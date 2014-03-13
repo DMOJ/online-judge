@@ -31,11 +31,11 @@ TIMEZONE = make_timezones()
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, verbose_name='The user whom this profile is associated with')
-    name = models.CharField(max_length=50, verbose_name="User's long name, real or not", null=True, blank=True)
-    about = models.TextField(verbose_name="User's self description", null=True, blank=True)
-    timezone = models.CharField(max_length=50, verbose_name="User's timezone", default='UTC', choices=TIMEZONE)
-    language = models.CharField(max_length=50, verbose_name="User's default language", choices=LANGUAGES, default='PY')
+    user = models.OneToOneField(User, verbose_name='User associated')
+    name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
+    about = models.TextField(verbose_name='Self-description', null=True, blank=True)
+    timezone = models.CharField(max_length=50, verbose_name='Timezone', default='UTC', choices=TIMEZONE)
+    language = models.CharField(max_length=50, verbose_name='Default language', choices=LANGUAGES, default='PY')
 
     def display_name(self):
         if self.name:
