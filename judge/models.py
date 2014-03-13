@@ -48,7 +48,7 @@ class Profile(models.Model):
         return self.user.username
 
     def __unicode__(self):
-        return u'Profile of %s (%s) in %s speaking %s' % (self.user.username, self.name, self.timezone, self.language)
+        return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
 
 
 class ProfileAdmin(admin.ModelAdmin):
