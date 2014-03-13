@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ title }}</title>
+    <title>DMOPC - {{ title }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="{% static "style.css" %}">
 <!--[if IE]>
@@ -12,7 +12,7 @@
 <body>
 
 <div id="main" role="main" class="centered unselectable">
-    <h1>{{ title }}</h1>
+    <h1>DMOPC</h1>
 </div>
 
 <nav id="navigation" class="unselectable">
@@ -23,6 +23,8 @@
         <li><a href="rainbow">About?</a></li>
     </ul>
 </nav>
+<h3>{{ title }}</h3>
+<hr/>
 <br/><br/>
 {% block body %}
 {% endblock %}
