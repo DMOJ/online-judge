@@ -15,6 +15,16 @@ class Profile(models.Model):
     timezone = models.CharField(max_length=50, verbose_name="User's timezone", default='UTC')
     language = models.CharField(max_length=50, verbose_name="User's default language", choices=LANGUAGES, default='PY')
 
+    def display_name(self):
+        if self.name:
+            return self.name
+        return self.user.username
+
+    def long_display_name(self):
+        if self.name:
+            return u'%s (%s)' % (self.user.username, self.name)
+        return self.user.username
+
     def __unicode__(self):
         return u'Profile of %s (%s) in %s speaking %s' % (self.user.username, self.name, self.timezone, self.language)
 
