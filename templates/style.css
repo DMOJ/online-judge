@@ -38,7 +38,7 @@ body {
 	margin: 0;
 	font-size: 13px;
 	line-height: 1.231;
-	background: #ecf0f1 url('background.png') repeat center bottom;
+	background: #FFFFFF url('background.png') repeat center bottom;
 	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 	color: #222;
 	height: 100%;
@@ -99,7 +99,7 @@ h1 {
 	font-weight: 900;
 	font-size: 6em;
 	letter-spacing: -2px;
-	color: #fff;
+	color: #000000;
 	margin: 0 0 10px 0;
 	padding: 20px 0 0 0;
 	text-shadow: 0 0 30px rgba(58, 93, 125, 0.67);
@@ -109,7 +109,7 @@ h1 {
 h2 {
 	font-weight: 300;
 	font-size: 2em;
-	color: #fff;
+	color: #000000;
 	border-radius: 4px;
 	padding: 0;
 	margin: 0;
@@ -119,7 +119,7 @@ h2 {
 h3 {
 	font-weight: 300;
 	font-size: 1.5em;
-	color: #fff;
+	color: #000000;
 	border-radius: 4px;
 	padding: 0;
 	margin: 0;
@@ -148,7 +148,7 @@ nav {
 nav ul li {
 	display: inline-block;
 	margin: 22px 10px 23px;
-	color: #fff;
+	color: #000000;
 	font-weight: 200;
 	text-transform: uppercase;
 	font-size: .8em

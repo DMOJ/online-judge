@@ -5,7 +5,6 @@
 
 <h1 align="center">Users</h1>
 
-<!-- based off of http://www.w3schools.com/html/html_tables.asp -->
 <table style="width:70%">
     <tr>
         <th>Rank</th>
