@@ -10,8 +10,8 @@ LANGUAGES = (
 
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='The user whom this profile is associated with')
-    name = models.CharField(max_length=50, verbose_name="User's long name, real or not", null=True)
-    about = models.TextField(verbose_name="User's self description", null=True)
+    name = models.CharField(max_length=50, verbose_name="User's long name, real or not", null=True, blank=True)
+    about = models.TextField(verbose_name="User's self description", null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name="User's timezone", default='UTC')
     language = models.CharField(max_length=50, verbose_name="User's default language", choices=LANGUAGES, default='PY')
 
