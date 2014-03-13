@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Users{% endblock %}
+
+{% block body %}
+
+<h1 align="center">Users</h1>
+
+<table>
+    <tr><th>Rank</th><th>User</th><th>Points</th><th>Problems</th></tr>
+    {% for user in users %}
+    <tr><td>0</td><td>{{ user.user.username }} ({{ user.name }})</td><td>0</td><td>0</td></tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

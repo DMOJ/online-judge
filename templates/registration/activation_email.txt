@@ -1,0 +1,3 @@
+Please activate your DMOPC account in {{ expiration_days }} days.
+
+Your activation key is {{ activation_key }}.
