@@ -103,31 +103,25 @@ body {
 h1 {
     font-size: 5em;
     letter-spacing: -2px;
-    color: #fff;
     margin: 0 0 10px 0;
     padding: 20px 0 0 0;
-    text-shadow: 0 0 30px rgba(58, 93, 125, 0.67);
     line-height: 1em;
 }
 
 h2 {
     font-weight: 300;
     font-size: 2em;
-    color: #fff;
     border-radius: 4px;
     padding: 0;
     margin: 0;
-    text-shadow: 0 0 5px rgba(58, 93, 125, 1);
 }
 
 h3 {
     font-weight: 300;
     font-size: 1.2em;
-    color: #fff;
     border-radius: 4px;
     padding: 0;
     margin: 0;
-    text-shadow: 0 0 5px rgba(58, 93, 125, 1);
 }
 
 h4 {
@@ -229,6 +223,10 @@ hr {
     width: 100%;
 }
 
+#content {
+    width: 90%;
+}
+
 .fullpage {
     top: 221px;
     bottom: 0;
@@ -241,3 +239,4 @@ hr {
     width: 100%;
     height: 100%;
 }
+

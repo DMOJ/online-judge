@@ -23,10 +23,12 @@
         <li><a href="rainbow">About?</a></li>
     </ul>
 </nav>
-<h3>{{ title }}</h3>
-<hr/>
-<br/><br/>
-{% block body %}
-{% endblock %}
+<div id="content">
+        <h2 style="color: #393630">{{ title }}</h2>
+        <hr/>
+        <br/>
+        {% block body %}
+        {% endblock %}
+<content>
 </body>
 </html>
