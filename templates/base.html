@@ -3,6 +3,10 @@
 <head>
 <title>{% block title %}{% endblock %}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="style.css">
+<!--[if IE]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
 </head>
 <body>
 <div id="title">
@@ -11,7 +15,10 @@
 
 <nav id="navigation" class="unselectable">
     <ul>
-
+        <li><a href="somewhere" class="active">Home</a></li>
+        <li><a href="over">Problems?</a></li>
+        <li><a href="users.html">Users</a></li>
+        <li><a href="rainbow">About?</a></li>
     </ul>
 </nav>
 {% block body %}
