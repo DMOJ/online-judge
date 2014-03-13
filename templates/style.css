@@ -34,6 +34,16 @@ html {
 	-ms-text-size-adjust: 100%;
 }
 
+body {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.231;
+	background: #ecf0f1 url('background.png') repeat center bottom;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	color: #000;
+	height: 100%;
+}
+
 @-webkit-keyframes fadeIn {
 	0% {
 		opacity: 0;
@@ -163,10 +173,6 @@ nav ul li a:hover {
 nav ul li a.active {
 	color: #fff;
 	background: #2980b9;
-}
-
-a, a:link {
-	color: #ffffff;
 }
 
 hr {
