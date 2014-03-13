@@ -68,6 +68,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'dmopc.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    url(r'^$', 'judge.views.home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include(register_patterns)),
     url(r'^users/$', 'judge.views.users'),
