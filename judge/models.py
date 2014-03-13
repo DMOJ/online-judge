@@ -1,6 +1,10 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.contrib import admin
+import pytz
+
+from operator import itemgetter
+
 
 LANGUAGES = (
     ('PY', 'Python'),
@@ -8,11 +12,29 @@ LANGUAGES = (
 )
 
 
+def make_timezones():
+    data = {}
+    for tz in pytz.all_timezones:
+        if '/' in tz:
+            area, loc = tz.split('/', 1)
+        else:
+            area, loc = 'Other', tz
+        if area in data:
+            data[area].append((tz, loc))
+        else:
+            data[area] = [(tz, loc)]
+    data = data.items()
+    data.sort(key=itemgetter(0))
+    return data
+
+TIMEZONE = make_timezones()
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='The user whom this profile is associated with')
     name = models.CharField(max_length=50, verbose_name="User's long name, real or not", null=True, blank=True)
     about = models.TextField(verbose_name="User's self description", null=True, blank=True)
-    timezone = models.CharField(max_length=50, verbose_name="User's timezone", default='UTC')
+    timezone = models.CharField(max_length=50, verbose_name="User's timezone", default='UTC', choices=TIMEZONE)
     language = models.CharField(max_length=50, verbose_name="User's default language", choices=LANGUAGES, default='PY')
 
     def display_name(self):
