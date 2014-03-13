@@ -16,6 +16,7 @@
     <h1 style="color:#fff">DMOPC</h1>
 </div>
 
+<header>
 <nav id="navigation" class="unselectable">
     <ul>
         <li><a href="/"{% if request.path == '/' %} class="active"{% endif %}>Home</a></li>
@@ -24,6 +25,7 @@
         <li><a href="/about/"{% if request.path == '/about/' %} class="active"{% endif %}>About?</a></li>
     </ul>
 </nav>
+</header>
 <br>
 <div id="content" class="centered">
         <h2 style="color:#393630">{{ title }}</h2>
@@ -31,6 +33,9 @@
         <br/>
         {% block body %}
         {% endblock %}
-<content>
+</div>
+<footer>
+    <p>Generated on {% now "H:i:s, F d, Y O" %}</p>
+</footer>
 </body>
 </html>
