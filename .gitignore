@@ -1,4 +1,5 @@
 .idea
 *.sqlite3
 *.pyc
+*~
 /dmopc/settings.py
