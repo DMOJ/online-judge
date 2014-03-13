@@ -35,15 +35,9 @@ class IfStartsWithNode(Node):
         return "<IfStartsWithNode>"
 
     def render(self, context):
-        try:
-            string = self.string.resolve(context)
-        except VariableDoesNotExist:
-            string = None
-        try:
-            start_string = self.start_string.resolve(context)
-        except VariableDoesNotExist:
-            start_string = None
-                    
+        string = self.string.resolve(context)
+        start_string = self.start_string.resolve(context)
+
         if (self.negate and not string.startswith(start_string)) or (not self.negate and string.startswith(start_string)):
             return self.nodelist_true.render(context)
         return self.nodelist_false.render(context)

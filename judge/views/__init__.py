@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.views.generic import TemplateView
 
 from .register import RegistrationView, ActivationView
-from .user import users
+from .user import users, user
 
 
 class TemplateView(TemplateView):

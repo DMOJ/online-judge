@@ -72,4 +72,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include(register_patterns)),
     url(r'^users/$', 'judge.views.users'),
+    url(r'^user/(\w+)$', 'judge.views.user'),
 )
