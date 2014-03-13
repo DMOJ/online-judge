@@ -1,14 +1,22 @@
+{% load variables %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>{% block title %}{% endblock %}</title>
+<title>{{ title }}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="http://judge1-dmopc.rhcloud.com/templates/style.css">
+<link rel="stylesheet" href="http://127.0.0.1:8000/templates/style.css">
 <!--[if IE]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 </head>
 <body>
+
+<div id="main" 
+     role="main" 
+     class="centered unselectable" 
+     style="background:#000;text-align:center;height:130px">
+    <h1>{{ title }}</h1>
+</div>
 
 <nav id="navigation" class="unselectable">
     <ul>

@@ -38,7 +38,7 @@ body {
 	margin: 0;
 	font-size: 13px;
 	line-height: 1.231;
-	background: #FFFFFF url('background.png') repeat center bottom;
+	background: #ecf0f1 url('background.png') repeat center bottom;
 	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 	color: #222;
 	height: 100%;
