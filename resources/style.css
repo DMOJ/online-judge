@@ -150,10 +150,10 @@ nav {
 
 nav ul li {
     display: inline-block;
-    margin: 11px 15px 11px;
+    margin: 11px 15px 12px;
     color: #fff;
     text-transform: uppercase;
-    font-size: em
+    font-size: 1em
 }
 
 nav ul li a {
@@ -239,4 +239,5 @@ hr {
     width: 100%;
     height: 100%;
 }
+
 
