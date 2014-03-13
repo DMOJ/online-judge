@@ -175,10 +175,6 @@ nav ul li a.active {
 	background: #2980b9;
 }
 
-a, a:link {
-	color: #ffffff;
-}
-
 hr {
 	color: rgba(0, 0, 0, 0.4)
 }

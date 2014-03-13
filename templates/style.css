@@ -159,10 +159,15 @@ nav ul li a {
 	font-size: 1.6em;
 	padding: 8px 15px;
 	border-radius: 100px;
+	color: #ffffff;
 	transition: all .1s linear;
 	-o-transition: all .1s linear;
 	-moz-transition: all .1s linear;
 	-webkit-transition: all .1s linear;
+}
+
+nav ul li a:link {
+        color: #ffffff;
 }
 
 nav ul li a:hover {
