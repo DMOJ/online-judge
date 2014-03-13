@@ -33,9 +33,10 @@
         <br/>
         {% block body %}
         {% endblock %}
+
+        <footer>
+            <p>Generated on {% now "H:i:s, F d, Y O" %}</p>
+        </footer>
 </div>
-<footer>
-    <p>Generated on {% now "H:i:s, F d, Y O" %}</p>
-</footer>
 </body>
 </html>
