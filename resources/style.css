@@ -15,7 +15,7 @@ table tr:nth-child(even) {
 
 table th {
     color: #ffffff;
-    background-color: #555555;
+    background-color: #393630;
     border: 1px solid #555555;
     padding: 3px;
     vertical-align: top;
@@ -43,7 +43,7 @@ body {
     margin: 0;
     font-size: 13px;
     line-height: 1.231;
-    background: #ecf0f1 url('background.png') repeat center bottom;
+    background: #F5F7F7 url('background.png') repeat center bottom;
     font-family: 'Open Sans', Arial, Helvetica, sans-serif;
     color: #000;
     height: 100%;
@@ -101,8 +101,7 @@ body {
 }
 
 h1 {
-    font-weight: 900;
-    font-size: 6em;
+    font-size: 5em;
     letter-spacing: -2px;
     color: #fff;
     margin: 0 0 10px 0;
@@ -123,7 +122,7 @@ h2 {
 
 h3 {
     font-weight: 300;
-    font-size: 1.5em;
+    font-size: 1.2em;
     color: #fff;
     border-radius: 4px;
     padding: 0;
@@ -133,7 +132,6 @@ h3 {
 
 h4 {
     font-size: 1.1em;
-    font-weight: 200;
     padding: 0;
     margin: 0;
 }
@@ -141,7 +139,7 @@ h4 {
 #main {
     background: #000000;
     text-align: center;
-    height: 130px;
+    height: 100px;
 }
 
 nav ul {
@@ -158,23 +156,21 @@ nav {
 
 nav ul li {
     display: inline-block;
-    margin: 22px 10px 23px;
+    margin: 11px 15px 11px;
     color: #fff;
-    font-weight: 200;
     text-transform: uppercase;
-    font-size: .8em
+    font-size: em
 }
 
 nav ul li a {
     text-decoration: none;
-    font-size: 1.6em;
     padding: 8px 15px;
-    border-radius: 100px;
+    border-radius: 2px;
     color: #ffffff;
-    transition: all .1s linear;
-    -o-transition: all .1s linear;
-    -moz-transition: all .1s linear;
-    -webkit-transition: all .1s linear;
+    transition: all .125s linear;
+    -o-transition: all .125s linear;
+    -moz-transition: all .125s linear;
+    -webkit-transition: all .125s linear;
 }
 
 nav ul li a:link {
@@ -183,7 +179,7 @@ nav ul li a:link {
 
 nav ul li a:hover {
     color: #fff;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.25);
 }
 
 nav ul li a.active {
