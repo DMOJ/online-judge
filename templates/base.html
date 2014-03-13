@@ -1,9 +1,10 @@
+{% load static from staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <title>{{ title }}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="http://judge1-dmopc.rhcloud.com/templates/style.css">
+<link rel="stylesheet" href="{% static "style.css" %}">
 <!--[if IE]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
