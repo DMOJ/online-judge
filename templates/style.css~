@@ -1,0 +1,30 @@
+<!-- based off of http://www.w3schools.com/html/html_tables.asp -->
+
+table {
+	border-collapse:collapse;
+	width:100%;
+	margin-left: auto;
+        margin-right: auto;
+}
+
+table tr:nth-child(odd)	{background-color:#F6F4F0;}
+table tr:nth-child(even)	{background-color:#FFFFFF;}
+
+table th {
+	color:#ffffff;
+	background-color:#555555;
+	border:1px solid #555555;
+	padding:3px;
+	vertical-align:top;
+	text-align:center;
+}
+
+table td {
+	border:1px solid #d4d4d4;
+	padding:5px;
+	padding-top:7px;
+	padding-bottom:7px;
+	vertical-align:center;
+	text-align:center;
+}
+
