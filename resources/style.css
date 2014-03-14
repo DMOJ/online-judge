@@ -49,15 +49,6 @@ body {
     height: 100%;
 }
 
-@-webkit-keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
 .unselectable {
     -ms-user-select: none;
     -webkit-user-select: none;
@@ -78,10 +69,6 @@ body {
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.39), 0 1px 0 rgba(255, 255, 255, 0.16);
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.39), 0 1px 0 rgba(255, 255, 255, 0.16);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.39), 0 1px 0 rgba(255, 255, 255, 0.16);
-    transition: all .5s linear;
-    -o-transition: all .5s linear;
-    -moz-transition: all .5s linear;
-    -webkit-transition: all .5s linear;
 }
 
 .button {
@@ -94,10 +81,6 @@ body {
     border-radius: 4px;
     color: #fff;
     text-align: right;
-    transition: all .1s linear;
-    -o-transition: all .1s linear;
-    -moz-transition: all .1s linear;
-    -webkit-transition: all .1s linear;
 }
 
 h1 {
@@ -161,10 +144,6 @@ nav ul li a {
     padding: 8px 15px;
     border-radius: 2px;
     color: #ffffff;
-    transition: all .125s linear;
-    -o-transition: all .125s linear;
-    -moz-transition: all .125s linear;
-    -webkit-transition: all .125s linear;
 }
 
 nav ul li a:link {
@@ -206,10 +185,6 @@ hr {
     font-size: .8em;
     text-align: center;
     vertical-align: middle;
-    transition: all .1s linear;
-    -o-transition: all .1s linear;
-    -moz-transition: all .1s linear;
-    -webkit-transition: all .1s linear;
 }
 
 .centered {
@@ -225,6 +200,7 @@ hr {
 
 #content {
     width: 90%;
+    height: 100%;
 }
 
 .fullpage {
@@ -241,7 +217,5 @@ hr {
 }
 
 footer {
-   position:absolute;
-   bottom:0;
-   width:100%;
+   height: 142px;
 }
