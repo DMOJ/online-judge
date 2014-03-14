@@ -12,19 +12,19 @@
 </head>
 <body>
 
-<div id="main" role="main" class="unselectable">
-    <h1 style="color:#fff;text-align:left">DMOPC</h1>
+<div id="header">
+    <h1>DMOPC</h1>
 </div>
 
 <header>
-<nav id="navigation" class="unselectable">
-    <ul>
-        <li><a href="/"{% if request.path == '/' %} class="active"{% endif %}>Home</a></li>
-        <li><a href="/problems/"{% ifstartswith request.path '/problem' %} class="active"{% endifstartswith %}>Problems?</a></li>
-        <li><a href="/users/"{% ifstartswith request.path '/user' %} class="active"{% endifstartswith %}>Users</a></li>
-        <li><a href="/about/"{% if request.path == '/about/' %} class="active"{% endif %}>About?</a></li>
-    </ul>
-</nav>
+        <nav id="navigation" class="unselectable">
+            <ul>
+                <li><a href="/"{% if request.path == '/' %} class="active"{% endif %}>Home</a></li>
+                <li><a href="/problems/"{% ifstartswith request.path '/problem' %} class="active"{% endifstartswith %}>Problems</a></li>
+                <li><a href="/users/"{% ifstartswith request.path '/user' %} class="active"{% endifstartswith %}>Users</a></li>
+                <li><a href="/about/"{% if request.path == '/about/' %} class="active"{% endif %}>About</a></li>
+            </ul>
+        </nav>
 </header>
 <br>
 <div id="content" class="centered">
@@ -33,9 +33,8 @@
         <br/>
         {% block body %}
         {% endblock %}
-
         <footer>
-            <p>Generated on {% now "H:i:s, F d, Y O" %}</p>
+                <p>Generated on {% now "H:i:s, F d, Y O" %}</p>
         </footer>
 </div>
 </body>
