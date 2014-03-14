@@ -86,7 +86,7 @@ class Problem(models.Model):
 
 class ProblemAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('code', 'name', 'user', 'description', 'type')}),
+        (None, {'fields': ('code', 'name', 'user', 'description', 'types')}),
         ('Points', {'fields': (('points', 'partial'),)}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
     )
