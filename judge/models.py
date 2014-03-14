@@ -48,7 +48,8 @@ class Profile(models.Model):
         return self.user.username
 
     def __unicode__(self):
-        return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
+        #return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
+        return self.long_display_name()
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -64,11 +65,19 @@ class Problem(models.Model):
     name = models.CharField(max_length=100, verbose_name='Problem name')
     description = models.TextField(verbose_name='Problem body')
     user = models.ForeignKey(Profile, verbose_name='Creator')
-    category = models.ManyToManyField(ProblemType, verbose_name='Type of problem')
-    time_limit = models.FloatField(verbose_name='Time limit for execution')
+    type = models.ManyToManyField(ProblemType, verbose_name='Problem Type')
+    time_limit = models.FloatField(verbose_name='Time limit')
     memory_limit = models.FloatField(verbose_name='Memory limit')
-    points = models.FloatField(verbose_name='Points this problem is worth')
-    partial = models.BooleanField(verbose_name='Whether partial points are allowed')
+    points = models.FloatField(verbose_name='Points')
+    partial = models.BooleanField(verbose_name='Allow Partial Points')
+
+
+class ProblemAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('name', 'user', 'description', 'type')}),
+        ('Points', {'fields': (('points', 'partial'),)}),
+        ('Limits', {'fields': ('time_limit', 'memory_limit')}),
+    )
 
 
 class Comment(models.Model):
@@ -86,3 +95,5 @@ class Submission(models.Model):
     points = models.FloatField(verbose_name='Points granted', null=True)
 
 admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Problem, ProblemAdmin)
+admin.site.register(ProblemType)
