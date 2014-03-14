@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib import admin
 import pytz
 
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 
 
 LANGUAGES = (
@@ -28,6 +28,7 @@ def make_timezones():
     return data
 
 TIMEZONE = make_timezones()
+del make_timezones
 
 
 class Profile(models.Model):
@@ -60,21 +61,32 @@ class ProblemType(models.Model):
     name = models.CharField(max_length=20, verbose_name='Problem category ID')
     full_name = models.CharField(max_length=100, verbose_name='Problem category name')
 
+    def __unicode__(self):
+        return self.full_name
+
 
 class Problem(models.Model):
+    code = models.CharField(max_length=20, verbose_name='Problem code')
     name = models.CharField(max_length=100, verbose_name='Problem name')
     description = models.TextField(verbose_name='Problem body')
     user = models.ForeignKey(Profile, verbose_name='Creator')
-    type = models.ManyToManyField(ProblemType, verbose_name='Problem Type')
+    types = models.ManyToManyField(ProblemType, verbose_name='Problem Type')
     time_limit = models.FloatField(verbose_name='Time limit')
     memory_limit = models.FloatField(verbose_name='Memory limit')
     points = models.FloatField(verbose_name='Points')
     partial = models.BooleanField(verbose_name='Allow Partial Points')
 
+    def types_list(self):
+        return map(attrgetter('full_name'), self.types.all())
+
+    def __unicode__(self):
+        return '%s (%s), %s%s points created by %s' % (self.name, self.code, self.points, 'p' if self.partial else '',
+                                                       self.user)
+
 
 class ProblemAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('name', 'user', 'description', 'type')}),
+        (None, {'fields': ('code', 'name', 'user', 'description', 'type')}),
         ('Points', {'fields': (('points', 'partial'),)}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
     )
@@ -82,6 +94,7 @@ class ProblemAdmin(admin.ModelAdmin):
 
 class Comment(models.Model):
     user = models.ForeignKey(Profile, verbose_name='User who posted this comment')
+    time = models.DateTimeField('Comment time')
     problem = models.ForeignKey(Problem, null=True, verbose_name='Problem this comment is associated with')
     title = models.CharField(max_length=200, verbose_name='Title of comment')
     body = models.TextField(verbose_name='Body of comment')
@@ -90,6 +103,7 @@ class Comment(models.Model):
 class Submission(models.Model):
     user = models.ForeignKey(Profile)
     problem = models.ForeignKey(Problem)
+    date = models.DateTimeField('Submission time')
     time = models.FloatField(verbose_name='Execution time', null=True)
     memory = models.FloatField(verbose_name='Memory usage', null=True)
     points = models.FloatField(verbose_name='Points granted', null=True)

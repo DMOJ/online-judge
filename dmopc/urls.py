@@ -73,5 +73,7 @@ urlpatterns = patterns('',
     url(r'^accounts/', include(register_patterns)),
     url(r'^users/$', 'judge.views.users'),
     url(r'^user/(\w+)$', 'judge.views.user'),
-    url(r'^edit/profile/$', 'judge.views.edit_profile')
+    url(r'^problems/$', 'judge.views.problems'),
+    url(r'^problem/(\w+)$', 'judge.views.problem'),
+    url(r'^edit/profile/$', 'judge.views.edit_profile'),
 )

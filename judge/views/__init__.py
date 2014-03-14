@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 
 from .register import RegistrationView, ActivationView
 from .user import users, user, edit_profile
+from .problem import problem, problems
 
 
 class TemplateView(TemplateView):
