@@ -118,7 +118,7 @@ class Submission(models.Model):
 
 
 class SubmissionTestCase(models.Model):
-    parent = models.ForeignKey(Submission, verbose_name='Associated submission')
+    submission = models.ForeignKey(Submission, verbose_name='Associated submission')
     case = models.ForeignKey(TestCase, verbose_name='Associated test case')
     status = models.IntegerField(verbose_name='Status flag')
     time = models.FloatField(verbose_name='Execution time', null=True)
