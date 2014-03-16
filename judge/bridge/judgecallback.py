@@ -37,7 +37,7 @@ class DjangoJudgeHandler(JudgeHandler):
     def on_test_case(self, packet):
         JudgeHandler.on_test_case(self, packet)
         test_case = SubmissionTestCase.objects.get(submission__id=packet['submission-id'],
-                                                   test_case__id=packet['case-id'])
+                                                   test_case__key=packet['position'])
         test_case.status = packet['status']
         test_case.time = packet['time']
         test_case.memory = packet['memory']
