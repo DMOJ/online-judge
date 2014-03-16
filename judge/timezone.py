@@ -6,7 +6,8 @@ from judge.models import Profile
 class TimezoneMiddleware(object):
     def process_request(self, request):
         if request.user.is_authenticated():
-            tzname = Profile.objects.get(user=request.user).timezone
+            # Have to do this. We drop our tables a lot in development.
+            tzname = Profile.objects.get_or_create(user=request.user).timezone
         else:
             tzname = 'UTC'
         timezone.activate(pytz.timezone(tzname))
