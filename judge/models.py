@@ -104,7 +104,7 @@ class TestCase(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(Profile, verbose_name='User who posted this comment')
-    time = models.DateTimeField('Comment time')
+    time = models.DateTimeField(verbose_name='Comment time')
     problem = models.ForeignKey(Problem, null=True, verbose_name='Associated problem')
     title = models.CharField(max_length=200, verbose_name='Title of comment')
     body = models.TextField(verbose_name='Body of comment')
@@ -128,6 +128,13 @@ class Submission(models.Model):
     language = models.ForeignKey(Language, verbose_name='Submission language')
     source = models.TextField(verbose_name='Source code')
     status = models.CharField(max_length=2, choices=STATUS, default='QU')
+
+    def judge(self):
+        from judge.judgeapi import judge_submission
+        return judge_submission(self)
+
+    def __unicode__(self):
+        return u'Submission %d of %s by %s' % (self.id, self.problem, self.user)
 
 
 class SubmissionTestCase(models.Model):

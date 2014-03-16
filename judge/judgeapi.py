@@ -4,6 +4,8 @@ import socket
 import json
 import logging
 
+from judge.models import TestCase, SubmissionTestCase
+
 logger = logging.getLogger('judge.judgeapi')
 
 
@@ -28,6 +30,8 @@ def judge_request(packet):
 
 
 def judge_submission(submission):
+    for case in TestCase.objects.filter(problem=submission.problem):
+        SubmissionTestCase.objects.get_or_create(submission=submission, case=case)
     try:
         response = judge_request({
             'name': 'submission-request',
