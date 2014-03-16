@@ -32,7 +32,7 @@ def problem_submit(request, problem=None):
         initial = {'language': request.user.profile.language}
         if problem is not None:
             try:
-                initial['problem'] = Problem.objects.get(problem)
+                initial['problem'] = Problem.objects.get(code=problem)
             except ObjectDoesNotExist:
                 return Http404()
         form = ProblemSubmitForm(initial=initial)
