@@ -27,6 +27,7 @@ def make_timezones():
     data.sort(key=itemgetter(0))
     return data
 
+
 TIMEZONE = make_timezones()
 del make_timezones
 
@@ -36,7 +37,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
     about = models.TextField(verbose_name='Self-description', null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name='Timezone', default='UTC', choices=TIMEZONE)
-    language = models.CharField(max_length=50, verbose_name='Default language', choices=LANGUAGES, default='PY')
+    language = models.ForeignKey(Language, "Default language")
 
     def display_name(self):
         if self.name:
@@ -70,11 +71,12 @@ class Problem(models.Model):
     name = models.CharField(max_length=100, verbose_name='Problem name')
     description = models.TextField(verbose_name='Problem body')
     user = models.ForeignKey(Profile, verbose_name='Creator')
-    types = models.ManyToManyField(ProblemType, verbose_name='Problem Type')
+    types = models.ManyToManyField(ProblemType, verbose_name='Problem type')
     time_limit = models.FloatField(verbose_name='Time limit')
     memory_limit = models.FloatField(verbose_name='Memory limit')
     points = models.FloatField(verbose_name='Points')
-    partial = models.BooleanField(verbose_name='Allow Partial Points')
+    partial = models.BooleanField(verbose_name='Allows partial points')
+    allowed_languages = models.ManyToManyField(Language, "Allowed languages")
 
     def types_list(self):
         return map(attrgetter('full_name'), self.types.all())
@@ -82,6 +84,11 @@ class Problem(models.Model):
     def __unicode__(self):
         return '%s (%s), %s%s points created by %s' % (self.name, self.code, self.points, 'p' if self.partial else '',
                                                        self.user)
+
+
+class Language(models.Model):
+    pretty_id = models.CharField(max_length=20)
+    id = models.CharField(max_length=6)
 
 
 class ProblemAdmin(admin.ModelAdmin):
@@ -95,7 +102,7 @@ class ProblemAdmin(admin.ModelAdmin):
 class Comment(models.Model):
     user = models.ForeignKey(Profile, verbose_name='User who posted this comment')
     time = models.DateTimeField('Comment time')
-    problem = models.ForeignKey(Problem, null=True, verbose_name='Problem this comment is associated with')
+    problem = models.ForeignKey(Problem, null=True, verbose_name='Associated problem')
     title = models.CharField(max_length=200, verbose_name='Title of comment')
     body = models.TextField(verbose_name='Body of comment')
 
@@ -107,6 +114,23 @@ class Submission(models.Model):
     time = models.FloatField(verbose_name='Execution time', null=True)
     memory = models.FloatField(verbose_name='Memory usage', null=True)
     points = models.FloatField(verbose_name='Points granted', null=True)
+    language = models.ForeignKey(Language, "Submission language")
+    source = models.TextField(verbose_name='Source code')
+
+
+class SubmissionTestCase(models.Model):
+    parent = models.ForeignKey(Submission, verbose_name="Associated submission")
+    case = models.ForeignKey(TestCase, verbose_name="Associated test case")
+    status = models.IntegerField(verbose_name="Status flag")
+    time = models.FloatField(verbose_name='Execution time', null=True)
+    memory = models.FloatField(verbose_name='Memory usage', null=True)
+    points = models.FloatField(verbose_name='Points granted', null=True)
+
+
+class TestCase(models.Model):
+    problem = models.ForeignKey(Problem)
+    points = models.FloatField(verbose_name='Points worth', null=True)
+
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Problem, ProblemAdmin)
