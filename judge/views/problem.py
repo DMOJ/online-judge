@@ -22,14 +22,19 @@ def problems(request):
 
 
 @login_required
-def problem_submit(request):
-    profile = Profile.objects.get(user=request.user)
+def problem_submit(request, problem=None):
     if request.method == 'POST':
-        form = ProblemSubmitForm(request.POST, instance=profile)
+        form = ProblemSubmitForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(request.path)
     else:
-        form = ProblemSubmitForm(instance=profile)
+        initial = {'user': request.user}
+        if problem is not None:
+            try:
+                initial['problem'] = Problem.objects.get(problem)
+            except ObjectDoesNotExist:
+                return Http404()
+        form = ProblemSubmitForm(initial=initial)
     return render_to_response('problem_submit.html', {'form': form, 'title': 'Submit'},
                               context_instance=RequestContext(request))
