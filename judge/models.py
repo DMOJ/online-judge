@@ -6,12 +6,6 @@ import pytz
 from operator import itemgetter, attrgetter
 
 
-LANGUAGES = (
-    ('PY', 'Python'),
-    ('CPP', 'C++'),
-)
-
-
 def make_timezones():
     data = {}
     for tz in pytz.all_timezones:
@@ -32,12 +26,17 @@ TIMEZONE = make_timezones()
 del make_timezones
 
 
+class Language(models.Model):
+    key = models.CharField(max_length=6)
+    name = models.CharField(max_length=20)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='User associated')
     name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
     about = models.TextField(verbose_name='Self-description', null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name='Timezone', default='UTC', choices=TIMEZONE)
-    language = models.ForeignKey(Language, "Default language")
+    language = models.ForeignKey(Language, verbose_name='Default language')
 
     def display_name(self):
         if self.name:
@@ -76,7 +75,7 @@ class Problem(models.Model):
     memory_limit = models.FloatField(verbose_name='Memory limit')
     points = models.FloatField(verbose_name='Points')
     partial = models.BooleanField(verbose_name='Allows partial points')
-    allowed_languages = models.ManyToManyField(Language, "Allowed languages")
+    allowed_languages = models.ManyToManyField(Language, verbose_name='Allowed languages')
 
     def types_list(self):
         return map(attrgetter('full_name'), self.types.all())
@@ -86,17 +85,18 @@ class Problem(models.Model):
                                                        self.user)
 
 
-class Language(models.Model):
-    pretty_id = models.CharField(max_length=20)
-    id = models.CharField(max_length=6)
-
-
 class ProblemAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('code', 'name', 'user', 'description', 'types')}),
         ('Points', {'fields': (('points', 'partial'),)}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
     )
+
+
+class TestCase(models.Model):
+    problem = models.ForeignKey(Problem)
+    key = models.IntegerField(verbose_name='Test case ID')
+    points = models.FloatField(verbose_name='Points worth', null=True)
 
 
 class Comment(models.Model):
@@ -108,28 +108,39 @@ class Comment(models.Model):
 
 
 class Submission(models.Model):
+    STATUS = (
+        ('QU', 'Queued'),
+        ('C', 'Compiled'),
+        ('G', 'Grading'),
+        ('D', 'Completed'),
+        ('IE', 'Internal Error'),
+    )
+
     user = models.ForeignKey(Profile)
     problem = models.ForeignKey(Problem)
     date = models.DateTimeField('Submission time')
     time = models.FloatField(verbose_name='Execution time', null=True)
     memory = models.FloatField(verbose_name='Memory usage', null=True)
     points = models.FloatField(verbose_name='Points granted', null=True)
-    language = models.ForeignKey(Language, "Submission language")
+    language = models.ForeignKey(Language, verbose_name='Submission language')
     source = models.TextField(verbose_name='Source code')
+    status = models.CharField(max_length=2, choices=STATUS, default='QU')
 
 
 class SubmissionTestCase(models.Model):
-    parent = models.ForeignKey(Submission, verbose_name="Associated submission")
-    case = models.ForeignKey(TestCase, verbose_name="Associated test case")
-    status = models.IntegerField(verbose_name="Status flag")
+    STATUS = (
+        ('QU', 'Queued'),
+        ('IR', 'Invalid Return'),
+        ('WA', 'Wrong Answer'),
+        ('AC', 'Correct'),
+    )
+
+    submission = models.ForeignKey(Submission, verbose_name='Associated submission')
+    case = models.ForeignKey(TestCase, verbose_name='Associated test case')
+    status = models.IntegerField(verbose_name='Status flag', choices=STATUS, default='QU')
     time = models.FloatField(verbose_name='Execution time', null=True)
     memory = models.FloatField(verbose_name='Memory usage', null=True)
     points = models.FloatField(verbose_name='Points granted', null=True)
-
-
-class TestCase(models.Model):
-    problem = models.ForeignKey(Problem)
-    points = models.FloatField(verbose_name='Points worth', null=True)
 
 
 admin.site.register(Profile, ProfileAdmin)
