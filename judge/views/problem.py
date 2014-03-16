@@ -24,7 +24,7 @@ def problems(request):
 @login_required
 def problem_submit(request, problem=None):
     if request.method == 'POST':
-        form = ProblemSubmitForm(request.POST, instance=Submission(user=request.user))
+        form = ProblemSubmitForm(request.POST, instance=Submission(user=request.user.profile))
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(request.path)

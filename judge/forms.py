@@ -9,6 +9,11 @@ class ProfileForm(ModelForm):
 
 
 class ProblemSubmitForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProblemSubmitForm, self).__init__(*args, **kwargs)
+        self.fields['problem'].empty_label = None
+        self.fields['language'].empty_label = None
+
     class Meta:
         model = Submission
         fields = ['problem', 'source', 'language']
