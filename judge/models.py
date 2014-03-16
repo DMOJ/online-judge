@@ -95,6 +95,7 @@ class ProblemAdmin(admin.ModelAdmin):
 
 class TestCase(models.Model):
     problem = models.ForeignKey(Problem)
+    key = models.IntegerField(verbose_name='Test case ID')
     points = models.FloatField(verbose_name='Points worth', null=True)
 
 
@@ -107,6 +108,14 @@ class Comment(models.Model):
 
 
 class Submission(models.Model):
+    STATUS = (
+        ('QU', 'Queued'),
+        ('C', 'Compiled'),
+        ('G', 'Grading'),
+        ('D', 'Completed'),
+        ('IE', 'Internal Error'),
+    )
+
     user = models.ForeignKey(Profile)
     problem = models.ForeignKey(Problem)
     date = models.DateTimeField('Submission time')
@@ -115,12 +124,20 @@ class Submission(models.Model):
     points = models.FloatField(verbose_name='Points granted', null=True)
     language = models.ForeignKey(Language, verbose_name='Submission language')
     source = models.TextField(verbose_name='Source code')
+    status = models.CharField(max_length=2, choices=STATUS, default='QU')
 
 
 class SubmissionTestCase(models.Model):
+    STATUS = (
+        ('QU', 'Queued'),
+        ('IR', 'Invalid Return'),
+        ('WA', 'Wrong Answer'),
+        ('AC', 'Correct'),
+    )
+
     submission = models.ForeignKey(Submission, verbose_name='Associated submission')
     case = models.ForeignKey(TestCase, verbose_name='Associated test case')
-    status = models.IntegerField(verbose_name='Status flag')
+    status = models.IntegerField(verbose_name='Status flag', choices=STATUS, default='QU')
     time = models.FloatField(verbose_name='Execution time', null=True)
     memory = models.FloatField(verbose_name='Memory usage', null=True)
     points = models.FloatField(verbose_name='Points granted', null=True)

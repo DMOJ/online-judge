@@ -1,5 +1,5 @@
 import SocketServer
-from judgelist import JudgeList
+from .judgelist import JudgeList
 import os
 
 
