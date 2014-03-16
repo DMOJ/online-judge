@@ -27,7 +27,7 @@ del make_timezones
 
 
 class Language(models.Model):
-    key = models.CharField(max_length=6, verbose_name='Short identifier')
+    key = models.CharField(max_length=6, verbose_name='Short identifier', unique=True)
     name = models.CharField(max_length=20, verbose_name='Name as shown to user')
 
     def __unicode__(self):
@@ -39,7 +39,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
     about = models.TextField(verbose_name='Self-description', null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name='Timezone', default='UTC', choices=TIMEZONE)
-    language = models.ForeignKey(Language, verbose_name='Default language', null=True)
+    language = models.ForeignKey(Language, verbose_name='Default language')
 
     def display_name(self):
         if self.name:
