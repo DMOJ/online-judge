@@ -27,8 +27,8 @@ del make_timezones
 
 
 class Language(models.Model):
-    key = models.CharField(max_length=6)
-    name = models.CharField(max_length=20)
+    key = models.CharField(max_length=6, verbose_name='Short identifier')
+    name = models.CharField(max_length=20, verbose_name='Name as shown to user')
 
 
 class Profile(models.Model):
@@ -143,6 +143,7 @@ class SubmissionTestCase(models.Model):
     points = models.FloatField(verbose_name='Points granted', null=True)
 
 
+admin.site.register(Language)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(ProblemType)
