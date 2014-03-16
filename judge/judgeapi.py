@@ -2,8 +2,9 @@ from django.conf import settings
 
 import socket
 import json
+import logging
 
-from .models import Submission
+logger = logging.getLogger('judge.judgeapi')
 
 
 def judge_request(packet):
@@ -35,7 +36,8 @@ def judge_submission(submission):
             'language': submission.language.key,
             'source': submission.source,
         })
-    except BaseException as e:
+    except BaseException:
+        logger.exception('Failed to send request to judge')
         submission.status = 'IE'
         submission.save()
     else:
