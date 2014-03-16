@@ -1,4 +1,4 @@
-from registration.views import RegistrationView, ActivationView
+from registration.backends.default.views import RegistrationView, ActivationView
 
 
 class RegistrationView(RegistrationView):
