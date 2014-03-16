@@ -82,6 +82,13 @@ DATABASES = {
     }
 }
 
+
+# Bridged configuration
+BRIDGED_JUDGE_HOST = 'localhost'
+BRIDGED_JUDGE_PORT = 9999
+BRIDGED_DJANGO_HOST = 'localhost'
+BRIDGED_DJANGO_PORT = 9998
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
