@@ -30,6 +30,9 @@ class Language(models.Model):
     key = models.CharField(max_length=6, verbose_name='Short identifier')
     name = models.CharField(max_length=20, verbose_name='Name as shown to user')
 
+    def __unicode__(self):
+        return self.name
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='User associated')
