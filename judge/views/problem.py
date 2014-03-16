@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.forms import ProblemSubmitForm
-from judge.models import Problem, Profile
+from judge.models import Problem, Profile, Submission
 
 
 def problem(request, code):
@@ -24,12 +24,12 @@ def problems(request):
 @login_required
 def problem_submit(request, problem=None):
     if request.method == 'POST':
-        form = ProblemSubmitForm(request.POST)
+        form = ProblemSubmitForm(request.POST, instance=Submission(user=request.user))
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(request.path)
     else:
-        initial = {'user': request.user}
+        initial = {'language': request.user.profile.language}
         if problem is not None:
             try:
                 initial['problem'] = Problem.objects.get(problem)
