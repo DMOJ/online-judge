@@ -36,7 +36,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
     about = models.TextField(verbose_name='Self-description', null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name='Timezone', default='UTC', choices=TIMEZONE)
-    language = models.ForeignKey(Language, verbose_name='Default language')
+    language = models.ForeignKey(Language, verbose_name='Default language', null=True)
 
     def display_name(self):
         if self.name:
