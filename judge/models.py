@@ -121,7 +121,7 @@ class Submission(models.Model):
 
     user = models.ForeignKey(Profile)
     problem = models.ForeignKey(Problem)
-    date = models.DateTimeField('Submission time')
+    date = models.DateTimeField(verbose_name='Submission time', auto_now_add=True)
     time = models.FloatField(verbose_name='Execution time', null=True)
     memory = models.FloatField(verbose_name='Memory usage', null=True)
     points = models.FloatField(verbose_name='Points granted', null=True)
