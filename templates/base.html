@@ -21,6 +21,7 @@
             <ul>
                 <li><a href="/"{% if request.path == '/' %} class="active"{% endif %}>Home</a></li>
                 <li><a href="/problems/"{% ifstartswith request.path '/problem' %} class="active"{% endifstartswith %}>Problems</a></li>
+                <li><a href="/submissions/"{% ifstartswith request.path '/submi' %} class="active"{% endifstartswith %}>Submissions</a></li>
                 <li><a href="/users/"{% ifstartswith request.path '/user' %} class="active"{% endifstartswith %}>Users</a></li>
                 <li><a href="/about/"{% if request.path == '/about/' %} class="active"{% endif %}>About</a></li>
             </ul>
