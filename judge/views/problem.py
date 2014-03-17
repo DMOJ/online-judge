@@ -10,7 +10,9 @@ from judge.models import Problem, Profile, Submission
 def get_result_table(code):
     results = {}
     for submission in Submission.objects.filter(problem__code=code) if code else Submission.objects.all():
-        results[submission.result] = results.get(submission.result, 0) + 1
+        r = submission.result if submission.result else "Unknown"
+        results[r] = results.get(r, 0) + 1
+    return results
 
 
 def problem(request, code):
