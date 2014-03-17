@@ -20,3 +20,8 @@ class TemplateView(TemplateView):
 def home(request):
     return render_to_response('index.html', {'title': 'DMOPC Home'},
                               context_instance=RequestContext(request))
+
+
+def about(request):
+    return render_to_response('about.html', {'title': 'About'},
+                              context_instance=RequestContext(request))
