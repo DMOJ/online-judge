@@ -84,8 +84,7 @@ class Problem(models.Model):
         return map(attrgetter('full_name'), self.types.all())
 
     def __unicode__(self):
-        return '%s (%s), %s%s points created by %s' % (self.name, self.code, self.points, 'p' if self.partial else '',
-                                                       self.user)
+        return self.name
 
 
 class ProblemAdmin(admin.ModelAdmin):
@@ -131,6 +130,7 @@ class Submission(models.Model):
 
     def judge(self):
         from judge.judgeapi import judge_submission
+
         return judge_submission(self)
 
     def __unicode__(self):
