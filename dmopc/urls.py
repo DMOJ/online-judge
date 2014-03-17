@@ -79,4 +79,6 @@ urlpatterns = patterns('',
     url(r'^submission/(\w+)$', 'judge.views.submission_status'),
     url(r'^submit/problem/$', 'judge.views.problem_submit'),
     url(r'^edit/profile/$', 'judge.views.edit_profile'),
+    url(r'^submissions/$', 'judge.views.submissions'),
+    url(r'^problem/(\w+)/rank/$', 'judge.views.submission_rank'),
 )

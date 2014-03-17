@@ -1,13 +1,12 @@
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from judge.forms import ProblemSubmitForm
-from judge.models import Problem, Profile, Submission
+from judge.models import Problem, Submission
 
 
 def submission_status(request, code):
+    #TODO: should only show "Click here to revise and resubmit!" if user is the author of the submission
     try:
         submission = Submission.objects.get(id=int(code))
         return render_to_response('submission_status.html',
@@ -16,3 +15,21 @@ def submission_status(request, code):
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return Http404()
+
+
+def submission_rank(request, code):
+    try:
+        submissions = Submission.objects.get(code=code)
+        problem = Problem.objects.get(code=code)
+        return render_to_response('submission_rank.html',
+                                  {'submissions': submissions,
+                                   'problem': problem,
+                                   'title': 'Best solutions for %s' % problem.name},
+                                  context_instance=RequestContext(request))
+    except ObjectDoesNotExist:
+        return Http404()
+
+
+def submissions(request):
+    return render_to_response('submissions.html', {'submissions': Submission.objects.all(), 'title': 'All submissions'},
+                              context_instance=RequestContext(request))
