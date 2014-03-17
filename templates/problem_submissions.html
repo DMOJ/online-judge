@@ -10,7 +10,7 @@
         {% for submission in submissions %}
         <tr>
             <td>{{ submission.points }} / {{ submission.problem.points }} ({{ submission.status }})</td>
-            <td><a href="{% url " judge.views.user" submission.user.user.username %}">{{
+            <td><a href="{% url 'judge.views.user' submission.user.user.username %}">{{
                 submission.user.long_display_name }}</a></td>
             <td><b>{{ submission.time }}s</b><br/>
                    {{ submission.memory }}kb

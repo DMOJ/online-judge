@@ -11,7 +11,7 @@
             </tr>
             {% for problem in problems %}
             <tr>
-                <td><a href="{% url "judge.views.problem" problem.code %}">{{ problem.name }}</a></td>
+                <td><a href="{% url 'judge.views.problem' problem.code %}">{{ problem.name }}</a></td>
                 <td>{{ problem.types_list|join:"<br>" }}</td>
                 <td>{{ problem.code }}</td>
                 <td>{{ problem.points }}{% if problem.partial %}p{% endif %}</td>
