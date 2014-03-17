@@ -130,6 +130,7 @@ class Submission(models.Model):
 
     def judge(self):
         from judge.judgeapi import judge_submission
+
         return judge_submission(self)
 
     def __unicode__(self):

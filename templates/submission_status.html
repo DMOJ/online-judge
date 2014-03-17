@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block body %}
+<b>Submission of {{ submission.problem.name}} by {{ submission.user.name }}</b>
+Submitted on {{ submission.time }}
+<a href="{% url 'judge.views.problem_submit' submission.problem.code %}">Click here to revise and resubmit!</a>
+<br/>
+<h3>Test case status</h3>
+Status: {{ submission.status }}
+Score: {{ submission.points }} / {{ submission.problem.points }}
+{% endblock %}
