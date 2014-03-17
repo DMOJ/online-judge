@@ -1,4 +1,4 @@
-table {
+.table table {
     border-collapse: collapse;
     width: 100%;
     margin-left: auto;
@@ -6,15 +6,15 @@ table {
     border: 1px solid #000;
 }
 
-table tr:nth-child(odd) {
+.table table tr:nth-child(odd) {
     background-color: #F6F4F0;
 }
 
-table tr:nth-child(even) {
+.table table tr:nth-child(even) {
     background-color: #FFFFFF;
 }
 
-table th {
+.table table th {
     color: #ffffff;
     background-color: #393630;
     border: 1px solid #555555;
@@ -23,7 +23,7 @@ table th {
     text-align: center;
 }
 
-table td {
+.table table td {
     border: 1px solid #d4d4d4;
     padding: 5px;
     padding-top: 7px;
