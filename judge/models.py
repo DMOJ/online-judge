@@ -56,10 +56,6 @@ class Profile(models.Model):
         return self.long_display_name()
 
 
-class ProfileAdmin(admin.ModelAdmin):
-    fields = ['user', 'name', 'about', 'timezone', 'language']
-
-
 class ProblemType(models.Model):
     name = models.CharField(max_length=20, verbose_name='Problem category ID')
     full_name = models.CharField(max_length=100, verbose_name='Problem category name')
@@ -87,18 +83,13 @@ class Problem(models.Model):
         return self.name
 
 
-class ProblemAdmin(admin.ModelAdmin):
-    fieldsets = (
-        (None, {'fields': ('code', 'name', 'user', 'description', 'types')}),
-        ('Points', {'fields': (('points', 'partial'),)}),
-        ('Limits', {'fields': ('time_limit', 'memory_limit')}),
-    )
-
-
 class TestCase(models.Model):
     problem = models.ForeignKey(Problem)
     key = models.IntegerField(verbose_name='Test case ID')
     points = models.FloatField(verbose_name='Points worth', null=True)
+
+    def __unicode__(self):
+        return '#%d on %s' % (self.key, self.problem.name)
 
 
 class Comment(models.Model):
@@ -134,7 +125,7 @@ class Submission(models.Model):
     language = models.ForeignKey(Language, verbose_name='Submission language')
     source = models.TextField(verbose_name='Source code')
     status = models.CharField(max_length=2, choices=STATUS, default='QU')
-    result = models.CharField(max_length=3, choices=RESULT, default=None)
+    result = models.CharField(max_length=3, choices=RESULT, default=None, null=True, blank=True)
 
     def judge(self):
         from judge.judgeapi import judge_submission
@@ -161,8 +152,31 @@ class SubmissionTestCase(models.Model):
     points = models.FloatField(verbose_name='Points granted', null=True)
 
 
+class ProfileAdmin(admin.ModelAdmin):
+    fields = ['user', 'name', 'about', 'timezone', 'language']
+
+
+class TestCaseInline(admin.StackedInline):
+    model = TestCase
+    ordering = ('key',)
+
+    def save_model(self, request, obj, form, change):
+        print change
+        print request
+        print form
+        obj.save()
+
+
+class ProblemAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('code', 'name', 'user', 'description', 'types')}),
+        ('Points', {'fields': (('points', 'partial'),)}),
+        ('Limits', {'fields': ('time_limit', 'memory_limit')}),
+    )
+    inlines = [TestCaseInline]
+
+
 admin.site.register(Language)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(ProblemType)
-admin.site.register(TestCase)
