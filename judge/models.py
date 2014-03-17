@@ -117,6 +117,13 @@ class Submission(models.Model):
         ('D', 'Completed'),
         ('IE', 'Internal Error'),
     )
+    RESULT = (
+        ('AC', 'Accepted'),
+        ('WA', 'Wrong Answer'),
+        ('TLE', 'Time Limit Exceeded'),
+        ('IR', 'Invalid Return'),
+        ('RTE', 'Runtime Error')
+    )
 
     user = models.ForeignKey(Profile)
     problem = models.ForeignKey(Problem)
@@ -127,6 +134,7 @@ class Submission(models.Model):
     language = models.ForeignKey(Language, verbose_name='Submission language')
     source = models.TextField(verbose_name='Source code')
     status = models.CharField(max_length=2, choices=STATUS, default='QU')
+    result = models.CharField(max_length=2, choices=RESULT, default=None)
 
     def judge(self):
         from judge.judgeapi import judge_submission

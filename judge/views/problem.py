@@ -7,10 +7,17 @@ from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Profile, Submission
 
 
+def get_result_table(code):
+    results = {}
+    for submission in Submission.objects.filter(problem__code=code) if code else Submission.objects.all():
+        results[submission.result] = results.get(submission.result, 0) + 1
+
+
 def problem(request, code):
     try:
         problem = Problem.objects.get(code=code)
-        return render_to_response('problem.html', {'problem': problem, 'title': 'Problem %s' % problem.name},
+        return render_to_response('problem.html', {'problem': problem, 'results': get_result_table(code),
+                                                   'title': 'Problem %s' % problem.name},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return Http404()

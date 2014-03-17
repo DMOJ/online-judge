@@ -3,6 +3,7 @@ from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.models import Problem, Submission
+from judge.views import get_result_table
 
 
 def submission_status(request, code):
@@ -36,11 +37,12 @@ def problem_submissions(request, code):
         return render_to_response('problem_submissions.html',
                                   {'submissions': submissions,
                                    'problem': problem,
+                                   'results': get_result_table(code),
                                    'title': 'Submissions for %s' % problem.name},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return Http404()
 
 def submissions(request):
-    return render_to_response('submissions.html', {'submissions': Submission.objects.all(), 'title': 'All submissions'},
+    return render_to_response('submissions.html', {'submissions': Submission.objects.all(), 'results': get_result_table(None), 'title': 'All submissions'},
                               context_instance=RequestContext(request))
