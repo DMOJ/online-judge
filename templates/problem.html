@@ -1,5 +1,5 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "results_table.html" %}
-{{ problem.description }}
+{{ problem.description|safe }}
 {% endblock %}
