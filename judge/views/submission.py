@@ -10,7 +10,9 @@ from judge.models import Problem, Profile, Submission
 def submission_status(request, code):
     try:
         submission = Submission.objects.get(id=int(code))
-        return render_to_response('submission_status.html', {'submission': submission, 'title': 'Submission %s' % code},
+        return render_to_response('submission_status.html',
+                                  {'submission': submission, 'title': 'Submission of %s by %s' %
+                                                                      (submission.problem.name, submission.user.name)},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return Http404()
