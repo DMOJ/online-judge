@@ -29,6 +29,17 @@ def submission_rank(request, code):
     except ObjectDoesNotExist:
         return Http404()
 
+def problem_submissions(request, code):
+    try:
+        submissions = Submission.objects.filter(problem__code=code)
+        problem = Problem.objects.get(code=code)
+        return render_to_response('problem_submissions.html',
+                                  {'submissions': submissions,
+                                   'problem': problem,
+                                   'title': 'Submissions for %s' % problem.name},
+                                  context_instance=RequestContext(request))
+    except ObjectDoesNotExist:
+        return Http404()
 
 def submissions(request):
     return render_to_response('submissions.html', {'submissions': Submission.objects.all(), 'title': 'All submissions'},

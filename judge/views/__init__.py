@@ -3,9 +3,9 @@ from django.template import RequestContext
 from django.views.generic import TemplateView
 
 from .register import RegistrationView, ActivationView
-from .user import users, user, edit_profile
-from .problem import problem, problems, problem_submit
-from .submission import submission_status, submissions, submission_rank
+from .user import *
+from .problem import *
+from .submission import *
 
 
 class TemplateView(TemplateView):

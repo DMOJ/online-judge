@@ -81,4 +81,5 @@ urlpatterns = patterns('',
     url(r'^edit/profile/$', 'judge.views.edit_profile'),
     url(r'^submissions/$', 'judge.views.submissions'),
     url(r'^problem/(\w+)/rank/$', 'judge.views.submission_rank'),
+    url(r'^problem/(\w+)/submissions/$', 'judge.views.problem_submissions'),
 )
