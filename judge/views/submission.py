@@ -19,7 +19,7 @@ def submission_status(request, code):
 
 def submission_rank(request, code):
     try:
-        submissions = Submission.objects.get(problem__code=code)
+        submissions = Submission.objects.filter(problem__code=code)
         problem = Problem.objects.get(code=code)
         return render_to_response('submission_rank.html',
                                   {'submissions': submissions,
