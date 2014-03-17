@@ -1,19 +1,24 @@
 {% extends "base.html" %}
 {% block body %}
-<table>
-    {% include "results_table.html" %}
-    <tr>
-        <th style="white-space:nowrap">Score</th>
-        <th style="width:100%">Details</th>
-        <th style="white-space:nowrap">Execution</th>
-    </tr>
-    {% for submission in submissions %}
-    <tr>
-        <td>{{ submission.points }} / {{ submission.problem.points }} ({{ submission.status }})</td>
-        <td><a href="{% url "judge.views.problem" submission.problem.code %}">{{ submission.problem.name }}</a> by <a href="{% url "judge.views.user" submission.user.user.username %}">{{ submission.user.long_display_name }}</a></td>
-        <td><b>{{ submission.time }}s</b><br/>
-            {{ submission.memory }}kb</td>
-    </tr>
-    {% endfor %}
-</table>
+<div class="fancy">
+    <table>
+        {% include "results_table.html" %}
+        <tr>
+            <th style="white-space:nowrap">Score</th>
+            <th style="width:100%">Details</th>
+            <th style="white-space:nowrap">Execution</th>
+        </tr>
+        {% for submission in submissions %}
+        <tr>
+            <td>{{ submission.points }} / {{ submission.problem.points }} ({{ submission.status }})</td>
+            <td><a href="{% url " judge.views.problem" submission.problem.code %}">{{ submission.problem.name }}</a> by
+                <a href="{% url " judge.views.user" submission.user.user.username %}">{{
+                submission.user.long_display_name }}</a></td>
+            <td><b>{{ submission.time }}s</b><br/>
+                {{ submission.memory }}kb
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
 {% endblock %}
