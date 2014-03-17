@@ -75,7 +75,7 @@ urlpatterns = patterns('',
     url(r'^user/(\w+)$', 'judge.views.user'),
     url(r'^problems/$', 'judge.views.problems'),
     url(r'^problem/(\w+)$', 'judge.views.problem'),
+    url(r'^problem/(\w+)/submit$', 'judge.views.problem_submit'),
     url(r'^submit/problem/$', 'judge.views.problem_submit'),
-    url(r'^submit/problem/(\w+)$', 'judge.views.problem_submit'),
     url(r'^edit/profile/$', 'judge.views.edit_profile'),
 )
