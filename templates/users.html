@@ -11,7 +11,7 @@
         {% for user in users %}
         <tr>
             <td>0</td>
-            <td><a href="{% url " judge.views.user" user.user.username %}">{{ user.long_display_name }}</a></td>
+            <td><a href="{% url 'judge.views.user' user.user.username %}">{{ user.long_display_name }}</a></td>
             <td>0</td>
             <td>0</td>
         </tr>
