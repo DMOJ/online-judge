@@ -36,7 +36,15 @@ class DjangoJudgeHandler(JudgeHandler):
         JudgeHandler.on_test_case(self, packet)
         test_case = SubmissionTestCase.objects.get_or_create(submission__id=packet['submission-id'],
                                                              case=packet['position'])[0]
-        test_case.status = packet['status']
+        status = packet['status']
+        if status & 2:
+            test_case.status = 'RTE'
+        elif status & 4:
+            test_case.status = 'TLE'
+        elif status & 1:
+            test_case.status = 'WA'
+        else:
+            test_case.status = 'AC'
         test_case.time = packet['time']
         test_case.memory = packet['memory']
         test_case.points = packet['points']
