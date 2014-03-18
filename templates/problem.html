@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block body %}
+<a href="{% url 'judge.views.problem_submit' problem.code %}">Submit</a>
+<br/>
+<a href="{% url 'judge.views.problem_submissions' problem.code %}">All submissions</a>
+<br/>
+<a href="{% url 'judge.views.submission_rank' problem.code %}">Best submissions</a>
+<br/>
 {% include "results_table.html" %}
 {{ problem.description|safe }}
 {% endblock %}
