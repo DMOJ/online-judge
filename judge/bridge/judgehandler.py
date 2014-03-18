@@ -12,6 +12,14 @@ logger = logging.getLogger('judge.bridge')
 class JudgeHandler(SocketServer.StreamRequestHandler):
     def setup(self):
         SocketServer.StreamRequestHandler.setup(self)
+
+        self.handlers = {
+            'grading-begin': self.on_grading_begin,
+            'grading-end': self.on_grading_end,
+            'compile-error': self.on_compile_error,
+            'test-case-status': self.on_test_case,
+            'current-submission-id': self.on_current_submission,
+        }
         self._current_submission = None
         self._current_submission_event = threading.Event()
         self._load = set()
@@ -73,7 +81,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             if 'name' not in data:
                 self.on_malformed(data)
             handler = self.handlers.get(data['name'], JudgeHandler.on_malformed)
-            handler(self, data)
+            handler(data)
             if data['name'] in ('grading-end', 'compile-error') and 'submission-id' in data:
                 self._load.remove(data['submission-id'])
         except:
@@ -99,12 +107,4 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)
-
-    handlers = {
-        'grading-begin': on_grading_begin,
-        'grading-end': on_grading_end,
-        'compile-error': on_compile_error,
-        'test-case-status': on_test_case,
-        'current-submission-id': on_current_submission,
-    }
 
