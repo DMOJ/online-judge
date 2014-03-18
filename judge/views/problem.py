@@ -35,7 +35,8 @@ def problem_submit(request, problem=None):
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=request.user.profile))
         if form.is_valid():
-            form.save()
+            model = form.save()
+            model.judge()
             return HttpResponseRedirect(request.path)
     else:
         initial = {'language': request.user.profile.language}
