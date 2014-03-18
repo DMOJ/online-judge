@@ -1,16 +1,19 @@
 {% extends "base.html" %}
+{% block css %}
+<link rel="stylesheet" href="{% static "status.css" %}">
+{% endblock %}
 {% block body %}
 {% include "results_table.html" %}
 <div class="table">
     <table>
         <tr>
-            <th style="white-space:nowrap">Score</th>
-            <th style="width:100%">Details</th>
+            <th style="width:5%">Score</th>
+            <th style="width:95%">Details</th>
             <th style="white-space:nowrap">Execution</th>
         </tr>
         {% for submission in submissions %}
         <tr>
-            <td>{{ submission.points }} / {{ submission.problem.points }} ({{ submission.status }})</td>
+            <td class="{{ submission.result }}">{{ submission.points }} / {{ submission.problem.points }}<br/>({{ submission.result }})</td>
             <td><a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.long_display_name }}</a></td>
             <td><b>{{ submission.time }}s</b><br/>
                    {{ submission.memory }}kb
