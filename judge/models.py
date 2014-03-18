@@ -77,7 +77,8 @@ class Problem(models.Model):
     name = models.CharField(max_length=100, verbose_name='Problem name')
     description = models.TextField(verbose_name='Problem body')
     user = models.ForeignKey(Profile, verbose_name='Creator')
-    types = models.ManyToManyField(ProblemType, verbose_name='Problem type')
+    types = models.ManyToManyField(ProblemType, verbose_name='Problem types')
+    groups = models.ManyToManyField(ProblemGroup, verbose_name='Problem groups')
     time_limit = models.FloatField(verbose_name='Time limit')
     memory_limit = models.FloatField(verbose_name='Memory limit')
     points = models.FloatField(verbose_name='Points')
@@ -177,7 +178,7 @@ class TestCaseInline(admin.StackedInline):
 
 class ProblemAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('code', 'name', 'user', 'description', 'types')}),
+        (None, {'fields': ('code', 'name', 'user', 'description', 'types', 'groups')}),
         ('Points', {'fields': (('points', 'partial'),)}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
     )
