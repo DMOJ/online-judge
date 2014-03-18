@@ -2,8 +2,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.contrib import admin
 import pytz
-
 from operator import itemgetter, attrgetter
+
+from judge.judgeapi import judge_submission
 
 
 def make_timezones():
@@ -92,15 +93,6 @@ class Problem(models.Model):
         return self.name
 
 
-class TestCase(models.Model):
-    problem = models.ForeignKey(Problem)
-    key = models.IntegerField(verbose_name='Test case ID')
-    points = models.FloatField(verbose_name='Points worth', null=True)
-
-    def __unicode__(self):
-        return '#%d on %s' % (self.key, self.problem.name)
-
-
 class Comment(models.Model):
     user = models.ForeignKey(Profile, verbose_name='User who posted this comment')
     time = models.DateTimeField(verbose_name='Comment time')
@@ -137,8 +129,6 @@ class Submission(models.Model):
     result = models.CharField(max_length=3, choices=RESULT, default=None, null=True, blank=True)
 
     def judge(self):
-        from judge.judgeapi import judge_submission
-
         return judge_submission(self)
 
     def __unicode__(self):
@@ -154,26 +144,16 @@ class SubmissionTestCase(models.Model):
     )
 
     submission = models.ForeignKey(Submission, verbose_name='Associated submission')
-    case = models.ForeignKey(TestCase, verbose_name='Associated test case')
+    case = models.IntegerField(verbose_name='Test case ID')
     status = models.IntegerField(verbose_name='Status flag', choices=STATUS, default='QU')
     time = models.FloatField(verbose_name='Execution time', null=True)
     memory = models.FloatField(verbose_name='Memory usage', null=True)
     points = models.FloatField(verbose_name='Points granted', null=True)
+    total = models.FloatField(verbose_name='Points possible', null=True)
 
 
 class ProfileAdmin(admin.ModelAdmin):
     fields = ['user', 'name', 'about', 'timezone', 'language']
-
-
-class TestCaseInline(admin.StackedInline):
-    model = TestCase
-    ordering = ('key',)
-
-    def save_model(self, request, obj, form, change):
-        print change
-        print request
-        print form
-        obj.save()
 
 
 class ProblemAdmin(admin.ModelAdmin):
@@ -182,7 +162,6 @@ class ProblemAdmin(admin.ModelAdmin):
         ('Points', {'fields': (('points', 'partial'),)}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
     )
-    inlines = [TestCaseInline]
 
 
 admin.site.register(Language)
