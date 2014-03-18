@@ -7,17 +7,12 @@
 {% include "results_table.html" %}
 <div class="table">
     <table>
-        <tr>
-            <th style="width:10%">Score</th>
-            <th style="width:90%">Details</th>
-            <th style="white-space:nowrap">Execution</th>
-        </tr>
         {% for submission in submissions %}
         <tr>
-            <td class="{{ submission.result }}">{{ submission.points }} / {{ submission.problem.points }}<br/>({{ submission.result }})</td>
-            <td><a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a> by
+            <td style="width:10%" class="{{ submission.result }}">{{ submission.points }} / {{ submission.problem.points }}<br/>({{ submission.result }})</td>
+            <td style="width:90%"><a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a> by
                 <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.long_display_name }}</a></td>
-            <td><b>{{ submission.time }}s</b><br/>
+            <td style="white-space:nowrap"><b>{{ submission.time }}s</b><br/>
                 {{ submission.memory }}kb
             </td>
         </tr>
