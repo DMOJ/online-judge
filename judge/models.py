@@ -64,6 +64,14 @@ class ProblemType(models.Model):
         return self.full_name
 
 
+class ProblemGroup(models.Model):
+    name = models.CharField(max_length=20, verbose_name='Problem group ID')
+    full_name = models.CharField(max_length=100, verbose_name='Problem group name')
+
+    def __unicode__(self):
+        return self.full_name
+
+
 class Problem(models.Model):
     code = models.CharField(max_length=20, verbose_name='Problem code')
     name = models.CharField(max_length=100, verbose_name='Problem name')
@@ -179,4 +187,5 @@ class ProblemAdmin(admin.ModelAdmin):
 admin.site.register(Language)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Problem, ProblemAdmin)
+admin.site.register(ProblemGroup)
 admin.site.register(ProblemType)
