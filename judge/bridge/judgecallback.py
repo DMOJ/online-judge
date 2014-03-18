@@ -26,7 +26,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
         time = 0
         memory = 0
-        points = 0
+        points = 0.0
         total = 0
         status = 0
         status_codes = ['AC', 'WA', 'TLE', 'RTE']
@@ -42,8 +42,7 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.status = 'D'
         submission.time = time
         submission.memory = memory
-        submission.points = points
-        submission.total = total
+        submission.points = points / total * submission.problem.points
         submission.result = status_codes[status]
         submission.save()
 
