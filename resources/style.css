@@ -34,6 +34,9 @@
 
 div.status-table {
 	float: right;
+    width: 20%;
+    padding-left: 8px;
+    height: 100%;
 }
 
 html {
@@ -223,5 +226,3 @@ hr {
 footer {
    height: 142px;
 }
-
-
