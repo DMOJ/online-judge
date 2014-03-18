@@ -4,6 +4,8 @@ import os
 
 
 class JudgeServer(SocketServer.ThreadingTCPServer):
+    allow_reuse_address = True
+
     def __init__(self, *args, **kwargs):
         SocketServer.ThreadingTCPServer.__init__(self, *args, **kwargs)
         self.judges = JudgeList()
