@@ -23,7 +23,28 @@ class DjangoJudgeHandler(JudgeHandler):
     def on_grading_end(self, packet):
         JudgeHandler.on_grading_end(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])
+
+        time = 0
+        memory = 0
+        points = 0
+        total = 0
+        status = 0
+        status_codes = ['AC', 'WA', 'TLE', 'RTE']
+        for case in SubmissionTestCase.objects.filter(submission=submission):
+            time += case.time
+            total += case.total
+            points += case.points
+            memory += case.total
+            i = status_codes.index(case.status)
+            if i > status:
+                status = i
+
         submission.status = 'D'
+        submission.time = time
+        submission.memory = memory
+        submission.points = points
+        submission.total = total
+        submission.result = status_codes[status]
         submission.save()
 
     def on_compile_error(self, packet):
@@ -34,8 +55,8 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def on_test_case(self, packet):
         JudgeHandler.on_test_case(self, packet)
-        test_case = SubmissionTestCase.objects.get_or_create(submission__id=packet['submission-id'],
-                                                             case=packet['position'])[0]
+        submission = Submission.objects.get(id=packet['submission-id'])
+        test_case = SubmissionTestCase.objects.get_or_create(submission=submission, case=packet['position'])[0]
         status = packet['status']
         if status & 2:
             test_case.status = 'RTE'
