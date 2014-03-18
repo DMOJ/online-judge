@@ -1,0 +1,39 @@
+.AC {
+    background-color: green;
+    color: black;
+}
+
+.WA {
+    background-color: gray;
+    color: red;
+}
+
+.TLE {
+    background-color: gray;
+    color: black;
+}
+
+.IR {
+    background-color: orange;
+    color: black;
+}
+
+.CE {
+    background-color: gray;
+    color: black;
+}
+
+.RTE {
+    background-color: orange;
+    color: black;
+}
+
+.IE {
+    background-color: red;
+    color: black;
+}
+
+.QU {
+    background-color: white;
+    color: black;
+}
