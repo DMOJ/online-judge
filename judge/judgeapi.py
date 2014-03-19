@@ -54,6 +54,9 @@ def judge_submission(submission):
         submission.status = 'QU' if (response['name'] == 'submission-received' and
                                      response['submission-id'] == submission.id) else 'IE'
         success = True
+    submission.time = None
+    submission.memory = None
+    submission.points = None
     submission.result = None
     submission.save()
     return success

@@ -9,7 +9,7 @@
     <table>
         {% for submission in submissions %}
         <tr>
-            <td style="width:10%" class="{{ submission.result }}">{{ submission.points|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}<br/>{{ submission.result }} | {{ submission.language.key }}</td>
+            <td style="width:10%" class="{{ submission.result }}">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}<br/>{{ submission.result|default_if_none:submission.status }} | {{ submission.language.key }}</td>
             <td style="width:90%"><a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a> by
                 <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.long_display_name }}</a><br/>
             {{ submission.date }}</td>
