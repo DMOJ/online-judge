@@ -7,7 +7,6 @@ from judge.views import get_result_table
 
 
 def submission_status(request, code):
-    #TODO: should only show "Click here to revise and resubmit!" if user is the author of the submission
     try:
         submission = Submission.objects.get(id=int(code))
         return render_to_response('submission_status.html',
@@ -33,6 +32,7 @@ def problem_submissions(request, code, title, order=['-id']):
 
 def submissions(request):
     return render_to_response('submissions.html',
-                              {'submissions': Submission.objects.all(), 'results': get_result_table(None),
+                              {'submissions': Submission.objects.all(),
+                               'results': get_result_table(None),
                                'title': 'All submissions'},
                               context_instance=RequestContext(request))

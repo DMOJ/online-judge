@@ -2,8 +2,10 @@
 {% block body %}
 Submitted on {{ submission.time }}
 <br/>
+{% if request.user == submission.user.user %}
 <a href="{% url 'judge.views.problem_submit' submission.problem.code %}">Click here to revise and resubmit!</a>
 <br/>
+{% endif %}
 <b>Test case status</b>
 <br/>
 Status: {{ submission.status }}
