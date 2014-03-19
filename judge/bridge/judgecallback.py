@@ -56,6 +56,12 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.status = 'CE'
         submission.save()
 
+    def on_bad_problem(self, packet):
+        JudgeHandler.on_bad_problem(self, packet)
+        submission = Submission.objects.get(id=packet['submission-id'])
+        submission.status = 'IE'
+        submission.save()
+
     def on_test_case(self, packet):
         JudgeHandler.on_test_case(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])

@@ -19,6 +19,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'compile-error': self.on_compile_error,
             'test-case-status': self.on_test_case,
             'current-submission-id': self.on_current_submission,
+            'problem-not-exist': self.on_bad_problem,
         }
         self._current_submission = None
         self._current_submission_event = threading.Event()
@@ -97,6 +98,9 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
     def on_compile_error(self, packet):
         logger.info('Submission failed to compile: %s', packet['submission-id'])
+
+    def on_bad_problem(self, packet):
+        logger.error('Submission referenced invalid problem "%s": %s', packet['problem'], packet['submission-id'])
 
     def on_test_case(self, packet):
         logger.info('Test case completed on: %s', packet['submission-id'])
