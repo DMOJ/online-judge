@@ -1,10 +1,12 @@
 from django.conf import settings
 
 import socket
+import struct
 import json
 import logging
 
 logger = logging.getLogger('judge.judgeapi')
+size_pack = struct.Struct('!I')
 
 
 def judge_request(packet):
@@ -14,11 +16,18 @@ def judge_request(packet):
     output = json.dumps(packet, separators=(',', ':'))
     output = output.encode('zlib')
     writer = sock.makefile('w', 0)
+    writer.write(size_pack.pack(len(output)))
     writer.write(output)
     writer.close()
 
     reader = sock.makefile('r', -1)
-    input = reader.read()
+    input = reader.read(4)
+    if not input:
+        raise ValueError('Judge did not respond')
+    length = size_pack.unpack(input)[0]
+    input = reader.read(length)
+    if not input:
+        raise ValueError('Judge did not respond')
     reader.close()
     sock.close()
 
