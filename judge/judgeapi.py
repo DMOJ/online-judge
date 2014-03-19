@@ -13,13 +13,13 @@ def judge_request(packet):
 
     output = json.dumps(packet, separators=(',', ':'))
     output = output.encode('zlib')
-    sock.sendall(output)
-    sock.shutdown(socket.SHUT_WR)
+    writer = sock.makefile('w', 0)
+    writer.write(output)
+    writer.close()
 
     reader = sock.makefile('r', -1)
     input = reader.read()
     reader.close()
-    sock.shutdown(socket.SHUT_RD)
     sock.close()
 
     input = input.decode('zlib')
