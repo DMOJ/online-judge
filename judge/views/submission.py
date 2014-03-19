@@ -22,7 +22,7 @@ def chronological_submissions(request, code):
 
 
 def ranked_submissions(request, code):
-    return problem_submissions(request, code, title="Best solutions for %s", order=['-points', '-time', '-memory'])
+    return problem_submissions(request, code, title="Best solutions for %s", order=['-points', 'time', 'memory'])
 
 
 def problem_submissions(request, code, title, order):
