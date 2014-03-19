@@ -18,11 +18,11 @@ def submission_status(request, code):
 
 
 def chronological_submissions(request, code):
-    problem_submissions(request, code, title="All submissions for %s", order=['-id'])
+    return problem_submissions(request, code, title="All submissions for %s", order=['-id'])
 
 
 def ranked_submissions(request, code):
-    problem_submissions(request, code, title="Best solutions for %s", order=['-points', '-time', '-memory'])
+    return problem_submissions(request, code, title="Best solutions for %s", order=['-points', '-time', '-memory'])
 
 
 def problem_submissions(request, code, title, order):
