@@ -141,7 +141,7 @@ class Submission(models.Model):
 class SubmissionTestCase(models.Model):
     submission = models.ForeignKey(Submission, verbose_name='Associated submission')
     case = models.IntegerField(verbose_name='Test case ID')
-    status = models.CharField(max_length=3, verbose_name='Status flag', choices=SUBMISSION_RESULT, default='QU')
+    status = models.CharField(max_length=3, verbose_name='Status flag', choices=SUBMISSION_RESULT)
     time = models.FloatField(verbose_name='Execution time', null=True)
     memory = models.FloatField(verbose_name='Memory usage', null=True)
     points = models.FloatField(verbose_name='Points granted', null=True)
