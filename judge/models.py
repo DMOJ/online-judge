@@ -160,8 +160,22 @@ class ProblemAdmin(admin.ModelAdmin):
     )
 
 
+class SubmissionAdmin(admin.ModelAdmin):
+    readonly_fields = ('user', 'problem', 'date')
+    fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result')
+    actions = ['judge']
+
+    def judge(self, request, queryset):
+        successful = 0
+        for model in queryset:
+            successful += model.judge()
+        self.message_user(request, '%d submission%s were successfully rejudged.' % (successful, 's'[successful == 1:]))
+    judge.short_description = 'Rejudge the selected submissions'
+
+
 admin.site.register(Language)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(ProblemGroup)
 admin.site.register(ProblemType)
+admin.site.register(Submission, SubmissionAdmin)
