@@ -49,7 +49,9 @@ def judge_submission(submission):
         logger.exception('Failed to send request to judge')
         submission.status = 'IE'
         submission.save()
+        return False
     else:
         submission.status = 'QU' if (response['name'] == 'submission-received' and
                                      response['submission-id'] == submission.id) else 'IE'
         submission.save()
+        return True
