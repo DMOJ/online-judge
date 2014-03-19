@@ -42,6 +42,7 @@ def problem_submissions(request, code, title, order):
 
 
 def submissions(request):
+    profile = request.user.profile
     return render_to_response('submissions.html',
                               {'submissions': Submission.objects.all(),
                                'results': get_result_table(None),
