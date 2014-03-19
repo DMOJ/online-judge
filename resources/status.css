@@ -1,11 +1,11 @@
 .AC {
-    background-color: green;
+    background-color: #53D93F;
     color: black;
 }
 
 .WA {
     background-color: gray;
-    color: red;
+    color: #EF1B53;
 }
 
 .TLE {
@@ -14,7 +14,7 @@
 }
 
 .IR {
-    background-color: orange;
+    background-color: #FAB623;
     color: black;
 }
 
@@ -24,7 +24,7 @@
 }
 
 .RTE {
-    background-color: orange;
+    background-color: #FAB623;
     color: black;
 }
 
