@@ -101,6 +101,16 @@ class Comment(models.Model):
     body = models.TextField(verbose_name='Body of comment')
 
 
+SUBMISSION_RESULT = (
+    ('AC', 'Accepted'),
+    ('WA', 'Wrong Answer'),
+    ('TLE', 'Time Limit Exceeded'),
+    ('MLE', 'Memory Limit Exceeded'),
+    ('IR', 'Invalid Return'),
+    ('RTE', 'Runtime Error')
+)
+
+
 class Submission(models.Model):
     STATUS = (
         ('QU', 'Queued'),
@@ -108,13 +118,6 @@ class Submission(models.Model):
         ('G', 'Grading'),
         ('D', 'Completed'),
         ('IE', 'Internal Error'),
-    )
-    RESULT = (
-        ('AC', 'Accepted'),
-        ('WA', 'Wrong Answer'),
-        ('TLE', 'Time Limit Exceeded'),
-        ('IR', 'Invalid Return'),
-        ('RTE', 'Runtime Error')
     )
 
     user = models.ForeignKey(Profile)
@@ -126,7 +129,7 @@ class Submission(models.Model):
     language = models.ForeignKey(Language, verbose_name='Submission language')
     source = models.TextField(verbose_name='Source code')
     status = models.CharField(max_length=2, choices=STATUS, default='QU')
-    result = models.CharField(max_length=3, choices=RESULT, default=None, null=True, blank=True)
+    result = models.CharField(max_length=3, choices=SUBMISSION_RESULT, default=None, null=True, blank=True)
 
     def judge(self):
         return judge_submission(self)
@@ -136,16 +139,9 @@ class Submission(models.Model):
 
 
 class SubmissionTestCase(models.Model):
-    STATUS = (
-        ('QU', 'Queued'),
-        ('IR', 'Invalid Return'),
-        ('WA', 'Wrong Answer'),
-        ('AC', 'Correct'),
-    )
-
     submission = models.ForeignKey(Submission, verbose_name='Associated submission')
     case = models.IntegerField(verbose_name='Test case ID')
-    status = models.CharField(max_length=2, verbose_name='Status flag', choices=STATUS, default='QU')
+    status = models.CharField(max_length=3, verbose_name='Status flag', choices=SUBMISSION_RESULT, default='QU')
     time = models.FloatField(verbose_name='Execution time', null=True)
     memory = models.FloatField(verbose_name='Memory usage', null=True)
     points = models.FloatField(verbose_name='Points granted', null=True)
