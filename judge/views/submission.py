@@ -21,9 +21,12 @@ def problem_submissions(request, code, title, order=['-id']):
     try:
         problem = Problem.objects.get(code=code)
         submissions = Submission.objects.filter(problem=problem).order_by(*order)
+        profile = request.user.profile
+        can_see_results = any(sub.user == profile and sub.result == 'AC' for sub in submissions)
         return render_to_response('problem_submissions.html',
                                   {'submissions': submissions,
                                    'results': get_result_table(code),
+                                   'can_see_results': can_see_results,
                                    'title': title % problem.name},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
