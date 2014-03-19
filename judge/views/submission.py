@@ -40,11 +40,12 @@ def problem_submissions(request, code, page, title, order):
             submissions = paginator.page(1)
         except EmptyPage:
             submissions = paginator.page(paginator.num_pages)
-        return render_to_response('problem_submissions.html',
+        return render_to_response('submissions.html',
                                   {'submissions': submissions,
                                    'results': get_result_table(code),
                                    'can_see_results': can_see_results,
-                                   'title': title % problem.name},
+                                   'title': title % problem.name,
+                                   'show_problem': False},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return Http404()
@@ -61,5 +62,6 @@ def submissions(request, page=1):
     return render_to_response('submissions.html',
                               {'submissions': submissions,
                                'results': get_result_table(None),
-                               'title': 'All submissions'},
+                               'title': 'All submissions',
+                               'show_problem': True},
                               context_instance=RequestContext(request))
