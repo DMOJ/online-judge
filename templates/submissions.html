@@ -23,4 +23,19 @@
         {% endfor %}
     </table>
 </div>
+<div class="pagination">
+    <span class="step-links">
+        {% if submissions.has_previous %}
+            <a href="{{ submissions.previous_page_number }}">&lt;&lt; Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ submissions.number }} of {{ submissions.paginator.num_pages }}.
+        </span>
+
+        {% if submissions.has_next %}
+            <a href="{{ submissions.next_page_number }}">Next &gt;&gt;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}

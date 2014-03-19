@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -17,20 +18,28 @@ def submission_status(request, code):
         return Http404()
 
 
-def chronological_submissions(request, code):
-    return problem_submissions(request, code, title="All submissions for %s", order=['-id'])
+def chronological_submissions(request, code, page=1):
+    return problem_submissions(request, code, page, title="All submissions for %s", order=['-id'])
 
 
-def ranked_submissions(request, code):
-    return problem_submissions(request, code, title="Best solutions for %s", order=['-points', 'time', 'memory'])
+def ranked_submissions(request, code, page=1):
+    return problem_submissions(request, code, page, title="Best solutions for %s", order=['-points', 'time', 'memory'])
 
 
-def problem_submissions(request, code, title, order):
+def problem_submissions(request, code, page, title, order):
     try:
         problem = Problem.objects.get(code=code)
         submissions = Submission.objects.filter(problem=problem).order_by(*order)
         profile = request.user.profile
         can_see_results = any(sub.user == profile and sub.result == 'AC' for sub in submissions)
+
+        paginator = Paginator(submissions, 50)
+        try:
+            submissions = paginator.page(page)
+        except PageNotAnInteger:
+            submissions = paginator.page(1)
+        except EmptyPage:
+            submissions = paginator.page(paginator.num_pages)
         return render_to_response('problem_submissions.html',
                                   {'submissions': submissions,
                                    'results': get_result_table(code),
@@ -41,10 +50,16 @@ def problem_submissions(request, code, title, order):
         return Http404()
 
 
-def submissions(request):
-    profile = request.user.profile
+def submissions(request, page=1):
+    paginator = Paginator(Submission.objects.order_by('-id'), 50)
+    try:
+        submissions = paginator.page(page)
+    except PageNotAnInteger:
+        submissions = paginator.page(1)
+    except EmptyPage:
+        submissions = paginator.page(paginator.num_pages)
     return render_to_response('submissions.html',
-                              {'submissions': Submission.objects.all().order_by('-id'),
+                              {'submissions': submissions,
                                'results': get_result_table(None),
                                'title': 'All submissions'},
                               context_instance=RequestContext(request))
