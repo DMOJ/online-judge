@@ -17,7 +17,15 @@ def submission_status(request, code):
         return Http404()
 
 
-def problem_submissions(request, code, title, order=['-id']):
+def chronological_submissions(request, code):
+    problem_submissions(request, code, title="All submissions for %s", order=['-id'])
+
+
+def ranked_submissions(request, code):
+    problem_submissions(request, code, title="Best solutions for %s", order=['-points', '-time', '-memory'])
+
+
+def problem_submissions(request, code, title, order):
     try:
         problem = Problem.objects.get(code=code)
         submissions = Submission.objects.filter(problem=problem).order_by(*order)
