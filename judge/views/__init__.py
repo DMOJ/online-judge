@@ -18,7 +18,7 @@ class TemplateView(TemplateView):
 
 
 def home(request):
-    return render_to_response('index.html', {'title': 'DMOPC Home'},
+    return render_to_response('index.html', {'title': 'Home'},
                               context_instance=RequestContext(request))
 
 
