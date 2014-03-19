@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.contrib import admin
+from django.contrib import admin, messages
 import pytz
 from operator import itemgetter, attrgetter
 
@@ -137,6 +137,11 @@ class Submission(models.Model):
     def __unicode__(self):
         return u'Submission %d of %s by %s' % (self.id, self.problem, self.user)
 
+    class Meta:
+        permissions = (
+            ('rejudge_submission', 'Rejudge the submission'),
+        )
+
 
 class SubmissionTestCase(models.Model):
     submission = models.ForeignKey(Submission, verbose_name='Associated submission')
@@ -166,6 +171,8 @@ class SubmissionAdmin(admin.ModelAdmin):
     actions = ['judge']
 
     def judge(self, request, queryset):
+        if not request.user.has_perm('judge.rejudge_submission'):
+            self.message_user(request, 'You do not have the permission to rejudge submissions.', level=messages.ERROR)
         successful = 0
         for model in queryset:
             successful += model.judge()
