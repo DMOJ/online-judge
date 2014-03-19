@@ -18,31 +18,21 @@ def submission_status(request, code):
         return Http404()
 
 
-def submission_rank(request, code):
+def problem_submissions(request, code, title, order=['-id']):
     try:
-        submissions = Submission.objects.filter(problem__code=code)
         problem = Problem.objects.get(code=code)
-        return render_to_response('submission_rank.html',
-                                  {'submissions': submissions,
-                                   'problem': problem,
-                                   'title': 'Best solutions for %s' % problem.name},
-                                  context_instance=RequestContext(request))
-    except ObjectDoesNotExist:
-        return Http404()
-
-def problem_submissions(request, code):
-    try:
-        submissions = Submission.objects.filter(problem__code=code)
-        problem = Problem.objects.get(code=code)
+        submissions = Submission.objects.filter(problem=problem).order_by(*order)
         return render_to_response('problem_submissions.html',
                                   {'submissions': submissions,
-                                   'problem': problem,
                                    'results': get_result_table(code),
-                                   'title': 'Submissions for %s' % problem.name},
+                                   'title': title % problem.name},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return Http404()
 
+
 def submissions(request):
-    return render_to_response('submissions.html', {'submissions': Submission.objects.all(), 'results': get_result_table(None), 'title': 'All submissions'},
+    return render_to_response('submissions.html',
+                              {'submissions': Submission.objects.all(), 'results': get_result_table(None),
+                               'title': 'All submissions'},
                               context_instance=RequestContext(request))
