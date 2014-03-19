@@ -38,11 +38,15 @@ class DjangoJudgeHandler(JudgeHandler):
             i = status_codes.index(case.status)
             if i > status:
                 status = i
+        total = round(total, 1)
+        points = round(points / total * submission.problem.points, 1)
+        if not submission.problem.partial and points != total:
+            points = 0
 
         submission.status = 'D'
         submission.time = time
         submission.memory = memory
-        submission.points = points / total * submission.problem.points
+        submission.points = points
         submission.result = status_codes[status]
         submission.save()
 
