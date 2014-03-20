@@ -40,9 +40,6 @@ div.status-table {
 }
 
 html {
-    font-size: 100%;
-    height: 100%;
-    overflow-y: none;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
 }
@@ -52,7 +49,7 @@ body {
     font-size: 13px;
     line-height: 1.231;
     background: #FFFFFF url('background.png') repeat center bottom;
-    font-family: arial, sans-serif;
+    font-family: 'Segoe UI', 'Lucida Grande', Arial, sans-serif;
     color: #000;
     height: 100%;
 }
