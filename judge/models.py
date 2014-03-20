@@ -196,6 +196,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         else:
             return '%.2f MB' % (memory / 1024.)
     pretty_memory.admin_order_field = 'memory'
+    pretty_memory.short_description = 'Memory Usage'
 
     def problem_code(self, obj):
         return obj.problem.code
