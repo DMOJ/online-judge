@@ -184,11 +184,13 @@ class SubmissionAdmin(admin.ModelAdmin):
     judge.short_description = 'Rejudge the selected submissions'
 
     def execution_time(self, obj):
-        return round(obj.time, 2)
+        return round(obj.time, 2) if obj.time is not None else 'None'
     execution_time.admin_order_field = 'time'
 
     def pretty_memory(self, obj):
         memory = obj.memory
+        if memory is None:
+            return 'None'
         if memory < 1000:
             return '%d KB' % memory
         else:
