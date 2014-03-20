@@ -52,6 +52,7 @@ body {
     font-size: 13px;
     line-height: 1.231;
     background: #FFFFFF url('background.png') repeat center bottom;
+    font-family: arial, sans-serif;
     color: #000;
     height: 100%;
 }
