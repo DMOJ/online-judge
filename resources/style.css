@@ -226,3 +226,7 @@ hr {
 footer {
    height: 142px;
 }
+
+a {
+    text-decoration:none;
+}
