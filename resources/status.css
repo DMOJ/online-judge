@@ -1,44 +1,44 @@
 .AC {
-    background-color: #53D93F;
+    background-color: #53f23f;
     color: green;
 }
 
 .WA {
-    background-color: #ccc;
-    color: #EF1B53;
+    background-color: #CCC;
+    color: #ef1b53
 }
 
 .TLE {
-    background-color: #ccc;
-    color: black;
+    background-color: #CCC;
+    color: black
 }
 
 .MLE {
-    background-color: #ccc;
+    background-color: #CCC;
     color: black;
 }
 
 .IR {
     background-color: #FAB623;
-    color: black;
+    color: black
 }
 
 .CE {
-    background-color: #ccc;
-    color: black;
+    background-color: #CCC;
+    color: black
 }
 
 .RTE {
-    background-color: #FAB623;
-    color: black;
+    background-color: #fab623;
+    color: black
 }
 
 .IE {
     background-color: red;
-    color: black;
+    color: black
 }
 
 .QU {
     background-color: white;
-    color: black;
+    color: black
 }
