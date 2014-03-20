@@ -39,7 +39,7 @@ class DjangoHandler(SocketServer.StreamRequestHandler):
         problem = data['problem-id']
         language = data['language']
         source = data['source']
-        self.server.judges.pick_lazy().submit(id, problem, language, source)
+        self.server.judges.judge(id, problem, language, source)
         return {'name': 'submission-received', 'submission-id': id}
 
     def on_malformed(self, packet):

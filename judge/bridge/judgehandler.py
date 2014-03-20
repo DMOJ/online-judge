@@ -24,6 +24,8 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self._current_submission = None
         self._current_submission_event = threading.Event()
         self._load = set()
+        self._problems = []
+        self.problems = {}
         logger.info('Judge connected from: %s', self.client_address)
         self.server.judges.append(self)
 
@@ -108,6 +110,11 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
     def on_current_submission(self, packet):
         self._current_submission = packet['submission-id']
         self._current_submission_event.set()
+
+    def on_supported_problems(self, packet):
+        self._problems = packet['supported-problems']
+        self.problems = dict(self._problems)
+        self.server.judges.on_got_problems(self)
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)
