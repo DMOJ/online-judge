@@ -155,7 +155,12 @@ class SubmissionTestCase(models.Model):
 
 class ProfileAdmin(admin.ModelAdmin):
     fields = ['user', 'name', 'about', 'timezone', 'language']
-    list_display = ['long_display_name', 'timezone', 'language']
+    list_display = ['long_display_name', 'timezone_full', 'language']
+
+    def timezone_full(self, obj):
+        return obj.timezone
+    timezone_full.admin_order_field = 'timezone'
+    timezone_full.short_description = 'Timezone'
 
 
 class ProblemAdmin(admin.ModelAdmin):
