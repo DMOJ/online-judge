@@ -2,35 +2,49 @@
 {% load static from staticfiles %}
 {% load mathtag %}
 {% block css %}
-<link rel="stylesheet" href="{% static "status.css" %}">
+    <link rel="stylesheet" href="{% static " status.css" %}">
 {% endblock %}
 {% block body %}
-{% include "results_table.html" %}
-{% include "submissions_pages.html" %}
-<div class="table" style="width:75%;border:0px;">
-    <table>
-        {% for submission in submissions %}
-        <tr>
-            <td style="width:10%" class="{{ submission.result }}"><span style="font-size:1.3em;color:black">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}</span><br/><span style="font-size:0.7em;font-weight:bold">{{ submission.result|default_if_none:submission.status }} | {{ submission.language.key }}</span></td>
-            <td style="width:90%">{% if show_problem %}<a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a> by {% endif %}
-                <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.long_display_name }}</a><br/>
-            <span style="color:#555">{{ submission.date }}</span></td>
-            {% if can_see_results %}
-            <td style="white-space:nowrap"><a href="{% url 'judge.views.submission_status' submission.id %}">View</a></td>
-            {% endif %}
-            <td style="white-space:nowrap"><b>{{ submission.time|default_if_none:0|floatformat:"2" }}s</b><br/>
-                {% with memory=submission.memory|default_if_none:0 %}
-                    {% if memory < 1000 %}
-                        {{ memory|floatformat:"-2"}} KB
-                    {% else %}
-                        {% math memory "$1 / 1024" as megabytes %}
-                        {{ megabytes|floatformat:"-2" }} MB
+    {% include "results_table.html" %}
+    {% include "submissions_pages.html" %}
+    <div class="table" style="width:75%;border:0px;">
+        <table>
+            {% for submission in submissions %}
+                <tr>
+                    <td style="width:10%" class="{{ submission.result }}">
+                        <span style="font-size:1.3em;color:black">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}</span>
+                        <br/>
+                        <span style="font-size:0.7em;font-weight:bold">{{ submission.result|default_if_none:submission.status }} | {{ submission.language.key }}</span>
+                    </td>
+                    <td style="width:90%">
+                        {% if show_problem %}
+                            <a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a>
+                            by
+                        {% endif %}
+                        <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.long_display_name }}</a>
+                        <br/>
+                        <span style="color:#555">{{ submission.date }}</span>
+                    </td>
+                    {% if can_see_results %}
+                        <td style="white-space:nowrap">
+                            <a href="{% url 'judge.views.submission_status' submission.id %}">View</a>
+                        </td>
                     {% endif %}
-                {% endwith %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-{% include "submissions_pages.html" %}
+                    <td style="white-space:nowrap">
+                        <b>{{ submission.time|default_if_none:0|floatformat:"2" }}s</b>
+                        <br/>
+                        {% with memory=submission.memory|default_if_none:0 %}
+                            {% if memory < 1000 %}
+                                {{ memory|floatformat:"-2" }} KB
+                            {% else %}
+                                {% math memory "$1 / 1024" as megabytes %}
+                                {{ megabytes|floatformat:"-2" }} MB
+                            {% endif %}
+                        {% endwith %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% include "submissions_pages.html" %}
 {% endblock %}
