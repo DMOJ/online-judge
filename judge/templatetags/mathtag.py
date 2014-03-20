@@ -1,6 +1,7 @@
 from django.template import Node, Library, Variable, FilterExpression, TemplateSyntaxError
 import math
 import re
+import logging
 
 register = Library()
 
@@ -14,6 +15,8 @@ math_safe_dict = dict([(k, getattr(math, k)) for k in math_safe_list])
 # add any needed builtins back in.
 for op in [abs, min, max]:
     math_safe_dict[op.__name__] = op
+
+logger = logging.getLogger(__name__)
 
 
 class MathNode(Node):
@@ -29,8 +32,8 @@ class MathNode(Node):
         try:
             result = eval(expr, {"__builtins__": None}, math_safe_dict)
             context[self.var_name] = result
-        except:
-            pass
+        except BaseException:
+            logger.exception('Failed to execute math tax')
         return ''
             
 

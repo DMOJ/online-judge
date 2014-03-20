@@ -19,11 +19,11 @@
             <td style="white-space:nowrap"><a href="{% url 'judge.views.submission_status' submission.id %}">View</a></td>
             {% endif %}
             <td style="white-space:nowrap"><b>{{ submission.time|default_if_none:0|floatformat:"2" }}s</b><br/>
-                {% with memory = submission.memory|default_if_none:0 %}
+                {% with memory=submission.memory|default_if_none:0 %}
                     {% if memory < 1024 %}
                         {{ memory }} KB
                     {% else %}
-                        {% math memory "memory / 1024" as megabytes %}
+                        {% math memory "$1 / 1024" as megabytes %}
                         {{ megabytes }} MB
                     {% endif %}
                 {% endwith %}
