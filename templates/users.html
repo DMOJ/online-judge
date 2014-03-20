@@ -1,21 +1,26 @@
 {% extends "base.html" %}
 {% block body %}
-<div class="table">
-    <table>
-        <tr>
-            <th style="white-space:nowrap">Rank</th>
-            <th style="width:100%">Username</th>
-            <th style="white-space:nowrap">Points</th>
-            <th style="white-space:nowrap">Problems</th>
-        </tr>
-        {% for user in users %}
-        <tr>
-            <td>0</td>
-            <td class="{{ user_css_class }}"><a href="{% url 'judge.views.user' user.user.username %}">{{ user.long_display_name }}</a></td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+    <div class="table">
+        <table>
+            <tr>
+                <th style="white-space:nowrap">Rank</th>
+                <th style="width:100%">Username</th>
+                <th style="white-space:nowrap">Points</th>
+                <th style="white-space:nowrap">Problems</th>
+            </tr>
+            {% for user in users %}
+                <tr>
+                    <td>0</td>
+                    <td class="{% if user.user.is_superuser %}
+                                admin
+                            {% else %}
+                                user
+                            {% endif %}"><a
+                            href="{% url 'judge.views.user' user.user.username %}">{{ user.long_display_name }}</a></td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}
