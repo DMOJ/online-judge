@@ -2,6 +2,7 @@ import logging
 
 from .judgehandler import JudgeHandler
 from judge.models import Submission, SubmissionTestCase
+from judge.simple_comet_client import send_message
 
 logger = logging.getLogger('judge.bridge')
 
@@ -19,6 +20,7 @@ class DjangoJudgeHandler(JudgeHandler):
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = 'G'
         submission.save()
+        send_message('sub_%d' % submission.id, 'grading-begin')
 
     def on_grading_end(self, packet):
         JudgeHandler.on_grading_end(self, packet)
@@ -50,17 +52,23 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.result = status_codes[status]
         submission.save()
 
+        chan = 'sub_%d' % submission.id
+        send_message(chan, 'grading-end %.3f %d %.1f %.1f %s' % (time, memory, points, submission.problem.points,
+                                                                 submission.result))
+
     def on_compile_error(self, packet):
         JudgeHandler.on_compile_error(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = 'CE'
         submission.save()
+        send_message('sub_%d' % submission.id, 'compile-error %s' % packet['log'])
 
     def on_bad_problem(self, packet):
         JudgeHandler.on_bad_problem(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = 'IE'
         submission.save()
+        send_message('sub_%d' % submission.id, 'bad-problem %s' % packet['problem'])
 
     def on_test_case(self, packet):
         JudgeHandler.on_test_case(self, packet)
@@ -82,3 +90,7 @@ class DjangoJudgeHandler(JudgeHandler):
         test_case.points = packet['points']
         test_case.total = packet['total-points']
         test_case.save()
+        chan = 'sub_%d' % submission.id
+        send_message(chan, 'test-case %d %s %.3f %d %.1f %.1f' % (packet['position'], test_case.status,
+                                                                  packet['time'], packet['memory'],
+                                                                  packet['points'], packet['total-points']))

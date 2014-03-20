@@ -90,6 +90,11 @@ BRIDGED_JUDGE_PORT = 9999
 BRIDGED_DJANGO_HOST = 'localhost'
 BRIDGED_DJANGO_PORT = 9998
 
+# Simple Comet server configuration
+SIMPLE_COMET_IS_UNIX = True
+SIMPLE_COMET_ADDRESS = '/tmp/simple_comet.sock'
+SIMPLE_COMET_URL = '/comet/'
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 

@@ -5,6 +5,8 @@ import struct
 import json
 import logging
 
+from judge.simple_comet_client import create_channel
+
 logger = logging.getLogger('judge.judgeapi')
 size_pack = struct.Struct('!I')
 
@@ -37,6 +39,7 @@ def judge_request(packet):
 
 
 def judge_submission(submission):
+    create_channel('sub_%d' % submission.id)
     try:
         response = judge_request({
             'name': 'submission-request',
