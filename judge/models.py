@@ -171,7 +171,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date')
     fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result')
     actions = ['judge']
-    list_display = ('problem_code', 'problem_name', 'user', 'execution_time', 'memory',
+    list_display = ('problem_code', 'problem_name', 'user', 'execution_time', 'pretty_memory',
                     'points', 'language', 'status', 'result')
 
     def judge(self, request, queryset):
@@ -185,13 +185,15 @@ class SubmissionAdmin(admin.ModelAdmin):
 
     def execution_time(self, obj):
         return round(obj.time, 2)
+    execution_time.admin_order_field = 'time'
 
-    def memory(self, obj):
+    def pretty_memory(self, obj):
         memory = obj.memory
         if memory < 1000:
             return '%d KB' % memory
         else:
             return '%.2f MB' % (memory / 1024.)
+    pretty_memory.admin_order_field = 'memory'
 
     def problem_code(self, obj):
         return obj.problem.code
