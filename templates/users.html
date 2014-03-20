@@ -11,7 +11,7 @@
             {% for user in users %}
                 <tr>
                     <td>0</td>
-                    <td class="{% if user.user.is_superuser %}
+                    <td class="{% if user.is_admin %}
                                 admin
                             {% else %}
                                 user
