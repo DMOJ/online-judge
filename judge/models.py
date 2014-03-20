@@ -143,6 +143,7 @@ class Submission(models.Model):
     class Meta:
         permissions = (
             ('rejudge_submission', 'Rejudge the submission'),
+            ('rejudge_submission_lot', 'Rejudge a lot of submissions'),
         )
 
 
@@ -185,10 +186,17 @@ class SubmissionAdmin(admin.ModelAdmin):
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission'):
             self.message_user(request, 'You do not have the permission to rejudge submissions.', level=messages.ERROR)
+            return
         successful = 0
+        queryset = queryset.sort('id')
+        if queryset.count() > 10 and not request.user.has_perm('judge.rejudge_submission_lot'):
+            self.message_user(request, 'You do not have the permission to rejudge THAT many submissions.',
+                              level=messages.ERROR)
+            return
         for model in queryset:
             successful += model.judge()
-        self.message_user(request, '%d submission%s were successfully rejudged.' % (successful, 's'[successful == 1:]))
+        self.message_user(request, '%d submission%s were successfully scheduled for rejudging.' %
+                                   (successful, 's'[successful == 1:]))
     judge.short_description = 'Rejudge the selected submissions'
 
     def execution_time(self, obj):
