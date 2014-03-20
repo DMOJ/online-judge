@@ -20,6 +20,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'test-case-status': self.on_test_case,
             'current-submission-id': self.on_current_submission,
             'problem-not-exist': self.on_bad_problem,
+            'supported-problems': self.on_supported_problems,
         }
         self._current_submission = None
         self._current_submission_event = threading.Event()
