@@ -56,7 +56,7 @@ class Profile(models.Model):
         return self.user.username
 
     def is_admin(self):
-        return self.user.groups.filter(name='Admin').exists()
+        return self.user.is_superuser or self.user.groups.filter(name='Admin').exists()
 
     def __unicode__(self):
         #return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
