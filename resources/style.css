@@ -9,7 +9,7 @@
 .table table th {
     color: #FFF;
     background-color: #393630;
-    border: 1px solid #555555;
+    border: 1px solid #555;
     padding: 3px;
     vertical-align: top;
     text-align: center;
@@ -23,7 +23,7 @@
 }
 
 div.status-table {
-	float: right;
+    float: right;
     width: 20%;
     padding-left: 8px;
     height: 100%;
@@ -99,7 +99,7 @@ nav {
 nav ul li {
     display: inline-block;
     margin: 11px 15px 12px;
-    color: #fff;
+    color: #FFF;
     text-transform: uppercase;
     font-size: 1em
 }
@@ -129,27 +129,6 @@ hr {
     color: rgba(0, 0, 0, 0.2)
 }
 
-.button {
-    display: inline-block;
-    text-decoration: none;
-    height: 2em;
-    line-height: 2em;
-    padding: 5px 5px;
-    width: 50px;
-    color: #fff;
-    border-radius: 1em;
-    font-weight: 200;
-    font-size: .8em;
-    text-align: center;
-    vertical-align: middle;
-}
-
-.centered {
-    text-align: center;
-    display : block;
-    margin: 0 auto;
-}
-
 #navigation {
     position: relative;
     top: 0;
@@ -159,20 +138,22 @@ hr {
 #content {
     width: 90%;
     height: 100%;
+    display: block;
+    margin: 0 auto;
 }
 
 footer {
-   height: 142px;
+    height: 142px;
 }
 
 a {
-    text-decoration:none;
+    text-decoration: none;
     color: blue;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .pagination {
-	padding-top:10px;
+    padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 40px;
 }
@@ -194,7 +175,7 @@ a {
 
 .admin a {
     color: red;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .user a {

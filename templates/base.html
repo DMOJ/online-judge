@@ -31,16 +31,14 @@
 </header>
 <br>
 <div id="content">
-        <h2 style="color:#393630">{{ title }}</h2>
-        <hr/>
-        <div class="centered">
-            <br/>
-            {% block body %}
-            {% endblock %}
-            <footer>
-                    <p>Generated on {% now "H:i:s, F d, Y O" %}</p>
-            </footer>
-        </div>
+    <h2 style="color:#393630">{{ title }}</h2>
+    <hr/>
+        <br/>
+        {% block body %}
+        {% endblock %}
+        <footer>
+                <p>Generated on {% now "H:i:s, F d, Y O" %}</p>
+        </footer>
 </div>
 </body>
 </html>
