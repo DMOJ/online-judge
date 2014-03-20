@@ -31,5 +31,6 @@ def edit_profile(request):
 
 
 def users(request):
-    return render_to_response('users.html', {'users': Profile.objects.all(), 'title': 'Users'},
+    user_css_class = ["user", "admin"][request.user.is_superuser]
+    return render_to_response('users.html', {'users': Profile.objects.all(), 'class': user_css_class, 'title': 'Users'},
                               context_instance=RequestContext(request))
