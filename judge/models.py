@@ -155,7 +155,7 @@ class SubmissionTestCase(models.Model):
 
 class ProfileAdmin(admin.ModelAdmin):
     fields = ['user', 'name', 'about', 'timezone', 'language']
-    list_display = ['timezone', 'language']
+    list_display = ['long_display_name', 'timezone', 'language']
 
 
 class ProblemAdmin(admin.ModelAdmin):
@@ -164,14 +164,14 @@ class ProblemAdmin(admin.ModelAdmin):
         ('Points', {'fields': (('points', 'partial'),)}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
     )
-    list_display = ['code', 'user', 'points']
+    list_display = ['code', 'name', 'user', 'points']
 
 
 class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date')
     fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result')
     actions = ['judge']
-    list_display = ['execution_time', 'memory', 'points', 'language', 'status', 'result']
+    list_display = ['problem__code', 'problem', 'user', 'execution_time', 'memory', 'points', 'language', 'status', 'result']
 
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission'):
