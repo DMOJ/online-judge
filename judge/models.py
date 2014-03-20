@@ -191,7 +191,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             self.message_user(request, 'You do not have the permission to rejudge submissions.', level=messages.ERROR)
             return
         successful = 0
-        queryset = queryset.sort('id')
+        queryset = queryset.order_by('id')
         if queryset.count() > 10 and not request.user.has_perm('judge.rejudge_submission_lot'):
             self.message_user(request, 'You do not have the permission to rejudge THAT many submissions.',
                               level=messages.ERROR)
