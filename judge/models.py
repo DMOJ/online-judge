@@ -155,6 +155,7 @@ class SubmissionTestCase(models.Model):
 
 class ProfileAdmin(admin.ModelAdmin):
     fields = ['user', 'name', 'about', 'timezone', 'language']
+    list_display = ['timezone', 'language']
 
 
 class ProblemAdmin(admin.ModelAdmin):
@@ -163,12 +164,14 @@ class ProblemAdmin(admin.ModelAdmin):
         ('Points', {'fields': (('points', 'partial'),)}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
     )
+    list_display = ['code', 'user', 'points']
 
 
 class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date')
     fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result')
     actions = ['judge']
+    list_display = ['execution_time', 'memory', 'points', 'language', 'status', 'result']
 
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission'):
@@ -178,6 +181,16 @@ class SubmissionAdmin(admin.ModelAdmin):
             successful += model.judge()
         self.message_user(request, '%d submission%s were successfully rejudged.' % (successful, 's'[successful == 1:]))
     judge.short_description = 'Rejudge the selected submissions'
+
+    def execution_time(self, obj):
+        return round(obj.time, 2)
+
+    def memory(self, obj):
+        memory = obj.memory
+        if memory < 1000:
+            return '%d KB' % memory
+        else:
+            return '%.2f MB' % (memory / 1024.)
 
 
 admin.site.register(Language)
