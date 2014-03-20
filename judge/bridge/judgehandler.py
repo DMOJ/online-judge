@@ -113,7 +113,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self._current_submission_event.set()
 
     def on_supported_problems(self, packet):
-        self._problems = packet['supported-problems']
+        self._problems = packet['problems']
         self.problems = dict(self._problems)
         self.server.judges.on_got_problems(self)
 
