@@ -1,16 +1,16 @@
 .AC {
-    background-color: #53D93F;
+    background-color: #53f23f;
     color: green;
 }
 
 .WA {
     background-color: #CCC;
-    color: #EF1B53;
+    color: #ef1b53
 }
 
 .TLE {
     background-color: #CCC;
-    color: black;
+    color: black
 }
 
 .MLE {
@@ -20,25 +20,25 @@
 
 .IR {
     background-color: #FAB623;
-    color: black;
+    color: black
 }
 
 .CE {
     background-color: #CCC;
-    color: black;
+    color: black
 }
 
 .RTE {
-    background-color: #FAB623;
-    color: black;
+    background-color: #fab623;
+    color: black
 }
 
 .IE {
     background-color: red;
-    color: black;
+    color: black
 }
 
 .QU {
     background-color: white;
-    color: black;
+    color: black
 }
