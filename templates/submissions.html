@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
+{% load mathtag %}
 {% block css %}
 <link rel="stylesheet" href="{% static "status.css" %}">
 {% endblock %}
@@ -18,7 +19,14 @@
             <td style="white-space:nowrap"><a href="{% url 'judge.views.submission_status' submission.id %}">View</a></td>
             {% endif %}
             <td style="white-space:nowrap"><b>{{ submission.time|default_if_none:0|floatformat:"2" }}s</b><br/>
-                {{ submission.memory|default_if_none:0 }} KB
+                {% with memory = submission.memory|default_if_none:0 %}
+                    {% if memory < 1024 %}
+                        {{ memory }} KB
+                    {% else %}
+                        {% math memory "memory / 1024" as megabytes %}
+                        {{ megabytes }} MB
+                    {% endif %}
+                {% endwith %}
             </td>
         </tr>
         {% endfor %}
