@@ -6,14 +6,6 @@
     border: 1px solid #000;
 }
 
-.table table tr:nth-child(odd) {
-    background-color: #F6F4F0;
-}
-
-.table table tr:nth-child(even) {
-    background-color: #FFFFFF;
-}
-
 .table table th {
     color: #ffffff;
     background-color: #393630;
