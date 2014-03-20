@@ -1,9 +1,12 @@
 import httplib
 import socket
 import json
+import logging
 from urllib import urlencode
 
 from django.conf import settings
+
+logger = logging.getLogger(__name__)
 
 
 class UHTTPConnection(httplib.HTTPConnection):
@@ -35,7 +38,9 @@ def create_channel(name):
     resp = conn.getresponse()
     if resp.status != 200:
         return False
-    return json.load(resp)
+    data = json.load(resp)
+    logger.info('Comet: %s' % data)
+    return data
 
 
 def send_message(channel, message):
@@ -46,4 +51,6 @@ def send_message(channel, message):
     resp = conn.getresponse()
     if resp.status != 200:
         return False
-    return json.load(resp)
+    data = json.load(resp)
+    logger.info('Comet: %s' % data)
+    return data
