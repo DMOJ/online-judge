@@ -11,7 +11,7 @@
     <table>
         {% for submission in submissions %}
         <tr>
-            <td style="width:10%" class="{{ submission.result }}"><span style="font-size:1.7em;color:black">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}</span><br/>{{ submission.result|default_if_none:submission.status }} | {{ submission.language.key }}</td>
+            <td style="width:10%" class="{{ submission.result }}"><span style="font-size:1.5em;color:black">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}</span><br/>{{ submission.result|default_if_none:submission.status }} | {{ submission.language.key }}</td>
             <td style="width:90%">{% if show_problem %}<a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a> by {% endif %}
                 <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.long_display_name }}</a><br/>
             {{ submission.date }}</td>
