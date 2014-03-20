@@ -227,6 +227,10 @@ footer {
    height: 142px;
 }
 
+a {
+    text-decoration:none;
+}
+
 .pagination {
     padding-bottom: 10px;
     padding-left: 40px;
