@@ -226,3 +226,23 @@ hr {
 footer {
    height: 142px;
 }
+
+.pagination {
+    padding-bottom: 10px;
+    padding-left: 40px;
+}
+
+.pagination a {
+    border: 2px solid #999;
+    margin-left: 1px;
+    margin-right: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+    text-decoration: none;
+    color: #000;
+}
+
+.pagination a.active-page {
+    border: 2px solid #444;
+    background-color: #afa;
+}
