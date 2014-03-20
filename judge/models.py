@@ -171,7 +171,8 @@ class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date')
     fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result')
     actions = ['judge']
-    list_display = ['problem__code', 'problem', 'user', 'execution_time', 'memory', 'points', 'language', 'status', 'result']
+    list_display = ('problem_code', 'problem_name', 'user', 'execution_time', 'memory',
+                    'points', 'language', 'status', 'result')
 
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission'):
@@ -191,6 +192,12 @@ class SubmissionAdmin(admin.ModelAdmin):
             return '%d KB' % memory
         else:
             return '%.2f MB' % (memory / 1024.)
+
+    def problem_code(self, obj):
+        return obj.problem.code
+
+    def problem_name(self, obj):
+        return obj.problem.name
 
 
 admin.site.register(Language)
