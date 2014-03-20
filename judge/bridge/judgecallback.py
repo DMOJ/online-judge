@@ -93,4 +93,4 @@ class DjangoJudgeHandler(JudgeHandler):
         chan = 'sub_%d' % submission.id
         send_message(chan, 'test-case %d %s %.3f %d %.1f %.1f' % (packet['position'], test_case.status,
                                                                   packet['time'], packet['memory'],
-                                                                  packet['points'], packet['total-points']))
+                                                                  float(test_case.points), float(test_case.total)))
