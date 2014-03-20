@@ -228,8 +228,8 @@ class SubmissionAdmin(admin.ModelAdmin):
             return Http404()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-    def judge_column(self):
-        return '<input type="button" value="Rejudge" onclick="location.href=\'%s/judge/\'" />' % self.pk
+    def judge_column(self, obj):
+        return '<input type="button" value="Rejudge" onclick="location.href=\'%s/judge/\'" />' % obj.id
 
     judge_column.short_description = ''
     judge_column.allow_tags = True
