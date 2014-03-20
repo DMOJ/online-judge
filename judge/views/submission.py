@@ -4,6 +4,7 @@ from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.models import Problem, Submission
+from judge.utils.diggpaginator import DiggPaginator
 from judge.views import get_result_table
 
 
@@ -33,7 +34,7 @@ def problem_submissions(request, code, page, title, order):
         profile = request.user.profile
         can_see_results = any(sub.user == profile and sub.result == 'AC' for sub in submissions)
 
-        paginator = Paginator(submissions, 50)
+        paginator = DiggPaginator(submissions, 50, body=6, padding=2)
         try:
             submissions = paginator.page(page)
         except PageNotAnInteger:
@@ -52,7 +53,7 @@ def problem_submissions(request, code, page, title, order):
 
 
 def submissions(request, page=1):
-    paginator = Paginator(Submission.objects.order_by('-id'), 50)
+    paginator = DiggPaginator(Submission.objects.order_by('-id'), 50, body=6, padding=2)
     try:
         submissions = paginator.page(page)
     except PageNotAnInteger:
