@@ -1,6 +1,9 @@
+from django.conf.urls import patterns
 from django.contrib.auth.models import User
 from django.db import models
 from django.contrib import admin, messages
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
+from django.core.exceptions import ObjectDoesNotExist
 import pytz
 from operator import itemgetter, attrgetter
 
@@ -177,7 +180,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result')
     actions = ['judge']
     list_display = ('problem_code', 'problem_name', 'user', 'execution_time', 'pretty_memory',
-                    'points', 'language', 'status', 'result')
+                    'points', 'language', 'status', 'result', 'judge_column')
 
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission'):
@@ -208,6 +211,28 @@ class SubmissionAdmin(admin.ModelAdmin):
 
     def problem_name(self, obj):
         return obj.problem.name
+
+    def get_urls(self):
+        urls = super(SubmissionAdmin, self).get_urls()
+        my_urls = patterns('',
+            (r'^(\d+)/judge/$', self.judge_view)
+        )
+        return my_urls + urls
+
+    def judge_view(self, request, id):
+        if not request.user.has_perm('judge.rejudge_submission'):
+            return HttpResponseForbidden()
+        try:
+            Submission.get(id=id).judge()
+        except ObjectDoesNotExist:
+            return Http404()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+    def judge_column(self):
+        return '<input type="button" value="Rejudge" onclick="location.href=\'%s/judge/\'" />' % self.pk
+
+    judge_column.short_description = ''
+    judge_column.allow_tags = True
 
 
 admin.site.register(Language)
