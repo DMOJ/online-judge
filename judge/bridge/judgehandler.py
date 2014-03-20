@@ -81,7 +81,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         try:
             if 'name' not in data:
                 self.on_malformed(data)
-            handler = self.handlers.get(data['name'], JudgeHandler.on_malformed)
+            handler = self.handlers.get(data['name'], self.on_malformed)
             handler(data)
             if data['name'] in ('grading-end', 'compile-error') and 'submission-id' in data:
                 self._load.remove(data['submission-id'])
