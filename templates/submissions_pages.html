@@ -5,7 +5,7 @@
 
     {% for page in submissions.page_range %}
        {% if not page %} ...
-       {% else %}<a href="page"{% if page == submissions.number %} class="active-page"{% endif %}>{{ page }}</a>
+       {% else %}<a href="{{ page }}"{% if page == submissions.number %} class="active-page"{% endif %}>{{ page }}</a>
        {% endif %}
     {% endfor %}
 
