@@ -10,11 +10,10 @@ logger = logging.getLogger(__name__)
 
 
 class UHTTPConnection(httplib.HTTPConnection):
-    """Subclass of Python library HTTPConnection that uses a unix-domain socket.
-    """
+    """Subclass of Python library HTTPConnection that uses a unix-domain socket."""
 
-    def __init__(self, path):
-        httplib.HTTPConnection.__init__(self, 'localhost')
+    def __init__(self, path, **kwargs):
+        httplib.HTTPConnection.__init__(self, 'localhost', **kwargs)
         self.path = path
 
     def connect(self):
@@ -23,11 +22,11 @@ class UHTTPConnection(httplib.HTTPConnection):
         self.sock = sock
 
 
-def _get_connection():
+def _get_connection(**kwargs):
     if settings.SIMPLE_COMET_IS_UNIX:
-        return UHTTPConnection(settings.SIMPLE_COMET_ADDRESS)
+        return UHTTPConnection(settings.SIMPLE_COMET_ADDRESS, **kwargs)
     else:
-        return httplib.HTTPConnection(settings.SIMPLE_COMET_ADDRESS)
+        return httplib.HTTPConnection(settings.SIMPLE_COMET_ADDRESS, **kwargs)
 
 
 def create_channel(name):
@@ -35,6 +34,17 @@ def create_channel(name):
     conn.request('POST', '/channels.json?' + urlencode({
         'channel_id': name,
     }))
+    resp = conn.getresponse()
+    if resp.status != 200:
+        return False
+    data = json.load(resp)
+    logger.info('Comet: %s' % data)
+    return data
+
+
+def delete_channel(name):
+    conn = _get_connection()
+    conn.request('DELETE', '/channels/%s.json' % name)
     resp = conn.getresponse()
     if resp.status != 200:
         return False
@@ -54,3 +64,14 @@ def send_message(channel, message):
     data = json.load(resp)
     logger.info('Comet: %s' % data)
     return data
+
+
+def get_message(channel):
+    conn = _get_connection()
+    conn.request('GET', '/channels/%s.json?' % channel)
+    resp = conn.getresponse()
+    if resp.status != 200:
+        return []
+    data = json.load(resp)
+    logger.info('Comet: %s' % data)
+    return data.get('messages', {}).get(channel, [])
