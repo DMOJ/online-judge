@@ -223,7 +223,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.rejudge_submission'):
             return HttpResponseForbidden()
         try:
-            Submission.get(id=id).judge()
+            Submission.objects.get(id=id).judge()
         except ObjectDoesNotExist:
             return Http404()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
