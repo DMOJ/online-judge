@@ -1,15 +1,15 @@
 .AC {
     background-color: #53D93F;
-    color: black;
+    color: green;
 }
 
 .WA {
-    background-color: gray;
+    background-color: #ccc;
     color: #EF1B53;
 }
 
 .TLE {
-    background-color: gray;
+    background-color: #ccc;
     color: black;
 }
 
@@ -19,7 +19,7 @@
 }
 
 .CE {
-    background-color: gray;
+    background-color: #ccc;
     color: black;
 }
 
