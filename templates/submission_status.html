@@ -30,7 +30,7 @@
     </script>
 {% endblock %}
 {% block body %}
-    Submitted on {{ submission.time }}
+    Submitted on {{ submission.date }}
     <br/>
     {% if request.user == submission.user.user %}
         <a href="{% url 'judge.views.problem_submit' submission.problem.code %}">Click here to revise and resubmit!</a>
