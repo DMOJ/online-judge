@@ -31,16 +31,28 @@
                         </td>
                     {% endif %}
                     <td style="white-space:nowrap">
-                        <b>{{ submission.time|default_if_none:0|floatformat:"2" }}s</b>
-                        <br/>
-                        {% with memory=submission.memory|default_if_none:0 %}
-                            {% if memory < 1000 %}
-                                {{ memory|floatformat:"-2" }} KB
-                            {% else %}
-                                {% math memory "$1 / 1024" as megabytes %}
-                                {{ megabytes|floatformat:"-2" }} MB
-                            {% endif %}
-                        {% endwith %}
+                        {% ifnotequal "QU" submission.result %}
+                            <b>
+                                {% ifnotequal "TLE" submission.result %}
+                                    {{ submission.time|default_if_none:0|floatformat:"2" }}s
+                                {% else %}
+                                    ---
+                                {% endifnotequal %}
+                            </b>
+                            <br/>
+                            {% with memory=submission.memory|default_if_none:0 %}
+                                {% if memory < 1000 %}
+                                    {{ memory|floatformat:"-2" }} KB
+                                {% else %}
+                                    {% math memory "$1 / 1024" as megabytes %}
+                                    {{ megabytes|floatformat:"-2" }} MB
+                                {% endif %}
+                            {% endwith %}
+                        {% else %}
+                            <b>---</b>
+                            <br/>
+                            ---
+                        {% endifnotequal %}
                     </td>
                 </tr>
             {% endfor %}
