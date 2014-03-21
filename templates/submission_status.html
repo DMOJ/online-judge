@@ -11,8 +11,13 @@
                     case "test-case":
                         node = document.createTextNode("Test case #{0}: {1} [{2}s, {3}kb] ({4}/{5})".format(packet[1], packet[2], packet[3], packet[4], packet[5], packet[6]));
                         break;
+                    case "grading-end":
+                        list.appendChild(document.createElement("br"));
+                        list.appendChild(document.createElement("br"));
+                        node = document.createTextNode("Final score: {0}/{1}".format(packet[3], packet[4]));
+                        break;
                     default:
-                        node = document.createTextNode(packet);
+                        return;
                 }
                 var list = document.getElementById("test-cases");
                 list.appendChild(node);
@@ -36,11 +41,9 @@
         <a href="{% url 'judge.views.problem_submit' submission.problem.code %}">Click here to revise and resubmit!</a>
         <br/>
     {% endif %}
-    <b>Test case status</b>
     <br/>
-    Status: {{ submission.status }}
     <br/>
-    Score: {{ submission.points }} / {{ submission.problem.points }}
+    <h3>Execution Results</h3>
     <br/>
     <div id="test-cases"></div>
 {% endblock %}
