@@ -5,6 +5,7 @@ import logging
 from urllib import urlencode
 
 from django.conf import settings
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +68,7 @@ def send_message(channel, message):
 
 
 def get_message(channel):
-    conn = _get_connection()
+    conn = _get_connection(timeout=1)
     conn.request('GET', '/channels/%s.json?' % channel)
     resp = conn.getresponse()
     if resp.status != 200:
@@ -75,3 +76,23 @@ def get_message(channel):
     data = json.load(resp)
     logger.info('Comet: %s' % data)
     return data.get('messages', {}).get(channel, [])
+
+
+def get_channels():
+    conn = _get_connection()
+    conn.request('GET', '/status.json')
+    resp = conn.getresponse()
+    if resp.status != 200:
+        return []
+    data = json.load(resp)
+    logger.info('Comet: %s' % data)
+    return data.get('status', {}).get('channels', [])
+
+
+def clear_channels(timeout=7200):
+    current = time.time()
+    for channel in get_channels():
+        messages = get_message(channel)
+        newest = max(msg['ts'] for msg in messages)
+        if current - newest > timeout:
+            delete_channel(channel)
