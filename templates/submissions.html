@@ -11,7 +11,12 @@
         <table>
             {% for submission in submissions %}
                 <tr>
-                    <td style="width:10%" class="{{ submission.status }}">
+                    <td style="width:10%" class="
+                    {% if submission.status == 'IE' or submission.status == 'CE' %}
+                    {{ submission.status }}
+                    {% else %}
+                    {{ submission.result }}
+                    {% endif %}">
                         <span style="font-size:1.3em;color:black">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}</span>
                         <br/>
                         <span style="font-size:0.7em;font-weight:bold">{{ submission.result|default_if_none:submission.status }} | {{ submission.language.key }}</span>
