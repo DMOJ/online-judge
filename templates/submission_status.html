@@ -8,6 +8,7 @@
             function on_receive(message) {
                 var packet = message.split(" ");
                 var node = null;
+                var list = document.getElementById("test-cases");
                 switch (packet[0]) {
                     case "test-case":
                         node = document.createTextNode("Test case #{0}: {1} [{2}s, {3}kb] ({4}/{5})".format(packet[1], packet[2], packet[3], packet[4], packet[5], packet[6]));
@@ -20,7 +21,6 @@
                     default:
                         return;
                 }
-                var list = document.getElementById("test-cases");
                 list.appendChild(node);
                 list.appendChild(document.createElement("br"));
             }
