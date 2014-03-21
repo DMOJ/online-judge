@@ -24,6 +24,8 @@ class UHTTPConnection(httplib.HTTPConnection):
 
 
 def _get_connection(**kwargs):
+    if 'timeout' not in kwargs:
+        kwargs['timeout'] = 2
     if settings.SIMPLE_COMET_IS_UNIX:
         return UHTTPConnection(settings.SIMPLE_COMET_ADDRESS, **kwargs)
     else:
@@ -67,8 +69,8 @@ def send_message(channel, message):
     return data
 
 
-def get_message(channel):
-    conn = _get_connection(timeout=1)
+def get_messages(channel, timeout=30):
+    conn = _get_connection(timeout=timeout)
     conn.request('GET', '/channels/%s.json?' % channel)
     resp = conn.getresponse()
     if resp.status != 200:
@@ -91,8 +93,13 @@ def get_channels():
 
 def clear_channels(timeout=7200):
     current = time.time()
+    channels = get_channels()
+    print 'Channels:', channels
     for channel in get_channels():
-        messages = get_message(channel)
+        messages = get_messages(channel, timeout=2)
         newest = max(msg['ts'] for msg in messages)
         if current - newest > timeout:
+            print 'Deleting channel:', channel
             delete_channel(channel)
+        else:
+            print 'Leaving channel:', channel
