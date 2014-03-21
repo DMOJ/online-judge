@@ -5,7 +5,9 @@
     <script type="text/javascript">
         $(function () {
             function on_receive(message) {
-                alert(message);
+                var packet = message.split(" ");
+                var txt = document.createTextNode(packet + "<br/>");
+                document.getElementById("test-cases").appendChild(txt)
             }
 
             SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}channels/sub_{{ submission.id }}.jsonp", function (resp) {
@@ -19,15 +21,17 @@
     </script>
 {% endblock %}
 {% block body %}
-Submitted on {{ submission.time }}
-<br/>
-{% if request.user == submission.user.user %}
-<a href="{% url 'judge.views.problem_submit' submission.problem.code %}">Click here to revise and resubmit!</a>
-<br/>
-{% endif %}
-<b>Test case status</b>
-<br/>
-Status: {{ submission.status }}
-<br/>
-Score: {{ submission.points }} / {{ submission.problem.points }}
+    Submitted on {{ submission.time }}
+    <br/>
+    {% if request.user == submission.user.user %}
+        <a href="{% url 'judge.views.problem_submit' submission.problem.code %}">Click here to revise and resubmit!</a>
+        <br/>
+    {% endif %}
+    <b>Test case status</b>
+    <br/>
+    Status: {{ submission.status }}
+    <br/>
+    Score: {{ submission.points }} / {{ submission.problem.points }}
+    <br/>
+    <div id="test-cases"/>
 {% endblock %}
