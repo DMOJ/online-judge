@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -33,25 +34,20 @@ def problems(request):
 
 
 @login_required
-def problem_submit(request, problem_code=None):
+def problem_submit(request, problem=None):
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=request.user.profile))
         if form.is_valid():
             model = form.save()
             model.judge()
-            return HttpResponseRedirect(request.path)
+            return HttpResponseRedirect(reverse('judge.view.submission_status', args=[model.id]))
     else:
         initial = {'language': request.user.profile.language}
-        problem = None
-        if problem_code is not None:
+        if problem is not None:
             try:
-                problem = Problem.objects.get(code=problem_code)
-                initial['problem'] = problem
+                initial['problem'] = Problem.objects.get(code=problem)
             except ObjectDoesNotExist:
                 return Http404()
-        else:
-            return Http404()
-
         form = ProblemSubmitForm(initial=initial)
-    return render_to_response('problem_submit.html', {'form': form, 'title': 'Submit', 'problem': problem},
+    return render_to_response('problem_submit.html', {'form': form, 'title': 'Submit'},
                               context_instance=RequestContext(request))
