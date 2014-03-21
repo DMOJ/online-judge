@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.functional import SimpleLazyObject
 from .models import Profile
 
@@ -11,3 +12,6 @@ def get_profile(request):
 def user_profile(request):
     return {'profile': SimpleLazyObject(lambda: get_profile(request))}
 
+
+def comet_location(request):
+    return {'SIMPLE_COMET_URL': settings.SIMPLE_COMET_URL}

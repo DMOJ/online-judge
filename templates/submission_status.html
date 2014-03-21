@@ -1,4 +1,15 @@
 {% extends "base.html" %}
+{% load static from staticfiles %}
+{% block css %}
+    <script src="{% static 'simple-comet.min.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}channels/sub_{{ submission.id }}.jsonp", function (message) {
+                alert(message);
+            });
+        });
+    </script>
+{% endblock %}
 {% block body %}
 Submitted on {{ submission.time }}
 <br/>
