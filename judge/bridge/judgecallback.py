@@ -31,7 +31,7 @@ class DjangoJudgeHandler(JudgeHandler):
         points = 0.0
         total = 0
         status = 0
-        status_codes = ['AC', 'WA', 'MLE', 'TLE', 'RTE']
+        status_codes = ['AC', 'IR', 'WA', 'MLE', 'TLE', 'RTE']
         for case in SubmissionTestCase.objects.filter(submission=submission):
             time += case.time
             total += case.total
@@ -81,6 +81,8 @@ class DjangoJudgeHandler(JudgeHandler):
             test_case.status = 'TLE'
         elif status & 8:
             test_case.status = 'MLE'
+        elif status & 16:
+            test_case.status = 'IR'
         elif status & 1:
             test_case.status = 'WA'
         else:
