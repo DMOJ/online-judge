@@ -31,7 +31,7 @@
                         </td>
                     {% endif %}
                     <td style="white-space:nowrap">
-                        {% ifnotequal "QU" submission.result %}
+                        {% if submission.status != "QU" and submission.status != "CE" %}
                             <b>
                                 {% ifnotequal "TLE" submission.result %}
                                     {{ submission.time|default_if_none:0|floatformat:"2" }}s
@@ -52,7 +52,7 @@
                             <b>---</b>
                             <br/>
                             ---
-                        {% endifnotequal %}
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
