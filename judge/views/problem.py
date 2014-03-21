@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -39,7 +40,7 @@ def problem_submit(request, problem=None):
         if form.is_valid():
             model = form.save()
             model.judge()
-            return HttpResponseRedirect(request.path)
+            return HttpResponseRedirect(reverse('judge.view.submission_status', args=[str(model.id)]))
     else:
         initial = {'language': request.user.profile.language}
         if problem is not None:
