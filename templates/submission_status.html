@@ -6,6 +6,11 @@
         $(function () {
             function on_receive(message) {
                 var packet = message.split(" ");
+                switch (packet[0]) {
+                    case "test-case":
+                        var txt = document.createTextNode("Test case #{0}: {1} [{2}s, {3}kb] ({4}/{5})".format(packet[1], packet[2], packet[3], packet[4], packet[5], packet[6]));
+                        break;
+                }
                 var txt = document.createTextNode(packet);
                 var list = document.getElementById("test-cases");
                 list.appendChild(txt);
@@ -35,5 +40,5 @@
     <br/>
     Score: {{ submission.points }} / {{ submission.problem.points }}
     <br/>
-    <div id="test-cases"/>
+    <div id="test-cases"></div>
 {% endblock %}
