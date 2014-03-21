@@ -11,7 +11,7 @@
         <table>
             {% for submission in submissions %}
                 <tr>
-                    <td style="width:10%" class="{{ submission.result }}">
+                    <td style="width:10%" class="{{ submission.status }}">
                         <span style="font-size:1.3em;color:black">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}</span>
                         <br/>
                         <span style="font-size:0.7em;font-weight:bold">{{ submission.result|default_if_none:submission.status }} | {{ submission.language.key }}</span>
@@ -31,7 +31,7 @@
                         </td>
                     {% endif %}
                     <td style="white-space:nowrap">
-                        {% if submission.status != "QU" and submission.status != "CE" %}
+                        {% if submission.status != "QU" and submission.status != "CE" and submission.status != "IE" %}
                             <b>
                                 {% ifnotequal "TLE" submission.result %}
                                     {{ submission.time|default_if_none:0|floatformat:"2" }}s
