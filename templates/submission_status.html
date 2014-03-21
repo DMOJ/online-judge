@@ -1,12 +1,20 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
 {% block css %}
-    <script src="{% static 'simple-comet.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'simple-comet.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
-            SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}channels/sub_{{ submission.id }}.jsonp", function (message) {
+            function on_receive(message) {
                 alert(message);
+            }
+
+            SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}channels/sub_{{ submission.id }}.jsonp", function (resp) {
+                var messages = resp['messages']['sub_{{ submission.id }}'];
+                for (var i = 0; i < messages.length; ++i) {
+                    on_receive(messages[i].content);
+                }
             });
+            SimpleComet.start();
         });
     </script>
 {% endblock %}
