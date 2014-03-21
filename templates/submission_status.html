@@ -6,7 +6,8 @@
         $(function () {
             function on_receive(message) {
                 var packet = message.split(" ");
-                var txt = document.createTextNode(packet + "<br/>");
+                var txt = document.createTextNode(packet);
+                txt.innerHTML += "<br/>";
                 document.getElementById("test-cases").appendChild(txt)
             }
 
