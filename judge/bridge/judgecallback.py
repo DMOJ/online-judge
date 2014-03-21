@@ -37,6 +37,7 @@ class DjangoJudgeHandler(JudgeHandler):
             total += case.total
             points += case.points
             memory += case.memory
+            memory = max(memory, case.memory)
             i = status_codes.index(case.status)
             if i > status:
                 status = i
