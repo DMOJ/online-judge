@@ -93,6 +93,6 @@ class DjangoJudgeHandler(JudgeHandler):
         test_case.total = packet['total-points']
         test_case.save()
         chan = 'sub_%d' % submission.id
-        send_message(chan, 'test-case %d %s %.3f %d %.1f %.1f' % (packet['position'], test_case.status,
+        send_message(chan, 'test-case %d %s %.3f %d %.1f %.1f (%s)' % (packet['position'], test_case.status,
                                                                   packet['time'], packet['memory'],
-                                                                  float(test_case.points), float(test_case.total)))
+                                                                  float(test_case.points), float(test_case.total), packet['output']))
