@@ -7,8 +7,9 @@
             function on_receive(message) {
                 var packet = message.split(" ");
                 var txt = document.createTextNode(packet);
-                txt.innerHTML += "<br/>";
-                document.getElementById("test-cases").appendChild(txt)
+                var list = document.getElementById("test-cases");
+                list.appendChild(txt);
+                list.appendChild(document.createElement("br"));
             }
 
             SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}channels/sub_{{ submission.id }}.jsonp", function (resp) {
