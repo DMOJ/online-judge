@@ -59,14 +59,14 @@ class DjangoJudgeHandler(JudgeHandler):
     def on_compile_error(self, packet):
         JudgeHandler.on_compile_error(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])
-        submission.status = 'CE'
+        submission.status = submission.result = 'CE'
         submission.save()
         send_message('sub_%d' % submission.id, 'compile-error %s' % packet['log'])
 
     def on_bad_problem(self, packet):
         JudgeHandler.on_bad_problem(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])
-        submission.status = 'IE'
+        submission.status = submission.result = 'IE'
         submission.save()
         send_message('sub_%d' % submission.id, 'bad-problem %s' % packet['problem'])
 

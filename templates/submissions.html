@@ -36,13 +36,13 @@
                         </td>
                     {% endif %}
                     <td style="white-space:nowrap">
-                        {% if submission.status != "QU" and submission.status != "CE" and submission.status != "IE" %}
+                        {% if submission.status != "QU" and submission.result != "CE" and submission.result != "IE" %}
                             <b>
-                                {% ifnotequal "TLE" submission.result %}
+                                {% if "TLE" != submission.result %}
                                     {{ submission.time|default_if_none:0|floatformat:"2" }}s
                                 {% else %}
                                     ---
-                                {% endifnotequal %}
+                                {% endif %}
                             </b>
                             <br/>
                             {% with memory=submission.memory|default_if_none:0 %}

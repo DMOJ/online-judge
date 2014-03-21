@@ -10,8 +10,10 @@ from judge.models import Problem, Profile, Submission
 def get_result_table(code):
     results = {}
     for submission in Submission.objects.filter(problem__code=code) if code else Submission.objects.all():
-        r = submission.result if submission.result else "Unknown"
-        results[r] = results.get(r, 0) + 1
+        r = None
+        if submission.result and submission.result not in ["IE"]:
+            r = submission.result
+            results[r] = results.get(r, 0) + 1
     return results
 
 

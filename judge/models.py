@@ -109,7 +109,9 @@ SUBMISSION_RESULT = (
     ('TLE', 'Time Limit Exceeded'),
     ('MLE', 'Memory Limit Exceeded'),
     ('IR', 'Invalid Return'),
-    ('RTE', 'Runtime Error')
+    ('RTE', 'Runtime Error'),
+    ('CE', 'Compile Error'),
+    ('IE', 'Internal Error'),
 )
 
 
@@ -120,6 +122,7 @@ class Submission(models.Model):
         ('G', 'Grading'),
         ('D', 'Completed'),
         ('IE', 'Internal Error'),
+        ('CE', 'Compile Error'),
     )
 
     user = models.ForeignKey(Profile)
