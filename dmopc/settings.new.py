@@ -67,6 +67,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'judge.template_context.user_profile',
+    'judge.template_context.comet_location',
 )
 
 TEMPLATE_DIRS = (
