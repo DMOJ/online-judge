@@ -40,7 +40,7 @@ def problem_submit(request, problem=None):
         if form.is_valid():
             model = form.save()
             model.judge()
-            return HttpResponseRedirect(reverse('judge.view.submission_status', args=[model.id]))
+            return HttpResponseRedirect(reverse('judge.view.submission_status', args=[str(model.id)]))
     else:
         initial = {'language': request.user.profile.language}
         if problem is not None:
