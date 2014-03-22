@@ -25,7 +25,7 @@ def problem(request, code):
                                                    'title': 'Problem %s' % problem.name},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
-        return Http404()
+        raise Http404()
 
 
 def problems(request):
@@ -47,7 +47,7 @@ def problem_submit(request, problem=None):
             try:
                 initial['problem'] = Problem.objects.get(code=problem)
             except ObjectDoesNotExist:
-                return Http404()
+                raise Http404()
         form = ProblemSubmitForm(initial=initial)
     return render_to_response('problem_submit.html', {'form': form, 'title': 'Submit'},
                               context_instance=RequestContext(request))

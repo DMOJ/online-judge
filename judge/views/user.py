@@ -13,7 +13,7 @@ def user(request, user):
         return render_to_response('user.html', {'user': user, 'title': 'User %s' % user.long_display_name()},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
-        return Http404()
+        raise Http404()
 
 
 @login_required

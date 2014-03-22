@@ -82,7 +82,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         try:
             Submission.objects.get(id=id).judge()
         except ObjectDoesNotExist:
-            return Http404()
+            raise Http404()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
     def judge_column(self, obj):

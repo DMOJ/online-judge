@@ -17,7 +17,7 @@ def submission_status(request, code):
                                                                       (submission.problem.name, submission.user.name)},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
-        return Http404()
+        raise Http404()
 
 
 def chronological_submissions(request, code, page=1):
@@ -50,7 +50,7 @@ def problem_submissions(request, code, page, title, order):
                                    'show_problem': False},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
-        return Http404()
+        raise Http404()
 
 
 def submissions(request, page=1):
