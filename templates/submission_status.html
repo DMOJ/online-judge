@@ -11,17 +11,17 @@
                     var list = $("#test-cases");
                     switch (packet[0]) {
                         case "test-case":
-                            list.prepend("<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>".format(packet[1], packet[2], packet[3], packet[4], packet[5], packet[6]));
+                            list.append("<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>".format(packet[1], packet[2], packet[3], packet[4], packet[5], packet[6]));
                             break;
                         case "grading-begin":
-                            $("#execution-title").prepend("Execution Results");
+                            $("#execution-title").append("Execution Results");
                             break;
                         case "grading-end":
-                            list.prepend("<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(packet[3], packet[4]));
+                            list.append("<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(packet[3], packet[4]));
                             break;
                         case "compile-error":
-                            $("#execution-title").prepend("Compilation Error");
-                            list.prepend(packet[1].replace("\f", " ").replace("\n", "<br/>"));
+                            $("#execution-title").append("Compilation Error");
+                            list.append(packet[1].replace("\f", " ").replace("\n", "<br/>"));
                             break;
                         default:
                             return;
