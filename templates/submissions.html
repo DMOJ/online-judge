@@ -23,9 +23,11 @@
                     </td>
                     <td style="width:90%;text-align:left;padding-left:20px">
                         {% if show_problem %}
-                            <a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a>
+                            <span style="font-size:1.3em;font-weight:bold">
+                                <a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a>
+                            </span>
+                            <br/>
                         {% endif %}
-                        <br/>
                         <span class="{% if submission.user.is_admin %}admin{% else %}user{% endif %}">
                             <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.user.username }}</a>
                         </span>
