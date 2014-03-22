@@ -45,7 +45,7 @@
                                         '<span class="{5}">' +
                                         '<a href="/user/{6}">{6}</a>' +
                                         '</span>' +
-                                        '<span style="color:#555"> {7}</span>' +
+                                        '<span style="color:#555"> on {7}</span>' +
                                         '</td>' +
 
                                         '<td style="white-space:nowrap">' +
@@ -70,7 +70,15 @@
                             info.find('span.score').html('<span style="font-size:1.3em;color:black">{0} / {1}</span>'.format(packet[4], packet[5]).replace(/\.0+/g, ''));
                             info.removeClass().addClass(packet[6]);
                             row.find('span.time').html('<b>{0}s</b>'.format(packet[2]));
-                            row.find('span.memory').html('{0}kb'.format(packet[3]));
+                            var mem = packet[3];
+                            var measure = null;
+                            if (mem >= 1024) {
+                                mem /= 1024.0;
+                                measure = "K";
+                            } else {
+                                measure = "M";
+                            }
+                            row.find('span.memory').html('{0} {1}'.format(mem.toFixed(1), measure));
                             break;
                         }
                         default:
@@ -146,10 +154,10 @@
                             <span class="memory">
                             {% with memory=submission.memory|default_if_none:0 %}
                                 {% if memory < 1000 %}
-                                    {{ memory|floatformat:"-2" }} KB
+                                    {{ memory|floatformat:"-2" }} K
                                 {% else %}
                                     {% math memory "$1 / 1024" as megabytes %}
-                                    {{ megabytes|floatformat:"-2" }} MB
+                                    {{ megabytes|floatformat:"-2" }} M
                                 {% endif %}
                             {% endwith %}
                             </span>
