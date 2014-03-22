@@ -41,7 +41,7 @@
                                         '<span class="time"><b>---</b></span><br/><span class="memory">---</span>' +
                                         '</td>' +
                                         '</tr>').format(id, status, language);
-                                table.innerHTML = html + table.innerHTML;
+                                table.prepend(html);
                             }
                             break;
                         case "submission-status":
