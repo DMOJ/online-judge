@@ -21,16 +21,17 @@
                         <br/>
                         <span style="font-size:0.7em;font-weight:bold">{{ submission.result|default_if_none:submission.status }} | {{ submission.language.key }}</span>
                     </td>
-                    <td style="width:90%">
+                    <td style="width:90%;text-align:left;padding-left:20px">
                         {% if show_problem %}
-                            <a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a>
-                            by
+                            <span style="font-size:1.3em;font-weight:bold">
+                                <a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a>
+                            </span>
+                            <br/>
                         {% endif %}
-                        <span class="{% if user.is_admin %}admin{% else %}user{% endif %}">
-                            <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.long_display_name }}</a>
+                        <span class="{% if submission.user.is_admin %}admin{% else %}user{% endif %}">
+                            <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.user.username }}</a>
                         </span>
-                        <br/>
-                        <span style="color:#555">{{ submission.date }}</span>
+                        <span style="color:#555">on {{ submission.date }}</span>
                     </td>
                     {% if can_see_results %}
                         <td style="white-space:nowrap">
