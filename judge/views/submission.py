@@ -11,7 +11,7 @@ from judge.views import get_result_table
 def submission_status(request, code):
     try:
         submission = Submission.objects.get(id=int(code))
-        test_cases = SubmissionTestCase.objects.get(submission=submission)
+        test_cases = SubmissionTestCase.objects.filter(submission=submission)
         return render_to_response('submission_status.html',
                                   {'submission': submission, 'test_cases': test_cases, 'title': 'Submission of %s by %s' %
                                                                       (submission.problem.name, submission.user.name)},
