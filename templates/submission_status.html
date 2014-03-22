@@ -21,10 +21,9 @@
             }
 
             SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}sub_{{ submission.id }}.jsonp", function (resp) {
-                var messages = resp['messages']['sub_{{ submission.id }}'];
-                for (var i = 0; i < messages.length; ++i) {
-                    on_receive(messages[i].content);
-                }
+                $.each(resp['messages']['sub_{{ submission.id }}'], function (index, message) {
+                    on_receive(message.content);
+                });
             });
             SimpleComet.start();
         });
