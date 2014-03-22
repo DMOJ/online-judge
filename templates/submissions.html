@@ -26,11 +26,9 @@
                             <a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a>
                             by
                         {% endif %}
-                        <a class="{% if user.is_admin %}
-                                admin
-                            {% else %}
-                                user
-                            {% endif %}" href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.long_display_name }}</a>
+                        <span class="{% if user.is_admin %}admin{% else %}user{% endif %}">
+                            <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.long_display_name }}</a>
+                        </span>
                         <br/>
                         <span style="color:#555">{{ submission.date }}</span>
                     </td>
