@@ -17,7 +17,7 @@
                     {% else %}
                     {{ submission.result }}
                     {% endif %}">
-                        {% if submission.is_grading %}
+                        {% if not submission.is_graded %}
                             <img src="{% static 'loading.gif' %}" alt="Grading...">
                         {% else %}
                             <span style="font-size:1.3em;color:black">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}</span>
