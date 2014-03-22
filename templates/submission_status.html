@@ -3,31 +3,34 @@
 {% block css %}
     <script src="{% static 'simple-comet.js' %}" type="text/javascript"></script>
     <script src="{% static 'common.js' %}" type="text/javascript"></script>
-    <script type="text/javascript">
-        $(function () {
-            function on_receive(message) {
-                var packet = message.split(" ");
-                var list = document.getElementById("test-cases");
-                switch (packet[0]) {
-                    case "test-case":
-                        list.innerHTML += "<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>".format(packet[1], packet[2], packet[3], packet[4], packet[5], packet[6]);
-                        break;
-                    case "grading-end":
-                        list.innerHTML += "<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(packet[3], packet[4]);
-                        break;
-                    default:
-                        return;
+    {% if not submission.is_graded %}
+        <script type="text/javascript">
+            $(function () {
+                function on_receive(message) {
+                    var packet = message.split(" ");
+                    var list = document.getElementById("test-cases");
+                    switch (packet[0]) {
+                        case "test-case":
+                            list.innerHTML += "<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>".format(packet[1], packet[2], packet[3], packet[4], packet[5], packet[6]);
+                            break;
+                        case "grading-end":
+                            list.innerHTML += "<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(packet[3], packet[4]);
+                            break;
+                        default:
+                            return;
+                    }
                 }
-            }
 
-            SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}sub_{{ submission.id }}.jsonp", function (resp) {
-                $.each(resp['messages']['sub_{{ submission.id }}'], function (index, message) {
-                    on_receive(message.content);
+                SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}sub_{{ submission.id }}.jsonp", function (resp) {
+                    var messages = resp['messages']['sub_{{ submission.id }}'];
+                    for (var i = 0; i < messages.length; ++i) {
+                        on_receive(messages[i].content);
+                    }
                 });
+                SimpleComet.start();
             });
-            SimpleComet.start();
-        });
-    </script>
+        </script>
+    {% endif %}
 {% endblock %}
 {% block body %}
     Submitted on {{ submission.date }}
@@ -40,5 +43,14 @@
     <br/>
     <h3>Execution Results</h3>
     <br/>
-    <div id="test-cases"></div>
+
+    <div id="test-cases">
+        {% if submission.is_graded %}
+            {% for case in test_cases %}
+                <b>Test case #{{ case.id }}:</b> {{ case.status }} [{{ case.time }}s, {{ case.memory }}kb] (
+                {{ case.points }}/{{ case.total }})<br/>
+            {% endfor %}
+            <br/><br/><b>Final score:</b> {{ submission.points }}/{{ submission.problem.points }}<br/>
+        {% endif %}
+    </div>
 {% endblock %}
