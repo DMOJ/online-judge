@@ -51,9 +51,9 @@
                             var row = table.find("tr#"+packet[1]);
                             var info = row.find('td:first-child');
                             info.find('span.status').html(packet[6]);
-                            info.find('span.score').html('<span style="font-size:1.3em;color:black">{0} / {1}</span>'.format(packet[4], packet[5]));
+                            info.find('span.score').html('<span style="font-size:1.3em;color:black">{0} / {1}</span>'.format(packet[4], packet[5]).replace(/\.0+/g, ''));
                             row.find('span.time').html('<b>{0}s</b>'.format(packet[2]));
-                            row.find('span.memory').html('<b>{0}kb</b>'.format(packet[3]));
+                            row.find('span.memory').html('{0}kb'.format(packet[3]));
                             break;
                         }
                         default:
