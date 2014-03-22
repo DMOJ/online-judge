@@ -64,7 +64,7 @@ def judge_submission(submission):
                                     (submission.id, submission.problem.name.replace(" ", "\f"),
                                      submission.status, submission.language.key,
                                      submission.user.user.username, [0, 1][submission.user.is_admin()],
-                                     submission.date.value_to_string().replace(" ", "\f")))
+                                     str(submission.date).replace(" ", "\f")))
         success = True
     submission.time = None
     submission.memory = None
