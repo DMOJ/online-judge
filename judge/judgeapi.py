@@ -60,7 +60,7 @@ def judge_submission(submission):
         submission.status = 'QU' if (response['name'] == 'submission-received' and
                                      response['submission-id'] == submission.id) else 'IE'
 
-        send_message('submissions', 'submission-start %d %s %d %s' % (submission.id, submission.status, submission.language.key, submission.user.user.username))
+        send_message('submissions', 'submission-start %d %s %s %s' % (submission.id, submission.status, submission.language.key, submission.user.user.username))
         success = True
     submission.time = None
     submission.memory = None
