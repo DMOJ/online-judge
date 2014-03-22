@@ -17,7 +17,11 @@
                     {% else %}
                     {{ submission.result }}
                     {% endif %}">
-                        <span style="font-size:1.3em;color:black">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}</span>
+                        {% if submission.is_grading %}
+                            <img src="{% static 'loading.gif' %}" alt="Grading...">
+                        {% else %}
+                            <span style="font-size:1.3em;color:black">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}</span>
+                        {% endif %}
                         <br/>
                         <span style="font-size:0.7em;font-weight:bold">{{ submission.result|default_if_none:submission.status }} | {{ submission.language.key }}</span>
                     </td>
