@@ -42,7 +42,7 @@ class DjangoJudgeHandler(JudgeHandler):
                 status = i
         total = round(total, 1)
         points = round(points / total * submission.problem.points, 1)
-        if not submission.problem.partial and points != total:
+        if not submission.problem.partial and points != submission.problem.points:
             points = 0
 
         submission.status = 'D'
