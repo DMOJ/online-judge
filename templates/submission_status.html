@@ -13,7 +13,7 @@
                         list.innerHTML += "<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>".format(packet[1], packet[2], packet[3], packet[4], packet[5], packet[6]);
                         break;
                     case "grading-end":
-                        list.innerHTML += "<br/><br/><b>Final score: {0}/{1}</b><br/>".format(packet[3], packet[4]);
+                        list.innerHTML += "<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(packet[3], packet[4]);
                         break;
                     default:
                         return;
