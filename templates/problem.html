@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block css %}
+    <link rel="stylesheet" href="{% static "status.css" %}">
+{% endblock %}
 {% block body %}
 <a href="{% url 'judge.views.problem_submit' problem.code %}">Submit</a>
 <br/>
