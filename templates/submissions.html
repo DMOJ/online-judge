@@ -24,13 +24,12 @@
                     <td style="width:90%">
                         {% if show_problem %}
                             <a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a>
-                            by
                         {% endif %}
                         <span class="{% if submission.user.is_admin %}admin{% else %}user{% endif %}">
                             <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.long_display_name }}</a>
                         </span>
                         <br/>
-                        <span style="color:#555">{{ submission.date }}</span>
+                        <span style="color:#555">on {{ submission.date }}</span>
                     </td>
                     {% if can_see_results %}
                         <td style="white-space:nowrap">
