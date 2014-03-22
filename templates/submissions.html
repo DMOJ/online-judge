@@ -21,42 +21,67 @@
                             var id = parseInt(packet[1]);
                             if (id > top_table_id()) {
                                 var html = "";
-                                var status = packet[2];
-                                var language = packet[3];
-                                var user = packet[3];
+                                var problem_code = packet[2];
+                                var problem = packet[3].replace("\f", " ");
+                                var status = packet[4];
+                                var language = packet[5];
+                                var user = packet[6];
+                                var clazz = ["user", "admin"][parseInt(packet[7])];
+                                var date = packet[8].replace("\f", " ");
                                 var dstatus = '<img src="{% static 'loading.gif' %}" alt="Grading...">';
                                 html = ('<tr id={0}>' +
                                         '<td style="width:10%" class="{1}">' +
                                         '<span class="score">' + dstatus + '</span>' +
                                         '<br/>' +
-                                        '<span style="font-size:0.7em;font-weight:bold">'+
+                                        '<span style="font-size:0.7em;font-weight:bold">' +
                                         '<span class="status">{1}</span> | <span class="language">{2}</span></span>' +
                                         '</td>' +
 
                                         '<td style="width:90%;text-align:left;padding-left:20px">' +
-                                        'I don\'t have enough patience with JavaScript to do this.' +
+                                        '<span style="font-size:1.3em;font-weight:bold">' +
+                                        '<a href="/problem/{3}">{4}</a>' +
+                                        '</span>' +
+                                        '<br/>' +
+                                        '<span class="{5}">' +
+                                        '<a href="/user/{6}">{6}</a>' +
+                                        '</span>' +
+                                        '<span style="color:#555"> on {7}</span>' +
                                         '</td>' +
 
                                         '<td style="white-space:nowrap">' +
                                         '<span class="time"><b>---</b></span><br/><span class="memory">---</span>' +
                                         '</td>' +
-                                        '</tr>').format(id, status, language);
+                                        '</tr>').format(id, status, language, problem_code, problem, clazz, user, date);
                                 table.prepend(html);
                             }
                             break;
                         case "submission-status":
-                            var info = table.find("tr#"+packet[1]).find('td:first-child');
+                        {
+                            var info = table.find("tr#" + packet[1]).find('td:first-child');
                             info.find('span.status').html(packet[2]);
+                            if (["QU", "G"].indexOf(packet[2]) == -1) {
+                                info.find('span.score').html('<span style="font-size:1.3em;color:black">---</span>');
+                            }
                             info.removeClass().addClass(packet[2]);
                             break;
-                        case "submission-end": {
-                            var row = table.find("tr#"+packet[1]);
+                        }
+                        case "submission-end":
+                        {
+                            var row = table.find("tr#" + packet[1]);
                             var info = row.find('td:first-child');
                             info.find('span.status').html(packet[6]);
                             info.find('span.score').html('<span style="font-size:1.3em;color:black">{0} / {1}</span>'.format(packet[4], packet[5]).replace(/\.0+/g, ''));
                             info.removeClass().addClass(packet[6]);
                             row.find('span.time').html('<b>{0}s</b>'.format(packet[2]));
-                            row.find('span.memory').html('{0}kb'.format(packet[3]));
+                            var mem = packet[3];
+                            var measure = null;
+                            if (mem >= 1024) {
+                                mem /= 1024.0;
+                                measure = "M";
+                            } else {
+                                measure = "K";
+                            }
+                            row.find('span.memory').html('{0} {1}'.format(mem.toFixed(2), measure));
                             break;
                         }
                         default:
@@ -132,10 +157,10 @@
                             <span class="memory">
                             {% with memory=submission.memory|default_if_none:0 %}
                                 {% if memory < 1000 %}
-                                    {{ memory|floatformat:"-2" }} KB
+                                    {{ memory|floatformat:"-2" }} K
                                 {% else %}
                                     {% math memory "$1 / 1024" as megabytes %}
-                                    {{ megabytes|floatformat:"-2" }} MB
+                                    {{ megabytes|floatformat:"-2" }} M
                                 {% endif %}
                             {% endwith %}
                             </span>

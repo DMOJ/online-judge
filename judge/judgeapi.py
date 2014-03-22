@@ -40,7 +40,7 @@ def judge_request(packet):
 
 def judge_submission(submission):
     chan = 'sub_%d' % submission.id
-    delete_channel(chan) # Delete if exist
+    delete_channel(chan)  # Delete if exist
     create_channel(chan)
     create_channel('submissions')  #TODO: only attempt to create once
     try:
@@ -60,7 +60,11 @@ def judge_submission(submission):
         submission.status = 'QU' if (response['name'] == 'submission-received' and
                                      response['submission-id'] == submission.id) else 'IE'
 
-        send_message('submissions', 'submission-start %d %s %s %s' % (submission.id, submission.status, submission.language.key, submission.user.user.username))
+        send_message('submissions', 'submission-start %d %s %s %s %s %s %d %s' %
+                                    (submission.id, submission.problem.code, submission.problem.name.replace(" ", "\f"),
+                                     submission.status, submission.language.key,
+                                     submission.user.user.username, [0, 1][submission.user.is_admin()],
+                                     str(submission.date).replace(" ", "\f")))
         success = True
     submission.time = None
     submission.memory = None
