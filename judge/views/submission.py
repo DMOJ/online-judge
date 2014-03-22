@@ -3,7 +3,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from judge.models import Problem, Submission
+from judge.models import Problem, Submission, SubmissionTestCase
 from judge.utils.diggpaginator import DiggPaginator
 from judge.views import get_result_table
 
@@ -11,8 +11,9 @@ from judge.views import get_result_table
 def submission_status(request, code):
     try:
         submission = Submission.objects.get(id=int(code))
+        test_cases = SubmissionTestCase.objects.get(submission=submission)
         return render_to_response('submission_status.html',
-                                  {'submission': submission, 'title': 'Submission of %s by %s' %
+                                  {'submission': submission, 'test_cases': test_cases, 'title': 'Submission of %s by %s' %
                                                                       (submission.problem.name, submission.user.name)},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:

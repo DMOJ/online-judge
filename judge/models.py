@@ -139,6 +139,9 @@ class Submission(models.Model):
     def judge(self):
         return judge_submission(self)
 
+    def is_graded(self):
+        return self.status not in ["QU", "C", "G"]
+
     def __unicode__(self):
         return u'Submission %d of %s by %s' % (self.id, self.problem, self.user)
 
