@@ -21,11 +21,12 @@
                             var id = parseInt(packet[1]);
                             if (id > top_table_id()) {
                                 var html = "";
-                                var problem = packet[2];
+                                var problem = packet[2].replace("\f", " ");
                                 var status = packet[3];
                                 var language = packet[4];
                                 var user = packet[5];
                                 var clazz = ["user", "admin"][parseInt(packet[6])];
+                                var date = packet[7].replace("\f", " ");
                                 var dstatus = '<img src="{% static 'loading.gif' %}" alt="Grading...">';
                                 html = ('<tr id={0}>' +
                                         '<td style="width:10%" class="{1}">' +
@@ -36,14 +37,14 @@
                                         '</td>' +
 
                                         '<td style="width:90%;text-align:left;padding-left:20px">' +
-                                        '<a href="/problems/{3}">{3}</a>' +
                                         '<span style="font-size:1.3em;font-weight:bold">' +
+                                        '<a href="/problems/{3}">{3}</a>' +
                                         '</span>' +
                                         '<br/>' +
                                         '<span class="{4}">' +
                                         '<a href="/user/{5}">{5}</a>' +
                                         '</span>' +
-                                        '<span style="color:#555">sometime after the Big Bang</span>' +
+                                        '<span style="color:#555"> sometime after the Big Bang</span>' +
                                         '</td>' +
 
                                         '<td style="white-space:nowrap">' +
