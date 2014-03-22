@@ -11,7 +11,7 @@
             $(function () {
                 function top_table_id() {
                     var table = document.getElementById("submissions-table");
-                    var top = parseInt(table.getElementsByTagName("tr").getAttribute("id").split("-")[1]);
+                    var top = parseInt(table.getElementsByTagName("tr")[0].getAttribute("id").split("-")[1]);
                     return top;
                 }
 
