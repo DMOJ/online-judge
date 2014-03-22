@@ -10,12 +10,12 @@
         <script type="text/javascript">
             $(function () {
                 function top_table_id() {
-                    return parseInt(document.getElementById("submissions-table").getElementsByTagName("tr")[0].getAttribute("id"));
+                    return parseInt($('#submissions-table').children('tr:first').attr("id"));
                 }
 
                 function on_receive(message) {
                     var packet = message.split(" ");
-                    var table = document.getElementById("submissions-table");
+                    var table = $('#submissions-table');
                     switch (packet[0]) {
                         case "submission-start":
                             var id = parseInt(packet[1]);
