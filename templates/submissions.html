@@ -74,11 +74,11 @@
                             var measure = null;
                             if (mem >= 1024) {
                                 mem /= 1024.0;
-                                measure = "K";
-                            } else {
                                 measure = "M";
+                            } else {
+                                measure = "K";
                             }
-                            row.find('span.memory').html('{0} {1}'.format(mem.toFixed(1), measure));
+                            row.find('span.memory').html('{0} {1}'.format(mem.toFixed(2), measure));
                             break;
                         }
                         default:
