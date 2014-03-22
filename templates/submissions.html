@@ -43,7 +43,7 @@
                 }
 
                 SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}submissions.jsonp", function (resp) {
-                    var messages = resp['messages']['sub_{{ submission.id }}'];
+                    var messages = resp['messages']['submissions'];
                     for (var i = 0; i < messages.length; ++i) {
                         on_receive(messages[i].content);
                     }
