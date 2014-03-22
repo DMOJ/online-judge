@@ -61,7 +61,7 @@ def judge_submission(submission):
                                      response['submission-id'] == submission.id) else 'IE'
 
         send_message('submissions', 'submission-start %d %s %s %s %s %d' %
-                                    (submission.id, submission.problem.name, submission.status, submission.language.key, submission.user.user.username, [0, 1][submission.user.is_admin]))
+                                    (submission.id, submission.problem.name, submission.status, submission.language.key, submission.user.user.username, [0, 1][submission.user.is_admin()]))
         success = True
     submission.time = None
     submission.memory = None
