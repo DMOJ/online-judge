@@ -8,13 +8,20 @@
             $(function () {
                 function on_receive(message) {
                     var packet = message.split(" ");
-                    var list = document.getElementById("test-cases");
+                    var list = $("#test-cases");
                     switch (packet[0]) {
                         case "test-case":
-                            list.innerHTML += "<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>".format(packet[1], packet[2], packet[3], packet[4], packet[5], packet[6]);
+                            list.prepend("<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>".format(packet[1], packet[2], packet[3], packet[4], packet[5], packet[6]));
+                            break;
+                        case "grading-begin":
+                            $("#execution-title").prepend("Execution Results");
                             break;
                         case "grading-end":
-                            list.innerHTML += "<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(packet[3], packet[4]);
+                            list.prepend("<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(packet[3], packet[4]));
+                            break;
+                        case "compile-error":
+                            $("#execution-title").prepend("Execution Results");
+                            list.prepend(packet[1].replace("\f", " ").replace("\n", "<br/>"));
                             break;
                         default:
                             return;
@@ -41,13 +48,16 @@
     {% endif %}
     <br/>
     <br/>
-    <h3>Execution Results</h3>
+    <h3>
+        <div id="execution-title"></div>
+    </h3>
     <br/>
 
     <div id="test-cases">
         {% if submission.is_graded %}
             {% for case in test_cases %}
-                <b>Test case #{{ forloop.counter }}:</b> {{ case.status }} [{{ case.time|floatformat:"3" }}s, {{ case.memory }}kb] ({{ case.points }}/{{ case.total }})<br/>
+                <b>Test case #{{ forloop.counter }}:</b> {{ case.status }} [{{ case.time|floatformat:"3" }}s,
+                {{ case.memory }}kb] ({{ case.points }}/{{ case.total }})<br/>
             {% endfor %}
             <br/><br/><b>Final score:</b> {{ submission.points }}/{{ submission.problem.points }}<br/>
         {% endif %}
