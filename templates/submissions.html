@@ -9,33 +9,41 @@
     {% if not submission.is_graded %}
         <script type="text/javascript">
             $(function () {
+                function top_table_id() {
+                    var table = document.getElementById("submissions-table");
+                    var top = table.getElementsByTagName("tr").getAttribute("id").split("-")[1].valueOf();
+                    return top;
+                }
+
                 function on_receive(message) {
                     var packet = message.split(" ");
                     var table = document.getElementById("submissions-table");
                     switch (packet[0]) {
                         case "submission-start":
-                            var html = "";
-                            var id = packet[1];
-                            var status = packet[2];
-                            var language = packet[3];
-                            var user = packet[3];
-                            var dstatus = '<img src="{% static 'loading.gif' %}" alt="Grading...">';
-                            html = ('<tr>' +
-                                    '<td style="width:10%" class="{0}">' +
-                                    dstatus +
-                                    '<br/>' +
-                                    '<span style="font-size:0.7em;font-weight:bold">{0} | {1}</span>' +
-                                    '</td>' +
+                            var id = packet[1].valueOf();
+                            if (id > top_table_id()) {
+                                var html = "";
+                                var status = packet[2];
+                                var language = packet[3];
+                                var user = packet[3];
+                                var dstatus = '<img src="{% static 'loading.gif' %}" alt="Grading...">';
+                                html = ('<tr id={0}>' +
+                                        '<td style="width:10%" class="{1}">' +
+                                        dstatus +
+                                        '<br/>' +
+                                        '<span style="font-size:0.7em;font-weight:bold">{1} | {2}</span>' +
+                                        '</td>' +
 
-                                    '<td style="width:90%;text-align:left;padding-left:20px">' +
-                                    'I don\'t have enough patience with JavaScript to do this.' +
-                                    '</td>' +
+                                        '<td style="width:90%;text-align:left;padding-left:20px">' +
+                                        'I don\'t have enough patience with JavaScript to do this.' +
+                                        '</td>' +
 
-                                    '<td style="white-space:nowrap">' +
-                                    '<b>---</b><br/>---' +
-                                    '</td>' +
-                                    '</tr>').format(status, language);
-                            table.innerHTML = html + table.innerHTML;
+                                        '<td style="white-space:nowrap">' +
+                                        '<b>---</b><br/>---' +
+                                        '</td>' +
+                                        '</tr>').format(id, status, language);
+                                table.innerHTML = html + table.innerHTML;
+                            }
                             break;
                         default:
                             return;
@@ -49,7 +57,8 @@
                     }
                 });
                 SimpleComet.start();
-            });
+            })
+            ;
         </script>
     {% endif %}
 {% endblock %}
@@ -60,7 +69,7 @@
     <div class="table" style="width:75%;border:0px;">
         <table id="submissions-table">
             {% for submission in submissions %}
-                <tr>
+                <tr id="submission-{{ submission.id }}">
                     <td style="width:10%" class="
                     {% if submission.status == 'IE' or submission.status == 'CE' %}{{ submission.status }}
                     {% else %}{{ submission.result }}{% endif %}">
