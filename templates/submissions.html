@@ -11,7 +11,7 @@
             $(function () {
                 function top_table_id() {
                     var table = document.getElementById("submissions-table");
-                    var top = table.getElementsByTagName("tr").getAttribute("id").split("-")[1].valueOf();
+                    var top = parseInt(table.getElementsByTagName("tr").getAttribute("id").split("-")[1]);
                     return top;
                 }
 
@@ -20,7 +20,7 @@
                     var table = document.getElementById("submissions-table");
                     switch (packet[0]) {
                         case "submission-start":
-                            var id = packet[1].valueOf();
+                            var id = parseInt(packet[1]);
                             if (id > top_table_id()) {
                                 var html = "";
                                 var status = packet[2];
