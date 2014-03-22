@@ -10,7 +10,7 @@
         <script type="text/javascript">
             $(function () {
                 function top_table_id() {
-                    return parseInt($('#submissions-table').children('tr:first').attr("id"));
+                    return parseInt($('#submissions-table').find('tr:first-child').attr('id'));
                 }
 
                 function on_receive(message) {
