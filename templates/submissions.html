@@ -27,9 +27,10 @@
                                 var dstatus = '<img src="{% static 'loading.gif' %}" alt="Grading...">';
                                 html = ('<tr id={0}>' +
                                         '<td style="width:10%" class="{1}">' +
-                                        dstatus +
+                                        '<span class="score">' + dstatus + '</span>' +
                                         '<br/>' +
-                                        '<span style="font-size:0.7em;font-weight:bold">{1} | {2}</span>' +
+                                        '<span style="font-size:0.7em;font-weight:bold">'+
+                                        '<span class="status">{1}</span> | <span class="language">{2}</span></span>' +
                                         '</td>' +
 
                                         '<td style="width:90%;text-align:left;padding-left:20px">' +
@@ -37,12 +38,24 @@
                                         '</td>' +
 
                                         '<td style="white-space:nowrap">' +
-                                        '<b>---</b><br/>---' +
+                                        '<span class="time"><b>---</b></span><br/><span class="memory">---</span>' +
                                         '</td>' +
                                         '</tr>').format(id, status, language);
                                 table.innerHTML = html + table.innerHTML;
                             }
                             break;
+                        case "submission-status":
+                            table.find("tr#"+packet[1]).find('td:first-child').find('span.status').html(packet[2]);
+                            break;
+                        case "submission-end": {
+                            var row = table.find("tr#"+packet[1]);
+                            var info = row.find('td:first-child');
+                            info.find('span.status').html(packet[6]);
+                            info.find('span.score').html('<span style="font-size:1.3em;color:black">{0} / {1}</span>'.format(packet[4], packet[5]));
+                            row.find('span.time').html('<b>{0}s</b>'.format(packet[2]));
+                            row.find('span.memory').html('<b>{0}kb</b>'.format(packet[3]));
+                            break;
+                        }
                         default:
                             return;
                     }
@@ -71,13 +84,18 @@
                     <td style="width:10%" class="
                     {% if submission.status == 'IE' or submission.status == 'CE' %}{{ submission.status }}
                     {% else %}{{ submission.result }}{% endif %}">
-                        {% if not submission.is_graded %}
-                            <img src="{% static 'loading.gif' %}" alt="Grading...">
-                        {% else %}
-                            <span style="font-size:1.3em;color:black">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}</span>
-                        {% endif %}
+                        <span class="score">
+                            {% if not submission.is_graded %}
+                                <img src="{% static 'loading.gif' %}" alt="Grading...">
+                            {% else %}
+                                <span style="font-size:1.3em;color:black">{{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}</span>
+                            {% endif %}
+                        </span>
                         <br/>
-                        <span style="font-size:0.7em;font-weight:bold">{{ submission.result|default_if_none:submission.status }} | {{ submission.language.key }}</span>
+                        <span style="font-size:0.7em;font-weight:bold">
+                            <span class="status">{{ submission.result|default_if_none:submission.status }}</span> |
+                            <span class="language">{{ submission.language.key }}</span>
+                        </span>
                     </td>
                     <td style="width:90%;text-align:left;padding-left:20px">
                         {% if show_problem %}
@@ -98,14 +116,17 @@
                     {% endif %}
                     <td style="white-space:nowrap">
                         {% if submission.status != "QU" and submission.status != "CE" and submission.status != "IE" %}
-                            <b>
-                                {% if "TLE" != submission.result %}
-                                    {{ submission.time|default_if_none:0|floatformat:"2" }}s
-                                {% else %}
-                                    ---
-                                {% endif %}
-                            </b>
+                            <span class="time">
+                                <b>
+                                    {% if "TLE" != submission.result %}
+                                        {{ submission.time|default_if_none:0|floatformat:"2" }}s
+                                    {% else %}
+                                        ---
+                                    {% endif %}
+                                </b>
+                            </span>
                             <br/>
+                            <span class="memory">
                             {% with memory=submission.memory|default_if_none:0 %}
                                 {% if memory < 1000 %}
                                     {{ memory|floatformat:"-2" }} KB
@@ -114,10 +135,10 @@
                                     {{ megabytes|floatformat:"-2" }} MB
                                 {% endif %}
                             {% endwith %}
+                            </span>
                         {% else %}
-                            <b>---</b>
-                            <br/>
-                            ---
+                            <span class="time"><b>---</b></span><br/>
+                            <span class="memory">---</span>
                         {% endif %}
                     </td>
                 </tr>
