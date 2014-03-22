@@ -10,7 +10,7 @@ from judge.models import Profile
 def user(request, user):
     try:
         user = Profile.objects.get(user__username=user)
-        return render_to_response('user.html', {'user': user, 'title': 'User %s' % user.display_name()},
+        return render_to_response('user.html', {'user': user, 'title': 'User %s' % user.long_display_name()},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return Http404()
