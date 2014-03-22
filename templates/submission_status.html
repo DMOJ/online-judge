@@ -20,7 +20,7 @@
                             list.prepend("<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(packet[3], packet[4]));
                             break;
                         case "compile-error":
-                            $("#execution-title").prepend("Execution Results");
+                            $("#execution-title").prepend("Compilation Error");
                             list.prepend(packet[1].replace("\f", " ").replace("\n", "<br/>"));
                             break;
                         default:
