@@ -32,8 +32,8 @@ def problem_submissions(request, code, page, title, order):
     try:
         problem = Problem.objects.get(code=code)
         submissions = Submission.objects.filter(problem=problem).order_by(*order)
-        profile = request.user.profile
-        can_see_results = any(sub.user == profile and sub.result == 'AC' for sub in submissions)
+        can_see_results = (request.user.is_authenticated() and
+                           submissions.filter(user=request.user.profile, result='AC').exists())
 
         paginator = DiggPaginator(submissions, 50, body=6, padding=2)
         try:
