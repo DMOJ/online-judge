@@ -39,6 +39,11 @@
 }
 
 .QU {
-    background-color: white;
-    color: black
+    background: linear-gradient(to right, blue, cyan);
+	color:white
+}
+
+.G {
+    background: linear-gradient(to right, blue, cyan);
+	color:white
 }
