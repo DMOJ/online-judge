@@ -13,22 +13,23 @@ def submission_status(request, code):
         submission = Submission.objects.get(id=int(code))
         test_cases = SubmissionTestCase.objects.filter(submission=submission)
         return render_to_response('submission_status.html',
-                                  {'submission': submission, 'test_cases': test_cases, 'title': 'Submission of %s by %s' %
-                                                                      (submission.problem.name, submission.user.name)},
+                                  {'submission': submission, 'test_cases': test_cases,
+                                   'title': 'Submission of %s by %s' %
+                                            (submission.problem.name, submission.user.name)},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()
 
 
 def chronological_submissions(request, code, page=1):
-    return problem_submissions(request, code, page, title="All submissions for %s", order=['-id'])
+    return problem_submissions(request, code, page, True, title="All submissions for %s", order=['-id'])
 
 
 def ranked_submissions(request, code, page=1):
-    return problem_submissions(request, code, page, title="Best solutions for %s", order=['-points', 'time', 'memory'])
+    return problem_submissions(request, code, page, False, title="Best solutions for %s", order=['-points', 'time', 'memory'])
 
 
-def problem_submissions(request, code, page, title, order):
+def problem_submissions(request, code, page, dynamic_update, title, order):
     try:
         problem = Problem.objects.get(code=code)
         submissions = Submission.objects.filter(problem=problem).order_by(*order)
@@ -46,6 +47,7 @@ def problem_submissions(request, code, page, title, order):
                                   {'submissions': submissions,
                                    'results': get_result_table(code),
                                    'can_see_results': can_see_results,
+                                   'dynamic_update': dynamic_update,
                                    'title': title % problem.name,
                                    'show_problem': False},
                                   context_instance=RequestContext(request))
@@ -64,6 +66,7 @@ def submissions(request, page=1):
     return render_to_response('submissions.html',
                               {'submissions': submissions,
                                'results': get_result_table(None),
+                               'dynamic_update': True,
                                'title': 'All submissions',
                                'show_problem': True},
                               context_instance=RequestContext(request))
