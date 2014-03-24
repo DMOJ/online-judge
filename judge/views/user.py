@@ -31,5 +31,5 @@ def edit_profile(request):
 
 
 def users(request):
-    return render_to_response('users.html', {'users': sorted(Profile.objects.all(), key=Profile.get_points), 'title': 'Users'},
+    return render_to_response('users.html', {'users': sorted(Profile.objects.all(), key=lambda x: x.get_points()), 'title': 'Users'},
                               context_instance=RequestContext(request))
