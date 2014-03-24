@@ -67,7 +67,6 @@ class Profile(models.Model):
     def get_problems(self):
         return Submission.objects.filter(user=self).values('problem').distinct().count()
 
-
     def __unicode__(self):
         #return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
         return self.long_display_name()
@@ -166,6 +165,7 @@ class Submission(models.Model):
         permissions = (
             ('rejudge_submission', 'Rejudge the submission'),
             ('rejudge_submission_lot', 'Rejudge a lot of submissions'),
+            ('spam_submission', 'Submit without limit')
         )
 
 

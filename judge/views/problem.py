@@ -48,8 +48,9 @@ def problem_submit(request, problem=None):
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=request.user.profile))
         if form.is_valid():
-            if Submission.objects.filter(user=request.user.profile).exclude(status__in=['D', 'IE', 'CE']).count() > 2:
-                return HttpResponse('<h1>You submitted too many submissions.</h1>', status=503)
+            if (request.user.has_permission('judge.spam_submission') and
+                Submission.objects.filter(user=request.user.profile).exclude(status__in=['D', 'IE', 'CE']).count() > 2):
+                    return HttpResponse('<h1>You submitted too many submissions.</h1>', status=503)
             model = form.save()
             model.judge()
             return HttpResponseRedirect(reverse('judge.views.submission_status', args=[str(model.id)]))
