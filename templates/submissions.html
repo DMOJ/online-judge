@@ -22,7 +22,7 @@
                             if (id > top_table_id()) {
                                 var html = "";
                                 var problem_code = packet[2];
-                                var problem = packet[3].replace("\f", " ");
+                                var problem = packet[3].replaceAll("\f", " ");
                                 var status = packet[4];
                                 var language = packet[5];
                                 var user = packet[6];

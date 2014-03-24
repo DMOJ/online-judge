@@ -7,6 +7,11 @@ String.prototype.format = function () {
     return formatted;
 };
 
+String.prototype.replaceAll = function (find, replace) {
+    var str = this;
+    return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
+};
+
 // IE 8
 if (!Array.indexOf) {
     Array.prototype.indexOf = function (obj) {
