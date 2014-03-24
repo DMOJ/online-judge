@@ -30,17 +30,29 @@ def ranked_submissions(request, code, page=1):
         problem = Problem.objects.get(code=code)
     except ObjectDoesNotExist:
         raise Http404()
-    results = Profile.objects.extra(select={'submission': '''SELECT judge_submission.id FROM judge_submission
-            WHERE judge_submission.user_id=judge_profile.id AND
-                  judge_submission.result = "AC" AND
-                  judge_submission.problem_id = %s
-            ORDER BY judge_submission.time ASC, judge_submission.memory ASC
-            LIMIT 1'''},
-        where=['''SELECT COUNT(*) FROM judge_submission
-                  WHERE judge_submission.user_id=judge_profile.id AND
-                        judge_submission.result = "AC" AND
-                        judge_submission.problem_id = %s'''],
-        params=[problem.id], select_params=[problem.id])
+    results = list(Submission.objects.raw('''
+        SELECT subs.id, subs.user_id, subs.problem_id, subs.date, subs.time,
+               subs.memory, subs.points, subs.language_id, subs.source,
+               subs.status, subs.result
+        FROM (
+            SELECT sub.user_id AS uid, MAX(sub.points) AS points
+            FROM judge_submission AS sub INNER JOIN
+                 judge_problem AS prob ON (sub.problem_id = prob.id)
+            WHERE sub.problem_id = %s AND
+                 (sub.result = 'AC' OR (prob.partial AND sub.points > 0))
+            GROUP BY sub.user_id
+        ) AS highscore INNER JOIN (
+            SELECT user_id AS uid, points, MIN(time) as time
+            FROM judge_submission
+            WHERE problem_id = %s
+            GROUP BY user_id, points
+        ) AS fastest
+                ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
+            INNER JOIN judge_submission as subs
+                ON (subs.user_id = fastest.uid AND subs.time = fastest.time)
+        GROUP BY fastest.uid
+        ORDER BY subs.points DESC, subs.time ASC
+    ''', (problem.id,) * 2))
     can_see_results = (request.user.is_authenticated() and
                        Submission.objects.filter(problem=problem, user=request.user.profile, result='AC').exists())
 
@@ -51,7 +63,6 @@ def ranked_submissions(request, code, page=1):
         submissions = paginator.page(1)
     except EmptyPage:
         submissions = paginator.page(paginator.num_pages)
-    submissions.object_list = [Submission.objects.get(id=result.submission) for result in submissions]
     return render_to_response('submissions.html',
                               {'submissions': submissions,
                                'results': get_result_table(code),
