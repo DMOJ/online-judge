@@ -3,7 +3,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from judge.models import Problem, Submission, SubmissionTestCase
+from judge.models import Problem, Submission, SubmissionTestCase, Profile
 from judge.utils.diggpaginator import DiggPaginator
 from judge.views import get_result_table
 
@@ -26,7 +26,40 @@ def chronological_submissions(request, code, page=1):
 
 
 def ranked_submissions(request, code, page=1):
-    return problem_submissions(request, code, page, False, title="Best solutions for %s", order=['-points', 'time', 'memory'])
+    try:
+        problem = Problem.objects.get(code=code)
+    except ObjectDoesNotExist:
+        raise Http404()
+    results = Profile.objects.extra(select={'submission': '''SELECT judge_submission.id FROM judge_submission
+            WHERE judge_submission.user_id=judge_profile.id AND
+                  judge_submission.result = "AC" AND
+                  judge_submission.problem_id = %s
+            ORDER BY judge_submission.time ASC, judge_submission.memory ASC
+            LIMIT 1'''},
+        where=['''SELECT COUNT(*) FROM judge_submission
+                  WHERE judge_submission.user_id=judge_profile.id AND
+                        judge_submission.result = "AC" AND
+                        judge_submission.problem_id = %s'''],
+        params=[problem.id], select_params=[problem.id])
+    can_see_results = (request.user.is_authenticated() and
+                       Submission.objects.filter(problem=problem, user=request.user.profile, result='AC').exists())
+
+    paginator = DiggPaginator(results, 50, body=6, padding=2)
+    try:
+        submissions = paginator.page(page)
+    except PageNotAnInteger:
+        submissions = paginator.page(1)
+    except EmptyPage:
+        submissions = paginator.page(paginator.num_pages)
+    submissions.object_list = [Submission.get(id=result.submission) for result in submissions]
+    return render_to_response('submissions.html',
+                              {'submissions': submissions,
+                               'results': get_result_table(code),
+                               'can_see_results': can_see_results,
+                               'dynamic_update': False,
+                               'title': "Best solutions for %s" % problem.name,
+                               'show_problem': False},
+                              context_instance=RequestContext(request))
 
 
 def problem_submissions(request, code, page, dynamic_update, title, order):
