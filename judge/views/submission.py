@@ -64,12 +64,10 @@ def submissions(request, page=1):
         submissions = paginator.page(1)
     except EmptyPage:
         submissions = paginator.page(paginator.num_pages)
-    can_see_results = (request.user.is_authenticated() and
-                       submissions.filter(user=request.user.profile, result='AC').exists())
     return render_to_response('submissions.html',
                               {'submissions': submissions,
                                'results': get_result_table(None),
-                               'can_see_results': can_see_results,
+                               'can_see_results': False, # TODO
                                'dynamic_update': True,
                                'title': 'All submissions',
                                'show_problem': True},
