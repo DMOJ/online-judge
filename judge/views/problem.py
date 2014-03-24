@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.forms import ProblemSubmitForm
@@ -48,6 +48,8 @@ def problem_submit(request, problem=None):
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=request.user.profile))
         if form.is_valid():
+            if Submission.objects.filter(user=request.user.profile).exclude(status='D').count() > 2:
+                return HttpResponse('<h1>You submitted too many submissions.</h1>', status=503)
             model = form.save()
             model.judge()
             return HttpResponseRedirect(reverse('judge.views.submission_status', args=[str(model.id)]))
