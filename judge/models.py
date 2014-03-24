@@ -93,7 +93,10 @@ class Problem(models.Model):
 
     def number_of_users(self):
         subs = Submission.objects.filter(problem=self)
-        users = {sub.user for sub in subs if sub.points == self.points}
+        users = set()
+        for sub in subs:
+            if sub.points == self.points:
+                users.add(sub.user)
         return len(users)
 
     def __unicode__(self):
