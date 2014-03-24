@@ -109,12 +109,7 @@ class Problem(models.Model):
         return map(attrgetter('full_name'), self.types.all())
 
     def number_of_users(self):
-        subs = Submission.objects.filter(problem=self)
-        users = set()
-        for sub in subs:
-            if sub.points == self.points:
-                users.add(sub.user)
-        return len(users)
+        return Submission.objects.filter(problem__code=self.code).values('user').distinct().count()
 
     def __unicode__(self):
         return self.name
