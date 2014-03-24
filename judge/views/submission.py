@@ -51,7 +51,7 @@ def ranked_submissions(request, code, page=1):
         submissions = paginator.page(1)
     except EmptyPage:
         submissions = paginator.page(paginator.num_pages)
-    submissions.object_list = [Submission.get(id=result.submission) for result in submissions]
+    submissions.object_list = [Submission.objects.get(id=result.submission) for result in submissions]
     return render_to_response('submissions.html',
                               {'submissions': submissions,
                                'results': get_result_table(code),
