@@ -12,6 +12,13 @@ String.prototype.replaceAll = function (find, replace) {
     return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
 };
 
+Array.prototype.removeAll = function (what) {
+    var array = this;
+    for (var i = array.length - 1; i--;) {
+        if (array[i] === what) array.splice(i, 1);
+    }
+};
+
 // IE 8
 if (!Array.indexOf) {
     Array.prototype.indexOf = function (obj) {

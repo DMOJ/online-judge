@@ -14,13 +14,13 @@
                             list.append("<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>".format(packet[1], packet[2], packet[3], packet[4], packet[5], packet[6]));
                             break;
                         case "grading-begin":
-                            $("#execution-title").append("Execution Results");
+                            $("#execution-title").append("<h3>Execution Results</h3>");
                             break;
                         case "grading-end":
                             list.append("<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(packet[3], packet[4]));
                             break;
                         case "compile-error":
-                            $("#execution-title").append("Compilation Error");
+                            $("#execution-title").append("<h3>Compilation Error</h3>");
                             list.append(packet[1].replace("\f", " ").replace("\n", "<br/>"));
                             break;
                         default:
@@ -48,9 +48,11 @@
     {% endif %}
     <br/>
     <br/>
-    <h3>
-        <div id="execution-title"></div>
-    </h3>
+    <div id="execution-title">
+        {% if submission.is_graded %}
+            
+        {% endif %}
+    </div>
     <br/>
 
     <div id="test-cases">
