@@ -1,11 +1,53 @@
 {% extends "base.html" %}
-{% block body %}
+{% block css %}
+    <script type="text/javascript">
+        $(function () {
+            function check_allowed() {
+                if (owned.length > 2) {
+                    alert("Hold on buddy: you have too many submissions pending.");
+                }
+            }
 
-<form action="" method="post">
-    {% csrf_token %}
-    <table border="0">
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit!"/>
-</form>
+            var owned = [];
+
+            function on_receive(message) {
+                var packet = message.split(" ");
+                switch (packet[0]) {
+                    case "submission-start":
+                    {
+                        if (packet[6] == {% user.username %}) {
+                            owned.add(packet[1]);
+                        }
+                        break;
+                    }
+                    case "submission-end":
+                    {
+                        owned.removeAll(packet[1]);
+                        break;
+                    }
+                    default:
+                        return;
+                }
+            }
+
+            SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}submissions.jsonp", function (resp) {
+                var messages = resp['messages']['submissions'];
+                for (var i = 0; i < messages.length; ++i) {
+                    on_receive(messages[i].content);
+                }
+            });
+            SimpleComet.start();
+        })
+        ;
+    </script>
+{% endblock %}
+
+{% block body %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <table border="0">
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Submit!" onclick="check_allowed()"/>
+    </form>
 {% endblock %}
