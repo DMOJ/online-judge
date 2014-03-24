@@ -48,6 +48,13 @@
                                         '<span style="color:#555"> on {7}</span>' +
                                         '</td>' +
 
+                                        {% if can_see_results %}
+                                            '<td style="white-space:nowrap">'+
+                                            '<a href="/submission/{0}">View</a>'
+                                            +
+                                            '</td>'+
+                                        {% endif %}
+
                                         '<td style="white-space:nowrap">' +
                                         '<span class="time"><b>---</b></span><br/><span class="memory">---</span>' +
                                         '</td>' +
@@ -119,7 +126,8 @@
                                 <span style="font-size:1.3em;color:black">{% if submission.status == 'IE' or submission.status == 'CE' %}
                                     ---
                                 {% else %}
-                                    {{ submission.points|default_if_none:0|floatformat:"-2" }} / {{ submission.problem.points|floatformat:"0" }}
+                                    {{ submission.points|default_if_none:0|floatformat:"-2" }} /
+                                    {{ submission.problem.points|floatformat:"0" }}
                                 {% endif %}
                                 </span>
                             {% endif %}
