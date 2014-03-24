@@ -5,7 +5,9 @@
             function check_allowed() {
                 if (owned.length > 2) {
                     alert("Hold on buddy: you have too many submissions pending.");
+                    return false;
                 }
+                return true''
             }
 
             var owned = [];
@@ -43,11 +45,11 @@
 {% endblock %}
 
 {% block body %}
-    <form action="" method="post">
+    <form action="" method="post" onsubmit="return check_allowed()">
         {% csrf_token %}
         <table border="0">
             {{ form.as_table }}
         </table>
-        <input type="submit" value="Submit!" onclick="check_allowed()"/>
+        <input type="submit" value="Submit!"/>
     </form>
 {% endblock %}
