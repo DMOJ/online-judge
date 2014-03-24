@@ -187,7 +187,7 @@ a {
     font-weight: bold
 }
 
-#noscript-banner {
+noscript {
     width: 100%;
     height: 23px;
     font-family: Arial, sans-serif;
