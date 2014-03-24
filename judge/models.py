@@ -59,16 +59,13 @@ class Profile(models.Model):
         problems = set()
         points = 0.0
         for sub in subs:
-            if (sub.result == 'AC' or sub.problem.partial) and problems.add(sub.problem):
+            # TODO: or sub.problem.partial
+            if (sub.result == 'AC') and problems.add(sub.problem):
                 points += sub.points
         return points
 
     def get_problems(self):
-        subs = Submission.objects.filter(user=self)
-        problems = set()
-        for sub in subs:
-            problems.add(sub.problem)
-        return len(problems)
+        return Submission.objects.filter(user=self).values('problem').distinct().count()
 
 
     def __unicode__(self):
