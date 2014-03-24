@@ -15,7 +15,17 @@ def get_result_table(code):
         if submission.result and submission.result not in ["IE"]:
             r = submission.result
             results[r] = results.get(r, 0) + 1
-    return results
+    displayable = {('Accepted', 'AC'): results.get('AC', 0),
+                   ('Wrong Answer', 'WA'): results.get('WA', 0),
+                   ('Compile Error', 'CE'): results.get('CE', 0),
+                   ('Time Limit Exceed', 'TLE'): results.get('TLE', 0),
+                   ('Invalid Return', 'IR'): results.get('IR', 0),
+                   ("Total", "TOT"): (results.get('AC', 0)
+                                      + results.get('WA', 0)
+                                      + results.get('CE', 0)
+                                      + results.get('TLE', 0)
+                                      + results.get('IR', 0))}
+    return displayable
 
 
 def problem(request, code):

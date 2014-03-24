@@ -5,8 +5,8 @@
             <th style="white-space:nowrap">Users</th>
         </tr>
         {% for k, v in results.iteritems %}
-            <tr class="{{ k }}">
-                <td style="font-weight:bold">{{ k }}</td>
+            <tr class="{{ k.1 }}">
+                <td style="font-weight:bold">{{ k.0 }}</td>
                 <td>{{ v }}</td>
             </tr>
         {% endfor %}
