@@ -29,7 +29,7 @@ class FancyRawQuerySetWrapper(object):
         else:
             offset = item
             limit = 1
-        return list(Submission.objects.raw(self._query + 'OFFSET %s LIMIT %s', self._args + (offset, limit)))
+        return list(Submission.objects.raw(self._query + 'LIMIT %s OFFSET %s', self._args + (limit, offset)))
 
 
 def ranked_submissions(request, code, page=1):
