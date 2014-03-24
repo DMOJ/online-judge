@@ -17,7 +17,7 @@
                 switch (packet[0]) {
                     case "submission-start":
                     {
-                        if (packet[6] == {% user.username %}) {
+                        if (packet[6] == {{ user.username }}) {
                             owned.add(packet[1]);
                         }
                         break;
