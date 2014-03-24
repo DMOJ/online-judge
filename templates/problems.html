@@ -15,7 +15,7 @@
                 <td>{{ problem.types_list|join:",<br>" }}</td>
                 <td>{{ problem.code }}</td>
                 <td>{{ problem.points }}{% if problem.partial %}p{% endif %}</td>
-                <td>0</td>
+                <td><a href="{% url 'judge.views.ranked_submissions' problem.code %}">{{ problem.number_of_users }}</a></td>
             </tr>
             {% endfor %}
         </table>

@@ -91,6 +91,11 @@ class Problem(models.Model):
     def types_list(self):
         return map(attrgetter('full_name'), self.types.all())
 
+    def number_of_users(self):
+        subs = Submission.objects.filter(problem=self)
+        users = {sub.user for sub in subs if sub.points == self.points}
+        return len(users)
+
     def __unicode__(self):
         return self.name
 
