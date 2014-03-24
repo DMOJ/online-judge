@@ -14,8 +14,8 @@
                     <td class="{% if user.is_admin %}admin{% else %}user{% endif %}">
                         <a href="{% url 'judge.views.user' user.user.username %}">{{ user.long_display_name }}</a>
                     </td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td>{{ user.get_points }}</td>
+                    <td>{{ user.get_problems }}</td>
                 </tr>
             {% endfor %}
         </table>
