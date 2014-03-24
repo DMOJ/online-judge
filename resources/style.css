@@ -186,3 +186,17 @@ a {
     color: blue;
     font-weight: bold
 }
+
+#noscript-banner {
+    width: 100%;
+    height: 23px;
+    font-family: Arial, sans-serif;
+    font-size: 111%;
+    color: white;
+    font-weight: bold;
+    background: #AE0000;
+    text-align: center;
+    padding-top: 4px;
+    position: fixed;
+    z-index: 100;
+}
