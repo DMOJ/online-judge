@@ -22,6 +22,14 @@
 
 <div id="header">
     <h1>DMOPC</h1>
+    <div id="login" style="float: right">
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'judge.views.user' request.user.username %}">Hello, {{ request.user.username }}</a>
+        {% else %}
+            <a href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path|urlencode }}">Login</a>
+            | <a href="/accounts/register/">Register</a>
+        {% endif %}
+    </div>
 </div>
 
 <header>
