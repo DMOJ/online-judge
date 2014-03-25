@@ -4,12 +4,15 @@
     <link rel="stylesheet" href="{% static "status.css" %}">
 {% endblock %}
 {% block body %}
-<a href="{% url 'judge.views.problem_submit' problem.code %}">Submit</a>
-<br/>
-<a href="{% url 'judge.views.chronological_submissions' problem.code %}">All submissions</a>
-<br/>
-<a href="{% url 'judge.views.ranked_submissions' problem.code %}">Best submissions</a>
-<br/>
-{% include "results_table.html" %}
-{{ problem.description|safe }}
+    <div class="info-float">
+        <a href="{% url 'judge.views.problem_submit' problem.code %}">Submit</a>
+        <br/>
+        <a href="{% url 'judge.views.chronological_submissions' problem.code %}">All submissions</a>
+        <br/>
+        <a href="{% url 'judge.views.ranked_submissions' problem.code %}">Best submissions</a>
+        <br/>
+        <br/>
+        {% include "results_table.html" %}
+    </div>
+    {{ problem.description|safe }}
 {% endblock %}
