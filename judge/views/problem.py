@@ -10,22 +10,17 @@ from judge.models import Problem, Profile, Submission
 
 def get_result_table(code):
     results = {}
-    for submission in Submission.objects.filter(problem__code=code) if code else Submission.objects.all():
-        r = None
-        if submission.result and submission.result not in ["IE"]:
-            r = submission.result
-            results[r] = results.get(r, 0) + 1
-    displayable = [(('Accepted', 'AC'), results.get('AC', 0)),
-                   (('Wrong Answer', 'WA'), results.get('WA', 0)),
-                   (('Compile Error', 'CE'), results.get('CE', 0)),
-                   (('Time Limit Exceed', 'TLE'), results.get('TLE', 0)),
-                   (('Invalid Return', 'IR'), results.get('IR', 0)),
-                   (("Total", "TOT"), (results.get('AC', 0)
-                                      + results.get('WA', 0)
-                                      + results.get('CE', 0)
-                                      + results.get('TLE', 0)
-                                      + results.get('IR', 0)))]
-    return displayable
+    submissions = Submission.objects.filter(problem__code=code) if code is not None else Submission.objects
+    for code in ['AC', 'WA', 'TLE', 'IR', 'MLE']:
+        results[code] = submissions.filter(result=code).count()
+    results['CE'] = submissions.filter(status='CE').count()
+    return [(('Accepted', 'AC'), results['AC']),
+            (('Wrong Answer', 'WA'), results['WA']),
+            (('Compile Error', 'CE'), results['CE']),
+            (('Time Limit Exceed', 'TLE'), results['TLE']),
+            (('Memory Limit Exceed', 'MLE'), results['MLE']),
+            (('Invalid Return', 'IR'), results['IR']),
+            (('Total', 'TOT'), sum(results.values()))]
 
 
 def problem(request, code):
