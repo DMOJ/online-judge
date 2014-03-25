@@ -8,6 +8,6 @@ $(function () {
     var info_right = float_bar.offset().right;
     $(window).scroll(function () {
         float_bar.css('position', ($(window).scrollTop() - info_offset > 0) ? 'fixed' : 'relative');
-        float_bar.css('right', ($(window).scrollTop() - info_offset > 0) ? 0 : 'auto');
+        float_bar.css('right', ($(window).scrollTop() - info_offset > 0) ? info_right : 'auto');
     });
 });
