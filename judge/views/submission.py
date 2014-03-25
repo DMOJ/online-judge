@@ -15,7 +15,7 @@ def submission_status(request, code):
         return render_to_response('submission_status.html',
                                   {'submission': submission, 'test_cases': test_cases,
                                    'title': 'Submission of %s by %s' %
-                                            (submission.problem.name, submission.user.name)},
+                                            (submission.problem.name, submission.user.user.username)},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()
