@@ -36,12 +36,12 @@
             </li>
             <li><a href="/about/"{% if request.path == '/about/' %} class="active"{% endif %}>About</a></li>
         </ul>
-        <span style="bottom:0;right:0;position:absolute">
+        <span style="height:60%;bottom:0;right:0;position:absolute">
         {% if request.user.is_authenticated %}
-            <a href="{% url 'judge.views.user' request.user.username %}">Hello, {{ request.user.username }}</a>
+            <a style="color:#FFF" href="{% url 'judge.views.user' request.user.username %}">Hello, {{ request.user.username }}</a>
         {% else %}
-            <a href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path|urlencode }}">Login</a>
-            | <a href="/accounts/register/">Register</a>
+            <a style="color:#FFF" href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path|urlencode }}">Login</a>
+            | <a style="color:#FFF" href="/accounts/register/">Register</a>
         {% endif %}
     </span>
     </nav>
