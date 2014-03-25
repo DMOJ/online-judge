@@ -73,7 +73,7 @@ class Profile(models.Model):
 
 
 class ProblemType(models.Model):
-    name = models.CharField(max_length=20, verbose_name='Problem category ID')
+    name = models.CharField(max_length=20, verbose_name='Problem category ID', unique=True)
     full_name = models.CharField(max_length=100, verbose_name='Problem category name')
 
     def __unicode__(self):
@@ -81,7 +81,7 @@ class ProblemType(models.Model):
 
 
 class ProblemGroup(models.Model):
-    name = models.CharField(max_length=20, verbose_name='Problem group ID')
+    name = models.CharField(max_length=20, verbose_name='Problem group ID', unique=True)
     full_name = models.CharField(max_length=100, verbose_name='Problem group name')
 
     def __unicode__(self):
@@ -89,8 +89,8 @@ class ProblemGroup(models.Model):
 
 
 class Problem(models.Model):
-    code = models.CharField(max_length=20, verbose_name='Problem code')
-    name = models.CharField(max_length=100, verbose_name='Problem name')
+    code = models.CharField(max_length=20, verbose_name='Problem code', unique=True)
+    name = models.CharField(max_length=100, verbose_name='Problem name', db_index=True)
     description = models.TextField(verbose_name='Problem body')
     user = models.ForeignKey(Profile, verbose_name='Creator')
     types = models.ManyToManyField(ProblemType, verbose_name='Problem types')
@@ -144,13 +144,14 @@ class Submission(models.Model):
     user = models.ForeignKey(Profile)
     problem = models.ForeignKey(Problem)
     date = models.DateTimeField(verbose_name='Submission time', auto_now_add=True)
-    time = models.FloatField(verbose_name='Execution time', null=True)
+    time = models.FloatField(verbose_name='Execution time', null=True, db_index=True)
     memory = models.FloatField(verbose_name='Memory usage', null=True)
-    points = models.FloatField(verbose_name='Points granted', null=True)
+    points = models.FloatField(verbose_name='Points granted', null=True, db_index=True)
     language = models.ForeignKey(Language, verbose_name='Submission language')
     source = models.TextField(verbose_name='Source code')
-    status = models.CharField(max_length=2, choices=STATUS, default='QU')
-    result = models.CharField(max_length=3, choices=SUBMISSION_RESULT, default=None, null=True, blank=True)
+    status = models.CharField(max_length=2, choices=STATUS, default='QU', db_index=True)
+    result = models.CharField(max_length=3, choices=SUBMISSION_RESULT, default=None, null=True,
+                              blank=True, db_index=True)
 
     def judge(self):
         return judge_submission(self)
