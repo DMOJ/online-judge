@@ -3,11 +3,11 @@ $(function () {
     $(window).scroll(function () {
         $('#navigation').css('position', ($(window).scrollTop() - nav_offset > 0) ? 'fixed' : 'relative');
     });
-    var float = $('.info-float');
-    var info_offset = float.offset().top;
-    var info_right = float.offset().right;
+    var float_bar = $('.info-float');
+    var info_offset = float_bar.offset().top;
+    var info_right = float_bar.offset().right;
     $(window).scroll(function () {
-        float.css('position', ($(window).scrollTop() - info_offset > 0) ? 'fixed' : 'relative');
-        float.css('right', ($(window).scrollTop() - info_offset > 0) ? 0 : 'auto');
+        float_bar.css('position', ($(window).scrollTop() - info_offset > 0) ? 'fixed' : 'relative');
+        float_bar.css('right', ($(window).scrollTop() - info_offset > 0) ? 0 : 'auto');
     });
 });
