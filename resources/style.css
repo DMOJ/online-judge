@@ -82,7 +82,8 @@ h4 {
     background: #FFF;
     color: #000;
     text-align: left;
-    height: 100px
+    height: 100px;
+    padding-left:60px;
 }
 
 nav ul {
