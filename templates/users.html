@@ -8,14 +8,14 @@
                 <th style="white-space:nowrap">Points</th>
                 <th style="white-space:nowrap">Problems</th>
             </tr>
-            {% for user in users %}
+            {% for rank, user in users %}
                 <tr>
-                    <td>0</td>
+                    <td>{{ rank }}</td>
                     <td class="{% if user.is_admin %}admin{% else %}user{% endif %}">
                         <a href="{% url 'judge.views.user' user.user.username %}">{{ user.long_display_name }}</a>
                     </td>
-                    <td>{{ user.get_points }}</td>
-                    <td>{{ user.get_problems }}</td>
+                    <td>{{ user.points }}</td>
+                    <td>{{ user.problems }}</td>
                 </tr>
             {% endfor %}
         </table>

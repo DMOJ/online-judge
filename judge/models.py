@@ -62,17 +62,8 @@ class Profile(models.Model):
     def is_admin(self):
         return self.user.is_superuser or self.user.groups.filter(name='Admin').exists()
 
-    def get_points(self):
-        subs = Submission.objects.filter(user=self)
-        problems = set()
-        points = 0.0
-        for sub in subs:
-            # TODO: or sub.problem.partial
-            if (sub.result == 'AC') and problems.add(sub.problem):
-                points += sub.points
-        return points
-
-    def get_problems(self):
+    @property
+    def problems(self):
         return Submission.objects.filter(user=self).values('problem').distinct().count()
 
     def __unicode__(self):
