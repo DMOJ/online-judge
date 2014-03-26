@@ -1,6 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import PageNotAnInteger, EmptyPage
-from django.http import Http404
+from django.core.urlresolvers import reverse
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.models import Problem, Submission, SubmissionTestCase
@@ -19,6 +20,13 @@ def submission_status(request, code):
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()
+
+
+def abort_submission(request, code):
+    if request.method != 'POST':
+        raise Http404()
+    Submission.objects.get(id=int(code)).abort()
+    return HttpResponseRedirect(reverse('judge.views.submission_status'), args=(code,))
 
 
 def chronological_submissions(request, code, page=1):

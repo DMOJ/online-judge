@@ -47,6 +47,11 @@
         <br/>
     {% endif %}
     <br/>
+    {% if not submission.is_graded %}
+        <form action="{% url 'judge.views.abort_submission' submission.id %}" method="post">
+            <input type="submit" value="Abort" />
+        </form>
+    {% endif %}
     <br/>
     <div id="execution-title">
         {% if submission.is_graded %}

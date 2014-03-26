@@ -4,7 +4,7 @@ from django.db.models import Max
 import pytz
 from operator import itemgetter, attrgetter
 
-from judge.judgeapi import judge_submission
+from judge.judgeapi import judge_submission, abort_submission
 
 
 def make_timezones():
@@ -154,6 +154,9 @@ class Submission(models.Model):
 
     def judge(self):
         return judge_submission(self)
+
+    def abort(self):
+        return abort_submission(self)
 
     def is_graded(self):
         return self.status not in ["QU", "C", "G"]

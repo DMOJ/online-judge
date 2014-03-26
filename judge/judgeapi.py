@@ -72,3 +72,9 @@ def judge_submission(submission):
     submission.result = None
     submission.save()
     return success
+
+
+def abort_submission(submission):
+    # @Xyene TODO: MAKE THIS WORK!
+    submission.status = 'ABR'
+    submission.save()
