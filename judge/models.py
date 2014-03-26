@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Max
 import pytz
 from operator import itemgetter, attrgetter
 
@@ -40,6 +41,13 @@ class Profile(models.Model):
     about = models.TextField(verbose_name='Self-description', null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name='Timezone', default='UTC', choices=TIMEZONE)
     language = models.ForeignKey(Language, verbose_name='Default language')
+    points = models.FloatField(default=0)
+
+    def calculate_points(self):
+        self.points = sum(Submission.objects.filter(user=self).values('problem_id').distinct()
+                                    .annotate(points=Max('points')).values_list('points', flat=True))
+        self.points.save()
+        return self.points
 
     def display_name(self):
         if self.name:
