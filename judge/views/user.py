@@ -40,6 +40,7 @@ def ranker(profiles):
         if profile.points != last:
             rank += delta
             delta = 0
+        last = round(profile.points, 1)
 
 
 def users(request):
