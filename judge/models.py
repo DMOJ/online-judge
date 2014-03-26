@@ -46,7 +46,7 @@ class Profile(models.Model):
     def calculate_points(self):
         self.points = sum(Submission.objects.filter(user=self).values('problem_id').distinct()
                                     .annotate(points=Max('points')).values_list('points', flat=True))
-        self.points.save()
+        self.save()
         return self.points
 
     def display_name(self):
