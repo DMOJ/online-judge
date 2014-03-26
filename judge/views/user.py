@@ -31,15 +31,15 @@ def edit_profile(request):
 
 
 def ranker(profiles):
-    rank = 1
-    delta = 0
+    rank = 0
+    delta = 1
     last = -1
     for profile in profiles:
-        delta += 1
-        yield rank, profile
         if profile.points != last:
             rank += delta
             delta = 0
+        delta += 1
+        yield rank, profile
         last = round(profile.points, 1)
 
 
