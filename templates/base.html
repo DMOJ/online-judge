@@ -10,7 +10,7 @@
     <script src="{% static "navbar.js" %}"></script>
     {% block css %}
     {% endblock %}
-<!--[if IE]>
+    <!--[if IE]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 </head>
@@ -22,37 +22,43 @@
 
 <div id="header">
     <h1><span style="color:#BBB">DM::</span>OJ</h1>
-    <div id="login" style="float: right">
-        {% if request.user.is_authenticated %}
-            <a href="{% url 'judge.views.user' request.user.username %}">Hello, {{ request.user.username }}</a>
-        {% else %}
-            <a href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path|urlencode }}">Login</a>
-            | <a href="/accounts/register/">Register</a>
-        {% endif %}
-    </div>
 </div>
 
 <header>
-        <nav id="navigation" class="unselectable">
-            <ul>
-                <li><a href="/"{% if request.path == '/' %} class="active"{% endif %}>Home</a></li>
-                <li><a href="/problems/"{% ifstartswith request.path '/problem' %} class="active"{% endifstartswith %}>Problems</a></li>
-                <li><a href="/submissions/"{% ifstartswith request.path '/submi' %} class="active"{% endifstartswith %}>Submissions</a></li>
-                <li><a href="/users/"{% ifstartswith request.path '/user' %} class="active"{% endifstartswith %}>Users</a></li>
-                <li><a href="/about/"{% if request.path == '/about/' %} class="active"{% endif %}>About</a></li>
-            </ul>
-        </nav>
+    <nav id="navigation" class="unselectable">
+        <ul>
+            <li><a href="/"{% if request.path == '/' %} class="active"{% endif %}>Home</a></li>
+            <li><a href="/problems/"{% ifstartswith request.path '/problem' %} class="active"{% endifstartswith %}>Problems</a>
+            </li>
+            <li><a href="/submissions/"{% ifstartswith request.path '/submi' %} class="active"{% endifstartswith %}>Submissions</a>
+            </li>
+            <li><a href="/users/"{% ifstartswith request.path '/user' %} class="active"{% endifstartswith %}>Users</a>
+            </li>
+            <li><a href="/about/"{% if request.path == '/about/' %} class="active"{% endif %}>About</a></li>
+        </ul>
+        <span style="bottom:6px;right:6px;position:absolute">
+        {% if request.user.is_authenticated %}
+            <a style="color:#FFF" href="{% url 'judge.views.user' request.user.username %}">Hello, <span
+                    style="font-weight:bold">{{ request.user.username }}</span></a>
+        {% else %}
+            <a style="color:#FFF;font-weight:bold"
+               href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path|urlencode }}">Login</a>
+            | <a style="color:#FFF" href="/accounts/register/">Register</a>
+        {% endif %}
+    </span>
+    </nav>
 </header>
 <br>
+
 <div id="content">
     <h2 style="color:#393630">{{ title }}</h2>
     <hr/>
-        <br/>
-        {% block body %}
-        {% endblock %}
-        <footer>
-                <p>Generated on {% now "H:i:s, F d, Y O" %}</p>
-        </footer>
+    <br/>
+    {% block body %}
+    {% endblock %}
+    <footer>
+        <p>Generated on {% now "H:i:s, F d, Y O" %}</p>
+    </footer>
 </div>
 </body>
 </html>
