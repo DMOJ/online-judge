@@ -41,7 +41,7 @@ class Profile(models.Model):
     about = models.TextField(verbose_name='Self-description', null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name='Timezone', default='UTC', choices=TIMEZONE)
     language = models.ForeignKey(Language, verbose_name='Default language')
-    points = models.FloatField(default=0)
+    points = models.FloatField(default=0, db_index=True)
 
     def calculate_points(self):
         self.points = sum(Submission.objects.filter(user=self).values('problem_id').distinct()
