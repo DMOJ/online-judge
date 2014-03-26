@@ -22,7 +22,7 @@ def submission_status(request, code):
 
 
 def chronological_submissions(request, code, page=1):
-    return problem_submissions(request, code, page, True, title="All submissions for %s", order=['-id'])
+    return problem_submissions(request, code, page, False, title="All submissions for %s", order=['-id'])
 
 
 def problem_submissions(request, code, page, dynamic_update, title, order):
