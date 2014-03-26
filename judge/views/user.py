@@ -30,6 +30,18 @@ def edit_profile(request):
                               context_instance=RequestContext(request))
 
 
+def ranker(profiles):
+    rank = 1
+    delta = 0
+    last = -1
+    for profile in profiles:
+        delta += 1
+        yield rank, profile
+        if profile.points != last:
+            rank += delta
+            delta = 0
+
+
 def users(request):
-    return render_to_response('users.html', {'users': enumerate(Profile.objects.order_by('-points')), 'title': 'Users'},
+    return render_to_response('users.html', {'users': ranker(Profile.objects.order_by('-points')), 'title': 'Users'},
                               context_instance=RequestContext(request))
