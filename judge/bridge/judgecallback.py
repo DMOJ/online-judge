@@ -53,6 +53,8 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.result = status_codes[status]
         submission.save()
 
+        submission.user.calculate_points()
+
         send_message('sub_%d' % submission.id,
                      'grading-end %.3f %d %.1f %.1f %s' % (time, memory, points, submission.problem.points,
                                                            submission.result))
