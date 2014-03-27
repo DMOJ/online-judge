@@ -17,4 +17,4 @@ class DjangoServer(SocketServer.ThreadingTCPServer):
             for judge in self.judges:
                 judge._send({'name': 'ping',
                              'when': time.time()})
-            time.sleep(0.2)
+            time.sleep(12)
