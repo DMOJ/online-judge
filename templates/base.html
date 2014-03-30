@@ -27,14 +27,14 @@
 <header>
     <nav id="navigation" class="unselectable">
         <ul>
-            <li><a href="/"{% if request.path == '/' %} class="active"{% endif %}>Home</a></li>
-            <li><a href="/problems/"{% ifstartswith request.path '/problem' %} class="active"{% endifstartswith %}>Problems</a>
+            <li><a href="/"{% if nav_tab == 'home' %} class="active"{% endif %}>Home</a></li>
+            <li><a href="/problems/"{% if nav_tab == 'problem' %} class="active"{% endif %}>Problems</a>
             </li>
-            <li><a href="/submissions/"{% ifstartswith request.path '/submi' %} class="active"{% endifstartswith %}>Submissions</a>
+            <li><a href="/submissions/"{% if nav_tab == 'submit' %} class="active"{% endif %}>Submissions</a>
             </li>
-            <li><a href="/users/"{% ifstartswith request.path '/user' %} class="active"{% endifstartswith %}>Users</a>
+            <li><a href="/users/"{% if nav_tab == 'user' %} class="active"{% endif %}>Users</a>
             </li>
-            <li><a href="/about/"{% if request.path == '/about/' %} class="active"{% endif %}>About</a></li>
+            <li><a href="/about/"{% if nav_tab == 'about' %} class="active"{% endif %}>About</a></li>
         </ul>
         <span style="bottom:6px;right:6px;position:absolute">
         {% if request.user.is_authenticated %}

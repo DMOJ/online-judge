@@ -15,3 +15,20 @@ def user_profile(request):
 
 def comet_location(request):
     return {'SIMPLE_COMET_URL': settings.SIMPLE_COMET_URL}
+
+
+def __tab(request):
+    if request.path == '/':
+        return 'home'
+    elif '/submi' in request.path:
+        return 'submit'
+    elif request.path.startswith('/problem'):
+        return 'problem'
+    elif request.path.startswith('/user'):
+        return 'user'
+    elif request.path == '/about/':
+        return 'about'
+
+
+def general_info(request):
+    return {'nav_tab': __tab(request)}
