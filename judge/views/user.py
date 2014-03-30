@@ -11,7 +11,8 @@ from judge.models import Profile, Submission
 def user(request, user):
     try:
         user = Profile.objects.get(user__username=user)
-        result = Submission.objects.filter(user=user).values('problem__code', 'problem__name', 'problem__points') \
+        result = Submission.objects.filter(user=user, points__gt=0) \
+                           .values('problem__code', 'problem__name', 'problem__points') \
                            .distinct().annotate(points=Max('points'))
         return render_to_response('user.html', {'user': user, 'title': 'User %s' % user.long_display_name(),
                                                 'best_submissions': result},
