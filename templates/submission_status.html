@@ -43,31 +43,37 @@
     Submitted on {{ submission.date }}
     <br/>
     {% if request.user == submission.user.user %}
-        <a href="{% url 'judge.views.problem_submit' submission.problem.code submission.id %}">Click here to revise and resubmit!</a>
+        <a href="{% url 'judge.views.problem_submit' submission.problem.code submission.id %}">Click here to revise and
+            resubmit!</a>
         <br/>
     {% endif %}
     <br/>
     {% if not submission.is_graded %}
         <form action="{% url 'judge.views.abort_submission' submission.id %}" method="post">
             {% csrf_token %}
-            <input type="submit" value="Abort" />
+            <input type="submit" value="Abort"/>
         </form>
     {% endif %}
     <br/>
     <div id="execution-title">
         {% if submission.is_graded %}
-            
+
         {% endif %}
     </div>
     <br/>
 
     <div id="test-cases">
         {% if submission.is_graded %}
-            {% for case in test_cases %}
-                <b>Test case #{{ forloop.counter }}:</b> {{ case.status }} [{{ case.time|floatformat:"3" }}s,
-                {{ case.memory }}kb] ({{ case.points }}/{{ case.total }})<br/>
-            {% endfor %}
-            <br/><br/><b>Final score:</b> {{ submission.points }}/{{ submission.problem.points }}<br/>
+        {% for case in test_cases %}
+            <b>Test case #{{ forloop.counter }}:</b> {{ case.status }} [{{ case.time|floatformat:"3" }}s,
+            {{ case.memory }}kb] ({{ case.points }}/{{ case.total }})<br/>
+        {% endfor %}
+        <br/><br/>
+        {% if submission.result != "AB" %}
+            <b>Final score:</b> {{ submission.points }}/{{ submission.problem.points }}
+        {% else %}
+            <b>Submission aborted!</b>
         {% endif %}
+        <br/>
     </div>
 {% endblock %}
