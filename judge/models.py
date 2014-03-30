@@ -103,6 +103,9 @@ class Problem(models.Model):
     def types_list(self):
         return map(attrgetter('full_name'), self.types.all())
 
+    def languages_list(self):
+        return map(attrgetter('name'), self.allowed_languages.all())
+
     def number_of_users(self):
         return Submission.objects.filter(problem__code=self.code).values('user').distinct().count()
 
