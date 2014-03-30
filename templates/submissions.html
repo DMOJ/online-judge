@@ -158,7 +158,7 @@
                         </td>
                     {% endif %}
                     <td style="white-space:nowrap">
-                        {% if submission.status != "QU" and submission.status != "CE" and submission.status != "IE" or submission.status != 'AB' %}
+                        {% if submission.status != "QU" and submission.status != "CE" and submission.status != "IE" and submission.status != 'AB' %}
                             <span class="time">
                                 <b>
                                     {% if "TLE" != submission.result %}
