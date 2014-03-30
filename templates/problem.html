@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
+{% load mathtag %}
 {% block css %}
     <link rel="stylesheet" href="{% static "status.css" %}">
 {% endblock %}
@@ -12,7 +13,33 @@
         <a href="{% url 'judge.views.ranked_submissions' problem.code %}">Best submissions</a>
         <br/>
         <br/>
-        {% include "results_table.html" %}
+        <hr/>
+        <br/>
+        <br/>
+        <b>Points: </b> {{ problem.points }} {% if problem.partial %} (partial){% endif %}
+        <br/>
+        <b>Time Limit: </b> {{ problem.time_limit }}s
+        <br/>
+        <b>Memory Limit: </b>
+        {% with memory=problem.memory_limit %}
+            {% if memory < 1000 %}
+                {{ memory|floatformat:"-2" }}K
+            {% else %}
+                {% math memory "$1 / 1024" as megabytes %}
+                {{ megabytes|floatformat:"-2" }}M
+            {% endif %}
+        {% endwith %}
+        <br/>
+        <br/>
+        <b>Problem type(s): </b>
+        <br/>
+        {{ problem.types_list|join:", " }}
+        <br/>
+        <br/>
+        <b>Languages allowed: </b>
+        <br/>
+        {{ problem.languages_list|join:", " }}
+        <br/>
     </div>
     {{ problem.description|safe }}
 {% endblock %}
