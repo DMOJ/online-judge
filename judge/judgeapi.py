@@ -76,6 +76,6 @@ def judge_submission(submission):
 
 
 def abort_submission(submission):
-    judge_request({'terminate-submission'}, reply=False)
+    judge_request({'name': 'terminate-submission'}, reply=False)
     submission.status = 'ABR'
     submission.save()
