@@ -39,7 +39,8 @@
         <span style="bottom:6px;right:6px;position:absolute">
         {% if request.user.is_authenticated %}
             <a style="color:#FFF" href="{% url 'judge.views.user' request.user.username %}">Hello, <span
-                    style="font-weight:bold">{{ request.user.username }}</span></a>
+                    style="font-weight:bold">{{ request.user.username }}</span></a> |
+            <a style="color:#FFF" href="{% url 'django.contrib.auth.views.logout' %}?next=">Log out</a>
         {% else %}
             <a style="color:#FFF;font-weight:bold"
                href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path|urlencode }}">Login</a>
