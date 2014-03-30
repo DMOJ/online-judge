@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.forms import ProblemSubmitForm
-from judge.models import Problem, Profile, Submission
+from judge.models import Problem, Submission
 
 
 def get_result_table(code):
@@ -46,6 +46,8 @@ def problem_submit(request, problem=None, submission=None):
             if (not request.user.has_perm('judge.spam_submission') and
                 Submission.objects.filter(user=request.user.profile).exclude(status__in=['D', 'IE', 'CE']).count() > 2):
                     return HttpResponse('<h1>You submitted too many submissions.</h1>', status=503)
+            if not form.problem.allowed_languages.filter(id=form.language.id).exist():
+                raise PermissionDenied()
             model = form.save()
             model.judge()
             return HttpResponseRedirect(reverse('judge.views.submission_status', args=[str(model.id)]))
@@ -62,5 +64,7 @@ def problem_submit(request, problem=None, submission=None):
             except (ObjectDoesNotExist, ValueError):
                 raise Http404()
         form = ProblemSubmitForm(initial=initial)
+        if 'problem' in initial:
+            form.language.queryset = initial['problem'].allowed_languages
     return render_to_response('problem_submit.html', {'form': form, 'title': 'Submit'},
                               context_instance=RequestContext(request))

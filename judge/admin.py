@@ -1,5 +1,6 @@
 from django.contrib import admin, messages
 from django.conf.urls import patterns
+from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -21,8 +22,14 @@ class ProblemAdmin(admin.ModelAdmin):
         (None, {'fields': ('code', 'name', 'user', 'description', 'types', 'groups')}),
         ('Points', {'fields': (('points', 'partial'),)}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
+        ('Language', {'fields': ('allowed_languages',)})
     )
     list_display = ['code', 'name', 'user', 'points']
+
+    def formfield_for_manytomany(self, db_field, request=None, **kwargs):
+        if db_field == 'allowed_languages':
+            kwargs['widget'] = CheckboxSelectMultiple()
+        return super(ProblemAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
 class SubmissionAdmin(admin.ModelAdmin):
