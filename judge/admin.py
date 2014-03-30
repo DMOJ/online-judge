@@ -27,7 +27,7 @@ class ProblemAdmin(admin.ModelAdmin):
     list_display = ['code', 'name', 'user', 'points']
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
-        if db_field == 'allowed_languages':
+        if db_field.name == 'allowed_languages':
             kwargs['widget'] = CheckboxSelectMultiple()
         return super(ProblemAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
