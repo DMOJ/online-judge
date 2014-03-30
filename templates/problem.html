@@ -12,7 +12,30 @@
         <a href="{% url 'judge.views.ranked_submissions' problem.code %}">Best submissions</a>
         <br/>
         <br/>
-        {% include "results_table.html" %}
+        <br/>
+        <b>Points: </b> {{ problem.points }}
+        <br/>
+        <b>Time Limit: </b> {{ problem.time_limit }}
+        <br/>
+        <b>Memory Limit: </b>
+        {% with memory=problem.memory_limit %}
+            {% if memory < 1000 %}
+                {{ memory|floatformat:"-2" }} K
+            {% else %}
+                {% math memory "$1 / 1024" as megabytes %}
+                {{ megabytes|floatformat:"-2" }} M
+            {% endif %}
+        {% endwith %}
+        <br/>
+        <br/>
+        <b>Problem type(s): </b>
+        <br/>
+        {{ problem.types_list|join:", " }}
+        <br/>
+        <br/>
+        <b>Languages allowed: </b>
+        {{ problem.languages_list|join:", " }}
+        <br/>
     </div>
     {{ problem.description|safe }}
 {% endblock %}
