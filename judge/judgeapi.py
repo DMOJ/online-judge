@@ -11,7 +11,7 @@ logger = logging.getLogger('judge.judgeapi')
 size_pack = struct.Struct('!I')
 
 
-def judge_request(packet):
+def judge_request(packet, reply=True):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((settings.BRIDGED_DJANGO_HOST, settings.BRIDGED_DJANGO_PORT))
 
@@ -22,20 +22,21 @@ def judge_request(packet):
     writer.write(output)
     writer.close()
 
-    reader = sock.makefile('r', -1)
-    input = reader.read(4)
-    if not input:
-        raise ValueError('Judge did not respond')
-    length = size_pack.unpack(input)[0]
-    input = reader.read(length)
-    if not input:
-        raise ValueError('Judge did not respond')
-    reader.close()
-    sock.close()
+    if reply:
+        reader = sock.makefile('r', -1)
+        input = reader.read(4)
+        if not input:
+            raise ValueError('Judge did not respond')
+        length = size_pack.unpack(input)[0]
+        input = reader.read(length)
+        if not input:
+            raise ValueError('Judge did not respond')
+        reader.close()
+        sock.close()
 
-    input = input.decode('zlib')
-    result = json.loads(input)
-    return result
+        input = input.decode('zlib')
+        result = json.loads(input)
+        return result
 
 
 def judge_submission(submission):
@@ -75,6 +76,6 @@ def judge_submission(submission):
 
 
 def abort_submission(submission):
-    # @Xyene TODO: MAKE THIS WORK!
+    judge_request({'name': 'terminate-submission'}, reply=False)
     submission.status = 'ABR'
     submission.save()
