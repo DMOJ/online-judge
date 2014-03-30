@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.paginator import PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
@@ -25,7 +25,10 @@ def submission_status(request, code):
 def abort_submission(request, code):
     if request.method != 'POST':
         raise Http404()
-    Submission.objects.get(id=int(code)).abort()
+    submission = Submission.objects.get(id=int(code))
+    if request.user.profile != submission.user and not request.user.profile.is_admin():
+        raise PermissionDenied()
+    submission.abort()
     return HttpResponseRedirect(reverse('judge.views.submission_status', args=(code,)))
 
 
