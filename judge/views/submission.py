@@ -26,7 +26,7 @@ def abort_submission(request, code):
     if request.method != 'POST':
         raise Http404()
     Submission.objects.get(id=int(code)).abort()
-    return HttpResponseRedirect(reverse('judge.views.submission_status'), args=(code,))
+    return HttpResponseRedirect(reverse('judge.views.submission_status', args=(code,)))
 
 
 def chronological_submissions(request, code, page=1):
