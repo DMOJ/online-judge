@@ -39,7 +39,7 @@ def problems(request):
 
 
 @login_required
-def problem_submit(request, problem=None):
+def problem_submit(request, problem=None, submission=None):
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=request.user.profile))
         if form.is_valid():
@@ -55,6 +55,11 @@ def problem_submit(request, problem=None):
             try:
                 initial['problem'] = Problem.objects.get(code=problem)
             except ObjectDoesNotExist:
+                raise Http404()
+        if submission is not None:
+            try:
+                initial['source'] = Submission.objects.get(id=int(submission)).source
+            except (ObjectDoesNotExist, ValueError):
                 raise Http404()
         form = ProblemSubmitForm(initial=initial)
     return render_to_response('problem_submit.html', {'form': form, 'title': 'Submit'},

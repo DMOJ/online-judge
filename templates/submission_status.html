@@ -43,7 +43,7 @@
     Submitted on {{ submission.date }}
     <br/>
     {% if request.user == submission.user.user %}
-        <a href="{% url 'judge.views.problem_submit' submission.problem.code %}">Click here to revise and resubmit!</a>
+        <a href="{% url 'judge.views.problem_submit' submission.problem.code submission.id %}">Click here to revise and resubmit!</a>
         <br/>
     {% endif %}
     <br/>
