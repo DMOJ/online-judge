@@ -13,18 +13,20 @@
         <a href="{% url 'judge.views.ranked_submissions' problem.code %}">Best submissions</a>
         <br/>
         <br/>
+        <hr/>
         <br/>
-        <b>Points: </b> {{ problem.points }}
         <br/>
-        <b>Time Limit: </b> {{ problem.time_limit }}
+        <b>Points: </b> {{ problem.points }} {% if problem.partial %} (partial){% endif %}
+        <br/>
+        <b>Time Limit: </b> {{ problem.time_limit }}s
         <br/>
         <b>Memory Limit: </b>
         {% with memory=problem.memory_limit %}
             {% if memory < 1000 %}
-                {{ memory|floatformat:"-2" }} K
+                {{ memory|floatformat:"-2" }}K
             {% else %}
                 {% math memory "$1 / 1024" as megabytes %}
-                {{ megabytes|floatformat:"-2" }} M
+                {{ megabytes|floatformat:"-2" }}M
             {% endif %}
         {% endwith %}
         <br/>
@@ -35,6 +37,7 @@
         <br/>
         <br/>
         <b>Languages allowed: </b>
+        <br/>
         {{ problem.languages_list|join:", " }}
         <br/>
     </div>
