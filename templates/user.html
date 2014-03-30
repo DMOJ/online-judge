@@ -5,11 +5,10 @@
         <br/>
         <br/>
     {% endif %}
-    <h3>{{ user.problems }} problems solved.</h3>
+    <h4>{{ user.problems }} problems solved.</h4>
     <br/>
     <br/>
     <b>Total points: </b>{{ user.calculate_points }}
-    <br/>
     <br/>
     <ul>
         {% for entry in best_submissions %}
