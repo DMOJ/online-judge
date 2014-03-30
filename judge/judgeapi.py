@@ -77,5 +77,6 @@ def judge_submission(submission):
 
 def abort_submission(submission):
     judge_request({'name': 'terminate-submission'}, reply=False)
-    submission.status = 'ABR'
+    submission.status = submission.status = 'AB'
+    send_message('submissions', 'submission-status %d %s' % (submission.id, submission.status))
     submission.save()
