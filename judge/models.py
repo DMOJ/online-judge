@@ -64,7 +64,7 @@ class Profile(models.Model):
 
     @property
     def problems(self):
-        return Submission.objects.filter(user=self).values('problem').distinct().count()
+        return Submission.objects.filter(user=self, points__gt=0).values('problem').distinct().count()
 
     def __unicode__(self):
         #return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
