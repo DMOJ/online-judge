@@ -1,1 +1,9 @@
 {% extends "base.html" %}
+{% block body %}
+    <ul>
+        {% for entry in best_submissions %}
+            <li><a href="{% url 'judge.views.problem' entry.problem__code %}">{{ entry.problem__name }}</a>
+                ({{ entry.points }} / {{ entry.problem__points }})</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,16 +1,20 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Max
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.forms import ProfileForm
-from judge.models import Profile
+from judge.models import Profile, Submission
 
 
 def user(request, user):
     try:
         user = Profile.objects.get(user__username=user)
-        return render_to_response('user.html', {'user': user, 'title': 'User %s' % user.long_display_name()},
+        result = Submission.objects.filter(user=user).values('problem__code', 'problem__name', 'problem__points') \
+                           .distinct().annotate(points=Max('points'))
+        return render_to_response('user.html', {'user': user, 'title': 'User %s' % user.long_display_name(),
+                                                'best_submissions': result},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()
