@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{% static "status.css" %}">
 {% endblock %}
 {% block body %}
-    <div class="info-float">
+    <div class="info-float" style="width:11%;padding-left:40px">
         <a href="{% url 'judge.views.problem_submit' problem.code %}">Submit</a>
         <br/>
         <a href="{% url 'judge.views.chronological_submissions' problem.code %}">All submissions</a>
@@ -14,7 +14,6 @@
         <br/>
         <br/>
         <hr/>
-        <br/>
         <br/>
         <b>Points: </b> {{ problem.points }} {% if problem.partial %} (partial){% endif %}
         <br/>

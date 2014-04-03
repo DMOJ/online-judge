@@ -1,9 +1,19 @@
 {% extends "base.html" %}
 {% block body %}
+    {% if user.name %}
+        <b>Name: </b> {{ user.name }}
+        <br/>
+        <br/>
+    {% endif %}
+    <h4>{{ user.problems }} problems solved.</h4>
+    <br/>
+    <b>Total points: </b>{{ user.calculate_points }}
+    <br/>
     <ul>
         {% for entry in best_submissions %}
             <li><a href="{% url 'judge.views.problem' entry.problem__code %}">{{ entry.problem__name }}</a>
-                ({{ entry.points }} / {{ entry.problem__points }})</li>
+                ({{ entry.points }} / {{ entry.problem__points }})
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}
