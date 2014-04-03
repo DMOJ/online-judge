@@ -44,8 +44,9 @@ class Profile(models.Model):
     points = models.FloatField(default=0, db_index=True)
 
     def calculate_points(self):
-        self.points = sum(Submission.objects.filter(user=self).values('problem_id').distinct()
-                                    .annotate(points=Max('points')).values_list('points', flat=True))
+        self.points = sum(map(itemgetter('points'),
+                              Submission.objects.filter(user=self).values('problem_id').distinct()
+                                        .annotate(points=Max('points'))))
         self.save()
         return self.points
 
