@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
@@ -89,3 +90,6 @@ urlpatterns = patterns('',
     url(r'^problem/(\w+)/rank/(\d+)$', 'judge.views.ranked_submissions'),
     url(r'^problem/(\w+)/submissions/(\d+)$', 'judge.views.chronological_submissions'),
 )
+
+if 'tinymce' in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^tinymce/', include('tinymce.urls')))
