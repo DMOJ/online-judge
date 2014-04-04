@@ -93,3 +93,4 @@ urlpatterns = patterns('',
 
 if 'tinymce' in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^tinymce/', include('tinymce.urls')))
+import django.contrib.staticfiles.storage
