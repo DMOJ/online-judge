@@ -37,6 +37,7 @@ else:
 class Language(models.Model):
     key = models.CharField(max_length=6, verbose_name='Short identifier', unique=True)
     name = models.CharField(max_length=20, verbose_name='Name as shown to user')
+    ace = models.CharField(max_length=20, verbose_name='ACE mode name')
 
     def __unicode__(self):
         return self.name

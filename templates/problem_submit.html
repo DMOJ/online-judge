@@ -2,10 +2,23 @@
 {% load static from staticfiles %}
 {% block css %}
     {{ form.media }}
+    <script type="text/javascript">
+        $(function () {
+            var modes = {
+                {% for lang in langs %}
+                    "{{ lang.id }}": "{{ lang.ace|escapejs }}",
+                {% endfor %}
+            };
+            $('#id_language').change(function () {
+                var lang = $("#id_language").find("option:selected").attr('value');
+                window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block body %}
-    <form action="" method="post" onsubmit="return check_allowed()">
+    <form action="" method="post">
         {% csrf_token %}
         <table border="0">
             {{ form.as_table }}

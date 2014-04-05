@@ -51,6 +51,8 @@ def problem_submit(request, problem=None, submission=None):
             model = form.save()
             model.judge()
             return HttpResponseRedirect(reverse('judge.views.submission_status', args=[str(model.id)]))
+        else:
+            form_data = form.cleaned_data
     else:
         initial = {'language': request.user.profile.language}
         if problem is not None:
@@ -64,7 +66,12 @@ def problem_submit(request, problem=None, submission=None):
             except (ObjectDoesNotExist, ValueError):
                 raise Http404()
         form = ProblemSubmitForm(initial=initial)
-        if 'problem' in initial:
-            form.fields['language'].queryset = initial['problem'].allowed_languages
-    return render_to_response('problem_submit.html', {'form': form, 'title': 'Submit'},
-                              context_instance=RequestContext(request))
+        form_data = initial
+    if 'problem' in form_data:
+        form.fields['language'].queryset = form_data['problem'].allowed_languages
+    form.fields['source'].widget.mode = form_data['language'].ace
+    return render_to_response('problem_submit.html', {
+        'form': form,
+        'title': 'Submit',
+        'langs': form.fields['language'].queryset,
+    }, context_instance=RequestContext(request))
