@@ -32,10 +32,6 @@ class AceWidget(forms.Textarea):
             urljoin(ACE_URL, 'ace.js'),
             'django_ace/widget.js',
         ]
-        if self.mode:
-            js.append(urljoin(ACE_URL, 'mode-%s.js' % self.mode))
-        if self.theme:
-            js.append(urljoin(ACE_URL, 'theme-%s.js' % self.theme))
         css = {
             'screen': ['django_ace/widget.css'],
         }
