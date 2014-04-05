@@ -73,5 +73,5 @@ def problem_submit(request, problem=None, submission=None):
     return render_to_response('problem_submit.html', {
         'form': form,
         'title': 'Submit',
-        'langs': form.fields['language'].queryset,
+        'langs': form.fields['language'].queryset.all(),
     }, context_instance=RequestContext(request))
