@@ -116,6 +116,8 @@
             },
             readOnly: true // false if this command should not apply in readOnly mode
         });
+
+        window[div.id] = editor;
     }
 
     function init() {
