@@ -6,6 +6,7 @@ import pytz
 from operator import itemgetter, attrgetter
 
 from judge.judgeapi import judge_submission, abort_submission
+from judge.model_choices import ACE_THEMES
 
 
 def make_timezones():
@@ -50,6 +51,7 @@ class Profile(models.Model):
     timezone = models.CharField(max_length=50, verbose_name='Timezone', default='UTC', choices=TIMEZONE)
     language = models.ForeignKey(Language, verbose_name='Default language')
     points = models.FloatField(default=0, db_index=True)
+    ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
 
     def calculate_points(self):
         self.points = sum(map(itemgetter('points'),

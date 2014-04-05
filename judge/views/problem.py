@@ -70,6 +70,7 @@ def problem_submit(request, problem=None, submission=None):
     if 'problem' in form_data:
         form.fields['language'].queryset = form_data['problem'].allowed_languages
     form.fields['source'].widget.mode = form_data['language'].ace
+    form.fields['source'].widget.theme = request.user.profile.ace_theme
     return render_to_response('problem_submit.html', {
         'form': form,
         'title': 'Submit',
