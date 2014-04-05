@@ -1,4 +1,4 @@
-(function() {
+(function () {
     function getDocHeight() {
         var D = document;
         return Math.max(
@@ -35,13 +35,15 @@
         return elem;
     }
 
-    function redraw(element){
-    element = $(element);
-    var n = document.createTextNode(' ');
-    element.appendChild(n);
-    (function(){n.parentNode.removeChild(n)}).defer();
-    return element;
-  }
+    function redraw(element) {
+        element = $(element);
+        var n = document.createTextNode(' ');
+        element.appendChild(n);
+        (function () {
+            n.parentNode.removeChild(n)
+        }).defer();
+        return element;
+    }
 
     function minimizeMaximize(widget, main_block, editor) {
         if (window.fullscreen == true) {
@@ -82,7 +84,7 @@
 
         // Toolbar maximize/minimize button
         var min_max = toolbar.getElementsByClassName('django-ace-max_min');
-        min_max[0].onclick = function() {
+        min_max[0].onclick = function () {
             minimizeMaximize(widget, main_block, editor);
             return false;
         };
@@ -103,18 +105,69 @@
             editor.getSession().setUseWrapMode(true);
         }
 
-        editor.getSession().on('change', function() {
+        editor.getSession().on('change', function () {
             textarea.value = editor.getSession().getValue();
         });
 
-        editor.commands.addCommand({
-            name: 'Full screen',
-            bindKey: {win: 'Ctrl-F11',  mac: 'Command-F11'},
-            exec: function(editor) {
-                minimizeMaximize(widget, main_block, editor);
+        editor.commands.addCommand([
+            {
+                name: 'Full screen',
+                bindKey: {win: 'Ctrl-F11', mac: 'Command-F11'},
+                exec: function (editor) {
+                    minimizeMaximize(widget, main_block, editor);
+                },
+                readOnly: true // false if this command should not apply in readOnly mode
             },
-            readOnly: true // false if this command should not apply in readOnly mode
-        });
+            {
+                name: 'submit',
+                bindKey: "Ctrl+Enter",
+                exec: function (editor) {
+                    $('form#problem_submit').submit();
+                },
+                readOnly: true
+            },
+            {
+                name: "showKeyboardShortcuts",
+                bindKey: {win: "Ctrl-Shift-/", mac: "Command-Shift-/"},
+                exec: function (editor) {
+                    ace.config.loadModule("ace/ext/keybinding_menu", function (module) {
+                        module.init(editor);
+                        editor.showKeyboardShortcuts();
+                    });
+                }
+            },
+            {
+                name: "increaseFontSize",
+                bindKey: "Ctrl-+",
+                exec: function (editor) {
+                    var size = parseInt(editor.getFontSize(), 10) || 12;
+                    editor.setFontSize(size + 1);
+                }
+            },
+            {
+                name: "decreaseFontSize",
+                bindKey: "Ctrl+-",
+                exec: function (editor) {
+                    var size = parseInt(editor.getFontSize(), 10) || 12;
+                    editor.setFontSize(Math.max(size - 1 || 1));
+                }
+            },
+            {
+                name: "resetFontSize",
+                bindKey: "Ctrl+0",
+                exec: function (editor) {
+                    editor.setFontSize(12);
+                }
+            },
+            {
+                name: "save",
+                bindKey: {win: "Ctrl-S", mac: "Command-S"},
+                exec: function (arg) {
+                    var problem = $('#id_problem').find('option:selected').attr('value');
+                    localStorage.setItem('submit:' + problem, editor.getSession().getValue());
+                }
+            }
+        ]);
 
         window[widget.id] = editor;
     }

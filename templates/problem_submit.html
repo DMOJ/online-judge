@@ -13,12 +13,23 @@
                 var lang = $("#id_language").find("option:selected").attr('value');
                 window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
             });
+            (function () {
+                var source = $('textarea#id_source');
+                if (source.val() == '') {
+                    var problem = $('#id_problem').find('option:selected').attr('value');
+                    var code = localStorage.getItem('submit:' + problem);
+                    if (code) {
+                        source.val(code);
+                        window.ace_source.getSession().setValue(code);
+                    }
+                }
+            })();
         });
     </script>
 {% endblock %}
 
 {% block body %}
-    <form action="" method="post">
+    <form action="" method="post" id="problem_submit">
         {% csrf_token %}
         <table border="0">
             {{ form.as_table }}
