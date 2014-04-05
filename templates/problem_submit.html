@@ -2,49 +2,6 @@
 {% load static from staticfiles %}
 {% block css %}
     {{ form.media }}
-    <script src="{% static 'simple-comet.js' %}" type="text/javascript"></script>
-    <script src="{% static 'common.js' %}" type="text/javascript"></script>
-    <script type="text/javascript">
-        $(function () {
-            function check_allowed() {
-                if (owned.length > 2) {
-                    alert("Hold on buddy: you have too many submissions pending.");
-                    return false;
-                }
-                return true;
-            }
-
-            var owned = [];
-
-            function on_receive(message) {
-                var packet = message.split(" ");
-                switch (packet[0]) {
-                    case "submission-start":
-                    {
-                        if (packet[6] == "{{ user.username }}") {
-                            owned.add(packet[1]);
-                        }
-                        break;
-                    }
-                    case "submission-end":
-                    {
-                        owned.removeAll(packet[1]);
-                        break;
-                    }
-                    default:
-                        return;
-                }
-            }
-
-            SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}submissions.jsonp", function (resp) {
-                var messages = resp['messages']['submissions'];
-                for (var i = 0; i < messages.length; ++i) {
-                    on_receive(messages[i].content);
-                }
-            });
-            SimpleComet.start();
-        });
-    </script>
 {% endblock %}
 
 {% block body %}
