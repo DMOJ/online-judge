@@ -170,7 +170,7 @@
         ]);
 
         window[widget.id] = editor;
-        $(widget).trigger('ace_load');
+        $(widget).trigger('ace_load', [editor]);
     }
 
     function init() {

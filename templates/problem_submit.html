@@ -13,14 +13,14 @@
                 var lang = $("#id_language").find("option:selected").attr('value');
                 window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
             });
-            $('#ace_source').on('ace_load', function () {
+            $('#ace_source').on('ace_load', function (e, editor) {
                 var source = $('textarea#id_source');
                 if (source.val() == '') {
                     var problem = $('#id_problem').find('option:selected').attr('value');
                     var code = localStorage.getItem('submit:' + problem);
                     if (code) {
                         source.val(code);
-                        window.ace_source.getSession().setValue(code);
+                        editor.getSession().setValue(code);
                     }
                 }
             });
