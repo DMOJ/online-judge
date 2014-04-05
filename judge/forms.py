@@ -7,9 +7,6 @@ class ProfileForm(ModelForm):
     class Meta:
         model = Profile
         fields = ['name', 'about', 'timezone', 'language']
-        widgets = {
-            "text": AceWidget(theme='twilight'),
-        }
 
 
 class ProblemSubmitForm(ModelForm):
@@ -21,3 +18,6 @@ class ProblemSubmitForm(ModelForm):
     class Meta:
         model = Submission
         fields = ['problem', 'source', 'language']
+        widgets = {
+            'source': AceWidget(theme='twilight'),
+        }
