@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block css %}
     {{ form.media }}
+    <script src="{% static 'simple-comet.js' %}" type="text/javascript"></script>
+    <script src="{% static 'common.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
             function check_allowed() {
