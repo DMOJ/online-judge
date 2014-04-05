@@ -109,7 +109,7 @@
             textarea.value = editor.getSession().getValue();
         });
 
-        editor.commands.addCommand([
+        editor.commands.addCommands([
             {
                 name: 'Full screen',
                 bindKey: {win: 'Ctrl-F11', mac: 'Command-F11'},
@@ -170,6 +170,7 @@
         ]);
 
         window[widget.id] = editor;
+        $(widget).trigger('ace_load');
     }
 
     function init() {

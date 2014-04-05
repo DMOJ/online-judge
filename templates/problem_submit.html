@@ -13,7 +13,7 @@
                 var lang = $("#id_language").find("option:selected").attr('value');
                 window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
             });
-            (function () {
+            $('#ace_source').on('ace_load', function () {
                 var source = $('textarea#id_source');
                 if (source.val() == '') {
                     var problem = $('#id_problem').find('option:selected').attr('value');
@@ -23,7 +23,7 @@
                         window.ace_source.getSession().setValue(code);
                     }
                 }
-            })();
+            });
         });
     </script>
 {% endblock %}
