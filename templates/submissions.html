@@ -155,11 +155,11 @@
                         </span>
                         <span style="color:#555">on {{ submission.date }}</span>
                     </td>
-                    {% if can_see_results %}
-                        <td style="white-space:nowrap">
-                            <a href="{% url 'judge.views.submission_status' submission.id %}">View</a>
-                        </td>
-                    {% endif %}
+
+                    <td style="white-space:nowrap">
+                        <a href="{% url 'judge.views.submission_status' submission.id %}">View</a>
+                    </td>
+
                     <td style="white-space:nowrap">
                         {% if submission.status != "QU" and submission.status != "G" and submission.status != "CE" and submission.status != "IE" and submission.status != 'AB' %}
                             <span class="time">

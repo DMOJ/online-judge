@@ -40,8 +40,6 @@ def problem_submissions(request, code, page, dynamic_update, title, order):
     try:
         problem = Problem.objects.get(code=code)
         submissions = Submission.objects.filter(problem=problem).order_by(*order)
-        can_see_results = (request.user.is_authenticated() and
-                           submissions.filter(user=request.user.profile, result='AC').exists())
 
         paginator = DiggPaginator(submissions, 50, body=6, padding=2)
         try:
@@ -53,7 +51,6 @@ def problem_submissions(request, code, page, dynamic_update, title, order):
         return render_to_response('submissions.html',
                                   {'submissions': submissions,
                                    'results': get_result_table(code),
-                                   'can_see_results': can_see_results,
                                    'dynamic_update': dynamic_update,
                                    'title': title % problem.name,
                                    'show_problem': False},
@@ -73,7 +70,6 @@ def submissions(request, page=1):
     return render_to_response('submissions.html',
                               {'submissions': submissions,
                                'results': get_result_table(None),
-                               'can_see_results': False, # TODO
                                'dynamic_update': True,
                                'title': 'All submissions',
                                'show_problem': True},
