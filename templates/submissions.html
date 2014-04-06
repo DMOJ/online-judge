@@ -48,12 +48,9 @@
                                         '<span style="color:#555"> on {7}</span>' +
                                         '</td>' +
 
-                                        {% if can_see_results %}
-                                            '<td style="white-space:nowrap">'+
-                                            '<a href="/submission/{0}">View</a>'
-                                            +
-                                            '</td>'+
-                                        {% endif %}
+                                        '<td style="white-space:nowrap">' +
+                                        '<a href="/submission/{0}">View</a>' +
+                                        '</td>' +
 
                                         '<td style="white-space:nowrap">' +
                                         '<span class="time"><b>---</b></span><br/><span class="memory">---</span>' +
@@ -125,7 +122,7 @@
                             {% if not submission.is_graded %}
                                 <img src="{% static 'loading.gif' %}" alt="Grading...">
                             {% else %}
-                                <span style="font-size:1.3em;color:black">{% if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB'%}
+                                <span style="font-size:1.3em;color:black">{% if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB' %}
                                     ---
                                 {% else %}
                                     {{ submission.points|default_if_none:0|floatformat:"-2" }} /
@@ -158,7 +155,7 @@
                         </td>
                     {% endif %}
                     <td style="white-space:nowrap">
-                        {% if submission.status != "QU" and submission.status != "CE" and submission.status != "IE" and submission.status != 'AB' %}
+                        {% if submission.status != "QU" and submission.status != "G" and submission.status != "CE" and submission.status != "IE" and submission.status != 'AB' %}
                             <span class="time">
                                 <b>
                                     {% if "TLE" != submission.result %}

@@ -67,7 +67,7 @@ class DjangoJudgeHandler(JudgeHandler):
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = submission.result = 'CE'
         submission.save()
-        send_message('sub_%d' % submission.id, 'compile-error %s' % packet['log'])
+        send_message('sub_%d' % submission.id, 'compile-error %s' % packet['log'].replace(" ", "\f"))
         send_message('submissions', 'submission-status %d %s' % (submission.id, submission.status))
 
     def on_bad_problem(self, packet):

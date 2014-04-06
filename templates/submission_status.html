@@ -48,7 +48,7 @@
         <br/>
     {% endif %}
     <br/>
-    {% if not submission.is_graded %}
+    {% if not submission.is_graded and request.user == submission.user.user or submission.user.is_admin %}
         <form action="{% url 'judge.views.abort_submission' submission.id %}" method="post">
             {% csrf_token %}
             <input type="submit" value="Abort"/>
