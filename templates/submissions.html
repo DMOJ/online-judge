@@ -30,7 +30,7 @@
                                 var user = packet[6];
                                 var clazz = ["user", "admin"][parseInt(packet[7])];
                                 var date = packet[8].replace("\f", " ");
-                                var dstatus = '<img src="{% static 'loading.gif' %}" alt="Grading...">';
+                                var dstatus = '<img src="{% static 'loading.gif' %}" alt="Grading..." height="20px">';
                                 html = ('<tr id={0}>' +
                                         '<td style="width:10%" class="{1}">' +
                                         '<span class="score">' + dstatus + '</span>' +
@@ -126,7 +126,7 @@
                     {% else %}{{ submission.result }}{% endif %}">
                         <span class="score">
                             {% if not submission.is_graded %}
-                                <img src="{% static 'loading.gif' %}" alt="Grading...">
+                                <img src="{% static 'loading.gif' %}" alt="Grading..." height="20px">
                             {% else %}
                                 <span style="font-size:1.3em;color:black">{% if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB' %}
                                     ---
