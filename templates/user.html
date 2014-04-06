@@ -5,6 +5,9 @@
         <br/>
         <br/>
     {% endif %}
+    {% if user.user == request.user %}
+        <p><a href="{% url 'judge.views.edit_profile' %}">Edit Profile</a></p>
+    {% endif %}
     <h4>{{ user.problems }} problems solved.</h4>
     <br/>
     <b>Total points: </b>{{ user.calculate_points }}

@@ -9,6 +9,8 @@
     {% if dynamic_update and not submission.is_graded %}
         <script type="text/javascript">
             $(function () {
+                var terminal_status = ['AC', 'IR', 'WA', 'AB', 'TLE', 'MLE', 'RTE', 'CE', 'IR', 'IE'];
+
                 function top_table_id() {
                     return parseInt($('#submissions-table').find('tr:first-child').attr('id'));
                 }
@@ -62,6 +64,8 @@
                         case "submission-status":
                         {
                             var info = table.find("tr#" + packet[1]).find('td:first-child');
+                            if (~terminal_status.indexOf(info.find('span.status').text()))
+                                break;
                             info.find('span.status').html(packet[2]);
                             if (["QU", "G"].indexOf(packet[2]) == -1) {
                                 info.find('span.score').html('<span style="font-size:1.3em;color:black">---</span>');
@@ -73,6 +77,8 @@
                         {
                             var row = table.find("tr#" + packet[1]);
                             var info = row.find('td:first-child');
+                            if (~terminal_status.indexOf(info.find('span.status').text()))
+                                break;
                             info.find('span.status').html(packet[6]);
                             info.find('span.score').html('<span style="font-size:1.3em;color:black">{0} / {1}</span>'.format(packet[4], packet[5]).replace(/\.0+/g, ''));
                             info.removeClass().addClass(packet[6]);

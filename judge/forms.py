@@ -1,11 +1,12 @@
 from django.forms import ModelForm
+from django_ace import AceWidget
 from .models import Profile, Submission
 
 
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['name', 'about', 'timezone', 'language']
+        fields = ['name', 'about', 'timezone', 'language', 'ace_theme']
 
 
 class ProblemSubmitForm(ModelForm):
@@ -17,3 +18,6 @@ class ProblemSubmitForm(ModelForm):
     class Meta:
         model = Submission
         fields = ['problem', 'source', 'language']
+        widgets = {
+            'source': AceWidget(theme='twilight'),
+        }

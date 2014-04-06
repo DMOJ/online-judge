@@ -8,7 +8,7 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    fields = ['user', 'name', 'about', 'timezone', 'language']
+    fields = ['user', 'name', 'about', 'timezone', 'language', 'ace_theme']
     list_display = ['long_display_name', 'timezone_full', 'language']
 
     def timezone_full(self, obj):

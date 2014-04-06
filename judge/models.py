@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max
@@ -5,6 +6,7 @@ import pytz
 from operator import itemgetter, attrgetter
 
 from judge.judgeapi import judge_submission, abort_submission
+from judge.model_choices import ACE_THEMES
 
 
 def make_timezones():
@@ -27,9 +29,16 @@ TIMEZONE = make_timezones()
 del make_timezones
 
 
+if 'tinymce' in settings.INSTALLED_APPS:
+    from tinymce.models import HTMLField
+else:
+    HTMLField = models.TextField
+
+
 class Language(models.Model):
     key = models.CharField(max_length=6, verbose_name='Short identifier', unique=True)
     name = models.CharField(max_length=20, verbose_name='Name as shown to user')
+    ace = models.CharField(max_length=20, verbose_name='ACE mode name')
 
     def __unicode__(self):
         return self.name
@@ -42,10 +51,12 @@ class Profile(models.Model):
     timezone = models.CharField(max_length=50, verbose_name='Timezone', default='UTC', choices=TIMEZONE)
     language = models.ForeignKey(Language, verbose_name='Default language')
     points = models.FloatField(default=0, db_index=True)
+    ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
 
     def calculate_points(self):
-        self.points = sum(Submission.objects.filter(user=self).values('problem_id').distinct()
-                                    .annotate(points=Max('points')).values_list('points', flat=True))
+        self.points = sum(map(itemgetter('points'),
+                              Submission.objects.filter(user=self).values('problem_id').distinct()
+                                        .annotate(points=Max('points'))))
         self.save()
         return self.points
 
@@ -90,7 +101,7 @@ class ProblemGroup(models.Model):
 class Problem(models.Model):
     code = models.CharField(max_length=20, verbose_name='Problem code', unique=True)
     name = models.CharField(max_length=100, verbose_name='Problem name', db_index=True)
-    description = models.TextField(verbose_name='Problem body')
+    description = HTMLField(verbose_name='Problem body')
     user = models.ForeignKey(Profile, verbose_name='Creator')
     types = models.ManyToManyField(ProblemType, verbose_name='Problem types')
     groups = models.ManyToManyField(ProblemGroup, verbose_name='Problem groups')
@@ -107,7 +118,7 @@ class Problem(models.Model):
         return map(attrgetter('name'), self.allowed_languages.all())
 
     def number_of_users(self):
-        return Submission.objects.filter(problem__code=self.code).values('user').distinct().count()
+        return Submission.objects.filter(problem=self).values('user').distinct().count()
 
     def __unicode__(self):
         return self.name

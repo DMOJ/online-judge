@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
@@ -74,6 +75,7 @@ urlpatterns = patterns('',
     url(r'^accounts/', include(register_patterns)),
     url(r'^users/$', 'judge.views.users'),
     url(r'^user/(\w+)$', 'judge.views.user'),
+    url(r'^user$', 'judge.views.user'),
     url(r'^problems/$', 'judge.views.problems'),
     url(r'^problem/(\w+)$', 'judge.views.problem'),
     url(r'^problem/(\w+)/submit$', 'judge.views.problem_submit'),
@@ -89,3 +91,7 @@ urlpatterns = patterns('',
     url(r'^problem/(\w+)/rank/(\d+)$', 'judge.views.ranked_submissions'),
     url(r'^problem/(\w+)/submissions/(\d+)$', 'judge.views.chronological_submissions'),
 )
+
+if 'tinymce' in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^tinymce/', include('tinymce.urls')))
+import django.contrib.staticfiles.storage

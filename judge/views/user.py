@@ -1,16 +1,23 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+
 from judge.forms import ProfileForm
 from judge.models import Profile, Submission
 
 
-def user(request, user):
+def user(request, user=None):
     try:
-        user = Profile.objects.get(user__username=user)
+        if user is None:
+            if not request.user.is_authenticated():
+                return redirect_to_login(request.get_full_path())
+            user = request.user.profile
+        else:
+            user = Profile.objects.get(user__username=user)
         result = Submission.objects.filter(user=user, points__gt=0) \
                            .values('problem__code', 'problem__name', 'problem__points') \
                            .distinct().annotate(points=Max('points'))

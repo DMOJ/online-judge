@@ -1,51 +1,35 @@
 {% extends "base.html" %}
+{% load static from staticfiles %}
 {% block css %}
+    {{ form.media }}
     <script type="text/javascript">
         $(function () {
-            function check_allowed() {
-                if (owned.length > 2) {
-                    alert("Hold on buddy: you have too many submissions pending.");
-                    return false;
-                }
-                return true;
-            }
-
-            var owned = [];
-
-            function on_receive(message) {
-                var packet = message.split(" ");
-                switch (packet[0]) {
-                    case "submission-start":
-                    {
-                        if (packet[6] == "{{ user.username }}") {
-                            owned.add(packet[1]);
-                        }
-                        break;
+            var modes = {
+                {% for lang in langs %}
+                    "{{ lang.id }}": "{{ lang.ace|escapejs }}",
+                {% endfor %}
+            };
+            $('#id_language').change(function () {
+                var lang = $("#id_language").find("option:selected").attr('value');
+                window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
+            });
+            $('#ace_source').on('ace_load', function (e, editor) {
+                var source = $('textarea#id_source');
+                if (source.val() == '') {
+                    var problem = $('#id_problem').find('option:selected').attr('value');
+                    var code = localStorage.getItem('submit:' + problem);
+                    if (code) {
+                        source.val(code);
+                        editor.getSession().setValue(code);
                     }
-                    case "submission-end":
-                    {
-                        owned.removeAll(packet[1]);
-                        break;
-                    }
-                    default:
-                        return;
-                }
-            }
-
-            SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}submissions.jsonp", function (resp) {
-                var messages = resp['messages']['submissions'];
-                for (var i = 0; i < messages.length; ++i) {
-                    on_receive(messages[i].content);
                 }
             });
-            SimpleComet.start();
-        })
-        ;
+        });
     </script>
 {% endblock %}
 
 {% block body %}
-    <form action="" method="post" onsubmit="return check_allowed()">
+    <form action="" method="post" id="problem_submit">
         {% csrf_token %}
         <table border="0">
             {{ form.as_table }}
