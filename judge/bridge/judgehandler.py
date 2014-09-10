@@ -10,8 +10,8 @@ logger = logging.getLogger('judge.bridge')
 
 
 class JudgeHandler(SocketServer.StreamRequestHandler):
-    def setup(self):
-        SocketServer.StreamRequestHandler.setup(self)
+    def __init__(self, *args, **kwargs):
+        SocketServer.StreamRequestHandler.__init__(self, *args, **kwargs)
 
         self.handlers = {
             'grading-begin': self.on_grading_begin,
@@ -20,13 +20,17 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'test-case-status': self.on_test_case,
             'current-submission-id': self.on_current_submission,
             'problem-not-exist': self.on_bad_problem,
+            'aborted': self.on_abort,
             'supported-problems': self.on_supported_problems,
         }
         self._current_submission = None
         self._current_submission_event = threading.Event()
-        self._load = set()
+        self._load = False
         self._problems = []
         self.problems = {}
+
+    def setup(self):
+        SocketServer.StreamRequestHandler.setup(self)
         logger.info('Judge connected from: %s', self.client_address)
         self.server.judges.append(self)
 
@@ -55,7 +59,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
     @property
     def load(self):
-        return len(self._load)
+        return self._load
 
     def submit(self, id, problem, language, source):
         packet = {
@@ -66,7 +70,10 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'source': source,
         }
         self._send(packet)
-        self._load.add(id)
+        self._load = True
+
+    def abort(self):
+        self._send({'name': 'terminate-submission'})
 
     def get_current_submission(self):
         self._send({'name': 'get-current-submission'})
@@ -86,8 +93,6 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
                 self.on_malformed(data)
             handler = self.handlers.get(data['name'], self.on_malformed)
             handler(data)
-            if data['name'] in ('grading-end', 'compile-error') and 'submission-id' in data:
-                self._load.remove(data['submission-id'])
         except:
             logger.exception('Error in packet handling (Judge-side)')
             # You can't crash here because you aren't so sure about the judges
@@ -98,12 +103,19 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
     def on_grading_end(self, packet):
         logger.info('Grading has ended on: %s', packet['submission-id'])
+        self._free_self(packet)
 
     def on_compile_error(self, packet):
         logger.info('Submission failed to compile: %s', packet['submission-id'])
+        self._free_self(packet)
 
     def on_bad_problem(self, packet):
         logger.error('Submission referenced invalid problem "%s": %s', packet['problem'], packet['submission-id'])
+        self._free_self(packet)
+
+    def on_abort(self, packet):
+        logger.info('Submission aborted: %s', packet['submission-id'])
+        self._free_self(packet)
 
     def on_test_case(self, packet):
         logger.info('Test case completed on: %s', packet['submission-id'])
@@ -119,4 +131,8 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)
+
+    def _free_self(self, packet):
+        self._load = False
+        self.server.judges.on_judge_free(self, packet['submission-id'])
 

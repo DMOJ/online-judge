@@ -8,6 +8,14 @@ size_pack = struct.Struct('!I')
 
 
 class DjangoHandler(SocketServer.StreamRequestHandler):
+    def __init__(self, *args, **kwargs):
+        SocketServer.StreamRequestHandler.__init__(self, *args, **kwargs)
+
+        self.handlers = {
+            'submission-request': self.on_submission,
+            'terminate-submission': self.on_termination,
+        }
+
     def handle(self):
         input = self.rfile.read(4)
         if not input:
@@ -28,8 +36,7 @@ class DjangoHandler(SocketServer.StreamRequestHandler):
 
     def packet(self, data):
         try:
-            if data.get('name', None) == 'submission-request':
-                return self.on_submission(data)
+            return self.handlers.get(data.get('name', None), lambda data: None)(data)
         except:
             logger.exception('Error in packet handling (Django-facing)')
             return {"name": "bad-request"}
@@ -41,6 +48,12 @@ class DjangoHandler(SocketServer.StreamRequestHandler):
         source = data['source']
         self.server.judges.judge(id, problem, language, source)
         return {'name': 'submission-received', 'submission-id': id}
+
+    def on_termination(self, data):
+        try:
+            self.server.judges.abort(data['submission-id'])
+        except KeyError:
+            return {"name": "bad-request"}
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)
