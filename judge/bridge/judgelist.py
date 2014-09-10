@@ -3,7 +3,7 @@ from random import choice
 
 
 class JudgeList(list):
-    __slots__ = 'queue',
+    __slots__ = 'queue', 'submission_map'
 
     def __init__(self, *args, **kwargs):
         super(JudgeList, self).__init__(*args, **kwargs)
