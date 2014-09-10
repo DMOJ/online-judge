@@ -8,8 +8,8 @@ size_pack = struct.Struct('!I')
 
 
 class DjangoHandler(SocketServer.StreamRequestHandler):
-    def __init__(self, *args, **kwargs):
-        SocketServer.StreamRequestHandler.__init__(self, *args, **kwargs)
+    def setup(self):
+        SocketServer.StreamRequestHandler.setup(self)
 
         self.handlers = {
             'submission-request': self.on_submission,

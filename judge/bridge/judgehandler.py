@@ -10,8 +10,8 @@ logger = logging.getLogger('judge.bridge')
 
 
 class JudgeHandler(SocketServer.StreamRequestHandler):
-    def __init__(self, *args, **kwargs):
-        SocketServer.StreamRequestHandler.__init__(self, *args, **kwargs)
+    def setup(self):
+        SocketServer.StreamRequestHandler.setup(self)
 
         self.handlers = {
             'grading-begin': self.on_grading_begin,
@@ -29,8 +29,6 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self._problems = []
         self.problems = {}
 
-    def setup(self):
-        SocketServer.StreamRequestHandler.setup(self)
         logger.info('Judge connected from: %s', self.client_address)
         self.server.judges.append(self)
 
