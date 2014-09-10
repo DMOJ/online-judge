@@ -59,7 +59,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
     @property
     def load(self):
-        return self._load
+        return bool(self._load)
 
     def submit(self, id, problem, language, source):
         packet = {
@@ -70,7 +70,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'source': source,
         }
         self._send(packet)
-        self._load = True
+        self._load = id
 
     def abort(self):
         self._send({'name': 'terminate-submission'})

@@ -10,8 +10,8 @@ logger = logging.getLogger('judge.bridge')
 class DjangoJudgeHandler(JudgeHandler):
     def finish(self):
         JudgeHandler.finish(self)
-        for id in self._load:
-            submission = Submission.objects.get(id=id)
+        if self._load:
+            submission = Submission.objects.get(id=self._load)
             submission.status = 'IE'
             submission.save()
 
