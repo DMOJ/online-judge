@@ -24,5 +24,7 @@ class Command(BaseCommand):
             while True:
                 time.sleep(86400)
         except KeyboardInterrupt:
+            pass
+        finally:
             django_server.shutdown()
             judge_server.shutdown()
