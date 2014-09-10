@@ -78,6 +78,13 @@ class DjangoJudgeHandler(JudgeHandler):
         send_message('sub_%d' % submission.id, 'bad-problem %s' % packet['problem'])
         send_message('submissions', 'submission-status %d %s' % (submission.id, submission.status))
 
+    def on_submission_terminated(self, packet):
+        JudgeHandler.on_submission_terminated(self, packet)
+        submission = Submission.objects.get(id=packet['submission-id'])
+        submission.status = submission.result = 'AB'
+        submission.save()
+        send_message('submissions', 'submission-status %d %s' % (submission.id, submission.status))
+
     def on_test_case(self, packet):
         JudgeHandler.on_test_case(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])

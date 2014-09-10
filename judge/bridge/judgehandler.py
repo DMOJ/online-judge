@@ -20,7 +20,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'test-case-status': self.on_test_case,
             'current-submission-id': self.on_current_submission,
             'problem-not-exist': self.on_bad_problem,
-            'aborted': self.on_abort,
+            'submission-terminated': self.on_submission_terminated,
             'supported-problems': self.on_supported_problems,
         }
         self._current_submission = None
@@ -113,7 +113,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         logger.error('Submission referenced invalid problem "%s": %s', packet['problem'], packet['submission-id'])
         self._free_self(packet)
 
-    def on_abort(self, packet):
+    def on_submission_terminated(self, packet):
         logger.info('Submission aborted: %s', packet['submission-id'])
         self._free_self(packet)
 
