@@ -18,10 +18,12 @@
                             break;
                         case "grading-end":
                             list.append("<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(packet[3], packet[4]));
+							$("#abort-button").remove();
                             break;
                         case "compile-error":
                             $("#execution-title").append("<h3>Compilation Error</h3>");
                             list.append(packet[1].replace("\f", " ").replace("\n", "<br/>"));
+							$("#abort-button").remove();
                             break;
                         default:
                             return;
@@ -49,10 +51,12 @@
     {% endif %}
     <br/>
     {% if not submission.is_graded and request.user == submission.user.user or submission.user.is_admin %}
-        <form action="{% url 'judge.views.abort_submission' submission.id %}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Abort"/>
-        </form>
+		<div id="abort-button">
+			<form action="{% url 'judge.views.abort_submission' submission.id %}" method="post">
+				{% csrf_token %}
+				<input type="submit" value="Abort"/>
+			</form>
+		</div>
     {% endif %}
     <br/>
     <div id="execution-title">
