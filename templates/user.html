@@ -3,7 +3,7 @@
     {% if user.user == request.user %}
         <a style="float:right;padding-top:1em;" href="{% url 'judge.views.edit_profile' %}">Edit profile</a>
     {% endif %}
-{% block %}
+{% endblock %}
 {% block body %}
     {% if user.name %}
         <b>Name: </b> {{ user.name }}
