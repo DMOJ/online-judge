@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from django.conf.urls import patterns
+from django.conf.urls import patterns, url
 from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
@@ -79,7 +79,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(SubmissionAdmin, self).get_urls()
         my_urls = patterns('',
-            (r'^(\d+)/judge/$', self.judge_view)
+            url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge'),
         )
         return my_urls + urls
 

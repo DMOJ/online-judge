@@ -1,0 +1,22 @@
+{% extends "admin/change_form.html" %}
+
+{% load staticfiles %}
+
+{% block extrahead %}{{ block.super }}
+<script>
+    django.jQuery(document).ready(function() {
+        django.jQuery('.rejudgelink').insertAfter('.deletelink-box>a:last');
+    });
+</script>
+<style type="text/css">
+.submit-row .rejudgelink {
+    background: url("{% static 'admin/img/icon_clock.gif' %}") no-repeat scroll 0 50% transparent;
+    margin-left: 20px;
+    padding-left: 18px;
+}
+</style>
+{% endblock extrahead %}
+
+{% block after_field_sets %}{{ block.super }}
+    <a class="rejudgelink" href="{% url 'admin:judge_submission_rejudge' original.pk %}">Rejudge</a>
+{% endblock %}
