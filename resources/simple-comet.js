@@ -55,7 +55,7 @@ window['SimpleComet'] = function() {
         setTimeout(comet_ready_cb, 1);
     }
 
-    function since(time) {
+    function from(time) {
         since = time;
     }
 
@@ -64,6 +64,6 @@ window['SimpleComet'] = function() {
         'min_delay': min_delay,
         'timeout': timeout,
         'subscribe': subscribe,
-        'since': since
+        'since': from
     };
 }();
