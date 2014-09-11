@@ -40,7 +40,7 @@
         {% if request.user.is_authenticated %}
             <a style="color:#FFF" href="{% url 'judge.views.user' %}">Hello, <span
                     style="font-weight:bold">{{ request.user.username }}</span></a> |
-            {% if request.user.profile.is_admin %}
+            {% if request.user.is_staff or request.user.profile.is_admin %}
                 <a style="color:#FFF" href="{% url 'admin:index' %}">Admin</a> |
             {% endif %}
             <a style="color:#FFF" href="{% url 'django.contrib.auth.views.logout' %}?next=">Log out</a>
