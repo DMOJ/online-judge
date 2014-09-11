@@ -98,7 +98,9 @@ nav ul{
 
 nav{
 	background:#393630;
-	text-align:left
+	text-align:left;
+	margin:0px;
+	padding:0px;
 }
 
 nav ul li{
@@ -155,28 +157,35 @@ a{
 }
 
 .pagination{
-	padding-top:10px;
-	padding-bottom:10px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:3px;
+	padding-bottom:3px;
+	margin-bottom:10px;
+	display: inline-block;
+	background:#393630;
+	color:#FFF;
+	border-radius:4px;
+	text-transform:uppercase;
+	font-size:1em
 }
 
 .pagination a{
+	margin:11px 0 12px;
 	text-decoration:none;
 	padding:1px 8px;
-	color:#000;
-	border-radius:4px;
-	margin: 0 0 0 0;
+	color:#FFF;
+	margin:0px;
 }
 
 .pagination a:hover{
 	color:#FFF;
-	background:rgba(0,0,0,0.25);
-	border-radius:4px
+	background:rgba(255,255,255,0.25);
 }
 
 .pagination a.active-page{
 	color:#FFF;
-	background:#84B9E8;
-	border-radius:4px
+	background:#2980b9
 }
 
 .admin a{
