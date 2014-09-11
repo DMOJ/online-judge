@@ -1,12 +1,14 @@
 {% extends "base.html" %}
+{% block header %}
+    {% if user.user == request.user %}
+        <a style="float:right;padding-top:1em;" href="{% url 'judge.views.edit_profile' %}">Edit profile</a>
+    {% endif %}
+{% block %}
 {% block body %}
     {% if user.name %}
         <b>Name: </b> {{ user.name }}
         <br/>
         <br/>
-    {% endif %}
-    {% if user.user == request.user %}
-        <p><a href="{% url 'judge.views.edit_profile' %}">Edit Profile</a></p>
     {% endif %}
     <h4>{{ user.problems }} problems solved.</h4>
     <br/>
