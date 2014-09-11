@@ -61,7 +61,7 @@ def judge_submission(submission):
         submission.status = 'QU' if (response['name'] == 'submission-received' and
                                      response['submission-id'] == submission.id) else 'IE'
 
-		id = 1 if submission.user.is_admin() else (2 is submission.user.is_problem_setter() else 0)
+        id = 1 if submission.user.is_admin() else (2 if submission.user.is_problem_setter() else 0)
         send_message('submissions', 'submission-start %d %s %s %s %s %s %d %s' %
                                     (submission.id, submission.problem.code, submission.problem.name.replace(" ", "\f"),
                                      submission.status, submission.language.key,
