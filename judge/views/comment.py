@@ -8,6 +8,8 @@ __all__ = ['upvote_comment', 'downvote_comment']
 
 @login_required
 def vote_comment(request, delta):
+    assert abs(delta) == 1
+
     if request.method != 'POST':
         return HttpResponseForbidden()
 
@@ -24,11 +26,17 @@ def vote_comment(request, delta):
     try:
         vote.save()
     except IntegrityError:
-        return HttpResponseBadRequest('You already voted.', mimetype='text/plain')
+        vote = CommentVote.objects.get(comment=comment, voter=request.user.profile)
+        if -vote.score == delta:
+            comment.score -= vote.score
+            comment.save()
+            vote.delete()
+        else:
+            return HttpResponseBadRequest('You already voted.', mimetype='text/plain')
     else:
         comment.score += delta
         comment.save()
-        return HttpResponse('success', mimetype='text/plain')
+    return HttpResponse('success', mimetype='text/plain')
 
 
 def upvote_comment(request):

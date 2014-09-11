@@ -28,7 +28,7 @@
                     id: id
                 },
                 success: function (data, textStatus, jqXHR) {
-                    var score = $('#comment-' + id + ' .comment-score');
+                    var score = $('#comment-' + id + ' .comment-score').first();
                     score.text(parseInt(score.text()) + delta);
                 },
                 error: function (data, textStatus, jqXHR) {
