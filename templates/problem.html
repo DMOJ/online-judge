@@ -11,9 +11,9 @@
         <a href="{% url 'judge.views.chronological_submissions' problem.code %}">All submissions</a>
         <br/>
         <a href="{% url 'judge.views.ranked_submissions' problem.code %}">Best submissions</a>
-        {% if request.user.is_authenticated and request.user.profile.is_admin %}
+        {% if request.user.is_authenticated and request.user.profile.is_problem_setter %}
             <hr/>
-            <a href="{% url 'admin:judge_problem_change' problem.id %}">Edit Problem</a>
+            <a href="{% url 'admin:judge_problem_change' problem.id %}">Edit problem</a>
             <br/>
         {% else %}
             <br/>
