@@ -187,6 +187,12 @@ a {
     font-weight: bold
 }
 
+.setter a {
+    color: orange;
+    font-weight: bold
+}
+
+
 noscript {
     width: 100%;
     height: 23px;
