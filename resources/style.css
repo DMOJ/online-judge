@@ -3,7 +3,10 @@
 	width:100%;
 	margin-left:auto;
 	margin-right:auto;
-	border:1px solid #000
+	border:1px solid #fff;
+	background:rgba(0, 0, 0, 0.01);
+	box-shadow: 2px 2px 10px #aaa;
+	border-radius: 8px;
 }
 
 .table table th{
@@ -15,6 +18,46 @@
 	text-align:center
 }
 
+
+.top-level-comments{
+	width:80%;
+}
+
+
+.comment {
+	list-style:none none;
+	background:rgba(0, 0, 0, 0.01);
+	border-radius: 4px;
+	padding-top:5px;
+	padding-bottom:10px;
+	padding-left:10px;
+	padding-right:10px;
+	margin-left:-40px;
+	box-shadow: 2px 2px 10px #bbb;
+	border:1px solid #ccc;
+}
+
+.comment-body {
+	padding-left:2px;
+	padding-right:2px;
+}
+
+.comment-author {
+	font-weight: bold;
+	color:#333;
+}
+
+.comment-header {
+	color:rgba(1, 1, 1, 1);
+	background:rgba(0, 0, 0, 0.1);
+	padding-top:5px;
+	padding-bottom:5px;
+	padding-left:10px;
+	padding-right:10px;
+	border:1px solid #ccc;
+	border-radius: 4px;
+}
+
 .table table td{
 	border:1px solid #d4d4d4;
 	padding:7px 5px;
@@ -24,8 +67,8 @@
 
 div.info-float{
 	float:right;
-	padding-left:8px;
-	height:100%
+	padding:10px;
+	height:100%;
 }
 
 footer{
@@ -93,7 +136,8 @@ h4{
 	height:65px;
 	padding:10px;
 	margin-top:-10px;
-	padding-left:60px
+	padding-left:60px;
+	text-shadow: 2px 2px 2px #ccc;
 }
 
 nav ul{
@@ -104,7 +148,8 @@ nav ul{
 
 nav{
 	background:#393630;
-	text-align:left
+	text-align:left;
+	box-shadow: 2px 2px 10px #333;
 }
 
 nav ul li{
@@ -159,7 +204,7 @@ footer{
 
 a{
 	text-decoration:none;
-	display:inline;
+	display:inline
 }
 
 .pagination{
@@ -172,7 +217,9 @@ a{
 	color:#FFF;
 	border-radius:4px;
 	text-transform:uppercase;
-	font-size:1em
+	font-size:1em;
+	box-shadow: 2px 2px 10px #777;
+	border-radius: 4px;
 }
 
 .pagination a{
