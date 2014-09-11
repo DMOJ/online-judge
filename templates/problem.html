@@ -15,11 +15,8 @@
             <hr/>
             <a href="{% url 'admin:judge_problem_change' problem.id %}">Edit problem</a>
             <br/>
-            <hr/>
-        {% else %}
-            <hr/>
-            <br/>
         {% endif %}
+        <hr/>
         <br/>
         <b>Points: </b> {{ problem.points }} {% if problem.partial %} (partial){% endif %}
         <br/>
