@@ -54,8 +54,8 @@ body{
 h1{
 	font-size:5em;
 	letter-spacing:-2px;
-	margin:0 0 0px 0;
-	padding:0px 0 0 0;
+	margin:0;
+	padding:0;
 	line-height:1em
 }
 
@@ -81,12 +81,12 @@ h4{
 	margin:0
 }
 
-#header h1 {
+#header h1{
 	background:#FFF;
 	color:#000;
 	text-align:left;
 	height:70px;
-	padding: 10px;
+	padding:10px;
 	padding-left:60px
 }
 
@@ -156,29 +156,27 @@ a{
 
 .pagination{
 	padding-top:10px;
-	padding-bottom:10px
+	padding-bottom:10px;
 }
 
 .pagination a{
-	border:2px solid #fff;
-	margin-left:1px;
-	margin-right:1px;
-	padding-left:4px;
-	padding-right:4px;
 	text-decoration:none;
+	padding:1px 8px;
 	color:#000;
-	border-radius:6px
+	border-radius:4px;
+	margin: 0 0 0 0;
 }
 
 .pagination a:hover{
-	background:#0df;
-	border:2px solid #444;
+	color:#FFF;
+	background:rgba(0,0,0,0.25);
 	border-radius:4px
 }
 
 .pagination a.active-page{
-	border:2px solid #444;
-	background-color:#5f5
+	color:#FFF;
+	background:#84B9E8;
+	border-radius:4px
 }
 
 .admin a{
