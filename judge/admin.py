@@ -101,7 +101,7 @@ class SubmissionAdmin(admin.ModelAdmin):
 
 class CommentAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('author', 'time', 'page', 'parent')}),
+        (None, {'fields': ('author', 'page', 'parent', 'score')}),
         ('Content', {'fields': ('title', 'body')}),
     )
     list_display = ['title', 'author', 'page', 'time']
