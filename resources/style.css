@@ -217,3 +217,7 @@ noscript{
 	position:fixed;
 	z-index:100
 }
+
+.comment-area {
+    margin-top: 40px;
+}

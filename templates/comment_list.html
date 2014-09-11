@@ -1,0 +1,68 @@
+{% load staticfiles %}
+
+<script type="text/javascript" src="{% static 'jquery-cookie.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                }
+            }
+        });
+
+        window.comment_set_parent = function (parent) {
+            $('form#comment-submit input#id_parent').val(parent);
+            console.log('Parent changed: ' + parent);
+        };
+
+        function ajax_vote(url, id) {
+            return $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    id: id
+                },
+                error: function (data, textStatus, jqXHR) {
+                    alert('Could not vote: ' + data.responseText);
+                }
+            });
+        }
+
+        window.comment_upvote = function (id) {
+            ajax_vote('{% url 'judge.views.upvote_comment' %}', id);
+        };
+
+        window.comment_downvote = function (id) {
+            ajax_vote('{% url 'judge.views.downvote_comment' %}', id);
+        };
+    });
+</script>
+
+<ul class="comments top-level-comments">
+    {% if comment_list %}
+        {% for comment in comment_list %}
+            {% include "comment.html" %}
+        {% endfor %}
+    {% endif %}
+</ul>
+
+{% if request.user.is_authenticated and comment_form %}
+    <div class="comment-submit">
+        {% block comment_submit_title %}
+            <h4>New Comment</h4>
+        {% endblock %}
+        <form action="" method="post" id="comment-submit">
+            {% csrf_token %}
+            <table border="0">
+                {{ comment_form.as_table }}
+            </table>
+            <input type="submit" value="Submit!"/>
+        </form>
+    </div>
+{% endif %}

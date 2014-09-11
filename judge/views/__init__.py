@@ -3,6 +3,7 @@ from django.template import RequestContext
 from django.views.generic import TemplateView
 
 from .register import RegistrationView, ActivationView
+from .comment import *
 from .user import *
 from .problem import *
 from .submission import *

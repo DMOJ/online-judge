@@ -29,7 +29,7 @@
 {% endblock %}
 
 {% block body %}
-    <form action="" method="post" id="problem_submit">
+    <form action="{% url 'judge.views.comment_post' %}" method="post" id="problem_submit">
         {% csrf_token %}
         <table border="0">
             {{ form.as_table }}

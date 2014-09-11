@@ -4,7 +4,7 @@ from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
 
-from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission
+from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -99,7 +99,16 @@ class SubmissionAdmin(admin.ModelAdmin):
     judge_column.allow_tags = True
 
 
+class CommentAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('author', 'time', 'page', 'parent')}),
+        ('Content', {'fields': ('title', 'body')}),
+    )
+    list_display = ['title', 'author', 'page', 'time']
+
+
 admin.site.register(Language)
+admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(ProblemGroup)

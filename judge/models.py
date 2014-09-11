@@ -127,14 +127,6 @@ class Problem(models.Model):
         return self.name
 
 
-class Comment(models.Model):
-    user = models.ForeignKey(Profile, verbose_name='User who posted this comment')
-    time = models.DateTimeField(verbose_name='Comment time')
-    problem = models.ForeignKey(Problem, null=True, verbose_name='Associated problem')
-    title = models.CharField(max_length=200, verbose_name='Title of comment')
-    body = models.TextField(verbose_name='Body of comment')
-
-
 SUBMISSION_RESULT = (
     ('AC', 'Accepted'),
     ('WA', 'Wrong Answer'),
@@ -198,3 +190,23 @@ class SubmissionTestCase(models.Model):
     points = models.FloatField(verbose_name='Points granted', null=True)
     total = models.FloatField(verbose_name='Points possible', null=True)
 
+
+class Comment(models.Model):
+    author = models.ForeignKey(Profile, verbose_name='Commenter')
+    time = models.DateTimeField(verbose_name='Posted time', auto_now_add=True)
+    page = models.CharField(max_length=30, verbose_name='Associated Page')
+    parent = models.ForeignKey('self', related_name='replies', null=True, blank=True)
+    score = models.IntegerField(verbose_name='Votes', default=0)
+    title = models.CharField(max_length=200, verbose_name='Title of comment')
+    body = models.TextField(verbose_name='Body of comment', blank=True)
+
+    def __unicode__(self):
+        return self.title
+
+
+class CommentVote(models.Model):
+    class Meta:
+        unique_together = ['voter', 'comment']
+    voter = models.ForeignKey(Profile)
+    comment = models.ForeignKey(Comment)
+    score = models.IntegerField()

@@ -47,5 +47,11 @@
         {{ problem.languages_list|join:", " }}
         <br/>
     </div>
-    {{ problem.description|safe }}
+    <div class="problem-description">
+        {{ problem.description|safe }}
+    </div>
+    <div class="comment-area">
+        <h3>Comments</h3>
+        {% include 'comment_list.html' %}
+    </div>
 {% endblock %}

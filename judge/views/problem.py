@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from judge.comments import problem_comments, comment_form
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission
 
@@ -26,8 +27,11 @@ def get_result_table(code):
 def problem(request, code):
     try:
         problem = Problem.objects.get(code=code)
+        form = comment_form(request, 'p:' + code)
         return render_to_response('problem.html', {'problem': problem, 'results': get_result_table(code),
-                                                   'title': 'Problem %s' % problem.name},
+                                                   'title': 'Problem %s' % problem.name,
+                                                   'comment_list': problem_comments(problem),
+                                                   'comment_form': form},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()

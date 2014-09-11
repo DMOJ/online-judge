@@ -90,6 +90,8 @@ urlpatterns = patterns('',
     url(r'^problem/(\w+)/submissions/$', 'judge.views.chronological_submissions'),
     url(r'^problem/(\w+)/rank/(\d+)$', 'judge.views.ranked_submissions'),
     url(r'^problem/(\w+)/submissions/(\d+)$', 'judge.views.chronological_submissions'),
+    url(r'^comments/upvote/$', 'judge.views.upvote_comment'),
+    url(r'^comments/downvote/$', 'judge.views.downvote_comment'),
 )
 
 if 'tinymce' in settings.INSTALLED_APPS:

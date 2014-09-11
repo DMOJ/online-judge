@@ -1,0 +1,29 @@
+<li class="comment">
+    <div class="comment-box">
+        <div class="comment-header">
+            <span class="comment-author">{{ comment.author }}</span> on
+            <span class="comment-time">{{ comment.time }}</span>:
+            <span class="comment-title">{{ comment.title }}</span>
+            <span class="comment-operation">
+                <a href="javascript:comment_set_parent('{{ comment.id }}')">Reply</a>
+                <a href="javascript:comment_upvote({{ comment.id }})">Upvote</a>
+                {{ comment.score }}
+                <a href="javascript:comment_downvote({{ comment.id }})">Downvote</a>
+            </span>
+        </div>
+        <div class="comment-body">
+            {{ comment.body|linebreaks }}
+        </div>
+    </div>
+    {% with replies=comment.replies.all %}
+        {% if replies %}
+            <ul class="comments">
+                {% for reply in replies %}
+                    {% with comment=reply template_name="comment.html" %}
+                        {% include template_name %}
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</li>
