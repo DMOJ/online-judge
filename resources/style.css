@@ -28,6 +28,10 @@ div.info-float {
     height: 100%
 }
 
+footer {
+	color: gray;
+}
+
 body {
     margin: 0;
     font-size: 13px;
