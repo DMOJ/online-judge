@@ -56,6 +56,7 @@ h1{
 	letter-spacing:-2px;
 	margin:0;
 	padding:0;
+	display:inline;
 	line-height:1em
 }
 
@@ -64,6 +65,7 @@ h2{
 	font-size:2em;
 	border-radius:4px;
 	padding:0;
+	display:inline;
 	margin:0
 }
 
@@ -72,12 +74,14 @@ h3{
 	font-size:1.4em;
 	border-radius:4px;
 	padding:0;
+	display:inline;
 	margin:0
 }
 
 h4{
 	font-size:1.1em;
 	padding:0;
+	display:inline;
 	margin:0
 }
 
@@ -85,7 +89,8 @@ h4{
 	background:#FFF;
 	color:#000;
 	text-align:left;
-	height: 65px;
+	display:block;
+	height:65px;
 	padding:10px;
 	margin-top:-10px;
 	padding-left:60px
@@ -99,7 +104,7 @@ nav ul{
 
 nav{
 	background:#393630;
-	text-align:left;
+	text-align:left
 }
 
 nav ul li{
@@ -153,7 +158,8 @@ footer{
 }
 
 a{
-	text-decoration:none
+	text-decoration:none;
+	display:inline;
 }
 
 .pagination{
@@ -218,6 +224,6 @@ noscript{
 	z-index:100
 }
 
-.comment-area {
-    margin-top: 40px;
+.comment-area{
+	margin-top:40px
 }
