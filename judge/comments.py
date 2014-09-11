@@ -14,6 +14,7 @@ def comment_form(request, page_id):
             comment.author = request.user.profile
             comment.page = page_id
             comment.save()
+            return
         else:
             return form
     return CommentForm(initial={'page': page_id, 'parent': None})

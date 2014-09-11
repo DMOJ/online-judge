@@ -28,6 +28,8 @@ def problem(request, code):
     try:
         problem = Problem.objects.get(code=code)
         form = comment_form(request, 'p:' + code)
+        if form is None:
+            return HttpResponseRedirect(request.path)
         return render_to_response('problem.html', {'problem': problem, 'results': get_result_table(code),
                                                    'title': 'Problem %s' % problem.name,
                                                    'comment_list': problem_comments(problem),
