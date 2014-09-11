@@ -18,15 +18,18 @@
 
         window.comment_set_parent = function (parent) {
             $('form#comment-submit input#id_parent').val(parent);
-            console.log('Parent changed: ' + parent);
         };
 
-        function ajax_vote(url, id) {
+        function ajax_vote(url, id, delta) {
             return $.ajax({
                 url: url,
                 type: "POST",
                 data: {
                     id: id
+                },
+                success: function (data, textStatus, jqXHR) {
+                    var score = $('#comment-' + id + ' .comment-score');
+                    score.text(parseInt(score.text()) + delta);
                 },
                 error: function (data, textStatus, jqXHR) {
                     alert('Could not vote: ' + data.responseText);
@@ -35,11 +38,11 @@
         }
 
         window.comment_upvote = function (id) {
-            ajax_vote('{% url 'judge.views.upvote_comment' %}', id);
+            ajax_vote('{% url 'judge.views.upvote_comment' %}', id, 1);
         };
 
         window.comment_downvote = function (id) {
-            ajax_vote('{% url 'judge.views.downvote_comment' %}', id);
+            ajax_vote('{% url 'judge.views.downvote_comment' %}', id, -1);
         };
     });
 </script>

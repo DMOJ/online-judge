@@ -1,4 +1,4 @@
-<li class="comment">
+<li class="comment" id="comment-{{ comment.id }}">
     <div class="comment-box">
         <div class="comment-header">
             <span class="comment-author">{{ comment.author }}</span> on
@@ -7,7 +7,7 @@
             <span class="comment-operation">
                 <a href="javascript:comment_set_parent('{{ comment.id }}')">Reply</a>
                 <a href="javascript:comment_upvote({{ comment.id }})">Upvote</a>
-                {{ comment.score }}
+                <span class="comment-score">{{ comment.score }}</span>
                 <a href="javascript:comment_downvote({{ comment.id }})">Downvote</a>
             </span>
         </div>
