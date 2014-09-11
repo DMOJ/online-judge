@@ -48,7 +48,7 @@ body{
 	-moz-user-select:none;
 	-khtml-user-select:none;
 	user-select:none;
-	behavior:url("unselectable.9340c5b17351.htc")
+	behavior: url("unselectable.htc")
 }
 
 h1{
