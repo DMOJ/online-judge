@@ -72,6 +72,9 @@ class Profile(models.Model):
 
     def is_admin(self):
         return self.user.is_superuser or self.user.groups.filter(name='Admin').exists()
+    
+    def is_problem_setter(self):
+        return self.user.is_superuser or self.user.groups.filter(name='ProblemSetter').exists()
 
     @property
     def problems(self):
