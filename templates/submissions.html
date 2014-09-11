@@ -124,7 +124,9 @@
     <div class="info-float" style="width:20%">
         {% include "results_table.html" %}
     </div>
-    {% include "submissions_pages.html" %}
+    <div style="margin-top:10px;">
+    	{% include "submissions_pages.html" %}
+    </div>
     <div class="table" style="width:75%;border:0px;">
         <table id="submissions-table">
             {% for submission in submissions %}
@@ -203,5 +205,7 @@
             {% endfor %}
         </table>
     </div>
-    {% include "submissions_pages.html" %}
+    <div style="margin-top:10px;">
+    	{% include "submissions_pages.html" %}
+    </div>
 {% endblock %}
