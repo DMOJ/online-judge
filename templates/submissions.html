@@ -112,6 +112,7 @@
                         on_receive(messages[i].content);
                     }
                 });
+                SimpleComet.since(999999999999999);
                 SimpleComet.start();
             })
             ;

@@ -55,10 +55,15 @@ window['SimpleComet'] = function() {
         setTimeout(comet_ready_cb, 1);
     }
 
+    function since(time) {
+        since = time;
+    }
+
     return {
         'start': start,
         'min_delay': min_delay,
         'timeout': timeout,
-        'subscribe': subscribe
+        'subscribe': subscribe,
+        'since': since
     };
 }();
