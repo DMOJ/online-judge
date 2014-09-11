@@ -29,7 +29,7 @@
                                 var status = packet[4];
                                 var language = packet[5];
                                 var user = packet[6];
-                                var clazz = ["user", "admin"][parseInt(packet[7])];
+                                var clazz = ["user", "admin", "setter"][parseInt(packet[7])];
                                 var date = packet[8].replace("\f", " ");
                                 var dstatus = '<img src="{% static 'loading.gif' %}" alt="Grading..." height="20px">';
                                 html = ('<tr id={0}>' +
@@ -53,6 +53,12 @@
 
                                         '<td style="white-space:nowrap">' +
                                         '<a href="/submission/{0}">View</a>' +
+										
+										{% if request.user.is_authenticated and request.user.profile.is_admin %}
+										'<br>' +
+                                        '<a href="/admin/judge/submission/{0}">Admin</a>' +
+										{% endif}
+										
                                         '</td>' +
 
                                         '<td style="white-space:nowrap">' +
@@ -151,7 +157,7 @@
                             </span>
                             <br/>
                         {% endif %}
-                        <span class="{% if submission.user.is_admin %}admin{% else %}user{% endif %}">
+                        <span class="{% if submission.user.is_admin %}admin{% else %}{% if submission.user.is_problem_setter %}setter{% else %}user{% endif %}{% endif %}">
                             <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.user.username }}</a>
                         </span>
                         <span style="color:#555">on {{ submission.date }}</span>
