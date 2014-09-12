@@ -70,7 +70,7 @@ def submissions(request, page=1):
     return render_to_response('submissions.html',
                               {'submissions': submissions,
                                'results': get_result_table(None),
-                               'dynamic_update': True,
+                               'dynamic_update': True if page == 1 else False,
                                'title': 'All submissions',
                                'show_problem': True},
                               context_instance=RequestContext(request))
