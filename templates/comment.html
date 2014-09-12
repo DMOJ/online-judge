@@ -1,9 +1,9 @@
 <li class="comment" id="comment-{{ comment.id }}">
     <div class="comment-box">
         <div style="float:left;">
-            <p><a href="javascript:comment_upvote({{ comment.id }})">Upvote</a></p>
+            <p><a href="javascript:comment_upvote({{ comment.id }})">+</a></p>
             <p><span class="comment-score">{{ comment.score }}</span></p>
-            <p><a href="javascript:comment_downvote({{ comment.id }})">Downvote</a></p>
+            <p><a href="javascript:comment_downvote({{ comment.id }})">-</a></p>
         </div>
         <div class="comment-header">
             <span class="comment-author">{{ comment.author }}</span> on
