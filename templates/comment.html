@@ -1,14 +1,16 @@
 <li class="comment" id="comment-{{ comment.id }}">
     <div class="comment-box">
+        <div style="float:left;">
+            <p><a href="javascript:comment_upvote({{ comment.id }})">Upvote</a></p>
+            <p><span class="comment-score">{{ comment.score }}</span></p>
+            <p><a href="javascript:comment_downvote({{ comment.id }})">Downvote</a></p>
+        </div>
         <div class="comment-header">
             <span class="comment-author">{{ comment.author }}</span> on
             <span class="comment-time">{{ comment.time }}</span>:
             <span class="comment-title">{{ comment.title }}</span>
             <span class="comment-operation">
                 <a href="javascript:comment_set_parent('{{ comment.id }}')">Reply</a>
-                <a href="javascript:comment_upvote({{ comment.id }})">Upvote</a>
-                <span class="comment-score">{{ comment.score }}</span>
-                <a href="javascript:comment_downvote({{ comment.id }})">Downvote</a>
                 {% if perms.judge.change_comment %}
                     <a href="{% url 'admin:judge_comment_change' comment.id %}">Admin</a>
                 {% endif %}
