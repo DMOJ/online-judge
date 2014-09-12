@@ -21,12 +21,12 @@ class JudgeList(list):
             return
         self.queue.remove(elem)
 
-    def on_judge_free(self, judge, problem):
+    def on_judge_free(self, judge, submission):
+        del self.submission_map[submission]
         if self.queue:
             id, problem, language, source = self.queue.pop(0)
             self.submission_map[id] = judge
             judge.submit(id, problem, language, source)
-        del self.submission_map[problem]
 
     def abort(self, submission):
         self.submission_map[submission].abort()
