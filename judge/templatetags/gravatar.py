@@ -12,31 +12,31 @@ from django import template
 import urllib, hashlib
  
 register = template.Library()
- 
+
+
 class GravatarUrlNode(template.Node):
-    def __init__(self, email):
+    def __init__(self, email, size='80'):
         self.email = template.Variable(email)
+        self.size = template.Variable(size)
  
     def render(self, context):
         try:
             email = self.email.resolve(context)
         except template.VariableDoesNotExist:
             return ''
- 
-        default = "http://example.com/static/images/defaultavatar.jpg"
-        size = 40
+        try:
+            size = self.size.resolve(context)
+        except template.VariableDoesNotExist:
+            size = 80
 
-        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest()#+ "?"
-        #gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
+        gravatar_url = 'http://www.gravatar.com/avatar/' + hashlib.md5(email.strip().lower()).hexdigest() + '?'
+        gravatar_url += urllib.urlencode({'d': 'identicon', 's': str(size)})
  
         return gravatar_url
  
 @register.tag
 def gravatar_url(parser, token):
     try:
-        tag_name, email = token.split_contents()
- 
+        return GravatarUrlNode(*token.split_contents()[1:])
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
- 
-    return GravatarUrlNode(email)
+        raise template.TemplateSyntaxError, '%r tag requires an email and an optional size' % token.contents.split()[0]
