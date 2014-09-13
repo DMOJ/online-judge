@@ -6,7 +6,7 @@
 {% endblock %}
 {% block body %}
     {% if user.name %}
-        <b>Name: </b> {{ user.name }}
+        <img src="{% gravatar_url user.user.email %}"><b></b> {{ user.name }}
         <br/>
         <br/>
     {% endif %}
