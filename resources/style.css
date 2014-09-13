@@ -136,7 +136,7 @@ h4{
 	padding:10px;
 	margin-top:-10px;
 	padding-left:60px;
-	text-shadow:2px 2px 2px #ccc
+	text-shadow:0px 0px 4px #ccc
 }
 
 nav ul{
@@ -148,7 +148,7 @@ nav ul{
 nav{
 	background:#393630;
 	text-align:left;
-	box-shadow:2px 2px 10px #333
+	box-shadow:0px 0px 10px #333
 }
 
 nav ul li{
