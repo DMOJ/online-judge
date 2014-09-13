@@ -1,6 +1,7 @@
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
-from django.forms import CheckboxSelectMultiple
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -107,10 +108,82 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ['title', 'author', 'page', 'time']
 
 
-admin.site.register(Language)
+class LanguageForm(ModelForm):
+    problems = ModelMultipleChoiceField(
+        label='Allowed problems',
+        queryset=Problem.objects.all(),
+        required=False,
+        help_text='These problems are allowed to be submitted in this language',
+        widget=FilteredSelectMultiple('problems', False))
+
+
+class LanguageAdmin(admin.ModelAdmin):
+    fields = ('key', 'name', 'ace', 'problems')
+    form = LanguageForm
+
+    def save_model(self, request, obj, form, change):
+        super(LanguageAdmin, self).save_model(request, obj, form, change)
+        obj.problem_set.clear()
+        for problem in form.cleaned_data['problems']:
+            obj.problem_set.add(problem)
+
+    def get_form(self, request, obj=None, **kwargs):
+        self.form.base_fields['problems'].initial = [o.pk for o in obj.problem_set.all()] if obj else []
+        return super(LanguageAdmin, self).get_form(request, obj, **kwargs)
+
+
+class ProblemGroupForm(ModelForm):
+    problems = ModelMultipleChoiceField(
+        label='Included problems',
+        queryset=Problem.objects.all(),
+        required=False,
+        help_text='These problems are included in this group of problems',
+        widget=FilteredSelectMultiple('problems', False))
+
+
+class ProblemGroupAdmin(admin.ModelAdmin):
+    fields = ('name', 'full_name', 'problems')
+    form = ProblemGroupForm
+
+    def save_model(self, request, obj, form, change):
+        super(ProblemGroupAdmin, self).save_model(request, obj, form, change)
+        obj.problem_set.clear()
+        for problem in form.cleaned_data['problems']:
+            obj.problem_set.add(problem)
+
+    def get_form(self, request, obj=None, **kwargs):
+        self.form.base_fields['problems'].initial = [o.pk for o in obj.problem_set.all()] if obj else []
+        return super(ProblemGroupAdmin, self).get_form(request, obj, **kwargs)
+
+
+class ProblemTypeForm(ModelForm):
+    problems = ModelMultipleChoiceField(
+        label='Included problems',
+        queryset=Problem.objects.all(),
+        required=False,
+        help_text='These problems are included in this type of problems',
+        widget=FilteredSelectMultiple('problems', False))
+
+
+class ProblemTypeAdmin(admin.ModelAdmin):
+    fields = ('name', 'full_name', 'problems')
+    form = ProblemTypeForm
+
+    def save_model(self, request, obj, form, change):
+        super(ProblemTypeAdmin, self).save_model(request, obj, form, change)
+        obj.problem_set.clear()
+        for problem in form.cleaned_data['problems']:
+            obj.problem_set.add(problem)
+
+    def get_form(self, request, obj=None, **kwargs):
+        self.form.base_fields['problems'].initial = [o.pk for o in obj.problem_set.all()] if obj else []
+        return super(ProblemTypeAdmin, self).get_form(request, obj, **kwargs)
+
+
+admin.site.register(Language, LanguageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Problem, ProblemAdmin)
-admin.site.register(ProblemGroup)
-admin.site.register(ProblemType)
+admin.site.register(ProblemGroup, ProblemGroupAdmin)
+admin.site.register(ProblemType, ProblemGroupAdmin)
 admin.site.register(Submission, SubmissionAdmin)
