@@ -1,3 +1,4 @@
+{% load gravatar %}
 <li class="comment" id="comment-{{ comment.id }}">
     <div class="comment-box">
         <div style="float:left;">
@@ -6,7 +7,12 @@
             <a href="javascript:comment_downvote({{ comment.id }})">-</a><br/>
         </div>
         <div class="comment-header">
-            <span class="comment-author">{{ comment.author }}</span> on
+            <span class="comment-author">
+                <img src="{% gravatar_url comment.author.user.email %}">
+                <span class="{% if comment.author.is_admin %}admin{% else %}{% if comment.author.is_problem_setter %}setter{% else %}user{% endif %}{% endif %}">
+                    <a href="{% url 'judge.views.user' comment.author.user.username %}">{{ comment.author.user.username }}</a>
+               </span>
+            </span> on
             <span class="comment-time">{{ comment.time }}</span>:
             <span class="comment-title">{{ comment.title }}</span>
             <span class="comment-operation">
