@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load gravatar %}
 {% block header %}
     {% if user.user == request.user %}
         <a style="float:right;padding-top:1em;" href="{% url 'judge.views.edit_profile' %}">Edit profile</a>
