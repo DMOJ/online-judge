@@ -27,6 +27,7 @@ TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
 SITE_NAME = 'DMOPC'
 
 # Application definition
@@ -35,9 +36,11 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.flatpages',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'judge',
     'registration',
 )
@@ -51,6 +54,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'judge.timezone.TimezoneMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7

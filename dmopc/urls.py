@@ -70,7 +70,6 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', 'judge.views.home'),
-    url(r'^about/$', 'judge.views.about'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include(register_patterns)),
     url(r'^users/$', 'judge.views.users'),
@@ -96,4 +95,3 @@ urlpatterns = patterns('',
 
 if 'tinymce' in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^tinymce/', include('tinymce.urls')))
-import django.contrib.staticfiles.storage

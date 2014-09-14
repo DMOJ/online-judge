@@ -1,5 +1,5 @@
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.contrib.flatpages.models import FlatPage
+from django.contrib.flatpages.views import flatpage
 from django.views.generic import TemplateView
 
 from .register import RegistrationView, ActivationView
@@ -20,10 +20,7 @@ class TemplateView(TemplateView):
 
 
 def home(request):
-    return render_to_response('index.html', {'title': 'Home'},
-                              context_instance=RequestContext(request))
-
-
-def about(request):
-    return render_to_response('about.html', {'title': 'About'},
+    if FlatPage.objects.filter(url='/').exist():
+        return flatpage(request, '/')
+    return render_to_response('base.html', {'title': 'Home'},
                               context_instance=RequestContext(request))
