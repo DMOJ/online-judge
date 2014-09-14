@@ -169,7 +169,7 @@
                     <td style="white-space:nowrap">
                         {% if request.user.is_authenticated and request.user.profile == submission.user or request.user.profile.is_admin %}
                             <a href="{% url 'judge.views.submission_src' submission.id %}">view</a> |
-                            <a href="{% url 'judge.views.submission_status' submission.id %}">detail</a>
+                            <a href="{% url 'judge.views.submission_source' submission.id %}">detail</a>
                             {% if request.user.is_authenticated and request.user.profile.is_admin %} | {% endif %}
                         {% endif %}
                         {% if request.user.is_authenticated and request.user.profile.is_admin %}
