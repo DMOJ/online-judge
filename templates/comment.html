@@ -13,7 +13,7 @@
                     <a href="{% url 'judge.views.user' comment.author.user.username %}">{{ comment.author.user.username }}</a>
                </span>
             </span> on
-            <span class="comment-time">{{ comment.time }}</span>:
+            <span class="comment-time">{{ comment.time|date:"N j, o, g:i a" }}</span>:
             <span class="comment-title">{{ comment.title }}</span>
             <span class="comment-operation">
                 <a href="javascript:comment_set_parent('{{ comment.id }}')">Reply</a>

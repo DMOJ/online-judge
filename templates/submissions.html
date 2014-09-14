@@ -163,7 +163,7 @@
                         <span class="{% if submission.user.is_admin %}admin{% else %}{% if submission.user.is_problem_setter %}setter{% else %}user{% endif %}{% endif %}">
                             <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.user.username }}</a>
                         </span>
-                        <span style="color:#555">on {{ submission.date }}</span>
+                        <span style="color:#555">on {{ submission.date|date:"N j, o, g:i a" }}</span>
                     </td>
 
                     <td style="white-space:nowrap">
