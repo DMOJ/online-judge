@@ -21,7 +21,7 @@ def submission_source(request, code):
                               {
                                   'submission': submission,
                                   'title': 'Submission %s of %s by %s' % (
-                                      submission.id, submission.problem.name, request.user.username)
+                                      submission.id, submission.problem.name, submission.user.user.username)
                               },
                               context_instance=RequestContext(request))
 
