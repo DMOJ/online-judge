@@ -1,4 +1,4 @@
-Please activate your DMOPC account in {{ expiration_days }} days.
+Please activate your DMOJ account in {{ expiration_days }} days.
 
 Use this link to activate:
 
