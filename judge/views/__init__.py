@@ -20,7 +20,7 @@ class TemplateView(TemplateView):
 
 
 def home(request):
-    if FlatPage.objects.filter(url='/').exist():
+    if FlatPage.objects.filter(url='/').exists():
         return flatpage(request, '/')
     return render_to_response('base.html', {'title': 'Home'},
                               context_instance=RequestContext(request))
