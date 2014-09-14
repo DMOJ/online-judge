@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.utils.functional import SimpleLazyObject
 from .models import Profile
 
@@ -32,3 +33,7 @@ def __tab(request):
 
 def general_info(request):
     return {'nav_tab': __tab(request)}
+
+
+def site(request):
+    return {'site': Site.objects.get_current()}

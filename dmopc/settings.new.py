@@ -68,6 +68,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     'judge.template_context.user_profile',
     'judge.template_context.comet_location',
     'judge.template_context.general_info',
+    'judge.template_context.site',
 )
 
 TEMPLATE_DIRS = (

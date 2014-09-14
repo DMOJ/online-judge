@@ -6,6 +6,7 @@
     <title>{% block title %}DMOJ | {{ title }}{% endblock %}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="{% static "style.css" %}">
+    <link rel="canonical" href="http://{{ site.domain }}{{ request.get_full_path }}">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="{% static "navbar.js" %}"></script>
     {% block css %}
