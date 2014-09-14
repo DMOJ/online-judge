@@ -37,7 +37,7 @@ def user_submissions(request, code, username, page=1):
     return problem_submissions(request, code, page, False, title="All submissions for %s", order=['-id'],
                                filter={
                                    'problem__code': code,
-                                   'user__username': username
+                                   'user__user__username': username
                                }
     )
 
