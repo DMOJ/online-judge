@@ -55,7 +55,7 @@
 <br>
 
 <div id="content">
-    <h2 style="color:#393630">{{ title }}</h2>
+    <h2 style="color:#393630">{% block content_title %}{{ title }}{% endblock %}</h2>
     {% block header %}
     {% endblock %}
     <hr/>
