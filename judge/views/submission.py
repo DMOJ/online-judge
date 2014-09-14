@@ -33,8 +33,25 @@ def abort_submission(request, code):
     return HttpResponseRedirect(reverse('judge.views.submission_status', args=(code,)))
 
 
+def all_user_submissions(request, username, page=1):
+    paginator = DiggPaginator(Submission.objects.filter(user__user__username=username).order_by('-id'), 50, body=6, padding=2)
+    try:
+        submissions = paginator.page(page)
+    except PageNotAnInteger:
+        submissions = paginator.page(1)
+    except EmptyPage:
+        submissions = paginator.page(paginator.num_pages)
+    return render_to_response('submissions.html',
+                              {'submissions': submissions,
+                               'results': get_result_table(),
+                               'dynamic_update': False,
+                               'title': 'All submissions by ' + username,
+                               'show_problem': True},
+                              context_instance=RequestContext(request))
+
+
 def user_submissions(request, code, username, page=1):
-    return problem_submissions(request, code, page, False, title="All submissions for %s", order=['-id'],
+    return problem_submissions(request, code, page, False, title=username + "'s submissions for %s", order=['-id'],
                                filter={
                                    'problem__code': code,
                                    'user__user__username': username
