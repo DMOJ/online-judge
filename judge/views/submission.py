@@ -9,6 +9,23 @@ from judge.utils.diggpaginator import DiggPaginator
 from judge.views import get_result_table
 
 
+def submission_source(request, code):
+    submission = Submission.objects.get(id=int(code))
+
+    if not request.user.is_authenticated():
+        raise PermissionDenied()
+
+    if not request.user.profile.completed_problem(code) and not request.user.profile.is_admin():
+        raise PermissionDenied()
+    return render_to_response('submission_src.html',
+                              {
+                                  'submission': submission,
+                                  'title': 'Submission %s of %s by %s' % (
+                                      submission.id, submission.problem.name, request.user.username)
+                              },
+                              context_instance=RequestContext(request))
+
+
 def submission_status(request, code):
     try:
         submission = Submission.objects.get(id=int(code))
@@ -27,14 +44,15 @@ def abort_submission(request, code):
         raise Http404()
     submission = Submission.objects.get(id=int(code))
     if not request.user.is_authenticated() or (
-            request.user.profile != submission.user and not request.user.profile.is_admin()):
+                    request.user.profile != submission.user and not request.user.profile.is_admin()):
         raise PermissionDenied()
     submission.abort()
     return HttpResponseRedirect(reverse('judge.views.submission_status', args=(code,)))
 
 
 def all_user_submissions(request, username, page=1):
-    paginator = DiggPaginator(Submission.objects.filter(user__user__username=username).order_by('-id'), 50, body=6, padding=2)
+    paginator = DiggPaginator(Submission.objects.filter(user__user__username=username).order_by('-id'), 50, body=6,
+                              padding=2)
     try:
         submissions = paginator.page(page)
     except PageNotAnInteger:

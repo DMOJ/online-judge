@@ -53,6 +53,9 @@ class Profile(models.Model):
     points = models.FloatField(default=0, db_index=True)
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
 
+    def completed_problem(self, code):
+        return Submission.objects.filter(user=self, result='AC', problem__code=code).exists()
+
     def calculate_points(self):
         self.points = sum(map(itemgetter('points'),
                               Submission.objects.filter(user=self, points__isnull=False).values('problem_id').distinct()

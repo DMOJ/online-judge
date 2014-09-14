@@ -85,6 +85,7 @@ urlpatterns = patterns('',
     url(r'^edit/profile/$', 'judge.views.edit_profile'),
     url(r'^submissions/$', 'judge.views.submissions'),
     url(r'^submissions/(\d+)$', 'judge.views.submissions'),
+    url(r'^src/(\d+)$', 'judge.views.submission_source'),
 
     url(r'^problem/(\w+)/rank/$', 'judge.views.ranked_submissions'),
     url(r'^problem/(\w+)/rank/(\d+)$', 'judge.views.ranked_submissions'),
@@ -94,7 +95,6 @@ urlpatterns = patterns('',
 
     url(r'^problem/(\w+)/submissions/(\w+)/$', 'judge.views.user_submissions'),
     url(r'^problem/(\w+)/submissions/(\w+)/(\d+)$', 'judge.views.user_submissions'),
-
 
     url(r'^user/(\w+)/submissions/$', 'judge.views.all_user_submissions'),
     url(r'^user/(\w+)/submissions/(\d+)$', 'judge.views.all_user_submissions'),
