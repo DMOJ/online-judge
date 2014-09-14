@@ -43,7 +43,7 @@ def all_user_submissions(request, username, page=1):
         submissions = paginator.page(paginator.num_pages)
     return render_to_response('submissions.html',
                               {'submissions': submissions,
-                               'results': get_result_table(),
+                               'results': get_result_table(user__user__username=username),
                                'dynamic_update': False,
                                'title': 'All submissions by ' + username,
                                'show_problem': True},
@@ -78,7 +78,7 @@ def problem_submissions(request, code, page, dynamic_update, title, order, filte
             submissions = paginator.page(paginator.num_pages)
         return render_to_response('submissions.html',
                                   {'submissions': submissions,
-                                   'results': get_result_table(problem__code=code),
+                                   'results': get_result_table(**filter),
                                    'dynamic_update': dynamic_update,
                                    'title': title % problem.name,
                                    'show_problem': False},
