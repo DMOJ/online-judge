@@ -75,7 +75,7 @@ def ranked_submissions(request, code, page=1):
         submissions = paginator.page(paginator.num_pages)
     return render_to_response('submissions.html',
                               {'submissions': submissions,
-                               'results': get_result_table(code),
+                               'results': get_result_table(problem__code=code),
                                'can_see_results': can_see_results,
                                'dynamic_update': False,
                                'title': "Best solutions for %s" % problem.name,
