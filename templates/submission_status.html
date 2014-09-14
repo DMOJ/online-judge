@@ -45,7 +45,7 @@
     <p>
         Submitted on {{ submission.date }}
         <b>Language: </b> {{ submission.language }}
-        <b>Problem: </b> <a href="{% url 'judge.views.problem' submission.problem.code submission.id %}">{{ submission.problem.name }}</a>
+        <b>Problem: </b> <a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a>
     </p>
     <br/>
     {% if request.user == submission.user.user %}
