@@ -26,7 +26,7 @@ def abort_submission(request, code):
     if request.method != 'POST':
         raise Http404()
     submission = Submission.objects.get(id=int(code))
-    if request.user.profile != submission.user and not request.user.profile.is_admin():
+    if not request.user.is_authenticated() or (request.user.profile != submission.user and not request.user.profile.is_admin()):
         raise PermissionDenied()
     submission.abort()
     return HttpResponseRedirect(reverse('judge.views.submission_status', args=(code,)))
