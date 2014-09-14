@@ -74,8 +74,6 @@ urlpatterns = patterns('',
     url(r'^accounts/', include(register_patterns)),
     url(r'^users/$', 'judge.views.users'),
     url(r'^user/(\w+)$', 'judge.views.user'),
-    url(r'^user/(\w+)/submissions/$', 'judge.views.all_user_submissions'),
-    url(r'^user/(\w+)/submissions/(\d+)$', 'judge.views.all_user_submissions'),
     url(r'^user$', 'judge.views.user'),
     url(r'^problems/$', 'judge.views.problems'),
     url(r'^problem/(\w+)$', 'judge.views.problem'),
@@ -87,11 +85,20 @@ urlpatterns = patterns('',
     url(r'^edit/profile/$', 'judge.views.edit_profile'),
     url(r'^submissions/$', 'judge.views.submissions'),
     url(r'^submissions/(\d+)$', 'judge.views.submissions'),
+
     url(r'^problem/(\w+)/rank/$', 'judge.views.ranked_submissions'),
-    url(r'^problem/(\w+)/submissions/$', 'judge.views.chronological_submissions'),
-    url(r'^problem/(\w+)/submissions/(\w+)$', 'judge.views.user_submissions'),
     url(r'^problem/(\w+)/rank/(\d+)$', 'judge.views.ranked_submissions'),
+
+    url(r'^problem/(\w+)/submissions/$', 'judge.views.chronological_submissions'),
     url(r'^problem/(\w+)/submissions/(\d+)$', 'judge.views.chronological_submissions'),
+
+    url(r'^problem/(\w+)/submissions/(\w+)/$', 'judge.views.user_submissions'),
+    url(r'^problem/(\w+)/submissions/(\w+)/(\d+)$', 'judge.views.user_submissions'),
+
+
+    url(r'^user/(\w+)/submissions/$', 'judge.views.all_user_submissions'),
+    url(r'^user/(\w+)/submissions/(\d+)$', 'judge.views.all_user_submissions'),
+
     url(r'^comments/upvote/$', 'judge.views.upvote_comment'),
     url(r'^comments/downvote/$', 'judge.views.downvote_comment'),
 )
