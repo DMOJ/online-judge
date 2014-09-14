@@ -9,9 +9,9 @@ from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission
 
 
-def get_result_table(code):
+def get_result_table(**kwargs):
     results = {}
-    submissions = Submission.objects.filter(problem__code=code) if code is not None else Submission.objects
+    submissions = Submission.objects.filter(**kwargs) if kwargs is not None else Submission.objects
     for code in ['AC', 'WA', 'TLE', 'IR', 'MLE']:
         results[code] = submissions.filter(result=code).count()
     results['CE'] = submissions.filter(status='CE').count()
@@ -30,7 +30,7 @@ def problem(request, code):
         form = comment_form(request, 'p:' + code)
         if form is None:
             return HttpResponseRedirect(request.path)
-        return render_to_response('problem.html', {'problem': problem, 'results': get_result_table(code),
+        return render_to_response('problem.html', {'problem': problem, 'results': get_result_table(problem__code=code),
                                                    'title': 'Problem %s' % problem.name,
                                                    'comment_list': problem_comments(problem),
                                                    'comment_form': form},

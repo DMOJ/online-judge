@@ -26,20 +26,31 @@ def abort_submission(request, code):
     if request.method != 'POST':
         raise Http404()
     submission = Submission.objects.get(id=int(code))
-    if not request.user.is_authenticated() or (request.user.profile != submission.user and not request.user.profile.is_admin()):
+    if not request.user.is_authenticated() or (
+            request.user.profile != submission.user and not request.user.profile.is_admin()):
         raise PermissionDenied()
     submission.abort()
     return HttpResponseRedirect(reverse('judge.views.submission_status', args=(code,)))
 
 
+def user_submissions(request, code, username, page=1):
+    return problem_submissions(request, code, page, False, title="All submissions for %s", order=['-id'],
+                               filter={
+                                   'problem__code': code,
+                                   'user__username': username
+                               }
+    )
+
+
 def chronological_submissions(request, code, page=1):
-    return problem_submissions(request, code, page, False, title="All submissions for %s", order=['-id'])
+    return problem_submissions(request, code, page, False, title="All submissions for %s", order=['-id'],
+                               filter={'problem__code': code})
 
 
-def problem_submissions(request, code, page, dynamic_update, title, order):
+def problem_submissions(request, code, page, dynamic_update, title, order, filter={}):
     try:
         problem = Problem.objects.get(code=code)
-        submissions = Submission.objects.filter(problem=problem).order_by(*order)
+        submissions = Submission.objects.filter(**filter).order_by(*order)
 
         paginator = DiggPaginator(submissions, 50, body=6, padding=2)
         try:
@@ -50,7 +61,7 @@ def problem_submissions(request, code, page, dynamic_update, title, order):
             submissions = paginator.page(paginator.num_pages)
         return render_to_response('submissions.html',
                                   {'submissions': submissions,
-                                   'results': get_result_table(code),
+                                   'results': get_result_table(problem__code=code),
                                    'dynamic_update': dynamic_update,
                                    'title': title % problem.name,
                                    'show_problem': False},
@@ -69,7 +80,7 @@ def submissions(request, page=1):
         submissions = paginator.page(paginator.num_pages)
     return render_to_response('submissions.html',
                               {'submissions': submissions,
-                               'results': get_result_table(None),
+                               'results': get_result_table(),
                                'dynamic_update': True if page == 1 else False,
                                'title': 'All submissions',
                                'show_problem': True},

@@ -11,6 +11,8 @@
         <a href="{% url 'judge.views.chronological_submissions' problem.code %}">All submissions</a>
         <br/>
         <a href="{% url 'judge.views.ranked_submissions' problem.code %}">Best submissions</a>
+        <br/>
+        <a href="{% url 'judge.views.user_submissions' problem.code request.user.username %}">My submissions</a>
         {% if perms.judge.change_problem %}
             <hr/>
             <a href="{% url 'admin:judge_problem_change' problem.id %}">Edit problem</a>
