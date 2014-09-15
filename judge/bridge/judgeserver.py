@@ -1,6 +1,11 @@
 import SocketServer
-from .judgelist import JudgeList
+import threading
+import time
 import os
+
+from django.db import connection
+
+from .judgelist import JudgeList
 
 
 class JudgeServer(SocketServer.ThreadingTCPServer):
@@ -9,6 +14,26 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
     def __init__(self, *args, **kwargs):
         SocketServer.ThreadingTCPServer.__init__(self, *args, **kwargs)
         self.judges = JudgeList()
+        self.ping_judge_thread = threading.Thread(target=self.ping_judge, args=())
+        self.ping_judge_thread.daemon = True
+        self.ping_judge_thread.start()
+        self.ping_db_thread = threading.Thread(target=self.ping_database, args=())
+        self.ping_db_thread.daemon = True
+        self.ping_db_thread.start()
+
+    def ping_judge(self):
+        while True:
+            for judge in self.judges:
+                judge._send({'name': 'ping',
+                             'when': time.time()})
+            time.sleep(12)
+
+    @staticmethod
+    def ping_database():
+        while True:
+            cursor = connection.cursor()
+            cursor.execute('SELECT 1').fetchall()
+            time.sleep(1800)
 
 
 def main():
