@@ -15,7 +15,7 @@ def submission_source(request, code):
     if not request.user.is_authenticated():
         raise PermissionDenied()
 
-    if not request.user.profile.completed_problem(code) and not request.user.profile.is_admin():
+    if not submission.user == request.user.user and not request.user.profile.completed_problem(code) and not request.user.profile.is_admin():
         raise PermissionDenied()
     return render_to_response('submission_src.html',
                               {
