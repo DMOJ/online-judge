@@ -56,8 +56,6 @@ def user_completed_codes(profile):
 
 
 def all_user_submissions(request, username, page=1):
-    if not Profile.objects.filter(user__username=username).exists():
-        raise Http404()
     paginator = DiggPaginator(Submission.objects.filter(user__user__username=username).order_by('-id'), 50, body=6,
                               padding=2)
     try:
@@ -77,6 +75,8 @@ def all_user_submissions(request, username, page=1):
 
 
 def user_submissions(request, code, username, page=1):
+    if not Profile.objects.filter(user__username=username).exists():
+        raise Http404()
     return problem_submissions(request, code, page, False, title=username + "'s submissions for %s", order=['-id'],
                                filter={
                                    'problem__code': code,
