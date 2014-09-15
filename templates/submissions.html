@@ -166,18 +166,17 @@
                         <span style="color:#555">on {{ submission.date|date:"N j, o, g:i a" }}</span>
                     </td>
 
-                    {% if request.user.is_authenticated and request.user.profile == submission.user or request.user.profile.is_admin %}
-                        <td style="white-space:nowrap">
+                    <!-- TODO don't show if not available for user -->
+                    <td style="white-space:nowrap">
+                        {% if request.user.is_authenticated and request.user.profile == submission.user or request.user.profile.is_admin %}
                             <a href="{% url 'judge.views.submission_source' submission.id %}">view</a> |
                             <a href="{% url 'judge.views.submission_status' submission.id %}">detail</a>
-                            {% if request.user.is_authenticated and request.user.profile.is_admin %}
-                                <a href="{% url 'admin:judge_submission_change' submission.id %}">admin</a>
-                            {% endif %}
+                        {% endif %}
+                        {% if request.user.is_authenticated and request.user.profile.is_admin %}
+                            <a href="{% url 'admin:judge_submission_change' submission.id %}">admin</a>
+                        {% endif %}
                         {% if request.user.is_authenticated and request.user.profile.is_admin %} | {% endif %}
-                        </td>
-                    {% else %}
-                        <td style="white-space:nowrap;border:none"></td>
-                    {% endif %}
+                    </td>
 
                     <td style="white-space:nowrap">
                         {% if submission.status != "QU" and submission.status != "G" and submission.status != "CE" and submission.status != "IE" and submission.status != 'AB' %}
