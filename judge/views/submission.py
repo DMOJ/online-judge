@@ -9,14 +9,17 @@ from judge.utils.diggpaginator import DiggPaginator
 from judge.views import get_result_table
 
 
+def user_completed_codes(profile):
+    return list(Submission.objects.filter(user=profile, result='AC').values_list('problem__code', flat=True).distinct())
+
+
 def submission_source(request, code):
     submission = Submission.objects.get(id=int(code))
 
     if not request.user.is_authenticated():
         raise PermissionDenied()
 
-    if not submission.user == request.user.profile and not request.user.profile.completed_problem(
-            code) and not request.user.profile.is_admin():
+    if not submission.user == request.user.profile and not request.user.profile.is_admin() and not Submission.objects.filter(user=request.user.profile, result='AC').exists():
         raise PermissionDenied()
     return render_to_response('submission_src.html',
                               {
@@ -51,10 +54,6 @@ def abort_submission(request, code):
     return HttpResponseRedirect(reverse('judge.views.submission_status', args=(code,)))
 
 
-def user_completed_codes(profile):
-    return list(Submission.objects.filter(user=profile, result='AC').values_list('problem__code', flat=True).distinct())
-
-
 def all_user_submissions(request, username, page=1):
     paginator = DiggPaginator(Submission.objects.filter(user__user__username=username).order_by('-id'), 50, body=6,
                               padding=2)
@@ -69,7 +68,8 @@ def all_user_submissions(request, username, page=1):
                                'results': get_result_table(user__user__username=username),
                                'dynamic_update': False,
                                'title': 'All submissions by ' + username,
-                               'completed_problem_codes': user_completed_codes(request.user.profile) if request.user.is_authenticated() else [],
+                               'completed_problem_codes': user_completed_codes(
+                                   request.user.profile) if request.user.is_authenticated() else [],
                                'show_problem': True},
                               context_instance=RequestContext(request))
 
@@ -107,7 +107,8 @@ def problem_submissions(request, code, page, dynamic_update, title, order, filte
                                    'results': get_result_table(**filter),
                                    'dynamic_update': dynamic_update,
                                    'title': title % problem.name,
-                                   'completed_problem_codes': user_completed_codes(request.user.profile) if request.user.is_authenticated() else [],
+                                   'completed_problem_codes': user_completed_codes(
+                                       request.user.profile) if request.user.is_authenticated() else [],
                                    'show_problem': False},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
@@ -127,6 +128,7 @@ def submissions(request, page=1):
                                'results': get_result_table(),
                                'dynamic_update': True if page == 1 else False,
                                'title': 'All submissions',
-                               'completed_problem_codes': user_completed_codes(request.user.profile) if request.user.is_authenticated() else [],
+                               'completed_problem_codes': user_completed_codes(
+                                   request.user.profile) if request.user.is_authenticated() else [],
                                'show_problem': True},
                               context_instance=RequestContext(request))
