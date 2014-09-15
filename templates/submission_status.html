@@ -79,14 +79,14 @@
         <br/>
     </div>
     {% if not submission.is_graded %}
-    <br/>
-    {% if request.user == submission.user.user or submission.user.is_admin %}
-        <div id="abort-button">
-            <form action="{% url 'judge.views.abort_submission' submission.id %}" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Abort"/>
-            </form>
-        </div>
-    {% endif %}
+        <br/>
+        {% if request.user == submission.user.user or submission.user.is_admin %}
+            <div id="abort-button">
+                <form action="{% url 'judge.views.abort_submission' submission.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Abort"/>
+                </form>
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock %}

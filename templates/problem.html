@@ -7,14 +7,15 @@
 {% block body %}
     <div class="info-float" style="width:11%;padding-left:40px">
         <a href="{% url 'judge.views.problem_submit' problem.code %}">Submit</a>
+        {% if request.user.is_authenticated %}
+            <br/>
+            <a href="{% url 'judge.views.user_submissions' problem.code request.user.username %}">My submissions</a>
+            <hr/>
+        {% endif %}
         <br/>
         <a href="{% url 'judge.views.chronological_submissions' problem.code %}">All submissions</a>
         <br/>
         <a href="{% url 'judge.views.ranked_submissions' problem.code %}">Best submissions</a>
-        {% if request.user.is_authenticated %}
-            <br/>
-            <a href="{% url 'judge.views.user_submissions' problem.code request.user.username %}">My submissions</a>
-        {% endif %}
         {% if perms.judge.change_problem %}
             <hr/>
             <a href="{% url 'admin:judge_problem_change' problem.id %}">Edit problem</a>

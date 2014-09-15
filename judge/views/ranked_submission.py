@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.models import Problem, Submission
 from judge.utils.diggpaginator import DiggPaginator
-from judge.views import get_result_table
+from judge.views import get_result_table, user_completed_codes
 
 
 __all__ = ['ranked_submissions']
@@ -63,8 +63,6 @@ def ranked_submissions(request, code, page=1):
         GROUP BY fastest.uid
         ORDER BY subs.points DESC, subs.time ASC
     ''', (problem.id,) * 2)
-    can_see_results = (request.user.is_authenticated() and
-                       Submission.objects.filter(problem=problem, user=request.user.profile, result='AC').exists())
 
     paginator = DiggPaginator(results, 50, body=6, padding=2)
     try:
@@ -76,7 +74,7 @@ def ranked_submissions(request, code, page=1):
     return render_to_response('submissions.html',
                               {'submissions': submissions,
                                'results': get_result_table(problem__code=code),
-                               'can_see_results': can_see_results,
+                               'completed_problem_codes': user_completed_codes(request.user.profile),
                                'dynamic_update': False,
                                'title': "Best solutions for %s" % problem.name,
                                'show_problem': False},
