@@ -18,12 +18,14 @@
                             break;
                         case "grading-end":
                             list.append("<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(packet[3], packet[4]));
-			    $("#abort-button").remove();
+			                $("#abort-button").remove();
+                            $("#grading-label").remove();
                             break;
                         case "compile-error":
                             $("#execution-title").append("<h3>Compilation Error</h3>");
                             list.append(packet[1].replace("\f", " ").replace("\n", "<br/>"));
-			    $("#abort-button").remove();
+			                $("#abort-button").remove();
+                            $("#grading-label").remove();
                             break;
                         default:
                             return;
@@ -88,4 +90,9 @@
         {% endif %}
         <br/>
     </div>
+    {% if not submission.is_graded %}
+    <span id="grading-label">
+        <img src="{% static 'loading.gif' %}" alt="Grading..." height="20px"> <b>Grading...</b>
+    </span>
+    {% endif %}
 {% endblock %}
