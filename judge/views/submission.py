@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from judge.models import Problem, Submission, SubmissionTestCase
+from judge.models import Problem, Submission, SubmissionTestCase, Profile
 from judge.utils.diggpaginator import DiggPaginator
 from judge.views import get_result_table
 
@@ -56,6 +56,8 @@ def user_completed_codes(profile):
 
 
 def all_user_submissions(request, username, page=1):
+    if not Profile.objects.filter(user__username=username).exists():
+        raise Http404()
     paginator = DiggPaginator(Submission.objects.filter(user__user__username=username).order_by('-id'), 50, body=6,
                               padding=2)
     try:
