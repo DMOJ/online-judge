@@ -11,8 +11,9 @@
             <br/>
             <a href="{% url 'judge.views.user_submissions' problem.code request.user.username %}">My submissions</a>
             <hr/>
+        {% else %}
+            <br/>
         {% endif %}
-        <br/>
         <a href="{% url 'judge.views.chronological_submissions' problem.code %}">All submissions</a>
         <br/>
         <a href="{% url 'judge.views.ranked_submissions' problem.code %}">Best submissions</a>
