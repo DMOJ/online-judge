@@ -14,23 +14,25 @@ def user_completed_codes(profile):
 
 
 def submission_source(request, code):
-    submission = Submission.objects.get(id=int(code))
+    try:
+        submission = Submission.objects.get(id=int(code))
 
-    if not request.user.is_authenticated():
-        raise PermissionDenied()
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
 
-    if not request.user.profile.is_admin() and submission.user != request.user.profile and \
-            not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=code).exists():
-        raise PermissionDenied()
+        if not request.user.profile.is_admin() and submission.user != request.user.profile and \
+                not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=code).exists():
+            raise PermissionDenied()
 
-    return render_to_response('submission_src.html',
-                              {
-                                  'submission': submission,
-                                  'title': 'Submission %s of %s by %s' % (
-                                      submission.id, submission.problem.name, submission.user.user.username)
-                              },
-                              context_instance=RequestContext(request))
-
+        return render_to_response('submission_src.html',
+                                  {
+                                      'submission': submission,
+                                      'title': 'Submission %s of %s by %s' % (
+                                          submission.id, submission.problem.name, submission.user.user.username)
+                                  },
+                                  context_instance=RequestContext(request))
+    except ObjectDoesNotExist:
+        raise Http404()
 
 def submission_status(request, code):
     try:
