@@ -79,10 +79,6 @@
         <br/>
     </div>
     {% if not submission.is_graded %}
-    <span id="grading-label">
-        <br/>
-        <img src="{% static 'loading.gif' %}" alt="Working..." height="20px">
-    </span>
     <br/>
     {% if request.user == submission.user.user or submission.user.is_admin %}
         <div id="abort-button">
