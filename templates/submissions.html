@@ -21,7 +21,7 @@
                     var table = $('#submissions-table');
                     switch (packet[0]) {
                         case "submission-start":
-                            table.children('tr:last').remove();
+                            table.children('tr:last-child').remove();
                             var id = parseInt(packet[1]);
                             if (id > top_table_id()) {
                                 var html = "";
