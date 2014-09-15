@@ -40,7 +40,7 @@ def problem(request, code):
 
 
 def problems(request):
-    return render_to_response('problems.html', {'problems': Problem.objects.all(), 'title': 'Problems'},
+    return render_to_response('problems.html', {'problems': Problem.objects.order_by('code'), 'title': 'Problems'},
                               context_instance=RequestContext(request))
 
 
