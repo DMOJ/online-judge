@@ -18,7 +18,6 @@ def submission_source(request, code):
 
     if not request.user.is_authenticated():
         raise PermissionDenied()
-
     if not submission.user == request.user.profile and not request.user.profile.is_admin() and not Submission.objects.filter(user=request.user.profile, result='AC').exists():
         raise PermissionDenied()
     return render_to_response('submission_src.html',
@@ -33,6 +32,10 @@ def submission_source(request, code):
 def submission_status(request, code):
     try:
         submission = Submission.objects.get(id=int(code))
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
+        if not submission.user == request.user.profile and not request.user.profile.is_admin() and not Submission.objects.filter(user=request.user.profile, result='AC').exists():
+            raise PermissionDenied()
         test_cases = SubmissionTestCase.objects.filter(submission=submission)
         return render_to_response('submission_status.html',
                                   {'submission': submission, 'test_cases': test_cases,
