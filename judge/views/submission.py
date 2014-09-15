@@ -35,7 +35,12 @@ def submission_source(request, code):
 def submission_status(request, code):
     try:
         submission = Submission.objects.get(id=int(code))
-        if not request.user.is_authenticated() or not submission.user == request.user.profile or request.user.profile.is_admin() or not Submission.objects.filter(user=request.user.profile, result='AC').exists():
+
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
+
+        if not request.user.profile.is_admin() and submission.user != request.user.profile and \
+                not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=code).exists():
             raise PermissionDenied()
         test_cases = SubmissionTestCase.objects.filter(submission=submission)
         return render_to_response('submission_status.html',
