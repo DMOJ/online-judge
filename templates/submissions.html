@@ -168,9 +168,11 @@
 
                     <!-- TODO don't show if not available for user -->
                     <td style="white-space:nowrap">
-                        {% if request.user.is_authenticated and request.user.profile == submission.user or request.user.profile.is_admin or submission.problem.code in completed_codes %}
+                        {% if request.user.is_authenticated %}
+                        {% if request.user.profile == submission.user or request.user.profile.is_admin or submission.problem.code in completed_codes %}
                             <a href="{% url 'judge.views.submission_source' submission.id %}">view</a> |
                             <a href="{% url 'judge.views.submission_status' submission.id %}">detail</a>
+                        {% endif %}
                         {% endif %}
                         {% if request.user.is_authenticated and request.user.profile.is_admin %}
                             | <a href="{% url 'admin:judge_submission_change' submission.id %}">admin</a>
