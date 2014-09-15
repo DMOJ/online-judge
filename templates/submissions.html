@@ -167,15 +167,17 @@
                     </td>
 
                     {% if request.user.is_authenticated and request.user.profile == submission.user or request.user.profile.is_admin %}
-                    <td style="white-space:nowrap">
+                        <td style="white-space:nowrap">
                             <a href="{% url 'judge.views.submission_source' submission.id %}">view</a> |
                             <a href="{% url 'judge.views.submission_status' submission.id %}">detail</a>
-                        {% endif %}
-                        {% if request.user.is_authenticated and request.user.profile.is_admin %}
-                            <a href="{% url 'admin:judge_submission_change' submission.id %}">admin</a>
-                        {% endif %}
-                    </td>
-                    {% if request.user.is_authenticated and request.user.profile.is_admin %} | {% endif %}
+                            {% if request.user.is_authenticated and request.user.profile.is_admin %}
+                                <a href="{% url 'admin:judge_submission_change' submission.id %}">admin</a>
+                            {% endif %}
+                        {% if request.user.is_authenticated and request.user.profile.is_admin %} | {% endif %}
+                        </td>
+                    {% else %}
+                        <td style="white-space:nowrap;border:none"></td>
+                    {% endif %}
 
                     <td style="white-space:nowrap">
                         {% if submission.status != "QU" and submission.status != "G" and submission.status != "CE" and submission.status != "IE" and submission.status != 'AB' %}
