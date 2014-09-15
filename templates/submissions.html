@@ -174,7 +174,7 @@
                             <a href="{% url 'judge.views.submission_status' submission.id %}">detail</a>
                         {% endif %}
                         {% endif %}
-                        {% if request.user.is_authenticated and request.user.profile.is_admin %}
+                        {% if perms.judge.change_submission %}
                             | <a href="{% url 'admin:judge_submission_change' submission.id %}">admin</a>
                         {% endif %}
                     </td>
