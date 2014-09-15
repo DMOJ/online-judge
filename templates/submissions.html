@@ -169,7 +169,7 @@
                     <!-- TODO don't show if not available for user -->
                     <td style="white-space:nowrap">
                         {% if request.user.is_authenticated %}
-                        {% if request.user.profile == submission.user or request.user.profile.is_admin or submission.problem in completed_problems %}
+                        {% if request.user.profile == submission.user or request.user.profile.is_admin or submission.problem.code in completed_problem_codes %}
                             <a href="{% url 'judge.views.submission_source' submission.id %}">view</a> |
                             <a href="{% url 'judge.views.submission_status' submission.id %}">detail</a>
                         {% endif %}
