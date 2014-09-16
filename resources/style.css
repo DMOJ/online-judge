@@ -167,7 +167,7 @@ h4 {
 }
 
 #user-links {
-    max-width: 20%;
+    max-width: 25%;
     bottom: 6px;
     right: 6px;
     position: absolute;
@@ -187,9 +187,7 @@ nav {
 }
 
 nav ul li {
-    display: inline-block;
-    margin-top: 11px;
-    margin-bottom: 11px;
+    display: inline-flex;
     color: #FFF;
     text-transform: uppercase;
     font-size: 1em
@@ -257,7 +255,7 @@ a {
 }
 
 .pagination a {
-    margin: 11px 0 12px;
+    display:inline-flex;
     text-decoration: none;
     padding: 1px 8px;
     color: #FFF;
