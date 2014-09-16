@@ -3,6 +3,7 @@ table.sortable thead {
     color:#666666;
     font-weight: bold;
     cursor: default;
+	behavior:url("unselectable.htc")
 }
 
 .table table{
