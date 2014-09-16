@@ -37,7 +37,7 @@
             </li>
             <li><a href="/about/"{% if nav_tab == 'about' %} class="active"{% endif %}>About</a></li>
         </ul>
-        <span style="bottom:6px;right:6px;position:absolute;color:#5C5954">
+        <span id="user-links">
         {% if request.user.is_authenticated %}
             <a style="color:#FFF" href="{% url 'judge.views.user' %}">Hello, <span
                     style="font-weight:bold">{{ request.user.username }}</span></a> |
