@@ -42,9 +42,9 @@
             <a style="color:#FFF" href="{% url 'judge.views.user' %}">Hello, <span
                     style="font-weight:bold">{{ request.user.username }}</span></a> |
             {% if request.user.is_staff or request.user.profile.is_admin %}
-                <a style="color:#FFF" href="{% url 'admin:index' %}">Admin</a> |
+                <a style="color:#FFF" href="{% url 'admin:index' %}">admin</a> |
             {% endif %}
-            <a style="color:#FFF" href="{% url 'django.contrib.auth.views.logout' %}?next=">Log out</a>
+            <a style="color:#FFF" href="{% url 'django.contrib.auth.views.logout' %}?next=">log out</a>
         {% else %}
             <a style="color:#FFF;font-weight:bold"
                href="{% url 'django.contrib.auth.views.login' %}?next={{ request.get_full_path|urlencode }}">Login</a>
