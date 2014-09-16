@@ -13,6 +13,7 @@
 {% block body %}
 <div class="table">
     <table id="problems" class="tablesorter">
+        <thead>
         <tr>
             <th style="width:85%">Problem</th>
             <th style="width:15%">Category</th>
@@ -20,6 +21,8 @@
             <th style="white-space:nowrap">Points</th>
             <th style="white-space:nowrap">Users</th>
         </tr>
+        </thead>
+        <tbody>
         {% for problem in problems %}
         <tr>
             <td><a href="{% url 'judge.views.problem' problem.code %}">{{ problem.name }}</a></td>
@@ -29,6 +32,7 @@
             <td><a href="{% url 'judge.views.ranked_submissions' problem.code %}">{{ problem.number_of_users }}</a></td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
 </div>
 {% endblock %}

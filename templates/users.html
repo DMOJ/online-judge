@@ -13,12 +13,15 @@
 {% block body %}
     <div class="table">
         <table id="users" class="tablesorter">
+            <thead>
             <tr>
                 <th style="white-space:nowrap">Rank</th>
                 <th style="width:100%">Username</th>
                 <th style="white-space:nowrap">Points</th>
                 <th style="white-space:nowrap">Problems</th>
             </tr>
+            </thead>
+            <tbody>
             {% for rank, user in users %}
                 <tr>
                     <td>{{ rank }}</td>
@@ -29,6 +32,7 @@
                     <td>{{ user.problems }}</td>
                 </tr>
             {% endfor %}
+            </tbody>
         </table>
     </div>
 {% endblock %}
