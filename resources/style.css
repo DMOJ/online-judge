@@ -282,7 +282,6 @@ a{
 }
 
 noscript{
-	height:23px;
 	font-family:Arial,sans-serif;
 	font-size:111%;
 	color:white;
@@ -290,12 +289,14 @@ noscript{
 	background:#ae0000;
 	text-align:center;
 	padding-top:15px;
-	width:20%;
+	padding-bottom:5px;
+	width:25%;
 	right:0;
 	position:fixed;
 	border-radius:4px;
 	z-index:100;
 }
+
 .comment-area{
 	margin-top:40px
 }
