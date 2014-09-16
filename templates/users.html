@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
 {% block css %}
-    <script src="{% static 'sorttable.js' %}" type="text/javascript"></script>
+    <script src="{% static 'tablesorter.js' %}" type="text/javascript"></script>
+    <script>
+        $(document).ready(function() {
+            $("#problems").tablesorter({
+                sortList: [[2, 0]]
+            });
+        });
+    </script>
 {% endblock %}
 {% block body %}
     <div class="table">
@@ -9,7 +16,7 @@
             <tr>
                 <th style="white-space:nowrap">Rank</th>
                 <th style="width:100%">Username</th>
-                <th class="default-sorted" style="white-space:nowrap">Points</th>
+                <th style="white-space:nowrap">Points</th>
                 <th style="white-space:nowrap">Problems</th>
             </tr>
             {% for rank, user in users %}

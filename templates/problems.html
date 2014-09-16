@@ -1,15 +1,22 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
 {% block css %}
-    <script src="{% static 'sorttable.js' %}" type="text/javascript"></script>
+    <script src="{% static 'tablesorter.js' %}" type="text/javascript"></script>
+    <script>
+        $(document).ready(function() {
+            $("#problems").tablesorter({
+                sortList: [[2, 0]]
+            });
+        });
+    </script>
 {% endblock %}
 {% block body %}
 <div class="table">
-        <table class="sortable">
+        <table id="problems">
             <tr>
                 <th style="width:85%">Problem</th>
                 <th style="width:15%">Category</th>
-                <th class="default-sorted" style="white-space:nowrap">Code</th>
+                <th style="white-space:nowrap">Code</th>
                 <th style="white-space:nowrap">Points</th>
                 <th style="white-space:nowrap">Users</th>
             </tr>
