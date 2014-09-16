@@ -1,11 +1,14 @@
 {% extends "base.html" %}
+{% block css %}
+    <script src="{% static 'sorttable.js' %}" type="text/javascript"></script>
+{% endblock %}
 {% block body %}
     <div class="table">
         <table>
             <tr>
                 <th style="white-space:nowrap">Rank</th>
                 <th style="width:100%">Username</th>
-                <th style="white-space:nowrap">Points</th>
+                <th class="default-sorted" style="white-space:nowrap">Points</th>
                 <th style="white-space:nowrap">Problems</th>
             </tr>
             {% for rank, user in users %}

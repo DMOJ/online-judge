@@ -6,7 +6,7 @@ table.sortable thead {
 	behavior:url("unselectable.htc")
 }
 
-table.sortable th.code:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
+table.sortable th.default-sorted:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after {
     content: " \25BE"
 }
 
