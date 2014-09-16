@@ -6,6 +6,14 @@ table.sortable thead {
 	behavior:url("unselectable.htc")
 }
 
+th.headerSortDown:after {
+    content: " \25BE"
+}
+
+th.headerSortUp:after {
+    content: " \25B4"
+}
+
 .table table{
 	border-collapse:collapse;
 	width:100%;
