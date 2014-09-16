@@ -288,13 +288,15 @@ noscript{
 	font-weight:bold;
 	background:#ae0000;
 	text-align:center;
+	max-width:30%;
 	padding-top:15px;
 	padding-bottom:5px;
-	width:25%;
+	padding-left:10px;
+	padding-right:10px;
 	right:0;
 	position:fixed;
 	border-radius:4px;
-	z-index:100;
+	z-index:100
 }
 
 .comment-area{
