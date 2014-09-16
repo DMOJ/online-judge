@@ -74,7 +74,8 @@ def ranked_submissions(request, code, page=1):
     return render_to_response('submissions.html',
                               {'submissions': submissions,
                                'results': get_result_table(problem__code=code),
-                               'completed_problem_codes': user_completed_codes(request.user.profile),
+                               'completed_problem_codes': user_completed_codes(request.user.profile)
+                                    if request.user.is_authenticated() else [],
                                'dynamic_update': False,
                                'title': "Best solutions for %s" % problem.name,
                                'show_problem': False},
