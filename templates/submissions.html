@@ -5,118 +5,46 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static "status.css" %}">
-    <script src="{% static 'simple-comet.js' %}" type="text/javascript"></script>
     <script src="{% static 'common.js' %}" type="text/javascript"></script>
-    {% if dynamic_update and not submission.is_graded %}
+    {% if dynamic_update %}
         <script type="text/javascript">
             $(function () {
-                var terminal_status = ['AC', 'IR', 'WA', 'AB', 'TLE', 'MLE', 'RTE', 'CE', 'IR', 'IE'];
+                var socket = new WebSocket("{{ EVENT_DAEMON_LOCATION }}");
+                var table = $('#submissions-table');
 
-                function top_table_id() {
-                    return parseInt($('#submissions-table').find('tr:first-child').attr('id'));
-                }
+                socket.onopen = function (event) {
+                    socket.send(JSON.stringify({
+                        command: 'start-msg',
+                        start: {{ last_msg }}
+                    }));
+                    socket.send(JSON.stringify({
+                        command: 'set-filter',
+                        filter: ['submissions']
+                    }));
+                };
 
-                function on_receive(message) {
-                    var packet = message.split(" ");
-                    var table = $('#submissions-table');
-                    switch (packet[0]) {
-                        case "submission-start":
-                            //table.find('tr:last-child').remove();
-                            var id = parseInt(packet[1]);
-                            if (id > top_table_id()) {
-                                var html = "";
-                                var problem_code = packet[2];
-                                var problem = packet[3].replaceAll("\f", " ");
-                                var status = packet[4];
-                                var language = packet[5];
-                                var user = packet[6];
-                                var clazz = ["user", "admin", "setter"][parseInt(packet[7])];
-                                var date = packet[8].replace("\f", " ");
-                                var dstatus = '<img src="{% static 'loading.gif' %}" alt="Grading..." height="20px">';
-                                html = ('<tr id={0}>' +
-                                        '<td style="width:10%" class="{1}">' +
-                                        '<span class="score">' + dstatus + '</span>' +
-                                        '<br/>' +
-                                        '<span style="font-size:0.7em;font-weight:bold">' +
-                                        '<span class="status">{1}</span> | <span class="language">{2}</span></span>' +
-                                        '</td>' +
-
-                                        '<td style="width:90%;text-align:left;padding-left:20px">' +
-                                        '<span style="font-size:1.3em;font-weight:bold">' +
-                                        '<a href="/problem/{3}">{4}</a>' +
-                                        '</span>' +
-                                        '<br/>' +
-                                        '<span class="{5}">' +
-                                        '<a href="/user/{6}">{6}</a>' +
-                                        '</span>' +
-                                        '<span style="color:#555"> on {7}</span>' +
-                                        '</td>' +
-
-                                        '<td style="white-space:nowrap">' +
-                                        '<a href="/submission/{0}">View</a>' +
-										
-                                        {% if request.user.is_authenticated and request.user.profile.is_admin %}
-                                        '<br>' +
-                                        '<a href="/admin/judge/submission/{0}">Admin</a>' +
-                                        {% endif %}
-										
-                                        '</td>' +
-
-                                        '<td style="white-space:nowrap">' +
-                                        '<span class="time"><b>---</b></span><br/><span class="memory">---</span>' +
-                                        '</td>' +
-                                        '</tr>').format(id, status, language, problem_code, problem, clazz, user, date);
-                                table.prepend(html);
-                            }
-                            break;
-                        case "submission-status":
-                        {
-                            var info = table.find("tr#" + packet[1]).find('td:first-child');
-                            if (~terminal_status.indexOf(info.find('span.status').text()))
-                                break;
-                            info.find('span.status').html(packet[2]);
-                            if (["QU", "G"].indexOf(packet[2]) == -1) {
-                                info.find('span.score').html('<span style="font-size:1.3em;color:black">---</span>');
-                            }
-                            info.removeClass().addClass(packet[2]);
-                            break;
+                socket.onmessage = function (event) {
+                    var data = JSON.parse(event.data);
+                    if (data.message.type == 'update-submission') {
+                        var id = data.message.id;
+                        var cell = table.find('tr#' + id);
+                        if (cell.length < 1) {
+                            table.prepend('<tr id="{0}"></tr>'.format(id));
+                            cell = table.find('tr#' + id);
                         }
-                        case "submission-end":
-                        {
-                            var row = table.find("tr#" + packet[1]);
-                            var info = row.find('td:first-child');
-                            if (~terminal_status.indexOf(info.find('span.status').text()))
-                                break;
-                            info.find('span.status').html(packet[6]);
-                            info.find('span.score').html('<span style="font-size:1.3em;color:black">{0} / {1}</span>'.format(packet[4], packet[5]).replace(/\.0+/g, ''));
-                            info.removeClass().addClass(packet[6]);
-                            row.find('span.time').html('<b>{0}</b>'.format(packet[6] != 'TLE' ? (parseFloat(packet[2]).toFixed(2) + 's') : '---'));
-                            var mem = packet[3];
-                            var measure = null;
-                            if (mem >= 1024) {
-                                mem /= 1024.0;
-                                measure = "M";
-                            } else {
-                                measure = "K";
+                        $.ajax({
+                            url: '{% url 'judge.views.single_submission_query' %}',
+                            data: {id: id},
+                            success: function (data, textStatus, jqXHR) {
+                                cell.html(data.responseText);
+                            },
+                            error: function (data, textStatus, jqXHR) {
+                                console.log('Failed to update submission: ' + id);
                             }
-                            row.find('span.memory').html('{0} {1}'.format(mem.toFixed(2), measure));
-                            break;
-                        }
-                        default:
-                            return;
+                        });
                     }
-                }
-
-                SimpleComet.subscribe("{{ SIMPLE_COMET_URL }}submissions.jsonp", function (resp) {
-                    var messages = resp['messages']['submissions'];
-                    for (var i = 0; i < messages.length; ++i) {
-                        on_receive(messages[i].content);
-                    }
-                });
-                SimpleComet.since(0);
-                SimpleComet.start();
-            })
-            ;
+                };
+            });
         </script>
     {% endif %}
 {% endblock %}
@@ -132,81 +60,7 @@
         <table id="submissions-table">
             {% for submission in submissions %}
                 <tr id="{{ submission.id }}">
-                    <td style="width:10%" class="
-                    {% if submission.status == 'IE' or submission.status == 'CE' %}{{ submission.status }}
-                    {% else %}{{ submission.result }}{% endif %}">
-                        <span class="score">
-                            {% if not submission.is_graded %}
-                                <img src="{% static 'loading.gif' %}" alt="Grading..." height="20px">
-                            {% else %}
-                                <span style="font-size:1.3em;color:black">{% if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB' %}
-                                    ---
-                                {% else %}
-                                    {{ submission.points|default_if_none:0|floatformat:"-2" }} /
-                                    {{ submission.problem.points|floatformat:"0" }}
-                                {% endif %}
-                                </span>
-                            {% endif %}
-                        </span>
-                        <br/>
-                        <span style="font-size:0.7em;font-weight:bold">
-                            <span class="status">{{ submission.result|default_if_none:submission.status }}</span> |
-                            <span class="language">{{ submission.language.key }}</span>
-                        </span>
-                    </td>
-                    <td style="width:90%;text-align:left;padding-left:20px">
-                        {% if show_problem %}
-                            <span style="font-size:1.3em;font-weight:bold">
-                                <a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a>
-                            </span>
-                            <br/>
-                        {% endif %}
-                        <span class="{% if submission.user.is_admin %}admin{% else %}{% if submission.user.is_problem_setter %}setter{% else %}user{% endif %}{% endif %}">
-                            <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.user.username }}</a>
-                        </span>
-                        <span style="color:#555">on {{ submission.date|date:"N j, o, g:i a" }}</span>
-                    </td>
-
-                    <!-- TODO don't show if not available for user -->
-                    <td style="white-space:nowrap">
-                        {% if request.user.is_authenticated %}
-                        {% if request.user.profile == submission.user or request.user.profile.is_admin or submission.problem in completed_problems %}
-                            <a href="{% url 'judge.views.submission_source' submission.id %}">view</a> |
-                            <a href="{% url 'judge.views.submission_status' submission.id %}">detail</a>
-                        {% endif %}
-                        {% endif %}
-                        {% if perms.judge.change_submission %}
-                            | <a href="{% url 'admin:judge_submission_change' submission.id %}">admin</a>
-                        {% endif %}
-                    </td>
-
-                    <td style="white-space:nowrap">
-                        {% if submission.status != "QU" and submission.status != "G" and submission.status != "CE" and submission.status != "IE" and submission.status != 'AB' %}
-                            <span class="time">
-                                <b>
-                                    {% if "TLE" != submission.result %}
-                                        {{ submission.time|default_if_none:0|floatformat:"2" }}s
-                                    {% else %}
-                                        ---
-                                    {% endif %}
-                                </b>
-                            </span>
-                            <br/>
-                            <span class="memory">
-                            {% with memory=submission.memory|default_if_none:0 %}
-                                {% if memory < 1000 %}
-                                    {{ memory|floatformat:"-2" }} K
-                                {% else %}
-                                    {% math memory "$1 / 1024" as megabytes %}
-                                    {{ megabytes|floatformat:"-2" }} M
-                                {% endif %}
-                            {% endwith %}
-                            </span>
-                        {% else %}
-                            <span class="time"><b>---</b></span><br/>
-                            <span class="memory">---</span>
-                        {% endif %}
-                    </td>
+                    {% include "submission_row.html" %}
                 </tr>
             {% endfor %}
         </table>

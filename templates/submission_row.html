@@ -1,0 +1,75 @@
+<td style="width:10%" class="
+{% if submission.status == 'IE' or submission.status == 'CE' %}{{ submission.status }}
+{% else %}{{ submission.result }}{% endif %}">
+    <span class="score">
+        {% if not submission.is_graded %}
+            <img src="{% static 'loading.gif' %}" alt="Grading..." height="20px">
+        {% else %}
+            <span style="font-size:1.3em;color:black">{% if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB' %}
+                ---
+            {% else %}
+                {{ submission.points|default_if_none:0|floatformat:"-2" }} /
+                {{ submission.problem.points|floatformat:"0" }}
+            {% endif %}
+            </span>
+        {% endif %}
+    </span>
+    <br/>
+    <span style="font-size:0.7em;font-weight:bold">
+        <span class="status">{{ submission.result|default_if_none:submission.status }}</span> |
+        <span class="language">{{ submission.language.key }}</span>
+    </span>
+</td>
+<td style="width:90%;text-align:left;padding-left:20px">
+    {% if show_problem %}
+        <span style="font-size:1.3em;font-weight:bold">
+            <a href="{% url 'judge.views.problem' submission.problem.code %}">{{ submission.problem.name }}</a>
+        </span>
+        <br/>
+    {% endif %}
+    <span class="{% if submission.user.is_admin %}admin{% else %}{% if submission.user.is_problem_setter %}setter{% else %}user{% endif %}{% endif %}">
+        <a href="{% url 'judge.views.user' submission.user.user.username %}">{{ submission.user.user.username }}</a>
+    </span>
+    <span style="color:#555">on {{ submission.date|date:"N j, o, g:i a" }}</span>
+</td>
+
+<!-- TODO don't show if not available for user -->
+<td style="white-space:nowrap">
+    {% if request.user.is_authenticated %}
+    {% if request.user.profile == submission.user or request.user.profile.is_admin or submission.problem in completed_problems %}
+        <a href="{% url 'judge.views.submission_source' submission.id %}">view</a> |
+        <a href="{% url 'judge.views.submission_status' submission.id %}">detail</a>
+    {% endif %}
+    {% endif %}
+    {% if perms.judge.change_submission %}
+        | <a href="{% url 'admin:judge_submission_change' submission.id %}">admin</a>
+    {% endif %}
+</td>
+
+<td style="white-space:nowrap">
+    {% if submission.status != "QU" and submission.status != "G" and submission.status != "CE" and submission.status != "IE" and submission.status != 'AB' %}
+        <span class="time">
+            <b>
+                {% if "TLE" != submission.result %}
+                    {{ submission.time|default_if_none:0|floatformat:"2" }}s
+                {% else %}
+                    ---
+                {% endif %}
+            </b>
+        </span>
+        <br/>
+        <span class="memory">
+        {% with memory=submission.memory|default_if_none:0 %}
+            {% if memory < 1000 %}
+                {{ memory|floatformat:"-2" }} K
+            {% else %}
+                {% math memory "$1 / 1024" as megabytes %}
+                {{ megabytes|floatformat:"-2" }} M
+            {% endif %}
+        {% endwith %}
+        </span>
+    {% else %}
+        <span class="time"><b>---</b></span><br/>
+        <span class="memory">---</span>
+    {% endif %}
+</td>

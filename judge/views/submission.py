@@ -1,12 +1,13 @@
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.paginator import PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.models import Problem, Submission, SubmissionTestCase, Profile
 from judge.utils.diggpaginator import DiggPaginator
 from judge.views import get_result_table
+from judge import event_poster as event
 
 
 def user_completed_codes(profile):
@@ -33,6 +34,7 @@ def submission_source(request, code):
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()
+
 
 def submission_status(request, code):
     try:
@@ -126,6 +128,21 @@ def problem_submissions(request, code, page, dynamic_update, title, order, filte
         raise Http404()
 
 
+def single_submission(request, id):
+    try:
+        return render_to_response('submission_row.html', {
+            'submission': Submission.objects.get(id=int(id))
+        }, context_instance=RequestContext(request))
+    except ObjectDoesNotExist:
+        raise Http404()
+
+
+def single_submission_query(request):
+    if 'id' not in request.GET or not request.GET['id'].isdigit():
+        return HttpResponseBadRequest()
+    return single_submission(request, int(request.GET['id']))
+
+
 def submissions(request, page=1):
     paginator = DiggPaginator(Submission.objects.order_by('-id'), 50, body=6, padding=2)
     try:
@@ -138,6 +155,7 @@ def submissions(request, page=1):
                               {'submissions': submissions,
                                'results': get_result_table(),
                                'dynamic_update': True if page == 1 else False,
+                               'last_msg': event.last(),
                                'title': 'All submissions',
                                'completed_problem_codes': user_completed_codes(
                                    request.user.profile) if request.user.is_authenticated() else [],

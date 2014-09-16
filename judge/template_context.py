@@ -15,7 +15,7 @@ def user_profile(request):
 
 
 def comet_location(request):
-    return {'SIMPLE_COMET_URL': settings.SIMPLE_COMET_URL}
+    return {'EVENT_DAEMON_LOCATION': settings.EVENT_DAEMON_GET}
 
 
 def __tab(request):
