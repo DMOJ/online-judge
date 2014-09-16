@@ -5,30 +5,30 @@
     <script>
         $(document).ready(function() {
             $("#problems").tablesorter({
-                sortList: [[2, 0]]
+                sortList: [[3, 0]]
             });
         });
     </script>
 {% endblock %}
 {% block body %}
 <div class="table">
-        <table id="problems">
-            <tr>
-                <th style="width:85%">Problem</th>
-                <th style="width:15%">Category</th>
-                <th style="white-space:nowrap">Code</th>
-                <th style="white-space:nowrap">Points</th>
-                <th style="white-space:nowrap">Users</th>
-            </tr>
-            {% for problem in problems %}
-            <tr>
-                <td><a href="{% url 'judge.views.problem' problem.code %}">{{ problem.name }}</a></td>
-                <td>{{ problem.types_list|join:",<br>" }}</td>
-                <td>{{ problem.code }}</td>
-                <td>{{ problem.points }}{% if problem.partial %}p{% endif %}</td>
-                <td><a href="{% url 'judge.views.ranked_submissions' problem.code %}">{{ problem.number_of_users }}</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+    <table id="problems" class="tablesorter">
+        <tr>
+            <th style="width:85%">Problem</th>
+            <th style="width:15%">Category</th>
+            <th style="white-space:nowrap">Code</th>
+            <th style="white-space:nowrap">Points</th>
+            <th style="white-space:nowrap">Users</th>
+        </tr>
+        {% for problem in problems %}
+        <tr>
+            <td><a href="{% url 'judge.views.problem' problem.code %}">{{ problem.name }}</a></td>
+            <td>{{ problem.types_list|join:",<br>" }}</td>
+            <td>{{ problem.code }}</td>
+            <td>{{ problem.points }}{% if problem.partial %}p{% endif %}</td>
+            <td><a href="{% url 'judge.views.ranked_submissions' problem.code %}">{{ problem.number_of_users }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}
