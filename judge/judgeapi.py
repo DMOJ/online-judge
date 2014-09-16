@@ -5,7 +5,7 @@ import struct
 import json
 import logging
 
-from judge.simple_comet_client import delete_channel, create_channel, send_message
+from judge import event_poster as event
 
 logger = logging.getLogger('judge.judgeapi')
 size_pack = struct.Struct('!I')
@@ -40,10 +40,11 @@ def judge_request(packet, reply=True):
 
 
 def judge_submission(submission):
-    chan = 'sub_%d' % submission.id
-    delete_channel(chan)  # Delete if exist
-    create_channel(chan)
-    create_channel('submissions')  #TODO: only attempt to create once
+    submission.time = None
+    submission.memory = None
+    submission.points = None
+    submission.result = None
+    submission.save()
     try:
         response = judge_request({
             'name': 'submission-request',
@@ -62,17 +63,8 @@ def judge_submission(submission):
                                      response['submission-id'] == submission.id) else 'IE'
 
         id = 1 if submission.user.is_admin() else (2 if submission.user.is_problem_setter() else 0)
-        send_message('submissions', 'submission-start %d %s %s %s %s %s %d %s' %
-                                    (submission.id, submission.problem.code, submission.problem.name.replace(" ", "\f"),
-                                     submission.status, submission.language.key,
-                                     submission.user.user.username, id,
-                                     str(submission.date).replace(" ", "\f")))
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id})
         success = True
-    submission.time = None
-    submission.memory = None
-    submission.points = None
-    submission.result = None
-    submission.save()
     return success
 
 

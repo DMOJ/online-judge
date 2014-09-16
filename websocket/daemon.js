@@ -1,11 +1,12 @@
+var config = require('./config');
 var set = require('simplesets').Set;
 var queue = require('qu');
 var WebSocketServer = require('ws').Server;
-var wss_receiver = new WebSocketServer({port: 17001});
-var wss_sender = new WebSocketServer({port: 17002});
+var wss_receiver = new WebSocketServer({host: config.get_host, port: config.get_port});
+var wss_sender = new WebSocketServer({host: config.post_host, port: config.post_port});
 var messages = new queue();
 var followers = new set();
-var max_queue = 50;
+var max_queue = config.max_queue || 50;
 var message_id = Date.now();
 
 messages.catch_up = function (client) {

@@ -2,7 +2,7 @@ import logging
 
 from .judgehandler import JudgeHandler
 from judge.models import Submission, SubmissionTestCase
-from judge.simple_comet_client import send_message
+from judge import event_poster as event
 
 logger = logging.getLogger('judge.bridge')
 
@@ -20,8 +20,8 @@ class DjangoJudgeHandler(JudgeHandler):
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = 'G'
         submission.save()
-        send_message('sub_%d' % submission.id, 'grading-begin')
-        send_message('submissions', 'submission-status %d %s' % (submission.id, submission.status))
+        event.post('sub_%d' % submission.id, {'type': 'grading-begin'})
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
     def on_grading_end(self, packet):
         JudgeHandler.on_grading_end(self, packet)
@@ -55,35 +55,47 @@ class DjangoJudgeHandler(JudgeHandler):
 
         submission.user.calculate_points()
 
-        send_message('sub_%d' % submission.id,
-                     'grading-end %.3f %d %.1f %.1f %s' % (time, memory, points, submission.problem.points,
-                                                           submission.result))
-        send_message('submissions', 'submission-end %d %.3f %d %.1f %.1f %s' % (
-            submission.id, time, memory, points, submission.problem.points,
-            submission.result))
+        event.post('sub_%d' % submission.id, {
+            'type': 'grading-end',
+            'time': time,
+            'memory': memory,
+            'points': points,
+            'total': submission.problem.points,
+            'result': submission.result
+        })
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
     def on_compile_error(self, packet):
         JudgeHandler.on_compile_error(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = submission.result = 'CE'
         submission.save()
-        send_message('sub_%d' % submission.id, 'compile-error %s' % packet['log'].replace(" ", "\f"))
-        send_message('submissions', 'submission-status %d %s' % (submission.id, submission.status))
+        event.post('sub_%d' % submission.id, {
+            'type': 'compile-error',
+            'log': packet['log']
+        })
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
     def on_bad_problem(self, packet):
         JudgeHandler.on_bad_problem(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = submission.result = 'IE'
         submission.save()
-        send_message('sub_%d' % submission.id, 'bad-problem %s' % packet['problem'])
-        send_message('submissions', 'submission-status %d %s' % (submission.id, submission.status))
+        event.post('sub_%d' % submission.id, {
+            'type': 'bad-problem',
+            'problem': packet['problem']
+        })
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
     def on_submission_terminated(self, packet):
         JudgeHandler.on_submission_terminated(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = submission.result = 'AB'
         submission.save()
-        send_message('submissions', 'submission-status %d %s' % (submission.id, submission.status))
+        event.post('sub_%d' % submission.id, {
+            'type': 'aborted-submission'
+        })
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
     def on_test_case(self, packet):
         JudgeHandler.on_test_case(self, packet)
@@ -107,8 +119,13 @@ class DjangoJudgeHandler(JudgeHandler):
         test_case.points = packet['points']
         test_case.total = packet['total-points']
         test_case.save()
-        chan = 'sub_%d' % submission.id
-        send_message(chan, 'test-case %d %s %.3f %d %.1f %.1f (%s)' % (packet['position'], test_case.status,
-                                                                       packet['time'], packet['memory'],
-                                                                       float(test_case.points), float(test_case.total),
-                                                                       packet['output']))
+        event.post('sub_%d' % submission.id, {
+            'type': 'test-case',
+            'id': packet['position'],
+            'status': test_case.status,
+            'time': packet['time'],
+            'memory': packet['memory'],
+            'points': test_case.points,
+            'total': test_case.total,
+            'output': packet['output']
+        })
