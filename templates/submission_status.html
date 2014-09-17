@@ -5,45 +5,34 @@
     {% if not submission.is_graded %}
         <script type="text/javascript">
             $(function () {
-                var socket = new WebSocket("{{ EVENT_DAEMON_LOCATION }}");
-
-                socket.onopen = function (event) {
-                    socket.send(JSON.stringify({
-                        command: 'start-msg',
-                        start: {{ last_msg }}
-                    }));
-                    socket.send(JSON.stringify({
-                        command: 'set-filter',
-                        filter: ['sub_' + {{ submission.id }}]
-                    }));
-                };
-
-                socket.onmessage = function (event) {
-                    var data = JSON.parse(event.data);
-                    var list = $('#test-cases');
-                    switch (data.message.type) {
-                        case 'test-case':
-                            list.append('<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>'.format(
-                                    data.message.id, data.message.status, data.message.time,
-                                    data.message.memory, data.message.points, data.message.total));
-                            break;
-                        case 'grading-begin':
-                            break;
-                        case 'grading-end':
-                            list.append("<br/><b>Final score:</b> {0}/{1}<br/>".format(
-                                    data.message.points, data.message.total
-                            ));
-			                $('#abort-button').remove();
-                            $('#grading-label').remove();
-                            break;
-                        case 'compile-error':
-                            $('#execution-title').append("<h3>Compilation Error</h3>");
-                            list.append(data.message.log.replace("\n", "<br/>"));
-			                $('#abort-button').remove();
-                            $('#grading-label').remove();
-                            break;
+                var receiver = new EventReceiver(
+                    "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                    ['sub_' + {{ submission.id }}], {{ last_msg }}, function (message) {
+                        var list = $('#test-cases');
+                        switch (message.type) {
+                            case 'test-case':
+                                list.append('<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>'.format(
+                                        message.id, message.status, message.time,
+                                        message.memory, message.points, message.total));
+                                break;
+                            case 'grading-begin':
+                                break;
+                            case 'grading-end':
+                                list.append("<br/><b>Final score:</b> {0}/{1}<br/>".format(
+                                        message.points, message.total
+                                ));
+                                $('#abort-button').remove();
+                                $('#grading-label').remove();
+                                break;
+                            case 'compile-error':
+                                $('#execution-title').append("<h3>Compilation Error</h3>");
+                                list.append(message.log.replace("\n", "<br/>"));
+                                $('#abort-button').remove();
+                                $('#grading-label').remove();
+                                break;
+                        }
                     }
-                };
+                );
             });
         </script>
     {% endif %}
