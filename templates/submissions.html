@@ -60,7 +60,9 @@
         <table id="submissions-table">
             {% for submission in submissions %}
                 <tr id="{{ submission.id }}">
-                    {% include "submission_row.html" %}
+                    {% with submission=submission %}
+                        {% include "submission_row.html" %}
+                    {% endwith %}
                 </tr>
             {% endfor %}
         </table>
