@@ -6,8 +6,15 @@ var wss_receiver = new WebSocketServer({host: config.get_host, port: config.get_
 var wss_sender = new WebSocketServer({host: config.post_host, port: config.post_port});
 var messages = new queue();
 var followers = new set();
+var pollers = new set();
 var max_queue = config.max_queue || 50;
 var message_id = Date.now();
+
+if (typeof String.prototype.startsWith != 'function') {
+    String.prototype.startsWith = function (str){
+        return this.slice(0, str.length) == str;
+    };
+}
 
 messages.catch_up = function (client) {
     this.each(function (message) {
@@ -27,6 +34,9 @@ messages.post = function (channel, message) {
         this.shift();
     followers.each(function (client) {
         client.got_message(message);
+    });
+    pollers.each(function (request) {
+        request.got_message(message);
     });
     return message.id;
 };
@@ -139,3 +149,43 @@ wss_sender.on('connection', function (socket) {
             }));
     });
 });
+
+var url = require('url');
+require('http').createServer(function (req, res) {
+    var parts = url.parse(req.url, true);
+
+    if (!parts.pathname.startsWith('/channels/')) {
+        res.writeHead(404, {'Content-Type': 'text/plain'});
+        res.end('404 Not Found');
+    }
+    var channels = parts.pathname.slice(10).split('|');
+    req.channels = {};
+    req.last_msg = parseInt(parts.query.last);
+    if (isNaN(req.last_msg)) req.last_msg = 0;
+
+    if (!channels.every(function (channel, index, array) {
+        if (!channel || !channel.length)
+            return false;
+        req.channels[channel] = true;
+    })) req.channels = true;
+
+    req.on('close', function () {
+        pollers.remove(req);
+    });
+
+    req.got_message = function (message) {
+        if (req.channels === true || message.channel in req.channels) {
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify(message));
+            pollers.remove(req);
+            return true;
+        }
+        return false;
+    };
+    var got = false;
+    messages.each(function (message) {
+        if (!got && message.id > req.last_msg)
+            got = req.got_message(message);
+    });
+    if (!got) pollers.add(req);
+}).listen(config.http_port, config.http_host);
