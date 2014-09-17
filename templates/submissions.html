@@ -29,16 +29,15 @@
                         if (cell.length < 1) {
                             table.prepend('<tr id="{0}"></tr>'.format(id));
                             cell = table.find('tr#' + id);
+                            alert(cell.length);
                         }
                         $.ajax({
                             url: '{% url 'judge.views.single_submission_query' %}',
-                            data: {id: id},
-                            success: function (data, textStatus, jqXHR) {
-                                cell.html(data.responseText);
-                            },
-                            error: function (data, textStatus, jqXHR) {
-                                console.log('Failed to update submission: ' + id);
-                            }
+                            data: {id: id}
+                        }).done(function (data) {
+                            cell.html(data);
+                        }).fail(function (data) {
+                            console.log('Failed to update submission: ' + id);
                         });
                     }
                 };
