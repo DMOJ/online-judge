@@ -20,27 +20,27 @@
 
                 socket.onmessage = function (event) {
                     var data = JSON.parse(event.data);
-                    var list = $("#test-cases");
+                    var list = $('#test-cases');
                     switch (data.message.type) {
                         case 'test-case':
                             list.append('<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>'.format(
                                     data.message.id, data.message.status, data.message.time,
                                     data.message.memory, data.message.points, data.message.total));
                             break;
-                        case "grading-begin":
+                        case 'grading-begin':
                             break;
-                        case "grading-end":
+                        case 'grading-end':
                             list.append("<br/><br/><b>Final score:</b> {0}/{1}<br/>".format(
                                     data.message.points, data.message.total
                             ));
-			                $("#abort-button").remove();
-                            $("#grading-label").remove();
+			                $('#abort-button').remove();
+                            $('#grading-label').remove();
                             break;
-                        case "compile-error":
-                            $("#execution-title").append("<h3>Compilation Error</h3>");
+                        case 'compile-error':
+                            $('#execution-title').append("<h3>Compilation Error</h3>");
                             list.append(data.message.log.replace("\n", "<br/>"));
-			                $("#abort-button").remove();
-                            $("#grading-label").remove();
+			                $('#abort-button').remove();
+                            $('#grading-label').remove();
                             break;
                     }
                 };
