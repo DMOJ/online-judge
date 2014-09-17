@@ -2,6 +2,7 @@
 {% load static from staticfiles %}
 {% block css %}
     <script src="{% static 'common.js' %}" type="text/javascript"></script>
+    <script src="{% static 'event.js' %}" type="text/javascript"></script>
     {% if not submission.is_graded %}
         <script type="text/javascript">
             $(function () {
