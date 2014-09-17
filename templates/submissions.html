@@ -29,7 +29,6 @@
                         if (cell.length < 1) {
                             table.prepend('<tr id="{0}"></tr>'.format(id));
                             cell = table.find('tr#' + id);
-                            alert(cell.length);
                         }
                         $.ajax({
                             url: '{% url 'judge.views.single_submission_query' %}',
