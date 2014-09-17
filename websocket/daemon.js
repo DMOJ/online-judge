@@ -163,11 +163,13 @@ require('http').createServer(function (req, res) {
     req.last_msg = parseInt(parts.query.last);
     if (isNaN(req.last_msg)) req.last_msg = 0;
 
+    console.log(channels);
     if (!channels.every(function (channel, index, array) {
         if (!channel || !channel.length)
             return false;
-        req.channels[channel] = true;
+        return req.channels[channel] = true;
     })) req.channels = true;
+    console.log(req.channels);
 
     req.on('close', function () {
         pollers.remove(req);
