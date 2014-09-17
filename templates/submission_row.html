@@ -1,3 +1,5 @@
+{% load static from staticfiles %}
+
 <td style="width:10%" class="
 {% if submission.status == 'IE' or submission.status == 'CE' %}{{ submission.status }}
 {% else %}{{ submission.result }}{% endif %}">
