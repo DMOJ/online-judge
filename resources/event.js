@@ -19,9 +19,13 @@ function EventReceiver(websocket, poller, channels, last_msg, onmessage) {
                     long_poll();
                 },
                 error: function (jqXHR, status, error) {
-                    console.log('Long poll failure: ' + status);
-                    console.log(jqXHR);
-                    setTimeout(long_poll, 2000);
+                    if (jqXHR.status == 504)
+                        long_poll();
+                    else {
+                        console.log('Long poll failure: ' + status);
+                        console.log(jqXHR);
+                        setTimeout(long_poll, 2000);
+                    }
                 },
                 dataType: "json"
             });
