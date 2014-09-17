@@ -96,6 +96,7 @@ BRIDGED_DJANGO_PORT = 9998
 EVENT_DAEMON_USE = True
 EVENT_DAEMON_POST = 'ws://localhost:9997/'
 EVENT_DAEMON_GET = 'ws://localhost:9996/'
+EVENT_DAEMON_KEY = None
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

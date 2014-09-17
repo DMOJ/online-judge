@@ -15,6 +15,11 @@ class EventPostingError(RuntimeError):
 class EventPoster(object):
     def __init__(self):
         self._conn = create_connection(settings.EVENT_DAEMON_POST)
+        if settings.EVENT_DAEMON_KEY is not None:
+            self._conn.send(json.dumps({'command': 'auth', 'key': settings.EVENT_DAEMON_KEY}))
+            resp = json.loads(self._conn.recv())
+            if resp['status'] == 'error':
+                raise EventPostingError(resp['code'])
 
     def post(self, channel, message):
         self._conn.send(json.dumps({'command': 'post', 'channel': channel, 'message': message}))
