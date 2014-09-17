@@ -29,11 +29,11 @@ messages.post = function (channel, message) {
         client.got_message(message);
     });
     return message.id;
-},
+};
 
 messages.last = function () {
     return this.tail().id;
-}
+};
 
 wss_receiver.on('connection', function (socket) {
     socket.channel = null;
