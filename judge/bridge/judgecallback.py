@@ -18,7 +18,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def problem_data(self, problem):
         problem = Problem.objects.get(code=problem)
-        params = dict(pair.split('=', 1) for pair in problem.grader_param.split(';'))
+        params = dict(pair.split('=', 1) for pair in problem.grader_param.split(';')) if problem.grader_param else {}
         return problem.time_limit, problem.memory_limit, problem.short_circuit, problem.grader.key, params
 
     def on_grading_begin(self, packet):
