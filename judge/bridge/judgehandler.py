@@ -4,6 +4,7 @@ import SocketServer
 import struct
 import json
 import threading
+import time
 
 size_pack = struct.Struct('!I')
 logger = logging.getLogger('judge.bridge')
@@ -22,12 +23,14 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'problem-not-exist': self.on_bad_problem,
             'submission-terminated': self.on_submission_terminated,
             'supported-problems': self.on_supported_problems,
+            'ping-response': self.on_ping_response
         }
         self._current_submission = None
         self._current_submission_event = threading.Event()
         self._load = False
         self._problems = []
         self.problems = {}
+        self.latency = None
 
         logger.info('Judge connected from: %s', self.client_address)
         self.server.judges.append(self)
@@ -89,6 +92,9 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self._current_submission_event.clear()
         return self._current_submission
 
+    def ping(self):
+        self._send({'name': 'ping', 'when': time.time()})
+
     def _send(self, data):
         data = json.dumps(data, separators=(',', ':'))
         compress = data.encode('zlib')
@@ -139,6 +145,9 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)
+
+    def on_ping_response(self, packet):
+        self.latency = packet['time']
 
     def _free_self(self, packet):
         self._load = False

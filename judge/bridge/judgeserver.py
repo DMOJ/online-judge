@@ -24,9 +24,8 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
     def ping_judge(self):
         while True:
             for judge in self.judges:
-                judge._send({'name': 'ping',
-                             'when': time.time()})
-            time.sleep(12)
+                judge.ping()
+            time.sleep(3600)
 
     @staticmethod
     def ping_database():
