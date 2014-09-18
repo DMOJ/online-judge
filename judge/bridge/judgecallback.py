@@ -2,7 +2,7 @@ import logging
 
 from django.db import connection
 from .judgehandler import JudgeHandler
-from judge.models import Submission, SubmissionTestCase
+from judge.models import Submission, SubmissionTestCase, Problem
 from judge import event_poster as event
 
 logger = logging.getLogger('judge.bridge')
@@ -15,6 +15,11 @@ class DjangoJudgeHandler(JudgeHandler):
             submission = Submission.objects.get(id=self._load)
             submission.status = 'IE'
             submission.save()
+
+    def problem_data(self, problem):
+        problem = Problem.objects.get(code=problem)
+        params = dict(pair.split('=', 1) for pair in problem.grader_param.split(';'))
+        return problem.time_limit, problem.memory_limit, problem.short_circuit, problem.grader.key, params
 
     def on_grading_begin(self, packet):
         JudgeHandler.on_grading_begin(self, packet)
