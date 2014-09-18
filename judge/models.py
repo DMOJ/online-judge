@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Max
 import pytz
@@ -39,6 +40,14 @@ class Language(models.Model):
     key = models.CharField(max_length=6, verbose_name='Short identifier', unique=True)
     name = models.CharField(max_length=20, verbose_name='Name as shown to user')
     ace = models.CharField(max_length=20, verbose_name='ACE mode name')
+
+    def __unicode__(self):
+        return self.name
+
+
+class GraderType(models.Model):
+    key = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
 
     def __unicode__(self):
         return self.name
@@ -101,6 +110,11 @@ class ProblemGroup(models.Model):
         return self.full_name
 
 
+def validate_grader_param(value):
+    if not all('=' in i for i in value.split(';')):
+        raise ValidationError('not all params are key-value pairs')
+
+
 class Problem(models.Model):
     code = models.CharField(max_length=20, verbose_name='Problem code', unique=True)
     name = models.CharField(max_length=100, verbose_name='Problem name', db_index=True)
@@ -108,8 +122,12 @@ class Problem(models.Model):
     user = models.ForeignKey(Profile, verbose_name='Creator')
     types = models.ManyToManyField(ProblemType, verbose_name='Problem types')
     groups = models.ManyToManyField(ProblemGroup, verbose_name='Problem groups')
-    time_limit = models.FloatField(verbose_name='Time limit')
-    memory_limit = models.FloatField(verbose_name='Memory limit')
+    time_limit = models.IntegerField(verbose_name='Time limit')
+    memory_limit = models.IntegerField(verbose_name='Memory limit')
+    short_circuit = models.BooleanField(default=False)
+    grader = models.ForeignKey(GraderType)
+    grader_param = models.CharField(verbose_name='Grader parameters', max_length=100, blank=True,
+                                    validators=[validate_grader_param])
     points = models.FloatField(verbose_name='Points')
     partial = models.BooleanField(verbose_name='Allows partial points')
     allowed_languages = models.ManyToManyField(Language, verbose_name='Allowed languages')

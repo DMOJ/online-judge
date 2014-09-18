@@ -5,7 +5,7 @@ from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceF
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
 
-from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment
+from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -21,7 +21,7 @@ class ProfileAdmin(admin.ModelAdmin):
 class ProblemAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('code', 'name', 'user', 'description', 'types', 'groups')}),
-        ('Points', {'fields': (('points', 'partial'),)}),
+        ('Points', {'fields': (('points', 'partial'), 'short_circuit', 'grader', 'grader_param')}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
         ('Language', {'fields': ('allowed_languages',)})
     )
@@ -181,6 +181,7 @@ class ProblemTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Language, LanguageAdmin)
+admin.site.register(GraderType)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Problem, ProblemAdmin)
