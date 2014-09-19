@@ -14,15 +14,15 @@ def user_completed_codes(profile):
     return list(Submission.objects.filter(user=profile, result='AC').values_list('problem__code', flat=True).distinct())
 
 
-def submission_source(request, code):
+def submission_source(request, sub_id):
     try:
-        submission = Submission.objects.get(id=int(code))
+        submission = Submission.objects.get(id=int(sub_id))
 
         if not request.user.is_authenticated():
             raise PermissionDenied()
 
         if not request.user.profile.is_admin() and submission.user != request.user.profile and \
-                not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=code).exists():
+                not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=submission.problem.code).exists():
             raise PermissionDenied()
 
         return render_to_response('submission_src.html',
