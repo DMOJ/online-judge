@@ -42,7 +42,7 @@ def problem(request, code):
 def problems(request, filter=None):
     if filter is None:
         filter = {}
-    filter.update(request.GET)
+    filter.update(request.GET.iteritems())
     return render_to_response('problems.html', {
         'problems': Problem.objects.filter(**filter).order_by('code'),
         'title': 'Problems'
