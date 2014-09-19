@@ -12,7 +12,7 @@
                         var list = $('#test-cases');
                         switch (message.type) {
                             case 'test-case':
-                                list.append('<br/><b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})'.format(
+                                list.append('<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>'.format(
                                         message.id, message.status, message.time,
                                         message.memory, message.points, message.total));
                                 break;
@@ -71,8 +71,8 @@
             {% else %}
                 <b>Submission aborted!</b>
             {% endif %}
+            <br/>
         {% endif %}
-        <br/>
     </div>
     {% if not submission.is_graded %}
         <br/>
