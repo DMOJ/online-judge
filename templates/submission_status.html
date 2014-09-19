@@ -12,7 +12,7 @@
                         var list = $('#test-cases');
                         switch (message.type) {
                             case 'test-case':
-                                list.append('<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>'.format(
+                                list.append('<br/><b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})'.format(
                                         message.id, message.status, message.time,
                                         message.memory, message.points, message.total));
                                 break;
