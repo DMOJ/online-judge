@@ -60,11 +60,11 @@
     <br/>
 
     <div id="test-cases">
+        {% for case in test_cases %}
+            <b>Test case #{{ forloop.counter }}:</b> {{ case.status }} [{{ case.time|floatformat:"3" }}s,
+            {{ case.memory }}kb] ({{ case.points }}/{{ case.total }})<br/>
+        {% endfor %}
         {% if submission.is_graded %}
-            {% for case in test_cases %}
-                <b>Test case #{{ forloop.counter }}:</b> {{ case.status }} [{{ case.time|floatformat:"3" }}s,
-                {{ case.memory }}kb] ({{ case.points }}/{{ case.total }})<br/>
-            {% endfor %}
             <br/><br/>
             {% if submission.result != "AB" %}
                 <b>Final score:</b> {{ submission.points }}/{{ submission.problem.points }}
