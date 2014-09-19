@@ -33,7 +33,7 @@ block body
                 for rank, user in users
                     tr
                         td #{rank}
-                        td(class='#{user.display_rank}')
+                        td(class=user.display_rank)
                             a(href='{% url "judge.views.user" user.user.username %}')
                                 | #{user.long_display_name}
                         td #{user.points}
