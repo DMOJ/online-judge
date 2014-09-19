@@ -71,6 +71,13 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     'judge.template_context.site',
 )
 
+TEMPLATE_LOADERS = (
+    ('pyjade.ext.django.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
+)
+
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )

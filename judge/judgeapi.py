@@ -62,7 +62,7 @@ def judge_submission(submission):
         submission.status = 'QU' if (response['name'] == 'submission-received' and
                                      response['submission-id'] == submission.id) else 'IE'
 
-        id = 1 if submission.user.is_admin() else (2 if submission.user.is_problem_setter() else 0)
+        id = 1 if submission.user.is_admin else (2 if submission.user.is_problem_setter else 0)
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
         success = True
     return success

@@ -21,7 +21,7 @@ def submission_source(request, sub_id):
         if not request.user.is_authenticated():
             raise PermissionDenied()
 
-        if not request.user.profile.is_admin() and submission.user != request.user.profile and \
+        if not request.user.profile.is_admin and submission.user != request.user.profile and \
                 not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=submission.problem.code).exists():
             raise PermissionDenied()
 
@@ -43,7 +43,7 @@ def submission_status(request, code):
         if not request.user.is_authenticated():
             raise PermissionDenied()
 
-        if not request.user.profile.is_admin() and submission.user != request.user.profile and \
+        if not request.user.profile.is_admin and submission.user != request.user.profile and \
                 not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=code).exists():
             raise PermissionDenied()
         test_cases = SubmissionTestCase.objects.filter(submission=submission)
@@ -62,7 +62,7 @@ def abort_submission(request, code):
         raise Http404()
     submission = Submission.objects.get(id=int(code))
     if not request.user.is_authenticated() or (
-                    request.user.profile != submission.user and not request.user.profile.is_admin()):
+                    request.user.profile != submission.user and not request.user.profile.is_admin):
         raise PermissionDenied()
     submission.abort()
     return HttpResponseRedirect(reverse('judge.views.submission_status', args=(code,)))
