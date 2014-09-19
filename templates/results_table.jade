@@ -2,7 +2,7 @@ div.table
     h3 Statistics
     hr
     table
-        for k, v in results
-            tr(class='#{k[1]}')
-                td(style='font-weight:bold;text-align:left') #{k[0]}
+        for (k0, k1), v in results
+            tr(class='#{k1}')
+                td(style='font-weight:bold;text-align:left') #{k0}
                 td(style='color:black') #{v}
