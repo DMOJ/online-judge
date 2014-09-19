@@ -98,7 +98,7 @@ class Profile(models.Model):
 
     def __unicode__(self):
         # return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
-        return self.long_display_name()
+        return self.long_display_name
 
 
 class ProblemType(models.Model):
