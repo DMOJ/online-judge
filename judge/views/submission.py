@@ -25,7 +25,7 @@ def submission_source(request, sub_id):
                 not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=submission.problem.code).exists():
             raise PermissionDenied()
 
-        return render_to_response('submission_src.html',
+        return render_to_response('submission_src.jade',
                                   {
                                       'submission': submission,
                                       'title': 'Submission %s of %s by %s' % (
