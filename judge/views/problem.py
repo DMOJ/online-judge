@@ -15,13 +15,13 @@ def get_result_table(**kwargs):
     for code in ['AC', 'WA', 'TLE', 'IR', 'MLE']:
         results[code] = submissions.filter(result=code).count()
     results['CE'] = submissions.filter(status='CE').count()
-    return [(('Accepted', 'AC'), results['AC']),
-            (('Wrong Answer', 'WA'), results['WA']),
-            (('Compile Error', 'CE'), results['CE']),
-            (('Time Limit Exceed', 'TLE'), results['TLE']),
-            (('Memory Limit Exceed', 'MLE'), results['MLE']),
-            (('Invalid Return', 'IR'), results['IR']),
-            (('Total', 'TOT'), sum(results.values()))]
+    return [('Accepted', 'AC', results['AC']),
+            ('Wrong Answer', 'WA', results['WA']),
+            ('Compile Error', 'CE', results['CE']),
+            ('Time Limit Exceed', 'TLE', results['TLE']),
+            ('Memory Limit Exceed', 'MLE', results['MLE']),
+            ('Invalid Return', 'IR', results['IR']),
+            ('Total', 'TOT', sum(results.values()))]
 
 
 def problem(request, code):
