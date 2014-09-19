@@ -29,7 +29,6 @@ def make_timezones():
 TIMEZONE = make_timezones()
 del make_timezones
 
-
 if 'tinymce' in settings.INSTALLED_APPS:
     from tinymce.models import HTMLField
 else:
@@ -65,23 +64,31 @@ class Profile(models.Model):
     def calculate_points(self):
         self.points = sum(map(itemgetter('points'),
                               Submission.objects.filter(user=self, points__isnull=False).values('problem_id').distinct()
-                                        .annotate(points=Max('points'))))
+                              .annotate(points=Max('points'))))
         self.save()
         return self.points
 
+    @property
     def display_name(self):
         if self.name:
             return self.name
         return self.user.username
 
+    @property
     def long_display_name(self):
         if self.name:
             return u'%s (%s)' % (self.user.username, self.name)
         return self.user.username
 
+    @property
+    def display_rank(self):
+        return 'admin' if self.is_admin else ('setter' if self.is_problem_setter else 'user')
+
+    @property
     def is_admin(self):
         return self.user.is_superuser or self.user.groups.filter(name='Admin').exists()
-    
+
+    @property
     def is_problem_setter(self):
         return self.user.is_superuser or self.user.groups.filter(name='ProblemSetter').exists()
 
@@ -90,7 +97,7 @@ class Profile(models.Model):
         return Submission.objects.filter(user=self, points__gt=0).values('problem').distinct().count()
 
     def __unicode__(self):
-        #return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
+        # return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
         return self.long_display_name()
 
 
@@ -225,6 +232,7 @@ class Comment(models.Model):
 class CommentVote(models.Model):
     class Meta:
         unique_together = ['voter', 'comment']
+
     voter = models.ForeignKey(Profile)
     comment = models.ForeignKey(Comment)
     score = models.IntegerField()

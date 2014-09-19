@@ -37,7 +37,6 @@
     <span style="color:#555">on {{ submission.date|date:"N j, o, g:i a" }}</span>
 </td>
 
-<!-- TODO don't show if not available for user -->
 <td style="white-space:nowrap">
     {% if request.user.is_authenticated %}
     {% if request.user.profile == submission.user or request.user.profile.is_admin or submission.problem in completed_problems %}

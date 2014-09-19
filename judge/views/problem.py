@@ -31,7 +31,7 @@ def problem(request, code):
         if form is None:
             return HttpResponseRedirect(request.path)
         return render_to_response('problem.html', {'problem': problem, 'results': get_result_table(problem__code=code),
-                                                   'title': 'Problem %s' % problem.name,
+                                                   'title': 'Problem: %s' % problem.name,
                                                    'comment_list': problem_comments(problem),
                                                    'comment_form': form},
                                   context_instance=RequestContext(request))
@@ -77,7 +77,7 @@ def problem_submit(request, problem=None, submission=None):
         form.fields['language'].queryset = form_data['problem'].allowed_languages
     form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = request.user.profile.ace_theme
-    return render_to_response('problem_submit.html', {
+    return render_to_response('problem_submit.jade', {
         'form': form,
         'title': 'Submit',
         'langs': form.fields['language'].queryset.all(),

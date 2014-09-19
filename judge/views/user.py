@@ -21,7 +21,7 @@ def user(request, user=None):
         result = Submission.objects.filter(user=user, points__gt=0) \
                            .values('problem__code', 'problem__name', 'problem__points') \
                            .distinct().annotate(points=Max('points'))
-        return render_to_response('user.html', {'user': user, 'title': 'User %s' % user.long_display_name(),
+        return render_to_response('user.jade', {'user': user, 'title': 'User %s' % user.long_display_name,
                                                 'best_submissions': result},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
@@ -38,7 +38,7 @@ def edit_profile(request):
             return HttpResponseRedirect(request.path)
     else:
         form = ProfileForm(instance=profile)
-    return render_to_response('edit_profile.html', {'form': form, 'title': 'Edit profile'},
+    return render_to_response('edit_profile.jade', {'form': form, 'title': 'Edit profile'},
                               context_instance=RequestContext(request))
 
 
@@ -56,5 +56,5 @@ def ranker(profiles):
 
 
 def users(request):
-    return render_to_response('users.html', {'users': ranker(Profile.objects.order_by('-points')), 'title': 'Users'},
+    return render_to_response('users.jade', {'users': ranker(Profile.objects.order_by('-points')), 'title': 'Users'},
                               context_instance=RequestContext(request))

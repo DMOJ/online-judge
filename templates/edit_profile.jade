@@ -1,0 +1,7 @@
+extends base
+
+block body
+    form.form-area(action='', method='post')
+        -csrf_token
+        table(border=0) #{form.as_table}
+        input(type='submit', value='Update profile')

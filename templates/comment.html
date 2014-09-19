@@ -9,7 +9,7 @@
         <div class="comment-header">
             <span class="comment-author">
                 <!--<img src="{% gravatar_url comment.author.user.email 30 %}" width="30" height="30">-->
-                <span class="{% if comment.author.is_admin %}admin{% else %}{% if comment.author.is_problem_setter %}setter{% else %}user{% endif %}{% endif %}">
+                <span class="{{ comment.author.display_rank }}">
                     <a href="{% url 'judge.views.user' comment.author.user.username %}">{{ comment.author.user.username }}</a>
                </span>
             </span> on

@@ -130,6 +130,10 @@ h1 {
     line-height: 1em
 }
 
+b {
+    font-weight: bold;
+}
+
 h2 {
     font-weight: 300;
     font-size: 2em;
@@ -174,6 +178,10 @@ h4 {
     color: #5C5954
 }
 
+#user-links a {
+    color: #FFF
+}
+
 nav ul {
     list-style: none none;
     margin: 0;
@@ -183,7 +191,7 @@ nav ul {
 nav {
     background: #393630;
     text-align: left;
-    box-shadow: 0px 0px 10px #333
+    box-shadow: 0 0 10px #333
 }
 
 nav ul li {
@@ -229,6 +237,10 @@ hr {
     height: 100%;
     display: block;
     margin: 0 auto
+}
+
+#content .title {
+    color: #393630
 }
 
 footer {

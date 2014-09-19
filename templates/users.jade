@@ -1,0 +1,41 @@
+extends base
+-load staticfiles
+
+block css
+    script(src='{% static "tablesorter.js" %}' type='text/javascript')
+    script(type='text/javascript')
+        $(document).ready(function () {
+            $("#users-table").tablesorter({
+                sortList: [
+                    [2, 1]
+                ]
+            });
+        });
+    style
+        #users-table .rank, .points, .problems {
+            white-space: nowrap
+        }
+
+        #users-table .username {
+            width: 100%
+        }
+
+block body
+    div(class='table')
+        table(id='users-table')
+            thead
+                tr
+                    th(class='rank') Rank
+                    th(class='username') Username
+                    th(class='points') Points
+                    th(class='problems') Problems
+            tbody
+                for rank, user in users
+                    tr
+                        td #{rank}
+                        td(class='#{user.display_rank}')
+                            a(href='{% url "judge.views.user" user.user.username %}')
+                                | #{user.long_display_name}
+                        td #{user.points}
+                        td #{user.problems}
+                            

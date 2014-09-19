@@ -1,0 +1,31 @@
+extends base
+-load staticfiles
+-load gravatar
+
+block css
+    style
+        a.edit-profile {
+            float: right;
+            padding-top: 1em;
+        }
+
+block header
+    if user.user == request.user
+        a(class="edit-profile" href='{% url "judge.views.edit_profile" %}')
+            | Edit profile
+
+block body
+    if user.name
+        b #{user.name}
+        br
+        br
+    h4 #{user.problems} problems solved.
+    br
+    b Total points:&nbsp;
+    | #{user.calculate_points}
+    ul
+        for entry in best_submissions
+            li
+                a(href='{% url "judge.views.problem" entry.problem__code %}') #{entry.problem__name}
+                | (#{entry.points} / #{entry.problem__points})
+        

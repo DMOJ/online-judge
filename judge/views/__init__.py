@@ -22,5 +22,5 @@ class TemplateView(TemplateView):
 def home(request):
     if FlatPage.objects.filter(url='/').exists():
         return flatpage(request, '/')
-    return render_to_response('base.html', {'title': 'Home'},
+    return render_to_response('base.jade', {'title': 'Home'},
                               context_instance=RequestContext(request))
