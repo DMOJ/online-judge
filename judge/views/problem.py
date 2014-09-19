@@ -39,9 +39,14 @@ def problem(request, code):
         raise Http404()
 
 
-def problems(request):
-    return render_to_response('problems.html', {'problems': Problem.objects.order_by('code'), 'title': 'Problems'},
-                              context_instance=RequestContext(request))
+def problems(request, filter=None):
+    if filter is None:
+        filter = {}
+    filter.update(request.GET)
+    return render_to_response('problems.html', {
+        'problems': Problem.objects.filter(**filter).order_by('code'),
+        'title': 'Problems'
+    }, context_instance=RequestContext(request))
 
 
 @login_required
