@@ -42,6 +42,7 @@ block body
     br
     b Language:
     | &nbsp;#{submission.language}
+    br
     b Problem:&nbsp
     a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
     br
