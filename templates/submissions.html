@@ -42,7 +42,7 @@
     <div style="margin-bottom:10px;">
         {% include "submissions_pages.html" %}
     </div>
-    <table id="submissions-table" class="table" style="width:75%;border:0px;">
+    <table id="submissions-table" class="table" style="width:75%;border:0px;margin-left:0">
         {% for submission in submissions %}
             <tr id="{{ submission.id }}">
                 {% include "submission_row.html" %}
