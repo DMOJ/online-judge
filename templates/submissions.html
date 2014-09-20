@@ -40,7 +40,7 @@
         {% include "results_table.jade" %}
     </div>
     <div style="margin-bottom:10px;">
-        {% include "submissions_pages.html" %}
+        {% include "submissions_pages.jade" %}
     </div>
     <table id="submissions-table" class="table" style="width:75%;border:0px;margin-left:0">
         {% for submission in submissions %}
@@ -50,6 +50,6 @@
         {% endfor %}
     </table>
     <div style="margin-top:10px;">
-        {% include "submissions_pages.html" %}
+        {% include "submissions_pages.jade" %}
     </div>
 {% endblock %}

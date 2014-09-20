@@ -1,0 +1,14 @@
+.pagination
+    if submission.has_previous
+        a(href=submission.previous_page_number) <<
+    
+    for page in submissions.page_range
+        if not page
+            | ...
+        else
+            if page == submissions.number
+                a.active-page(href=page) #{page}
+            else
+                a(href=page) #{page}
+    if submissions.has_next
+        a(href=submissions.next_page_number) >>
