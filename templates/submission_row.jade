@@ -16,11 +16,11 @@ td(class='{{ submission_class }}', style='width:10%')
                     | ---
                 else
                     | {{ submission.points|default_if_none:0|floatformat:"-2" }} /
-                    | {{ submission.problem.points|floatformat:"0" }}
+                    | &nbsp;{{ submission.problem.points|floatformat:"0" }}
     br
     span(style='font-size:0.7em;font-weight:bold')
-        span.status {{ submission.result|default_if_none:submission.status }}</span>
-        | |
+        span.status {{ submission.result|default_if_none:submission.status }}
+        | &nbsp;|&nbsp;
         span.language {{ submission.language.key }}
 td(style='width:90%;text-align:left;padding-left:20px')
     if show_problem
@@ -32,12 +32,12 @@ td(style='width:90%;text-align:left;padding-left:20px')
     span(style="color:#555") on {{ submission.date|date:"N j, o, g:i a" }}
 td(style='white-space:nowrap')
     if request.user.is_authenticated
-        if request.user.profile == submission.user or request.user.profile.is_admin or submission.problem.code in completed_problem_codes %}
+        if request.user.profile == submission.user or request.user.profile.is_admin or submission.problem.code in completed_problem_codes
             a(href='{% url "judge.views.submission_source" submission.id %}') view
-            | |
+            | &nbsp;|&nbsp;
             a(href='{% url "judge.views.submission_status" submission.id %}') detail
     if perms.judge.change_submission
-        | |
+        | &nbsp;|&nbsp;
         a(href='{% url "admin:judge_submission_change" submission.id %}') admin
 td(style='white-space:nowrap')
     if submission.status != 'QU' and submission.status != 'G' and submission.status != 'CE' and submission.status != 'IE' and submission.status != 'AB'
