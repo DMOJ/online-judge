@@ -13,6 +13,7 @@ class CustomRegistrationForm(RegistrationForm):
 class RegistrationView(OldRegistrationView):
     title = 'Registration'
     form_class = CustomRegistrationForm
+    template_name = 'registration/registration_form.jade'
 
     def get_context_data(self, **kwargs):
         if 'title' not in kwargs:
@@ -31,6 +32,7 @@ class RegistrationView(OldRegistrationView):
 
 class ActivationView(OldActivationView):
     title = 'Registration'
+    template_name = 'registration/activate.jade'
 
     def get_context_data(self, **kwargs):
         if 'title' not in kwargs:
