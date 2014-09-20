@@ -10,7 +10,7 @@ class SetVarNode(template.Node):
         self.var_name = var_name
 
     def render(self, context):
-        context[self.var_name] = self.new_val
+        context[self.var_name] = self.new_val.resolve(context)
         return ''
 
 
