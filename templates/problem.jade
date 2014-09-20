@@ -24,12 +24,12 @@ block body
         hr
         br
         b Points:
-        |&nbsp;#{problem.points}
+        | &nbsp;#{problem.points}
         if problem.prtial
-            |&nbsp(partial)
+            | &nbsp(partial)
         br
         b Time Limit:
-        |&nbsp;#{problem.time_limit}s
+        | &nbsp;#{problem.time_limit}s
         br
         b Memory Limit
         -with memory=problem.memory_limit
@@ -42,12 +42,12 @@ block body
         br
         b Problem type(s):
         br
-        |&nbsp;#{problem.types_list|join:", "}
+        | #{problem.types_list|join:", "}
         br
         br
         b Languages allowed:
         br
-        |&nbsp;#{problem.languages_list|join:", "}
+        | #{problem.languages_list|join:", "}
     .problem-description
         | #{problem.description|safe}
     .comment-area
