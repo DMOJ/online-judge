@@ -1,0 +1,9 @@
+extends ../base
+    block body
+        if form.errors
+            p.error Invalid username or password.
+        form.form-area(action='', method='post')
+            -csrf_token
+            table(border=0) #{form.as_table}
+            button(type='submit') Login!
+            input(type='hidden' name='next' value=next)
