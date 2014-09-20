@@ -10,25 +10,25 @@
             $(function () {
                 var table = $('#submissions-table');
                 var receiver = new EventReceiver(
-                    "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
-                    ['submissions'], {{ last_msg }}, function (message) {
-                        if (message.type == 'update-submission') {
-                            var id = message.id;
-                            var cell = table.find('tr#' + id);
-                            if (cell.length < 1) {
-                                table.prepend('<tr id="{0}"></tr>'.format(id));
-                                cell = table.find('tr#' + id);
+                        "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                        ['submissions'], {{ last_msg }}, function (message) {
+                            if (message.type == 'update-submission') {
+                                var id = message.id;
+                                var cell = table.find('tr#' + id);
+                                if (cell.length < 1) {
+                                    table.prepend('<tr id="{0}"></tr>'.format(id));
+                                    cell = table.find('tr#' + id);
+                                }
+                                $.ajax({
+                                    url: '{% url 'judge.views.single_submission_query' %}',
+                                    data: {id: id}
+                                }).done(function (data) {
+                                    cell.html(data);
+                                }).fail(function (data) {
+                                    console.log('Failed to update submission: ' + id);
+                                });
                             }
-                            $.ajax({
-                                url: '{% url 'judge.views.single_submission_query' %}',
-                                data: {id: id}
-                            }).done(function (data) {
-                                cell.html(data);
-                            }).fail(function (data) {
-                                console.log('Failed to update submission: ' + id);
-                            });
                         }
-                    }
                 );
             });
         </script>
@@ -40,18 +40,16 @@
         {% include "results_table.jade" %}
     </div>
     <div style="margin-bottom:10px;">
-    	{% include "submissions_pages.html" %}
+        {% include "submissions_pages.html" %}
     </div>
-    <div class="table" style="width:75%;border:0px;">
-        <table id="submissions-table">
-            {% for submission in submissions %}
-                <tr id="{{ submission.id }}">
-                    {% include "submission_row.html" %}
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
+    <table id="submissions-table" class="table" style="width:75%;border:0px;">
+        {% for submission in submissions %}
+            <tr id="{{ submission.id }}">
+                {% include "submission_row.html" %}
+            </tr>
+        {% endfor %}
+    </table>
     <div style="margin-top:10px;">
-    	{% include "submissions_pages.html" %}
+        {% include "submissions_pages.html" %}
     </div>
 {% endblock %}
