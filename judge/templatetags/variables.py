@@ -6,7 +6,7 @@ register = template.Library()
 
 class SetVarNode(template.Node):
     def __init__(self, new_val, var_name):
-        self.new_val = new_val
+        self.new_val = template.Variable(new_val)
         self.var_name = var_name
 
     def render(self, context):
@@ -25,7 +25,4 @@ def setvar(parser, token):
     m = re.search(r'(.*?) as (\w+)', arg)
     if not m:
         raise template.TemplateSyntaxError, "%r tag had invalid arguments" % tag_name
-    new_val, var_name = m.groups()
-    if not (new_val[0] == new_val[-1] and new_val[0] in ('"', "'")):
-        raise template.TemplateSyntaxError, "%r tag's argument should be in quotes" % tag_name
-    return SetVarNode(new_val[1:-1], var_name)
+    return SetVarNode(*m.groups())
