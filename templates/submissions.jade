@@ -48,7 +48,7 @@ block body
     table#submissions-table.table
         for submission in submissions
             tr(id=submission.id)
-                include submission_row.html
+                include submission_row
 
     div(style='margin-top:10px;')
         include submissions_pages

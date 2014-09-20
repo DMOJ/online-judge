@@ -131,7 +131,7 @@ def problem_submissions(request, code, page, dynamic_update, title, order, filte
 
 def single_submission(request, id):
     try:
-        return render_to_response('submission_row.html', {
+        return render_to_response('submission_row.jade', {
             'submission': Submission.objects.get(id=int(id)),
             'show_problem': True
         }, context_instance=RequestContext(request))
