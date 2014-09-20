@@ -1,5 +1,5 @@
 -load gravatar
-li.comment(id='comment-' + comment.id)
+li.comment(id='comment-{{comment.id}}')
     .comment-box
         div(style='float:left')
             a(href='javascript:comment_upvote({{comment.id}})') +
@@ -16,7 +16,7 @@ li.comment(id='comment-' + comment.id)
             span.comment-time &nbsp;#{comment.time|date:"N j, o, g:i a"}
             span.comment-title &nbsp;#{comment.title}
             span.comment-operation
-                a(href='javascript:comment_set_parent("{{comment.id}}")') &nbsp;Reply
+                a(href='javascript:comment_set_parent({{comment.id}})') &nbsp;Reply
                 if perms.judge.change_comment
                     a(href='{% url "admin:judge_comment_change" comment.id %}') &nbsp;Admin
         .comment-body
