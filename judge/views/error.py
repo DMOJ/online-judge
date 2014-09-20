@@ -2,7 +2,7 @@ from django.shortcuts import *
 
 
 def error(request, context, status):
-    template = loader.get_template('error.html')
+    template = loader.get_template('error.jade')
     return HttpResponse(template.render(RequestContext(request, context)), status=status)
 
 
