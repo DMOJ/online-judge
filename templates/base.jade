@@ -66,7 +66,7 @@ html(lang='en')
                         a(href='/accounts/register/') Register
         br
         div#content
-            h2(style='color:#393630')
+            h2(style='color:#393630; display:inline')
                 block content_title
                     | #{title}
             block header
@@ -75,7 +75,3 @@ html(lang='en')
             block body
             footer
                 p Generated on {% now "H:i:s, F d, Y O" %}
-
-
-
-
