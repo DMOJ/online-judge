@@ -1,7 +1,12 @@
 - load static from staticfiles
 - load mathtag
 - load admin_urls
-td(class='{% if submission.status == 'IE' or submission.status == 'CE' %}{{ submission.status }}{% else %}{{ submission.result }}{% endif %}', style='width:10%')
+- load variables
+if submission.status == 'IE' or submission.status == 'CE'
+    - setvar '{{ submission.status }}' submission_class
+else
+    - setvar '{{ submission.result }}' submission_class
+td(class='#{submission_class}', style='width:10%')
     span.score
         if not submission.is_graded
             img(src='{% static "loading.gif" %}', alt='Grading...', height='20px')
