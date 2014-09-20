@@ -1,11 +1,12 @@
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.forms import CheckboxSelectMultiple, ModelForm, ModelMultipleChoiceField
+from django.forms import ModelForm, ModelMultipleChoiceField
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType
+from judge.widgets import CheckboxSelectMultipleWithSelectAll
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -29,7 +30,7 @@ class ProblemAdmin(admin.ModelAdmin):
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'allowed_languages':
-            kwargs['widget'] = CheckboxSelectMultiple()
+            kwargs['widget'] = CheckboxSelectMultipleWithSelectAll()
         return super(ProblemAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
