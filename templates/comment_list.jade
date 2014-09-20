@@ -1,7 +1,7 @@
-{% load staticfiles %}
+-load staticfiles
 
-<script type="text/javascript" src="{% static 'jquery-cookie.js' %}"></script>
-<script type="text/javascript">
+script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
+script(type='text/javascript')
     $(document).ready(function () {
         function csrfSafeMethod(method) {
             // these HTTP methods do not require CSRF protection
@@ -38,34 +38,24 @@
         }
 
         window.comment_upvote = function (id) {
-            ajax_vote('{% url 'judge.views.upvote_comment' %}', id, 1);
+            ajax_vote('{% url "judge.views.upvote_comment" %}', id, 1);
         };
 
         window.comment_downvote = function (id) {
-            ajax_vote('{% url 'judge.views.downvote_comment' %}', id, -1);
+            ajax_vote('{% url "judge.views.downvote_comment" %}', id, -1);
         };
     });
-</script>
 
-<ul class="comments top-level-comments">
-    {% if comment_list %}
-        {% for comment in comment_list %}
-            {% include "comment.jade" %}
-        {% endfor %}
-    {% endif %}
-</ul>
+ul.comments.top-level-comments
+    if comments_list
+        for comment in comment_list
+            include comment
 
-{% if request.user.is_authenticated and comment_form %}
-    <div class="comment-submit form-area">
-        {% block comment_submit_title %}
-            <h4>New Comment</h4>
-        {% endblock %}
-        <form action="" method="post" id="comment-submit">
-            {% csrf_token %}
-            <table border="0">
-                {{ comment_form.as_table }}
-            </table>
-            <input type="submit" value="Submit!"/>
-        </form>
-    </div>
-{% endif %}
+if request.user.is_authenticated and comment_form
+    .form-area.comment-submit
+        block comment_submit_title
+            h4 New Comment
+        form#comment-submit(action='', method='post')
+            -csrf_token
+            table(border=0) #{comment_form.as_table}
+            input(type='submit', value='Submit!')

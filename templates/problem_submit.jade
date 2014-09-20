@@ -29,7 +29,7 @@ block media
     | </script>
 
 block body
-    form.form-area(action='', method='post', id='problem_submit')
+    form#problem_submit.form-area(action='', method='post')
         -csrf_token
         table(border=0) #{form.as_table}
         input(type='submit', value='Submit!')
