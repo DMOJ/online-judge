@@ -3,9 +3,9 @@
 - load admin_urls
 - load variables
 if submission.status == 'IE' or submission.status == 'CE'
-    - setvar {{ submission.status }} as submission_class
+    - setvar submission.status as submission_class
 else
-    - setvar {{ submission.result }} as submission_class
+    - setvar submission.result as submission_class
 td(class='{{ submission_class }}', style='width:10%')
     span.score
         if not submission.is_graded
