@@ -1,0 +1,78 @@
+extends base
+-load staticfiles
+
+block media
+    script(type='text/javascript', src='{% static "common.js" %}')
+    script(type='text/javascript', src='{% static "event.js" %}')
+    if not submission.is_graded
+        script(type='text/javascript')
+            $(function () {
+                var receiver = new EventReceiver(
+                    "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                    ['sub_{{ submission.id }}'], {{ last_msg }}, function (message) {
+                        var list = $('#test-cases');
+                        switch (message.type) {
+                            case 'test-case':
+                                list.append('<b>Test case #{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>'.format(
+                                        message.id, message.status, message.time,
+                                        message.memory, message.points, message.total));
+                                break;
+                            case 'grading-begin':
+                                break;
+                            case 'grading-end':
+                                list.append("<br/><b>Final score:</b> {0}/{1}<br/>".format(
+                                        message.points, message.total
+                                ));
+                                $('#abort-button').remove();
+                                $('#grading-label').remove();
+                                break;
+                            case 'compile-error':
+                                $('#execution-title').append("<h3>Compilation Error</h3>");
+                                list.append(message.log.replace("\n", "<br/>"));
+                                $('#abort-button').remove();
+                                $('#grading-label').remove();
+                                break;
+                        }
+                    }
+                );
+            });
+
+block body
+    | Submitted on #{submission.date}
+    br
+    b Language:
+    | &nbsp;#{submission.language}
+    b Problem:&nbsp
+    a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
+    br
+    if request.user == submission.user.user
+        a(href='{% url "judge.views.problem_submit" submission.problem.code submission.id %}') Click here to revise and resubmit!
+        br
+    br
+    // TODO: Compilation Error pops up above execution results
+    #execution-title
+    h3 Execution Results
+    br
+    
+    #test-cases
+        for case in test_cases
+            b Test case #{forloop.counter}:
+            |&nbsp;[#{case.time|floatformat:"3"}s, #{case.memory}kb] (#{case.points}/#{case.total}
+            br
+        if submission.is_graded
+            br
+            br
+            if submission.result != "AB"
+                b Final score:
+                | &nbsp;#{submission.points}/#{submission.problem.points}
+            else
+                b Submission aborted!
+            br
+    
+    if not submission.is_graded
+        br
+        if request.user == submission.user.user or submission.user.is_admin
+            #abort-button
+                form(action='{% url "judge.views.abort_submission" submission.id %}', method='post')
+                    -csrf_token
+                    input(type='submit', value='Abort')

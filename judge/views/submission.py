@@ -47,7 +47,7 @@ def submission_status(request, code):
                 not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=code).exists():
             raise PermissionDenied()
         test_cases = SubmissionTestCase.objects.filter(submission=submission)
-        return render_to_response('submission_status.html',
+        return render_to_response('submission_status.jade',
                                   {'submission': submission, 'test_cases': test_cases,
                                    'last_msg': event.last(),
                                    'title': 'Submission of %s by %s' %
