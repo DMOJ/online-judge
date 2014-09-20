@@ -1,6 +1,6 @@
 .pagination
     if submission.has_previous
-        a(href=submission.previous_page_number) <<
+        a(href='{{ submission.previous_page_number }}') <<
     
     for page in submissions.page_range
         if not page
@@ -11,4 +11,4 @@
             else
                 a(href=page) #{page}
     if submissions.has_next
-        a(href=submissions.next_page_number) >>
+        a(href='{{ submissions.next_page_number }}') >>
