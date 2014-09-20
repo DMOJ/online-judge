@@ -77,7 +77,7 @@ def all_user_submissions(request, username, page=1):
         submissions = paginator.page(1)
     except EmptyPage:
         submissions = paginator.page(paginator.num_pages)
-    return render_to_response('submissions.html',
+    return render_to_response('submissions.jade',
                               {'submissions': submissions,
                                'results': get_result_table(user__user__username=username),
                                'dynamic_update': False,
@@ -116,7 +116,7 @@ def problem_submissions(request, code, page, dynamic_update, title, order, filte
             submissions = paginator.page(1)
         except EmptyPage:
             submissions = paginator.page(paginator.num_pages)
-        return render_to_response('submissions.html',
+        return render_to_response('submissions.jade',
                                   {'submissions': submissions,
                                    'results': get_result_table(**filter),
                                    'dynamic_update': dynamic_update,
@@ -153,7 +153,7 @@ def submissions(request, page=1):
         submissions = paginator.page(1)
     except EmptyPage:
         submissions = paginator.page(paginator.num_pages)
-    return render_to_response('submissions.html',
+    return render_to_response('submissions.jade',
                               {'submissions': submissions,
                                'results': get_result_table(),
                                'dynamic_update': True if page == 1 else False,

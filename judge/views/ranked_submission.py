@@ -71,7 +71,7 @@ def ranked_submissions(request, code, page=1):
         submissions = paginator.page(1)
     except EmptyPage:
         submissions = paginator.page(paginator.num_pages)
-    return render_to_response('submissions.html',
+    return render_to_response('submissions.jade',
                               {'submissions': submissions,
                                'results': get_result_table(problem__code=code),
                                'completed_problem_codes': user_completed_codes(request.user.profile)
