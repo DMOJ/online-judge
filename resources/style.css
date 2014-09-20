@@ -14,7 +14,7 @@ th.headerSortUp:after {
     content: " \25B4"
 }
 
-.table table {
+.table {
     border-collapse: collapse;
     width: 100%;
     margin-left: auto;
@@ -24,7 +24,7 @@ th.headerSortUp:after {
     box-shadow: 2px 2px 10px #aaa
 }
 
-.table table th {
+.table th {
     color: #FFF;
     background-color: #393630;
     border: 1px solid #555;
@@ -85,7 +85,7 @@ th.headerSortUp:after {
     border-radius: 4px
 }
 
-.table table td {
+.table td {
     border: 1px solid #d4d4d4;
     padding: 7px 5px;
     vertical-align: middle;

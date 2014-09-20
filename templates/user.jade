@@ -11,7 +11,7 @@ block media
 
 block header
     if user.user == request.user
-        a(class="edit-profile" href='{% url "judge.views.edit_profile" %}')
+        a.edit-profile(href='{% url "judge.views.edit_profile" %}')
             | Edit profile
 
 block body

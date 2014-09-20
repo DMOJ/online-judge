@@ -21,21 +21,20 @@ block media
         }
 
 block body
-    div(class='table')
-        table(id='users-table')
-            thead
+    table.table(id='users-table')
+        thead
+            tr
+                th.rank Rank
+                th.username Username
+                th.points Points
+                th.problems Problems
+        tbody
+            for rank, user in users
                 tr
-                    th(class='rank') Rank
-                    th(class='username') Username
-                    th(class='points') Points
-                    th(class='problems') Problems
-            tbody
-                for rank, user in users
-                    tr
-                        td #{rank}
-                        td(class='#{user.display_rank}')
-                            a(href='{% url "judge.views.user" user.user.username %}')
-                                | #{user.long_display_name}
-                        td #{user.points}
-                        td #{user.problems}
+                    td #{rank}
+                    td(class='#{user.display_rank}')
+                        a(href='{% url "judge.views.user" user.user.username %}')
+                            | #{user.long_display_name}
+                    td #{user.points}
+                    td #{user.problems}
                             

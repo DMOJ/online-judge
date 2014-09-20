@@ -1,8 +1,7 @@
-div.table
-    h3 Statistics
-    hr
-    table
-        for k, cls, v in results
-            tr(class=cls)
-                td(style='font-weight:bold;text-align:left') #{k}
-                td(style='color:black') #{v}
+h3 Statistics
+hr
+table.table
+    for k, cls, v in results
+        tr(class=cls)
+            td(style='font-weight:bold;text-align:left') #{k}
+            td(style='color:black') #{v}
