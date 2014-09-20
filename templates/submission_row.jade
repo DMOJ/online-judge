@@ -16,7 +16,7 @@ td(class='{{ submission_class }}', style='width:10%')
                     | ---
                 else
                     | {{ submission.points|default_if_none:0|floatformat:"-2" }} /
-                    | &nbsp;{{ submission.problem.points|floatformat:"0" }}
+                    | {{ submission.problem.points|floatformat:"0" }}
     br
     span(style='font-size:0.7em;font-weight:bold')
         span.status {{ submission.result|default_if_none:submission.status }}
@@ -29,6 +29,7 @@ td(style='width:90%;text-align:left;padding-left:20px')
         br
     span(class='{% if submission.user.is_admin %}admin{% else %}{% if submission.user.is_problem_setter %}setter{% else %}user{% endif %}{% endif %}')
         a(href='{% url "judge.views.user" submission.user.user.username %}') {{ submission.user.user.username }}
+    | &nbsp;
     span(style="color:#555") on {{ submission.date|date:"N j, o, g:i a" }}
 td(style='white-space:nowrap')
     if request.user.is_authenticated
