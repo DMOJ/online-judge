@@ -30,7 +30,7 @@ def problem(request, code):
         form = comment_form(request, 'p:' + code)
         if form is None:
             return HttpResponseRedirect(request.path)
-        return render_to_response('problem.html', {'problem': problem, 'results': get_result_table(problem__code=code),
+        return render_to_response('problem.jade', {'problem': problem, 'results': get_result_table(problem__code=code),
                                                    'title': 'Problem: %s' % problem.name,
                                                    'comment_list': problem_comments(problem),
                                                    'comment_form': form},
