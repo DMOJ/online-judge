@@ -28,7 +28,7 @@ td.sub-info
         br
     span(class=submission.user.display_rank)
         a(href='{% url "judge.views.user" submission.user.user.username %}') {{ submission.user.user.username }}
-    | &nbsp; on
+    | on &nbsp;
     span.time {{ submission.date|date:"N j, o, g:i a" }}
 td.sub-prop
     if request.user.is_authenticated
