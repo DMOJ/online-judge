@@ -1,0 +1,29 @@
+-load gravatar
+li.comment(id='comment-' + comment.id)
+    .comment-box
+        div(style='float:left')
+            a(href='javascript:comment_upvote(' + comment.id + ')') +
+            br
+            span.comment-score #{comment.score}
+            br
+            a(href='javascript:comment_downvote(' + comment.id + ')') -
+            br
+        .comment-header
+            span.comment-author
+                span(class=comment.author.display_rank)
+                    a(href='{% url "judge.views.user" comment.author.user.username %}') #{comment.author.user.username}
+                |&nbsp;on&nbsp;
+                span.comment-time #{comment.time|date:"N j, o, g:i a"}
+                span.comment-title #{comment.title}
+                span.comment-operation
+                    a(href='javascript:comment_set_parent("' + comment.id + '")') Reply
+                    if perms.judge.change_comment
+                        a(href='{% url "admin:judge_comment_change" comment.id %}') Admin
+        .comment-body
+            | #{comment.body|linebreaks}
+    -with replies=comment.replies.all
+        if replies
+            ul.comments
+                for reply in replies
+                    -with comment=reply
+                        include comment
