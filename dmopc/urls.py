@@ -64,12 +64,17 @@ register_patterns = patterns('',
 )
 
 
+def exception(request):
+    raise RuntimeError('@Xyene asked me to cause this')
+
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'dmopc.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', 'judge.views.home'),
+    url(r'^500/$', exception),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include(register_patterns)),
     url(r'^users/$', 'judge.views.users'),
