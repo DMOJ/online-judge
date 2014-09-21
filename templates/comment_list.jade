@@ -1,5 +1,5 @@
 -load staticfiles
-
+-load markdown_deux_tags
 script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
 script(type='text/javascript')
     $(document).ready(function () {
@@ -60,3 +60,4 @@ if request.user.is_authenticated and comment_form
             -csrf_token
             table(border=0) #{comment_form.as_table}
             input(type='submit', value='Submit!')
+            -markdown_allowed
