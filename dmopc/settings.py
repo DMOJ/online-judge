@@ -109,6 +109,7 @@ MARKDOWN_TROIS_STYLES = {
         'extras': {
             'code-friendly': None,
             'pyshell': None,
+            'fenced-code-blocks': None,
             'demote-headers': 3,
             'link-patterns': None,
             'nofollow': None,
