@@ -59,5 +59,6 @@ if request.user.is_authenticated and comment_form
         form#comment-submit(action='', method='post')
             -csrf_token
             table(border=0) #{comment_form.as_table}
-            input(type='submit', value='Submit!')
             -markdown_allowed
+            br
+            input(type='submit', value='Submit!')
