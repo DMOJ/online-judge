@@ -10,7 +10,7 @@ else
 
 td.sub-result(class=submission_class)
     .score
-        if !submission.is_graded
+        if not submission.is_graded
             img(src='{% static "loading.gif" %}', alt='Grading...', height='20px')
         else
             if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB'
