@@ -29,10 +29,10 @@ def make_timezones():
 TIMEZONE = make_timezones()
 del make_timezones
 
-if 'tinymce' in settings.INSTALLED_APPS:
-    from tinymce.models import HTMLField
-else:
-    HTMLField = models.TextField
+# if 'tinymce' in settings.INSTALLED_APPS:
+#     from tinymce.models import HTMLField
+# else:
+#     HTMLField = models.TextField
 
 
 class Language(models.Model):
@@ -125,7 +125,7 @@ def validate_grader_param(value):
 class Problem(models.Model):
     code = models.CharField(max_length=20, verbose_name='Problem code', unique=True)
     name = models.CharField(max_length=100, verbose_name='Problem name', db_index=True)
-    description = HTMLField(verbose_name='Problem body')
+    description = models.TextField(verbose_name='Problem body')
     user = models.ForeignKey(Profile, verbose_name='Creator')
     types = models.ManyToManyField(ProblemType, verbose_name='Problem types')
     groups = models.ManyToManyField(ProblemGroup, verbose_name='Problem groups')

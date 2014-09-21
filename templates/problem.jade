@@ -50,7 +50,7 @@ block body
         br
         | #{problem.languages_list|join:", "}
     .problem-description
-        | #{problem.description|safe}
+        | #{problem.description|markdown:"problem"}
     .comment-area
         h3 Comments
         include comment_list

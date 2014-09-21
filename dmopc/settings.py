@@ -119,6 +119,26 @@ MARKDOWN_TROIS_STYLES = {
             'header-ids': None,
         },
         'safe_mode': 'escape',
+    },
+    'problem': {
+        'link_patterns': [
+            (re.compile(r'((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+(:[0-9]+)?|(?:www\.|'
+                        r'[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?'
+                        r'(?:[\.\!\/\\\w]*))?)'), r'\1'),
+        ],
+        'extras': {
+            'code-friendly': None,
+            'pyshell': None,
+            'fenced-code-blocks': None,
+            'demote-headers': 3,
+            'link-patterns': None,
+            'nofollow': None,
+            'html-classes': {'pre': 'code'},
+            'cuddled-lists': None,
+            'footnotes': None,
+            'header-ids': None,
+        },
+        'safe_mode': False,
     }
 }
 
