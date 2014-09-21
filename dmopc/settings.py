@@ -88,30 +88,36 @@ TEMPLATE_DIRS = (
 from markdown_deux.conf.settings import MARKDOWN_DEUX_DEFAULT_STYLE
 
 MARKDOWN_DEUX_STYLES = {
-    "default": MARKDOWN_DEUX_DEFAULT_STYLE,
-    "trusted": {
-        "extras": {
-            "code-friendly": None,
+    'default': MARKDOWN_DEUX_DEFAULT_STYLE,
+    'trusted': {
+        'extras': {
+            'code-friendly': None,
         },
         # Allow raw HTML (WARNING: don't use this for user-generated
         # Markdown for your site!).
-        "safe_mode": False,
+        'safe_mode': False,
     },
-    "comment": {
-        "link_patterns": [
-            (re.compile(r"\bproblem:(\w+)\b", re.I), r'/problem/\1'),
+    'comment': {
+        'link_patterns': [
+            (re.compile(r'\bproblem:(\w+)\b', re.I), r'/problem/\1'),
+            # https://github.com/trentm/python-markdown2/wiki/link-patterns
+            # I can not understand this regex. May be @tchrist can, but I certainly am not him.
+            (re.compile(r'((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+(:[0-9]+)?|(?:www\.|'
+                        r'[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?'
+                        r'(?:[\.\!\/\\\w]*))?)'), r'\1'),
         ],
-        "extras": {
-            "code-friendly": None,
-            "pyshell": None,
-            "demote-headers": 3,
-            "link-patterns": None,
-            "html-classes": {"pre": "code"},
-            "cuddled-lists": None,
-            "footnotes": None,
-            "header-ids": None,
+        'extras': {
+            'code-friendly': None,
+            'pyshell': None,
+            'demote-headers': 3,
+            'link-patterns': None,
+            'nofollow': None,
+            'html-classes': {'pre': 'code'},
+            'cuddled-lists': None,
+            'footnotes': None,
+            'header-ids': None,
         },
-        "safe_mode": "escape",
+        'safe_mode': 'escape',
     }
 }
 
