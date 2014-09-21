@@ -25,6 +25,6 @@ li.comment(id='comment-{{comment.id}}')
     -with replies=comment.replies.all
         if replies
             ul.comments
-                for reply in replies
+                each reply in replies
                     -with comment=reply
                         include comment

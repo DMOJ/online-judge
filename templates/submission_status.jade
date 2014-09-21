@@ -55,7 +55,7 @@ block body
     
     #test-cases
         if submission.status != 'CE'
-            for case in test_cases
+            each case in test_cases
                 b Test case ##{forloop.counter}:
                 |&nbsp;#{case.status} [#{case.time|floatformat:"3"}s, #{case.memory}kb] (#{case.points}/#{case.total})
                 br

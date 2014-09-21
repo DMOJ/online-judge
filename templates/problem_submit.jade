@@ -7,7 +7,7 @@ block media
     | <script type='text/javascript'>
     | $(function () {
     |     var modes = {
-    for lang in langs
+    each lang in langs
         |      "#{lang.id}": "#{lang.ace|escapejs}",
     |     };
     |     $('#id_language').change(function () {

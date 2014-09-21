@@ -2,7 +2,7 @@
     if submission.has_previous
         a(href='{{ submission.previous_page_number }}') <<
     
-    for page in submissions.page_range
+    each page in submissions.page_range
         if not page
             | ...
         else

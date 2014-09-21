@@ -49,7 +49,7 @@ script(type='text/javascript')
 
 ul.comments.top-level-comments
     if comment_list
-        for comment in comment_list
+        each comment in comment_list
             include comment
 
 if request.user.is_authenticated and comment_form

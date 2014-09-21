@@ -83,7 +83,7 @@ block body
         include submissions_pages
 
     table#submissions-table.table
-        for submission in submissions
+        each submission in submissions
             tr(id=submission.id)
                 include submission_row
 

@@ -34,7 +34,7 @@ block body
                 th.points Points
                 th.users Users
         tbody
-            for problem in problems
+            each problem in problems
                 tr
                     td
                         a(href='{% url "judge.views.problem" problem.code %}') #{problem.name}

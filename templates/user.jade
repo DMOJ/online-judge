@@ -24,7 +24,7 @@ block body
     b Total points:&nbsp;
     | #{user.calculate_points}
     ul
-        for entry in best_submissions
+        each entry in best_submissions
             li
                 a(href='{% url "judge.views.problem" entry.problem__code %}') #{entry.problem__name}
                 | (#{entry.points} / #{entry.problem__points})
