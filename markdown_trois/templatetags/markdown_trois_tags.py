@@ -3,6 +3,7 @@ from django.utils.safestring import mark_safe
 from django.utils.encoding import force_unicode
 import markdown_trois
 from django.conf import settings
+from markdown_trois.conf.settings import MARKDOWN_TROIS_HELP_URL
 
 register = template.Library()
 
@@ -17,7 +18,7 @@ def markdown_filter(value, style="default"):
         {{ value|markdown }}            {# uses the "default" style #}
         {{ value|markdown:"mystyle" }}
 
-    Markdown "styles" are defined by the `markdown_trois_STYLES` setting.
+    Markdown "styles" are defined by the `MARKDOWN_TROIS_STYLES` setting.
     """
     try:
         return mark_safe(markdown_trois.markdown(value, style))
@@ -64,13 +65,11 @@ class MarkdownNode(template.Node):
 
 @register.inclusion_tag("markdown_trois/markdown_cheatsheet.html")
 def markdown_cheatsheet():
-    return {"help_url": settings.markdown_trois_HELP_URL}
+    return {"help_url": getattr(settings, 'MARKDOWN_TROIS_HELP_URL', MARKDOWN_TROIS_HELP_URL)}
 
 
 @register.simple_tag
 def markdown_allowed():
     return ('<a href="%s" target="_blank">Markdown syntax</a> allowed, but no raw HTML. '
             'Examples: **bold**, *italic*, indent 4 spaces for a code block.'
-            % settings.markdown_trois_HELP_URL)
-
-
+            % getattr(settings, 'MARKDOWN_TROIS_HELP_URL', MARKDOWN_TROIS_HELP_URL))
