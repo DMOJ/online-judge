@@ -1,6 +1,6 @@
 from django.shortcuts import *
 import sys
-
+import traceback
 
 def error(request, context, status):
     template = loader.get_template('error.jade')
@@ -22,5 +22,5 @@ def error403(request):
 def error500(request):
     return error(request, {'id': 'invalid_state',
                            'description': 'corrupt page %s' % request.path,
-                           'traceback': sys.exc_info(),
+                           'traceback': traceback.format(sys.exc_info()[2]),
                            'code': 500}, 500)
