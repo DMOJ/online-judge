@@ -1,7 +1,7 @@
 h3 Statistics
 hr
 table.table
-    each result in results
-        tr(class=result[1])
-            td(style='font-weight:bold;text-align:left')= result[0]
-            td(style='color:black')= result[2]
+    each key, class, count in results
+        tr(class=class)
+            td(style='font-weight:bold;text-align:left')= key
+            td(style='color:black')= count
