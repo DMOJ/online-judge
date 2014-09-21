@@ -132,7 +132,7 @@ MARKDOWN_TROIS_STYLES = {
             'code-friendly': None,
             'pyshell': None,
             'fenced-code-blocks': None,
-            'demote-headers': 3,
+            'demote-headers': 2,
             'link-patterns': None,
             'html-classes': {'pre': 'code'},
             'cuddled-lists': None,
