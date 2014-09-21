@@ -129,7 +129,6 @@ MARKDOWN_TROIS_STYLES = {
                         r'(?:[\.\!\/\\\w]*))?)'), r'\1'),
         ],
         'extras': {
-            'code-friendly': None,
             'pyshell': None,
             'fenced-code-blocks': None,
             'link-patterns': None,
