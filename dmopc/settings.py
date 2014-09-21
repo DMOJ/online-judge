@@ -132,7 +132,6 @@ MARKDOWN_TROIS_STYLES = {
             'fenced-code-blocks': None,
             'demote-headers': 3,
             'link-patterns': None,
-            'nofollow': None,
             'html-classes': {'pre': 'code'},
             'cuddled-lists': None,
             'footnotes': None,
