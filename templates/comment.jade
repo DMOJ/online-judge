@@ -4,8 +4,7 @@ li.comment(id='comment-{{comment.id}}')
         div(style='float:left')
             a(href='javascript:comment_upvote({{comment.id}})') +
             br
-            span.comment-score #{comment.score}
-            br
+            .comment-score #{comment.score}
             a(href='javascript:comment_downvote({{comment.id}})') -
             br
         .comment-header
