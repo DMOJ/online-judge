@@ -1,5 +1,4 @@
 from django.shortcuts import *
-import sys
 import traceback
 
 def error(request, context, status):
@@ -22,5 +21,5 @@ def error403(request):
 def error500(request):
     return error(request, {'id': 'invalid_state',
                            'description': 'corrupt page %s' % request.path,
-                           'traceback': traceback.format_tb(sys.exc_info()[2]),
+                           'traceback': traceback.format_exc(),
                            'code': 500}, 500)
