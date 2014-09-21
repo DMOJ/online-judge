@@ -22,5 +22,5 @@ def error403(request):
 def error500(request):
     return error(request, {'id': 'invalid_state',
                            'description': 'corrupt page %s' % request.path,
-                           'traceback': traceback.format(sys.exc_info()[2]),
+                           'traceback': traceback.format_tb(sys.exc_info()[2]),
                            'code': 500}, 500)
