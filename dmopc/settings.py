@@ -100,6 +100,8 @@ MARKDOWN_TROIS_STYLES = {
     'comment': {
         'link_patterns': [
             (re.compile(r'\bproblem:(\w+)\b', re.I), r'/problem/\1'),
+            (re.compile(r'\bsubmission:(\w+)\b', re.I), r'/submission/\1'),
+            (re.compile(r'\b@(\w+)\b', re.I), r'/user/\1'),
             # https://github.com/trentm/python-markdown2/wiki/link-patterns
             # I can not understand this regex. May be @tchrist can, but I certainly am not him.
             (re.compile(r'((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+(:[0-9]+)?|(?:www\.|'
