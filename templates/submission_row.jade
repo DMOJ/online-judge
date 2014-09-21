@@ -4,34 +4,33 @@
 - load variables
 
 if submission.status == 'IE' or submission.status == 'CE'
-    - setvar submission.status as submission_class
+    - var submission_class = submission.status
 else
-    - setvar submission.result as submission_class
+    - var submission_class = submission.result
 
-td.sub-result(class='{{ submission_class }}')
-    span.score
-        if not submission.is_graded
+td.sub-result(class=submission_class)
+    .score
+        if !submission.is_graded
             img(src='{% static "loading.gif" %}', alt='Grading...', height='20px')
         else
             if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB'
                 | ---
             else
                 | #{submission.points|default_if_none:0|floatformat:"-2"} / #{submission.problem.points|floatformat:"0"}
-    br
-    span.state
+    .state
         span.status #{submission.result|default_if_none:submission.status}
         | &nbsp;|&nbsp;
         span.language #{submission.language.key}
 
 td.sub-info
     if show_problem
-        span.name
+        .name
             a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
         br
-    span(class=submission.user.display_rank)
-        a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
-
-    span.time &nbsp;on #{submission.date|date:"N j, o, g:i a"}
+    .user
+        span(class=submission.user.display_rank)
+            a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
+        span.time &nbsp;on #{submission.date|date:"N j, o, g:i a"}
 
 td.sub-prop
     if request.user.is_authenticated
@@ -45,13 +44,12 @@ td.sub-prop
 
 td.sub-usage
     if submission.status != 'QU' and submission.status != 'G' and submission.status != 'CE' and submission.status != 'IE' and submission.status != 'AB'
-        span.time
+        .time
             if "TLE" != submission.result
                 | #{submission.time|default_if_none:0|floatformat:"2"}s
             else
                 | ---
-        br
-        span.memory
+        .memory
             - with memory=submission.memory|default_if_none:0
                 if memory < 1000
                     | #{memory|floatformat:"-2"} K
@@ -59,6 +57,5 @@ td.sub-usage
                     - math memory "$1 / 1024" as megabytes
                     | #{megabytes|floatformat:"-2"} M
     else
-        span.time ---
-        span.memory ---
-
+        .time ---
+        .memory ---
