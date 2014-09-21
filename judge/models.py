@@ -185,6 +185,7 @@ class Submission(models.Model):
     status = models.CharField(max_length=2, choices=STATUS, default='QU', db_index=True)
     result = models.CharField(max_length=3, choices=SUBMISSION_RESULT, default=None, null=True,
                               blank=True, db_index=True)
+    error = models.TextField(verbose_name='Compile Errors')
 
     def judge(self):
         return judge_submission(self)

@@ -76,6 +76,7 @@ class DjangoJudgeHandler(JudgeHandler):
         JudgeHandler.on_compile_error(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = submission.result = 'CE'
+        submission.error = packet['log']
         submission.save()
         event.post('sub_%d' % submission.id, {
             'type': 'compile-error',
