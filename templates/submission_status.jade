@@ -27,7 +27,7 @@ block media
                                 $('#grading-label').remove();
                                 break;
                             case 'compile-error':
-                                $('#execution-title').append("<h3>Compilation Error</h3>");
+                                list.append("<h4>Compilation Error</h4>");
                                 list.append(message.log.replace("\n", "<br/>"));
                                 $('#abort-button').remove();
                                 $('#grading-label').remove();
@@ -50,8 +50,6 @@ block body
         a(href='{% url "judge.views.problem_submit" submission.problem.code submission.id %}') Click here to revise and resubmit!
         br
     br
-    // TODO: Compilation Error pops up above execution results
-    #execution-title
     h3 Execution Results
     br
     
