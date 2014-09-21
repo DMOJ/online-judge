@@ -126,7 +126,6 @@ MARKDOWN_TROIS_STYLES = {
         'extras': {
             'pyshell': None,
             'fenced-code-blocks': None,
-            'link-patterns': None,
             'html-classes': {'pre': 'code'},
             'cuddled-lists': None,
             'footnotes': None,
