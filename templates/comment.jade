@@ -1,4 +1,5 @@
 -load gravatar
+-load markdown_deux_tags
 li.comment(id='comment-{{comment.id}}')
     .comment-box
         div(style='float:left')
@@ -19,8 +20,7 @@ li.comment(id='comment-{{comment.id}}')
                 a(href='javascript:comment_set_parent({{comment.id}})') &nbsp;Reply
                 if perms.judge.change_comment
                     a(href='{% url "admin:judge_comment_change" comment.id %}') &nbsp;Admin
-        .comment-body
-            | #{comment.body|linebreaks}
+        .comment-body #{comment.body|markdown:"comment"}
     -with replies=comment.replies.all
         if replies
             ul.comments

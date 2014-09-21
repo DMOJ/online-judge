@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import re
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
@@ -42,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'judge',
     'registration',
+    'markdown_deux',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -80,6 +83,37 @@ TEMPLATE_LOADERS = (
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
+
+# Markdown Deux
+from markdown_deux.conf.settings import MARKDOWN_DEUX_DEFAULT_STYLE
+
+MARKDOWN_DEUX_STYLES = {
+    "default": MARKDOWN_DEUX_DEFAULT_STYLE,
+    "trusted": {
+        "extras": {
+            "code-friendly": None,
+        },
+        # Allow raw HTML (WARNING: don't use this for user-generated
+        # Markdown for your site!).
+        "safe_mode": False,
+    },
+    "comment": {
+        "link_patterns": [
+            (re.compile(r"\bproblem:(\w+)\b", re.I), r'/problem/\1'),
+        ],
+        "extras": {
+            "code-friendly": None,
+            "pyshell": None,
+            "demote-headers": 3,
+            "link-patterns": None,
+            "html-classes": {"pre": "code"},
+            "cuddled-lists": None,
+            "footnotes": None,
+            "header-ids": None,
+        },
+        "safe_mode": "escape",
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
