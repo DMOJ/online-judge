@@ -26,7 +26,6 @@ td.sub-info
     if show_problem
         .name
             a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
-        br
     .user
         span(class=submission.user.display_rank)
             a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
