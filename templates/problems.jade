@@ -3,7 +3,6 @@ extends base
 
 block media
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
-    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
     script(type='text/javascript')
         $(document).ready(function () {
             $("#problem-table").tablesorter({
