@@ -44,7 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'judge',
     'registration',
-    'markdown_deux',
+    'markdown_trois',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -84,11 +84,11 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 
-# Markdown Deux
-from markdown_deux.conf.settings import MARKDOWN_DEUX_DEFAULT_STYLE
+# Markdown Trois
+from markdown_trois.conf.settings import MARKDOWN_TROIS_DEFAULT_STYLE
 
-MARKDOWN_DEUX_STYLES = {
-    'default': MARKDOWN_DEUX_DEFAULT_STYLE,
+MARKDOWN_TROIS_STYLES = {
+    'default': MARKDOWN_TROIS_DEFAULT_STYLE,
     'trusted': {
         'extras': {
             'code-friendly': None,
