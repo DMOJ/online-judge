@@ -104,7 +104,7 @@ MARKDOWN_TROIS_STYLES = {
             (re.compile(r'@(\w+)\b', re.I), r'/user/\1'),
             # https://github.com/trentm/python-markdown2/wiki/link-patterns
             # I can not understand this regex. May be @tchrist can, but I certainly am not him.
-            (re.compile(r'((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+(:[0-9]+)?|(?:www\.|'
+            (re.compile(r'(?<!")((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+(:[0-9]+)?|(?:www\.|'
                         r'[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?'
                         r'(?:[\.\!\/\\\w]*))?)'), r'\1'),
         ],
