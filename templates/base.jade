@@ -62,7 +62,7 @@ html(lang='en')
                     else
                         a(href='{% url "django.contrib.auth.views.login" %}?next={{ request.get_full_path|urlencode }}')
                             b Login
-                        | &nbsp;|&nbsp
+                        | &nbsp;|&nbsp;
                         a(href='/accounts/register/') Register
         br
         div#content
