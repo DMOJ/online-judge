@@ -26,5 +26,5 @@ li.comment(id='comment-{{comment.id}}')
         if replies
             ul.comments
                 each reply in replies
-                    -with comment=reply
-                        include comment
+                    -with comment=reply template='comment.jade'
+                        -include template
