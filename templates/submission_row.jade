@@ -8,6 +8,14 @@ if submission.status == 'IE' or submission.status == 'CE'
 else
     - var submission_class = submission.result
 
+if request.user.is_authenticated
+    - var can_view = request.user.profile == submission.user or request.user.profile.is_admin or submission.problem.code in completed_problem_codes
+    - var show_prop = can_view or perms.judge.change_submission
+    - var info_colspan = 1
+else
+    - var show_prop = false
+    - var info_colspan = 2
+
 td.sub-result(class=submission_class)
     .score
         if not submission.is_graded
@@ -22,7 +30,7 @@ td.sub-result(class=submission_class)
         | &nbsp;|&nbsp;
         span.language #{submission.language.key}
 
-td.sub-info
+td.sub-info(colspan=info_colspan)
     if show_problem
         .name
             a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
@@ -31,9 +39,9 @@ td.sub-info
             a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
         span.time &nbsp;on #{submission.date|date:"N j, o, g:i a"}
 
-td.sub-prop
-    if request.user.is_authenticated
-        if request.user.profile == submission.user or request.user.profile.is_admin or submission.problem.code in completed_problem_codes
+if show_prop
+    td.sub-prop
+        if can_view
             a(href='{% url "judge.views.submission_source" submission.id %}') view
             | &nbsp;|&nbsp;
             a(href='{% url "judge.views.submission_status" submission.id %}') detail
