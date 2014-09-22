@@ -43,6 +43,9 @@ class Language(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        ordering = ['key']
+
 
 class GraderType(models.Model):
     key = models.CharField(max_length=20)

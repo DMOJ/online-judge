@@ -19,6 +19,7 @@ except ImportError:
 class ProfileAdmin(admin.ModelAdmin):
     fields = ['user', 'name', 'about', 'timezone', 'language', 'ace_theme']
     list_display = ['long_display_name', 'timezone_full', 'language']
+    ordering = ['user__username']
 
     def timezone_full(self, obj):
         return obj.timezone
@@ -34,6 +35,7 @@ class ProblemAdmin(admin.ModelAdmin):
         ('Language', {'fields': ('allowed_languages',)})
     )
     list_display = ['code', 'name', 'user', 'points']
+    ordering = ['code']
     if AdminPagedownWidget is not None:
         formfield_overrides = {
             TextField: {'widget': AdminPagedownWidget},
