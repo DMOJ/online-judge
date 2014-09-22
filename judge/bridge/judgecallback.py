@@ -113,12 +113,12 @@ class DjangoJudgeHandler(JudgeHandler):
         submission = Submission.objects.get(id=packet['submission-id'])
         test_case = SubmissionTestCase.objects.get_or_create(submission=submission, case=packet['position'])[0]
         status = packet['status']
-        if status & 2:
-            test_case.status = 'RTE'
-        elif status & 4:
+        if status & 4:
             test_case.status = 'TLE'
         elif status & 8:
             test_case.status = 'MLE'
+        elif status & 2:
+            test_case.status = 'RTE'
         elif status & 16:
             test_case.status = 'IR'
         elif status & 1:
