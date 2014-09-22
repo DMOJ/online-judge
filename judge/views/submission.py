@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, SubmissionTestCase, Profile
 from judge.utils.diggpaginator import DiggPaginator
 from judge.views import get_result_table
@@ -28,6 +29,7 @@ def submission_source(request, sub_id):
         return render_to_response('submission_src.jade',
                                   {
                                       'submission': submission,
+                                      'source': highlight_code(submission.source),
                                       'title': 'Submission %s of %s by %s' % (
                                           submission.id, submission.problem.name, submission.user.user.username)
                                   },
