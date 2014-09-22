@@ -1,12 +1,19 @@
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.db.models import TextField
 from django.forms import ModelForm, ModelMultipleChoiceField
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType
 from judge.widgets import CheckboxSelectMultipleWithSelectAll
+
+
+try:
+    from pagedown.widgets import AdminPagedownWidget
+except ImportError:
+    AdminPagedownWidget = None
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -27,6 +34,10 @@ class ProblemAdmin(admin.ModelAdmin):
         ('Language', {'fields': ('allowed_languages',)})
     )
     list_display = ['code', 'name', 'user', 'points']
+    if AdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': AdminPagedownWidget},
+        }
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'allowed_languages':
