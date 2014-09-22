@@ -16,7 +16,7 @@ th.headerSortUp:after{
 
 .table{
 	border-collapse:separate;
-	border-spacing: 0;
+	border-spacing:0;
 	width:100%;
 	margin-left:auto;
 	margin-right:auto;
@@ -30,7 +30,9 @@ th.headerSortUp:after{
 	color:#FFF;
 	background-color:#393630;
 	border-width:1px;
-	border:1px solid #555;
+	border:1px solid #d4d4d4;
+	border-bottom:0;
+	border-right:0;
 	padding:3px;
 	vertical-align:top;
 	text-align:center
@@ -38,8 +40,8 @@ th.headerSortUp:after{
 
 .table td{
 	border:1px solid #d4d4d4;
-	border-bottom:none;
-	border-right:none;
+	border-bottom:0;
+	border-right:0;
 	padding:7px 5px;
 	vertical-align:middle;
 	text-align:center
