@@ -133,6 +133,8 @@ def single_submission(request, id):
     try:
         return render_to_response('submission_row.jade', {
             'submission': Submission.objects.get(id=int(id)),
+            'completed_problem_codes': user_completed_codes(
+                   request.user.profile) if request.user.is_authenticated() else [],
             'show_problem': True
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
