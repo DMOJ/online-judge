@@ -28,8 +28,8 @@ else:
         except pygments.util.ClassNotFound:
             return _make_pre_code(code)
 
-        class HtmlCodeFormatter(pygments.formatters.html.HtmlFormatter):
+        class HtmlCodeFormatter(pygments.formatters.HtmlFormatter):
             def wrap(self, source, outfile):
                 return self._wrap_div(self._wrap_pre(_wrap_code(source)))
 
-        return mark_safe(pygments.highlight(code, lexer, HtmlCodeFormatter({'cssclass': cssclass})))
+        return mark_safe(pygments.highlight(code, lexer, HtmlCodeFormatter(cssclass=cssclass)))
