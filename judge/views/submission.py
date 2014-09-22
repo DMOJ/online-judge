@@ -29,7 +29,7 @@ def submission_source(request, sub_id):
         return render_to_response('submission_src.jade',
                                   {
                                       'submission': submission,
-                                      'source': highlight_code(submission.source),
+                                      'source': highlight_code(submission.source, submission.language.ace),
                                       'title': 'Submission %s of %s by %s' % (
                                           submission.id, submission.problem.name, submission.user.user.username)
                                   },
