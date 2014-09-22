@@ -50,6 +50,8 @@ block body
         b Languages allowed:
         br
         | #{problem.languages_list|join:", "}
+        br
+        -markdown_cheatsheet
     .problem-description
         | #{problem.description|markdown:"problem"}
     .comment-area
