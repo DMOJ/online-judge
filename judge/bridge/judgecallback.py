@@ -134,7 +134,7 @@ class DjangoJudgeHandler(JudgeHandler):
             'type': 'test-case',
             'id': packet['position'],
             'status': test_case.status,
-            'time': packet['time'],
+            'time': round(float(packet['time']), 3),
             'memory': packet['memory'],
             'points': test_case.points,
             'total': test_case.total,
