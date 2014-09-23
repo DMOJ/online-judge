@@ -201,7 +201,7 @@ class Submission(models.Model):
             'RTE': 'Runtime Error (invalid syscall)',
             'CE': 'Compile Error',
             'IE': 'Internal Error (judging server error)',
-        }.get(self.status, '')
+        }.get(self.result, '')
 
     def judge(self):
         return judge_submission(self)
