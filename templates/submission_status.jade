@@ -20,7 +20,7 @@ block media
                             case 'grading-begin':
                                 break;
                             case 'grading-end':
-                                list.append("<br/><b>Final score:</b> {0}/{1}<br/>".format(
+                                list.append("<br/><br/><b>Final score:</b> {0}/{1}".format(
                                         message.points, message.total
                                 ));
                                 $('#abort-button').remove();
@@ -58,7 +58,6 @@ block body
             each case in test_cases
                 b Test case ##{forloop.counter}:
                 |&nbsp;#{case.status} [#{case.time|floatformat:"3"}s, #{case.memory|floatformat:"-1"}kb] (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
-                br
                 br
             if submission.is_graded
                 br

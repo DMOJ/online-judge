@@ -65,8 +65,8 @@ class DjangoJudgeHandler(JudgeHandler):
             'type': 'grading-end',
             'time': time,
             'memory': memory,
-            'points': points,
-            'total': submission.problem.points,
+            'points': float(points),
+            'total': float(submission.problem.points),
             'result': submission.result
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
@@ -136,7 +136,7 @@ class DjangoJudgeHandler(JudgeHandler):
             'status': test_case.status,
             'time': "%.3f" % round(float(packet['time']), 3),
             'memory': packet['memory'],
-            'points': test_case.points,
-            'total': test_case.total,
+            'points': float(test_case.points),
+            'total': float(test_case.total),
             'output': packet['output']
         })
