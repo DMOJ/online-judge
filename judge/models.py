@@ -32,7 +32,7 @@ del make_timezones
 # if 'tinymce' in settings.INSTALLED_APPS:
 # from tinymce.models import HTMLField
 # else:
-#     HTMLField = models.TextField
+# HTMLField = models.TextField
 
 
 class Language(models.Model):
@@ -176,6 +176,20 @@ class Submission(models.Model):
         ('IE', 'Internal Error'),
         ('CE', 'Compile Error'),
     )
+    USER_DISPLAY_CODES = {
+        'AC': 'Accepted',
+        'WA': 'Wrong Answer',
+        'TLE': 'Time Limit Exceeded',
+        'MLE': 'Memory Limit Exceeded',
+        'IR': 'Invalid Return',
+        'RTE': 'Runtime Error (invalid syscall)',
+        'CE': 'Compile Error',
+        'IE': 'Internal Error (judging server error)',
+        'QU': 'Queued',
+        'C': 'Compiled',
+        'G': 'Grading',
+        'D': 'Completed'
+    }
 
     user = models.ForeignKey(Profile)
     problem = models.ForeignKey(Problem)
@@ -192,16 +206,7 @@ class Submission(models.Model):
 
     @property
     def long_status(self):
-        return {
-            'AC': 'Accepted',
-            'WA': 'Wrong Answer',
-            'TLE': 'Time Limit Exceeded',
-            'MLE': 'Memory Limit Exceeded',
-            'IR': 'Invalid Return',
-            'RTE': 'Runtime Error (invalid syscall)',
-            'CE': 'Compile Error',
-            'IE': 'Internal Error (judging server error)',
-        }.get(self.result, '')
+        return Submission.USER_DISPLAY_CODES.get(self.result if self.result else self.status, '')
 
     def judge(self):
         return judge_submission(self)
