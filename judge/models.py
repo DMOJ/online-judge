@@ -30,7 +30,7 @@ TIMEZONE = make_timezones()
 del make_timezones
 
 # if 'tinymce' in settings.INSTALLED_APPS:
-#     from tinymce.models import HTMLField
+# from tinymce.models import HTMLField
 # else:
 #     HTMLField = models.TextField
 
@@ -189,6 +189,19 @@ class Submission(models.Model):
     result = models.CharField(max_length=3, choices=SUBMISSION_RESULT, default=None, null=True,
                               blank=True, db_index=True)
     error = models.TextField(verbose_name='Compile Errors', null=True, blank=True)
+
+    @property
+    def long_status(self):
+        return {
+            'AC': 'Accepted',
+            'WA': 'Wrong Answer',
+            'TLE': 'Time Limit Exceeded',
+            'MLE': 'Memory Limit Exceeded',
+            'IR': 'Invalid Return',
+            'RTE': 'Runtime Error (invalid syscall)',
+            'CE': 'Compile Error',
+            'IE': 'Internal Error (judging server error)',
+        }.get(self.status, '')
 
     def judge(self):
         return judge_submission(self)

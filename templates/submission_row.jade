@@ -29,7 +29,7 @@ td.sub-result(class=submission_class)
             else
                 | #{submission.points|default_if_none:0|floatformat:"-2"} / #{submission.problem.points|floatformat:"0"}
     .state
-        span.status #{submission.result|default_if_none:submission.status}
+        span.status(title=submission.long_result) #{submission.result|default_if_none:submission.status}
         | &nbsp;|&nbsp;
         span.language #{submission.language.key}
 
