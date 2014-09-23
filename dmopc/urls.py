@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.sitemaps import FlatPageSitemap
 
 from judge.views import RegistrationView, ActivationView, TemplateView
-from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap
+from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap
 
 admin.autodiscover()
 
@@ -115,7 +115,9 @@ urlpatterns = patterns('',
         'problem': ProblemSitemap,
         'user': UserSitemap,
         'home': HomePageSitemap,
-        'flatpages': FlatPageSitemap,
+        'pages': UrlSitemap([
+            {'location': '/about/', 'priority': 1.0},
+        ]),
     }}),
 )
 

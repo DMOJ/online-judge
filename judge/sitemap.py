@@ -35,3 +35,20 @@ class HomePageSitemap(Sitemap):
 
     def location(self, obj):
         return reverse(obj)
+
+
+class UrlSitemap(Sitemap):
+    def __init__(self, pages):
+        self.pages = pages
+
+    def items(self):
+        return self.pages
+
+    def location(self, obj):
+        return obj['location'] if isinstance(obj, dict) else obj
+
+    def priority(self, obj):
+        return obj.get('priority', 0.5) if isinstance(obj, dict) else 0.5
+
+    def changefreq(self, obj):
+        return obj.get('priority', 'daily') if isinstance(obj, dict) else 'daily'
