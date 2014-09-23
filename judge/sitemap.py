@@ -51,4 +51,4 @@ class UrlSitemap(Sitemap):
         return obj.get('priority', 0.5) if isinstance(obj, dict) else 0.5
 
     def changefreq(self, obj):
-        return obj.get('priority', 'daily') if isinstance(obj, dict) else 'daily'
+        return obj.get('changefreq', 'daily') if isinstance(obj, dict) else 'daily'
