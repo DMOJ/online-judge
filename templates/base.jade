@@ -37,7 +37,7 @@ html(lang='en')
                     li
                         a.user(href='/users/') Users
                     li
-                        a.about(href='/about'/) About
+                        a.about(href='/about/') About
                 span#user-links
                     if request.user.is_authenticated
                         a(href='{% url "judge.views.user" %}')
