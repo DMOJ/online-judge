@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /problem/*/submit
+Disallow: /problem/*/resubmit/
+Disallow: /problem/*/submissions/
+Disallow: /user/*/submissions/
+Disallow: /submission/
+Disallow: /submissions/
+Disallow: /single_submission
+Disallow: /edit/profile/
+Disallow: /src/
+Disallow: /comments/
