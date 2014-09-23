@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.contrib.sitemaps import FlatPageSitemap
 
 from judge.views import RegistrationView, ActivationView, TemplateView
+from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap
 
 admin.autodiscover()
 
@@ -108,6 +110,13 @@ urlpatterns = patterns('',
 
     url(r'^comments/upvote/$', 'judge.views.upvote_comment'),
     url(r'^comments/downvote/$', 'judge.views.downvote_comment'),
+
+    url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {
+        'problem': ProblemSitemap,
+        'user': UserSitemap,
+        'home': HomePageSitemap,
+        'flatpages': FlatPageSitemap,
+    }}),
 )
 
 handler404 = 'judge.views.error.error404'
