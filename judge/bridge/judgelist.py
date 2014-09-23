@@ -33,7 +33,7 @@ class JudgeList(list):
 
     def judge(self, id, problem, language, source):
         try:
-            judge = min([judge for judge in self if problem in judge.problems and not judge.load],
+            judge = min([judge for judge in self if problem in judge.problems and not judge.working],
                         key=attrgetter('load'))
         except ValueError:
             self.queue.append((id, problem, language, source))
