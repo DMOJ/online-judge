@@ -33,7 +33,7 @@ block body
         b Time Limit:
         | &nbsp;#{problem.time_limit}s
         br
-        b Memory Limit
+        b Memory Limit:
         -with memory=problem.memory_limit
             if memory < 1000
                 | #{memory|floatformat:"-2"}K
