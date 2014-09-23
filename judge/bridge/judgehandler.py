@@ -27,10 +27,11 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         }
         self._current_submission = None
         self._current_submission_event = threading.Event()
-        self._load = False
+        self._working = False
         self._problems = []
         self.problems = {}
         self.latency = None
+        self.load = 1e100
 
         logger.info('Judge connected from: %s', self.client_address)
         self.server.judges.append(self)
@@ -41,6 +42,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self.server.judges.remove(self)
 
     def handle(self):
+        self.ping()
         while True:
             try:
                 buf = self.rfile.read(size_pack.size)
@@ -59,8 +61,8 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
                 break
 
     @property
-    def load(self):
-        return bool(self._load)
+    def working(self):
+        return bool(self._working)
 
     def problem_data(self, problem):
         return 2, 16384, False, 'standard', {}
@@ -81,7 +83,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
         }
         self._send(packet)
-        self._load = id
+        self._working = id
 
     def abort(self):
         self._send({'name': 'terminate-submission'})
@@ -148,8 +150,9 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
     def on_ping_response(self, packet):
         self.latency = packet['time']
+        self.load = packet['load']
 
     def _free_self(self, packet):
-        self._load = False
+        self._working = False
         self.server.judges.on_judge_free(self, packet['submission-id'])
 

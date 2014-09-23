@@ -33,8 +33,9 @@ class JudgeList(list):
 
     def judge(self, id, problem, language, source):
         try:
-            judge = choice([judge for judge in self if problem in judge.problems and not judge.load])
-        except IndexError:
+            judge = min([judge for judge in self if problem in judge.problems and not judge.load],
+                        key=attrgetter('load'))
+        except ValueError:
             self.queue.append((id, problem, language, source))
         else:
             self.submission_map[id] = judge
