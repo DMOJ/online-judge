@@ -1,218 +1,321 @@
-.problem-description{
-	line-height:1.5em;
-	font-size:1em;
-	width:84%;
-	margin-top:-1.5em
+table.sortable thead {
+    background-color: #eee;
+    color: #666;
+    font-weight: bold;
+    cursor: default;
+    behavior: url("unselectable.htc")
 }
 
-.problem-description *{
-	font-family:'Segoe UI','Lucida Grande',Arial,sans-serif
+th.headerSortDown:after {
+    content: " \25BE"
 }
 
-.problem-description a{
-	color:#5b80b2;
-	text-decoration:underline
+th.headerSortUp:after {
+    content: " \25B4"
 }
 
-.problem-description a:visited{
-	color:#0b0080
+.table {
+    border-spacing: 0;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background: rgba(0, 0, 0, 0.01);
+    border-color: #d4d4d4;
+    border-width: 0 0 1px 1px;
+    border-style: solid;
+    box-shadow: 2px 2px 10px #aaa
 }
 
-.problem-description a:hover{
-	color:#0645ad
+.table th {
+    color: #FFF;
+    background-color: #393630;
+
+    border-color: #555;
+    border-width: 1px 1px 0 0;
+    border-style: solid;
+
+    padding: 3px;
+    vertical-align: top;
+    text-align: center
 }
 
-.problem-description a:active{
-	color:#faa700
+.table td {
+    border-color: #d4d4d4;
+    border-width: 1px 1px 0 0;
+    border-style: solid;
+    padding: 7px 5px;
+    vertical-align: middle;
+    text-align: center
 }
 
-.problem-description a:focus{
-	outline:thin dotted
+.top-level-comments {
+    width: 80%
 }
 
-.problem-description a:hover,.problem-description a:active{
-	outline:0
+.comment {
+    list-style: none none;
+    background: rgba(0, 0, 0, 0.01);
+    border-radius: 4px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    padding-left: 15px;
+    margin-left: -40px;
+    margin-bottom: 10px;
+    box-shadow: 2px 2px 10px #bbb;
+    border: 1px solid #ccc
 }
 
-.problem-description p{
-	margin:1em 0 !important;
-	padding:0 !important;
-	font-size:14px !important
+.form-area {
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.01);
+    padding-top: 5px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    padding-left: 15px;
+    border-radius: 4px;
+    box-shadow: 2px 2px 10px #bbb;
+    border: 1px solid #ccc
 }
 
-.problem-description img{
-	max-width:100%
+.comment-body {
+    padding-right: 2px;
+    padding-left: 30px
 }
 
-.problem-description h1,.problem-description h2,.problem-description h3,.problem-description h4,.problem-description h5,.problem-description h6{
-	font-weight:normal;
-	color:#111;
-	margin-bottom:.75em;
-	padding:0;
-	background:0
+.comment-author {
+    font-weight: bold;
+    color: #333
 }
 
-.problem-description h4,.problem-description h5,.problem-description h6{
-	font-weight:bold
+.comment-header {
+    color: rgba(1, 1, 1, 1);
+    background: rgba(0, 0, 0, 0.1);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 10px;
+    margin-left: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px
 }
 
-.problem-description h1{
-	font-size:2.5em
+div.info-float {
+    float: right;
+    padding: 10px;
+    height: 100%
 }
 
-.problem-description h2{
-	font-size:2em
+footer {
+    color: gray
 }
 
-.problem-description h3{
-	font-size:1.4em;
-	margin:0;
-	padding:0;
-	margin-bottom:-0.5em;
+body {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.231;
+    background: #FFF;
+    font-family: 'Segoe UI', 'Lucida Grande', Arial, sans-serif;
+    color: #000;
+    height: 100%
 }
 
-.problem-description h4{
-	font-size:1.2em
+.unselectable {
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    behavior: url("unselectable.htc")
 }
 
-.problem-description h5{
-	font-size:1em
+h1 {
+    font-size: 5em;
+    letter-spacing: -2px;
+    margin: 0;
+    padding: 0;
+    line-height: 1em
 }
 
-.problem-description h6{
-	font-size:.9em
+b {
+    font-weight: bold
 }
 
-.problem-description blockquote{
-	color:#666;
-	margin:0;
-	padding-left:1.5em;
-	border-left:.5em #EEE solid
+h2 {
+    font-weight: 300;
+    font-size: 2em;
+    border-radius: 4px;
+    padding: 0;
+    margin: 0
 }
 
-.problem-description hr{
-	display:block;
-	height:0;
-	border:0;
-	font-style:italic;
-	border-bottom:1px solid #CCC;
-	margin:25px 0 20px 0;
-	padding:0
+h3 {
+    font-weight: 300;
+    font-size: 1.4em;
+    border-radius: 4px;
+    padding: 0;
+    margin: 0
 }
 
-.problem-description pre,.problem-description code,.problem-description kbd,.problem-description samp{
-	color:#000;
-	font-family:monospace,monospace;
-	_font-family:'courier new',monospace;
-	font-size:.98em
+h4 {
+    font-size: 1.1em;
+    padding: 0;
+    margin: 0
 }
 
-.problem-description code{
-	font-family:Consolas,"Liberation Mono",Courier,monospace,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace !important;
-	margin:0 2px;
-	padding:0 5px;
-	border:1px solid #ddd;
-	background-color:#f8f8f8;
-	border-radius:2px;
-	font-size:.95em;
-	color:#444
+#header h1 {
+    background: #111;
+    color: #aaa;
+    text-align: left;
+    display: block;
+    height: 65px;
+    padding: 10px;
+    margin-top: -10px;
+    padding-left: 60px
 }
 
-.problem-description pre code{
-	background-color:none;
-	border:0;
-	line-height:1em;
-	margin:0;
-	padding:0;
-	background:transparent;
-	border:0;
-	font-size:1em
+#user-links {
+    max-width: 25%;
+    bottom: 6px;
+    right: 6px;
+    position: absolute;
+    color: #5c5954
 }
 
-.problem-description pre{
-	white-space:pre;
-	white-space:pre-wrap;
-	word-wrap:break-word;
-	margin:1.5em 0 1.5em 0;
-	padding:1em;
-	background-color:#393630;
-	color:white;
-	border-radius:4px;
+#user-links a {
+    color: #FFF
 }
 
-.problem-description pre code{
-	color:white
+nav ul {
+    list-style: none none;
+    margin: 0;
+    padding: 0 0 0 60px
 }
 
-.problem-description b,.problem-description strong{
-	font-weight:bold
+nav {
+    background: #393630;
+    text-align: left;
+    box-shadow: 0 0 10px #333
 }
 
-.problem-description dfn{
-	font-style:italic
+nav ul li {
+    display: inline;
+    color: #FFF;
+    text-transform: uppercase;
+    font-size: 1em
 }
 
-.problem-description ins{
-	background:#ff9;
-	color:#000;
-	text-decoration:none
+nav ul li a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 7px;
+    color: #FFF
 }
 
-.problem-description mark{
-	background:#ff0;
-	color:#000;
-	font-style:italic;
-	font-weight:bold
+nav ul li a:link {
+    color: #FFF
 }
 
-.problem-description sub,.problem-description sup{
-	font-size:75%;
-	line-height:0;
-	position:relative;
-	vertical-align:baseline
+nav ul li a:hover {
+    color: #FFF;
+    background: rgba(255, 255, 255, 0.25)
 }
 
-.problem-description sup{
-	top:-0.5em
+nav ul li a.active {
+    color: #FFF;
+    background: #2980b9
 }
 
-.problem-description sub{
-	bottom:-0.25em
+hr {
+    color: rgba(0, 0, 0, 0.2)
 }
 
-.problem-description ul,.problem-description ol{
-	margin:1em 0 !important;
-	padding:0 0 0 2em !important
+#navigation {
+    position: relative;
+    top: 0;
+    width: 100%
 }
 
-.problem-description ul li,.problem-description ol li{
-	font-size:14px !important;
-	margin-bottom:.75em
+#content {
+    width: 90%;
+    height: 100%;
+    display: block;
+    margin: 0 auto
 }
 
-.problem-description li p:last-child{
-	margin:0
+#content .title {
+    color: #393630
 }
 
-.problem-description dd{
-	margin:0 0 0 2em
+footer {
+    height: 142px
 }
 
-.problem-description img{
-	border:0;
-	-ms-interpolation-mode:bicubic;
-	vertical-align:middle
+a {
+    text-decoration: none;
+    display: inline
 }
 
-.problem-description table{
-	border-collapse:collapse;
-	border-spacing:0
+.pagination {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
+    background: #393630;
+    color: #FFF;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-size: 1em;
+    box-shadow: 2px 2px 10px #777
 }
 
-.problem-description td{
-	vertical-align:top
+.pagination a {
+    display: inline-block;
+    text-decoration: none;
+    padding-left: 8px;
+    padding-right: 8px;
+    color: #FFF
 }
 
-.inline-related .wmd-input{
-	height:150px
+.pagination a:hover {
+    color: #FFF;
+    background: rgba(255, 255, 255, 0.25)
+}
+
+.pagination a.active-page {
+    color: #FFF;
+    background: #2980b9
+}
+
+.admin a {
+    color: red;
+    font-weight: bold
+}
+
+.user a {
+    color: blue;
+    font-weight: bold
+}
+
+.setter a {
+    color: orange;
+    font-weight: bold
+}
+
+noscript {
+    font-family: Arial, sans-serif;
+    font-size: 111%;
+    color: white;
+    font-weight: bold;
+    background: #ae0000;
+    text-align: center;
+    max-width: 30%;
+    padding: 15px 10px 5px;
+    right: 0;
+    position: fixed;
+    border-radius: 4px;
+    z-index: 100
+}
+
+.comment-area {
+    margin-top: 40px
 }
