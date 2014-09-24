@@ -38,26 +38,6 @@
     outline: 0;
 }
 
-.problem-description ::-moz-selection {
-    background: rgba(255, 255, 0, 0.3);
-    color: #000
-}
-
-.problem-description ::selection {
-    background: rgba(255, 255, 0, 0.3);
-    color: #000
-}
-
-.problem-description a::-moz-selection {
-    background: rgba(255, 255, 0, 0.3);
-    color: #0645ad
-}
-
-.problem-description a::selection {
-    background: rgba(255, 255, 0, 0.3);
-    color: #0645ad
-}
-
 .problem-description p {
     margin: 1em 0 !important;
     padding: 0 !important;
