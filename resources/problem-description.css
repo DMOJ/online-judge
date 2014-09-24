@@ -68,7 +68,7 @@
 	font-size:1.4em;
 	margin:0;
 	padding:0;
-	margin-bottom:-0.5em;
+	margin-bottom:-0.5em
 }
 
 .problem-description h4{
@@ -135,9 +135,10 @@
 	word-wrap:break-word;
 	margin:1.5em 0 1.5em 0;
 	padding:1em;
-	background-color:#393630;
-	color:white;
-	border-radius:4px;
+	border:1px solid #ddd;
+	background-color:#f8f8f8;
+	color:black;
+	border-radius:4px
 }
 
 .problem-description pre code{
