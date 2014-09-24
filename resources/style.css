@@ -68,7 +68,7 @@ th.headerSortUp:after {
 
 .form-area {
     display: inline-block;
-    background: rgba(0, 0, 0, 0.01);
+    background: #fafafa;
     padding-top: 5px;
     padding-bottom: 10px;
     padding-right: 10px;
