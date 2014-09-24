@@ -319,3 +319,12 @@ noscript {
 .comment-area {
     margin-top: 40px
 }
+
+code {
+    margin: 0 2px;
+    padding: 0 3px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    border-radius: 2px 2px 2px 2px;
+    color: #444;
+}
