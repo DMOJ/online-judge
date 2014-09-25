@@ -31,6 +31,12 @@ class DjangoJudgeHandler(JudgeHandler):
     def _connected(self):
         judge = Judge.objects.get(name=self.name)
         judge.last_connect = datetime.now()
+        judge.online = True
+        judge.save()
+
+    def _disconnected(self):
+        judge = Judge.objects.get(name=self.name)
+        judge.online = False
         judge.save()
 
     def _update_ping(self):

@@ -37,6 +37,8 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
     def finish(self):
         SocketServer.StreamRequestHandler.finish(self)
+        if self.name is not None:
+            self._disconnected()
         logger.info('Judge disconnected from: %s', self.client_address)
         self.server.judges.remove(self)
 
@@ -73,6 +75,9 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         return False
 
     def _connected(self):
+        pass
+
+    def _disconnected(self):
         pass
 
     def _update_ping(self):

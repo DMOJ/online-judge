@@ -4,8 +4,13 @@ import time
 import os
 
 from django.db import connection
+from judge.models import Judge
 
 from .judgelist import JudgeList
+
+
+def reset_judges():
+    Judge.objects.update(online=False, last_connect=None, ping=None, load=None)
 
 
 class JudgeServer(SocketServer.ThreadingTCPServer):
@@ -13,6 +18,7 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
 
     def __init__(self, *args, **kwargs):
         SocketServer.ThreadingTCPServer.__init__(self, *args, **kwargs)
+        reset_judges()
         self.judges = JudgeList()
         self.ping_judge_thread = threading.Thread(target=self.ping_judge, args=())
         self.ping_judge_thread.daemon = True
@@ -20,6 +26,10 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
         self.ping_db_thread = threading.Thread(target=self.ping_database, args=())
         self.ping_db_thread.daemon = True
         self.ping_db_thread.start()
+
+    def shutdown(self):
+        SocketServer.ThreadingTCPServer.shutdown(self)
+        reset_judges()
 
     def ping_judge(self):
         while True:

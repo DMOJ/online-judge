@@ -23,6 +23,9 @@ class JudgeList(object):
     def remove(self, judge):
         self.judges.remove(judge)
 
+    def __iter__(self):
+        return iter(self.judges)
+
     def on_judge_free(self, judge, submission):
         del self.submission_map[submission]
         if self.queue:
