@@ -22,7 +22,6 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'current-submission-id': self.on_current_submission,
             'problem-not-exist': self.on_bad_problem,
             'submission-terminated': self.on_submission_terminated,
-            'supported-problems': self.on_supported_problems,
             'ping-response': self.on_ping_response
         }
         self._current_submission = None
