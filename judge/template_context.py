@@ -41,12 +41,13 @@ def site(request):
     return {'site': Site.objects.get_current()}
 
 
-def __get_config(key):
-    try:
-        return MiscConfig.objects.get(key=key).value
-    except MiscConfig.DoesNotExist:
-        return ''
+class MiscConfigDict(defaultdict):
+    def __missing__(self, key):
+        try:
+            return MiscConfig.objects.get(key=key).value
+        except MiscConfig.DoesNotExist:
+            return ''
 
 
 def misc_config(request):
-    return {'misc_config': defaultdict(__get_config)}
+    return {'misc_config': MiscConfigDict()}
