@@ -23,7 +23,7 @@ def comet_location(request):
 def __tab(request):
     if request.path == '/':
         return 'home'
-    elif '/submi' in request.path:
+    elif '/submi' in request.path or '/src' in request.path:
         return 'submit'
     elif request.path.startswith('/problem'):
         return 'problem'
