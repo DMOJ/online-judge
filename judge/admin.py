@@ -208,19 +208,19 @@ class GenerateKeyTextInput(TextInput):
             '''\
 <a href="#" onclick="return false;" class="button" id="id_{0}_regen">Regenerate</a>
 <script type="text/javascript">
-(function ($) {
-    $(document).ready(function () {
-        $('#id_{0}_regen').click(function () {
+(function ($) {{
+    $(document).ready(function () {{
+        $('#id_{0}_regen').click(function () {{
             var length = 100,
                 charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{{}};:,<>./?",
                 key = "";
-            for (var i = 0, n = charset.length; i < length; ++i) {
+            for (var i = 0, n = charset.length; i < length; ++i) {{
                 key += charset.charAt(Math.floor(Math.random() * n));
-            }
+            }}
             alert(key);
-        });
-    });
-})(django.jQuery);
+        }});
+    }});
+}})(django.jQuery);
 </script>
 ''', name))
 
