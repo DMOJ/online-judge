@@ -46,6 +46,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             logger.info('Judge failed authentication: %s', self.client_address)
             return
         else:
+            self._send({'name': 'handshake-success'})
             logger.info('Judge authenticated: %s', self.client_address)
             self.server.judges.register(self)
         self.ping()
