@@ -2,9 +2,11 @@ from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import TextField
-from django.forms import ModelForm, ModelMultipleChoiceField
+from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType, \
     MiscConfig, Judge
@@ -199,7 +201,40 @@ class ProblemTypeAdmin(admin.ModelAdmin):
         return super(ProblemTypeAdmin, self).get_form(request, obj, **kwargs)
 
 
+class GenerateKeyTextInput(TextInput):
+    def render(self, name, value, attrs=None):
+        text = super(TextInput, self).render(name, value, attrs)
+        return mark_safe(text + format_html(
+            '''\
+<a href="#" onclick="return false;" class="button" id="id_{0}_regen">Regenerate</a>
+<script type="text/javascript">
+(function ($) {
+    $(document).ready(function () {
+        $('#id_{0}_regen').click(function () {
+            var length = 100,
+                charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{};:,<>./?",
+                key = "";
+            for (var i = 0, n = charset.length; i < length; ++i) {
+                key += charset.charAt(Math.floor(Math.random() * n));
+            }
+            alert(key);
+        });
+    });
+})(django.jQuery);
+</script>
+'''))
+
+
+class JudgeAdminForm(ModelForm):
+    class Meta:
+        model = Judge
+        widgets = {
+            'auth_key': GenerateKeyTextInput(),
+        }
+
+
 class JudgeAdmin(admin.ModelAdmin):
+    form = JudgeAdminForm
     readonly_fields = ('created', 'online', 'last_connect', 'ping', 'load')
     fieldsets = (
         (None, {'fields': ('name', 'auth_key')}),
