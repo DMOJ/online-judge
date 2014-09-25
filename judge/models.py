@@ -266,7 +266,7 @@ class MiscConfig(models.Model):
 
 
 class Judge(models.Model):
-    name = models.CharField(max_length=50, help_text='Server name, hostname-style')
+    name = models.CharField(max_length=50, help_text='Server name, hostname-style', unique=True)
     created = models.DateTimeField(auto_now_add=True)
     auth_key = models.CharField(max_length=100, help_text='A key to authenticated this judge',
                                 verbose_name='Authentication key')
