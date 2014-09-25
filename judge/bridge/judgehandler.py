@@ -34,7 +34,6 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self.load = 1e100
 
         logger.info('Judge connected from: %s', self.client_address)
-        self.server.judges.append(self)
 
     def finish(self):
         SocketServer.StreamRequestHandler.finish(self)
@@ -42,6 +41,12 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self.server.judges.remove(self)
 
     def handle(self):
+        if not self._handle_auth():
+            self.rfile.close()
+            self.wfile.close()
+            return
+        else:
+            self.server.judges.register(self)
         self.ping()
         while True:
             try:
@@ -59,6 +64,28 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
                 self.rfile.close()
                 self.wfile.close()
                 break
+
+    def _authenticate(self, id, key):
+        return False
+
+    def _handle_auth(self):
+        buf = self.rfile.read(size_pack.size)
+        if not buf:
+            return False
+        size = size_pack.unpack(buf)[0]
+        data = self.rfile.read(size)
+        if not data:
+            return False
+        data = data.decode('zlib')
+        packet = json.loads(data)
+        if packet['name'] != 'handshake' or 'id' not in packet or 'key' not in packet:
+            return False
+        if not self._authenticate(packet['id'], packet['key']):
+            return False
+
+        self._problems = packet['problems']
+        self.problems = dict(self._problems)
+        return True
 
     @property
     def working(self):
@@ -139,11 +166,6 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
     def on_current_submission(self, packet):
         self._current_submission = packet['submission-id']
         self._current_submission_event.set()
-
-    def on_supported_problems(self, packet):
-        self._problems = packet['problems']
-        self.problems = dict(self._problems)
-        self.server.judges.on_got_problems(self)
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)

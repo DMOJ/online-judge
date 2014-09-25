@@ -2,15 +2,14 @@ from operator import attrgetter
 from random import choice
 
 
-class JudgeList(list):
-    __slots__ = 'queue', 'submission_map'
-
-    def __init__(self, *args, **kwargs):
-        super(JudgeList, self).__init__(*args, **kwargs)
+class JudgeList(object):
+    def __init__(self):
         self.queue = []
+        self.judges = []
         self.submission_map = {}
 
-    def on_got_problems(self, judge):
+    def register(self, judge):
+        self.judges.append(judge)
         for elem in self.queue:
             id, problem, language, source = elem
             if problem in judge.problems:
@@ -20,6 +19,9 @@ class JudgeList(list):
         else:
             return
         self.queue.remove(elem)
+
+    def remove(self, judge):
+        self.judges.remove(judge)
 
     def on_judge_free(self, judge, submission):
         del self.submission_map[submission]
@@ -33,7 +35,7 @@ class JudgeList(list):
 
     def judge(self, id, problem, language, source):
         try:
-            judge = min([judge for judge in self if problem in judge.problems and not judge.working],
+            judge = min([judge for judge in self.judges if problem in judge.problems and not judge.working],
                         key=attrgetter('load'))
         except ValueError:
             self.queue.append((id, problem, language, source))
