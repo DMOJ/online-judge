@@ -120,6 +120,10 @@ class CommentAdmin(admin.ModelAdmin):
         ('Content', {'fields': ('title', 'body')}),
     )
     list_display = ['title', 'author', 'page', 'time']
+    if AdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': AdminPagedownWidget},
+        }
 
 
 class LanguageForm(ModelForm):
