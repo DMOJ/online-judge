@@ -270,10 +270,10 @@ class Judge(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     auth_key = models.CharField(max_length=100, help_text='A key to authenticated this judge',
                                 verbose_name='Authentication key')
-    online = models.BooleanField()
-    last_connect = models.DateTimeField(verbose_name='Last connection time')
-    ping = models.FloatField(verbose_name='Response time')
-    load = models.FloatField(verbose_name='System load',
+    online = models.BooleanField(default=False)
+    last_connect = models.DateTimeField(verbose_name='Last connection time', null=True)
+    ping = models.FloatField(verbose_name='Response time', null=True)
+    load = models.FloatField(verbose_name='System load', null=True,
                              help_text='Load for the last minute, divided by processors to be fair.')
     problems = models.ManyToManyField(Problem)
     runtimes = models.ManyToManyField(Language)
