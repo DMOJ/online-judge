@@ -205,6 +205,7 @@ class JudgeAdmin(admin.ModelAdmin):
         (None, {'fields': ('name', 'auth_key')}),
         ('Information', {'fields': ('created', 'online', 'last_connect', 'ping', 'load')}),
     )
+    list_display = ('name',)
 
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(GraderType)
