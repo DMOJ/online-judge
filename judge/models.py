@@ -273,5 +273,7 @@ class Judge(models.Model):
     online = models.BooleanField()
     last_connect = models.DateTimeField(verbose_name='Last connection time')
     ping = models.FloatField(verbose_name='Response time')
+    load = models.FloatField(verbose_name='System load',
+                             help_text='Load for the last minute, divided by processors to be fair.')
     problems = models.ManyToManyField(Problem)
     runtimes = models.ManyToManyField(Language)
