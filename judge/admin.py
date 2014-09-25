@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType, \
-    MiscConfig
+    MiscConfig, Judge
 from judge.widgets import CheckboxSelectMultipleWithSelectAll
 
 
@@ -199,6 +199,13 @@ class ProblemTypeAdmin(admin.ModelAdmin):
         return super(ProblemTypeAdmin, self).get_form(request, obj, **kwargs)
 
 
+class JudgeAdmin(admin.ModelAdmin):
+    readonly_fields = ('created', 'online', 'last_connect', 'ping', 'load')
+    fieldsets = (
+        (None, {'fields': ('name', 'auth_key')}),
+        ('Information', {'fields': ('created', 'online', 'last_connect', 'ping', 'load')}),
+    )
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(GraderType)
 admin.site.register(Comment, CommentAdmin)
@@ -208,3 +215,4 @@ admin.site.register(ProblemGroup, ProblemGroupAdmin)
 admin.site.register(ProblemType, ProblemGroupAdmin)
 admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(MiscConfig)
+admin.site.register(Judge, JudgeAdmin)
