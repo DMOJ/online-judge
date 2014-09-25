@@ -217,7 +217,7 @@ class GenerateKeyTextInput(TextInput):
             for (var i = 0, n = charset.length; i < length; ++i) {{
                 key += charset.charAt(Math.floor(Math.random() * n));
             }}
-            alert(key);
+            $('#id_{0}').val(key);
         }});
     }});
 }})(django.jQuery);
