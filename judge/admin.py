@@ -6,7 +6,8 @@ from django.forms import ModelForm, ModelMultipleChoiceField
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
 
-from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType
+from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType, \
+    MiscConfig
 from judge.widgets import CheckboxSelectMultipleWithSelectAll
 
 
@@ -206,3 +207,4 @@ admin.site.register(Problem, ProblemAdmin)
 admin.site.register(ProblemGroup, ProblemGroupAdmin)
 admin.site.register(ProblemType, ProblemGroupAdmin)
 admin.site.register(Submission, SubmissionAdmin)
+admin.site.register(MiscConfig)
