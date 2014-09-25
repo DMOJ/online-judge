@@ -31,6 +31,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self.problems = {}
         self.latency = None
         self.load = 1e100
+        self.name = None
 
         logger.info('Judge connected from: %s', self.client_address)
 
@@ -49,6 +50,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             self._send({'name': 'handshake-success'})
             logger.info('Judge authenticated: %s', self.client_address)
             self.server.judges.register(self)
+            self._connected()
         self.ping()
         while True:
             try:
@@ -70,6 +72,12 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
     def _authenticate(self, id, key):
         return False
 
+    def _connected(self):
+        pass
+
+    def _update_ping(self):
+        pass
+
     def _handle_auth(self):
         buf = self.rfile.read(size_pack.size)
         if not buf:
@@ -87,6 +95,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
         self._problems = packet['problems']
         self.problems = dict(self._problems)
+        self.name = packet['id']
         return True
 
     @property
@@ -175,6 +184,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
     def on_ping_response(self, packet):
         self.latency = packet['time']
         self.load = packet['load']
+        self._update_ping()
 
     def _free_self(self, packet):
         self._working = False

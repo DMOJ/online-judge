@@ -1,6 +1,6 @@
 import logging
+from datetime import datetime
 
-from django.db import connection
 from .judgehandler import JudgeHandler
 from judge.models import Submission, SubmissionTestCase, Problem, Judge
 from judge import event_poster as event
@@ -26,9 +26,18 @@ class DjangoJudgeHandler(JudgeHandler):
             judge = Judge.objects.get(name=id)
         except Judge.DoesNotExist:
             return False
-        finally:
-            connection.close()
         return judge.auth_key == key
+
+    def _connected(self):
+        judge = Judge.objects.get(name=self.name)
+        judge.last_connect = datetime.now()
+        judge.save()
+
+    def _update_ping(self):
+        judge = Judge.objects.get(name=self.name)
+        judge.ping = self.latency
+        judge.load = self.load
+        judge.save()
 
     def on_grading_begin(self, packet):
         JudgeHandler.on_grading_begin(self, packet)
@@ -79,7 +88,6 @@ class DjangoJudgeHandler(JudgeHandler):
             'result': submission.result
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
-        connection.close()
 
     def on_compile_error(self, packet):
         JudgeHandler.on_compile_error(self, packet)
@@ -92,7 +100,6 @@ class DjangoJudgeHandler(JudgeHandler):
             'log': packet['log']
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
-        connection.close()
 
     def on_bad_problem(self, packet):
         JudgeHandler.on_bad_problem(self, packet)
@@ -104,7 +111,6 @@ class DjangoJudgeHandler(JudgeHandler):
             'problem': packet['problem']
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
-        connection.close()
 
     def on_submission_terminated(self, packet):
         JudgeHandler.on_submission_terminated(self, packet)
@@ -115,7 +121,6 @@ class DjangoJudgeHandler(JudgeHandler):
             'type': 'aborted-submission'
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
-        connection.close()
 
     def on_test_case(self, packet):
         JudgeHandler.on_test_case(self, packet)
