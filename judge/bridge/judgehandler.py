@@ -44,8 +44,10 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         if not self._handle_auth():
             self.rfile.close()
             self.wfile.close()
+            logger.info('Judge failed authentication: %s', self.client_address)
             return
         else:
+            logger.info('Judge authenticated: %s', self.client_address)
             self.server.judges.register(self)
         self.ping()
         while True:
