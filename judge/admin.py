@@ -222,7 +222,7 @@ class GenerateKeyTextInput(TextInput):
     });
 })(django.jQuery);
 </script>
-'''))
+''', name))
 
 
 class JudgeAdminForm(ModelForm):
