@@ -258,3 +258,8 @@ class CommentVote(models.Model):
     voter = models.ForeignKey(Profile)
     comment = models.ForeignKey(Comment)
     score = models.IntegerField()
+
+
+class MiscConfig(models.Model):
+    key = models.CharField(max_length=30, db_index=True)
+    value = models.TextField()

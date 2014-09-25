@@ -1,7 +1,8 @@
+from collections import defaultdict
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.utils.functional import SimpleLazyObject
-from .models import Profile
+from .models import Profile, MiscConfig
 
 
 def get_profile(request):
@@ -38,3 +39,14 @@ def general_info(request):
 
 def site(request):
     return {'site': Site.objects.get_current()}
+
+
+def __get_config(key):
+    try:
+        return MiscConfig.objects.get(key=key).value
+    except MiscConfig.DoesNotExist:
+        return ''
+
+
+def misc_config(request):
+    return {'misc_config': defaultdict(__get_config)}
