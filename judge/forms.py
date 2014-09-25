@@ -5,11 +5,6 @@ from django_ace import AceWidget
 from judge.comments import valid_comment_page
 from .models import Profile, Submission, Comment
 
-try:
-    from pagedown.widgets import PagedownWidget
-except ImportError:
-    PagedownWidget = None
-
 
 class ProfileForm(ModelForm):
     class Meta:
@@ -38,8 +33,6 @@ class CommentForm(ModelForm):
         widgets = {
             'parent': forms.HiddenInput(),
         }
-        if PagedownWidget is not None:
-            widgets['body'] = PagedownWidget()
 
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)
