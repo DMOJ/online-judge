@@ -263,3 +263,15 @@ class CommentVote(models.Model):
 class MiscConfig(models.Model):
     key = models.CharField(max_length=30, db_index=True)
     value = models.TextField()
+
+
+class Judge(models.Model):
+    name = models.CharField(max_length=50, help_text='Server name, hostname-style')
+    created = models.DateTimeField(auto_now_add=True)
+    auth_key = models.CharField(max_length=100, help_text='A key to authenticated this judge',
+                                verbose_name='Authentication key')
+    online = models.BooleanField()
+    last_connect = models.DateTimeField(verbose_name='Last connection time')
+    ping = models.FloatField(verbose_name='Response time')
+    problems = models.ManyToManyField(Problem)
+    runtimes = models.ManyToManyField(Language)
