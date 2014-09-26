@@ -32,6 +32,7 @@ def problem(request, code):
             return HttpResponseRedirect(request.path)
         return render_to_response('problem.jade', {'problem': problem, 'results': get_result_table(problem__code=code),
                                                    'title': 'Problem: %s' % problem.name,
+                                                   'has_submissions': Submission.objects.filter(user=request.user.profile).exists(),
                                                    'comment_list': problem_comments(problem),
                                                    'comment_form': form},
                                   context_instance=RequestContext(request))

@@ -13,7 +13,8 @@ block body
         a(href='{% url "judge.views.problem_submit" problem.code %}') Submit
         if request.user.is_authenticated
             br
-            a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My submissions
+            if has_submissions
+                a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My submissions
             hr
         else
             br
