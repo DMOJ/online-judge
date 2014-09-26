@@ -1,6 +1,7 @@
 extends base
 
 -load static from staticfiles
+-load timedelta
 
 block media
     meta(http-equiv='refresh', content='120')
@@ -25,6 +26,6 @@ block body
                         img(src='{% static "admin/img/icon-yes.gif" %}')
                     else
                         img(src='{% static "admin/img/icon-yes.gif" %}')
-                td= judge.uptime
+                td #{judge.uptime|timedelta}
                 td= judge.ping
                 td= judge.load
