@@ -39,9 +39,11 @@ html(lang='en')
                     li
                         a.user(href='/users/') Users
                     li
-                        a.about(href='/about/') About
-                    li
                         a.status(href='/status/') Status
+                    li
+                        a.chat(href='/chat/') Chat
+                    li
+                        a.about(href='/about/') About
                 span#user-links
                     if request.user.is_authenticated
                         a(href='{% url "judge.views.user" %}')

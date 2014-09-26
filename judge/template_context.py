@@ -33,6 +33,8 @@ def __tab(request):
         return 'about'
     elif request.path == '/status/':
         return 'status'
+    elif request.path == '/chat/':
+        return 'chat'
 
 
 def general_info(request):
