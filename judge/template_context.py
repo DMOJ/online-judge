@@ -31,6 +31,8 @@ def __tab(request):
         return 'user'
     elif request.path == '/about/':
         return 'about'
+    elif request.path == '/status/':
+        return 'status'
 
 
 def general_info(request):
