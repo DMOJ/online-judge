@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from django.utils import timezone
 
 from .judgehandler import JudgeHandler
 from judge.models import Submission, SubmissionTestCase, Problem, Judge
@@ -30,7 +30,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def _connected(self):
         judge = Judge.objects.get(name=self.name)
-        judge.last_connect = datetime.now()
+        judge.last_connect = timezone.now()
         judge.online = True
         judge.save()
 

@@ -1,9 +1,8 @@
-from datetime import datetime
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Max
+from django.utils import timezone
 import pytz
 from operator import itemgetter, attrgetter
 
@@ -281,4 +280,4 @@ class Judge(models.Model):
 
     @property
     def uptime(self):
-        return datetime.now() - self.last_connect if self.online else 'N/A'
+        return timezone.now() - self.last_connect if self.online else 'N/A'
