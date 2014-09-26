@@ -7,6 +7,7 @@ tr
     th Uptime
     th Ping
     th Load
+    th Runtimes
 for judge in judges
     tr
         td= judge.name
@@ -18,3 +19,4 @@ for judge in judges
         td #{judge.uptime|timedelta}
         td #{judge.ping_ms|floatformat:3} ms
         td #{judge.load|floatformat:3}
+        td= judge.runtime_list

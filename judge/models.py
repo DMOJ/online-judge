@@ -29,11 +29,6 @@ def make_timezones():
 TIMEZONE = make_timezones()
 del make_timezones
 
-# if 'tinymce' in settings.INSTALLED_APPS:
-# from tinymce.models import HTMLField
-# else:
-# HTMLField = models.TextField
-
 
 class Language(models.Model):
     key = models.CharField(max_length=6, verbose_name='Short identifier', unique=True)
@@ -285,3 +280,7 @@ class Judge(models.Model):
     @property
     def ping_ms(self):
         return self.ping * 1000
+
+    @property
+    def runtime_list(self):
+        return ', '.join(map(attrgetter('name'), self.runtimes))
