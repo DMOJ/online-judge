@@ -13,7 +13,7 @@ block media
 
 block body
     p.
-        This page shows the current status of Don Mills Online Judge.
+        This page shows the current status of DMOJ's judging servers.
         The page will automatically refresh every two minutes.
     h3 Judges
     hr
@@ -31,7 +31,7 @@ block body
                     if judge.online
                         img(src='{% static "admin/img/icon-yes.gif" %}')
                     else
-                        img(src='{% static "admin/img/icon-yes.gif" %}')
+                        img(src='{% static "admin/img/icon-no.gif" %}')
                 td #{judge.uptime|timedelta}
                 td #{judge.ping_ms|floatformat:3} ms
                 td= judge.load
