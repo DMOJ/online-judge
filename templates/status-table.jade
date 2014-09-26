@@ -1,0 +1,19 @@
+-load static from staticfiles
+
+tr
+    th Name
+    th Online
+    th Uptime
+    th Ping
+    th Load
+for judge in judges
+    tr
+        td= judge.name
+        td
+            if judge.online
+                img(src='{% static "admin/img/icon-yes.gif" %}')
+            else
+                img(src='{% static "admin/img/icon-no.gif" %}')
+        td #{judge.uptime|timedelta}
+        td #{judge.ping_ms|floatformat:3} ms
+        td= judge.load

@@ -4,34 +4,25 @@ extends base
 -load timedelta
 
 block media
-    meta(http-equiv='refresh', content='10')
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
     script(type='text/javascript')
         $(document).ready(function () {
-            $("#judge-status").tablesorter();
+            var table = $("#judge-status");
+            table.tablesorter();
+            setInterval(function () {
+                $.ajax({
+                    url: '{% url "judge.views.status_table" %}'
+                }).done(function (data) {
+                    table.html(data);
+                });
+            }, 10000);
         });
 
 block body
     p.
         This page shows the current status of DMOJ's judging servers.
-        The page will automatically refresh every two minutes.
+        The page will automatically refresh every 10 seconds.
     h3 Judges
     hr
     table#judge-status.table
-        tr
-            th Name
-            th Online
-            th Uptime
-            th Ping
-            th Load
-        for judge in judges
-            tr
-                td= judge.name
-                td
-                    if judge.online
-                        img(src='{% static "admin/img/icon-yes.gif" %}')
-                    else
-                        img(src='{% static "admin/img/icon-no.gif" %}')
-                td #{judge.uptime|timedelta}
-                td #{judge.ping_ms|floatformat:3} ms
-                td= judge.load
+        include status-table
