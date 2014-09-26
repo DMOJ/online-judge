@@ -100,6 +100,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
         self._problems = packet['problems']
         self.problems = dict(self._problems)
+        self.executors = packet['executors']
         self.name = packet['id']
         return True
 

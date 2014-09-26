@@ -2,7 +2,7 @@ import logging
 from django.utils import timezone
 
 from .judgehandler import JudgeHandler
-from judge.models import Submission, SubmissionTestCase, Problem, Judge
+from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language
 from judge import event_poster as event
 
 logger = logging.getLogger('judge.bridge')
@@ -32,6 +32,7 @@ class DjangoJudgeHandler(JudgeHandler):
         judge = Judge.objects.get(name=self.name)
         judge.last_connect = timezone.now()
         judge.online = True
+        judge.runtimes = Language.objects.filter(key__in=self.executors)
         judge.save()
 
     def _disconnected(self):
