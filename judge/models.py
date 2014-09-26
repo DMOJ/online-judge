@@ -283,4 +283,4 @@ class Judge(models.Model):
 
     @property
     def runtime_list(self):
-        return ', '.join(map(attrgetter('name'), self.runtimes.all()))
+        return map(attrgetter('name'), self.runtimes.all())
