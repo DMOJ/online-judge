@@ -11,6 +11,7 @@ block body
         This page shows the current status of Don Mills Online Judge.
         The page will automatically refresh every two minutes.
     h3 Judges
+    hr
     table#judge-status.table
         tr
             th Name
@@ -27,5 +28,5 @@ block body
                     else
                         img(src='{% static "admin/img/icon-yes.gif" %}')
                 td #{judge.uptime|timedelta}
-                td= judge.ping
+                td #{judge.ping_ms|floatformat:3} ms
                 td= judge.load

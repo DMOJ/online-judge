@@ -281,3 +281,7 @@ class Judge(models.Model):
     @property
     def uptime(self):
         return timezone.now() - self.last_connect if self.online else 'N/A'
+
+    @property
+    def ping_ms(self):
+        return self.ping * 1000
