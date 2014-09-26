@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -277,3 +278,7 @@ class Judge(models.Model):
                              help_text='Load for the last minute, divided by processors to be fair.')
     problems = models.ManyToManyField(Problem)
     runtimes = models.ManyToManyField(Language)
+
+    @property
+    def uptime(self):
+        return datetime.now() - self.last_connect if self.online else 'N/A'

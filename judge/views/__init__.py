@@ -8,6 +8,7 @@ from .user import *
 from .problem import *
 from .submission import *
 from .ranked_submission import ranked_submissions
+from .status import status
 
 
 class TemplateView(TemplateView):

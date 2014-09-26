@@ -1,0 +1,28 @@
+extends base
+
+block media
+    meta(http-equiv='refresh', content='120')
+
+block body
+    p.
+        This page shows the current status of Don Mills Online Judge.
+        The page will automatically refresh every two minutes.
+    h3 Judges
+    table.judge-status
+        tr
+            th Name
+            th Online
+            th Uptime
+            th Ping
+            th Load
+        for judge in judges
+            tr
+                td= judge.name
+                td
+                    if judge.online
+                        img(src='{% static "admin/img/icon-yes.gif" %}')
+                    else
+                        img(src='{% static "admin/img/icon-yes.gif" %}')
+                td= judge.uptime
+                td= judge.ping
+                td= judge.load
