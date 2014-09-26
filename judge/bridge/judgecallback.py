@@ -32,6 +32,7 @@ class DjangoJudgeHandler(JudgeHandler):
         judge = Judge.objects.get(name=self.name)
         judge.last_connect = timezone.now()
         judge.online = True
+        judge.problems = Problem.objects.filter(code__in=self.problems.keys())
         judge.runtimes = Language.objects.filter(key__in=self.executors)
         judge.save()
 

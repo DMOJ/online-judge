@@ -235,11 +235,11 @@ class JudgeAdminForm(ModelForm):
 
 class JudgeAdmin(admin.ModelAdmin):
     form = JudgeAdminForm
-    readonly_fields = ('created', 'online', 'last_connect', 'ping', 'load', 'runtimes')
+    readonly_fields = ('created', 'online', 'last_connect', 'ping', 'load', 'runtimes', 'problems')
     fieldsets = (
         (None, {'fields': ('name', 'auth_key')}),
         ('Information', {'fields': ('created', 'online', 'last_connect', 'ping', 'load')}),
-        ('Capabilities', {'fields': ('runtimes',)}),
+        ('Capabilities', {'fields': ('runtimes', 'problems')}),
     )
     list_display = ('name', 'online', 'last_connect', 'ping', 'load')
     ordering = ['name']
