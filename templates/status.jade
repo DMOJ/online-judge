@@ -6,6 +6,10 @@ extends base
 block media
     meta(http-equiv='refresh', content='120')
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
+    script(type='text/javascript')
+        $(document).ready(function () {
+            $("#judge-status").tablesorter();
+        });
 
 block body
     p.
