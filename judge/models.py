@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Max
 from django.utils import timezone
@@ -148,6 +149,9 @@ class Problem(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('judge.views.problem', args=(self.code,))
 
 
 SUBMISSION_RESULT = (
