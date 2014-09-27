@@ -42,7 +42,7 @@ class ProblemAdmin(admin.ModelAdmin):
     )
     list_display = ['code', 'name', 'user', 'points']
     ordering = ['code']
-    search_fields = ('^code', '@name')
+    search_fields = ('^code', 'name')
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
@@ -160,7 +160,7 @@ class CommentAdmin(admin.ModelAdmin):
         ('Content', {'fields': ('title', 'body')}),
     )
     list_display = ['title', 'author', 'page', 'time']
-    search_fields = ['author', 'page', 'title', '@body']
+    search_fields = ['author', 'page', 'title', 'body']
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
