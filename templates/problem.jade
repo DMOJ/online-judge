@@ -54,7 +54,7 @@ block body
         | #{problem.languages_list|join:", "}
         br
     .problem-description
-        cache 3600 problem_html problem.id
+        -cache 3600 problem_html problem.id
             | #{problem.description|markdown:"problem"}
     hr
     .comment-area
