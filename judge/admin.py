@@ -160,7 +160,7 @@ class CommentAdmin(admin.ModelAdmin):
         ('Content', {'fields': ('title', 'body')}),
     )
     list_display = ['title', 'author', 'page', 'time']
-    search_fields = ['author', 'page', 'title', 'body']
+    search_fields = ['author__user__username', 'author__name', 'page', 'title', 'body']
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
