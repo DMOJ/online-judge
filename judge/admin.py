@@ -24,6 +24,8 @@ class ProfileAdmin(admin.ModelAdmin):
     fields = ['user', 'name', 'about', 'timezone', 'language', 'ace_theme']
     list_display = ['long_display_name', 'timezone_full', 'language']
     ordering = ['user__username']
+    search_fields = ['user__username', 'name']
+    list_filter = ['language', 'timezone']
 
     def timezone_full(self, obj):
         return obj.timezone
@@ -40,6 +42,8 @@ class ProblemAdmin(admin.ModelAdmin):
     )
     list_display = ['code', 'name', 'user', 'points']
     ordering = ['code']
+    search_fields = ('^code', '@name')
+
     if AdminPagedownWidget is not None:
         formfield_overrides = {
             TextField: {'widget': AdminPagedownWidget},
@@ -156,6 +160,8 @@ class CommentAdmin(admin.ModelAdmin):
         ('Content', {'fields': ('title', 'body')}),
     )
     list_display = ['title', 'author', 'page', 'time']
+    search_fields = ['author', 'page', 'title', '@body']
+
     if AdminPagedownWidget is not None:
         formfield_overrides = {
             TextField: {'widget': AdminPagedownWidget},
