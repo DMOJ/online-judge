@@ -35,7 +35,10 @@ class ProfileAdmin(admin.ModelAdmin):
 
 class ProblemAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('code', 'name', 'user', 'description', 'types', 'groups')}),
+        (None, {
+            'classes': ('wide',),
+            'fields': ('code', 'name', 'user', 'description', 'types', 'groups')
+        }),
         ('Points', {'fields': (('points', 'partial'), 'short_circuit', 'grader', 'grader_param')}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
         ('Language', {'fields': ('allowed_languages',)})
