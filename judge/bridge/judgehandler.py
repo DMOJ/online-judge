@@ -28,6 +28,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self._current_submission_event = threading.Event()
         self._working = False
         self._problems = []
+        self.executors = []
         self.problems = {}
         self.latency = None
         self.load = 1e100
