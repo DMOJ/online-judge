@@ -1,4 +1,5 @@
 extends base
+-load evaluate
 
 block title
     | #{flatpage.title} - Don Mills Online Judge
@@ -7,4 +8,4 @@ block content_title
     | #{flatpage.title}
 
 block body
-    | #{flatpage.content}
+    | {% evaluate flatpage.content %}
