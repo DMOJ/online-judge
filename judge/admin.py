@@ -1,3 +1,4 @@
+from operator import itemgetter
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
@@ -53,6 +54,7 @@ class ProblemAdmin(admin.ModelAdmin):
 class SubmissionStatusFilter(admin.SimpleListFilter):
     parameter_name = title = 'status'
     __lookups = (('None', 'None'),) + Submission.STATUS
+    __handles = set(map(itemgetter(0), Submission.STATUS))
 
     def lookups(self, request, model_admin):
         return self.__lookups
@@ -60,12 +62,14 @@ class SubmissionStatusFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() == 'None':
             return queryset.filter(status=None)
-        return queryset.filter(status=self.value())
+        if self.value() in self.__handles:
+            return queryset.filter(status=self.value())
 
 
 class SubmissionResultFilter(admin.SimpleListFilter):
     parameter_name = title = 'result'
     __lookups = (('None', 'None'),) + Submission.RESULT
+    __handles = set(map(itemgetter(0), Submission.RESULT))
 
     def lookups(self, request, model_admin):
         return self.__lookups
@@ -73,7 +77,8 @@ class SubmissionResultFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() == 'None':
             return queryset.filter(result=None)
-        return queryset.filter(result=self.value())
+        if self.value() in self.__handles:
+            return queryset.filter(result=self.value())
 
 
 class SubmissionAdmin(admin.ModelAdmin):
