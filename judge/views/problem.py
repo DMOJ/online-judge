@@ -69,7 +69,9 @@ def problem_submit(request, problem=None, submission=None):
                 raise Http404()
         if submission is not None:
             try:
-                initial['source'] = Submission.objects.get(id=int(submission)).source
+                sub = Submission.objects.get(id=int(submission))
+                initial['source'] = sub.source
+                initial['language'] = sub.language
             except (ObjectDoesNotExist, ValueError):
                 raise Http404()
         form = ProblemSubmitForm(initial=initial)
