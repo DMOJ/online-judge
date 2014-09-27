@@ -57,7 +57,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     list_display = ('id', 'problem_code', 'problem_name', 'user', 'execution_time', 'pretty_memory',
                     'points', 'language', 'status', 'result', 'judge_column')
     list_filter = ('language', 'result', 'status')
-    search_fields = ('problem', 'user')
+    search_fields = ('problem__code', 'problem__name', 'user__user__username', 'user__name')
 
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission'):
