@@ -50,13 +50,39 @@ class ProblemAdmin(admin.ModelAdmin):
         return super(ProblemAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
+class SubmissionStatusFilter(admin.SimpleListFilter):
+    parameter_name = title = 'status'
+    __lookups = (('None', 'None'),) + Submission.STATUS
+
+    def lookups(self, request, model_admin):
+        return self.__lookups
+
+    def queryset(self, request, queryset):
+        if self.value() == 'None':
+            return queryset.filter(status=None)
+        return queryset.filter(status=self.value())
+
+
+class SubmissionResultFilter(admin.SimpleListFilter):
+    parameter_name = title = 'result'
+    __lookups = (('None', 'None'),) + Submission.RESULT
+
+    def lookups(self, request, model_admin):
+        return self.__lookups
+
+    def queryset(self, request, queryset):
+        if self.value() == 'None':
+            return queryset.filter(result=None)
+        return queryset.filter(result=self.value())
+
+
 class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date')
     fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result')
     actions = ['judge']
     list_display = ('id', 'problem_code', 'problem_name', 'user', 'execution_time', 'pretty_memory',
                     'points', 'language', 'status', 'result', 'judge_column')
-    list_filter = ('language', 'result', 'status')
+    list_filter = ('language', SubmissionStatusFilter, SubmissionResultFilter)
     search_fields = ('problem__code', 'problem__name', 'user__user__username', 'user__name')
 
     def judge(self, request, queryset):

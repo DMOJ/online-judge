@@ -171,6 +171,7 @@ class Submission(models.Model):
         ('IE', 'Internal Error'),
         ('CE', 'Compile Error'),
     )
+    RESULT = SUBMISSION_RESULT
     USER_DISPLAY_CODES = {
         'AC': 'Accepted',
         'WA': 'Wrong Answer',
@@ -224,6 +225,8 @@ class Submission(models.Model):
 
 
 class SubmissionTestCase(models.Model):
+    RESULT = SUBMISSION_RESULT
+
     submission = models.ForeignKey(Submission, verbose_name='Associated submission')
     case = models.IntegerField(verbose_name='Test case ID')
     status = models.CharField(max_length=3, verbose_name='Status flag', choices=SUBMISSION_RESULT)
