@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
+from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Max
 from django.utils import timezone
@@ -122,7 +123,8 @@ def validate_grader_param(value):
 
 
 class Problem(models.Model):
-    code = models.CharField(max_length=20, verbose_name='Problem code', unique=True)
+    code = models.CharField(max_length=20, verbose_name='Problem code', unique=True,
+                            validators=[RegexValidator('^[a-z0-9]+$', 'Problem code must be ^[a-z0-9]+$')])
     name = models.CharField(max_length=100, verbose_name='Problem name', db_index=True)
     description = models.TextField(verbose_name='Problem body')
     user = models.ForeignKey(Profile, verbose_name='Creator')
