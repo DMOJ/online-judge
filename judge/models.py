@@ -56,7 +56,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='User associated')
     name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
     about = models.TextField(verbose_name='Self-description', null=True, blank=True)
-    timezone = models.CharField(max_length=50, verbose_name='Timezone', default='UTC', choices=TIMEZONE)
+    timezone = models.CharField(max_length=50, verbose_name='Timezone', default='America/Toronto', choices=TIMEZONE)
     language = models.ForeignKey(Language, verbose_name='Default language')
     points = models.FloatField(default=0, db_index=True)
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')

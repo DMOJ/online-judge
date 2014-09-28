@@ -1,13 +1,15 @@
-from django.forms import CharField
+from django.forms import CharField, ChoiceField, ModelChoiceField
 from registration.backends.default.views import\
     RegistrationView as OldRegistrationView,\
     ActivationView as OldActivationView
 from registration.forms import RegistrationForm
-from judge.models import Profile, Language
+from judge.models import Profile, Language, TIMEZONE
 
 
 class CustomRegistrationForm(RegistrationForm):
-    display_name = CharField(max_length=50, required=False)
+    display_name = CharField(max_length=50, required=False, label='Display name (optional)')
+    timezone = ChoiceField(max_length=50, default='America/Toronto', choices=TIMEZONE)
+    language = ModelChoiceField(queryset=Language.objects.all(), label='Default language')
 
 
 class RegistrationView(OldRegistrationView):
@@ -26,6 +28,8 @@ class RegistrationView(OldRegistrationView):
             'language': Language.objects.get_or_create(key='PY2', name='Python 2')[0]
         })
         profile.name = cleaned_data['display_name']
+        profile.timezone = cleaned_data['timezone']
+        profile.language = cleaned_data['language']
         profile.save()
         return user
 
