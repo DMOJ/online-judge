@@ -152,7 +152,7 @@ class Problem(models.Model):
         return map(attrgetter('name'), self.allowed_languages.all())
 
     def number_of_users(self):
-        return Submission.objects.filter(problem=self).values('user').distinct().count()
+        return Submission.objects.filter(problem=self, result='AC').values('user').distinct().count()
 
     def __unicode__(self):
         return self.name
