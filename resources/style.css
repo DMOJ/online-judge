@@ -28,7 +28,8 @@ th.headerSortUp:after {
 }
 
 .table tr:last-child td:first-child {
-    border: 1px #d4d4d4;
+    border-color: #d4d4d4;
+    border-width: 1px 1px 1px 1px;
 }
 
 .table tr:last-child td {
