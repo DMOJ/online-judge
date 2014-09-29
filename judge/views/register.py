@@ -9,7 +9,7 @@ from judge.models import Profile, Language, TIMEZONE
 class CustomRegistrationForm(RegistrationForm):
     display_name = CharField(max_length=50, required=False, label='Display name (optional)')
     timezone = ChoiceField(choices=TIMEZONE)
-    language = ModelChoiceField(queryset=Language.objects.all(), label='Default language')
+    language = ModelChoiceField(queryset=Language.objects.all(), label='Default language', required=True)
 
 
 class RegistrationView(OldRegistrationView):
