@@ -94,6 +94,12 @@ MARKDOWN_TROIS_STYLES = {
     'trusted': {
         'extras': {
             'code-friendly': None,
+            'pyshell': None,
+            'fenced-code-blocks': None,
+            'html-classes': {'pre': 'code'},
+            'cuddled-lists': None,
+            'footnotes': None,
+            'header-ids': None,
         },
         # Allow raw HTML (WARNING: don't use this for user-generated
         # Markdown for your site!).
