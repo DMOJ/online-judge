@@ -1,6 +1,9 @@
 extends base
 -load markdown_trois_tags
 
+block media
+    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+
 block title
     | #{flatpage.title} - Don Mills Online Judge
 
