@@ -40,6 +40,11 @@ class Language(models.Model):
     def __unicode__(self):
         return self.name
 
+    @classmethod
+    def get_python2(cls):
+        # We really need a default language, and this app is in Python 2
+        return Language.objects.get_or_create(key='PY2', name='Python 2')[0]
+
     class Meta:
         ordering = ['key']
 
