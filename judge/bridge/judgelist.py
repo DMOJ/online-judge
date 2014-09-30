@@ -31,7 +31,7 @@ class JudgeList(object):
         return iter(self.judges)
 
     def on_judge_free(self, judge, submission):
-        logger.info('Judge available: %d', submission)
+        logger.info('Judge available after grading %d: %s', submission, judge.name)
         del self.submission_map[submission]
         self._handle_free_judge(judge)
 
