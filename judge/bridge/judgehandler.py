@@ -5,13 +5,11 @@ import struct
 import json
 import threading
 import time
-from utils.synchronize import synchronize_class, synchronized
 
 size_pack = struct.Struct('!I')
 logger = logging.getLogger('judge.bridge')
 
 
-@synchronize_class
 class JudgeHandler(SocketServer.StreamRequestHandler):
     def setup(self):
         SocketServer.StreamRequestHandler.setup(self)
@@ -149,11 +147,9 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
     def _send(self, data):
         data = json.dumps(data, separators=(',', ':'))
         compress = data.encode('zlib')
-        with self.__lock__:
-            self.wfile.write(size_pack.pack(len(compress)))
-            self.wfile.write(compress)
+        self.wfile.write(size_pack.pack(len(compress)))
+        self.wfile.write(compress)
 
-    @synchronized
     def _packet(self, data):
         try:
             if 'name' not in data:
