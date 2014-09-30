@@ -44,6 +44,7 @@ def judge_submission(submission):
     submission.memory = None
     submission.points = None
     submission.result = None
+    submission.status = None
     submission.save()
     try:
         response = judge_request({
@@ -56,15 +57,13 @@ def judge_submission(submission):
     except BaseException:
         logger.exception('Failed to send request to judge')
         submission.status = 'IE'
-        submission.save()
         success = False
     else:
         submission.status = 'QU' if (response['name'] == 'submission-received' and
                                      response['submission-id'] == submission.id) else 'IE'
-
-        id = 1 if submission.user.is_admin else (2 if submission.user.is_problem_setter else 0)
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
         success = True
+    submission.save()
     return success
 
 
