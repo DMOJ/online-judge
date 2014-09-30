@@ -147,8 +147,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
     def _send(self, data):
         data = json.dumps(data, separators=(',', ':'))
         compress = data.encode('zlib')
-        self.wfile.write(size_pack.pack(len(compress)))
-        self.wfile.write(compress)
+        self.wfile.write(size_pack.pack(len(compress)) + compress)
 
     def _packet(self, data):
         try:
