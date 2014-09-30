@@ -46,7 +46,7 @@ def submission_status(request, code):
             raise PermissionDenied()
 
         if not request.user.profile.is_admin and submission.user != request.user.profile and \
-                not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=code).exists():
+                not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=submission.problem.code).exists():
             raise PermissionDenied()
         test_cases = SubmissionTestCase.objects.filter(submission=submission)
         return render_to_response('submission_status.jade',
