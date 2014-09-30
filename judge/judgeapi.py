@@ -40,12 +40,14 @@ def judge_request(packet, reply=True):
 
 
 def judge_submission(submission):
+    from .models import SubmissionTestCase
     submission.time = None
     submission.memory = None
     submission.points = None
     submission.result = None
     submission.status = None
     submission.save()
+    SubmissionTestCase.objects.filter(submission=submission).delete()
     try:
         response = judge_request({
             'name': 'submission-request',
