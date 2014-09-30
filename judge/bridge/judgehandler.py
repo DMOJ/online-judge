@@ -105,6 +105,9 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self.name = packet['id']
         return True
 
+    def can_judge(self, problem, executor):
+        return problem in self.problems and executor in self.executors
+
     @property
     def working(self):
         return bool(self._working)
