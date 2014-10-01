@@ -27,6 +27,14 @@ class DjangoHandler(SocketServer.StreamRequestHandler):
         self.rfile.close()
         input = input.decode('zlib')
         packet = json.loads(input)
+        if not packet.get('submission-id', -1):
+            for n in xrange(100):
+                print("WE SCREWED UP!!!!!!!!!!!!!!")
+            from time import gmtime, strftime
+
+            with open("spectacular-dump-" + strftime("%Y-%m-%d %H:%M:%S", gmtime()), 'w') as f:
+                f.write(input)
+
         result = self.packet(packet)
         output = json.dumps(result, separators=(',', ':'))
         output = output.encode('zlib')
