@@ -51,6 +51,8 @@ ul.comments.top-level-comments
     if comment_list
         each comment in comment_list
             include comment
+    else
+        p There are no comments at the moment.
 
 if request.user.is_authenticated and comment_form
     .form-area.comment-submit
