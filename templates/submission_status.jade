@@ -64,7 +64,7 @@ block body
                 br
                 if submission.result != "AB"
                     b Final score:
-                    | &nbsp;#{submission.points}/#{submission.problem.points|floatformat:"0"}
+                    | &nbsp;#{submission.testcase_granted_points}/#{submission.testcase_total_points} (#{submission.points}/#{submission.problem.points|floatformat:"0"} points)
                 else
                     b Submission aborted!
                 br
