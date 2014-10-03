@@ -189,7 +189,7 @@ nav ul {
 }
 
 nav {
-    background: #393630;
+    background: rgba(0, 0, 0, 0.77);
     text-align: left;
     box-shadow: 0 0 10px #333
 }
