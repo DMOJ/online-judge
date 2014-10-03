@@ -27,7 +27,7 @@ td.sub-result(class=submission_class)
             if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB'
                 | ---
             else
-                | #{submission.points|default_if_none:0|floatformat:"-2"} / #{submission.problem.points|floatformat:"0"}
+                | #{submission.testcase_granted_points|default_if_none:0} / #{submission.testcase_total_points}
     .state
         span.status(title=submission.long_status) #{submission.result|default_if_none:submission.status}
         | &nbsp;|&nbsp;

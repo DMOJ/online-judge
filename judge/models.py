@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, Sum
 from django.utils import timezone
 import pytz
 from operator import itemgetter, attrgetter
@@ -223,6 +223,14 @@ class Submission(models.Model):
 
     def is_graded(self):
         return self.status not in ["QU", "C", "G"]
+
+    @property
+    def testcase_granted_points(self):
+        return SubmissionTestCase.objects.filter(submission=self).annotate(score=Sum('points'))[0].score
+
+    @property
+    def testcase_total_points(self):
+        return SubmissionTestCase.objects.filter(submission=self).annotate(score=Sum('total'))[0].score
 
     def __unicode__(self):
         return u'Submission %d of %s by %s' % (self.id, self.problem, self.user)
