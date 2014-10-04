@@ -123,7 +123,8 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     -khtml-user-select: none;
-    -ms-behavior: url("unselectable.htc")
+    -ms-behavior: url("unselectable.htc");
+    cursor: default
 }
 
 h1 {
