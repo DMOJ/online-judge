@@ -61,3 +61,7 @@ block body
     .comment-area
         h3 Comments
         include comment_list
+
+block bodyend
+    if '<!--math-->' in problem.description
+        script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
