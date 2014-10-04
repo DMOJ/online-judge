@@ -21,6 +21,18 @@ for judge in judges
                 | #{judge.uptime|timedelta}
             else
                 | N/A
-        td #{judge.ping_ms|floatformat:3} ms
-        td #{judge.load|floatformat:3}
-        td #{judge.runtime_list|join:", "}
+        td
+            if judge.online
+                | #{judge.ping_ms|floatformat:3} ms
+            else
+                | N/A
+        td
+            if judge.online
+                | #{judge.load|floatformat:3}
+            else
+                | N/A
+        td
+            if judge.online
+                | #{judge.runtime_list|join:", "}
+            else
+                | N/A
