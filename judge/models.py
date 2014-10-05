@@ -226,13 +226,15 @@ class Submission(models.Model):
 
     @property
     def testcase_granted_points(self):
-        return SubmissionTestCase.objects.filter(submission=self).values('submission')\
-                                 .annotate(score=Sum('points'))[0]['score']
+        score = SubmissionTestCase.objects.filter(submission=self).values('submission')\
+                                  .annotate(score=Sum('points'))[0]['score']
+        return score[0]['score'] if score else 0
 
     @property
     def testcase_total_points(self):
-        return SubmissionTestCase.objects.filter(submission=self).values('submission')\
-                                 .annotate(score=Sum('total'))[0]['score']
+        score = SubmissionTestCase.objects.filter(submission=self).values('submission')\
+                                  .annotate(score=Sum('total'))
+        return score[0]['score'] if score else 0
 
     def __unicode__(self):
         return u'Submission %d of %s by %s' % (self.id, self.problem, self.user)
