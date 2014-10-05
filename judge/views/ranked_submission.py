@@ -52,11 +52,12 @@ def ranked_submissions(request, code, page=1):
                  (sub.result = 'AC' OR (prob.partial AND sub.points > 0))
             GROUP BY sub.user_id
         ) AS highscore INNER JOIN (
-            SELECT user_id AS uid, points, MIN(time) as time
-            FROM judge_submission
-            WHERE problem_id = %s AND
+            SELECT sub.user_id AS uid, sub.points, MIN(sub.time) as time
+            FROM judge_submission AS sub INNER JOIN
+                 judge_problem AS prob ON (sub.problem_id = prob.id)
+            WHERE sub.problem_id = %s AND
                  (sub.result = 'AC' OR (prob.partial AND sub.points > 0))
-            GROUP BY user_id, points
+            GROUP BY sub.user_id, sub.points
         ) AS fastest
                 ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
             INNER JOIN judge_submission as subs
