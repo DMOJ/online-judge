@@ -1,5 +1,6 @@
 import logging
 from operator import attrgetter
+import traceback
 
 logger = logging.getLogger('judge.bridge')
 
@@ -16,7 +17,12 @@ class JudgeList(object):
             if judge.can_judge(problem, language):
                 self.submission_map[id] = judge
                 logger.info('Dispatched queued submission %d: %s', id, judge.name)
-                judge.submit(id, problem, language, source)
+                try:
+                    judge.submit(id, problem, language, source)
+                except Exception:
+                    traceback.print_exc()
+                    self.judges.remove(judge)
+                    return
                 del self.queue[i]
                 break
 
@@ -46,7 +52,12 @@ class JudgeList(object):
             judge = min(candidates, key=attrgetter('load'))
             logger.info('Dispatched submission %d to: %s', id, judge.name)
             self.submission_map[id] = judge
-            judge.submit(id, problem, language, source)
+            try:
+                judge.submit(id, problem, language, source)
+            except Exception:
+                traceback.print_exc()
+                self.judges.remove(judge)
+                return self.judge(id, problem, language, source)
         else:
             self.queue.append((id, problem, language, source))
             logger.info('Queued submission: %d', id)
