@@ -133,7 +133,7 @@ class DjangoJudgeHandler(JudgeHandler):
     def on_test_case(self, packet):
         JudgeHandler.on_test_case(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])
-        test_case = SubmissionTestCase.objects.get_or_create(submission=submission, case=packet['position'])[0]
+        test_case = SubmissionTestCase(submission=submission, case=packet['position'])
         status = packet['status']
         if status & 4:
             test_case.status = 'TLE'
