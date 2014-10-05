@@ -227,7 +227,7 @@ class Submission(models.Model):
     @property
     def testcase_granted_points(self):
         score = SubmissionTestCase.objects.filter(submission=self).values('submission')\
-                                  .annotate(score=Sum('points'))[0]['score']
+                                  .annotate(score=Sum('points'))
         return score[0]['score'] if score else 0
 
     @property
