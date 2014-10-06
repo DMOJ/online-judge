@@ -44,7 +44,7 @@ def problem(request, code):
 def problems(request):
     hide_solved = request.GET.get('hide_solved', False)
     if hide_solved and request.user.is_authenticated:
-        probs = Problem.unsolved(request.user.user)
+        probs = Problem.unsolved(request.user.profile)
     else:
         probs = Problem.objects
     probs = probs.order_by('code')
