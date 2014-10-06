@@ -25,6 +25,8 @@ block media
         }
 
 block body
+    form(action='', method='get')
+        input(type='checkbox', name='hide_solved', value=hide_solved, onclick='document.form.submit()') Hide solved problems
     table#problem-table.table
         thead
             tr

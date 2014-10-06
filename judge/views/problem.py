@@ -32,7 +32,8 @@ def problem(request, code):
             return HttpResponseRedirect(request.path)
         return render_to_response('problem.jade', {'problem': problem, 'results': get_result_table(problem__code=code),
                                                    'title': 'Problem: %s' % problem.name,
-                                                   'has_submissions': request.user.is_authenticated() and Submission.objects.filter(user=request.user.profile).exists(),
+                                                   'has_submissions': request.user.is_authenticated() and Submission.objects.filter(
+                                                       user=request.user.profile).exists(),
                                                    'comment_list': problem_comments(problem),
                                                    'comment_form': form},
                                   context_instance=RequestContext(request))
@@ -41,8 +42,16 @@ def problem(request, code):
 
 
 def problems(request):
-    return render_to_response('problems.jade', {'problems': Problem.objects.order_by('code'), 'title': 'Problems'},
-                              context_instance=RequestContext(request))
+    hide_solved = request.GET.pop('hide_solved', False)
+    if hide_solved and request.user.is_authenticated:
+        probs = Problem.unsolved(request.user.user)
+    else:
+        probs = Problem.objects
+    probs = probs.order_by('code')
+    return render_to_response('problems.jade', {
+        'problems': probs,
+        'hide_solved': 1 if hide_solved else 0,
+        'title': 'Problems'}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -51,8 +60,9 @@ def problem_submit(request, problem=None, submission=None):
         form = ProblemSubmitForm(request.POST, instance=Submission(user=request.user.profile))
         if form.is_valid():
             if (not request.user.has_perm('judge.spam_submission') and
-                Submission.objects.filter(user=request.user.profile).exclude(status__in=['D', 'IE', 'CE']).count() > 2):
-                    return HttpResponse('<h1>You submitted too many submissions.</h1>', status=503)
+                        Submission.objects.filter(user=request.user.profile).exclude(
+                                status__in=['D', 'IE', 'CE']).count() > 2):
+                return HttpResponse('<h1>You submitted too many submissions.</h1>', status=503)
             if not form.cleaned_data['problem'].allowed_languages.filter(id=form.cleaned_data['language'].id).exists():
                 raise PermissionDenied()
             model = form.save()
