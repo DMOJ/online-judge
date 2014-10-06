@@ -9,7 +9,7 @@ html(lang='en')
                 | #{title} - Don Mills Online Judge
         meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
         if misc_config.meta_keywords
-            meta(name='keywords', content=misc_config['meta_description'])
+            meta(name='keywords', content=misc_config['meta_keywords'])
         link(rel='stylesheet', href='{% static "style.css" %}')
         link(rel='canonical', href='http://{{ site.domain }}{{ request.get_full_path }}')
         script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
