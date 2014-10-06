@@ -26,7 +26,10 @@ block media
 
 block body
     form(name='form', action='', method='get')
-        input(type='checkbox', name='hide_solved', id='hide_solved', value=hide_solved, onclick='document.form.submit()', checked=(hide_solved ? 'checked' : undefined))
+        if hide_solved
+            input(type='checkbox', name='hide_solved', id='hide_solved', value=hide_solved, onclick='document.form.submit()', checked='checked')
+        else
+            input(type='checkbox', name='hide_solved', id='hide_solved', value=hide_solved, onclick='document.form.submit()')
         label(for='hide_solved') Hide solved problems
     table#problem-table.table
         thead
