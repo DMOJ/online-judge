@@ -42,7 +42,8 @@ def problem(request, code):
 
 
 def problems(request):
-    hide_solved = request.GET.get('hide_solved', '0') == '1'
+    hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
+
     if hide_solved and request.user.is_authenticated:
         probs = Problem.unsolved(request.user.profile)
     else:
