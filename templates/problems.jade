@@ -8,7 +8,14 @@ block media
             $("#problem-table").tablesorter({
                 sortList: [
                     [2, 0]
-                ]
+                ],
+                textExtraction: function (node) {
+                    if (node.hasClass('p')) {
+                        return node.text().replace(/p$/, '');
+                    } else {
+                        return node.text();
+                    }
+                }
             });
         });
     style
@@ -46,7 +53,7 @@ block body
                         a(href='{% url "judge.views.problem" problem.code %}') #{problem.name}
                     td #{problem.types_list|join:",<br>"}
                     td #{problem.code}
-                    td #{problem.points}
+                    td.p #{problem.points}
                         if problem.partial
                             | p
                     td
