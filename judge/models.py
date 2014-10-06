@@ -160,6 +160,13 @@ class Problem(models.Model):
     def get_absolute_url(self):
         return reverse('judge.views.problem', args=(self.code,))
 
+    @classmethod
+    def unsolved(cls, user, queryset=None):
+        if queryset is None:
+            queryset = cls.objects
+        return queryset.exclude(id__in=Submission.objects.filter(user=user, result='AC')
+                                                 .values_list('problem__id', flat=True))
+
 
 SUBMISSION_RESULT = (
     ('AC', 'Accepted'),
