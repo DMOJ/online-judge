@@ -38,7 +38,9 @@ def problem(request, code):
                                                    'comment_form': form},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
-        raise Http404()
+        return render_to_response('message.jade', {'message': 'Could not find a problem with the code %s.' % code,
+                                                   'title': 'No such problem'},
+                                  context_instance=RequestContext(request))
 
 
 def problems(request):
@@ -64,7 +66,8 @@ def problem_submit(request, problem=None, submission=None):
                         Submission.objects.filter(user=request.user.profile).exclude(
                                 status__in=['D', 'IE', 'CE']).count() > 2):
                 return HttpResponse('<h1>You submitted too many submissions.</h1>', status=503)
-            if not form.cleaned_data['problem'].allowed_languages.filter(id=form.cleaned_data['language'].id).exists():
+            if not form.cleaned_data['problem'].allowed_languages.filter(
+                    id=form.cleaned_data['language'].id).exists():
                 raise PermissionDenied()
             model = form.save()
             model.judge()
