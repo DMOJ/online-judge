@@ -10,11 +10,9 @@ block media
                     [2, 0]
                 ],
                 textExtraction: function (node) {
-                    if (node.hasClass('p')) {
-                        return node.text().replace(/p$/, '');
-                    } else {
-                        return node.text();
-                    }
+                    node = $(node);
+                    var text = node.text().replace(/^\s+|\s+$/g, '');
+                    return (node.hasClass('p') ? text.replace(/p$/, '') : text);
                 }
             });
         });
