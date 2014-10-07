@@ -1,4 +1,4 @@
 site
 ====
 
-Web. Site.
+Site component for the DMOJ contest judge.
