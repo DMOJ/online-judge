@@ -19,6 +19,11 @@ block body
         b #{user.name}
         br
         br
+    if user.about
+        h3 Self-description
+        | #{user.about|linebreaks}
+        br
+        br
     h4 #{user.problems} problems solved.
     br
     b Total points:&nbsp;
