@@ -276,6 +276,10 @@ class DiggPage(Page):
             " ".join(map(str, self.main_range)),
             " ".join(map(str, self.trailing_range))]))
 
+    @property
+    def num_pages(self):
+        return self.paginator.num_pages
+
 
 QuerySetDiggPaginator = DiggPaginator
 
