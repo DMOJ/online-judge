@@ -1,6 +1,6 @@
 .pagination
-    if submission.has_previous
-        a(href='{{ submission.previous_page_number }}') <<
+    if submissions.has_previous
+        a(href='{{ submissions.previous_page_number }}') <<
     
     each page in submissions.page_range
         if not page
