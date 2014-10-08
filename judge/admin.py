@@ -185,8 +185,13 @@ class LanguageForm(ModelForm):
 
 
 class LanguageAdmin(admin.ModelAdmin):
-    fields = ('key', 'name', 'ace', 'problems')
+    fields = ('key', 'name', 'short_name', 'ace', 'info', 'description' 'problems')
     form = LanguageForm
+
+    if AdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': AdminPagedownWidget},
+        }
 
     def save_model(self, request, obj, form, change):
         super(LanguageAdmin, self).save_model(request, obj, form, change)
