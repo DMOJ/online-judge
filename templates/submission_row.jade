@@ -52,6 +52,9 @@ if show_prop
             | &nbsp;|&nbsp;
             a(href='{% url "admin:judge_submission_change" submission.id %}') admin
 
+if submission.status == 'G':
+    td.sub-testcase ...
+
 td.sub-usage
     if submission.status != 'QU' and submission.status != 'G' and submission.status != 'CE' and submission.status != 'IE' and submission.status != 'AB'
         .time
