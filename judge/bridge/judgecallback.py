@@ -152,6 +152,7 @@ class DjangoJudgeHandler(JudgeHandler):
         test_case.points = packet['points']
         test_case.total = packet['total-points']
         submission.current_testcase += 1
+        submission.save()
         test_case.save()
         event.post('sub_%d' % submission.id, {
             'type': 'test-case',
