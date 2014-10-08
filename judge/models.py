@@ -232,6 +232,7 @@ class Submission(models.Model):
     result = models.CharField(max_length=3, choices=SUBMISSION_RESULT, default=None, null=True,
                               blank=True, db_index=True)
     error = models.TextField(verbose_name='Compile Errors', null=True, blank=True)
+    current_testcase = models.IntegerField()
 
     @property
     def long_status(self):
