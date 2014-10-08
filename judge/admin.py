@@ -60,7 +60,7 @@ class ProblemAdmin(admin.ModelAdmin):
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
     parameter_name = title = 'status'
-    __lookups = (('None', 'None'),) + Submission.STATUS
+    __lookups = (('None', 'None'), ('NotDone', 'Not done'), ('EX', 'Exceptional')) + Submission.STATUS
     __handles = set(map(itemgetter(0), Submission.STATUS))
 
     def lookups(self, request, model_admin):
@@ -69,7 +69,11 @@ class SubmissionStatusFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() == 'None':
             return queryset.filter(status=None)
-        if self.value() in self.__handles:
+        elif self.value() == 'NotDone':
+            return queryset.exclude(status__in=['D', 'IE', 'CE'])
+        elif self.value() == 'EX':
+            return queryset.exclude(status__in=['D', 'CE', 'G'])
+        elif self.value() in self.__handles:
             return queryset.filter(status=self.value())
 
 
