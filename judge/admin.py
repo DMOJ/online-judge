@@ -185,7 +185,7 @@ class LanguageForm(ModelForm):
 
 
 class LanguageAdmin(admin.ModelAdmin):
-    fields = ('key', 'name', 'short_name', 'ace', 'info', 'description' 'problems')
+    fields = ('key', 'name', 'short_name', 'ace', 'info', 'description', 'problems')
     form = LanguageForm
 
     if AdminPagedownWidget is not None:
