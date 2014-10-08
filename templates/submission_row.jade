@@ -42,6 +42,9 @@ td.sub-info(colspan=info_colspan)
             a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
         span.time &nbsp;on #{submission.date|date:"N j, o, g:i a"}
 
+if submission.status == 'G'
+    td.sub-testcase ...
+
 if show_prop
     td.sub-prop
         if can_view
@@ -51,9 +54,6 @@ if show_prop
         if perms.judge.change_submission
             | &nbsp;|&nbsp;
             a(href='{% url "admin:judge_submission_change" submission.id %}') admin
-
-if submission.status == 'G'
-    td.sub-testcase ...
 
 td.sub-usage
     if submission.status != 'QU' and submission.status != 'G' and submission.status != 'CE' and submission.status != 'IE' and submission.status != 'AB'
