@@ -52,7 +52,7 @@ td.sub-info(colspan=info_colspan)
         span.time &nbsp;on #{submission.date|date:"N j, o, g:i a"}
 
 if submission.status == 'G'
-    td.sub-testcase Running on test case #?
+    td.sub-testcase Running on test case ##{submission.current_testcase}
 
 if show_prop
     td.sub-prop
