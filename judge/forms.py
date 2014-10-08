@@ -1,3 +1,4 @@
+from operator import attrgetter
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
@@ -17,6 +18,7 @@ class ProblemSubmitForm(ModelForm):
         super(ProblemSubmitForm, self).__init__(*args, **kwargs)
         self.fields['problem'].empty_label = None
         self.fields['language'].empty_label = None
+        self.fields['language'].label_from_instance = attrgetter('display_name')
 
     class Meta:
         model = Submission

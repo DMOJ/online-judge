@@ -34,11 +34,25 @@ del make_timezones
 
 class Language(models.Model):
     key = models.CharField(max_length=6, verbose_name='Short identifier', unique=True)
-    name = models.CharField(max_length=20, verbose_name='Name as shown to user')
+    name = models.CharField(max_length=20, verbose_name='Long name')
+    short_name = models.CharField(max_length=10, verbose_name='Short name', null=True, blank=True)
     ace = models.CharField(max_length=20, verbose_name='ACE mode name')
+    info = models.CharField(max_length=50, verbose_name='Basic runtime info', blank=True)
+    description = models.TextField(verbose_name='Description for model', blank=True)
+
+    @property
+    def short_display_name(self):
+        return self.short_name or self.key
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def display_name(self):
+        if self.info:
+            return '%s (%s)' % (self.name, self.info)
+        else:
+            return self.name
 
     @classmethod
     def get_python2(cls):

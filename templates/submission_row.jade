@@ -31,7 +31,7 @@ td.sub-result(class=submission_class)
     .state
         span.status(title=submission.long_status) #{submission.result|default_if_none:submission.status}
         | &nbsp;|&nbsp;
-        span.language #{submission.language.key}
+        span.language #{submission.language.short_display_name}
 
 td.sub-info(colspan=info_colspan)
     if show_problem
