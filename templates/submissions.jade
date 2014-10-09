@@ -101,6 +101,7 @@ block media
             var fix = function () {
                 info.css('position', 'fixed').css('top', 200);
             };
+            info.css('right', info.offset().right);
             moving();
             $(window).scroll(function () {
                 ($(window).scrollTop() - info_offset > 200) ? fix() : moving();
