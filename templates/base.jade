@@ -34,7 +34,7 @@ html(lang='en')
                 ul
                     each item in nav_bar
                         li
-                            a(href=item.path, class='nav-#{item.key}')
+                            a(href=item.path, class='nav-{{ item.key }}')
                 span#user-links
                     if request.user.is_authenticated
                         a(href='{% url "judge.views.user" %}')
