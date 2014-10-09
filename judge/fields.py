@@ -20,8 +20,7 @@ class RegexTextField(TextField):
     compiled_regex_cache = {}
 
     def get_prep_value(self, value):
-        value = self.to_python(value)
-        return self.value_to_string(value)
+        return self.to_python(value).pattern
 
     def get_compiled_regex(self, value):
         if value not in self.compiled_regex_cache:
@@ -49,4 +48,4 @@ class RegexTextField(TextField):
 
     def value_to_string(self, obj):
         if obj is not None:
-            return obj.pattern
+            return self.to_python(obj).pattern
