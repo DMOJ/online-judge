@@ -51,6 +51,7 @@ class DjangoJudgeHandler(JudgeHandler):
         JudgeHandler.on_grading_begin(self, packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = 'G'
+        submission.current_testcase = 1
         submission.save()
         event.post('sub_%d' % submission.id, {'type': 'grading-begin'})
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
@@ -151,7 +152,7 @@ class DjangoJudgeHandler(JudgeHandler):
         test_case.memory = packet['memory']
         test_case.points = packet['points']
         test_case.total = packet['total-points']
-        submission.current_testcase += 1
+        submission.current_testcase = packet['position'] + 1
         submission.save()
         test_case.save()
         event.post('sub_%d' % submission.id, {
