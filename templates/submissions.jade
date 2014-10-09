@@ -95,7 +95,7 @@ block media
         $(function () {
             var info = $('.info-float');
             var info_offset = info.offset().top;
-            var info_right = $(window).width() - info.offset().left;
+            var info_right = $(window).width() - info.width() - info.offset().left;
             var moving = function () {
                 info.css('position', 'absolute').css('top', info_offset).css('right', info_right);
             };
