@@ -10,7 +10,7 @@ script(type='text/javascript')
     (function ($) {
         $(document).ready(function() {
             $('.checkall').click(function ()  {
-                $('div#{{ select_all_name }}').find(':checkbox').prop('checked', this.checked);
+                $('div#' + '{{ select_all_name }}').find(':checkbox').prop('checked', this.checked);
             });
         });
     })(django.jQuery);
