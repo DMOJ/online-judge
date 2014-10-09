@@ -47,6 +47,8 @@ class ProblemAdmin(admin.ModelAdmin):
     ordering = ['code']
     search_fields = ('^code', 'name')
     actions = ['make_public', 'make_private']
+    list_per_page = 500
+    list_max_show_all = 1000
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
