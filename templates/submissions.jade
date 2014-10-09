@@ -100,11 +100,11 @@ block media
                 info.css('position', 'absolute').css('top', info_offset).css('right', info_right);
             };
             var fix = function () {
-                info.css('position', 'fixed').css('top', 200).css('right', info_right);
+                info.css('position', 'fixed').css('top', 40).css('right', info_right);
             };
             moving();
             $(window).scroll(function () {
-                ($(window).scrollTop() - info_offset > 200) ? fix() : moving();
+                ($(window).scrollTop() - info_offset > -40) ? fix() : moving();
             });
         });
 
