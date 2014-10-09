@@ -161,7 +161,7 @@ class Problem(models.Model):
     points = models.FloatField(verbose_name='Points')
     partial = models.BooleanField(verbose_name='Allows partial points')
     allowed_languages = models.ManyToManyField(Language, verbose_name='Allowed languages')
-    is_public = models.BooleanField(verbose_name='Publically visiable')
+    is_public = models.BooleanField(verbose_name='Publicly visible')
 
     def types_list(self):
         return map(attrgetter('full_name'), self.types.all())
