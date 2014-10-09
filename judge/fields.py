@@ -48,4 +48,5 @@ class RegexTextField(TextField):
                     raise ValidationError('Invalid regex {0}'.format(value))
 
     def value_to_string(self, obj):
-        return obj and obj.pattern
+        if obj is not None:
+            return obj.pattern
