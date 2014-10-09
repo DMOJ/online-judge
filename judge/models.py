@@ -8,7 +8,6 @@ from django.db.models import Max, Sum
 from django.utils import timezone
 import pytz
 from operator import itemgetter, attrgetter
-from judge.fields import RegexTextField
 
 from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
