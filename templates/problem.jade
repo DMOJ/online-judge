@@ -8,6 +8,10 @@ block media
     link(rel='stylesheet', href='{% static "status.css" %}')
     link(rel='stylesheet', href='{% static "problem-description.css" %}')
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+    script(type='text/javascript')
+        $(function () {
+            fix_div($('.info-float'), 40, true);
+        });
 
 block body
     .info-float(style='width:11%;padding-left:40px')
