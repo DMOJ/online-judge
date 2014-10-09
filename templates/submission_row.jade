@@ -23,6 +23,7 @@ if request.user.is_authenticated
             - var info_colspan = 3
 else
     - var show_prop = false
+    if submission.status == 'G'
         - var info_colspan = 2
     else
         - var info_colspan = 3
