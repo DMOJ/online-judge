@@ -53,12 +53,14 @@ class ProblemAdmin(admin.ModelAdmin):
             TextField: {'widget': AdminPagedownWidget},
         }
 
-    def make_public(request, queryset):
-        queryset.update(is_public=True)
+    def make_public(self, request, queryset):
+        count = queryset.update(is_public=True)
+        self.message_user(request, "%d problem%s successfully marked as public." % (count, 's'[count == 1:]))
     make_public.short_description = 'Mark problems as public'
 
-    def make_private(request, queryset):
-        queryset.update(is_public=False)
+    def make_private(self, request, queryset):
+        count = queryset.update(is_public=False)
+        self.message_user(request, "%d problem%s successfully marked as private." % (count, 's'[count == 1:]))
     make_private.short_description = 'Mark problems as private'
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
