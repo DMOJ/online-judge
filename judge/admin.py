@@ -53,12 +53,10 @@ class ProblemAdmin(admin.ModelAdmin):
             TextField: {'widget': AdminPagedownWidget},
         }
 
-    @staticmethod
     def make_public(request, queryset):
         queryset.update(is_public=True)
     make_public.short_description = 'Mark problems as public'
 
-    @staticmethod
     def make_private(request, queryset):
         queryset.update(is_public=False)
     make_private.short_description = 'Mark problems as private'
