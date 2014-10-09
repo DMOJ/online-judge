@@ -321,6 +321,7 @@ def validate_regex(regex):
 
 class NavigationBar(OrderedModel):
     class Meta:
+        ordering = ['order']
         verbose_name = 'navigation item'
         verbose_name_plural = 'navigation bar'
 
