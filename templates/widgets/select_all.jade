@@ -1,16 +1,16 @@
-fieldset(style='border:none')
+div(style='border:none', id=select_all_name)
     | {{original_widget}}
     if empty
         | Nothing here.
     else
         label(for=select_all_id)
             input.checkall(id=select_all_id, name=select_all_name, checked=all_selected, type='checkbox')
-            | Check all
+            | &nbsp;Check all
 script(type='text/javascript')
     (function ($) {
         $(document).ready(function() {
             $('.checkall').click(function ()  {
-                $(this).parents('fieldset:eq(0)').find(':checkbox').attr('checked', this.checked);
+                $('div#{{ select_all_name }}').find(':checkbox').prop('checked', this.checked);
             });
         });
     })(django.jQuery);
