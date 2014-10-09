@@ -14,6 +14,15 @@ th.headerSortUp:after {
     content: " \25B4"
 }
 
+hr {
+    display: block;
+    height: 0;
+    border: 0;
+    font-style: italic;
+    border-bottom: 1px solid #CCC;
+    padding: 0
+}
+
 .table {
     border-spacing: 0;
     width: 100%;
