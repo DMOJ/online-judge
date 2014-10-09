@@ -97,12 +97,11 @@ block media
             var info_offset = info.offset().top;
             var info_right = info.offset().right;
             var moving = function () {
-                info.css('position', 'absolute').css('top', info_offset);
+                info.css('position', 'absolute').css('top', info_offset).css('right', info_right);
             };
             var fix = function () {
-                info.css('position', 'fixed').css('top', 200);
+                info.css('position', 'fixed').css('top', 200).css('right', info_right);
             };
-            info.css('right', info_right);
             moving();
             $(window).scroll(function () {
                 ($(window).scrollTop() - info_offset > 200) ? fix() : moving();
