@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.sitemaps import FlatPageSitemap
+from judge.ordered_model import urls as ordered_model_urls
 
 from judge.views import RegistrationView, ActivationView, TemplateView
 from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap
@@ -78,7 +79,7 @@ urlpatterns = patterns('',
     url(r'^$', 'judge.views.home'),
     url(r'^500/$', exception),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include('judge.ordered_model.urls')),
+    url(r'^', include(ordered_model_urls)),
     url(r'^accounts/', include(register_patterns)),
     url(r'^users/$', 'judge.views.users'),
     url(r'^user/(\w+)$', 'judge.views.user'),
