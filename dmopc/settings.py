@@ -33,7 +33,19 @@ SITE_NAME = 'DMOPC'
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = ()
+
+try:
+    import suit
+except ImportError:
+    pass
+else:
+    INSTALLED_APPS += ('suit',)
+    SUIT_CONFIG = {
+        'ADMIN_NAME': 'DMOJ Admin'
+    }
+
+INSTALLED_APPS += (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
