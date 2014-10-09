@@ -23,10 +23,14 @@ if request.user.is_authenticated
             - var info_colspan = 3
 else
     - var show_prop = false
-    if submission.status == 'G'
         - var info_colspan = 2
     else
         - var info_colspan = 3
+
+if submission.status == 'G'
+    - var info_class = sub-info-grading
+else
+    - var info_class = sub-info
 
 td.sub-result(class=submission_class)
     .score
@@ -42,7 +46,7 @@ td.sub-result(class=submission_class)
         | &nbsp;|&nbsp;
         span.language #{submission.language.short_display_name}
 
-td.sub-info(colspan=info_colspan)
+td(colspan=info_colspan, class=info_class)
     if show_problem
         .name
             a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
