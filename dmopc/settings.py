@@ -42,7 +42,8 @@ except ImportError:
 else:
     INSTALLED_APPS += ('suit',)
     SUIT_CONFIG = {
-        'ADMIN_NAME': 'DMOJ Admin'
+        'ADMIN_NAME': 'DMOJ Admin',
+        'LIST_PER_PAGE': 100,
     }
 
 INSTALLED_APPS += (
