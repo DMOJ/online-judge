@@ -1,5 +1,7 @@
 window.fix_div = function (div, height, right, fake_gen) {
     var div_offset = div.offset().top;
+    if (right)
+        var div_right = $(window).width() - div.offset().left - div.outerWidth();
     var is_moving = false;
     if (typeof fake_gen !== 'undefined')
         fake_gen(div);
@@ -15,7 +17,8 @@ window.fix_div = function (div, height, right, fake_gen) {
             is_moving = false;
         }
     };
-    if (right) div.css('right', $(window).width() - div.offset().left - div.outerWidth());
+    if (right)
+        div.css('right', div_right);
     moving();
     $(window).scroll(function () {
         ($(window).scrollTop() - div_offset > -height) ? fix() : moving();
