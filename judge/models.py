@@ -321,8 +321,8 @@ def validate_regex(regex):
 
 class NavigationBar(OrderedModel):
     class Meta:
-        verbose_name = 'Navigation bar'
-        verbose_name_plural = 'Navigation bar'
+        verbose_name = 'navigation item'
+        verbose_name_plural = 'navigation bar'
 
     key = models.CharField(max_length=10, unique=True, verbose_name='Identifier')
     label = models.CharField(max_length=20)
