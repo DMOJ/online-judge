@@ -10,7 +10,12 @@ block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
     script(type='text/javascript')
         $(function () {
-            fix_div($('.info-float'), 40, true);
+            fix_div($('.info-float'), 40, true, function (info) {
+                return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
+                    'width': '11%',
+                    'padding-left': '40px'
+                }).prependTo('#content-body');
+            });
         });
 
 block body

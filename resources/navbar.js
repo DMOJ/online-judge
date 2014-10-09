@@ -33,6 +33,6 @@ window.fix_div = function (div, height, right, fake_gen) {
 
 $(function () {
     fix_div($('#navigation'), 0, false, function (nav) {
-        $('<div/>', {id: 'fake-nav'}).css('height', nav.height()).prependTo('#nav-head');;
+        $('<div/>', {id: 'fake-nav'}).css('height', nav.height()).prependTo('#nav-head');
     })
 });
