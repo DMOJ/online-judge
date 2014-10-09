@@ -21,7 +21,7 @@ $(function () {
     });
 });
 
-function fix_div(div, height, right) {
+window.fix_div = function (div, height, right) {
     var div_offset = div.offset().top;
     var is_moving = false;
     var moving = function () {
@@ -41,4 +41,4 @@ function fix_div(div, height, right) {
     $(window).scroll(function () {
         ($(window).scrollTop() - div_offset > -height) ? fix() : moving();
     });
-}
+};
