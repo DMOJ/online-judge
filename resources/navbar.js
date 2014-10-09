@@ -4,7 +4,7 @@ window.fix_div = function (div, height, right, fake_gen) {
         var div_right = $(window).width() - div.offset().left - div.outerWidth();
     var is_moving = false;
     if (typeof fake_gen !== 'undefined')
-        fake_gen(div);
+        var fake = fake_gen(div);
     var moving = function () {
         if (!is_moving) {
             div.css('position', 'absolute').css('top', div_offset);
@@ -19,6 +19,12 @@ window.fix_div = function (div, height, right, fake_gen) {
     };
     if (right)
         div.css('right', div_right);
+    if (typeof fake != 'undefined') {
+        div.css('left', fake.offset().left).css('right', undefined);
+        $(window).resize(function () {
+            div.css('left', fake.offset().left);
+        });
+    }
     moving();
     $(window).scroll(function () {
         ($(window).scrollTop() - div_offset > -height) ? fix() : moving();
