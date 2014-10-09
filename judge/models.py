@@ -320,10 +320,17 @@ def validate_regex(regex):
 
 
 class NavigationBar(OrderedModel):
+    class Meta:
+        verbose_name = 'Navigation bar'
+        verbose_name_plural = 'Navigation bar'
+
     key = models.CharField(max_length=10, unique=True, verbose_name='Identifier')
     label = models.CharField(max_length=20)
     path = models.CharField(max_length=30, verbose_name='Link path')
     regex = models.TextField(verbose_name='Highlight regex', validators=[validate_regex])
+
+    def __unicode__(self):
+        return self.label
 
     @property
     def pattern(self, cache={}):
