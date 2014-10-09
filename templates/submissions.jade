@@ -96,11 +96,18 @@ block media
             var info = $('.info-float');
             var info_offset = info.offset().top;
             var info_right = $(window).width() - info.offset().left - info.outerWidth();
+            var is_moving = true;
             var moving = function () {
-                info.css('position', 'absolute').css('top', info_offset).css('right', info_right);
+                if (!is_moving) {
+                    info.css('position', 'absolute').css('top', info_offset).css('right', info_right);
+                    is_moving = true;
+                }
             };
             var fix = function () {
-                info.css('position', 'fixed').css('top', 40).css('right', info_right);
+                if (is_moving) {
+                    info.css('position', 'fixed').css('top', 40).css('right', info_right);
+                    is_moving = false;
+                }
             };
             moving();
             $(window).scroll(function () {
