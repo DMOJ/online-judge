@@ -27,6 +27,8 @@ def get_result_table(**kwargs):
 def problem(request, code):
     try:
         problem = Problem.objects.get(code=code)
+        if not problem.is_public and not (request.user.is_authenticated and request.user.profile.is_admin):
+            raise ObjectDoesNotExist()
         form = comment_form(request, 'p:' + code)
         if form is None:
             return HttpResponseRedirect(request.path)
@@ -50,7 +52,7 @@ def problems(request):
         probs = Problem.unsolved(request.user.profile)
     else:
         probs = Problem.objects
-    probs = probs.order_by('code')
+    probs = probs.filter(is_public=True).order_by('code')
     return render_to_response('problems.jade', {
         'problems': probs,
         'hide_solved': 1 if hide_solved else 0,

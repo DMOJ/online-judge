@@ -37,20 +37,31 @@ class ProblemAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('code', 'name', 'user', 'description', 'types', 'groups')
+            'fields': ('code', 'name', 'is_public', 'user', 'description', 'types', 'groups')
         }),
         ('Points', {'fields': (('points', 'partial'), 'short_circuit', 'grader', 'grader_param')}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
         ('Language', {'fields': ('allowed_languages',)})
     )
-    list_display = ['code', 'name', 'user', 'points']
+    list_display = ['code', 'name', 'user', 'points', 'is_public']
     ordering = ['code']
     search_fields = ('^code', 'name')
+    actions = ['make_public', 'make_private']
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
             TextField: {'widget': AdminPagedownWidget},
         }
+
+    @staticmethod
+    def make_public(request, queryset):
+        queryset.update(is_public=True)
+    make_public.short_description = 'Mark problems as public'
+
+    @staticmethod
+    def make_private(request, queryset):
+        queryset.update(is_public=False)
+    make_private.short_description = 'Mark problems as private'
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'allowed_languages':
