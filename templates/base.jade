@@ -14,11 +14,13 @@ html(lang='en')
         link(rel='canonical', href='http://{{ site.domain }}{{ request.get_full_path }}')
         script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
         script(src='{% static "navbar.js" %}')
-        style.
-            nav ul li a.#{nav_tab} {
-               color: #FFF;
-               background: #2980b9
-            }
+
+        if nav_tab
+            style.
+                nav ul li a.nav-#{nav_tab} {
+                   color: #FFF;
+                   background: #2980b9
+                }
         block media
 
     body
@@ -30,20 +32,9 @@ html(lang='en')
         header#nav-head
             nav#navigation.unselectable
                 ul
-                    li
-                        a.home(href='/') Home
-                    li
-                        a.problem(href='/problems/') Problems
-                    li
-                        a.submit(href='/submissions/') Submissions
-                    li
-                        a.user(href='/users/') Users
-                    li
-                        a.status(href='/status/') Status
-                    li
-                        a.chat(href='/chat/') Chat
-                    li
-                        a.about(href='/about/') About
+                    each item in nav_bar
+                        li
+                            a(href=item.path, class='nav-#{item.key}')
                 span#user-links
                     if request.user.is_authenticated
                         a(href='{% url "judge.views.user" %}')

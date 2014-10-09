@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType, \
-    MiscConfig, Judge
+    MiscConfig, Judge, NavigationBar
 from judge.widgets import CheckboxSelectMultipleWithSelectAll
 
 
@@ -276,6 +276,11 @@ class GenerateKeyTextInput(TextInput):
 ''', name))
 
 
+class NavigationBarAdmin(admin.ModelAdmin):
+    list_display = ('key', 'label', 'path', 'order', 'order_link')
+    fields = ('key', 'label', 'path', 'regex')
+
+
 class JudgeAdminForm(ModelForm):
     class Meta:
         model = Judge
@@ -304,4 +309,5 @@ admin.site.register(ProblemGroup, ProblemGroupAdmin)
 admin.site.register(ProblemType, ProblemGroupAdmin)
 admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(MiscConfig)
+admin.site.register(NavigationBar, NavigationBarAdmin)
 admin.site.register(Judge, JudgeAdmin)

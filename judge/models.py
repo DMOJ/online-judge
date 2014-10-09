@@ -7,9 +7,11 @@ from django.db.models import Max, Sum
 from django.utils import timezone
 import pytz
 from operator import itemgetter, attrgetter
+from judge.fields import RegexTextField
 
 from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
+from judge.ordered_model import OrderedModel
 
 
 def make_timezones():
@@ -307,6 +309,13 @@ class CommentVote(models.Model):
 class MiscConfig(models.Model):
     key = models.CharField(max_length=30, db_index=True)
     value = models.TextField()
+
+
+class NavigationBar(OrderedModel):
+    key = models.CharField(max_length=10, unique=True, verbose_name='Identifier')
+    label = models.CharField(max_length=20)
+    path = models.CharField(max_length=30, verbose_name='Link path')
+    regex = RegexTextField(verbose_name='Highlight regex')
 
 
 class Judge(models.Model):

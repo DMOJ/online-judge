@@ -2,7 +2,7 @@ from collections import defaultdict
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.utils.functional import SimpleLazyObject
-from .models import Profile, MiscConfig
+from .models import Profile, MiscConfig, NavigationBar
 
 
 def get_profile(request):
@@ -20,25 +20,19 @@ def comet_location(request):
             'EVENT_DAEMON_POLL_LOCATION': settings.EVENT_DAEMON_POLL}
 
 
-def __tab(request):
-    if request.path == '/':
-        return 'home'
-    elif '/submi' in request.path or '/src' in request.path:
-        return 'submit'
-    elif request.path.startswith('/problem'):
-        return 'problem'
-    elif request.path.startswith('/user'):
-        return 'user'
-    elif request.path == '/about/':
-        return 'about'
-    elif request.path == '/status/':
-        return 'status'
-    elif request.path == '/chat/':
-        return 'chat'
+def __tab(request, nav_bar):
+    for item in nav_bar:
+        if item.regex.match(request.path):
+            return item
+    return None
 
 
 def general_info(request):
-    return {'nav_tab': __tab(request)}
+    nav = NavigationBar.objects.all()
+    return {
+        'nav_tab': __tab(request, nav),
+        'nav_bar': nav,
+    }
 
 
 def site(request):
