@@ -7,10 +7,8 @@ div(style='border:none', id=select_all_name)
             input.checkall(id=select_all_id, name=select_all_name, checked=all_selected, type='checkbox')
             | &nbsp;Check all
 script(type='text/javascript')
-    (function ($) {
-        $(document).ready(function() {
-            $('.checkall').click(function ()  {
-                $('div#' + '{{ select_all_name }}').find(':checkbox').prop('checked', this.checked);
-            });
+    django.jQuery(function($) {
+        $('.checkall').click(function ()  {
+            $('div#' + '{{ select_all_name }}').find(':checkbox').prop('checked', this.checked);
         });
-    })(django.jQuery);
+    });
