@@ -22,7 +22,7 @@ def comet_location(request):
 
 def __tab(request, nav_bar):
     for item in nav_bar:
-        if item.regex.match(request.path):
+        if item.pattern.match(request.path):
             return item
     return None
 

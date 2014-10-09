@@ -1,3 +1,4 @@
+import re
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
@@ -311,11 +312,26 @@ class MiscConfig(models.Model):
     value = models.TextField()
 
 
+def validate_regex(regex):
+    try:
+        re.compile(regex, re.VERBOSE)
+    except re.error as e:
+        raise ValidationError('Invalid regex: %s' % e.message)
+
+
 class NavigationBar(OrderedModel):
     key = models.CharField(max_length=10, unique=True, verbose_name='Identifier')
     label = models.CharField(max_length=20)
     path = models.CharField(max_length=30, verbose_name='Link path')
-    regex = RegexTextField(verbose_name='Highlight regex')
+    regex = models.TextField(verbose_name='Highlight regex', validators=[validate_regex])
+
+    @property
+    def pattern(self, cache={}):
+        if self.regex in cache:
+            return cache[self.regex]
+        else:
+            pattern = cache[self.regex] = re.compile(self.regex, re.VERBOSE)
+            return pattern
 
 
 class Judge(models.Model):
