@@ -71,7 +71,7 @@ block media
                 var table = $('#submissions-table');
                 var receiver = new EventReceiver(
                         "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
-                        ['submissions'], {{ last_msg }}, function (message) {
+                        ['submissions'], #{last_msg}, function (message) {
                             if (message.type == 'update-submission') {
                                 var id = message.id;
                                 var cell = table.find('tr#' + id);
@@ -93,7 +93,9 @@ block media
             });
     script(type='text/javascript')
         $(function () {
-            fix_div($('.info-float'), 40, true);
+            fix_div($('.info-float'), 40, true, function (info) {
+                $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css('width', '20%').prependTo('#content-body');
+            });
         });
 
 
