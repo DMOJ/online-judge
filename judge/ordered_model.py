@@ -38,7 +38,7 @@ class OrderedModel(models.Model):
             ModelClass = ContentType.objects.get(id=model_type_id).model_class()
 
             lower_model = ModelClass.objects.get(id=model_id)
-            higher_model = ModelClass.objects.filter(order__gt=lower_model.order)[0]
+            higher_model = ModelClass.objects.filter(order__gt=lower_model.order).order_by('order')[0]
             
             lower_model.order, higher_model.order = higher_model.order, lower_model.order
 
@@ -55,7 +55,7 @@ class OrderedModel(models.Model):
             ModelClass = ContentType.objects.get(id=model_type_id).model_class()
 
             higher_model = ModelClass.objects.get(id=model_id)
-            lower_model = ModelClass.objects.filter(order__lt=higher_model.order)[0]
+            lower_model = ModelClass.objects.filter(order__lt=higher_model.order).order_by('-order')[0]
 
             lower_model.order, higher_model.order = higher_model.order, lower_model.order
 
