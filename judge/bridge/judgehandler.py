@@ -128,6 +128,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'short-circuit': short,
             'grader-id': grader,
             'grader-args': param
+
         }
         self._send(packet)
         self._working = id
@@ -147,7 +148,10 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
     def _send(self, data):
         data = json.dumps(data, separators=(',', ':'))
         compress = data.encode('zlib')
-        self.wfile.write(size_pack.pack(len(compress)) + compress)
+        try:
+            self.wfile.write(size_pack.pack(len(compress)) + compress)
+        except Exception:
+            logger.exception('Send failure')
 
     def _packet(self, data):
         try:
