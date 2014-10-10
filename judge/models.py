@@ -365,6 +365,9 @@ class Judge(models.Model):
     problems = models.ManyToManyField(Problem)
     runtimes = models.ManyToManyField(Language)
 
+    def __unicode__(self):
+        return self.name
+
     @property
     def uptime(self):
         return timezone.now() - self.last_connect if self.online else 'N/A'
