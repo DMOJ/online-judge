@@ -83,9 +83,9 @@ class SubmissionStatusFilter(admin.SimpleListFilter):
         if self.value() == 'None':
             return queryset.filter(status=None)
         elif self.value() == 'NotDone':
-            return queryset.exclude(status__in=['D', 'IE', 'CE'])
+            return queryset.exclude(status__in=['D', 'IE', 'CE', 'AB'])
         elif self.value() == 'EX':
-            return queryset.exclude(status__in=['D', 'CE', 'G'])
+            return queryset.exclude(status__in=['D', 'CE', 'G', 'AB'])
         elif self.value() in self.__handles:
             return queryset.filter(status=self.value())
 
