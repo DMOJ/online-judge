@@ -170,3 +170,10 @@ class DjangoJudgeHandler(JudgeHandler):
             'output': packet['output']
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
+
+    def on_supported_problems(self, packet):
+        JudgeHandler.on_supported_problems(self, packet)
+
+        judge = Judge.objects.get(name=self.name)
+        judge.problems = Problem.objects.filter(code__in=self.problems.keys())
+        judge.save()

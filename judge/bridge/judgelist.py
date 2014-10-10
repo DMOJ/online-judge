@@ -30,6 +30,9 @@ class JudgeList(object):
         self.judges.append(judge)
         self._handle_free_judge(judge)
 
+    def update_problems(self, judge):
+        self._handle_free_judge(judge)
+
     def remove(self, judge):
         self.judges.remove(judge)
 

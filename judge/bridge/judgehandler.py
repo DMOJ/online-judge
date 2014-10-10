@@ -22,7 +22,8 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'current-submission-id': self.on_current_submission,
             'problem-not-exist': self.on_bad_problem,
             'submission-terminated': self.on_submission_terminated,
-            'ping-response': self.on_ping_response
+            'ping-response': self.on_ping_response,
+            'supported-problems': self.on_supported_problems,
         }
         self._current_submission = None
         self._current_submission_event = threading.Event()
@@ -163,6 +164,13 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             logger.exception('Error in packet handling (Judge-side)')
             # You can't crash here because you aren't so sure about the judges
             # not being malicious or simply malforms. THIS IS A SERVER!
+
+    def on_supported_problems(self, packet):
+        logger.info('Updated problem list')
+        self._problems = packet['problems']
+        self.problems = dict(self._problems)
+        if not self.working:
+            self.server.judges.update_problems(self)
 
     def on_grading_begin(self, packet):
         logger.info('Grading has begun on: %s', packet['submission-id'])
