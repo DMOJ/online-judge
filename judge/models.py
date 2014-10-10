@@ -76,7 +76,7 @@ class GraderType(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='User associated')
-    name = models.CharField(max_length=50, verbose_name='Real name', null=True, blank=True)
+    name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
     about = models.TextField(verbose_name='Self-description', null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name='Timezone', default='America/Toronto', choices=TIMEZONE)
     language = models.ForeignKey(Language, verbose_name='Default language')
