@@ -25,10 +25,11 @@ window.fix_div = function (div, height, right, fake_gen) {
             div.css('left', fake.offset().left);
         });
     }
-    moving();
-    $(window).scroll(function () {
+    var update_scroll = function () {
         ($(window).scrollTop() - div_offset > -height) ? fix() : moving();
-    });
+    };
+    update_scroll();
+    $(window).scroll(update_scroll);
 };
 
 $(function () {
