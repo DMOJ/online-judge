@@ -191,6 +191,7 @@ SUBMISSION_RESULT = (
     ('WA', 'Wrong Answer'),
     ('TLE', 'Time Limit Exceeded'),
     ('MLE', 'Memory Limit Exceeded'),
+    ('OLE', 'Output Limit Exceeded'),
     ('IR', 'Invalid Return'),
     ('RTE', 'Runtime Error'),
     ('CE', 'Compile Error'),

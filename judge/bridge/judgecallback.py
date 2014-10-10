@@ -140,6 +140,8 @@ class DjangoJudgeHandler(JudgeHandler):
             test_case.status = 'TLE'
         elif status & 8:
             test_case.status = 'MLE'
+        elif status & 64:
+            test_case.status = 'OLE'
         elif status & 2:
             test_case.status = 'RTE'
         elif status & 16:
