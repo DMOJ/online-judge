@@ -8,6 +8,7 @@
         var suit = $('ul.box.menu-box li:first');
         if (suit.length) {
             $('li#suit-rejudge').insertBefore(suit);
+            $('.rejudgelink').remove();
         } else {
             $('.rejudgelink').insertAfter('.deletelink-box>a:last');
         }
