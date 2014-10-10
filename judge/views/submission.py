@@ -149,7 +149,7 @@ def submission_testcases_query(request):
     try:
         submission = Submission.objects.get(id=int(request.GET['id']))
         return render_to_response('submission_testcases.jade', {
-            'submission': submission, 'test_cases': submission.test_cases
+            'submission': submission, 'test_cases': submission.test_cases.all()
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()
