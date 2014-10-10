@@ -219,6 +219,7 @@ class Submission(models.Model):
     USER_DISPLAY_CODES = {
         'AC': 'Accepted',
         'WA': 'Wrong Answer',
+        'SC': "Short Circuited",
         'TLE': 'Time Limit Exceeded',
         'MLE': 'Memory Limit Exceeded',
         'IR': 'Invalid Return',

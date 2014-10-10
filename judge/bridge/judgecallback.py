@@ -148,6 +148,8 @@ class DjangoJudgeHandler(JudgeHandler):
             test_case.status = 'IR'
         elif status & 1:
             test_case.status = 'WA'
+        elif status & 32:
+            test_case.status = 'SC'
         else:
             test_case.status = 'AC'
         test_case.time = packet['time']
