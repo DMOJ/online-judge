@@ -185,6 +185,11 @@ class Problem(models.Model):
         return queryset.exclude(id__in=Submission.objects.filter(user=user, result='AC')
                                                  .values_list('problem__id', flat=True))
 
+    class Meta:
+        permissions = (
+            ('see_private_problem', 'See hidden problems'),
+        )
+
 
 SUBMISSION_RESULT = (
     ('AC', 'Accepted'),

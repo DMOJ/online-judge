@@ -27,7 +27,7 @@ def get_result_table(**kwargs):
 def problem(request, code):
     try:
         problem = Problem.objects.get(code=code)
-        if not problem.is_public and not (request.user.is_authenticated() and request.user.profile.is_admin):
+        if not problem.is_public and not request.user.has_perm('judge.see_private_problem'):
             raise ObjectDoesNotExist()
         form = comment_form(request, 'p:' + code)
         if form is None:
