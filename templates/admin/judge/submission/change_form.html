@@ -24,10 +24,12 @@
 {% endblock extrahead %}
 
 {% block after_field_sets %}{{ block.super }}
-    <a class="rejudgelink" href="{% url 'admin:judge_submission_rejudge' original.pk %}">Rejudge</a>
-    <div style="display: none">
-        <ul>
-            <li id="suit-rejudge"><a href="{% url 'admin:judge_submission_rejudge' original.pk %}"><i class="icon-refresh icon-alpha75"></i>Rejudge</a></li>
-        </ul>
-    </div>
+    {% if original %}
+        <a class="rejudgelink" href="{% url 'admin:judge_submission_rejudge' original.pk %}">Rejudge</a>
+        <div style="display: none">
+            <ul>
+                <li id="suit-rejudge"><a href="{% url 'admin:judge_submission_rejudge' original.pk %}"><i class="icon-refresh icon-alpha75"></i>Rejudge</a></li>
+            </ul>
+        </div>
+    {% endif %}
 {% endblock %}
