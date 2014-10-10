@@ -286,7 +286,7 @@ class Submission(models.Model):
 class SubmissionTestCase(models.Model):
     RESULT = SUBMISSION_RESULT
 
-    submission = models.ForeignKey(Submission, verbose_name='Associated submission')
+    submission = models.ForeignKey(Submission, verbose_name='Associated submission', related_name='test_cases')
     case = models.IntegerField(verbose_name='Test case ID')
     status = models.CharField(max_length=3, verbose_name='Status flag', choices=SUBMISSION_RESULT)
     time = models.FloatField(verbose_name='Execution time', null=True)
