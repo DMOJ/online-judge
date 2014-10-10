@@ -27,7 +27,7 @@
     <a class="rejudgelink" href="{% url 'admin:judge_submission_rejudge' original.pk %}">Rejudge</a>
     <div style="display: none">
         <ul>
-            <li id="suit-rejudge"><a href="../add/"><i class="icon-refresh icon-alpha75"></i>Rejudge</a></li>
+            <li id="suit-rejudge"><a href="{% url 'admin:judge_submission_rejudge' original.pk %}"><i class="icon-refresh icon-alpha75"></i>Rejudge</a></li>
         </ul>
     </div>
 {% endblock %}
