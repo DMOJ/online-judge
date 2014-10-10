@@ -65,7 +65,7 @@ class DjangoJudgeHandler(JudgeHandler):
         points = 0.0
         total = 0
         status = 0
-        status_codes = ['AC', 'WA', 'MLE', 'TLE', 'IR', 'RTE', 'OLE', 'SC']
+        status_codes = ['SC', 'AC', 'WA', 'MLE', 'TLE', 'IR', 'RTE', 'OLE']
         for case in SubmissionTestCase.objects.filter(submission=submission):
             time += case.time
             total += case.total
