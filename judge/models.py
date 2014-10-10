@@ -201,6 +201,7 @@ SUBMISSION_RESULT = (
     ('RTE', 'Runtime Error'),
     ('CE', 'Compile Error'),
     ('IE', 'Internal Error'),
+    ('AB', 'Aborted'),
 )
 
 
@@ -212,6 +213,7 @@ class Submission(models.Model):
         ('D', 'Completed'),
         ('IE', 'Internal Error'),
         ('CE', 'Compile Error'),
+        ('AB', 'Aborted'),
     )
     RESULT = SUBMISSION_RESULT
     USER_DISPLAY_CODES = {
@@ -226,7 +228,8 @@ class Submission(models.Model):
         'QU': 'Queued',
         'C': 'Compiled',
         'G': 'Grading',
-        'D': 'Completed'
+        'D': 'Completed',
+        'AB': 'Aborted',
     }
 
     user = models.ForeignKey(Profile)
