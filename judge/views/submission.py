@@ -143,6 +143,18 @@ def single_submission(request, id):
         raise Http404()
 
 
+def submission_testcases_query(request):
+    if 'id' not in request.GET or not request.GET['id'].isdigit():
+        return HttpResponseBadRequest()
+    try:
+        submission = Submission.objects.get(id=int(request.GET['id']))
+        test_cases = SubmissionTestCase.objects.filter(submission=submission)
+        return render_to_response('submission_testcases.jade', {
+            'submission': submission, 'test_cases': test_cases
+        }, context_instance=RequestContext(request))
+    except ObjectDoesNotExist:
+        raise Http404()
+
 def single_submission_query(request):
     if 'id' not in request.GET or not request.GET['id'].isdigit():
         return HttpResponseBadRequest()

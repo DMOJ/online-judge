@@ -1,0 +1,17 @@
+if submission.status != 'CE'
+    each case in test_cases
+        b Test case ##{forloop.counter}:
+        |&nbsp;#{case.status} [#{case.time|floatformat:"3"}s, #{case.memory|floatformat:"-1"}kb] (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
+        br
+    if submission.is_graded
+        br
+        br
+        if submission.result != "AB"
+            b Final score:
+            | &nbsp;#{submission.testcase_granted_points|floatformat:"0"}/#{submission.testcase_total_points|floatformat:"0"} (#{submission.points|floatformat:"0"}/#{submission.problem.points|floatformat:"0"} points)
+        else
+            b Submission aborted!
+        br
+else
+    h4 Compilation Error
+    pre #{submission.error}

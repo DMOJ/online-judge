@@ -11,26 +11,21 @@ block media
                     "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                     ['sub_{{ submission.id }}'], {{ last_msg }}, function (message) {
                         var list = $('#test-cases');
-                        switch (message.type) {
-                            case 'test-case':
-                                list.append('<b>Test case &#35;{0}:</b> {1} [{2}s, {3}kb] ({4}/{5})<br/>'.format(
-                                        message.id, message.status, message.time,
-                                        message.memory, message.points, message.total));
-                                break;
-                            case 'grading-begin':
-                                break;
+                        switch (message.type) {                                                                          
                             case 'grading-end':
-                                list.append("<br/><br/><b>Final score:</b> {0}/{1}".format(
-                                        message.points, message.total
-                                ));
-                                $('#abort-button').remove();
-                                $('#grading-label').remove();
-                                break;
+                               $('#abort-button').remove();
+                               $('#grading-label').remove();
+                            case 'test-case':
+                            case 'grading-begin':
                             case 'compile-error':
-                                list.append("<h4>Compilation Error</h4>");
-                                list.append(message.log.replace("\n", "<br/>"));
-                                $('#abort-button').remove();
-                                $('#grading-label').remove();
+                                $.ajax({
+                                    url: '{% url "judge.views.submission_testcases_query" %}',
+                                    data: {id: '{{ submission.id }}'}
+                                }).done(function (data) {
+                                    list.html(data);
+                                }).fail(function (data) {
+                                    console.log('Failed to update testcases!');
+                                });
                                 break;
                         }
                     }
@@ -54,23 +49,7 @@ block body
     br
     
     #test-cases
-        if submission.status != 'CE'
-            each case in test_cases
-                b Test case ##{forloop.counter}:
-                |&nbsp;#{case.status} [#{case.time|floatformat:"3"}s, #{case.memory|floatformat:"-1"}kb] (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
-                br
-            if submission.is_graded
-                br
-                br
-                if submission.result != "AB"
-                    b Final score:
-                    | &nbsp;#{submission.testcase_granted_points|floatformat:"0"}/#{submission.testcase_total_points|floatformat:"0"} (#{submission.points|floatformat:"0"}/#{submission.problem.points|floatformat:"0"} points)
-                else
-                    b Submission aborted!
-                br
-        else
-            h4 Compilation Error
-            pre #{submission.error}
+        include submission_testcases
     
     if not submission.is_graded
         if request.user == submission.user.user or submission.user.is_admin

@@ -91,7 +91,10 @@ urlpatterns = patterns('',
     url(r'^submission/(\w+)$', 'judge.views.submission_status'),
     url(r'^submission/(\w+)/abort$', 'judge.views.abort_submission'),
     url(r'^submission/(\w+)/html$', 'judge.views.single_submission'),
+    
     url(r'^single_submission', 'judge.views.single_submission_query'),
+    url(r'^submission_testcases', 'judge.views.submission_testcases_query'),
+    
     url(r'^submit/problem/$', 'judge.views.problem_submit'),
     url(r'^edit/profile/$', 'judge.views.edit_profile'),
     url(r'^submissions/$', 'judge.views.submissions'),
