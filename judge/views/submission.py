@@ -48,9 +48,8 @@ def submission_status(request, code):
         if not request.user.profile.is_admin and submission.user != request.user.profile and \
                 not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=submission.problem.code).exists():
             raise PermissionDenied()
-        test_cases = SubmissionTestCase.objects.filter(submission=submission)
         return render_to_response('submission_status.jade',
-                                  {'submission': submission, 'test_cases': test_cases,
+                                  {'submission': submission, 'test_cases': submission.test_cases.all(),
                                    'last_msg': event.last(),
                                    'title': 'Submission of %s by %s' %
                                             (submission.problem.name, submission.user.user.username)},
