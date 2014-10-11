@@ -11,7 +11,7 @@ block media
     script(type='text/javascript')
         $(function () {
             $('a.hide-group').click(function (event) {
-                var ul = $(this).parent().find('ul');
+                var ul = $(this).parents('div.user-problem-group').find('ul');
                 if (ul.is(':visible')) {
                     ul.hide('slow', function () {
                         $(this).html('[Show]');
