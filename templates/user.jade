@@ -74,7 +74,7 @@ block body
         div.user-problem-group
             h3
                 a.hide-group(href='#')
-                    img(src='{% static icons/minus.png %}')
+                    img(src='{% static "icons/minus.png" %}')
                 | #{group.grouper}
             ul
                 each entry in group.list
