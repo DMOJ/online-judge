@@ -58,5 +58,7 @@ def ranker(profiles):
 
 
 def users(request):
-    return render_to_response('users.jade', {'users': ranker(Profile.objects.order_by('-points')), 'title': 'Users'},
-                              context_instance=RequestContext(request))
+    return render_to_response('users.jade', {
+        'users': ranker(Profile.objects.filter(points__gt=0).order_by('-points')),
+        'title': 'Users'
+    }, context_instance=RequestContext(request))
