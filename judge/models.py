@@ -152,7 +152,7 @@ class Problem(models.Model):
     description = models.TextField(verbose_name='Problem body')
     user = models.ForeignKey(Profile, verbose_name='Creator')
     types = models.ManyToManyField(ProblemType, verbose_name='Problem types')
-    groups = models.ManyToManyField(ProblemGroup, verbose_name='Problem groups')
+    group = models.ForeignKey(ProblemGroup, verbose_name='Problem group')
     time_limit = models.IntegerField(verbose_name='Time limit')
     memory_limit = models.IntegerField(verbose_name='Memory limit')
     short_circuit = models.BooleanField(default=False)
