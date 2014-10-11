@@ -170,6 +170,10 @@ class Problem(models.Model):
     def languages_list(self):
         return map(attrgetter('name'), self.allowed_languages.all())
 
+    @property
+    def group(self):
+        return self.groups.all()[0].full_name
+
     def number_of_users(self):
         return Submission.objects.filter(problem=self, result='AC').values('user').distinct().count()
 
