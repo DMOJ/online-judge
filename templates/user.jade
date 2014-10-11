@@ -26,6 +26,11 @@ block media
             margin-left: -25px;
             margin-bottom: 0px;
         }
+    
+        .user-problem-group a img {
+            max-width: 15px;
+            vertical-align: middle;
+        }
     script(type='text/javascript')
         $(function () {
             $('a.hide-group').click(function (event) {
@@ -33,11 +38,11 @@ block media
                 var ul = $(this).parents('div.user-problem-group').find('ul');
                 if (ul.is(':visible')) {
                     ul.hide('slow', function () {
-                        $(a).html('+');
+                        $(a).html('<img src="{% static icons/plus.png %}"></img>');
                     });
                 } else {
                     ul.show('slow', function () {
-                        $(a).html('-');
+                        $(a).html('<img src="{% static icons/minus.png %}"></img>');
                     });
                 }
                 event.preventDefault();
@@ -68,7 +73,8 @@ block body
     each group in problems
         div.user-problem-group
             h3
-                a.hide-group(href='#') -
+                a.hide-group(href='#')
+                    img(src='{% static icons/minus.png %}')
                 | #{group.grouper}
             ul
                 each entry in group.list
