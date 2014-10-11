@@ -33,11 +33,11 @@ block media
                 var ul = $(this).parents('div.user-problem-group').find('ul');
                 if (ul.is(':visible')) {
                     ul.hide('slow', function () {
-                        $(a).html('[Show]');
+                        $(a).html('+');
                     });
                 } else {
                     ul.show('slow', function () {
-                        $(a).html('[Hide]');
+                        $(a).html('-');
                     });
                 }
                 event.preventDefault();
@@ -67,8 +67,9 @@ block body
     - regroup best_submissions by problem__group__full_name as problems
     each group in problems
         div.user-problem-group
-            h3 #{group.grouper}
-                a.hide-group(href='#') [Hide]
+            h3
+                a.hide-group(href='#') -
+                | #{group.grouper}
             ul
                 each entry in group.list
                     li
