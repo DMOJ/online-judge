@@ -41,6 +41,8 @@ block body
     b Problem:&nbsp
     a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
     br
+    a(href='{% url "judge.views.submission_source" submission.id %}') View source
+    br
     if request.user == submission.user.user
         a(href='{% url "judge.views.problem_submit" submission.problem.code submission.id %}') Click here to revise and resubmit!
         br
