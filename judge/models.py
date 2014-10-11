@@ -85,7 +85,8 @@ class Profile(models.Model):
 
     def calculate_points(self):
         self.points = sum(map(itemgetter('points'),
-                              Submission.objects.filter(user=self, points__isnull=False).values('problem_id').distinct()
+                              Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
+                              .values('problem_id').distinct()
                               .annotate(points=Max('points'))))
         self.save()
         return self.points
