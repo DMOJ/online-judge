@@ -77,7 +77,7 @@ block body
                 a.hide-group.unselectable(href='#')
                     img(src='{% static "icons/minus.png" %}')
                 | #{group.grouper}
-                | (points: #{group.list|list_getitem:"points"|sum_list})
+                | (#{group.list|list_getitem:"points"|sum_list|floatformat:1} points)
             ul
                 each entry in group.list
                     li
