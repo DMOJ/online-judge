@@ -37,11 +37,11 @@ block media
                 var a = this;
                 var ul = $(this).parents('div.user-problem-group').find('ul');
                 if (ul.is(':visible')) {
-                    ul.hide('slow', function () {
+                    ul.slideUp('slow', function () {
                         $(a).html('<img src="{% static "icons/plus.png" %}"></img>');
                     });
                 } else {
-                    ul.show('slow', function () {
+                    ul.slideDown('slow', function () {
                         $(a).html('<img src="{% static "icons/minus.png" %}"></img>');
                     });
                 }
