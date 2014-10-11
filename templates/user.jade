@@ -34,5 +34,5 @@ block body
         ul
             each entry in group.list
                 li
-                    a(href='{% url "judge.views.problem" entry.problem__code %}') #{entry.problem.name}
-                    | &nbsp;(#{entry.points} / #{entry.problem.points})
+                    a(href='{% url "judge.views.problem" entry.problem__code %}') #{entry.problem__name}
+                    | &nbsp;(#{entry.points} / #{entry.problem__points})
