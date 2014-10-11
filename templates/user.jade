@@ -70,6 +70,8 @@ block body
     b Total points:&nbsp;
     | #{user.calculate_points}
     br
+    a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
+    br
     - regroup best_submissions by problem__group__full_name as problems
     each group in problems
         div.user-problem-group
