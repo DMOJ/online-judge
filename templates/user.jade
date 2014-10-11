@@ -74,7 +74,7 @@ block body
     br
     a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
     br
-    - regroup best_submissions by problem__group__full_name as problems
+    - regroup best_submissions by group as problems
     each group in problems
         div.user-problem-group
             h3
@@ -85,6 +85,6 @@ block body
             ul
                 each entry in group.list
                     li
-                        a(href='{% url "judge.views.problem" entry.problem__code %}') #{entry.problem__name}&nbsp;
-                        a(href='{% url "judge.views.user_submissions" entry.problem__code user.user.username %}')
-                            | (#{entry.points} / #{entry.problem__points})
+                        a(href='{% url "judge.views.problem" entry.code %}') #{entry.name}&nbsp;
+                        a(href='{% url "judge.views.user_submissions" entry.code user.user.username %}')
+                            | (#{entry.points} / #{entry.total})

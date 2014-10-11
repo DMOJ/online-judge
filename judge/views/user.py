@@ -1,13 +1,18 @@
+from operator import itemgetter
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
-from django.http import Http404, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Submission
+
+
+def remap_keys(iterable, mapping):
+    return [dict((mapping.get(k, k), v) for k, v in item.iteritems()) for item in iterable]
 
 
 def user(request, user=None):
@@ -21,10 +26,14 @@ def user(request, user=None):
         result = Submission.objects.filter(user=user, points__gt=0) \
             .values('problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
             .distinct().annotate(points=Max('points')).order_by('problem__group__full_name', 'problem__name')
-        return render_to_response('user.jade', {'user': user, 
-                                                'title': 'My Account' if request.user == user.user else 'User %s' % user.long_display_name,
-                                                'best_submissions': result},
-                                  context_instance=RequestContext(request))
+        result = remap_keys(result, {
+            'problem__code': 'code', 'problem__name': 'name', 'problem__points': 'total',
+            'problem__group__full_name': 'group'
+        })
+        return render_to_response('user.jade', {
+            'user': user, 'best_submissions': result,
+            'title': 'My Account' if request.user == user.user else 'User %s' % user.long_display_name,
+        },  context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return render_to_response('message.jade', {'message': 'No user handle "%s".' % user,
                                                    'title': 'No such user'},
