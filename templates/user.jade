@@ -68,6 +68,7 @@ block body
         | #{user.about|markdown:"self-description"}
         br
     h4 #{user.problems} problems solved.
+    a(href='{% url "judge.views.all_user_submissions" user.username %}') View submissions
     br
     b Total points:&nbsp;
     | #{user.calculate_points}
