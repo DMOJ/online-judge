@@ -145,6 +145,27 @@ def validate_grader_param(value):
         raise ValidationError('not all params are key-value pairs')
 
 
+class ContestParticipation(models.Model):
+    contest = models.ForeignKey(Contest, "Associated contest")
+    date = models.DateTimeField(verbose_name='Start time', auto_now_add=True)
+    submissions = models.ManyToManyField(Submission, verbose_name='Submissions')
+
+
+class ContestProfile(models.Model):
+    current_contest = models.ForeignKey(ContestParticipation, verbose_name='Current contest user is participating in')
+    history = models.ManyToManyField(ContestParticipation, verbose_name='Previous contests')
+
+
+class Contest(models.Model):
+    id = models.CharField(max_length=20, verbose_name='Contest id', unique=True,
+                          validators=[RegexValidator('^[a-z0-9]+$', 'Contest id must be ^[a-z0-9]+$')])
+    name = models.CharField(max_length=100, verbose_name='Contest name', db_index=True)
+    ongoing = models.BooleanField(default=True)
+    types = models.ManyToManyField(Problem, verbose_name='Problems')
+    time_limit = models.IntegerField(verbose_name='Time limit')
+    is_public = models.BooleanField(verbose_name='Publicly visible')
+
+
 class Problem(models.Model):
     code = models.CharField(max_length=20, verbose_name='Problem code', unique=True,
                             validators=[RegexValidator('^[a-z0-9]+$', 'Problem code must be ^[a-z0-9]+$')])
@@ -184,7 +205,7 @@ class Problem(models.Model):
         if queryset is None:
             queryset = cls.objects
         return queryset.exclude(id__in=Submission.objects.filter(user=user, result='AC')
-                                                 .values_list('problem__id', flat=True))
+                                .values_list('problem__id', flat=True))
 
     class Meta:
         permissions = (
@@ -263,14 +284,14 @@ class Submission(models.Model):
 
     @property
     def testcase_granted_points(self):
-        score = SubmissionTestCase.objects.filter(submission=self).values('submission')\
-                                  .annotate(score=Sum('points'))
+        score = SubmissionTestCase.objects.filter(submission=self).values('submission') \
+            .annotate(score=Sum('points'))
         return score[0]['score'] if score else 0
 
     @property
     def testcase_total_points(self):
-        score = SubmissionTestCase.objects.filter(submission=self).values('submission')\
-                                  .annotate(score=Sum('total'))
+        score = SubmissionTestCase.objects.filter(submission=self).values('submission') \
+            .annotate(score=Sum('total'))
         return score[0]['score'] if score else 0
 
     def __unicode__(self):
