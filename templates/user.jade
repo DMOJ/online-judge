@@ -28,9 +28,9 @@ block body
     br
     b Total points:&nbsp;
     | #{user.calculate_points}
-    - regroup best_submissions by problem__group as problems
+    - regroup best_submissions by problem__group__full_name as problems
     each group in problems
-        h3= group.grouper.full_name
+        h3= group.grouper
         ul
             each entry in group.list
                 li
