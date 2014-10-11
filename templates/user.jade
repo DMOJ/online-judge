@@ -28,9 +28,11 @@ block body
     br
     b Total points:&nbsp;
     | #{user.calculate_points}
-    ul
-        each entry in best_submissions
-            li
-                a(href='{% url "judge.views.problem" entry.problem__code %}') #{entry.problem__name}
-                | &nbsp;(#{entry.points} / #{entry.problem__points})
-        
+    - regroup best_submissions by problem.groups as problems
+    each group in problems
+        h3= group.grouper
+        ul
+            each entry in group.list
+                li
+                    a(href='{% url "judge.views.problem" entry.problem.code %}') #{entry.problem.name}
+                    | &nbsp;(#{entry.points} / #{entry.problem.points})
