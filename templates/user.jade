@@ -2,6 +2,7 @@ extends base
 -load staticfiles
 -load gravatar
 -load list_processor
+-load markdown_trois_tags
 
 block media
     style
@@ -63,7 +64,7 @@ block body
         br
     if user.about
         h4 About
-        | #{user.about|linebreaks}        
+        | #{user.about|markdown:"self-description"}
         br
     h4 #{user.problems} problems solved.
     br
