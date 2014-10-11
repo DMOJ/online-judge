@@ -73,7 +73,7 @@ block body
     each group in problems
         div.user-problem-group
             h3
-                a.hide-group(href='#')
+                a.hide-group.unselectable(href='#')
                     img(src='{% static "icons/minus.png" %}')
                 | #{group.grouper}
             ul
