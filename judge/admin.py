@@ -26,11 +26,20 @@ class ProfileAdmin(admin.ModelAdmin):
     ordering = ['user__username']
     search_fields = ['user__username', 'name']
     list_filter = ['language', 'timezone']
+    actions = ['recalculate_points']
 
     def timezone_full(self, obj):
         return obj.timezone
     timezone_full.admin_order_field = 'timezone'
     timezone_full.short_description = 'Timezone'
+
+    def recalculate_points(self, request, queryset):
+        count = 0
+        for profile in queryset:
+            profile.calculate_points()
+            count += 1
+        self.message_user(request, "%d user%s have scores recalculated." % (count, 's'[count == 1:]))
+    recalculate_points.short_description = 'Recalculate scores'
 
 
 class ProblemAdmin(admin.ModelAdmin):
