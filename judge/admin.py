@@ -47,7 +47,7 @@ class ProblemAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('code', 'name', 'is_public', 'user', 'description')
         }),
-        ('Taxonomy', {'fields': ('types', 'groups')}),
+        ('Taxonomy', {'fields': ('types', 'group')}),
         ('Points', {'fields': (('points', 'partial'), 'short_circuit', 'grader', 'grader_param')}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
         ('Language', {'fields': ('allowed_languages',)})
