@@ -33,7 +33,7 @@ block media
             });
 
 block body
-    | Submitted on #{submission.date}
+    | Submitted on #{submission.date|date:"N j, o, g:i a"}
     br
     b Language:
     | &nbsp;#{submission.language}
