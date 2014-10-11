@@ -35,7 +35,5 @@ block body
             each entry in group.list
                 li
                     a(href='{% url "judge.views.problem" entry.problem__code %}') #{entry.problem__name}
-                    | &nbsp;(
-                    a(href='{% url "judge.views.user_submissions" entry.problem__code user.user.username %}')
-                        | #{entry.points} / #{entry.problem__points}
-                    | )
+                    | &nbsp;(<a href="{% url 'judge.views.user_submissions' entry.problem__code user.user.username %}">#{entry.points}
+                    | / #{entry.problem__points})
