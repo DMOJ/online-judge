@@ -23,7 +23,6 @@ def get_result_table(**kwargs):
             ('Invalid Return', 'IR', results['IR']),
             ('Total', 'TOT', sum(results.values()))]
 
-
 def problem(request, code):
     try:
         problem = Problem.objects.get(code=code)

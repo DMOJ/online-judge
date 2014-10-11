@@ -48,8 +48,9 @@ def submission_status(request, code):
         if not request.user.profile.is_admin and submission.user != request.user.profile and \
                 not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=submission.problem.code).exists():
             raise PermissionDenied()
+        test_cases = SubmissionTestCase.objects.filter(submission=submission)
         return render_to_response('submission_status.jade',
-                                  {'submission': submission, 'test_cases': submission.test_cases.all(),
+                                  {'submission': submission, 'test_cases': test_cases,
                                    'last_msg': event.last(),
                                    'title': 'Submission of %s by %s' %
                                             (submission.problem.name, submission.user.user.username)},
@@ -147,11 +148,17 @@ def submission_testcases_query(request):
         return HttpResponseBadRequest()
     try:
         submission = Submission.objects.get(id=int(request.GET['id']))
+        test_cases = SubmissionTestCase.objects.filter(submission=submission)
         return render_to_response('submission_testcases.jade', {
-            'submission': submission, 'test_cases': submission.test_cases.all()
+            'submission': submission, 'test_cases': test_cases
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()
+
+
+def statistics_table_query(request):
+    return render_to_response('results_table.jade',
+                              {'results': get_result_table()})
 
 
 def single_submission_query(request):

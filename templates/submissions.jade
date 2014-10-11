@@ -38,7 +38,7 @@ block media
             width: auto !important;
             min-width: 58% !important;
         }
-        
+
         td.sub-testcase {
             color: #555;
             min-width: 32%;
@@ -69,6 +69,7 @@ block media
         script(type='text/javascript')
             $(function () {
                 var table = $('#submissions-table');
+                var statistics = $("statistics-table")
                 var receiver = new EventReceiver(
                         "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                         ['submissions'], #{last_msg}, function (message) {
@@ -87,6 +88,13 @@ block media
                                 }).fail(function (data) {
                                     console.log('Failed to update submission: ' + id);
                                 });
+                                $.ajax({
+                                    url: '{% url "judge.views.statistics_table_query" %}'
+                                }).done(function (data) {
+                                    statistics.html(data);
+                                }).fail(function (data) {
+                                    console.log('Failed to update statistics table!' + id);
+                                });
                             }
                         }
                 );
@@ -102,7 +110,8 @@ block media
 
 block body
     .info-float(style='width:20%')
-        include results_table
+        #statistics-table
+            include results_table
     if submissions.num_pages > 1
         div(style='margin-bottom:10px;')
             include submissions_pages
