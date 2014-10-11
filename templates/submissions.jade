@@ -69,7 +69,7 @@ block media
         script(type='text/javascript')
             $(function () {
                 var table = $('#submissions-table');
-                var statistics = $("statistics-table")
+                var statistics = $("#statistics-table")
                 var receiver = new EventReceiver(
                         "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                         ['submissions'], #{last_msg}, function (message) {
