@@ -28,7 +28,7 @@ block body
     br
     b Total points:&nbsp;
     | #{user.calculate_points}
-    - regroup best_submissions by problem.group as problems
+    - regroup best_submissions by problem__groups as problems
     each group in problems
         h3= group.grouper
         ul
