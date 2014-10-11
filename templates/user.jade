@@ -1,6 +1,7 @@
 extends base
 -load staticfiles
 -load gravatar
+-load list_processor
 
 block media
     style
@@ -76,6 +77,7 @@ block body
                 a.hide-group.unselectable(href='#')
                     img(src='{% static "icons/minus.png" %}')
                 | #{group.grouper}
+                | (points: #{group.list|list_getitem:"points"|sum_list})
             ul
                 each entry in group.list
                     li
