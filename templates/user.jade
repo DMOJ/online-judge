@@ -57,13 +57,13 @@ block header
 
 block body
     if user.name
-        b #{user.name}
+        b Name: 
+        | #{user.name}
         br
         br
     if user.about
-        h3 Self-description
-        | #{user.about|linebreaks}
-        br
+        h4 About
+        | #{user.about|linebreaks}        
         br
     h4 #{user.problems} problems solved.
     br
