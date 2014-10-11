@@ -11,14 +11,15 @@ block media
     script(type='text/javascript')
         $(function () {
             $('a.hide-group').click(function (event) {
+                var a = this;
                 var ul = $(this).parents('div.user-problem-group').find('ul');
                 if (ul.is(':visible')) {
                     ul.hide('slow', function () {
-                        $(this).html('[Show]');
+                        $(a).html('[Show]');
                     });
                 } else {
                     ul.show('slow', function () {
-                        $(this).html('[Hide]');
+                        $(a).html('[Hide]');
                     });
                 }
                 event.preventDefault();
