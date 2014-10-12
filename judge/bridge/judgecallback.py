@@ -88,6 +88,9 @@ class DjangoJudgeHandler(JudgeHandler):
 
         submission.user.calculate_points()
 
+        if submission.contest is not None:
+            submission.contest.recalculate_score()
+
         event.post('sub_%d' % submission.id, {
             'type': 'grading-end',
             'time': time,
