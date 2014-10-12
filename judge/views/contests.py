@@ -29,11 +29,13 @@ def contest(request, key):
         form = comment_form(request, 'c:' + key)
         if form is None:
             return HttpResponseRedirect(request.path)
-        return render_to_response('contest.jade', {'contest': contest,
-                                                   'title': contest.name,
-                                                   'comment_list': contest_comments(contest),
-                                                   'comment_form': form},
-                                  context_instance=RequestContext(request))
+        return render_to_response('contest.jade', {
+            'contest': contest,
+            'title': contest.name,
+            'comment_list': contest_comments(contest),
+            'comment_form': form,
+            'in_contest': request.user.is_authenticated() and request.user.profile.contest.current == contest
+        }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return render_to_response('message.jade', {'message': 'Could not find a contest with the key "%s".' % key,
                                                    'title': 'No such contest'},
