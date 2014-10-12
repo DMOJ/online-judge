@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Max, Sum
+from django.db.models import Max, Sum, Min
 from django.utils import timezone
 from timedelta.fields import TimedeltaField
 
@@ -274,15 +274,23 @@ class Submission(models.Model):
 
     @property
     def testcase_granted_points(self):
-        score = SubmissionTestCase.objects.filter(submission=self).values('submission') \
-            .annotate(score=Sum('points'))
-        return score[0]['score'] if score else 0
+        if self.batch:
+            return sum(map(itemgetter('points'), SubmissionTestCase.objects.filter(submission=self)
+                           .values('batch').annotate(points=Min('points'))))
+        else:
+            score = SubmissionTestCase.objects.filter(submission=self).values('submission') \
+                .annotate(score=Sum('points'))
+            return score[0]['score'] if score else 0
 
     @property
     def testcase_total_points(self):
-        score = SubmissionTestCase.objects.filter(submission=self).values('submission') \
-            .annotate(score=Sum('total'))
-        return score[0]['score'] if score else 0
+        if self.batch:
+            return sum(map(itemgetter('points'), SubmissionTestCase.objects.filter(submission=self)
+                           .values('batch').annotate(points=Max('total'))))
+        else:
+            score = SubmissionTestCase.objects.filter(submission=self).values('submission') \
+                .annotate(score=Sum('total'))
+            return score[0]['score'] if score else 0
 
     def __unicode__(self):
         return u'Submission %d of %s by %s' % (self.id, self.problem, self.user)
