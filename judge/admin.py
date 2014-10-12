@@ -348,10 +348,10 @@ class ContestAdmin(admin.ModelAdmin):
 class ContestParticipationAdmin(admin.ModelAdmin):
     """For developer use only."""
     fields = ('contest', 'profile', 'start')
-    list_display = ('contest', 'user_name', 'start')
+    list_display = ('contest', 'username', 'start')
 
     @staticmethod
-    def user_name(obj):
+    def username(obj):
         return obj.profile.user.display_name
 
 admin.site.register(Language, LanguageAdmin)
