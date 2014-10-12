@@ -12,6 +12,19 @@ from judge.utils.ranker import ranker
 __all__ = ['contest_list', 'contest', 'contest_ranking', 'join_contest', 'leave_contest']
 
 
+def _find_contest(request, key, private_check=True):
+    try:
+        contest = Contest.objects.get(key=key)
+        if private_check and not contest.is_public and not request.user.has_perm('judge.see_private_contest'):
+            raise ObjectDoesNotExist()
+    except ObjectDoesNotExist:
+        return render_to_response('message.jade', {
+            'message': 'Could not find a contest with the key "%s".' % key,
+            'title': 'No such contest'
+        }, context_instance=RequestContext(request)), False
+    return contest, True
+
+
 def contest_list(request):
     if request.user.has_perm('judge.see_private_contest'):
         contests = Contest.objects.all()
@@ -24,17 +37,14 @@ def contest_list(request):
 
 
 def contest(request, key):
-    try:
-        contest = Contest.objects.get(key=key)
-        if not contest.is_public and not request.user.has_perm('judge.see_private_contest'):
-            raise ObjectDoesNotExist()
-    except ObjectDoesNotExist:
-        return render_to_response('message.jade', {'message': 'Could not find a contest with the key "%s".' % key,
-                                                   'title': 'No such contest'},
-                                  context_instance=RequestContext(request))
+    contest, exists = _find_contest(request, key)
+    if not exists:
+        return contest
+
     form = comment_form(request, 'c:' + key)
     if form is None:
         return HttpResponseRedirect(request.path)
+
     if request.user.is_authenticated():
         contest_profile = request.user.profile.contest
         try:
@@ -62,15 +72,9 @@ def contest(request, key):
 
 @login_required
 def join_contest(request, key):
-    try:
-        contest = Contest.objects.get(key=key)
-        if not contest.is_public and not request.user.has_perm('judge.see_private_contest'):
-            raise ObjectDoesNotExist()
-    except ObjectDoesNotExist:
-        return render_to_response('message.jade', {
-            'message': 'Could not find a contest with the key "%s".' % key,
-            'title': 'No such contest'
-        }, context_instance=RequestContext(request))
+    contest, exists = _find_contest(request, key)
+    if not exists:
+        return contest
 
     contest_profile = request.user.profile.contest
     if contest_profile.current is not None:
@@ -78,12 +82,14 @@ def join_contest(request, key):
             'message': 'You are already in a contest: "%s".' % contest_profile.current.contest.name,
             'title': 'Already in contest'
         }, context_instance=RequestContext(request))
+
     participation, created = ContestParticipation.objects.get_or_create(contest=contest, profile=contest_profile)
     if not created and participation.ended:
         return render_to_response('message.jade', {
             'message': 'Too late! You already used up your time limit for "%s".' % contest.name,
             'title': 'Already in contest'
         }, context_instance=RequestContext(request))
+
     contest_profile.current = participation
     contest_profile.save()
     return HttpResponseRedirect(reverse('judge.views.contest', args=(key,)))
@@ -91,15 +97,11 @@ def join_contest(request, key):
 
 @login_required
 def leave_contest(request, key):
-    try:
-        contest = Contest.objects.get(key=key)
-        # No public checking because if we hide the contest people should still be able to leave.
-        # No lock ins.
-    except ObjectDoesNotExist:
-        return render_to_response('message.jade', {
-            'message': 'Could not find a contest with the key "%s".' % key,
-            'title': 'No such contest'
-        }, context_instance=RequestContext(request))
+    # No public checking because if we hide the contest people should still be able to leave.
+    # No lock ins.
+    contest, exists = _find_contest(request, key, False)
+    if not exists:
+        return contest
 
     contest_profile = request.user.profile.contest
     if contest_profile.current.contest != contest:
@@ -117,15 +119,10 @@ ContestRankingProfile = namedtuple('ContestRankingProfile',
 
 
 def contest_ranking(request, key):
-    try:
-        contest = Contest.objects.get(key=key)
-        # No public checking because if we hide the contest people should still be able to leave.
-        # No lock ins.
-    except ObjectDoesNotExist:
-        return render_to_response('message.jade', {
-            'message': 'Could not find a contest with the key "%s".' % key,
-            'title': 'No such contest'
-        }, context_instance=RequestContext(request))
+    contest, exists = _find_contest(request, key)
+    if not exists:
+        return contest
+
     results = [ContestRankingProfile(
         user=participation.profile.user.user,
         display_rank=participation.profile.user.display_rank,
