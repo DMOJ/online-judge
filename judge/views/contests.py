@@ -7,7 +7,7 @@ from django.template import RequestContext
 from judge.comments import comment_form, contest_comments
 from judge.models import Contest, ContestParticipation
 
-__all__ = ['contest_list', 'contest', 'contest_ranking', 'join_contest']
+__all__ = ['contest_list', 'contest', 'contest_ranking', 'join_contest', 'leave_contest']
 
 
 def contest_list(request):
@@ -70,6 +70,28 @@ def join_contest(request, key):
     participation.profile = contest_profile
     participation.save()
     contest_profile.current = participation
+    contest_profile.save()
+    return HttpResponseRedirect(reverse('judge.views.contest', args=(key,)))
+
+@login_required
+def leave_contest(request, key):
+    try:
+        contest = Contest.objects.get(key=key)
+        if not contest.is_public and not request.user.has_perm('judge.see_private_contest'):
+            raise ObjectDoesNotExist()
+    except ObjectDoesNotExist:
+        return render_to_response('message.jade', {
+            'message': 'Could not find a contest with the key "%s".' % key,
+            'title': 'No such contest'
+        }, context_instance=RequestContext(request))
+
+    contest_profile = request.user.profile.contest
+    if contest_profile.current != contest:
+        return render_to_response('message.jade', {
+            'message': 'You are not in a contest.' % contest_profile.current.contest.name,
+            'title': 'Not in contest'
+        }, context_instance=RequestContext(request))
+    contest_profile.current = None
     contest_profile.save()
     return HttpResponseRedirect(reverse('judge.views.contest', args=(key,)))
 
