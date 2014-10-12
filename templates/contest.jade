@@ -18,7 +18,7 @@ block media
             $('button#join').click(function () {
                 window.location.href = '{% url "judge.views.join_contest" contest.key %}';
             });
-            $('button#leave').click(function () {                                                                 
+            $('button#leave').click(function () {
                 window.location.href = '{% url "judge.views.leave_contest" contest.key %}';
             });
         });

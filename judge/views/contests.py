@@ -60,7 +60,7 @@ def join_contest(request, key):
             'message': 'You are already in a contest: "%s".' % contest_profile.current.contest.name,
             'title': 'Already in contest'
         }, context_instance=RequestContext(request))
-    if contest in contest_profile.history.all():
+    if contest_profile.history.filter(contest=contest).exists():
         return render_to_response('message.jade', {
             'message': 'You are already participated in the contest "%s".' % contest.name,
             'title': 'Already in contest'
@@ -73,12 +73,11 @@ def join_contest(request, key):
     contest_profile.save()
     return HttpResponseRedirect(reverse('judge.views.contest', args=(key,)))
 
+
 @login_required
 def leave_contest(request, key):
     try:
         contest = Contest.objects.get(key=key)
-        if not contest.is_public and not request.user.has_perm('judge.see_private_contest'):
-            raise ObjectDoesNotExist()
     except ObjectDoesNotExist:
         return render_to_response('message.jade', {
             'message': 'Could not find a contest with the key "%s".' % key,
@@ -86,12 +85,12 @@ def leave_contest(request, key):
         }, context_instance=RequestContext(request))
 
     contest_profile = request.user.profile.contest
-    if contest_profile.current != contest:
+    if contest_profile.current.contest != contest:
         return render_to_response('message.jade', {
-            'message': 'You are not in a contest.' % contest_profile.current.contest.name,
-            'title': 'Not in contest'
+            'message': 'You are not in contest "%s".' % key,
+            'title': 'No such contest'
         }, context_instance=RequestContext(request))
-    contest_profile.current = None
+    contest_profile.contest = None
     contest_profile.save()
     return HttpResponseRedirect(reverse('judge.views.contest', args=(key,)))
 
