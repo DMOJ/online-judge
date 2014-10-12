@@ -12,7 +12,7 @@ block body
             each contest in contests
                 tr
                     td
-                        a(href='#')= contest.name
+                        a(href='{% url "judge.views.contest" contest.key %}')= contest.name
                     td= contest.time_limit
                     td
                         if contest.ongoing
