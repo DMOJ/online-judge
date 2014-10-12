@@ -40,10 +40,51 @@ try:
 except ImportError:
     pass
 else:
+    del suit
     INSTALLED_APPS += ('suit',)
     SUIT_CONFIG = {
         'ADMIN_NAME': 'DMOJ Admin',
         'LIST_PER_PAGE': 100,
+        'MENU': (
+            {
+                'label': 'Site',
+                'icon': 'icon-leaf',
+                'models': (
+                    'sites.site',
+                    'flatpages.flatpage',
+                    'judge.miscconfig',
+                    'judge.navigationbar'
+                ),
+            },
+            {
+                'label': 'Users',
+                'icon': 'icon-user',
+                'models': (
+                    'auth.user',
+                    'auth.group',
+                    'judge.profile',
+                    'registration.registrationprofile',
+                ),
+            },
+            {
+                'label': 'Problems',
+                'icon': 'icon-question-sign',
+                'models': (
+                    'judge.problem',
+                    'judge.problemgroup',
+                    'judge.problemtype',
+                ),
+            },
+            {
+                'label': 'Judging',
+                'icon': 'icon-ok',
+                'models': (
+                    'judge.submission',
+                    'judge.language',
+                    'judge.judge',
+                ),
+            }
+        )
     }
 
 INSTALLED_APPS += (
