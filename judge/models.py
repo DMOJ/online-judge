@@ -418,7 +418,8 @@ class ContestParticipation(models.Model):
     score = models.IntegerField(verbose_name='score', default=0, db_index=True)
 
     def recalculate_score(self):
-        self.score = sum(map(itemgetter('points'), self.submissions.values('problem').annotate(points=Max('points'))))
+        self.score = sum(map(itemgetter('points'),
+                             self.submissions.values('submission__problem').annotate(points=Max('points'))))
         self.save()
         return self.score
 
