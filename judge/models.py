@@ -124,9 +124,7 @@ class Profile(models.Model):
     @property
     def contest(self):
         cp, created = ContestProfile.objects.get_or_create(user=self)
-        if created:
-            return cp
-        if cp.current.ended:
+        if cp.current is not None and cp.current.ended:
             cp.current = None
             cp.save()
         return cp
