@@ -21,7 +21,7 @@ def contest_list(request):
 
 def contest(request, key):
     try:
-        contest = Contest.objects.get(code=key)
+        contest = Contest.objects.get(key=key)
         if not contest.is_public and not request.user.has_perm('judge.see_private_contest'):
             raise ObjectDoesNotExist()
         form = comment_form(request, 'p:' + key)
