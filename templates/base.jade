@@ -21,6 +21,21 @@ html(lang='en')
                    color: #FFF;
                    background: #2980b9
                 }
+        if request.user.is_authenticated and IN_CONTEST
+            style.
+                #contest-info {
+                    position:fixed;
+                    padding-top:0px;
+                    padding-bottom:3px;
+                    padding-left:5px;
+                    padding-right:5px;
+                    right:10px;
+                    top:30px;
+                    font-size:2em;
+                    color:white;
+                    border:1px solid gray;
+                    border-radius:4px;
+                }
         block media
 
     body
@@ -29,6 +44,8 @@ html(lang='en')
             h1
                 span(style='color: #FFDE05') DM::
                 | OJ
+            if request.user.is_authenticated and IN_CONTEST
+                #contest-info #{CONTEST.contest.name} - #{CONTEST.time_remaining}
         header#nav-head
             nav#navigation.unselectable
                 ul
