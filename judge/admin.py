@@ -2,7 +2,7 @@ from operator import itemgetter
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.db.models import TextField
+from django.db.models import TextField, ManyToManyField
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
@@ -327,6 +327,10 @@ class ContestAdmin(admin.ModelAdmin):
     fields = ('key', 'name', 'description', 'ongoing', 'is_public', 'time_limit', 'types')
     list_display = ('key', 'name', 'ongoing', 'is_public', 'time')
     actions = ['make_public', 'make_private']
+
+    formfield_overrides = {
+        ManyToManyField: {'widget': FilteredSelectMultiple},
+    }
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
