@@ -59,6 +59,7 @@ class DjangoJudgeHandler(JudgeHandler):
     def _submission_is_batch(self, id):
         submission = Submission.objects.get(id=id)
         submission.batch = True
+        submission.save()
 
     def on_grading_end(self, packet):
         JudgeHandler.on_grading_end(self, packet)
