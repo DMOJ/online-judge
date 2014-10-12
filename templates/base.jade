@@ -32,7 +32,7 @@ html(lang='en')
                             var s=today.getSeconds();
                             m = checkTime(m);
                             s = checkTime(s);
-                            label.html = h+":"+m+":"+s;
+                            label.html(h+":"+m+":"+s);
                             var t = setTimeout(function(){
                             today -= 1000;
                             today = new Date(today);
