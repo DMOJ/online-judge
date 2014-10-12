@@ -37,8 +37,15 @@ block body
             a(href='{% url "admin:judge_contest_change" contest.id %}') Edit contest
         hr
         br
-        b Time Limit:
-        | &nbsp;#{contest.time_limit}
+        if participating
+            if participation.ended
+                b Time is up!
+            else
+                b Time Remaining:
+                | &nbsp;#{contest.time_remaining}
+        else
+            b Time Limit:
+            | &nbsp;#{contest.time_limit}
     .content-description
         -cache 3600 contest_html contest.id
             | #{contest.description|markdown:"contest"}

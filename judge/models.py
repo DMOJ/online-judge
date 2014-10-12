@@ -428,8 +428,9 @@ class ContestParticipation(models.Model):
     @property
     def time_remaining(self):
         now = timezone.now()
-        if self.end_time >= now:
-            return self.end_time - now
+        end = self.end_time
+        if end >= now:
+            return end - now
         else:
             return None
 

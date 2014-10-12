@@ -91,6 +91,8 @@ def join_contest(request, key):
 def leave_contest(request, key):
     try:
         contest = Contest.objects.get(key=key)
+        # No public checking because if we hide the contest people should still be able to leave.
+        # No lock ins.
     except ObjectDoesNotExist:
         return render_to_response('message.jade', {
             'message': 'Could not find a contest with the key "%s".' % key,
