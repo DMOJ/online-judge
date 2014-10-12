@@ -1,4 +1,6 @@
 import logging
+from operator import itemgetter
+from django.db.models import Min, Max
 from django.utils import timezone
 
 from .judgehandler import JudgeHandler
@@ -80,6 +82,13 @@ class DjangoJudgeHandler(JudgeHandler):
             if i > status:
                 status = i
         total = round(total, 1)
+
+        if submission.batch:
+            data = SubmissionTestCase.objects.filter(submission_id=3717).values('batch').annotate(points=Min('points'),
+                                                                                                  total=Max('total'))
+            points = round(sum(map(itemgetter('points'), data)), 1)
+            total = round(sum(map(itemgetter('total'), data)), 1)
+
         sub_points = round(points / total * submission.problem.points, 1)
         if not submission.problem.partial and sub_points != submission.problem.points:
             sub_points = 0
