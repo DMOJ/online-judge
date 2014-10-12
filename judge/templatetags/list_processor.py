@@ -44,9 +44,13 @@ def sum_list(iterable):
 
 @register.filter(name='max_list')
 def max_list(iterable):
+    if not iterable:
+        return 0
     return max(iterable)
 
 
 @register.filter(name='min_list')
 def min_list(iterable):
+    if not iterable:
+        return 0
     return min(iterable)
