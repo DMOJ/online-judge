@@ -65,15 +65,12 @@ def join_contest(request, key):
             'message': 'You are already in a contest: "%s".' % contest_profile.current.contest.name,
             'title': 'Already in contest'
         }, context_instance=RequestContext(request))
-    if contest_profile.history.filter(contest=contest).exists():
+    participation, created = ContestParticipation.objects.get_or_create(contest=contest, profile=contest_profile)
+    if not created and participation.ended:
         return render_to_response('message.jade', {
-            'message': 'You are already participated in the contest "%s".' % contest.name,
+            'message': 'Too late! You already used up your time limit for "%s".' % contest.name,
             'title': 'Already in contest'
         }, context_instance=RequestContext(request))
-    participation = ContestParticipation()
-    participation.contest = contest
-    participation.profile = contest_profile
-    participation.save()
     contest_profile.current = participation
     contest_profile.save()
     return HttpResponseRedirect(reverse('judge.views.contest', args=(key,)))
