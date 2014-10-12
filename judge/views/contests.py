@@ -104,7 +104,7 @@ def leave_contest(request, key):
         return contest
 
     contest_profile = request.user.profile.contest
-    if contest_profile.current.contest != contest:
+    if contest_profile.current is None or contest_profile.contest != contest:
         return render_to_response('message.jade', {
             'message': 'You are not in contest "%s".' % key,
             'title': 'No such contest'
