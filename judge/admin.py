@@ -327,10 +327,7 @@ class ContestAdmin(admin.ModelAdmin):
     fields = ('key', 'name', 'description', 'ongoing', 'is_public', 'time_limit', 'types')
     list_display = ('key', 'name', 'ongoing', 'is_public', 'time')
     actions = ['make_public', 'make_private']
-
-    formfield_overrides = {
-        ManyToManyField: {'widget': FilteredSelectMultiple},
-    }
+    filter_horizontal = ('types',)
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
