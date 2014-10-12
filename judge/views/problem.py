@@ -23,6 +23,7 @@ def get_result_table(**kwargs):
             ('Invalid Return', 'IR', results['IR']),
             ('Total', 'TOT', sum(results.values()))]
 
+
 def problem(request, code):
     try:
         problem = Problem.objects.get(code=code)
@@ -47,10 +48,13 @@ def problem(request, code):
 def problems(request):
     hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
 
-    if hide_solved and request.user.is_authenticated():
-        probs = Problem.unsolved(request.user.profile)
-    else:
-        probs = Problem.objects
+    probs = Problem.objects
+    if request.user.is_authenticated():
+        cp = request.user.profile.contest
+        if cp.current is not None:
+            probs = cp.current.contest.types
+        elif hide_solved:
+            probs = Problem.unsolved(request.user.profile)
     probs = probs.filter(is_public=True).order_by('code')
     return render_to_response('problems.jade', {
         'problems': probs,
