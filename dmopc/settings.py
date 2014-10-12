@@ -86,6 +86,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     'judge.template_context.general_info',
     'judge.template_context.site',
     'judge.template_context.misc_config',
+    'judge.template_context.contest',
 )
 
 TEMPLATE_LOADERS = (

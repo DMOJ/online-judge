@@ -51,3 +51,14 @@ class MiscConfigDict(dict):
 
 def misc_config(request):
     return {'misc_config': MiscConfigDict()}
+
+
+def contest(request):
+    if request.user.is_authenticated():
+        contest_profile = request.user.profile.contest
+        in_contest = contest_profile.current is not None
+        participation = contest_profile.current
+    else:
+        in_contest = False
+        participation = None
+    return {'IN_CONTEST': in_contest, 'CONTEST': participation}
