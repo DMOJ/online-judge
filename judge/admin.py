@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType, \
-    MiscConfig, Judge, NavigationBar
+    MiscConfig, Judge, NavigationBar, Contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll
 
 
@@ -322,6 +322,22 @@ class JudgeAdmin(admin.ModelAdmin):
     list_display = ('name', 'online', 'last_connect', 'ping', 'load')
     ordering = ['name']
 
+
+class ContestAdmin(admin.ModelAdmin):
+    fields = ('key', 'name', 'description', 'ongoing', 'is_public', 'time', 'types')
+    list_display = ('key', 'name', 'ongoing', 'is_public', 'time')
+    actions = ['make_public', 'make_private']
+
+    def make_public(self, request, queryset):
+        count = queryset.update(is_public=True)
+        self.message_user(request, "%d contest%s successfully marked as public." % (count, 's'[count == 1:]))
+    make_public.short_description = 'Mark contests as public'
+
+    def make_private(self, request, queryset):
+        count = queryset.update(is_public=False)
+        self.message_user(request, "%d contest%s successfully marked as private." % (count, 's'[count == 1:]))
+    make_private.short_description = 'Mark contests as private'
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(GraderType)
 admin.site.register(Comment, CommentAdmin)
@@ -333,3 +349,4 @@ admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(MiscConfig)
 admin.site.register(NavigationBar, NavigationBarAdmin)
 admin.site.register(Judge, JudgeAdmin)
+admin.site.register(Contest, ContestAdmin)
