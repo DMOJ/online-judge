@@ -39,7 +39,10 @@ html(lang='en')
                     background-color: #111;
                 }
                 #contest-info a {
-                   color: white;
+                    color: white;
+                }
+                #contest-time-remaining {
+                    display: inline
                 }
         block media
     body
@@ -52,7 +55,7 @@ html(lang='en')
                 #contest-info
                     a(href='{% url "judge.views.contest" CONTEST.contest.key %}')
                         | #{CONTEST.contest.name} -
-                        span#contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
+                        #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
         header#nav-head
             nav#navigation.unselectable
                 ul
