@@ -324,7 +324,7 @@ class JudgeAdmin(admin.ModelAdmin):
 
 
 class ContestAdmin(admin.ModelAdmin):
-    fields = ('key', 'name', 'description', 'ongoing', 'is_public', 'time', 'types')
+    fields = ('key', 'name', 'description', 'ongoing', 'is_public', 'time_limit', 'types')
     list_display = ('key', 'name', 'ongoing', 'is_public', 'time')
     actions = ['make_public', 'make_private']
 
