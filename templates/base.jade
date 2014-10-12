@@ -18,9 +18,9 @@ html(lang='en')
         if nav_tab
             style.
                 nav ul li a.nav-#{nav_tab.key} {
-                    color: #FFF;
-                    background: #2980b9
-                }
+                color: #FFF;
+                background: #2980b9
+            }
         if request.user.is_authenticated and IN_CONTEST
             script(type='text/javascript')
                 $(document).ready(function () {
@@ -54,6 +54,7 @@ html(lang='en')
                     color:white;
                     border:1px solid gray;
                     border-radius:4px;
+                    background-color:#111;
                 }
                 #contest-time-remaining {
                     display:inline;
