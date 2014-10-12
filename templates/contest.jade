@@ -19,23 +19,20 @@ block media
 block body
     .info-float(style='width:11%;padding-left:40px')    
         br
+        br
         if request.user.is_authenticated
             button(type='submit') Join contest
         else                        
             button(type='submit') Login to join contest
         hr
         
-        br
         a(href='{% url "judge.views.contest_ranking" contest.key %}') Ranking
         if perms.judge.change_problem
-            hr
-            a(href='/404/') Edit contest
+            hr                          
+            a(href='{% url "admin:judge_contest_change" contest.id %}') Edit contest
             br
-        hr
-        br
         b Time Limit:
         | &nbsp;#{contest.time_limit}
-        br
     .contest-description
         -cache 3600 contest_html contest.id
             | #{contest.description|markdown:"contest"}
