@@ -33,6 +33,7 @@ def contest(request, key):
             participation = request.user.profile.contest.current
             in_contest = participation is not None and participation.contest == contest
         else:
+            participation = None
             in_contest = False
         return render_to_response('contest.jade', {
             'contest': contest,
@@ -40,6 +41,7 @@ def contest(request, key):
             'comment_list': contest_comments(contest),
             'comment_form': form,
             'in_contest': in_contest,
+            'participation': participation
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return render_to_response('message.jade', {'message': 'Could not find a contest with the key "%s".' % key,
