@@ -48,14 +48,14 @@ def problem(request, code):
 def problems(request):
     hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
 
-    probs = Problem.objects
+    probs = Problem.objects.filter(is_public=True)
     if request.user.is_authenticated():
         cp = request.user.profile.contest
         if cp.current is not None:
             probs = cp.current.contest.types
         elif hide_solved:
-            probs = Problem.unsolved(request.user.profile)
-    probs = probs.filter(is_public=True).order_by('code')
+            probs = Problem.unsolved(request.user.profile).filter(is_public=True)
+    probs = probs.order_by('code')
     return render_to_response('problems.jade', {
         'problems': probs,
         'hide_solved': 1 if hide_solved else 0,
