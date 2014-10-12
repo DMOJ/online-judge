@@ -19,7 +19,7 @@ block media
                 window.location.href = '{% url "django.contrib.auth.views.login" %}?next={{ request.get_full_path|urlencode }}';
             });
             $('button#join').click(function () {
-                window.location.href = '{% url "judge.views.join_contest" %}';
+                window.location.href = '{% url "judge.views.join_contest" contest.key %}';
             });
         });
 block body
