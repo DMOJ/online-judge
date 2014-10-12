@@ -398,6 +398,9 @@ class Contest(models.Model):
     time_limit = TimedeltaField(verbose_name='Time limit')
     is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         permissions = (
             ('see_private_contest', 'See private contests'),

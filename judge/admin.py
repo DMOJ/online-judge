@@ -348,7 +348,7 @@ class ContestAdmin(admin.ModelAdmin):
 class ContestParticipationAdmin(admin.ModelAdmin):
     """For developer use only."""
     fields = ('contest', 'profile', 'start', 'submissions')
-    list_display = ('contest__name', 'profile', 'start')
+    list_display = ('contest', 'profile', 'start')
 
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(GraderType)
