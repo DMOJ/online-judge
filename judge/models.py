@@ -257,6 +257,7 @@ class Submission(models.Model):
                               blank=True, db_index=True)
     error = models.TextField(verbose_name='Compile Errors', null=True, blank=True)
     current_testcase = models.IntegerField(default=0)
+    batch = models.BooleanField(verbose_name='Batched cases', default=False)
 
     @property
     def long_status(self):
@@ -304,6 +305,7 @@ class SubmissionTestCase(models.Model):
     memory = models.FloatField(verbose_name='Memory usage', null=True)
     points = models.FloatField(verbose_name='Points granted', null=True)
     total = models.FloatField(verbose_name='Points possible', null=True)
+    batch = models.IntegerField(verbose_name='Batch number', null=True)
 
 
 class Comment(models.Model):

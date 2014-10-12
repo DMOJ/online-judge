@@ -18,6 +18,8 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'grading-begin': self.on_grading_begin,
             'grading-end': self.on_grading_end,
             'compile-error': self.on_compile_error,
+            'batch-begin': self.on_batch_begin,
+            'batch-end': self.on_batch_end,
             'test-case-status': self.on_test_case,
             'current-submission-id': self.on_current_submission,
             'problem-not-exist': self.on_bad_problem,
@@ -34,6 +36,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self.latency = None
         self.load = 1e100
         self.name = None
+        self.batch_id = None
 
         logger.info('Judge connected from: %s', self.client_address)
 
@@ -165,6 +168,9 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             # You can't crash here because you aren't so sure about the judges
             # not being malicious or simply malforms. THIS IS A SERVER!
 
+    def _submission_is_batch(self, id):
+        pass
+
     def on_supported_problems(self, packet):
         logger.info('Updated problem list')
         self._problems = packet['problems']
@@ -174,10 +180,12 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
     def on_grading_begin(self, packet):
         logger.info('Grading has begun on: %s', packet['submission-id'])
+        self.batch_id = None
 
     def on_grading_end(self, packet):
         logger.info('Grading has ended on: %s', packet['submission-id'])
         self._free_self(packet)
+        self.batch_id = None
 
     def on_compile_error(self, packet):
         logger.info('Submission failed to compile: %s', packet['submission-id'])
@@ -190,6 +198,16 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
     def on_submission_terminated(self, packet):
         logger.info('Submission aborted: %s', packet['submission-id'])
         self._free_self(packet)
+
+    def on_batch_begin(self, packet):
+        logger.info('Batch began on: %s', packet['submission-id'])
+        if self.batch_id is None:
+            self.batch_id = 0
+            self._submission_is_batch(packet['submission-id'])
+        self.batch_id += 1
+
+    def on_batch_end(self, packet):
+        logger.info('Batch ended on: %s', packet['submission-id'])
 
     def on_test_case(self, packet):
         logger.info('Test case completed on: %s', packet['submission-id'])
