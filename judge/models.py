@@ -257,8 +257,6 @@ class Submission(models.Model):
                               blank=True, db_index=True)
     error = models.TextField(verbose_name='Compile Errors', null=True, blank=True)
     current_testcase = models.IntegerField(default=0)
-    contest = models.ForeignKey('ContestParticipation', null=True, blank=True, on_delete=models.SET_NULL,
-                                related_name='submissions', related_query_name='submission')
 
     @property
     def long_status(self):
@@ -461,3 +459,9 @@ class ContestProblem(models.Model):
 
     class Meta:
         unique_together = ('problem', 'contest')
+
+
+class ContestSubmission(models.Model):
+    submission = models.OneToOneField(Submission, related_name='contest')
+    participation = models.ForeignKey(ContestParticipation, related_name='submissions', related_query_name='submission')
+    points = models.FloatField(default=0.0)
