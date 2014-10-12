@@ -146,12 +146,13 @@ def validate_grader_param(value):
 
 
 class ContestParticipation(models.Model):
-    contest = models.ForeignKey(Contest, "Associated contest")
+    contest = models.ForeignKey(Contest, 'Associated contest')
     date = models.DateTimeField(verbose_name='Start time', auto_now_add=True)
     submissions = models.ManyToManyField(Submission, verbose_name='Submissions')
 
 
 class ContestProfile(models.Model):
+    user = models.OneToOneField(Profile, verbose_name='User', related_name='contest')
     current_contest = models.ForeignKey(ContestParticipation, verbose_name='Current contest user is participating in')
     history = models.ManyToManyField(ContestParticipation, verbose_name='Previous contests')
 
