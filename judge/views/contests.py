@@ -1,3 +1,4 @@
+from collections import namedtuple
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
@@ -6,6 +7,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.comments import comment_form, contest_comments
 from judge.models import Contest, ContestParticipation
+from judge.utils.ranker import ranker
 
 __all__ = ['contest_list', 'contest', 'contest_ranking', 'join_contest', 'leave_contest']
 
@@ -110,5 +112,29 @@ def leave_contest(request, key):
     return HttpResponseRedirect(reverse('judge.views.contest', args=(key,)))
 
 
+ContestRankingProfile = namedtuple('ContestRankingProfile',
+                                   'user display_rank long_display_name points problems')
+
+
 def contest_ranking(request, key):
-    raise Http404()
+    try:
+        contest = Contest.objects.get(key=key)
+        # No public checking because if we hide the contest people should still be able to leave.
+        # No lock ins.
+    except ObjectDoesNotExist:
+        return render_to_response('message.jade', {
+            'message': 'Could not find a contest with the key "%s".' % key,
+            'title': 'No such contest'
+        }, context_instance=RequestContext(request))
+    results = [ContestRankingProfile(
+        user=participation.profile.user.user,
+        display_rank=participation.profile.user.display_rank,
+        long_display_name=participation.profile.user.long_display_name,
+        points=participation.score,
+        problems=participation.submissions.values('problem').distinct().count()
+    ) for participation in contest.users.order_by('-points')]
+    return render_to_response('users.jade', {
+        'users': ranker(results),
+        'title': 'Ranking: %s' % contest.name
+    }, context_instance=RequestContext(request))
+

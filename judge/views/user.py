@@ -9,6 +9,7 @@ from django.template import RequestContext
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Submission
+from judge.utils.ranker import ranker
 
 
 def remap_keys(iterable, mapping):
@@ -52,19 +53,6 @@ def edit_profile(request):
         form = ProfileForm(instance=profile)
     return render_to_response('edit_profile.jade', {'form': form, 'title': 'Edit profile'},
                               context_instance=RequestContext(request))
-
-
-def ranker(profiles):
-    rank = 0
-    delta = 1
-    last = -1
-    for profile in profiles:
-        if profile.points != last:
-            rank += delta
-            delta = 0
-        delta += 1
-        yield rank, profile
-        last = round(profile.points, 1)
 
 
 def users(request):
