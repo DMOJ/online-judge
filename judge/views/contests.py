@@ -39,4 +39,4 @@ def contest(request, key):
 
 
 def contest_ranking(request, key):
-    return Http404()
+    raise Http404()
