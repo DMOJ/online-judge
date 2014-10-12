@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.comments import problem_comments, comment_form
 from judge.forms import ProblemSubmitForm
-from judge.models import Problem, Submission
+from judge.models import Problem, Submission, ContestSubmission, ContestProblem
 
 
 def get_result_table(**kwargs):
@@ -78,8 +78,14 @@ def problem_submit(request, problem=None, submission=None):
 
             cp = request.user.profile.contest
             if cp.current is not None:
-                model.contest = cp.current
-                model.save()
+                try:
+                    contest_problem = model.problem.contests.get(contest=cp.current.contest)
+                except ContestProblem.DoesNotExist:
+                    pass
+                else:
+                    contest = ContestSubmission(submission=model, problem=contest_problem,
+                                                participation=cp.current)
+                    contest.save()
 
             model.judge()
             return HttpResponseRedirect(reverse('judge.views.submission_status', args=[str(model.id)]))
