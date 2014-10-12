@@ -3,6 +3,7 @@ from django.contrib.flatpages.views import flatpage
 from django.views.generic import TemplateView
 
 from .register import RegistrationView, ActivationView
+from .contests import *
 from .comment import *
 from .user import *
 from .problem import *
