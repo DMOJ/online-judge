@@ -429,6 +429,9 @@ class ContestParticipation(models.Model):
         else:
             return None
 
+    def __unicode__(self):
+        return '%s in %s' % (self.profile.user.display_name, self.contest.name)
+
 
 class ContestProfile(models.Model):
     user = models.OneToOneField(Profile, verbose_name='User', related_name='+')
