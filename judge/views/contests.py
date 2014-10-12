@@ -37,5 +37,6 @@ def contest(request, key):
                                                    'title': 'No such contest'},
                                   context_instance=RequestContext(request))
 
+
 def contest_ranking(request, key):
     return Http404()
