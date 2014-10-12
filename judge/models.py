@@ -417,6 +417,10 @@ class ContestParticipation(models.Model):
     contest = models.ForeignKey(Contest, verbose_name='Associated contest', related_name='users')
     profile = models.ForeignKey('ContestProfile', verbose_name='User', related_name='history')
     start = models.DateTimeField(verbose_name='Start time', default=timezone.now)
+    score = models.IntegerField(verbose_name='score', default=0, db_index=True)
+
+    def recalculate_score(self):
+        pass
 
     @property
     def end_time(self):
