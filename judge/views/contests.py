@@ -26,27 +26,36 @@ def contest(request, key):
         contest = Contest.objects.get(key=key)
         if not contest.is_public and not request.user.has_perm('judge.see_private_contest'):
             raise ObjectDoesNotExist()
-        form = comment_form(request, 'c:' + key)
-        if form is None:
-            return HttpResponseRedirect(request.path)
-        if request.user.is_authenticated():
-            participation = request.user.profile.contest.current
-            in_contest = participation is not None and participation.contest == contest
-        else:
-            participation = None
-            in_contest = False
-        return render_to_response('contest.jade', {
-            'contest': contest,
-            'title': contest.name,
-            'comment_list': contest_comments(contest),
-            'comment_form': form,
-            'in_contest': in_contest,
-            'participation': participation
-        }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return render_to_response('message.jade', {'message': 'Could not find a contest with the key "%s".' % key,
                                                    'title': 'No such contest'},
                                   context_instance=RequestContext(request))
+    form = comment_form(request, 'c:' + key)
+    if form is None:
+        return HttpResponseRedirect(request.path)
+    if request.user.is_authenticated():
+        contest_profile = request.user.profile.contest
+        try:
+            participation = contest_profile.history.get(contest=contest)
+        except ContestParticipation.DoesNotExist:
+            participating = False
+            participation = None
+        else:
+            participating = True
+        in_contest = contest_profile.current is not None and contest_profile.current.contest == contest
+    else:
+        participating = False
+        participation = None
+        in_contest = False
+    return render_to_response('contest.jade', {
+        'contest': contest,
+        'title': contest.name,
+        'comment_list': contest_comments(contest),
+        'comment_form': form,
+        'in_contest': in_contest,
+        'participating': participating,
+        'participation': participation,
+    }, context_instance=RequestContext(request))
 
 
 @login_required
