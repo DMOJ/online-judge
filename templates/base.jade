@@ -18,9 +18,9 @@ html(lang='en')
         if nav_tab
             style.
                 nav ul li a.nav-#{nav_tab.key} {
-                color: #FFF;
-                background: #2980b9
-            }
+                    color: #FFF;
+                    background: #2980b9
+                }
         if request.user.is_authenticated and IN_CONTEST
             script(type='text/javascript')
                 $(document).ready(function () {
@@ -60,7 +60,7 @@ html(lang='en')
                     display:inline;
                 }
         block media
-            body
+    body
         noscript This site works best with JavaScript enabled.
         #header.unselectable
             h1
