@@ -24,26 +24,22 @@ html(lang='en')
         if request.user.is_authenticated and IN_CONTEST
             script(type='text/javascript')
                 $(document).ready(function () {
-                        var label = $("#contest-time-remaining");
-                        var today=new Date('0/0/0 ' + label.html)
-                        function startTime() {
-                            var h=today.getHours();
-                            var m=today.getMinutes();
-                            var s=today.getSeconds();
-                            m = checkTime(m);
-                            s = checkTime(s);
-                            label.html(h+":"+m+":"+s);
-                            var t = setTimeout(function(){
-                            today -= 1000;
-                            today = new Date(today);
-                            startTime()
-                            },1000);
-                        }
+                    var label = $("#contest-time-remaining");
+                    var match = /(\d+):(\d+):(\d+)/.exec(label.text());
+                    var time = parseInt(match[1]) * 3600 + parseInt(match[2]) * 60 + parseInt(match[3]);
+                    function format(int) {
+                        var s = "0" + int;
+                        return s.substr(s.length - size);
+                    }
+
+                    setInterval(function () {
+                        --time;
+                        var h = Math.floor(time / 3600);
+                        var m = Math.floor(time % 3600 / 60);
+                        var s = time % 60;
+                        label.text(h + ":" + format(m) + ":" + format(s));
+                    }, 1000);
                 });
-                function checkTime(i) {
-                    if (i<10) {i = "0" + i}  // add zero in front of numbers < 10
-                    return i;
-                }
             style.
                 #contest-info {
                     position:fixed;
