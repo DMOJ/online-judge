@@ -452,3 +452,12 @@ class ContestProfile(models.Model):
 
     def __unicode__(self):
         return 'Contest: %s' % self.user.display_name
+
+
+class ContestProblem(models.Model):
+    problem = models.ForeignKey(Problem)
+    contest = models.ForeignKey(Contest)
+    points = models.IntegerField()
+
+    class Meta:
+        unique_together = ('problem', 'contest')
