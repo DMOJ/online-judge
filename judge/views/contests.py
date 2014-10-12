@@ -5,7 +5,7 @@ from django.template import RequestContext
 from judge.comments import comment_form, contest_comments
 from judge.models import Contest
 
-__all__ = ['contest_list', 'contest']
+__all__ = ['contest_list', 'contest', 'contest_ranking']
 
 
 def contest_list(request):
