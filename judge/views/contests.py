@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.comments import comment_form, contest_comments
@@ -36,3 +36,6 @@ def contest(request, key):
         return render_to_response('message.jade', {'message': 'Could not find a contest with the key "%s".' % key,
                                                    'title': 'No such contest'},
                                   context_instance=RequestContext(request))
+
+def contest_ranking(request, key):
+    return Http404()
