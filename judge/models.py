@@ -257,6 +257,8 @@ class Submission(models.Model):
                               blank=True, db_index=True)
     error = models.TextField(verbose_name='Compile Errors', null=True, blank=True)
     current_testcase = models.IntegerField(default=0)
+    contest = models.ForeignKey('ContestParticipation', null=True, blank=True, on_delete=models.SET_NULL,
+                                related_name='submissions', related_query_name='submission')
 
     @property
     def long_status(self):
@@ -415,7 +417,6 @@ class ContestParticipation(models.Model):
     contest = models.ForeignKey(Contest, verbose_name='Associated contest', related_name='users')
     profile = models.ForeignKey('ContestProfile', verbose_name='User', related_name='history')
     start = models.DateTimeField(verbose_name='Start time', default=timezone.now)
-    submissions = models.ManyToManyField(Submission, verbose_name='Submissions', blank=True)
 
     @property
     def end_time(self):

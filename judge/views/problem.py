@@ -75,6 +75,12 @@ def problem_submit(request, problem=None, submission=None):
                     id=form.cleaned_data['language'].id).exists():
                 raise PermissionDenied()
             model = form.save()
+
+            cp = request.user.profile.contest
+            if cp.current is not None:
+                model.contest = cp.current
+                model.save()
+
             model.judge()
             return HttpResponseRedirect(reverse('judge.views.submission_status', args=[str(model.id)]))
         else:
