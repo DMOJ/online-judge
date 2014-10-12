@@ -2,7 +2,6 @@ doctype 5
 -load staticfiles
 -load strings
 -load variables
--load timedelta
 html(lang='en')
     head
         title
@@ -45,7 +44,7 @@ html(lang='en')
             h1
                 span(style='color: #FFDE05') DM::
                 | OJ
-            if IN_CONTEST
+            if request.user.is_authenticated and IN_CONTEST
                 #contest-info #{CONTEST.contest.name} - #{CONTEST.time_remaining|timedelta:"simple"}
         header#nav-head
             nav#navigation.unselectable
