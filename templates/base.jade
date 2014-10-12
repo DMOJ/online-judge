@@ -38,7 +38,7 @@ html(lang='en')
                         var h = Math.floor(time / 3600);
                         var m = Math.floor(time % 3600 / 60);
                         var s = time % 60;
-                        label.text(h + ":" + format(m) + ":" + format(s));
+                        label.text(format(h) + ":" + format(m) + ":" + format(s));
                     }, 1000);
                 });
             style.
