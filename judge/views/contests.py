@@ -6,7 +6,7 @@ __all__ = ['contest_list']
 
 
 def contest_list(request):
-    if request.user.is_authenticated() and request.profile.is_admin:
+    if request.user.is_authenticated() and request.user.profile.is_admin:
         contests = Contest.objects.all()
     else:
         contests = Contest.objects.filter(is_public=True)
