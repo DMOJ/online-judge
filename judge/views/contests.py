@@ -132,7 +132,7 @@ def contest_ranking(request, key):
         long_display_name=participation.profile.user.long_display_name,
         points=participation.score,
         problems=participation.submissions.values('problem').distinct().count()
-    ) for participation in contest.users.order_by('-points')]
+    ) for participation in contest.users.order_by('-score')]
     return render_to_response('users.jade', {
         'users': ranker(results),
         'title': 'Ranking: %s' % contest.name
