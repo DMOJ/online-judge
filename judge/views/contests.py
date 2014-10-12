@@ -34,7 +34,7 @@ def contest(request, key):
             'title': contest.name,
             'comment_list': contest_comments(contest),
             'comment_form': form,
-            'in_contest': request.user.is_authenticated() and request.user.profile.contest.current == contest
+            'in_contest': request.user.is_authenticated() and request.user.profile.contest.current.contest == contest
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return render_to_response('message.jade', {'message': 'Could not find a contest with the key "%s".' % key,
