@@ -65,7 +65,7 @@ def problems(request):
 @login_required
 def problem_submit(request, problem=None, submission=None):
     try:
-        if submission is None and Submission.objects.get(id=int(submission)).user.user != request.user:
+        if submission is not None and Submission.objects.get(id=int(submission)).user.user != request.user:
             raise PermissionDenied()
     except Submission.DoesNotExist:
         raise Http404()
