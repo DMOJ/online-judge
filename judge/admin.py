@@ -352,7 +352,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
 
     @staticmethod
     def user_name(obj):
-        return obj.user.display_name
+        return obj.profile.user.display_name
 
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(GraderType)
