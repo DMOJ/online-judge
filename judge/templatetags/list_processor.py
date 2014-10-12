@@ -1,4 +1,4 @@
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 from django import template
 register = template.Library()
 
@@ -32,6 +32,21 @@ def list_getindex(iterable, index):
     return map(itemgetter(int(index)), iterable)
 
 
+@register.filter(name='list_getattr')
+def list_getattr(iterable, prop):
+    return map(attrgetter(prop), iterable)
+
+
 @register.filter(name='sum_list')
 def sum_list(iterable):
     return sum(iterable)
+
+
+@register.filter(name='max_list')
+def max_list(iterable):
+    return max(iterable)
+
+
+@register.filter(name='min_list')
+def min_list(iterable):
+    return min(iterable)

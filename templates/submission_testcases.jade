@@ -1,7 +1,19 @@
+- load list_processor
+
 if submission.status != 'CE'
-    each case in test_cases
-        b Test case ##{forloop.counter}:
-        |&nbsp;#{case.status} [#{case.time|floatformat:"3"}s, #{case.memory|floatformat:"-1"}kb] (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
+    if submission.batch
+        - regroup test_cases by batch as batches
+        each batch in batches
+            b Batch ##{batch.grouper}
+            | (#{group.list|list_getitem:"points"|min_list|floatformat:"0"}/#{group.list|list_getitem:"total"|max_list|floatformat:"0"} points)
+            .batch-cases
+                each case in batch.list
+                    b Test case ##{case.case}:
+                    |&nbsp;#{case.status} [#{case.time|floatformat:"3"}s, #{case.memory|floatformat:"-1"}kb] (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
+    else
+        each case in test_cases
+            b Test case ##{forloop.counter}:
+            |&nbsp;#{case.status} [#{case.time|floatformat:"3"}s, #{case.memory|floatformat:"-1"}kb] (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
         br
     if submission.is_graded
         br
