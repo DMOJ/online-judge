@@ -24,7 +24,7 @@ def contest(request, key):
         contest = Contest.objects.get(key=key)
         if not contest.is_public and not request.user.has_perm('judge.see_private_contest'):
             raise ObjectDoesNotExist()
-        form = comment_form(request, 'p:' + key)
+        form = comment_form(request, 'c:' + key)
         if form is None:
             return HttpResponseRedirect(request.path)
         return render_to_response('contest.jade', {'contest': contest,
