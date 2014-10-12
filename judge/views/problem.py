@@ -52,7 +52,7 @@ def problems(request):
     if request.user.is_authenticated():
         cp = request.user.profile.contest
         if cp.current is not None:
-            probs = cp.current.contest.types
+            probs = cp.current.contest.problems
         elif hide_solved:
             probs = Problem.unsolved(request.user.profile).filter(is_public=True)
     probs = probs.order_by('code')

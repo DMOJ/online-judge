@@ -400,19 +400,12 @@ class Contest(models.Model):
     name = models.CharField(max_length=100, verbose_name='Contest name', db_index=True)
     description = models.TextField(blank=True)
     ongoing = models.BooleanField(default=True)
-    types = models.ManyToManyField(Problem, verbose_name='Problems')
+    types = models.ManyToManyField(Problem, verbose_name='Problems', through='ContestProblem')
     time_limit = TimedeltaField(verbose_name='Time limit')
     is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
 
     def __unicode__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        result = super(Contest, self).save(*args, **kwargs)
-        for problem in self.types.filter(contestproblem=None):
-            ContestProblem(problem=problem, contest=self, points=problem.points).save()
-        ContestProblem.objects.filter(contest=self).exclude(problem__in=self.types.all()).delete()
-        return result
 
     class Meta:
         permissions = (
