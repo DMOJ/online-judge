@@ -325,7 +325,7 @@ class JudgeAdmin(admin.ModelAdmin):
 
 class ContestProblemInline(admin.TabularInline):
     model = ContestProblem
-    fields = ('problem', 'points')
+    fields = ('problem', 'points', 'partial')
 
 
 class ContestAdmin(admin.ModelAdmin):

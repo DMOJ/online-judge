@@ -457,6 +457,7 @@ class ContestProblem(models.Model):
     problem = models.ForeignKey(Problem)
     contest = models.ForeignKey(Contest)
     points = models.IntegerField()
+    partial = models.BooleanField()
 
     class Meta:
         unique_together = ('problem', 'contest')
