@@ -9,7 +9,7 @@ __all__ = ['contest_list', 'contest', 'contest_ranking']
 
 
 def contest_list(request):
-    if request.user.is_authenticated() and request.user.profile.is_admin:
+    if request.user.has_perm('judge.see_private_contest'):
         contests = Contest.objects.all()
     else:
         contests = Contest.objects.filter(is_public=True)
