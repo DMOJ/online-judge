@@ -407,7 +407,7 @@ class Contest(models.Model):
 class ContestParticipation(models.Model):
     contest = models.ForeignKey(Contest, verbose_name='Associated contest', related_name='users')
     profile = models.ForeignKey('ContestProfile', verbose_name='User', related_name='history')
-    start = models.DateTimeField(verbose_name='Start time', auto_now_add=True)
+    start = models.DateTimeField(verbose_name='Start time', default=timezone.now)
     submissions = models.ManyToManyField(Submission, verbose_name='Submissions', blank=True)
 
     @property
