@@ -418,6 +418,14 @@ class ContestParticipation(models.Model):
     def ended(self):
         return self.end_time < timezone.now()
 
+    @property
+    def time_remaining(self):
+        now = timezone.now()
+        if self.end_time < now:
+            return now - self.end_time
+        else:
+            return None
+
 
 class ContestProfile(models.Model):
     user = models.OneToOneField(Profile, verbose_name='User', related_name='+')
