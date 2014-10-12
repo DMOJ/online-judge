@@ -103,7 +103,10 @@ block media
         $(function () {
             fix_div($('.info-float'), 40, true, function (info) {
                 info.css('width', (info.width() / $(window).width() * 100) + '%');
-                return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css('width', '20%').prependTo('#content-body');
+                return $('<div/>', {
+                    id: 'fake-info-float',
+                    class: 'info-float'
+                }).css('width', '20%').height(info.height()).prependTo('#content-body');
             });
         });
 
