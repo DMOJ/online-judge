@@ -14,14 +14,35 @@ html(lang='en')
         link(rel='canonical', href='http://{{ site.domain }}{{ request.get_full_path }}')
         script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
         script(src='{% static "navbar.js" %}')
-
         if nav_tab
             style.
                 nav ul li a.nav-#{nav_tab.key} {
-                   color: #FFF;
-                   background: #2980b9
+                    color: #FFF;
+                    background: #2980b9
                 }
         if request.user.is_authenticated and IN_CONTEST
+            script(type='text/javascript')
+                $(document).ready(function () {
+                        var label = $("#contest-time-remaining");
+                        var today=new Date('0/0/0 ' + label.html)
+                        function startTime() {
+                            var h=today.getHours();
+                            var m=today.getMinutes();
+                            var s=today.getSeconds();
+                            m = checkTime(m);
+                            s = checkTime(s);
+                            label.html = h+":"+m+":"+s;
+                            var t = setTimeout(function(){
+                            today -= 1000;
+                            today = new Date(today);
+                            startTime()
+                            },1000);
+                        }
+                });
+                function checkTime(i) {
+                    if (i<10) {i = "0" + i}  // add zero in front of numbers < 10
+                    return i;
+                }
             style.
                 #contest-info {
                     position:fixed;
@@ -37,15 +58,15 @@ html(lang='en')
                     border-radius:4px;
                 }
         block media
-
-    body
+            body
         noscript This site works best with JavaScript enabled.
         #header.unselectable
             h1
                 span(style='color: #FFDE05') DM::
                 | OJ
             if request.user.is_authenticated and IN_CONTEST
-                #contest-info #{CONTEST.contest.name} - #{CONTEST.time_remaining|timedelta:"simple"}
+                #contest-info #{CONTEST.contest.name} - 
+                    #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
         header#nav-head
             nav#navigation.unselectable
                 ul
@@ -81,3 +102,4 @@ html(lang='en')
             footer
                 p Generated on {% now "H:i:s, F d, Y O" %}
         block bodyend
+                                                 
