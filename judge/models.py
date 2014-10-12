@@ -434,3 +434,6 @@ class ContestProfile(models.Model):
     user = models.OneToOneField(Profile, verbose_name='User', related_name='+')
     current = models.OneToOneField(ContestParticipation, verbose_name='Current contest',
                                    null=True, blank=True, related_name='+')
+
+    def __unicode__(self):
+        return 'Contest: %s' % self.user.display_name
