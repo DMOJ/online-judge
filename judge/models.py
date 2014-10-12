@@ -151,39 +151,6 @@ def validate_grader_param(value):
         raise ValidationError('not all params are key-value pairs')
 
 
-class ContestParticipation(models.Model):
-    contest = models.ForeignKey(Contest, 'Associated contest', related_name='users')
-    user = models.ForeignKey(Profile, 'Associated user', related_name='+')
-    start = models.DateTimeField(verbose_name='Start time', auto_now_add=True)
-    submissions = models.ManyToManyField(Submission, verbose_name='Submissions', blank=True)
-
-    @property
-    def end_time(self):
-        return self.start + self.contest.time_limit
-
-    @property
-    def ended(self):
-        return self.end_time < timezone.now()
-
-
-class ContestProfile(models.Model):
-    user = models.OneToOneField(Profile, verbose_name='User', related_name='+')
-    current = models.ForeignKey(ContestParticipation, verbose_name='Current contest user is participating in',
-                                null=True, blank=True)
-    history = models.ManyToManyField(ContestParticipation, verbose_name='Previous contests', blank=True)
-
-
-class Contest(models.Model):
-    id = models.CharField(max_length=20, verbose_name='Contest id', unique=True,
-                          validators=[RegexValidator('^[a-z0-9]+$', 'Contest id must be ^[a-z0-9]+$')])
-    name = models.CharField(max_length=100, verbose_name='Contest name', db_index=True)
-    description = models.TextField(blank=True)
-    ongoing = models.BooleanField(default=True)
-    types = models.ManyToManyField(Problem, verbose_name='Problems')
-    time_limit = TimedeltaField(verbose_name='Time limit')
-    is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
-
-
 class Problem(models.Model):
     code = models.CharField(max_length=20, verbose_name='Problem code', unique=True,
                             validators=[RegexValidator('^[a-z0-9]+$', 'Problem code must be ^[a-z0-9]+$')])
@@ -419,3 +386,35 @@ class Judge(models.Model):
     @property
     def runtime_list(self):
         return map(attrgetter('name'), self.runtimes.all())
+
+
+class Contest(models.Model):
+    key = models.CharField(max_length=20, verbose_name='Contest id', unique=True,
+                           validators=[RegexValidator('^[a-z0-9]+$', 'Contest id must be ^[a-z0-9]+$')])
+    name = models.CharField(max_length=100, verbose_name='Contest name', db_index=True)
+    description = models.TextField(blank=True)
+    ongoing = models.BooleanField(default=True)
+    types = models.ManyToManyField(Problem, verbose_name='Problems')
+    time_limit = TimedeltaField(verbose_name='Time limit')
+    is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
+
+
+class ContestParticipation(models.Model):
+    contest = models.ForeignKey(Contest, verbose_name='Associated contest', related_name='users')
+    profile = models.ForeignKey('ContestProfile', verbose_name='User', related_name='history')
+    start = models.DateTimeField(verbose_name='Start time', auto_now_add=True)
+    submissions = models.ManyToManyField(Submission, verbose_name='Submissions', blank=True)
+
+    @property
+    def end_time(self):
+        return self.start + self.contest.time_limit
+
+    @property
+    def ended(self):
+        return self.end_time < timezone.now()
+
+
+class ContestProfile(models.Model):
+    user = models.OneToOneField(Profile, verbose_name='User', related_name='+')
+    current = models.OneToOneField(ContestParticipation, verbose_name='Current contest',
+                                   null=True, blank=True, related_name='+')
