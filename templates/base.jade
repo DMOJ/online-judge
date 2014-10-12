@@ -22,7 +22,7 @@ html(lang='en')
                     color: #FFF;
                     background: #2980b9
                 }
-        if request.user.is_authenticated and IN_CONTEST
+        if IN_CONTEST
             script(type='text/javascript')
                 $(document).ready(function () {
                     count_down($("#contest-time-remaining"));
@@ -52,9 +52,11 @@ html(lang='en')
             h1
                 span(style='color: #FFDE05') DM::
                 | OJ
-            if request.user.is_authenticated and IN_CONTEST
-                #contest-info #{CONTEST.contest.name} - 
-                    #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
+            if IN_CONTEST
+                #contest-info
+                    a(href='{% url "judge.views.contest" CONTEST.contest.key %}')
+                        | #{CONTEST.contest.name} -
+                        #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
         header#nav-head
             nav#navigation.unselectable
                 ul
