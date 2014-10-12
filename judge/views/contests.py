@@ -90,7 +90,7 @@ def leave_contest(request, key):
             'message': 'You are not in contest "%s".' % key,
             'title': 'No such contest'
         }, context_instance=RequestContext(request))
-    contest_profile.contest = None
+    contest_profile.current = None
     contest_profile.save()
     return HttpResponseRedirect(reverse('judge.views.contest', args=(key,)))
 
