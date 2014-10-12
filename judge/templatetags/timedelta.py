@@ -30,6 +30,12 @@ def nice_repr(timedelta, display='long', sep=', '):
     if display == 'sql':
         days += weeks * 7
         return '%i %02i:%02i:%02i' % (days, hours, minutes, seconds)
+    elif display == 'simple':
+        days += weeks * 7
+        if days:
+            return '%i %02i:%02i:%02i' % (days, hours, minutes, seconds)
+        else:
+            return '%02i:%02i:%02i' % (hours, minutes, seconds)
     elif display == 'minimal':
         words = ['w', 'd', 'h', 'm', 's']
     elif display == 'short':
