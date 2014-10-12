@@ -29,21 +29,17 @@ html(lang='en')
                 });
             style.
                 #contest-info {
-                    position:fixed;
-                    padding-top:0px;
-                    padding-bottom:3px;
-                    padding-left:5px;
-                    padding-right:5px;
-                    right:10px;
-                    top:30px;
-                    font-size:2em;
-                    color:white;
-                    border:1px solid gray;
-                    border-radius:4px;
-                    background-color:#111;
+                    position: fixed;
+                    padding: 0 5px 3px;
+                    right: 10px;
+                    top: 30px;
+                    font-size: 2em;
+                    border: 1px solid gray;
+                    border-radius: 4px;
+                    background-color: #111;
                 }
-                #contest-time-remaining {
-                    display:inline;
+                #contest-info a {
+                   color: white;
                 }
         block media
     body
@@ -56,7 +52,7 @@ html(lang='en')
                 #contest-info
                     a(href='{% url "judge.views.contest" CONTEST.contest.key %}')
                         | #{CONTEST.contest.name} -
-                        #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
+                        span#contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
         header#nav-head
             nav#navigation.unselectable
                 ul
