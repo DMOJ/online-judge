@@ -1,4 +1,4 @@
-.problem-description {
+.content-description {
     line-height: 1.5em;
     font-size: 1em;
     width: 84%;
@@ -6,42 +6,42 @@
     font-family: 'Segoe UI', 'Lucida Grande', Arial, sans-serif
 }
 
-.problem-description a {
+.content-description a {
     color: #5b80b2;
     text-decoration: underline
 }
 
-.problem-description a:visited {
+.content-description a:visited {
     color: #0b0080
 }
 
-.problem-description a:hover {
+.content-description a:hover {
     color: #0645ad
 }
 
-.problem-description a:active {
+.content-description a:active {
     color: #faa700
 }
 
-.problem-description a:focus {
+.content-description a:focus {
     outline: thin dotted
 }
 
-.problem-description a:hover, .problem-description a:active {
+.content-description a:hover, .content-description a:active {
     outline: 0
 }
 
-.problem-description p {
+.content-description p {
     margin: 1em 0 !important;
     padding: 0 !important;
     font-size: 14px !important
 }
 
-.problem-description img {
+.content-description img {
     max-width: 100%
 }
 
-.problem-description h1, .problem-description h2, .problem-description h3, .problem-description h4, .problem-description h5, .problem-description h6 {
+.content-description h1, .content-description h2, .content-description h3, .content-description h4, .content-description h5, .content-description h6 {
     font-weight: normal;
     color: #111;
     margin-bottom: .75em;
@@ -49,45 +49,45 @@
     background: 0
 }
 
-.problem-description h4, .problem-description h5, .problem-description h6 {
+.content-description h4, .content-description h5, .content-description h6 {
     font-weight: bold
 }
 
-.problem-description h1 {
+.content-description h1 {
     font-size: 2.5em
 }
 
-.problem-description h2 {
+.content-description h2 {
     font-size: 2em
 }
 
-.problem-description h3 {
+.content-description h3 {
     font-size: 1.4em;
     margin: 0;
     padding: 0;
     margin-bottom: -0.5em
 }
 
-.problem-description h4 {
+.content-description h4 {
     font-size: 1.2em
 }
 
-.problem-description h5 {
+.content-description h5 {
     font-size: 1em
 }
 
-.problem-description h6 {
+.content-description h6 {
     font-size: .9em
 }
 
-.problem-description blockquote {
+.content-description blockquote {
     color: #666;
     margin: 0;
     padding-left: 1.5em;
     border-left: .5em #EEE solid
 }
 
-.problem-description hr {
+.content-description hr {
     display: block;
     height: 0;
     border: 0;
@@ -97,14 +97,14 @@
     padding: 0
 }
 
-.problem-description pre, .problem-description code, .problem-description kbd, .problem-description samp {
+.content-description pre, .content-description code, .content-description kbd, .content-description samp {
     color: #000;
     font-family: monospace, monospace;
     _font-family: 'courier new', monospace;
     font-size: .98em
 }
 
-.problem-description code {
+.content-description code {
     font-family: Consolas, "Liberation Mono", Courier, monospace, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace !important;
     margin: 0 2px;
     padding: 0 5px;
@@ -115,7 +115,7 @@
     color: #444
 }
 
-.problem-description pre code {
+.content-description pre code {
     background-color: none;
     border: 0;
     line-height: 1em;
@@ -126,7 +126,7 @@
     font-size: 1em
 }
 
-.problem-description pre {
+.content-description pre {
     white-space: pre;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -138,76 +138,76 @@
     border-radius: 4px
 }
 
-.problem-description pre code {
+.content-description pre code {
     color: black
 }
 
-.problem-description b, .problem-description strong {
+.content-description b, .content-description strong {
     font-weight: bold
 }
 
-.problem-description dfn {
+.content-description dfn {
     font-style: italic
 }
 
-.problem-description ins {
+.content-description ins {
     background: #ff9;
     color: #000;
     text-decoration: none
 }
 
-.problem-description mark {
+.content-description mark {
     background: #ff0;
     color: #000;
     font-style: italic;
     font-weight: bold
 }
 
-.problem-description sub, .problem-description sup {
+.content-description sub, .content-description sup {
     font-size: 75%;
     line-height: 0;
     position: relative;
     vertical-align: baseline
 }
 
-.problem-description sup {
+.content-description sup {
     top: -0.5em
 }
 
-.problem-description sub {
+.content-description sub {
     bottom: -0.25em
 }
 
-.problem-description ul, .problem-description ol {
+.content-description ul, .content-description ol {
     margin: 1em 0 !important;
     padding: 0 0 0 2em !important
 }
 
-.problem-description ul li, .problem-description ol li {
+.content-description ul li, .content-description ol li {
     font-size: 14px !important;
     margin-bottom: .75em
 }
 
-.problem-description li p:last-child {
+.content-description li p:last-child {
     margin: 0
 }
 
-.problem-description dd {
+.content-description dd {
     margin: 0 0 0 2em
 }
 
-.problem-description img {
+.content-description img {
     border: 0;
     -ms-interpolation-mode: bicubic;
     vertical-align: middle
 }
 
-.problem-description table {
+.content-description table {
     border-collapse: collapse;
     border-spacing: 0
 }
 
-.problem-description td {
+.content-description td {
     vertical-align: top
 }
 

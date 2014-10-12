@@ -6,7 +6,7 @@ extends base
 
 block media
     link(rel='stylesheet', href='{% static "status.css" %}')
-    link(rel='stylesheet', href='{% static "problem-description.css" %}')
+    link(rel='stylesheet', href='{% static "contest-description.css" %}')
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
     script(type='text/javascript')
         $(function () {
@@ -63,7 +63,7 @@ block body
         br
         | #{problem.languages_list|join:", "}
         br
-    .problem-description
+    .content-description
         -cache 3600 problem_html problem.id
             | #{problem.description|markdown:"problem"}
         hr

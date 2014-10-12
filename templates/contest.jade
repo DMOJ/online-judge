@@ -5,7 +5,7 @@ extends base
 -load cache
 block media
     link(rel='stylesheet', href='{% static "status.css" %}')
-    link(rel='stylesheet', href='{% static "problem-description.css" %}')
+    link(rel='stylesheet', href='{% static "content-description.css" %}')
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
     script(type='text/javascript')
         $(function () {
@@ -33,7 +33,7 @@ block body
             br
         b Time Limit:
         | &nbsp;#{contest.time_limit}
-    .contest-description
+    .content-description
         -cache 3600 contest_html contest.id
             | #{contest.description|markdown:"contest"}
         hr
