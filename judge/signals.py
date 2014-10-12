@@ -11,5 +11,5 @@ def problem_update(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Contest)
-def problem_update(sender, instance, **kwargs):
+def contest_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('contest_html', (instance.id,)))
