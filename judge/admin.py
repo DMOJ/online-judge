@@ -329,6 +329,11 @@ class ContestAdmin(admin.ModelAdmin):
     actions = ['make_public', 'make_private']
     filter_horizontal = ('types',)
 
+    if AdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': AdminPagedownWidget},
+        }
+
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self.message_user(request, "%d contest%s successfully marked as public." % (count, 's'[count == 1:]))
