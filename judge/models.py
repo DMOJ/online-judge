@@ -123,7 +123,13 @@ class Profile(models.Model):
 
     @property
     def contest(self):
-        return ContestProfile.objects.get_or_create(user=self)[0]
+        cp, created = ContestProfile.objects.get_or_create(user=self)
+        if created:
+            return cp
+        if cp.current.ended:
+            cp.current = None
+            cp.save()
+        return cp
 
     def __unicode__(self):
         # return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
