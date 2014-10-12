@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType, \
-    MiscConfig, Judge, NavigationBar, Contest, ContestParticipation
+    MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem
 from judge.widgets import CheckboxSelectMultipleWithSelectAll
 
 
@@ -323,10 +323,16 @@ class JudgeAdmin(admin.ModelAdmin):
     ordering = ['name']
 
 
+class ContestProblemInline(admin.TabularInline):
+    model = ContestProblem
+    fields = ('problem', 'points')
+
+
 class ContestAdmin(admin.ModelAdmin):
     fields = ('key', 'name', 'description', 'ongoing', 'is_public', 'time_limit', 'types')
     list_display = ('key', 'name', 'ongoing', 'is_public', 'time_limit')
     actions = ['make_public', 'make_private']
+    inlines = [ContestProblemInline]
     filter_horizontal = ('types',)
 
     if AdminPagedownWidget is not None:
