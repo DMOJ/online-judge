@@ -58,7 +58,7 @@ def join_contest(request, key):
             'message': 'You are already in a contest: "%s".' % contest_profile.current.contest.name,
             'title': 'Already in contest'
         }, context_instance=RequestContext(request))
-    if contest in contest_profile.history:
+    if contest in contest_profile.history.all():
         return render_to_response('message.jade', {
             'message': 'You are already participated in the contest "%s".' % contest.name,
             'title': 'Already in contest'
