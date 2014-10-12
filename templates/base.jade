@@ -15,6 +15,7 @@ html(lang='en')
         link(rel='canonical', href='http://{{ site.domain }}{{ request.get_full_path }}')
         script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
         script(src='{% static "navbar.js" %}')
+        script(src='{% static "clock.js" %}')
         if nav_tab
             style.
                 nav ul li a.nav-#{nav_tab.key} {
@@ -24,22 +25,7 @@ html(lang='en')
         if request.user.is_authenticated and IN_CONTEST
             script(type='text/javascript')
                 $(document).ready(function () {
-                    var label = $("#contest-time-remaining");
-                    var match = /(\d+):(\d+):(\d+)/.exec(label.text());
-                    var time = parseInt(match[1]) * 3600 + parseInt(match[2]) * 60 + parseInt(match[3]);
-
-                    function format(int) {
-                        var s = "0" + int;
-                        return s.substr(s.length - 2);
-                    }
-
-                    setInterval(function () {
-                        --time;
-                        var h = Math.floor(time / 3600);
-                        var m = Math.floor(time % 3600 / 60);
-                        var s = time % 60;
-                        label.text(format(h) + ":" + format(m) + ":" + format(s));
-                    }, 1000);
+                    count_down($("#contest-time-remaining"));
                 });
             style.
                 #contest-info {
