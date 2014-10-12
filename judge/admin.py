@@ -347,7 +347,7 @@ class ContestAdmin(admin.ModelAdmin):
 
 class ContestParticipationAdmin(admin.ModelAdmin):
     """For developer use only."""
-    fields = ('contest', 'profile', 'start', 'submissions')
+    fields = ('contest', 'profile', 'start')
     list_display = ('contest', 'user_name', 'start')
 
     @staticmethod
