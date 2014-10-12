@@ -28,7 +28,7 @@ block body
         if not in_contest
             button#join(type='submit') Join contest
         else
-            button#leave(type='submit', onclick="return confirm('Are you sure want to leave the contest? You won't be able to get back in.')") Leave contest
+            button#leave(type='submit') Leave contest
         hr
 
         a(href='{% url "judge.views.contest_ranking" contest.key %}') View rankings
