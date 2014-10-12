@@ -1,0 +1,21 @@
+extends base
+- load staticfiles
+
+block body
+    table.table
+        thead
+            tr
+                th Name
+                th Time limit
+                th Ongoing
+        tbody
+            each contest in contests
+                tr
+                    td
+                        a(href='#')= contest.name
+                    td= contest.time_limit
+                    td
+                        if contest.ongoing
+                            img(src='{% static "admin/img/icon-yes.gif" %}')
+                        else
+                            img(src='{% static "admin/img/icon-no.gif" %}')

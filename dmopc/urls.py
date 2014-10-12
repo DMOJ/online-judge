@@ -119,6 +119,8 @@ urlpatterns = patterns('',
     url(r'^comments/upvote/$', 'judge.views.upvote_comment'),
     url(r'^comments/downvote/$', 'judge.views.downvote_comment'),
 
+    url(r'^contests/$', 'judge.views.contest_list'),
+
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {
         'problem': ProblemSitemap,
         'user': UserSitemap,
