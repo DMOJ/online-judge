@@ -75,21 +75,26 @@ class DjangoJudgeHandler(JudgeHandler):
             if i > status:
                 status = i
         total = round(total, 1)
-        points = round(points / total * submission.problem.points, 1)
-        if not submission.problem.partial and points != submission.problem.points:
-            points = 0
+        sub_points = round(points / total * submission.problem.points, 1)
+        if not submission.problem.partial and sub_points != submission.problem.points:
+            sub_points = 0
 
         submission.status = 'D'
         submission.time = time
         submission.memory = memory
-        submission.points = points
+        submission.points = sub_points
         submission.result = status_codes[status]
         submission.save()
 
         submission.user.calculate_points()
 
-        if submission.contest is not None:
-            submission.contest.recalculate_score()
+        if hasattr(submission, 'contest'):
+            contest = submission.contest
+            contest.points = round(points / total * contest.problem.points, 1)
+            if not contest.problem.partial and contest.points != contest.problem.points:
+                contest.points = 0
+            contest.save()
+            submission.contest.participation.recalculate_score()
 
         event.post('sub_%d' % submission.id, {
             'type': 'grading-end',

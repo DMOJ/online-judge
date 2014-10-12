@@ -454,7 +454,7 @@ class ContestProfile(models.Model):
 
 
 class ContestProblem(models.Model):
-    problem = models.ForeignKey(Problem)
+    problem = models.ForeignKey(Problem, related_name='contests')
     contest = models.ForeignKey(Contest)
     points = models.IntegerField()
     partial = models.BooleanField()
@@ -465,5 +465,6 @@ class ContestProblem(models.Model):
 
 class ContestSubmission(models.Model):
     submission = models.OneToOneField(Submission, related_name='contest')
+    problem = models.ForeignKey(ContestProblem, related_name='submissions')
     participation = models.ForeignKey(ContestParticipation, related_name='submissions', related_query_name='submission')
     points = models.FloatField(default=0.0)
