@@ -1,4 +1,3 @@
-from operator import itemgetter
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,6 +9,7 @@ from django.template import RequestContext
 from judge.forms import ProfileForm
 from judge.models import Profile, Submission
 from judge.utils.ranker import ranker
+from .contests import contest_ranking_view
 
 
 def remap_keys(iterable, mapping):
@@ -56,6 +56,8 @@ def edit_profile(request):
 
 
 def users(request):
+    if request.user.is_authenticated() and request.user.profile.contest.current is not None:
+        return contest_ranking_view(request, request.user.profile.contest.current.contest)
     return render_to_response('users.jade', {
         'users': ranker(Profile.objects.filter(points__gt=0).order_by('-points')),
         'title': 'Users'

@@ -118,11 +118,7 @@ ContestRankingProfile = namedtuple('ContestRankingProfile',
                                    'user display_rank long_display_name points problems')
 
 
-def contest_ranking(request, key):
-    contest, exists = _find_contest(request, key)
-    if not exists:
-        return contest
-
+def contest_ranking_view(request, contest):
     results = [ContestRankingProfile(
         user=participation.profile.user.user,
         display_rank=participation.profile.user.display_rank,
@@ -134,4 +130,11 @@ def contest_ranking(request, key):
         'users': ranker(results),
         'title': 'Ranking: %s' % contest.name
     }, context_instance=RequestContext(request))
+
+
+def contest_ranking(request, key):
+    contest, exists = _find_contest(request, key)
+    if not exists:
+        return contest
+    return contest_ranking_view(request, contest)
 
