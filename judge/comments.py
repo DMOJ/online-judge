@@ -4,6 +4,8 @@ from .models import Comment, Problem
 def problem_comments(problem):
     return Comment.objects.filter(page='p:' + problem.code, parent=None)
 
+def contest_comments(contest):
+    return Comment.objects.filter(page='p:' + contest.key, parent=None)
 
 def comment_form(request, page_id):
     from judge.forms import CommentForm

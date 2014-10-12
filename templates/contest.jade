@@ -1,0 +1,48 @@
+extends base
+-load staticfiles
+-load mathtag
+-load markdown_trois_tags
+-load cache
+block media
+    link(rel='stylesheet', href='{% static "status.css" %}')
+    link(rel='stylesheet', href='{% static "problem-description.css" %}')
+    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+    script(type='text/javascript')
+        $(function () {
+            fix_div($('.info-float'), 40, true, function (info) {
+                return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
+                    'width': '11%',
+                    'padding-left': '40px'
+                }).prependTo('#content-body');
+            });
+        });
+block body
+    .info-float(style='width:11%;padding-left:40px')    
+        br
+        if request.user.is_authenticated
+            button(type='submit') Join contest
+        else                        
+            button(type='submit') Login to join contest
+        hr
+        
+        br
+        a(href='{% url "judge.views.contest_ranking" contest.key %}') Ranking
+        if perms.judge.change_problem
+            hr
+            a(href='/404/') Edit contest
+            br
+        hr
+        br
+        b Time Limit:
+        | &nbsp;#{contest.time_limit}
+        br
+    .contest-description
+        -cache 3600 contest_html contest.id
+            | #{contest.description|markdown:"contest"}
+        hr
+    .comment-area
+        h3 Comments
+        include comment_list
+block bodyend
+    if '<!--math-->' in problem.description
+        script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')

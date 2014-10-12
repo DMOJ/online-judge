@@ -120,6 +120,8 @@ urlpatterns = patterns('',
     url(r'^comments/downvote/$', 'judge.views.downvote_comment'),
 
     url(r'^contests/$', 'judge.views.contest_list'),
+    url(r'^contest/(\d+)$', 'judge.views.contest'),
+    url(r'^contest/(\d+)/ranking$', 'judge.views.contest_ranking'),
 
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {
         'problem': ProblemSitemap,
