@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType, \
-    MiscConfig, Judge, NavigationBar, Contest
+    MiscConfig, Judge, NavigationBar, Contest, ContestParticipation
 from judge.widgets import CheckboxSelectMultipleWithSelectAll
 
 
@@ -344,6 +344,12 @@ class ContestAdmin(admin.ModelAdmin):
         self.message_user(request, "%d contest%s successfully marked as private." % (count, 's'[count == 1:]))
     make_private.short_description = 'Mark contests as private'
 
+
+class ContestParticipationAdmin(admin.ModelAdmin):
+    """For developer use only."""
+    fields = ('contest', 'profile', 'start', 'submissions')
+    list_display = ('contest__name', 'profile', 'start')
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(GraderType)
 admin.site.register(Comment, CommentAdmin)
@@ -356,3 +362,4 @@ admin.site.register(MiscConfig)
 admin.site.register(NavigationBar, NavigationBarAdmin)
 admin.site.register(Judge, JudgeAdmin)
 admin.site.register(Contest, ContestAdmin)
+admin.site.register(ContestParticipation, ContestParticipationAdmin)
