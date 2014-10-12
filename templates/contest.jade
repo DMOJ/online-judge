@@ -18,17 +18,17 @@ block media
             $('button#login').click(function () {
                 window.location.href = '{% url "django.contrib.auth.views.login" %}?next={{ request.get_full_path|urlencode }}';
             });
-            $('button#join').click(function () {
-                window.location.href = '{% url "judge.views.join_contest" contest.key %}';
+            $('button#leave').click(function () {
+                window.location.reload(true);
             });
         });
 block body
     .info-float(style='width:11%;padding-left:40px')    
         br
-        if request.user.is_authenticated
+        if not in_contest
             button#join(type='submit') Join contest
         else                        
-            button#login(type='submit') Login to join contest
+            button#leave(type='submit', onclick="return confirm('Are you sure want to leave the contest? You won't be able to get back in.')") Leave contest
         hr
         
         a(href='{% url "judge.views.contest_ranking" contest.key %}') View rankings
