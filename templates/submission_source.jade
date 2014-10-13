@@ -15,6 +15,15 @@ block media
             color: gray;
         }
 
+        .source-ln {
+            color: gray;
+            border-right: 1px solid gray;
+        }
+
+        .source-code {
+            padding-left: 15px;
+        }
+
 block header
     span.submission-info
         span.submission-date
@@ -31,8 +40,8 @@ block body
     hr(style='float:left;width:30%')
     br
     table
-        td
+        td.source-ln
             for line in source|split
                 | #{forloop.counter}
                 br
-        td #{source}
+        td.source-code #{source}
