@@ -41,7 +41,7 @@ def problem(request, code):
                                                    'comment_form': form},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
-        return render_to_response('message.jade', {'message': 'Could not find a problem with the code "%s".' % code,
+        return render_to_response('generic_message.jade', {'message': 'Could not find a problem with the code "%s".' % code,
                                                    'title': 'No such problem'},
                                   context_instance=RequestContext(request))
 

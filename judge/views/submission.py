@@ -23,7 +23,7 @@ def submission_source(request, sub_id):
                 not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=submission.problem.code).exists():
             raise PermissionDenied()
 
-        return render_to_response('submission_src.jade',
+        return render_to_response('submission_source.jade',
                                   {
                                       'submission': submission,
                                       'source': highlight_code(submission.source, submission.language.pygments),
@@ -146,7 +146,7 @@ def submission_testcases_query(request):
     try:
         submission = Submission.objects.get(id=int(request.GET['id']))
         test_cases = SubmissionTestCase.objects.filter(submission=submission)
-        return render_to_response('submission_testcases.jade', {
+        return render_to_response('submission_status_testcases.jade', {
             'submission': submission, 'test_cases': test_cases
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
@@ -154,7 +154,7 @@ def submission_testcases_query(request):
 
 
 def statistics_table_query(request):
-    return render_to_response('results_table.jade',
+    return render_to_response('problem_statistics_table.jade',
                               {'results': get_result_table()})
 
 

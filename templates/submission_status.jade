@@ -88,7 +88,7 @@ block body
     br
     
     #test-cases
-        include submission_testcases
+        include submission_status_testcases
     
     if not submission.is_graded
         if request.user == submission.user.user or submission.user.is_admin

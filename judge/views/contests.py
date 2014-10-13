@@ -18,7 +18,7 @@ def _find_contest(request, key, private_check=True):
         if private_check and not contest.is_public and not request.user.has_perm('judge.see_private_contest'):
             raise ObjectDoesNotExist()
     except ObjectDoesNotExist:
-        return render_to_response('message.jade', {
+        return render_to_response('generic_message.jade', {
             'message': 'Could not find a contest with the key "%s".' % key,
             'title': 'No such contest'
         }, context_instance=RequestContext(request)), False
@@ -78,14 +78,14 @@ def join_contest(request, key):
 
     contest_profile = request.user.profile.contest
     if contest_profile.current is not None:
-        return render_to_response('message.jade', {
+        return render_to_response('generic_message.jade', {
             'message': 'You are already in a contest: "%s".' % contest_profile.current.contest.name,
             'title': 'Already in contest'
         }, context_instance=RequestContext(request))
 
     participation, created = ContestParticipation.objects.get_or_create(contest=contest, profile=contest_profile)
     if not created and participation.ended:
-        return render_to_response('message.jade', {
+        return render_to_response('generic_message.jade', {
             'message': 'Too late! You already used up your time limit for "%s".' % contest.name,
             'title': 'Already in contest'
         }, context_instance=RequestContext(request))
@@ -105,7 +105,7 @@ def leave_contest(request, key):
 
     contest_profile = request.user.profile.contest
     if contest_profile.current is None or contest_profile.current.contest != contest:
-        return render_to_response('message.jade', {
+        return render_to_response('generic_message.jade', {
             'message': 'You are not in contest "%s".' % key,
             'title': 'No such contest'
         }, context_instance=RequestContext(request))
