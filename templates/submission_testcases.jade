@@ -8,7 +8,7 @@ if submission.status != 'CE'
             | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
             .batch-cases
                 for case in batch.list
-                    b Case ##{forloop.counter1}:
+                    b Case ##{forloop.counter}:
                     |&nbsp;#{case.status} [#{case.time|floatformat:"3"}s, #{case.memory|floatformat:"-1"}kb] (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
                     br
             br
