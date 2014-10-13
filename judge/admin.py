@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
-from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, GraderType, \
+from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem
 from judge.widgets import CheckboxSelectMultipleWithSelectAll
 
@@ -48,7 +48,7 @@ class ProblemAdmin(admin.ModelAdmin):
             'fields': ('code', 'name', 'is_public', 'user', 'description')
         }),
         ('Taxonomy', {'fields': ('types', 'group')}),
-        ('Points', {'fields': (('points', 'partial'), 'short_circuit', 'grader', 'grader_param')}),
+        ('Points', {'fields': (('points', 'partial'), 'short_circuit')}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
         ('Language', {'fields': ('allowed_languages',)})
     )
@@ -358,7 +358,6 @@ class ContestParticipationAdmin(admin.ModelAdmin):
         return obj.profile.user.display_name
 
 admin.site.register(Language, LanguageAdmin)
-admin.site.register(GraderType)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Problem, ProblemAdmin)
