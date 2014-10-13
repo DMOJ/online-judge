@@ -2,7 +2,7 @@ from django.core.cache.utils import make_template_fragment_key
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.cache import cache
-from .models import Problem, Contest
+from .models import Problem, Contest, Submission, SubmissionTestCase
 
 
 @receiver(post_save, sender=Problem)
@@ -13,3 +13,19 @@ def problem_update(sender, instance, **kwargs):
 @receiver(post_save, sender=Contest)
 def contest_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('contest_html', (instance.id,)))
+
+
+def update_submission(id):
+    key = 'version:submission-%d' % id
+    cache.add(key, 0)
+    cache.incr(key)
+
+
+@receiver(post_save, sender=Submission)
+def submission_update(sender, instance, **kwargs):
+    update_submission(instance.id)
+
+
+@receiver(post_save, sender=SubmissionTestCase)
+def submission_case_update(sender, instance, **kwargs):
+    update_submission(instance.submission_id)
