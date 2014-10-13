@@ -29,4 +29,7 @@ block body
         br
     hr(style='float:left;width:30%')
     br
-    | #{source}
+    table
+        for line in source
+            td #{forloop.counter}
+        td #{source}
