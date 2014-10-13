@@ -63,7 +63,7 @@ block body
     if request.user == submission.user.user
         a(href='{% url "judge.views.problem_submit" submission.problem.code submission.id %}') Resubmit
         br
-    hr(style='style="float:left;width:30%"')
+    hr(style='float:left;width:30%')
     br
     h3 Execution Results
     br
