@@ -84,8 +84,8 @@ class Profile(models.Model):
     language = models.ForeignKey(Language, verbose_name='Default language')
     points = models.FloatField(default=0, db_index=True)
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
-    last_access = models.DateTimeField(verbose_name='Last access time')
-    ip = models.GenericIPAddressField(verbose_name='Last IP')
+    last_access = models.DateTimeField(verbose_name='Last access time', null=True, blank=True)
+    ip = models.GenericIPAddressField(verbose_name='Last IP', null=True, blank=True)
 
     def calculate_points(self):
         self.points = sum(map(itemgetter('points'),
