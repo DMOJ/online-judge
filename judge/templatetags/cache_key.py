@@ -2,6 +2,9 @@ from django import template
 from django.core.cache import cache
 import re
 
+import logging
+logger = logging.getLogger('judge.cache')
+
 register = template.Library()
 
 
@@ -14,6 +17,7 @@ class CacheVersionNode(template.Node):
         key = 'version:' + '-'.join(str(key.resolve(context)) for key in self.key)
         cache.add(key, 0)
         context[self.var_name] = cache.get(key)
+        logger.info('cache: %s: %s', key, context[self.var_name])
         return ''
 
 

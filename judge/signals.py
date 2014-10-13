@@ -5,6 +5,10 @@ from django.core.cache import cache
 from .models import Problem, Contest, Submission, SubmissionTestCase
 
 
+import logging
+logger = logging.getLogger('judge.cache')
+
+
 @receiver(post_save, sender=Problem)
 def problem_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('problem_html', (instance.id,)))
@@ -19,6 +23,7 @@ def update_submission(id):
     key = 'version:submission-%d' % id
     cache.add(key, 0)
     cache.incr(key)
+    logger.info('Increment: %s', key)
 
 
 @receiver(post_save, sender=Submission)
