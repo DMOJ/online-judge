@@ -63,9 +63,7 @@
     if show_prop
         td.sub-prop
             if can_view
-                a(href='{% url "judge.views.submission_source" submission.id %}') view
-                | &nbsp;|&nbsp;
-                a(href='{% url "judge.views.submission_status" submission.id %}') detail
+                a(href='{% url "judge.views.submission_status" submission.id %}') view
             if perms.judge.change_submission
                 | &nbsp;|&nbsp;
                 a(href='{% url "admin:judge_submission_change" submission.id %}') admin
