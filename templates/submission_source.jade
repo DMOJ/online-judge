@@ -22,7 +22,7 @@ block media
             text-align: right;
         }
 
-        .source-ln pre {
+        .source-ln-cell {
             margin: 0;
             padding: 0;
         }
@@ -56,5 +56,5 @@ block body
                 td.source-ln
                     div
                         for line in raw_source|split
-                            pre #{forloop.counter}
+                            pre.source-ln-cell #{forloop.counter}
                 td.source-code #{highlighted_source}
