@@ -15,6 +15,9 @@ block media
             border-radius:4px;
             color:#222
         }
+        .submission-info {
+            float: right;
+        }
     if not submission.is_graded
         script(type='text/javascript')
             $(function () {
@@ -44,12 +47,12 @@ block media
             });
 
 block header
-    | #{submission.date|date:"N j, o, g:i a"}
+    span.submission-info
+        | #{submission.date|date:"N j, o, g:i a"}
+        br
+        | #{submission.language}
 
 block body
-    b Language:
-    | &nbsp;#{submission.language}
-    br
     b Problem:&nbsp
     a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
     br
