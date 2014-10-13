@@ -23,11 +23,11 @@ if submission.status != 'CE'
 
             - with memory=case.memory|default_if_none:0
                 if memory < 1000
-                    | #{memory|floatformat:"-2"} K
+                    | #{memory|floatformat:"-2"}kb
                 else
                     - math memory "$1 / 1024" as megabytes
-                    | #{megabytes|floatformat:"-2"} M
-            | ] (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
+                    | #{megabytes|floatformat:"-2"}mb
+            |] (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
             br
         br
     if submission.is_graded
