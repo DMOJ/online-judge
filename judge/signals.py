@@ -21,5 +21,5 @@ def submission_update(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=SubmissionTestCase)
-def submission_update(sender, instance, **kwargs):
+def submission_case_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('submission_row', (instance.submission_id,)))
