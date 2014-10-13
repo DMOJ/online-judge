@@ -16,7 +16,11 @@ block media
             color:#222
         }
         .submission-info {
+            text-align:right;
             float: right;
+        }
+        .submission-info .submission-date {
+            color: gray;
         }
     if not submission.is_graded
         script(type='text/javascript')
@@ -48,7 +52,8 @@ block media
 
 block header
     span.submission-info
-        | #{submission.date|date:"N j, o, g:i a"}
+        span.submission-date
+            | #{submission.date|date:"N j, o, g:i a"}
         br
         | #{submission.language}
 
