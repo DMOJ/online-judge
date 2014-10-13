@@ -10,7 +10,7 @@ if submission.status != 'CE'
                 for case in batch.list
                     b Case ##{forloop.counter}:
                     span(class=case.status) &nbsp;#{case.status}
-                    if case.status != SC
+                    if case.status != 'SC'
                         | &nbsp;[#{case.time|floatformat:"3"}s, #{case.memory|floatformat:"-1"}kb]
                     br
             br
