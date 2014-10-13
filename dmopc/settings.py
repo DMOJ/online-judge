@@ -104,13 +104,13 @@ INSTALLED_APPS += (
 
 MIDDLEWARE_CLASSES = (
     'judge.initialize.InitializationMiddleware',
-    'judge.user_log.LogUserAccessMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'judge.user_log.LogUserAccessMiddleware',
     'judge.timezone.TimezoneMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
