@@ -6,7 +6,7 @@ register = template.Library()
 
 @register.filter(name='split')
 def split(value):
-    return value.split('\n')
+    return value.strip('\n').split('\n')
 
 
 def do_startswith(parser, token, negate):
