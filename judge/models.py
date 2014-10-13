@@ -69,14 +69,6 @@ class Language(models.Model):
         ordering = ['key']
 
 
-class GraderType(models.Model):
-    key = models.CharField(max_length=20)
-    name = models.CharField(max_length=50)
-
-    def __unicode__(self):
-        return self.name
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='User associated')
     name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
@@ -153,11 +145,6 @@ class ProblemGroup(models.Model):
         return self.full_name
 
 
-def validate_grader_param(value):
-    if not all('=' in i for i in value.split(';')):
-        raise ValidationError('not all params are key-value pairs')
-
-
 class Problem(models.Model):
     code = models.CharField(max_length=20, verbose_name='Problem code', unique=True,
                             validators=[RegexValidator('^[a-z0-9]+$', 'Problem code must be ^[a-z0-9]+$')])
@@ -169,9 +156,6 @@ class Problem(models.Model):
     time_limit = models.IntegerField(verbose_name='Time limit')
     memory_limit = models.IntegerField(verbose_name='Memory limit')
     short_circuit = models.BooleanField(default=False)
-    grader = models.ForeignKey(GraderType)
-    grader_param = models.CharField(verbose_name='Grader parameters', max_length=100, blank=True,
-                                    validators=[validate_grader_param])
     points = models.FloatField(verbose_name='Points')
     partial = models.BooleanField(verbose_name='Allows partial points')
     allowed_languages = models.ManyToManyField(Language, verbose_name='Allowed languages')

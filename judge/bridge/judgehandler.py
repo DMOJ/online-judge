@@ -120,7 +120,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         return 2, 16384, False, 'standard', {}
 
     def submit(self, id, problem, language, source):
-        time, memory, short, grader, param = self.problem_data(problem)
+        time, memory, short = self.problem_data(problem)
         packet = {
             'name': 'submission-request',
             'submission-id': id,
@@ -130,8 +130,6 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'time-limit': time,
             'memory-limit': memory,
             'short-circuit': short,
-            'grader-id': grader,
-            'grader-args': param
 
         }
         self._send(packet)
