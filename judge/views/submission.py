@@ -27,8 +27,8 @@ def submission_source(request, sub_id):
                                   {
                                       'submission': submission,
                                       'source': highlight_code(submission.source, submission.language.pygments),
-                                      'title': 'Submission %s of %s by %s' % (
-                                          submission.id, submission.problem.name, submission.user.user.username)
+                                      'title': 'Submission of %s by %s' %
+                                            (submission.problem.name, submission.user.user.username)
                                   },
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
