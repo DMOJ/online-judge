@@ -1,14 +1,16 @@
 import SocketServer
+import logging
 import threading
 import time
 import os
 
 from Queue import Queue
-from django.db import connection
 from judge.models import Judge
 from judge.caching import update_submission
 
 from .judgelist import JudgeList
+
+logger = logging.getLogger('judge.bridge')
 
 
 def reset_judges():
@@ -33,11 +35,12 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
     def purge_thread(self):
         while True:
             t, sub = self.cache_queue.get()
-            t += 2
+            t += 5
             now = time.time()
             if t > now:
                 time.sleep(t - now)
             update_submission(sub)
+            logger.info('Purged cache after %.2f: %d', t - now, sub)
 
     def shutdown(self):
         SocketServer.ThreadingTCPServer.shutdown(self)
