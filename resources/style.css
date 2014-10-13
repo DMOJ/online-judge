@@ -28,6 +28,7 @@ hr {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom:0.5em;
     background: rgba(0, 0, 0, 0.01)
 }
 
