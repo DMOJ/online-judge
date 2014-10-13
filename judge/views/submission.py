@@ -26,7 +26,8 @@ def submission_source(request, sub_id):
         return render_to_response('submission_source.jade',
                                   {
                                       'submission': submission,
-                                      'source': highlight_code(submission.source, submission.language.pygments),
+                                      'raw_source': submission.source,
+                                      'highlighted_source': highlight_code(submission.source, submission.language.pygments),
                                       'title': 'Submission of %s by %s' %
                                             (submission.problem.name, submission.user.user.username)
                                   },

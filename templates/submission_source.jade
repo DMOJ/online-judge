@@ -42,6 +42,6 @@ block body
     br
     table
         td.source-ln
-            for line in source|split
+            for line in raw_source|split
                 .source-ln-no #{forloop.counter}
-        td.source-code #{source}
+        td.source-code #{highlighted_source}
