@@ -2,85 +2,83 @@
 - load mathtag
 - load admin_urls
 - load variables
-- load cache
 
-- cache 86400 submission_row submission.id
-    if submission.status == 'IE' or submission.status == 'CE'
-        - var submission_class = submission.status
-    else
-        - var submission_class = submission.result
+if submission.status == 'IE' or submission.status == 'CE'
+    - var submission_class = submission.status
+else
+    - var submission_class = submission.result
 
-    if request.user.is_authenticated
-        - var can_view = request.user.profile == submission.user or request.user.profile.is_admin or submission.problem.code in completed_problem_codes
-        - var show_prop = can_view or perms['judge']['change_submission']
-        if show_prop
-            - var info_colspan = 1
-        else
-            - var info_colspan = 2
-    else
-        - var show_prop = false
-        - var info_colspan = 2
-
-    if submission.status == 'G'
-        - var info_class = 'sub-info sub-info-grading'
-    else
-        - var info_class = 'sub-info'
-        - var info_colspan = info_colspan + 1
-
-    td.sub-result(class=submission_class)
-        .score
-            if not submission.is_graded
-                img(src='{% static "loading.gif" %}', alt='Grading...', height='20px')
-            else
-                if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB'
-                    | ---
-                else
-                    | #{submission.testcase_granted_points|default_if_none:0|floatformat:"0"} / #{submission.testcase_total_points|floatformat:"0"}
-        .state
-            span.status(title=submission.long_status) #{submission.result|default_if_none:submission.status}
-            | &nbsp;|&nbsp;
-            span.language #{submission.language.short_display_name}
-
-    td(colspan=info_colspan, class=info_class)
-        if show_problem
-            .name
-                a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
-        div
-            span(class=submission.user.display_rank)
-                a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
-            span.time &nbsp;on #{submission.date|date:"N j, o, g:i a"}
-
-    if submission.status == 'G'
-        td.sub-testcase
-            if submission.current_testcase > 0
-                | Running on test case ##{submission.current_testcase}
-            else
-                | ...
-
+if request.user.is_authenticated
+    - var can_view = request.user.profile == submission.user or request.user.profile.is_admin or submission.problem.code in completed_problem_codes
+    - var show_prop = can_view or perms['judge']['change_submission']
     if show_prop
-        td.sub-prop
-            if can_view
-                a(href='{% url "judge.views.submission_source" submission.id %}') view
-                | &nbsp;|&nbsp;
-                a(href='{% url "judge.views.submission_status" submission.id %}') detail
-            if perms.judge.change_submission
-                | &nbsp;|&nbsp;
-                a(href='{% url "admin:judge_submission_change" submission.id %}') admin
+        - var info_colspan = 1
+    else
+        - var info_colspan = 2
+else
+    - var show_prop = false
+    - var info_colspan = 2
 
-    td.sub-usage
-        if submission.status != 'QU' and submission.status != 'G' and submission.status != 'CE' and submission.status != 'IE' and submission.status != 'AB'
-            .time
-                if "TLE" != submission.result
-                    | #{submission.time|default_if_none:0|floatformat:"2"}s
-                else
-                    | ---
-            .memory
-                - with memory=submission.memory|default_if_none:0
-                    if memory < 1000
-                        | #{memory|floatformat:"-2"} K
-                    else
-                        - math memory "$1 / 1024" as megabytes
-                        | #{megabytes|floatformat:"-2"} M
+if submission.status == 'G'
+    - var info_class = 'sub-info sub-info-grading'
+else
+    - var info_class = 'sub-info'
+    - var info_colspan = info_colspan + 1
+
+td.sub-result(class=submission_class)
+    .score
+        if not submission.is_graded
+            img(src='{% static "loading.gif" %}', alt='Grading...', height='20px')
         else
-            .time ---
-            .memory ---
+            if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB'
+                | ---
+            else
+                | #{submission.testcase_granted_points|default_if_none:0|floatformat:"0"} / #{submission.testcase_total_points|floatformat:"0"}
+    .state
+        span.status(title=submission.long_status) #{submission.result|default_if_none:submission.status}
+        | &nbsp;|&nbsp;
+        span.language #{submission.language.short_display_name}
+
+td(colspan=info_colspan, class=info_class)
+    if show_problem
+        .name
+            a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
+    div
+        span(class=submission.user.display_rank)
+            a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
+        span.time &nbsp;on #{submission.date|date:"N j, o, g:i a"}
+
+if submission.status == 'G'
+    td.sub-testcase
+        if submission.current_testcase > 0
+            | Running on test case ##{submission.current_testcase}
+        else
+            | ...
+
+if show_prop
+    td.sub-prop
+        if can_view
+            a(href='{% url "judge.views.submission_source" submission.id %}') view
+            | &nbsp;|&nbsp;
+            a(href='{% url "judge.views.submission_status" submission.id %}') detail
+        if perms.judge.change_submission
+            | &nbsp;|&nbsp;
+            a(href='{% url "admin:judge_submission_change" submission.id %}') admin
+
+td.sub-usage
+    if submission.status != 'QU' and submission.status != 'G' and submission.status != 'CE' and submission.status != 'IE' and submission.status != 'AB'
+        .time
+            if "TLE" != submission.result
+                | #{submission.time|default_if_none:0|floatformat:"2"}s
+            else
+                | ---
+        .memory
+            - with memory=submission.memory|default_if_none:0
+                if memory < 1000
+                    | #{memory|floatformat:"-2"} K
+                else
+                    - math memory "$1 / 1024" as megabytes
+                    | #{megabytes|floatformat:"-2"} M
+    else
+        .time ---
+        .memory ---
