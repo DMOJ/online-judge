@@ -4,15 +4,12 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, SubmissionTestCase, Profile
 from judge.utils.diggpaginator import DiggPaginator
-from judge.views import get_result_table
+from judge.views import get_result_table, user_completed_codes
 from judge import event_poster as event
-
-
-def user_completed_codes(profile):
-    return list(Submission.objects.filter(user=profile, result='AC').values_list('problem__code', flat=True).distinct())
 
 
 def submission_source(request, sub_id):

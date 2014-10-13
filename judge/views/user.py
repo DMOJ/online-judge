@@ -62,3 +62,7 @@ def users(request):
         'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True).order_by('-points')),
         'title': 'Users'
     }, context_instance=RequestContext(request))
+
+
+def user_completed_codes(profile):
+    return list(Submission.objects.filter(user=profile, result='AC').values_list('problem__code', flat=True).distinct())
