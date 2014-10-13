@@ -7,7 +7,7 @@
 
 - get_cache_version "submission" submission.id as sub_version
 
-- cache 86400 sub_version submission_row submission.id request.user.username show_problem
+- cache 86400 submission_row sub_version submission.id request.user.username show_problem
     if submission.status == 'IE' or submission.status == 'CE'
         - var submission_class = submission.status
     else
