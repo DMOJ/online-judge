@@ -5,5 +5,19 @@ extends base
 block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
 
+block header
+    span.submission-info
+        span.submission-date
+            | #{submission.date|date:"N j, o, g:i a"}
+        br
+        | #{submission.language}
+
 block body
+    a(href='{% url "judge.views.submission_status" submission.id %}') View status
+    br
+    if request.user == submission.user.user
+        a(href='{% url "judge.views.problem_submit" submission.problem.code submission.id %}') Resubmit
+        br
+    hr(style='float:left;width:30%')
+    br
     | #{source}
