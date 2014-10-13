@@ -3,6 +3,7 @@
 - load admin_urls
 - load variables
 
+- cache 86400 submission_row submission.id
 if submission.status == 'IE' or submission.status == 'CE'
     - var submission_class = submission.status
 else
