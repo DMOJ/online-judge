@@ -4,6 +4,15 @@ extends base
 
 block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+    style
+        .submission-info {
+            text-align: right;
+            float: right;
+        }
+    
+        .submission-info .submission-date {
+            color: gray;
+        }
 
 block header
     span.submission-info
