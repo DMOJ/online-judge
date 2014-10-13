@@ -207,6 +207,7 @@ MARKDOWN_TROIS_STYLES = {
             'cuddled-lists': None,
             'footnotes': None,
             'header-ids': None,
+            'tables': None,
         },
         'safe_mode': False,
     }
