@@ -73,10 +73,4 @@ block body
 
 block bodyend
     if '<!--math-->' in problem.description
-        script(type='text/x-mathjax-config')
-            MathJax.Hub.Config({
-                tex2jax: {
-                    inlineMath: [['\u007e', '\u007e'], ['\\(', '\\)']]
-                }
-            });
         script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
