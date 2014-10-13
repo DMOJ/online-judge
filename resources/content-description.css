@@ -46,10 +46,10 @@
     color: #111;
     margin-bottom: .75em;
     padding: 0;
-    background: 0
+    background: 0;
 }
 
-.content-description h4, .content-description h5, .content-description h6 {
+.content-description h3, .content-description h4, .content-description h5, .content-description h6 {
     font-weight: bold
 }
 
@@ -62,14 +62,14 @@
 }
 
 .content-description h3 {
-    font-size: 1.4em;
+    font-size: 1.2em;
     margin: 0;
     padding: 0;
     margin-bottom: -0.5em
 }
 
 .content-description h4 {
-    font-size: 1.2em
+    font-size: 1.4em;
 }
 
 .content-description h5 {
