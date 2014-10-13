@@ -122,7 +122,7 @@ class DjangoJudgeHandler(JudgeHandler):
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
-        #self.server.queue_purge(submission.id)
+        self.server.queue_purge(submission.id)
 
     def on_compile_error(self, packet):
         JudgeHandler.on_compile_error(self, packet)

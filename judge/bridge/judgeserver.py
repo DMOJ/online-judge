@@ -7,7 +7,7 @@ import os
 from Queue import Queue
 from judge.models import Judge
 from judge.caching import update_submission
-
+from judge import event_poster as event
 from .judgelist import JudgeList
 
 logger = logging.getLogger('judge.bridge')
@@ -43,6 +43,7 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
             if t > now:
                 time.sleep(t - now)
             update_submission(sub)
+            event.post('submissions', {'type': 'update-submission', 'id': sub})
             logger.info('Purged cache after %.2f: %d', t - now, sub)
 
     def shutdown(self):
