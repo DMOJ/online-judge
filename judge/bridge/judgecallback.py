@@ -85,8 +85,8 @@ class DjangoJudgeHandler(JudgeHandler):
         total = round(total, 1)
 
         if submission.batch:
-            data = SubmissionTestCase.objects.filter(submission_id=3717).values('batch').annotate(points=Min('points'),
-                                                                                                  total=Max('total'))
+            data = (SubmissionTestCase.objects.filter(submission_id=submission.id)
+                    .values('batch').annotate(points=Min('points'), total=Max('total')))
             points = round(sum(map(itemgetter('points'), data)), 1)
             total = round(sum(map(itemgetter('total'), data)), 1)
 
