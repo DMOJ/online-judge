@@ -31,7 +31,7 @@ block body
     br
     table
         td
-            for line in source
+            for line in source|split
                 | #{forloop.counter}
                 br
         td #{source}

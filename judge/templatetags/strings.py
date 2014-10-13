@@ -4,6 +4,11 @@ from django.template import Node, NodeList, Variable, VariableDoesNotExist
 register = template.Library()
 
 
+@register.filter(name='split')
+def split(value, arg):
+    return value.split('\n')
+
+
 def do_startswith(parser, token, negate):
     try:
         # split_contents() knows not to split quoted strings.
@@ -12,7 +17,7 @@ def do_startswith(parser, token, negate):
         raise template.TemplateSyntaxError, "%r tag requires two arguments" % token.contents.split()[0]
     if not (start_string[0] == start_string[-1] and start_string[0] in ('"', "'")):
         raise template.TemplateSyntaxError, "%r start strings argument should be in quotes" % tag_name
-    
+
     end_tag = 'end' + tag_name
     nodelist_true = parser.parse(('else', end_tag))
     token = parser.next_token()
@@ -38,7 +43,8 @@ class IfStartsWithNode(Node):
         string = self.string.resolve(context)
         start_string = self.start_string.resolve(context)
 
-        if (self.negate and not string.startswith(start_string)) or (not self.negate and string.startswith(start_string)):
+        if (self.negate and not string.startswith(start_string)) or (
+            not self.negate and string.startswith(start_string)):
             return self.nodelist_true.render(context)
         return self.nodelist_false.render(context)
 
