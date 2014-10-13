@@ -40,6 +40,7 @@ block body
     table#problem-table.table
         thead
             tr
+                th.solved
                 th.problem Problem
                 th.category Category
                 th.code Code
@@ -48,6 +49,11 @@ block body
         tbody
             each problem in problems
                 tr
+                    td
+                        if problem.code in completed_problem_codes
+                            img(src='{% static "admin/img/icon-yes.gif" %}')
+                        else                                                            
+                            img(src='{% static "admin/img/icon-no.gif" %}')
                     td
                         a(href='{% url "judge.views.problem" problem.code %}') #{problem.name}
                     td #{problem.types_list|join:",<br>"}
