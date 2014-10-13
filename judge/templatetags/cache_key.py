@@ -12,7 +12,7 @@ class CacheVersionNode(template.Node):
 
     def render(self, context):
         key = 'version:' + '-'.join(str(key.resolve(context)) for key in self.key)
-        cache.add(key, 0)
+        cache.add(key, 0, None)
         context[self.var_name] = cache.get(key)
         return ''
 
