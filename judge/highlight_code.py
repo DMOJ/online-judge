@@ -32,4 +32,5 @@ else:
         except pygments.util.ClassNotFound:
             return _make_pre_code(code)
 
-        return mark_safe(pygments.highlight(code, lexer, HtmlCodeFormatter(cssclass=cssclass, linenos='table')))
+        #return mark_safe(pygments.highlight(code, lexer, HtmlCodeFormatter(cssclass=cssclass, linenos='table')))
+        return mark_safe(pygments.highlight(code, lexer, HtmlCodeFormatter(cssclass=cssclass)))
