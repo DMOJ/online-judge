@@ -26,9 +26,6 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
         self.ping_judge_thread = threading.Thread(target=self.ping_judge, args=())
         self.ping_judge_thread.daemon = True
         self.ping_judge_thread.start()
-        self.ping_db_thread = threading.Thread(target=self.ping_database, args=())
-        self.ping_db_thread.daemon = True
-        self.ping_db_thread.start()
 
     def queue_purge(self, sub):
         self.cache_queue.put((time.time(), sub))
@@ -51,13 +48,6 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
             for judge in self.judges:
                 judge.ping()
             time.sleep(10)
-
-    @staticmethod
-    def ping_database():
-        while True:
-            cursor = connection.cursor()
-            cursor.execute('SELECT 1').fetchall()
-            time.sleep(1800)
 
 
 def main():
