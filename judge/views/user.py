@@ -59,6 +59,6 @@ def users(request):
     if request.user.is_authenticated() and request.user.profile.contest.current is not None:
         return contest_ranking_view(request, request.user.profile.contest.current.contest)
     return render_to_response('users.jade', {
-        'users': ranker(Profile.objects.filter(points__gt=0).order_by('-points')),
+        'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True).order_by('-points')),
         'title': 'Users'
     }, context_instance=RequestContext(request))
