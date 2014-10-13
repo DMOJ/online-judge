@@ -31,7 +31,12 @@ block media
             padding-left: 15px;
         }
 
-block header
+        .source-wrap {
+            overflow-x: auto;
+        }
+
+
+}block header
     span.submission-info
         span.submission-date
             | #{submission.date|date:"N j, o, g:i a"}
@@ -46,9 +51,11 @@ block body
         br
     hr(style='float:left;width:30%')
     br
-    table
-        td.source-ln
-            div
-                for line in raw_source|split
-                    pre #{forloop.counter}
-        td.source-code #{highlighted_source}
+    .source-wrap
+        table
+            tr
+                td.source-ln
+                    div
+                        for line in raw_source|split
+                            pre #{forloop.counter}
+                td.source-code #{highlighted_source}
