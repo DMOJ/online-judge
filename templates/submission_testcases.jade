@@ -15,7 +15,8 @@ if submission.status != 'CE'
     else
         each case in test_cases
             b Test case ##{forloop.counter}:
-            |&nbsp;#{case.status} [#{case.time|floatformat:"3"}s, #{case.memory|floatformat:"-1"}kb] (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
+            span(class=case.status) &nbsp;#{case.status}
+            | &nbsp;[#{case.time|floatformat:"3"}s, #{case.memory|floatformat:"-1"}kb] (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
             br
         br
     if submission.is_graded
