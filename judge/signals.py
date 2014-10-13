@@ -3,6 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.cache import cache
 from .models import Problem, Contest, Submission, SubmissionTestCase
+from .caching import update_submission
 
 
 @receiver(post_save, sender=Problem)
@@ -13,12 +14,6 @@ def problem_update(sender, instance, **kwargs):
 @receiver(post_save, sender=Contest)
 def contest_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('contest_html', (instance.id,)))
-
-
-def update_submission(id):
-    key = 'version:submission-%d' % id
-    cache.add(key, 0)
-    cache.incr(key)
 
 
 @receiver(post_save, sender=Submission)

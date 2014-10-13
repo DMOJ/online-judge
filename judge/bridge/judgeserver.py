@@ -3,8 +3,10 @@ import threading
 import time
 import os
 
+from Queue import Queue
 from django.db import connection
 from judge.models import Judge
+from judge.caching import update_submission
 
 from .judgelist import JudgeList
 
@@ -20,12 +22,25 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
         SocketServer.ThreadingTCPServer.__init__(self, *args, **kwargs)
         reset_judges()
         self.judges = JudgeList()
+        self.cache_queue = Queue()
         self.ping_judge_thread = threading.Thread(target=self.ping_judge, args=())
         self.ping_judge_thread.daemon = True
         self.ping_judge_thread.start()
         self.ping_db_thread = threading.Thread(target=self.ping_database, args=())
         self.ping_db_thread.daemon = True
         self.ping_db_thread.start()
+
+    def queue_purge(self, sub):
+        self.cache_queue.put((time.time(), sub))
+
+    def purge_thread(self):
+        while True:
+            t, sub = self.cache_queue.get()
+            t += 2
+            now = time.time()
+            if t > now:
+                time.sleep(t - now)
+            update_submission(sub)
 
     def shutdown(self):
         SocketServer.ThreadingTCPServer.shutdown(self)
