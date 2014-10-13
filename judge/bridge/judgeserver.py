@@ -28,6 +28,9 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
         self.ping_judge_thread = threading.Thread(target=self.ping_judge, args=())
         self.ping_judge_thread.daemon = True
         self.ping_judge_thread.start()
+        self.purge_thread_thread = threading.Thread(target=self.purge_thread, args=())
+        self.purge_thread_thread.daemon = True
+        self.purge_thread_thread.start()
 
     def queue_purge(self, sub):
         self.cache_queue.put((time.time(), sub))
