@@ -43,6 +43,5 @@ block body
     table
         td.source-ln
             for line in source|split
-                | #{forloop.counter}
-                br
+                .source-ln-no #{forloop.counter}
         td.source-code #{source}
