@@ -2,6 +2,7 @@ import logging
 from operator import itemgetter
 from django.db.models import Min, Max
 from django.utils import timezone
+from judge.caching import update_submission
 
 from .judgehandler import JudgeHandler
 from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language
@@ -110,6 +111,7 @@ class DjangoJudgeHandler(JudgeHandler):
             contest.save()
             submission.contest.participation.recalculate_score()
 
+        update_submission(submission.id)
         event.post('sub_%d' % submission.id, {
             'type': 'grading-end',
             'time': time,
@@ -120,7 +122,7 @@ class DjangoJudgeHandler(JudgeHandler):
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
-        self.server.queue_purge(submission.id)
+        #self.server.queue_purge(submission.id)
 
     def on_compile_error(self, packet):
         JudgeHandler.on_compile_error(self, packet)
