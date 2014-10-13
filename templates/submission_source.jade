@@ -43,6 +43,7 @@ block body
     br
     table
         td.source-ln
-            for line in raw_source|split
-                .source-ln-no #{forloop.counter}
+            div
+                for line in raw_source|split
+                    pre #{forloop.counter}
         td.source-code #{highlighted_source}
