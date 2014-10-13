@@ -7,22 +7,22 @@ if submission.status != 'CE'
         each batch in batches
             b Batch ##{batch.grouper}
             | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
-                .batch-cases
-                    table
-                    for case in batch.list
-                        tr
-                            td
-                                b Case ##{forloop.counter}:
-                            td
-                                span(class=case.status) &nbsp;#{case.status}
-                                if case.status != 'SC'
-                                    | &nbsp;[#{case.time|floatformat:"3"}s,
-                                    - with memory=case.memory|default_if_none:0
-                                        if memory < 1000
-                                            | #{memory|floatformat:"-2"}kb]
-                                        else
-                                            - math memory "$1 / 1024" as megabytes
-                                            | #{megabytes|floatformat:"-2"}mb]
+            .batch-cases
+                table
+                for case in batch.list
+                    tr
+                        td
+                            b Case ##{forloop.counter}:
+                        td
+                            span(class=case.status) &nbsp;#{case.status}
+                            if case.status != 'SC'
+                                | &nbsp;[#{case.time|floatformat:"3"}s,
+                                - with memory=case.memory|default_if_none:0
+                                    if memory < 1000
+                                        | #{memory|floatformat:"-2"}kb]
+                                    else
+                                        - math memory "$1 / 1024" as megabytes
+                                        | #{megabytes|floatformat:"-2"}mb]
             br
     else
         table
