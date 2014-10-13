@@ -43,9 +43,10 @@ block media
                 );
             });
 
+block header
+    | #{submission.date|date:"N j, o, g:i a"}
+
 block body
-    | Submitted on #{submission.date|date:"N j, o, g:i a"}
-    br
     b Language:
     | &nbsp;#{submission.language}
     br
