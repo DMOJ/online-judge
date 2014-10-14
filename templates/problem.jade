@@ -40,10 +40,10 @@ block body
         if problem.partial
             | &nbsp(partial)
         br
-        b Time Limit:
+        b Time limit:
         | &nbsp;#{problem.time_limit}s
         br
-        b Memory Limit:
+        b Memory limit:
         -with memory=problem.memory_limit
             if memory < 1000
                 | #{memory|floatformat:"-2"}K
@@ -57,7 +57,7 @@ block body
         | #{problem.types_list|join:", "}
         br
         br
-        b Languages allowed:
+        b Allowed languages:
         br
         | #{problem.languages_list|join:", "}
         br
