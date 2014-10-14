@@ -14,10 +14,10 @@ if submission.status != 'CE'
                             td
                                 b Case ##{forloop.counter}:
                             td
-                                span(class=case.status) &nbsp;#{case.status}
+                                span(class=case.status) #{case.status}
                             td
                                 if case.status != 'SC'
-                                    | &nbsp;[#{case.time|floatformat:"3"}s,
+                                    |[#{case.time|floatformat:"3"}s,
                                     - with memory=case.memory|default_if_none:0
                                         if memory < 1000
                                             | #{memory|floatformat:"-2"}kb]
@@ -32,10 +32,9 @@ if submission.status != 'CE'
                     td
                         b Test case ##{forloop.counter}:
                     td
-                        span(class=case.status) &nbsp;#{case.status}
+                        span(class=case.status) #{case.status}
                     td
-                        | &nbsp;[#{case.time|floatformat:"3"}s,
-            
+                        |[#{case.time|floatformat:"3"}s,
                         - with memory=case.memory|default_if_none:0
                             if memory < 1000
                                 | #{memory|floatformat:"-2"}kb]
