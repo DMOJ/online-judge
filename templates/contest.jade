@@ -30,12 +30,11 @@ block media
             });
 block body
     .info-float(style='width:11%;padding-left:40px')
-        br
         if not participating or participating and not participation.ended
             if not in_contest
-                button#join(type='submit') Join contest
+                button#join(style="width:100%", type='submit') Join contest
             else
-                button#leave(type='submit') Leave contest
+                button#leave(style="width:100%", type='submit') Leave contest
             hr
 
         a(href='{% url "judge.views.contest_ranking" contest.key %}') View rankings
