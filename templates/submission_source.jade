@@ -35,13 +35,6 @@ block media
             overflow-x: auto;
         }
 
-block header
-    span.submission-info
-        span.submission-date
-            | #{submission.date|date:"N j, o, g:i a"}
-        br
-        | #{submission.language}
-
 block body
     a(href='{% url "judge.views.submission_status" submission.id %}') View status
     br

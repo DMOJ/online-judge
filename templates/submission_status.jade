@@ -75,12 +75,6 @@ block media
                 );
             });
 
-block content_title
-    = 'Submission of '
-    a(href='{% url "judge.views.problem" submission.problem.code %}')= submission.problem.name
-    = ' by '
-    a(href='{% url "judge.views.user" submission.user.user.username %}')= submission.user.user.username
-
 block body
     a(href='{% url "judge.views.submission_source" submission.id %}') View source
     br
