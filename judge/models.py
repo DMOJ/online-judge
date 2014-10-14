@@ -136,6 +136,9 @@ class ProblemType(models.Model):
     def __unicode__(self):
         return self.full_name
 
+    class Meta:
+        ordering = ['full_name']
+
 
 class ProblemGroup(models.Model):
     name = models.CharField(max_length=20, verbose_name='Problem group ID', unique=True)
@@ -143,6 +146,9 @@ class ProblemGroup(models.Model):
 
     def __unicode__(self):
         return self.full_name
+
+    class Meta:
+        ordering = ['full_name']
 
 
 class Problem(models.Model):
