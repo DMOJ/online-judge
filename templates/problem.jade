@@ -20,7 +20,7 @@ block media
 
 block body
     .info-float(style='width:11%;padding-left:40px')
-        form(action='{% url "judge.views.problem_submit" problem.code %}')
+        form(style='width:100%', action='{% url "judge.views.problem_submit" problem.code %}')
             input(type='submit', value='Submit!')
         hr
         a(href='{% url "judge.views.problem_submit" problem.code %}') Submit
