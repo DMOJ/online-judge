@@ -20,17 +20,16 @@ block media
 
 block body
     .info-float(style='width:11%;padding-left:40px')
+        form(action='{% url "judge.views.problem_submit" problem.code %}')
+            input(type='submit', value='Submit!')
+        hr
         a(href='{% url "judge.views.problem_submit" problem.code %}') Submit
-        if request.user.is_authenticated
-            br
-            if has_submissions
-                a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My submissions
-            hr
-        else
-            br
-        a(href='{% url "judge.views.chronological_submissions" problem.code %}') All submissions
+        if request.user.is_authenticated and has_submissions
+                a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My solutions
+                br
+        a(href='{% url "judge.views.chronological_submissions" problem.code %}') All solutions
         br
-        a(href='{% url "judge.views.ranked_submissions" problem.code %}') Best submissions
+        a(href='{% url "judge.views.ranked_submissions" problem.code %}') Best solutions
         if perms.judge.change_problem
             hr
             a(href='{% url "admin:judge_problem_change" problem.id %}') Edit problem
