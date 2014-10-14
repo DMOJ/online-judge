@@ -1,4 +1,4 @@
-extends base
+extends submission_info_base
 -load staticfiles
 
 block media
@@ -74,13 +74,6 @@ block media
                     }
                 );
             });
-
-block header
-    span.submission-info
-        span.submission-date
-            | #{submission.date|date:"N j, o, g:i a"}
-        br
-        | #{submission.language}
 
 block content_title
     = 'Submission of '
