@@ -21,14 +21,14 @@ block media
 block body
     .info-float(style='width:11%;padding-left:40px')
         form(action='{% url "judge.views.problem_submit" problem.code %}')
-            input(style='width:100%', type='submit', value='Submit!')
+            input(style='width:100%', type='submit', value='Submit Solution')
         hr
         if request.user.is_authenticated and has_submissions
-                a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My solutions
+                a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My submissions
                 br
-        a(href='{% url "judge.views.chronological_submissions" problem.code %}') All solutions
+        a(href='{% url "judge.views.chronological_submissions" problem.code %}') All submissions
         br
-        a(href='{% url "judge.views.ranked_submissions" problem.code %}') Best solutions
+        a(href='{% url "judge.views.ranked_submissions" problem.code %}') Best submissions
         if perms.judge.change_problem
             hr
             a(href='{% url "admin:judge_problem_change" problem.id %}') Edit problem
