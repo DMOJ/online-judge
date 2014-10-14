@@ -39,7 +39,7 @@ block body
 
         a(href='{% url "judge.views.contest_ranking" contest.key %}') View rankings
         if perms.judge.change_problem
-            br
+            hr
             a(href='{% url "admin:judge_contest_change" contest.id %}') Edit contest
         hr
         br
@@ -47,10 +47,10 @@ block body
             if participation.ended
                 b Time is up!
             else
-                b Time Remaining:
+                b Time remaining:
                 .time-remaining #{participation.time_remaining|timedelta:"simple"}
         else
-            b Time Limit:
+            b Time limit:
             | &nbsp;#{contest.time_limit}
     .content-description
         -cache 3600 contest_html contest.id
