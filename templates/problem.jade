@@ -23,7 +23,6 @@ block body
         form(style='width:100%', action='{% url "judge.views.problem_submit" problem.code %}')
             input(type='submit', value='Submit!')
         hr
-        a(href='{% url "judge.views.problem_submit" problem.code %}') Submit
         if request.user.is_authenticated and has_submissions
                 a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My solutions
                 br
