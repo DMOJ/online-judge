@@ -73,6 +73,7 @@ else:
                     'judge.problem',
                     'judge.problemgroup',
                     'judge.problemtype',
+                    'judge.contest',
                 ),
             },
             {
