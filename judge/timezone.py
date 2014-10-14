@@ -8,13 +8,12 @@ from judge.models import Profile
 class TimezoneMiddleware(object):
     def process_request(self, request):
         if request.user.is_authenticated():
-            # Have to do this. We drop our tables a lot in development.
             try:
                 tzname = Profile.objects.get(user=request.user).timezone
             except ObjectDoesNotExist:
-                tzname = 'UTC'
+                tzname = 'America/Toronto'
         else:
-            tzname = 'UTC'
+            tzname = 'America/Toronto'
         timezone.activate(pytz.timezone(tzname))
 
     def process_response(self, request, response):
