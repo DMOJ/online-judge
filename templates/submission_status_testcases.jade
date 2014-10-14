@@ -42,7 +42,7 @@ if submission.status != 'CE'
                             else
                                 - math memory "$1 / 1024" as megabytes
                                 | #{megabytes|floatformat:"-2"}mb]
-                        | (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
+                    td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
         br
     if submission.is_graded
         br
