@@ -5,40 +5,41 @@ block media
     | #{form.media}
 
     | <script type='text/javascript'>
-    | $(function () {
     |     var modes = {
     each lang in langs
         |      "#{lang.id}": "#{lang.ace|escapejs}",
     |     };
     | </script>
     script(type='text/javascript')
-        $('#id_language').change(function () {
-            var lang = $("#id_language").find("option:selected").attr('value');
-            window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
-        });
-
-        $('#id_problem').change(function () {
-            var prob = $("#id_language").find("option:selected").attr('value');
-            $.ajax({
-                url: '{% url "judge.views.single_submission_query" %}',
-                data: {id: prob}
-            }).done(function (data) {
-                $('#id_language').html(data);
-            }).fail(function () {
-                console.log('Failed to update language: ' + prob);
+        $(document).ready(function () {
+            $('#id_language').change(function () {
+                var lang = $("#id_language").find("option:selected").attr('value');
+                window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
             });
-        });
 
-        $('#ace_source').on('ace_load', function (e, editor) {
-            var source = $('textarea#id_source');
-            if (source.val() == '') {
-                var problem = $('#id_problem').find('option:selected').attr('value');
-                var code = localStorage.getItem('submit:' + problem);
-                if (code) {
-                    source.val(code);
-                    editor.getSession().setValue(code);
+            $('#id_problem').change(function () {
+                var prob = $("#id_language").find("option:selected").attr('value');
+                $.ajax({
+                    url: '{% url "judge.views.single_submission_query" %}',
+                    data: {id: prob}
+                }).done(function (data) {
+                    $('#id_language').html(data);
+                }).fail(function () {
+                    console.log('Failed to update language: ' + prob);
+                });
+            });
+
+            $('#ace_source').on('ace_load', function (e, editor) {
+                var source = $('textarea#id_source');
+                if (source.val() == '') {
+                    var problem = $('#id_problem').find('option:selected').attr('value');
+                    var code = localStorage.getItem('submit:' + problem);
+                    if (code) {
+                        source.val(code);
+                        editor.getSession().setValue(code);
+                    }
                 }
-            }
+            });
         });
     style
         #submit-wrapper {
