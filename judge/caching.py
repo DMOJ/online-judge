@@ -11,6 +11,4 @@ def update_submission(id):
 
 
 def update_stats():
-    request = HttpRequest()
-    request.path = reverse('judge.views.statistics_table_query')
-    cache.delete(get_cache_key(request))
+    cache.delete('sub_stats_table')

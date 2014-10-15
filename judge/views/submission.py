@@ -1,10 +1,10 @@
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.paginator import PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render_to_response
-from django.template import RequestContext
-from django.views.decorators.cache import cache_page
+from django.template import RequestContext, loader
 
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, SubmissionTestCase, Profile
@@ -155,10 +155,12 @@ def submission_testcases_query(request):
         raise Http404()
 
 
-@cache_page(86400)
 def statistics_table_query(request):
-    return render_to_response('problem_statistics_table.jade',
-                              {'results': get_result_table()})
+    page = cache.get('sub_stats_table')
+    if page is None:
+        page = loader.render_to_string('problem_statistics_table.jade', {'results': get_result_table()})
+        cache.set('sub_stats_table', page, 86400)
+    return HttpResponse(page)
 
 
 def single_submission_query(request):
