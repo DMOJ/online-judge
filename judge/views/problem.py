@@ -133,6 +133,6 @@ def language_select_query(request):
     try:
         problem = Problem.objects.get(id=int(request.GET['id']))
         return HttpResponse('\n'.join('<option value="%d">%s</option>' % (lang.id, lang.display_name)
-                                      for lang in problem.allowed_languages))
+                                      for lang in problem.allowed_languages.all()))
     except ObjectDoesNotExist:
         raise Http404()
