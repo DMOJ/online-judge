@@ -25,7 +25,7 @@ block media
                     data: {id: prob}
                 }).done(function (data) {
                     var sel = $('#id_language').html(data);
-                    if (sel.find(':option[value=1]').length) {
+                    if (sel.find('option[value=1]').length) {
                         sel.val(old_lang);
                     }
                 }).fail(function () {
