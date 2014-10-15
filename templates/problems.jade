@@ -29,9 +29,14 @@ block media
             white-space: nowrap
         }
 
+        #filter-form {
+            vertical-align: top;
+            margin-bottom: 0.5em;
+        }
+
 block body
     if not IN_CONTEST
-        form(name='form', action='', method='get')
+        form.filter-form(name='form', action='', method='get')
             if hide_solved
                 input(type='checkbox', name='hide_solved', id='hide_solved', onclick='document.form.submit()', checked='checked')
             else
