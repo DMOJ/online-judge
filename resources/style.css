@@ -3,14 +3,12 @@
 	width:100%;
 	display:block;
 	text-align:center;
-	padding:2px;
-	padding-top:4px;
-	padding-bottom:5px;
-	color:white;
+    padding: 4px 2px 5px;
+    color:white;
 	border:1px solid #666;
 	border-radius:1px;
-	background:#2980b9;
-	background:linear-gradient(180deg,#00a0e0,#2980b9 100%);
+	background:#2980b9; /* Fallback */
+	background: linear-gradient(180deg,#00a0e0,#2980b9);
 	text-decoration:none
 }
 
@@ -19,7 +17,8 @@
 }
 
 .button:active {
-		background:linear-gradient(180deg,#2980b9, #00aee0 100%);
+    background: #00aee0; /* Fallback */
+    background: linear-gradient(180deg,#2980b9, #00aee0);
 }
 
 table.sortable thead {
