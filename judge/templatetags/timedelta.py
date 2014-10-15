@@ -33,7 +33,7 @@ def nice_repr(timedelta, display='long', sep=', '):
     elif display == 'simple':
         days += weeks * 7
         if days:
-            return '%i %02i:%02i:%02i' % (days, hours, minutes, seconds)
+            return '%d day%s %02d:%02d:%02d' % (days, 's'[days == 1:], hours, minutes, seconds)
         else:
             return '%02i:%02i:%02i' % (hours, minutes, seconds)
     elif display == 'minimal':
