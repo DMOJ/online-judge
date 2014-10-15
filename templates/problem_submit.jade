@@ -31,7 +31,6 @@ block media
 block body
     form#problem_submit.form-area(action='', method='post')
         -csrf_token
-        table(border=0) #{form.as_table}
         | #{form.non_field_errors}
         #problem-id
             | #{form.problem.errors}
