@@ -19,15 +19,18 @@ block media
         });
     style
         #submit-button {
-            -moz-appearance:button;
-            -webkit-appearance:button;
+            -moz-appearance: button;
+            -webkit-appearance: button;
             appearance: button;
-            width:100%;
+            width: 100%;
+            display: block;
+            text-align: center;
+            padding: 2px;
         }
 
 block body
     .info-float(style='width:11%;padding-left:40px')
-        a#submit-button(href'{% url "judge.views.problem_submit" problem.code %}') Submit solution
+        a.unselectable#submit-button(href'{% url "judge.views.problem_submit" problem.code %}') Submit solution
         hr
         if request.user.is_authenticated and has_submissions
                 a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My submissions
