@@ -27,19 +27,28 @@ block media
     |     });
     | });
     | </script>
+    style
+        #submit-wrapper {
+            margin-top: 0.7em;
+        }
+
+        #submit-wrapper #problem-id, #submit-wrapper #editor, #submit-wrapper #language {
+            margin-top: 4px;
+        }
 
 block body
     form#problem_submit.form-area(action='', method='post')
         -csrf_token
         | #{form.non_field_errors}
-        #problem-id
-            | #{form.problem.errors}
-            | #{form.problem}
-        #editor
-            | #{form.source.errors}
-            | #{form.source}
-        #language
-            | #{form.language.errors}
-            | #{form.language}
+        #submit-wrapper
+            #problem-id
+                | #{form.problem.errors}
+                | #{form.problem}
+            #editor
+                | #{form.source.errors}
+                | #{form.source}
+            #language
+                | #{form.language.errors}
+                | #{form.language}
         hr
         input(class="button", style="float:right;", type='submit', value='Submit!')
