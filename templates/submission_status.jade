@@ -7,21 +7,24 @@ block media
     style
         #test-cases {
         }
+
         .batch-cases {
-            margin:0;
-            padding-left:1em;
-            padding-bottom:3px;
-            padding-top:3px;
+            margin: 0;
+            padding-left: 1em;
+            padding-bottom: 3px;
+            padding-top: 3px;
             border: 1px solid #BBB;
             border-left-width: .5em;
-            border-radius:4px;
-            color:#222;
+            border-radius: 4px;
+            color: #222;
             max-width: 250px;
         }
+
         .submission-info {
-            text-align:right;
+            text-align: right;
             float: right;
         }
+
         .submission-info .submission-date {
             color: gray;
         }
@@ -30,22 +33,25 @@ block media
             margin: 0;
             padding: 0 5px 0 0;
         }
-        
+
         .AC {
             color: green;
-            font-weight:bold;
+            font-weight: bold;
         }
+
         .WA {
             color: red;
-            font-weight:bold;
+            font-weight: bold;
         }
+
         .TLE, .SC {
             color: gray;
-            font-weight:bold;
+            font-weight: bold;
         }
+
         .MLE, .OLE, .RTE, .IR {
             color: orange;
-            font-weight:bold;
+            font-weight: bold;
         }
 
 
@@ -74,7 +80,7 @@ block media
                                 break;
                         }
                         if($(window).scrollTop() + $(window).height() > $(document).height() - 200) {
-                            $("html, body").animate({ scrollTop: $(document).height() }, 150);
+                            $("html, body").animate({ scrollTop: $(document).height() });
                         }
                     }
                 );
@@ -90,10 +96,10 @@ block body
     br
     h3 Execution Results
     br
-    
+
     #test-cases
         include submission_status_testcases
-    
+
     if not submission.is_graded
         if request.user == submission.user.user or submission.user.is_admin
             #abort-button
