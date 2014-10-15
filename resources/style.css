@@ -8,14 +8,18 @@
 	padding-bottom:5px;
 	color:white;
 	border:1px solid #666;
-	border-radius: 1px;
+	border-radius:1px;
 	background:#2980b9;
-	background: linear-gradient(180deg, #00a0e0, #2980b9 100%) ;
-	text-decoration:none;
+	background:linear-gradient(180deg,#00a0e0,#2980b9 100%);
+	text-decoration:none
 }
 
 .button:hover{
-	background: #00aee0;
+	background:#00aee0
+}
+
+.button:active {
+		background:linear-gradient(180deg,#2980b9, #00aee0 100%);
 }
 
 table.sortable thead {
