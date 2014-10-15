@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.comments import problem_comments, comment_form
 from judge.forms import ProblemSubmitForm
-from judge.models import Problem, Submission, ContestSubmission, ContestProblem
+from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language
 from judge.views import user_completed_codes
 
 
@@ -123,5 +123,5 @@ def problem_submit(request, problem=None, submission=None):
     return render_to_response('problem_submit.jade', {
         'form': form,
         'title': 'Submit',
-        'langs': form.fields['language'].queryset.all(),
+        'langs': Language.objects.all(),
     }, context_instance=RequestContext(request))
