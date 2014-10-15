@@ -60,11 +60,11 @@ def ranked_submissions(request, code, page=1):
             GROUP BY sub.user_id, sub.points
         ) AS fastest
                 ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
-            INNER JOIN judge_submission as subs
+            INNER JOIN (SELECT * FROM judge_submission WHERE problem_id = %s) as subs
                 ON (subs.user_id = fastest.uid AND subs.time = fastest.time)
         GROUP BY fastest.uid
         ORDER BY subs.points DESC, subs.time ASC
-    ''', (problem.id,) * 2)
+    ''', (problem.id,) * 3)
 
     paginator = DiggPaginator(results, 50, body=6, padding=2)
     try:
