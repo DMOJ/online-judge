@@ -117,7 +117,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         return bool(self._working)
 
     def problem_data(self, problem):
-        return 2, 16384, False, 'standard', {}
+        return 2, 16384, False
 
     def submit(self, id, problem, language, source):
         time, memory, short = self.problem_data(problem)
