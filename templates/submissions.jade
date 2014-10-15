@@ -141,7 +141,10 @@ block body
             tr(id=submission.id)
                 if submission.is_graded
                     - get_cache_version "submission" submission.id as sub_version
-                    - var done = request.user.profile.id == submission.user_id or submission.problem.code in completed_problem_codes
+                    if request.user.is_authenticated
+                        - var done = request.user.profile == submission.user or submission.problem.code in completed_problem_codes
+                    else
+                        - var done = false
                     - cache 86400 submission_row sub_version submission.id show_problem done perms.judge.change_submission
                         include submission_row
                 else
