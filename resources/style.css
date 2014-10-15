@@ -1,7 +1,5 @@
-.button {
-	-moz-appearance:button;
-	-webkit-appearance:button;
-	appearance:button;
+.button{
+	cursor:pointer;
 	width:100%;
 	display:block;
 	text-align:center;
@@ -9,18 +7,15 @@
 	padding-top:4px;
 	padding-bottom:5px;
 	color:white;
-	background: #2980b9;
+	border:1px solid #666;
+	border-radius: 1px;
+	background:#2980b9;
+	background: linear-gradient(180deg, #3da0e0, #2980b9 100%) ;
 	text-decoration:none;
-	-moz-transition-duration: 0.35s;
-	-webkit-transition-duration: 0.35s;
-	transition-duration: 0.35s;
 }
 
-.button:hover {
-	background:#3DA0E0;
-	-moz-transition-duration: 0.35s;
-	-webkit-transition-duration: 0.35s;
-	transition-duration: 0.35s;
+.button:hover{
+	background:#3da0e0;
 }
 
 table.sortable thead {
