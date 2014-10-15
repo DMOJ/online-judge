@@ -76,6 +76,9 @@ block media
                     }
                 );
             });
+            $(window).load(function() {
+              $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+            });
 
 block body
     a(href='{% url "judge.views.submission_source" submission.id %}') View source
