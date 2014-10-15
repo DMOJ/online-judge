@@ -1,13 +1,26 @@
 .button {
-    -moz-appearance: button;
-    -webkit-appearance: button;
-    appearance: button;
-    width: 100%;
-    display: block;
-    text-align: center;
-    padding: 2px;
-    color: black;
-    text-decoration: none;
+	-moz-appearance:button;
+	-webkit-appearance:button;
+	appearance:button;
+	width:100%;
+	display:block;
+	text-align:center;
+	padding:2px;
+	padding-top:4px;
+	padding-bottom:5px;
+	color:white;
+	background: #2980b9;
+	text-decoration:none;
+	-moz-transition-duration: 0.35s;
+	-webkit-transition-duration: 0.35s;
+	transition-duration: 0.35s;
+}
+
+.button:hover {
+	background:#3DA0E0;
+	-moz-transition-duration: 0.35s;
+	-webkit-transition-duration: 0.35s;
+	transition-duration: 0.35s;
 }
 
 table.sortable thead {
