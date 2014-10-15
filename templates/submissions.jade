@@ -1,6 +1,5 @@
 extends base
 - load staticfiles
-- load variables
 - load cache
 - load cache_key
 
@@ -135,7 +134,6 @@ block body
         div(style='margin-bottom:10px;')
             include submissions_pages
 
-    - setvar completed_problem_codes|join:"|" as codes
     table#submissions-table.table
         each submission in submissions
             tr(id=submission.id)
