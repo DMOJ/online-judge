@@ -10,12 +10,12 @@
 	border:1px solid #666;
 	border-radius: 1px;
 	background:#2980b9;
-	background: linear-gradient(180deg, #00aee0, #2980b9 100%) ;
+	background: linear-gradient(180deg, #00a0e0, #2980b9 100%) ;
 	text-decoration:none;
 }
 
 .button:hover{
-	background: #3ab8e0;
+	background: #00aee0;
 }
 
 table.sortable thead {
