@@ -32,4 +32,15 @@ block body
     form#problem_submit.form-area(action='', method='post')
         -csrf_token
         table(border=0) #{form.as_table}
-        input(type='submit', value='Submit!')
+        | #{form.non_field_errors}
+        #problem-id
+            | #{form.problem.errors}
+            | #{form.problem}
+        #editor
+            | #{form.source.errors}
+            | #{form.source}
+        #language
+            | #{form.language.errors}
+            | #{form.language}
+        hr
+        input(class="button", style="float:right;", type='submit', value='Submit!')

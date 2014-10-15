@@ -1,24 +1,27 @@
-.button{
-	cursor:pointer;
-	width:100%;
-	display:block;
-	text-align:center;
-    padding: 4px 2px 5px;
-    color:white;
-	border:1px solid #666;
-	border-radius:1px;
-	background:#2980b9; /* Fallback */
-	background: linear-gradient(180deg,#00a0e0,#2980b9);
-	text-decoration:none
+.full {
+    width: 100%;
 }
 
-.button:hover{
-	background: #00a3e0
+.button {
+    cursor: pointer;
+    display: block;
+    text-align: center;
+    padding: 4px 2px 5px;
+    color: white;
+    border: 1px solid #666;
+    border-radius: 1px;
+    background: #2980b9; /* Fallback */
+    background: linear-gradient(180deg, #00a0e0, #2980b9);
+    text-decoration: none
+}
+
+.button:hover {
+    background: #00a3e0
 }
 
 .button:active {
     background: #00aee0; /* Fallback */
-    background: linear-gradient(180deg,#2980b9, #00aee0);
+    background: linear-gradient(180deg, #2980b9, #00aee0);
 }
 
 table.sortable thead {
@@ -51,7 +54,7 @@ hr {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom:0.5em;
+    margin-bottom: 0.5em;
     background: rgba(0, 0, 0, 0.01)
 }
 
