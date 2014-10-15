@@ -1,3 +1,5 @@
+import re
+from django import forms
 from django.forms import CharField, ChoiceField, ModelChoiceField
 from registration.backends.default.views import\
     RegistrationView as OldRegistrationView,\
@@ -6,10 +8,18 @@ from registration.forms import RegistrationForm
 from judge.models import Profile, Language, TIMEZONE
 
 
+valid_id = re.compile(r'^\w+$')
+
+
 class CustomRegistrationForm(RegistrationForm):
     display_name = CharField(max_length=50, required=False, label='Real name (optional)')
     timezone = ChoiceField(choices=TIMEZONE)
     language = ModelChoiceField(queryset=Language.objects.all(), label='Default language', empty_label=None)
+
+    def clean_username(self):
+        if valid_id.match(self.cleaned_data['username']) is None:
+            raise forms.ValidationError('A username must contain letters, numbers, or underscores')
+        return super(CustomRegistrationForm, self).clean_username()
 
 
 class RegistrationView(OldRegistrationView):
