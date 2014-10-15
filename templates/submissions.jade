@@ -1,5 +1,6 @@
 extends base
 - load staticfiles
+- load variables
 - load cache
 - load cache_key
 
@@ -134,12 +135,14 @@ block body
         div(style='margin-bottom:10px;')
             include submissions_pages
 
+    - setvar completed_problem_codes|join:"|" as codes
     table#submissions-table.table
         each submission in submissions
             tr(id=submission.id)
                 if submission.is_graded
                     - get_cache_version "submission" submission.id as sub_version
-                    - cache 86400 submission_row sub_version submission.id request.user.username show_problem
+                    - var done = request.user.profile.id == submission.user_id or submission.problem.code in completed_problem_codes
+                    - cache 86400 submission_row sub_version submission.id show_problem done perms.judge.change_submission
                         include submission_row
                 else
                     include submission_row
