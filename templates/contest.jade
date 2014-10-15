@@ -16,12 +16,6 @@ block media
                     'padding-left': '40px'
                 }).prependTo('#content-body');
             });
-            $('button#join').click(function () {
-                window.location.href = '{% url "judge.views.join_contest" contest.key %}';
-            });
-            $('button#leave').click(function () {
-                window.location.href = '{% url "judge.views.leave_contest" contest.key %}';
-            });
         });
     if participating
         script(type='text/javascript')
@@ -32,9 +26,9 @@ block body
     .info-float(style='width:11%;padding-left:40px')
         if not participating or participating and not participation.ended
             if not in_contest
-                button#join(style="width:100%", type='submit') Join contest
+                a.unselectable.button(href='{% url "judge.views.join_contest" contest.key %}') Join contest
             else
-                button#leave(style="width:100%", type='submit') Leave contest
+                a.unselectable.button(href='{% url "judge.views.leave_contest" contest.key %}') Leave contest
             hr
 
         a(href='{% url "judge.views.contest_ranking" contest.key %}') View rankings

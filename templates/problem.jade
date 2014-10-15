@@ -17,22 +17,10 @@ block media
                 }).prependTo('#content-body');
             });
         });
-    style
-        #submit-button {
-            -moz-appearance: button;
-            -webkit-appearance: button;
-            appearance: button;
-            width: 100%;
-            display: block;
-            text-align: center;
-            padding: 2px;
-            color: black;
-            text-decoration: none;
-        }
 
 block body
     .info-float(style='width:11%;padding-left:40px')
-        a.unselectable#submit-button(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
+        a.unselectable.button(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
         hr
         if request.user.is_authenticated and has_submissions
                 a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My submissions

@@ -1,3 +1,15 @@
+.button {
+    -moz-appearance: button;
+    -webkit-appearance: button;
+    appearance: button;
+    width: 100%;
+    display: block;
+    text-align: center;
+    padding: 2px;
+    color: black;
+    text-decoration: none;
+}
+
 table.sortable thead {
     background-color: #eee;
     color: #666;
