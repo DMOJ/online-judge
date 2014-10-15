@@ -4,7 +4,7 @@ import threading
 import time
 import os
 
-from Queue import Queue
+from Queue import PriorityQueue
 from judge.models import Judge
 from judge.caching import update_submission
 from judge import event_poster as event
@@ -24,7 +24,7 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
         SocketServer.ThreadingTCPServer.__init__(self, *args, **kwargs)
         reset_judges()
         self.judges = JudgeList()
-        self.cache_queue = Queue()
+        self.cache_queue = PriorityQueue()
         self.ping_judge_thread = threading.Thread(target=self.ping_judge, args=())
         self.ping_judge_thread.daemon = True
         self.ping_judge_thread.start()
@@ -32,19 +32,20 @@ class JudgeServer(SocketServer.ThreadingTCPServer):
         self.purge_thread_thread.daemon = True
         self.purge_thread_thread.start()
 
-    def queue_purge(self, sub):
-        self.cache_queue.put((time.time(), sub))
+    def queue_purge(self, sub, f=0):
+        self.cache_queue.put((time.time() + [5, 60][f], f, sub))
 
     def purge_thread(self):
         while True:
-            t, sub = self.cache_queue.get()
-            t += 5
+            t, f, sub = self.cache_queue.get()
             now = time.time()
             if t > now:
                 time.sleep(t - now)
             update_submission(sub)
             event.post('submissions', {'type': 'update-submission', 'id': sub})
             logger.info('Purged cache after %.2f: %d', t - now, sub)
+            if f < 1:
+                self.queue_purge(sub, f + 1)
 
     def shutdown(self):
         SocketServer.ThreadingTCPServer.shutdown(self)
