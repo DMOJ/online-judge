@@ -71,9 +71,9 @@ block media
                                 }).fail(function (data) {
                                     console.log('Failed to update testcases!');
                                 });
-                                $("html, body").animate({ scrollTop: $(document).height() }, 1000);
                                 break;
                         }
+                        $("html, body").animate({ scrollTop: $(document).height() }, 50);
                     }
                 );
             });
