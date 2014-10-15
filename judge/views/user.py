@@ -65,4 +65,4 @@ def users(request):
 
 
 def user_completed_codes(profile):
-    return list(Submission.objects.filter(user=profile, result='AC').values_list('problem__code', flat=True).distinct())
+    return set(Submission.objects.filter(user=profile, result='AC').values_list('problem__code', flat=True).distinct())
