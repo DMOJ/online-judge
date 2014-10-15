@@ -20,7 +20,7 @@ block media
             $('#id_problem').change(function () {
                 var prob = $("#id_problem").find("option:selected").attr('value');
                 $.ajax({
-                    url: '{% url "judge.views.single_submission_query" %}',
+                    url: '{% url "judge.views.language_select_query" %}',
                     data: {id: prob}
                 }).done(function (data) {
                     $('#id_language').html(data);
