@@ -110,8 +110,8 @@ class DjangoJudgeHandler(JudgeHandler):
             contest.save()
             submission.contest.participation.recalculate_score()
 
-        update_submission(submission.id)
         update_stats()
+
         event.post('sub_%d' % submission.id, {
             'type': 'grading-end',
             'time': time,
@@ -122,8 +122,6 @@ class DjangoJudgeHandler(JudgeHandler):
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
         event.post('submissions', {'type': 'done-submission', 'id': submission.id})
-
-        self.server.queue_purge(submission.id)
 
     def on_compile_error(self, packet):
         JudgeHandler.on_compile_error(self, packet)

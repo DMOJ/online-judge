@@ -1,5 +1,7 @@
 extends base
--load staticfiles
+- load staticfiles
+- load cache
+- load cache_key
 
 block media
     link(rel='stylesheet', href='{% static "status.css" %}')
@@ -135,7 +137,12 @@ block body
     table#submissions-table.table
         each submission in submissions
             tr(id=submission.id)
-                include submission_row
+                if submission.is_graded
+                    - get_cache_version "submission" submission.id as sub_version
+                    - cache 86400 submission_row sub_version submission.id request.user.username show_problem
+                        include submission_row
+                else
+                    include submission_row
 
     if submissions.num_pages > 1
         div(style='margin-top:10px;')

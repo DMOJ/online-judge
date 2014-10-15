@@ -19,8 +19,3 @@ def contest_update(sender, instance, **kwargs):
 @receiver(post_save, sender=Submission)
 def submission_update(sender, instance, **kwargs):
     update_submission(instance.id)
-
-
-@receiver(post_save, sender=SubmissionTestCase)
-def submission_case_update(sender, instance, **kwargs):
-    update_submission(instance.submission_id)
