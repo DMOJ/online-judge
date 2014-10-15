@@ -2,7 +2,7 @@ import logging
 from operator import itemgetter
 from django.db.models import Min, Max
 from django.utils import timezone
-from judge.caching import update_submission
+from judge.caching import update_submission, update_stats
 
 from .judgehandler import JudgeHandler
 from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language
@@ -111,6 +111,7 @@ class DjangoJudgeHandler(JudgeHandler):
             submission.contest.participation.recalculate_score()
 
         update_submission(submission.id)
+        update_stats()
         event.post('sub_%d' % submission.id, {
             'type': 'grading-end',
             'time': time,
