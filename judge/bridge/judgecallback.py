@@ -121,6 +121,7 @@ class DjangoJudgeHandler(JudgeHandler):
             'result': submission.result
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
+        event.post('submissions', {'type': 'done-submission', 'id': submission.id})
 
         self.server.queue_purge(submission.id)
 

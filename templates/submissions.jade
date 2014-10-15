@@ -69,30 +69,43 @@ block media
         script(type='text/javascript')
             $(function () {
                 var table = $('#submissions-table');
-                var statistics = $("#statistics-table")
+                var statistics = $("#statistics-table");
+                var doing_ajax = false;
+
+                var update_submission = function (id, force) {
+                    var cell = table.find('tr#' + id);
+                    if (cell.length < 1) {
+                        table.prepend('<tr id="{0}"></tr>'.format(id));
+                        cell = table.find('tr#' + id);
+                    }
+                    if (force || !doing_ajax) {
+                        if (!force) doing_ajax = true;
+                        $.ajax({
+                            url: '{% url "judge.views.single_submission_query" %}',
+                            data: {id: id}
+                        }).done(function (data) {
+                            cell.html(data);
+                            if (!force) doing_ajax = false;
+                        }).fail(function () {
+                            console.log('Failed to update submission: ' + id);
+                            if (!force) doing_ajax = false;
+                        });
+                    }
+                };
+
                 var receiver = new EventReceiver(
                         "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                         ['submissions'], #{last_msg}, function (message) {
                             if (message.type == 'update-submission') {
-                                var id = message.id;
-                                var cell = table.find('tr#' + id);
-                                if (cell.length < 1) {
-                                    table.prepend('<tr id="{0}"></tr>'.format(id));
-                                    cell = table.find('tr#' + id);
-                                }
-                                $.ajax({
-                                    url: '{% url "judge.views.single_submission_query" %}',
-                                    data: {id: id}
-                                }).done(function (data) {
-                                    cell.html(data);
-                                }).fail(function (data) {
-                                    console.log('Failed to update submission: ' + id);
-                                });
+                                update_submission(message.id);
+                            } else if (message.type == 'done-submission') {
+                                update_submission(message.id, true);
+
                                 $.ajax({
                                     url: '{% url "judge.views.statistics_table_query" %}'
                                 }).done(function (data) {
                                     statistics.html(data);
-                                }).fail(function (data) {
+                                }).fail(function () {
                                     console.log('Failed to update statistics table!' + id);
                                 });
                             }
