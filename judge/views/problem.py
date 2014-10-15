@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.comments import problem_comments, comment_form
@@ -125,3 +125,14 @@ def problem_submit(request, problem=None, submission=None):
         'title': 'Submit',
         'langs': Language.objects.all(),
     }, context_instance=RequestContext(request))
+
+
+def language_select_query(request):
+    if 'id' not in request.GET or not request.GET['id'].isdigit():
+        return HttpResponseBadRequest()
+    try:
+        problem = Problem.objects.get(id=int(request.GET['id']))
+        return HttpResponse('\n'.join('<option value="%d">%s</option>' % (lang.id, lang.display_name)
+                                      for lang in problem.allowed_languages))
+    except ObjectDoesNotExist:
+        raise Http404()

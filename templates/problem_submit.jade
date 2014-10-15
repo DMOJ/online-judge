@@ -17,6 +17,18 @@ block media
             window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
         });
 
+        $('#id_problem').change(function () {
+            var prob = $("#id_language").find("option:selected").attr('value');
+            $.ajax({
+                url: '{% url "judge.views.single_submission_query" %}',
+                data: {id: prob}
+            }).done(function (data) {
+                $('#id_language').html(data);
+            }).fail(function () {
+                console.log('Failed to update language: ' + prob);
+            });
+        });
+
         $('#ace_source').on('ace_load', function (e, editor) {
             var source = $('textarea#id_source');
             if (source.val() == '') {
