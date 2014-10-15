@@ -71,13 +71,11 @@ block media
                                 }).fail(function (data) {
                                     console.log('Failed to update testcases!');
                                 });
+                                $("html, body").animate({ scrollTop: $(document).height() }, 1000);
                                 break;
                         }
                     }
                 );
-            });
-            $(window).load(function() {
-              $("html, body").animate({ scrollTop: $(document).height() }, 1000);
             });
 
 block body
