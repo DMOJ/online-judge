@@ -18,7 +18,7 @@ block media
             });
 
             $('#id_problem').change(function () {
-                var prob = $("#id_language").find("option:selected").attr('value');
+                var prob = $("#id_problem").find("option:selected").attr('value');
                 $.ajax({
                     url: '{% url "judge.views.single_submission_query" %}',
                     data: {id: prob}
