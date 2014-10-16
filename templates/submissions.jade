@@ -78,6 +78,7 @@ block media
                     var cell = table.find('tr#' + id);
                     if (cell.length < 1) {
                         table.prepend('<tr id="{0}"></tr>'.format(id));
+                        table.find('tr:last-child').remove();
                         cell = table.find('tr#' + id);
                     }
                     if (force || !doing_ajax) {
