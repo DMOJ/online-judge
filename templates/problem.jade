@@ -65,6 +65,7 @@ block body
             | #{problem.description|markdown:"problem"}
         hr
     .comment-area
+        script(src='{% static "placeholder-compat.js" %}')
         h2 Comments
         include comment_list
 

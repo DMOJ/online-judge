@@ -52,6 +52,7 @@ block body
         hr
     .comment-area
         h2 Comments
+        script(src='{% static "placeholder-compat.js" %}')
         include comment_list
 block bodyend
     if '<!--math-->' in problem.description
