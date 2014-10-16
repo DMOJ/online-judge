@@ -106,5 +106,5 @@ block body
                 br
                 form(action='{% url "judge.views.abort_submission" submission.id %}', method='post')
                     -csrf_token
-                    input(type='submit', value='Abort')
+                    input.button(style='float:left', type='submit', value='Abort')
             
