@@ -152,6 +152,10 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         compress = data.encode('zlib')
         try:
             self.wfile.write(size_pack.pack(len(compress)) + compress)
+        except socket.error:
+            self.wfile.close()
+            self.rfile.close()
+            raise
         except Exception:
             logger.exception('Send failure')
 
