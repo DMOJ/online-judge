@@ -85,7 +85,6 @@ block body
                 each entry in group.list
                     li
                         a(href='{% url "judge.views.problem" entry.code %}') #{entry.name}
-                        = ' ('
+                        = ' '
                         a(href='{% url "judge.views.user_submissions" entry.code user.user.username %}')
-                            | #{entry.points} / #{entry.total}
-                        = ')'
+                            | (#{entry.points} / #{entry.total})
