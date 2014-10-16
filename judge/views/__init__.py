@@ -10,7 +10,7 @@ from .problem import *
 from .submission import *
 from .ranked_submission import ranked_submissions
 from .status import *
-
+from .widgets import *
 
 class TemplateView(TemplateView):
     title = None

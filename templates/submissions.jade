@@ -66,6 +66,13 @@ block media
         td.sub-usage .time {
             font-weight: bold;
         }
+    
+    if request.user.is_authenticated and request.user.is_admin
+        script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
+        script(type='text/javascript')
+            function rejudge_submission(id) {
+                $.post('{% url "judge.views.rejudge_submission" %}', id);
+            }
 
     if dynamic_update
         script(type='text/javascript')

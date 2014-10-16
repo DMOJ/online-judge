@@ -59,6 +59,9 @@ if show_prop
     td.sub-prop
         if can_view
             a(href='{% url "judge.views.submission_status" submission.id %}') view
+        if perms.judge.rejudge_submission
+            | &nbsp;|&nbsp;
+            a(href='javascript:rejudge_submission({{ submission.id }})') rejudge
         if perms.judge.change_submission
             | &nbsp;|&nbsp;
             a(href='{% url "admin:judge_submission_change" submission.id %}') admin
