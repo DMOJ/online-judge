@@ -73,10 +73,14 @@ block media
                 var table = $('#submissions-table');
                 var statistics = $("#statistics-table");
                 var doing_ajax = false;
+                var first = parseInt(table.find('tr:first-child').attr('id'));
 
                 var update_submission = function (id, force) {
                     var cell = table.find('tr#' + id);
                     if (cell.length < 1) {
+                        if (id < first)
+                            return;
+                        first = id;
                         table.prepend('<tr id="{0}"></tr>'.format(id));
                         table.find('tr:last-child').remove();
                         cell = table.find('tr#' + id);
