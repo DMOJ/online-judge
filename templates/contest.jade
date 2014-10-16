@@ -51,7 +51,7 @@ block body
             | #{contest.description|markdown:"contest"}
         hr
     .comment-area
-        h3 Comments
+        h2 Comments
         include comment_list
 block bodyend
     if '<!--math-->' in problem.description
