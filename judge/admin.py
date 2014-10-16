@@ -2,7 +2,7 @@ from operator import itemgetter
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.db.models import TextField, ManyToManyField
+from django.db.models import TextField, ManyToManyField, Q
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.core.exceptions import ObjectDoesNotExist
@@ -78,6 +78,12 @@ class ProblemAdmin(admin.ModelAdmin):
         if db_field.name == 'allowed_languages':
             kwargs['widget'] = CheckboxSelectMultipleWithSelectAll()
         return super(ProblemAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+
+    def get_form(self, *args, **kwargs):
+        form = super(ProblemAdmin, self).get_form(*args, **kwargs)
+        form.base_fields['user'] = Profile.objects.filter(Q(user__groups__name__in=['Admin', 'ProblemSetter']) |
+                                                          Q(user__is_superuser=True))
+        return form
 
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
