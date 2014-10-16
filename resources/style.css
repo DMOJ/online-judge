@@ -281,7 +281,7 @@ hr {
     position: relative;
     top: 0;
     width: 100%;
-    z-index:1000;
+    z-index:1000; /* Something really large since Ace uses z-index too */
 }
 
 #content {
