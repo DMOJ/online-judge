@@ -57,10 +57,17 @@ ul.comments.top-level-comments
 if request.user.is_authenticated and comment_form
     .form-area.comment-submit
         block comment_submit_title
-            h4 New Comment
+            h3 New Comment
+            hr
         form#comment-submit(action='', method='post')
             -csrf_token
-            table(border=0) #{comment_form.as_table}
-            -markdown_allowed
-            br
-            input(type='submit', value='Post!')
+            | #{comment_form.non_field_errors}
+            #comment-post-wrapper
+                #comment-form-title
+                    | #{comment_form.title.errors}
+                    | #{comment_form.title}
+                #comment-form-body
+                    | #{comment_form.body.errors}
+                    | #{comment_form.body}
+            hr
+            input.button(style="float:right;",type='submit', value='Post!')

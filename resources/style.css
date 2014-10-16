@@ -138,6 +138,14 @@ hr {
     border-radius: 4px
 }
 
+.comment-submit {
+	min-width: 40%;
+}
+
+#comment-post-wrapper table {
+	width:100%;
+}
+
 div.info-float {
     float: right;
     padding: 10px;
