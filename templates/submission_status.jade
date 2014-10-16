@@ -103,8 +103,8 @@ block body
     if not submission.is_graded
         if request.user == submission.user.user or submission.user.is_admin
             #abort-button
-                br
-                hr
+                br                      
+                hr(style='float:left;width:30%')
                 br
                 form(action='{% url "judge.views.abort_submission" submission.id %}', method='post')
                     -csrf_token
