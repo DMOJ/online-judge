@@ -104,7 +104,11 @@ block body
         if request.user == submission.user.user or submission.user.is_admin
             #abort-button
                 br
+                hr
+                br
                 form(action='{% url "judge.views.abort_submission" submission.id %}', method='post')
                     -csrf_token
                     input.button(style='float:left', type='submit', value='Abort')
+                    br
+                    br
             
