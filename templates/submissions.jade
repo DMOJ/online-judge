@@ -71,7 +71,7 @@ block media
         script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
         script(type='text/javascript')
             function rejudge_submission(id) {
-                $.post('{% url "judge.views.rejudge_submission" %}', id);
+                $.post('{% url "judge.views.rejudge_submission" %}', {id: id});
             }
 
     if dynamic_update
