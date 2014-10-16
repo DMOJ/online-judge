@@ -38,8 +38,8 @@ class CommentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs.update({'style': 'min-width:100%'})
-        self.fields['body'].widget.attrs.update({'style': 'min-width:100%'})
+        self.fields['title'].widget.attrs.update({'style': 'min-width:100%', 'placeholder': 'Comment title'})
+        self.fields['body'].widget.attrs.update({'style': 'min-width:100%', 'placeholder': 'Comment body'})
 
     def clean_page(self):
         page = self.cleaned_data['page']
