@@ -57,7 +57,7 @@ ul.comments.top-level-comments
 if request.user.is_authenticated and comment_form
     .form-area.comment-submit
         block comment_submit_title
-            h3 New Comment
+            h2 New comment
             hr
         form#comment-submit(action='', method='post')
             -csrf_token
