@@ -1,5 +1,6 @@
 import errno
 import select
+import socket
 import sys
 from ..base_server import BaseServer
 __author__ = 'Quantum'
@@ -60,11 +61,15 @@ class PollServer(BaseServer):
                             # Client destroyed on another thread.
                             pass
                         else:
-                            if event & self.POLLIN:
-                                self._nonblock_read(self._fdmap[fd])
-                            if event & self.POLLOUT:
-                                self._nonblock_write(client)
-
+                            try:
+                                if event & self.POLLIN:
+                                    self._nonblock_read(client)
+                                if event & self.POLLOUT:
+                                    self._nonblock_write(client)
+                            except socket.error as e:
+                                if e.errno != errno.EBADF:
+                                    self._clean_up_client(client)
+                                # EBADF happens because it got closed elsewhere.
         finally:
             for client in self._clients:
                 self._clean_up_client(client, True)
