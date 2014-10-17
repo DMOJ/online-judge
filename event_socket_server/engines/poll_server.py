@@ -54,10 +54,17 @@ class PollServer(BaseServer):
                     elif event & self.POLL_CLOSE:
                         self._clean_up_client(self._fdmap[fd])
                     else:
-                        if event & self.POLLIN:
-                            self._nonblock_read(self._fdmap[fd])
-                        if event & self.POLLOUT:
-                            self._nonblock_write(self._fdmap[fd])
+                        try:
+                            client = self._fdmap[fd]
+                        except KeyError:
+                            # Client destroyed on another thread.
+                            pass
+                        else:
+                            if event & self.POLLIN:
+                                self._nonblock_read(self._fdmap[fd])
+                            if event & self.POLLOUT:
+                                self._nonblock_write(client)
+
         finally:
             for client in self._clients:
                 self._clean_up_client(client, True)
