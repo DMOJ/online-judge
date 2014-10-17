@@ -2,6 +2,7 @@ import errno
 import select
 import socket
 import sys
+import threading
 from ..base_server import BaseServer
 __author__ = 'Quantum'
 
@@ -23,6 +24,7 @@ class PollServer(BaseServer):
         self._poll = self.poll()
         self._fdmap = {}
         self._server_fd = self._server.fileno()
+        self._close_lock = threading.RLock()
 
     def _register_write(self, client):
         self._poll.modify(client.fileno(), self.WRITE)
@@ -31,16 +33,17 @@ class PollServer(BaseServer):
         self._poll.modify(client.fileno(), self.READ)
 
     def _clean_up_client(self, client, finalize=False):
-        fd = client.fileno()
-        try:
-            self._poll.unregister(fd)
-        except IOError as e:
-            if e.errno == errno.ENOENT:
-                print>>sys.stderr, '(fd not registered: %d)' % fd
-            else:
-                raise
-        del self._fdmap[fd]
-        super(PollServer, self)._clean_up_client(client, finalize)
+        with self._close_lock:
+            fd = client.fileno()
+            try:
+                self._poll.unregister(fd)
+            except IOError as e:
+                if e.errno == errno.ENOENT:
+                    print>>sys.stderr, '(fd not registered: %d)' % fd
+                else:
+                    raise
+            del self._fdmap[fd]
+            super(PollServer, self)._clean_up_client(client, finalize)
 
     def _serve(self):
         self._server.listen(16)
@@ -56,21 +59,17 @@ class PollServer(BaseServer):
                     elif event & self.POLL_CLOSE:
                         self._clean_up_client(self._fdmap[fd])
                     else:
-                        try:
-                            client = self._fdmap[fd]
-                        except KeyError:
-                            # Client destroyed on another thread.
-                            pass
-                        else:
+                        with self._close_lock:
                             try:
+                                client = self._fdmap[fd]
+                            except KeyError:
+                                pass
+                            else:
                                 if event & self.POLLIN:
                                     self._nonblock_read(client)
-                                if event & self.POLLOUT:
+                                # Might be closed in the read handler.
+                                if event & self.POLLOUT and fd in self._fdmap:
                                     self._nonblock_write(client)
-                            except socket.error as e:
-                                if e.errno != errno.EBADF:
-                                    self._clean_up_client(client)
-                                # EBADF happens because it got closed elsewhere.
         finally:
             for client in self._clients:
                 self._clean_up_client(client, True)
