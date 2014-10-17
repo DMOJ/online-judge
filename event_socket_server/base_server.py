@@ -2,7 +2,6 @@ import logging
 import socket
 import threading
 import time
-import traceback
 from collections import defaultdict, deque
 from heapq import heappush, heappop
 
