@@ -62,6 +62,8 @@ if request.user.is_authenticated and comment_form
         form#comment-submit(action='', method='post')
             -csrf_token
             | #{comment_form.non_field_errors}
+            | #{comment_form.parent.errors}
+            | #{comment_form.parent}
             #comment-post-wrapper
                 #comment-form-title
                     | #{comment_form.title.errors}
