@@ -34,7 +34,10 @@ class DjangoHandler(ZlibPacketHandler):
         except:
             logger.exception('Error in packet handling (Django-facing)')
             result = {"name": "bad-request"}
-        self.send(result, self.close)
+        self.send(result, self._schedule_close)
+
+    def _schedule_close(self):
+        self.server.schedule(0, self.close)
 
     def on_submission(self, data):
         id = data['submission-id']
