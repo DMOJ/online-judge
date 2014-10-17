@@ -2,10 +2,18 @@ import socket
 import threading
 import time
 import traceback
-from collections import defaultdict
+from collections import defaultdict, deque
 from heapq import heappush, heappop
 
 __author__ = 'Quantum'
+
+
+class SendMessage(object):
+    __slots__ = ('data', 'callback')
+
+    def __init__(self, data, callback):
+        self.data = data
+        self.callback = callback
 
 
 class BaseServer(object):
@@ -17,7 +25,7 @@ class BaseServer(object):
         self._stop = threading.Event()
         self._clients = set()
         self._ClientClass = client
-        self._send_queue = defaultdict(str)
+        self._send_queue = defaultdict(deque)
         self._job_queue = []
         self._job_queue_lock = threading.Lock()
 
@@ -84,17 +92,22 @@ class BaseServer(object):
 
     def _nonblock_write(self, client):
         fd = client.fileno()
+        queue = self._send_queue[fd]
         try:
-            cb = client._socket.send(self._send_queue[fd])
-            self._send_queue[fd] = self._send_queue[fd][cb:]
-            if not self._send_queue[fd]:
-                self._register_read(client)
-                del self._send_queue[fd]
+            top = queue[0]
+            cb = client._socket.send(top.data)
+            top.data = top.data[cb:]
+            if not top.data:
+                top.callback()
+                queue.popleft()
+                if not queue:
+                    self._register_read(client)
+                    del self._send_queue[fd]
         except socket.error:
             self._clean_up_client(client)
 
-    def send(self, client, data):
-        self._send_queue[client.fileno()] += data
+    def send(self, client, data, callback=None):
+        self._send_queue[client.fileno()].append(SendMessage(data, callback))
         self._register_write(client)
 
     def stop(self):

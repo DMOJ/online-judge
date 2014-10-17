@@ -30,14 +30,17 @@ class SizedPacketHandler(Handler):
                 self._buffer = self._buffer[size_pack.size:]
                 self._packetlen = size_pack.unpack(data)[0]
 
-    def send(self, data):
+    def send(self, data, callback=None):
         data = self._format_send(data)
-        self._send(size_pack.pack(len(data)) + data)
+        self._send(size_pack.pack(len(data)) + data, callback)
 
 
 class ZlibPacketHandler(SizedPacketHandler):
     def _format_send(self, data):
         return data.encode('zlib')
+
+    def packet(self, data):
+        raise NotImplementedError()
 
     def _packet(self, data):
         self.packet(data.decode('zlib'))

@@ -1,46 +1,40 @@
 import logging
-import SocketServer
 import json
 import struct
+
+from event_socket_server import ZlibPacketHandler
 
 logger = logging.getLogger('judge.bridge')
 size_pack = struct.Struct('!I')
 
 
-class DjangoHandler(SocketServer.StreamRequestHandler):
-    def setup(self):
-        SocketServer.StreamRequestHandler.setup(self)
+class DjangoHandler(ZlibPacketHandler):
+    def __init__(self, server, socket):
+        super(DjangoHandler, self).__init__(server, socket)
 
         self.handlers = {
             'submission-request': self.on_submission,
             'terminate-submission': self.on_termination,
         }
+        self._to_kill = True
+        self.server.schedule(5, self._kill_if_no_request)
 
-    def handle(self):
-        input = self.rfile.read(4)
-        if not input:
-            return
-        length = size_pack.unpack(input)[0]
-        input = self.rfile.read(length)
-        if not input:
-            return
-        self.rfile.close()
-        input = input.decode('zlib')
-        packet = json.loads(input)
+    def _kill_if_no_request(self):
+        if self._to_kill:
+            logger.info('Killed inactive connection: %s', self._socket.getpeername())
+            self.close()
 
-        result = self.packet(packet)
-        output = json.dumps(result, separators=(',', ':'))
-        output = output.encode('zlib')
-        self.wfile.write(size_pack.pack(len(output)))
-        self.wfile.write(output)
-        self.wfile.close()
+    def _format_send(self, data):
+        return super(DjangoHandler, self)._format_send(json.dumps(data, separators=(',', ':')))
 
-    def packet(self, data):
+    def packet(self, packet):
+        packet = json.loads(packet)
         try:
-            return self.handlers.get(data.get('name', None), lambda data: None)(data)
+            result = self.handlers.get(packet.get('name', None), self.on_malformed)(packet)
         except:
             logger.exception('Error in packet handling (Django-facing)')
-            return {"name": "bad-request"}
+            result = {"name": "bad-request"}
+        self.send(result, self.close)
 
     def on_submission(self, data):
         id = data['submission-id']

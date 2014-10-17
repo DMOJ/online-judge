@@ -12,8 +12,8 @@ class Handler(object):
     def _recv_data(self, data):
         raise NotImplementedError
 
-    def _send(self, data):
-        return self.server.send(self, data)
+    def _send(self, data, callback=None):
+        return self.server.send(self, data, callback)
 
     def close(self):
         self.server._clean_up_client(self)

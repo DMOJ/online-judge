@@ -1,11 +1,9 @@
 import logging
-import struct
 import json
 import time
 
 from event_socket_server import ZlibPacketHandler
 
-size_pack = struct.Struct('!I')
 logger = logging.getLogger('judge.bridge')
 
 

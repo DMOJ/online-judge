@@ -1,9 +1,7 @@
-import SocketServer
+from event_socket_server import get_preferred_engine
 
 
-class DjangoServer(SocketServer.ThreadingTCPServer):
-    allow_reuse_address = True
-
+class DjangoServer(get_preferred_engine()):
     def __init__(self, judges, *args, **kwargs):
-        SocketServer.ThreadingTCPServer.__init__(self, *args, **kwargs)
+        super(DjangoServer, self).__init__(*args, **kwargs)
         self.judges = judges

@@ -2,23 +2,16 @@ import logging
 import threading
 import time
 import os
+from event_socket_server import get_preferred_engine
 
 from judge.models import Judge
 from .judgelist import JudgeList
-from event_socket_server import engines
 
 logger = logging.getLogger('judge.bridge')
 
 
 def reset_judges():
     Judge.objects.update(online=False, last_connect=None, ping=None, load=None)
-
-
-def get_preferred_engine(choices=('epoll', 'poll', 'select')):
-    for choice in choices:
-        if choice in engines:
-            return engines[choice]
-    return engines['select']
 
 
 class JudgeServer(get_preferred_engine()):
