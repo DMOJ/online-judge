@@ -1,3 +1,4 @@
+import logging
 import socket
 import threading
 import time
@@ -6,6 +7,7 @@ from collections import defaultdict, deque
 from heapq import heappush, heappop
 
 __author__ = 'Quantum'
+logger = logging.getLogger('event_socket_server')
 
 
 class SendMessage(object):
@@ -87,7 +89,7 @@ class BaseServer(object):
                 try:
                     client._recv_data(data)
                 except Exception:
-                    traceback.print_exc()
+                    logger.exception('Client recv_data failure')
                     self._clean_up_client(client)
 
     def _nonblock_write(self, client):
@@ -99,7 +101,12 @@ class BaseServer(object):
             top.data = top.data[cb:]
             if not top.data:
                 if top.callback is not None:
-                    top.callback()
+                    try:
+                        top.callback()
+                    except Exception:
+                        logger.exception('Client write callback failure')
+                        self._clean_up_client(client)
+                        return
                 queue.popleft()
                 if not queue:
                     self._register_read(client)
