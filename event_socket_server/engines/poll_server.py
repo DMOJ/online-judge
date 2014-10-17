@@ -16,6 +16,7 @@ class PollServer(BaseServer):
     POLLIN = select.POLLIN
     POLLOUT = select.POLLOUT
     POLL_CLOSE = select.POLLERR | select.POLLHUP
+    NEED_CLOSE = False
 
     def __init__(self, *args, **kwargs):
         super(PollServer, self).__init__(*args, **kwargs)
@@ -74,5 +75,6 @@ class PollServer(BaseServer):
             for client in self._clients:
                 self._clean_up_client(client, True)
             self._poll.unregister(self._server_fd)
-            self._poll.close()
+            if self.NEED_CLOSE:
+                self._poll.close()
             self._server.close()

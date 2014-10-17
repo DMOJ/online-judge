@@ -13,3 +13,4 @@ class EpollServer(PollServer):
     POLLIN = select.EPOLLIN
     POLLOUT = select.EPOLLOUT
     POLL_CLOSE = select.EPOLLHUP | select.EPOLLERR
+    NEED_CLOSE = True
