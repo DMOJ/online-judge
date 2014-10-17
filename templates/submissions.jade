@@ -67,7 +67,7 @@ block media
             font-weight: bold;
         }
     
-    if request.user.is_authenticated and request.user.is_admin
+    if request.user.is_authenticated and perms.judge.rejudge_submission
         script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
         script(type='text/javascript')
             function rejudge_submission(id) {
