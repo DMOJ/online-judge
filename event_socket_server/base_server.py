@@ -98,7 +98,8 @@ class BaseServer(object):
             cb = client._socket.send(top.data)
             top.data = top.data[cb:]
             if not top.data:
-                top.callback()
+                if top.callback is not None:
+                    top.callback()
                 queue.popleft()
                 if not queue:
                     self._register_read(client)
