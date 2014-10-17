@@ -8,7 +8,7 @@ logger = logging.getLogger('judge.bridge')
 class JudgeList(object):
     def __init__(self):
         self.queue = []
-        self.judges = []
+        self.judges = set()
         self.submission_map = {}
 
     def _handle_free_judge(self, judge):
@@ -27,14 +27,14 @@ class JudgeList(object):
                 break
 
     def register(self, judge):
-        self.judges.append(judge)
+        self.judges.add(judge)
         self._handle_free_judge(judge)
 
     def update_problems(self, judge):
         self._handle_free_judge(judge)
 
     def remove(self, judge):
-        self.judges.remove(judge)
+        self.judges.discard(judge)
 
     def __iter__(self):
         return iter(self.judges)
@@ -59,7 +59,7 @@ class JudgeList(object):
                 judge.submit(id, problem, language, source)
             except Exception:
                 traceback.print_exc()
-                self.judges.remove(judge)
+                self.judges.discard(judge)
                 return self.judge(id, problem, language, source)
         else:
             self.queue.append((id, problem, language, source))

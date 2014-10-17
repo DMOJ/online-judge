@@ -10,21 +10,16 @@ from judge.bridge import DjangoHandler, DjangoServer
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        judge_server = JudgeServer((settings.BRIDGED_JUDGE_HOST, settings.BRIDGED_JUDGE_PORT), DjangoJudgeHandler)
+        judge_server = JudgeServer(settings.BRIDGED_JUDGE_HOST, settings.BRIDGED_JUDGE_PORT, DjangoJudgeHandler)
         django_server = DjangoServer(judge_server.judges, (settings.BRIDGED_DJANGO_HOST, settings.BRIDGED_DJANGO_PORT),
                                      DjangoHandler)
-
-        judge_server.daemon_threads = True
         django_server.daemon_threads = True
 
         # TODO: This is so ugly. Would be so much prettier to have select() on both of them.
-        threading.Thread(target=judge_server.serve_forever).start()
         threading.Thread(target=django_server.serve_forever).start()
         try:
-            while True:
-                time.sleep(86400)
+            judge_server.serve_forever()
         except KeyboardInterrupt:
             pass
         finally:
             django_server.shutdown()
-            judge_server.shutdown()

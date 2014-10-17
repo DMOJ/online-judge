@@ -71,6 +71,7 @@ class PollServer(BaseServer):
                                 if event & self.POLLOUT and fd in self._fdmap:
                                     self._nonblock_write(client)
         finally:
+            self.on_shutdown()
             for client in self._clients:
                 self._clean_up_client(client, True)
             self._poll.unregister(self._server_fd)

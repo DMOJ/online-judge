@@ -1,18 +1,17 @@
 import logging
-import socket
-import SocketServer
 import struct
 import json
-import threading
 import time
+
+from event_socket_server import ZlibPacketHandler
 
 size_pack = struct.Struct('!I')
 logger = logging.getLogger('judge.bridge')
 
 
-class JudgeHandler(SocketServer.StreamRequestHandler):
-    def setup(self):
-        SocketServer.StreamRequestHandler.setup(self)
+class JudgeHandler(ZlibPacketHandler):
+    def __init__(self, server, socket):
+        super(JudgeHandler, self).__init__(server, socket)
 
         self.handlers = {
             'grading-begin': self.on_grading_begin,
@@ -26,9 +25,9 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'submission-terminated': self.on_submission_terminated,
             'ping-response': self.on_ping_response,
             'supported-problems': self.on_supported_problems,
+            'handshake': self.on_handshake,
         }
-        self._current_submission = None
-        self._current_submission_event = threading.Event()
+        self._to_kill = False
         self._working = False
         self._problems = []
         self.executors = []
@@ -37,44 +36,22 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
         self.load = 1e100
         self.name = None
         self.batch_id = None
+        self.client_address = socket.getpeername()
 
+        self.server.schedule(5, self._kill_if_no_auth)
         logger.info('Judge connected from: %s', self.client_address)
 
-    def finish(self):
-        SocketServer.StreamRequestHandler.finish(self)
+    def _kill_if_no_auth(self):
+        if self._to_kill:
+            logger.info('Judge not authenticated: %s', self.client_address)
+            self.close()
+
+    def on_close(self):
+        self._to_kill = False
+        self.server.judges.remove(self)
         if self.name is not None:
             self._disconnected()
         logger.info('Judge disconnected from: %s', self.client_address)
-        self.server.judges.remove(self)
-
-    def handle(self):
-        if not self._handle_auth():
-            self.rfile.close()
-            self.wfile.close()
-            logger.info('Judge failed authentication: %s', self.client_address)
-            return
-        else:
-            self._send({'name': 'handshake-success'})
-            logger.info('Judge authenticated: %s', self.client_address)
-            self.server.judges.register(self)
-            self._connected()
-        self.ping()
-        while True:
-            try:
-                buf = self.rfile.read(size_pack.size)
-                if not buf:
-                    break
-                size = size_pack.unpack(buf)[0]
-                data = self.rfile.read(size)
-                if not data:
-                    break
-                data = data.decode('zlib')
-                payload = json.loads(data)
-                self._packet(payload)
-            except socket.error:
-                self.rfile.close()
-                self.wfile.close()
-                break
 
     def _authenticate(self, id, key):
         return False
@@ -88,26 +65,22 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
     def _update_ping(self):
         pass
 
-    def _handle_auth(self):
-        buf = self.rfile.read(size_pack.size)
-        if not buf:
-            return False
-        size = size_pack.unpack(buf)[0]
-        data = self.rfile.read(size)
-        if not data:
-            return False
-        data = data.decode('zlib')
-        packet = json.loads(data)
-        if packet['name'] != 'handshake' or 'id' not in packet or 'key' not in packet:
-            return False
-        if not self._authenticate(packet['id'], packet['key']):
-            return False
+    def _format_send(self, data):
+        return super(JudgeHandler, self)._format_send(json.dumps(data, separators=(',', ':')))
+
+    def on_handshake(self, packet):
+        if 'id' not in packet or 'key' not in packet or not self._authenticate(packet['id'], packet['key']):
+            self.close()
 
         self._problems = packet['problems']
         self.problems = dict(self._problems)
         self.executors = packet['executors']
         self.name = packet['id']
-        return True
+
+        self.send({'name': 'handshake-success'})
+        logger.info('Judge authenticated: %s', self.client_address)
+        self.server.judges.register(self)
+        self._connected()
 
     def can_judge(self, problem, executor):
         return problem in self.problems and executor in self.executors
@@ -121,7 +94,7 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
 
     def submit(self, id, problem, language, source):
         time, memory, short = self.problem_data(problem)
-        packet = {
+        self.send({
             'name': 'submission-request',
             'submission-id': id,
             'problem-id': problem,
@@ -130,41 +103,29 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
             'time-limit': time,
             'memory-limit': memory,
             'short-circuit': short,
-
-        }
-        self._send(packet)
+        })
         self._working = id
 
     def abort(self):
-        self._send({'name': 'terminate-submission'})
+        self.send({'name': 'terminate-submission'})
 
     def get_current_submission(self):
-        self._send({'name': 'get-current-submission'})
-        self._current_submission_event.wait()
-        self._current_submission_event.clear()
-        return self._current_submission
+        return self._working or None
 
     def ping(self):
-        self._send({'name': 'ping', 'when': time.time()})
+        self.send({'name': 'ping', 'when': time.time()})
 
-    def _send(self, data):
-        data = json.dumps(data, separators=(',', ':'))
-        compress = data.encode('zlib')
+    def packet(self, data):
         try:
-            self.wfile.write(size_pack.pack(len(compress)) + compress)
-        except socket.error:
-            self.wfile.close()
-            self.rfile.close()
-            raise
-        except Exception:
-            logger.exception('Send failure')
-
-    def _packet(self, data):
-        try:
-            if 'name' not in data:
+            try:
+                data = json.loads(data)
+                if 'name' not in data:
+                    raise ValueError
+            except ValueError:
                 self.on_malformed(data)
-            handler = self.handlers.get(data['name'], self.on_malformed)
-            handler(data)
+            else:
+                handler = self.handlers.get(data['name'], self.on_malformed)
+                handler(data)
         except:
             logger.exception('Error in packet handling (Judge-side)')
             # You can't crash here because you aren't so sure about the judges
@@ -229,4 +190,3 @@ class JudgeHandler(SocketServer.StreamRequestHandler):
     def _free_self(self, packet):
         self._working = False
         self.server.judges.on_judge_free(self, packet['submission-id'])
-

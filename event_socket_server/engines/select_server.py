@@ -41,6 +41,7 @@ class SelectServer(BaseServer):
                     else:
                         self._clean_up_client(s)
         finally:
+            self.on_shutdown()
             for client in self._clients:
                 self._clean_up_client(client, True)
             self._server.close()

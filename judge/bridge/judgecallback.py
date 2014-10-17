@@ -2,7 +2,7 @@ import logging
 from operator import itemgetter
 from django.db.models import Min, Max
 from django.utils import timezone
-from judge.caching import update_submission, update_stats
+from judge.caching import update_stats
 
 from .judgehandler import JudgeHandler
 from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language
@@ -12,8 +12,8 @@ logger = logging.getLogger('judge.bridge')
 
 
 class DjangoJudgeHandler(JudgeHandler):
-    def finish(self):
-        JudgeHandler.finish(self)
+    def on_close(self):
+        super(DjangoJudgeHandler, self).on_close()
         if self._working:
             submission = Submission.objects.get(id=self._working)
             submission.status = 'IE'
@@ -50,7 +50,7 @@ class DjangoJudgeHandler(JudgeHandler):
         judge.save()
 
     def on_grading_begin(self, packet):
-        JudgeHandler.on_grading_begin(self, packet)
+        super(DjangoJudgeHandler, self).on_grading_begin(packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = 'G'
         submission.current_testcase = 1
@@ -64,7 +64,7 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.save()
 
     def on_grading_end(self, packet):
-        JudgeHandler.on_grading_end(self, packet)
+        super(DjangoJudgeHandler, self).on_grading_end(packet)
         submission = Submission.objects.get(id=packet['submission-id'])
 
         time = 0
@@ -124,7 +124,7 @@ class DjangoJudgeHandler(JudgeHandler):
         event.post('submissions', {'type': 'done-submission', 'id': submission.id})
 
     def on_compile_error(self, packet):
-        JudgeHandler.on_compile_error(self, packet)
+        super(DjangoJudgeHandler, self).on_compile_error(packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = submission.result = 'CE'
         submission.error = packet['log']
@@ -136,7 +136,7 @@ class DjangoJudgeHandler(JudgeHandler):
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
     def on_bad_problem(self, packet):
-        JudgeHandler.on_bad_problem(self, packet)
+        super(DjangoJudgeHandler, self).on_bad_problem(packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = submission.result = 'IE'
         submission.save()
@@ -147,7 +147,7 @@ class DjangoJudgeHandler(JudgeHandler):
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
     def on_submission_terminated(self, packet):
-        JudgeHandler.on_submission_terminated(self, packet)
+        super(DjangoJudgeHandler, self).on_submission_terminated(packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         submission.status = submission.result = 'AB'
         submission.save()
@@ -157,7 +157,7 @@ class DjangoJudgeHandler(JudgeHandler):
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
     def on_test_case(self, packet):
-        JudgeHandler.on_test_case(self, packet)
+        super(DjangoJudgeHandler, self).on_test_case(packet)
         submission = Submission.objects.get(id=packet['submission-id'])
         test_case = SubmissionTestCase(submission=submission, case=packet['position'])
         status = packet['status']
@@ -198,7 +198,7 @@ class DjangoJudgeHandler(JudgeHandler):
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
     def on_supported_problems(self, packet):
-        JudgeHandler.on_supported_problems(self, packet)
+        super(DjangoJudgeHandler, self).on_supported_problems(packet)
 
         judge = Judge.objects.get(name=self.name)
         judge.problems = Problem.objects.filter(code__in=self.problems.keys())

@@ -102,3 +102,6 @@ class BaseServer(object):
 
     def serve_forever(self):
         self._serve()
+
+    def on_shutdown(self):
+        pass

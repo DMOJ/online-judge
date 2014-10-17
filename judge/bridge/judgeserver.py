@@ -1,4 +1,3 @@
-import SocketServer
 import logging
 import threading
 import time
@@ -6,6 +5,7 @@ import os
 
 from judge.models import Judge
 from .judgelist import JudgeList
+from event_socket_server import engines
 
 logger = logging.getLogger('judge.bridge')
 
@@ -14,19 +14,24 @@ def reset_judges():
     Judge.objects.update(online=False, last_connect=None, ping=None, load=None)
 
 
-class JudgeServer(SocketServer.ThreadingTCPServer):
-    allow_reuse_address = True
+def get_preferred_engine(choices=('epoll', 'poll', 'select')):
+    for choice in choices:
+        if choice in engines:
+            return engines[choice]
+    return engines['select']
 
+
+class JudgeServer(get_preferred_engine()):
     def __init__(self, *args, **kwargs):
-        SocketServer.ThreadingTCPServer.__init__(self, *args, **kwargs)
+        super(JudgeServer, self).__init__(*args, **kwargs)
         reset_judges()
         self.judges = JudgeList()
         self.ping_judge_thread = threading.Thread(target=self.ping_judge, args=())
         self.ping_judge_thread.daemon = True
         self.ping_judge_thread.start()
 
-    def shutdown(self):
-        SocketServer.ThreadingTCPServer.shutdown(self)
+    def on_shutdown(self):
+        super(JudgeServer, self).on_shutdown()
         reset_judges()
 
     def ping_judge(self):
@@ -58,7 +63,7 @@ def main():
                         help='port to listen for the judge')
 
     args = parser.parse_args()
-    server = JudgeServer((args.judge_host, args.judge_port), JudgeHandler)
+    server = JudgeServer(args.judge_host, args.judge_port, JudgeHandler)
     server.serve_forever()
 
 
