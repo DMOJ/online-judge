@@ -27,7 +27,7 @@ class JudgeHandler(ZlibPacketHandler):
             'supported-problems': self.on_supported_problems,
             'handshake': self.on_handshake,
         }
-        self._to_kill = False
+        self._to_kill = True
         self._working = False
         self._problems = []
         self.executors = []
@@ -72,6 +72,7 @@ class JudgeHandler(ZlibPacketHandler):
         if 'id' not in packet or 'key' not in packet or not self._authenticate(packet['id'], packet['key']):
             self.close()
 
+        self._to_kill = False
         self._problems = packet['problems']
         self.problems = dict(self._problems)
         self.executors = packet['executors']
