@@ -31,9 +31,9 @@ class BaseServer(object):
         self._clients.add(client)
         return client
 
-    def schedule(self, delay, job):
+    def schedule(self, delay, job, *args, **kwargs):
         with self._job_queue_lock:
-            heappush(self._job_queue, (time.time() + delay, job))
+            heappush(self._job_queue, (time.time() + delay, job, args, kwargs))
 
     def _register_write(self, client):
         raise NotImplementedError()
@@ -59,9 +59,10 @@ class BaseServer(object):
                 dt = self._job_queue[0][0] - t if self._job_queue else 1
                 if dt > 0:
                     break
-                tasks.append(heappop(self._job_queue)[1])
+                tasks.append(heappop(self._job_queue))
         for task in tasks:
-            task()
+            _, task, args, kwargs = task
+            task(*args, **kwargs)
         if not self._job_queue or dt > 1:
             dt = 1
         return dt
