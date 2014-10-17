@@ -70,7 +70,7 @@ block media
     if request.user.is_authenticated and perms.judge.rejudge_submission
         script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
         script(type='text/javascript')
-            function rejudge_submission(id) {
+            window.rejudge_submission = function(id) {
                 $.ajax({
                     url: '{% url "judge.views.rejudge_submission" %}',
                     type: "POST",

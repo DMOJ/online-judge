@@ -3,6 +3,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from judge.models import Submission
 
+
+__all__ = ['rejudge_submission']
+
 @login_required
 def rejudge_submission(request):
     if request.method != 'POST':
