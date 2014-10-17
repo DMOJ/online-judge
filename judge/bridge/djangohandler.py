@@ -28,6 +28,7 @@ class DjangoHandler(ZlibPacketHandler):
         return super(DjangoHandler, self)._format_send(json.dumps(data, separators=(',', ':')))
 
     def packet(self, packet):
+        self._to_kill = False
         packet = json.loads(packet)
         try:
             result = self.handlers.get(packet.get('name', None), self.on_malformed)(packet)
