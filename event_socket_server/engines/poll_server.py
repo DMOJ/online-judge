@@ -38,10 +38,10 @@ class PollServer(BaseServer):
             try:
                 self._poll.unregister(fd)
             except IOError as e:
-                if e.errno == errno.ENOENT:
-                    print>>sys.stderr, '(fd not registered: %d)' % fd
-                else:
+                if e.errno != errno.ENOENT:
                     raise
+            except KeyError:
+                pass
             del self._fdmap[fd]
             super(PollServer, self)._clean_up_client(client, finalize)
 
