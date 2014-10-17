@@ -71,7 +71,7 @@ block media
         script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
         script(type='text/javascript')
             function rejudge_submission(id) {
-                return $.ajax({
+                $.ajax({
                     url: '{% url "judge.views.rejudge_submission" %}',
                     type: "POST",
                     data: {
