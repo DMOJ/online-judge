@@ -28,10 +28,14 @@ class JudgeServer(get_preferred_engine()):
         reset_judges()
 
     def ping_judge(self):
-        while True:
-            for judge in self.judges:
-                judge.ping()
-            time.sleep(10)
+        try:
+            while True:
+                for judge in self.judges:
+                    judge.ping()
+                time.sleep(10)
+        except:
+            logger.exception('Ping error')
+            raise
 
 
 def main():
