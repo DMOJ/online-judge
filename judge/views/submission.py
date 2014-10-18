@@ -2,6 +2,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.paginator import PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
+from django.db.models import F
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader
@@ -13,16 +14,21 @@ from judge.views import get_result_table, user_completed_codes
 from judge import event_poster as event
 
 
+def check_submission_access(request, submission):
+    if not request.user.is_authenticated():
+        raise PermissionDenied()
+
+    if not request.user.profile.is_admin and submission.user != request.user.profile and \
+            not Submission.objects.filter(user=request.user.profile, result='AC',
+                                          problem__code=submission.problem.code,
+                                          points=F('problem__points')).exists():
+        raise PermissionDenied()
+
+
 def submission_source(request, sub_id):
     try:
         submission = Submission.objects.get(id=int(sub_id))
-
-        if not request.user.is_authenticated():
-            raise PermissionDenied()
-
-        if not request.user.profile.is_admin and submission.user != request.user.profile and \
-                not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=submission.problem.code).exists():
-            raise PermissionDenied()
+        check_submission_access(request, submission)
 
         return render_to_response('submission_source.jade',
                                   {
@@ -40,13 +46,8 @@ def submission_source(request, sub_id):
 def submission_status(request, code):
     try:
         submission = Submission.objects.get(id=int(code))
+        check_submission_access(request, submission)
 
-        if not request.user.is_authenticated():
-            raise PermissionDenied()
-
-        if not request.user.profile.is_admin and submission.user != request.user.profile and \
-                not Submission.objects.filter(user=request.user.profile, result='AC', problem__code=submission.problem.code).exists():
-            raise PermissionDenied()
         test_cases = SubmissionTestCase.objects.filter(submission=submission)
         return render_to_response('submission_status.jade',
                                   {'submission': submission, 'test_cases': test_cases,

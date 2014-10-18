@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max
+from django.db.models import Max, F
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -65,4 +65,5 @@ def users(request):
 
 
 def user_completed_codes(profile):
-    return set(Submission.objects.filter(user=profile, result='AC').values_list('problem__code', flat=True).distinct())
+    return set(Submission.objects.filter(user=profile, result='AC', points=F('problem__points'))
+               .values_list('problem__code', flat=True).distinct())
