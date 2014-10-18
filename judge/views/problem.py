@@ -34,7 +34,7 @@ def problem(request, code):
         if form is None:
             return HttpResponseRedirect(request.path)
         return render_to_response('problem.jade', {'problem': problem, 'results': get_result_table(problem__code=code),
-                                                   'title': 'Problem: %s' % problem.name,
+                                                   'title': problem.name,
                                                    'has_submissions': request.user.is_authenticated() and Submission.objects.filter(
                                                        user=request.user.profile).exists(),
                                                    'comment_list': problem_comments(problem),
