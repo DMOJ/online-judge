@@ -174,10 +174,6 @@ class JudgeHandler(ZlibPacketHandler):
     def on_test_case(self, packet):
         logger.info('Test case completed on: %s', packet['submission-id'])
 
-    def on_current_submission(self, packet):
-        self._current_submission = packet['submission-id']
-        self._current_submission_event.set()
-
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)
 
