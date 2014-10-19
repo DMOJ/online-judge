@@ -8,7 +8,7 @@ __all__ = ['status', 'status_table']
 
 def status(request):
     return render_to_response('judge_status.jade', {
-        'judges': Judge.objects.all(),
+        'judges': Judge.objects.all().order_by('load'),
         'title': 'Status',
     }, context_instance=RequestContext(request))
 
