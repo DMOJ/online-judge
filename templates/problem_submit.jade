@@ -55,6 +55,7 @@ block media
         }
 
 block body
+    br
     form#problem_submit.form-area(action='', method='post')
         -csrf_token
         | #{form.non_field_errors}

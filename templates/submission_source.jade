@@ -36,6 +36,7 @@ block media
         }
 
 block body
+    br
     a(href='{% url "judge.views.submission_status" submission.id %}') View status
     br
     if request.user == submission.user.user
