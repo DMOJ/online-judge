@@ -15,5 +15,5 @@ def status(request):
 
 def status_table(request):
     return render_to_response('judge_status_table.jade', {
-        'judges': Judge.objects.all(),
+        'judges': Judge.objects.all().order_by('load'),
     }, context_instance=RequestContext(request))
