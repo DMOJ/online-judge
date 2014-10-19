@@ -172,7 +172,7 @@ class Problem(models.Model):
         return map(attrgetter('full_name'), self.types.all())
 
     def languages_list(self):
-        return map(attrgetter('name'), self.allowed_languages.all())
+        return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
     def number_of_users(self):
         return Submission.objects.filter(problem=self, result='AC').values('user').distinct().count()
