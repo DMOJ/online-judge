@@ -3,7 +3,7 @@
     position: relative;
 }
 
-.django-ace-widget > div  {
+.django-ace-widget > div {
     position: absolute;
     top: 0;
     left: 0;
@@ -32,26 +32,26 @@
 
 .django-ace-max_min {
     float: right;
-    background-position:5px 5px;
-    background-repeat:no-repeat;
     padding: 5px;
 
-    background-image:url(img/expand.png);
-    display:block;
+    background: url(img/expand.png) no-repeat 5px 5px;
+    display: block;
     height: 16px;
     width: 16px;
 }
-
 
 .django-ace-editor {
     position: relative;
 }
 
 .django-ace-editor-fullscreen {
-    position: absolute;
-    top: 0px; left: 0px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 
 .django-ace-editor-fullscreen .django-ace-max_min {
-    background-image:url(img/contract.png);
+    background-image: url(img/contract.png);
 }
