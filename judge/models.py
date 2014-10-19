@@ -41,6 +41,7 @@ class Language(models.Model):
     key = models.CharField(max_length=6, verbose_name='Short identifier', unique=True)
     name = models.CharField(max_length=20, verbose_name='Long name')
     short_name = models.CharField(max_length=10, verbose_name='Short name', null=True, blank=True)
+    common_name = models.CharField(max_length=10, verbose_name='Common name')
     ace = models.CharField(max_length=20, verbose_name='ACE mode name')
     pygments = models.CharField(max_length=20, verbose_name='Pygments Name')
     info = models.CharField(max_length=50, verbose_name='Basic runtime info', blank=True)
