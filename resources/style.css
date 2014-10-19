@@ -2,30 +2,30 @@
     width: 100%;
 }
 
-.full{
-	width:100%
+.full {
+    width: 100%
 }
 
-.button{
-	cursor:pointer;
-	display:block;
-	text-align:center;
-	padding:4px 2px 5px;
-	color:white;
-	border:1px solid #666;
-	border-radius:1px;
-	background:#2980b9;
-	background:linear-gradient(180deg,#00aee0,#2980b9);
-	text-decoration:none
+.button {
+    cursor: pointer;
+    display: block;
+    text-align: center;
+    padding: 4px 2px 5px;
+    color: white;
+    border: 1px solid #666;
+    border-radius: 1px;
+    background: #2980b9;
+    background: linear-gradient(180deg, #00aee0, #2980b9);
+    text-decoration: none
 }
 
-.button:hover{
-	background:#00a3e0
+.button:hover {
+    background: #00a3e0
 }
 
-.button:active{
-	background:#00aee0;
-	background:linear-gradient(180deg,#2980b9, #00aee0)
+.button:active {
+    background: #00aee0;
+    background: linear-gradient(180deg, #2980b9, #00aee0)
 }
 
 table.sortable thead {
@@ -139,13 +139,13 @@ hr {
 }
 
 .comment-submit {
-	min-width: 40%;
+    min-width: 40%;
 }
 
 #comment-post-wrapper div {
-	padding-top:2px;
-	padding-bottom:2px;
-	padding-right:10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 10px;
 }
 
 div.info-float {
@@ -281,7 +281,7 @@ hr {
     position: relative;
     top: 0;
     width: 100%;
-    z-index:1000; /* Something really large since Ace uses z-index too */
+    z-index: 500;
 }
 
 #content {
