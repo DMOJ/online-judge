@@ -17,6 +17,18 @@ class SendMessage(object):
         self.callback = callback
 
 
+class ScheduledJob(object):
+    __slots__ = ('time', 'func', 'args', 'kwargs', 'cancel', 'dispatched')
+
+    def __init__(self, time, func, args, kwargs):
+        self.time = time
+        self.func = func
+        self.args = args
+        self.kwargs = kwargs
+        self.cancel = False
+        self.dispatched = False
+
+
 class BaseServer(object):
     def __init__(self, host, port, client):
         self._server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -40,9 +52,18 @@ class BaseServer(object):
         self._clients.add(client)
         return client
 
-    def schedule(self, delay, job, *args, **kwargs):
+    def schedule(self, delay, func, *args, **kwargs):
         with self._job_queue_lock:
-            heappush(self._job_queue, (time.time() + delay, job, args, kwargs))
+            job = ScheduledJob(time.time() + delay, func, args, kwargs)
+            heappush(self._job_queue, job)
+            return job
+
+    def unschedule(self, job):
+        with self._job_queue_lock:
+            if job.dispatched or job.cancelled:
+                return False
+            job.cancelled = True
+            return True
 
     def _register_write(self, client):
         raise NotImplementedError()
@@ -65,13 +86,15 @@ class BaseServer(object):
         tasks = []
         with self._job_queue_lock:
             while True:
-                dt = self._job_queue[0][0] - t if self._job_queue else 1
+                dt = self._job_queue[0].time - t if self._job_queue else 1
                 if dt > 0:
                     break
-                tasks.append(heappop(self._job_queue))
+                task = heappop(self._job_queue)
+                task.dispatched = True
+                if not task.cancelled:
+                    tasks.append(task)
         for task in tasks:
-            _, task, args, kwargs = task
-            task(*args, **kwargs)
+            task.func(*task.args, **task.kwargs)
         if not self._job_queue or dt > 1:
             dt = 1
         return dt

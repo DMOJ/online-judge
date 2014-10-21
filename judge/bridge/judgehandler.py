@@ -1,5 +1,6 @@
 import logging
 import json
+import threading
 import time
 
 from event_socket_server import ZlibPacketHandler
@@ -20,12 +21,15 @@ class JudgeHandler(ZlibPacketHandler):
             'test-case-status': self.on_test_case,
             'problem-not-exist': self.on_bad_problem,
             'submission-terminated': self.on_submission_terminated,
+            'submission-acknowledged': self.on_submission_acknowledged,
             'ping-response': self.on_ping_response,
             'supported-problems': self.on_supported_problems,
             'handshake': self.on_handshake,
         }
         self._to_kill = True
         self._working = False
+        self._received = threading.Event()
+        self._no_response_job = None
         self._problems = []
         self.executors = []
         self.problems = {}
@@ -103,6 +107,20 @@ class JudgeHandler(ZlibPacketHandler):
             'short-circuit': short,
         })
         self._working = id
+        self._no_response_job = self.server.schedule(20, self._kill_if_no_response())
+        self._received.clear()
+
+    def _kill_if_no_response(self):
+        logger.error('Judge seems dead: %s: %s', self.name, self._working)
+        self.close()
+
+    def on_submission_acknowledged(self, packet):
+        if not packet.get('submission-id', None) == self._working:
+            logger.error('Wrong acknowledgement: %s: %s, expected: %s', self.name, packet.get('submission-id', None),
+                         self._working)
+            self.close()
+        self.server.unschedule(self._no_response_job)
+        self._received.set()
 
     def abort(self):
         self.send({'name': 'terminate-submission'})
