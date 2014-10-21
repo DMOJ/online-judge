@@ -89,7 +89,7 @@ class DjangoJudgeHandler(JudgeHandler):
             points = round(sum(map(itemgetter('points'), data)), 1)
             total = round(sum(map(itemgetter('total'), data)), 1)
 
-        sub_points = round(points / total * submission.problem.points, 1)
+        sub_points = round(points / total * submission.problem.points if total > 0 else 0, 1)
         if not submission.problem.partial and sub_points != submission.problem.points:
             sub_points = 0
 
