@@ -18,7 +18,6 @@ class JudgeHandler(ZlibPacketHandler):
             'batch-begin': self.on_batch_begin,
             'batch-end': self.on_batch_end,
             'test-case-status': self.on_test_case,
-            'current-submission-id': self.on_current_submission,
             'problem-not-exist': self.on_bad_problem,
             'submission-terminated': self.on_submission_terminated,
             'ping-response': self.on_ping_response,
