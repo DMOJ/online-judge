@@ -92,26 +92,26 @@ block header
 block body
     br
         div
-        .user-gravatar
-            img(src='{% gravatar_url user.user.email 128 %}', alt='gravatar')
-        if user.name
-            .user-display-name
-                b Name: 
-                | #{user.name}
+            .user-gravatar
+                img(src='{% gravatar_url user.user.email 128 %}', alt='gravatar')
+            if user.name
+                .user-display-name
+                    b Name: 
+                    | #{user.name}
+                br
+                br
+            if user.about
+                .user-about
+                    h4 About
+                    | #{user.about|markdown:"self-description"}
+            
             br
-            br
-        if user.about
-            .user-about
-                h4 About
-                | #{user.about|markdown:"self-description"}
-        
-        br
-        .user-stats
-            h4 #{user.problems} problems solved.
-            b Total points:&nbsp;
-            | #{user.calculate_points}
-            br
-            a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
+            .user-stats
+                h4 #{user.problems} problems solved.
+                b Total points:&nbsp;
+                | #{user.calculate_points}
+                br
+                a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
     hr
     - regroup best_submissions by group as problems
     each group in problems
