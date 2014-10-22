@@ -47,6 +47,9 @@ block media
             border: 1px solid gray;
             border-radius: 4px;
         }
+        .user-info-cell {
+            padding-left: 5px;
+        }    
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
 
     script(type='text/javascript')
@@ -79,7 +82,7 @@ block body
             td
                 .user-gravatar
                     img(src='{% gravatar_url user.user.email 128 %}', alt='gravatar')
-            td
+            td.user-info-cell
                 if user.name
                     b Name: 
                     | #{user.name}
@@ -94,9 +97,6 @@ block body
                 | #{user.calculate_points}
                 br
                 a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
-    br
-    br
-    br
 
     - regroup best_submissions by group as problems
     each group in problems
