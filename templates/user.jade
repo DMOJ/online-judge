@@ -32,6 +32,9 @@ block media
             padding-bottom:1px;
             vertical-align: middle;
         }
+        .user-gravatar {
+            float: left;
+        }
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
 
     script(type='text/javascript')
@@ -59,6 +62,8 @@ block header
 
 block body
     br
+    .user-gravatar
+        img(src='{% gravatar user.user.email 128 %}', alt='gravatar')
     if user.name
         b Name: 
         | #{user.name}
