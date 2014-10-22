@@ -108,11 +108,11 @@ class JudgeHandler(ZlibPacketHandler):
         })
         self._working = id
         #self._no_response_job = self.server.schedule(20, self._kill_if_no_response())
-        self._received.clear()
+        #self._received.clear()
 
     def _kill_if_no_response(self):
         logger.error('Judge seems dead: %s: %s', self.name, self._working)
-        self.close()
+        #self.close()
 
     def on_submission_acknowledged(self, packet):
         return
