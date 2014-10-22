@@ -119,8 +119,10 @@ class JudgeHandler(ZlibPacketHandler):
             logger.error('Wrong acknowledgement: %s: %s, expected: %s', self.name, packet.get('submission-id', None),
                          self._working)
             self.close()
-        self.server.unschedule(self._no_response_job)
-        self._received.set()
+            return
+        if self._no_response_job: # WTF GZ
+            self.server.unschedule(self._no_response_job)
+            self._received.set()
 
     def abort(self):
         self.send({'name': 'terminate-submission'})
