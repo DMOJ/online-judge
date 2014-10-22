@@ -103,6 +103,8 @@ block body
         .user-about
             h4 About
             | #{user.about|markdown:"self-description"}
+    else
+        br
     br
     .user-stats
         h4 #{user.problems} problems solved.
