@@ -32,7 +32,7 @@ block media
         .user-problem-group a img {
             max-width: 1em;
             margin-right: 3px;
-            padding-bottom: 1px;
+            padding-bottom: 2px;
             vertical-align: middle;
         }
 
@@ -103,8 +103,7 @@ block body
         .user-about
             h4 About
             | #{user.about|markdown:"self-description"}
-    else
-        br
+    
     br
     .user-stats
         h4 #{user.problems} problems solved.
@@ -112,6 +111,7 @@ block body
         | #{user.calculate_points}
         br
         a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
+    br
     br
     hr
     - regroup best_submissions by group as problems
