@@ -60,9 +60,9 @@ class BaseServer(object):
 
     def unschedule(self, job):
         with self._job_queue_lock:
-            if job.dispatched or job.cancelled:
+            if job.dispatched or job.cancel:
                 return False
-            job.cancelled = True
+            job.cancel = True
             return True
 
     def _register_write(self, client):
@@ -91,7 +91,7 @@ class BaseServer(object):
                     break
                 task = heappop(self._job_queue)
                 task.dispatched = True
-                if not task.cancelled:
+                if not task.cancel:
                     tasks.append(task)
         for task in tasks:
             task.func(*task.args, **task.kwargs)
