@@ -102,7 +102,7 @@ block body
                 | #{user.calculate_points}
                 br
                 a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
-
+    hr
     - regroup best_submissions by group as problems
     each group in problems
         div.user-problem-group
