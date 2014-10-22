@@ -38,7 +38,7 @@ block media
 
         .user-gravatar {
             float: left;
-            padding-right: 1%;
+            padding-right: 10px;
         }
 
         .user-gravatar img {
@@ -47,8 +47,17 @@ block media
             border: 1px solid gray;
             border-radius: 4px;
         }
-        .user-info-cell {
-            padding-left: 5px;
+
+        .user-display-name {
+            display: inline-block;
+        }
+
+        .user-about {
+            display: inline-block;
+        }
+
+        .user-stats {
+            display: inline-block;
         }
 
         table td {
@@ -82,26 +91,25 @@ block header
 
 block body
     br
-    table
-        tr
-            td
-                .user-gravatar
-                    img(src='{% gravatar_url user.user.email 128 %}', alt='gravatar')
-            td.user-info-cell
-                if user.name
-                    b Name: 
-                    | #{user.name}
-                    br
-                    br
-                if user.about
-                    h4 About
-                    | #{user.about|markdown:"self-description"}
-                    br
-                h4 #{user.problems} problems solved.
-                b Total points:&nbsp;
-                | #{user.calculate_points}
-                br
-                a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
+    .user-gravatar
+        img(src='{% gravatar_url user.user.email 128 %}', alt='gravatar')
+    if user.name
+        .user-display-name
+            b Name: 
+            | #{user.name}
+    br
+    br
+    if user.about
+        .user-about
+            h4 About
+            | #{user.about|markdown:"self-description"}
+    br
+    .user-stats
+        h4 #{user.problems} problems solved.
+        b Total points:&nbsp;
+        | #{user.calculate_points}
+        br
+        a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
     hr
     - regroup best_submissions by group as problems
     each group in problems
