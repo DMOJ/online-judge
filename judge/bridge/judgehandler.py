@@ -120,6 +120,7 @@ class JudgeHandler(ZlibPacketHandler):
                          self._working)
             self.close()
             return
+        logger.info('Submission acknowledged: %d', self._working)
         if self._no_response_job:
             self.server.unschedule(self._no_response_job)
             self._received.set()
