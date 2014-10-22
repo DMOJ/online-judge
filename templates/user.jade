@@ -94,7 +94,11 @@ block body
                     h4 About
                     | #{user.about|markdown:"self-description"}
                 else
-                    i This user has not shared any information.
+                    i
+                        if user.user == request.user
+                            | This user has not shared any information.
+                        else
+                            | You have not shared any information.
                 br
     hr
     - regroup best_submissions by group as problems
