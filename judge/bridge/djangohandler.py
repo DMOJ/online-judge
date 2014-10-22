@@ -56,3 +56,6 @@ class DjangoHandler(ZlibPacketHandler):
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)
+
+    def on_close(self):
+        self._to_kill = False
