@@ -107,7 +107,7 @@ class JudgeHandler(ZlibPacketHandler):
             'short-circuit': short,
         })
         self._working = id
-        self._no_response_job = self.server.schedule(20, self._kill_if_no_response())
+        #self._no_response_job = self.server.schedule(20, self._kill_if_no_response())
         self._received.clear()
 
     def _kill_if_no_response(self):
@@ -115,6 +115,7 @@ class JudgeHandler(ZlibPacketHandler):
         self.close()
 
     def on_submission_acknowledged(self, packet):
+        return
         if not packet.get('submission-id', None) == self._working:
             logger.error('Wrong acknowledgement: %s: %s, expected: %s', self.name, packet.get('submission-id', None),
                          self._working)
