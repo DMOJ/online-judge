@@ -63,7 +63,7 @@ block header
 block body
     br
     .user-gravatar
-        img(src='{% gravatar user.user.email 128 %}', alt='gravatar')
+        img(src='{% gravatar_url user.user.email 128 %}', alt='gravatar')
     if user.name
         b Name: 
         | #{user.name}
