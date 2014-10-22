@@ -96,9 +96,9 @@ block body
                 else
                     i
                         if user.user == request.user
-                            | This user has not shared any information.
-                        else
                             | You have not shared any information.
+                        else
+                            | This user has not shared any information.
                 br
     hr
     - regroup best_submissions by group as problems
