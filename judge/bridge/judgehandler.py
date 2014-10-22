@@ -199,7 +199,7 @@ class JudgeHandler(ZlibPacketHandler):
         logger.error('Malformed packet: %s', packet)
 
     def on_ping_response(self, packet):
-        self.latency = packet['time']
+        self.latency = time.time() - packet['when']
         self.load = packet['load']
         self._update_ping()
 
