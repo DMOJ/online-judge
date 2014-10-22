@@ -17,7 +17,7 @@ class DjangoHandler(ZlibPacketHandler):
             'terminate-submission': self.on_termination,
         }
         self._to_kill = True
-        self.server.schedule(5, self._kill_if_no_request)
+        #self.server.schedule(5, self._kill_if_no_request)
 
     def _kill_if_no_request(self):
         if self._to_kill:
