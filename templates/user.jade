@@ -88,9 +88,11 @@ block body
                 .user-gravatar
                     img(src='{% gravatar_url user.user.email 128 %}', alt='gravatar')
                 br
-                b Last visit:&nbsp;
-                | #{user.last_access}
-                br
+                if user.name
+                    b Name: 
+                    | #{user.name}
+                    br
+                    br
                 br
                 h4 #{user.problems} problems solved.
                 b Total points:&nbsp;
@@ -98,15 +100,12 @@ block body
                 br
                 a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
             td.user-info-cell
-                if user.name
-                    b Name: 
-                    | #{user.name}
-                    br
-                    br
                 if user.about
                     h4 About
                     | #{user.about|markdown:"self-description"}
-                    br
+                else
+                    i This user has not shared any information.
+                br
     hr
     - regroup best_submissions by group as problems
     each group in problems
