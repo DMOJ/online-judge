@@ -10,6 +10,7 @@ block media
             float: right;
             padding-top: 1em;
         }
+
         .user-problem-group h3 {
             font-weight: bold;
             font-size: 1.25em;
@@ -17,6 +18,7 @@ block media
             max-height: 20%;
             line-height: 2.5em;
         }
+
         .user-problem-group ul {
             -webkit-columns: 100px 4;
             -moz-columns: 100px 4;
@@ -26,14 +28,24 @@ block media
             margin-left: -20px;
             margin-bottom: 0px;
         }
+
         .user-problem-group a img {
             max-width: 1em;
-            margin-right:3px;
-            padding-bottom:1px;
+            margin-right: 3px;
+            padding-bottom: 1px;
             vertical-align: middle;
         }
+
         .user-gravatar {
             float: left;
+            padding-right: 1%;
+        }
+
+        .user-gravatar img {
+            width: 95px;
+            padding: 5px;
+            border: 1px solid gray;
+            border-radius: 4px;
         }
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
 
@@ -78,6 +90,8 @@ block body
     | #{user.calculate_points}
     br
     a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
+    br
+    br
     br
     - regroup best_submissions by group as problems
     each group in problems
