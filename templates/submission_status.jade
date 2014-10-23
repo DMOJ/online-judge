@@ -69,6 +69,7 @@ block media
                                $('#grading-label').remove();
                             case 'test-case':
                             case 'grading-begin':
+                                var doScroll = $(window).scrollTop() + $(window).height() > $(document).height() - 100;
                                 $.ajax({
                                     url: '{% url "judge.views.submission_testcases_query" %}',
                                     data: {id: '{{ submission.id }}'}
@@ -78,7 +79,7 @@ block media
                                     console.log('Failed to update testcases!');
                                 });
                                 
-                                if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                                if(doScroll) {
                                     $("html, body").animate({ scrollTop: $(document).height() }, 0);
                                 }
                                 
