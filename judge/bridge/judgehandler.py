@@ -1,8 +1,11 @@
+from __future__ import division
+
 import logging
 import json
 import threading
 import time
 
+from collections import deque
 from event_socket_server import ZlibPacketHandler
 
 logger = logging.getLogger('judge.bridge')
@@ -34,10 +37,13 @@ class JudgeHandler(ZlibPacketHandler):
         self.executors = []
         self.problems = {}
         self.latency = None
+        self.time_delta = None
         self.load = 1e100
         self.name = None
         self.batch_id = None
         self.client_address = socket.getpeername()
+        self._ping_average = deque(maxlen=6)  # 1 minute average, just like load
+        self._time_delta = deque(maxlen=6)
 
         self.server.schedule(5, self._kill_if_no_auth)
         logger.info('Judge connected from: %s', self.client_address)
@@ -199,7 +205,11 @@ class JudgeHandler(ZlibPacketHandler):
         logger.error('Malformed packet: %s', packet)
 
     def on_ping_response(self, packet):
-        self.latency = time.time() - packet['when']
+        end = time.time()
+        self._ping_average.append(end - packet['when'])
+        self._time_delta.append((end + packet['when']) / 2 - packet['time'])
+        self.latency = sum(self._ping_average) / len(self._ping_average)
+        self.time_delta = sum(self._time_delta) / len(self._time_delta)
         self.load = packet['load']
         self._update_ping()
 
