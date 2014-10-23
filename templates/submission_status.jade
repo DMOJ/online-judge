@@ -63,12 +63,12 @@ block media
                     ['sub_{{ submission.id }}'], {{ last_msg }}, function (message) {
                         var list = $('#test-cases');
                         switch (message.type) {                                                                          
-                            case 'grading-end':
+                            case 'grading-end':                                                                           
+                            case 'compile-error':
                                $('#abort-button').remove();
                                $('#grading-label').remove();
                             case 'test-case':
                             case 'grading-begin':
-                            case 'compile-error':
                                 $.ajax({
                                     url: '{% url "judge.views.submission_testcases_query" %}',
                                     data: {id: '{{ submission.id }}'}
