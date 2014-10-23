@@ -77,11 +77,12 @@ block media
                                 }).fail(function (data) {
                                     console.log('Failed to update testcases!');
                                 });
-                                break;
-                        }
-                        if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
-                            $("html, body").animate({ scrollTop: $(document).height() }, 0);
-                        }
+                                
+                                if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                                    $("html, body").animate({ scrollTop: $(document).height() }, 0);
+                                }
+                                
+                        }                        
                     }
                 );
             });
