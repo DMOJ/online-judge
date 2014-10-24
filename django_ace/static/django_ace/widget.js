@@ -51,25 +51,23 @@
 
             widget.style.width = window.ace_widget.width + 'px';
             widget.style.height = window.ace_widget.height + 'px';
-            widget.style.zIndex = 1;
             window.fullscreen = false;
         }
         else {
             window.ace_widget = {
                 'width': widget.offsetWidth,
-                'height': widget.offsetHeight,
-            }
+                'height': widget.offsetHeight
+            };
 
             main_block.className = 'django-ace-editor-fullscreen';
 
             widget.style.height = getDocHeight() + 'px';
             widget.style.width = getDocWidth() + 'px';
-            widget.style.zIndex = 999;
 
             window.scrollTo(0, 0);
             window.fullscreen = true;
-            editor.resize();
         }
+        editor.resize();
     }
 
     function apply_widget(widget) {
