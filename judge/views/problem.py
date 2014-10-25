@@ -38,7 +38,7 @@ def problem(request, code):
                                                    'has_submissions': request.user.is_authenticated() and Submission.objects.filter(
                                                        user=request.user.profile).exists(),
                                                    'comment_list': problem_comments(problem),
-                                                   'show_languages': problem.types.count() != ProblemType.objects.count(),
+                                                   'show_languages': problem.allowed_languages.count() != Language.objects.count(),
                                                    'comment_form': form},
                                   context_instance=RequestContext(request))
     except ObjectDoesNotExist:
