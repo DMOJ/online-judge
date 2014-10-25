@@ -74,7 +74,7 @@ def problems(request):
                 'partial': p.partial,
                 'number_of_users': p.submissions.filter(submission__points__gt=0)
                                     .values('participation').distinct().count()
-            } for p in cp.current.contest.contest_problems.order_by('code')]
+            } for p in cp.current.contest.contest_problems.order_by('problem__code')]
         elif hide_solved:
             probs = Problem.unsolved(request.user.profile).filter(is_public=True).order_by('code')
     return render_to_response('problems.jade', {
