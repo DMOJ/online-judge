@@ -175,7 +175,7 @@ class Problem(models.Model):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
     def number_of_users(self):
-        return Submission.objects.filter(problem=self, result='AC').values('user').distinct().count()
+        return Submission.objects.filter(problem=self, points__gt=0).values('user').distinct().count()
 
     def __unicode__(self):
         return self.name
@@ -459,7 +459,7 @@ class ContestProfile(models.Model):
 
 class ContestProblem(models.Model):
     problem = models.ForeignKey(Problem, related_name='contests')
-    contest = models.ForeignKey(Contest)
+    contest = models.ForeignKey(Contest, related_name='contest_problems')
     points = models.IntegerField()
     partial = models.BooleanField()
 

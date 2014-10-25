@@ -66,7 +66,15 @@ def problems(request):
     if request.user.is_authenticated():
         cp = request.user.profile.contest
         if cp.current is not None:
-            probs = cp.current.contest.problems
+            probs = [{
+                'code': p.problem.code,
+                'name': p.problem.name,
+                'types_list': p.problem.types_list(),
+                'points': p.points,
+                'partial': p.partial,
+                'number_of_users': p.submissions.filter(submission__points__gt=0)
+                                    .values('participation').distinct().count()
+            } for p in cp.current.contest.contest_problems]
         elif hide_solved:
             probs = Problem.unsolved(request.user.profile).filter(is_public=True)
     probs = probs.order_by('code')
