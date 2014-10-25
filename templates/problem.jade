@@ -56,11 +56,12 @@ block body
         br
         | #{problem.types_list|join:", "}
         br
-        br
-        b Allowed languages:
-        br
-        | #{problem.languages_list|join:", "}
-        br
+        if show_languages
+            br
+            b Allowed languages:
+            br
+            | #{problem.languages_list|join:", "}
+            br
     .content-description
         -cache 3600 problem_html problem.id
             | #{problem.description|markdown:"problem"}
