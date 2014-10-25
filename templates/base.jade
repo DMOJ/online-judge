@@ -74,7 +74,7 @@ html(lang='en')
                         a(href='{% url "django.contrib.auth.views.logout" %}?next=')
                             | &nbsp;log out
                     else
-                        a(href='{% url "django.contrib.auth.views.login" %}?next={{ request.get_full_path|urlencode }}')
+                        a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
                             b Login
                         | &nbsp;|&nbsp;
                         a(href='/accounts/register/') Register

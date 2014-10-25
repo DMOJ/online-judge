@@ -29,9 +29,11 @@ def __tab(request, nav_bar):
 
 def general_info(request):
     nav = NavigationBar.objects.all()
+    path = request.get_full_path()
     return {
         'nav_tab': __tab(request, nav),
         'nav_bar': nav,
+        'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path
     }
 
 
