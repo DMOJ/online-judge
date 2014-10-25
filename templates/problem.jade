@@ -35,18 +35,17 @@ block body
             br
         hr
         br
-        if contest_problem is None
+        if contest_problem
+            b Points:
+                | &nbsp;#{contest_problem.points}
+            if contest_problem.partial
+                | &nbsp(partial)
+        else
             b Points:
             | &nbsp;#{problem.points}
             if problem.partial
                 | &nbsp(partial)
-            br
-        else
-            b Points:
-            | &nbsp;#{contest_problem.points}
-            if contest_problem.partial
-                | &nbsp(partial)
-            br
+        br
         b Time limit:
         | &nbsp;#{problem.time_limit}s
         br
