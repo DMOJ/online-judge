@@ -51,7 +51,11 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def on_grading_begin(self, packet):
         super(DjangoJudgeHandler, self).on_grading_begin(packet)
-        submission = Submission.objects.get(id=packet['submission-id'])
+        try:
+            submission = Submission.objects.get(id=packet['submission-id'])
+        except Submission.DoesNotExist:
+            logger.warning('Unknown submission: %d', packet['submission-id'])
+            return
         submission.status = 'G'
         submission.current_testcase = 1
         submission.save()
@@ -65,7 +69,11 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def on_grading_end(self, packet):
         super(DjangoJudgeHandler, self).on_grading_end(packet)
-        submission = Submission.objects.get(id=packet['submission-id'])
+        try:
+            submission = Submission.objects.get(id=packet['submission-id'])
+        except Submission.DoesNotExist:
+            logger.warning('Unknown submission: %d', packet['submission-id'])
+            return
 
         time = 0
         memory = 0
@@ -125,7 +133,11 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def on_compile_error(self, packet):
         super(DjangoJudgeHandler, self).on_compile_error(packet)
-        submission = Submission.objects.get(id=packet['submission-id'])
+        try:
+            submission = Submission.objects.get(id=packet['submission-id'])
+        except Submission.DoesNotExist:
+            logger.warning('Unknown submission: %d', packet['submission-id'])
+            return
         submission.status = submission.result = 'CE'
         submission.error = packet['log']
         submission.save()
@@ -137,7 +149,11 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def on_bad_problem(self, packet):
         super(DjangoJudgeHandler, self).on_bad_problem(packet)
-        submission = Submission.objects.get(id=packet['submission-id'])
+        try:
+            submission = Submission.objects.get(id=packet['submission-id'])
+        except Submission.DoesNotExist:
+            logger.warning('Unknown submission: %d', packet['submission-id'])
+            return
         submission.status = submission.result = 'IE'
         submission.save()
         event.post('sub_%d' % submission.id, {
@@ -148,7 +164,11 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def on_submission_terminated(self, packet):
         super(DjangoJudgeHandler, self).on_submission_terminated(packet)
-        submission = Submission.objects.get(id=packet['submission-id'])
+        try:
+            submission = Submission.objects.get(id=packet['submission-id'])
+        except Submission.DoesNotExist:
+            logger.warning('Unknown submission: %d', packet['submission-id'])
+            return
         submission.status = submission.result = 'AB'
         submission.save()
         event.post('sub_%d' % submission.id, {
@@ -158,7 +178,11 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def on_test_case(self, packet):
         super(DjangoJudgeHandler, self).on_test_case(packet)
-        submission = Submission.objects.get(id=packet['submission-id'])
+        try:
+            submission = Submission.objects.get(id=packet['submission-id'])
+        except Submission.DoesNotExist:
+            logger.warning('Unknown submission: %d', packet['submission-id'])
+            return
         test_case = SubmissionTestCase(submission=submission, case=packet['position'])
         status = packet['status']
         if status & 4:
