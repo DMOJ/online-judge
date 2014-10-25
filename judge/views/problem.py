@@ -25,26 +25,38 @@ def get_result_table(**kwargs):
             ('Total', 'TOT', sum(results.values()))]
 
 
+def get_contest_problem(problem, profile):
+    try:
+        return problem.contests.get(contest=profile.contest.current.contest)
+    except ObjectDoesNotExist:
+        return None
+
+
 def problem(request, code):
     try:
         problem = Problem.objects.get(code=code)
-        if not problem.is_public and not request.user.has_perm('judge.see_private_problem'):
+        user = request.user
+        if not problem.is_public and not user.has_perm('judge.see_private_problem'):
             raise ObjectDoesNotExist()
         form = comment_form(request, 'p:' + code)
         if form is None:
             return HttpResponseRedirect(request.path)
-        return render_to_response('problem.jade', {'problem': problem, 'results': get_result_table(problem__code=code),
-                                                   'title': problem.name,
-                                                   'has_submissions': request.user.is_authenticated() and Submission.objects.filter(
-                                                       user=request.user.profile).exists(),
-                                                   'comment_list': problem_comments(problem),
-                                                   'show_languages': problem.allowed_languages.count() != Language.objects.count(),
-                                                   'comment_form': form},
-                                  context_instance=RequestContext(request))
+        authed = user.is_authenticated()
+        return render_to_response('problem.jade', {
+            'problem': problem, 'results': get_result_table(problem__code=code),
+            'title': problem.name,
+            'has_submissions': authed and Submission.objects.filter(user=user.profile).exists(),
+            'comment_list': problem_comments(problem),
+            'contest_problem': None if not authed or user.profile.contest.current is None else
+                                get_contest_problem(problem, user.profile),
+            'show_languages': problem.allowed_languages.count() != Language.objects.count(),
+            'comment_form': form
+        }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
-        return render_to_response('generic_message.jade', {'message': 'Could not find a problem with the code "%s".' % code,
-                                                   'title': 'No such problem'},
-                                  context_instance=RequestContext(request))
+        return render_to_response('generic_message.jade', {
+            'message': 'Could not find a problem with the code "%s".' % code,
+            'title': 'No such problem'
+        }, context_instance=RequestContext(request))
 
 
 def problems(request):
