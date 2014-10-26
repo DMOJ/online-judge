@@ -21,7 +21,7 @@ block media
             $('a.toggle').each(function() {
                 $(this).click(function (event) {
                     var a = this;
-                    var types = $($(a).attr('id') + '-toggle');
+                    var types = $('#' + $(a).attr('id') + '-toggle');
                     if (types.is(':visible')) {
                         types.hide();
                     } else {
