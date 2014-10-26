@@ -147,6 +147,19 @@ class DjangoJudgeHandler(JudgeHandler):
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
+    def on_compile_message(self, packet):
+        super(DjangoJudgeHandler, self).on_compile_message(packet)
+        try:
+            submission = Submission.objects.get(id=packet['submission-id'])
+        except Submission.DoesNotExist:
+            logger.warning('Unknown submission: %d', packet['submission-id'])
+            return
+        submission.error = packet['log']
+        submission.save()
+        event.post('sub_%d' % submission.id, {
+            'type': 'compile-message'
+        })
+
     def on_bad_problem(self, packet):
         super(DjangoJudgeHandler, self).on_bad_problem(packet)
         try:

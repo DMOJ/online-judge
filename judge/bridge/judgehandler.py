@@ -19,6 +19,7 @@ class JudgeHandler(ZlibPacketHandler):
             'grading-begin': self.on_grading_begin,
             'grading-end': self.on_grading_end,
             'compile-error': self.on_compile_error,
+            'compile-message': self.on_compile_message,
             'batch-begin': self.on_batch_begin,
             'batch-end': self.on_batch_end,
             'test-case-status': self.on_test_case,
@@ -179,6 +180,9 @@ class JudgeHandler(ZlibPacketHandler):
     def on_compile_error(self, packet):
         logger.info('Submission failed to compile: %s', packet['submission-id'])
         self._free_self(packet)
+
+    def on_compile_message(self, packet):
+        logger.info('Submission generated compiler messages: %s', packet['submission-id'])
 
     def on_bad_problem(self, packet):
         logger.error('Submission referenced invalid problem "%s": %s', packet['problem'], packet['submission-id'])
