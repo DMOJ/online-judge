@@ -22,8 +22,8 @@ block media
                 var a = this;
                 var types = $('.problem-types');
                 var switchToggle = function() {                                                               
-                    a.toggleClass('open');
-                    a.toggleClass('closed');                
+                    $(a).toggleClass('open');
+                    $(a).toggleClass('closed');                
                 };
                 if (types.is(':visible')) {
                     types.hide('fast', switchToggle);
