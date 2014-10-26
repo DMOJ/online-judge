@@ -21,9 +21,9 @@ block media
                 var a = $(this);
                 var types = $('#' + a.attr('id') + '-toggle');
                 if (types.is(':visible')) {
-                    types.slideUp();
+                    types.hide();
                 } else {
-                    types.slideDown();
+                    types.show();
                 }
                 a.toggleClass('open');
                 a.toggleClass('closed');
