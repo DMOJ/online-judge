@@ -49,6 +49,10 @@ class JudgeList(object):
         self.submission_map[submission].abort()
 
     def judge(self, id, problem, language, source):
+        if id in self.submission_map:
+            logger.warning('Already judging? %d', id)
+            return
+
         candidates = [judge for judge in self.judges if not judge.working and judge.can_judge(problem, language)]
         logger.info('Free judges: %d', len(candidates))
         if candidates:
