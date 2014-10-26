@@ -91,12 +91,14 @@ block body
                 | #{megabytes|floatformat:"-2"}M
         br
         br
-        a.toggle.closed#problem-types Problem type(s):
+        a.toggle.closed#problem-types
+        b Problem type(s):
         #problem-types-toggle(style="display:none;margin-bottom:-1em") #{problem.types_list|join:", "}
         br
         if show_languages
             br
-            a.toggle.open#allowed-langs Allowed languages:
+            a.toggle.open#allowed-langs
+            b Allowed languages:
             #allowed-langs-toggle(style="margin-bottom:-1em") #{problem.languages_list|join:", "}
             br
     .content-description
