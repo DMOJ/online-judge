@@ -68,6 +68,8 @@ block body
             br
             | #{problem.languages_list|join:", "}
             br
+        br
+        include problem_statistics_table
     .content-description
         -cache 3600 problem_html problem.id
             | #{problem.description|markdown:"problem"}
