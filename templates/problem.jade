@@ -34,14 +34,15 @@ block media
             });
         });
     style
-        /** Showing **/
+        .toggle {
+            font-weight:bold;
+        }
         .toggle.open:before {
-            content: " \25BE"
+            content: "\25BE"
         }
 
-        /** Hidden **/
         .toggle.closed:before {
-            content: " \25B8"
+            content: "\25B8"
         }
 
 block body
@@ -84,7 +85,7 @@ block body
                 | #{megabytes|floatformat:"-2"}M
         br
         br
-        a.toggle.hidden Problem type(s):
+        a.toggle.closed Problem type(s):
         .problem-types(style="display:none") #{problem.types_list|join:", "}
         br
         if show_languages
