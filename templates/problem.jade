@@ -17,6 +17,32 @@ block media
                 }).prependTo('#content-body');
             });
         });
+        $(function () {
+            $('a.toggle').click(function (event) {
+                var a = this;
+                var types = $('.problem-types');
+                var switchToggle = function() {                                                               
+                    a.toggleClass('open');
+                    a.toggleClass('closed');                
+                };
+                if (types.is(':visible')) {
+                    types.hide('fast', switchToggle);
+                } else {
+                    types.show('fast', switchToggle);
+                }
+                event.preventDefault();
+            });
+        });
+    style
+        /** Showing **/
+        .toggle.open:before {
+            content: " \25BE"
+        }
+
+        /** Hidden **/
+        .toggle.closed:before {
+            content: " \25B8"
+        }
 
 block body
     br
@@ -24,8 +50,8 @@ block body
         a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
         hr
         if request.user.is_authenticated and has_submissions
-                a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My submissions
-                br
+            a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My submissions
+            br
         a(href='{% url "judge.views.chronological_submissions" problem.code %}') All submissions
         br
         a(href='{% url "judge.views.ranked_submissions" problem.code %}') Best submissions
@@ -58,9 +84,8 @@ block body
                 | #{megabytes|floatformat:"-2"}M
         br
         br
-        b Problem type(s):
-        br
-        | #{problem.types_list|join:", "}
+        a.toggle.hidden Problem type(s):
+        .problem-types(style="display:none") #{problem.types_list|join:", "}
         br
         if show_languages
             br
@@ -80,10 +105,10 @@ block body
 block bodyend
     if '<!--math-->' in problem.description
         | <script type='text/x-mathjax-config'>
-        |     MathJax.Hub.Config({
-        |         tex2jax: {
-        |             inlineMath: [['~', '~'], ['\\(', '\\)']]
-        |         }
-        |     });
+        | MathJax.Hub.Config({
+        | tex2jax: {
+        | inlineMath: [['~', '~'], ['\\(', '\\)']]
+        | }
+        | });
         | </script>
         script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
