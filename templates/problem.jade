@@ -18,17 +18,19 @@ block media
             });
         });
         $(function () {
-            $('a.toggle').click(function (event) {
-                var a = this;
-                var types = $('.problem-types');
-                if (types.is(':visible')) {
-                    types.hide();
-                } else {
-                    types.show();
-                }
-                $(a).toggleClass('open');
-                $(a).toggleClass('closed');       
-                event.preventDefault();
+            $('a.toggle').each(function() {
+                $(this).click(function (event) {
+                    var a = this;
+                    var types = $($(a).attr('id') + '-toggle');
+                    if (types.is(':visible')) {
+                        types.hide();
+                    } else {
+                        types.show();
+                    }
+                    $(a).toggleClass('open');
+                    $(a).toggleClass('closed');
+                    event.preventDefault();
+                });
             });
         });
     style
@@ -87,14 +89,13 @@ block body
                 | #{megabytes|floatformat:"-2"}M
         br
         br
-        a.toggle.closed Problem type(s):
-        .problem-types(style="display:none") #{problem.types_list|join:", "}
+        a.toggle.closed#problem-types Problem type(s):
+        #problem-types-toggle(style="display:none") #{problem.types_list|join:", "}
         br
         if show_languages
             br
-            a.toggle.open Allowed languages:
-            br
-            | #{problem.languages_list|join:", "}
+            a.toggle.open#allowed-langs Allowed languages:
+            #allowed-langs-toggle #{problem.languages_list|join:", "}
             br
     .content-description
         -cache 3600 problem_html problem.id
