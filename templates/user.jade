@@ -59,11 +59,11 @@ block media
                 var a = this;
                 var ul = $(this).parents('div.user-problem-group').find('ul');
                 if (ul.is(':visible')) {
-                    ul.slideUp('slow', function () {
+                    ul.hide('slow', function () {
                         $(a).html('<img src="{% static "icons/plus.png" %}"></img>');
                     });
                 } else {
-                    ul.slideDown('slow', function () {
+                    ul.show('slow', function () {
                         $(a).html('<img src="{% static "icons/minus.png" %}"></img>');
                     });
                 }
