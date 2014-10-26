@@ -59,6 +59,7 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.status = 'G'
         submission.current_testcase = 1
         submission.save()
+        SubmissionTestCase.objects.filter(submission_id=submission.id).delete()
         event.post('sub_%d' % submission.id, {'type': 'grading-begin'})
         event.post('submissions', {'type': 'update-submission', 'id': submission.id})
 
