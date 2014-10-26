@@ -43,7 +43,7 @@ def problem(request, code):
             return HttpResponseRedirect(request.path)
         authed = user.is_authenticated()
         return render_to_response('problem.jade', {
-            'problem': problem, 'results': get_result_table(problem__code=code),
+            'problem': problem,
             'title': problem.name,
             'has_submissions': authed and Submission.objects.filter(user=user.profile).exists(),
             'comment_list': problem_comments(problem),
