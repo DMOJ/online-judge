@@ -2,6 +2,10 @@
 - load mathtag
 
 if submission.status != 'CE'
+    if submission.error
+        h4 Compilation Warnings
+        pre #{submission.error}
+        br
     if submission.batch
         - regroup test_cases by batch as batches
         each batch in batches
