@@ -21,15 +21,13 @@ block media
             $('a.toggle').click(function (event) {
                 var a = this;
                 var types = $('.problem-types');
-                var switchToggle = function() {                                                               
-                    $(a).toggleClass('open');
-                    $(a).toggleClass('closed');                
-                };
                 if (types.is(':visible')) {
-                    types.hide('fast', switchToggle);
+                    types.hide();
                 } else {
-                    types.show('fast', switchToggle);
+                    types.show();
                 }
+                $(a).toggleClass('open');
+                $(a).toggleClass('closed');       
                 event.preventDefault();
             });
         });
