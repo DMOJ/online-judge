@@ -16,25 +16,22 @@ block media
                     'padding-left': '40px'
                 }).prependTo('#content-body');
             });
-        });
-        $(function () {
-            $('a.toggle').each(function() {
-                $(this).click(function (event) {
-                    var a = this;
-                    var types = $('#' + $(a).attr('id') + '-toggle');
-                    if (types.is(':visible')) {
-                        types.hide();
-                    } else {
-                        types.show();
-                    }
-                    $(a).toggleClass('open');
-                    $(a).toggleClass('closed');
-                    event.preventDefault();
-                });
+
+            $('span.toggle').click(function () {
+                var a = $(this);
+                var types = $('#' + a.attr('id') + '-toggle');
+                if (types.is(':visible')) {
+                    types.hide();
+                } else {
+                    types.show();
+                }
+                a.toggleClass('open');
+                a.toggleClass('closed');
             });
         });
     style
-        .toggle.open {
+        .toggle .icon {
+            font-weight: bold;
             border-style: solid;
             border-width: 7px 6px 0 6px;
             border-color: #666 transparent transparent transparent;
@@ -43,20 +40,19 @@ block media
             line-height: 0;
             width: 0;
             height: 0;
+        }
+        .toggle.open .icon {
+            border-width: 7px 6px 0;
+            border-color: #076591 transparent transparent transparent;
             margin-right: 3px;
             margin-left: -15px;
         }
 
-        .toggle.closed {
-            border-style: solid;
+        .toggle.closed .icon {
             border-width: 6px 0 6px 7px;
             border-color: transparent transparent transparent #666;
             margin-right: 5px;
             margin-left: -12px;
-            font-size: 0;
-            vertical-align: middle;
-            width: 0;
-            height: 0;
         }
 
 
@@ -100,14 +96,16 @@ block body
                 | #{megabytes|floatformat:"-2"}M
         br
         br
-        a.toggle.closed#problem-types
-        span(style='font-weight:bold').unselectable Problem type(s):
+        span.toggle.closed.unselectable#problem-types
+            span.icon
+            | Problem type(s):
         #problem-types-toggle(style="display:none;margin-bottom:-1em") #{problem.types_list|join:", "}
         br
         if show_languages
             br
-            a.toggle.open#allowed-langs
-            span(style='font-weight:bold').unselectable Allowed languages:
+            span.toggle.open.unselectable#allowed-langs
+                span.icon
+                | Allowed languages:
             #allowed-langs-toggle(style="margin-bottom:-1em") #{problem.languages_list|join:", "}
             br
     .content-description
