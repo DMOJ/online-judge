@@ -117,7 +117,7 @@ block body
     each group in problems
         div.user-problem-group
             h3
-                a.hide-group.unselectable.open(href='#')
+                a.hide-group.unselectable.toggle.open
                     | #{group.grouper}
                     | (#{group.list|list_getitem:"points"|sum_list|floatformat:1} points)
             ul
