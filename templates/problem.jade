@@ -90,12 +90,12 @@ block body
         br
         br
         a.toggle.closed#problem-types Problem type(s):
-        #problem-types-toggle(style="display:none") #{problem.types_list|join:", "}
+        #problem-types-toggle(style="display:none;margin-bottom:-1em") #{problem.types_list|join:", "}
         br
         if show_languages
             br
             a.toggle.open#allowed-langs Allowed languages:
-            #allowed-langs-toggle #{problem.languages_list|join:", "}
+            #allowed-langs-toggle(style="margin-bottom:-1em") #{problem.languages_list|join:", "}
             br
     .content-description
         -cache 3600 problem_html problem.id
