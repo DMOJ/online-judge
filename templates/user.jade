@@ -46,6 +46,18 @@ block media
             padding-left: 15px;
             border-left:1px solid #CCC;
         }
+
+        .toggle {
+            font-weight: bold;
+        }
+
+        .toggle.open:before {
+            content: "\25BE"
+        }
+
+        .toggle.closed:before {
+            content: "\25B8"
+        }
         table td {
             margin: 0;
             vertical-align: top;
@@ -58,14 +70,14 @@ block media
             $('a.hide-group').click(function (event) {
                 var a = this;
                 var ul = $(this).parents('div.user-problem-group').find('ul');
+                var switchToggle = function() {                                                               
+                   $(a).toggleClass('open');
+                   $(a).toggleClass('closed');                
+               };
                 if (ul.is(':visible')) {
-                    ul.slideUp('fast', function () {
-                        $(a).html('<img src="{% static "icons/plus.png" %}"></img>');
-                    });
+                    ul.slideUp('fast', switchToggle);
                 } else {
-                    ul.slideDown('fast', function () {
-                        $(a).html('<img src="{% static "icons/minus.png" %}"></img>');
-                    });
+                    ul.slideDown('fast', switchToggle);
                 }
                 event.preventDefault();
             });
@@ -105,10 +117,9 @@ block body
     each group in problems
         div.user-problem-group
             h3
-                a.hide-group.unselectable(href='#')
-                    img(src='{% static "icons/minus.png" %}')
-                | #{group.grouper}
-                | (#{group.list|list_getitem:"points"|sum_list|floatformat:1} points)
+                a.hide-group.unselectable.open(href='#')
+                    | #{group.grouper}
+                    | (#{group.list|list_getitem:"points"|sum_list|floatformat:1} points)
             ul
                 each entry in group.list
                     li
