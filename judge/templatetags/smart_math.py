@@ -18,7 +18,7 @@ def inline_template(match):
 </span>
 ''' % (MATHTEX_CGI, math, math)
 
-displaymath = re.compile('$$(.*?)$$|\\\[(.*?)\\\]')
+displaymath = re.compile(r'\$\$(.*?)\$\$|\\\[(.*?)\\\]')
 
 
 def display_template(match):
