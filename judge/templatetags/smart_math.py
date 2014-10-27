@@ -13,8 +13,8 @@ def inline_template(match):
     math = match.group(1) or match.group(2)
     return r'''
 <span>
-    <img src="%s?\textstyle %s"/>
-    <span style="display:none">\( %s \)</span>
+    <img class="tex-image" src="%s?\textstyle %s"/>
+    <span class="tex-text" style="display:none">\( %s \)</span>
 </span>
 ''' % (MATHTEX_CGI, math, math)
 
