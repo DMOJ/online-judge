@@ -1,5 +1,6 @@
 import logging
 from operator import itemgetter
+from django import db
 from django.db.models import Min, Max
 from django.utils import timezone
 from judge.caching import update_stats
@@ -11,6 +12,13 @@ from judge import event_poster as event
 logger = logging.getLogger('judge.bridge')
 
 
+def _ensure_connection():
+    try:
+        db.connection.cursor().execute('SELECT 1').fetchall()
+    except Exception:
+        db.close_connection()
+
+
 class DjangoJudgeHandler(JudgeHandler):
     def on_close(self):
         super(DjangoJudgeHandler, self).on_close()
@@ -20,6 +28,7 @@ class DjangoJudgeHandler(JudgeHandler):
             submission.save()
 
     def problem_data(self, problem):
+        _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
         problem = Problem.objects.get(code=problem)
         return problem.time_limit, problem.memory_limit, problem.short_circuit
 
