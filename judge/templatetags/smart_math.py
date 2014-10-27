@@ -1,13 +1,11 @@
 from HTMLParser import HTMLParser
-from django.template import Node, Library, Variable, FilterExpression, TemplateSyntaxError
-import math
+from django.template import Library
 import re
-import logging
 
 register = Library()
 
 CGI_BIN = 'http://www.forkosh.com/mathtex.cgi'
-
+inlinemath = re.compile('~(.*?)~')
 template = r'''
 <span>
     <img src="%s?\1"/>
@@ -16,25 +14,37 @@ template = r'''
 ''' % CGI_BIN
 
 
+class MathHTMLParser(HTMLParser):
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.new_page = []
+        self.data_buffer = []
+
+    def purge_buffer(self):
+        if self.data_buffer:
+            self.new_page.append(inlinemath.sub(template, ''.join(self.data_buffer)))
+            del self.data_buffer[:]
+
+    def handle_starttag(self, tag, attrs):
+        self.purge_buffer()
+        self.new_page.append('<%s%s>' % (tag, ' '.join([''] + ['%s="%s"' % p for p in attrs])))
+
+    def handle_endtag(self, tag):
+        self.purge_buffer()
+        self.new_page.append('</%s>' % tag)
+
+    def handle_data(self, data):
+        self.data_buffer.append(data)
+
+    def handle_entityref(self, name):
+        self.data_buffer.append('&%s;' % name)
+
+    def handle_charref(self, name):
+        self.data_buffer.append('&#%s;' % name)
+
+
 @register.filter(name='smart_math', is_safe=True)
 def math(page):
-    class MathHTMLParser(HTMLParser):
-        def __init__(self):
-            HTMLParser.__init__(self)
-            self.new_page = ''
-            self.data_buffer = ''
-
-        def handle_starttag(self, tag, attrs):
-            self.new_page += '<' + tag + ' '.join('%s="%s"' % p for p in attrs.iteritems()) + '>'
-
-        def handle_endtag(self, tag):
-            self.new_page += re.sub('~(.*?)~', template, self.data_buffer)
-            self.data_buffer = ''
-            self.new_page += '<' + tag + '>'
-
-        def handle_data(self, data):
-            self.data_buffer += data
-
     parser = MathHTMLParser()
     parser.feed(page)
-    return parser.new_page
+    return ''.join(parser.new_page)
