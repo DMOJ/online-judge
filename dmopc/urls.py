@@ -132,7 +132,7 @@ urlpatterns = patterns('',
         'user': UserSitemap,
         'home': HomePageSitemap,
         'pages': UrlSitemap([
-            {'location': '/about/', 'priority': 1.0},
+            {'location': '/about/', 'priority': 0.9},
         ]),
     }}),
 )
