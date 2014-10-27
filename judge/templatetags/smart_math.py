@@ -14,7 +14,7 @@ def inline_template(match):
     return r'''
 <span>
     <img class="tex-image" src="%s?\textstyle %s"/>
-    <span class="tex-text" style="display:none">\( %s \)</span>
+    <span class="tex-text" style="display:none">\(%s\)</span>
 </span>
 ''' % (MATHTEX_CGI, math, math)
 
@@ -26,7 +26,7 @@ def display_template(match):
     return r'''
 <span>
     <img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>
-    <div class="tex-text" style="display:none">\[ %s \]</div>
+    <div class="tex-text" style="display:none">\[%s\]</div>
 </span>
 ''' % (MATHTEX_CGI, math, math, math)
 
