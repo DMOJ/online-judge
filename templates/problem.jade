@@ -112,7 +112,7 @@ block body
             br
     .content-description
         -cache 3600 problem_html problem.id
-            | #{problem.description|markdown:"problem"}
+            | #{problem.description|markdown:"problem"|smart_math}
         hr
     .comment-area
         script(src='{% static "placeholder-compat.js" %}')
