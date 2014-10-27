@@ -1,17 +1,17 @@
 from HTMLParser import HTMLParser
 from django.template import Library
+from django.conf import settings
 import re
 
 register = Library()
 
-CGI_BIN = 'http://www.forkosh.com/mathtex.cgi'
 inlinemath = re.compile('~(.*?)~')
 template = r'''
 <span>
     <img src="%s?\1"/>
     <span style="display:none">~\1~</span>
 </span>
-''' % CGI_BIN
+''' % settings.get('MATHTEX_CGI', 'http://www.forkosh.com/mathtex.cgi')
 
 
 class MathHTMLParser(HTMLParser):
