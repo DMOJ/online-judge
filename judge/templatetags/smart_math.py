@@ -7,7 +7,8 @@ register = Library()
 
 
 REPLACES = [
-    (u'\u2264', '\le')
+    (u'\u2264', r'\le'),
+    (u'\u2026 ', '...'),
 ]
 
 
