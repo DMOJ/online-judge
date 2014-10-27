@@ -25,8 +25,8 @@ def display_template(match):
     math = match.group(1) or match.group(2)
     return r'''
 <span>
-    <img src="%s?\displaystyle %s" alt="%s"/>
-    <span style="display:none">\[ %s \]</div>
+    <img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>
+    <div class="tex-text" style="display:none">\[ %s \]</div>
 </span>
 ''' % (MATHTEX_CGI, math, math, math)
 
