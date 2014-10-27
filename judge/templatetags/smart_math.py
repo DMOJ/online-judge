@@ -5,7 +5,7 @@ import re
 
 register = Library()
 
-MATHTEX_CGI = settings.get('MATHTEX_CGI', 'http://www.forkosh.com/mathtex.cgi')
+MATHTEX_CGI = getattr(settings, 'MATHTEX_CGI', 'http://www.forkosh.com/mathtex.cgi')
 inlinemath = re.compile(r'~(.*?)~|\\\((.*?)\\\)')
 
 
