@@ -5,26 +5,39 @@ import re
 
 register = Library()
 
+
+REPLACES = [
+    (u'\u2264', '\le')
+]
+
+
+def format_math(math):
+    for a, b in REPLACES:
+        math = math.replace(a, b)
+    return math
+
 MATHTEX_CGI = getattr(settings, 'MATHTEX_CGI', 'http://www.forkosh.com/mathtex.cgi')
 inlinemath = re.compile(r'~(.*?)~|\\\((.*?)\\\)')
 
 
 def inline_template(match):
     math = match.group(1) or match.group(2)
+    formatted = format_math(math)
     return ('<span>'
-                r'<img class="tex-image" src="%s?\textstyle %s"/>'
+                r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>'
                 r'<span class="tex-text" style="display:none">\(%s\)</span>'
-            '</span>') % (MATHTEX_CGI, math, math)
+            '</span>') % (MATHTEX_CGI, formatted, formatted, math)
 
 displaymath = re.compile(r'\$\$(.*?)\$\$|\\\[(.*?)\\\]')
 
 
 def display_template(match):
-    math = match.group(1) or match.group(2)
+    math = format_math(match.group(1) or match.group(2))
+    formatted = format_math(math)
     return ('<span>'
                r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>'
                r'<div class="tex-text" style="display:none">\[%s\]</div>'
-            '</span>') % (MATHTEX_CGI, math, math, math)
+            '</span>') % (MATHTEX_CGI, formatted, formatted, math)
 
 
 class MathHTMLParser(HTMLParser):
