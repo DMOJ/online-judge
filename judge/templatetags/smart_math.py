@@ -5,13 +5,30 @@ import re
 
 register = Library()
 
-inlinemath = re.compile('~(.*?)~')
-template = r'''
+MATHTEX_CGI = settings.get('MATHTEX_CGI', 'http://www.forkosh.com/mathtex.cgi')
+inlinemath = re.compile(r'~(.*?)~|\\\((.*?)\\\)')
+
+
+def inline_template(match):
+    math = match.group(1) or match.group(2)
+    return r'''
 <span>
-    <img src="%s?\1"/>
-    <span style="display:none">~\1~</span>
+    <img src="%s?\textstyle %s"/>
+    <span style="display:none">\( %s \)</span>
 </span>
-''' % settings.get('MATHTEX_CGI', 'http://www.forkosh.com/mathtex.cgi')
+''' % (MATHTEX_CGI, math, math)
+
+displaymath = re.compile('$$(.*?)$$|\\\[(.*?)\\\]')
+
+
+def display_template(match):
+    math = match.group(1) or match.group(2)
+    return r'''
+<span>
+    <img src="%s?\displaystyle %s"/>
+    <span style="display:none">\[ %s \]</div>
+</span>
+''' % (MATHTEX_CGI, math, math)
 
 
 class MathHTMLParser(HTMLParser):
@@ -22,7 +39,10 @@ class MathHTMLParser(HTMLParser):
 
     def purge_buffer(self):
         if self.data_buffer:
-            self.new_page.append(inlinemath.sub(template, ''.join(self.data_buffer)))
+            buffer = ''.join(self.data_buffer)
+            buffer = inlinemath.sub(inline_template, buffer)
+            buffer = displaymath.sub(display_template, buffer)
+            self.new_page.append(buffer)
             del self.data_buffer[:]
 
     def handle_starttag(self, tag, attrs):
