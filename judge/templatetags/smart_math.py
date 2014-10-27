@@ -25,10 +25,10 @@ def display_template(match):
     math = match.group(1) or match.group(2)
     return r'''
 <span>
-    <img src="%s?\displaystyle %s"/>
+    <img src="%s?\displaystyle %s" alt="%s"/>
     <span style="display:none">\[ %s \]</div>
 </span>
-''' % (MATHTEX_CGI, math, math)
+''' % (MATHTEX_CGI, math, math, math)
 
 
 class MathHTMLParser(HTMLParser):
