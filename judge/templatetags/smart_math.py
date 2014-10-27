@@ -22,15 +22,18 @@ def math(page):
         def __init__(self):
             HTMLParser.__init__(self)
             self.new_page = ''
+            self.data_buffer = ''
 
         def handle_starttag(self, tag, attrs):
             self.new_page += '<' + tag + ' '.join('%s="%s"' % p for p in attrs.iteritems()) + '>'
 
         def handle_endtag(self, tag):
+            self.new_page += re.sub('~(.*?)~', template, self.data_buffer)
+            self.data_buffer = ''
             self.new_page += '<' + tag + '>'
 
         def handle_data(self, data):
-            self.new_page += re.sub('~(.*?)~', template, data)
+            self.data_buffer += data
 
     parser = MathHTMLParser()
     parser.feed(page)
