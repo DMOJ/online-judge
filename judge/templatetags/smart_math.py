@@ -10,10 +10,10 @@ CGI_BIN = 'http://www.forkosh.com/mathtex.cgi'
 
 template = r'''
 <span>
-    <img src="''' + CGI_BIN + r'''?c=\1"/>
+    <img src="%s?\1"/>
     <span style="display:none">~\1~</span>
 </span>
-'''
+''' % CGI_BIN
 
 
 @register.filter(name='smart_math', is_safe=True)
