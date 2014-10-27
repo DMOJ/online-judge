@@ -62,7 +62,7 @@ class JudgeList(object):
             try:
                 judge.submit(id, problem, language, source)
             except Exception:
-                traceback.print_exc()
+                logger.exception('Failed to dispatch %d (%s, %s) to %s', id, problem, language, judge.name)
                 self.judges.discard(judge)
                 return self.judge(id, problem, language, source)
         else:
