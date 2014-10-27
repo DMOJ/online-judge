@@ -11,24 +11,14 @@ inlinemath = re.compile(r'~(.*?)~|\\\((.*?)\\\)')
 
 def inline_template(match):
     math = match.group(1) or match.group(2)
-    return r'''
-<span>
-    <img class="tex-image" src="%s?\textstyle %s"/>
-    <span class="tex-text" style="display:none">\(%s\)</span>
-</span>
-''' % (MATHTEX_CGI, math, math)
+    return r'''<span><img class="tex-image" src="%s?\textstyle %s"/><span class="tex-text" style="display:none">\(%s\)</span></span>''' % (MATHTEX_CGI, math, math)
 
 displaymath = re.compile(r'\$\$(.*?)\$\$|\\\[(.*?)\\\]')
 
 
 def display_template(match):
     math = match.group(1) or match.group(2)
-    return r'''
-<span>
-    <img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>
-    <div class="tex-text" style="display:none">\[%s\]</div>
-</span>
-''' % (MATHTEX_CGI, math, math, math)
+    return r'''<span><img class="tex-image" src="%s?\displaystyle %s" alt="%s"/><div class="tex-text" style="display:none">\[%s\]</div></span>''' % (MATHTEX_CGI, math, math, math)
 
 
 class MathHTMLParser(HTMLParser):
