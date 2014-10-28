@@ -34,6 +34,12 @@ class JudgeList(object):
         self._handle_free_judge(judge)
 
     def remove(self, judge):
+        sub = judge.get_current_submission()
+        if sub is not None:
+            try:
+                del self.submission_map[judge.working]
+            except KeyError:
+                pass
         self.judges.discard(judge)
 
     def __iter__(self):
