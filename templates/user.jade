@@ -106,11 +106,13 @@ block body
         tr
             td
                 .user-gravatar
-                    img(src='{% gravatar_url user.user.email 128 %}', alt='gravatar')
+                    img(src='{% gravatar_url user.user.email 135 %}', alt='gravatar')
                 if user.user == request.user
-                    a(href='http://www.gravatar.com/', title='We use Gravatar, like many sites', target='_blank')
-                        | Change your avatar
-                br
+                    div(style='text-align: center; width: 147px; margin-bottom: 0.5em')
+                        a(href='http://www.gravatar.com/', title='We use Gravatar, like many sites', target='_blank')
+                            | Change your avatar
+                else
+                    br
                 h4 #{user.problems} problems solved.
                 b Total points:&nbsp;
                 | #{user.calculate_points}
