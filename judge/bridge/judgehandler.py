@@ -77,7 +77,13 @@ class JudgeHandler(ZlibPacketHandler):
         return super(JudgeHandler, self)._format_send(json.dumps(data, separators=(',', ':')))
 
     def on_handshake(self, packet):
-        if 'id' not in packet or 'key' not in packet or not self._authenticate(packet['id'], packet['key']):
+        if 'id' not in packet or 'key' not in packet:
+            logger.warning('Malformed handshake: %s', self.client_address)
+            self.close()
+            return
+
+        if not self._authenticate(packet['id'], packet['key']):
+            logger.warning('Authentication failure: %s', self.client_address)
             self.close()
             return
 
