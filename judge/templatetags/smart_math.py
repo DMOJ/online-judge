@@ -24,7 +24,7 @@ inlinemath = re.compile(r'~(.*?)~|\\\((.*?)\\\)')
 def inline_template(match):
     math = match.group(1) or match.group(2)
     formatted = format_math(math)
-    return ('<span>'
+    return ('<span class="inline-math">'
                 r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>'
                 r'<span class="tex-text" style="display:none">\(%s\)</span>'
             '</span>') % (MATHTEX_CGI, formatted, formatted, math)
@@ -35,9 +35,9 @@ displaymath = re.compile(r'\$\$(.*?)\$\$|\\\[(.*?)\\\]')
 def display_template(match):
     math = format_math(match.group(1) or match.group(2))
     formatted = format_math(math)
-    return ('<span>'
+    return ('<span class="display-math">'
                r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>'
-               r'<div class="tex-text" style="display:none">\[%s\]</div>'
+               r'<span class="tex-text" style="display:none">\[%s\]</div>'
             '</span>') % (MATHTEX_CGI, formatted, formatted, math)
 
 
