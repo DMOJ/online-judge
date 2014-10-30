@@ -210,6 +210,7 @@
     vertical-align: top
 }
 
-.inline-related .wmd-input {
-    height: 150px
+.display-math {
+    display: block;
+    text-align: center;
 }
