@@ -79,6 +79,7 @@ class JudgeHandler(ZlibPacketHandler):
     def on_handshake(self, packet):
         if 'id' not in packet or 'key' not in packet or not self._authenticate(packet['id'], packet['key']):
             self.close()
+            return
 
         self._to_kill = False
         self._problems = packet['problems']
