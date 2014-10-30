@@ -37,7 +37,7 @@ def display_template(match):
     formatted = format_math(math)
     return ('<span class="display-math">'
                r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>'
-               r'<span class="tex-text" style="display:none">\[%s\]</div>'
+               r'<span class="tex-text" style="display:none">\[%s\]</span>'
             '</span>') % (MATHTEX_CGI, formatted, formatted, math)
 
 
