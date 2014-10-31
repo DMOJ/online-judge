@@ -18,4 +18,4 @@ class ThrottledEmailHandler(AdminEmailHandler):
         else:
             if count >= 10:
                 return
-        super(ThrottledEmailHandler, self).emit(record)
+        AdminEmailHandler.emit(self, record)
