@@ -157,7 +157,7 @@ class Problem(models.Model):
                             validators=[RegexValidator('^[a-z0-9]+$', 'Problem code must be ^[a-z0-9]+$')])
     name = models.CharField(max_length=100, verbose_name='Problem name', db_index=True)
     description = models.TextField(verbose_name='Problem body')
-    user = models.ForeignKey(Profile, verbose_name='Creator')
+    user = models.ForeignKey(Profile, verbose_name='Creator', null=True)
     types = models.ManyToManyField(ProblemType, verbose_name='Problem types')
     group = models.ForeignKey(ProblemGroup, verbose_name='Problem group')
     time_limit = models.IntegerField(verbose_name='Time limit')
