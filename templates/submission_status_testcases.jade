@@ -10,21 +10,22 @@ if submission.status != 'CE'
         - regroup test_cases by batch as batches
         each batch in batches
             if not batch.grouper
-                each case in batch.list
-                    tr
-                        td
-                            b Test case ##{forloop.counter}:
-                        td
-                            span(class=case.status) #{case.status}
-                        td
-                            | [#{case.time|floatformat:"3"}s,
-                            - with memory=case.memory|default_if_none:0
-                                if memory < 1000
-                                    | #{memory|floatformat:"-2"}kb]
-                                else
-                                    - math memory "$1 / 1024" as megabytes
-                                    | #{megabytes|floatformat:"-2"}mb]
-                        td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
+                table
+                    each case in batch.list
+                        tr
+                            td
+                                b Test case ##{forloop.counter}:
+                            td
+                                span(class=case.status) #{case.status}
+                            td
+                                | [#{case.time|floatformat:"3"}s,
+                                - with memory=case.memory|default_if_none:0
+                                    if memory < 1000
+                                        | #{memory|floatformat:"-2"}kb]
+                                    else
+                                        - math memory "$1 / 1024" as megabytes
+                                        | #{megabytes|floatformat:"-2"}mb]
+                            td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
             else
                 b Batch ##{batch.grouper}
                 | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
