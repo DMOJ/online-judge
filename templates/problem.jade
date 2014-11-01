@@ -1,9 +1,9 @@
 extends base
--load staticfiles
--load mathtag
--load markdown_trois_tags
--load cache
--load smart_math
+- load staticfiles
+- load mathtag
+- load markdown_trois_tags
+- load cache
+- load smart_math
 
 block media
     link(rel='stylesheet', href='{% static "status.css" %}')
@@ -36,26 +36,21 @@ block media
         }
 
         .toggle .icon {
-            border-style: solid;
-            font-size: 0;
             vertical-align: middle;
-            line-height: 0;
-            width: 0;
-            height: 0;
+            width: .7em;
+            height: .7em;
+            margin: -3px .2em 0 -.9em;
+            display: inline-block;
+            background-size: .7em .7em;
+            background-image: url('{% static "icons/arrow.png" %}');
         }
 
         .toggle.open .icon {
-            border-width: 7px 6px 0;
-            border-color: #666 transparent transparent transparent;
-            margin-right: 3px;
-            margin-left: -15px;
-        }
-
-        .toggle.closed .icon {
-            border-width: 6px 0 6px 7px;
-            border-color: transparent transparent transparent #666;
-            margin-right: 5px;
-            margin-left: -12px;
+            -webkit-transform: rotate(90deg);
+            -moz-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            -o-transform: rotate(90deg);
+            transform: rotate(90deg);
         }
 
 
