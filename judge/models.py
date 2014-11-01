@@ -308,6 +308,8 @@ class SubmissionTestCase(models.Model):
     points = models.FloatField(verbose_name='Points granted', null=True)
     total = models.FloatField(verbose_name='Points possible', null=True)
     batch = models.IntegerField(verbose_name='Batch number', null=True)
+    feedback = models.CharField(max_length=50, verbose_name='Judging feedback', blank=True)
+    output = models.TextField(verbose_name='Program output', blank=True)
 
 
 class Comment(models.Model):
