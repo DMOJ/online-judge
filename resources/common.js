@@ -33,16 +33,16 @@ if (!Array.indexOf) {
 
 $(function () {
     $('.toggle').click(function () {
-        var a = $(this);
-        var types = $('#' + a.attr('id') + '-toggle');
-        if (types.is(':visible')) {
-            types.hide(400);
-            a.removeClass('open');
-            a.addClass('closed');
+        var link = $(this);
+        var toggled = link.parent().find('.toggled');
+        if (toggled.is(':visible')) {
+            toggled.hide(400);
+            link.removeClass('open');
+            link.addClass('closed');
         } else {
-            types.show(400);
-            a.addClass('open');
-            a.removeClass('closed');
+            toggled.show(400);
+            link.addClass('open');
+            link.removeClass('closed');
         }
     });
 });

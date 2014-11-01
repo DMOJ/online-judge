@@ -99,11 +99,11 @@ block body
     - regroup best_submissions by group as problems
     each group in problems
         div.user-problem-group
-            h3.unselectable.toggle.open(id='problem-{{ group.grouper|slugify }}')
+            h3.unselectable.toggle.open
                 span.icon
                 | #{group.grouper}
                 | (#{group.list|list_getitem:"points"|sum_list|floatformat:1} points)
-            ul(id='problem-{{ group.grouper|slugify }}-toggle')
+            ul.toggled
                 each entry in group.list
                     li
                         a(href='{% url "judge.views.problem" entry.code %}') #{entry.name}

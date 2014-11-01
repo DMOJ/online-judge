@@ -60,16 +60,18 @@ block body
                 | #{megabytes|floatformat:"-2"}M
         br
         br
-        div.toggle.closed.unselectable#problem-types
-            span.icon
-            | Problem type(s):
-        div#problem-types-toggle(style="display:none") #{problem.types_list|join:", "}
+        div#problem-types
+            div.toggle.closed.unselectable
+                span.icon
+                | Problem type(s):
+            div.toggled(style="display:none") #{problem.types_list|join:", "}
         br
         if show_languages
-            div.toggle.open.unselectable#allowed-langs
-                span.icon
-                | Allowed languages:
-            div#allowed-langs-toggle(style="margin-bottom:-1em") #{problem.languages_list|join:", "}
+            div#allowed-langs
+                div.toggle.open.unselectable
+                    span.icon
+                    | Allowed languages:
+                div.toggled(style="margin-bottom:-1em") #{problem.languages_list|join:", "}
             br
     .content-description
         -cache 3600 problem_html problem.id
