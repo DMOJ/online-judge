@@ -93,8 +93,12 @@ block media
                 }).css('width', '20%').height(info.height()).prependTo('#content-body');
             });
 
+            var time_cache = {};
             window.update_relative_time = function (row) {
-                row.find('span.time').text(moment(row.find('span.moment').text()).fromNow());
+                var id = row.attr('id');
+                if (!(id in time_cache))
+                    time_cache[id] = row.find('span.time').text();
+                row.find('span.time').text(moment(row.find('span.moment').text()).fromNow() + ' (' + time_cache[id] + ')');
             };
 
             function update_all_time() {
