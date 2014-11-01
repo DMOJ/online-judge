@@ -101,10 +101,9 @@ block body
         span.toggle.closed.unselectable#problem-types
             span.icon
             | Problem type(s):
-        #problem-types-toggle(style="display:none;margin-bottom:-1em") #{problem.types_list|join:", "}
+        #problem-types-toggle(style="display:none") #{problem.types_list|join:", "}
         br
         if show_languages
-            br
             span.toggle.open.unselectable#allowed-langs
                 span.icon
                 | Allowed languages:
