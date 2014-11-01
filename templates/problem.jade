@@ -9,6 +9,7 @@ block media
     link(rel='stylesheet', href='{% static "status.css" %}')
     link(rel='stylesheet', href='{% static "content-description.css" %}')
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+    script(type='text/javascript', src='{% static "common.js" %}')
     script(type='text/javascript')
         $(function () {
             fix_div($('.info-float'), 40, true, function (info) {
@@ -17,46 +18,7 @@ block media
                     'padding-left': '40px'
                 }).prependTo('#content-body');
             });
-
-            $('div.toggle').click(function () {
-                var a = $(this);
-                var types = $('#' + a.attr('id') + '-toggle');
-                if (types.is(':visible')) {
-                    types.hide(400);
-                } else {
-                    types.show(400);
-                }
-                a.toggleClass('open');
-                a.toggleClass('closed');
-            });
         });
-    style
-        .toggle {
-            font-weight: bold;
-        }
-
-        .toggle .icon {
-            vertical-align: middle;
-            width: .7em;
-            height: .7em;
-            margin: -3px .2em 0 -.9em;
-            display: inline-block;
-            background-size: .7em .7em;
-            background-image: url('{% static "icons/arrow.png" %}');
-            -webkit-transition: transform .4s;
-            -moz-transition: transform .4s;
-            -o-transition: transform .4s;
-            transition: transform .4s;
-        }
-
-        .toggle.open .icon {
-            -webkit-transform: rotate(90deg);
-            -moz-transform: rotate(90deg);
-            -ms-transform: rotate(90deg);
-            -o-transform: rotate(90deg);
-            transform: rotate(90deg);
-        }
-
 
 block body
     br

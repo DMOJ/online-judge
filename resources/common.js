@@ -30,3 +30,17 @@ if (!Array.indexOf) {
         return -1;
     }
 }
+
+$(function () {
+    $('.toggle').click(function () {
+        var a = $(this);
+        var types = $('#' + a.attr('id') + '-toggle');
+        if (types.is(':visible')) {
+            types.hide(400);
+        } else {
+            types.show(400);
+        }
+        a.toggleClass('open');
+        a.toggleClass('closed');
+    });
+});

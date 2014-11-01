@@ -370,3 +370,28 @@ noscript {
     margin-top: 40px
 }
 
+.toggle {
+    font-weight: bold;
+}
+
+.toggle .icon {
+    vertical-align: middle;
+    width: .7em;
+    height: .7em;
+    margin: -3px .2em 0 -.9em;
+    display: inline-block;
+    background-size: .7em .7em;
+    background-image: url('icons/arrow.png');
+    -webkit-transition: transform .4s;
+    -moz-transition: transform .4s;
+    -o-transition: transform .4s;
+    transition: transform .4s;
+}
+
+.toggle.open .icon {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
