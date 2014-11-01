@@ -7,6 +7,7 @@ block media
     link(rel='stylesheet', href='{% static "status.css" %}')
     script(type='text/javascript', src='{% static "common.js" %}')
     script(type='text/javascript', src='{% static "event.js" %}')
+    script(type='text/javascript', src='{% static "moment.min.js" %}')
     style
         #submissions-table {
             width: 75%;
@@ -82,7 +83,26 @@ block media
                     });
                 }
             }
+    script(type='text/javascript')
+        $(function () {
+            fix_div($('.info-float'), 40, true, function (info) {
+                info.css('width', (info.width() / $(window).width() * 100) + '%');
+                return $('<div/>', {
+                    id: 'fake-info-float',
+                    class: 'info-float'
+                }).css('width', '20%').height(info.height()).prependTo('#content-body');
+            });
 
+            window.update_relative_time = function (row) {
+                row.find('span.time').text(moment(row.find('span.moment').text()).fromNow());
+            };
+
+            setInterval(function () {
+                $('#submissions-table').each(function (row) {
+                    update_relative_time($(row));
+                });
+            }, 60000);
+        });
     if dynamic_update
         script(type='text/javascript')
             $(function () {
@@ -92,14 +112,14 @@ block media
                 var first = parseInt(table.find('tr:first-child').attr('id'));
 
                 var update_submission = function (id, force) {
-                    var cell = table.find('tr#' + id);
-                    if (cell.length < 1) {
+                    var row = table.find('tr#' + id);
+                    if (row.length < 1) {
                         if (id < first)
                             return;
                         first = id;
                         table.prepend('<tr id="{0}"></tr>'.format(id));
                         table.find('tr:last-child').remove();
-                        cell = table.find('tr#' + id);
+                        row = table.find('tr#' + id);
                     }
                     if (force || !doing_ajax) {
                         if (!force) doing_ajax = true;
@@ -107,7 +127,8 @@ block media
                             url: '{% url "judge.views.single_submission_query" %}',
                             data: {id: id}
                         }).done(function (data) {
-                            cell.html(data);
+                            row.html(data);
+                            update_relative_time(row);
                             if (!force) doing_ajax = false;
                         }).fail(function () {
                             console.log('Failed to update submission: ' + id);
@@ -135,16 +156,6 @@ block media
                         }
                 );
             });
-    script(type='text/javascript')
-        $(function () {
-            fix_div($('.info-float'), 40, true, function (info) {
-                info.css('width', (info.width() / $(window).width() * 100) + '%');
-                return $('<div/>', {
-                    id: 'fake-info-float',
-                    class: 'info-float'
-                }).css('width', '20%').height(info.height()).prependTo('#content-body');
-            });
-        });
 
 
 block body

@@ -48,7 +48,8 @@ td(colspan=info_colspan, class=info_class)
         span(class=submission.user.display_rank)
             a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
         span.moment(style='display: none') #{submission.date|utc|date:"c"}
-        span.time &nbsp;on #{submission.date|date:"N j, o, g:i a"}
+        = ' '
+        span.time on #{submission.date|date:"N j, o, g:i a"}
 
 if submission.status == 'G'
     td.sub-testcase
