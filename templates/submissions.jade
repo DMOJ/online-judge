@@ -123,6 +123,10 @@ block media
                         if (id < first)
                             return;
                         first = id;
+                        row = $('<tr/>', {id: id}).hide().prependTo(table);
+                        table.find('tr:last-child').hide('slow', function () {
+                            $(this).remove();
+                        });
                     }
                     if (force || !doing_ajax) {
                         if (!force) doing_ajax = true;
@@ -130,14 +134,10 @@ block media
                             url: '{% url "judge.views.single_submission_query" %}',
                             data: {id: id}
                         }).done(function (data) {
-                            if (row.length < 1) {
-                                row = $('<tr/>', {id: id}).hide().html(data).prependTo(table).show('slow');
-                                table.find('tr:last-child').hide('slow', function () {
-                                   $(this).remove();
-                                });
-                            } else {
-                                row.html(data);
-                            }
+                            var was_shown = row.is(':visible');
+                            row.html(data);
+                            if (!was_shown)
+                                row.show('slow');
                             update_relative_time(row);
                             if (!force) doing_ajax = false;
                         }).fail(function () {
