@@ -229,7 +229,7 @@ class DjangoJudgeHandler(JudgeHandler):
         test_case.points = packet['points']
         test_case.total = packet['total-points']
         test_case.batch = self.batch_id
-        test_case.feedback = packet.get('feedback', None)
+        test_case.feedback = packet.get('feedback', None) or ''
         test_case.output = packet['output']
         submission.current_testcase = packet['position'] + 1
         submission.save()
