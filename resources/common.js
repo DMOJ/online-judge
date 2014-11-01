@@ -37,10 +37,12 @@ $(function () {
         var types = $('#' + a.attr('id') + '-toggle');
         if (types.is(':visible')) {
             types.hide(400);
+            a.removeClass('open');
+            a.addClass('closed');
         } else {
             types.show(400);
+            a.addClass('open');
+            a.removeClass('closed');
         }
-        a.toggleClass('open');
-        a.toggleClass('closed');
     });
 });
