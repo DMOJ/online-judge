@@ -8,6 +8,7 @@ register = Library()
 
 REPLACES = [
     (u'\u2264', r'\le'),
+    (u'\u2265', r'\ge'),
     (u'\u2026', '...'),
     (r'\lt', '<'),
     (r'\gt', '>'),
