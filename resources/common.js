@@ -53,7 +53,7 @@ $(function () {
             = window.onfocus = window.onblur = onchange;
 
     function onchange(evt) {
-        var v = 'visible', h = 'hidden', evtMap = {
+        var v = 'window-visible', h = 'window-hidden', evtMap = {
             focus: v, focusin: v, pageshow: v, blur: h, focusout: h, pagehide: h
         };
 
