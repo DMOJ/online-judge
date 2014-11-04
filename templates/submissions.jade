@@ -148,13 +148,14 @@ block media
                     }
                 };
 
+                var $body = $(document.body);
                 var receiver = new EventReceiver(
                         "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                         ['submissions'], #{last_msg}, function (message) {
                             if (message.type == 'update-submission') {
                                 if (message.state == 'grading-end')
                                     return;
-                                if (message.state == 'test-case' && $(window).hasClass('window-hidden'))
+                                if (message.state == 'test-case' && $body.hasClass('window-hidden'))
                                     return;
                                 update_submission(message.id);
                             } else if (message.type == 'done-submission') {
