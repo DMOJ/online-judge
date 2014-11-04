@@ -110,6 +110,7 @@ block media
             update_all_time();
         });
     if dynamic_update
+        script(type='text/javascript', src='{% static "common.js" %}')
         script(type='text/javascript')
             $(function () {
                 var table = $('#submissions-table');
@@ -151,6 +152,10 @@ block media
                         "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                         ['submissions'], #{last_msg}, function (message) {
                             if (message.type == 'update-submission') {
+                                if (message.state == 'grading-end')
+                                    return;
+                                if (message.state == 'test-case' && $(window).hasClass('window-hidden'))
+                                    return;
                                 update_submission(message.id);
                             } else if (message.type == 'done-submission') {
                                 update_submission(message.id, true);
