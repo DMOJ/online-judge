@@ -32,7 +32,7 @@ if (!Array.indexOf) {
 }
 
 // http://stackoverflow.com/a/1060034/1090657
-(function () {
+$(function () {
     var hidden = 'hidden';
 
     // Standards:
@@ -67,7 +67,7 @@ if (!Array.indexOf) {
     // set the initial state (but only if browser supports the Page Visibility API)
     if (document[hidden] !== undefined)
         onchange({type: document[hidden] ? 'blur' : 'focus'});
-})();
+});
 
 $(function () {
     $('.toggle').click(function () {
