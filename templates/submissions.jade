@@ -111,6 +111,12 @@ block media
         });
     if dynamic_update
         script(type='text/javascript', src='{% static "common.js" %}')
+        if IN_CONTEST
+            script(type='text/javascript')
+                window.current_contest = '#{CONTEST.contest.key}';
+        else
+            script(type='text/javascript')
+                window.current_contest = null;
         script(type='text/javascript')
             $(function () {
                 var table = $('#submissions-table');
