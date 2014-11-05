@@ -71,8 +71,10 @@ def abort_submission(request, code):
 
 
 def all_user_submissions(request, username, page=1):
-    paginator = DiggPaginator(Submission.objects.filter(user__user__username=username).order_by('-id'), 50, body=6,
-                              padding=2)
+    queryset = Submission.objects.filter(user__user__username=username).order_by('-id')
+    if request.user.is_authenticated() and request.user.profile.contest.current is not None:
+        queryset = queryset.filter(contest__participation__contest_id=request.user.profile.contest.current.id)
+    paginator = DiggPaginator(queryset, 50, body=6, padding=2)
     try:
         submissions = paginator.page(page)
     except PageNotAnInteger:
@@ -110,6 +112,8 @@ def problem_submissions(request, code, page, dynamic_update, title, order, filte
     try:
         problem = Problem.objects.get(code=code)
         submissions = Submission.objects.filter(**filter).order_by(*order)
+        if request.user.is_authenticated() and request.user.profile.contest.current is not None:
+            submissions = submissions.filter(contest__participation__contest_id=request.user.profile.contest.current.id)
 
         paginator = DiggPaginator(submissions, 50, body=6, padding=2)
         try:
@@ -171,7 +175,10 @@ def single_submission_query(request):
 
 
 def submissions(request, page=1):
-    paginator = DiggPaginator(Submission.objects.order_by('-id'), 50, body=6, padding=2)
+    queryset = Submission.objects.order_by('-id')
+    if request.user.is_authenticated() and request.user.profile.contest.current is not None:
+        queryset = queryset.filter(contest__participation__contest_id=request.user.profile.contest.current.id)
+    paginator = DiggPaginator(queryset, 50, body=6, padding=2)
     try:
         submissions = paginator.page(page)
     except PageNotAnInteger:
