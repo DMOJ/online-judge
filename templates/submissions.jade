@@ -158,6 +158,8 @@ block media
                 var receiver = new EventReceiver(
                         "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                         ['submissions'], #{last_msg}, function (message) {
+                            if (current_contest && message.contest != current_contest)
+                                return;
                             if (message.type == 'update-submission') {
                                 if (message.state == 'grading-end')
                                     return;
