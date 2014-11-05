@@ -192,14 +192,15 @@ block body
             include submissions_pages
 
     table#submissions-table.table
+        if request.user.is_authenticated
+            - var profile_id = request.user.profile.id
+        else
+            - var profile_id = 0
         each submission in submissions
             tr(id=submission.id)
                 if submission.is_graded
                     - get_cache_version "submission" submission.id as sub_version
-                    if request.user.is_authenticated
-                        - var done = request.user.profile_id == submission.user_id or submission.problem.code in completed_problem_codes
-                    else
-                        - var done = false
+                    - var done = profile_id == submission.user_id or submission.problem.code in completed_problem_codes
                     - cache 86400 submission_row sub_version submission.id show_problem done perms.judge.change_submission request.user.profile.timezone
                         include submission_row
                 else
