@@ -4,6 +4,7 @@ extends base
 -load markdown_trois_tags
 -load cache
 -load timedelta
+-load smart_math
 block media
     link(rel='stylesheet', href='{% static "status.css" %}')
     link(rel='stylesheet', href='{% static "content-description.css" %}')
@@ -49,12 +50,12 @@ block body
             | &nbsp;#{contest.time_limit}
     .content-description
         -cache 3600 contest_html contest.id
-            | #{contest.description|markdown:"contest"}
+            | #{contest.description|markdown:"contest"|smart_math}
         hr
     .comment-area
         h2 Comments
         script(src='{% static "placeholder-compat.js" %}')
         include comment_list
 block bodyend
-    if '<!--math-->' in problem.description
-        script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
+    if '<!--math-->' in contest.description
+        include mathjax_load
