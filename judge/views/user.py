@@ -64,6 +64,6 @@ def users(request):
     }, context_instance=RequestContext(request))
 
 
-def user_completed_codes(profile):
+def user_completed_ids(profile):
     return set(Submission.objects.filter(user=profile, result='AC', points=F('problem__points'))
-               .values_list('problem__code', flat=True).distinct())
+               .values_list('problem_id', flat=True).distinct())

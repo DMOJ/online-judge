@@ -7,7 +7,7 @@ from django.template import RequestContext
 from judge.comments import problem_comments, comment_form
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemType
-from judge.views import user_completed_codes
+from judge.views import user_completed_ids
 
 
 def get_result_table(**kwargs):
@@ -80,7 +80,7 @@ def problems(request):
     return render_to_response('problems.jade', {
         'problems': probs,
         'hide_solved': 1 if hide_solved else 0,
-        'completed_problem_codes': user_completed_codes(
+        'completed_problem_ids': user_completed_ids(
             request.user.profile) if request.user.is_authenticated() else [],
         'title': 'Problems'}, context_instance=RequestContext(request))
 

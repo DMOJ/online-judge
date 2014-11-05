@@ -63,7 +63,7 @@ block body
             each problem in problems
                 tr
                     td
-                        if problem.code in completed_problem_codes
+                        if problem.id in completed_problem_ids
                             img(src='{% static "admin/img/icon-yes.gif" %}')
                         else                                                            
                             img(src='{% static "admin/img/icon-no.gif" %}')

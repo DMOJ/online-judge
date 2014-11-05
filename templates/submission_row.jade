@@ -10,7 +10,7 @@ else
     - var submission_class = submission.result
 
 if request.user.is_authenticated
-    - var can_view = request.user.profile == submission.user or perms['judge']['change_submission'] or submission.problem.code in completed_problem_codes
+    - var can_view = request.user.profile == submission.user or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids
     - var show_prop = can_view
     if show_prop
         - var info_colspan = 1
