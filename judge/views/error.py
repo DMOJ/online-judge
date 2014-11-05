@@ -1,15 +1,19 @@
 from django.shortcuts import *
 import traceback
 
+
 def error(request, context, status):
     template = loader.get_template('error.jade')
     return HttpResponse(template.render(RequestContext(request, context)), status=status)
 
 
 def error404(request):
-    return error(request, {'id': 'page_out_of_bounds',
-                           'description': 'bad page %s' % request.path,
-                           'code': 404}, 404)
+    # TODO: "panic: go back"
+    template = loader.get_template('generic_message.jade')
+    return HttpResponse(template.render(RequestContext(request, {
+        'title': '404 error',
+        'message': 'Could not find page "%s"' % request.path,
+        'code': 404})), status=404)
 
 
 def error403(request):
