@@ -286,6 +286,11 @@ class Submission(models.Model):
                 .annotate(score=Sum('total'))
             return score[0]['score'] if score else 0
 
+    @property
+    def contest_key(self):
+        if hasattr(self, 'contest'):
+            return self.contest.participation.contest.key
+
     def __unicode__(self):
         return u'Submission %d of %s by %s' % (self.id, self.problem, self.user)
 
