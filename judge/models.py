@@ -70,6 +70,13 @@ class Language(models.Model):
         ordering = ['key']
 
 
+class Organization(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Organization title')
+    id = models.CharField(max_length=6, verbose_name='Short organization id',
+                          help_text='Organization id as displayed beside name during contests')
+    description = models.TextField(verbose_name='Organization description')
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='User associated')
     name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
@@ -80,6 +87,8 @@ class Profile(models.Model):
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
     last_access = models.DateTimeField(verbose_name='Last access time', default=now)
     ip = models.GenericIPAddressField(verbose_name='Last IP', blank=True, null=True)
+    organization = models.ForeignKey(Organization, verbose_name='Affiliation', null=True, blank=True)
+    organization_join_time = models.DateTimeField(verbose_name='Organization joining date', null=True, blank=True)
 
     def calculate_points(self):
         self.points = sum(map(itemgetter('points'),
