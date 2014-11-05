@@ -12,8 +12,7 @@ def error404(request):
     template = loader.get_template('generic_message.jade')
     return HttpResponse(template.render(RequestContext(request, {
         'title': '404 error',
-        'message': 'Could not find page "%s"' % request.path,
-        'code': 404})), status=404)
+        'message': 'Could not find page "%s"' % request.path})), status=404)
 
 
 def error403(request):
