@@ -26,10 +26,11 @@ block body
                 if not profile.organization_id
                     a.unselectable.button.full(href='{% url "judge.views.join_organization" organization.key %}')
                         | Join organization
+                    hr
                 elif profile.organization_id == organization.id
                     a.unselectable.button.full(href='{% url "judge.views.leave_organization" organization.key %}')
                         | Leave organization
-        hr
+                    hr
         a(href='{% url "judge.views.organization_users" organization.key %}') View members
         
     .content-description
