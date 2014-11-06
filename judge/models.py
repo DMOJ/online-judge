@@ -96,7 +96,7 @@ class Profile(models.Model):
     last_access = models.DateTimeField(verbose_name='Last access time', default=now)
     ip = models.GenericIPAddressField(verbose_name='Last IP', blank=True, null=True)
     organization = models.ForeignKey(Organization, verbose_name='Affiliation', null=True, blank=True,
-                                     on_delete=models.SET_NULL)
+                                     on_delete=models.SET_NULL, related_name='members', related_query_name='member')
     organization_join_time = models.DateTimeField(verbose_name='Organization joining date', null=True, blank=True)
 
     def calculate_points(self):
