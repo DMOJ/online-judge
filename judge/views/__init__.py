@@ -11,6 +11,7 @@ from .submission import *
 from .ranked_submission import ranked_submissions
 from .status import *
 from .widgets import *
+from .organization import *
 
 class TemplateView(TemplateView):
     title = None

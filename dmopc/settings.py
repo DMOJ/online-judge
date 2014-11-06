@@ -212,7 +212,20 @@ MARKDOWN_TROIS_STYLES = {
             'tables': None,
         },
         'safe_mode': False,
-    }
+    },
+    'organization-about': {
+        'extras': {
+            'code-friendly': None,
+            'pyshell': None,
+            'fenced-code-blocks': None,
+            'demote-headers': 3,
+            'nofollow': None,
+            'html-classes': {'pre': 'code'},
+            'cuddled-lists': None,
+            'header-ids': None,
+        },
+        'safe_mode': 'escape',
+    },
 }
 
 # Database
