@@ -63,6 +63,7 @@ else:
                     'auth.user',
                     'auth.group',
                     'judge.profile',
+                    'judge.organization',
                     'registration.registrationprofile',
                 ),
             },
