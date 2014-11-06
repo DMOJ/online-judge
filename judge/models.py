@@ -266,27 +266,7 @@ class Submission(models.Model):
         return abort_submission(self)
 
     def is_graded(self):
-        return self.status not in ["QU", "C", "G"]
-
-    @property
-    def testcase_granted_points(self):
-        if self.batch:
-            return sum(map(itemgetter('points'), SubmissionTestCase.objects.filter(submission=self)
-                           .values('batch').annotate(points=Min('points'))))
-        else:
-            score = SubmissionTestCase.objects.filter(submission=self).values('submission') \
-                .annotate(score=Sum('points'))
-            return score[0]['score'] if score else 0
-
-    @property
-    def testcase_total_points(self):
-        if self.batch:
-            return sum(map(itemgetter('points'), SubmissionTestCase.objects.filter(submission=self)
-                           .values('batch').annotate(points=Max('total'))))
-        else:
-            score = SubmissionTestCase.objects.filter(submission=self).values('submission') \
-                .annotate(score=Sum('total'))
-            return score[0]['score'] if score else 0
+        return self.status not in ['QU', 'C', 'G']
 
     @property
     def contest_key(self):
