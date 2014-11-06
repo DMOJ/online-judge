@@ -62,8 +62,6 @@ class ProblemNameNode(DataNode):
         return problem.name
 
 register_data_tag('language_short_display', LanguageShortDisplayNode, 'language')
-register_data_tag('problem_code', ProblemCodeNode, 'problem')
-register_data_tag('problem_name', ProblemNameNode, 'problem')
 
 
 def make_problem_data_filter(prefix, model, getter, ttl=3600):
