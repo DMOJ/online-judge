@@ -13,14 +13,13 @@ window.fix_div = function (div, height, right, fake_gen) {
         div.css('position', 'fixed').css('top', height);
         is_moving = false;
     };
-    if (right)
-        div.css('right', div_right);
     if (typeof fake != 'undefined') {
-        div.css('left', fake.offset().left).css('right', undefined);
+        div.css('left', fake.offset().left);
         $(window).resize(function () {
             div.css('left', fake.offset().left);
         });
-    }
+    } else if (right)
+        div.css('right', div_right);
     ($(window).scrollTop() - div_offset > -height) ? fix() : moving();
     $(window).scroll(function () {
         if (($(window).scrollTop() - div_offset > -height) == is_moving)
