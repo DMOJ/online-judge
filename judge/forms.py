@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django_ace import AceWidget
 from judge.comments import valid_comment_page
+from judge.models import Organization
 from .models import Profile, Submission, Comment
 
 
@@ -45,3 +46,9 @@ class CommentForm(ModelForm):
         page = self.cleaned_data['page']
         if not valid_comment_page(page):
             raise ValidationError('Invalid page id: %(id)s', params={'id': page})
+
+
+class OrganizationForm(ModelForm):
+    class Meta:
+        model = Organization
+        fields = ['name', 'key', 'about']
