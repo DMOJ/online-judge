@@ -1,5 +1,6 @@
 import re
 from operator import itemgetter, attrgetter
+from django.core.cache import cache
 
 import pytz
 from django.contrib.auth.models import User
@@ -175,7 +176,12 @@ class Problem(models.Model):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
     def number_of_users(self):
-        return Submission.objects.filter(problem=self, points__gt=0).values('user').distinct().count()
+        key = 'prob_users:%d' % self.id
+        count = cache.get(key)
+        if count is None:
+            count = Submission.objects.filter(problem=self, points__gt=0).values('user').distinct().count()
+            cache.set(key, count, 86400)
+        return count
 
     def __unicode__(self):
         return self.name

@@ -1,7 +1,4 @@
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
-from django.http import HttpRequest
-from django.utils.cache import get_cache_key
 
 
 def update_submission(id):
@@ -13,3 +10,7 @@ def update_submission(id):
 def update_stats():
     cache.delete('sub_stats_table')
     cache.delete('sub_stats_data')
+
+
+def finished_submission(sub):
+    cache.delete('prob_users:%d' % sub.problem_id)
