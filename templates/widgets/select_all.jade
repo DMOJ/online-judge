@@ -5,7 +5,8 @@ div(style='border:none', id=select_all_name)
         | Nothing here.
     else
         label(for=select_all_id)
-            input.checkall(id=select_all_id, name=select_all_name, checked=all_selected, type='checkbox')= ' '
+            input.checkall(id=select_all_id, name=select_all_name, checked=all_selected, type='checkbox')
+            = ' '
             | Check all
 script(type='text/javascript')
     django.jQuery(function($) {
