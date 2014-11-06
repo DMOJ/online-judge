@@ -138,11 +138,12 @@ def problem_submissions(request, code, page, dynamic_update, title, order, filte
 
 def single_submission(request, id):
     try:
+        authenticated = request.user.is_authenticated()
         return render_to_response('submission_row.jade', {
             'submission': Submission.objects.get(id=int(id)),
-            'completed_problem_ids': user_completed_ids(
-                   request.user.profile) if request.user.is_authenticated() else [],
-            'show_problem': True
+            'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
+            'show_problem': True,
+            'profile_id': request.user.profile.id if authenticated else 0,
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()

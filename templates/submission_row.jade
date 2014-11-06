@@ -9,8 +9,8 @@ if submission.status == 'IE' or submission.status == 'CE'
 else
     - var submission_class = submission.result
 
-if request.user.is_authenticated
-    - var can_view = request.user.profile == submission.user or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids
+if profile_id
+    - var can_view = profile_id == submission.user_id or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids
     - var show_prop = can_view
     if show_prop
         - var info_colspan = 1
