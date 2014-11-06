@@ -5,7 +5,7 @@ from registration.backends.default.views import\
     RegistrationView as OldRegistrationView,\
     ActivationView as OldActivationView
 from registration.forms import RegistrationForm
-from judge.models import Profile, Language, TIMEZONE
+from judge.models import Profile, Language, Organization, TIMEZONE
 
 
 valid_id = re.compile(r'^\w+$')
@@ -14,6 +14,7 @@ valid_id = re.compile(r'^\w+$')
 class CustomRegistrationForm(RegistrationForm):
     display_name = CharField(max_length=50, required=False, label='Real name (optional)')
     timezone = ChoiceField(choices=TIMEZONE)
+    organization = ModelChoiceField(queryset=Organization.objects.all(), label='Affiliation', require=False)
     language = ModelChoiceField(queryset=Language.objects.all(), label='Default language', empty_label=None)
 
     def clean_username(self):
@@ -40,6 +41,7 @@ class RegistrationView(OldRegistrationView):
         profile.name = cleaned_data['display_name']
         profile.timezone = cleaned_data['timezone']
         profile.language = cleaned_data['language']
+        profile.organization = cleaned_data['organization']
         profile.save()
         return user
 
