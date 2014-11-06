@@ -1,14 +1,17 @@
 div(style='border:none', id=select_all_name)
-    | {{original_widget}}
+    div.original-checkboxes= original_widget
     if empty
         | Nothing here.
     else
         label(for=select_all_id)
-            input.checkall(id=select_all_id, name=select_all_name, checked=all_selected, type='checkbox')
-            | &nbsp;Check all
+            input.checkall(id=select_all_id, name=select_all_name, checked=all_selected, type='checkbox')= ' '
+            | Check all
 script(type='text/javascript')
     django.jQuery(function($) {
+        var box = $('div#' + '{{ select_all_name }}');
+        var original = box.find('.original-checkboxes');
         $('.checkall').click(function ()  {
-            $('div#' + '{{ select_all_name }}').find(':checkbox').prop('checked', this.checked);
+            original.find(':checkbox').prop('checked', this.checked);
         });
+        box.find('.checkall').prop('checked', !original.find('input[type=checkbox]:not(:checked)').length);
     });
