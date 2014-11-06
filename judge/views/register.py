@@ -1,6 +1,7 @@
 import re
 from django import forms
 from django.forms import CharField, ChoiceField, ModelChoiceField
+from django.utils import timezone
 from registration.backends.default.views import\
     RegistrationView as OldRegistrationView,\
     ActivationView as OldActivationView
@@ -42,6 +43,8 @@ class RegistrationView(OldRegistrationView):
         profile.timezone = cleaned_data['timezone']
         profile.language = cleaned_data['language']
         profile.organization = cleaned_data['organization']
+        if profile.organization is not None:
+            profile.organization_join_time = timezone.now()
         profile.save()
         return user
 
