@@ -61,18 +61,9 @@ class ProblemNameNode(DataNode):
     def get_data(self, problem):
         return problem.name
 
-
-class ProfileUserNameNode(DataNode):
-    model = Profile
-    prefix = 'prof_un'
-
-    def get_data(self, profile):
-        return profile.user.username
-
 register_data_tag('language_short_display', LanguageShortDisplayNode, 'language')
 register_data_tag('problem_code', ProblemCodeNode, 'problem')
 register_data_tag('problem_name', ProblemNameNode, 'problem')
-register_data_tag('profile_username', ProfileUserNameNode, 'profile')
 
 
 def make_problem_data_filter(prefix, model, getter, ttl=3600):
@@ -88,4 +79,3 @@ def make_problem_data_filter(prefix, model, getter, ttl=3600):
     return filter
 
 register.filter('problem_code', make_problem_data_filter('prob_code', Problem, attrgetter('code')))
-register.filter('profile_username', make_problem_data_filter('prof_un', Profile, lambda profile: profile.user.username))

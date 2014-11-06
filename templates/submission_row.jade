@@ -4,6 +4,7 @@
 - load variables
 - load tz
 - load fast_data_query
+- load cache
 
 if submission.status == 'IE' or submission.status == 'CE'
     - var submission_class = submission.status
@@ -48,9 +49,9 @@ td(colspan=info_colspan, class=info_class)
             a(href='{% url "judge.views.problem" submission.problem_id|problem_code %}')
                 - problem_name submission.problem_id
     div
-        span(class=submission.user.display_rank)
-            - with username=submission.user_id|profile_username
-                a(href='{% url "judge.views.user" username %}') #{username}
+        - cache 3600 submission_user submission.user_id
+            span(class=submission.user.display_rank)
+                a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
         span.moment(style='display: none') #{submission.date|utc|date:"c"}
         = ' '
         span.time on #{submission.date|date:"N j, o, g:i a"}
