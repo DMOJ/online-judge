@@ -81,6 +81,9 @@ class Organization(models.Model):
                                    help_text='User who registered this organization')
     creation_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='User associated')
