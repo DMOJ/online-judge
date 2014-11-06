@@ -49,7 +49,8 @@ td(colspan=info_colspan, class=info_class)
                 - problem_name submission.problem_id
     div
         span(class=submission.user.display_rank)
-            a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
+            - with username=submission.user_id|profile_username
+                a(href='{% url "judge.views.user" username %}') #{username}
         span.moment(style='display: none') #{submission.date|utc|date:"c"}
         = ' '
         span.time on #{submission.date|date:"N j, o, g:i a"}
