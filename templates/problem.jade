@@ -1,87 +1,68 @@
-extends base
+extends common-content
 - load staticfiles
 - load mathtag
 - load markdown_trois_tags
 - load cache
 - load smart_math
 
-block media
-    link(rel='stylesheet', href='{% static "status.css" %}')
-    link(rel='stylesheet', href='{% static "content-description.css" %}')
-    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
-    script(type='text/javascript', src='{% static "common.js" %}')
-    script(type='text/javascript')
-        $(function () {
-            fix_div($('.info-float'), 40, true, function (info) {
-                return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
-                    'width': '11%',
-                    'padding-left': '40px'
-                }).prependTo('#content-body');
-            });
-        });
-
-block body
+block info_float
+    a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
+    hr
+    if request.user.is_authenticated and has_submissions
+        a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My submissions
+        br
+    a(href='{% url "judge.views.chronological_submissions" problem.code %}') All submissions
     br
-    .info-float(style='width:11%;padding-left:40px')
-        a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
+    a(href='{% url "judge.views.ranked_submissions" problem.code %}') Best submissions
+    if perms.judge.change_problem
         hr
-        if request.user.is_authenticated and has_submissions
-            a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My submissions
-            br
-        a(href='{% url "judge.views.chronological_submissions" problem.code %}') All submissions
+        a(href='{% url "admin:judge_problem_change" problem.id %}') Edit problem
         br
-        a(href='{% url "judge.views.ranked_submissions" problem.code %}') Best submissions
-        if perms.judge.change_problem
-            hr
-            a(href='{% url "admin:judge_problem_change" problem.id %}') Edit problem
-            br
-        hr
-        br
-        if contest_problem
-            b Points:
-            | &nbsp;#{contest_problem.points}
-            if contest_problem.partial
-                | (partial)
+    hr
+    br
+    if contest_problem
+        b Points:
+        | &nbsp;#{contest_problem.points}
+        if contest_problem.partial
+            | (partial)
+    else
+        b Points:
+        | &nbsp;#{problem.points}
+        if problem.partial
+            | (partial)
+    br
+    b Time limit:
+    | &nbsp;#{problem.time_limit}s
+    br
+    b Memory limit:
+    -with memory=problem.memory_limit
+        if memory < 1000
+            | #{memory|floatformat:"-2"}K
         else
-            b Points:
-            | &nbsp;#{problem.points}
-            if problem.partial
-                | (partial)
-        br
-        b Time limit:
-        | &nbsp;#{problem.time_limit}s
-        br
-        b Memory limit:
-        -with memory=problem.memory_limit
-            if memory < 1000
-                | #{memory|floatformat:"-2"}K
-            else
-                -math memory "$1 / 1024" as megabytes
-                | #{megabytes|floatformat:"-2"}M
-        br
-        br
-        div#problem-types
-            div.toggle.closed.unselectable
+            -math memory "$1 / 1024" as megabytes
+            | #{megabytes|floatformat:"-2"}M
+    br
+    br
+    div#problem-types
+        div.toggle.closed.unselectable
+            span.icon
+            | Problem type(s):
+        div.toggled(style="display:none") #{problem.types_list|join:", "}
+    br
+    if show_languages
+        div#allowed-langs
+            div.toggle.open.unselectable
                 span.icon
-                | Problem type(s):
-            div.toggled(style="display:none") #{problem.types_list|join:", "}
+                | Allowed languages:
+            div.toggled(style="margin-bottom:-1em") #{problem.languages_list|join:", "}
         br
-        if show_languages
-            div#allowed-langs
-                div.toggle.open.unselectable
-                    span.icon
-                    | Allowed languages:
-                div.toggled(style="margin-bottom:-1em") #{problem.languages_list|join:", "}
-            br
-    .content-description
+
+block description
         -cache 3600 problem_html problem.id
             | #{problem.description|markdown:"problem"|smart_math}
-        hr
+
+block comments
     .comment-area
         script(src='{% static "placeholder-compat.js" %}')
         h2 Comments
         include comment_list
-
-block bodyend
-    if '<!--math-->' in problem.description
-        include mathjax_load

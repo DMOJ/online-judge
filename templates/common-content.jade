@@ -1,0 +1,27 @@
+extends base
+- load staticfiles
+
+block media
+    link(rel='stylesheet', href='{% static "content-description.css" %}')
+    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+    script(type='text/javascript')
+        $(function () {
+            fix_div($('.info-float'), 40, true, function (info) {
+                return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
+                    'width': '11%',
+                    'padding-left': '40px'
+                }).prependTo('#content-body');
+            });
+        });
+    block content_media
+block body
+    br
+    .info-float(style='width:11%;padding-left:40px')
+        block info_float
+    .content-description
+        block description
+        hr
+    block comments
+
+block bodyend
+    include mathjax_load

@@ -1,61 +1,49 @@
-extends base
+extends common-content
+
 -load staticfiles
 -load mathtag
 -load markdown_trois_tags
 -load cache
 -load timedelta
 -load smart_math
-block media
-    link(rel='stylesheet', href='{% static "status.css" %}')
-    link(rel='stylesheet', href='{% static "content-description.css" %}')
-    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
-    script(type='text/javascript')
-        $(function () {
-            fix_div($('.info-float'), 40, true, function (info) {
-                return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
-                    'width': '11%',
-                    'padding-left': '40px'
-                }).prependTo('#content-body');
-            });
-        });
+
+block content_media
     if participating
         script(type='text/javascript')
             $(document).ready(function () {
                 count_down($('.time-remaining'));
             });
-block body
-    br
-    .info-float(style='width:11%;padding-left:40px')
-        if not participating or participating and not participation.ended
-            if not in_contest
-                a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}') Join contest
-            else
-                a.unselectable.button.full(href='{% url "judge.views.leave_contest" contest.key %}') Leave contest
-            hr
 
-        a(href='{% url "judge.views.contest_ranking" contest.key %}') View rankings
-        if perms.judge.change_problem
-            hr
-            a(href='{% url "admin:judge_contest_change" contest.id %}') Edit contest
-        hr
-        br
-        if participating
-            if participation.ended
-                b Time is up!
-            else
-                b Time remaining:
-                .time-remaining #{participation.time_remaining|timedelta:"simple"}
+block info_float
+    if not participating or participating and not participation.ended
+        if not in_contest
+            a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}') Join contest
         else
-            b Time limit:
-            | &nbsp;#{contest.time_limit}
-    .content-description
-        -cache 3600 contest_html contest.id
-            | #{contest.description|markdown:"contest"|smart_math}
+            a.unselectable.button.full(href='{% url "judge.views.leave_contest" contest.key %}') Leave contest
         hr
+
+    a(href='{% url "judge.views.contest_ranking" contest.key %}') View rankings
+    if perms.judge.change_problem
+        hr
+        a(href='{% url "admin:judge_contest_change" contest.id %}') Edit contest
+    hr
+    br
+    if participating
+        if participation.ended
+            b Time is up!
+        else
+            b Time remaining:
+            .time-remaining #{participation.time_remaining|timedelta:"simple"}
+    else
+        b Time limit:
+        | &nbsp;#{contest.time_limit}
+
+block description
+    -cache 3600 contest_html contest.id
+        | #{contest.description|markdown:"contest"|smart_math}
+
+block comments
     .comment-area
         h2 Comments
         script(src='{% static "placeholder-compat.js" %}')
         include comment_list
-block bodyend
-    if '<!--math-->' in contest.description
-        include mathjax_load
