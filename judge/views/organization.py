@@ -54,6 +54,12 @@ def join_organization(request, key):
         return org
 
     profile = request.user.profile
+    if profile.organization_id is not None:
+        return render_to_response('generic_message.jade', {
+            'message': 'You are already in an organization.' % key,
+            'title': 'Joining organization'
+        }, context_instance=RequestContext(request))
+
     profile.organization = org
     profile.organization_join_time = timezone.now()
     profile.save()
