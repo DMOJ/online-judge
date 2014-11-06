@@ -7,14 +7,15 @@ register = template.Library()
 
 class LanguageShortDisplayNode(template.Node):
     def __init__(self, language):
-        self.language_id = language
+        self.language_id = template.Variable(language)
  
     def render(self, context):
-        key = 'lang_sdn:%d' % self.language_id
+        id = int(self.language_id.resolve(context))
+        key = 'lang_sdn:%d' % id
         result = cache.get(key)
         if result is not None:
             return result
-        result = Language.objects.get(id=self.language_id).short_display_name
+        result = Language.objects.get(id=id).short_display_name
         cache.set(key, result, 86400)
         return result
  
