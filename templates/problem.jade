@@ -5,6 +5,9 @@ extends common-content
 - load cache
 - load smart_math
 
+block content_media
+    script(type='text/javascript', src='{% static "common.js" %}')
+
 block info_float
     a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
     hr
