@@ -88,6 +88,9 @@ class Organization(models.Model):
     def member_count(self):
         return self.members.count()
 
+    class Meta:
+        ordering = ['key']
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='User associated')
