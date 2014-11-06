@@ -12,3 +12,4 @@ def update_submission(id):
 
 def update_stats():
     cache.delete('sub_stats_table')
+    cache.delete('sub_stats_data')

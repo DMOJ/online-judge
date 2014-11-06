@@ -187,9 +187,13 @@ def submissions(request, page=1):
         submissions = paginator.page(1)
     except EmptyPage:
         submissions = paginator.page(paginator.num_pages)
+    results = cache.get('sub_stats_data')
+    if results is None:
+        results = get_result_table()
+        cache.set('sub_stats_data', results, 86400)
     return render_to_response('submissions.jade',
                               {'submissions': submissions,
-                               'results': get_result_table(),
+                               'results': results,
                                'dynamic_update': True if page == 1 else False,
                                'last_msg': event.last(),
                                'title': 'All submissions',
