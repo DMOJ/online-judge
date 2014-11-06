@@ -73,7 +73,7 @@ class Language(models.Model):
 
 class Organization(models.Model):
     name = models.CharField(max_length=50, verbose_name='Organization title')
-    key = models.CharField(max_length=6, verbose_name='Short organization id',
+    key = models.CharField(max_length=6, verbose_name='Short organization id', unique=True,
                            help_text='Organization id as displayed beside name during contests')
     about = models.TextField(verbose_name='Organization description')
     registrant = models.ForeignKey('Profile', verbose_name='Registrant',
