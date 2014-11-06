@@ -26,7 +26,7 @@ block body
         a(href='{% url "judge.views.organization_users" organization.key %}') View members
         
     .content-description
-        -cache 3600 organization_html organization.key
+        -cache 3600 organization_html organization.id
             | #{organization.about|markdown:"organization-about"|smart_math}
         hr
 block bodyend
