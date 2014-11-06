@@ -95,7 +95,8 @@ class Profile(models.Model):
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
     last_access = models.DateTimeField(verbose_name='Last access time', default=now)
     ip = models.GenericIPAddressField(verbose_name='Last IP', blank=True, null=True)
-    organization = models.ForeignKey(Organization, verbose_name='Affiliation', null=True, blank=True)
+    organization = models.ForeignKey(Organization, verbose_name='Affiliation', null=True, blank=True,
+                                     on_delete=models.SET_NULL)
     organization_join_time = models.DateTimeField(verbose_name='Organization joining date', null=True, blank=True)
 
     def calculate_points(self):
@@ -174,7 +175,8 @@ class Problem(models.Model):
                             validators=[RegexValidator('^[a-z0-9]+$', 'Problem code must be ^[a-z0-9]+$')])
     name = models.CharField(max_length=100, verbose_name='Problem name', db_index=True)
     description = models.TextField(verbose_name='Problem body')
-    user = models.ForeignKey(Profile, verbose_name='Creator', null=True, blank=True, default=None)
+    user = models.ForeignKey(Profile, verbose_name='Creator', null=True, blank=True, default=None,
+                             on_delete=models.SET_NULL)
     types = models.ManyToManyField(ProblemType, verbose_name='Problem types')
     group = models.ForeignKey(ProblemGroup, verbose_name='Problem group')
     time_limit = models.IntegerField(verbose_name='Time limit')
