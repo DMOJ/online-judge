@@ -21,7 +21,7 @@ except ImportError:
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    fields = ('user', 'name', 'about', 'timezone', 'language', 'ace_theme', 'last_access', 'ip')
+    fields = ('user', 'name', 'about', 'organization', 'timezone', 'language', 'ace_theme', 'last_access', 'ip')
     list_display = ('long_display_name', 'timezone_full', 'language', 'last_access', 'ip')
     ordering = ('user__username',)
     search_fields = ('user__username', 'name', 'ip')
