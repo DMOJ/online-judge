@@ -8,6 +8,9 @@ block media
         $(function () {
             fix_div($('.info-float'), 40, true, function (info) {
                 return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
+                    'position': 'absolute',
+                    'right': $(window).width() - div.offset().left - div.outerWidth(),
+                    'top': div.offset().top,
                     'width': '11%',
                     'padding-left': '40px'
                 }).prependTo('#content-body');
