@@ -73,9 +73,12 @@ class Language(models.Model):
 
 class Organization(models.Model):
     name = models.CharField(max_length=50, verbose_name='Organization title')
-    id = models.CharField(max_length=6, verbose_name='Short organization id',
-                          help_text='Organization id as displayed beside name during contests')
+    key = models.CharField(max_length=6, verbose_name='Short organization id',
+                           help_text='Organization id as displayed beside name during contests')
     description = models.TextField(verbose_name='Organization description')
+    registrant = models.ForeignKey(Profile, verbose_name='Registrant',
+                                   help_text='User who registered this organization')
+    creation_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
 
 
 class Profile(models.Model):
