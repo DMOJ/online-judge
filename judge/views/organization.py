@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
 
-from judge.models import Organization, Profile
+from judge.models import Organization
 from judge.utils.ranker import ranker
 
 __all__ = ['organization_list', 'organization_home', 'organization_users', 'join_organization', 'leave_organization']
@@ -41,7 +41,7 @@ def organization_users(request, key):
     return render_to_response('users.jade', {
         'organization': org,
         'title': '%s Members' % org.name,
-        'users': ranker(Profile.objects.filter(organization=org, points__gt=0, user__is_active=True).order_by('-points'))
+        'users': ranker(org.members.filter(points__gt=0, user__is_active=True).order_by('-points'))
     }, context_instance=RequestContext(request))
 
 
