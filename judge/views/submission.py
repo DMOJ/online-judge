@@ -10,7 +10,7 @@ from django.template import RequestContext, loader
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, SubmissionTestCase, Profile
 from judge.utils.diggpaginator import DiggPaginator
-from judge.views import get_result_table, user_completed_codes
+from judge.views import get_result_table, user_completed_ids
 from judge import event_poster as event
 
 
@@ -86,7 +86,7 @@ def all_user_submissions(request, username, page=1):
                                'results': get_result_table(user__user__username=username),
                                'dynamic_update': False,
                                'title': 'All submissions by ' + username,
-                               'completed_problem_codes': user_completed_codes(
+                               'completed_problem_ids': user_completed_ids(
                                    request.user.profile) if request.user.is_authenticated() else [],
                                'show_problem': True},
                               context_instance=RequestContext(request))
@@ -128,7 +128,7 @@ def problem_submissions(request, code, page, dynamic_update, title, order, filte
                                    'results': get_result_table(**filter),
                                    'dynamic_update': dynamic_update,
                                    'title': title % problem.name,
-                                   'completed_problem_codes': user_completed_codes(
+                                   'completed_problem_ids': user_completed_ids(
                                        user.profile) if user.is_authenticated() else [],
                                    'show_problem': False},
                                   context_instance=RequestContext(request))
@@ -138,11 +138,12 @@ def problem_submissions(request, code, page, dynamic_update, title, order, filte
 
 def single_submission(request, id):
     try:
+        authenticated = request.user.is_authenticated()
         return render_to_response('submission_row.jade', {
             'submission': Submission.objects.get(id=int(id)),
-            'completed_problem_codes': user_completed_codes(
-                   request.user.profile) if request.user.is_authenticated() else [],
-            'show_problem': True
+            'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
+            'show_problem': True,
+            'profile_id': request.user.profile.id if authenticated else 0,
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()
@@ -186,13 +187,17 @@ def submissions(request, page=1):
         submissions = paginator.page(1)
     except EmptyPage:
         submissions = paginator.page(paginator.num_pages)
+    results = cache.get('sub_stats_data')
+    if results is None:
+        results = get_result_table()
+        cache.set('sub_stats_data', results, 86400)
     return render_to_response('submissions.jade',
                               {'submissions': submissions,
-                               'results': get_result_table(),
+                               'results': results,
                                'dynamic_update': True if page == 1 else False,
                                'last_msg': event.last(),
                                'title': 'All submissions',
-                               'completed_problem_codes': user_completed_codes(
+                               'completed_problem_ids': user_completed_ids(
                                    request.user.profile) if request.user.is_authenticated() else [],
                                'show_problem': True},
                               context_instance=RequestContext(request))

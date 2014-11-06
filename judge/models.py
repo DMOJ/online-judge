@@ -1,5 +1,6 @@
 import re
 from operator import itemgetter, attrgetter
+from django.core.cache import cache
 
 import pytz
 from django.contrib.auth.models import User
@@ -184,7 +185,12 @@ class Problem(models.Model):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
     def number_of_users(self):
-        return Submission.objects.filter(problem=self, points__gt=0).values('user').distinct().count()
+        key = 'prob_users:%d' % self.id
+        count = cache.get(key)
+        if count is None:
+            count = Submission.objects.filter(problem=self, points__gt=0).values('user').distinct().count()
+            cache.set(key, count, 86400)
+        return count
 
     def __unicode__(self):
         return self.name
@@ -261,6 +267,8 @@ class Submission(models.Model):
     error = models.TextField(verbose_name='Compile Errors', null=True, blank=True)
     current_testcase = models.IntegerField(default=0)
     batch = models.BooleanField(verbose_name='Batched cases', default=False)
+    case_points = models.FloatField(verbose_name='Test case points', default=0)
+    case_total = models.FloatField(verbose_name='Test case total points', default=0)
 
     @property
     def long_status(self):
@@ -273,27 +281,12 @@ class Submission(models.Model):
         return abort_submission(self)
 
     def is_graded(self):
-        return self.status not in ["QU", "C", "G"]
+        return self.status not in ['QU', 'C', 'G']
 
     @property
-    def testcase_granted_points(self):
-        if self.batch:
-            return sum(map(itemgetter('points'), SubmissionTestCase.objects.filter(submission=self)
-                           .values('batch').annotate(points=Min('points'))))
-        else:
-            score = SubmissionTestCase.objects.filter(submission=self).values('submission') \
-                .annotate(score=Sum('points'))
-            return score[0]['score'] if score else 0
-
-    @property
-    def testcase_total_points(self):
-        if self.batch:
-            return sum(map(itemgetter('points'), SubmissionTestCase.objects.filter(submission=self)
-                           .values('batch').annotate(points=Max('total'))))
-        else:
-            score = SubmissionTestCase.objects.filter(submission=self).values('submission') \
-                .annotate(score=Sum('total'))
-            return score[0]['score'] if score else 0
+    def contest_key(self):
+        if hasattr(self, 'contest'):
+            return self.contest.participation.contest.key
 
     def __unicode__(self):
         return u'Submission %d of %s by %s' % (self.id, self.problem, self.user)

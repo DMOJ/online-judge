@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.models import Problem, Submission
 from judge.utils.diggpaginator import DiggPaginator
-from judge.views import get_result_table, user_completed_codes
+from judge.views import get_result_table, user_completed_ids
 
 
 __all__ = ['ranked_submissions']
@@ -76,7 +76,7 @@ def ranked_submissions(request, code, page=1):
     return render_to_response('submissions.jade',
                               {'submissions': submissions,
                                'results': get_result_table(problem__code=code),
-                               'completed_problem_codes': user_completed_codes(request.user.profile)
+                               'completed_problem_ids': user_completed_ids(request.user.profile)
                                     if request.user.is_authenticated() else [],
                                'dynamic_update': False,
                                'title': "Best solutions for %s" % problem.name,

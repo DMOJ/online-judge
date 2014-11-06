@@ -3,14 +3,15 @@
 - load admin_urls
 - load variables
 - load tz
+- load cache
 
 if submission.status == 'IE' or submission.status == 'CE'
     - var submission_class = submission.status
 else
     - var submission_class = submission.result
 
-if request.user.is_authenticated
-    - var can_view = request.user.profile == submission.user or perms['judge']['change_submission'] or submission.problem.code in completed_problem_codes
+if profile_id
+    - var can_view = profile_id == submission.user_id or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids
     - var show_prop = can_view
     if show_prop
         - var info_colspan = 1
@@ -34,19 +35,22 @@ td.sub-result(class=submission_class)
             if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB'
                 | ---
             else
-                | #{submission.testcase_granted_points|default_if_none:0|floatformat:"0"} / #{submission.testcase_total_points|floatformat:"0"}
+                | #{submission.case_points|default_if_none:0|floatformat:"0"} / #{submission.case_total|floatformat:"0"}
     .state
         span.status(title=submission.long_status) #{submission.result|default_if_none:submission.status}
         | &nbsp;|&nbsp;
-        span.language #{submission.language.short_display_name}
+        - cache 86400 submission_lang submission.language_id
+            span.language #{submission.language.short_display_name}
 
 td(colspan=info_colspan, class=info_class)
     if show_problem
-        .name
-            a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
+        - cache 86400 submission_problem submission.problem_id
+            .name
+                a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
     div
-        span(class=submission.user.display_rank)
-            a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
+        - cache 3600 submission_user submission.user_id
+            span(class=submission.user.display_rank)
+                a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
         span.moment(style='display: none') #{submission.date|utc|date:"c"}
         = ' '
         span.time on #{submission.date|date:"N j, o, g:i a"}

@@ -3,7 +3,7 @@ from operator import itemgetter
 from django import db
 from django.db.models import Min, Max
 from django.utils import timezone
-from judge.caching import update_stats
+from judge.caching import update_stats, finished_submission
 
 from .judgehandler import JudgeHandler
 from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language
@@ -70,7 +70,8 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.save()
         SubmissionTestCase.objects.filter(submission_id=submission.id).delete()
         event.post('sub_%d' % submission.id, {'type': 'grading-begin'})
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id, 'state': 'grading-begin'})
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
+                                   'state': 'grading-begin', 'contest': submission.contest_key})
 
     def _submission_is_batch(self, id):
         submission = Submission.objects.get(id=id)
@@ -99,13 +100,17 @@ class DjangoJudgeHandler(JudgeHandler):
             i = status_codes.index(case.status)
             if i > status:
                 status = i
-        total = round(total, 1)
 
         if submission.batch:
             data = (SubmissionTestCase.objects.filter(submission_id=submission.id)
                     .values('batch').annotate(points=Min('points'), total=Max('total')))
-            points = round(sum(map(itemgetter('points'), data)), 1)
-            total = round(sum(map(itemgetter('total'), data)), 1)
+            points = sum(map(itemgetter('points'), data))
+            total = sum(map(itemgetter('total'), data))
+
+        points = round(points, 1)
+        total = round(total, 1)
+        submission.case_points = points
+        submission.case_total = total
 
         sub_points = round(points / total * submission.problem.points if total > 0 else 0, 1)
         if not submission.problem.partial and sub_points != submission.problem.points:
@@ -129,6 +134,7 @@ class DjangoJudgeHandler(JudgeHandler):
             submission.contest.participation.recalculate_score()
 
         update_stats()
+        finished_submission(submission)
 
         event.post('sub_%d' % submission.id, {
             'type': 'grading-end',
@@ -138,8 +144,10 @@ class DjangoJudgeHandler(JudgeHandler):
             'total': float(submission.problem.points),
             'result': submission.result
         })
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id, 'state': 'grading-end'})
-        event.post('submissions', {'type': 'done-submission', 'id': submission.id})
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
+                                   'state': 'grading-end', 'contest': submission.contest_key})
+        event.post('submissions', {'type': 'done-submission', 'id': submission.id,
+                                   'contest': submission.contest_key})
 
     def on_compile_error(self, packet):
         super(DjangoJudgeHandler, self).on_compile_error(packet)
@@ -155,7 +163,8 @@ class DjangoJudgeHandler(JudgeHandler):
             'type': 'compile-error',
             'log': packet['log']
         })
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id, 'state': 'compile-error'})
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
+                                   'state': 'compile-error', 'contest': submission.contest_key})
 
     def on_compile_message(self, packet):
         super(DjangoJudgeHandler, self).on_compile_message(packet)
@@ -183,7 +192,8 @@ class DjangoJudgeHandler(JudgeHandler):
             'type': 'bad-problem',
             'problem': packet['problem']
         })
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id, 'state': 'internal-error'})
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
+                                   'state': 'internal-error', 'contest': submission.contest_key})
 
     def on_submission_terminated(self, packet):
         super(DjangoJudgeHandler, self).on_submission_terminated(packet)
@@ -197,7 +207,8 @@ class DjangoJudgeHandler(JudgeHandler):
         event.post('sub_%d' % submission.id, {
             'type': 'aborted-submission'
         })
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id, 'state': 'terminated'})
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
+                                   'state': 'terminated', 'contest': submission.contest_key})
 
     def on_test_case(self, packet):
         super(DjangoJudgeHandler, self).on_test_case(packet)
@@ -244,7 +255,8 @@ class DjangoJudgeHandler(JudgeHandler):
             'total': float(test_case.total),
             'output': packet['output']
         })
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id, 'state': 'test-case'})
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
+                                   'state': 'test-case', 'contest': submission.contest_key})
 
     def on_supported_problems(self, packet):
         super(DjangoJudgeHandler, self).on_supported_problems(packet)

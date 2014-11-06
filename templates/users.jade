@@ -1,5 +1,6 @@
 extends base
--load staticfiles
+- load staticfiles
+- load cache
 
 block media
     script(src='{% static "tablesorter.js" %}' type='text/javascript')
@@ -33,8 +34,9 @@ block body
             for rank, user in users
                 tr
                     td #{rank}
-                    td(class=user.display_rank)
-                        a(href='{% url "judge.views.user" user.user.username %}').
-                            #{user.long_display_name}
+                    - cache 86400 user_on_rank user.id
+                        td(class=user.display_rank)
+                            a(href='{% url "judge.views.user" user.user.username %}').
+                                #{user.long_display_name}
                     td #{user.points}
                     td #{user.problems}
