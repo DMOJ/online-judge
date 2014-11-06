@@ -45,7 +45,8 @@ td.sub-result(class=submission_class)
 td(colspan=info_colspan, class=info_class)
     if show_problem
         .name
-            a(href='{% url "judge.views.problem" submission.problem.code %}') #{submission.problem.name}
+            a(href='{% url "judge.views.problem" submission.problem_id|problem_code %}')
+                - problem_name submission.problem_id
     div
         span(class=submission.user.display_rank)
             a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}

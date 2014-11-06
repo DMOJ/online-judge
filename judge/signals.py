@@ -9,6 +9,8 @@ from .caching import update_submission
 @receiver(post_save, sender=Problem)
 def problem_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('problem_html', (instance.id,)))
+    cache.delete('prob_code:%d' % instance.id)
+    cache.delete('prob_name:%d' % instance.id)
 
 
 @receiver(post_save, sender=Contest)
