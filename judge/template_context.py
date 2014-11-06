@@ -1,7 +1,6 @@
 from collections import defaultdict
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.cache import cache
 from django.utils.functional import SimpleLazyObject
 from .models import Profile, MiscConfig, NavigationBar
 
@@ -29,10 +28,7 @@ def __tab(request, nav_bar):
 
 
 def general_info(request):
-    nav = cache.get('navbar')
-    if nav is None:
-        nav = list(NavigationBar.objects.values())
-        cache.set('navbar', nav, 86400)
+    nav = NavigationBar.objects.all()
     path = request.get_full_path()
     return {
         'nav_tab': __tab(request, nav),
