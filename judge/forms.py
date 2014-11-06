@@ -10,7 +10,7 @@ from .models import Profile, Submission, Comment
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['name', 'about', 'timezone', 'language', 'ace_theme']
+        fields = ['name', 'about', 'organization', 'timezone', 'language', 'ace_theme']
 
 
 class ProblemSubmitForm(ModelForm):
