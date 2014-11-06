@@ -365,7 +365,9 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     def username(obj):
         return obj.profile.user.display_name
 
+
 class OrganizationAdmin(admin.ModelAdmin):
+    readonly_fields = ('creation_date',)
     fields = ('name', 'key', 'about', 'registrant', 'creation_date')
     list_display = ('name', 'key', 'registrant', 'creation_date')
 
