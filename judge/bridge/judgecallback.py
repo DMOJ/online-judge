@@ -100,13 +100,17 @@ class DjangoJudgeHandler(JudgeHandler):
             i = status_codes.index(case.status)
             if i > status:
                 status = i
-        total = round(total, 1)
 
         if submission.batch:
             data = (SubmissionTestCase.objects.filter(submission_id=submission.id)
                     .values('batch').annotate(points=Min('points'), total=Max('total')))
-            points = round(sum(map(itemgetter('points'), data)), 1)
-            total = round(sum(map(itemgetter('total'), data)), 1)
+            points = sum(map(itemgetter('points'), data))
+            total = sum(map(itemgetter('total'), data))
+
+        submission.case_points = points
+        submission.case_total = total
+        points = round(points, 1)
+        total = round(total, 1)
 
         sub_points = round(points / total * submission.problem.points if total > 0 else 0, 1)
         if not submission.problem.partial and sub_points != submission.problem.points:

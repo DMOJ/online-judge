@@ -252,6 +252,8 @@ class Submission(models.Model):
     error = models.TextField(verbose_name='Compile Errors', null=True, blank=True)
     current_testcase = models.IntegerField(default=0)
     batch = models.BooleanField(verbose_name='Batched cases', default=False)
+    case_points = models.FloatField(verbose_name='Test case points', default=0)
+    case_total = models.FloatField(verbose_name='Test case total points', default=0)
 
     @property
     def long_status(self):
