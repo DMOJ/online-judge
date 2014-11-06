@@ -9,6 +9,7 @@ from judge.comments import problem_comments, comment_form
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemType, Organization, \
     Profile
+from judge.utils.ranker import ranker
 from judge.views import user_completed_ids
 
 
@@ -24,7 +25,7 @@ def organization_users(request, key):
         return render_to_response('users.jade', {
             'organization': org,
             'title': '%s Members' % org.name,
-            'users': Profile.objects.filter(organization=org),
+            'users': ranker(Profile.objects.filter(organization=org, points__gt=0, user__is_active=True).order_by('-points'))
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         return render_to_response('generic_message.jade', {

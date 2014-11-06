@@ -30,6 +30,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
     def timezone_full(self, obj):
         return obj.timezone
+
     timezone_full.admin_order_field = 'timezone'
     timezone_full.short_description = 'Timezone'
 
@@ -39,6 +40,7 @@ class ProfileAdmin(admin.ModelAdmin):
             profile.calculate_points()
             count += 1
         self.message_user(request, "%d user%s have scores recalculated." % (count, 's'[count == 1:]))
+
     recalculate_points.short_description = 'Recalculate scores'
 
 
@@ -67,11 +69,13 @@ class ProblemAdmin(admin.ModelAdmin):
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self.message_user(request, "%d problem%s successfully marked as public." % (count, 's'[count == 1:]))
+
     make_public.short_description = 'Mark problems as public'
 
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
         self.message_user(request, "%d problem%s successfully marked as private." % (count, 's'[count == 1:]))
+
     make_private.short_description = 'Mark problems as private'
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
@@ -144,11 +148,13 @@ class SubmissionAdmin(admin.ModelAdmin):
         for model in queryset:
             successful += model.judge()
         self.message_user(request, '%d submission%s were successfully scheduled for rejudging.' %
-                                   (successful, 's'[successful == 1:]))
+                          (successful, 's'[successful == 1:]))
+
     judge.short_description = 'Rejudge the selected submissions'
 
     def execution_time(self, obj):
         return round(obj.time, 2) if obj.time is not None else 'None'
+
     execution_time.admin_order_field = 'time'
 
     def pretty_memory(self, obj):
@@ -159,6 +165,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             return '%d KB' % memory
         else:
             return '%.2f MB' % (memory / 1024.)
+
     pretty_memory.admin_order_field = 'memory'
     pretty_memory.short_description = 'Memory Usage'
 
@@ -171,7 +178,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(SubmissionAdmin, self).get_urls()
         my_urls = patterns('',
-            url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge'),
+                           url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge'),
         )
         return my_urls + urls
 
@@ -348,11 +355,13 @@ class ContestAdmin(admin.ModelAdmin):
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self.message_user(request, "%d contest%s successfully marked as public." % (count, 's'[count == 1:]))
+
     make_public.short_description = 'Mark contests as public'
 
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
         self.message_user(request, "%d contest%s successfully marked as private." % (count, 's'[count == 1:]))
+
     make_private.short_description = 'Mark contests as private'
 
 
@@ -375,6 +384,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         formfield_overrides = {
             TextField: {'widget': AdminPagedownWidget},
         }
+
 
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Comment, CommentAdmin)
