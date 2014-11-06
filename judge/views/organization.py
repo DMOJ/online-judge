@@ -10,6 +10,8 @@ from django.utils import timezone
 from judge.models import Organization, Profile
 from judge.utils.ranker import ranker
 
+__all__ = ['organization_home', 'organization_users', 'join_organization', 'leave_organization']
+
 
 def _find_organization(request, key):
     try:

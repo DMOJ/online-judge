@@ -21,7 +21,14 @@ block media
 block body
     br
     .info-float(style='width:11%;padding-left:40px')
-        a.unselectable.button.full(href='#') Join organization
+        if request.user.is_authenticated
+            - with profile=request.user.profile
+                if not profile.organization_id
+                    a.unselectable.button.full(href='{% url "judge.views.join_organization" organization.key %}')
+                        | Join organization
+                else if profile.organization_id == organization.id
+                    a.unselectable.button.full(href='{% url "judge.views.leave_organization" organization.key %}')
+                        | Leave organization
         hr
         a(href='{% url "judge.views.organization_users" organization.key %}') View members
         

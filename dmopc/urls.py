@@ -129,6 +129,8 @@ urlpatterns = patterns('',
     
     url(r'^organization/(\w+)$', 'judge.views.organization_home'),
     url(r'^organization/(\w+)/users$', 'judge.views.organization_users'),
+    url(r'^organization/(\w+)/join', 'judge.views.join_organization'),
+    url(r'^organization/(\w+)/leave', 'judge.views.leave_organization'),
 
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {
         'problem': ProblemSitemap,
