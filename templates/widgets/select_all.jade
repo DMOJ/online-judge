@@ -1,5 +1,6 @@
 div(style='border:none', id=select_all_name)
-    div.original-checkboxes= original_widget
+    div.original-checkboxes
+        | {{ original_widget }}
     if empty
         | Nothing here.
     else
