@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
-    MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem
+    MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization
 from judge.widgets import CheckboxSelectMultipleWithSelectAll
 
 
@@ -365,6 +365,15 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     def username(obj):
         return obj.profile.user.display_name
 
+class OrganizationAdmin(admin.ModelAdmin):
+    fields = ('name', 'key', 'about', 'registrant', 'creation_date')
+    list_display = ('name', 'key', 'registrant', 'creation_date')
+
+    if AdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': AdminPagedownWidget},
+        }
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
@@ -377,3 +386,4 @@ admin.site.register(NavigationBar, NavigationBarAdmin)
 admin.site.register(Judge, JudgeAdmin)
 admin.site.register(Contest, ContestAdmin)
 admin.site.register(ContestParticipation, ContestParticipationAdmin)
+admin.site.register(Organization, OrganizationAdmin)
