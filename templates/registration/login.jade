@@ -6,5 +6,6 @@ block body
     form.form-area(action='', method='post')
         -csrf_token
         table(border=0) #{form.as_table}
-        button(type='submit') Login!
+        hr
+        button(style="float:right;", type='submit') Login!
         input(type='hidden', name='next', value=next)
