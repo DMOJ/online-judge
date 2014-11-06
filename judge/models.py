@@ -77,6 +77,7 @@ class Organization(models.Model):
                            help_text='Organization id as displayed beside name during contests')
     about = models.TextField(verbose_name='Organization description')
     registrant = models.ForeignKey('Profile', verbose_name='Registrant',
+                                   related_name='+',
                                    help_text='User who registered this organization')
     creation_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
 
