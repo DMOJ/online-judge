@@ -3,7 +3,6 @@
 - load admin_urls
 - load variables
 - load tz
-- load fast_data_query
 - load cache
 
 if submission.status == 'IE' or submission.status == 'CE'
@@ -40,8 +39,8 @@ td.sub-result(class=submission_class)
     .state
         span.status(title=submission.long_status) #{submission.result|default_if_none:submission.status}
         | &nbsp;|&nbsp;
-        span.language
-            - language_short_display submission.language_id
+        - cache 86400 submission_lang submission.language_id
+            span.language #{submission.language.short_display_name}
 
 td(colspan=info_colspan, class=info_class)
     if show_problem
