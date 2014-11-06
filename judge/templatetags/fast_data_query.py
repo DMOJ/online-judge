@@ -6,95 +6,77 @@ from judge.models import Language, Problem
 register = template.Library()
 
 
-class LanguageShortDisplayNode(template.Node):
-    def __init__(self, language):
-        self.language_id = template.Variable(language)
- 
-    def render(self, context):
-        id = int(self.language_id.resolve(context))
-        key = 'lang_sdn:%d' % id
-        result = cache.get(key)
-        if result is not None:
-            return result
-        result = Language.objects.get(id=id).short_display_name
-        cache.set(key, result, 86400)
-        return result
- 
-@register.tag
-def language_short_display(parser, token):
-    try:
-        return LanguageShortDisplayNode(token.split_contents()[1])
-    except IndexError:
-        raise template.TemplateSyntaxError('%r tag requires language id' % token.contents.split()[0])
+class DataNode(template.Node):
+    model = None
+    prefix = None
+    ttl = 3600
 
-
-class ProblemDataNode(template.Node):
     def __init__(self, problem):
         self.problem_id = template.Variable(problem)
 
-    def field_name(self):
+    def get_data(self, instance):
         raise NotImplementedError
-
-    def get_data(self, problem):
-        raise NotImplementedError
-
-    def time_to_live(self, problem):
-        return 3600
 
     def render(self, context):
         id = int(self.problem_id.resolve(context))
-        key = 'prob_%s:%d' % (self.field_name(), id)
+        key = '%s:%d' % (self.prefix, id)
         result = cache.get(key)
         if result is not None:
             return result
-        problem = Problem.objects.get(id=id)
-        result = self.get_data(problem)
-        cache.set(key, result, self.time_to_live(problem))
+        instance = self.model.objects.get(id=id)
+        result = self.get_data(instance)
+        cache.set(key, result, self.ttl)
         return result
 
 
-class ProblemCodeNode(ProblemDataNode):
-    def field_name(self):
-        return 'code'
+def register_data_tag(name, cls, model_name):
+    def tag(parser, token):
+        try:
+            return cls(token.split_contents()[1])
+        except IndexError:
+            raise template.TemplateSyntaxError('%r tag requires %s id' % (token.contents.split()[0], model_name))
+    register.tag(name, tag)
+
+
+class LanguageShortDisplayNode(DataNode):
+    model = Language
+    prefix = 'lang_sdn'
+
+    def get_data(self, language):
+        return language.short_display_name
+
+
+class ProblemCodeNode(DataNode):
+    model = Problem
+    prefix = 'prob_code'
 
     def get_data(self, problem):
         return problem.code
 
 
-@register.tag
-def problem_code(parser, token):
-    try:
-        return ProblemCodeNode(token.split_contents()[1])
-    except IndexError:
-        raise template.TemplateSyntaxError('%r tag requires problem id' % token.contents.split()[0])
-
-
-class ProblemNameNode(ProblemDataNode):
-    def field_name(self):
-        return 'name'
+class ProblemNameNode(DataNode):
+    model = Problem
+    prefix = 'prob_name'
 
     def get_data(self, problem):
         return problem.name
 
 
-@register.tag
-def problem_name(parser, token):
-    try:
-        return ProblemNameNode(token.split_contents()[1])
-    except IndexError:
-        raise template.TemplateSyntaxError('%r tag requires problem id' % token.contents.split()[0])
+register_data_tag('language_short_display', LanguageShortDisplayNode, 'language')
+register_data_tag('problem_code', ProblemCodeNode, 'problem')
+register_data_tag('problem_name', ProblemNameNode, 'problem')
 
 
-def make_problem_data_filter(name, getter, ttl=3600):
+def make_problem_data_filter(prefix, model, getter, ttl=3600):
     def filter(problem):
         id = int(problem)
-        key = 'prob_%s:%d' % (name, id)
+        key = '%s:%d' % (prefix, id)
         result = cache.get(key)
         if result is not None:
             return result
-        result = getter(Problem.objects.get(id=id))
+        result = getter(model.objects.get(id=id))
         cache.set(key, result, ttl)
         return result
     return filter
 
-register.filter('problem_code', make_problem_data_filter('code', attrgetter('code')))
+register.filter('problem_code', make_problem_data_filter('prob_code', Problem, attrgetter('code')))
