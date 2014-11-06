@@ -10,7 +10,14 @@ from django.utils import timezone
 from judge.models import Organization, Profile
 from judge.utils.ranker import ranker
 
-__all__ = ['organization_home', 'organization_users', 'join_organization', 'leave_organization']
+__all__ = ['organization_list', 'organization_home', 'organization_users', 'join_organization', 'leave_organization']
+
+
+def organization_list(request):
+    return render_to_response('organizations.jade', {
+        'organizations': Organization.objects.all(),
+        'title': 'Organizations'
+    }, context_instance=RequestContext(request))
 
 
 def _find_organization(request, key):

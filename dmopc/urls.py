@@ -127,6 +127,7 @@ urlpatterns = patterns('',
     url(r'^contest/(\w+)/join$', 'judge.views.join_contest'),
     url(r'^contest/(\w+)/leave$', 'judge.views.leave_contest'),
     
+    url(r'^organizations/$', 'judge.views.organization_list'),
     url(r'^organization/(\w+)$', 'judge.views.organization_home'),
     url(r'^organization/(\w+)/users$', 'judge.views.organization_users'),
     url(r'^organization/(\w+)/join', 'judge.views.join_organization'),

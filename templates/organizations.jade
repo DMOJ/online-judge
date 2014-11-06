@@ -1,0 +1,18 @@
+extends base
+
+block body
+    br
+    table.table
+        thead
+            tr
+                th ID
+                th(style='width:85%') Name
+                th Members
+        tbody
+            each org in organizations
+                tr
+                    td= org.key
+                    td
+                        a(href='{% url "judge.views.organization_home" org.key %}')= org.name
+                    td
+                        a(href='{% url "judge.views.organization_users" org.key %}') 0
