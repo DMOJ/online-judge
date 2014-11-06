@@ -132,7 +132,7 @@ def make_ranking_profile(participation):
 
 
 def contest_ranking_view(request, contest):
-    results = map(make_ranking_profile, contest.users.order_by('-score'))
+    results = map(make_ranking_profile, contest.users.select_related('profile').order_by('-score'))
     return render_to_response('users.jade', {
         'users': ranker(results),
         'title': 'Ranking: %s' % contest.name
