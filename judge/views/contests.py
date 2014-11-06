@@ -119,15 +119,20 @@ ContestRankingProfile = namedtuple('ContestRankingProfile',
                                    'id user display_rank long_display_name points problems')
 
 
-def contest_ranking_view(request, contest):
-    results = [ContestRankingProfile(
-        id=participation.profile.user_id,
-        user=SimpleLazyObject(lambda: participation.profile.user.user),
-        display_rank=SimpleLazyObject(lambda: participation.profile.user.display_rank),
-        long_display_name=SimpleLazyObject(lambda: participation.profile.user.long_display_name),
+def make_ranking_profile(participation):
+    contest_profile = participation.profile
+    return ContestRankingProfile(
+        id=contest_profile.user_id,
+        user=SimpleLazyObject(lambda: contest_profile.user.user),
+        display_rank=SimpleLazyObject(lambda: contest_profile.user.display_rank),
+        long_display_name=SimpleLazyObject(lambda: contest_profile.user.long_display_name),
         points=participation.score,
         problems=participation.submissions.values('problem').distinct().count()
-    ) for participation in contest.users.order_by('-score')]
+    )
+
+
+def contest_ranking_view(request, contest):
+    results = map(make_ranking_profile, contest.users.order_by('-score'))
     return render_to_response('users.jade', {
         'users': ranker(results),
         'title': 'Ranking: %s' % contest.name
