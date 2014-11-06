@@ -2,9 +2,10 @@ from collections import namedtuple
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.functional import SimpleLazyObject
 from judge.comments import comment_form, contest_comments
 from judge.models import Contest, ContestParticipation
 from judge.utils.ranker import ranker
@@ -115,14 +116,15 @@ def leave_contest(request, key):
 
 
 ContestRankingProfile = namedtuple('ContestRankingProfile',
-                                   'user display_rank long_display_name points problems')
+                                   'id user display_rank long_display_name points problems')
 
 
 def contest_ranking_view(request, contest):
     results = [ContestRankingProfile(
-        user=participation.profile.user.user,
-        display_rank=participation.profile.user.display_rank,
-        long_display_name=participation.profile.user.long_display_name,
+        id=participation.profile.user_id,
+        user=SimpleLazyObject(lambda: participation.profile.user.user),
+        display_rank=SimpleLazyObject(lambda: participation.profile.user.display_rank),
+        long_display_name=SimpleLazyObject(lambda: participation.profile.user.long_display_name),
         points=participation.score,
         problems=participation.submissions.values('problem').distinct().count()
     ) for participation in contest.users.order_by('-score')]
