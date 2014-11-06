@@ -84,6 +84,10 @@ class Organization(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def member_count(self):
+        return self.members.count()
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='User associated')

@@ -1,4 +1,5 @@
 extends base
+- load cache
 
 block body
     br
@@ -15,4 +16,5 @@ block body
                     td
                         a(href='{% url "judge.views.organization_home" org.key %}')= org.name
                     td
-                        a(href='{% url "judge.views.organization_users" org.key %}') 0
+                        - cache 86400 org_member_count org.id
+                            a(href='{% url "judge.views.organization_users" org.key %}')= org.member_count

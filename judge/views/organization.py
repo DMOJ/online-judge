@@ -1,4 +1,6 @@
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -70,6 +72,7 @@ def join_organization(request, key):
     profile.organization = org
     profile.organization_join_time = timezone.now()
     profile.save()
+    cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
     return HttpResponseRedirect(reverse(organization_home, args=(key,)))
 
 
@@ -88,4 +91,5 @@ def leave_organization(request, key):
     profile.organization = None
     profile.organization_join_time = None
     profile.save()
+    cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
     return HttpResponseRedirect(reverse(organization_home, args=(key,)))
