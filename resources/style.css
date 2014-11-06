@@ -6,7 +6,7 @@
     width: 100%
 }
 
-.button, button {
+.button, button, input[type='submit'] {
     cursor: pointer;
     display: block;
     text-align: center;
@@ -19,11 +19,11 @@
     text-decoration: none
 }
 
-.button:hover, button:hover {
+.button:hover, button:hover, input[type='submit']:hover {
     background: #00a3e0
 }
 
-.button:active, button:active {
+.button:active, button:active, input[type='submit']:hover {
     background: #00aee0;
     background: linear-gradient(180deg, #2980b9, #00aee0)
 }
