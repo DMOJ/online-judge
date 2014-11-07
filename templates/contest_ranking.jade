@@ -63,6 +63,6 @@ block before_point
     each problem in user.problems
         if problem
             td(class=problem.state)= problem.points
-                .solving-time #{problem.time|timedelta:"simple"}
+                .solving-time #{problem.time|timedelta:"noday"}
         else
             td

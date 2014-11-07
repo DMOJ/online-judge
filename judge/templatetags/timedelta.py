@@ -29,13 +29,23 @@ def nice_repr(timedelta, display='long', sep=', '):
     
     if display == 'sql':
         days += weeks * 7
-        return '%i %02i:%02i:%02i' % (days, hours, minutes, seconds)
+        return '%d %02d:%02d:%02d' % (days, hours, minutes, seconds)
     elif display == 'simple':
         days += weeks * 7
         if days:
             return '%d day%s %02d:%02d:%02d' % (days, 's'[days == 1:], hours, minutes, seconds)
         else:
-            return '%02i:%02i:%02i' % (hours, minutes, seconds)
+            return '%02d:%02d:%02d' % (hours, minutes, seconds)
+    elif display == 'concise':
+        days += weeks * 7
+        if days:
+            return '%dd %02d:%02d:%02d' % (days, hours, minutes, seconds)
+        else:
+            return '%02d:%02d:%02d' % (hours, minutes, seconds)
+    elif display == 'noday':
+        days += weeks * 7
+        hours += days * 24
+        return '%02d:%02d:%02d' % (hours, minutes, seconds)
     elif display == 'minimal':
         words = ['w', 'd', 'h', 'm', 's']
     elif display == 'short':
