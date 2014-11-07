@@ -8,5 +8,8 @@ block before_point_head
 
 block before_point
     each problem in user.problems
-        td(class=problem.state)= problem.points
-            .solving-time #{problem.time|timedelta:"simple"}
+        if problem
+            td(class=problem.state)= problem.points
+                .solving-time #{problem.time|timedelta:"simple"}
+        else
+            td
