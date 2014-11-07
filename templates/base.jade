@@ -19,9 +19,9 @@ html(lang='en')
         if nav_tab
             style.
                 nav ul li a.nav-#{nav_tab.key} {
-                    color: #FFF;
-                    background: #2980b9
-                }
+            color: #FFF;
+            background: #2980b9
+            }
         if IN_CONTEST
             script(type='text/javascript')
                 $(document).ready(function () {
@@ -82,8 +82,15 @@ html(lang='en')
         div#content
             h2(style='color:#393630; display:inline')
                 block content_title
-                    | #{title}
+                    if content-title
+                        | #{content-title}
+                    else
+                        | #{title}
             block header
+            if subtitle
+                br
+                block content_subtitle
+                    h3(style='display:inline; font-size:1.5em; color:gray; font-style:italic') #{subtitle}
             hr
             div#content-body
                 block body

@@ -161,7 +161,9 @@ def contest_ranking_view(request, contest):
     results = map(make_ranking_profile, contest.users.select_related('profile').order_by('-score'))
     return render_to_response('contest_ranking.jade', {
         'users': ranker(results),
-        'title': 'Ranking: %s' % contest.name,
+        'title': '%s Rankings' % contest.name,
+        'content-title': contest.name,
+        'subtitle: Rankings'
         'problems': problems
     }, context_instance=RequestContext(request))
 
