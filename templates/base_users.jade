@@ -3,15 +3,6 @@ extends base
 - load cache
 
 block media
-    script(src='{% static "tablesorter.js" %}' type='text/javascript')
-    script(type='text/javascript')
-        $(document).ready(function () {
-            $("#users-table").tablesorter({
-                sortList: [
-                    [2, 1]
-                ]
-            });
-        });
     style
         #users-table .rank, .points, .problems {
             white-space: nowrap
