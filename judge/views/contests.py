@@ -128,17 +128,17 @@ def get_best_contest_solutions(problems, profile, participation):
     assert isinstance(participation, ContestParticipation)
     for problem in problems:
         assert isinstance(problem, ContestProblem)
-        solution = problem.submissions.filter(submission__user_id=profile.id)\
+        solution = problem.submissions.filter(submission__user_id=profile.id).values('submission__user_id')\
             .annotate(best=Max('points'), time=Max('submission__date'))
         if not solution:
             solutions.append(None)
             continue
         solution = solution[0]
         solutions.append(BestSolutionData(
-            points=solution.best,
-            time=solution.time - participation.start,
-            state='failed-score' if not solution.best else
-                  ('full-score' if solution.best == problem.points else 'partial-score'),
+            points=solution['best'],
+            time=solution['time'] - participation.start,
+            state='failed-score' if not solution['best'] else
+                  ('full-score' if solution['best'] == problem.points else 'partial-score'),
         ))
     return solutions
 
