@@ -1,0 +1,45 @@
+extends base
+- load staticfiles
+- load cache
+
+block media
+    script(src='{% static "tablesorter.js" %}' type='text/javascript')
+    script(type='text/javascript')
+        $(document).ready(function () {
+            $("#users-table").tablesorter({
+                sortList: [
+                    [2, 1]
+                ]
+            });
+        });
+    style
+        #users-table .rank, .points, .problems {
+            white-space: nowrap
+        }
+
+        #users-table .username {
+            width: 100%
+        }
+    block users_media
+
+block body
+    br
+    table#users-table.table
+        thead
+            tr
+                th.rank Rank
+                th.username Username
+                block before_point_head
+                th.points Points
+                block after_point_head
+        tbody
+            for rank, user in users
+                tr
+                    td #{rank}
+                    - cache 86400 user_on_rank user.id
+                        td(class=user.display_rank)
+                            a(href='{% url "judge.views.user" user.user.username %}').
+                                #{user.long_display_name}
+                    block before_point
+                    td #{user.points}
+                    block after_point

@@ -1,42 +1,7 @@
-extends base
-- load staticfiles
-- load cache
+extends users
 
-block media
-    script(src='{% static "tablesorter.js" %}' type='text/javascript')
-    script(type='text/javascript')
-        $(document).ready(function () {
-            $("#users-table").tablesorter({
-                sortList: [
-                    [2, 1]
-                ]
-            });
-        });
-    style
-        #users-table .rank, .points, .problems {
-            white-space: nowrap
-        }
+block after_point_head
+    th.problems Problems
 
-        #users-table .username {
-            width: 100%
-        }
-
-block body
-    br
-    table#users-table.table
-        thead
-            tr
-                th.rank Rank
-                th.username Username
-                th.points Points
-                th.problems Problems
-        tbody
-            for rank, user in users
-                tr
-                    td #{rank}
-                    - cache 86400 user_on_rank user.id
-                        td(class=user.display_rank)
-                            a(href='{% url "judge.views.user" user.user.username %}').
-                                #{user.long_display_name}
-                    td #{user.points}
-                    td #{user.problems}
+block after_point
+    td #{user.problems}
