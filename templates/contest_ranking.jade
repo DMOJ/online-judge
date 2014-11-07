@@ -1,57 +1,59 @@
 extends base_users
 - load timedelta
 
-style
-    #users-table .rank, .points, .problems, .username {
-        white-space: nowrap;
-    }
+block users_media
+    style
+        #users-table .rank, .points, .problems, .username {
+            white-space: nowrap;
+        }
+    
+        #users-table .username {
+            width: 100%
+        }
+    
+        #users-table .header {
+            vertical-align: middle;
+        }
+    
+        .rank {
+            min-width: 2.5em
+        }
+    
+        .points {
+            min-width: 4em;
+        }
+    
+        .full-score {
+            font-weight: bold;
+            color: green;
+        }
+    
+        .partial-score {
+            color: green;
+        }
+    
+        .failed-score {
+            font-weight: bold;
+            color: red;
+        }
+    
+        .total-score {
+            font-weight: bold;
+            color: black;
+        }
+    
+        .solving-time {
+            color: gray;
+            font-weight: normal;
+            font-size: 0.75em;
+            padding-bottom: -0.75em;
+        }
+    
+        .point-denominator {
+            border-top: 1px solid gray;
+            font-size: 0.7em;
+        }
 
-    #users-table .username {
-        width: 100%
-    }
-
-    #users-table .header {
-        vertical-align: middle;
-    }
-
-    .rank {
-        min-width: 2.5em
-    }
-
-    .points {
-        min-width: 4em;
-    }
-
-    .full-score {
-        font-weight: bold;
-        color: green;
-    }
-
-    .partial-score {
-        color: green;
-    }
-
-    .failed-score {
-        font-weight: bold;
-        color: red;
-    }
-
-    .total-score {
-        font-weight: bold;
-        color: black;
-    }
-
-    .solving-time {
-        color: gray;
-        font-weight: normal;
-        font-size: 0.75em;
-        padding-bottom: -0.75em;
-    }
-
-    .point-denominator {
-        border-top: 1px solid gray;
-        font-size: 0.7em;
-    }
 block before_point_head
     each problem in problems
         th.points.header= forloop.counter
