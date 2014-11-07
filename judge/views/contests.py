@@ -7,6 +7,7 @@ from django.db.models import Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils import timezone
 from django.utils.functional import SimpleLazyObject
 from judge.comments import comment_form, contest_comments
 from judge.models import Contest, ContestParticipation, ContestProblem, Profile
@@ -86,7 +87,11 @@ def join_contest(request, key):
             'title': 'Already in contest'
         }, context_instance=RequestContext(request))
 
-    participation, created = ContestParticipation.objects.get_or_create(contest=contest, profile=contest_profile)
+    participation, created = ContestParticipation.objects.get_or_create(
+        contest=contest, profile=contest_profile, defaults={
+            'start': contest.start_time or timezone.now()
+        }
+    )
     if not created and participation.ended:
         return render_to_response('generic_message.jade', {
             'message': 'Too late! You already used up your time limit for "%s".' % contest.name,

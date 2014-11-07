@@ -424,6 +424,7 @@ class Contest(models.Model):
     description = models.TextField(blank=True)
     ongoing = models.BooleanField(default=True)
     problems = models.ManyToManyField(Problem, verbose_name='Problems', through='ContestProblem')
+    start_time = models.DateTimeField(verbose_name='Start time', null=True, blank=True)
     time_limit = TimedeltaField(verbose_name='Time limit')
     is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
 
@@ -450,7 +451,10 @@ class ContestParticipation(models.Model):
 
     @property
     def end_time(self):
-        return self.start + self.contest.time_limit
+        contest = self.contest
+        if contest.start_time is not None:
+            return contest.start_time + contest.time_limit
+        return self.start + contest.time_limit
 
     @property
     def ended(self):
