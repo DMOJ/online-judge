@@ -72,6 +72,7 @@ class ProblemAdmin(admin.ModelAdmin):
 
     def authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.select_related('user')))
+    authors.short_description = 'Authors'
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
