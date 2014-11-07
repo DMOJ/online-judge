@@ -56,7 +56,7 @@ class ProblemAdmin(admin.ModelAdmin):
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
         ('Language', {'fields': ('allowed_languages',)})
     )
-    list_display = ['code', 'name', 'authors', 'points', 'is_public']
+    list_display = ['code', 'name', 'show_authors', 'points', 'is_public']
     ordering = ['code']
     search_fields = ('^code', 'name')
     actions = ['make_public', 'make_private']
@@ -70,9 +70,9 @@ class ProblemAdmin(admin.ModelAdmin):
             TextField: {'widget': AdminPagedownWidget},
         }
 
-    def authors(self, obj):
+    def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.select_related('user')))
-    authors.short_description = 'Authors'
+    show_authors.short_description = 'Authors'
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
