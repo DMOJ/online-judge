@@ -32,5 +32,5 @@ block body
                             a(href='{% url "judge.views.user" user.user.username %}').
                                 #{user.long_display_name}
                     block before_point
-                    td #{user.points}
+                    td.user-points #{user.points}
                     block after_point
