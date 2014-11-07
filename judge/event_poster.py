@@ -1,3 +1,4 @@
+import socket
 import threading
 import json
 
@@ -63,7 +64,7 @@ def post(channel, message):
     if settings.EVENT_DAEMON_USE:
         try:
             return _get_poster().post(channel, message)
-        except WebSocketException:
+        except (WebSocketException, socket.error):
             del _local.poster
     return 0
 
@@ -72,6 +73,6 @@ def last():
     if settings.EVENT_DAEMON_USE:
         try:
             return _get_poster().last()
-        except WebSocketException:
+        except (WebSocketException, socket.error):
             del _local.poster
     return 0
