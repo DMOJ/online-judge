@@ -1,4 +1,5 @@
 extends base_users
+- load timedelta
 
 block before_point_head
     each problem in problems
@@ -6,5 +7,6 @@ block before_point_head
             div.point-denominator= problem.points
 
 block before_point
-    each problem in problems
-        td
+    each problem in user.problems
+        td(class=problem.state)= problem.points
+            .solving-time #{problem.time|timedelta:"simple"}

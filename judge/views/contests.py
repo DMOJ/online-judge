@@ -1,13 +1,15 @@
 from collections import namedtuple
+from functools import partial
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.db.models import Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.functional import SimpleLazyObject
 from judge.comments import comment_form, contest_comments
-from judge.models import Contest, ContestParticipation
+from judge.models import Contest, ContestParticipation, ContestProblem, Profile
 from judge.utils.ranker import ranker
 
 __all__ = ['contest_list', 'contest', 'contest_ranking', 'join_contest', 'leave_contest']
@@ -119,25 +121,44 @@ ContestRankingProfile = namedtuple('ContestRankingProfile',
                                    'id user display_rank long_display_name points problems')
 
 
-def make_ranking_profile(participation):
-    contest_profile = participation.profile
-    return ContestRankingProfile(
-        id=contest_profile.user_id,
-        user=SimpleLazyObject(lambda: contest_profile.user.user),
-        display_rank=SimpleLazyObject(lambda: contest_profile.user.display_rank),
-        long_display_name=SimpleLazyObject(lambda: contest_profile.user.long_display_name),
-        points=participation.score,
-        problems=None
-    )
+def get_best_contest_solutions(problems, profile, participation):
+    solutions = []
+    assert isinstance(profile, Profile)
+    assert isinstance(participation, ContestParticipation)
+    for problem in problems:
+        assert isinstance(problem, ContestProblem)
+        solution = problem.submissions.filter(submission__user_id=profile.id)\
+            .annotate(points=Max('points'), time=Max('submission__date'))[0]
+        solutions.append({
+            'points': solution.points,
+            'time': solution.time - participation.start,
+            'state': 'failed-score' if not solution.points else
+                     ('full-score' if solution.points == problem.points else 'partial-score'),
+        })
+    return solutions
 
 
 def contest_ranking_view(request, contest):
     assert isinstance(contest, Contest)
+    problems = list(contest.contest_problems.all())
+
+    def make_ranking_profile(participation):
+        contest_profile = participation.profile
+        return ContestRankingProfile(
+            id=contest_profile.user_id,
+            user=SimpleLazyObject(lambda: contest_profile.user.user),
+            display_rank=SimpleLazyObject(lambda: contest_profile.user.display_rank),
+            long_display_name=SimpleLazyObject(lambda: contest_profile.user.long_display_name),
+            points=participation.score,
+            problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.profile.user,
+                                                                         participation))
+        )
+
     results = map(make_ranking_profile, contest.users.select_related('profile').order_by('-score'))
     return render_to_response('contest_ranking.jade', {
         'users': ranker(results),
         'title': 'Ranking: %s' % contest.name,
-        'problems': contest.contest_problems.all(),
+        'problems': problems
     }, context_instance=RequestContext(request))
 
 
