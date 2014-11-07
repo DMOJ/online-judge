@@ -55,7 +55,7 @@ block media
         }
 
 
-    if not submission.is_graded
+    if not submission.is_graded and last_msg
         script(type='text/javascript')
             $(function () {
                 var receiver = new EventReceiver(
