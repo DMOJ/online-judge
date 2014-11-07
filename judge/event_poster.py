@@ -65,7 +65,10 @@ def post(channel, message):
         try:
             return _get_poster().post(channel, message)
         except (WebSocketException, socket.error):
-            del _local.poster
+            try:
+                del _local.poster
+            except AttributeError:
+                pass
     return 0
 
 
@@ -74,5 +77,8 @@ def last():
         try:
             return _get_poster().last()
         except (WebSocketException, socket.error):
-            del _local.poster
+            try:
+                del _local.poster
+            except AttributeError:
+                pass
     return 0
