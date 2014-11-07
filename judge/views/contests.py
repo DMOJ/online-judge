@@ -119,6 +119,7 @@ def leave_contest(request, key):
 
 ContestRankingProfile = namedtuple('ContestRankingProfile',
                                    'id user display_rank long_display_name points problems')
+BestSolutionData = namedtuple('BestSolutionData', 'points time state')
 
 
 def get_best_contest_solutions(problems, profile, participation):
@@ -129,12 +130,12 @@ def get_best_contest_solutions(problems, profile, participation):
         assert isinstance(problem, ContestProblem)
         solution = problem.submissions.filter(submission__user_id=profile.id)\
             .annotate(best=Max('points'), time=Max('submission__date'))[0]
-        solutions.append({
-            'points': solution.best,
-            'time': solution.time - participation.start,
-            'state': 'failed-score' if not solution.best else
-                     ('full-score' if solution.best == problem.points else 'partial-score'),
-        })
+        solutions.append(BestSolutionData(
+            points=solution.best,
+            time=solution.time - participation.start,
+            state='failed-score' if not solution.best else
+                  ('full-score' if solution.best == problem.points else 'partial-score'),
+        ))
     return solutions
 
 
