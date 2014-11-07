@@ -109,7 +109,7 @@ block media
             setInterval(update_all_time, 60000);
             update_all_time();
         });
-    if dynamic_update
+    if dynamic_update and last_msg
         script(type='text/javascript', src='{% static "common.js" %}')
         if IN_CONTEST
             script(type='text/javascript')
