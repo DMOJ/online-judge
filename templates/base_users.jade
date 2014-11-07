@@ -12,6 +12,13 @@ block media
         #users-table .header {
             vertical-align: middle;
         }
+    if show_organization
+        style
+            .organization {
+                float:left;
+                font-weight:bold;
+                color:gray;
+            }
     block users_media
 
 block body
@@ -30,6 +37,8 @@ block body
                     td #{rank}
                     - cache 86400 user_on_rank user.id
                         td(class=user.display_rank)
+                            if show_organization and user.organization
+                                span.organization #{user.organization.key}
                             a(href='{% url "judge.views.user" user.user.username %}').
                                 #{user.long_display_name}
                     block before_point

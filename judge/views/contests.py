@@ -170,7 +170,8 @@ def contest_ranking_view(request, contest):
         'content_title': contest.name,
         'subtitle': 'Rankings',
         'problems': problems,
-        'contest': contest
+        'contest': contest,
+        'show_organization': True,
     }, context_instance=RequestContext(request))
 
 
