@@ -126,7 +126,8 @@ def make_ranking_profile(participation):
         user=SimpleLazyObject(lambda: contest_profile.user.user),
         display_rank=SimpleLazyObject(lambda: contest_profile.user.display_rank),
         long_display_name=SimpleLazyObject(lambda: contest_profile.user.long_display_name),
-        points=participation.score
+        points=participation.score,
+        problems=None
     )
 
 
