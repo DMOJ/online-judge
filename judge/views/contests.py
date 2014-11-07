@@ -150,8 +150,7 @@ def contest_ranking_view(request, contest):
             display_rank=SimpleLazyObject(lambda: contest_profile.user.display_rank),
             long_display_name=SimpleLazyObject(lambda: contest_profile.user.long_display_name),
             points=participation.score,
-            problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.profile.user,
-                                                                         participation))
+            problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.user, participation))
         )
 
     results = map(make_ranking_profile, contest.users.select_related('profile').order_by('-score'))
