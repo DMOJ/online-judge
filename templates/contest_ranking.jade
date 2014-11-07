@@ -53,7 +53,7 @@ block before_point
         each problem in user.problems
             if problem
                 td(class=problem.state)
-                    | #{problem.points|floatformat:"-1"}
+                    | #{problem.points|floatformat:"0"}
                     .solving-time #{problem.time|timedelta:"noday"}
             else
                 td
