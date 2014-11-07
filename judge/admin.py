@@ -94,8 +94,8 @@ class ProblemAdmin(admin.ModelAdmin):
     def get_form(self, *args, **kwargs):
         form = super(ProblemAdmin, self).get_form(*args, **kwargs)
         form.base_fields['authors'].queryset = Profile.objects.filter(
-            Q(authors__groups__name__in=['Admin', 'ProblemSetter']) |
-            Q(authors__is_superuser=True)
+            Q(user__groups__name__in=['Admin', 'ProblemSetter']) |
+            Q(user__is_superuser=True)
         )
         return form
 
