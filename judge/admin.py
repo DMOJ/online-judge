@@ -27,6 +27,8 @@ class ProfileAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'name', 'ip')
     list_filter = ('language', 'timezone')
     actions = ('recalculate_points',)
+    actions_on_top = True
+    actions_on_bottom = True
 
     def timezone_full(self, obj):
         return obj.timezone
@@ -60,6 +62,8 @@ class ProblemAdmin(admin.ModelAdmin):
     actions = ['make_public', 'make_private']
     list_per_page = 500
     list_max_show_all = 1000
+    actions_on_top = True
+    actions_on_bottom = True
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
@@ -134,6 +138,8 @@ class SubmissionAdmin(admin.ModelAdmin):
                     'points', 'language', 'status', 'result', 'judge_column')
     list_filter = ('language', SubmissionStatusFilter, SubmissionResultFilter)
     search_fields = ('problem__code', 'problem__name', 'user__user__username', 'user__name')
+    actions_on_top = True
+    actions_on_bottom = True
 
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission'):
@@ -205,6 +211,8 @@ class CommentAdmin(admin.ModelAdmin):
     )
     list_display = ['title', 'author', 'page', 'time']
     search_fields = ['author__user__username', 'author__name', 'page', 'title', 'body']
+    actions_on_top = True
+    actions_on_bottom = True
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
@@ -346,6 +354,8 @@ class ContestAdmin(admin.ModelAdmin):
     list_display = ('key', 'name', 'ongoing', 'is_public', 'time_limit')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
+    actions_on_top = True
+    actions_on_bottom = True
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
@@ -379,6 +389,8 @@ class OrganizationAdmin(admin.ModelAdmin):
     readonly_fields = ('creation_date',)
     fields = ('name', 'key', 'about', 'registrant', 'creation_date')
     list_display = ('name', 'key', 'registrant', 'creation_date')
+    actions_on_top = True
+    actions_on_bottom = True
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
