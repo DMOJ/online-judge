@@ -1,0 +1,10 @@
+extends base_users
+
+block before_point_head
+    each problem in problems
+        th.points.header= forloop.counter
+            div.point-denominator= problem.points
+
+block before_point
+    each problem in problems
+        td

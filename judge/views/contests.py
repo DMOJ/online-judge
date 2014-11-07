@@ -126,16 +126,17 @@ def make_ranking_profile(participation):
         user=SimpleLazyObject(lambda: contest_profile.user.user),
         display_rank=SimpleLazyObject(lambda: contest_profile.user.display_rank),
         long_display_name=SimpleLazyObject(lambda: contest_profile.user.long_display_name),
-        points=participation.score,
-        problems=participation.submissions.values('problem').distinct().count()
+        points=participation.score
     )
 
 
 def contest_ranking_view(request, contest):
+    assert isinstance(contest, Contest)
     results = map(make_ranking_profile, contest.users.select_related('profile').order_by('-score'))
-    return render_to_response('users.jade', {
+    return render_to_response('contest_ranking.jade', {
         'users': ranker(results),
-        'title': 'Ranking: %s' % contest.name
+        'title': 'Ranking: %s' % contest.name,
+        'problems': contest.contest_problems.all(),
     }, context_instance=RequestContext(request))
 
 
@@ -144,4 +145,3 @@ def contest_ranking(request, key):
     if not exists:
         return contest
     return contest_ranking_view(request, contest)
-
