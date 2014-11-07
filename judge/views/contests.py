@@ -162,7 +162,7 @@ def contest_ranking_view(request, contest):
     return render_to_response('contest_ranking.jade', {
         'users': ranker(results),
         'title': '%s Rankings' % contest.name,
-        'content-title': contest.name,
+        'content_title': contest.name,
         'subtitle: Rankings'
         'problems': problems
     }, context_instance=RequestContext(request))

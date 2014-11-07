@@ -82,8 +82,8 @@ html(lang='en')
         div#content
             h2(style='color:#393630; display:inline')
                 block content_title
-                    if content-title
-                        | #{content-title}
+                    if content_title
+                        | #{content_title-title}
                     else
                         | #{title}
             block header
