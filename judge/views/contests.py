@@ -163,8 +163,9 @@ def contest_ranking_view(request, contest):
         'users': ranker(results),
         'title': '%s Rankings' % contest.name,
         'content_title': contest.name,
-        'subtitle: Rankings'
-        'problems': problems
+        'subtitle': 'Rankings',
+        'problems': problems,
+        'contest': contest
     }, context_instance=RequestContext(request))
 
 

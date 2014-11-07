@@ -48,9 +48,10 @@ block before_point_head
             div.point-denominator= problem.points
 
 block before_point
-    each problem in user.problems
-        if problem
-            td(class=problem.state)= problem.points
-                .solving-time #{problem.time|timedelta:"noday"}
-        else
-            td
+    - cache 86400 conrank_user_prob user.id contest.id
+        each problem in user.problems
+            if problem
+                td(class=problem.state)= problem.points
+                    .solving-time #{problem.time|timedelta:"noday"}
+            else
+                td
