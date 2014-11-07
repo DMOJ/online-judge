@@ -49,7 +49,7 @@ class ProfileAdmin(admin.ModelAdmin):
 class ProblemAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('code', 'name', 'is_public', 'user', 'description')
+            'fields': ('code', 'name', 'is_public', 'authors', 'description')
         }),
         ('Taxonomy', {'fields': ('types', 'group')}),
         ('Points', {'fields': (('points', 'partial'), 'short_circuit')}),
