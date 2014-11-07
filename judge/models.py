@@ -182,8 +182,7 @@ class Problem(models.Model):
                             validators=[RegexValidator('^[a-z0-9]+$', 'Problem code must be ^[a-z0-9]+$')])
     name = models.CharField(max_length=100, verbose_name='Problem name', db_index=True)
     description = models.TextField(verbose_name='Problem body')
-    user = models.ForeignKey(Profile, verbose_name='Creator', null=True, blank=True, default=None,
-                             on_delete=models.SET_NULL)
+    user = models.ManyToManyField(Profile, verbose_name='Creator', blank=True, related_name='authored_problems')
     types = models.ManyToManyField(ProblemType, verbose_name='Problem types')
     group = models.ForeignKey(ProblemGroup, verbose_name='Problem group')
     time_limit = models.IntegerField(verbose_name='Time limit')
@@ -380,6 +379,8 @@ class NavigationBar(OrderedModel):
 
     @property
     def pattern(self, cache={}):
+        # A cache with a bad policy is an alias for memory leak
+        # Thankfully, there will never be too many regexes to cache.
         if self.regex in cache:
             return cache[self.regex]
         else:
