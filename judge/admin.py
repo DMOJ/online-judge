@@ -1,4 +1,4 @@
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
@@ -56,7 +56,7 @@ class ProblemAdmin(admin.ModelAdmin):
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
         ('Language', {'fields': ('allowed_languages',)})
     )
-    list_display = ['code', 'name', 'user', 'points', 'is_public']
+    list_display = ['code', 'name', 'authors', 'points', 'is_public']
     ordering = ['code']
     search_fields = ('^code', 'name')
     actions = ['make_public', 'make_private']
@@ -69,6 +69,9 @@ class ProblemAdmin(admin.ModelAdmin):
         formfield_overrides = {
             TextField: {'widget': AdminPagedownWidget},
         }
+
+    def authors(self, obj):
+        return ', '.join(map(attrgetter('user.username'), obj.authors.select_related('user')))
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
