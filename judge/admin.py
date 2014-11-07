@@ -354,7 +354,7 @@ class ContestProblemInline(admin.TabularInline):
 
 
 class ContestAdmin(admin.ModelAdmin):
-    fields = ('key', 'name', 'description', 'ongoing', 'is_public', 'time_limit')
+    fields = ('key', 'name', 'description', 'ongoing', 'is_public', 'start_time', 'time_limit')
     list_display = ('key', 'name', 'ongoing', 'is_public', 'time_limit')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
