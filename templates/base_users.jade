@@ -4,12 +4,14 @@ extends base
 
 block media
     style
-        #users-table .rank, .points, .problems {
-            white-space: nowrap
+        #users-table .rank, .points, .problems, .username {
+            white-space: nowrap;
         }
-
         #users-table .username {
             width: 100%
+        }
+        #users-table .header {
+            vertical-align: middle;
         }
     block users_media
 
@@ -18,10 +20,10 @@ block body
     table#users-table.table
         thead
             tr
-                th.rank Rank
-                th.username Username
+                th.header.rank Rank
+                th.header.username Username
                 block before_point_head
-                th.points Points
+                th.header.points Points
                 block after_point_head
         tbody
             for rank, user in users
