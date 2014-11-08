@@ -13,15 +13,12 @@ valid_id = re.compile(r'^\w+$')
 
 
 class CustomRegistrationForm(RegistrationForm):
+    username = forms.RegexField(regex=r'^\w+$', max_length=30, label='Username',
+                                error_messages={'invalid': 'A username must contain letters, numbers, or underscores'})
     display_name = CharField(max_length=50, required=False, label='Real name (optional)')
     timezone = ChoiceField(choices=TIMEZONE)
     organization = ModelChoiceField(queryset=Organization.objects.all(), label='Affiliation', required=False)
     language = ModelChoiceField(queryset=Language.objects.all(), label='Default language', empty_label=None)
-
-    def clean_username(self):
-        if valid_id.match(self.cleaned_data['username']) is None:
-            raise forms.ValidationError('A username must contain letters, numbers, or underscores')
-        return super(CustomRegistrationForm, self).clean_username()
 
 
 class RegistrationView(OldRegistrationView):
