@@ -468,6 +468,9 @@ class Contest(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('judge.views.contest', args=(self.key,))
+
     class Meta:
         permissions = (
             ('see_private_contest', 'See private contests'),
