@@ -81,6 +81,7 @@ class SubmissionsListBase(TitleMixin, ListView):
     dynamic_update = False
     show_problem = True
     title = 'All Submissions'
+    template_name = 'submission/list.jade'
 
     def get_paginator(self, queryset, per_page, orphans=0,
                       allow_empty_first_page=True, **kwargs):
