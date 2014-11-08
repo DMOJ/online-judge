@@ -69,7 +69,6 @@ class OrganizationUsers(OrganizationMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = '%s Members' % self.object.name
-        context['can_edit'] = self.can_edit_organization()
         context['users'] = ranker(self.object.members.filter(points__gt=0, user__is_active=True).order_by('-points'))
         return context
 
