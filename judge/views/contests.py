@@ -132,7 +132,7 @@ def leave_contest(request, key):
 
 
 ContestRankingProfile = namedtuple('ContestRankingProfile',
-                                   'id user display_rank long_display_name points problems')
+                                   'id user display_rank long_display_name points problems organization')
 BestSolutionData = namedtuple('BestSolutionData', 'points time state')
 
 
@@ -169,6 +169,7 @@ def contest_ranking_view(request, contest):
             display_rank=SimpleLazyObject(lambda: contest_profile.user.display_rank),
             long_display_name=SimpleLazyObject(lambda: contest_profile.user.long_display_name),
             points=participation.score,
+            organization=SimpleLazyObject(lambda: contest_profile.user.organization),
             problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.user, participation))
         )
 
