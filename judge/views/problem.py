@@ -125,7 +125,7 @@ def problem_submit(request, problem=None, submission=None):
                     contest.save()
 
             model.judge()
-            return HttpResponseRedirect(reverse('judge.views.submission_status', args=[str(model.id)]))
+            return HttpResponseRedirect(reverse('submission_status', args=[str(model.id)]))
         else:
             form_data = form.cleaned_data
     else:

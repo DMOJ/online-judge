@@ -37,7 +37,7 @@ block media
 
 block body
     br
-    a(href='{% url "judge.views.submission_status" submission.id %}') View status
+    a(href='{% url "submission_status" submission.id %}') View status
     br
     if request.user == submission.user.user
         a(href='{% url "judge.views.problem_submit" submission.problem.code submission.id %}') Resubmit

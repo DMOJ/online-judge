@@ -6,58 +6,62 @@ from django.db.models import F
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader
+from django.views.generic import TemplateView
+from django.views.generic.detail import SingleObjectMixin
 
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, SubmissionTestCase, Profile
 from judge.utils.problems import user_completed_ids
 from judge.utils.diggpaginator import DiggPaginator
+from judge.utils.views import TitleMixin
 from judge.views import get_result_table
 from judge import event_poster as event
 
 
-def check_submission_access(request, submission):
-    if not request.user.is_authenticated():
-        raise PermissionDenied()
-
-    if not request.user.profile.is_admin and submission.user != request.user.profile and \
-            not Submission.objects.filter(user=request.user.profile, result='AC',
-                                          problem__code=submission.problem.code,
-                                          points=F('problem__points')).exists():
-        raise PermissionDenied()
+class SubmissionMixin(object):
+    model = Submission
 
 
-def submission_source(request, sub_id):
-    try:
-        submission = Submission.objects.get(id=int(sub_id))
-        check_submission_access(request, submission)
+class SubmissionDetailBase(TitleMixin, SubmissionMixin, SingleObjectMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        self.object = submission = self.get_object()
 
-        return render_to_response('submission/source.jade',
-                                  {
-                                      'submission': submission,
-                                      'raw_source': submission.source.rstrip('\n'),
-                                      'highlighted_source': highlight_code(submission.source, submission.language.pygments),
-                                      'title': 'Submission of %s by %s' %
-                                            (submission.problem.name, submission.user.user.username)
-                                  },
-                                  context_instance=RequestContext(request))
-    except ObjectDoesNotExist:
-        raise Http404()
+        if not request.user.is_authenticated():
+            raise PermissionDenied()
+
+        if not request.user.profile.is_admin and submission.user != request.user.profile and \
+                not Submission.objects.filter(user=request.user.profile, result='AC',
+                                              problem__code=submission.problem.code,
+                                              points=F('problem__points')).exists():
+            raise PermissionDenied()
+
+        return super(SubmissionDetailBase, self).get(request, *args, submission=self.object, **kwargs)
+
+    def get_title(self):
+        submission = self.object
+        return 'Submission of %s by %s' % (submission.problem.name, submission.user.user.username)
 
 
-def submission_status(request, code):
-    try:
-        submission = Submission.objects.get(id=int(code))
-        check_submission_access(request, submission)
+class SubmissionSource(SubmissionDetailBase):
+    template_name = 'submission/source.jade'
 
-        test_cases = SubmissionTestCase.objects.filter(submission=submission)
-        return render_to_response('submission/status.jade',
-                                  {'submission': submission, 'test_cases': test_cases,
-                                   'last_msg': event.last(),
-                                   'title': 'Submission of %s by %s' %
-                                            (submission.problem.name, submission.user.user.username)},
-                                  context_instance=RequestContext(request))
-    except ObjectDoesNotExist:
-        raise Http404()
+    def get_context_object_name(self, obj):
+        context = super(SubmissionSource, self).get_context_object_name(obj)
+        submission = self.object
+        context['raw_source'] = submission.source
+        context['highlighted_source'] = highlight_code(submission.source, submission.language.pygments)
+        return context
+
+
+class SubmissionStatus(SubmissionDetailBase):
+    template_name = 'submission/status.jade'
+
+    def get_context_object_name(self, obj):
+        context = super(SubmissionStatus, self).get_context_object_name(obj)
+        submission = self.object
+        context['last_msg'] = event.last()
+        context['test_cases'] = submission.test_cases.all()
+        return context
 
 
 def abort_submission(request, code):
@@ -68,7 +72,7 @@ def abort_submission(request, code):
                     request.user.profile != submission.user and not request.user.profile.is_admin):
         raise PermissionDenied()
     submission.abort()
-    return HttpResponseRedirect(reverse('judge.views.submission_status', args=(code,)))
+    return HttpResponseRedirect(reverse('submission_status', args=(code,)))
 
 
 def all_user_submissions(request, username, page=1):
