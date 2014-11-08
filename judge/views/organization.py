@@ -1,7 +1,9 @@
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.forms import modelform_factory
 from django.http import HttpResponseRedirect, Http404
 from django.utils import timezone
 from django.views.generic import CreateView, DetailView, ListView, View, UpdateView
@@ -94,7 +96,8 @@ class LeaveOrganization(OrganizationMembershipChange):
 class NewOrganization(LoginRequiredMixin, TitleMixin, CreateView):
     template_name = 'organization/new.jade'
     model = Organization
-    fields = ['name', 'key', 'about']
+    fields = ['name', 'key', 'about', 'admins']
+    form_class = modelform_factory(Organization, widgets={'admins': FilteredSelectMultiple})
     title = 'New Organization'
 
     def form_valid(self, form):
@@ -113,15 +116,18 @@ class NewOrganization(LoginRequiredMixin, TitleMixin, CreateView):
 
 
 class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, UpdateView):
-    fields = ['name', 'about']
+    fields = ['name', 'about', 'admins']
     template_name = 'organization/edit.jade'
+    form_class = modelform_factory(Organization, widgets={'admins': FilteredSelectMultiple})
 
     def get_title(self):
         return 'Editing %s' % self.object.name
 
     def get_object(self, queryset=None):
         object = super(EditOrganization, self).get_object()
-        if object.id != self.request.user.profile.organization_id:
+        assert isinstance(object, Organization)
+        profile_id = self.request.user.profile.id
+        if not object.admins.filter(id=profile_id).exists() and object.registrant_id != profile_id:
             raise PermissionDenied()
         return object
 
@@ -130,4 +136,4 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
             return super(EditOrganization, self).dispatch(request, *args, **kwargs)
         except PermissionDenied:
             return generic_message(request, "Can't edit organization",
-                                   'You are not in this organization.')
+                                   'You are not allowed to edit this organization.')
