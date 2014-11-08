@@ -100,7 +100,7 @@ block body
     br
 
     #test-cases
-        include status_testcases
+        include submission/status_testcases
 
     if not submission.is_graded
         if request.user == submission.user.user or request.user.is_admin
