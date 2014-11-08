@@ -78,7 +78,6 @@ def abort_submission(request, code):
 class SubmissionsListBase(TitleMixin, ListView):
     model = Submission
     paginate_by = 50
-    context_object_name = 'submissions'
     dynamic_update = False
     show_problem = True
     title = 'All Submissions'
@@ -106,6 +105,7 @@ class SubmissionsListBase(TitleMixin, ListView):
         context['completed_problem_ids'] = (user_completed_ids(self.request.user.profile)
                                             if self.request.user.is_authenticated() else [])
         context['results'] = self.get_result_table()
+        context['submissions'] = context['page_obj']
         return context
 
 
