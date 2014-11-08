@@ -15,8 +15,8 @@ from judge.utils.ranker import ranker
 from judge.utils.views import generic_message
 
 
-__all__ = ['organization_list', 'OrganizationHomeView', 'organization_users', 'join_organization', 'leave_organization',
-           'NewOrganizationView']
+__all__ = ['organization_list', 'OrganizationHomeView', 'OrganizationUsersView', 'join_organization',
+           'leave_organization', 'NewOrganizationView']
 
 
 def organization_list(request):
@@ -35,18 +35,6 @@ def _find_organization(request, key):
     return organization, True
 
 
-def organization_users(request, key):
-    org, exists = _find_organization(request, key)
-    if not exists:
-        return org
-
-    return render_to_response('users.jade', {
-        'organization': org,
-        'title': '%s Members' % org.name,
-        'users': ranker(org.members.filter(points__gt=0, user__is_active=True).order_by('-points'))
-    }, context_instance=RequestContext(request))
-
-
 def organization_not_found(request, key):
     if key:
         return generic_message(request, 'No such organization',
@@ -56,11 +44,20 @@ def organization_not_found(request, key):
                                'Could not find such organization.')
 
 
-class OrganizationHomeView(DetailView):
+class OrganizationDataView(DetailView):
     context_object_name = 'organization'
     model = Organization
     slug_field = 'key'
     slug_url_kwarg = 'key'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super(OrganizationDataView, self).get(self, request, *args, **kwargs)
+        except Http404:
+            return organization_not_found(request, kwargs.get(self.slug_url_kwarg, None))
+
+
+class OrganizationHomeView(OrganizationDataView):
     template_name = 'organization.jade'
 
     def get_context_data(self, **kwargs):
@@ -68,11 +65,16 @@ class OrganizationHomeView(DetailView):
         context['title'] = self.object.name
         return context
 
-    def get(self, request, *args, **kwargs):
-        try:
-            return super(OrganizationHomeView, self).get(self, request, *args, **kwargs)
-        except Http404:
-            return organization_not_found(request, kwargs.get(self.slug_url_kwarg, None))
+
+class OrganizationUsersView(OrganizationDataView):
+    template_name = 'users.jade'
+
+    def get_context_data(self, **kwargs):
+        context = super(OrganizationUsersView, self).get_context_data(**kwargs)
+        context['title'] = '%s Members' % self.object.name
+        context['users'] = ranker(self.object.members.filter(points__gt=0, user__is_active=True).order_by('-points'))
+        return context
+
 
 
 @login_required

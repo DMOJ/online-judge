@@ -15,7 +15,7 @@ block info_float
                 a.unselectable.button.full(href='{% url "judge.views.leave_organization" organization.key %}')
                     | Leave organization
                 hr
-    a(href='{% url "judge.views.organization_users" organization.key %}') View members
+    a(href='{% url "organization_users" organization.key %}') View members
         
 block description
     -cache 3600 organization_html organization.id
