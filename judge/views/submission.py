@@ -46,7 +46,7 @@ class SubmissionSource(SubmissionDetailBase):
     template_name = 'submission/source.jade'
 
     def get_context_data(self, **kwargs):
-        context = super(SubmissionSource, self).get_context_data(obj)
+        context = super(SubmissionSource, self).get_context_data(**kwargs)
         submission = self.object
         context['raw_source'] = submission.source
         context['highlighted_source'] = highlight_code(submission.source, submission.language.pygments)
@@ -56,8 +56,8 @@ class SubmissionSource(SubmissionDetailBase):
 class SubmissionStatus(SubmissionDetailBase):
     template_name = 'submission/status.jade'
 
-    def get_context_data(self, obj):
-        context = super(SubmissionStatus, self).get_context_data(obj)
+    def get_context_data(self, **kwargs):
+        context = super(SubmissionStatus, self).get_context_data(**kwargs)
         submission = self.object
         context['last_msg'] = event.last()
         context['test_cases'] = submission.test_cases.all()
