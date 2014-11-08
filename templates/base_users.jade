@@ -18,7 +18,7 @@ block media
                 position: relative;
             }
 
-            .organization {
+            .organization a {
                 position: absolute;
                 left: 0;
                 font-weight: bold;
@@ -46,7 +46,8 @@ block body
                             td(class=user.display_rank)
                                 .userinfo
                                     if user.organization
-                                        span.organization #{user.organization.key}
+                                        span.organization
+                                            a(href='{% url "judge.views.organization_home" user.organization.key %}') #{user.organization.key}
                                     a(href='{% url "judge.views.user" user.user.username %}').
                                         #{user.long_display_name}
                     else
