@@ -130,7 +130,7 @@ urlpatterns = patterns('',
     
     url(r'^organizations/$', 'judge.views.organization_list'),
     url(r'^organizations/add$', views.NewOrganizationView.as_view()),
-    url(r'^organization/(\w+)$', views.OrganizationHomeView.as_view(), name='organization_home'),
+    url(r'^organization/(?P<key>\w+)$', views.OrganizationHomeView.as_view(), name='organization_home'),
     url(r'^organization/(\w+)/users$', 'judge.views.organization_users'),
     url(r'^organization/(\w+)/join', 'judge.views.join_organization'),
     url(r'^organization/(\w+)/leave', 'judge.views.leave_organization'),

@@ -47,10 +47,10 @@ def organization_users(request, key):
     }, context_instance=RequestContext(request))
 
 
-def organization_not_found(request, args):
-    if args:
+def organization_not_found(request, key):
+    if key:
         return generic_message(request, 'No such organization',
-                               'Could not find an organization with the key "%s".' % args[0])
+                               'Could not find an organization with the key "%s".' % key)
     else:
         return generic_message(request, 'No such organization',
                                'Could not find such organization.')
@@ -60,6 +60,7 @@ class OrganizationHomeView(DetailView):
     context_object_name = 'organization'
     model = Organization
     slug_field = 'key'
+    slug_url_kwarg = 'key'
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationHomeView, self).get_context_data(**kwargs)
@@ -70,7 +71,7 @@ class OrganizationHomeView(DetailView):
         try:
             return super(OrganizationHomeView, self).get(self, request, *args, **kwargs)
         except Http404:
-            return organization_not_found(request, args)
+            return organization_not_found(request, kwargs.get(self.slug_url_kwarg, None))
 
 
 @login_required
