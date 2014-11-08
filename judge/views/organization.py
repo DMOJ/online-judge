@@ -68,7 +68,6 @@ class OrganizationMembershipChange(LoginRequiredMixin, SingleObjectMixin, View):
     model = Organization
     slug_field = 'key'
     slug_url_kwarg = 'key'
-    permanent = False
 
     def get(self, request, *args, **kwargs):
         try:
