@@ -1,4 +1,4 @@
-extends ../common-content
+extends common-content
 
 -load staticfiles
 -load mathtag
@@ -63,4 +63,4 @@ block comments
     .comment-area
         h2 Comments
         script(src='{% static "placeholder-compat.js" %}')
-        include ../comment/list
+        include comment/list
