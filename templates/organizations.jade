@@ -14,7 +14,7 @@ block body
                 tr
                     td= org.key
                     td
-                        a(href='{% url "judge.views.organization_home" org.key %}')= org.name
+                        a(href='{% url "organization_home" org.key %}')= org.name
                     td
                         - cache 86400 org_member_count org.id
                             a(href='{% url "judge.views.organization_users" org.key %}')= org.member_count

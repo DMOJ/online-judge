@@ -47,7 +47,7 @@ block body
                                 .userinfo
                                     if user.organization
                                         span.organization
-                                            a(href='{% url "judge.views.organization_home" user.organization.key %}')= user.organization.key
+                                            a(href='{% url "organization_home" user.organization.key %}')= user.organization.key
                                     a(href='{% url "judge.views.user" user.user.username %}')= user.long_display_name
                     else
                         - cache 86400 user_on_rank user.id

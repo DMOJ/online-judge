@@ -45,7 +45,7 @@ class OrganizationSitemap(Sitemap):
         return Organization.objects.all()
 
     def location(self, obj):
-        return reverse('judge.views.organization_home', args=(obj.key,))
+        return reverse('organization_home', args=(obj.key,))
 
 
 class HomePageSitemap(Sitemap):

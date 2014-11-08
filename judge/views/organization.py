@@ -3,19 +3,19 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView
 
 from judge.models import Organization
 from judge.utils.ranker import ranker
 from judge.utils.views import generic_message
 
 
-__all__ = ['organization_list', 'organization_home', 'organization_users', 'join_organization', 'leave_organization',
+__all__ = ['organization_list', 'OrganizationHomeView', 'organization_users', 'join_organization', 'leave_organization',
            'NewOrganizationView']
 
 
@@ -47,15 +47,30 @@ def organization_users(request, key):
     }, context_instance=RequestContext(request))
 
 
-def organization_home(request, key):
-    org, exists = _find_organization(request, key)
-    if not exists:
-        return org
+def organization_not_found(request, args):
+    if args:
+        return generic_message(request, 'No such organization',
+                               'Could not find an organization with the key "%s".' % args[0])
+    else:
+        return generic_message(request, 'No such organization',
+                               'Could not find such organization.')
 
-    return render_to_response('organization.jade', {
-        'organization': org,
-        'title': org.name,
-    }, context_instance=RequestContext(request))
+
+class OrganizationHomeView(DetailView):
+    context_object_name = 'organization'
+    model = Organization
+    slug_field = 'key'
+
+    def get_context_data(self, **kwargs):
+        context = super(OrganizationHomeView, self).get_context_data(**kwargs)
+        context['title'] = self.object.name
+        return context
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super(OrganizationHomeView, self).get(self, request, *args, **kwargs)
+        except Http404:
+            return organization_not_found(request, args)
 
 
 @login_required
@@ -75,7 +90,7 @@ def join_organization(request, key):
     profile.organization_join_time = timezone.now()
     profile.save()
     cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
-    return HttpResponseRedirect(reverse(organization_home, args=(key,)))
+    return HttpResponseRedirect(reverse('organization_home', args=(key,)))
 
 
 @login_required
@@ -94,7 +109,7 @@ def leave_organization(request, key):
     profile.organization_join_time = None
     profile.save()
     cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
-    return HttpResponseRedirect(reverse(organization_home, args=(key,)))
+    return HttpResponseRedirect(reverse('organization_home', args=(key,)))
 
 
 class NewOrganizationView(CreateView):
