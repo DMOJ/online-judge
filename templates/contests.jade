@@ -16,7 +16,7 @@ block body
                         a(href='{% url "judge.views.contest" contest.key %}')= contest.name
                     td= contest.time_limit
                     td
-                        if contest.ongoing
+                        if contest.can_join
                             img(src='{% static "admin/img/icon-yes.gif" %}')
                         else
                             img(src='{% static "admin/img/icon-no.gif" %}')

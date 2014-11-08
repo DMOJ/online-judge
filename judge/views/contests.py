@@ -80,6 +80,12 @@ def join_contest(request, key):
     if not exists:
         return contest
 
+    if not contest.can_join:
+        return render_to_response('generic_message.jade', {
+            'message': '"%s" is not currently ongoing.' % contest.name,
+            'title': 'Contest not ongoing'
+        }, context_instance=RequestContext(request))
+
     contest_profile = request.user.profile.contest
     if contest_profile.current is not None:
         return render_to_response('generic_message.jade', {
@@ -89,13 +95,13 @@ def join_contest(request, key):
 
     participation, created = ContestParticipation.objects.get_or_create(
         contest=contest, profile=contest_profile, defaults={
-            'start': contest.start_time or timezone.now()
+            'start': contest.start_time or now
         }
     )
     if not created and participation.ended:
         return render_to_response('generic_message.jade', {
             'message': 'Too late! You already used up your time limit for "%s".' % contest.name,
-            'title': 'Already in contest'
+            'title': 'Time limit exceeded'
         }, context_instance=RequestContext(request))
 
     contest_profile.current = participation

@@ -1,6 +1,7 @@
 import re
 from operator import itemgetter, attrgetter
 from django.core.cache import cache
+from django.utils.functional import cached_property
 
 import pytz
 from django.contrib.auth.models import User
@@ -8,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Max, Sum, Min
+from django.db.models import Max
 from django.utils import timezone
 from timedelta.fields import TimedeltaField
 
@@ -427,6 +428,16 @@ class Contest(models.Model):
     start_time = models.DateTimeField(verbose_name='Start time', null=True, blank=True)
     time_limit = TimedeltaField(verbose_name='Time limit')
     is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
+
+    @cached_property
+    def can_join(self):
+        if not self.ongoing:
+            return False
+        if self.start_time is not None:
+            now = timezone.now()
+            if now < self.start_time or now > self.start_time + self.time_limit:
+                return False
+        return True
 
     def __unicode__(self):
         return self.name
