@@ -13,7 +13,7 @@ block media
                 return fmt.replace(/%s/g, function(match) {return String(obj.shift())});
             }
         }
-    link(rel='stylesheet', href='{% static 'admin/css/widgets.css' %}', type='text/css')
+    link(rel='stylesheet', href='{% static "admin/css/widgets.css" %}', type='text/css')
     | #{form.media}
 
 block body
