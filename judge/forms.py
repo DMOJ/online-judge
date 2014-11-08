@@ -1,5 +1,6 @@
 from operator import attrgetter
 from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django_ace import AceWidget
@@ -52,3 +53,17 @@ class OrganizationForm(ModelForm):
     class Meta:
         model = Organization
         fields = ['name', 'key', 'about']
+
+
+class EditOrganizationForm(ModelForm):
+    class Meta:
+        model = Organization
+        fields = ['name', 'about', 'admins']
+        widgets = {
+            'admins': FilteredSelectMultiple('Admins', False)
+        }
+
+
+class NewOrganizationForm(EditOrganizationForm):
+    class Meta(EditOrganizationForm.Meta):
+        fields = ['key', 'name', 'about', 'admins']

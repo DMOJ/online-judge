@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.views.generic import CreateView, DetailView, ListView, View, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 
+from judge.forms import EditOrganizationForm, NewOrganizationForm
 from judge.models import Organization
 from judge.utils.ranker import ranker
 from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
@@ -96,8 +97,7 @@ class LeaveOrganization(OrganizationMembershipChange):
 class NewOrganization(LoginRequiredMixin, TitleMixin, CreateView):
     template_name = 'organization/new.jade'
     model = Organization
-    fields = ['name', 'key', 'about', 'admins']
-    form_class = modelform_factory(Organization, widgets={'admins': FilteredSelectMultiple('Admins', False)})
+    form_class = NewOrganizationForm
     title = 'New Organization'
 
     def form_valid(self, form):
@@ -116,9 +116,9 @@ class NewOrganization(LoginRequiredMixin, TitleMixin, CreateView):
 
 
 class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, UpdateView):
-    fields = ['name', 'about', 'admins']
     template_name = 'organization/edit.jade'
-    form_class = modelform_factory(Organization, widgets={'admins': FilteredSelectMultiple('Admins', False)})
+    model = Organization
+    form_class = EditOrganizationForm
 
     def get_title(self):
         return 'Editing %s' % self.object.name
