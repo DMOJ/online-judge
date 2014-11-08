@@ -71,6 +71,7 @@ def contest(request, key):
         'in_contest': in_contest,
         'participating': participating,
         'participation': participation,
+        'now': timezone.now(),
     }, context_instance=RequestContext(request))
 
 

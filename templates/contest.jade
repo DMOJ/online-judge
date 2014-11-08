@@ -28,15 +28,26 @@ block info_float
         a(href='{% url "admin:judge_contest_change" contest.id %}') Edit contest
     hr
     br
-    if participating
-        if participation.ended
+    if contest.start_time
+        if contest.start_time > now
+            b Starting in:
+            .time-remaining #{contest.time_before_start|timedelta:"simple"}
+        elif contest.end_time < now
             b Time is up!
         else
             b Time remaining:
-            .time-remaining #{participation.time_remaining|timedelta:"simple"}
+            = ' '
+            .time-remaining #{contest.time_before_end|timedelta:"simple"}
     else
-        b Time limit:
-        | &nbsp;#{contest.time_limit}
+        if participating
+            if participation.ended
+                b Time is up!
+            else
+                b Time remaining:
+                .time-remaining #{participation.time_remaining|timedelta:"simple"}
+        else
+            b Time limit:
+            | &nbsp;#{contest.time_limit}
 
 block description
     -cache 3600 contest_html contest.id

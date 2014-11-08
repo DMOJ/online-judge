@@ -439,6 +439,32 @@ class Contest(models.Model):
                 return False
         return True
 
+    @cached_property
+    def end_time(self):
+        if self.start_time is None:
+            return None
+        return self.start_time + self.time_limit
+
+    @property
+    def time_before_start(self):
+        if self.start_time is None:
+            return None
+        now = timezone.now()
+        if self.start_time <= now:
+            return now - self.start_time
+        else:
+            return None
+
+    @property
+    def time_before_end(self):
+        if self.start_time is None:
+            return None
+        now = timezone.now()
+        if self.end_time >= now:
+            return self.end_time - now
+        else:
+            return None
+
     def __unicode__(self):
         return self.name
 
