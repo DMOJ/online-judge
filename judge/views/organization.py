@@ -14,17 +14,8 @@ from judge.utils.ranker import ranker
 from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
 
 
-__all__ = ['OrganizationList', 'OrganizationHomeView', 'OrganizationUsersView', 'JoinOrganizationView',
-           'LeaveOrganizationView', 'NewOrganizationView']
-
-
-def _find_organization(request, key):
-    try:
-        organization = Organization.objects.get(key=key)
-    except ObjectDoesNotExist:
-        return generic_message(request, 'No such organization',
-                               'Could not find an organization with the key "%s".' % key), False
-    return organization, True
+__all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'JoinOrganization',
+           'LeaveOrganization', 'NewOrganization']
 
 
 def organization_not_found(request, key):
@@ -56,18 +47,18 @@ class OrganizationDataView(DetailView):
             return organization_not_found(request, kwargs.get(self.slug_url_kwarg, None))
 
 
-class OrganizationHomeView(TitleMixin, OrganizationDataView):
+class OrganizationHome(TitleMixin, OrganizationDataView):
     template_name = 'organization.jade'
 
     def get_title(self):
         return self.object.name
 
 
-class OrganizationUsersView(OrganizationDataView):
+class OrganizationUsers(OrganizationDataView):
     template_name = 'users.jade'
 
     def get_context_data(self, **kwargs):
-        context = super(OrganizationUsersView, self).get_context_data(**kwargs)
+        context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = '%s Members' % self.object.name
         context['users'] = ranker(self.object.members.filter(points__gt=0, user__is_active=True).order_by('-points'))
         return context
@@ -93,7 +84,7 @@ class OrganizationMembershipChange(LoginRequiredMixin, SingleObjectMixin, View):
         raise NotImplementedError()
 
 
-class JoinOrganizationView(OrganizationMembershipChange):
+class JoinOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
         if profile.organization_id is not None:
             return generic_message(request, 'Joining organization', 'You are already in an organization.')
@@ -103,7 +94,7 @@ class JoinOrganizationView(OrganizationMembershipChange):
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
 
-class LeaveOrganizationView(OrganizationMembershipChange):
+class LeaveOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
         if org.id != profile.organization_id:
             return generic_message(request, 'Leaving organization', 'You are not in "%s".' % org.key)
@@ -113,14 +104,14 @@ class LeaveOrganizationView(OrganizationMembershipChange):
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
 
-class NewOrganizationView(CreateView):
+class NewOrganization(CreateView):
     template_name = 'new_organization.jade'
     model = Organization
     fields = ['name', 'key', 'about']
 
     def form_valid(self, form):
         form.instance.registrant = self.request.user.profile
-        return super(NewOrganizationView, self).form_valid(form)
+        return super(NewOrganization, self).form_valid(form)
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -131,4 +122,4 @@ class NewOrganizationView(CreateView):
         elif profile.organization is not None:
             return generic_message(request, "Can't add organization",
                                    'You are already in an organization.')
-        return super(NewOrganizationView, self).dispatch(request, *args, **kwargs)
+        return super(NewOrganization, self).dispatch(request, *args, **kwargs)

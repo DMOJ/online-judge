@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from django.contrib.sitemaps import FlatPageSitemap
 from judge import views
+from judge.views import organization
 from judge.ordered_model import urls as ordered_model_urls
 
 from judge.views import RegistrationView, ActivationView, TemplateView
@@ -128,12 +128,12 @@ urlpatterns = patterns('',
     url(r'^contest/(\w+)/join$', 'judge.views.join_contest'),
     url(r'^contest/(\w+)/leave$', 'judge.views.leave_contest'),
     
-    url(r'^organizations/$', views.OrganizationList.as_view(), name='organization_list'),
-    url(r'^organizations/add$', views.NewOrganizationView.as_view()),
-    url(r'^organization/(?P<key>\w+)$', views.OrganizationHomeView.as_view(), name='organization_home'),
-    url(r'^organization/(?P<key>\w+)/users$', views.OrganizationUsersView.as_view(), name='organization_users'),
-    url(r'^organization/(?P<key>\w+)/join', views.JoinOrganizationView.as_view(), name='join_organization'),
-    url(r'^organization/(?P<key>\w+)/leave', views.LeaveOrganizationView.as_view(), name='leave_organization'),
+    url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
+    url(r'^organizations/add$', organization.NewOrganization.as_view()),
+    url(r'^organization/(?P<key>\w+)$', organization.OrganizationHome.as_view(), name='organization_home'),
+    url(r'^organization/(?P<key>\w+)/users$', organization.OrganizationUsers.as_view(), name='organization_users'),
+    url(r'^organization/(?P<key>\w+)/join', organization.JoinOrganization.as_view(), name='join_organization'),
+    url(r'^organization/(?P<key>\w+)/leave', organization.LeaveOrganization.as_view(), name='leave_organization'),
 
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {
         'problem': ProblemSitemap,
