@@ -99,10 +99,11 @@ class LeaveOrganization(OrganizationMembershipChange):
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
 
-class NewOrganization(LoginRequiredMixin, CreateView):
+class NewOrganization(LoginRequiredMixin, TitleMixin, CreateView):
     template_name = 'new_organization.jade'
     model = Organization
     fields = ['name', 'key', 'about']
+    title = 'New Organization'
 
     def form_valid(self, form):
         form.instance.registrant = self.request.user.profile
@@ -119,9 +120,12 @@ class NewOrganization(LoginRequiredMixin, CreateView):
         return super(NewOrganization, self).dispatch(request, *args, **kwargs)
 
 
-class EditOrganization(LoginRequiredMixin, OrganizationMixin, UpdateView):
+class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, UpdateView):
     fields = ['name', 'about']
     template_name = 'edit_organization.jade'
+
+    def get_title(self):
+        return 'Editing %s' % self.object.name
 
     def get_object(self, queryset=None):
         object = super(EditOrganization, self).get_object()
