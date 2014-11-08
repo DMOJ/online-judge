@@ -45,11 +45,19 @@ class OrganizationList(TitleMixin, ListView):
     title = 'Organizations'
 
 
-class OrganizationHome(TitleMixin, OrganizationMixin, DetailView):
+class OrganizationHome(OrganizationMixin, DetailView):
     template_name = 'organization/home.jade'
 
-    def get_title(self):
-        return self.object.name
+    def get_context_data(self, **kwargs):
+        context = super(OrganizationUsers, self).get_context_data(**kwargs)
+        org = self.object
+        context['title'] = org.name
+        if self.request.user.is_authenticated():
+            profile_id = self.request.user.profile.id
+            context['can_edit'] = org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id
+        else:
+            context['can_edit'] = False
+        return context
 
 
 class OrganizationUsers(OrganizationMixin, DetailView):
