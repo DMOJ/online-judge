@@ -15,23 +15,7 @@ from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
 
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'JoinOrganization',
-           'LeaveOrganization', 'NewOrganization']
-
-
-def organization_not_found(request, key):
-    if key:
-        return generic_message(request, 'No such organization',
-                               'Could not find an organization with the key "%s".' % key)
-    else:
-        return generic_message(request, 'No such organization',
-                               'Could not find such organization.')
-
-
-class OrganizationList(TitleMixin, ListView):
-    model = Organization
-    context_object_name = 'organizations'
-    template_name = 'organization/list.jade'
-    title = 'Organizations'
+           'LeaveOrganization', 'NewOrganization', 'EditOrganization']
 
 
 class OrganizationMixin(object):
@@ -44,7 +28,20 @@ class OrganizationMixin(object):
         try:
             return super(OrganizationMixin, self).dispatch(request, *args, **kwargs)
         except Http404:
-            return organization_not_found(request, kwargs.get(self.slug_url_kwarg, None))
+            key = kwargs.get(self.slug_url_kwarg, None)
+            if key:
+                return generic_message(request, 'No such organization',
+                                       'Could not find an organization with the key "%s".' % key)
+            else:
+                return generic_message(request, 'No such organization',
+                                       'Could not find such organization.')
+
+
+class OrganizationList(TitleMixin, ListView):
+    model = Organization
+    context_object_name = 'organizations'
+    template_name = 'organization/list.jade'
+    title = 'Organizations'
 
 
 class OrganizationHome(TitleMixin, OrganizationMixin, DetailView):
@@ -66,10 +63,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
 
 class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
     def get(self, request, *args, **kwargs):
-        try:
-            org = self.get_object()
-        except Http404:
-            return organization_not_found(request, kwargs.get(self.slug_url_kwarg, None))
+        org = self.get_object()
         response = self.handle(request, org, request.user.profile)
         if response is not None:
             return response
