@@ -4,7 +4,6 @@ from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
@@ -13,6 +12,8 @@ from django.views.generic import CreateView
 
 from judge.models import Organization
 from judge.utils.ranker import ranker
+from judge.utils.views import generic_message
+
 
 __all__ = ['organization_list', 'organization_home', 'organization_users', 'join_organization', 'leave_organization',
            'NewOrganizationView']
@@ -29,10 +30,8 @@ def _find_organization(request, key):
     try:
         organization = Organization.objects.get(key=key)
     except ObjectDoesNotExist:
-        return render_to_response('generic_message.jade', {
-            'message': 'Could not find an organization with the key "%s".' % key,
-            'title': 'No such organization'
-        }, context_instance=RequestContext(request)), False
+        return generic_message(request, 'No such organization',
+                               'Could not find an organization with the key "%s".' % key), False
     return organization, True
 
 
@@ -111,13 +110,9 @@ class NewOrganizationView(CreateView):
     def dispatch(self, request, *args, **kwargs):
         profile = request.user.profile
         if profile.points < 50:
-            return render_to_response('generic_message.jade', {
-                'message': 'You need 50 points to add an organization.',
-                'title': "Can't add organization"
-            }, context_instance=RequestContext(request))
+            return generic_message(request, "Can't add organization",
+                                   'You need 50 points to add an organization.')
         elif profile.organization is not None:
-            return render_to_response('generic_message.jade', {
-                'message': 'You are already in an organization.',
-                'title': "Can't add organization"
-            }, context_instance=RequestContext(request))
+            return generic_message(request, "Can't add organization",
+                                   'You are already in an organization.')
         return super(NewOrganizationView, self).dispatch(request, *args, **kwargs)
