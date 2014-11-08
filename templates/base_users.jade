@@ -40,21 +40,19 @@ block body
         tbody
             for rank, user in users
                 tr
-                    td #{rank}
+                    td= rank
                     if show_organization
                         - cache 86400 user_org_on_rank user.id
                             td(class=user.display_rank)
                                 .userinfo
                                     if user.organization
                                         span.organization
-                                            a(href='{% url "judge.views.organization_home" user.organization.key %}') #{user.organization.key}
-                                    a(href='{% url "judge.views.user" user.user.username %}').
-                                        #{user.long_display_name}
+                                            a(href='{% url "judge.views.organization_home" user.organization.key %}')= user.organization.key
+                                    a(href='{% url "judge.views.user" user.user.username %}')= user.long_display_name
                     else
                         - cache 86400 user_on_rank user.id
                             td(class=user.display_rank)
-                                a(href='{% url "judge.views.user" user.user.username %}').
-                                    #{user.long_display_name}
+                                a(href='{% url "judge.views.user" user.user.username %}')= user.long_display_name
                     block before_point
-                    td.user-points #{user.points}
+                    td.user-points= user.points
                     block after_point
