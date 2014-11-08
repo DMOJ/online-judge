@@ -37,6 +37,14 @@ class OrganizationMixin(object):
                 return generic_message(request, 'No such organization',
                                        'Could not find such organization.')
 
+    def can_edit_organization(self, org=None):
+        if org is None:
+            org = self.object
+        if not self.request.user.is_authenticated():
+            return False
+        profile_id = self.request.user.profile.id
+        return org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id
+
 
 class OrganizationList(TitleMixin, ListView):
     model = Organization
@@ -50,13 +58,8 @@ class OrganizationHome(OrganizationMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationHome, self).get_context_data(**kwargs)
-        org = self.object
-        context['title'] = org.name
-        if self.request.user.is_authenticated():
-            profile_id = self.request.user.profile.id
-            context['can_edit'] = org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id
-        else:
-            context['can_edit'] = False
+        context['title'] = self.object.name
+        context['can_edit'] = self.can_edit_organization()
         return context
 
 
@@ -66,6 +69,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = '%s Members' % self.object.name
+        context['can_edit'] = self.can_edit_organization()
         context['users'] = ranker(self.object.members.filter(points__gt=0, user__is_active=True).order_by('-points'))
         return context
 
@@ -133,9 +137,7 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
 
     def get_object(self, queryset=None):
         object = super(EditOrganization, self).get_object()
-        assert isinstance(object, Organization)
-        profile_id = self.request.user.profile.id
-        if not object.admins.filter(id=profile_id).exists() and object.registrant_id != profile_id:
+        if not self.can_edit_organization(object):
             raise PermissionDenied()
         return object
 
