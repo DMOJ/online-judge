@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.contrib.sitemaps import Sitemap
 from django.contrib.auth.models import User
-from judge.models import Problem
+from judge.models import Problem, Organization, Contest
 
 
 class ProblemSitemap(Sitemap):
@@ -24,6 +24,28 @@ class UserSitemap(Sitemap):
 
     def location(self, obj):
         return reverse('judge.views.user', args=(obj.username,))
+
+
+class ContestSitemap(Sitemap):
+    changefreq = 'hourly'
+    priority = 0.5
+
+    def items(self):
+        return Contest.objects.all()
+
+    def location(self, obj):
+        return reverse('judge.views.contest', args=(obj.key,))
+
+
+class OrganizationSitemap(Sitemap):
+    changefreq = 'hourly'
+    priority = 0.5
+
+    def items(self):
+        return Organization.objects.all()
+
+    def location(self, obj):
+        return reverse('judge.views.organization_home', args=(obj.key,))
 
 
 class HomePageSitemap(Sitemap):

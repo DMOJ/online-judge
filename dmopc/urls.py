@@ -5,7 +5,7 @@ from django.contrib.sitemaps import FlatPageSitemap
 from judge.ordered_model import urls as ordered_model_urls
 
 from judge.views import RegistrationView, ActivationView, TemplateView
-from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap
+from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap
 
 admin.autodiscover()
 
@@ -137,6 +137,8 @@ urlpatterns = patterns('',
         'problem': ProblemSitemap,
         'user': UserSitemap,
         'home': HomePageSitemap,
+        'contest': ContestSitemap,
+        'organization': OrganizationSitemap,
         'pages': UrlSitemap([
             {'location': '/about/', 'priority': 0.9},
         ]),
