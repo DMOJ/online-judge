@@ -207,6 +207,7 @@ class JudgeHandler(ZlibPacketHandler):
         self.batch_id += 1
 
     def on_batch_end(self, packet):
+        self.batch_id = None
         logger.info('Batch ended on: %s', packet['submission-id'])
 
     def on_test_case(self, packet):
