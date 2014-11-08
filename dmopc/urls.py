@@ -134,6 +134,7 @@ urlpatterns = patterns('',
     url(r'^organization/(?P<key>\w+)/users$', organization.OrganizationUsers.as_view(), name='organization_users'),
     url(r'^organization/(?P<key>\w+)/join', organization.JoinOrganization.as_view(), name='join_organization'),
     url(r'^organization/(?P<key>\w+)/leave', organization.LeaveOrganization.as_view(), name='leave_organization'),
+    url(r'^organization/(?P<key>\w+)/edit', organization.EditOrganization.as_view(), name='edit_organization'),
 
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {
         'problem': ProblemSitemap,

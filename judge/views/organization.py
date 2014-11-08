@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DetailView, ListView, RedirectView, View
+from django.views.generic import CreateView, DetailView, ListView, RedirectView, View, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 
 from judge.models import Organization
@@ -34,27 +34,27 @@ class OrganizationList(TitleMixin, ListView):
     title = 'Organizations'
 
 
-class OrganizationDataView(DetailView):
+class OrganizationMixin(object):
     context_object_name = 'organization'
     model = Organization
     slug_field = 'key'
     slug_url_kwarg = 'key'
 
-    def get(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         try:
-            return super(OrganizationDataView, self).get(self, request, *args, **kwargs)
+            return super(OrganizationMixin, self).dispatch(self, request, *args, **kwargs)
         except Http404:
             return organization_not_found(request, kwargs.get(self.slug_url_kwarg, None))
 
 
-class OrganizationHome(TitleMixin, OrganizationDataView):
+class OrganizationHome(TitleMixin, OrganizationMixin, DetailView):
     template_name = 'organization.jade'
 
     def get_title(self):
         return self.object.name
 
 
-class OrganizationUsers(OrganizationDataView):
+class OrganizationUsers(OrganizationMixin, DetailView):
     template_name = 'users.jade'
 
     def get_context_data(self, **kwargs):
@@ -64,11 +64,7 @@ class OrganizationUsers(OrganizationDataView):
         return context
 
 
-class OrganizationMembershipChange(LoginRequiredMixin, SingleObjectMixin, View):
-    model = Organization
-    slug_field = 'key'
-    slug_url_kwarg = 'key'
-
+class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
     def get(self, request, *args, **kwargs):
         try:
             org = self.get_object()
@@ -121,3 +117,20 @@ class NewOrganization(LoginRequiredMixin, CreateView):
             return generic_message(request, "Can't add organization",
                                    'You are already in an organization.')
         return super(NewOrganization, self).dispatch(request, *args, **kwargs)
+
+
+class EditOrganization(LoginRequiredMixin, OrganizationMixin, UpdateView):
+    fields = ['name', 'about']
+    template_name = 'edit_organization.jade'
+
+    def get_object(self, queryset=None):
+        object = super(EditOrganization, self).get_object()
+        if object.id != self.request.user.profile.organization_id:
+            raise PermissionDenied()
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super(EditOrganization, self).dispatch(request, *args, **kwargs)
+        except PermissionDenied:
+            return generic_message(request, "Can't edit organization",
+                                   'You are not in this organization.')
