@@ -42,7 +42,7 @@ class OrganizationMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
         try:
-            return super(OrganizationMixin, self).dispatch(self, request, *args, **kwargs)
+            return super(OrganizationMixin, self).dispatch(request, *args, **kwargs)
         except Http404:
             return organization_not_found(request, kwargs.get(self.slug_url_kwarg, None))
 
