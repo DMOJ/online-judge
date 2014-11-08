@@ -131,6 +131,7 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
         object = super(EditOrganization, self).get_object()
         if object.id != self.request.user.profile.organization_id:
             raise PermissionDenied()
+        return object
 
     def dispatch(self, request, *args, **kwargs):
         try:
