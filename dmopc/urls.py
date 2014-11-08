@@ -123,7 +123,7 @@ urlpatterns = patterns('',
     url(r'^comments/downvote/$', 'judge.views.downvote_comment'),
 
     url(r'^contests/$', views.ContestList.as_view(), name='contest_list'),
-    url(r'^contest/(\w+)$', views.ContestDetail.as_view(), name='contest_view'),
+    url(r'^contest/(\w+)$', 'judge.views.contest', name='contest_view'),
     url(r'^contest/(\w+)/ranking/$', 'judge.views.contest_ranking'),
     url(r'^contest/(\w+)/join$', 'judge.views.join_contest'),
     url(r'^contest/(\w+)/leave$', 'judge.views.leave_contest'),
