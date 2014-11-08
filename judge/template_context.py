@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.cache import cache
 from .models import Profile, MiscConfig, NavigationBar
 
 
@@ -22,7 +23,10 @@ def __tab(request, nav_bar):
 
 
 def general_info(request):
-    nav = NavigationBar.objects.all()
+    nav = cache.get('navbar')
+    if nav is None:
+        nav = list(NavigationBar.objects.all())
+        cache.set('navbar', nav, 86400)
     path = request.get_full_path()
     return {
         'nav_tab': __tab(request, nav),

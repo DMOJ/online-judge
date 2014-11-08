@@ -2,7 +2,7 @@ from django.core.cache.utils import make_template_fragment_key
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.cache import cache
-from .models import Problem, Contest, Submission, Organization, Profile
+from .models import Problem, Contest, Submission, Organization, Profile, NavigationBar
 from .caching import update_submission
 
 
@@ -33,3 +33,8 @@ def submission_update(sender, instance, **kwargs):
 @receiver(post_save, sender=Organization)
 def organization_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('organization_html', (instance.id,)))
+
+
+@receiver(post_save, sender=NavigationBar)
+def navigation_update(sender, instance, **kwargs):
+    cache.delete('navbar')
