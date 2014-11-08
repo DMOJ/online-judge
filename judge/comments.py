@@ -1,6 +1,5 @@
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from .models import Comment, Problem
-from judge.forms import CommentForm
 
 
 class CommentMixin(object):
@@ -18,6 +17,7 @@ class CommentMixin(object):
         return super(CommentMixin, self).form_valid(form)
 
     def post(self, request, *args, **kwargs):
+        from judge.forms import CommentForm
         if not request.user.is_authenticated():
             return HttpResponseForbidden()
 
@@ -36,9 +36,7 @@ class CommentMixin(object):
         return context
 
     def get(self, request, *args, **kwargs):
-        """
-        Handles GET requests and instantiates a blank version of the form.
-        """
+        from judge.forms import CommentForm
         self.comment_form = CommentForm(initial={'page': self.get_page_id(), 'parent': None})
 
 
@@ -51,6 +49,7 @@ def contest_comments(contest):
 
 
 def comment_form(request, page_id):
+    from judge.forms import CommentForm
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
