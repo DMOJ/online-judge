@@ -8,11 +8,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.generic import CreateView
 
 from judge.models import Organization
 from judge.utils.ranker import ranker
 
-__all__ = ['organization_list', 'organization_home', 'organization_users', 'join_organization', 'leave_organization']
+__all__ = ['organization_list', 'organization_home', 'organization_users', 'join_organization', 'leave_organization',
+           'NewOrganizationView']
 
 
 def organization_list(request):
@@ -93,3 +96,22 @@ def leave_organization(request, key):
     profile.save()
     cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
     return HttpResponseRedirect(reverse(organization_home, args=(key,)))
+
+
+class NewOrganizationView(CreateView):
+    template_name = 'new_organization.jade'
+    model = Organization
+    fields = ['name', 'key', 'about']
+
+    def form_valid(self, form):
+        form.instance.registrant = self.request.user.profile
+        return super(NewOrganizationView, self).form_valid(form)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.profile.points < 50:
+            return render_to_response('generic_message.jade', {
+                'message': 'You need 50 points to add an organization.',
+                'title': "Can't add organization"
+            })
+        return super(NewOrganizationView, self).dispatch(*args, **kwargs)

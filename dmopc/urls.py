@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.sitemaps import FlatPageSitemap
+from judge import views
 from judge.ordered_model import urls as ordered_model_urls
 
 from judge.views import RegistrationView, ActivationView, TemplateView
@@ -128,6 +129,7 @@ urlpatterns = patterns('',
     url(r'^contest/(\w+)/leave$', 'judge.views.leave_contest'),
     
     url(r'^organizations/$', 'judge.views.organization_list'),
+    url(r'^organizations/add$', views.NewOrganizationView.as_view()),
     url(r'^organization/(\w+)$', 'judge.views.organization_home'),
     url(r'^organization/(\w+)/users$', 'judge.views.organization_users'),
     url(r'^organization/(\w+)/join', 'judge.views.join_organization'),
