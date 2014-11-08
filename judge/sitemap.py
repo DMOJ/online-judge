@@ -9,7 +9,7 @@ class ProblemSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Problem.objects.all()
+        return Problem.objects.filter(is_public=True)
 
     def location(self, obj):
         return reverse('judge.views.problem', args=(obj.code,))
