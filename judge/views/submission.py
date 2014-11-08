@@ -124,28 +124,6 @@ class AllUserSubmissions(SubmissionsListBase):
         return super(AllUserSubmissions, self).get(request, *args, **kwargs)
 
 
-def all_user_submissions(request, username, page=1):
-    queryset = Submission.objects.filter(user__user__username=username).order_by('-id')
-    if request.user.is_authenticated() and request.user.profile.contest.current is not None:
-        queryset = queryset.filter(contest__participation__contest_id=request.user.profile.contest.current.contest_id)
-    paginator = DiggPaginator(queryset, 50, body=6, padding=2)
-    try:
-        submissions = paginator.page(page)
-    except PageNotAnInteger:
-        submissions = paginator.page(1)
-    except EmptyPage:
-        submissions = paginator.page(paginator.num_pages)
-    return render_to_response('submission/list.jade',
-                              {'submissions': submissions,
-                               'results': get_result_table(user__user__username=username),
-                               'dynamic_update': False,
-                               'title': 'All submissions by ' + username,
-                               'completed_problem_ids': user_completed_ids(
-                                   request.user.profile) if request.user.is_authenticated() else [],
-                               'show_problem': True},
-                              context_instance=RequestContext(request))
-
-
 def user_submissions(request, code, username, page=1):
     if not Profile.objects.filter(user__username=username).exists():
         raise Http404()
