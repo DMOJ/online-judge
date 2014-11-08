@@ -1,4 +1,4 @@
-extends submission_info_base
+extends info_base
 -load staticfiles
 
 block media
@@ -100,7 +100,7 @@ block body
     br
 
     #test-cases
-        include submission_status_testcases
+        include status_testcases
 
     if not submission.is_graded
         if request.user == submission.user.user or request.user.is_admin

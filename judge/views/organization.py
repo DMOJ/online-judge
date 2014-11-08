@@ -64,7 +64,7 @@ class OrganizationHome(OrganizationMixin, DetailView):
 
 
 class OrganizationUsers(OrganizationMixin, DetailView):
-    template_name = 'users.jade'
+    template_name = 'user/list.jade'
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)

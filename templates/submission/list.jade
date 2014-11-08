@@ -1,4 +1,4 @@
-extends base
+extends ../base
 - load staticfiles
 - load cache
 - load cache_key
@@ -186,10 +186,10 @@ block body
     br
     .info-float(style='width:20%')
         #statistics-table
-            include problem_statistics_table
+            include ../problem/statistics_table
     if submissions.num_pages > 1
         div(style='margin-bottom:10px;')
-            include submissions_pages
+            include list_pages
 
     table#submissions-table.table
         if request.user.is_authenticated
@@ -202,10 +202,10 @@ block body
                     - get_cache_version "submission" submission.id as sub_version
                     - var done = profile_id == submission.user_id or submission.problem_id in completed_problem_ids
                     - cache 86400 submission_row sub_version submission.id show_problem done perms.judge.change_submission request.user.profile.timezone
-                        include submission_row
+                        include row
                 else
-                    include submission_row
+                    include row
 
     if submissions.num_pages > 1
         div(style='margin-top:10px;')
-            include submissions_pages
+            include list_pages

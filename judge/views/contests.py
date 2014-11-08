@@ -36,7 +36,7 @@ def _find_contest(request, key, private_check=True):
 class ContestList(TitleMixin, ListView):
     model = Contest
     context_object_name = 'contests'
-    template_name = 'contests.jade'
+    template_name = 'contest/list.jade'
     title = 'Contests'
 
     def get_queryset(self):
@@ -69,7 +69,7 @@ def contest(request, key):
         participating = False
         participation = None
         in_contest = False
-    return render_to_response('contest.jade', {
+    return render_to_response('contest/contest.jade', {
         'contest': contest,
         'title': contest.name,
         'comment_list': contest_comments(contest),
@@ -178,7 +178,7 @@ def contest_ranking_view(request, contest):
         )
 
     results = map(make_ranking_profile, contest.users.select_related('profile').order_by('-score'))
-    return render_to_response('contest_ranking.jade', {
+    return render_to_response('contest/ranking.jade', {
         'users': ranker(results),
         'title': '%s Rankings' % contest.name,
         'content_title': contest.name,

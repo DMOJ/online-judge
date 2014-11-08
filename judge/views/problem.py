@@ -43,7 +43,7 @@ def problem(request, code):
         if form is None:
             return HttpResponseRedirect(request.path)
         authed = user.is_authenticated()
-        return render_to_response('problem.jade', {
+        return render_to_response('problem/problem.jade', {
             'problem': problem,
             'title': problem.name,
             'has_submissions': authed and Submission.objects.filter(user=user.profile).exists(),
@@ -86,7 +86,7 @@ def problems(request):
             completed = user_completed_ids(request.user.profile)
     else:
         completed = []
-    return render_to_response('problems.jade', {
+    return render_to_response('problem/list.jade', {
         'problems': probs,
         'hide_solved': 1 if hide_solved else 0,
         'completed_problem_ids': completed,
@@ -148,7 +148,7 @@ def problem_submit(request, problem=None, submission=None):
         form.fields['language'].queryset = form_data['problem'].allowed_languages
     form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = request.user.profile.ace_theme
-    return render_to_response('problem_submit.jade', {
+    return render_to_response('problem/submit.jade', {
         'form': form,
         'title': 'Submit',
         'langs': Language.objects.all(),

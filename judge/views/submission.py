@@ -31,7 +31,7 @@ def submission_source(request, sub_id):
         submission = Submission.objects.get(id=int(sub_id))
         check_submission_access(request, submission)
 
-        return render_to_response('submission_source.jade',
+        return render_to_response('submission/source.jade',
                                   {
                                       'submission': submission,
                                       'raw_source': submission.source.rstrip('\n'),
@@ -50,7 +50,7 @@ def submission_status(request, code):
         check_submission_access(request, submission)
 
         test_cases = SubmissionTestCase.objects.filter(submission=submission)
-        return render_to_response('submission_status.jade',
+        return render_to_response('submission/status.jade',
                                   {'submission': submission, 'test_cases': test_cases,
                                    'last_msg': event.last(),
                                    'title': 'Submission of %s by %s' %
@@ -82,7 +82,7 @@ def all_user_submissions(request, username, page=1):
         submissions = paginator.page(1)
     except EmptyPage:
         submissions = paginator.page(paginator.num_pages)
-    return render_to_response('submissions.jade',
+    return render_to_response('submission/list.jade',
                               {'submissions': submissions,
                                'results': get_result_table(user__user__username=username),
                                'dynamic_update': False,
@@ -124,7 +124,7 @@ def problem_submissions(request, code, page, dynamic_update, title, order, filte
             submissions = paginator.page(1)
         except EmptyPage:
             submissions = paginator.page(paginator.num_pages)
-        return render_to_response('submissions.jade',
+        return render_to_response('submission/list.jade',
                                   {'submissions': submissions,
                                    'results': get_result_table(**filter),
                                    'dynamic_update': dynamic_update,
@@ -140,7 +140,7 @@ def problem_submissions(request, code, page, dynamic_update, title, order, filte
 def single_submission(request, id):
     try:
         authenticated = request.user.is_authenticated()
-        return render_to_response('submission_row.jade', {
+        return render_to_response('submission/row.jade', {
             'submission': Submission.objects.get(id=int(id)),
             'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
             'show_problem': True,
@@ -156,7 +156,7 @@ def submission_testcases_query(request):
     try:
         submission = Submission.objects.get(id=int(request.GET['id']))
         test_cases = SubmissionTestCase.objects.filter(submission=submission)
-        return render_to_response('submission_status_testcases.jade', {
+        return render_to_response('submission/status_testcases.jade', {
             'submission': submission, 'test_cases': test_cases
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
@@ -166,7 +166,7 @@ def submission_testcases_query(request):
 def statistics_table_query(request):
     page = cache.get('sub_stats_table')
     if page is None:
-        page = loader.render_to_string('problem_statistics_table.jade', {'results': get_result_table()})
+        page = loader.render_to_string('problem/statistics_table.jade', {'results': get_result_table()})
         cache.set('sub_stats_table', page, 86400)
     return HttpResponse(page)
 
@@ -192,7 +192,7 @@ def submissions(request, page=1):
     if results is None:
         results = get_result_table()
         cache.set('sub_stats_data', results, 86400)
-    return render_to_response('submissions.jade',
+    return render_to_response('submission/list.jade',
                               {'submissions': submissions,
                                'results': results,
                                'dynamic_update': True if page == 1 else False,
