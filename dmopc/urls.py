@@ -116,8 +116,9 @@ urlpatterns = patterns('',
     url(r'^problem/(\w+)/submissions/(\w+)/$', 'judge.views.user_submissions'),
     url(r'^problem/(\w+)/submissions/(\w+)/(\d+)$', 'judge.views.user_submissions'),
 
-    url(r'^user/(\w+)/submissions/$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
-    url(r'^user/(\w+)/submissions/(?P<page>\d+)$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
+    url(r'^user/(?P<user>\w+)/submissions/$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
+    url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', views.AllUserSubmissions.as_view(),
+        name='all_user_submissions'),
 
     url(r'^comments/upvote/$', 'judge.views.upvote_comment'),
     url(r'^comments/downvote/$', 'judge.views.downvote_comment'),
