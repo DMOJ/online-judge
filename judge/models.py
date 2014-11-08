@@ -89,6 +89,9 @@ class Organization(models.Model):
     def member_count(self):
         return self.members.count()
 
+    def get_absolute_url(self):
+        return reverse('judge.views.organization_home', args=(self.key,))
+
     class Meta:
         ordering = ['key']
 
