@@ -89,7 +89,7 @@ class SubmissionsListBase(TitleMixin, ListView):
                              orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
 
     def get_result_table(self):
-        return get_result_table()
+        return get_result_table(self.get_queryset())
 
     def get_queryset(self):
         if self.request.user.is_authenticated() and self.request.user.profile.contest.current is not None:
@@ -116,9 +116,6 @@ class AllUserSubmissions(SubmissionsListBase):
 
     def get_title(self):
         return 'All submissions by %s' % self.username
-
-    def get_result_table(self):
-        return get_result_table(user__user__username=self.username)
 
     def get(self, request, *args, **kwargs):
         if 'user' not in kwargs:

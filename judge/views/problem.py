@@ -11,9 +11,14 @@ from judge.models import Problem, Submission, ContestSubmission, ContestProblem,
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 
 
-def get_result_table(**kwargs):
+def get_result_table(*args, **kwargs):
     results = {}
-    submissions = Submission.objects.filter(**kwargs) if kwargs is not None else Submission.objects
+    if args:
+        submissions = args[0]
+        if kwargs:
+            raise ValueError("Can't pass both queryset and keyword filters")
+    else:
+        submissions = Submission.objects.filter(**kwargs) if kwargs is not None else Submission.objects
     for code in ['AC', 'WA', 'TLE', 'IR', 'MLE']:
         results[code] = submissions.filter(result=code).count()
     results['CE'] = submissions.filter(status='CE').count()
