@@ -107,7 +107,7 @@ def join_contest(request, key):
 
     contest_profile.current = participation
     contest_profile.save()
-    return HttpResponseRedirect(reverse('judge.views.contest', args=(key,)))
+    return HttpResponseRedirect(reverse('judge.views.problems'))
 
 
 @login_required
