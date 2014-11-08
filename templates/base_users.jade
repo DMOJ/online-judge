@@ -14,11 +14,17 @@ block media
         }
     if show_organization
         style
-            .organization {
-                float:left;
-                font-weight:bold;
-                color:gray;
+            .userinfo {
+                position: relative;
             }
+
+            .organization {
+                position: absolute;
+                left: 0;
+                font-weight: bold;
+                color: gray;
+            }
+
     block users_media
 
 block body
@@ -38,10 +44,11 @@ block body
                     if show_organization
                         - cache 86400 user_org_on_rank user.id
                             td(class=user.display_rank)
-                                if user.organization
-                                    span.organization #{user.organization.key}
-                                a(href='{% url "judge.views.user" user.user.username %}').
-                                    #{user.long_display_name}
+                                .userinfo
+                                    if user.organization
+                                        span.organization #{user.organization.key}
+                                    a(href='{% url "judge.views.user" user.user.username %}').
+                                        #{user.long_display_name}
                     else
                         - cache 86400 user_on_rank user.id
                             td(class=user.display_rank)
