@@ -450,8 +450,8 @@ class Contest(models.Model):
         if self.start_time is None:
             return None
         now = timezone.now()
-        if self.start_time <= now:
-            return now - self.start_time
+        if self.start_time >= now:
+            return self.start_time - now
         else:
             return None
 
