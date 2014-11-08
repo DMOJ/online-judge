@@ -3,6 +3,15 @@ extends base
 block media
     script(type='text/javascript')
         window.django = {jQuery: $};
+        function pluralidx(count) { return (count == 1) ? 0 : 1; }
+        function gettext(msgid) { return msgid; }
+        function interpolate(fmt, obj, named) {
+            if (named) {
+                return fmt.replace(/%\(\w+\)s/g, function(match) {return String(obj[match.slice(2,-2)])});
+            } else {
+                return fmt.replace(/%s/g, function(match) {return String(obj.shift())});
+            }
+        }
     | #{form.media}
 
 block body
