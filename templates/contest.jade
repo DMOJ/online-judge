@@ -8,11 +8,12 @@ extends common-content
 -load smart_math
 
 block content_media
-    if participating
-        script(type='text/javascript')
-            $(document).ready(function () {
-                count_down($('.time-remaining'));
+    script(type='text/javascript')
+        $(document).ready(function () {
+            $('.time-remaining').each(function () {
+                count_down($(this));
             });
+        });
 
 block info_float
     if not participating or participating and not participation.ended
