@@ -8,22 +8,15 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, ListView
 
 from judge.models import Organization
 from judge.utils.ranker import ranker
-from judge.utils.views import generic_message
+from judge.utils.views import generic_message, TitleMixin
 
 
-__all__ = ['organization_list', 'OrganizationHomeView', 'OrganizationUsersView', 'join_organization',
+__all__ = ['OrganizationList', 'OrganizationHomeView', 'OrganizationUsersView', 'join_organization',
            'leave_organization', 'NewOrganizationView']
-
-
-def organization_list(request):
-    return render_to_response('organizations.jade', {
-        'organizations': Organization.objects.all(),
-        'title': 'Organizations'
-    }, context_instance=RequestContext(request))
 
 
 def _find_organization(request, key):
@@ -44,6 +37,13 @@ def organization_not_found(request, key):
                                'Could not find such organization.')
 
 
+class OrganizationList(TitleMixin, ListView):
+    model = Organization
+    context_object_name = 'organizations'
+    template_name = 'organizations.jade'
+    title = 'Organizations'
+
+
 class OrganizationDataView(DetailView):
     context_object_name = 'organization'
     model = Organization
@@ -57,13 +57,11 @@ class OrganizationDataView(DetailView):
             return organization_not_found(request, kwargs.get(self.slug_url_kwarg, None))
 
 
-class OrganizationHomeView(OrganizationDataView):
+class OrganizationHomeView(TitleMixin, OrganizationDataView):
     template_name = 'organization.jade'
 
-    def get_context_data(self, **kwargs):
-        context = super(OrganizationHomeView, self).get_context_data(**kwargs)
-        context['title'] = self.object.name
-        return context
+    def get_title(self):
+        return self.object.name
 
 
 class OrganizationUsersView(OrganizationDataView):
@@ -74,7 +72,6 @@ class OrganizationUsersView(OrganizationDataView):
         context['title'] = '%s Members' % self.object.name
         context['users'] = ranker(self.object.members.filter(points__gt=0, user__is_active=True).order_by('-points'))
         return context
-
 
 
 @login_required

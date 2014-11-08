@@ -9,3 +9,13 @@ def generic_message(request, title, message):
         'message': message,
         'title': title
     }, context_instance=RequestContext(request))
+
+
+class TitleMixin(object):
+    def get_context_data(self, **kwargs):
+        context = super(TitleMixin, self).get_context_data(**kwargs)
+        context['title'] = self.get_title()
+        return context
+
+    def get_title(self):
+        return self.title

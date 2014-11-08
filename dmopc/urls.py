@@ -128,7 +128,7 @@ urlpatterns = patterns('',
     url(r'^contest/(\w+)/join$', 'judge.views.join_contest'),
     url(r'^contest/(\w+)/leave$', 'judge.views.leave_contest'),
     
-    url(r'^organizations/$', 'judge.views.organization_list'),
+    url(r'^organizations/$', views.OrganizationList.as_view(), name='organization_list'),
     url(r'^organizations/add$', views.NewOrganizationView.as_view()),
     url(r'^organization/(?P<key>\w+)$', views.OrganizationHomeView.as_view(), name='organization_home'),
     url(r'^organization/(?P<key>\w+)/users$', views.OrganizationUsersView.as_view(), name='organization_users'),
