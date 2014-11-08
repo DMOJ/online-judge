@@ -17,6 +17,7 @@ block info_float
                 hr
     if can_edit
         a(href='{% url "edit_organization" organization.key %}') Edit organization
+        br
     a(href='{% url "organization_users" organization.key %}') View members
         
 block description
