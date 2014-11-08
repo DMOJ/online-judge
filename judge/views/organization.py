@@ -103,7 +103,7 @@ class LeaveOrganization(OrganizationMembershipChange):
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
 
-class NewOrganization(CreateView):
+class NewOrganization(LoginRequiredMixin, CreateView):
     template_name = 'new_organization.jade'
     model = Organization
     fields = ['name', 'key', 'about']
@@ -112,7 +112,6 @@ class NewOrganization(CreateView):
         form.instance.registrant = self.request.user.profile
         return super(NewOrganization, self).form_valid(form)
 
-    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         profile = request.user.profile
         if profile.points < 50:
