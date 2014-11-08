@@ -66,4 +66,4 @@ class EditOrganizationForm(ModelForm):
 
 class NewOrganizationForm(EditOrganizationForm):
     class Meta(EditOrganizationForm.Meta):
-        fields = ['key', 'name', 'about', 'admins']
+        fields = ['key'] + EditOrganizationForm.Meta.fields
