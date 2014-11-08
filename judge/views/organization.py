@@ -30,7 +30,7 @@ def organization_not_found(request, key):
 class OrganizationList(TitleMixin, ListView):
     model = Organization
     context_object_name = 'organizations'
-    template_name = 'organizations.jade'
+    template_name = 'organization/list.jade'
     title = 'Organizations'
 
 
@@ -48,7 +48,7 @@ class OrganizationMixin(object):
 
 
 class OrganizationHome(TitleMixin, OrganizationMixin, DetailView):
-    template_name = 'organization.jade'
+    template_name = 'organization/home.jade'
 
     def get_title(self):
         return self.object.name
@@ -100,7 +100,7 @@ class LeaveOrganization(OrganizationMembershipChange):
 
 
 class NewOrganization(LoginRequiredMixin, TitleMixin, CreateView):
-    template_name = 'new_organization.jade'
+    template_name = 'organization/new.jade'
     model = Organization
     fields = ['name', 'key', 'about']
     title = 'New Organization'
@@ -122,7 +122,7 @@ class NewOrganization(LoginRequiredMixin, TitleMixin, CreateView):
 
 class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, UpdateView):
     fields = ['name', 'about']
-    template_name = 'edit_organization.jade'
+    template_name = 'organization/edit.jade'
 
     def get_title(self):
         return 'Editing %s' % self.object.name
