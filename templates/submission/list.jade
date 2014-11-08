@@ -189,7 +189,7 @@ block body
             include problem/statistics_table
     if submissions.num_pages > 1
         div(style='margin-bottom:10px;')
-            include list_pages
+            include submission/list_pages
 
     table#submissions-table.table
         if request.user.is_authenticated
@@ -208,4 +208,4 @@ block body
 
     if submissions.num_pages > 1
         div(style='margin-top:10px;')
-            include list_pages
+            include submission/list_pages
