@@ -42,6 +42,7 @@ class JudgeHandler(ZlibPacketHandler):
         self.load = 1e100
         self.name = None
         self.batch_id = None
+        self.in_batch = False
         self.client_address = socket.getpeername()
         self._ping_average = deque(maxlen=6)  # 1 minute average, just like load
         self._time_delta = deque(maxlen=6)
@@ -201,13 +202,14 @@ class JudgeHandler(ZlibPacketHandler):
 
     def on_batch_begin(self, packet):
         logger.info('Batch began on: %s', packet['submission-id'])
+        self.in_batch = True
         if self.batch_id is None:
             self.batch_id = 0
             self._submission_is_batch(packet['submission-id'])
         self.batch_id += 1
 
     def on_batch_end(self, packet):
-        self.batch_id = None
+        self.in_batch = False
         logger.info('Batch ended on: %s', packet['submission-id'])
 
     def on_test_case(self, packet):
