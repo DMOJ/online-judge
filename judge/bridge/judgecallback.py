@@ -97,7 +97,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
         for case in SubmissionTestCase.objects.filter(submission=submission):
             time += case.time
-            if case.batch:
+            if not case.batch:
                 points += case.points
                 total += case.total
             else:
