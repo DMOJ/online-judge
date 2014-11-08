@@ -16,7 +16,7 @@ block content_media
         });
 
 block info_float
-    if contest.can_join or participating and not participation.ended
+    if contest.can_join or in_contest
         if not in_contest
             a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}') Join contest
         else
