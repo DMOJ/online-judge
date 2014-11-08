@@ -80,6 +80,8 @@ class Organization(models.Model):
     registrant = models.ForeignKey('Profile', verbose_name='Registrant',
                                    related_name='+',
                                    help_text='User who registered this organization')
+    admins = models.ManyToManyField('Profile', verbose_name='Administrators', related_name='+',
+                                    help_text='Those who can edit this organization')
     creation_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
 
     def __unicode__(self):
