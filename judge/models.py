@@ -143,7 +143,7 @@ class Profile(models.Model):
     def problems(self):
         return Submission.objects.filter(user=self, points__gt=0).values('problem').distinct().count()
 
-    @property
+    @cached_property
     def contest(self):
         cp, created = ContestProfile.objects.get_or_create(user=self)
         if cp.current is not None and cp.current.ended:
