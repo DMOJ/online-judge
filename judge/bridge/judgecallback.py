@@ -67,6 +67,7 @@ class DjangoJudgeHandler(JudgeHandler):
             return
         submission.status = 'G'
         submission.current_testcase = 1
+        submission.batch = False
         submission.save()
         SubmissionTestCase.objects.filter(submission_id=submission.id).delete()
         event.post('sub_%d' % submission.id, {'type': 'grading-begin'})
