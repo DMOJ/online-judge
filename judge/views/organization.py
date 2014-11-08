@@ -4,19 +4,18 @@ from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, RedirectView, View
+from django.views.generic.detail import SingleObjectMixin
 
 from judge.models import Organization
 from judge.utils.ranker import ranker
-from judge.utils.views import generic_message, TitleMixin
+from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
 
 
-__all__ = ['OrganizationList', 'OrganizationHomeView', 'OrganizationUsersView', 'join_organization',
-           'leave_organization', 'NewOrganizationView']
+__all__ = ['OrganizationList', 'OrganizationHomeView', 'OrganizationUsersView', 'JoinOrganizationView',
+           'LeaveOrganizationView', 'NewOrganizationView']
 
 
 def _find_organization(request, key):
@@ -74,43 +73,44 @@ class OrganizationUsersView(OrganizationDataView):
         return context
 
 
-@login_required
-def join_organization(request, key):
-    org, exists = _find_organization(request, key)
-    if not exists:
-        return org
+class OrganizationMembershipChange(LoginRequiredMixin, SingleObjectMixin, View):
+    model = Organization
+    slug_field = 'key'
+    slug_url_kwarg = 'key'
+    permanent = False
 
-    profile = request.user.profile
-    if profile.organization_id is not None:
-        return render_to_response('generic_message.jade', {
-            'message': 'You are already in an organization.' % key,
-            'title': 'Joining organization'
-        }, context_instance=RequestContext(request))
+    def get(self, request, *args, **kwargs):
+        try:
+            org = self.get_object()
+        except Http404:
+            return organization_not_found(request, kwargs.get(self.slug_url_kwarg, None))
+        response = self.handle(request, org, request.user.profile)
+        if response is not None:
+            return response
+        return HttpResponseRedirect(reverse('organization_home', args=(org.key,)))
 
-    profile.organization = org
-    profile.organization_join_time = timezone.now()
-    profile.save()
-    cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
-    return HttpResponseRedirect(reverse('organization_home', args=(key,)))
+    def handle(self, request, org, profile):
+        raise NotImplementedError()
 
 
-@login_required
-def leave_organization(request, key):
-    org, exists = _find_organization(request, key)
-    if not exists:
-        return org
+class JoinOrganizationView(OrganizationMembershipChange):
+    def handle(self, request, org, profile):
+        if profile.organization_id is not None:
+            return generic_message(request, 'Joining organization', 'You are already in an organization.')
+        profile.organization = org
+        profile.organization_join_time = timezone.now()
+        profile.save()
+        cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
-    profile = request.user.profile
-    if org.id != profile.organization_id:
-        return render_to_response('generic_message.jade', {
-            'message': 'You are not in "%s".' % key,
-            'title': 'Leaving organization'
-        }, context_instance=RequestContext(request))
-    profile.organization = None
-    profile.organization_join_time = None
-    profile.save()
-    cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
-    return HttpResponseRedirect(reverse('organization_home', args=(key,)))
+
+class LeaveOrganizationView(OrganizationMembershipChange):
+    def handle(self, request, org, profile):
+        if org.id != profile.organization_id:
+            return generic_message(request, 'Leaving organization', 'You are not in "%s".' % org.key)
+        profile.organization = None
+        profile.organization_join_time = None
+        profile.save()
+        cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
 
 class NewOrganizationView(CreateView):

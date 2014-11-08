@@ -8,11 +8,11 @@ block info_float
     if request.user.is_authenticated
         - with profile=request.user.profile
             if not profile.organization_id
-                a.unselectable.button.full(href='{% url "judge.views.join_organization" organization.key %}')
+                a.unselectable.button.full(href='{% url "join_organization" organization.key %}')
                     | Join organization
                 hr
             elif profile.organization_id == organization.id
-                a.unselectable.button.full(href='{% url "judge.views.leave_organization" organization.key %}')
+                a.unselectable.button.full(href='{% url "leave_organization" organization.key %}')
                     | Leave organization
                 hr
     a(href='{% url "organization_users" organization.key %}') View members
