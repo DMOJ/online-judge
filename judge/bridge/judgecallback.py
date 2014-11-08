@@ -93,20 +93,27 @@ class DjangoJudgeHandler(JudgeHandler):
         total = 0
         status = 0
         status_codes = ['SC', 'AC', 'WA', 'MLE', 'TLE', 'IR', 'RTE', 'OLE']
+        batches = {} # batch number: (points, total)
+
         for case in SubmissionTestCase.objects.filter(submission=submission):
             time += case.time
-            total += case.total
-            points += case.points
+			if case.batch:
+				points += case.points
+				total += case.total
+			else:
+				if case.batch in batches:
+					batches[case.batch][0] = min(batches[case.batch][0], case.points)
+					batches[case.batch][1] = max(batches[case.batch][1], case.total)
+				else:
+					batches[case.batch] = [case.points, case.total]
             memory = max(memory, case.memory)
             i = status_codes.index(case.status)
             if i > status:
                 status = i
 
-        if submission.batch:
-            data = (SubmissionTestCase.objects.filter(submission_id=submission.id)
-                    .values('batch').annotate(points=Min('points'), total=Max('total')))
-            points = sum(map(itemgetter('points'), data))
-            total = sum(map(itemgetter('total'), data))
+        for i in batches:
+			points += batches[i][0]
+			total += batches[i][1]
 
         points = round(points, 1)
         total = round(total, 1)
