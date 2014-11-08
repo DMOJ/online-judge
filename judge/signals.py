@@ -16,6 +16,7 @@ def problem_update(sender, instance, **kwargs):
 @receiver(post_save, sender=Profile)
 def profile_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('user_on_rank', (instance.id,)))
+    cache.delete(make_template_fragment_key('user_org_on_rank', (instance.id,)))
     cache.delete(make_template_fragment_key('submission_user', (instance.id,)))
 
 

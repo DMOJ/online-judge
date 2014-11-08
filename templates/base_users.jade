@@ -35,12 +35,18 @@ block body
             for rank, user in users
                 tr
                     td #{rank}
-                    - cache 86400 user_on_rank user.id
-                        td(class=user.display_rank)
-                            if show_organization and user.organization
-                                span.organization #{user.organization.key}
-                            a(href='{% url "judge.views.user" user.user.username %}').
-                                #{user.long_display_name}
+                    if show_organization
+                        - cache 86400 user_org_on_rank user.id
+                            td(class=user.display_rank)
+                                if user.organization
+                                    span.organization #{user.organization.key}
+                                a(href='{% url "judge.views.user" user.user.username %}').
+                                    #{user.long_display_name}
+                    else
+                        - cache 86400 user_on_rank user.id
+                            td(class=user.display_rank)
+                                a(href='{% url "judge.views.user" user.user.username %}').
+                                    #{user.long_display_name}
                     block before_point
                     td.user-points #{user.points}
                     block after_point
