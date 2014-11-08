@@ -61,6 +61,7 @@ class OrganizationHomeView(DetailView):
     model = Organization
     slug_field = 'key'
     slug_url_kwarg = 'key'
+    template_name = 'organization.jade'
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationHomeView, self).get_context_data(**kwargs)
