@@ -49,7 +49,7 @@ class OrganizationHome(OrganizationMixin, DetailView):
     template_name = 'organization/home.jade'
 
     def get_context_data(self, **kwargs):
-        context = super(OrganizationUsers, self).get_context_data(**kwargs)
+        context = super(OrganizationHome, self).get_context_data(**kwargs)
         org = self.object
         context['title'] = org.name
         if self.request.user.is_authenticated():
