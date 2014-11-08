@@ -46,7 +46,7 @@ block info_float
             else
                 b Time remaining:
                 .time-remaining #{participation.time_remaining|timedelta:"simple"}
-        else if not contest.can_join
+        elif not contest.can_join
             b Contest not started.
         else
             b Time limit:
