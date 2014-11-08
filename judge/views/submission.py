@@ -9,8 +9,9 @@ from django.template import RequestContext, loader
 
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, SubmissionTestCase, Profile
+from judge.utils.problems import user_completed_ids
 from judge.utils.diggpaginator import DiggPaginator
-from judge.views import get_result_table, user_completed_ids
+from judge.views import get_result_table
 from judge import event_poster as event
 
 

@@ -5,8 +5,9 @@ from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from judge.models import Problem, Submission
+from judge.utils.problems import user_completed_ids
 from judge.utils.diggpaginator import DiggPaginator
-from judge.views import get_result_table, user_completed_ids
+from judge.views import get_result_table
 
 
 __all__ = ['ranked_submissions']

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max, F
+from django.db.models import Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -62,8 +62,3 @@ def users(request):
         'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True).order_by('-points')),
         'title': 'Users'
     }, context_instance=RequestContext(request))
-
-
-def user_completed_ids(profile):
-    return set(Submission.objects.filter(user=profile, result='AC', points=F('problem__points'))
-               .values_list('problem_id', flat=True).distinct())

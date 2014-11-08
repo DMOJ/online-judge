@@ -1,5 +1,5 @@
 from collections import namedtuple
-from functools import partial
+
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
@@ -9,9 +9,11 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
 from django.utils.functional import SimpleLazyObject
+
 from judge.comments import comment_form, contest_comments
 from judge.models import Contest, ContestParticipation, ContestProblem, Profile
 from judge.utils.ranker import ranker
+
 
 __all__ = ['contest_list', 'contest', 'contest_ranking', 'join_contest', 'leave_contest']
 
