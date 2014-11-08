@@ -9,13 +9,15 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
 from django.utils.functional import SimpleLazyObject
+from django.views.generic import ListView
 
 from judge.comments import comment_form, contest_comments
 from judge.models import Contest, ContestParticipation, ContestProblem, Profile
 from judge.utils.ranker import ranker
+from judge.utils.views import TitleMixin
 
 
-__all__ = ['contest_list', 'contest', 'contest_ranking', 'join_contest', 'leave_contest']
+__all__ = ['ContestList', 'contest', 'contest_ranking', 'join_contest', 'leave_contest']
 
 
 def _find_contest(request, key, private_check=True):
@@ -31,15 +33,17 @@ def _find_contest(request, key, private_check=True):
     return contest, True
 
 
-def contest_list(request):
-    if request.user.has_perm('judge.see_private_contest'):
-        contests = Contest.objects.all()
-    else:
-        contests = Contest.objects.filter(is_public=True)
-    return render_to_response('contests.jade', {
-        'contests': contests,
-        'title': 'Contests'
-    }, context_instance=RequestContext(request))
+class ContestList(TitleMixin, ListView):
+    model = Contest
+    context_object_name = 'contests'
+    template_name = 'contests.jade'
+    title = 'Contests'
+
+    def get_queryset(self):
+        if self.request.user.has_perm('judge.see_private_contest'):
+            return Contest.objects.all()
+        else:
+            return Contest.objects.filter(is_public=True)
 
 
 def contest(request, key):
