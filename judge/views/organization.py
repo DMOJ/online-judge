@@ -3,7 +3,7 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.forms import modelform_factory
+from django.forms.models import modelform_factory
 from django.http import HttpResponseRedirect, Http404
 from django.utils import timezone
 from django.views.generic import CreateView, DetailView, ListView, View, UpdateView
