@@ -114,6 +114,12 @@ class AllUserSubmissions(SubmissionsListBase):
     def get_queryset(self):
         return super(AllUserSubmissions, self).get_queryset().filter(user__user__username=self.username)
 
+    def get_title(self):
+        return 'All submissions by %s' % self.username
+
+    def get_result_table(self):
+        return get_result_table(user__user__username=self.username)
+
     def get(self, request, *args, **kwargs):
         if 'user' not in kwargs:
             raise ImproperlyConfigured('Must pass a user')
