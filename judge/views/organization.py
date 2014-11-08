@@ -97,7 +97,7 @@ class NewOrganization(LoginRequiredMixin, TitleMixin, CreateView):
     template_name = 'organization/new.jade'
     model = Organization
     fields = ['name', 'key', 'about', 'admins']
-    form_class = modelform_factory(Organization, widgets={'admins': FilteredSelectMultiple})
+    form_class = modelform_factory(Organization, widgets={'admins': FilteredSelectMultiple('Admins', False)})
     title = 'New Organization'
 
     def form_valid(self, form):
@@ -118,7 +118,7 @@ class NewOrganization(LoginRequiredMixin, TitleMixin, CreateView):
 class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, UpdateView):
     fields = ['name', 'about', 'admins']
     template_name = 'organization/edit.jade'
-    form_class = modelform_factory(Organization, widgets={'admins': FilteredSelectMultiple})
+    form_class = modelform_factory(Organization, widgets={'admins': FilteredSelectMultiple('Admins', False)})
 
     def get_title(self):
         return 'Editing %s' % self.object.name
