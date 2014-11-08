@@ -33,7 +33,7 @@ block info_float
         if contest.start_time > now
             b Starting in:
             .time-remaining #{contest.time_before_start|timedelta:"simple"}
-        elif contest.end_time < now
+        elif contest.end_time < now or not contest.can_join
             b Time is up!
         else
             b Time remaining:
@@ -41,11 +41,13 @@ block info_float
             .time-remaining #{contest.time_before_end|timedelta:"simple"}
     else
         if participating
-            if participation.ended
+            if not contest.can_join or participation.ended
                 b Time is up!
             else
                 b Time remaining:
                 .time-remaining #{participation.time_remaining|timedelta:"simple"}
+        else if not contest.can_join
+            b Contest not started.
         else
             b Time limit:
             | &nbsp;#{contest.time_limit}
