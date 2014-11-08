@@ -1,12 +1,10 @@
-from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.utils import timezone
-from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DetailView, ListView, RedirectView, View, UpdateView
+from django.views.generic import CreateView, DetailView, ListView, View, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 
 from judge.models import Organization
