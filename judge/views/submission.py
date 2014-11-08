@@ -1,12 +1,12 @@
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.paginator import PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.views.generic.detail import SingleObjectMixin
 
 from judge.highlight_code import highlight_code
@@ -73,6 +73,51 @@ def abort_submission(request, code):
         raise PermissionDenied()
     submission.abort()
     return HttpResponseRedirect(reverse('submission_status', args=(code,)))
+
+
+class SubmissionsListBase(TitleMixin, ListView):
+    model = Submission
+    paginate_by = 50
+    context_object_name = 'submissions'
+    dynamic_update = False
+    show_problem = True
+    title = 'All Submissions'
+
+    def get_paginator(self, queryset, per_page, orphans=0,
+                      allow_empty_first_page=True, **kwargs):
+        return DiggPaginator(queryset, per_page, body=6, padding=2,
+                             orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
+
+    def get_result_table(self):
+        return get_result_table()
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated() and self.request.user.profile.contest.current is not None:
+            return Submission.objects.filter(
+                contest__participation__contest_id=self.request.user.profile.contest.current.contest_id
+            ).order_by('-id')
+        else:
+            return Submission.objects.order_by('-id')
+
+    def get_context_data(self, **kwargs):
+        context = super(SubmissionsListBase, self).get_context_data(**kwargs)
+        context['dynamic_update'] = self.dynamic_update
+        context['show_problem'] = self.show_problem
+        context['completed_problem_ids'] = (user_completed_ids(self.request.user.profile)
+                                            if self.request.user.is_authenticated() else [])
+        context['results'] = self.get_result_table()
+        return context
+
+
+class AllUserSubmissions(SubmissionsListBase):
+    def get_queryset(self):
+        return super(AllUserSubmissions, self).get_queryset().filter(user__user__username=self.username)
+
+    def get(self, request, *args, **kwargs):
+        if 'user' not in kwargs:
+            raise ImproperlyConfigured('Must pass a user')
+        self.username = kwargs['user']
+        return super(AllUserSubmissions, self).get(request, *args, **kwargs)
 
 
 def all_user_submissions(request, username, page=1):

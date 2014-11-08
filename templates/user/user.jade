@@ -83,7 +83,7 @@ block body
                 b Total points:&nbsp;
                 | #{user.calculate_points}
                 br
-                a(href='{% url "judge.views.all_user_submissions" user.user.username %}') View submissions
+                a(href='{% url "all_user_submissions" user.user.username %}') View submissions
             td.user-info-cell
                 if user.about
                     h4 About
