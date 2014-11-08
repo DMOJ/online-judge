@@ -41,10 +41,14 @@ def site(request):
 
 class MiscConfigDict(dict):
     def __missing__(self, key):
-        try:
-            value = MiscConfig.objects.get(key=key).value
-        except MiscConfig.DoesNotExist:
-            value = ''
+        cache_key = 'misc_config:%s' % key
+        value = cache.get(cache_key)
+        if value is None:
+            try:
+                value = MiscConfig.objects.get(key=key).value
+            except MiscConfig.DoesNotExist:
+                value = ''
+            cache.set(cache_key, value, 86400)
         self[key] = value
         return value
 
