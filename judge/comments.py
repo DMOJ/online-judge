@@ -1,4 +1,45 @@
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from .models import Comment, Problem
+from judge.forms import CommentForm
+
+
+class CommentMixin(object):
+    def get_page_id(self):
+        raise NotImplementedError()
+
+    def get_success_url(self):
+        return self.request.path
+
+    def form_valid(self, form):
+        comment = form.save(commit=False)
+        comment.author = self.request.user.profile
+        comment.page = self.get_page_id()
+        comment.save()
+        return super(CommentMixin, self).form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+
+        self.comment_form = form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user.profile
+            comment.page = self.get_page_id()
+            comment.save()
+            return HttpResponseRedirect(request.path)
+
+    def get_context_data(self, **kwargs):
+        context = super(CommentMixin, self).get_context_data(**kwargs)
+        context['comment_list'] = Comment.objects.filter(page=self.get_page_id(), parent=None)
+        context['comment_form'] = self.comment_form
+        return context
+
+    def get(self, request, *args, **kwargs):
+        """
+        Handles GET requests and instantiates a blank version of the form.
+        """
+        self.comment_form = CommentForm(initial={'page': self.get_page_id(), 'parent': None})
 
 
 def problem_comments(problem):
@@ -10,7 +51,6 @@ def contest_comments(contest):
 
 
 def comment_form(request, page_id):
-    from judge.forms import CommentForm
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():

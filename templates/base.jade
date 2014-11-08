@@ -53,7 +53,7 @@ html(lang='en')
                 | OJ
             if IN_CONTEST
                 #contest-info
-                    a(href='{% url "judge.views.contest" CONTEST.contest.key %}')
+                    a(href='{% url "contest_view" CONTEST.contest.key %}')
                         | #{CONTEST.contest.name} -
                         #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
         header#nav-head

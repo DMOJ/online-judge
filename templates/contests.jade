@@ -13,7 +13,7 @@ block body
             each contest in contests
                 tr
                     td
-                        a(href='{% url "judge.views.contest" contest.key %}')= contest.name
+                        a(href='{% url "contest_view" contest.key %}')= contest.name
                     td= contest.time_limit
                     td
                         if contest.can_join
