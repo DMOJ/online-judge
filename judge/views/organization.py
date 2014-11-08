@@ -108,8 +108,8 @@ class NewOrganizationView(CreateView):
         return super(NewOrganizationView, self).form_valid(form)
 
     @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        profile = self.request.user.profile
+    def dispatch(self, request, *args, **kwargs):
+        profile = request.user.profile
         if profile.points < 50:
             return render_to_response('generic_message.jade', {
                 'message': 'You need 50 points to add an organization.',
@@ -120,4 +120,4 @@ class NewOrganizationView(CreateView):
                 'message': 'You are already in an organization.',
                 'title': "Can't add organization"
             })
-        return super(NewOrganizationView, self).dispatch(*args, **kwargs)
+        return super(NewOrganizationView, self).dispatch(request, *args, **kwargs)
