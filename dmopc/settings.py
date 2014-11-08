@@ -125,7 +125,6 @@ WSGI_APPLICATION = 'dmopc.wsgi.application'
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
-    'judge.template_context.user_profile',
     'judge.template_context.comet_location',
     'judge.template_context.general_info',
     'judge.template_context.site',
