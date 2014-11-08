@@ -31,7 +31,7 @@ class ContestSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Contest.objects.all()
+        return Contest.objects.filter(is_public=True)
 
     def location(self, obj):
         return reverse('judge.views.contest', args=(obj.key,))
