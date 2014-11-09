@@ -140,6 +140,7 @@ class DjangoJudgeHandler(JudgeHandler):
                 contest.points = 0
             contest.save()
             submission.contest.participation.recalculate_score()
+            submission.contest.participation.update_cumtime()
 
         update_stats()
         finished_submission(submission)

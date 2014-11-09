@@ -496,6 +496,7 @@ class ContestParticipation(models.Model):
     profile = models.ForeignKey('ContestProfile', verbose_name='User', related_name='history')
     start = models.DateTimeField(verbose_name='Start time', default=timezone.now)
     score = models.IntegerField(verbose_name='score', default=0, db_index=True)
+    cumtime = models.PositiveIntegerField()
 
     def recalculate_score(self):
         self.score = sum(map(itemgetter('points'),
@@ -522,6 +523,19 @@ class ContestParticipation(models.Model):
             return end - now
         else:
             return None
+
+    def update_cumtime(self):
+        cumtime = 0
+        profile_id = self.profile.user_id
+        for problem in self.contest.contest_problems.all():
+            assert isinstance(problem, ContestProblem)
+            solution = problem.submissions.filter(submission__user_id=profile_id).values('submission__user_id')\
+                              .annotate(time=Max('submission__date'))
+            if not solution:
+                continue
+            cumtime += solution[0]['time'] - self.start
+        self.cumtime = cumtime
+        self.save()
 
     def __unicode__(self):
         return '%s in %s' % (self.profile.user.display_name, self.contest.name)
