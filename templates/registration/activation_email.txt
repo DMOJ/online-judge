@@ -1,5 +1,4 @@
 Please activate your DMOJ account in {{ expiration_days }} days.
 
-Use this link to activate:
-
+Please click on the following link to activate your account:
     http://{{ site.domain }}/accounts/activate/{{ activation_key }}/
