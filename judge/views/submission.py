@@ -95,12 +95,13 @@ class SubmissionsListBase(TitleMixin, ListView):
         return self.request.user.is_authenticated() and self.request.user.profile.contest.current is not None
 
     def get_queryset(self):
+        queryset = Submission.objects.order_by('-id').defer('source', 'error')
         if self.in_contest:
-            return Submission.objects.filter(
+            return queryset.filter(
                 contest__participation__contest_id=self.request.user.profile.contest.current.contest_id
-            ).order_by('-id')
+            )
         else:
-            return Submission.objects.order_by('-id')
+            return queryset
 
     def get_context_data(self, **kwargs):
         context = super(SubmissionsListBase, self).get_context_data(**kwargs)
