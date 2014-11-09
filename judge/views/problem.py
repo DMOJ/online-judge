@@ -1,6 +1,8 @@
+from operator import itemgetter
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
+from django.db.models import Count
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -12,16 +14,14 @@ from judge.utils.problems import contest_completed_ids, user_completed_ids
 
 
 def get_result_table(*args, **kwargs):
-    results = {}
     if args:
         submissions = args[0]
         if kwargs:
             raise ValueError("Can't pass both queryset and keyword filters")
     else:
         submissions = Submission.objects.filter(**kwargs) if kwargs is not None else Submission.objects
-    for code in ['AC', 'WA', 'TLE', 'IR', 'MLE']:
-        results[code] = submissions.filter(result=code).count()
-    results['CE'] = submissions.filter(status='CE').count()
+    raw = submissions.values('result').annotate(count=Count('result'))
+    results = dict(zip(map(itemgetter('result'), raw), map(itemgetter('count'), raw)))
     return [('Accepted', 'AC', results['AC']),
             ('Wrong Answer', 'WA', results['WA']),
             ('Compile Error', 'CE', results['CE']),
