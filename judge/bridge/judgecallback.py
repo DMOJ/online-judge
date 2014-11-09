@@ -198,8 +198,7 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.status = submission.result = 'IE'
         submission.save()
         event.post('sub_%d' % submission.id, {
-            'type': 'bad-problem',
-            'problem': packet['problem']
+            'type': 'internal-error'
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'internal-error', 'contest': submission.contest_key})
