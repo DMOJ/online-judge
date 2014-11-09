@@ -177,7 +177,7 @@ def contest_ranking_view(request, contest):
             problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.user, participation))
         )
 
-    results = map(make_ranking_profile, contest.users.select_related('profile').order_by('-score'))
+    results = map(make_ranking_profile, contest.users.select_related('profile').order_by('-score', 'cumtime'))
     return render_to_response('contest/ranking.jade', {
         'users': ranker(results),
         'title': '%s Rankings' % contest.name,
