@@ -1,3 +1,4 @@
+from collections import defaultdict
 from operator import itemgetter
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
@@ -21,7 +22,7 @@ def get_result_table(*args, **kwargs):
     else:
         submissions = Submission.objects.filter(**kwargs) if kwargs is not None else Submission.objects
     raw = submissions.values('result').annotate(count=Count('result'))
-    results = dict(zip(map(itemgetter('result'), raw), map(itemgetter('count'), raw)))
+    results = defaultdict(int, zip(map(itemgetter('result'), raw), map(itemgetter('count'), raw)))
     return [('Accepted', 'AC', results['AC']),
             ('Wrong Answer', 'WA', results['WA']),
             ('Compile Error', 'CE', results['CE']),
