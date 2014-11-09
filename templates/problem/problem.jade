@@ -49,14 +49,14 @@ block info_float
     div#problem-types
         div.toggle.closed.unselectable
             span.icon
-            | Problem type(s):
+            | Problem type(s)
         div.toggled(style="display:none") #{problem.types_list|join:", "}
     br
     if show_languages
         div#allowed-langs
             div.toggle.open.unselectable
                 span.icon
-                | Allowed languages:
+                | Allowed languages
             div.toggled(style="margin-bottom:-1em") #{problem.languages_list|join:", "}
         br
 
