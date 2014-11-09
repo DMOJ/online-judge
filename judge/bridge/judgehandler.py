@@ -23,7 +23,7 @@ class JudgeHandler(ZlibPacketHandler):
             'batch-begin': self.on_batch_begin,
             'batch-end': self.on_batch_end,
             'test-case-status': self.on_test_case,
-            'problem-not-exist': self.on_bad_problem,
+            'internal-error': self.on_bad_problem,
             'submission-terminated': self.on_submission_terminated,
             'submission-acknowledged': self.on_submission_acknowledged,
             'ping-response': self.on_ping_response,
@@ -193,7 +193,7 @@ class JudgeHandler(ZlibPacketHandler):
         logger.info('Submission generated compiler messages: %s', packet['submission-id'])
 
     def on_bad_problem(self, packet):
-        logger.error('Submission referenced invalid problem "%s": %s', packet['problem'], packet['submission-id'])
+        logger.error('Judge client failed while handling submission %s: %s', packet['submission-id'], packet['message'])
         self._free_self(packet)
 
     def on_submission_terminated(self, packet):
