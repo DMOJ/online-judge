@@ -159,7 +159,7 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
         return super(UserProblemSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
     def get_title(self):
-        return "%s's submissions for %s" % (self.username, self.problem.code)
+        return "%s's submissions for %s" % (self.username, self.problem.name)
 
 
 def single_submission(request, id):
