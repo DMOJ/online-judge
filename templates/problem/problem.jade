@@ -12,9 +12,9 @@ block info_float
     a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
     hr
     if request.user.is_authenticated and has_submissions
-        a(href='{% url "judge.views.user_submissions" problem.code request.user.username %}') My submissions
+        a(href='{% url "user_submissions" problem.code request.user.username %}') My submissions
         br
-    a(href='{% url "judge.views.chronological_submissions" problem.code %}') All submissions
+    a(href='{% url "chronological_submissions" problem.code %}') All submissions
     br
     a(href='{% url "judge.views.ranked_submissions" problem.code %}') Best submissions
     if perms.judge.change_problem

@@ -110,62 +110,52 @@ class SubmissionsListBase(TitleMixin, ListView):
         return context
 
 
-class AllUserSubmissions(SubmissionsListBase):
+class UserMixin(object):
+    def get(self, request, *args, **kwargs):
+        if 'user' not in kwargs:
+            raise ImproperlyConfigured('Must pass a user')
+        try:
+            self.profile = Profile.objects.get(user__username=kwargs['user'])
+        except Problem.DoesNotExist:
+            raise Http404()
+        else:
+            self.username = kwargs['user']
+        return super(UserMixin, self).get(request, *args, **kwargs)
+
+
+class AllUserSubmissions(UserMixin, SubmissionsListBase):
     def get_queryset(self):
-        return super(AllUserSubmissions, self).get_queryset().filter(user__user__username=self.username)
+        return super(AllUserSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
     def get_title(self):
         return 'All submissions by %s' % self.username
 
+
+class ProblemSubmissions(SubmissionsListBase):
+    show_problem = False
+
+    def get_queryset(self):
+        return super(ProblemSubmissions, self).get_queryset().filter(problem__code=self.problem.code)
+
+    def get_title(self):
+        return 'All submissions for %s' % self.problem.name
+
     def get(self, request, *args, **kwargs):
-        if 'user' not in kwargs:
-            raise ImproperlyConfigured('Must pass a user')
-        self.username = kwargs['user']
-        return super(AllUserSubmissions, self).get(request, *args, **kwargs)
-
-
-def user_submissions(request, code, username, page=1):
-    if not Profile.objects.filter(user__username=username).exists():
-        raise Http404()
-    return problem_submissions(request, code, page, False, title=username + "'s submissions for %s", order=['-id'],
-                               filter={
-                                   'problem__code': code,
-                                   'user__user__username': username
-                               }
-    )
-
-
-def chronological_submissions(request, code, page=1):
-    return problem_submissions(request, code, page, False, title="All submissions for %s", order=['-id'],
-                               filter={'problem__code': code})
-
-
-def problem_submissions(request, code, page, dynamic_update, title, order, filter={}):
-    try:
-        problem = Problem.objects.get(code=code)
-        queryset = Submission.objects.filter(**filter).order_by(*order)
-        user = request.user
-        if user.is_authenticated() and user.profile.contest.current is not None:
-            queryset = queryset.filter(contest__participation__contest_id=user.profile.contest.current.contest_id)
-
-        paginator = DiggPaginator(queryset, 50, body=6, padding=2)
+        if 'problem' not in kwargs:
+            raise ImproperlyConfigured('Must pass a problem')
         try:
-            submissions = paginator.page(page)
-        except PageNotAnInteger:
-            submissions = paginator.page(1)
-        except EmptyPage:
-            submissions = paginator.page(paginator.num_pages)
-        return render_to_response('submission/list.jade',
-                                  {'submissions': submissions,
-                                   'results': get_result_table(**filter),
-                                   'dynamic_update': dynamic_update,
-                                   'title': title % problem.name,
-                                   'completed_problem_ids': user_completed_ids(
-                                       user.profile) if user.is_authenticated() else [],
-                                   'show_problem': False},
-                                  context_instance=RequestContext(request))
-    except ObjectDoesNotExist:
-        raise Http404()
+            self.problem = Problem.objects.get(code=kwargs['problem'])
+        except Problem.DoesNotExist:
+            raise Http404()
+        return super(ProblemSubmissions, self).get(request, *args, **kwargs)
+
+
+class UserProblemSubmissions(UserMixin, ProblemSubmissions):
+    def get_queryset(self):
+        return super(UserProblemSubmissions, self).get_queryset().filter(user_id=self.profile.id)
+
+    def get_title(self):
+        return "%s's submissions for %s" % (self.username, self.problem.code)
 
 
 def single_submission(request, id):

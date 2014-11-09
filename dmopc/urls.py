@@ -110,15 +110,14 @@ urlpatterns = patterns('',
     url(r'^problem/(\w+)/rank/$', 'judge.views.ranked_submissions'),
     url(r'^problem/(\w+)/rank/(\d+)$', 'judge.views.ranked_submissions'),
 
-    url(r'^problem/(\w+)/submissions/$', 'judge.views.chronological_submissions'),
-    url(r'^problem/(\w+)/submissions/(\d+)$', 'judge.views.chronological_submissions'),
+    url(r'^problem/(?P<problem>\w+)/submissions/$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
+    url(r'^problem/(?P<problem>\w+)/submissions/(?P<page>\d+)$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
 
-    url(r'^problem/(\w+)/submissions/(\w+)/$', 'judge.views.user_submissions'),
-    url(r'^problem/(\w+)/submissions/(\w+)/(\d+)$', 'judge.views.user_submissions'),
+    url(r'^problem/(?P<problem>\w+)/submissions/(?P<user>\w+)/$', views.UserProblemSubmissions.as_view(), name='user_submissions'),
+    url(r'^problem/(?P<problem>\w+)/submissions/(?P<user>\w+)/(?P<page>\d+)$', views.UserProblemSubmissions.as_view(), name='user_submissions'),
 
     url(r'^user/(?P<user>\w+)/submissions/$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
-    url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', views.AllUserSubmissions.as_view(),
-        name='all_user_submissions'),
+    url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
 
     url(r'^comments/upvote/$', 'judge.views.upvote_comment'),
     url(r'^comments/downvote/$', 'judge.views.downvote_comment'),

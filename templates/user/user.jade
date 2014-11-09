@@ -108,5 +108,5 @@ block body
                     li
                         a(href='{% url "judge.views.problem" entry.code %}') #{entry.name}
                         = ' '
-                        a(href='{% url "judge.views.user_submissions" entry.code user.user.username %}')
+                        a(href='{% url "user_submissions" entry.code user.user.username %}')
                             | (#{entry.points} / #{entry.total})
