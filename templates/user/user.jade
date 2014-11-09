@@ -74,8 +74,8 @@ block body
                 .user-gravatar
                     img(src='{% gravatar_url user.user.email 135 %}', alt='gravatar')
                 if user.user == request.user
-                    div(style='text-align: center; width: 147px; margin-bottom: 0.5em')
-                        a(href='http://www.gravatar.com/', title='We use Gravatar, like many sites', target='_blank')
+                    div(style='text-align:left; width: 147px; margin-bottom: 0.5em')
+                        a(href='http://www.gravatar.com/', title='Change your avatar...', target='_blank')
                             | Change your avatar
                 else
                     br
