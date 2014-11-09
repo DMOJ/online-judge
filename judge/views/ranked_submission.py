@@ -41,7 +41,7 @@ class RankedSubmissions(ProblemSubmissions):
             query = super(RankedSubmissions, self).get_queryset()
             ranking = [query.filter(user_id=user).order_by('-contest__points', 'time', '-memory')
                             .select_related('contest')[0]
-                       for user in list(query.values_list('user_id', flat=True).distinct())]
+                       for user in list(query.values_list('user_id', flat=True).order_by().distinct())]
             ranking.sort(key=lambda sub: (-sub.contest.points, sub.time, -sub.memory))
             return ranking
         else:
