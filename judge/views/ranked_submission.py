@@ -47,10 +47,10 @@ class RankedSubmissions(ProblemSubmissions):
         if self.in_contest:
             # WARNING: SLOW
             query = super(RankedSubmissions, self).get_queryset()
-            ranking = [query.filter(user_id=user).order_by('-contest__points', 'time', '-memory')
+            ranking = [query.filter(user_id=user).order_by('-contest__points', 'time', 'memory')
                             .select_related('contest')[0]
                        for user in list(query.values_list('user_id', flat=True).order_by().distinct())]
-            ranking.sort(key=lambda sub: (-sub.contest.points, sub.time, -sub.memory))
+            ranking.sort(key=lambda sub: (-sub.contest.points, sub.time, sub.memory))
         else:
             ranking = FancyRawQuerySetWrapper(Submission,Submission.objects.filter(problem__id=self.problem.id).filter(
                     Q(result='AC') | Q(problem__partial=True, points__gt=0)).values('user').distinct().count(), '''
