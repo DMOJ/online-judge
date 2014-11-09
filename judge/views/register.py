@@ -17,8 +17,8 @@ class CustomRegistrationForm(RegistrationForm):
                                 error_messages={'invalid': 'A username must contain letters, numbers, or underscores'})
     display_name = CharField(max_length=50, required=False, label='Real name (optional)')
     timezone = ChoiceField(choices=TIMEZONE)
-    organization = ModelChoiceField(queryset=Organization.objects.all(), label='Affiliation', required=False)
-    language = ModelChoiceField(queryset=Language.objects.all(), label='Default language', empty_label=None)
+    organization = ModelChoiceField(queryset=Organization.objects.all(), label='Organization', required=False)
+    language = ModelChoiceField(queryset=Language.objects.all(), label='Preferred language', empty_label=None)
 
 
 class RegistrationView(OldRegistrationView):
