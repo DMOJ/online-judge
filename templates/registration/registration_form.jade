@@ -4,5 +4,6 @@ block body
     form.form-area(action='', method='post')
         -csrf_token
         table(border=0, style='text-align:left') #{form.as_table}
-        button(type='submit') Register!
+        hr
+        button(style="float:right;", type='submit') Register!
         input(type='hidden', name='next', value=next)
