@@ -1,78 +1,81 @@
 - load list_processor
 - load mathtag
-
-if submission.status != 'CE'
-    if submission.error
-        h4 Compilation Warnings
-        pre #{submission.error}
-        br
-    if submission.batch
-        - regroup test_cases by batch as batches
-        each batch in batches
-            if not batch.grouper
-                table
-                    each case in batch.list
-                        tr
-                            td
-                                b Test case ##{forloop.counter}:
-                            td
-                                span(class=case.status) #{case.status}
-                            td
-                                | [#{case.time|floatformat:"3"}s,
-                                - with memory=case.memory|default_if_none:0
-                                    if memory < 1000
-                                        | #{memory|floatformat:"-2"}kb]
-                                    else
-                                        - math memory "$1 / 1024" as megabytes
-                                        | #{megabytes|floatformat:"-2"}mb]
-                            td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
-            else
-                b Batch ##{batch.grouper}
-                | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
-                .batch-cases
+if submission.status != 'IE'
+    if submission.status != 'CE'
+        if submission.error
+            h4 Compilation Warnings
+            pre #{submission.error}
+            br
+        if submission.batch
+            - regroup test_cases by batch as batches
+            each batch in batches
+                if not batch.grouper
                     table
-                        for case in batch.list
+                        each case in batch.list
                             tr
                                 td
-                                    b Case ##{forloop.counter}:
+                                    b Test case ##{forloop.counter}:
                                 td
                                     span(class=case.status) #{case.status}
                                 td
-                                    if case.status != 'SC'
-                                        |[#{case.time|floatformat:"3"}s,
-                                        - with memory=case.memory|default_if_none:0
-                                            if memory < 1000
-                                                | #{memory|floatformat:"-2"}kb]
-                                            else
-                                                - math memory "$1 / 1024" as megabytes
-                                                | #{megabytes|floatformat:"-2"}mb]
+                                    | [#{case.time|floatformat:"3"}s,
+                                    - with memory=case.memory|default_if_none:0
+                                        if memory < 1000
+                                            | #{memory|floatformat:"-2"}kb]
+                                        else
+                                            - math memory "$1 / 1024" as megabytes
+                                            | #{megabytes|floatformat:"-2"}mb]
+                                td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
+                else
+                    b Batch ##{batch.grouper}
+                    | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
+                    .batch-cases
+                        table
+                            for case in batch.list
+                                tr
+                                    td
+                                        b Case ##{forloop.counter}:
+                                    td
+                                        span(class=case.status) #{case.status}
+                                    td
+                                        if case.status != 'SC'
+                                            |[#{case.time|floatformat:"3"}s,
+                                            - with memory=case.memory|default_if_none:0
+                                                if memory < 1000
+                                                    | #{memory|floatformat:"-2"}kb]
+                                                else
+                                                    - math memory "$1 / 1024" as megabytes
+                                                    | #{megabytes|floatformat:"-2"}mb]
+                br
+        else
+            table
+                each case in test_cases
+                    tr
+                        td
+                            b Test case ##{forloop.counter}:
+                        td
+                            span(class=case.status, title=case.long_status) #{case.status}
+                        td
+                            |[#{case.time|floatformat:"3"}s,
+                            - with memory=case.memory|default_if_none:0
+                                if memory < 1000
+                                    | #{memory|floatformat:"-2"}kb]
+                                else
+                                    - math memory "$1 / 1024" as megabytes
+                                    | #{megabytes|floatformat:"-2"}mb]
+                        td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
+            br
+        if submission.is_graded
+            br
+            if submission.result != "AB"
+                b Final score:
+                | &nbsp;#{submission.case_points|floatformat:"0"}/#{submission.case_total|floatformat:"0"} (#{submission.points|floatformat:"0"}/#{submission.problem.points|floatformat:"0"} points)
+            else
+                b Submission aborted!
             br
     else
-        table
-            each case in test_cases
-                tr
-                    td
-                        b Test case ##{forloop.counter}:
-                    td
-                        span(class=case.status, title=case.long_status) #{case.status}
-                    td
-                        |[#{case.time|floatformat:"3"}s,
-                        - with memory=case.memory|default_if_none:0
-                            if memory < 1000
-                                | #{memory|floatformat:"-2"}kb]
-                            else
-                                - math memory "$1 / 1024" as megabytes
-                                | #{megabytes|floatformat:"-2"}mb]
-                    td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
-        br
-    if submission.is_graded
-        br
-        if submission.result != "AB"
-            b Final score:
-            | &nbsp;#{submission.case_points|floatformat:"0"}/#{submission.case_total|floatformat:"0"} (#{submission.points|floatformat:"0"}/#{submission.problem.points|floatformat:"0"} points)
-        else
-            b Submission aborted!
-        br
+        h4 Compilation Error
+        pre #{submission.error}
+
 else
-    h4 Compilation Error
-    pre #{submission.error}
+    h3 An internal error occured while processing your submission
