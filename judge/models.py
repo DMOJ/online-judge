@@ -533,7 +533,8 @@ class ContestParticipation(models.Model):
                               .annotate(time=Max('submission__date'))
             if not solution:
                 continue
-            cumtime += solution[0]['time'] - self.start
+            dt = solution[0]['time'] - self.start
+            cumtime += dt.days * 86400 + dt.seconds
         self.cumtime = cumtime
         self.save()
 
