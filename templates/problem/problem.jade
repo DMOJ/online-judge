@@ -16,7 +16,7 @@ block info_float
         br
     a(href='{% url "chronological_submissions" problem.code %}') All submissions
     br
-    a(href='{% url "judge.views.ranked_submissions" problem.code %}') Best submissions
+    a(href='{% url "ranked_submissions" problem.code %}') Best submissions
     if perms.judge.change_problem
         hr
         a(href='{% url "admin:judge_problem_change" problem.id %}') Edit problem

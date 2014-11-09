@@ -86,4 +86,4 @@ block body
                         if problem.partial
                             | p
                     td
-                        a(href='{% url "judge.views.ranked_submissions" problem.code %}')= problem.number_of_users
+                        a(href='{% url "ranked_submissions" problem.code %}')= problem.number_of_users

@@ -107,8 +107,8 @@ urlpatterns = patterns('',
     url(r'^status/$', 'judge.views.status'),
     url(r'^status-table/$', 'judge.views.status_table'),
 
-    url(r'^problem/(\w+)/rank/$', 'judge.views.ranked_submissions'),
-    url(r'^problem/(\w+)/rank/(\d+)$', 'judge.views.ranked_submissions'),
+    url(r'^problem/(?P<problem>\w+)/rank/$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
+    url(r'^problem/(?P<problem>\w+)/rank/(?P<page>\d+)$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
 
     url(r'^problem/(?P<problem>\w+)/submissions/$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
     url(r'^problem/(?P<problem>\w+)/submissions/(?P<page>\d+)$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),

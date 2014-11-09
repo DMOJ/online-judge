@@ -12,10 +12,9 @@ from django.views.generic.detail import SingleObjectMixin
 
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, SubmissionTestCase, Profile
-from judge.utils.problems import user_completed_ids
+from judge.utils.problems import user_completed_ids, get_result_table
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.views import TitleMixin
-from judge.views import get_result_table
 from judge import event_poster as event
 
 
