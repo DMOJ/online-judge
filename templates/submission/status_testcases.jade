@@ -54,7 +54,7 @@ if submission.status != 'CE'
                     td
                         b Test case ##{forloop.counter}:
                     td
-                        span(class=case.status) #{case.status}
+                        span(class=case.status, title=case.long_status) #{case.status}
                     td
                         |[#{case.time|floatformat:"3"}s,
                         - with memory=case.memory|default_if_none:0

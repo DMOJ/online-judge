@@ -339,6 +339,10 @@ class SubmissionTestCase(models.Model):
     feedback = models.CharField(max_length=50, verbose_name='Judging feedback', blank=True)
     output = models.TextField(verbose_name='Program output', blank=True)
 
+    @property
+    def long_status(self):
+        return Submission.USER_DISPLAY_CODES.get(self.status, '')
+
 
 class Comment(models.Model):
     author = models.ForeignKey(Profile, verbose_name='Commenter')
