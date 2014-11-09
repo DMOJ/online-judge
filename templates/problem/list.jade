@@ -82,7 +82,7 @@ block body
                     - cache 86400 problem_list_group problem.group_id
                         td= problem.group.full_name
                     td= problem.code
-                    td.p= problem.points
+                    td.p #{problem.points|floatformat}
                         if problem.partial
                             | p
                     td

@@ -30,7 +30,7 @@ block info_float
             | (partial)
     else
         b Points:
-        | &nbsp;#{problem.points}
+        | &nbsp;#{problem.points|floatformat}
         if problem.partial
             | (partial)
     br
