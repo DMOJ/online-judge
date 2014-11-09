@@ -78,9 +78,8 @@ def abort_submission(request, code):
 class SubmissionsListBase(TitleMixin, ListView):
     model = Submission
     paginate_by = 50
-    dynamic_update = False
     show_problem = True
-    title = 'All Submissions'
+    title = 'All submissions'
     template_name = 'submission/list.jade'
 
     def get_paginator(self, queryset, per_page, orphans=0,
@@ -101,7 +100,7 @@ class SubmissionsListBase(TitleMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(SubmissionsListBase, self).get_context_data(**kwargs)
-        context['dynamic_update'] = self.dynamic_update
+        context['dynamic_update'] = False
         context['show_problem'] = self.show_problem
         context['completed_problem_ids'] = (user_completed_ids(self.request.user.profile)
                                             if self.request.user.is_authenticated() else [])
@@ -198,28 +197,17 @@ def single_submission_query(request):
     return single_submission(request, int(request.GET['id']))
 
 
-def submissions(request, page=1):
-    queryset = Submission.objects.order_by('-id')
-    if request.user.is_authenticated() and request.user.profile.contest.current is not None:
-        queryset = queryset.filter(contest__participation__contest_id=request.user.profile.contest.current.contest_id)
-    paginator = DiggPaginator(queryset, 50, body=6, padding=2)
-    try:
-        submissions = paginator.page(page)
-    except PageNotAnInteger:
-        submissions = paginator.page(1)
-    except EmptyPage:
-        submissions = paginator.page(paginator.num_pages)
-    results = cache.get('sub_stats_data')
-    if results is None:
-        results = get_result_table()
+class AllSubmissions(SubmissionsListBase):
+    def get_result_table(self):
+        results = cache.get('sub_stats_data')
+        if results is not None:
+            return results
+        results = super(AllSubmissions, self).get_result_table()
         cache.set('sub_stats_data', results, 86400)
-    return render_to_response('submission/list.jade',
-                              {'submissions': submissions,
-                               'results': results,
-                               'dynamic_update': True if page == 1 else False,
-                               'last_msg': event.last(),
-                               'title': 'All submissions',
-                               'completed_problem_ids': user_completed_ids(
-                                   request.user.profile) if request.user.is_authenticated() else [],
-                               'show_problem': True},
-                              context_instance=RequestContext(request))
+        return results
+
+    def get_context_data(self, **kwargs):
+        context = super(AllSubmissions, self).get_context_data(**kwargs)
+        context['dynamic_update'] = context['page_obj'].number == 1
+        context['last_msg'] = event.last()
+        return context
