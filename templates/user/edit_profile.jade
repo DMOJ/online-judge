@@ -5,6 +5,8 @@ block body
         -csrf_token
         table(border=0, style='text-align:left') #{form.as_table}
         a(href='http://www.gravatar.com/', title='Change your avatar...', target='_blank') Change your avatar
+        br
+        hr
         a(href='{% url "password_change" %}') Change your password
         hr
         input(type='submit', style="float:right;", value='Update profile')
