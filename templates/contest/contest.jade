@@ -18,10 +18,10 @@ block content_media
 block info_float
     if contest.can_join or in_contest
         if not participating or not participation.ended
-            if not in_contest
-                a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}') Join contest
-            else
+            if in_contest
                 a.unselectable.button.full(href='{% url "judge.views.leave_contest" contest.key %}') Leave contest
+            else
+                a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}') Join contest
             hr
 
     a(href='{% url "judge.views.contest_ranking" contest.key %}') View rankings
