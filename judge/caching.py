@@ -15,10 +15,12 @@ def update_stats():
 
 
 def finished_submission(sub):
-    cache.delete('prob_users:%d' % sub.problem_id)
     assert isinstance(sub, Submission)
+    cache.delete('prob_users:%d' % sub.problem_id)
+    cache.delete('user_complete:%d' % sub.user_id)
     if hasattr(sub, 'contest'):
         participation = sub.contest.participation
+        cache.delete('contest_complete:%d' % participation.id)
         cache.delete(make_template_fragment_key('conrank_user_prob',
                                                 (participation.profile.user_id,
                                                  participation.contest_id)))
