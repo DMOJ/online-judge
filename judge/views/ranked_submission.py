@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import PageNotAnInteger, EmptyPage
 from django.db.models import Q
@@ -37,15 +38,21 @@ class FancyRawQuerySetWrapper(object):
 class RankedSubmissions(ProblemSubmissions):
     def get_queryset(self):
         if self.in_contest:
+            key = 'contest_problem_rank:%d:%d' % (self.request.user.profile.contest.current_id, self.problem.id)
+        else:
+            key = 'problem_rank:%d' % self.problem.id
+        ranking = cache.get(key)
+        if ranking is not None:
+            return ranking
+        if self.in_contest:
             # WARNING: SLOW
             query = super(RankedSubmissions, self).get_queryset()
             ranking = [query.filter(user_id=user).order_by('-contest__points', 'time', '-memory')
                             .select_related('contest')[0]
                        for user in list(query.values_list('user_id', flat=True).order_by().distinct())]
             ranking.sort(key=lambda sub: (-sub.contest.points, sub.time, -sub.memory))
-            return ranking
         else:
-            return FancyRawQuerySetWrapper(Submission,Submission.objects.filter(problem__id=self.problem.id).filter(
+            ranking = FancyRawQuerySetWrapper(Submission,Submission.objects.filter(problem__id=self.problem.id).filter(
                     Q(result='AC') | Q(problem__partial=True, points__gt=0)).values('user').distinct().count(), '''
                 SELECT subs.id, subs.user_id, subs.problem_id, subs.date, subs.time,
                        subs.memory, subs.points, subs.language_id, subs.source,
@@ -71,6 +78,8 @@ class RankedSubmissions(ProblemSubmissions):
                 GROUP BY fastest.uid
                 ORDER BY subs.points DESC, subs.time ASC
             ''', (self.problem.id,) * 3)
+        cache.set(key, ranking, 86400)
+        return ranking
 
     def get_title(self):
         return 'Best solutions for %s' % self.problem.name
