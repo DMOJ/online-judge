@@ -19,6 +19,7 @@ class ProblemSubmitForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProblemSubmitForm, self).__init__(*args, **kwargs)
         self.fields['problem'].empty_label = None
+        self.fields['problem'].widget = forms.HiddenInput()
         self.fields['language'].empty_label = None
         self.fields['language'].label_from_instance = attrgetter('display_name')
 
