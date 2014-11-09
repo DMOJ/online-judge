@@ -49,7 +49,7 @@ def problem(request, code):
 def problems(request):
     hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
 
-    probs = Problem.objects.filter(is_public=True).order_by('code')
+    probs = Problem.objects.filter(is_public=True).defer('description').order_by('code')
     if request.user.is_authenticated():
         cp = request.user.profile.contest
         if cp.current is not None:
@@ -63,10 +63,11 @@ def problems(request):
                 'partial': p.partial,
                 'number_of_users': p.submissions.filter(submission__points__gt=0)
                                     .values('participation').distinct().count()
-            } for p in cp.current.contest.contest_problems.select_related('problem').order_by('problem__code')]
+            } for p in cp.current.contest.contest_problems.select_related('problem')
+                         .defer('problem__description').order_by('problem__code')]
             completed = contest_completed_ids(cp.current)
         elif hide_solved:
-            probs = Problem.unsolved(request.user.profile).filter(is_public=True).order_by('code')
+            probs = Problem.unsolved(request.user.profile).filter(is_public=True).defer('description').order_by('code')
             completed = user_completed_ids(request.user.profile)
         else:
             completed = user_completed_ids(request.user.profile)
