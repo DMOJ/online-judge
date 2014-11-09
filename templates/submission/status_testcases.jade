@@ -78,10 +78,10 @@ if submission.status != 'IE'
         pre #{submission.error}
 
 else
-    h3(style='color:red;font-weight:bold') An internal error occured while grading
+    h3(style='color:red;font-weight:bold') 
         if request.user == submission.user.user
-            | &nbsp;and DMOJ administrators have been notified.
+            | An internal error occured while grading, and DMOJ administrators have been notified.
             br
             | Please try again shortly.
         else
-            |.
+            | An internal error occured while grading.
