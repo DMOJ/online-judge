@@ -146,7 +146,12 @@ class Profile(models.Model):
 
     @property
     def problems(self):
-        return Submission.objects.filter(user=self, points__gt=0).values('problem').distinct().count()
+        key = 'user_probs:%d' % self.id
+        count = cache.get(key)
+        if count is None:
+            count = Submission.objects.filter(user=self, points__gt=0).values('problem').distinct().count()
+            cache.set(key, count, 86400)
+        return count
 
     @cached_property
     def contest(self):

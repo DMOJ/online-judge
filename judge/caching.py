@@ -18,6 +18,7 @@ def finished_submission(sub):
     assert isinstance(sub, Submission)
     cache.delete('prob_users:%d' % sub.problem_id)
     cache.delete('user_complete:%d' % sub.user_id)
+    cache.delete('user_probs:%d' % sub.user_id)
     if hasattr(sub, 'contest'):
         participation = sub.contest.participation
         cache.delete('contest_complete:%d' % participation.id)
