@@ -38,7 +38,7 @@ class FancyRawQuerySetWrapper(object):
 class RankedSubmissions(ProblemSubmissions):
     def get_queryset(self):
         if self.in_contest:
-            key = 'contest_problem_rank:%d:%d' % (self.request.user.profile.contest.current_id, self.problem.id)
+            key = 'contest_problem_rank:%d:%d' % (self.request.user.profile.contest.current.contest_id, self.problem.id)
         else:
             key = 'problem_rank:%d' % self.problem.id
         ranking = cache.get(key)

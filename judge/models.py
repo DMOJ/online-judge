@@ -155,6 +155,9 @@ class Profile(models.Model):
 
     @cached_property
     def contest(self):
+        """
+        :rtype : ContestProfile
+        """
         cp, created = ContestProfile.objects.get_or_create(user=self)
         if cp.current is not None and cp.current.ended:
             cp.current = None
