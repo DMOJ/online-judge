@@ -12,6 +12,11 @@ block media
     | </script>
     script(type='text/javascript')
         $(document).ready(function () {
+            $('#id_language').change(function () {
+                var lang = $("#id_language").find("option:selected").attr('value');
+                window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
+            });
+
             $('#ace_source').on('ace_load', function (e, editor) {
                 var source = $('textarea#id_source');
                 if (source.val() == '') {
