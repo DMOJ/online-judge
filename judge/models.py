@@ -1,9 +1,10 @@
 import re
+from collections import defaultdict
 from operator import itemgetter, attrgetter
-from django.core.cache import cache
-from django.utils.functional import cached_property
 
 import pytz
+from django.core.cache import cache
+from django.utils.functional import cached_property
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
@@ -19,16 +20,14 @@ from judge.ordered_model import OrderedModel
 
 
 def make_timezones():
-    data = {}
+    data = defaultdict(list)
     for tz in pytz.all_timezones:
         if '/' in tz:
             area, loc = tz.split('/', 1)
         else:
             area, loc = 'Other', tz
-        if area in data:
+        if not loc.startswith('GMT'):
             data[area].append((tz, loc))
-        else:
-            data[area] = [(tz, loc)]
     data = data.items()
     data.sort(key=itemgetter(0))
     return data
