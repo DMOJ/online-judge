@@ -6,6 +6,7 @@ from django.db.models import F
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader
+from django.utils.functional import cached_property
 from django.views.generic import TemplateView, ListView
 from django.views.generic.detail import SingleObjectMixin
 
@@ -90,8 +91,12 @@ class SubmissionsListBase(TitleMixin, ListView):
     def get_result_table(self):
         return get_result_table(self.get_queryset())
 
+    @cached_property
+    def in_contest(self):
+        return self.request.user.is_authenticated() and self.request.user.profile.contest.current is not None
+
     def get_queryset(self):
-        if self.request.user.is_authenticated() and self.request.user.profile.contest.current is not None:
+        if self.in_contest:
             return Submission.objects.filter(
                 contest__participation__contest_id=self.request.user.profile.contest.current.contest_id
             ).order_by('-id')
@@ -199,6 +204,8 @@ def single_submission_query(request):
 
 class AllSubmissions(SubmissionsListBase):
     def get_result_table(self):
+        if self.in_contest:
+            return super(AllSubmissions, self).get_result_table()
         results = cache.get('sub_stats_data')
         if results is not None:
             return results
