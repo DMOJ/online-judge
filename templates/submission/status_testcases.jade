@@ -78,4 +78,6 @@ if submission.status != 'IE'
         pre #{submission.error}
 
 else
-    h3(style='color:red;font-weight:bold') An internal error occured while grading. Please try again shortly.
+    h3(style='color:red;font-weight:bold') An internal error occured while grading.
+        if request.user == submission.user.user
+            | Please try again shortly.
