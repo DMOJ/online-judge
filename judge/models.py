@@ -102,13 +102,13 @@ class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='User associated')
     name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
     about = models.TextField(verbose_name='Self-description', null=True, blank=True)
-    timezone = models.CharField(max_length=50, verbose_name='Timezone', default='America/Toronto', choices=TIMEZONE)
-    language = models.ForeignKey(Language, verbose_name='Default language')
+    timezone = models.CharField(max_length=50, verbose_name='Location', default='America/Toronto', choices=TIMEZONE)
+    language = models.ForeignKey(Language, verbose_name='Preferred language')
     points = models.FloatField(default=0, db_index=True)
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
     last_access = models.DateTimeField(verbose_name='Last access time', default=now)
     ip = models.GenericIPAddressField(verbose_name='Last IP', blank=True, null=True)
-    organization = models.ForeignKey(Organization, verbose_name='Affiliation', null=True, blank=True,
+    organization = models.ForeignKey(Organization, verbose_name='Organization', null=True, blank=True,
                                      on_delete=models.SET_NULL, related_name='members', related_query_name='member')
     organization_join_time = models.DateTimeField(verbose_name='Organization joining date', null=True, blank=True)
 
