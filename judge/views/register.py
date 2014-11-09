@@ -16,7 +16,7 @@ class CustomRegistrationForm(RegistrationForm):
     username = forms.RegexField(regex=r'^\w+$', max_length=30, label='Username',
                                 error_messages={'invalid': 'A username must contain letters, numbers, or underscores'})
     display_name = CharField(max_length=50, required=False, label='Real name (optional)')
-    timezone = ChoiceField(choices=TIMEZONE)
+    timezone = ChoiceField(label='Location', choices=TIMEZONE)
     organization = ModelChoiceField(queryset=Organization.objects.all(), label='Organization', required=False)
     language = ModelChoiceField(queryset=Language.objects.all(), label='Preferred language', empty_label=None)
 
