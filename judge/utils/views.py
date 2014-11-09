@@ -1,15 +1,14 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 
 __author__ = 'Quantum'
 
 
-def generic_message(request, title, message):
-    return render_to_response('generic_message.jade', {
+def generic_message(request, title, message, status=None):
+    return render(request, 'generic_message.jade', {
         'message': message,
         'title': title
-    }, context_instance=RequestContext(request))
+    }, status=status)
 
 
 class TitleMixin(object):
