@@ -496,7 +496,7 @@ class ContestParticipation(models.Model):
     profile = models.ForeignKey('ContestProfile', verbose_name='User', related_name='history')
     start = models.DateTimeField(verbose_name='Start time', default=timezone.now)
     score = models.IntegerField(verbose_name='score', default=0, db_index=True)
-    cumtime = models.PositiveIntegerField()
+    cumtime = models.PositiveIntegerField(default=0)
 
     def recalculate_score(self):
         self.score = sum(map(itemgetter('points'),
