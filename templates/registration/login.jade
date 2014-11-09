@@ -1,7 +1,6 @@
 extends base
 
 block body
-    a(href='{% url "password_change" %}') Forgot your password?
     if form.errors
         p.error Invalid username or password.
     form.form-area(action='', method='post')
@@ -10,3 +9,5 @@ block body
         hr
         button(style="float:right;", type='submit') Login!
         input(type='hidden', name='next', value=next)
+    br
+    a(href='{% url "password_change" %}') Forgot your password?
