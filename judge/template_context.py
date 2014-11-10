@@ -19,7 +19,7 @@ def comet_location(request):
 def __tab(request):
     nav = cache.get('navbar_dict')
     if nav is None:
-        nav = dict((n.id, n) for n in NavigationBar.objects.all())
+        nav = dict((n.id, n) for n in NavigationBar.objects.only('key', 'parent'))
         nav[None] = None
         cache.set('navbar_dict', nav, 86400)
     for item in NavigationBar.objects.all():
