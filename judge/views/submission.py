@@ -148,6 +148,10 @@ class ProblemSubmissions(SubmissionsListBase):
     def get_title(self):
         return 'All submissions for %s' % self.problem.name
 
+    def get_content_title(self):
+        return format_html('All submissions for <a href="{1}">{0}</a>', self.problem.name,
+                           reverse('judge.views.problem', args=[self.problem.code]))
+
     def get(self, request, *args, **kwargs):
         if 'problem' not in kwargs:
             raise ImproperlyConfigured('Must pass a problem')
@@ -164,6 +168,11 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
 
     def get_title(self):
         return "%s's submissions for %s" % (self.username, self.problem.name)
+
+    def get_content_title(self):
+        return format_html('''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
+                           self.username, reverse('judge.views.user', args=[self.username]),
+                           self.problem.name, reverse('judge.views.problem', args=[self.problem.code]))
 
 
 def single_submission(request, id):
