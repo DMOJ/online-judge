@@ -19,8 +19,7 @@ def comet_location(request):
 def __tab(request, nav_bar):
     for item in nav_bar:
         if item.pattern.match(request.path):
-            yield item
-            while item.parent is not None:
+            while item is not None:
                 yield item
                 item = item.parent
 
