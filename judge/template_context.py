@@ -20,6 +20,7 @@ def __tab(request):
     nav = cache.get('navbar_dict')
     if nav is None:
         nav = dict((n.id, n) for n in NavigationBar.objects.all())
+        nav[None] = None
         cache.set('navbar_dict', nav, 86400)
     for item in NavigationBar.objects.all():
         if item.pattern.match(request.path):
