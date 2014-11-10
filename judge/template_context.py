@@ -19,8 +19,10 @@ def comet_location(request):
 def __tab(request, nav_bar):
     for item in nav_bar:
         if item.pattern.match(request.path):
-            return item
-    return None
+            yield item
+            while item.parent is not None:
+                yield item
+                item = item.parent
 
 
 def general_info(request):
@@ -30,7 +32,7 @@ def general_info(request):
         cache.set('navbar', nav, 86400)
     path = request.get_full_path()
     return {
-        'nav_tab': __tab(request, nav),
+        'nav_tab': list(__tab(request, nav)),
         'nav_bar': SimpleLazyObject(lambda: NavigationBar.objects.filter(parent=None)),
         'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path
     }
