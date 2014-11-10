@@ -24,6 +24,8 @@ def __tab(request):
         cache.set('navbar_dict', nav, 86400)
     for item in NavigationBar.objects.all():
         if item.pattern.match(request.path):
+            yield item.key
+            item = nav[item.parent_id]
             while item is not None:
                 yield item['key']
                 item = nav[item['parent_id']]
