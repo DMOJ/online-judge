@@ -42,7 +42,7 @@ class JudgeList(object):
             sub = judge.get_current_submission()
             if sub is not None:
                 try:
-                    del self.submission_map[judge.working]
+                    del self.submission_map[sub]
                 except KeyError:
                     pass
             self.judges.discard(judge)
