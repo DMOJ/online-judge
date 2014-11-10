@@ -1,10 +1,12 @@
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import PageNotAnInteger, EmptyPage
+from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.html import format_html
 
 from judge.models import Problem, Submission
 from judge.views.submission import ProblemSubmissions
@@ -83,6 +85,10 @@ class RankedSubmissions(ProblemSubmissions):
 
     def get_title(self):
         return 'Best solutions for %s' % self.problem.name
+
+    def get_content_title(self):
+        return format_html('Best solutions for <a href="{1}">{0}</a>', self.problem.name,
+                           reverse('judge.views.problem', args=[self.problem.code]))
 
     def get_result_table(self):
         return get_result_table(super(RankedSubmissions, self).get_queryset())
