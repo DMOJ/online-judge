@@ -38,6 +38,7 @@ def organization_update(sender, instance, **kwargs):
 @receiver(post_save, sender=NavigationBar)
 def navigation_update(sender, instance, **kwargs):
     cache.delete('navbar')
+    cache.delete(make_template_fragment_key('navbar'))
 
 
 @receiver(post_save, sender=MiscConfig)
