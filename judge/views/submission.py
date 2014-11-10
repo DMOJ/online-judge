@@ -1,12 +1,12 @@
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
-from django.core.paginator import PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader
 from django.utils.functional import cached_property
+from django.utils.html import format_html
 from django.views.generic import TemplateView, ListView
 from django.views.generic.detail import SingleObjectMixin
 
@@ -133,6 +133,10 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
 
     def get_title(self):
         return 'All submissions by %s' % self.username
+
+    def get_content_title(self):
+        return format_html('All submissions by <a href="{1}">{0}</a>', self.username,
+                           reverse('judge.views.user', self.username))
 
 
 class ProblemSubmissions(SubmissionsListBase):
