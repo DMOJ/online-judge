@@ -399,6 +399,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     list_display = ('name', 'key', 'registrant', 'creation_date')
     actions_on_top = True
     actions_on_bottom = True
+    filter_horizontal = ('admins',)
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
