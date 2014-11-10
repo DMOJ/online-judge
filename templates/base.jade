@@ -18,7 +18,7 @@ html(lang='en')
         script(src='{% static "navbar.js" %}')
         script(src='{% static "clock.js" %}')
         style.
-            {% for item in nav_tab %}nav ul li a.nav-{{ item.key }}{% if not forloop.last %},{% endif %} {% endfor %}{
+            {% for item in nav_tab %}nav ul li a.nav-{{ item }}{% if not forloop.last %},{% endif %} {% endfor %}{
                 color: #FFF;
                 background: #2980b9
             }
