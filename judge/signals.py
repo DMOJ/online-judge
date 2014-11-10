@@ -18,6 +18,7 @@ def profile_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('user_on_rank', (instance.id,)))
     cache.delete(make_template_fragment_key('user_org_on_rank', (instance.id,)))
     cache.delete(make_template_fragment_key('submission_user', (instance.id,)))
+    cache.delete(make_template_fragment_key('org_member_count', (instance.organization_id,)))
 
 
 @receiver(post_save, sender=Contest)
