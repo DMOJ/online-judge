@@ -2,6 +2,8 @@
 - load mathtag
 if submission.status != 'IE'
     if submission.status != 'CE'
+        h3 Execution Results
+        br
         if submission.error
             h4 Compilation Warnings
             pre #{submission.error}
@@ -55,6 +57,8 @@ if submission.status != 'IE'
                             b Test case ##{forloop.counter}:
                         td
                             span(class=case.status, title=case.long_status) #{case.status}
+                            if case.feedback
+                                | (#{case.feedback})
                         td
                             | [#{case.time|floatformat:"3"}s,
                             - with memory=case.memory|default_if_none:0
