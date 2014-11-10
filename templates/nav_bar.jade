@@ -1,0 +1,6 @@
+each item in nav_bar
+    li
+        a(href=item.path, class='nav-{{ item.key }}')= item.label
+        - with nav_bar=item.children template=nav_bar.jade
+            if nav_bar
+                - include template

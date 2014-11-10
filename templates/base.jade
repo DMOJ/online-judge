@@ -59,9 +59,7 @@ html(lang='en')
         header#nav-head
             nav#navigation.unselectable
                 ul
-                    each item in nav_bar
-                        li
-                            a(href=item.path, class='nav-{{ item.key }}')= item.label
+                    include nav_bar
                 span#user-links
                     if request.user.is_authenticated
                         a(href='{% url "judge.views.user" %}')

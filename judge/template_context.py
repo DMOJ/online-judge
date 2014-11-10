@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.cache import cache
+from django.utils.functional import SimpleLazyObject
 from .models import Profile, MiscConfig, NavigationBar
 
 
@@ -30,7 +31,7 @@ def general_info(request):
     path = request.get_full_path()
     return {
         'nav_tab': __tab(request, nav),
-        'nav_bar': nav,
+        'nav_bar': SimpleLazyObject(lambda: NavigationBar.objects.filter(parent=None)),
         'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path
     }
 
