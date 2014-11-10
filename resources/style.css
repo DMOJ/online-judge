@@ -294,6 +294,7 @@ nav ul li ul {
 nav ul li ul li a {
 	padding:8px 15px 8px 8px;	
 	font-size:0.8em;
+	width:100%;
 }
 
 nav ul li:hover > ul {
