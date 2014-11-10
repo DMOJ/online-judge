@@ -328,7 +328,7 @@ class NavigationBarAdmin(admin.ModelAdmin):
     fields = ('key', 'label', 'path', 'regex', 'parent')
 
     def parent_name(self, obj):
-        return obj.parent or obj.parent.name
+        return obj.parent and obj.parent.name
     parent_name.short_description = 'Parent'
 
 
