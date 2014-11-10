@@ -136,7 +136,7 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
 
     def get_content_title(self):
         return format_html('All submissions by <a href="{1}">{0}</a>', self.username,
-                           reverse('judge.views.user', self.username))
+                           reverse('judge.views.user', args=[self.username]))
 
 
 class ProblemSubmissions(SubmissionsListBase):
