@@ -387,6 +387,7 @@ class NavigationBar(OrderedModel):
     label = models.CharField(max_length=20)
     path = models.CharField(max_length=30, verbose_name='Link path')
     regex = models.TextField(verbose_name='Highlight regex', validators=[validate_regex])
+    parent = models.ForeignKey('self', verbose_name='Parent item', null=True, blank=True)
 
     def __unicode__(self):
         return self.label

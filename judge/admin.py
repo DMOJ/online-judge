@@ -324,8 +324,8 @@ class GenerateKeyTextInput(TextInput):
 
 
 class NavigationBarAdmin(admin.ModelAdmin):
-    list_display = ('key', 'label', 'path', 'order', 'order_link')
-    fields = ('key', 'label', 'path', 'regex')
+    list_display = ('key', 'label', 'path', 'order', 'order_link', 'parent__name')
+    fields = ('key', 'label', 'path', 'regex', 'parent')
 
 
 class JudgeAdminForm(ModelForm):
