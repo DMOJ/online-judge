@@ -62,7 +62,8 @@ def judge_submission(submission):
     else:
         submission.status = 'QU' if (response['name'] == 'submission-received' and
                                      response['submission-id'] == submission.id) else 'IE'
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id})
+        if submission.problem.is_public:
+            event.post('submissions', {'type': 'update-submission', 'id': submission.id})
         success = True
     submission.save()
     return success
