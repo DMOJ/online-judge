@@ -149,7 +149,7 @@ class ProblemSubmissions(SubmissionsListBase):
         return 'All submissions for %s' % self.problem.name
 
     def get_content_title(self):
-        return format_html('All submissions for <a href="{1}">{0}</a>', self.problem.name,
+        return format_html(u'All submissions for <a href="{1}">{0}</a>', self.problem.name,
                            reverse('judge.views.problem', args=[self.problem.code]))
 
     def get(self, request, *args, **kwargs):
