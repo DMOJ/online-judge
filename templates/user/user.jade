@@ -80,6 +80,12 @@ block body
                 br
                 a(href='{% url "all_user_submissions" user.user.username %}') View submissions
             td.user-info-cell
+                - with org=user.organization
+                    if org
+                        p
+                            b Organization:
+                            = ' '
+                            a(href='{% url "organization_home" org.key %}')= org.name
                 if user.about
                     h4 About
                     | #{user.about|markdown:"self-description"}
