@@ -45,6 +45,7 @@ block users_media
             font-size: 0.7em;
         }
     if last_msg
+        script(type='text/javascript', src='{% static "event.js" %}')
         script(type='text/javascript')
             $(function () {
                 var receiver = new EventReceiver(
@@ -57,7 +58,7 @@ block users_media
                                     url: '{% url "judge.views.contest_ranking_ajax" contest.key %}'
                                 }).done(function (data) {
                                     table.html(data);
-                                }).fail(function (data) {
+                                }).fail(function () {
                                     console.log('Failed to update table!');
                                 });
                         }
