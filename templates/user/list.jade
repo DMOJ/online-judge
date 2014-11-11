@@ -9,8 +9,6 @@ block users_media
             $("#users-table").tablesorter({ sortList: [[2, 1]] });
         });
 
-block after_point_head
-    th.problems Problems
 
-block after_point
-    td #{user.problems}
+block users_table
+    include user/users_table

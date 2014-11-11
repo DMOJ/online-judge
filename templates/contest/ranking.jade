@@ -1,6 +1,5 @@
 extends user/base_users
-- load timedelta
-- load cache
+
 block users_media
     style
         #users-table td {
@@ -45,16 +44,6 @@ block users_media
             border-top: 1px solid gray;
             font-size: 0.7em;
         }
-block before_point_head
-    each problem in problems
-        th.points.header= forloop.counter
-            div.point-denominator= problem.points
-block before_point
-    - cache 86400 conrank_user_prob user.id contest.id
-        each problem in user.problems
-            if problem
-                td(class=problem.state)
-                    | #{problem.points|floatformat}
-                    .solving-time #{problem.time|timedelta:"noday"}
-            else
-                td
+
+block users_table
+    include contest/ranking_table

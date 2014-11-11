@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db.models import Max
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
@@ -161,9 +161,8 @@ def get_best_contest_solutions(problems, profile, participation):
     return solutions
 
 
-def contest_ranking_view(request, contest):
+def contest_ranking_list(contest, problems):
     assert isinstance(contest, Contest)
-    problems = list(contest.contest_problems.all())
 
     def make_ranking_profile(participation):
         contest_profile = participation.profile
@@ -177,9 +176,26 @@ def contest_ranking_view(request, contest):
             problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.user, participation))
         )
 
-    results = map(make_ranking_profile, contest.users.select_related('profile').order_by('-score', 'cumtime'))
+    return map(make_ranking_profile, contest.users.select_related('profile').order_by('-score', 'cumtime'))
+
+
+def contest_ranking_ajax(request, key):
+    contest, exists = _find_contest(request, key)
+    if not exists:
+        return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
+    problems = list(contest.contest_problems.all())
+    return render_to_response('contest/ranking_table.jade', {
+        'users': ranker(contest_ranking_list(contest, problems)),
+        'problems': problems,
+        'contest': contest,
+        'show_organization': True,
+    }, context_instance=RequestContext(request))
+
+
+def contest_ranking_view(request, contest):
+    problems = list(contest.contest_problems.all())
     return render_to_response('contest/ranking.jade', {
-        'users': ranker(results),
+        'users': ranker(contest_ranking_list(contest, problems)),
         'title': '%s Rankings' % contest.name,
         'content_title': contest.name,
         'subtitle': 'Rankings',

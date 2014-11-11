@@ -1,0 +1,19 @@
+extends user/base_users_table
+
+- load timedelta
+- load cache
+
+block before_point_head
+    each problem in problems
+        th.points.header= forloop.counter
+            div.point-denominator= problem.points
+
+block before_point
+    - cache 86400 conrank_user_prob user.id contest.id
+        each problem in user.problems
+            if problem
+                td(class=problem.state)
+                    | #{problem.points|floatformat}
+                    .solving-time #{problem.time|timedelta:"noday"}
+            else
+                td
