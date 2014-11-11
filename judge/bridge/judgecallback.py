@@ -70,9 +70,9 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.batch = False
         submission.save()
         SubmissionTestCase.objects.filter(submission_id=submission.id).delete()
+        event.post('sub_%d' % submission.id, {'type': 'grading-begin'})
         if not submission.problem.is_public:
             return
-        event.post('sub_%d' % submission.id, {'type': 'grading-begin'})
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'grading-begin', 'contest': submission.contest_key})
 
@@ -147,8 +147,6 @@ class DjangoJudgeHandler(JudgeHandler):
         update_stats()
         finished_submission(submission)
 
-        if not submission.problem.is_public:
-            return
         event.post('sub_%d' % submission.id, {
             'type': 'grading-end',
             'time': time,
@@ -157,6 +155,8 @@ class DjangoJudgeHandler(JudgeHandler):
             'total': float(submission.problem.points),
             'result': submission.result
         })
+        if not submission.problem.is_public:
+            return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'grading-end', 'contest': submission.contest_key})
         event.post('submissions', {'type': 'done-submission', 'id': submission.id,
@@ -172,12 +172,12 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.status = submission.result = 'CE'
         submission.error = packet['log']
         submission.save()
-        if not submission.problem.is_public:
-            return
         event.post('sub_%d' % submission.id, {
             'type': 'compile-error',
             'log': packet['log']
         })
+        if not submission.problem.is_public:
+            return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'compile-error', 'contest': submission.contest_key})
 
@@ -190,8 +190,6 @@ class DjangoJudgeHandler(JudgeHandler):
             return
         submission.error = packet['log']
         submission.save()
-        if not submission.problem.is_public:
-            return
         event.post('sub_%d' % submission.id, {
             'type': 'compile-message'
         })
@@ -205,11 +203,11 @@ class DjangoJudgeHandler(JudgeHandler):
             return
         submission.status = submission.result = 'IE'
         submission.save()
-        if not submission.problem.is_public:
-            return
         event.post('sub_%d' % submission.id, {
             'type': 'internal-error'
         })
+        if not submission.problem.is_public:
+            return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'internal-error', 'contest': submission.contest_key})
 
@@ -265,8 +263,6 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.current_testcase = packet['position'] + 1
         submission.save()
         test_case.save()
-        if not submission.problem.is_public:
-            return
         event.post('sub_%d' % submission.id, {
             'type': 'test-case',
             'id': packet['position'],
@@ -277,6 +273,8 @@ class DjangoJudgeHandler(JudgeHandler):
             'total': float(test_case.total),
             'output': packet['output']
         })
+        if not submission.problem.is_public:
+            return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'test-case', 'contest': submission.contest_key})
 
