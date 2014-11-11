@@ -44,6 +44,26 @@ block users_media
             border-top: 1px solid gray;
             font-size: 0.7em;
         }
+    if last_msg
+        script(type='text/javascript')
+            $(function () {
+                var receiver = new EventReceiver(
+                    "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                    ['contest_#{contest.id}'], #{last_msg}, function (message) {
+                        var table = $('#users-table');
+                        switch (message.type) {
+                            case 'update':
+                                $.ajax({
+                                    url: '{% url "judge.views.contest_ranking_ajax" contest.key %}'
+                                }).done(function (data) {
+                                    table.html(data);
+                                }).fail(function (data) {
+                                    console.log('Failed to update table!');
+                                });
+                        }
+                    }
+                );
+            });
 
 block users_table
     include contest/ranking_table

@@ -15,6 +15,7 @@ from judge.comments import comment_form, contest_comments
 from judge.models import Contest, ContestParticipation, ContestProblem, Profile
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin
+from judge import event_poster as event
 
 
 __all__ = ['ContestList', 'contest', 'contest_ranking', 'join_contest', 'leave_contest', 'contest_ranking_ajax']
@@ -202,6 +203,7 @@ def contest_ranking_view(request, contest):
         'problems': problems,
         'contest': contest,
         'show_organization': True,
+        'last_msg': event.last(),
     }, context_instance=RequestContext(request))
 
 

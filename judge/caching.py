@@ -23,7 +23,6 @@ def finished_submission(sub):
     if hasattr(sub, 'contest'):
         participation = sub.contest.participation
         cache.delete('contest_complete:%d' % participation.id)
-        cache.delete('contest_complete:%d' % participation.id)
         cache.delete('contest_problem_rank:%d:%d' % (participation.contest_id, sub.problem_id))
         cache.delete(make_template_fragment_key('conrank_user_prob',
                                                 (participation.profile.user_id,

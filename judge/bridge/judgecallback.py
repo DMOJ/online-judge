@@ -161,6 +161,9 @@ class DjangoJudgeHandler(JudgeHandler):
                                    'state': 'grading-end', 'contest': submission.contest_key})
         event.post('submissions', {'type': 'done-submission', 'id': submission.id,
                                    'contest': submission.contest_key})
+        if hasattr(submission, 'contest'):
+            participation = submission.contest.participation
+            event.post('contest_%d' % participation.contest_id, {'type': 'update'})
 
     def on_compile_error(self, packet):
         super(DjangoJudgeHandler, self).on_compile_error(packet)
