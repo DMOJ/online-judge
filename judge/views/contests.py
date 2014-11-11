@@ -17,7 +17,7 @@ from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin
 
 
-__all__ = ['ContestList', 'contest', 'contest_ranking', 'join_contest', 'leave_contest']
+__all__ = ['ContestList', 'contest', 'contest_ranking', 'join_contest', 'leave_contest', 'contest_ranking_ajax']
 
 
 def _find_contest(request, key, private_check=True):
