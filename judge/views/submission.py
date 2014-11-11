@@ -135,7 +135,7 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
         return 'All submissions by %s' % self.username
 
     def get_content_title(self):
-        return format_html('All submissions by <a href="{1}">{0}</a>', self.username,
+        return format_html(u'All submissions by <a href="{1}">{0}</a>', self.username,
                            reverse('judge.views.user', args=[self.username]))
 
 
@@ -170,7 +170,7 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
         return "%s's submissions for %s" % (self.username, self.problem.name)
 
     def get_content_title(self):
-        return format_html('''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
+        return format_html(u'''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
                            self.username, reverse('judge.views.user', args=[self.username]),
                            self.problem.name, reverse('judge.views.problem', args=[self.problem.code]))
 
