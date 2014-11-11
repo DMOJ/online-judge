@@ -70,6 +70,8 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.batch = False
         submission.save()
         SubmissionTestCase.objects.filter(submission_id=submission.id).delete()
+        if not submission.problem.is_public:
+            return
         event.post('sub_%d' % submission.id, {'type': 'grading-begin'})
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'grading-begin', 'contest': submission.contest_key})
@@ -145,6 +147,8 @@ class DjangoJudgeHandler(JudgeHandler):
         update_stats()
         finished_submission(submission)
 
+        if not submission.problem.is_public:
+            return
         event.post('sub_%d' % submission.id, {
             'type': 'grading-end',
             'time': time,
@@ -168,6 +172,8 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.status = submission.result = 'CE'
         submission.error = packet['log']
         submission.save()
+        if not submission.problem.is_public:
+            return
         event.post('sub_%d' % submission.id, {
             'type': 'compile-error',
             'log': packet['log']
@@ -184,6 +190,8 @@ class DjangoJudgeHandler(JudgeHandler):
             return
         submission.error = packet['log']
         submission.save()
+        if not submission.problem.is_public:
+            return
         event.post('sub_%d' % submission.id, {
             'type': 'compile-message'
         })
@@ -197,6 +205,8 @@ class DjangoJudgeHandler(JudgeHandler):
             return
         submission.status = submission.result = 'IE'
         submission.save()
+        if not submission.problem.is_public:
+            return
         event.post('sub_%d' % submission.id, {
             'type': 'internal-error'
         })
@@ -212,6 +222,8 @@ class DjangoJudgeHandler(JudgeHandler):
             return
         submission.status = submission.result = 'AB'
         submission.save()
+        if not submission.problem.is_public:
+            return
         event.post('sub_%d' % submission.id, {
             'type': 'aborted-submission'
         })
@@ -253,6 +265,8 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.current_testcase = packet['position'] + 1
         submission.save()
         test_case.save()
+        if not submission.problem.is_public:
+            return
         event.post('sub_%d' % submission.id, {
             'type': 'test-case',
             'id': packet['position'],
