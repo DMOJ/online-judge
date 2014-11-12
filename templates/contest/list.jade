@@ -15,7 +15,7 @@ block body
                     th Time limit
                     th Rankings
             tbody
-                each contest in past_contests
+                each contest in current_contests
                     tr
                         td
                             a(href='{% url "contest_view" contest.key %}')= contest.name
