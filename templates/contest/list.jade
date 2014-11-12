@@ -15,6 +15,7 @@ block body
         thead
             tr
                 th(style='width:85%') Name
+                th Start
                 th Time limit
         tbody
             each contest in past_contests
@@ -24,8 +25,5 @@ block body
                             a(href='{% url "contest_view" contest.key %}')= contest.name
                         td
                             if contest.start_time
-                                | #{contest.start_time|date:"N j, o, g:i a"}
-                                br
-                                | &nbsp;&nbsp;&nbsp;> #{contest.time_limit}
-                            else
-                                | #{contest.time_limit}
+                                | #{contest.start_time|date:"N/j/o, g:i a"}
+                        td #{contest.time_limit}
