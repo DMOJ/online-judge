@@ -213,6 +213,19 @@ MARKDOWN_TROIS_STYLES = {
         },
         'safe_mode': False,
     },
+    'contest': {
+        'extras': {
+            'pyshell': None,
+            'fenced-code-blocks': None,
+            'html-classes': {'pre': 'code'},
+            'cuddled-lists': None,
+            'footnotes': None,
+            'header-ids': None,
+            'demote-headers': 1,
+            'tables': None,
+        },
+        'safe_mode': False,
+    },
     'organization-about': {
         'extras': {
             'code-friendly': None,
