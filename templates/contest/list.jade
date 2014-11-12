@@ -27,6 +27,6 @@ block body
                         td
                             if contest.start_time
                                 | #{contest.start_time|date:"N/j/o, g:i a"}
-                        td #{contest.time_limit|timeformat:"noseconds"}
+                        td #{contest.time_limit}
                         td
                             a(href='{% url "judge.views.contest_ranking" contest.key %}') <>
