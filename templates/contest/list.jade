@@ -1,6 +1,7 @@
 extends base
 - load staticfiles
 - load timedelta
+- load tz
 
 block body
     br
@@ -23,6 +24,6 @@ block body
                             a(href='{% url "contest_view" contest.key %}')= contest.name
                         td
                             if contest.start_time
-                                | #{contest.start_time} - #{contest.end_time}
+                                | #{contest.start_time|date:"N j, o, g:i a"} - #{contest.end_time|date:"N j, o, g:i a"}
                             else
                                 | #{contest.time_limit}
