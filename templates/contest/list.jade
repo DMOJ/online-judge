@@ -6,7 +6,26 @@ extends base
 block body
     br
     h3 Upcoming Contests
-    i There are no scheduled contests at this time.
+    if current_contests
+        table.table.striped
+        thead
+            tr
+                th(style='width:85%') Name
+                th Start
+                th Time limit
+                th Rankings
+        tbody
+            each contest in past_contests
+                td
+                    a(href='{% url "contest_view" contest.key %}')= contest.name
+                td
+                    if contest.start_time
+                        | #{contest.start_time|date:"N j, o, G:i"}
+                td #{contest.time_limit}
+                td
+                    a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}
+    else
+        i There are no scheduled contests at this time.
     br
     br
     h3 Past Contests
@@ -20,13 +39,12 @@ block body
                 th Rankings
         tbody
             each contest in past_contests
-                if not contest.ongoing
-                    tr
-                        td
-                            a(href='{% url "contest_view" contest.key %}')= contest.name
-                        td
-                            if contest.start_time
-                                | #{contest.start_time|date:"N/j/o, g:i a"}
-                        td #{contest.time_limit}
-                        td
-                            a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}
+                tr
+                    td
+                        a(href='{% url "contest_view" contest.key %}')= contest.name
+                    td
+                        if contest.start_time
+                            | #{contest.start_time|date:"N j, o, G:i"}
+                    td #{contest.time_limit}
+                    td
+                        a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}

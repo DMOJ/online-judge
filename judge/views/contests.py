@@ -36,7 +36,6 @@ def _find_contest(request, key, private_check=True):
 
 class ContestList(TitleMixin, ListView):
     model = Contest
-    context_object_name = 'past_contests'
     template_name = 'contest/list.jade'
     title = 'Contests'
 
@@ -44,7 +43,13 @@ class ContestList(TitleMixin, ListView):
         if self.request.user.has_perm('judge.see_private_contest'):
             return Contest.objects.all()
         else:
-            return Contest.objects.filter(is_public=True, ongoing=False).order_by('-id')
+            return Contest.objects.filter(is_public=True).order_by('-id')
+
+    def get_context_data(self, **kwargs):
+        context = super(ContestList, self).get_context_data(**kwargs)
+        context['current_contests'] = self.get_queryset().filter(ongoing=True)
+        context['past_contests'] = self.get_queryset().filter(ongoing=False)
+        return context
 
 
 def contest(request, key):
