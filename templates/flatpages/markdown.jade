@@ -13,4 +13,5 @@ block content_title
     | #{flatpage.title}
 
 block body
-    | #{flatpage.content|markdown:"trusted"}
+    .content-description
+        | #{flatpage.content|markdown:"trusted"}
