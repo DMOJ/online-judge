@@ -23,7 +23,7 @@ def user(request, user=None):
                 return redirect_to_login(request.get_full_path())
             user = request.user.profile
         else:
-            user = Profile.objects.select_related('user').get(username=user)
+            user = Profile.objects.select_related('user').get(user__username=user)
         result = Submission.objects.filter(user=user, points__gt=0, problem__is_public=True) \
             .values('problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
             .distinct().annotate(points=Max('points')).order_by('problem__group__full_name', 'problem__name')

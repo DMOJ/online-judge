@@ -117,7 +117,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
-AUTH_USER_MODEL = 'judge.Profile'
 ACCOUNT_ACTIVATION_DAYS = 7
 
 ROOT_URLCONF = 'dmopc.urls'
