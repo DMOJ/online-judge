@@ -17,6 +17,7 @@ block body
                 th(style='width:85%') Name
                 th Start
                 th Time limit
+                th Rankings
         tbody
             each contest in past_contests
                 if not contest.ongoing
@@ -26,4 +27,6 @@ block body
                         td
                             if contest.start_time
                                 | #{contest.start_time|date:"N/j/o, g:i a"}
-                        td #{contest.time_limit}
+                        td #{contest.time_limit|timeformat:"noseconds"}
+                        td
+                            a(href='{% url "judge.views.contest_ranking" contest.key %}') <>
