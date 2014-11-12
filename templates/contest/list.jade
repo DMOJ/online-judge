@@ -1,22 +1,29 @@
 extends base
 - load staticfiles
+- load timedelta
 
 block body
     br
-    table.table
+    h3 Upcoming Contests
+    br
+    i There are no scheduled contests at this time.
+    h3 Past Contests
+    br
+    table.table.striped
         thead
             tr
                 th(style='width:85%') Name
                 th Time limit
                 th Ongoing
         tbody
-            each contest in contests
-                tr
-                    td
-                        a(href='{% url "contest_view" contest.key %}')= contest.name
-                    td= contest.time_limit
-                    td
-                        if contest.can_join
-                            img(src='{% static "admin/img/icon-yes.gif" %}')
-                        else
-                            img(src='{% static "admin/img/icon-no.gif" %}')
+            each contest in past_contests
+                if not contest.ongoing
+                    tr
+                        td
+                            a(href='{% url "contest_view" contest.key %}')= contest.name
+                        td= contest.time_limit
+                        td
+                            if contest.can_join
+                                img(src='{% static "admin/img/icon-yes.gif" %}')
+                            else
+                                img(src='{% static "admin/img/icon-no.gif" %}')
