@@ -119,7 +119,7 @@ class UserMixin(object):
         if 'user' not in kwargs:
             raise ImproperlyConfigured('Must pass a user')
         try:
-            self.profile = Profile.objects.get(user__username=kwargs['user'])
+            self.profile = Profile.objects.get(username=kwargs['user'])
         except Profile.DoesNotExist:
             raise Http404()
         else:

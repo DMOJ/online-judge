@@ -1,11 +1,12 @@
 import re
 from collections import defaultdict
 from operator import itemgetter, attrgetter
+from django.core.mail import send_mail
 
 import pytz
 from django.core.cache import cache
 from django.utils.functional import cached_property
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
@@ -97,19 +98,52 @@ class Organization(models.Model):
         ordering = ['key']
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, verbose_name='User associated')
+class Profile(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField('Username', max_length=30, unique=True,
+                                help_text='Required. 30 characters or fewer. Letters, numbers and underscores.',
+                                validators=[RegexValidator(r'^\w+$', 'Enter a valid username.', 'invalid')])
+    email = models.EmailField('Email address', unique=True)
+    is_staff = models.BooleanField('Staff status', default=False,
+                                   help_text='Designates whether the user can log into this admin site.')
+    is_active = models.BooleanField('Active', default=True,
+                                    help_text='Designates whether this user should be treated as active. '
+                                              'Unselect this instead of deleting accounts.')
+    date_joined = models.DateTimeField('Date joined', default=now)
+    last_access = models.DateTimeField(verbose_name='Last access time', default=now)
+    ip = models.GenericIPAddressField(verbose_name='Last IP', blank=True, null=True)
     name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
     about = models.TextField(verbose_name='Self-description', null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name='Location', default='America/Toronto', choices=TIMEZONE)
-    language = models.ForeignKey(Language, verbose_name='Preferred language')
+    language = models.ForeignKey(Language, verbose_name='Preferred language', default=Language.get_python2())
     points = models.FloatField(default=0, db_index=True)
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
-    last_access = models.DateTimeField(verbose_name='Last access time', default=now)
-    ip = models.GenericIPAddressField(verbose_name='Last IP', blank=True, null=True)
     organization = models.ForeignKey(Organization, verbose_name='Organization', null=True, blank=True,
                                      on_delete=models.SET_NULL, related_name='members', related_query_name='member')
     organization_join_time = models.DateTimeField(verbose_name='Organization joining date', null=True, blank=True)
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+    objects = UserManager()
+
+    @property
+    def profile(self):
+        return self
+
+    @property
+    def user(self):
+        return self
+
+    def get_full_name(self):
+        """Returns the first_name plus the last_name, with a space in between."""
+        return self.long_display_name
+
+    def get_short_name(self):
+        """Returns the short name for the user."""
+        return self.username
+
+    def email_user(self, subject, message, from_email=None):
+        """Sends an email to this User."""
+        send_mail(subject, message, from_email, [self.email])
 
     def calculate_points(self):
         self.points = sum(map(itemgetter('points'),
@@ -123,13 +157,13 @@ class Profile(models.Model):
     def display_name(self):
         if self.name:
             return self.name
-        return self.user.username
+        return self.username
 
     @property
     def long_display_name(self):
         if self.name:
-            return u'%s (%s)' % (self.user.username, self.name)
-        return self.user.username
+            return u'%s (%s)' % (self.username, self.name)
+        return self.username
 
     @property
     def display_rank(self):
@@ -161,7 +195,6 @@ class Profile(models.Model):
         return cp
 
     def __unicode__(self):
-        # return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
         return self.long_display_name
 
 

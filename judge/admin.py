@@ -23,8 +23,8 @@ except ImportError:
 class ProfileAdmin(admin.ModelAdmin):
     fields = ('user', 'name', 'about', 'organization', 'timezone', 'language', 'ace_theme', 'last_access', 'ip')
     list_display = ('long_display_name', 'timezone_full', 'language', 'last_access', 'ip')
-    ordering = ('user__username',)
-    search_fields = ('user__username', 'name', 'ip')
+    ordering = ('username',)
+    search_fields = ('username', 'name', 'ip')
     list_filter = ('language', 'timezone')
     actions = ('recalculate_points',)
     actions_on_top = True
@@ -141,7 +141,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     list_display = ('id', 'problem_code', 'problem_name', 'user', 'execution_time', 'pretty_memory',
                     'points', 'language', 'status', 'result', 'judge_column')
     list_filter = ('language', SubmissionStatusFilter, SubmissionResultFilter)
-    search_fields = ('problem__code', 'problem__name', 'user__user__username', 'user__name')
+    search_fields = ('problem__code', 'problem__name', 'user__username', 'user__name')
     actions_on_top = True
     actions_on_bottom = True
 
@@ -214,7 +214,7 @@ class CommentAdmin(admin.ModelAdmin):
         ('Content', {'fields': ('title', 'body')}),
     )
     list_display = ['title', 'author', 'page', 'time']
-    search_fields = ['author__user__username', 'author__name', 'page', 'title', 'body']
+    search_fields = ['author__username', 'author__name', 'page', 'title', 'body']
     actions_on_top = True
     actions_on_bottom = True
 
