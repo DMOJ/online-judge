@@ -444,6 +444,10 @@ class Contest(models.Model):
     is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
 
     @cached_property
+    def participation_count(self):
+        return ContestParticipation.objects.filter(contest=self).count()
+    
+    @cached_property
     def can_join(self):
         if not self.ongoing:
             return False

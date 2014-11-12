@@ -29,4 +29,4 @@ block body
                                 | #{contest.start_time|date:"N/j/o, g:i a"}
                         td #{contest.time_limit}
                         td
-                            a(href='{% url "judge.views.contest_ranking" contest.key %}') <>
+                            a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}
