@@ -49,6 +49,10 @@ hr {
     padding: 0
 }
 
+/* hr */ .dashed {
+  border-bottom: 1px dashed #CCC;
+}
+
 .table {
     border-spacing: 0;
     width: 100%;
