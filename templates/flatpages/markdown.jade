@@ -3,7 +3,8 @@ extends base
 -load staticfiles
 
 block media
-    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')                                                                                         
+    link(rel='stylesheet', href='{% static "content-description.css" %}')
 
 block title
     | #{flatpage.title} - Don Mills Online Judge
