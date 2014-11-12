@@ -24,6 +24,8 @@ block body
                             a(href='{% url "contest_view" contest.key %}')= contest.name
                         td
                             if contest.start_time
-                                | #{contest.start_time|date:"N j, o, g:i a"} - #{contest.end_time|date:"N j, o, g:i a"}
+                                | #{contest.start_time|date:"N j, o, g:i a"}
+                                br
+                                | &nbsp;&nbsp;&nbsp;> #{contest.time_limit}
                             else
                                 | #{contest.time_limit}
