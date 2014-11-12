@@ -91,6 +91,7 @@ else:
 
 INSTALLED_APPS += (
     'django.contrib.admin',
+    'judge',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.flatpages',
@@ -99,7 +100,6 @@ INSTALLED_APPS += (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
-    'judge',
     'registration',
     'markdown_trois',
 )
