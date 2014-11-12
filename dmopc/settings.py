@@ -160,7 +160,7 @@ MARKDOWN_TROIS_STYLES = {
         },
         # Allow raw HTML (WARNING: don't use this for user-generated
         # Markdown for your site!).
-        'safe_mode': True,
+        'safe_mode': False,
     },
     'comment': {
         'link_patterns': [
