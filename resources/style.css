@@ -77,6 +77,10 @@ hr {
     border-width: 1px 1px 1px 0
 }
 
+.table thead th, th {
+	vertical-align: middle;
+}
+
 .table th {
     color: #FFF;
     background-color: #393630;
