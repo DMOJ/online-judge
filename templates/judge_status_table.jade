@@ -18,7 +18,7 @@ for judge in judges
                 img(src='{% static "admin/img/icon-no.gif" %}')
         td
             if judge.online
-                | #{judge.uptime|timedelta}
+                | #{judge.uptime|timedelta:"simple"}
             else
                 | N/A
         td
