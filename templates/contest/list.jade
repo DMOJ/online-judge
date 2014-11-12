@@ -5,8 +5,9 @@ extends base
 block body
     br
     h3 Upcoming Contests
-    br
     i There are no scheduled contests at this time.
+    br
+    br
     h3 Past Contests
     br
     table.table.striped
@@ -14,16 +15,14 @@ block body
             tr
                 th(style='width:85%') Name
                 th Time limit
-                th Ongoing
         tbody
             each contest in past_contests
                 if not contest.ongoing
                     tr
                         td
                             a(href='{% url "contest_view" contest.key %}')= contest.name
-                        td= contest.time_limit
                         td
-                            if contest.can_join
-                                img(src='{% static "admin/img/icon-yes.gif" %}')
+                            if contest.start_time
+                                | #{contest.start_time} - #{contest.end_time}
                             else
-                                img(src='{% static "admin/img/icon-no.gif" %}')
+                                | #{contest.time_limit}
