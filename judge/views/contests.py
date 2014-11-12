@@ -44,7 +44,7 @@ class ContestList(TitleMixin, ListView):
         if self.request.user.has_perm('judge.see_private_contest'):
             return Contest.objects.all()
         else:
-            return Contest.objects.filter(is_public=True, ongoing=False)
+            return Contest.objects.filter(is_public=True, ongoing=False).order_by('id')
 
 
 def contest(request, key):
