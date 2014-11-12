@@ -3,11 +3,15 @@ extends base
 - load timedelta
 - load tz
 
+block media
+    style.
+        .contest-list td:nth-child(2) { min-width: 9.8em; }
+
 block body
     br
     h3 Upcoming Contests
     if current_contests
-        table.table.striped
+        table.contest-list.table.striped
             thead
                 tr
                     th(style='width:85%') Name
@@ -31,7 +35,7 @@ block body
     br
     h3 Past Contests
     br
-    table.table.striped
+    table.contest-list.table.striped
         thead
             tr
                 th(style='width:85%') Name
