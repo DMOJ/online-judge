@@ -49,10 +49,11 @@ block body
                         td
                             div(style='position:relative')
                                 a(href='{% url "contest_view" contest.key %}')= contest.name
-                                if contest.start_time and contest.time_before_start
+                                if contest.start_time
                                     br
-                                    span.time Starting in&nbsp;
-                                    span.time.time-remaining #{contest.time_before_start|timedelta:"simple"}
+                                    if contest.time_before_start
+                                        span.time Starting in&nbsp;
+                                        span.time.time-remaining #{contest.time_before_start|timedelta:"simple"}
                                     .time.floating-time #{contest.start_time|date:"N j, o, G:i"}
                         td #{contest.time_limit}
     else
