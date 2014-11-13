@@ -24,3 +24,7 @@ block body
         .content-description
             - cache 86400 language_html language.id
                 | #{problem.description|markdown:"language"}
+
+    h3 Judges
+    - with judges=language.judges.all
+        include judge_status_table
