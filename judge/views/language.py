@@ -22,6 +22,11 @@ class LanguageDetail(TitleMixin, DetailView):
     def get_title(self):
         return self.object.name
 
+    def get_context_data(self, **kwargs):
+        context = super(LanguageDetail, self).get_context_data(**kwargs)
+        context['judges'] = self.object.judges.order_by('load')
+        return context
+
 
 class LanguageList(TitleMixin, ListView):
     model = Language
