@@ -137,6 +137,7 @@ urlpatterns = patterns('',
     url(r'^organization/(?P<key>\w+)/leave', organization.LeaveOrganization.as_view(), name='leave_organization'),
     url(r'^organization/(?P<key>\w+)/edit', organization.EditOrganization.as_view(), name='edit_organization'),
 
+    url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
     url(r'^runtime/(?P<key>\w+)$', language.LanguageDetail.as_view(), name='runtime_info'),
 
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {

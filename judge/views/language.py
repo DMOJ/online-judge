@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from judge.models import Language
 from judge.utils.views import generic_message, TitleMixin
 
@@ -21,3 +21,10 @@ class LanguageDetail(TitleMixin, DetailView):
 
     def get_title(self):
         return self.object.name
+
+
+class LanguageList(TitleMixin, ListView):
+    model = Language
+    context_object_name = 'languages'
+    template_name = 'language_list.jade'
+    title = 'Runtimes'
