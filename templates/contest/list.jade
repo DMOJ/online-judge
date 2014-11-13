@@ -41,7 +41,7 @@ block body
         table.contest-list.table.striped
             thead
                 tr
-                    th(style='width:85%') Name
+                    th(style='width:90%') Name
                     th Time limit
             tbody
                 each contest in current_contests
@@ -67,17 +67,15 @@ block body
         thead
             tr
                 th(style='width:85%') Name
-                th Start
                 th Time limit
                 th Rankings
         tbody
             each contest in past_contests
                 tr
-                    td
-                        a(href='{% url "contest_view" contest.key %}')= contest.name
-                    td
-                        if contest.start_time
-                            | #{contest.start_time|date:"N j, o, G:i"}
+                    td                                                  
+                        div(style='position:relative')
+                            a(href='{% url "contest_view" contest.key %}')= contest.name
+                            .time.floating-time #{contest.start_time|date:"N j, o, G:i"}
                     td #{contest.time_limit}
                     td
                         a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}
