@@ -23,7 +23,7 @@ block body
     if language.description
         .content-description
             - cache 86400 language_html language.id
-                | #{problem.description|markdown:"language"}
+                | #{language.description|markdown:"language"}
 
     h3 Judges
     hr
