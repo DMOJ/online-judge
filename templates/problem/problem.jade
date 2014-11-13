@@ -61,7 +61,7 @@ block info_float
         br
 
 block description
-    -cache 3600 problem_html problem.id
+    - cache 86400 problem_html problem.id
         | #{problem.description|markdown:"problem"|smart_math}
 
 block comments

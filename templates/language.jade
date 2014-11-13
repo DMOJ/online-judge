@@ -1,0 +1,22 @@
+extends base
+- load staticfiles
+- load cache
+
+block media
+    link(rel='stylesheet', href='{% static "content-description.css" %}')
+
+block body
+    ul
+        li
+            b Short name:
+            = language.short_display_name
+        li
+            b Category:
+            = language.common_name
+        li
+            b Basic Runtime Info:
+            = language.info
+    if language.description
+        .content-description
+            - cache 86400 language_html language.id
+                | #{problem.description|markdown:"language"}

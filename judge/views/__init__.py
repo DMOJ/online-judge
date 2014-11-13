@@ -1,6 +1,6 @@
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.views import flatpage
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView as OldTemplateView
 
 from .register import RegistrationView, ActivationView
 from .contests import *
@@ -13,7 +13,7 @@ from .status import *
 from .widgets import *
 
 
-class TemplateView(TemplateView):
+class TemplateView(OldTemplateView):
     title = None
 
     def get_context_data(self, **kwargs):

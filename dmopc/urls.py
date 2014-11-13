@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from judge import views
-from judge.views import organization
+from judge.views import organization, language
 from judge.ordered_model import urls as ordered_model_urls
 
 from judge.views import RegistrationView, ActivationView, TemplateView
@@ -136,6 +136,8 @@ urlpatterns = patterns('',
     url(r'^organization/(?P<key>\w+)/join', organization.JoinOrganization.as_view(), name='join_organization'),
     url(r'^organization/(?P<key>\w+)/leave', organization.LeaveOrganization.as_view(), name='leave_organization'),
     url(r'^organization/(?P<key>\w+)/edit', organization.EditOrganization.as_view(), name='edit_organization'),
+
+    url(r'^runtime/(?P<key>\w+)$', language.LanguageDetail.as_view(), name='runtime_info'),
 
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {
         'problem': ProblemSitemap,
