@@ -35,7 +35,7 @@ block body
                                     br
                                     | Starting in&nbsp;
                                     span.time-remaining #{contest.time_before_start|timedelta:"simple"}
-                                    div(style='position:absolute;right:0') #{contest.start_time|date:"N j, o, G:i"}
+                                    div(style='position:absolute;right:0;bottom:0') #{contest.start_time|date:"N j, o, G:i"}
                         td #{contest.time_limit}
     else
         i There are no scheduled contests at this time.
