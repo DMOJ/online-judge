@@ -52,7 +52,7 @@ block body
                                 if contest.start_time
                                     br
                                     | Starting in&nbsp;
-                                    .time.time-remaining #{contest.time_before_start|timedelta:"simple"}
+                                    span.time.time-remaining #{contest.time_before_start|timedelta:"simple"}
                                     .time.floating-time #{contest.start_time|date:"N j, o, G:i"}
                         td #{contest.time_limit}
     else
