@@ -68,4 +68,9 @@ block users_media
             });
 
 block users_table
-    include contest/ranking_table
+    if users
+        include contest/ranking_table
+    else
+        tr
+            td
+                i No one has joined this contest.
