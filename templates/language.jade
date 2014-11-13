@@ -5,6 +5,7 @@ extends base
 
 block media
     link(rel='stylesheet', href='{% static "content-description.css" %}')
+    script(src='{% static "tablesorter.js" %}', type='text/javascript')
     script(type='text/javascript')
         $(document).ready(function () {
             var table = $("#judge-status");
