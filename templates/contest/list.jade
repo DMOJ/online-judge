@@ -20,7 +20,6 @@ block body
                     th(style='width:85%') Name
                     th Start
                     th Time limit
-                    th Rankings
             tbody
                 each contest in current_contests
                     tr
@@ -30,8 +29,6 @@ block body
                             if contest.start_time
                                 | #{contest.start_time|date:"N j, o, G:i"}
                         td #{contest.time_limit}
-                        td
-                            a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}
     else
         i There are no scheduled contests at this time.
     br
