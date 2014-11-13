@@ -26,5 +26,7 @@ block body
                 | #{problem.description|markdown:"language"}
 
     h3 Judges
+    hr
     - with judges=language.judges.all
-        include judge_status_table
+        table#judge-status.table
+            include judge_status_table
