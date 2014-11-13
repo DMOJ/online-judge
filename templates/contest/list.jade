@@ -24,19 +24,17 @@ block body
             thead
                 tr
                     th(style='width:85%') Name
-                    th Start
                     th Time limit
             tbody
                 each contest in current_contests
                     tr
                         td
-                            a(href='{% url "contest_view" contest.key %}')= contest.name
-                            br
-                            b Starting in:
-                            span.time-remaining #{contest.time_before_start|timedelta:"simple"}
-                        td
+                            a(href='{% url "contest_view" contest.key %}')= contest.name                                                                                                                    
                             if contest.start_time
-                                | #{contest.start_time|date:"N j, o, G:i"}
+                                br
+                                | Starting in:&nbsp;
+                                span.time-remaining #{contest.time_before_start|timedelta:"simple"}
+                                div(style='float:right') #{contest.start_time|date:"N j, o, G:i"}
                         td #{contest.time_limit}
     else
         i There are no scheduled contests at this time.
