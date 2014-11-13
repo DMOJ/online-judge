@@ -1,6 +1,7 @@
+from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404
-from django.views.generic import DetailView, ListView
-from judge.models import Language
+from django.views.generic import DetailView, ListView, TemplateView
+from judge.models import Language, Judge
 from judge.utils.views import generic_message, TitleMixin
 
 
@@ -33,3 +34,18 @@ class LanguageList(TitleMixin, ListView):
     context_object_name = 'languages'
     template_name = 'language_list.jade'
     title = 'Runtimes'
+
+
+class LanguageJudgesAjaxList(TemplateView):
+    template_name = 'judge_status_table.jade'
+
+    def get(self, request, *args, **kwargs):
+        self.lang = kwargs.pop('key', None)
+        if self.lang is None:
+            raise ImproperlyConfigured('Need lang')
+        return super(LanguageJudgesAjaxList, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(LanguageJudgesAjaxList, self).get_context_data(**kwargs)
+        context['judges'] = Judge.objects.filter(runtimes__key=self.lang)
+        return context

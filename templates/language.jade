@@ -5,6 +5,18 @@ extends base
 
 block media
     link(rel='stylesheet', href='{% static "content-description.css" %}')
+    script(type='text/javascript')
+        $(document).ready(function () {
+            var table = $("#judge-status");
+            table.tablesorter();
+            setInterval(function () {
+                $.ajax({
+                    url: '{% url "runtime_judge_ajax" language.key %}'
+                }).done(function (data) {
+                    table.html(data);
+                });
+            }, 10000);
+        });
     style.
         .content-description { margin-top: auto; }
 
