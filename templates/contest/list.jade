@@ -5,9 +5,27 @@ extends base
 
 block media
     style
-        .contest-list td:nth-child(2) { min-width: 9.8em; }
-        .contest-list td:nth-child(3) { min-width:6em; }
-        .contest-list tbody tr { height: 4em; }
+        .contest-list td:nth-child(2) {
+            min-width: 9.8em;
+        }
+
+        .contest-list td:nth-child(3) {
+            min-width: 6em;
+        }
+
+        .contest-list tbody tr {
+            height: 4em;
+        }
+
+        .time {
+            color: #555;
+        }
+
+        .floating-time {
+            position: absolute;
+            right: 0;
+            bottom: 0
+        }
     script(type='text/javascript')
         $(document).ready(function () {
             $('.time-remaining').each(function () {
@@ -30,12 +48,12 @@ block body
                     tr
                         td
                             div(style='position:relative')
-                                a(href='{% url "contest_view" contest.key %}')= contest.name                                                                                                                    
+                                a(href='{% url "contest_view" contest.key %}')= contest.name
                                 if contest.start_time
                                     br
                                     | Starting in&nbsp;
-                                    span.time-remaining #{contest.time_before_start|timedelta:"simple"}
-                                    div(style='position:absolute;right:0;bottom:0') #{contest.start_time|date:"N j, o, G:i"}
+                                    .time.time-remaining #{contest.time_before_start|timedelta:"simple"}
+                                    .time.floating-time #{contest.start_time|date:"N j, o, G:i"}
                         td #{contest.time_limit}
     else
         i There are no scheduled contests at this time.
