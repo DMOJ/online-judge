@@ -8,6 +8,12 @@ block media
         .contest-list td:nth-child(2) { min-width: 9.8em; }
         .contest-list td:nth-child(3) { min-width:6em; }
         .contest-list tbody tr { height: 4em; }
+    script(type='text/javascript')
+        $(document).ready(function () {
+            $('.time-remaining').each(function () {
+                count_down($(this));
+            });
+        });
 
 block body
     br
@@ -25,6 +31,9 @@ block body
                     tr
                         td
                             a(href='{% url "contest_view" contest.key %}')= contest.name
+                            br
+                            b Starting in:
+                            .time-remaining #{contest.time_before_start|timedelta:"simple"}
                         td
                             if contest.start_time
                                 | #{contest.start_time|date:"N j, o, G:i"}
