@@ -49,7 +49,7 @@ block body
                         td
                             div(style='position:relative')
                                 a(href='{% url "contest_view" contest.key %}')= contest.name
-                                if contest.start_time
+                                if contest.start_time and contest.time_before_start
                                     br
                                     span.time Starting in&nbsp;
                                     span.time.time-remaining #{contest.time_before_start|timedelta:"simple"}
