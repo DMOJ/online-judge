@@ -29,7 +29,7 @@ block body
                 each contest in current_contests
                     tr
                         td
-                            div(style='style='position:relative')
+                            div(style='position:relative')
                                 a(href='{% url "contest_view" contest.key %}')= contest.name                                                                                                                    
                                 if contest.start_time
                                     br
