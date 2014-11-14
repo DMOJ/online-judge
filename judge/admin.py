@@ -30,8 +30,14 @@ class ProfileAdmin(admin.ModelAdmin):
     actions_on_top = True
     actions_on_bottom = True
 
+    def admin_user_admin(self, obj):
+        return obj.long_display_name
+    admin_user_admin.admin_order_field = 'user__username'
+    admin_user_admin.short_description = 'User'
+
     def email(self, obj):
         return obj.user.email
+    email.admin_order_field = 'user__email'
     email.short_description = 'Email'
 
     def timezone_full(self, obj):
