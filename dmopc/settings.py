@@ -146,6 +146,20 @@ TEMPLATE_DIRS = (
 # Markdown Trois
 from markdown_trois.conf.settings import MARKDOWN_TROIS_DEFAULT_STYLE
 
+markdown_admin_editable_style = {
+    'extras': {
+        'pyshell': None,
+        'fenced-code-blocks': None,
+        'html-classes': {'pre': 'code'},
+        'cuddled-lists': None,
+        'footnotes': None,
+        'header-ids': None,
+        'demote-headers': 2,
+        'tables': None,
+    },
+    'safe_mode': False,
+}
+
 MARKDOWN_TROIS_STYLES = {
     'default': MARKDOWN_TROIS_DEFAULT_STYLE,
     'trusted': {
@@ -195,45 +209,10 @@ MARKDOWN_TROIS_STYLES = {
         },
         'safe_mode': 'escape',
     },
-    'problem': {
-        'extras': {
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'footnotes': None,
-            'header-ids': None,
-            'demote-headers': 2,
-            'tables': None,
-        },
-        'safe_mode': False,
-    },
-    'contest': {
-        'extras': {
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'footnotes': None,
-            'header-ids': None,
-            'demote-headers': 2,
-            'tables': None,
-        },
-        'safe_mode': False,
-    },
-    'language': {
-        'extras': {
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'footnotes': None,
-            'header-ids': None,
-            'demote-headers': 2,
-            'tables': None,
-        },
-        'safe_mode': False,
-    },
+    'problem': markdown_admin_editable_style,
+    'contest': markdown_admin_editable_style,
+    'language': markdown_admin_editable_style,
+    'judge': markdown_admin_editable_style,
     'organization-about': {
         'extras': {
             'code-friendly': None,

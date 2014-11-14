@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from judge import views
-from judge.views import organization, language
+from judge.views import organization, language, status
 from judge.ordered_model import urls as ordered_model_urls
 
 from judge.views import RegistrationView, ActivationView, TemplateView
@@ -104,7 +104,7 @@ urlpatterns = patterns('',
     url(r'^submissions/$', views.AllSubmissions.as_view(), name='all_submissions'),
     url(r'^submissions/(?P<page>\d+)$', views.AllSubmissions.as_view(), name='all_submissions'),
     url(r'^rejudge$', 'judge.views.rejudge_submission'),
-    url(r'^status/$', 'judge.views.status'),
+    url(r'^status/$', 'judge.views.status_all'),
     url(r'^status-table/$', 'judge.views.status_table'),
 
     url(r'^problem/(?P<problem>\w+)/rank/$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
@@ -140,6 +140,8 @@ urlpatterns = patterns('',
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
     url(r'^runtime/(?P<key>\w+)$', language.LanguageDetail.as_view(), name='runtime_info'),
     url(r'^runtime/(?P<key>\w+)/judges$', language.LanguageJudgesAjaxList.as_view(), name='runtime_judge_ajax'),
+
+    url(r'^judge/(?P<name>\w+)$', status.JudgeDetail.as_view(), name='judge_info'),
 
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {
         'problem': ProblemSitemap,

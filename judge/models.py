@@ -416,6 +416,7 @@ class Judge(models.Model):
     ping = models.FloatField(verbose_name='Response time', null=True)
     load = models.FloatField(verbose_name='System load', null=True,
                              help_text='Load for the last minute, divided by processors to be fair.')
+    description = models.TextField(v)
     problems = models.ManyToManyField(Problem)
     runtimes = models.ManyToManyField(Language, related_name='judges')
 

@@ -2,7 +2,7 @@ from django.core.cache.utils import make_template_fragment_key
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.cache import cache
-from .models import Problem, Contest, Submission, Organization, Profile, NavigationBar, MiscConfig, Language
+from .models import Problem, Contest, Submission, Organization, Profile, NavigationBar, MiscConfig, Language, Judge
 from .caching import update_submission
 
 
@@ -29,6 +29,11 @@ def contest_update(sender, instance, **kwargs):
 @receiver(post_save, sender=Language)
 def language_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('language_html', (instance.id,)))
+
+
+@receiver(post_save, sender=Judge)
+def language_update(sender, instance, **kwargs):
+    cache.delete(make_template_fragment_key('judge_html', (instance.id,)))
 
 
 @receiver(post_save, sender=Submission)

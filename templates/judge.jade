@@ -1,0 +1,13 @@
+extends base
+- load staticfiles
+- load cache
+- load markdown_trois_tags
+
+block media
+    link(rel='stylesheet', href='{% static "content-description.css" %}')
+    script(src='{% static "tablesorter.js" %}', type='text/javascript')
+
+block body
+    .content-description
+        - cache 86400 judge_html judge.id
+            | #{judge.description|markdown:"judge"}

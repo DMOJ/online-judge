@@ -361,6 +361,11 @@ class JudgeAdmin(admin.ModelAdmin):
     list_display = ('name', 'online', 'last_connect', 'ping', 'load')
     ordering = ['name']
 
+    if AdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': AdminPagedownWidget},
+        }
+
 
 class ContestProblemInline(admin.TabularInline):
     model = ContestProblem
