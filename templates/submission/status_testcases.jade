@@ -30,8 +30,10 @@ if submission.status != 'IE'
                                 td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
                             if case.output
                                 tr
-                                    td
-                                        .case-output #{case.output}
+                                    td(colspan='4')
+                                        .case-info
+                                            strong Your output (clipped)
+                                            .case-output #{case.output}
                 else
                     b Batch ##{batch.grouper}
                     | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
@@ -54,8 +56,10 @@ if submission.status != 'IE'
                                                     | #{megabytes|floatformat:"-2"}mb]
                                 if case.output
                                     tr
-                                        td
-                                            .case-output #{case.output}
+                                        td(colspan='4')
+                                            .case-info
+                                                strong Your output (clipped)
+                                                .case-output #{case.output}
                 br
         else
             table
@@ -78,8 +82,10 @@ if submission.status != 'IE'
                         td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
                     if case.output
                         tr
-                            td
-                                .case-output #{case.output}
+                            td(colspan='4')
+                                .case-info
+                                    strong Your output (clipped)
+                                    .case-output #{case.output}
             br
         if submission.is_graded
             br
