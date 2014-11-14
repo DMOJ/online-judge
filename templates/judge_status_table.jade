@@ -10,7 +10,8 @@ tr
     th Runtimes
 for judge in judges
     tr
-        td= judge.name
+        td
+            a(href='{% url "judge_info" judge.name %}')= judge.name
         td
             if judge.online
                 img(src='{% static "admin/img/icon-yes.gif" %}')
