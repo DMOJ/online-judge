@@ -69,9 +69,8 @@ $(function () {
         onchange({type: document[hidden] ? 'blur' : 'focus'});
 });
 
-$(function () {
-    $('.toggle').click(function () {
-        var link = $(this);
+function register_toggle(link) {
+    link.click(function () {
         var toggled = link.next('.toggled');
         if (toggled.is(':visible')) {
             toggled.hide(400);
@@ -82,5 +81,11 @@ $(function () {
             link.addClass('open');
             link.removeClass('closed');
         }
+    });
+}
+
+$(function register_all_toggles() {
+    $('.toggle').each(function () {
+        register_toggle($(this));
     });
 });
