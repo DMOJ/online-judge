@@ -72,7 +72,7 @@ block body
             each contest in past_contests
                 tr
                     td
-                        div(style='position:relative')
+                        div(style='position:relative;text-align:right')
                             a(href='{% url "contest_view" contest.key %}')= contest.name
                             .time.floating-time
                                 if contest.start_time
