@@ -1,215 +1,214 @@
-.content-description{
-	line-height:1.5em;
-	font-size:1em;
-	width:84%;
-	margin-top:-1.5em;
-	font-family:'Segoe UI','Lucida Grande',Arial,sans-serif
+.content-description {
+    line-height: 1.5em;
+    font-size: 1em;
+    width: 84%;
+    font-family: 'Segoe UI', 'Lucida Grande', Arial, sans-serif
 }
 
-.content-description a{
-	color:#5b80b2;
-	text-decoration:underline
+.content-description a {
+    color: #5b80b2;
+    text-decoration: underline
 }
 
-.content-description a:visited{
-	color:#0b0080
+.content-description a:visited {
+    color: #0b0080
 }
 
-.content-description a:hover{
-	color:#0645ad
+.content-description a:hover {
+    color: #0645ad
 }
 
-.content-description a:active{
-	color:#faa700
+.content-description a:active {
+    color: #faa700
 }
 
-.content-description a:focus{
-	outline:thin dotted
+.content-description a:focus {
+    outline: thin dotted
 }
 
-.content-description a:hover,.content-description a:active{
-	outline:0
+.content-description a:hover, .content-description a:active {
+    outline: 0
 }
 
-.content-description p{
-	margin:1em 0 !important;
-	padding:0 !important;
-	font-size:14px !important
+.content-description p {
+    margin: 1em 0 !important;
+    padding: 0 !important;
+    font-size: 14px !important
 }
 
-.content-description img{
-	max-width:100%
+.content-description img {
+    max-width: 100%
 }
 
-.content-description h1,.content-description h2,.content-description h3,.content-description h4,.content-description h5,.content-description h6{
-	font-weight:normal;
-	color:#111;
-	margin-bottom:.75em;
-	padding:0;
-	background:0
+.content-description h1, .content-description h2, .content-description h3, .content-description h4, .content-description h5, .content-description h6 {
+    font-weight: normal;
+    color: #111;
+    margin-bottom: .75em;
+    padding: 0;
+    background: 0
 }
 
-.content-description h3,.content-description h4,.content-description h5,.content-description h6{
-	font-weight:bold
+.content-description h3, .content-description h4, .content-description h5, .content-description h6 {
+    font-weight: bold
 }
 
-.content-description h1{
-	font-size:2.5em
+.content-description h1 {
+    font-size: 2.5em
 }
 
-.content-description h2{
-	font-size:2em
+.content-description h2 {
+    font-size: 2em
 }
 
-.content-description h3{
-	font-size:1.6em;
-	margin:0;
-	padding:0;
+.content-description h3 {
+    font-size: 1.6em;
+    margin: 0;
+    padding: 0;
 }
 
-.content-description h4{
-	font-size:1.4em
+.content-description h4 {
+    font-size: 1.4em
 }
 
-.content-description h5{
-	font-size:1em
+.content-description h5 {
+    font-size: 1em
 }
 
-.content-description h6{
-	font-size:.9em
+.content-description h6 {
+    font-size: .9em
 }
 
-.content-description blockquote{
-	color:#666;
-	margin:0;
-	padding-left:1.5em;
-	border-left:.5em #EEE solid
+.content-description blockquote {
+    color: #666;
+    margin: 0;
+    padding-left: 1.5em;
+    border-left: .5em #EEE solid
 }
 
-.content-description hr{
-	display:block;
-	height:0;
-	border:0;
-	font-style:italic;
-	border-bottom:1px solid #CCC;
-	margin:25px 0 20px 0;
-	padding:0
+.content-description hr {
+    display: block;
+    height: 0;
+    border: 0;
+    font-style: italic;
+    border-bottom: 1px solid #CCC;
+    margin: 25px 0 20px 0;
+    padding: 0
 }
 
-.content-description pre,.content-description code,.content-description kbd,.content-description samp{
-	color:#000;
-	font-family:monospace,monospace;
-	_font-family:'courier new',monospace;
-	font-size:.98em
+.content-description pre, .content-description code, .content-description kbd, .content-description samp {
+    color: #000;
+    font-family: monospace, monospace;
+    _font-family: 'courier new', monospace;
+    font-size: .98em
 }
 
-.content-description code{
-	font-family:Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace !important;
-	margin:0 2px;
-	padding:0 5px;
-	border:1px solid #ddd;
-	background-color:#f8f8f8;
-	border-radius:2px;
-	font-size:.95em;
-	color:#444
+.content-description code {
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace !important;
+    margin: 0 2px;
+    padding: 0 5px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    border-radius: 2px;
+    font-size: .95em;
+    color: #444
 }
 
-.content-description pre code{
-	background-color:none;
-	border:0;
-	line-height:1em;
-	margin:0;
-	padding:0;
-	background:transparent;
-	border:0;
-	font-size:1em
+.content-description pre code {
+    background-color: none;
+    border: 0;
+    line-height: 1em;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    font-size: 1em
 }
 
-.content-description pre{
-	white-space:pre;
-	white-space:pre-wrap;
-	word-wrap:break-word;
-	margin:1.5em 0 1.5em 0;
-	padding:1em;
-	border:1px solid #ddd;
-	background-color:#f8f8f8;
-	color:black;
-	border-radius:4px
+.content-description pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 1.5em 0 1.5em 0;
+    padding: 1em;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    color: black;
+    border-radius: 4px
 }
 
-.content-description pre code{
-	color:black
+.content-description pre code {
+    color: black
 }
 
-.content-description b,.content-description strong{
-	font-weight:bold
+.content-description b, .content-description strong {
+    font-weight: bold
 }
 
-.content-description dfn{
-	font-style:italic
+.content-description dfn {
+    font-style: italic
 }
 
-.content-description ins{
-	background:#ff9;
-	color:#000;
-	text-decoration:none
+.content-description ins {
+    background: #ff9;
+    color: #000;
+    text-decoration: none
 }
 
-.content-description mark{
-	background:#ff0;
-	color:#000;
-	font-style:italic;
-	font-weight:bold
+.content-description mark {
+    background: #ff0;
+    color: #000;
+    font-style: italic;
+    font-weight: bold
 }
 
-.content-description sub,.content-description sup{
-	font-size:75%;
-	line-height:0;
-	position:relative;
-	vertical-align:baseline
+.content-description sub, .content-description sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
 }
 
-.content-description sup{
-	top:-0.5em
+.content-description sup {
+    top: -0.5em
 }
 
-.content-description sub{
-	bottom:-0.25em
+.content-description sub {
+    bottom: -0.25em
 }
 
-.content-description ul,.content-description ol{
-	margin:1em 0 !important;
-	padding:0 0 0 2em !important
+.content-description ul, .content-description ol {
+    margin: 1em 0 !important;
+    padding: 0 0 0 2em !important
 }
 
-.content-description ul li,.content-description ol li{
-	font-size:14px !important
+.content-description ul li, .content-description ol li {
+    font-size: 14px !important
 }
 
-.content-description li p:last-child{
-	margin:0
+.content-description li p:last-child {
+    margin: 0
 }
 
-.content-description dd{
-	margin:0 0 0 2em
+.content-description dd {
+    margin: 0 0 0 2em
 }
 
-.content-description img{
-	border:0;
-	-ms-interpolation-mode:bicubic;
-	vertical-align:middle
+.content-description img {
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+    vertical-align: middle
 }
 
-.content-description table{
-	border-collapse:collapse;
-	border-spacing:0
+.content-description table {
+    border-collapse: collapse;
+    border-spacing: 0
 }
 
-.content-description td{
-	vertical-align:top
+.content-description td {
+    vertical-align: top
 }
 
-.display-math{
-	display:block;
-	text-align:center
+.display-math {
+    display: block;
+    text-align: center
 }
