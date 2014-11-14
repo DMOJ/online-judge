@@ -48,7 +48,7 @@ html(lang='en')
         block media
         
         if misc_config.analytics
-            script(type='text/javascript') #{misc_config.analytics|safe}       
+            | #{misc_config.analytics|safe}       
     body
         noscript This site works best with JavaScript enabled.
         #header.unselectable
