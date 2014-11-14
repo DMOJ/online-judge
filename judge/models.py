@@ -340,7 +340,7 @@ class SubmissionTestCase(models.Model):
 
     @property
     def output_wb(self):
-        return self.output.replace('\\n', '<br>')
+        return self.output.replace('\n', '<br>')
 
     @property
     def long_status(self):
