@@ -33,6 +33,9 @@ for judge in judges
                 | N/A
         td
             if judge.online
-                | #{judge.runtime_list|join:", "}
+                each runtime in judge.runtimes.all
+                    a(href='{% static "runtime_info" runtime.key %}')= runtime.name
+                    if not forloop.last
+                        = ', '
             else
                 | N/A
