@@ -34,7 +34,7 @@ for judge in judges
         td
             if judge.online
                 each runtime in judge.runtimes.all
-                    a(href='{% static "runtime_info" runtime.key %}')= runtime.name
+                    a(href='{% url "runtime_info" runtime.key %}')= runtime.name
                     if not forloop.last
                         = ', '
             else
