@@ -17,7 +17,7 @@ if submission.status != 'IE'
                             tr(id=case.id).toggle.closed
                                 td
                                     if case.status != 'AC' and case.output
-                                            span.icon
+                                        span.icon
                                     b Test case ##{forloop.counter}:
                                 td
                                     span(class=case.status) #{case.status}
@@ -71,7 +71,7 @@ if submission.status != 'IE'
                     tr(id=case.id).toggle.closed
                         td
                             if case.status != 'AC' and case.output
-                                            span.icon
+                                span.icon
                             b Test case ##{forloop.counter}:
                         td
                             span(class=case.status, title=case.long_status) #{case.status}
