@@ -339,10 +339,6 @@ class SubmissionTestCase(models.Model):
     output = models.TextField(verbose_name='Program output', blank=True)
 
     @property
-    def output_wb(self):
-        return self.output.replace('\n', '<br>')
-
-    @property
     def long_status(self):
         return Submission.USER_DISPLAY_CODES.get(self.status, '')
 
