@@ -41,3 +41,8 @@ class JudgeDetail(TitleMixin, DetailView):
 
     def get_title(self):
         return 'Judge %s' % self.object.name
+
+    def get_context_data(self, **kwargs):
+        context = super(JudgeDetail, self).get_context_data(**kwargs)
+        context['judges'] = Judge.objects.all().order_by('load')
+        return context

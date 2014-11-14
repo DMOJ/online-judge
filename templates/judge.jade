@@ -6,8 +6,25 @@ extends base
 block media
     link(rel='stylesheet', href='{% static "content-description.css" %}')
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
+    script(type='text/javascript')
+        $(document).ready(function () {
+            var table = $("#judge-status");
+            table.tablesorter();
+            setInterval(function () {
+                $.ajax({
+                    url: '{% url "judge.views.status_table" %}'
+                }).done(function (data) {
+                    table.html(data);
+                });
+            }, 10000);
+        });
 
 block body
     .content-description
         - cache 86400 judge_html judge.id
             | #{judge.description|markdown:"judge"}
+
+    h3 All Judges
+    hr
+    table#judge-status.table
+        include judge_status_table
