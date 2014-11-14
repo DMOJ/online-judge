@@ -72,7 +72,7 @@ $(function () {
 $(function () {
     $('.toggle').click(function () {
         var link = $(this);
-        var toggled = link.parent().find('.toggled');
+        var toggled = link.next('.toggled');
         if (toggled.is(':visible')) {
             toggled.hide(400);
             link.removeClass('open');
