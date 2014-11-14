@@ -1,8 +1,15 @@
+if (!Date.now) {
+    Date.now = function () {
+        return new Date().getTime();
+    };
+}
+
 function count_down(label) {
     var match = /(?:(\d+)\s+days?\s+)?(\d+):(\d+):(\d+)/.exec(label.text());
-    var time = parseInt(match[2]) * 3600 + parseInt(match[3]) * 60 + parseInt(match[4]);
+    var initial = parseInt(match[2]) * 3600 + parseInt(match[3]) * 60 + parseInt(match[4]);
     if (typeof match[1] != 'undefined')
-        time += parseInt(match[1]) * 86400;
+        initial += parseInt(match[1]) * 86400;
+    var start = Date.now();
 
     function format(num) {
         var s = "0" + num;
@@ -10,7 +17,7 @@ function count_down(label) {
     }
 
     var timer = setInterval(function () {
-        --time;
+        var time = initial - (Date.now() - start);
         if (time <= 0)
             clearInterval(timer);
         var d = Math.floor(time / 86400);
