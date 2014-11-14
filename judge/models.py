@@ -339,6 +339,10 @@ class SubmissionTestCase(models.Model):
     output = models.TextField(verbose_name='Program output', blank=True)
 
     @property
+    def output_wb(self):
+        return self.output.replace('\\n', '<br>')
+
+    @property
     def long_status(self):
         return Submission.USER_DISPLAY_CODES.get(self.status, '')
 
@@ -446,7 +450,7 @@ class Contest(models.Model):
     @cached_property
     def participation_count(self):
         return ContestParticipation.objects.filter(contest=self).count()
-    
+
     @cached_property
     def can_join(self):
         if not self.ongoing:
@@ -533,8 +537,8 @@ class ContestParticipation(models.Model):
         profile_id = self.profile.user_id
         for problem in self.contest.contest_problems.all():
             assert isinstance(problem, ContestProblem)
-            solution = problem.submissions.filter(submission__user_id=profile_id).values('submission__user_id')\
-                              .annotate(time=Max('submission__date'))
+            solution = problem.submissions.filter(submission__user_id=profile_id).values('submission__user_id') \
+                .annotate(time=Max('submission__date'))
             if not solution:
                 continue
             dt = solution[0]['time'] - self.start
