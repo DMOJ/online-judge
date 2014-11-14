@@ -17,6 +17,9 @@ html(lang='en')
         script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
         script(src='{% static "navbar.js" %}')
         script(src='{% static "clock.js" %}')
+        if misc_config.analytics
+            script(type='text/javascript') #{misc_config['analytics']}        
+        
         style.
             {% for item in nav_tab %}nav ul li a.nav-{{ item }}{% if not forloop.last %},{% endif %} {% endfor %}{
                 color: #FFF;
@@ -96,4 +99,5 @@ html(lang='en')
             footer
                 p
         block bodyend
-                                                 
+            if misc_config.analytics
+                script(type='text/javascript') #{misc_config['analytics']}       
