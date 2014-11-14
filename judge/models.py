@@ -369,6 +369,9 @@ class MiscConfig(models.Model):
     key = models.CharField(max_length=30, db_index=True)
     value = models.TextField()
 
+    def __unicode__(self):
+        return self.key
+
 
 def validate_regex(regex):
     try:
