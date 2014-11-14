@@ -33,7 +33,7 @@ if submission.status != 'IE'
                                     td(colspan='4')
                                         .case-info
                                             strong Your output (clipped)
-                                            .case-output #{case.output_wb}
+                                            .case-output #{case.output_wb|safe}
                 else
                     b Batch ##{batch.grouper}
                     | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
@@ -59,7 +59,7 @@ if submission.status != 'IE'
                                         td(colspan='4')
                                             .case-info
                                                 strong Your output (clipped)
-                                                .case-output #{case.output_wb}
+                                                .case-output #{case.output_wb|safe}
                 br
         else
             table
@@ -85,7 +85,7 @@ if submission.status != 'IE'
                             td(colspan='4')
                                 .case-info
                                     strong Your output (clipped)
-                                    .case-output #{case.output_wb}
+                                    .case-output #{case.output_wb|safe}
             br
         if submission.is_graded
             br
