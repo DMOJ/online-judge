@@ -98,4 +98,4 @@ html(lang='en')
                 p
         block bodyend
             if misc_config.analytics
-                script(type='text/javascript') #{misc_config.analytics}       
+                script(type='text/javascript') #{misc_config.analytics|safe}       
