@@ -355,6 +355,7 @@ class JudgeAdmin(admin.ModelAdmin):
     readonly_fields = ('created', 'online', 'last_connect', 'ping', 'load', 'runtimes', 'problems')
     fieldsets = (
         (None, {'fields': ('name', 'auth_key')}),
+        ('Description', {'fields': ('description',)}),
         ('Information', {'fields': ('created', 'online', 'last_connect', 'ping', 'load')}),
         ('Capabilities', {'fields': ('runtimes', 'problems')}),
     )
