@@ -28,6 +28,8 @@ if submission.status != 'IE'
                                             - math memory "$1 / 1024" as megabytes
                                             | #{megabytes|floatformat:"-2"}mb]
                                 td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
+                            if case.output
+                                .case-output #{case.output}
                 else
                     b Batch ##{batch.grouper}
                     | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
@@ -48,6 +50,8 @@ if submission.status != 'IE'
                                                 else
                                                     - math memory "$1 / 1024" as megabytes
                                                     | #{megabytes|floatformat:"-2"}mb]
+                                if case.output
+                                    .case-output #{case.output}
                 br
         else
             table
@@ -68,6 +72,8 @@ if submission.status != 'IE'
                                     - math memory "$1 / 1024" as megabytes
                                     | #{megabytes|floatformat:"-2"}mb]
                         td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
+                    if case.output
+                        .case-output #{case.output}
             br
         if submission.is_graded
             br
