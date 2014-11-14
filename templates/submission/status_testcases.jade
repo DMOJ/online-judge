@@ -14,7 +14,7 @@ if submission.status != 'IE'
                 if not batch.grouper
                     table
                         each case in batch.list
-                            tr
+                            tr(id=forloop.counter)
                                 td
                                     b Test case ##{forloop.counter}:
                                 td
@@ -29,7 +29,7 @@ if submission.status != 'IE'
                                             | #{megabytes|floatformat:"-2"}mb]
                                 td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
                             if case.status != 'AC' and case.output
-                                tr
+                                tr(id=forloop.counter).toggle.closed
                                     td(colspan='4')
                                         .case-info
                                             strong Your output (clipped)
@@ -40,7 +40,7 @@ if submission.status != 'IE'
                     .batch-cases
                         table
                             for case in batch.list
-                                tr
+                                tr(id=forloop.counter)
                                     td
                                         b Case ##{forloop.counter}:
                                     td
@@ -55,7 +55,7 @@ if submission.status != 'IE'
                                                     - math memory "$1 / 1024" as megabytes
                                                     | #{megabytes|floatformat:"-2"}mb]
                                 if case.status != 'AC' and case.output
-                                    tr
+                                    tr(id=forloop.counter).toggle.closed
                                         td(colspan='4')
                                             .case-info
                                                 strong Your output (clipped)
@@ -64,7 +64,7 @@ if submission.status != 'IE'
         else
             table
                 each case in test_cases
-                    tr
+                    tr(id=forloop.counter)
                         td
                             b Test case ##{forloop.counter}:
                         td
@@ -81,7 +81,7 @@ if submission.status != 'IE'
                                     | #{megabytes|floatformat:"-2"}mb]
                         td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
                     if case.status != 'AC' and case.output
-                        tr
+                        tr(id=forloop.counter).toggle.closed
                             td(colspan='4')
                                 .case-info
                                     strong Your output (clipped)
