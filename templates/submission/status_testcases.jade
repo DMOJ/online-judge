@@ -28,7 +28,7 @@ if submission.status != 'IE'
                                             - math memory "$1 / 1024" as megabytes
                                             | #{megabytes|floatformat:"-2"}mb]
                                 td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
-                            if case.output
+                            if case.status != 'AC' and case.output
                                 tr
                                     td(colspan='4')
                                         .case-info
@@ -54,7 +54,7 @@ if submission.status != 'IE'
                                                 else
                                                     - math memory "$1 / 1024" as megabytes
                                                     | #{megabytes|floatformat:"-2"}mb]
-                                if case.output
+                                if case.status != 'AC' and case.output
                                     tr
                                         td(colspan='4')
                                             .case-info
@@ -80,7 +80,7 @@ if submission.status != 'IE'
                                     - math memory "$1 / 1024" as megabytes
                                     | #{megabytes|floatformat:"-2"}mb]
                         td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
-                    if case.output
+                    if case.status != 'AC' and case.output
                         tr
                             td(colspan='4')
                                 .case-info
