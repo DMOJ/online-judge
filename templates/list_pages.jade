@@ -6,7 +6,7 @@
         if not page
             | ...
         else
-            if page == '1' and first_page_href
+            if page == '1' and first_page_href != None
                 - var list_pages_href = first_page_href
             else
                 - var list_pages_href = page
