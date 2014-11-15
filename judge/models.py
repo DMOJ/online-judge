@@ -13,8 +13,8 @@ from django.db import models
 from django.db.models import Max
 from django.utils import timezone
 from timedelta.fields import TimedeltaField
-from judge.caching import points_update
 
+from judge.caching import point_update
 from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
 from judge.ordered_model import OrderedModel
@@ -119,7 +119,7 @@ class Profile(models.Model):
                          .annotate(points=Max('points'))))
         if self.points != points:
             self.points = points
-            points_update(self)
+            point_update(self)
             self.save()
         return self.points
 
