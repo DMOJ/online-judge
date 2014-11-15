@@ -187,9 +187,9 @@ block body
     .info-float(style='width:20%')
         #statistics-table
             include problem/statistics_table
-    if submissions.num_pages > 1
+    if page_obj.num_pages > 1
         div(style='margin-bottom:10px;')
-            include submission/list_pages
+            include list_pages
 
     table#submissions-table.table
         if request.user.is_authenticated
@@ -207,6 +207,6 @@ block body
                     else
                         include submission/row
 
-    if submissions.num_pages > 1
+    if page_obj.num_pages > 1
         div(style='margin-top:10px;')
-            include submission/list_pages
+            include list_pages

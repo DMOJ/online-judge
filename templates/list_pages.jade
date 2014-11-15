@@ -1,0 +1,14 @@
+.pagination
+    if page_obj.has_previous
+        a(href='{{ page_obj.previous_page_number }}') <<
+    
+    each page in page_obj.page_range
+        if not page
+            | ...
+        else
+            if page == page_obj.number
+                a.active-page(href=page) #{page}
+            else
+                a(href=page) #{page}
+    if page_obj.has_next
+        a(href='{{ page_obj.next_page_number }}') >>

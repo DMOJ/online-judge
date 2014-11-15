@@ -213,6 +213,7 @@ MARKDOWN_TROIS_STYLES = {
     'contest': markdown_admin_editable_style,
     'language': markdown_admin_editable_style,
     'judge': markdown_admin_editable_style,
+    'blog': markdown_admin_editable_style,
     'organization-about': {
         'extras': {
             'code-friendly': None,

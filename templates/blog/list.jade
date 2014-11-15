@@ -1,0 +1,23 @@
+extends base
+- load staticfiles
+- load cache
+
+block media
+
+
+block body
+    if page_obj.num_pages > 1
+        div(style='margin-bottom:10px;')
+            include list_pages
+
+    each post in posts
+        div.post
+            h2.title
+                a(href='{% url "blog_post" post.id post.slug %}')= post.title
+            div.summary
+                - cache 86400 post_summary post.id
+                    | #{post.summary|default:post.content|markdown:"blog"}
+
+    if page_obj.num_pages > 1
+        div(style='margin-bottom:10px;')
+            include list_pages

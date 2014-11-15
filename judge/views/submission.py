@@ -81,6 +81,7 @@ class SubmissionsListBase(TitleMixin, ListView):
     show_problem = True
     title = 'All submissions'
     template_name = 'submission/list.jade'
+    context_object_name = 'submissions'
 
     def get_paginator(self, queryset, per_page, orphans=0,
                       allow_empty_first_page=True, **kwargs):
@@ -110,7 +111,6 @@ class SubmissionsListBase(TitleMixin, ListView):
         context['completed_problem_ids'] = (user_completed_ids(self.request.user.profile)
                                             if self.request.user.is_authenticated() else [])
         context['results'] = self.get_result_table()
-        context['submissions'] = context['page_obj']
         return context
 
 
