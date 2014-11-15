@@ -1,6 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
+from django.views.generic import DetailView, View
+from django.views.generic.detail import SingleObjectMixin
 from .models import Comment, Problem
 
 
@@ -23,7 +25,7 @@ class CommentForm(ModelForm):
             raise ValidationError('Invalid page id: %(id)s', params={'id': page})
 
 
-class CommentMixin(object):
+class CommentedDetailView(SingleObjectMixin, View):
     comment_page = None
 
     def get_comment_page(self):
@@ -32,26 +34,28 @@ class CommentMixin(object):
         return self.comment_page
 
     def post(self, request, *args, **kwargs):
-        self.comment_form = form = CommentForm(request.POST)
+        self.object = self.get_object()
+
+        form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.author = request.user.profile
             comment.page = self.get_comment_page()
             comment.save()
             return
-        parent = super(CommentMixin, self)
-        if hasattr(parent, 'post'):
-            return parent.post(request, *args, **kwargs)
-        else:
-            return parent.get(request, *args, **kwargs)
+
+        context = self.get_context_data(object=self.object, comment_form=form)
+        return self.render_to_response(context)
 
     def get(self, request, *args, **kwargs):
-        self.comment_form = CommentForm(initial={'page': self.get_comment_page(), 'parent': None})
-        return super(CommentMixin, self).get(request, *args, **kwargs)
+        self.object = self.get_object()
+        return self.render_to_response(self.get_context_data(
+            object=self.object,
+            comment_form=CommentForm(initial={'page': self.get_comment_page(), 'parent': None})
+        ))
 
     def get_context_data(self, **kwargs):
-        context = super(CommentMixin, self).get_context_data(**kwargs)
-        context['comment_form'] = self.comment_form
+        context = super(CommentedDetailView, self).get_context_data(**kwargs)
         context['commend_list'] = Comment.objects.filter(page=self.get_comment_page(), parent=None)
         return context
 

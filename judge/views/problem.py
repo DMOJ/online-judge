@@ -7,7 +7,7 @@ from django.template import RequestContext
 from django.utils.functional import SimpleLazyObject
 from django.views.generic import DetailView
 
-from judge.comments import problem_comments, comment_form, CommentMixin
+from judge.comments import problem_comments, comment_form, CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language
 from judge.utils.problems import contest_completed_ids, user_completed_ids
@@ -21,10 +21,13 @@ def get_contest_problem(problem, profile):
         return None
 
 
-class ProblemDetail(TitleMixin, CommentMixin, DetailView):
+class ProblemDetail(TitleMixin, CommentedDetailView):
     model = Problem
     context_object_name = 'problem'
     template_name = 'problem/problem.jade'
+
+    def get_comment_page(self):
+        return 'p:%s' % self.object.code
 
     def get_object(self, queryset=None):
         problem = super(ProblemDetail, self).get_object(queryset)
