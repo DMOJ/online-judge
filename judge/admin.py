@@ -24,7 +24,7 @@ class ProfileAdmin(admin.ModelAdmin):
     fields = ('user', 'name', 'about', 'organization', 'timezone', 'language', 'ace_theme', 'last_access', 'ip')
     list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip')
     ordering = ('user__username',)
-    search_fields = ('user__username', 'name', 'ip')
+    search_fields = ('user__username', 'name', 'ip', 'user__email')
     list_filter = ('language', 'timezone')
     actions = ('recalculate_points',)
     actions_on_top = True
