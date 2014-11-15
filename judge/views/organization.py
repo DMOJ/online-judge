@@ -68,6 +68,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = '%s Members' % self.object.name
         context['users'] = ranker(self.object.members.order_by('-points'))
+        context['partial'] = True
         return context
 
 
