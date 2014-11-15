@@ -15,5 +15,4 @@ script(type='text/javascript')
         $('.checkall').click(function ()  {
             original.find(':checkbox').prop('checked', this.checked);
         });
-        box.find('.checkall').prop('checked', !original.find('input[type=checkbox]:not(:checked)').length);
     });
