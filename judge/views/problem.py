@@ -25,6 +25,7 @@ class ProblemDetail(TitleMixin, CommentedDetailView):
     model = Problem
     context_object_name = 'problem'
     template_name = 'problem/problem.jade'
+    slug_url_kwarg = slug_field = 'code'
 
     def get_comment_page(self):
         return 'p:%s' % self.object.code
