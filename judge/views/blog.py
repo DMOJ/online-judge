@@ -1,5 +1,7 @@
+from django.http import Http404
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
+from judge.comments import CommentedDetailView
 from judge.models import BlogPost
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.views import TitleMixin
@@ -26,7 +28,7 @@ class PostList(ListView):
         return context
 
 
-class PostView(TitleMixin, DetailView):
+class PostView(TitleMixin, CommentedDetailView):
     model = BlogPost
     pk_url_kwarg = 'id'
     context_object_name = 'post'
@@ -34,3 +36,13 @@ class PostView(TitleMixin, DetailView):
 
     def get_title(self):
         return self.object.title
+
+    def get_comment_page(self):
+        return 'b:%s' % self.object.id
+
+    def get_object(self, queryset=None):
+        post = super(PostView, self).get_object(queryset)
+        if (not post.is_public or post.publish_on > timezone.now())\
+                and not self.request.user.has_perm('judge.see_hidden_post'):
+            raise Http404()
+        return post

@@ -589,3 +589,8 @@ class BlogPost(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog_post', args=(self.id, self.slug))
+
+    class Meta:
+        permissions = (
+            ('see_hidden_post', 'See hidden posts'),
+        )
