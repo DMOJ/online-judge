@@ -5,9 +5,8 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.functional import SimpleLazyObject
-from django.views.generic import DetailView
 
-from judge.comments import problem_comments, comment_form, CommentedDetailView
+from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language
 from judge.utils.problems import contest_completed_ids, user_completed_ids
@@ -55,33 +54,6 @@ class ProblemDetail(TitleMixin, CommentedDetailView):
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         return context
-
-
-def problem_old(request, code):
-    try:
-        problem = Problem.objects.get(code=code)
-        user = request.user
-        if not problem.is_public and not user.has_perm('judge.see_private_problem'):
-            raise ObjectDoesNotExist()
-        form = comment_form(request, 'p:' + code)
-        if form is None:
-            return HttpResponseRedirect(request.path)
-        authed = user.is_authenticated()
-        return render_to_response('problem/problem.jade', {
-            'problem': problem,
-            'title': problem.name,
-            'has_submissions': authed and Submission.objects.filter(user=user.profile).exists(),
-            'comment_list': problem_comments(problem),
-            'contest_problem': None if not authed or user.profile.contest.current is None else
-                                get_contest_problem(problem, user.profile),
-            'show_languages': problem.allowed_languages.count() != Language.objects.count(),
-            'comment_form': form
-        }, context_instance=RequestContext(request))
-    except ObjectDoesNotExist:
-        return render_to_response('generic_message.jade', {
-            'message': 'Could not find a problem with the code "%s".' % code,
-            'title': 'No such problem'
-        }, context_instance=RequestContext(request))
 
 
 def problems(request):
