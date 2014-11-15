@@ -17,7 +17,7 @@ class PostList(ListView):
                              orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
 
     def get_queryset(self):
-        return BlogPost.objects.filter(visible=True, publish_on__le=timezone.now())
+        return BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now())
 
 
 class PostView(TitleMixin, DetailView):
