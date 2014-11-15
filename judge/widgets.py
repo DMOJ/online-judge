@@ -23,7 +23,7 @@ class CheckboxSelectMultipleWithSelectAll(forms.CheckboxSelectMultiple):
         context = Context({'original_widget': renderer.render(),
                            'select_all_id': select_all_id,
                            'select_all_name': select_all_name,
-                           'all_selected': all(map(methodcaller('is_checked'), renderer)),
+                           'all_selected': all(renderer.value == choice[0] for choice in renderer.choices),
                            'empty': empty})
         return mark_safe(template.render(context))
 
