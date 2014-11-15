@@ -7,6 +7,8 @@ block media
 
 
 block body
+    block before_posts
+    
     if page_obj.num_pages > 1
         div(style='margin-bottom:10px;')
             include list_pages
@@ -22,3 +24,5 @@ block body
     if page_obj.num_pages > 1
         div(style='margin-bottom:10px;')
             include list_pages
+
+    block after_posts
