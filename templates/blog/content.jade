@@ -7,7 +7,6 @@ block media
 
 block body
     div.post-full
-        h2.title= post.title
         div.body
             - cache 86400 post_content post.id
                 | #{post.content|markdown:"blog"}
