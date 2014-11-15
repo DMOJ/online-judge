@@ -221,7 +221,7 @@ class Problem(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('judge.views.problem', args=(self.code,))
+        return reverse('problem_detail', args=(self.code,))
 
     @classmethod
     def unsolved(cls, user, queryset=None):

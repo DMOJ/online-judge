@@ -5,11 +5,13 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.functional import SimpleLazyObject
+from django.views.generic import DetailView
 
-from judge.comments import problem_comments, comment_form
+from judge.comments import problem_comments, comment_form, CommentMixin
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language
 from judge.utils.problems import contest_completed_ids, user_completed_ids
+from judge.utils.views import TitleMixin, generic_message
 
 
 def get_contest_problem(problem, profile):
@@ -19,7 +21,39 @@ def get_contest_problem(problem, profile):
         return None
 
 
-def problem(request, code):
+class ProblemDetail(TitleMixin, CommentMixin, DetailView):
+    model = Problem
+    context_object_name = 'problem'
+    template_name = 'problem/problem.jade'
+
+    def get_object(self, queryset=None):
+        problem = super(ProblemDetail, self).get_object(queryset)
+        if not problem.is_public and not self.request.user.has_perm('judge.see_private_problem'):
+            raise Http404()
+        return problem
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super(ProblemDetail, self).get(request, *args, **kwargs)
+        except Http404:
+            code = kwargs.get(self.slug_url_kwarg, None)
+            return generic_message(request, 'No such problem', 'Could not find a problem with the code "%s".' % code)
+
+    def get_title(self):
+        return self.object.name
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemDetail, self).get_context_data(**kwargs)
+        user = self.request.user
+        authed = user.is_authenticated()
+        context['has_submissions'] = authed and Submission.objects.filter(user=user.profile).exists()
+        context['contest_problem'] = (None if not authed or user.profile.contest.current is None else
+                                      get_contest_problem(self.object, user.profile))
+        context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
+        return context
+
+
+def problem_old(request, code):
     try:
         problem = Problem.objects.get(code=code)
         user = request.user

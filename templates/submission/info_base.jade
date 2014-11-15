@@ -2,7 +2,7 @@ extends base
 
 block content_title
     = 'Submission of '
-    a(href='{% url "judge.views.problem" submission.problem.code %}')= submission.problem.name
+    a(href='{% url "problem_detail" submission.problem.code %}')= submission.problem.name
     = ' by '
     a(href='{% url "judge.views.user" submission.user.user.username %}')= submission.user.user.username
 

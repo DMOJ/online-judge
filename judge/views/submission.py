@@ -150,7 +150,7 @@ class ProblemSubmissions(SubmissionsListBase):
 
     def get_content_title(self):
         return format_html(u'All submissions for <a href="{1}">{0}</a>', self.problem.name,
-                           reverse('judge.views.problem', args=[self.problem.code]))
+                           reverse('problem_detail', args=[self.problem.code]))
 
     def get(self, request, *args, **kwargs):
         if 'problem' not in kwargs:
@@ -172,7 +172,7 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
     def get_content_title(self):
         return format_html(u'''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
                            self.username, reverse('judge.views.user', args=[self.username]),
-                           self.problem.name, reverse('judge.views.problem', args=[self.problem.code]))
+                           self.problem.name, reverse('problem_detail', args=[self.problem.code]))
 
 
 def single_submission(request, id):

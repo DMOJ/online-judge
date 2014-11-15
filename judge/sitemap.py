@@ -12,7 +12,7 @@ class ProblemSitemap(Sitemap):
         return Problem.objects.filter(is_public=True)
 
     def location(self, obj):
-        return reverse('judge.views.problem', args=(obj.code,))
+        return reverse('problem_detail', args=(obj.code,))
 
 
 class UserSitemap(Sitemap):

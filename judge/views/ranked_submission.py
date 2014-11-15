@@ -88,7 +88,7 @@ class RankedSubmissions(ProblemSubmissions):
 
     def get_content_title(self):
         return format_html(u'Best solutions for <a href="{1}">{0}</a>', self.problem.name,
-                           reverse('judge.views.problem', args=[self.problem.code]))
+                           reverse('problem_detail', args=[self.problem.code]))
 
     def get_result_table(self):
         return get_result_table(super(RankedSubmissions, self).get_queryset())

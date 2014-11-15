@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from judge import views
-from judge.views import organization, language, status, blog
+from judge.views import organization, language, status, blog, problem
 from judge.ordered_model import urls as ordered_model_urls
 
 from judge.views import RegistrationView, ActivationView, TemplateView
@@ -86,7 +86,7 @@ urlpatterns = patterns('',
     url(r'^user/(\w+)$', 'judge.views.user'),
     url(r'^user$', 'judge.views.user'),
     url(r'^problems/$', 'judge.views.problems'),
-    url(r'^problem/(\w+)$', 'judge.views.problem'),
+    url(r'^problem/(\w+)$', problem.ProblemDetail.as_view(), name='problem_detail'),
     url(r'^problem/(\w+)/submit$', 'judge.views.problem_submit'),
     url(r'^problem/(\w+)/resubmit/(\d+)$', 'judge.views.problem_submit'),
     url(r'^src/(?P<pk>\d+)$', views.SubmissionSource.as_view(), name='submission_source'),

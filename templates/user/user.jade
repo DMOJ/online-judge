@@ -107,7 +107,7 @@ block body
             ul.toggled
                 each entry in group.list
                     li
-                        a(href='{% url "judge.views.problem" entry.code %}') #{entry.name}
+                        a(href='{% url "problem_detail" entry.code %}') #{entry.name}
                         = ' '
                         a(href='{% url "user_submissions" entry.code user.user.username %}')
                             | (#{entry.points} / #{entry.total})
