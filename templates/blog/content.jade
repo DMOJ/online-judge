@@ -10,3 +10,8 @@ block body
         div.body
             - cache 86400 post_content post.id
                 | #{post.content|markdown:"blog"}
+    hr
+    .comment-area
+        script(src='{% static "placeholder-compat.js" %}')
+        h2 Comments
+        include comment/list
