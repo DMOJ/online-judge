@@ -431,6 +431,11 @@ class BlogPostAdmin(admin.ModelAdmin):
     )
     prepopulated_fields = {'slug': ('title',)}
 
+    if AdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': AdminPagedownWidget},
+        }
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
