@@ -112,7 +112,7 @@ class SubmissionsListBase(TitleMixin, ListView):
         context['completed_problem_ids'] = (user_completed_ids(self.request.user.profile)
                                             if self.request.user.is_authenticated() else [])
         context['results'] = self.get_result_table()
-        context['first_page_href'] = self.first_page_href or ''
+        context['first_page_href'] = self.first_page_href or '.'
         return context
 
 
