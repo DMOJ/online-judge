@@ -10,6 +10,7 @@ class PostList(ListView):
     paginate_by = 10
     context_object_name = 'posts'
     template_name = 'blog/list.jade'
+    title = None
 
     def get_paginator(self, queryset, per_page, orphans=0,
                       allow_empty_first_page=True, **kwargs):
@@ -18,6 +19,11 @@ class PostList(ListView):
 
     def get_queryset(self):
         return BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now())
+
+    def get_context_data(self, **kwargs):
+        context = super(PostList, self).get_context_data(**kwargs)
+        context['title'] = self.title or 'Page %d of Posts' % context['page_obj'].number
+        return context
 
 
 class PostView(TitleMixin, DetailView):
