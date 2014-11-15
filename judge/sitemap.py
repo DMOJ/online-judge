@@ -53,7 +53,7 @@ class HomePageSitemap(Sitemap):
     changefreq = 'daily'
 
     def items(self):
-        return ['judge.views.home']
+        return ['home']
 
     def location(self, obj):
         return reverse(obj)
