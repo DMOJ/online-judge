@@ -25,7 +25,7 @@ class CommentForm(ModelForm):
             raise ValidationError('Invalid page id: %(id)s', params={'id': page})
 
 
-class CommentedDetailView(SingleObjectMixin, View):
+class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
     comment_page = None
 
     def get_comment_page(self):
