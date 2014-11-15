@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
+from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
@@ -43,7 +44,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
             comment.author = request.user.profile
             comment.page = self.get_comment_page()
             comment.save()
-            return
+            return HttpResponseRedirect(request.path)
 
         context = self.get_context_data(object=self.object, comment_form=form)
         return self.render_to_response(context)
