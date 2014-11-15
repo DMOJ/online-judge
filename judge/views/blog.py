@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
@@ -25,6 +26,7 @@ class PostList(ListView):
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data(**kwargs)
         context['title'] = self.title or 'Page %d of Posts' % context['page_obj'].number
+        context['first_page_href'] = reverse('home')
         return context
 
 
