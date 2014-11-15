@@ -39,8 +39,7 @@ td.sub-result(class=submission_class)
     .state
         span.status(title=submission.long_status) #{submission.result|default_if_none:submission.status}
         | &nbsp;|&nbsp;
-        - cache 86400 submission_lang submission.language_id
-            span.language #{submission.language.short_display_name}
+        span.language #{submission.language.short_display_name}
 
 td(colspan=info_colspan, class=info_class)
     if show_problem
