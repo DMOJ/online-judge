@@ -1,6 +1,5 @@
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
-from judge.models import Submission
 
 
 def update_submission(id):
@@ -14,8 +13,11 @@ def update_stats():
     cache.delete('sub_stats_data')
 
 
+def point_update(profile):
+    cache.delete(make_template_fragment_key('global_user'))
+
+
 def finished_submission(sub):
-    assert isinstance(sub, Submission)
     cache.delete('prob_users:%d' % sub.problem_id)
     cache.delete('user_complete:%d' % sub.user_id)
     cache.delete('user_probs:%d' % sub.user_id)

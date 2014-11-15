@@ -13,6 +13,7 @@ from django.db import models
 from django.db.models import Max
 from django.utils import timezone
 from timedelta.fields import TimedeltaField
+from judge.caching import points_update
 
 from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
@@ -112,11 +113,14 @@ class Profile(models.Model):
     organization_join_time = models.DateTimeField(verbose_name='Organization joining date', null=True, blank=True)
 
     def calculate_points(self):
-        self.points = sum(map(itemgetter('points'),
-                              Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
-                              .values('problem_id').distinct()
-                              .annotate(points=Max('points'))))
-        self.save()
+        points = sum(map(itemgetter('points'),
+                         Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
+                         .values('problem_id').distinct()
+                         .annotate(points=Max('points'))))
+        if self.points != points:
+            self.points = points
+            points_update(self)
+            self.save()
         return self.points
 
     @property
