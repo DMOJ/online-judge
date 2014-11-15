@@ -6,9 +6,13 @@
         if not page
             | ...
         else
-            if page == page_obj.number
-                a.active-page(href=page) #{page}
+            if page == 1 and first_page_href
+                - var list_pages_href = first_page_href
             else
-                a(href=page) #{page}
+                - var list_pages_href = page
+            if page == page_obj.number
+                a.active-page(href=list_pages_href) #{page}
+            else
+                a(href=list_pages_href) #{page}
     if page_obj.has_next
         a(href='{{ page_obj.next_page_number }}') >>
