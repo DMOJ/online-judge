@@ -1,3 +1,4 @@
+from operator import methodcaller
 from django import forms
 from django.template import Context
 from django.template.loader import get_template
@@ -17,12 +18,12 @@ class CheckboxSelectMultipleWithSelectAll(forms.CheckboxSelectMultiple):
             raise FieldError("id required")
         select_all_id = kwargs["attrs"]["id"] + "_all"
         select_all_name = args[0] + "_all"
-        original = super(CheckboxSelectMultipleWithSelectAll, self).render(*args, **kwargs)
+        renderer = super(CheckboxSelectMultipleWithSelectAll, self).get_renderer(*args, **kwargs)
         template = get_template("widgets/select_all.jade")
-        context = Context({"original_widget": original,
-                           "select_all_id": select_all_id,
+        context = Context({'original_widget': renderer.render(),
+                           'select_all_id': select_all_id,
                            'select_all_name': select_all_name,
-                           'all_selected': self._all_selected,
+                           'all_selected': all(map(methodcaller('is_checked'), renderer)),
                            'empty': empty})
         return mark_safe(template.render(context))
 
