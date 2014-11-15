@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
-    MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization
+    MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost
 from judge.widgets import CheckboxSelectMultipleWithSelectAll
 
 
@@ -423,6 +423,14 @@ class OrganizationAdmin(admin.ModelAdmin):
         }
 
 
+class BlogPostAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('title', 'slug', 'visible', 'publish_on')}),
+        ('Content', {'classes': ('full-width',), 'fields': ('content',)}),
+        ('Summary', {'classes': ('collapse',), 'fields': ('summary',)}),
+    )
+    prepopulated_fields = {'slug': ('title',)}
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
@@ -436,3 +444,4 @@ admin.site.register(Judge, JudgeAdmin)
 admin.site.register(Contest, ContestAdmin)
 admin.site.register(ContestParticipation, ContestParticipationAdmin)
 admin.site.register(Organization, OrganizationAdmin)
+admin.site.register(BlogPost, BlogPostAdmin)
