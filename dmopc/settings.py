@@ -52,6 +52,7 @@ else:
                 'models': (
                     'sites.site',
                     'flatpages.flatpage',
+                    'judge.blogpost',
                     'judge.miscconfig',
                     'judge.navigationbar'
                 ),

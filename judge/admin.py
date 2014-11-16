@@ -426,7 +426,7 @@ class OrganizationAdmin(admin.ModelAdmin):
 class BlogPostAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('title', 'slug', 'visible', 'publish_on')}),
-        ('Content', {'classes': ('full-width',), 'fields': ('content',)}),
+        ('Content', {'classes': ('wide',), 'fields': ('content',)}),
         ('Summary', {'classes': ('collapse',), 'fields': ('summary',)}),
     )
     prepopulated_fields = {'slug': ('title',)}
