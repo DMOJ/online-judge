@@ -79,10 +79,11 @@ def problems(request):
                 'group': p.problem.group,
                 'points': p.points,
                 'partial': p.partial,
-                'number_of_users': p.submissions.filter(submission__points__gt=0)
-                                    .values('participation').distinct().count()
+                'number_of_users': p.number_of_users
             } for p in cp.current.contest.contest_problems.select_related('problem__group')
-                         .defer('problem__description').order_by('problem__code')]
+                         .defer('problem__description').order_by('problem__code')
+                         .annotate(number_of_users=Count('submission__participation', distinct=True))
+                         .filter(submission__points__gt=0)]
             completed = contest_completed_ids(cp.current)
         elif hide_solved:
             probs = probs.exclude(id__in=Submission.objects.filter(user=request.user.profile, result='AC')
