@@ -201,7 +201,7 @@ def contest_ranking_ajax(request, key):
 
 
 def contest_ranking_view(request, contest):
-    problems = list(contest.contest_problems.all())
+    problems = list(contest.contest_problems.select_related('problem').defer('problem__description'))
     return render_to_response('contest/ranking.jade', {
         'users': ranker(contest_ranking_list(contest, problems)),
         'title': '%s Rankings' % contest.name,
