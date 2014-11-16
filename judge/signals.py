@@ -1,10 +1,10 @@
 from django.core.cache.utils import make_template_fragment_key
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete, post_delete
 from django.dispatch import receiver
 from django.core.cache import cache
 from .models import Problem, Contest, Submission, Organization, Profile, NavigationBar, MiscConfig, Language, Judge, \
-    BlogPost
-from .caching import update_submission
+    BlogPost, ContestSubmission
+from .caching import update_submission, finished_submission
 
 
 @receiver(post_save, sender=Problem)
@@ -46,6 +46,17 @@ def post_update(sender, instance, **kwargs):
 @receiver(post_save, sender=Submission)
 def submission_update(sender, instance, **kwargs):
     update_submission(instance.id)
+
+
+@receiver(post_delete, sender=Submission)
+def submission_pre_delete(sender, instance, **kwargs):
+    finished_submission(instance)
+    instance.user.calculate_points()
+
+
+@receiver(pre_delete, sender=ContestSubmission)
+def submission_pre_delete(sender, instance, **kwargs):
+    instance.participation.recalculate_score()
 
 
 @receiver(post_save, sender=Organization)
