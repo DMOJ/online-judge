@@ -92,6 +92,9 @@ class SubmissionsListBase(TitleMixin, ListView):
     def get_result_table(self):
         return get_result_table(self.get_queryset())
 
+    def access_check(self, request):
+        pass
+
     @cached_property
     def in_contest(self):
         return self.request.user.is_authenticated() and self.request.user.profile.contest.current is not None
@@ -100,13 +103,17 @@ class SubmissionsListBase(TitleMixin, ListView):
     def contest_id(self):
         return self.request.user.profile.contest.current.contest_id
 
+    @cached_property
+    def contest_object(self):
+        return self.request.user.profile.contest.current.contest_id
+
     def get_queryset(self):
         queryset = Submission.objects.order_by('-id').defer('source', 'error')
-        if not self.request.user.has_perm('judge.see_private_problem'):
-            queryset = queryset.filter(problem__is_public=True)
         if self.in_contest:
             return queryset.filter(contest__participation__contest_id=self.contest_id)
         else:
+            if not self.request.user.has_perm('judge.see_private_problem'):
+                queryset = queryset.filter(problem__is_public=True)
             return queryset
 
     def get_context_data(self, **kwargs):
@@ -118,6 +125,12 @@ class SubmissionsListBase(TitleMixin, ListView):
         context['results'] = self.get_result_table()
         context['first_page_href'] = self.first_page_href or '.'
         return context
+
+    def get(self, request, *args, **kwargs):
+        check = self.access_check(request)
+        if check is not None:
+            return check
+        return super(SubmissionsListBase, self).get(request, *args, **kwargs)
 
 
 class UserMixin(object):
@@ -157,6 +170,12 @@ class ProblemSubmissions(SubmissionsListBase):
     def get_content_title(self):
         return format_html(u'All submissions for <a href="{1}">{0}</a>', self.problem.name,
                            reverse('problem_detail', args=[self.problem.code]))
+
+    def access_check(self, request):
+        if not self.problem.is_public:
+            if not self.request.user.has_perm('judge.see_private_problem') and \
+                    not self.contest_object.problems.filter(id=self.problem.id).exists():
+                raise Http404()
 
     def get(self, request, *args, **kwargs):
         if 'problem' not in kwargs:
@@ -247,6 +266,10 @@ class ForceContestMixin(object):
     @property
     def contest_id(self):
         return self.contest.id
+
+    @property
+    def contest_object(self):
+        return self.contest
 
     def get(self, request, *args, **kwargs):
         if 'contest' not in kwargs:
