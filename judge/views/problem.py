@@ -70,13 +70,12 @@ def problems(request):
                 'id': p.problem.id,
                 'code': p.problem.code,
                 'name': p.problem.name,
-                'group_id': p.problem.group_id,
-                'group': (lambda k: SimpleLazyObject(lambda: k.group))(p.problem),
+                'group': p.problem.group,
                 'points': p.points,
                 'partial': p.partial,
                 'number_of_users': p.submissions.filter(submission__points__gt=0)
                                     .values('participation').distinct().count()
-            } for p in cp.current.contest.contest_problems.select_related('problem')
+            } for p in cp.current.contest.contest_problems.select_related('problem__group')
                          .defer('problem__description').order_by('problem__code')]
             completed = contest_completed_ids(cp.current)
         elif hide_solved:
