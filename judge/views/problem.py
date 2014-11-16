@@ -85,7 +85,7 @@ def problems(request):
                          .defer('problem__description').order_by('problem__code')]
             completed = contest_completed_ids(cp.current)
         elif hide_solved:
-            probs = probs.exclude(id__in=Submission.objects.filter(user=user, result='AC')
+            probs = probs.exclude(id__in=Submission.objects.filter(user=request.user.profile, result='AC')
                          .values_list('problem__id', flat=True))
             completed = user_completed_ids(request.user.profile)
         else:
