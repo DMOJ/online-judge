@@ -426,12 +426,12 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 class BlogPostAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('title', 'slug', 'visible', 'publish_on')}),
+        (None, {'fields': ('title', 'slug', 'visible', 'sticky', 'publish_on')}),
         ('Content', {'classes': ('wide',), 'fields': ('content',)}),
         ('Summary', {'classes': ('collapse',), 'fields': ('summary',)}),
     )
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('id', 'title', 'visible', 'publish_on')
+    list_display = ('id', 'title', 'visible', 'sticky', 'publish_on')
     list_display_links = ('id', 'title')
     ordering = ('-publish_on',)
 
