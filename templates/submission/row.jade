@@ -6,9 +6,9 @@
 - load cache
 
 if submission.status == 'IE' or submission.status == 'CE'
-    - var submission_class = submission.status
+    submission_class = submission.status
 else
-    - var submission_class = submission.result
+    submission_class = submission.result
 
 if profile_id
     - var can_view = profile_id == submission.user_id or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids
@@ -21,10 +21,7 @@ else
     - var show_prop = false
     - var info_colspan = 2
 
-if submission.status == 'G'
-    - var info_class = 'sub-info sub-info-grading'
-else
-    - var info_class = 'sub-info'
+if submission.status != 'G'
     - var info_colspan = info_colspan + 1
 
 td.sub-result(class=submission_class)
@@ -42,7 +39,7 @@ td.sub-result(class=submission_class)
         - cache 86400 submission_lang submission.language_id
             span.language #{submission.language.short_display_name}
 
-td(colspan=info_colspan, class=info_class)
+td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status == 'G' else 'sub-info'))
     if show_problem
         .name
             - with problem=submission.problem
