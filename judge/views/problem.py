@@ -9,7 +9,7 @@ from django.utils.functional import SimpleLazyObject
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
-from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language
+from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
 
@@ -33,7 +33,13 @@ class ProblemDetail(TitleMixin, CommentedDetailView):
     def get_object(self, queryset=None):
         problem = super(ProblemDetail, self).get_object(queryset)
         if not problem.is_public and not self.request.user.has_perm('judge.see_private_problem'):
-            raise Http404()
+            if self.request.user.is_authenticated():
+                cp = self.request.user.profile.contest
+                assert isinstance(cp, ContestProfile)
+                if cp.current is None or not cp.current.contest.problems.filter(id=problem.id).exists():
+                    raise Http404()
+            else:
+                raise Http404()
         return problem
 
     def get(self, request, *args, **kwargs):
