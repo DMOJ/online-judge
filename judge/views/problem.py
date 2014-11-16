@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
+from django.db.models import Count
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -59,7 +60,9 @@ class ProblemDetail(TitleMixin, CommentedDetailView):
 def problems(request):
     hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
 
-    probs = Problem.objects.filter(is_public=True).defer('description').order_by('code')
+    probs = Problem.objects.filter(is_public=True, submission__points__gt=0) \
+        .annotate(number_of_users=Count('submission__user', distinct=True))\
+        .select_related('group').defer('description').order_by('code')
     if request.user.is_authenticated():
         cp = request.user.profile.contest
         if cp.current is not None:

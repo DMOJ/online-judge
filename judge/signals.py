@@ -11,7 +11,6 @@ from .caching import update_submission, finished_submission
 def problem_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('problem_html', (instance.id,)))
     cache.delete(make_template_fragment_key('submission_problem', (instance.id,)))
-    cache.delete(make_template_fragment_key('problem_list_group', (instance.group_id,)))
 
 
 @receiver(post_save, sender=Profile)

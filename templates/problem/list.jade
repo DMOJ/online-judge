@@ -79,8 +79,7 @@ block body
                             img(src='{% static "admin/img/icon-no.gif" %}')
                     td
                         a(href='{% url "problem_detail" problem.code %}')= problem.name
-                    - cache 86400 problem_list_group problem.group_id
-                        td= problem.group.full_name
+                    td= problem.group.full_name
                     td= problem.code
                     td.p #{problem.points|floatformat}
                         if problem.partial

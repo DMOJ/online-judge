@@ -18,7 +18,6 @@ def point_update(profile):
 
 
 def finished_submission(sub):
-    cache.delete('prob_users:%d' % sub.problem_id)
     cache.delete('user_complete:%d' % sub.user_id)
     cache.delete('user_probs:%d' % sub.user_id)
     cache.delete('problem_rank:%d' % sub.problem_id)

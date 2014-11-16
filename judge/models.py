@@ -213,14 +213,6 @@ class Problem(models.Model):
     def languages_list(self):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
-    def number_of_users(self):
-        key = 'prob_users:%d' % self.id
-        count = cache.get(key)
-        if count is None:
-            count = Submission.objects.filter(problem=self, points__gt=0).values('user').distinct().count()
-            cache.set(key, count, 86400)
-        return count
-
     def __unicode__(self):
         return self.name
 
