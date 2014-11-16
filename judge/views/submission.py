@@ -96,14 +96,16 @@ class SubmissionsListBase(TitleMixin, ListView):
     def in_contest(self):
         return self.request.user.is_authenticated() and self.request.user.profile.contest.current is not None
 
+    @cached_property
+    def contest_id(self):
+        return self.request.user.profile.contest.current.contest_id
+
     def get_queryset(self):
         queryset = Submission.objects.order_by('-id').defer('source', 'error')
         if not self.request.user.has_perm('judge.see_private_problem'):
             queryset = queryset.filter(problem__is_public=True)
         if self.in_contest:
-            return queryset.filter(
-                contest__participation__contest_id=self.request.user.profile.contest.current.contest_id
-            )
+            return queryset.filter(contest__participation__contest_id=self.contest_id)
         else:
             return queryset
 

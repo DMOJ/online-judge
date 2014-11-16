@@ -40,47 +40,43 @@ class FancyRawQuerySetWrapper(object):
 class RankedSubmissions(ProblemSubmissions):
     def get_queryset(self):
         if self.in_contest:
-            key = 'contest_problem_rank:%d:%d' % (self.request.user.profile.contest.current.contest_id, self.problem.id)
+            count = Submission.objects.filter(problem_id=self.problem.id,
+                                              contest__participation__contest_id=self.contest_id, points__gt=0)\
+                .values('user').distinct().count()
+            contest_join = '''INNER JOIN judge_contestsubmission AS cs ON (sub.id = cs.submission_id)
+                              INNER JOIN judge_contestparticipation AS cp ON (cs.participation_id = cp.id)'''
+            points = 'cs.points'
+            constraint = 'AND cp.contest_id = %s'
         else:
-            key = 'problem_rank:%d' % self.problem.id
-        ranking = cache.get(key)
-        if ranking is not None:
-            return ranking
-        if self.in_contest:
-            # WARNING: SLOW
-            query = super(RankedSubmissions, self).get_queryset()
-            ranking = [query.filter(user_id=user).order_by('-contest__points', 'time', 'memory')
-                            .select_related('contest')[0]
-                       for user in list(query.values_list('user_id', flat=True).order_by().distinct())]
-            ranking.sort(key=lambda sub: (-sub.contest.points, sub.time, sub.memory))
-        else:
-            ranking = FancyRawQuerySetWrapper(Submission,Submission.objects.filter(problem__id=self.problem.id).filter(
-                    Q(result='AC') | Q(problem__partial=True, points__gt=0)).values('user').distinct().count(), '''
-                SELECT subs.id, subs.user_id, subs.problem_id, subs.date, subs.time,
-                       subs.memory, subs.points, subs.language_id, subs.source,
-                       subs.status, subs.result
-                FROM (
-                    SELECT sub.user_id AS uid, MAX(sub.points) AS points
-                    FROM judge_submission AS sub INNER JOIN
-                         judge_problem AS prob ON (sub.problem_id = prob.id)
-                    WHERE sub.problem_id = %s AND
-                         (sub.result = 'AC' OR (prob.partial AND sub.points > 0))
-                    GROUP BY sub.user_id
-                ) AS highscore INNER JOIN (
-                    SELECT sub.user_id AS uid, sub.points, MIN(sub.time) as time
-                    FROM judge_submission AS sub INNER JOIN
-                         judge_problem AS prob ON (sub.problem_id = prob.id)
-                    WHERE sub.problem_id = %s AND
-                         (sub.result = 'AC' OR (prob.partial AND sub.points > 0))
-                    GROUP BY sub.user_id, sub.points
-                ) AS fastest
-                        ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
-                    INNER JOIN (SELECT * FROM judge_submission WHERE problem_id = %s) as subs
-                        ON (subs.user_id = fastest.uid AND subs.time = fastest.time)
-                GROUP BY fastest.uid
-                ORDER BY subs.points DESC, subs.time ASC
-            ''', (self.problem.id,) * 3)
-        cache.set(key, ranking, 86400)
+            count = Submission.objects.filter(problem__id=self.problem.id) \
+                .filter(Q(result='AC') | Q(problem__partial=True, points__gt=0)).values('user').distinct().count()
+            contest_join = ''
+            points = 'sub.points'
+            constraint = ''
+        ranking = FancyRawQuerySetWrapper(Submission, count, '''
+            SELECT sub.id, sub.user_id, sub.problem_id, sub.date, sub.time,
+                   sub.memory, sub.points, sub.language_id, sub.source,
+                   sub.status, sub.result
+            FROM (
+                SELECT sub.user_id AS uid, MAX(sub.points) AS points
+                FROM judge_submission AS sub INNER JOIN
+                     judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
+                WHERE sub.problem_id = %s AND {points} > 0 {constraint}
+                GROUP BY sub.user_id
+            ) AS highscore INNER JOIN (
+                SELECT sub.user_id AS uid, sub.points, MIN(sub.time) as time
+                FROM judge_submission AS sub INNER JOIN
+                     judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
+                WHERE sub.problem_id = %s AND {points} > 0 {constraint}
+                GROUP BY sub.user_id, {points}
+            ) AS fastest ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
+                INNER JOIN judge_submission AS sub
+                    ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
+            WHERE sub.problem_id = %s AND {points} > 0 {constraint}
+            GROUP BY fastest.uid
+            ORDER BY {points} DESC, sub.time ASC
+        '''.format(points=points, contest_join=contest_join, constraint=constraint),
+                  (self.problem.id, self.contest_id) * 3 if self.in_contest else (self.problem.id,) * 3)
         return ranking
 
     def get_title(self):
