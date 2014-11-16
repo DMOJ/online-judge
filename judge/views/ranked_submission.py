@@ -55,8 +55,8 @@ class RankedSubmissions(ProblemSubmissions):
             constraint = ''
         ranking = FancyRawQuerySetWrapper(Submission, count, '''
             SELECT sub.id, sub.user_id, sub.problem_id, sub.date, sub.time,
-                   sub.memory, sub.points, sub.language_id, sub.source,
-                   sub.status, sub.result
+                   sub.memory, sub.points, sub.language_id,
+                   sub.status, sub.result, sub.case_points, sub.case_total
             FROM (
                 SELECT sub.user_id AS uid, MAX(sub.points) AS points
                 FROM judge_submission AS sub INNER JOIN
