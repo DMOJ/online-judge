@@ -49,7 +49,7 @@ def submission_update(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=Submission)
-def submission_pre_delete(sender, instance, **kwargs):
+def submission_delete(sender, instance, **kwargs):
     finished_submission(instance)
     instance.user.calculate_points()
 
