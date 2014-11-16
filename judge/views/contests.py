@@ -144,7 +144,7 @@ def leave_contest(request, key):
 
 ContestRankingProfile = namedtuple('ContestRankingProfile',
                                    'id user display_rank long_display_name points problems organization')
-BestSolutionData = namedtuple('BestSolutionData', 'points time state')
+BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
 
 
 def get_best_contest_solutions(problems, profile, participation):
@@ -160,6 +160,7 @@ def get_best_contest_solutions(problems, profile, participation):
             continue
         solution = solution[0]
         solutions.append(BestSolutionData(
+            code=problem.problem.code,
             points=solution['best'],
             time=solution['time'] - participation.start,
             state='failed-score' if not solution['best'] else
