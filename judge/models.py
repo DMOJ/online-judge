@@ -147,15 +147,6 @@ class Profile(models.Model):
     def is_problem_setter(self):
         return self.user.is_superuser or self.user.groups.filter(name='ProblemSetter').exists()
 
-    @property
-    def problems(self):
-        key = 'user_probs:%d' % self.id
-        count = cache.get(key)
-        if count is None:
-            count = Submission.objects.filter(user=self, points__gt=0).values('problem').distinct().count()
-            cache.set(key, count, 86400)
-        return count
-
     @cached_property
     def contest(self):
         cp, created = ContestProfile.objects.get_or_create(user=self)

@@ -12,8 +12,4 @@ block users_media
 
 
 block users_table
-    if partial
-        include user/users_table
-    else
-        - cache 3600 global_user
-            include user/users_table
+    include user/users_table

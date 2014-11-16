@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max
+from django.db.models import Max, Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -59,6 +59,7 @@ def users(request):
     if request.user.is_authenticated() and request.user.profile.contest.current is not None:
         return contest_ranking_view(request, request.user.profile.contest.current.contest)
     return render_to_response('user/list.jade', {
-        'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True).order_by('-points')),
+        'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
+                               .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')),
         'title': 'Users'
     }, context_instance=RequestContext(request))
