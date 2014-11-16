@@ -67,6 +67,7 @@ class ProblemAdmin(admin.ModelAdmin):
         ('Language', {'fields': ('allowed_languages',)})
     )
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public']
+    filter_horizontal = ['authors']
     ordering = ['code']
     search_fields = ('^code', 'name')
     actions = ['make_public', 'make_private']
