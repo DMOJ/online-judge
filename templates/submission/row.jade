@@ -45,7 +45,8 @@ td.sub-result(class=submission_class)
 td(colspan=info_colspan, class=info_class)
     if show_problem
         .name
-            a(href='{% url "problem_detail" submission.problem.code %}') #{submission.problem.name}
+            - with problem=submission.problem
+                a(href='{% url "problem_detail" problem.code %}') #{problem.name}
     div
         - cache 3600 submission_user submission.user_id
             span(class=submission.user.display_rank)

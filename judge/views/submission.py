@@ -97,8 +97,7 @@ class SubmissionsListBase(TitleMixin, ListView):
         return self.request.user.is_authenticated() and self.request.user.profile.contest.current is not None
 
     def get_queryset(self):
-        queryset = Submission.objects.order_by('-id').select_related('problem')\
-            .defer('source', 'error', 'problem__description')
+        queryset = Submission.objects.order_by('-id').defer('source', 'error').filter(problem__is_public=True)
         if self.in_contest:
             return queryset.filter(
                 contest__participation__contest_id=self.request.user.profile.contest.current.contest_id
