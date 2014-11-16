@@ -5,8 +5,9 @@ extends user/base_users_table
 
 block before_point_head
     each problem in problems
-        th.points.header= forloop.counter
-            div.point-denominator= problem.points
+        th.points.header
+            a(href='{% url "contest_ranked_submissions" contest.key problem.problem.code %}')= forloop.counter
+                div.point-denominator= problem.points
 
 block before_point
     - cache 86400 conrank_user_prob user.id contest.id

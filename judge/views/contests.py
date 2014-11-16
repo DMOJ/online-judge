@@ -190,7 +190,7 @@ def contest_ranking_ajax(request, key):
     contest, exists = _find_contest(request, key)
     if not exists:
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
-    problems = list(contest.contest_problems.all())
+    problems = list(contest.contest_problems.select_related('problem').defer('problem__description'))
     return render_to_response('contest/ranking_table.jade', {
         'users': ranker(contest_ranking_list(contest, problems)),
         'problems': problems,
