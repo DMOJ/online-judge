@@ -3,7 +3,6 @@ from collections import defaultdict
 from operator import itemgetter, attrgetter
 
 import pytz
-from django.core.cache import cache
 from django.utils.functional import cached_property
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -123,27 +122,27 @@ class Profile(models.Model):
             self.save()
         return self.points
 
-    @property
+    @cached_property
     def display_name(self):
         if self.name:
             return self.name
         return self.user.username
 
-    @property
+    @cached_property
     def long_display_name(self):
         if self.name:
             return u'%s (%s)' % (self.user.username, self.name)
         return self.user.username
 
-    @property
+    @cached_property
     def display_rank(self):
         return 'admin' if self.is_admin else ('setter' if self.is_problem_setter else 'user')
 
-    @property
+    @cached_property
     def is_admin(self):
         return self.user.is_superuser or self.user.groups.filter(name='Admin').exists()
 
-    @property
+    @cached_property
     def is_problem_setter(self):
         return self.user.is_superuser or self.user.groups.filter(name='ProblemSetter').exists()
 
@@ -196,7 +195,7 @@ class Problem(models.Model):
     points = models.FloatField(verbose_name='Points')
     partial = models.BooleanField(verbose_name='Allows partial points')
     allowed_languages = models.ManyToManyField(Language, verbose_name='Allowed languages')
-    is_public = models.BooleanField(verbose_name='Publicly visible')
+    is_public = models.BooleanField(verbose_name='Publicly visible', db_index=True)
 
     def types_list(self):
         return map(attrgetter('full_name'), self.types.all())
