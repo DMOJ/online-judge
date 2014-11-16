@@ -10,7 +10,7 @@ from django.db import models, transaction
 
 
 class OrderedModel(models.Model):
-    order = models.PositiveIntegerField(editable=False)
+    order = models.PositiveIntegerField(editable=False, db_index=True)
 
     def save(self, **kwargs):
         if not self.id:
