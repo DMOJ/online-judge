@@ -1,5 +1,3 @@
-from django.contrib.flatpages.models import FlatPage
-from django.contrib.flatpages.views import flatpage
 from django.views.generic import TemplateView as OldTemplateView
 
 from .register import RegistrationView, ActivationView
@@ -20,10 +18,3 @@ class TemplateView(OldTemplateView):
         if 'title' not in kwargs and self.title is not None:
             kwargs['title'] = self.title
         return super(TemplateView, self).get_context_data(**kwargs)
-
-
-def home(request):
-    if FlatPage.objects.filter(url='/').exists():
-        return flatpage(request, '/')
-    return render_to_response('base.jade', {'title': 'Home'},
-                              context_instance=RequestContext(request))
