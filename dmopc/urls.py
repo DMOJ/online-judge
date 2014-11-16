@@ -107,9 +107,11 @@ urlpatterns = patterns('',
     url(r'^status/$', 'judge.views.status_all'),
     url(r'^status-table/$', 'judge.views.status_table'),
 
+    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/$', views.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
+    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/(?P<page>\d+)$', views.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
+
     url(r'^problem/(?P<problem>\w+)/rank/$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
     url(r'^problem/(?P<problem>\w+)/rank/(?P<page>\d+)$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
-
     url(r'^problem/(?P<problem>\w+)/submissions/$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
     url(r'^problem/(?P<problem>\w+)/submissions/(?P<page>\d+)$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
 

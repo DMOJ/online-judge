@@ -1,5 +1,5 @@
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.paginator import PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -8,7 +8,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.html import format_html
 
-from judge.models import Problem, Submission
+from judge.models import Problem, Submission, Contest
 from judge.views.submission import ProblemSubmissions
 from judge.utils.problems import user_completed_ids, get_result_table
 from judge.utils.diggpaginator import DiggPaginator
@@ -88,3 +88,34 @@ class RankedSubmissions(ProblemSubmissions):
 
     def get_result_table(self):
         return get_result_table(super(RankedSubmissions, self).get_queryset())
+
+
+class ContestRankedSubmission(RankedSubmissions):
+    @property
+    def in_contest(self):
+        return True
+
+    @property
+    def contest_id(self):
+        return self.contest.id
+
+    def get(self, request, *args, **kwargs):
+        if 'contest' not in kwargs:
+            raise ImproperlyConfigured('Must pass a contest')
+        try:
+            self.contest = Contest.objects.get(key=kwargs['contest'])
+        except Problem.DoesNotExist:
+            raise Http404()
+        return super(ContestRankedSubmission, self).get(request, *args, **kwargs)
+
+    def get_title(self):
+        return 'Best solutions for %s in %s' % (self.problem.name, self.contest.name)
+
+    def get_content_title(self):
+        return format_html(u'Best solutions for <a href="{1}">{0}</a> in <a href="{3}">{2}</a>',
+                           self.problem.name, reverse('problem_detail', args=[self.problem.code]),
+                           self.contest.name, reverse('contest_view', args=[self.contest.key]))
+
+    def get_result_table(self):
+        return get_result_table(Submission.objects.filter(
+            problem_id=self.problem.id, contest__participation__contest_id=self.contest_id))
