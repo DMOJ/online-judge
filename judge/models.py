@@ -304,6 +304,7 @@ class Submission(models.Model):
 
     class Meta:
         permissions = (
+            ('abort_any_submission', 'Abort any submission'),
             ('rejudge_submission', 'Rejudge the submission'),
             ('rejudge_submission_lot', 'Rejudge a lot of submissions'),
             ('spam_submission', 'Submit without limit')
