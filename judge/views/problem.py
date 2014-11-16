@@ -66,7 +66,7 @@ class ProblemDetail(TitleMixin, CommentedDetailView):
 def problems(request):
     hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
 
-    probs = Problem.objects.filter(is_public=True, submission__points__gt=0) \
+    probs = Problem.objects.filter(is_public=True) \
         .annotate(number_of_users=Count('submission__user', distinct=True))\
         .select_related('group').defer('description').order_by('code')
     if request.user.is_authenticated():
@@ -82,8 +82,7 @@ def problems(request):
                 'number_of_users': p.number_of_users
             } for p in cp.current.contest.contest_problems.select_related('problem__group')
                          .defer('problem__description').order_by('problem__code')
-                         .annotate(number_of_users=Count('submission__participation', distinct=True))
-                         .filter(submission__points__gt=0)]
+                         .annotate(number_of_users=Count('submission__participation', distinct=True))]
             completed = contest_completed_ids(cp.current)
         elif hide_solved:
             probs = probs.exclude(id__in=Submission.objects.filter(user=request.user.profile, result='AC')
