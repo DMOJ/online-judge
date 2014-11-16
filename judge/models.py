@@ -551,7 +551,7 @@ class ContestProblem(models.Model):
 
 class ContestSubmission(models.Model):
     submission = models.OneToOneField(Submission, related_name='contest')
-    problem = models.ForeignKey(ContestProblem, related_name='submissions')
+    problem = models.ForeignKey(ContestProblem, related_name='submissions', related_query_name='submission')
     participation = models.ForeignKey(ContestParticipation, related_name='submissions', related_query_name='submission')
     points = models.FloatField(default=0.0)
 
