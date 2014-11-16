@@ -107,9 +107,6 @@ urlpatterns = patterns('',
     url(r'^status/$', 'judge.views.status_all'),
     url(r'^status-table/$', 'judge.views.status_table'),
 
-    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/$', views.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
-    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/(?P<page>\d+)$', views.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
-
     url(r'^problem/(?P<problem>\w+)/rank/$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
     url(r'^problem/(?P<problem>\w+)/rank/(?P<page>\d+)$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
     url(r'^problem/(?P<problem>\w+)/submissions/$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
@@ -130,6 +127,12 @@ urlpatterns = patterns('',
     url(r'^contest/(\w+)/ranking/ajax$', 'judge.views.contest_ranking_ajax'),
     url(r'^contest/(\w+)/join$', 'judge.views.join_contest'),
     url(r'^contest/(\w+)/leave$', 'judge.views.leave_contest'),
+
+    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/$', views.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
+    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/(?P<page>\d+)$', views.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
+
+    url(r'^contest/(?P<contest>\w+)/(?P<user>\w+)/(?P<problem>\w+)/$', views.UserContestSubmissions.as_view(), name='contest_user_submissions'),
+    url(r'^contest/(?P<contest>\w+)/(?P<user>\w+)/(?P<problem>\w+)/(?P<page>\d+)$', views.UserContestSubmissions.as_view(), name='contest_user_submissions'),
     
     url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
     url(r'^organizations/add$', organization.NewOrganization.as_view()),

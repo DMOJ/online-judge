@@ -14,7 +14,8 @@ block before_point
         each problem in user.problems
             if problem
                 td(class=problem.state)
-                    | #{problem.points|floatformat}
-                    .solving-time #{problem.time|timedelta:"noday"}
+                    a(href='{% url "contest_user_submissions" contest.key user.user.username problem.problem.code %}')
+                        | #{problem.points|floatformat}
+                        .solving-time #{problem.time|timedelta:"noday"}
             else
                 td

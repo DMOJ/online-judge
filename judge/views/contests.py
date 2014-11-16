@@ -175,15 +175,15 @@ def contest_ranking_list(contest, problems):
         contest_profile = participation.profile
         return ContestRankingProfile(
             id=contest_profile.user_id,
-            user=SimpleLazyObject(lambda: contest_profile.user.user),
+            user=contest_profile.user.user,
             display_rank=SimpleLazyObject(lambda: contest_profile.user.display_rank),
             long_display_name=SimpleLazyObject(lambda: contest_profile.user.long_display_name),
             points=participation.score,
             organization=SimpleLazyObject(lambda: contest_profile.user.organization),
             problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.user, participation))
         )
-
-    return map(make_ranking_profile, contest.users.select_related('profile').order_by('-score', 'cumtime'))
+    return map(make_ranking_profile, contest.users.select_related('profile__user').order_by('-score', 'cumtime')
+                                            .defer('profile__about'))
 
 
 def contest_ranking_ajax(request, key):

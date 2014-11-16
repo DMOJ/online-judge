@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.utils.html import format_html
 
 from judge.models import Problem, Submission, Contest
-from judge.views.submission import ProblemSubmissions
+from judge.views.submission import ProblemSubmissions, ForceContestMixin
 from judge.utils.problems import user_completed_ids, get_result_table
 from judge.utils.diggpaginator import DiggPaginator
 
@@ -90,24 +90,7 @@ class RankedSubmissions(ProblemSubmissions):
         return get_result_table(super(RankedSubmissions, self).get_queryset())
 
 
-class ContestRankedSubmission(RankedSubmissions):
-    @property
-    def in_contest(self):
-        return True
-
-    @property
-    def contest_id(self):
-        return self.contest.id
-
-    def get(self, request, *args, **kwargs):
-        if 'contest' not in kwargs:
-            raise ImproperlyConfigured('Must pass a contest')
-        try:
-            self.contest = Contest.objects.get(key=kwargs['contest'])
-        except Problem.DoesNotExist:
-            raise Http404()
-        return super(ContestRankedSubmission, self).get(request, *args, **kwargs)
-
+class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
     def get_title(self):
         return 'Best solutions for %s in %s' % (self.problem.name, self.contest.name)
 

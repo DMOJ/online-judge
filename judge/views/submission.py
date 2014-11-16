@@ -11,7 +11,7 @@ from django.views.generic import TemplateView, ListView
 from django.views.generic.detail import SingleObjectMixin
 
 from judge.highlight_code import highlight_code
-from judge.models import Problem, Submission, SubmissionTestCase, Profile
+from judge.models import Problem, Submission, SubmissionTestCase, Profile, Contest
 from judge.utils.problems import user_completed_ids, get_result_table
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.views import TitleMixin
@@ -237,3 +237,33 @@ class AllSubmissions(SubmissionsListBase):
         context['dynamic_update'] = context['page_obj'].number == 1
         context['last_msg'] = event.last()
         return context
+
+
+class ForceContestMixin(object):
+    @property
+    def in_contest(self):
+        return True
+
+    @property
+    def contest_id(self):
+        return self.contest.id
+
+    def get(self, request, *args, **kwargs):
+        if 'contest' not in kwargs:
+            raise ImproperlyConfigured('Must pass a contest')
+        try:
+            self.contest = Contest.objects.get(key=kwargs['contest'])
+        except Problem.DoesNotExist:
+            raise Http404()
+        return super(ForceContestMixin, self).get(request, *args, **kwargs)
+
+
+class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
+    def get_title(self):
+        return "%s's submissions for %s in %s" % (self.username, self.problem.name, self.contest.name)
+
+    def get_content_title(self):
+        return format_html(u'<a href="{1}">{0}</a>\'s submissions for <a href="{3}">{2}</a> in <a href="{5}">{4}</a>',
+                           self.username, reverse('judge.views.user', args=[self.username]),
+                           self.problem.name, reverse('problem_detail', args=[self.problem.code]),
+                           self.contest.name, reverse('contest_view', args=[self.contest.key]))
