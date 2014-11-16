@@ -567,6 +567,7 @@ class BlogPost(models.Model):
     title = models.CharField(verbose_name='Post title', max_length=100)
     slug = models.SlugField(verbose_name='Slug')
     visible = models.BooleanField(verbose_name='Public visibility')
+    sticky = models.BooleanField(verbose_name='Sticky')
     publish_on = models.DateTimeField(verbose_name='Publish after')
     content = models.TextField(verbose_name='Post content')
     summary = models.TextField(verbose_name='Post summary', blank=True)
