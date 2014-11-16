@@ -430,6 +430,9 @@ class BlogPostAdmin(admin.ModelAdmin):
         ('Summary', {'classes': ('collapse',), 'fields': ('summary',)}),
     )
     prepopulated_fields = {'slug': ('title',)}
+    list_display = ('id', 'title', 'visible', 'publish_on')
+    list_display_links = ('id', 'title')
+    ordering = ('-publish_on',)
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
