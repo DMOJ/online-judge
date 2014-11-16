@@ -19,11 +19,9 @@ def point_update(profile):
 
 def finished_submission(sub):
     cache.delete('user_complete:%d' % sub.user_id)
-    cache.delete('problem_rank:%d' % sub.problem_id)
     if hasattr(sub, 'contest'):
         participation = sub.contest.participation
         cache.delete('contest_complete:%d' % participation.id)
-        cache.delete('contest_problem_rank:%d:%d' % (participation.contest_id, sub.problem_id))
         cache.delete(make_template_fragment_key('conrank_user_prob',
                                                 (participation.profile.user_id,
                                                  participation.contest_id)))
