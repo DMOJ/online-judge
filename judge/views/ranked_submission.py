@@ -41,7 +41,7 @@ class RankedSubmissions(ProblemSubmissions):
     def get_queryset(self):
         if self.in_contest:
             count = Submission.objects.filter(problem_id=self.problem.id,
-                                              contest__participation__contest_id=self.contest_id, points__gt=0)\
+                                              contest__participation__contest_id=self.contest.id, points__gt=0)\
                 .values('user').distinct().count()
             contest_join = '''INNER JOIN judge_contestsubmission AS cs ON (sub.id = cs.submission_id)
                               INNER JOIN judge_contestparticipation AS cp ON (cs.participation_id = cp.id)'''
@@ -76,7 +76,7 @@ class RankedSubmissions(ProblemSubmissions):
             GROUP BY fastest.uid
             ORDER BY {points} DESC, sub.time ASC
         '''.format(points=points, contest_join=contest_join, constraint=constraint),
-                  (self.problem.id, self.contest_id) * 3 if self.in_contest else (self.problem.id,) * 3)
+                  (self.problem.id, self.contest.id) * 3 if self.in_contest else (self.problem.id,) * 3)
         return ranking
 
     def get_title(self):

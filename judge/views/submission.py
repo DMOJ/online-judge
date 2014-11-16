@@ -100,17 +100,13 @@ class SubmissionsListBase(TitleMixin, ListView):
         return self.request.user.is_authenticated() and self.request.user.profile.contest.current is not None
 
     @cached_property
-    def contest_id(self):
-        return self.request.user.profile.contest.current.contest_id
-
-    @cached_property
-    def contest_object(self):
+    def contest(self):
         return self.request.user.profile.contest.current.contest
 
     def get_queryset(self):
         queryset = Submission.objects.order_by('-id').defer('source', 'error')
         if self.in_contest:
-            return queryset.filter(contest__participation__contest_id=self.contest_id)
+            return queryset.filter(contest__participation__contest_id=self.contest.id)
         else:
             if not self.request.user.has_perm('judge.see_private_problem'):
                 queryset = queryset.filter(problem__is_public=True)
@@ -174,7 +170,7 @@ class ProblemSubmissions(SubmissionsListBase):
     def access_check(self, request):
         if not self.problem.is_public:
             if not self.request.user.has_perm('judge.see_private_problem') and \
-                    not self.contest_object.problems.filter(id=self.problem.id).exists():
+                    not (self.in_contest and self.contest.problems.filter(id=self.problem.id).exists()):
                 raise Http404()
 
     def get(self, request, *args, **kwargs):
@@ -264,18 +260,14 @@ class ForceContestMixin(object):
         return True
 
     @property
-    def contest_id(self):
-        return self.contest.id
-
-    @property
-    def contest_object(self):
-        return self.contest
+    def contest(self):
+        return self._contest
 
     def get(self, request, *args, **kwargs):
         if 'contest' not in kwargs:
             raise ImproperlyConfigured('Must pass a contest')
         try:
-            self.contest = Contest.objects.get(key=kwargs['contest'])
+            self._contest = Contest.objects.get(key=kwargs['contest'])
         except Problem.DoesNotExist:
             raise Http404()
         return super(ForceContestMixin, self).get(request, *args, **kwargs)
