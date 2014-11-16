@@ -14,7 +14,7 @@ block body
             include list_pages
 
     each post in posts
-        div.post(class=('sticky' if post.sticky else ''))
+        div.post(class=('sticky' if post.sticky else undefined))
             h2.title
                 a(href='{% url "blog_post" post.id post.slug %}')= post.title
             div.time #{post.publish_on|date:"N j, o, G:i"}
