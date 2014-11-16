@@ -1,5 +1,5 @@
 from django.core.cache.utils import make_template_fragment_key
-from django.db.models.signals import post_save, pre_delete, post_delete
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.cache import cache
 from .models import Problem, Contest, Submission, Organization, Profile, NavigationBar, MiscConfig, Language, Judge, \
@@ -54,8 +54,8 @@ def submission_pre_delete(sender, instance, **kwargs):
     instance.user.calculate_points()
 
 
-@receiver(pre_delete, sender=ContestSubmission)
-def submission_pre_delete(sender, instance, **kwargs):
+@receiver(post_delete, sender=ContestSubmission)
+def contest_submission_delete(sender, instance, **kwargs):
     instance.participation.recalculate_score()
 
 
