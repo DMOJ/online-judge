@@ -75,8 +75,8 @@ class Organization(models.Model):
     name = models.CharField(max_length=50, verbose_name='Organization title')
     key = models.CharField(max_length=6, verbose_name='Identifier', unique=True,
                            help_text='Organization name shows in URL',
-                           validators=RegexValidator('^[A-Za-z0-9]+$',
-                                                     'Identifier must contain letters and numbers only'))
+                           validators=[RegexValidator('^[A-Za-z0-9]+$',
+                                                      'Identifier must contain letters and numbers only')])
     short_name = models.CharField(max_length=20, verbose_name='Short name',
                                   help_text='Displayed beside user name during contests')
     about = models.TextField(verbose_name='Organization description')
