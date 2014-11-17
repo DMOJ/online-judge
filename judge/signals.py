@@ -65,8 +65,8 @@ def contest_submission_delete(sender, instance, **kwargs):
 @receiver(post_save, sender=Organization)
 def organization_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('organization_html', (instance.id,)))
-    for user in instance.members.values_list('id', flat=True):
-        cache.delete(make_template_fragment_key('user_org_on_rank', (user,)))
+    cache.delete_many([make_template_fragment_key('user_org_on_rank', (user,))
+                       for user in instance.members.values_list('id', flat=True)])
 
 
 @receiver(post_save, sender=NavigationBar)
