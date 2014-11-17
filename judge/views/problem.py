@@ -5,7 +5,8 @@ from django.db.models import Count
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils.functional import SimpleLazyObject
+from django.utils.functional import SimpleLazyObject, cached_property
+from django.views.generic import ListView
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
@@ -63,40 +64,70 @@ class ProblemDetail(TitleMixin, CommentedDetailView):
         return context
 
 
-def problems(request):
-    hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
+class ProblemList(TitleMixin, ListView):
+    model = Problem
+    title = 'Problems'
+    context_object_name = 'problems'
+    template_name = 'problem/list.jade'
 
-    probs = Problem.objects.filter(is_public=True) \
-        .annotate(number_of_users=Count('submission__user', distinct=True))\
-        .select_related('group').defer('description').order_by('code')
-    if request.user.is_authenticated():
-        cp = request.user.profile.contest
-        if cp.current is not None:
-            probs = [{
-                'id': p.problem.id,
-                'code': p.problem.code,
-                'name': p.problem.name,
-                'group': p.problem.group,
-                'points': p.points,
-                'partial': p.partial,
-                'number_of_users': p.number_of_users
-            } for p in cp.current.contest.contest_problems.select_related('problem__group')
-                         .defer('problem__description').order_by('problem__code')
-                         .annotate(number_of_users=Count('submission__participation', distinct=True))]
-            completed = contest_completed_ids(cp.current)
-        elif hide_solved:
-            probs = probs.exclude(id__in=Submission.objects.filter(user=request.user.profile, result='AC')
-                         .values_list('problem__id', flat=True))
-            completed = user_completed_ids(request.user.profile)
+    @cached_property
+    def profile(self):
+        if not self.request.user.is_authenticated():
+            return None
+        return self.request.user.profile
+
+    @cached_property
+    def contest_profile(self):
+        return self.profile and self.profile.contest
+
+    @cached_property
+    def in_contest(self):
+        return self.contest_profile is not None and self.contest_profile.current is not None
+
+    def get_contest_queryset(self):
+        queryset = self.contest_profile.current.contest.contest_problems.select_related('problem__group') \
+                       .defer('problem__description').order_by('problem__code') \
+                       .annotate(number_of_users=Count('submission__participation', distinct=True))
+        return [{
+            'id': p.problem.id,
+            'code': p.problem.code,
+            'name': p.problem.name,
+            'group': p.problem.group,
+            'points': p.points,
+            'partial': p.partial,
+            'number_of_users': p.number_of_users
+        } for p in queryset]
+
+    def get_normal_queryset(self):
+        queryset = Problem.objects.filter(is_public=True) \
+                          .annotate(number_of_users=Count('submission__user', distinct=True))\
+                          .select_related('group').defer('description').order_by('code')
+        if self.hide_solved:
+            queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, result='AC')
+                               .values_list('problem__id', flat=True))
+        return queryset
+
+    def get_queryset(self):
+        if self.in_contest:
+            return self.get_contest_queryset()
         else:
-            completed = user_completed_ids(request.user.profile)
-    else:
-        completed = []
-    return render_to_response('problem/list.jade', {
-        'problems': probs,
-        'hide_solved': 1 if hide_solved else 0,
-        'completed_problem_ids': completed,
-        'title': 'Problems'}, context_instance=RequestContext(request))
+            return self.get_normal_queryset()
+
+    def get_completed_problems(self):
+        if self.in_contest:
+            return contest_completed_ids(self.contest_profile.current)
+        else:
+            return user_completed_ids(self.profile) if self.profile is not None else ()
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemList, self).get_context_data(**kwargs)
+        context['hide_solved'] = int(self.hide_solved)
+        context['completed_problem_ids'] = self.get_completed_problems()
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
+        return super(ProblemList, self).get(request, *args, **kwargs)
 
 
 @login_required
