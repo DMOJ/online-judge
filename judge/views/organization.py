@@ -2,6 +2,7 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.db.models import Count
 from django.http import HttpResponseRedirect, Http404
 from django.utils import timezone
 from django.views.generic import CreateView, DetailView, ListView, View, UpdateView
@@ -67,7 +68,8 @@ class OrganizationUsers(OrganizationMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = '%s Members' % self.object.name
-        context['users'] = ranker(self.object.members.order_by('-points'))
+        context['users'] = ranker(self.object.members.annotate(problems=Count('submission__problem', distinct=True))
+                                      .order_by('-points'))
         context['partial'] = True
         return context
 
