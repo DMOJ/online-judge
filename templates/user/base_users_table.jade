@@ -15,9 +15,10 @@ thead
                     - cache 86400 user_org_on_rank user.id
                         td(class=user.display_rank)
                             .userinfo
-                                if user.organization
-                                    span.organization
-                                        a(href='{% url "organization_home" user.organization.key %}')= user.organization.key
+                                - with org=user.organization
+                                    if org
+                                        span.organization
+                                            a(href='{% url "organization_home" org.key %}')= org.short_name
                                 a(href='{% url "judge.views.user" user.user.username %}')= user.long_display_name
                 else
                     - cache 86400 user_on_rank user.id

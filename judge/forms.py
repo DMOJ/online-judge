@@ -59,7 +59,7 @@ class OrganizationForm(ModelForm):
 class EditOrganizationForm(ModelForm):
     class Meta:
         model = Organization
-        fields = ['name', 'about', 'admins']
+        fields = ['name', 'short_name', 'about', 'admins']
         widgets = {
             'admins': FilteredSelectMultiple('Admins', False)
         }
