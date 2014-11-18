@@ -44,7 +44,8 @@ block body
                     th(style='width:90%') Name
                     th Time limit
                     th Rankings
-                    th(style='width:15%')
+                    if not IN_CONTEST
+                        th(style='width:15%')
             tbody
                 each contest in current_contests
                     tr
@@ -60,8 +61,8 @@ block body
                         td #{contest.time_limit}
                         td
                             a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}
-                        td
-                            if not IN_CONTEST
+                        if not IN_CONTEST
+                            td
                                 a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}', style='display:inline;padding-left:30%;padding-right:30%') Join
         br
         .dashed
