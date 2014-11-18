@@ -5,6 +5,7 @@ from django.db.models import F
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader
+from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import format_html
 from django.views.generic import TemplateView, ListView
@@ -263,6 +264,11 @@ class ForceContestMixin(object):
     def contest(self):
         return self._contest
 
+    def access_check(self, request):
+        if not request.user.has_perm('judge.see_private_contest') and (not self.contest.is_public or \
+                self.contest.start_time > timezone.now()):
+            raise Http404()
+
     def get(self, request, *args, **kwargs):
         if 'contest' not in kwargs:
             raise ImproperlyConfigured('Must pass a contest')
@@ -270,9 +276,6 @@ class ForceContestMixin(object):
             self._contest = Contest.objects.get(key=kwargs['contest'])
         except Problem.DoesNotExist:
             raise Http404()
-        else:
-            if not self._contest.is_public and not request.user.has_perm('judge.see_private_contest'):
-                raise Http404()
         return super(ForceContestMixin, self).get(request, *args, **kwargs)
 
 
