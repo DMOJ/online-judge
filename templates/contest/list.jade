@@ -62,7 +62,7 @@ block body
                             a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}
                         td
                             if not IN_CONTEST
-                                a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}') Join
+                                a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}', style='display:inline;padding-left:30%;padding-right:30%') Join
         br
         .dashed
         
