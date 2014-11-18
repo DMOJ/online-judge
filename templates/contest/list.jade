@@ -34,6 +34,36 @@ block media
         });
 
 block body
+    if current_contests
+        br
+        h3 Ongoing Contests
+        br
+        table.contest-list.table.striped
+            thead
+                tr
+                    th(style='width:90%') Name
+                    th Time limit
+                    th Rankings
+                    th
+            tbody
+                each contest in current_contests
+                    tr
+                        td
+                            div(style='position:relative')
+                                a(href='{% url "contest_view" contest.key %}')= contest.name
+                                if contest.start_time
+                                    br
+                                    if contest.time_before_end
+                                        span.time Ending in&nbsp;
+                                        span.time.time-remaining #{contest.time_before_end|timedelta:"simple"}
+                                    .time.floating-time #{contest.end_time|date:"N j, o, G:i"}
+                        td #{contest.time_limit}
+                        td
+                            a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}
+                        td
+                            if not IN_CONTEST
+                                a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}') Join
+        
     br
     h3 Upcoming Contests
     br
@@ -59,33 +89,7 @@ block body
     else
         i There are no scheduled contests at this time.
 
-    br
-    h3 Ongoing Contests
-    br
-    if current_contests
-        table.contest-list.table.striped
-            thead
-                tr
-                    th(style='width:90%') Name
-                    th Time limit
-                    th Rankings
-            tbody
-                each contest in current_contests
-                    tr
-                        td
-                            div(style='position:relative')
-                                a(href='{% url "contest_view" contest.key %}')= contest.name
-                                if contest.start_time
-                                    br
-                                    if contest.time_before_end
-                                        span.time Ending in&nbsp;
-                                        span.time.time-remaining #{contest.time_before_end|timedelta:"simple"}
-                                    .time.floating-time #{contest.end_time|date:"N j, o, G:i"}
-                        td #{contest.time_limit}
-                        td
-                            a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}
-    else
-        i There are no scheduled contests at this time.
+
 
     br
     hr.dashed
