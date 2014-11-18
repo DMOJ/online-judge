@@ -74,7 +74,7 @@ block body
                 .user-gravatar
                     img(src='{% gravatar_url user.user.email 135 %}', alt='gravatar')    
                 br
-                h4 #{user.problems} problems solved.
+                h4 #{user.solved_problems} problems solved.
                 b Total points:&nbsp;
                 | #{user.calculate_points}
                 br
