@@ -17,7 +17,7 @@ function count_down(label) {
     }
 
     var timer = setInterval(function () {
-        var time = Math.floor(initial - (Date.now() - start) / 1000);
+        var time = Math.round(initial - (Date.now() - start) / 1000);
         if (time <= 0)
             clearInterval(timer);
         var d = Math.floor(time / 86400);
