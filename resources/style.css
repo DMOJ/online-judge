@@ -49,8 +49,9 @@ hr {
     padding: 0
 }
 
-/* hr */ .dashed {
-  border-bottom: 1px dashed #CCC;
+/* hr */
+.dashed {
+    border-bottom: 1px dashed #CCC;
 }
 
 .table {
@@ -82,7 +83,7 @@ hr {
 }
 
 .table thead th, th {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 .table th {
@@ -240,77 +241,77 @@ h4 {
     color: #FFF
 }
 
-nav ul{
-	list-style:none none;
-	margin:0;
-	padding:0 0 0 60px
-}
-
-nav{
-	background:rgba(0,0,0,0.77);
-	text-align:left;
-	box-shadow:0 0 10px #333
-}
-
-nav ul li{
-	display:inline;
-	color:#FFF;
-	text-transform:uppercase;
-	font-size:1em;
-}
-
-nav ul li a{
-	display:inline-block;
-	text-decoration:none;
-	padding:10px 7px;
-	color:#FFF
-}
-
-nav ul li a:link{
-	color:#FFF
-}
-
-nav ul li a:hover{
-	color:#FFF;
-	background:rgba(255,255,255,0.25)
-}
-
-nav ul li a.active{
-	color:#FFF;
-	background:#2980b9
-}
-
 nav ul {
-  text-align: left;
-  display: inline;
-  margin: 0;
-  list-style: none;
+    list-style: none none;
+    margin: 0;
+    padding: 0 0 0 60px
+}
+
+nav {
+    background: rgba(0, 0, 0, 0.77);
+    text-align: left;
+    box-shadow: 0 0 10px #333
 }
 
 nav ul li {
-  position: relative;
+    display: inline;
+    color: #FFF;
+    text-transform: uppercase;
+    font-size: 1em;
+}
+
+nav ul li a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 7px;
+    color: #FFF
+}
+
+nav ul li a:link {
+    color: #FFF
+}
+
+nav ul li a:hover {
+    color: #FFF;
+    background: rgba(255, 255, 255, 0.25)
+}
+
+nav ul li a.active {
+    color: #FFF;
+    background: #2980b9
+}
+
+nav ul {
+    text-align: left;
+    display: inline;
+    margin: 0;
+    list-style: none;
+}
+
+nav ul li {
+    position: relative;
 }
 
 nav ul li ul {
-  padding: 0;
-  position: absolute;
-  left: 0;
-  display: none;
+    padding: 0;
+    position: absolute;
+    left: 0;
+    display: none;
 }
 
 nav ul li ul li a {
-	padding:8px 15px 8px 8px;	
-	font-size:0.8em;
-	display:block;
+    padding: 8px 15px 8px 8px;
+    font-size: 0.8em;
+    display: block;
 }
 
 nav ul li:hover > ul {
-  display: block;
-  background: #000;
-  color: #fff;
-	border-left:4px solid #2980b9;
-	background:rgba(0,0,0,0.77);
-	box-shadow:0 0 10px #333
+    display: block;
+    background: #000;
+    color: #fff;
+    border-left: 4px solid #2980b9;
+    background: rgba(0, 0, 0, 0.77);
+    box-shadow: 0 0 10px #333
 }
 
 hr {
@@ -387,7 +388,7 @@ a {
     font-weight: bold
 }
 
-noscript {
+noscript, #announcement {
     font-family: Arial, sans-serif;
     font-size: 111%;
     color: white;
@@ -400,6 +401,12 @@ noscript {
     position: fixed;
     border-radius: 4px;
     z-index: 100
+}
+
+#announcement {
+    bottom: -4px;
+    right: -4px;
+    padding: 5px 6px 6px 5px
 }
 
 .comment-area {
