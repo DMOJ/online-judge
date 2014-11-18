@@ -1,3 +1,4 @@
+from itertools import chain
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
@@ -68,8 +69,11 @@ class OrganizationUsers(OrganizationMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = '%s Members' % self.object.name
-        context['users'] = ranker(self.object.members.annotate(problems=Count('submission__problem', distinct=True))
-                                      .order_by('-points'))
+        context['users'] = ranker(chain(
+            self.object.members.filter(submission__points__gt=0).order_by('-points')
+                .annotate(problems=Count('submission__problem', distinct=True)),
+            self.object.members.annotate(problems=Count('submission__problem', distinct=True)).filter(problems=0),
+        ))
         context['partial'] = True
         return context
 
