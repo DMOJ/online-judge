@@ -270,6 +270,9 @@ class ForceContestMixin(object):
             self._contest = Contest.objects.get(key=kwargs['contest'])
         except Problem.DoesNotExist:
             raise Http404()
+        else:
+            if not self._contest.is_public and not request.user.has_perm('judge.see_private_contest'):
+                raise Http404()
         return super(ForceContestMixin, self).get(request, *args, **kwargs)
 
 
