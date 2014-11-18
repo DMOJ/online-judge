@@ -101,4 +101,4 @@ class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
 
     def get_result_table(self):
         return get_result_table(Submission.objects.filter(
-            problem_id=self.problem.id, contest__participation__contest_id=self.contest_id))
+            problem_id=self.problem.id, contest__participation__contest_id=self.contest.id))
