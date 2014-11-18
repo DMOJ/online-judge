@@ -355,7 +355,7 @@ class CommentVote(models.Model):
 
 class MiscConfig(models.Model):
     key = models.CharField(max_length=30, db_index=True)
-    value = models.TextField()
+    value = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.key
