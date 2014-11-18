@@ -54,7 +54,7 @@ class ContestList(TitleMixin, ListView):
             if contest.start_time is None:
                 (present if contest.ongoing else past).append(contest)
             elif contest.end_time < now:
-                    past.append(contest)
+                past.append(contest)
             elif contest.start_time > now:
                 future.append(contest)
             else:
