@@ -99,4 +99,6 @@ html(lang='en')
                 block body
             footer
                 p
+        if misc_config.announcement
+            div#announcement=misc_config['announcement']
         block bodyend
