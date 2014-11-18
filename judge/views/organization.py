@@ -3,7 +3,7 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Q
+from django.db.models import Count
 from django.http import HttpResponseRedirect, Http404
 from django.utils import timezone
 from django.views.generic import CreateView, DetailView, ListView, View, UpdateView
@@ -72,7 +72,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
         context['users'] = ranker(chain(
             self.object.members.filter(submission__points__gt=0).order_by('-points')
                 .annotate(problems=Count('submission__problem', distinct=True)),
-            self.object.members.annotate(subs=Count('submission')).filter(subs=0),
+            self.object.members.annotate(problems=Count('submission__problem', distinct=True)).filter(problems=0),
         ))
         context['partial'] = True
         return context
