@@ -49,7 +49,7 @@ class ContestList(TitleMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
         now = timezone.now()
-        past, present, future = []
+        past, present, future = [], [], []
         for contest in self.get_queryset():
             if contest.start_time is None:
                 (present if contest.ongoing else past).append(contest)
