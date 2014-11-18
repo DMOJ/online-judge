@@ -72,7 +72,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
         context['users'] = ranker(chain(
             self.object.members.filter(submission__points__gt=0).order_by('-points')
                 .annotate(problems=Count('submission__problem', distinct=True)),
-            self.object.members.annotate(subs=Count('submission')).filter(Q(subs=0) | Q(submission__points=0)),
+            self.object.members.annotate(subs=Count('submission')).filter(subs=0),
         ))
         context['partial'] = True
         return context
