@@ -160,7 +160,7 @@ class Profile(models.Model):
 
     @cached_property
     def solved_problems(self):
-        return Submission.objects.filter(user_id=self.id, points__gt=0).distinct().count()
+        return Submission.objects.filter(user_id=self.id, points__gt=0).values('problem').distinct().count()
 
     def __unicode__(self):
         # return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
