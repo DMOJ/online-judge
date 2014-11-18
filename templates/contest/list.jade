@@ -37,14 +37,14 @@ block body
     br
     h3 Upcoming Contests
     br
-    if current_contests
+    if future_contests
         table.contest-list.table.striped
             thead
                 tr
                     th(style='width:90%') Name
                     th Time limit
             tbody
-                each contest in current_contests
+                each contest in future_contests
                     tr
                         td
                             div(style='position:relative')
@@ -58,6 +58,35 @@ block body
                         td #{contest.time_limit}
     else
         i There are no scheduled contests at this time.
+
+    br
+    h3 Ongoing Contests
+    br
+    if current_contests
+        table.contest-list.table.striped
+            thead
+                tr
+                    th(style='width:90%') Name
+                    th Time limit
+                    th Rankings
+            tbody
+                each contest in current_contests
+                    tr
+                        td
+                            div(style='position:relative')
+                                a(href='{% url "contest_view" contest.key %}')= contest.name
+                                if contest.start_time
+                                    br
+                                    if contest.time_before_end
+                                        span.time Ending in&nbsp;
+                                        span.time.time-remaining #{contest.time_before_end|timedelta:"simple"}
+                                    .time.floating-time #{contest.end_time|date:"N j, o, G:i"}
+                        td #{contest.time_limit}
+                        td
+                            a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}
+    else
+        i There are no scheduled contests at this time.
+
     br
     hr.dashed
     br

@@ -42,14 +42,26 @@ class ContestList(TitleMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.has_perm('judge.see_private_contest'):
-            return Contest.objects.all()
+            return Contest.objects.order_by('-id')
         else:
-            return Contest.objects.filter(is_public=True)
+            return Contest.objects.filter(is_public=True).order_by('-id')
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
-        context['current_contests'] = self.get_queryset().filter(ongoing=True).order_by('-id')
-        context['past_contests'] = self.get_queryset().filter(ongoing=False).order_by('-id')
+        now = timezone.now()
+        past, present, future = []
+        for contest in self.get_queryset():
+            if contest.start_time is None:
+                (present if contest.ongoing else past).append(contest)
+            elif contest.end_time < now:
+                    past.append(contest)
+            elif contest.start_time > now:
+                future.append(contest)
+            else:
+                present.append(contest)
+        context['current_contests'] = present
+        context['past_contests'] = past
+        context['future_contests'] = future
         return context
 
 
