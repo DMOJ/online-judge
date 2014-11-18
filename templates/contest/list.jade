@@ -44,7 +44,7 @@ block body
                     th(style='width:90%') Name
                     th Time limit
                     th Rankings
-                    th
+                    th(style='width:5%')
             tbody
                 each contest in current_contests
                     tr
@@ -63,6 +63,7 @@ block body
                         td
                             if not IN_CONTEST
                                 a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}') Join
+        .dashed
         
     br
     h3 Upcoming Contests
