@@ -37,6 +37,12 @@ EPILOGUE = r'''
 \end{document}'''
 
 
+LATEX_REPLACE = [
+    (u'\u2190', '\leftarrow'),
+    (u'\u2192', '\rightarrow'),
+]
+
+
 def format_markdown(markdown):
     return markdown.replace('~', '$').replace(r'\_', '_')
 
@@ -60,6 +66,8 @@ def make_latex(markdown):
 
 def latex_document(title, author, fragment):
     latex = fragment.replace('\subsection{', '\section{')
+    for a, b in LATEX_REPLACE:
+        latex = latex.replace(a, b)
     return PROLOGUE % (title, author) + latex + EPILOGUE
 
 
