@@ -99,7 +99,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
             with open(cache, 'rb') as f:
                 response = HttpResponse(f.read())
         response['Content-Type'] = 'application/pdf'
-        response['Content-Disposition'] = 'attachment; filename=%s.pdf' % problem.code
+        response['Content-Disposition'] = 'inline; filename=%s.pdf' % problem.code
         return response
 
 
