@@ -21,7 +21,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{hyperref}
 \usepackage{bookmark}
 
-\title{\Large \bf %s}
+\title{\%s \bf %s}
 \author{%s}
 \date{\vspace{-5ex}}
 
@@ -75,7 +75,7 @@ def latex_document(title, author, fragment):
     latex = fragment.replace('\subsection{', '\section{')
     for a, b in LATEX_REPLACE:
         latex = latex.replace(a, b)
-    return PROLOGUE % (title, author) + latex + EPILOGUE
+    return PROLOGUE % (['Huge', 'Large'][len(title) > 30], title, author) + latex + EPILOGUE
 
 
 class LatexPdfMaker(object):
