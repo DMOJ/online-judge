@@ -71,7 +71,10 @@ class LatexPdfMaker(object):
         self.source = source
         self.texfile = os.path.join(self.dir, 'output.tex')
         self.pdffile = os.path.join(self.dir, 'output.pdf')
-    
+
+        if isinstance(source, unicode):
+            self.source = source.encode('utf-8')
+
     def make(self):
         with open(self.texfile, 'wb') as f:
             f.write(self.source)
