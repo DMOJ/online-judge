@@ -1,3 +1,4 @@
+import logging
 from operator import attrgetter
 import os
 
@@ -76,21 +77,31 @@ class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
 class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
     model = Problem
     slug_url_kwarg = slug_field = 'code'
+    logger = logging.getLogger('judge.problem.pdf')
 
     def get(self, request, *args, **kwargs):
         if not hasattr(settings, 'PROBLEM_PDF_CACHE'):
             raise Http404()
+
         problem = self.get_object()
         cache = os.path.join(settings.PROBLEM_PDF_CACHE, '%s.pdf' % problem.code)
+
         if not os.path.exists(cache):
-            authors = ', '.join(map(attrgetter('user.username'), problem.authors.select_related('user')))
-            document = latex_document(problem.name, authors, make_latex(format_markdown(problem.description)))
-            with LatexPdfMaker(document) as latex:
-                latex.make()
-                if latex.success:
-                    os.rename(latex.pdffile, cache)
-                else:
-                    return HttpResponse(latex.log, status=500)
+            self.logger.info('Rendering: %s.pdf', problem.code)
+            try:
+                authors = ', '.join(map(attrgetter('user.username'), problem.authors.select_related('user')))
+                document = latex_document(problem.name, authors, make_latex(format_markdown(problem.description)))
+                with LatexPdfMaker(document) as latex:
+                    latex.make()
+                    if latex.success:
+                        os.rename(latex.pdffile, cache)
+                    else:
+                        return HttpResponse(latex.log, status=500)
+            except:
+                self.logger.exception('Error while rendering: %s.pdf', problem.code)
+                raise
+            else:
+                self.logger.info('Successfully rendered: %s.pdf', problem.code)
 
         if hasattr(settings, 'PROBLEM_PDF_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
             response = HttpResponse()
@@ -98,6 +109,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         else:
             with open(cache, 'rb') as f:
                 response = HttpResponse(f.read())
+
         response['Content-Type'] = 'application/pdf'
         response['Content-Disposition'] = 'inline; filename=%s.pdf' % problem.code
         return response
