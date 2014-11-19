@@ -80,6 +80,8 @@ class LatexError(Exception):
 
 class ProblemLatexView(ProblemMixin, SingleObjectMixin, View):
     def get(self, request, *args, **kwargs):
+        if not request.user.has_perm('judge.change_problem'):
+            raise Http404()
         problem = self.get_object()
         authors = ', '.join(map(attrgetter('user.username'), problem.authors.select_related('user')))
         document = latex_document(problem.name, authors, make_latex(format_markdown(problem.description)))
