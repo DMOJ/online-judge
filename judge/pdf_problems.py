@@ -38,8 +38,11 @@ EPILOGUE = r'''
 
 
 LATEX_REPLACE = [
-    (u'\u2190', '\leftarrow'),
-    (u'\u2192', '\rightarrow'),
+    (u'\u2190', r'\leftarrow'),
+    (u'\u2192', r'\rightarrow'),
+    (u'\u2264', r'\le'),
+    (u'\u2265', r'\ge'),
+    (u'\u2026', '...'),
 ]
 
 
