@@ -156,7 +156,7 @@ def leave_contest(request, key):
 
 
 ContestRankingProfile = namedtuple('ContestRankingProfile',
-                                   'id user display_rank long_display_name points problems organization')
+                                   'id user display_rank long_display_name points cumtime problems organization')
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
 
 
