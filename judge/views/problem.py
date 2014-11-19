@@ -74,6 +74,10 @@ class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
         return context
 
 
+class LatexError(Exception):
+    pass
+
+
 class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
     model = Problem
     slug_url_kwarg = slug_field = 'code'
@@ -96,7 +100,11 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                     if latex.success:
                         os.rename(latex.pdffile, cache)
                     else:
-                        return HttpResponse(latex.log, status=500)
+                        try:
+                            raise LatexError(latex.log)
+                        except LatexError:
+                            self.logger.exception('Latex error while rendering: %s.pdf', problem.code)
+                        return HttpResponse(latex.log, status=500, content_type='text/plain')
             except:
                 self.logger.exception('Error while rendering: %s.pdf', problem.code)
                 raise
