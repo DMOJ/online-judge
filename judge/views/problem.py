@@ -78,9 +78,15 @@ class LatexError(Exception):
     pass
 
 
+class ProblemLatexView(ProblemMixin, SingleObjectMixin, View):
+    def get(self, request, *args, **kwargs):
+        problem = self.get_object()
+        authors = ', '.join(map(attrgetter('user.username'), problem.authors.select_related('user')))
+        document = latex_document(problem.name, authors, make_latex(format_markdown(problem.description)))
+        return HttpResponse(document, content_type='text/plain')
+
+
 class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
-    model = Problem
-    slug_url_kwarg = slug_field = 'code'
     logger = logging.getLogger('judge.problem.pdf')
 
     def get(self, request, *args, **kwargs):
