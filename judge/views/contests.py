@@ -1,5 +1,6 @@
 
 from collections import namedtuple
+from operator import attrgetter
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -192,6 +193,7 @@ def contest_ranking_list(contest, problems):
             display_rank=SimpleLazyObject(lambda: contest_profile.user.display_rank),
             long_display_name=SimpleLazyObject(lambda: contest_profile.user.long_display_name),
             points=participation.score,
+            cumtime=participation.cumtime,
             organization=SimpleLazyObject(lambda: contest_profile.user.organization),
             problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.user, participation))
         )
@@ -215,7 +217,7 @@ def contest_ranking_ajax(request, key):
 def contest_ranking_view(request, contest):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description'))
     return render_to_response('contest/ranking.jade', {
-        'users': ranker(contest_ranking_list(contest, problems)),
+        'users': ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')),
         'title': '%s Rankings' % contest.name,
         'content_title': contest.name,
         'subtitle': 'Rankings',

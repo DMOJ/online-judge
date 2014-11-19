@@ -1,11 +1,15 @@
-def ranker(iterable):
+from operator import attrgetter
+
+
+def ranker(iterable, key=attrgetter('points')):
     rank = 0
     delta = 1
-    last = -1
+    last = None
     for item in iterable:
-        if item.points != last:
+        new = key(item)
+        if new != last:
             rank += delta
             delta = 0
         delta += 1
         yield rank, item
-        last = round(item.points, 1)
+        last = key(item)
