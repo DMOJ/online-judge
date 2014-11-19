@@ -21,7 +21,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{hyperref}
 \usepackage{bookmark}
 
-\title{\Huge \bf %s}
+\title{\Large \bf %s}
 \author{%s}
 \date{\vspace{-5ex}}
 
