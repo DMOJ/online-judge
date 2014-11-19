@@ -1,3 +1,7 @@
+from operator import attrgetter
+import os
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
@@ -5,12 +9,14 @@ from django.db.models import Count
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils.functional import SimpleLazyObject, cached_property
-from django.views.generic import ListView
+from django.utils.functional import cached_property
+from django.views.generic import ListView, View
+from django.views.generic.detail import SingleObjectMixin
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile
+from judge.pdf_problems import make_latex, format_markdown, latex_document, LatexPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
 
@@ -22,17 +28,12 @@ def get_contest_problem(problem, profile):
         return None
 
 
-class ProblemDetail(TitleMixin, CommentedDetailView):
+class ProblemMixin(object):
     model = Problem
-    context_object_name = 'problem'
-    template_name = 'problem/problem.jade'
     slug_url_kwarg = slug_field = 'code'
 
-    def get_comment_page(self):
-        return 'p:%s' % self.object.code
-
     def get_object(self, queryset=None):
-        problem = super(ProblemDetail, self).get_object(queryset)
+        problem = super(ProblemMixin, self).get_object(queryset)
         if not problem.is_public and not self.request.user.has_perm('judge.see_private_problem'):
             if self.request.user.is_authenticated():
                 cp = self.request.user.profile.contest
@@ -42,6 +43,14 @@ class ProblemDetail(TitleMixin, CommentedDetailView):
             else:
                 raise Http404()
         return problem
+
+
+class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
+    context_object_name = 'problem'
+    template_name = 'problem/problem.jade'
+
+    def get_comment_page(self):
+        return 'p:%s' % self.object.code
 
     def get(self, request, *args, **kwargs):
         try:
@@ -62,6 +71,35 @@ class ProblemDetail(TitleMixin, CommentedDetailView):
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         return context
+
+
+class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
+    model = Problem
+    slug_url_kwarg = slug_field = 'code'
+
+    def get(self, request, *args, **kwargs):
+        if not hasattr(settings, 'PROBLEM_PDF_CACHE'):
+            raise Http404()
+        problem = self.get_object()
+        cache = os.path.join(settings.PROBLEM_PDF_CACHE, '%s.pdf' % problem.code)
+        if not os.path.exists(cache):
+            authors = ', '.join(map(attrgetter('user.username'), problem.authors.select_related('user')))
+            document = latex_document(problem.name, authors, make_latex(format_markdown(problem.description)))
+            with LatexPdfMaker(document) as latex:
+                latex.make()
+                if latex.success:
+                    os.rename(latex.pdffile, cache)
+                else:
+                    return HttpResponse(latex.log, status=500)
+
+        if hasattr(settings, 'PROBLEM_PDF_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
+            response = HttpResponse()
+            response['X-Accel-Redirect'] = '/%s/%s.pdf' % (settings.PROBLEM_PDF_INTERNAL, problem.code)
+        else:
+            with open(cache, 'rb') as f:
+                response = HttpResponse(f.read())
+        response['Content-Disposition'] = 'attachment; filename=%s.pdf' % problem.code
+        return response
 
 
 class ProblemList(TitleMixin, ListView):

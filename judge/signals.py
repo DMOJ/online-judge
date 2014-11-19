@@ -1,7 +1,12 @@
+import os
+import errno
+
+from django.conf import settings
 from django.core.cache.utils import make_template_fragment_key
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.cache import cache
+
 from .models import Problem, Contest, Submission, Organization, Profile, NavigationBar, MiscConfig, Language, Judge, \
     BlogPost, ContestSubmission
 from .caching import update_submission, finished_submission
@@ -11,6 +16,12 @@ from .caching import update_submission, finished_submission
 def problem_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('problem_html', (instance.id,)))
     cache.delete(make_template_fragment_key('submission_problem', (instance.id,)))
+    if hasattr(settings, 'PROBLEM_PDF_CACHE'):
+        try:
+            os.unlink(os.path.join(settings.PROBLEM_PDF_CACHE, '%s.pdf' % instance.code))
+        except OSError as e:
+            if e.errno != errno.ENOENT:
+                raise
 
 
 @receiver(post_save, sender=Profile)
