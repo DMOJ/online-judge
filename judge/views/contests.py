@@ -207,7 +207,7 @@ def contest_ranking_ajax(request, key):
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description'))
     return render_to_response('contest/ranking_table.jade', {
-        'users': ranker(contest_ranking_list(contest, problems)),
+        'users': ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')),
         'problems': problems,
         'contest': contest,
         'show_organization': True,
