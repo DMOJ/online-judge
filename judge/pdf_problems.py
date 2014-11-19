@@ -48,6 +48,8 @@ def make_latex(markdown):
         return proc.communicate(markdown)[0]
     else:
         # Sorry, but can't install haskell on openshift.
+        if isinstance(markdown, unicode):
+            markdown = markdown.encode('utf-8')
         stream = urllib2.urlopen('http://johnmacfarlane.net/cgi-bin/trypandoc?%s' % urllib.urlencode({
             'from': 'markdown', 'to': 'latex', 'text': markdown
         }))
