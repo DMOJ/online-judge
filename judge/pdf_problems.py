@@ -75,7 +75,7 @@ def latex_document(title, author, fragment):
     latex = fragment.replace('\subsection{', '\section{')
     for a, b in LATEX_REPLACE:
         latex = latex.replace(a, b)
-    return PROLOGUE % (['Huge', 'Large'][len(title) > 30], title, author) + latex + EPILOGUE
+    return PROLOGUE % (['Huge', 'LARGE'][len(title) > 30], title, author) + latex + EPILOGUE
 
 
 class LatexPdfMaker(object):
