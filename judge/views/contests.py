@@ -172,12 +172,13 @@ def get_best_contest_solutions(problems, profile, participation):
             solutions.append(None)
             continue
         time = queryset.filter(points__gt=0).annotate(time=Max('submission__date'))
+        best = solution[0]['best']
         solutions.append(BestSolutionData(
             code=problem.problem.code,
-            points=solution[0]['best'],
+            points=best,
             time=time[0]['time'] - participation.start if time else 0,
-            state='failed-score' if not solution['best'] else
-                  ('full-score' if solution['best'] == problem.points else 'partial-score'),
+            state='failed-score' if not best else
+                  ('full-score' if best == problem.points else 'partial-score'),
         ))
     return solutions
 
