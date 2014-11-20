@@ -525,8 +525,8 @@ class ContestParticipation(models.Model):
         profile_id = self.profile.user_id
         for problem in self.contest.contest_problems.all():
             assert isinstance(problem, ContestProblem)
-            solution = problem.submissions.filter(submission__user_id=profile_id).values('submission__user_id') \
-                .annotate(time=Max('submission__date'))
+            solution = problem.submissions.filter(submission__user_id=profile_id, points__gt=0)\
+                .values('submission__user_id').annotate(time=Max('submission__date'))
             if not solution:
                 continue
             dt = solution[0]['time'] - self.start

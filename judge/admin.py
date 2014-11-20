@@ -401,13 +401,31 @@ class ContestAdmin(admin.ModelAdmin):
 
 
 class ContestParticipationAdmin(admin.ModelAdmin):
-    """For developer use only."""
     fields = ('contest', 'profile', 'start')
     list_display = ('contest', 'username', 'start')
+    actions = ['recalculate_points', 'recalculate_cumtime']
+    actions_on_bottom = actions_on_top = True
+    search_fields = ('contest__key', 'contest__name', 'profile__user__user__username', 'profile__user__name')
 
-    @staticmethod
-    def username(obj):
+    def username(self, obj):
         return obj.profile.user.display_name
+    username.admin_order_field = 'profile__user__user__username'
+
+    def recalculate_points(self, request, queryset):
+        count = 0
+        for participation in queryset:
+            participation.recalculate_score()
+            count += 1
+        self.message_user(request, "%d participation%s have scores recalculated." % (count, 's'[count == 1:]))
+    recalculate_points.short_description = 'Recalculate scores'
+
+    def recalculate_cumtime(self, request, queryset):
+        count = 0
+        for participation in queryset:
+            participation.update_cumtime()
+            count += 1
+        self.message_user(request, "%d participation%s have times recalculated." % (count, 's'[count == 1:]))
+    recalculate_cumtime.short_description = 'Recalculate cumulative time'
 
 
 class OrganizationAdmin(admin.ModelAdmin):
