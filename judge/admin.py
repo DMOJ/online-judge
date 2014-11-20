@@ -199,6 +199,10 @@ class SubmissionAdmin(admin.ModelAdmin):
             if not submission.problem.partial and submission.points < submission.problem.points:
                 submission.points = 0
             submission.save()
+
+        for profile in Profile.objects.filter(id__in=queryset.values_list('user_id', flat=True).distinct()):
+            profile.calculate_points()
+
         self.message_user(request, '%d submission%s were successfully rescored.' %
                           (len(submissions), 's'[len(submissions) == 1:]))
     recalculate_score.short_description = 'Rescore the selected submissions'
