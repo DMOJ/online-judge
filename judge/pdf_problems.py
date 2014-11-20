@@ -51,7 +51,7 @@ LATEX_REPLACE = [
 
 
 def format_markdown(markdown):
-    return markdown.replace('~', '$').replace(r'\_', '_')
+    return markdown.replace('~', '$').replace(r'\(', '$').replace(r'\)', '$').replace(r'\_', '_')
 
 
 def make_latex(markdown):
