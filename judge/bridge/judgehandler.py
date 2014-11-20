@@ -57,6 +57,8 @@ class JudgeHandler(ZlibPacketHandler):
 
     def on_close(self):
         self._to_kill = False
+        if self._no_response_job:
+            self.server.unschedule(self._no_response_job)
         self.server.judges.remove(self)
         if self.name is not None:
             self._disconnected()
