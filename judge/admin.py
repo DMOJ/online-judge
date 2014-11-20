@@ -194,7 +194,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         submissions = list(queryset.select_related('problem').only('points', 'case_points', 'case_total',
                                                                    'problem__partial', 'problem__points'))
         for submission in submissions:
-            submission.points = round(submission.case_points / submission.case_total, 1)
+            submission.points = round(submission.case_points / submission.case_total if submission.case_total else 0, 1)
             if not submission.problem.partial and submission.points < submission.problem.points:
                 submission.points = 0
             submission.save()
