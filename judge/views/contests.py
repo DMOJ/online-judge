@@ -1,6 +1,7 @@
 
 from collections import namedtuple
 from operator import attrgetter
+from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -176,7 +177,7 @@ def get_best_contest_solutions(problems, profile, participation):
         solutions.append(BestSolutionData(
             code=problem.problem.code,
             points=best,
-            time=time[0]['time'] - participation.start if time else 0,
+            time=time[0]['time'] - participation.start if time else timedelta(seconds=0),
             state='failed-score' if not best else
                   ('full-score' if best == problem.points else 'partial-score'),
         ))
