@@ -148,7 +148,7 @@ class SubmissionResultFilter(admin.SimpleListFilter):
 class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date')
     fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result')
-    actions = ['judge']
+    actions = ('judge', 'recalculate_score')
     list_display = ('id', 'problem_code', 'problem_name', 'user', 'execution_time', 'pretty_memory',
                     'points', 'language', 'status', 'result', 'judge_column')
     list_filter = ('language', SubmissionStatusFilter, SubmissionResultFilter)
@@ -170,12 +170,10 @@ class SubmissionAdmin(admin.ModelAdmin):
             successful += model.judge()
         self.message_user(request, '%d submission%s were successfully scheduled for rejudging.' %
                           (successful, 's'[successful == 1:]))
-
     judge.short_description = 'Rejudge the selected submissions'
 
     def execution_time(self, obj):
         return round(obj.time, 2) if obj.time is not None else 'None'
-
     execution_time.admin_order_field = 'time'
 
     def pretty_memory(self, obj):
@@ -186,9 +184,24 @@ class SubmissionAdmin(admin.ModelAdmin):
             return '%d KB' % memory
         else:
             return '%.2f MB' % (memory / 1024.)
-
     pretty_memory.admin_order_field = 'memory'
     pretty_memory.short_description = 'Memory Usage'
+
+    def recalculate_score(self, request, queryset):
+        if not request.user.has_perm('judge.rejudge_submission'):
+            self.message_user(request, 'You do not have the permission to rejudge submissions.', level=messages.ERROR)
+            return
+        submissions = list(queryset.select_related('problem').only('points', 'case_points', 'case_total',
+                                                                   'problem__partial', 'problem__points'))
+        for submission in submissions:
+            submission.points = round(submission.case_points / submission.case_total, 1)
+            if not submission.problem.partial and submission.points < submission.problem.points:
+                submission.points = 0
+            submission.save()
+        self.message_user(request, '%d submission%s were successfully rescored.' %
+                          (len(submissions), 's'[len(submissions) == 1:]))
+    recalculate_score.short_description = 'Rescore the selected submissions'
+
 
     def problem_code(self, obj):
         return obj.problem.code
