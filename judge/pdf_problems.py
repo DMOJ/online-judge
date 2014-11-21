@@ -24,12 +24,13 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{bookmark}
 \usepackage[pdftex]{graphicx}
 \usepackage{amssymb}
+\usepackage{ifxetex,ifluatex}
 
-\usepackage{fontspec,xltxtra,xunicode}
-\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+\usepackage[utf8]{inputenc}
 
 \usepackage{color}
 \usepackage{fancyvrb}
+\DefineShortVerb[commandchars=\\\{\}]{\|}
 
 \newenvironment{Highlighting}
     {
