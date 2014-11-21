@@ -34,7 +34,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \makeatother
 
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
+
 \newenvironment{Shaded}{}{}
 \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
@@ -51,8 +51,8 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
 \newcommand{\NormalTok}[1]{{#1}}
 \ifxetex
-  \usepackage[setpagesize=false, % page size defined by xetex
-              unicode=false, % unicode breaks when used with xetex
+  \usepackage[setpagesize=false,
+              unicode=false,
               xetex,
               colorlinks=true,
               linkcolor=blue]{hyperref}
@@ -64,7 +64,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \hypersetup{breaklinks=true, pdfborder={0 0 0}}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt plus 2pt minus 1pt}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setlength{\emergencystretch}{3em}
 \setcounter{secnumdepth}{0}
 
 \EndDefineVerbatimEnvironment{Highlighting}
