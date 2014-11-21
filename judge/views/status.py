@@ -13,14 +13,14 @@ __all__ = ['status_all', 'status_table']
 
 def status_all(request):
     return render_to_response('judge_status.jade', {
-        'judges': Judge.objects.all().order_by('load'),
+        'judges': Judge.objects.order_by('-online', 'load'),
         'title': 'Status',
     }, context_instance=RequestContext(request))
 
 
 def status_table(request):
     return render_to_response('judge_status_table.jade', {
-        'judges': Judge.objects.all().order_by('load'),
+        'judges': Judge.objects.order_by('-online', 'load'),
     }, context_instance=RequestContext(request))
 
 
