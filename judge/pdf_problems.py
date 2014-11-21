@@ -23,17 +23,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{hyperref}
 \usepackage{bookmark}
 \usepackage[pdftex]{graphicx}
-\usepackage{listings}
-
-\title{\%s \bf %s}
-\author{%s}
-\date{\vspace{-5ex}}
-
-\makeatletter
-\renewcommand\@seccntformat[1]{\large}
-\makeatother
-
-\usepackage{amssymb,amsmath}
+\usepackage{amssymb}
 \usepackage{ifxetex,ifluatex}
 \ifxetex
   \usepackage{fontspec,xltxtra,xunicode}
@@ -83,6 +73,14 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \setcounter{secnumdepth}{0}
 
 \EndDefineVerbatimEnvironment{Highlighting}
+
+\title{\%s \bf %s}
+\author{%s}
+\date{\vspace{-5ex}}
+
+\makeatletter
+\renewcommand\@seccntformat[1]{\large}
+\makeatother
 
 \begin{document}
 \maketitle
