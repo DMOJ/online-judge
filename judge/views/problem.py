@@ -74,7 +74,7 @@ class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
         return context
 
 
-class ProblemEdit(ProblemMixin, UpdateView):
+class ProblemEdit(ProblemMixin, TitleMixin, UpdateView):
     template_name = 'problem/edit.jade'
     form_class = ProblemEditForm
 
