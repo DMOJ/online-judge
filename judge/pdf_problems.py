@@ -20,6 +20,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{amsfonts}
 \usepackage{hyperref}
 \usepackage{bookmark}
+\usepackage[pdftex]{graphicx}  
 
 \title{\%s \bf %s}
 \author{%s}
