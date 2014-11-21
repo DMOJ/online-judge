@@ -23,7 +23,6 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{hyperref}
 \usepackage{bookmark}
 \usepackage[pdftex]{graphicx}
-\usepackage{listings}
 
 \title{\%s \bf %s}
 \author{%s}
@@ -36,6 +35,8 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \begin{document}
 \maketitle
 '''
+
+# \usepackage{listings}
 
 EPILOGUE = r'''
 \end{document}'''
