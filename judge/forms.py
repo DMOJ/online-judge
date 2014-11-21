@@ -6,7 +6,7 @@ from django.forms import ModelForm
 from django_ace import AceWidget
 from judge.comments import valid_comment_page
 from judge.models import Organization
-from .models import Profile, Submission, Comment
+from .models import Profile, Submission, Comment, Problem
 
 
 class ProfileForm(ModelForm):
@@ -68,3 +68,13 @@ class EditOrganizationForm(ModelForm):
 class NewOrganizationForm(EditOrganizationForm):
     class Meta(EditOrganizationForm.Meta):
         fields = ['key'] + EditOrganizationForm.Meta.fields
+
+
+class ProblemEditForm(ModelForm):
+    class Meta:
+        model = Problem
+        fields = ['name', 'is_public', 'authors', 'types', 'group', 'description', 'time_limit',
+                  'memory_limit', 'points', 'partial', 'allowed_languages']
+        widgets = {
+            'authors': FilteredSelectMultiple('Authors', False)
+        }

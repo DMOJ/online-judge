@@ -1,0 +1,23 @@
+extends base
+- load staticfiles
+
+block media
+    script(type='text/javascript')
+        window.django = {jQuery: $};
+        function pluralidx(count) { return (count == 1) ? 0 : 1; }
+        function gettext(msgid) { return msgid; }
+        function interpolate(fmt, obj, named) {
+            if (named) {
+                return fmt.replace(/%\(\w+\)s/g, function(match) {return String(obj[match.slice(2,-2)])});
+            } else {
+                return fmt.replace(/%s/g, function(match) {return String(obj.shift())});
+            }
+        }
+    link(rel='stylesheet', href='{% static "admin/css/widgets.css" %}', type='text/css')
+    | #{form.media}
+
+block body
+    form.form-area(action='', method='post')
+        - csrf_token
+        table(border=0, style='text-align:left') #{form.as_table}
+        button(type='submit') Save

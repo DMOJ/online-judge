@@ -11,11 +11,11 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.functional import cached_property
-from django.views.generic import ListView, View
+from django.views.generic import ListView, View, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 
 from judge.comments import CommentedDetailView
-from judge.forms import ProblemSubmitForm
+from judge.forms import ProblemSubmitForm, ProblemEditForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile
 from judge.pdf_problems import make_latex, format_markdown, latex_document, LatexPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
@@ -72,6 +72,29 @@ class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         return context
+
+
+class ProblemEdit(ProblemMixin, UpdateView):
+    template_name = 'problem/edit.jade'
+    form_class = ProblemEditForm
+
+    def get_title(self):
+        return 'Editing %s' % self.object.name
+
+    def get_object(self, queryset=None):
+        problem = super(ProblemEdit, self).get_object()
+        if not self.request.user.has_perm('judge.edit_own_problem'):
+            raise PermissionDenied()
+        if not problem.authors.filter(id=self.request.user.profile.id).exists():
+            raise PermissionDenied()
+        return problem
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super(ProblemEdit, self).dispatch(request, *args, **kwargs)
+        except PermissionDenied:
+            return generic_message(request, "Can't edit problem",
+                                   'You are not allowed to edit this problem.')
 
 
 class LatexError(Exception):

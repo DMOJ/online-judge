@@ -220,6 +220,7 @@ class Problem(models.Model):
     class Meta:
         permissions = (
             ('see_private_problem', 'See hidden problems'),
+            ('edit_own_problem', 'Edit own problems'),
         )
 
 
