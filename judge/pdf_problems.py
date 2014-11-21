@@ -44,7 +44,6 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
     \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
   \else
     \usepackage[utf8]{inputenc}
-    \usepackage{eurosym}
   \fi
 \fi
 \usepackage{color}
