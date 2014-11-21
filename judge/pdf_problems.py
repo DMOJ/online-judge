@@ -25,6 +25,16 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage[pdftex]{graphicx}
 \usepackage{amssymb}
 \usepackage{ifxetex,ifluatex}
+
+\title{\%s \bf %s}
+\author{%s}
+\date{\vspace{-5ex}}
+
+\makeatletter
+\renewcommand\@seccntformat[1]{\large}
+\makeatother
+
+\begin{document}
 \ifxetex
   \usepackage{fontspec,xltxtra,xunicode}
   \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
@@ -73,16 +83,6 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \setcounter{secnumdepth}{0}
 
 \EndDefineVerbatimEnvironment{Highlighting}
-
-\title{\%s \bf %s}
-\author{%s}
-\date{\vspace{-5ex}}
-
-\makeatletter
-\renewcommand\@seccntformat[1]{\large}
-\makeatother
-
-\begin{document}
 \maketitle
 '''
 
