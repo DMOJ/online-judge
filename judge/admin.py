@@ -2,6 +2,7 @@ from operator import itemgetter, attrgetter
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.core.cache import cache
 from django.db.models import TextField, ManyToManyField, Q
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
@@ -202,11 +203,11 @@ class SubmissionAdmin(admin.ModelAdmin):
 
         for profile in Profile.objects.filter(id__in=queryset.values_list('user_id', flat=True).distinct()):
             profile.calculate_points()
+            cache.delete('user_complete:%d' % profile.id)
 
         self.message_user(request, '%d submission%s were successfully rescored.' %
                           (len(submissions), 's'[len(submissions) == 1:]))
     recalculate_score.short_description = 'Rescore the selected submissions'
-
 
     def problem_code(self, obj):
         return obj.problem.code
