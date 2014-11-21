@@ -133,9 +133,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                 document = latex_document(problem.name, authors, make_latex(format_markdown(problem.description)))
                 with LatexPdfMaker(document) as latex:
                     latex.make()
-                    if latex.success:
-                        os.rename(latex.pdffile, cache)
-                    else:
+                    if not latex.success:
                         try:
                             raise LatexError(latex.log)
                         except LatexError:
@@ -144,6 +142,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                             with open(error_cache, 'wb') as f:
                                 f.write(latex.log)
                             return HttpResponse(latex.log, status=500, content_type='text/plain')
+                    os.rename(latex.pdffile, cache)
             except:
                 self.logger.exception('Error while rendering: %s.pdf', problem.code)
                 raise
