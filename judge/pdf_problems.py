@@ -80,7 +80,7 @@ def latex_document(title, author, fragment):
         latex = latex.replace(a, b)
     for m in refilename.finditer(latex):
         path = m.group(1)
-        latex = latex.replace(m.group(0), r'''\write18{wget %s}
+        latex = latex.replace(m.group(0), r'''\write18{curl -O %s}
     \includegraphics{%s}
     ''' % (path, path[path.rfind('/') + 1:]))
 
