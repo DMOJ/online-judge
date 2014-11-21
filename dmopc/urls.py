@@ -6,7 +6,8 @@ from judge.views import organization, language, status, blog, problem
 from judge.ordered_model import urls as ordered_model_urls
 
 from judge.views import RegistrationView, ActivationView, TemplateView
-from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap
+from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap, \
+    BlogPostSitemap
 
 admin.autodiscover()
 
@@ -160,6 +161,7 @@ urlpatterns = patterns('',
         'home': HomePageSitemap,
         'contest': ContestSitemap,
         'organization': OrganizationSitemap,
+        'blog': BlogPostSitemap,
         'pages': UrlSitemap([
             {'location': '/about/', 'priority': 0.9},
         ]),
