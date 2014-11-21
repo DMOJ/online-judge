@@ -40,7 +40,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{fancyvrb}
 \DefineShortVerb[commandchars=\\\{\}]{\|}
 
-\newenvironment{Highlighting}{}{}
+\newenvironment{Highlighting}{\hypersetup{breaklinks=true, pdfborder={0 0 0}}\setlength{\parindent}{0pt}\setlength{\parskip}{6pt plus 2pt minus 1pt}\setlength{\emergencystretch}{3em}\setcounter{secnumdepth}{0}}{}
 \newenvironment{Shaded}{}{}
 \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
@@ -67,11 +67,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
               colorlinks=true,
               linkcolor=blue]{hyperref}
 \fi
-\hypersetup{breaklinks=true, pdfborder={0 0 0}}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-\setlength{\emergencystretch}{3em}
-\setcounter{secnumdepth}{0}
+
 
 \title{\%s \bf %s}
 \author{%s}
