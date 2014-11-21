@@ -41,13 +41,13 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \DefineShortVerb[commandchars=\\\{\}]{\|}
 
 \newenvironment{Highlighting}
-    {
-        \VerbatimEnvironment
+    {    
         \hypersetup{breaklinks=true, pdfborder={0 0 0}}
         \setlength{\parindent}{0pt}
         \setlength{\parskip}{6pt plus 2pt minus 1pt}
         \setlength{\emergencystretch}{3em}
         \setcounter{secnumdepth}{0}
+        \VerbatimEnvironment
         \begin{Verbatim}
     }
     {\end{Verbatim}
