@@ -1,12 +1,19 @@
 from operator import attrgetter
+
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
+
 from django_ace import AceWidget
 from judge.comments import valid_comment_page
 from judge.models import Organization
 from .models import Profile, Submission, Comment, Problem
+
+try:
+    from pagedown.widgets import PagedownWidget
+except ImportError:
+    PagedownWidget = None
 
 
 class ProfileForm(ModelForm):
@@ -63,6 +70,8 @@ class EditOrganizationForm(ModelForm):
         widgets = {
             'admins': FilteredSelectMultiple('Admins', False)
         }
+        if PagedownWidget is not None:
+            widgets['about'] = PagedownWidget
 
 
 class NewOrganizationForm(EditOrganizationForm):
@@ -80,3 +89,5 @@ class ProblemEditForm(ModelForm):
             'types': FilteredSelectMultiple('Problem types', False),
             'allowed_languages': FilteredSelectMultiple('Allowed languages', False),
         }
+        if PagedownWidget is not None:
+            widgets['description'] = PagedownWidget
