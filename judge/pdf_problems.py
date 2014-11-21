@@ -48,9 +48,9 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
         \setlength{\emergencystretch}{3em}
         \setcounter{secnumdepth}{0}
         \VerbatimEnvironment
-        \begin{Verbatim}
+        \begin{Verbatim}[commandchars=\\\{\}]\%
     }
-    {\end{Verbatim}}{commandchars=\\\{\}}
+    {\end{Verbatim}}
 \newenvironment{Shaded}{}{}
 \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
