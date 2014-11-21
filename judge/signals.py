@@ -22,6 +22,11 @@ def problem_update(sender, instance, **kwargs):
         except OSError as e:
             if e.errno != errno.ENOENT:
                 raise
+        try:
+            os.unlink(os.path.join(settings.PROBLEM_PDF_CACHE, '%s.log' % instance.code))
+        except OSError as e:
+            if e.errno != errno.ENOENT:
+                raise
 
 
 @receiver(post_save, sender=Profile)

@@ -96,7 +96,12 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
             raise Http404()
 
         problem = self.get_object()
+        error_cache = os.path.join(settings.PROBLEM_PDF_CACHE, '%s.log' % problem.code)
         cache = os.path.join(settings.PROBLEM_PDF_CACHE, '%s.pdf' % problem.code)
+
+        if os.path.exists(error_cache):
+            with open(error_cache) as f:
+                return HttpResponse(f.read(), status=500, content_type='text/plain')
 
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.pdf', problem.code)
@@ -112,6 +117,8 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                             raise LatexError(latex.log)
                         except LatexError:
                             self.logger.exception('Latex error while rendering: %s.pdf', problem.code)
+                        with open(error_cache, 'wb') as f:
+                            f.write(latex.log)
                         return HttpResponse(latex.log, status=500, content_type='text/plain')
             except:
                 self.logger.exception('Error while rendering: %s.pdf', problem.code)
