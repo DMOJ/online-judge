@@ -24,21 +24,14 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{bookmark}
 \usepackage[pdftex]{graphicx}
 \usepackage{amssymb}
-\usepackage{ifxetex,ifluatex}
 
 \usepackage[utf8]{inputenc}
 
 \usepackage{color}
 \usepackage{fancyvrb}
-\DefineShortVerb[commandchars=\\\{\}]{\|}
 
 \newenvironment{Highlighting}
     {
-        \hypersetup{breaklinks=true, pdfborder={0 0 0}}
-        \setlength{\parindent}{0pt}
-        \setlength{\parskip}{6pt plus 2pt minus 1pt}
-        \setlength{\emergencystretch}{3em}
-        \setcounter{secnumdepth}{0}
         \VerbatimEnvironment
         \begin{Verbatim}[commandchars=\\\{\}]%%
     }
