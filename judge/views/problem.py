@@ -142,7 +142,8 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                             self.logger.exception('Latex error while rendering: %s.pdf', problem.code)
                         with open(error_cache, 'wb') as f:
                             f.write(latex.log)
-                        return HttpResponse(latex.log, status=500, content_type='text/plain')
+                        if not latex.created:
+                            return HttpResponse(latex.log, status=500, content_type='text/plain')
             except:
                 self.logger.exception('Error while rendering: %s.pdf', problem.code)
                 raise

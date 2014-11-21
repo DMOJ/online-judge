@@ -118,6 +118,10 @@ class LatexPdfMaker(object):
     def success(self):
         return self.proc.returncode == 0
 
+    @property
+    def created(self):
+        return os.path.exists(self.pdffile)
+
     def __enter__(self):
         try:
             os.makedirs(self.dir)
