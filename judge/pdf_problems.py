@@ -38,12 +38,10 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \ifxetex
   \usepackage{fontspec,xltxtra,xunicode}
   \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \newcommand{\euro}{â‚¬}
 \else
   \ifluatex
     \usepackage{fontspec}
     \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-    \newcommand{\euro}{â‚¬}
   \else
     \usepackage[utf8]{inputenc}
     \usepackage{eurosym}
