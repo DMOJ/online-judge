@@ -48,7 +48,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
         \setlength{\emergencystretch}{3em}
         \setcounter{secnumdepth}{0}
         \VerbatimEnvironment
-        \begin{Verbatim}[commandchars=\\\{\}]\\%
+        \begin{Verbatim}[commandchars=\\\{\}]%%
     }
     {\end{Verbatim}}
 \newenvironment{Shaded}{}{}
