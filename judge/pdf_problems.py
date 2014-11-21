@@ -24,24 +24,15 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{bookmark}
 \usepackage[pdftex]{graphicx}
 \usepackage{amssymb}
-\usepackage{ifxetex,ifluatex}
-\ifxetex
-  \usepackage{fontspec,xltxtra,xunicode}
-  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-\else
-  \ifluatex
-    \usepackage{fontspec}
-    \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \else
-    \usepackage[utf8]{inputenc}
-  \fi
-\fi
+
+\usepackage{fontspec,xltxtra,xunicode}
+\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+
 \usepackage{color}
 \usepackage{fancyvrb}
-\DefineShortVerb[commandchars=\\\{\}]{\|}
 
 \newenvironment{Highlighting}
-    {    
+    {
         \hypersetup{breaklinks=true, pdfborder={0 0 0}}
         \setlength{\parindent}{0pt}
         \setlength{\parskip}{6pt plus 2pt minus 1pt}
@@ -66,17 +57,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \newcommand{\RegionMarkerTok}[1]{{#1}}
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
 \newcommand{\NormalTok}[1]{{#1}}
-\ifxetex
-  \usepackage[setpagesize=false,
-              unicode=false,
-              xetex,
-              colorlinks=true,
-              linkcolor=blue]{hyperref}
-\else
-  \usepackage[unicode=true,
-              colorlinks=true,
-              linkcolor=blue]{hyperref}
-\fi
+
 
 
 \title{\%s \bf %s}
