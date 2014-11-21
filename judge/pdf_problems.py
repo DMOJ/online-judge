@@ -104,7 +104,7 @@ class LatexPdfMaker(object):
             f.write(self.source)
         self.proc = subprocess.Popen([
             getattr(settings, 'PDFLATEX_PATH', 'pdflatex'), '--shell-escape', '-interaction', 'nonstopmode',
-            '-halt-on-error', '-file-line-error', 'output.tex'
+            '-file-line-error', 'output.tex'
         ], stdout=subprocess.PIPE, cwd=self.dir)
         self.log = self.proc.communicate()[0]
 
