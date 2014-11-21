@@ -50,7 +50,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
         \VerbatimEnvironment
         \begin{Verbatim}
     }
-    {\end{Verbatim}
+    {\end{Verbatim}}
 \newenvironment{Shaded}{}{}
 \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
