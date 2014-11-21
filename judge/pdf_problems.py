@@ -75,16 +75,18 @@ def make_latex(markdown):
         return result['result']
 
 
+def wget_graphics(match):
+    path = match.group(1)
+    return r'''\immediate\write18{wget %s}
+\includegraphics{%s}
+''' % (path, path[path.rfind('/') + 1:])
+
+
 def latex_document(title, author, fragment):
     latex = fragment.replace('\subsection{', '\section{')
     for a, b in LATEX_REPLACE:
         latex = latex.replace(a, b)
-    for m in refilename.finditer(latex):
-        path = m.group(1)
-        latex = latex.replace(m.group(0), r'''\immediate\write18{wget %s}
-    \includegraphics{%s}
-    ''' % (path, path[path.rfind('/') + 1:]))
-
+    latex = refilename.sub(wget_graphics, latex)
     return PROLOGUE % (['Huge', 'LARGE'][len(title) > 30], title.replace('#', r'\#'), author) + latex + EPILOGUE
 
 
