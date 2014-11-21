@@ -25,16 +25,6 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage[pdftex]{graphicx}
 \usepackage{amssymb}
 \usepackage{ifxetex,ifluatex}
-
-\title{\%s \bf %s}
-\author{%s}
-\date{\vspace{-5ex}}
-
-\makeatletter
-\renewcommand\@seccntformat[1]{\large}
-\makeatother
-
-\begin{document}
 \ifxetex
   \usepackage{fontspec,xltxtra,xunicode}
   \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
@@ -48,8 +38,9 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \fi
 \usepackage{color}
 \usepackage{fancyvrb}
-\DefineShortVerb[commandchars=\\\{\}]{\|}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+
+\newenvironment{Highlighting}{\begin{verbatim}}{\end{verbatim}}
+
 \newenvironment{Shaded}{}{}
 \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
@@ -82,7 +73,15 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \setlength{\emergencystretch}{3em}
 \setcounter{secnumdepth}{0}
 
-\EndDefineVerbatimEnvironment{Highlighting}
+\title{\%s \bf %s}
+\author{%s}
+\date{\vspace{-5ex}}
+
+\makeatletter
+\renewcommand\@seccntformat[1]{\large}
+\makeatother
+
+\begin{document}
 \maketitle
 '''
 
