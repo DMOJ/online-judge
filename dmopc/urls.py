@@ -101,7 +101,6 @@ urlpatterns = patterns('',
     url(r'^single_submission', 'judge.views.single_submission_query'),
     url(r'^submission_testcases', 'judge.views.submission_testcases_query'),
     url(r'^statistics_table', 'judge.views.statistics_table_query'),
-    url(r'^language_select', 'judge.views.language_select_query'),
 
     url(r'^submit/problem/$', 'judge.views.problem_submit'),
     url(r'^edit/profile/$', 'judge.views.edit_profile'),
