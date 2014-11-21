@@ -7,10 +7,12 @@ import json
 import shutil
 import subprocess
 import tempfile
+import re
 
 from django.conf import settings
 
 
+refilename = re.compile(r'\\includegraphics{(.*?)}')
 PROLOGUE = r'''\documentclass[a4paper]{article}
 
 \usepackage{fullpage}
@@ -76,6 +78,12 @@ def latex_document(title, author, fragment):
     latex = fragment.replace('\subsection{', '\section{')
     for a, b in LATEX_REPLACE:
         latex = latex.replace(a, b)
+    for m in refilename.finditer(latex):
+        path = m.group(1)
+        latex = latex.replace(m.group(0), r'''\write18{wget %s}
+    \includegraphics{%s}
+    ''' % (path, path[path.rfind('/') + 1:]))
+
     return PROLOGUE % (['Huge', 'LARGE'][len(title) > 30], title.replace('#', r'\#'), author) + latex + EPILOGUE
 
 
@@ -95,7 +103,7 @@ class LatexPdfMaker(object):
         with open(self.texfile, 'wb') as f:
             f.write(self.source)
         self.proc = subprocess.Popen([
-            getattr(settings, 'PDFLATEX_PATH', 'pdflatex'), '-interaction', 'nonstopmode',
+            getattr(settings, 'PDFLATEX_PATH', 'pdflatex'), '--shell-escape', '-interaction', 'nonstopmode',
             '-halt-on-error', '-file-line-error', 'output.tex'
         ], stdout=subprocess.PIPE, cwd=self.dir)
         self.log = self.proc.communicate()[0]
