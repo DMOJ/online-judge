@@ -22,7 +22,8 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{amsfonts}
 \usepackage{hyperref}
 \usepackage{bookmark}
-\usepackage[pdftex]{graphicx}  
+\usepackage[pdftex]{graphicx}
+\usepackage{listings}
 
 \title{\%s \bf %s}
 \author{%s}
@@ -38,7 +39,6 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 
 EPILOGUE = r'''
 \end{document}'''
-
 
 LATEX_REPLACE = [
     (u'\u2190', r'\(\leftarrow\)'),
@@ -61,7 +61,8 @@ def format_markdown(markdown):
 def make_latex(markdown):
     pandoc = getattr(settings, 'PANDOC_PATH', None)
     if pandoc is not None:
-        proc = subprocess.Popen([pandoc, '-f', 'markdown', '-t', 'latex'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        proc = subprocess.Popen([pandoc, '-f', 'markdown', '-t', 'latex'], stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE)
         return proc.communicate(markdown)[0]
     else:
         # Sorry, but can't install haskell on openshift.
@@ -106,9 +107,10 @@ class LatexPdfMaker(object):
         with open(self.texfile, 'wb') as f:
             f.write(self.source)
         self.proc = subprocess.Popen([
-            getattr(settings, 'PDFLATEX_PATH', 'pdflatex'), '--shell-escape', '-interaction', 'nonstopmode',
-            '-file-line-error', 'output.tex'
-        ], stdout=subprocess.PIPE, cwd=self.dir)
+                                         getattr(settings, 'PDFLATEX_PATH', 'pdflatex'), '--shell-escape',
+                                         '-interaction', 'nonstopmode',
+                                         '-file-line-error', 'output.tex'
+                                     ], stdout=subprocess.PIPE, cwd=self.dir)
         self.log = self.proc.communicate()[0]
 
     @property
@@ -130,6 +132,7 @@ class LatexPdfMaker(object):
 def main():
     import sys
     import argparse
+
     parser = argparse.ArgumentParser(description='Make a pdf from DMOJ problem.')
     parser.add_argument('title')
     parser.add_argument('author')
@@ -149,6 +152,7 @@ def main():
                 os.rename(latex.pdffile, args.outfile)
         else:
             print latex.log
+
 
 if __name__ == '__main__':
     main()
