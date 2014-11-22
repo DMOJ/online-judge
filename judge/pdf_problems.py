@@ -134,7 +134,7 @@ def latex_document(title, author, fragment):
     latex = latex.replace(r'\textbackslash{}ne', r'\ne')
     latex = latex.replace(r'\begin{longtable}', r'\begin{tabular}')
     latex = latex.replace(r'\end{longtable}', r'\end{tabular}')
-    latex = latex.replace(r'\tabularnewline', r'\\ \hline')
+    #latex = latex.replace(r'\tabularnewline', r'\\ \hline')
     return PROLOGUE % (['Huge', 'LARGE'][len(title) > 30], title.replace('#', r'\#'), author) + latex + EPILOGUE
 
 
