@@ -24,6 +24,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{bookmark}
 \usepackage[pdftex]{graphicx}
 \usepackage{amssymb}
+\usepackage{longtable}
 
 \usepackage[utf8]{inputenc}
 
