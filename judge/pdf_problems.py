@@ -126,6 +126,7 @@ def latex_document(title, author, fragment):
         latex = latex.replace(a, b)
     latex = refilename.sub(wget_graphics, latex)
     latex = latex.replace(r'\begin{Highlighting}[]', r'\begin{Highlighting}')
+    latex = latex.replace(r'\textbackslash{}(', r'\(')
     return PROLOGUE % (['Huge', 'LARGE'][len(title) > 30], title.replace('#', r'\#'), author) + latex + EPILOGUE
 
 
