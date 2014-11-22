@@ -88,6 +88,14 @@ LATEX_REPLACE = [
 def format_markdown(markdown):
     return markdown.replace('~', '$').replace(r'\\(', '$').replace(r'\\)', '$').replace(r'\_', '_')
 
+def pandoc_do(source, to, text):
+    stream = urllib2.urlopen('http://johnmacfarlane.net/cgi-bin/trypandoc?%s' % urllib.urlencode({
+        'from': source, 'to': to, 'text': text
+    }))
+    result = json.load(stream)
+    stream.close()
+    return result['result']
+
 
 def make_latex(markdown):
     pandoc = getattr(settings, 'PANDOC_PATH', None)
@@ -99,12 +107,9 @@ def make_latex(markdown):
         # Sorry, but can't install haskell on openshift.
         if isinstance(markdown, unicode):
             markdown = markdown.encode('utf-8')
-        stream = urllib2.urlopen('http://johnmacfarlane.net/cgi-bin/trypandoc?%s' % urllib.urlencode({
-            'from': 'markdown', 'to': 'latex', 'text': markdown
-        }))
-        result = json.load(stream)
-        stream.close()
-        return result['result']
+        # This double conversion allows for tables
+        html = pandoc_do('markdown_github', 'html', markdown)
+        return pandoc_do('html', 'latex', html)
 
 
 def wget_graphics(match):
