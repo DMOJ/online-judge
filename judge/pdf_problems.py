@@ -144,8 +144,6 @@ def latex_document(title, author, fragment):
     latex = retablebegin.sub(lambda m: r'%s\hline' % m.group(0), latex)
     latex = retable.sub(lambda m: '| %s |' % ' | '.join('p{0.1\textwidth}' for l in m.group(0)), latex)
     latex = latex.replace(r'\tabularnewline', r'\\ \hline')
-    latex = latex.replace(r'\begin{longtable}[c]', r'\begin{tabulary}{0.8\linewidth}')
-    latex = latex.replace(r'\end{longtable}', r'\end{tabulary}')
     return PROLOGUE % (['Huge', 'LARGE'][len(title) > 30], title.replace('#', r'\#'), author) + latex + EPILOGUE
 
 
