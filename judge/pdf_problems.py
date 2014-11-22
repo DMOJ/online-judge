@@ -38,7 +38,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
     {\end{Verbatim}}
 \newenvironment{Shaded}{}{}
 \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{\textbf{{#1}}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.25,0.31,0.50}{{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.25,0.31,0.50}{\textbf{{#1}}}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.56,0.56}{{#1}}}
 \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.56,0.56}{{#1}}}
 \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.56,0.56}{{#1}}}
