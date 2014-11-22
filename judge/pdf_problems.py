@@ -28,6 +28,10 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{tabularx}
 \usepackage{tabulary}
 
+\renewcommand{\arraystretch}{1.5}
+
+\usepackage[newcommands]{ragged2e}
+
 \usepackage[utf8]{inputenc}
 
 \usepackage{color}
