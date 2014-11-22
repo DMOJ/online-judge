@@ -13,14 +13,14 @@ __all__ = ['status_all', 'status_table']
 
 def status_all(request):
     return render_to_response('judge_status.jade', {
-        'judges': Judge.objects.order_by('-online', 'load'),
+        'judges': Judge.objects.all(),
         'title': 'Status',
     }, context_instance=RequestContext(request))
 
 
 def status_table(request):
     return render_to_response('judge_status_table.jade', {
-        'judges': Judge.objects.order_by('-online', 'load'),
+        'judges': Judge.objects.all(),
     }, context_instance=RequestContext(request))
 
 
@@ -44,5 +44,5 @@ class JudgeDetail(TitleMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(JudgeDetail, self).get_context_data(**kwargs)
-        context['judges'] = Judge.objects.all().order_by('load')
+        context['judges'] = Judge.objects.all()
         return context

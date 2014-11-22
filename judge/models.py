@@ -424,6 +424,9 @@ class Judge(models.Model):
     def runtime_list(self):
         return map(attrgetter('name'), self.runtimes.all())
 
+    class Meta:
+        ordering = ['-online', 'load']
+
 
 class Contest(models.Model):
     key = models.CharField(max_length=20, verbose_name='Contest id', unique=True,
