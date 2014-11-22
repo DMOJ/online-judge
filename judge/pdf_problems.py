@@ -91,7 +91,7 @@ LATEX_REPLACE = [
     (r'\gt', '>'),
 ]
 
-retable = re.compile(r'(?<=\\begin\{longtable\}\[c\])\{@\{\}(l+)@\{\}(?=\})')
+retable = re.compile(r'(?<=\\begin\{longtable\}\[c\]\{)@\{\}(l+)@\{\}(?=\})')
 retablebegin = re.compile(r'\\begin\{longtable\}\[c\]\{@\{\}l+@\{\}\}')
 
 
