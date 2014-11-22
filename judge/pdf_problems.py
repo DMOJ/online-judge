@@ -91,7 +91,7 @@ LATEX_REPLACE = [
     (r'\gt', '>'),
 ]
 
-retable = re.compile(r'(?<=\\begin\{longtable\}\[c\]\{)@\{\}(l+)@\{\}(?=\})')
+retable = re.compile(r'(?<=\\begin\{longtable\}\[c\]\{@\{\})l+(?=@\{\}\})')
 retablebegin = re.compile(r'\\begin\{longtable\}\[c\]\{@\{\}l+@\{\}\}')
 
 
@@ -142,7 +142,7 @@ def latex_document(title, author, fragment):
     latex = latex.replace(r'\textbackslash{}ge', r'\ge')
     latex = latex.replace(r'\textbackslash{}ne', r'\ne')
     latex = retablebegin.sub(lambda m: r'%s\hline' % m.group(0), latex)
-    latex = retable.sub(lambda m: '| %s |' % ' | '.join('L' for l in m.group(1)), latex)
+    latex = retable.sub(lambda m: '| %s |' % ' | '.join('p{0.1\textwidth}' for l in m.group(0)), latex)
     latex = latex.replace(r'\tabularnewline', r'\\ \hline')
     latex = latex.replace(r'\begin{longtable}[c]', r'\begin{tabulary}{0.8\linewidth}')
     latex = latex.replace(r'\end{longtable}', r'\end{tabulary}')
