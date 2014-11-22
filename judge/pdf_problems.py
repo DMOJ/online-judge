@@ -86,6 +86,8 @@ LATEX_REPLACE = [
     (r'\gt', '>'),
 ]
 
+retable = re.compile(r'(?<=\\begin\{longtable\}\[c\]\{@\{\})l+(?=@\{\}\})')
+
 
 def format_markdown(markdown):
     return markdown.replace('~', '$').replace(r'\\(', '$').replace(r'\\)', '$').replace(r'\_', '_')
@@ -135,6 +137,7 @@ def latex_document(title, author, fragment):
     latex = latex.replace(r'\textbackslash{}ne', r'\ne')
     #latex = latex.replace(r'\begin{longtable}', r'\begin{tabularx}{\linewidth}')
     #latex = latex.replace(r'\end{longtable}', r'\end{tabularx}')
+    latex = retable.sub(lambda m: ' | '.join(m.group(0)), latex)
     latex = latex.replace(r'\tabularnewline', r'\\ \hline')
     return PROLOGUE % (['Huge', 'LARGE'][len(title) > 30], title.replace('#', r'\#'), author) + latex + EPILOGUE
 
