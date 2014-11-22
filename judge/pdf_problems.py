@@ -108,7 +108,7 @@ def make_latex(markdown):
         if isinstance(markdown, unicode):
             markdown = markdown.encode('utf-8')
         # This double conversion allows for tables
-        html = pandoc_do('markdown_github', 'html', markdown)
+        html = pandoc_do('markdown_github', 'html', markdown).encode('utf-8')
         return pandoc_do('html', 'latex', html)
 
 
