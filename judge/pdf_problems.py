@@ -89,6 +89,7 @@ LATEX_REPLACE = [
 def format_markdown(markdown):
     return markdown.replace('~', '$').replace(r'\\(', '$').replace(r'\\)', '$').replace(r'\_', '_')
 
+
 def pandoc_do(source, to, text):
     stream = urllib2.urlopen('http://johnmacfarlane.net/cgi-bin/trypandoc?%s' % urllib.urlencode({
         'from': source, 'to': to, 'text': text
@@ -131,6 +132,7 @@ def latex_document(title, author, fragment):
     latex = latex.replace(r'\textbackslash{}le', r'\le')
     latex = latex.replace(r'\textbackslash{}ge', r'\ge')
     latex = latex.replace(r'\textbackslash{}ne', r'\ne')
+    latex = latex.replace(r'tabularnewline', r'\hline')
     return PROLOGUE % (['Huge', 'LARGE'][len(title) > 30], title.replace('#', r'\#'), author) + latex + EPILOGUE
 
 
@@ -150,10 +152,10 @@ class LatexPdfMaker(object):
         with open(self.texfile, 'wb') as f:
             f.write(self.source)
         self.proc = subprocess.Popen([
-            getattr(settings, 'PDFLATEX_PATH', 'pdflatex'), '--shell-escape',
-            '-interaction', 'nonstopmode',
-            '-file-line-error', 'output.tex'
-        ], stdout=subprocess.PIPE, cwd=self.dir)
+                                         getattr(settings, 'PDFLATEX_PATH', 'pdflatex'), '--shell-escape',
+                                         '-interaction', 'nonstopmode',
+                                         '-file-line-error', 'output.tex'
+                                     ], stdout=subprocess.PIPE, cwd=self.dir)
         self.log = self.proc.communicate()[0]
 
     @property
