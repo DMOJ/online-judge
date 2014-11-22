@@ -137,11 +137,11 @@ def latex_document(title, author, fragment):
     latex = latex.replace(r'\textbackslash{}le', r'\le')
     latex = latex.replace(r'\textbackslash{}ge', r'\ge')
     latex = latex.replace(r'\textbackslash{}ne', r'\ne')
-    latex = latex.replace(r'\begin{longtable}[c]', r'\begin{tabulary}{0.8\linewidth}')
-    latex = latex.replace(r'\end{longtable}', r'\end{tabulary}')
     latex = retablebegin.sub(lambda m: r'%s\hline' % m.group(0), latex)
     latex = retable.sub(lambda m: '| %s |' % ' | '.join('L' for l in m.group(0)), latex)
     latex = latex.replace(r'\tabularnewline', r'\\ \hline')
+    latex = latex.replace(r'\begin{longtable}[c]', r'\begin{tabulary}{0.8\linewidth}')
+    latex = latex.replace(r'\end{longtable}', r'\end{tabulary}')
     return PROLOGUE % (['Huge', 'LARGE'][len(title) > 30], title.replace('#', r'\#'), author) + latex + EPILOGUE
 
 
