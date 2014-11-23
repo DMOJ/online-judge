@@ -51,6 +51,7 @@ else:
             media.add_js(staticfiles_storage.url('mathjax_config.js'))
             media.add_js('//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
             media.add_js(staticfiles_storage.url('pagedown_math.js'))
+            return media
 
     class MathJaxAdminPagedownWidget(AdminPagedownWidget, MathJaxPagedownWidget):
         pass
