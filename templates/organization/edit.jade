@@ -15,6 +15,8 @@ block media
         }
     link(rel='stylesheet', href='{% static "admin/css/widgets.css" %}', type='text/css')
     | #{form.media}
+    link(rel='stylesheet', href='{% static "admin/css/pagedown.css" %}', type='text/css')
+    link(rel='stylesheet', href='{% static "problem_edit.css" %}', type='text/css')
 
 block body
     form.form-area(action='', method='post')
