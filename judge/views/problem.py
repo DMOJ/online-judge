@@ -49,6 +49,13 @@ class ProblemMixin(object):
                 raise Http404()
         return problem
 
+    def get(self, request, *args, **kwargs):
+        try:
+            return super(ProblemMixin, self).get(request, *args, **kwargs)
+        except Http404:
+            code = kwargs.get(self.slug_url_kwarg, None)
+            return generic_message(request, 'No such problem', 'Could not find a problem with the code "%s".' % code)
+
 
 class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
     context_object_name = 'problem'
@@ -56,13 +63,6 @@ class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
 
     def get_comment_page(self):
         return 'p:%s' % self.object.code
-
-    def get(self, request, *args, **kwargs):
-        try:
-            return super(ProblemDetail, self).get(request, *args, **kwargs)
-        except Http404:
-            code = kwargs.get(self.slug_url_kwarg, None)
-            return generic_message(request, 'No such problem', 'Could not find a problem with the code "%s".' % code)
 
     def get_title(self):
         return self.object.name
