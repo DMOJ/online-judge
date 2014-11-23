@@ -8,13 +8,8 @@ from django.forms import ModelForm
 
 from django_ace import AceWidget
 from judge.comments import valid_comment_page
-from judge.models import Organization
-from .models import Profile, Submission, Comment, Problem
-
-try:
-    from pagedown.widgets import PagedownWidget
-except ImportError:
-    PagedownWidget = None
+from judge.models import Organization, Profile, Submission, Comment, Problem
+from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 
 class ProfileForm(ModelForm):
@@ -90,8 +85,8 @@ class ProblemEditForm(ModelForm):
             'types': FilteredSelectMultiple('types', False),
             'allowed_languages': FilteredSelectMultiple('languages', False),
         }
-        if PagedownWidget is not None:
-            widgets['description'] = PagedownWidget
+        if MathJaxPagedownWidget is not None:
+            widgets['description'] = MathJaxPagedownWidget
 
     def __init__(self, *args, **kwargs):
         super(ProblemEditForm, self).__init__(*args, **kwargs)
