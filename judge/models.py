@@ -217,6 +217,10 @@ class Problem(models.Model):
     def get_absolute_url(self):
         return reverse('problem_detail', args=(self.code,))
 
+    @cached_property
+    def author_ids(self):
+        return self.authors.values_list('id', flat=True)
+
     class Meta:
         permissions = (
             ('see_private_problem', 'See hidden problems'),

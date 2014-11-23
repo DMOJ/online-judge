@@ -25,6 +25,10 @@ block info_float
         hr
         a(href='{% url "admin:judge_problem_change" problem.id %}') Edit problem
         br
+    elif perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids
+        hr
+        a(href='{% url "problem_edit" problem.code %}') Edit problem
+        br
     hr
     br
     if contest_problem
