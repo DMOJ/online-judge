@@ -3,6 +3,7 @@ from operator import attrgetter
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.forms import ModelForm
 
 from django_ace import AceWidget
@@ -91,3 +92,8 @@ class ProblemEditForm(ModelForm):
         }
         if PagedownWidget is not None:
             widgets['description'] = PagedownWidget
+
+    def __init__(self, *args, **kwargs):
+        super(ProblemEditForm, self).__init__(*args, **kwargs)
+        self.fields['authors'].queryset = Profile.objects.filter(Q(user__group__in=['ProblemSetter', 'Admin']) |
+                                                                 Q(user__is_superuser=True))
