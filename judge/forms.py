@@ -95,5 +95,5 @@ class ProblemEditForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProblemEditForm, self).__init__(*args, **kwargs)
-        self.fields['authors'].queryset = Profile.objects.filter(Q(user__groups__in=['ProblemSetter', 'Admin']) |
+        self.fields['authors'].queryset = Profile.objects.filter(Q(user__groups__name__in=['ProblemSetter', 'Admin']) |
                                                                  Q(user__is_superuser=True))
