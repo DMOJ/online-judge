@@ -20,12 +20,12 @@
     margin-top: 15px;
     padding: 0 15px;
     background-color: #f8f8f8;
-    color: #555555;
     overflow-y: scroll;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
     line-height: 1.5em;
     font-size: 1em;
-    width: 84%;
-    font-family: 'Segoe UI', 'Lucida Grande', Arial, sans-serif
+    width: 90%;
 }
 
 .wmd-preview a {
@@ -63,38 +63,26 @@
     max-width: 100%
 }
 
-.wmd-preview h2, .wmd-preview h3, .wmd-preview h4, .wmd-preview h5, .wmd-preview h6 {
-    font-weight: normal;
-    color: #111;
-    margin-bottom: .75em;
-    padding: 0;
-    background: 0
-}
-
-.wmd-preview h4, .wmd-preview h5, .wmd-preview h6 {
-    font-weight: bold
-}
-
-.wmd-preview h1 {
-    font-size: 2em
-}
-
 .wmd-preview h2 {
-    font-size: 1.6em;
-    margin: 0;
+    font-size: 1.5em;
+    border-radius: 4px;
+    font-weight: bold;
     padding: 0;
+    margin: 0
 }
 
 .wmd-preview h3 {
-    font-size: 1.4em
+    font-weight: 300;
+    font-size: 1.4em;
+    border-radius: 4px;
+    padding: 0;
+    margin: 0
 }
 
 .wmd-preview h4 {
-    font-size: 1em
-}
-
-.wmd-preview h5 {
-    font-size: .9em
+    font-size: 1.1em;
+    padding: 0;
+    margin: 0
 }
 
 .wmd-preview blockquote {
@@ -133,18 +121,15 @@
 }
 
 .wmd-preview pre code {
-    background-color: none;
     border: 0;
     line-height: 1em;
     margin: 0;
     padding: 0;
     background: transparent;
-    border: 0;
     font-size: 1em
 }
 
 .wmd-preview pre {
-    white-space: pre;
     white-space: pre-wrap;
     word-wrap: break-word;
     margin: 1.5em 0 1.5em 0;
@@ -201,7 +186,7 @@
 }
 
 .wmd-preview ul li, .wmd-preview ol li {
-    font-size: 14px !important
+    font-size: 14px !important;
 }
 
 .wmd-preview li p:last-child {
@@ -227,7 +212,6 @@
     vertical-align: top
 }
 
-.display-math {
-    display: block;
-    text-align: center
+.inline-related .wmd-input {
+    height: 150px
 }
