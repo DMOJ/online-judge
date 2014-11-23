@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseForbidden, Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
+from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse
+
 from judge.models import Submission
 
 

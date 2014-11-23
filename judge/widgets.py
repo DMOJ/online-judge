@@ -1,5 +1,5 @@
-from operator import methodcaller
 from django import forms
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
@@ -36,3 +36,21 @@ class CheckboxSelectMultipleWithSelectAll(forms.CheckboxSelectMultiple):
             self._all_selected = False
         return original
 
+try:
+    from pagedown.widgets import PagedownWidget, AdminPagedownWidget
+except ImportError:
+    PagedownWidget = None
+    AdminPagedownWidget = None
+    MathJaxPagedownWidget = None
+    MathJaxAdminPagedownWidget = None
+else:
+    class MathJaxPagedownWidget(PagedownWidget):
+        @property
+        def media(self):
+            media = self._media()
+            media.add_js(staticfiles_storage.url('mathjax_config.js'))
+            media.add_js('//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
+            media.add_js(staticfiles_storage.url('pagedown_math.js'))
+
+    class MathJaxAdminPagedownWidget(AdminPagedownWidget, MathJaxPagedownWidget):
+        pass

@@ -12,13 +12,7 @@ from django.utils.safestring import mark_safe
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost
-from judge.widgets import CheckboxSelectMultipleWithSelectAll
-
-
-try:
-    from pagedown.widgets import AdminPagedownWidget
-except ImportError:
-    AdminPagedownWidget = None
+from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -77,9 +71,9 @@ class ProblemAdmin(admin.ModelAdmin):
     actions_on_top = True
     actions_on_bottom = True
 
-    if AdminPagedownWidget is not None:
+    if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
+            TextField: {'widget': MathJaxAdminPagedownWidget},
         }
 
     def show_authors(self, obj):
