@@ -67,7 +67,7 @@ class EditOrganizationForm(ModelForm):
             'admins': FilteredSelectMultiple('Admins', False)
         }
         if PagedownWidget is not None:
-            widgets['about'] = PagedownWidget
+            widgets['about'] = MathJaxPagedownWidget
 
 
 class NewOrganizationForm(EditOrganizationForm):

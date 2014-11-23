@@ -395,9 +395,9 @@ class ContestAdmin(admin.ModelAdmin):
     actions_on_top = True
     actions_on_bottom = True
 
-    if AdminPagedownWidget is not None:
+    if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
+            TextField: {'widget': MathJaxAdminPagedownWidget},
         }
 
     def make_public(self, request, queryset):
@@ -449,9 +449,9 @@ class OrganizationAdmin(admin.ModelAdmin):
     actions_on_bottom = True
     filter_horizontal = ('admins',)
 
-    if AdminPagedownWidget is not None:
+    if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
+            TextField: {'widget': MathJaxAdminPagedownWidget},
         }
 
 
