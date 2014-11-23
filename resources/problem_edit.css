@@ -21,9 +21,6 @@
 
 .selector-available h2, .selector-chosen h2 {
     border: 1px solid #ccc;
-}
-
-.selector .selector-available h2 {
     background: white url(admin/img/nav-bg.gif) bottom left repeat-x;
     color: #666;
 }
