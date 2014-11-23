@@ -34,25 +34,6 @@ class ProblemSubmitForm(ModelForm):
         }
 
 
-class CommentForm(ModelForm):
-    class Meta:
-        model = Comment
-        fields = ['title', 'body', 'parent']
-        widgets = {
-            'parent': forms.HiddenInput(),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs.update({'style': 'min-width:100%', 'placeholder': 'Comment title'})
-        self.fields['body'].widget.attrs.update({'style': 'min-width:100%', 'placeholder': 'Comment body'})
-
-    def clean_page(self):
-        page = self.cleaned_data['page']
-        if not valid_comment_page(page):
-            raise ValidationError('Invalid page id: %(id)s', params={'id': page})
-
-
 class OrganizationForm(ModelForm):
     class Meta:
         model = Organization
