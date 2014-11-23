@@ -22,14 +22,6 @@
     background-color: #f8f8f8;
     color: #555555;
     overflow-y: scroll;
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    line-height: 1.5em;
-    font-size: 1em;
-    width: 585px;
-}
-
-.wmd-preview * {
     line-height: 1.5em;
     font-size: 1em;
     width: 84%;
@@ -76,7 +68,7 @@
     color: #111;
     margin-bottom: .75em;
     padding: 0;
-    background: 0;
+    background: 0
 }
 
 .wmd-preview h3, .wmd-preview h4, .wmd-preview h5, .wmd-preview h6 {
@@ -92,13 +84,13 @@
 }
 
 .wmd-preview h3 {
-    font-size: 1.2em;
+    font-size: 1.6em;
+    margin: 0;
     padding: 0;
-    margin: 0 0 -0.5em;
 }
 
 .wmd-preview h4 {
-    font-size: 1.4em;
+    font-size: 1.4em
 }
 
 .wmd-preview h5 {
@@ -145,15 +137,18 @@
 }
 
 .wmd-preview pre code {
+    background-color: none;
     border: 0;
     line-height: 1em;
     margin: 0;
     padding: 0;
     background: transparent;
+    border: 0;
     font-size: 1em
 }
 
 .wmd-preview pre {
+    white-space: pre;
     white-space: pre-wrap;
     word-wrap: break-word;
     margin: 1.5em 0 1.5em 0;
@@ -210,7 +205,7 @@
 }
 
 .wmd-preview ul li, .wmd-preview ol li {
-    font-size: 14px !important;
+    font-size: 14px !important
 }
 
 .wmd-preview li p:last-child {
@@ -236,6 +231,7 @@
     vertical-align: top
 }
 
-.inline-related .wmd-input {
-    height: 150px
+.display-math {
+    display: block;
+    text-align: center
 }
