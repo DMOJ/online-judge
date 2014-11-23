@@ -1,4 +1,4 @@
-(function () {
+(function ($) {
     if ('MathJax' in window) {
         $(window).load(function () {
             $.each(window.editors, function (id, editor) {
