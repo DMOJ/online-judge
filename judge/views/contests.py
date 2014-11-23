@@ -77,6 +77,7 @@ class ContestMixin(object):
         contest = super(ContestMixin, self).get_object(queryset)
         if self.private_check and not contest.is_public and not self.request.user.has_perm('judge.see_private_contest'):
             raise Http404()
+        return contest
 
     def dispatch(self, request, *args, **kwargs):
         try:
