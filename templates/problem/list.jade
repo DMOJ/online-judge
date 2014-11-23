@@ -53,7 +53,7 @@ block media
 
 block body
     br
-    if not IN_CONTEST
+    if not IN_CONTEST and request.user.is_authenticated
         form#filter-form(name='form', action='', method='get')
             if hide_solved
                 input(type='checkbox', name='hide_solved', id='hide_solved', onclick='document.form.submit()', checked='checked')
