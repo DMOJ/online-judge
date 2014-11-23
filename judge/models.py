@@ -162,6 +162,9 @@ class Profile(models.Model):
     def solved_problems(self):
         return Submission.objects.filter(user_id=self.id, points__gt=0).values('problem').distinct().count()
 
+    def get_absolute_url(self):
+        return reverse('judge.views.user', args=(self.user.username,))
+
     def __unicode__(self):
         # return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
         return self.long_display_name
@@ -307,6 +310,9 @@ class Submission(models.Model):
 
     def __unicode__(self):
         return u'Submission %d of %s by %s' % (self.id, self.problem, self.user)
+
+    def get_absolute_url(self):
+        return reverse('submission_status', args=(self.id,))
 
     class Meta:
         permissions = (
