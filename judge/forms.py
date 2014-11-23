@@ -86,9 +86,9 @@ class ProblemEditForm(ModelForm):
         fields = ['name', 'is_public', 'authors', 'types', 'group', 'description', 'time_limit',
                   'memory_limit', 'points', 'partial', 'allowed_languages']
         widgets = {
-            'authors': FilteredSelectMultiple('Authors', False),
-            'types': FilteredSelectMultiple('Problem types', False),
-            'allowed_languages': FilteredSelectMultiple('Allowed languages', False),
+            'authors': FilteredSelectMultiple('creators', False),
+            'types': FilteredSelectMultiple('types', False),
+            'allowed_languages': FilteredSelectMultiple('languages', False),
         }
         if PagedownWidget is not None:
             widgets['description'] = PagedownWidget
