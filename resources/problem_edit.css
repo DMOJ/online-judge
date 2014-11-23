@@ -1,0 +1,146 @@
+.selector {
+    width: 840px;
+    float: left;
+}
+
+.selector select {
+    width: 400px;
+    height: 17.2em;
+}
+
+.selector-available, .selector-chosen {
+    float: left;
+    width: 400px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.selector-chosen select {
+    border-top: none;
+}
+
+.selector-available h2, .selector-chosen h2 {
+    border: 1px solid #ccc;
+}
+
+.selector .selector-available h2 {
+    background: white url(admin/img/nav-bg.gif) bottom left repeat-x;
+    color: #666;
+}
+
+.selector .selector-filter {
+    background: white;
+    border: 1px solid #ccc;
+    border-width: 0 1px;
+    padding: 3px;
+    color: #999;
+    font-size: 10px;
+    margin: 0;
+    text-align: left;
+}
+
+.selector .selector-filter label,
+.inline-group .aligned .selector .selector-filter label {
+    width: 16px;
+    padding: 2px;
+}
+
+.selector .selector-available input {
+    width: 360px;
+}
+
+.selector ul.selector-chooser {
+    float: left;
+    width: 22px;
+    height: 50px;
+    background: url(admin/img/chooser-bg.gif) top center no-repeat;
+    margin: 10em 5px 0 5px;
+    padding: 0;
+}
+
+.selector-chooser li {
+    margin: 0;
+    padding: 3px;
+    list-style-type: none;
+}
+
+.selector select {
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.selector-add, .selector-remove {
+    width: 16px;
+    height: 16px;
+    display: block;
+    text-indent: -3000px;
+    overflow: hidden;
+}
+
+.selector-add {
+    background: url(admin/img/selector-icons.gif) 0 -161px no-repeat;
+    cursor: default;
+    margin-bottom: 2px;
+}
+
+.active.selector-add {
+    background: url(admin/img/selector-icons.gif) 0 -187px no-repeat;
+    cursor: pointer;
+}
+
+.selector-remove {
+    background: url(admin/img/selector-icons.gif) 0 -109px no-repeat;
+    cursor: default;
+}
+
+.active.selector-remove {
+    background: url(admin/img/selector-icons.gif) 0 -135px no-repeat;
+    cursor: pointer;
+}
+
+a.selector-chooseall, a.selector-clearall {
+    display: inline-block;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+    color: #666;
+}
+
+a.selector-chooseall {
+    padding: 3px 18px 3px 0;
+}
+
+a.selector-clearall {
+    padding: 3px 0 3px 18px;
+}
+
+a.active.selector-chooseall:hover, a.active.selector-clearall:hover {
+    color: #036;
+}
+
+a.selector-chooseall {
+    background: url(admin/img/selector-icons.gif) right -263px no-repeat;
+    cursor: default;
+}
+
+a.active.selector-chooseall {
+    background: url(admin/img/selector-icons.gif) right -289px no-repeat;
+    cursor: pointer;
+}
+
+a.selector-clearall {
+    background: url(admin/img/selector-icons.gif) left -211px no-repeat;
+    cursor: default;
+}
+
+a.active.selector-clearall {
+    background: url(admin/img/selector-icons.gif) left -237px no-repeat;
+    cursor: pointer;
+}
+
+.selector h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 1em 0 0 0;
+}
