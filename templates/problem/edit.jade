@@ -15,6 +15,12 @@ block media
         }
     link(rel='stylesheet', href='{% static "admin/css/widgets.css" %}', type='text/css')
     | #{form.media}
+    style.
+        .selector h2 {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 1em 0 0 0;
+        }
 
 block body
     form.form-area(action='', method='post')
