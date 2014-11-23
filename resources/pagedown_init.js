@@ -3,7 +3,7 @@ var DjangoPagedown = DjangoPagedown | {};
 DjangoPagedown = (function () {
 
     var converter,
-        editors,
+        editors = {},
         elements;
 
     var that = this;
@@ -44,7 +44,6 @@ DjangoPagedown = (function () {
     var init = function () {
         that.converter = Markdown.getSanitizingConverter();
         that.elements = document.getElementsByTagName("textarea");
-        that.editors = {};
         for (var i = 0; i < that.elements.length; ++i) {
             if (isPagedownable(that.elements[i])) {
                 createEditor(that.elements[i]);
