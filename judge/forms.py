@@ -2,13 +2,11 @@ from operator import attrgetter
 
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms import ModelForm
 
 from django_ace import AceWidget
-from judge.comments import valid_comment_page
-from judge.models import Organization, Profile, Submission, Comment, Problem
+from judge.models import Organization, Profile, Submission, Problem
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 
