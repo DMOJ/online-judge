@@ -36,6 +36,10 @@ class ProblemMixin(object):
     def get_object(self, queryset=None):
         problem = super(ProblemMixin, self).get_object(queryset)
         if not problem.is_public and not self.request.user.has_perm('judge.see_private_problem'):
+            if self.request.user.has_perm('judge.edit_own_problem') and \
+                    problem.authors.filter(id=self.request.user.profile.id).exists():
+                return problem
+
             if self.request.user.is_authenticated():
                 cp = self.request.user.profile.contest
                 assert isinstance(cp, ContestProfile)
