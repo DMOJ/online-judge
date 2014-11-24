@@ -90,6 +90,7 @@ urlpatterns = patterns('',
     url(r'^edit/profile/$', 'judge.views.edit_profile'),
 
     url(r'^problems/$', problem.ProblemList.as_view(), name='problem_list'),
+    url(r'^problems/own/$', problem.OwnProblemList.as_view(), name='own_problem_list'),
     url(r'^problem/(?P<code>\w+)$', problem.ProblemDetail.as_view(), name='problem_detail'),
     url(r'^problem/(?P<code>\w+)/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
     url(r'^problem/(?P<code>\w+)/latex$', problem.ProblemLatexView.as_view(), name='problem_latex'),

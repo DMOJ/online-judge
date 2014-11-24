@@ -3,13 +3,14 @@ from operator import attrgetter
 import os
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.views.generic import ListView, View, UpdateView
 from django.views.generic.detail import SingleObjectMixin
@@ -229,6 +230,19 @@ class ProblemList(TitleMixin, ListView):
     def get(self, request, *args, **kwargs):
         self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
         return super(ProblemList, self).get(request, *args, **kwargs)
+
+
+class OwnProblemList(TitleMixin, ListView):
+    title = 'My Problems'
+    context_object_name = 'problems'
+    template_name = 'problem/list.jade'
+
+    def get_queryset(self):
+        return Problem.objects.filter(author__id=self.request.user.profile.id)
+
+    @method_decorator(permission_required('judge.change_problem', 'judge.edit_own_problem'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(OwnProblemList, self).dispatch(request, *args, **kwargs)
 
 
 @login_required
