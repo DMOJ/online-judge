@@ -6,7 +6,7 @@ from django.core.cache import cache
 from django.db.models import TextField, ManyToManyField, Q
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -246,14 +246,14 @@ class SubmissionAdmin(admin.ModelAdmin):
 
     def judge_view(self, request, id):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
-            return HttpResponseForbidden()
+            raise PermissionDenied()
         try:
             submission = Submission.objects.get(id=id)
         except ObjectDoesNotExist:
             raise Http404()
         if not request.user.has_perm('judge.edit_all_problem') and \
                 not submission.problem.authors.filter(id=request.user.profile.id).exists():
-            return HttpResponseForbidden()
+            return PermissionDenied()
         submission.judge()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
