@@ -71,3 +71,8 @@ class ProblemEditForm(ModelForm):
         super(ProblemEditForm, self).__init__(*args, **kwargs)
         self.fields['authors'].queryset = Profile.objects.filter(Q(user__groups__name__in=['ProblemSetter', 'Admin']) |
                                                                  Q(user__is_superuser=True))
+
+
+class ProblemAddForm(ProblemEditForm):
+    class Meta(ProblemEditForm.Meta):
+        fields = ['code'] + ProblemEditForm.Meta.fields
