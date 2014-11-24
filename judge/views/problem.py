@@ -238,7 +238,7 @@ class OwnProblemList(TitleMixin, ListView):
     template_name = 'problem/list.jade'
 
     def get_queryset(self):
-        return Problem.objects.filter(author__id=self.request.user.profile.id)
+        return Problem.objects.filter(authors__id=self.request.user.profile.id)
 
     @method_decorator(permission_required('judge.change_problem', 'judge.edit_own_problem'))
     def dispatch(self, request, *args, **kwargs):
