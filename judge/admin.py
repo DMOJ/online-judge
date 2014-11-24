@@ -164,8 +164,21 @@ class SubmissionAdmin(admin.ModelAdmin):
     actions_on_top = True
     actions_on_bottom = True
 
+    def get_queryset(self, request):
+        if request.user.has_perm('judge.edit_all_problem'):
+            return Submission.objects.all()
+        else:
+            return Submission.objects.filter(problem__authors__id=request.user.profile.id)
+
+    def has_change_permission(self, request, obj=None):
+        if not request.user.has_perm('judge.edit_own_problem'):
+            return False
+        if request.user.has_perm('judge.edit_all_problem') or obj is None:
+            return True
+        return obj.problem.authors.filter(id=request.user.profile.id).exists()
+
     def judge(self, request, queryset):
-        if not request.user.has_perm('judge.rejudge_submission'):
+        if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
             self.message_user(request, 'You do not have the permission to rejudge submissions.', level=messages.ERROR)
             return
         successful = 0
@@ -174,6 +187,8 @@ class SubmissionAdmin(admin.ModelAdmin):
             self.message_user(request, 'You do not have the permission to rejudge THAT many submissions.',
                               level=messages.ERROR)
             return
+        if not request.user.has_perm('judge.edit_all_problem'):
+            queryset = queryset.filter(problem__authors__id=request.user.profile.id)
         for model in queryset:
             successful += model.judge()
         self.message_user(request, '%d submission%s were successfully scheduled for rejudging.' %
@@ -230,12 +245,16 @@ class SubmissionAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def judge_view(self, request, id):
-        if not request.user.has_perm('judge.rejudge_submission'):
+        if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
             return HttpResponseForbidden()
         try:
-            Submission.objects.get(id=id).judge()
+            submission = Submission.objects.get(id=id)
         except ObjectDoesNotExist:
             raise Http404()
+        if not request.user.has_perm('judge.edit_all_problem') and \
+                not submission.problem.authors.filter(id=request.user.profile.id).exists():
+            return HttpResponseForbidden()
+        submission.judge()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
     def judge_column(self, obj):
