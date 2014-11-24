@@ -246,7 +246,7 @@ class ProblemList(TitleMixin, ListView):
 class OwnProblemList(TitleMixin, ListView):
     title = 'My Problems'
     context_object_name = 'problems'
-    template_name = 'problem/list.jade'
+    template_name = 'problem/own_list.jade'
 
     def get_queryset(self):
         return Problem.objects.filter(authors__id=self.request.user.profile.id) \
