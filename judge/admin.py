@@ -92,6 +92,19 @@ class ProblemAdmin(admin.ModelAdmin):
 
     make_private.short_description = 'Mark problems as private'
 
+    def get_queryset(self, request):
+        if request.user.has_perm('judge.edit_all_problem'):
+            return Problem.objects.all()
+        else:
+            return Problem.objects.filter(authors__id=request.user.profile.id)
+
+    def has_change_permission(self, request, obj=None):
+        if not request.user.has_perm('judge.edit_own_problem'):
+            return False
+        if request.user.has_perm('judge.edit_all_problem') or obj is None:
+            return True
+        return obj.authors.filter(id=request.user.profile.id).exists()
+
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'allowed_languages':
             kwargs['widget'] = CheckboxSelectMultipleWithSelectAll()
