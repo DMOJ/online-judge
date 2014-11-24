@@ -106,16 +106,16 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         if self.request.user.is_authenticated():
             contest_profile = self.request.user.profile.contest
             try:
-                context['participating'] = contest_profile.history.get(contest=self.object)
+                context['participation'] = contest_profile.history.get(contest=self.object)
             except ContestParticipation.DoesNotExist:
                 context['participating'] = False
-                context['participating'] = None
+                context['participation'] = None
             else:
                 context['participating'] = True
             context['in_contest'] = contest_profile.current is not None and contest_profile.current.contest == self.object
         else:
             context['participating'] = False
-            context['participating'] = None
+            context['participation'] = None
             context['in_contest'] = False
         context['now'] = timezone.now()
         return context
