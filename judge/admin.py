@@ -253,7 +253,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             raise Http404()
         if not request.user.has_perm('judge.edit_all_problem') and \
                 not submission.problem.authors.filter(id=request.user.profile.id).exists():
-            return PermissionDenied()
+            raise PermissionDenied()
         submission.judge()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
