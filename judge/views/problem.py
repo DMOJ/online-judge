@@ -240,8 +240,10 @@ class OwnProblemList(TitleMixin, ListView):
     def get_queryset(self):
         return Problem.objects.filter(authors__id=self.request.user.profile.id)
 
-    @method_decorator(permission_required('judge.change_problem', 'judge.edit_own_problem'))
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('judge.change_problem') and not request.user.has_perm('judge.edit_own_problem'):
+            raise PermissionDenied()
         return super(OwnProblemList, self).dispatch(request, *args, **kwargs)
 
 
