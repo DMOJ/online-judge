@@ -493,7 +493,7 @@ class Contest(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('judge.views.contest', args=(self.key,))
+        return reverse('contest_view', args=(self.key,))
 
     class Meta:
         permissions = (

@@ -172,7 +172,7 @@ def leave_contest(request, key):
         }, context_instance=RequestContext(request))
     contest_profile.current = None
     contest_profile.save()
-    return HttpResponseRedirect(reverse('judge.views.contest', args=(key,)))
+    return HttpResponseRedirect(reverse('contest_view', args=(key,)))
 
 
 ContestRankingProfile = namedtuple('ContestRankingProfile',

@@ -35,7 +35,7 @@ class ContestSitemap(Sitemap):
         return Contest.objects.filter(is_public=True)
 
     def location(self, obj):
-        return reverse('judge.views.contest', args=(obj.key,))
+        return reverse('contest_view', args=(obj.key,))
 
 
 class OrganizationSitemap(Sitemap):
