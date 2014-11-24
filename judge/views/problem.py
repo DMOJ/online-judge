@@ -242,6 +242,11 @@ class OwnProblemList(TitleMixin, ListView):
                       .annotate(number_of_users=Count('submission__user', distinct=True))\
                       .select_related('group').defer('description').order_by('code')
 
+    def get_context_data(self, **kwargs):
+        context = super(OwnProblemList, self).get_context_data(**kwargs)
+        context['completed_problem_ids'] = user_completed_ids(self.request.user.profile)
+        return context
+
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         if not request.user.has_perm('judge.change_problem') and not request.user.has_perm('judge.edit_own_problem'):
