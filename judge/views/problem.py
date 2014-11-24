@@ -238,7 +238,9 @@ class OwnProblemList(TitleMixin, ListView):
     template_name = 'problem/list.jade'
 
     def get_queryset(self):
-        return Problem.objects.filter(authors__id=self.request.user.profile.id)
+        return Problem.objects.filter(authors__id=self.request.user.profile.id) \
+                      .annotate(number_of_users=Count('submission__user', distinct=True))\
+                      .select_related('group').defer('description').order_by('code')
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
