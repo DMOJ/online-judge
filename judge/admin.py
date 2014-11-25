@@ -3,6 +3,7 @@ from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 from django.db.models import TextField, ManyToManyField, Q
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
@@ -269,10 +270,26 @@ class CommentAdmin(admin.ModelAdmin):
         (None, {'fields': ('author', 'page', 'parent', 'score')}),
         ('Content', {'fields': ('title', 'body')}),
     )
-    list_display = ['title', 'author', 'page', 'time']
+    list_display = ['title', 'author', 'linked_page', 'time']
     search_fields = ['author__user__username', 'author__name', 'page', 'title', 'body']
     actions_on_top = True
     actions_on_bottom = True
+
+    def linked_page(self, obj):
+        link = None
+        if obj.page.startswith('p:'):
+            link = reverse('problem_detail', args=(obj.page[2:],))
+        elif obj.page.startswith('c:'):
+            link = reverse('contest_view', args=(obj.page[2:],))
+        elif obj.page.startswith('b:'):
+            link = reverse('blog_post', args=(obj.page[2:], ''))
+        if link is not None:
+            return format_html('<a href="{}">{}</a>', link, obj.page)
+        else:
+            return format_html('{}', obj.page)
+    linked_page.short_description = 'Associated page'
+    linked_page.allow_tags = True
+    linked_page.admin_order_field = 'page'
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
