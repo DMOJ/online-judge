@@ -284,9 +284,9 @@ class CommentAdmin(admin.ModelAdmin):
         elif obj.page.startswith('b:'):
             link = reverse('blog_post', args=(obj.page[2:], ''))
         if link is not None:
-            return format_html('<a href="{}">{}</a>', link, obj.page)
+            return format_html('<a href="{0}">{1}</a>', link, obj.page)
         else:
-            return format_html('{}', obj.page)
+            return format_html('{0}', obj.page)
     linked_page.short_description = 'Associated page'
     linked_page.allow_tags = True
     linked_page.admin_order_field = 'page'
