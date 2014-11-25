@@ -48,7 +48,9 @@ if submission.status != 'IE'
                                             span.icon
                                         b Case ##{forloop.counter}:
                                     td
-                                        span(class=case.status) #{case.status}
+                                        span(class=case.status, title=case.long_status) #{case.status}
+                                        if case.feedback
+                                            | &nbsp;(#{case.feedback})
                                     td
                                         if case.status != 'SC'
                                             | [#{case.time|floatformat:"3"}s,
