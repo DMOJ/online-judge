@@ -7,15 +7,23 @@ block media
     style
         .blog-content {
             padding-right:1em;
-            border-right:1px solid #CCC;
-            width:80%;
+            padding-left:1em;
+            width:78%;
             display:inline-block;
+            border:1px solid #CCC;
+            border-radius:4px;
+        }
+        .blog-content .post {
+            border-bottom:1px dashed #CCC;
+        }
+        .blog-content .post:last-child {
+            border-bottom:none;
         }
         .comment-content {
             position:relative;
             display:inline-block;
             float:right;
-            width:18%;
+            width:19%;
             border:1px solid #CCC;
             border-radius:4px;
         }
