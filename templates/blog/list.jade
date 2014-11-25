@@ -54,7 +54,7 @@ block body
         ul
             for comment in comments
                 li
-                    a(class=comment.author.display_rank, href='{% url "judge.views.user" comment.author.display_name %}') #{comment.author.display_name}
+                    a(class=comment.author.display_rank, href='{% url "judge.views.user" comment.author.user.username %}') #{comment.author.display_name}
                     | &nbsp;&rarr;&nbsp;
                     if comment.parent
                         | #{comment.parent.title}
