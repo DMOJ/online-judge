@@ -39,6 +39,7 @@ if submission.status != 'IE'
                 else
                     b Batch ##{batch.grouper}
                     | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
+                    br
                     .batch-cases
                         table
                             for case in batch.list
