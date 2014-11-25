@@ -51,5 +51,15 @@ block body
                 include list_pages
     div.comment-content
         h3 Comment Stream
+        ul
+            for comment in comments
+                li
+                    span(class=author.display_rank) #{comment.author}
+                    | &nbsp;&rarr;&nbsp;
+                    if comment.parent
+                        | #{comment.parent.title}
+                    else
+                        | #{comment.page}
+                    
 
     block after_posts
