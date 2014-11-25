@@ -9,21 +9,22 @@ block media
 block body
     block before_posts
     
-    if page_obj.num_pages > 1
-        div(style='margin-bottom:10px;')
-            include list_pages
-
-    each post in posts
-        div(class=('sticky post' if post.sticky else 'post'))
-            h2.title
-                a(href='{% url "blog_post" post.id post.slug %}')= post.title
-            div.time #{post.publish_on|date:"N j, o, G:i"}
-            div.summary
-                - cache 86400 post_summary post.id
-                    | #{post.summary|default:post.content|markdown:"blog"}
-
-    if page_obj.num_pages > 1
-        div(style='margin-bottom:10px;')
-            include list_pages
+    div.blog-content
+        if page_obj.num_pages > 1
+            div(style='margin-bottom:10px;')
+                include list_pages
+    
+        each post in posts
+            div(class=('sticky post' if post.sticky else 'post'))
+                h2.title
+                    a(href='{% url "blog_post" post.id post.slug %}')= post.title
+                div.time #{post.publish_on|date:"N j, o, G:i"}
+                div.summary
+                    - cache 86400 post_summary post.id
+                        | #{post.summary|default:post.content|markdown:"blog"}
+    
+        if page_obj.num_pages > 1
+            div(style='margin-bottom:10px;')
+                include list_pages
 
     block after_posts
