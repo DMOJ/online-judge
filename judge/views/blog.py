@@ -27,7 +27,7 @@ class PostList(ListView):
         context = super(PostList, self).get_context_data(**kwargs)
         context['title'] = self.title or 'Page %d of Posts' % context['page_obj'].number
         context['first_page_href'] = reverse('home')
-        context['comments'] = Comment.objects.all().order_by('-id')
+        context['comments'] = Comment.objects.all().order_by('-id')[:10]
         return context
 
 
