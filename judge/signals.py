@@ -56,6 +56,7 @@ def language_update(sender, instance, **kwargs):
 def post_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('post_summary', (instance.id,)))
     cache.delete(make_template_fragment_key('post_content', (instance.id,)))
+    cache.delete('blog_slug:%d' % instance.id)
 
 
 @receiver(post_save, sender=Submission)

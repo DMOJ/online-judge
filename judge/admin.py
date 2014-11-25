@@ -282,7 +282,15 @@ class CommentAdmin(admin.ModelAdmin):
         elif obj.page.startswith('c:'):
             link = reverse('contest_view', args=(obj.page[2:],))
         elif obj.page.startswith('b:'):
-            link = reverse('blog_post', args=(obj.page[2:], ''))
+            key = 'blog_slug:%s' % obj.page[2:]
+            slug = cache.get(key)
+            if slug is None:
+                try:
+                    slug = BlogPost.objects.get(id=obj.page[2:]).slug
+                except ObjectDoesNotExist:
+                    slug = ''
+                cache.set(key, slug, 3600)
+            link = reverse('blog_post', args=(obj.page[2:], slug))
         if link is not None:
             return format_html('<a href="{0}">{1}</a>', link, obj.page)
         else:
