@@ -7,6 +7,16 @@ extends common-content
 
 block content_media
     script(type='text/javascript', src='{% static "common.js" %}')
+    style
+        a.view-pdf {
+            float: right;
+            padding-top: 1em;
+        }
+
+block header
+    a.view-pdf(href='{% url "problem_pdf" problem.code %}')
+        | View as PDF
+        sup &nbsp;(beta)
 
 block info_float
     a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
@@ -17,10 +27,7 @@ block info_float
     a(href='{% url "chronological_submissions" problem.code %}') All submissions
     br
     a(href='{% url "ranked_submissions" problem.code %}') Best submissions
-    hr
-    a(href='{% url "problem_pdf" problem.code %}')
-        | Download PDF
-        sup &nbsp;(beta)
+
     if perms.judge.change_problem
         hr
         a(href='{% url "admin:judge_problem_change" problem.id %}') Edit problem
