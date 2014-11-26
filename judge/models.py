@@ -372,6 +372,19 @@ class Comment(models.Model):
             link = reverse('blog_post', args=(self.page[2:], slug))
         return link
 
+    @cached_property
+    def page_title(self):
+        try:
+            if self.page.startswith('p:'):
+                return Problem.objects.get(code=self.page[2:]).name
+            elif self.page.startswith('c:'):
+                return Contest.objects.get(key=self.page[2:]).name
+            elif self.page.startswith('b:'):
+                return BlogPost.objects.get(id=self.page[2:]).title
+            raise ObjectDoesNotExist()
+        except ObjectDoesNotExist:
+            return '<deleted>'
+
     def get_absolute_url(self):
         return '%s#comment-%d-link' % (self.link, self.id)
 
