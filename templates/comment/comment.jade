@@ -9,6 +9,7 @@ li.comment(id='comment-{{comment.id}}')
             a(href='javascript:comment_downvote({{comment.id}})') -
             br
         .comment-header
+            a(name='comment-{{comment.id}}')
             span.comment-author
                 span(class=comment.author.display_rank)
                     a(href='{% url "judge.views.user" comment.author.user.username %}') #{comment.author.user.username}
