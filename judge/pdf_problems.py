@@ -98,7 +98,7 @@ retablebegin = re.compile(r'\\begin\{longtable\}\[c\]\{@\{\}l+@\{\}\}')
 
 
 def format_markdown(markdown):
-    return markdown.replace('~', '$').replace(r'\\(', '$').replace(r'\\)', '$').replace(r'\_', '_')
+    return markdown
 
 
 def make_latex(markdown, style='problem'):
