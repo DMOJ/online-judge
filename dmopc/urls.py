@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from judge import views
-from judge.feed import CommentFeed
+from judge.feed import CommentFeed, AtomCommentFeed
 from judge.views import organization, language, status, blog, problem
 from judge.ordered_model import urls as ordered_model_urls
 
@@ -161,7 +161,8 @@ urlpatterns = patterns('',
     url(r'^blog/(?P<page>\d+)$', blog.PostList.as_view(), name='blog_post_list'),
     url(r'^post/(?P<id>\d+)-(?P<slug>.*)$', blog.PostView.as_view(), name='blog_post'),
 
-    url(r'^feed/comment/', CommentFeed()),
+    url(r'^feed/comment/rss/$', CommentFeed()),
+    url(r'^feed/comment/atom/$', AtomCommentFeed()),
 
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {
         'problem': ProblemSitemap,

@@ -1,4 +1,5 @@
 from django.contrib.syndication.views import Feed
+from django.utils.feedgenerator import Atom1Feed
 from judge.models import Comment
 
 
@@ -16,3 +17,8 @@ class CommentFeed(Feed):
 
     def item_description(self, comment):
         return comment.body
+
+
+class AtomCommentFeed(CommentFeed):
+    feed_type = Atom1Feed
+    subtitle = CommentFeed.description
