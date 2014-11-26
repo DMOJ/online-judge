@@ -2,6 +2,7 @@ from django.contrib.syndication.views import Feed
 from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
 from judge.models import Comment, BlogPost
+from markdown_trois import markdown
 
 
 class CommentFeed(Feed):
@@ -17,7 +18,7 @@ class CommentFeed(Feed):
                              comment.parent.title if comment.parent is not None else comment.page_title)
 
     def item_description(self, comment):
-        return comment.body
+        return markdown(comment.body, 'comment')
 
 
 class AtomCommentFeed(CommentFeed):
@@ -37,7 +38,7 @@ class BlogFeed(Feed):
         return post.title
 
     def item_description(self, post):
-        return post.summary or post.content
+        return markdown(post.summary or post.content, 'blog')
 
 
 class AtomBlogFeed(CommentFeed):
