@@ -5,7 +5,7 @@ from operator import itemgetter, attrgetter
 import pytz
 from django.utils.functional import cached_property
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
@@ -351,6 +351,26 @@ class Comment(models.Model):
     score = models.IntegerField(verbose_name='Votes', default=0)
     title = models.CharField(max_length=200, verbose_name='Title of comment')
     body = models.TextField(verbose_name='Body of comment', blank=True)
+
+    @property
+    def link(self):
+        from django.core.cache import cache
+        link = None
+        if self.page.startswith('p:'):
+            link = reverse('problem_detail', args=(self.page[2:],))
+        elif self.page.startswith('c:'):
+            link = reverse('contest_view', args=(self.page[2:],))
+        elif self.page.startswith('b:'):
+            key = 'blog_slug:%s' % self.page[2:]
+            slug = cache.get(key)
+            if slug is None:
+                try:
+                    slug = BlogPost.objects.get(id=self.page[2:]).slug
+                except ObjectDoesNotExist:
+                    slug = ''
+                cache.set(key, slug, 3600)
+            link = reverse('blog_post', args=(self.page[2:], slug))
+        return link
 
     def __unicode__(self):
         return self.title

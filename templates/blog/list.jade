@@ -93,7 +93,7 @@ block body
                         if comment.parent
                             | #{comment.parent.title}
                         else
-                            | #{comment.page}
+                            a(href=comment.link) #{comment.page}
                     
 
     block after_posts
