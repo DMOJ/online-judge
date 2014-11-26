@@ -1,4 +1,5 @@
 from django.contrib.syndication.views import Feed
+from django.core.cache import cache
 from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
 from django.utils.html import escape
@@ -32,7 +33,12 @@ class CommentFeed(Feed):
                              comment.parent.title if comment.parent is not None else comment.page_title)
 
     def item_description(self, comment):
-        return FeedMath.convert(markdown(comment.body, 'comment'))
+        key = 'comment_feed:%d' % comment.id
+        desc = cache.get(key)
+        if desc is None:
+            desc = FeedMath.convert(markdown(comment.body, 'comment'))
+            cache.set(key, desc, 86400)
+        return desc
 
     def item_pubdate(self, comment):
         return comment.time
@@ -55,7 +61,12 @@ class BlogFeed(Feed):
         return post.title
 
     def item_description(self, post):
-        return FeedMath.convert(markdown(post.summary or post.content, 'blog'))
+        key = 'blog_feed:%d' % post.id
+        summary = cache.get(key)
+        if summary is None:
+            summary = FeedMath.convert(markdown(post.summary or post.content, 'blog'))
+            cache.set(key, summary, 86400)
+        return summary
 
     def item_pubdate(self, post):
         return post.publish_on

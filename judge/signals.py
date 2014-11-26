@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from django.core.cache import cache
 
 from .models import Problem, Contest, Submission, Organization, Profile, NavigationBar, MiscConfig, Language, Judge, \
-    BlogPost, ContestSubmission
+    BlogPost, ContestSubmission, Comment
 from .caching import update_submission, finished_submission
 
 
@@ -52,11 +52,19 @@ def language_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('judge_html', (instance.id,)))
 
 
+@receiver(post_save, sender=Comment)
+def comment_update(sender, instance, **kwargs):
+    cache.delete('comment_feed:%d' % instance.id)
+
+
 @receiver(post_save, sender=BlogPost)
 def post_update(sender, instance, **kwargs):
-    cache.delete(make_template_fragment_key('post_summary', (instance.id,)))
-    cache.delete(make_template_fragment_key('post_content', (instance.id,)))
-    cache.delete('blog_slug:%d' % instance.id)
+    cache.delete_many([
+        make_template_fragment_key('post_summary', (instance.id,)),
+        make_template_fragment_key('post_content', (instance.id,)),
+        'blog_slug:%d' % instance.id,
+        'blog_feed:%d' % instance.id,
+    ])
 
 
 @receiver(post_save, sender=Submission)
