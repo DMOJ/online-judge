@@ -6,77 +6,92 @@ extends base
 block media
     style
         .blog-content {
-            padding-right:1em;
-            padding-left:1em;
-            width:78%;
-            display:inline-block;
-            border:1px solid #CCC;
-            border-radius:4px;
+            padding-right: 1em;
+            padding-left: 1em;
+            width: 85%;
+            display: table-cell;
+            border: 1px solid #CCC;
+            border-radius: 4px;
+            vertical-align: top;
         }
+
         .blog-content .post {
-            border-bottom:1px dashed #CCC;
+            border-bottom: 1px dashed #CCC;
         }
+
         .blog-content .post:last-child {
-            border-bottom:none;
+            border-bottom: none;
         }
+
         .comment-content {
-            position:relative;
-            display:inline-block;
-            float:right;
-            width:19%;
-            border:1px solid #CCC;
-            border-radius:4px;
+            position: relative;
+            display: table-cell;
+            float: right;
+            border: 1px solid #CCC;
+            border-radius: 4px;
         }
+
         .comment-content h3 {
-            padding-left:0.5em;
-            border-bottom:1px dashed #CCC;
+            padding-left: 0.5em;
+            border-bottom: 1px dashed #CCC;
         }
+
         .comment-content ul {
-            list-style:none;
-            padding-left:1em;
-            padding-right:0.5em;
-            font-size:110%;
+            list-style: none;
+            padding-left: 1em;
+            padding-right: 0.5em;
+            font-size: 110%;
         }
+
         .comment-content ul li {
-            margin-bottom:0.75em;
+            margin-bottom: 0.75em;
         }
+
         .time {
-            color:#555;
+            color: #555;
         }
+
+        .container {
+            display: table;
+            border-collapse: separate;
+            border-spacing: 1em;
+        }
+
 
 
 block body
     block before_posts
     
-    div.blog-content
-        if page_obj.num_pages > 1
-            div(style='margin-bottom:10px;')
-                include list_pages
-    
-        each post in posts
-            div(class=('sticky post' if post.sticky else 'post'))
-                h2.title
-                    a(href='{% url "blog_post" post.id post.slug %}')= post.title
-                div.time #{post.publish_on|date:"N j, o, G:i"}
-                div.summary
-                    - cache 86400 post_summary post.id
-                        | #{post.summary|default:post.content|markdown:"blog"}
-    
-        if page_obj.num_pages > 1
-            div(style='margin-bottom:10px;')
-                include list_pages
-    div.comment-content
-        h3 Comment Stream
-        ul
-            for comment in comments
-                li
-                    span(class=comment.author.display_rank)
-                        a(href='{% url "judge.views.user" comment.author.user.username %}') #{comment.author.display_name}
-                    | &nbsp;&rarr;
-                    if comment.parent
-                        | #{comment.parent.title}
-                    else
-                        | #{comment.page}
+    div.container
+        div.blog-content
+            if page_obj.num_pages > 1
+                div(style='margin-bottom:10px;')
+                    include list_pages
+        
+            each post in posts
+                div(class=('sticky post' if post.sticky else 'post'))
+                    h2.title
+                        a(href='{% url "blog_post" post.id post.slug %}')= post.title
+                    div.time #{post.publish_on|date:"N j, o, G:i"}
+                    div.summary
+                        - cache 86400 post_summary post.id
+                            | #{post.summary|default:post.content|markdown:"blog"}
+        
+            if page_obj.num_pages > 1
+                div(style='margin-bottom:10px;')
+                    include list_pages
+        div.comment-content
+            h3 Comment Stream
+            ul
+                for comment in comments
+                    li
+                        span(class=comment.author.display_rank)
+                            a(href='{% url "judge.views.user" comment.author.user.username %}') #{comment.author.display_name}
+                        | &nbsp;&rarr;
+                        if comment.parent
+                            | #{comment.parent.title}
+                        else
+                            | #{comment.page}
                     
 
     block after_posts
