@@ -91,8 +91,8 @@ block body
                             a(href='{% url "judge.views.user" comment.author.user.username %}') #{comment.author.display_name}
                         | &nbsp;&rarr;
                         if comment.parent
-                            a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.parent.title}
+                            a(href='{{comment.link}}#comment-{{comment.id}}-link') #{comment.parent.title}
                         else
-                            a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.page}
+                            a(href='{{comment.link}}#comment-{{comment.id}}-link') #{comment.page}
 
     block after_posts
