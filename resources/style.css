@@ -452,7 +452,6 @@ noscript, #announcement {
 }
 
 a.upvote-link {
-	vertical-align:middle;
 	width:.7em;
 	height:.7em;
 	display:inline-block;
@@ -466,7 +465,6 @@ a.upvote-link {
 }
 
 a.downvote-link {
-	vertical-align:middle;
 	width:.7em;
 	height:.7em;
 	display:inline-block;
