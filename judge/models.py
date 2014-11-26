@@ -1,6 +1,7 @@
 import re
 from collections import defaultdict
 from operator import itemgetter, attrgetter
+from django.core.cache import cache
 
 import pytz
 from django.utils.functional import cached_property
@@ -352,9 +353,8 @@ class Comment(models.Model):
     title = models.CharField(max_length=200, verbose_name='Title of comment')
     body = models.TextField(verbose_name='Body of comment', blank=True)
 
-    @property
+    @cached_property
     def link(self):
-        from django.core.cache import cache
         link = None
         if self.page.startswith('p:'):
             link = reverse('problem_detail', args=(self.page[2:],))
@@ -371,6 +371,9 @@ class Comment(models.Model):
                 cache.set(key, slug, 3600)
             link = reverse('blog_post', args=(self.page[2:], slug))
         return link
+
+    def get_absolute_url(self):
+        return '%s#comment-%d-link' % (self.link, self.id)
 
     def __unicode__(self):
         return self.title
