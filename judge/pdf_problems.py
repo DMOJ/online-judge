@@ -11,6 +11,8 @@ import re
 
 from django.conf import settings
 
+from markdown_trois import markdown as markdown_trois
+
 
 refilename = re.compile(r'\\includegraphics{(.*?)}')
 PROLOGUE = r'''\documentclass[a4paper]{article}
@@ -99,28 +101,22 @@ def format_markdown(markdown):
     return markdown.replace('~', '$').replace(r'\\(', '$').replace(r'\\)', '$').replace(r'\_', '_')
 
 
-def pandoc_do(source, to, text):
-    stream = urllib2.urlopen('http://johnmacfarlane.net/cgi-bin/trypandoc?%s' % urllib.urlencode({
-        'from': source, 'to': to, 'text': text
-    }))
-    result = json.load(stream)
-    stream.close()
-    return result['result']
-
-
-def make_latex(markdown):
+def make_latex(markdown, style='problem'):
+    html = markdown_trois(markdown, style)
     pandoc = getattr(settings, 'PANDOC_PATH', None)
+    if isinstance(html, unicode):
+        html = html.encode('utf-8')
     if pandoc is not None:
-        proc = subprocess.Popen([pandoc, '-f', 'markdown', '-t', 'latex'], stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE)
-        return proc.communicate(markdown)[0]
+        proc = subprocess.Popen([pandoc, '-f', 'html', '-t', 'latex'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        return proc.communicate(html)[0]
     else:
         # Sorry, but can't install haskell on openshift.
-        if isinstance(markdown, unicode):
-            markdown = markdown.encode('utf-8')
-        # This double conversion allows for tables
-        html = pandoc_do('markdown_github', 'html', markdown).encode('utf-8')
-        return pandoc_do('html', 'latex', html)
+        stream = urllib2.urlopen('http://johnmacfarlane.net/cgi-bin/trypandoc?%s' % urllib.urlencode({
+            'from': 'html', 'to': 'latex', 'text': html
+        }))
+        result = json.load(stream)
+        stream.close()
+        return result['result']
 
 
 def wget_graphics(match):
