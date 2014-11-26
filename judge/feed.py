@@ -4,7 +4,7 @@ from judge.models import Comment
 
 
 class CommentFeed(Feed):
-    title = 'Lates DMOJ comments'
+    title = 'Latest DMOJ comments'
     link = '/'
     description = 'The latest comments on the Don Mills Online Judge website'
 
