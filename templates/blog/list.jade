@@ -93,6 +93,6 @@ block body
                         if comment.parent
                             a(href='{{comment.link}}#comment-{{comment.id}}-link') #{comment.parent.title}
                         else
-                            a(href='{{comment.link}}#comment-{{comment.id}}-link') #{comment.page}
+                            a(href='{{comment.link}}#comment-{{comment.id}}-link') #{comment.page_title}
 
     block after_posts
