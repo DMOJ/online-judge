@@ -10,6 +10,7 @@ import tempfile
 import re
 
 from django.conf import settings
+from judge.math_parser import MathHTMLParser
 
 from markdown_trois import markdown as markdown_trois
 
@@ -97,8 +98,16 @@ retable = re.compile(r'(?<=\\begin\{longtable\}\[c\]\{@\{\})l+(?=@\{\}\})')
 retablebegin = re.compile(r'\\begin\{longtable\}\[c\]\{@\{\}l+@\{\}\}')
 
 
+class DollarMath(MathHTMLParser):
+    def inline_math(self, math):
+        return '$ %s $' % math
+
+    def display_math(self, math):
+        return '$$ %s $$' % math
+
+
 def format_markdown(markdown):
-    return markdown
+    return DollarMath.convert(markdown)
 
 
 def make_latex(markdown, style='problem'):
