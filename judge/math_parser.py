@@ -1,6 +1,10 @@
 from HTMLParser import HTMLParser
 import re
 
+from django.conf import settings
+
+
+MATHTEX_CGI = getattr(settings, 'MATHTEX_CGI', 'http://www.forkosh.com/mathtex.cgi')
 inline_math = re.compile(r'~(.*?)~|\\\((.*?)\\\)')
 display_math = re.compile(r'\$\$(.*?)\$\$|\\\[(.*?)\\\]')
 
@@ -23,6 +27,12 @@ def format_math(math):
 
 
 class MathHTMLParser(HTMLParser):
+    @classmethod
+    def convert(cls, html):
+        converter = cls()
+        converter.feed(html)
+        return converter.result
+
     def __init__(self):
         HTMLParser.__init__(self)
         self.new_page = []

@@ -1,8 +1,22 @@
 from django.contrib.syndication.views import Feed
 from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
+from django.utils.html import escape
+from django.utils.http import urlquote
+
+from judge.math_parser import MathHTMLParser, MATHTEX_CGI
 from judge.models import Comment, BlogPost
 from markdown_trois import markdown
+
+
+class FeedMath(MathHTMLParser):
+    def inline_math(self, math):
+        return (r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>' %
+                (MATHTEX_CGI, urlquote(math), escape(math)))
+
+    def display_math(self, math):
+        return (r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>' %
+                (MATHTEX_CGI, urlquote(math), escape(math)))
 
 
 class CommentFeed(Feed):
@@ -18,7 +32,7 @@ class CommentFeed(Feed):
                              comment.parent.title if comment.parent is not None else comment.page_title)
 
     def item_description(self, comment):
-        return markdown(comment.body, 'comment')
+        return FeedMath.convert(markdown(comment.body, 'comment'))
 
     def item_pubdate(self, comment):
         return comment.time
@@ -41,7 +55,7 @@ class BlogFeed(Feed):
         return post.title
 
     def item_description(self, post):
-        return markdown(post.summary or post.content, 'blog')
+        return FeedMath.convert(markdown(post.summary or post.content, 'blog'))
 
     def item_pubdate(self, post):
         return post.publish_on

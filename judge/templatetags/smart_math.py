@@ -1,14 +1,10 @@
 from django.template import Library
-from django.conf import settings
 from django.utils.html import escape
 from django.utils.http import urlquote
 
-from judge.math_parser import MathHTMLParser
-
+from judge.math_parser import MathHTMLParser, MATHTEX_CGI
 
 register = Library()
-
-MATHTEX_CGI = getattr(settings, 'MATHTEX_CGI', 'http://www.forkosh.com/mathtex.cgi')
 
 
 class MathJaxTexFallbackMath(MathHTMLParser):
@@ -29,6 +25,4 @@ class MathJaxTexFallbackMath(MathHTMLParser):
 
 @register.filter(name='smart_math', is_safe=True)
 def math(page):
-    parser = MathJaxTexFallbackMath()
-    parser.feed(page)
-    return parser.result
+    return MathJaxTexFallbackMath.convert(page)
