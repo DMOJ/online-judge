@@ -84,6 +84,11 @@ block body
                     include list_pages
         div.comment-content
             h3 Comment Stream
+                a(href='{% url "comment_rss" %}')
+                    img(src='{% static "icons/feed.png" %}')
+                    | RSS
+                | /
+                a(href='{% url "comment_atom" %}') Atom
             ul
                 for comment in comments
                     li
