@@ -53,6 +53,7 @@ class MathHTMLParser(HTMLParser):
 
     @property
     def result(self):
+        self.purge_buffer()
         return ''.join(self.new_page)
 
     def purge_buffer(self):
