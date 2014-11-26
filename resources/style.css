@@ -446,6 +446,11 @@ noscript, #announcement {
     transform: rotate(90deg);
 }
 
+.comment-score {
+	font-weight:bold;
+	text-align: center;
+}
+
 a.upvote-link {
 	vertical-align:middle;
 	width:.7em;
