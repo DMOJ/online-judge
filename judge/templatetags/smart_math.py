@@ -1,85 +1,34 @@
-from HTMLParser import HTMLParser
 from django.template import Library
 from django.conf import settings
-import re
+from django.utils.html import escape
+from django.utils.http import urlquote
+
+from judge.math_parser import MathHTMLParser
+
 
 register = Library()
 
-
-REPLACES = [
-    (u'\u2264', r'\le'),
-    (u'\u2265', r'\ge'),
-    (u'\u2026', '...'),
-    ('&le;', r'\le'),
-    ('&le;', r'\ge'),
-    (r'\lt', '<'),
-    (r'\gt', '>'),
-]
-
-
-def format_math(math):
-    for a, b in REPLACES:
-        math = math.replace(a, b)
-    return math
-
 MATHTEX_CGI = getattr(settings, 'MATHTEX_CGI', 'http://www.forkosh.com/mathtex.cgi')
-inlinemath = re.compile(r'~(.*?)~|\\\((.*?)\\\)')
 
 
-def inline_template(match):
-    math = match.group(1) or match.group(2)
-    formatted = format_math(math)
-    return ('<span class="inline-math">'
-                r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>'
-                r'<span class="tex-text" style="display:none">\(%s\)</span>'
-            '</span>') % (MATHTEX_CGI, formatted, formatted, math)
+class MathJaxTexFallbackMath(MathHTMLParser):
+    def inline_math(self, math):
+        escaped = escape(math)
+        return ('<span class="inline-math">'
+                    r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>'
+                    r'<span class="tex-text" style="display:none">\(%s\)</span>'
+                '</span>') % (MATHTEX_CGI, urlquote(math), escaped, escaped)
 
-displaymath = re.compile(r'\$\$(.*?)\$\$|\\\[(.*?)\\\]')
-
-
-def display_template(match):
-    math = format_math(match.group(1) or match.group(2))
-    formatted = format_math(math)
-    return ('<span class="display-math">'
-               r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>'
-               r'<span class="tex-text" style="display:none">\[%s\]</span>'
-            '</span>') % (MATHTEX_CGI, formatted, formatted, math)
-
-
-class MathHTMLParser(HTMLParser):
-    def __init__(self):
-        HTMLParser.__init__(self)
-        self.new_page = []
-        self.data_buffer = []
-
-    def purge_buffer(self):
-        if self.data_buffer:
-            buffer = ''.join(self.data_buffer)
-            buffer = inlinemath.sub(inline_template, buffer)
-            buffer = displaymath.sub(display_template, buffer)
-            self.new_page.append(buffer)
-            del self.data_buffer[:]
-
-    def handle_starttag(self, tag, attrs):
-        self.purge_buffer()
-        self.new_page.append('<%s%s>' % (tag, ' '.join([''] + ['%s="%s"' % p for p in attrs])))
-
-    def handle_endtag(self, tag):
-        self.purge_buffer()
-        self.new_page.append('</%s>' % tag)
-
-    def handle_data(self, data):
-        self.data_buffer.append(data)
-
-    def handle_entityref(self, name):
-        self.data_buffer.append('&%s;' % name)
-
-    def handle_charref(self, name):
-        self.data_buffer.append('&#%s;' % name)
+    def display_math(self, math):
+        escaped = escape(math)
+        return ('<span class="display-math">'
+                   r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>'
+                   r'<span class="tex-text" style="display:none">\[%s\]</span>'
+                '</span>') % (MATHTEX_CGI, urlquote(math), escaped, escaped)
 
 
 @register.filter(name='smart_math', is_safe=True)
 def math(page):
-    parser = MathHTMLParser()
+    parser = MathJaxTexFallbackMath()
     parser.feed(page)
-    return ''.join(parser.new_page)
+    return parser.result
