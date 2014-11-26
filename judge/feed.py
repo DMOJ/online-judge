@@ -20,6 +20,9 @@ class CommentFeed(Feed):
     def item_description(self, comment):
         return markdown(comment.body, 'comment')
 
+    def item_pubdate(self, comment):
+        return comment.time
+
 
 class AtomCommentFeed(CommentFeed):
     feed_type = Atom1Feed
@@ -39,6 +42,9 @@ class BlogFeed(Feed):
 
     def item_description(self, post):
         return markdown(post.summary or post.content, 'blog')
+
+    def item_pubdate(self, post):
+        return post.publish_on
 
 
 class AtomBlogFeed(CommentFeed):
