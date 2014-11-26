@@ -59,6 +59,15 @@ block media
             margin-right: -1em;
         }
 
+        .rssatom img {
+            height: 0.8em;
+        }
+
+        .rssatom {
+            font-size: 0.6em;
+            padding-left: 1em;
+        }
+
 
 
 block body
@@ -84,11 +93,12 @@ block body
                     include list_pages
         div.comment-content
             h3 Comment Stream
-                a(href='{% url "comment_rss" %}')
-                    img(src='{% static "icons/feed.png" %}')
-                    | RSS
-                | /
-                a(href='{% url "comment_atom" %}') Atom
+                span.rssatom
+                    a(href='{% url "comment_rss" %}')
+                        img(src='{% static "icons/feed.png" %}')
+                        | RSS
+                    | /
+                    a(href='{% url "comment_atom" %}') Atom
             ul
                 for comment in comments
                     li
