@@ -3,10 +3,16 @@
 li.comment(id='comment-{{comment.id}}')
     .comment-box
         div(style='float:left')
-            a(href='javascript:comment_upvote({{comment.id}})') +
+            if request.user.is_authenticated
+                a(href='javascript:comment_upvote({{comment.id}})') +
+            else
+                br
             br
             .comment-score #{comment.score}
-            a(href='javascript:comment_downvote({{comment.id}})') -
+            if request.user.is_authenticated
+                a(href='javascript:comment_downvote({{comment.id}})') -
+            else
+                br
             br
         .comment-header
             a.comment-link(name='comment-{{comment.id}}-link')
