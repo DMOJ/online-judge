@@ -13,11 +13,11 @@ from markdown_trois import markdown
 class FeedMath(MathHTMLParser):
     def inline_math(self, math):
         return (r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>' %
-                (MATHTEX_CGI, urlquote(math), escape(math)))
+                (MATHTEX_CGI, urlquote(math), math))
 
     def display_math(self, math):
         return (r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>' %
-                (MATHTEX_CGI, urlquote(math), escape(math)))
+                (MATHTEX_CGI, urlquote(math), math))
 
 
 class CommentFeed(Feed):
