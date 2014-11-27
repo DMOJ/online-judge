@@ -34,6 +34,7 @@ block media
         }
 
         .comment-content h3 {
+            padding-bottom: 0.25em;
             padding-left: 0.5em;
             border-bottom: 1px dashed #CCC;
         }
@@ -62,14 +63,18 @@ block media
         }
 
         .rssatom img {
-            height: 0.8em;
+            height: 1em;
+            vertical-align: middle;
             padding-right: 0.2em;
+            margin-top: 0.75em;
+            margin-bottom: 0.75em;
         }
 
         .rssatom {
-            font-size: 0.7em;
-            padding-left: 1em;
+            float: right;
+            padding-right: 1em;
         }
+
 
 
 
@@ -96,12 +101,6 @@ block body
                     include list_pages
         div.comment-content
             h3 Comment Stream
-                span.rssatom
-                    a(href='{% url "comment_rss" %}')
-                        img(src='{% static "icons/feed.png" %}')
-                        | RSS
-                    = '/ '
-                    a(href='{% url "comment_atom" %}') Atom
             ul
                 for comment in comments
                     li
@@ -112,5 +111,11 @@ block body
                             a(href='{{comment.link}}#comment-{{comment.id}}-link') #{comment.parent.title}
                         else
                             a(href='{{comment.link}}#comment-{{comment.id}}-link') #{comment.page_title}
-
+            span.dashed
+            span.rssatom
+                    a(href='{% url "comment_rss" %}')
+                        img(src='{% static "icons/feed.png" %}')
+                        | RSS
+                    = '/ '
+                    a(href='{% url "comment_atom" %}') Atom
     block after_posts
