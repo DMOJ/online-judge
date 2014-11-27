@@ -3,7 +3,7 @@ from operator import attrgetter
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import Q
-from django.forms import ModelForm
+from django.forms import ModelForm, CharField, Textarea
 
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, Problem
@@ -19,7 +19,6 @@ class ProfileForm(ModelForm):
 class ProblemSubmitForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProblemSubmitForm, self).__init__(*args, **kwargs)
-        self.fields['source'].max_length = 65536
         self.fields['problem'].empty_label = None
         self.fields['problem'].widget = forms.HiddenInput()
         self.fields['language'].empty_label = None
@@ -29,7 +28,7 @@ class ProblemSubmitForm(ModelForm):
         model = Submission
         fields = ['problem', 'source', 'language']
         widgets = {
-            'source': AceWidget(theme='twilight'),
+            'source': AceWidget(theme='twilight', max_length=65536),
         }
 
 
