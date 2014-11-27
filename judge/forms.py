@@ -17,6 +17,8 @@ class ProfileForm(ModelForm):
 
 
 class ProblemSubmitForm(ModelForm):
+    source = CharField(max_length=65536, widget=AceWidget(theme='twilight'))
+
     def __init__(self, *args, **kwargs):
         super(ProblemSubmitForm, self).__init__(*args, **kwargs)
         self.fields['problem'].empty_label = None
@@ -27,9 +29,6 @@ class ProblemSubmitForm(ModelForm):
     class Meta:
         model = Submission
         fields = ['problem', 'source', 'language']
-        widgets = {
-            'source': AceWidget(theme='twilight', max_length=65536),
-        }
 
 
 class OrganizationForm(ModelForm):
