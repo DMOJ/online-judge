@@ -586,7 +586,7 @@ class ContestParticipation(models.Model):
         self.save()
 
     def __unicode__(self):
-        return '%s in %s' % (self.profile.user.display_name, self.contest.name)
+        return '%s in %s' % (self.profile.user.long_display_name, self.contest.name)
 
 
 class ContestProfile(models.Model):
