@@ -282,7 +282,7 @@ class Submission(models.Model):
     memory = models.FloatField(verbose_name='Memory usage', null=True)
     points = models.FloatField(verbose_name='Points granted', null=True, db_index=True)
     language = models.ForeignKey(Language, verbose_name='Submission language')
-    source = models.TextField(verbose_name='Source code')
+    source = models.TextField(verbose_name='Source code', max_length=65536)
     status = models.CharField(max_length=2, choices=STATUS, default='QU', db_index=True)
     result = models.CharField(max_length=3, choices=SUBMISSION_RESULT, default=None, null=True,
                               blank=True, db_index=True)
