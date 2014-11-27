@@ -1,17 +1,10 @@
-from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
-from django.core.paginator import PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http import Http404
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 from django.utils.html import format_html
 
-from judge.models import Problem, Submission, Contest
+from judge.models import Submission
 from judge.views.submission import ProblemSubmissions, ForceContestMixin
-from judge.utils.problems import user_completed_ids, get_result_table
-from judge.utils.diggpaginator import DiggPaginator
+from judge.utils.problems import get_result_table
 
 
 __all__ = ['RankedSubmissions']
@@ -41,7 +34,7 @@ class RankedSubmissions(ProblemSubmissions):
     def get_queryset(self):
         if self.in_contest:
             count = Submission.objects.filter(problem_id=self.problem.id,
-                                              contest__participation__contest_id=self.contest.id, points__gt=0)\
+                                              contest__participation__contest_id=self.contest.id, points__gt=0) \
                 .values('user').distinct().count()
             contest_join = '''INNER JOIN judge_contestsubmission AS cs ON (sub.id = cs.submission_id)
                               INNER JOIN judge_contestparticipation AS cp ON (cs.participation_id = cp.id)'''
@@ -76,7 +69,8 @@ class RankedSubmissions(ProblemSubmissions):
             GROUP BY fastest.uid
             ORDER BY {points} DESC, sub.time ASC
         '''.format(points=points, contest_join=contest_join, constraint=constraint),
-                  (self.problem.id, self.contest.id) * 3 if self.in_contest else (self.problem.id,) * 3)
+                                          (self.problem.id, self.contest.id) * 3 if self.in_contest else (
+                                                                                                         self.problem.id,) * 3)
         return ranking
 
     def get_title(self):
