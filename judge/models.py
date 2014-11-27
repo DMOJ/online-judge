@@ -595,7 +595,7 @@ class ContestProfile(models.Model):
                                    null=True, blank=True, related_name='+')
 
     def __unicode__(self):
-        return 'Contest: %s' % self.user.display_name
+        return 'Contest: %s' % self.user.long_display_name
 
 
 class ContestProblem(models.Model):
