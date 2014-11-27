@@ -20,7 +20,8 @@ from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidg
 class ContestProfileInlineForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ContestProfileInlineForm, self).__init__(*args, **kwargs)
-        self.fields['current'].queryset = self.instance.history.all()
+        self.fields['current'].queryset = self.instance.history.select_related('contest').all()
+        self.fields['current'].label_from_instance = lambda obj: obj.contest.name
 
 
 class ContestProfileInline(admin.StackedInline):
