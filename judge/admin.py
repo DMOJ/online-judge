@@ -27,6 +27,7 @@ class ContestProfileInline(admin.StackedInline):
     fields = ('current',)
     model = ContestProfile
     form = ContestProfileInlineForm
+    can_delete = False
 
 
 class ProfileAdmin(admin.ModelAdmin):
