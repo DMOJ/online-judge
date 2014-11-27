@@ -19,6 +19,7 @@ class ProfileForm(ModelForm):
 class ProblemSubmitForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProblemSubmitForm, self).__init__(*args, **kwargs)
+        self.fields['source'].max_length = 65536
         self.fields['problem'].empty_label = None
         self.fields['problem'].widget = forms.HiddenInput()
         self.fields['language'].empty_label = None
