@@ -16,6 +16,10 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 
+class ContestProfileInline(admin.StackedInline):
+    fields = ('current',)
+
+
 class ProfileAdmin(admin.ModelAdmin):
     fields = ('user', 'name', 'about', 'organization', 'timezone', 'language', 'ace_theme', 'last_access', 'ip')
     list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip')
@@ -23,6 +27,7 @@ class ProfileAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'name', 'ip', 'user__email')
     list_filter = ('language', 'timezone')
     actions = ('recalculate_points',)
+    inlines = [ContestProfileInline]
     actions_on_top = True
     actions_on_bottom = True
 
