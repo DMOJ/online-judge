@@ -266,7 +266,7 @@ class ForceContestMixin(object):
 
     def access_check(self, request):
         if not request.user.has_perm('judge.see_private_contest') and not (self.contest.is_public or \
-                        self.contest.start_time > timezone.now()):
+                        self.contest.start_time < timezone.now()):
             raise Http404()
 
     def get(self, request, *args, **kwargs):
