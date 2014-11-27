@@ -17,9 +17,16 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 
+class ContestProfileInlineForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ContestProfileInlineForm, self).__init__(*args, **kwargs)
+        self.fields['current'].queryset = self.instance.history.all()
+
+
 class ContestProfileInline(admin.StackedInline):
     fields = ('current',)
     model = ContestProfile
+    form = ContestProfileInlineForm
 
 
 class ProfileAdmin(admin.ModelAdmin):
