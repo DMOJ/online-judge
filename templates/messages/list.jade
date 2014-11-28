@@ -1,2 +1,13 @@
 extends base
 - load staticfiles
+
+for message in incoming
+    | #{message.title} &rarr; me (#{message.timestamp})
+    br
+br
+.dashed
+br
+for message in outgoing
+    | #{message.title} &rarr; #{message.target} (#{message.timestamp})
+    br
+    
