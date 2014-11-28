@@ -11,36 +11,62 @@ if submission.status != 'IE'
         if submission.batch
             - regroup test_cases by batch as batches
             each batch in batches
-                b Batch ##{batch.grouper}
-                | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
-                br
-                .batch-cases
+                if not batch.grouper
                     table
-                        for case in batch.list
+                        each case in batch.list
                             tr(id=case.id).toggle.closed
                                 td
                                     if case.status != 'AC' and case.output
                                         span.icon
-                                    b Case ##{forloop.counter}:
+                                    b Test case ##{forloop.counter}:
                                 td
-                                    span(class=case.status, title=case.long_status) #{case.status}
-                                    if case.feedback
-                                        | &nbsp;(#{case.feedback})
+                                    span(class=case.status) #{case.status}
                                 td
-                                    if case.status != 'SC'
-                                        | [#{case.time|floatformat:"3"}s,
-                                        - with memory=case.memory|default_if_none:0
-                                            if memory < 1000
-                                                | #{memory|floatformat:"-2"}kb]
-                                            else
-                                                - math memory "$1 / 1024" as megabytes
-                                                | #{megabytes|floatformat:"-2"}mb]
+                                    | [#{case.time|floatformat:"3"}s,
+                                    - with memory=case.memory|default_if_none:0
+                                        if memory < 1000
+                                            | #{memory|floatformat:"-2"}kb]
+                                        else
+                                            - math memory "$1 / 1024" as megabytes
+                                            | #{megabytes|floatformat:"-2"}mb]
+                                td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
                             if case.status != 'AC' and case.output
                                 tr(id=case.id, style="display:none").toggled
                                     td(colspan='4')
                                         .case-info
                                             strong Your output (clipped)
                                             .case-output #{case.output|linebreaksbr}
+                else
+                    b Batch ##{batch.grouper}
+                    | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
+                    br
+                    .batch-cases
+                        table
+                            for case in batch.list
+                                tr(id=case.id).toggle.closed
+                                    td
+                                        if case.status != 'AC' and case.output
+                                            span.icon
+                                        b Case ##{forloop.counter}:
+                                    td
+                                        span(class=case.status, title=case.long_status) #{case.status}
+                                        if case.feedback
+                                            | &nbsp;(#{case.feedback})
+                                    td
+                                        if case.status != 'SC'
+                                            | [#{case.time|floatformat:"3"}s,
+                                            - with memory=case.memory|default_if_none:0
+                                                if memory < 1000
+                                                    | #{memory|floatformat:"-2"}kb]
+                                                else
+                                                    - math memory "$1 / 1024" as megabytes
+                                                    | #{megabytes|floatformat:"-2"}mb]
+                                if case.status != 'AC' and case.output
+                                    tr(id=case.id, style="display:none").toggled
+                                        td(colspan='4')
+                                            .case-info
+                                                strong Your output (clipped)
+                                                .case-output #{case.output|linebreaksbr}
                 br
         else
             table
