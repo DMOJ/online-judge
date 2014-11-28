@@ -3,14 +3,17 @@ extends base
 
 for message in incoming
     if not message.read
-        b #{message.title} &rarr; me (#{message.timestamp})
+        b #{message.title} &rarr; me 
+            span.time (#{message.timestamp})
     else
-        | #{message.title} &rarr; me (#{message.timestamp})
+        | #{message.title} &rarr; me
+        span.time (#{message.timestamp})
     br
 br
 .dashed
 br
 for message in outgoing
-    | #{message.title} &rarr; #{message.target} (#{message.timestamp})
+    | #{message.title} &rarr; #{message.target}
+    span.time (#{message.timestamp})
     br
     
