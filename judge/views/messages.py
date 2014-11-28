@@ -23,7 +23,7 @@ class NewMessage(LoginRequiredMixin, TitleMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(NewMessage, self).get_context_data(**kwargs)
-        profile = Profile.objects.filter(user__username=self.target)
+        profile = Profile.objects.get(user__username=self.target)
         context['target'] = profile
         return context
 
