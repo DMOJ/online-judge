@@ -48,6 +48,15 @@ class EditOrganizationForm(ModelForm):
             widgets['about'] = MathJaxPagedownWidget
 
 
+class NewMessageForm(ModelForm):
+    class Meta:
+        model = Organization
+        fields = ['title', 'content']
+        widgets = {}
+        if PagedownWidget is not None:
+            widgets.update({'content', MathJaxPagedownWidget()})
+
+
 class NewOrganizationForm(EditOrganizationForm):
     class Meta(EditOrganizationForm.Meta):
         fields = ['key'] + EditOrganizationForm.Meta.fields
