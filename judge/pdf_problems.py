@@ -63,7 +63,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
 \newcommand{\NormalTok}[1]{{#1}}
 
-
+\setlength{\parindent}{0pt}
 
 \title{\%s \bf %s}
 \author{%s}
