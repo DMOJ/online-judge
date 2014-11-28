@@ -2,7 +2,10 @@ extends base
 - load staticfiles
 
 for message in incoming
-    | #{message.title} &rarr; me (#{message.timestamp})
+    if not message.read
+        b #{message.title} &rarr; me (#{message.timestamp})
+    else
+        | #{message.title} &rarr; me (#{message.timestamp})
     br
 br
 .dashed

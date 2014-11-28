@@ -48,5 +48,5 @@ class MessageList(LoginRequiredMixin, TitleMixin, ListView):
         context = super(MessageList, self).get_context_data(**kwargs)
         profile = self.request.user.user.profile
         context['outgoing'] = PrivateMessage.objects.filter(sender=profile).order_by('-key')
-        context['incoming'] = PrivateMessage.objects.filter(target=profile).order_by('-key')
+        context['incoming'] = PrivateMessage.objects.filter(target=profile).order_by('-read')
         return context
