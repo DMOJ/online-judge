@@ -15,8 +15,9 @@ block content_media
 
 block header
     a.view-pdf(href='{% url "problem_pdf" problem.code %}')
+        img(style='position:relative;top:2px', src='http://www.adobe.com/images/pdficon_small.png')
         | View as PDF
-        sup &nbsp;(beta)
+        sup= ' (beta)'
 
 block info_float
     a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
