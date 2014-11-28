@@ -149,7 +149,7 @@ def latex_document(title, author, fragment):
     latex = latex.replace(r'\textbackslash{}ne', r'\ne')
     latex = latex.replace(r'\paragraph{', r'\section{')
     latex = retablebegin.sub(lambda m: r'%s\hline' % m.group(0), latex)
-    latex = retable.sub(lambda m: '| %s |' % ' | '.join(r'p{0.1\textwidth}' for l in m.group(0)), latex)
+    latex = retable.sub(lambda m: '| %s |' % ' | '.join(['l' for l in m.group(0)[:-1]]+['X']), latex)
     latex = latex.replace(r'\tabularnewline', r'\\ \hline')
     return PROLOGUE % (['Huge', 'LARGE'][len(title) > 30], title.replace('#', r'\#'), author) + latex + EPILOGUE
 
