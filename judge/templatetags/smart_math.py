@@ -1,5 +1,4 @@
 from django.template import Library
-from django.utils.html import escape
 from django.utils.http import urlquote
 
 from judge.math_parser import MathHTMLParser, MATHTEX_CGI

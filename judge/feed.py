@@ -2,7 +2,6 @@ from django.contrib.syndication.views import Feed
 from django.core.cache import cache
 from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
-from django.utils.html import escape
 from django.utils.http import urlquote
 
 from judge.math_parser import MathHTMLParser, MATHTEX_CGI

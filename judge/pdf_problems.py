@@ -31,6 +31,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{tabularx}
 \usepackage{tabulary}
 
+\setlength{\parskip}{1em}
 \renewcommand{\arraystretch}{1.5}
 
 \usepackage[newcommands]{ragged2e}
