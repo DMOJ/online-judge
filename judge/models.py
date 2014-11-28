@@ -576,7 +576,7 @@ class ContestParticipation(models.Model):
         profile_id = self.profile.user_id
         for problem in self.contest.contest_problems.all():
             assert isinstance(problem, ContestProblem)
-            solution = problem.submissions.filter(submission__user_id=profile_id, points__gt=0)\
+            solution = problem.submissions.filter(submission__user_id=profile_id, points__gt=0) \
                 .values('submission__user_id').annotate(time=Max('submission__date'))
             if not solution:
                 continue
@@ -634,3 +634,16 @@ class BlogPost(models.Model):
         permissions = (
             ('see_hidden_post', 'See hidden posts'),
         )
+
+
+class PrivateMessage(models.Model):
+    title = models.CharField(verbose_name='Message title', max_length=50)
+    content = models.TextField(verbose_name='Message body')
+    sender = models.ForeignKey(Profile, verbose_name='Sender')
+    target = models.ForeignKey(Profile, verbose_name='Target')
+    timestamp = models.DateTimeField(verbose_name='Message timestamp', auto_now_add=True)
+    read = models.BooleanField(verbose_name='Read')
+
+
+class PrivateMessageThread(models.Model):
+    messages = models.ManyToManyField(PrivateMessage, verbose_name='Messages in the thread')
