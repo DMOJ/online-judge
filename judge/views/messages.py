@@ -1,7 +1,7 @@
 from itertools import chain
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Max
 from django.http import HttpResponseRedirect, Http404
@@ -23,8 +23,7 @@ class NewMessage(LoginRequiredMixin, TitleMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(NewMessage, self).get_context_data(**kwargs)
-        profile = Profile.objects.get(user__username=self.target)
-        context['target'] = profile
+        context['target'] = self.target
         return context
 
     def form_valid(self, form):
@@ -32,7 +31,11 @@ class NewMessage(LoginRequiredMixin, TitleMixin, CreateView):
         return super(NewMessage, self).form_valid(form)
 
     def get(self, request, *args, **kwargs):
-        self.target = request.GET.get('target') if 'target' in request.GET else None
+        name = request.GET.get('target') if 'target' in request.GET else None
+        try:
+            self.target = Profile.objects.get(user__username=self.target)
+        except ObjectDoesNotExist:
+            return generic_message(request, 'No such user', 'No user called "%s"' % name)
         return super(NewMessage, self).get(request, *args, **kwargs)
 
 
