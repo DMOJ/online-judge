@@ -62,12 +62,14 @@ block info_float
             | #{megabytes|floatformat:"-2"}M
     br
     - with authors=problem.authors.all
-        b Author(s):&nbsp;
-        for author in authors
-            span(class=author.display_rank)
-                a(href='{% url "judge.views.user" author.user.username %}') #{author.user.username}
-            if not forloop.last
-                = ', '
+        if authors
+            b Author(s):
+            = ' '
+            for author in authors
+                span(class=author.display_rank)
+                    a(href='{% url "judge.views.user" author.user.username %}') #{author.user.username}
+                if not forloop.last
+                    = ', '
     br
     br
     div#problem-types
