@@ -52,9 +52,9 @@ class NewMessageForm(ModelForm):
     class Meta:
         model = PrivateMessage
         fields = ['title', 'content']
-        # widgets = {}
-        # if PagedownWidget is not None:
-        #     widgets.update({'content', MathJaxPagedownWidget()})
+        widgets = {}
+        if PagedownWidget is not None:
+            widgets['content'] = MathJaxPagedownWidget()
 
 
 class NewOrganizationForm(EditOrganizationForm):
