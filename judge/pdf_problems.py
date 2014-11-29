@@ -156,6 +156,8 @@ def latex_document(title, author, fragment):
     # FIXME
     latex = latex.replace(r'{@{}', r'{')
     latex = latex.replace(r'@{}}', r'}')
+    for f in [r'\toprule', r'\midrule', r'\endhead', r'\bottomrule']:
+        latex = latex.replace(f, '')
     return PROLOGUE % (['Huge', 'LARGE'][len(title) > 30], title.replace('#', r'\#'), author) + latex + EPILOGUE
 
 
