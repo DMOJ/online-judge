@@ -150,10 +150,10 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                 with LatexPdfMaker(document) as latex:
                     latex.make()
                     if not latex.success:
-                        try:
-                            raise LatexError(latex.log)
-                        except LatexError:
-                            self.logger.exception('Latex error while rendering: %s.pdf', problem.code)
+                        # try:
+                        #     raise LatexError(latex.log)
+                        # except LatexError:
+                        #     self.logger.exception('Latex error while rendering: %s.pdf', problem.code)
                         if not latex.created:
                             with open(error_cache, 'wb') as f:
                                 f.write(latex.log)
