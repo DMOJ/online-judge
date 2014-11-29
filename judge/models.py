@@ -222,6 +222,10 @@ class Problem(models.Model):
         return reverse('problem_detail', args=(self.code,))
 
     @cached_property
+    def authors_list(self):
+        return self.authors.all()
+
+    @cached_property
     def author_ids(self):
         return self.authors.values_list('id', flat=True)
 

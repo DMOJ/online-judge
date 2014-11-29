@@ -62,7 +62,11 @@ block info_float
             | #{megabytes|floatformat:"-2"}M
     br
     b Author(s):
-
+    for author in problem.authors_list
+        a(href='{% url "judge.views.user" author.user.username %}') #{author.user.username}
+        if not forloop.last
+            |,&nbsp;
+    br
     br
     div#problem-types
         div.toggle.closed.unselectable
