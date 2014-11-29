@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.forms import ModelForm, CharField, Textarea
 
 from django_ace import AceWidget
-from judge.models import Organization, Profile, Submission, Problem
+from judge.models import Organization, Profile, Submission, Problem, PrivateMessage
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 
@@ -50,7 +50,7 @@ class EditOrganizationForm(ModelForm):
 
 class NewMessageForm(ModelForm):
     class Meta:
-        model = Organization
+        model = PrivateMessage
         fields = ['title', 'content']
         # widgets = {}
         # if PagedownWidget is not None:
