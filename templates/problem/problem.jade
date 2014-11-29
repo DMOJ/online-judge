@@ -63,7 +63,8 @@ block info_float
     br
     b Author(s):&nbsp;
     for author in problem.authors_list
-        a(class=author.display_rank, href='{% url "judge.views.user" author.user.username %}') #{author.user.username}
+        span(class=author.display_rank)
+            a(href='{% url "judge.views.user" author.user.username %}') #{author.user.username}
         if not forloop.last
             |,&nbsp;
     br
