@@ -61,12 +61,13 @@ block info_float
             -math memory "$1 / 1024" as megabytes
             | #{megabytes|floatformat:"-2"}M
     br
-    b Author(s):&nbsp;
-    for author in problem.authors_list
-        span(class=author.display_rank)
-            a(href='{% url "judge.views.user" author.user.username %}') #{author.user.username}
-        if not forloop.last
-            |,&nbsp;
+    - with authors=problem.authors.all
+        b Author(s):&nbsp;
+        for author in authors
+            span(class=author.display_rank)
+                a(href='{% url "judge.views.user" author.user.username %}') #{author.user.username}
+            if not forloop.last
+                = ', '
     br
     br
     div#problem-types
