@@ -61,19 +61,20 @@ block info_float
             -math memory "$1 / 1024" as megabytes
             | #{megabytes|floatformat:"-2"}M
     br
-    - with authors=problem.authors.all
-        if authors
-            if authors|length > 1
-                b Authors:
-            else
-                b Author:
-            = ' '
-            for author in authors
-                span(class=author.display_rank)
-                    a(href='{% url "judge.views.user" author.user.username %}') #{author.user.username}
-                if not forloop.last
-                    = ', '
-            br
+    - cache 86400 problem_authors problem.id
+        - with authors=problem.authors.all
+            if authors
+                if authors|length > 1
+                    b Authors:
+                else
+                    b Author:
+                = ' '
+                for author in authors
+                    span(class=author.display_rank)
+                        a(href='{% url "judge.views.user" author.user.username %}') #{author.user.username}
+                    if not forloop.last
+                        = ', '
+                br
     br
     div#problem-types
         div.toggle.closed.unselectable

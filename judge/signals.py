@@ -14,8 +14,11 @@ from .caching import update_submission, finished_submission
 
 @receiver(post_save, sender=Problem)
 def problem_update(sender, instance, **kwargs):
-    cache.delete(make_template_fragment_key('problem_html', (instance.id,)))
-    cache.delete(make_template_fragment_key('submission_problem', (instance.id,)))
+    cache.delete_many([
+        make_template_fragment_key('problem_html', (instance.id,)),
+        make_template_fragment_key('problem_authors', (instance.id,)),
+        make_template_fragment_key('submission_problem', (instance.id,))
+    ])
     if hasattr(settings, 'PROBLEM_PDF_CACHE'):
         try:
             os.unlink(os.path.join(settings.PROBLEM_PDF_CACHE, '%s.pdf' % instance.code))
