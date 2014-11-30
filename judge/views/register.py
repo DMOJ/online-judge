@@ -22,10 +22,10 @@ class CustomRegistrationForm(RegistrationForm):
     language = ModelChoiceField(queryset=Language.objects.all(), label='Preferred language', empty_label=None)
 
     def clean_email(self):
-        if User.objects.filter(email__exact=self.clean_data['email']).exists():
+        if User.objects.filter(email=self.cleaned_data['email']).exists():
             raise forms.ValidationError(u'The email address "%s" is already taken. '
                                         u'Only one registration is allowed per address.' % self.clean_data['email'])
-        return self.clean_data['email']
+        return self.cleaned_data['email']
 
 
 class RegistrationView(OldRegistrationView):
