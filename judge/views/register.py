@@ -24,7 +24,7 @@ class CustomRegistrationForm(RegistrationForm):
     def clean_email(self):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
             raise forms.ValidationError(u'The email address "%s" is already taken. '
-                                        u'Only one registration is allowed per address.' % self.clean_data['email'])
+                                        u'Only one registration is allowed per address.' % self.cleaned_data['email'])
         return self.cleaned_data['email']
 
 
