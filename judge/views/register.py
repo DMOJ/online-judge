@@ -1,5 +1,6 @@
 import re
 from django import forms
+from django.contrib.auth.models import User
 from django.forms import CharField, ChoiceField, ModelChoiceField
 from django.utils import timezone
 from registration.backends.default.views import\
@@ -19,6 +20,12 @@ class CustomRegistrationForm(RegistrationForm):
     timezone = ChoiceField(label='Location', choices=TIMEZONE)
     organization = ModelChoiceField(queryset=Organization.objects.all(), label='Organization', required=False)
     language = ModelChoiceField(queryset=Language.objects.all(), label='Preferred language', empty_label=None)
+
+    def clean_email(self):
+        if User.objects.filter(email__exact=self.clean_data['email']).exists():
+            raise forms.ValidationError(u'The email address "%s" is already taken. '
+                                        u'Only one registration is allowed per address.' % self.clean_data['email'])
+        return self.clean_data['email']
 
 
 class RegistrationView(OldRegistrationView):
