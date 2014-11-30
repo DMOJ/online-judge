@@ -201,7 +201,7 @@ block body
                 if submission.is_graded
                     - get_cache_version "submission" submission.id as sub_version
                     - var done = profile_id == submission.user_id or submission.problem_id in completed_problem_ids
-                    - cache 86400 submission_row sub_version submission.id show_problem done perms.judge.change_submission request.user.profile.timezone
+                    - cache 86400 submission_row sub_version submission.id show_problem done perms.judge.rejudge_submission perms.judge.change_submission request.user.profile.timezone
                         include submission/row
                 else
                     include submission/row
