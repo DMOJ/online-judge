@@ -201,7 +201,7 @@ class Problem(models.Model):
     authors = models.ManyToManyField(Profile, verbose_name='Creators', blank=True, related_name='authored_problems')
     types = models.ManyToManyField(ProblemType, verbose_name='Problem types')
     group = models.ForeignKey(ProblemGroup, verbose_name='Problem group')
-    time_limit = models.IntegerField(verbose_name='Time limit')
+    time_limit = models.FloatField(verbose_name='Time limit')
     memory_limit = models.IntegerField(verbose_name='Memory limit')
     short_circuit = models.BooleanField(default=False)
     points = models.FloatField(verbose_name='Points')
