@@ -154,7 +154,7 @@ class SubmissionStatusFilter(admin.SimpleListFilter):
 
 class SubmissionResultFilter(admin.SimpleListFilter):
     parameter_name = title = 'result'
-    __lookups = (('None', 'None'),) + Submission.RESULT
+    __lookups = (('None', 'None'), ('BAD', 'Unaccepted')) + Submission.RESULT
     __handles = set(map(itemgetter(0), Submission.RESULT))
 
     def lookups(self, request, model_admin):
@@ -163,7 +163,9 @@ class SubmissionResultFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() == 'None':
             return queryset.filter(result=None)
-        if self.value() in self.__handles:
+        elif self.value() == 'BAD':
+            return queryset.exclude(result='AC')
+        elif self.value() in self.__handles:
             return queryset.filter(result=self.value())
 
 
