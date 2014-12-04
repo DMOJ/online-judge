@@ -440,6 +440,12 @@ class JudgeAdmin(admin.ModelAdmin):
             return self.readonly_fields + ('name',)
         return self.readonly_fields
 
+    def has_delete_permission(self, request, obj=None):
+        result = super(JudgeAdmin, self).has_delete_permission(request, obj)
+        if result and obj is not None:
+            return not obj.online
+        return result
+
     if AdminPagedownWidget is not None:
         formfield_overrides = {
             TextField: {'widget': AdminPagedownWidget},
