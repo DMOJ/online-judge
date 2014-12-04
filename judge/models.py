@@ -640,8 +640,8 @@ class BlogPost(models.Model):
 class PrivateMessage(models.Model):
     title = models.CharField(verbose_name='Message title', max_length=50)
     content = models.TextField(verbose_name='Message body')
-    sender = models.ForeignKey(Profile, verbose_name='Sender')
-    target = models.ForeignKey(Profile, verbose_name='Target')
+    sender = models.ForeignKey(Profile, verbose_name='Sender', related_name='sent_messages')
+    target = models.ForeignKey(Profile, verbose_name='Target', related_name='received_messages')
     timestamp = models.DateTimeField(verbose_name='Message timestamp', auto_now_add=True)
     read = models.BooleanField(verbose_name='Read')
 
