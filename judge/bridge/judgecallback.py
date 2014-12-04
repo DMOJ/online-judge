@@ -48,15 +48,10 @@ class DjangoJudgeHandler(JudgeHandler):
         judge.save()
 
     def _disconnected(self):
-        judge = Judge.objects.get(name=self.name)
-        judge.online = False
-        judge.save()
+        Judge.objects.filter(name=self.name).update(online=False)
 
     def _update_ping(self):
-        judge = Judge.objects.get(name=self.name)
-        judge.ping = self.latency
-        judge.load = self.load
-        judge.save()
+        Judge.objects.filter(name=self.name).update(ping=self.latency, load=self.load)
 
     def on_grading_begin(self, packet):
         super(DjangoJudgeHandler, self).on_grading_begin(packet)
