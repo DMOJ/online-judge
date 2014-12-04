@@ -10,7 +10,7 @@
             | ...
         else
             if page == 1 and first_page_href != None
-                a(class=('active-page' if page == page_obj.number else undefined), href=first_page_href)= page
+                a(class=('active-page' if page == page_obj.number else undefined), href='{{ first_page_href }}')= page
             else
                 a(class=('active-page' if page == page_obj.number else undefined), href='{{ page_prefix }}{{ page }}')= page
 
