@@ -435,6 +435,11 @@ class JudgeAdmin(admin.ModelAdmin):
     list_display = ('name', 'online', 'last_connect', 'ping', 'load')
     ordering = ['name']
 
+    def get_readonly_fields(self, request, obj=None):
+        if obj is not None and obj.online:
+            return self.readonly_fields + ('name',)
+        return self.readonly_fields
+
     if AdminPagedownWidget is not None:
         formfield_overrides = {
             TextField: {'widget': AdminPagedownWidget},
