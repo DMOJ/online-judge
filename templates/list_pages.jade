@@ -10,10 +10,9 @@
             | ...
         else
             if page == 1 and first_page_href != None
-                - var list_pages_href = first_page_href
+                a(class=('active-page' if page == page_obj.number else undefined), href=first_page_href)= page
             else
-                - var list_pages_href = page_prefix + str(page)
-            a(class=('active-page' if page == page_obj.number else undefined), href=list_pages_href)= page
+                a(class=('active-page' if page == page_obj.number else undefined), href='{{ page_prefix }}{{ page }}')= page
 
     if page_obj.has_next
         a(href='{{ page_prefix }}{{ page_obj.next_page_number }}') >>
