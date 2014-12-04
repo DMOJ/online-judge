@@ -1,7 +1,7 @@
 .pagination
     if page_obj.has_previous
         if page_obj.previous_page_number == 1 and first_page_href != None
-            a(href='{{ page_prefix }}{{ first_page_href }}') <<
+            a(href='{{ first_page_href }}') <<
         else
             a(href='{{ page_prefix }}{{ page_obj.previous_page_number }}') <<
 
@@ -12,11 +12,8 @@
             if page == 1 and first_page_href != None
                 - var list_pages_href = first_page_href
             else
-                - var list_pages_href = page
-            if page == page_obj.number
-                a.active-page(href='{{ page_prefix }}{{ list_pages_href }}')= page
-            else
-                a(href='{{ page_prefix }}{{ list_pages_href }}')= page
+                - var list_pages_href = page_prefix + page
+            a(class=('active-page' if page == page_obj.number else undefined), href=list_pages_href)= page
 
     if page_obj.has_next
         a(href='{{ page_prefix }}{{ page_obj.next_page_number }}') >>
