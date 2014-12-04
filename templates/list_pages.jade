@@ -12,7 +12,7 @@
             if page == 1 and first_page_href != None
                 - var list_pages_href = first_page_href
             else
-                - var list_pages_href = page_prefix + page
+                - var list_pages_href = page_prefix + str(page)
             a(class=('active-page' if page == page_obj.number else undefined), href=list_pages_href)= page
 
     if page_obj.has_next
