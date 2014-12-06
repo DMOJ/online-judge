@@ -39,6 +39,10 @@ TIMEZONE = make_timezones()
 del make_timezones
 
 
+def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
+    return string + (sum(k in unsafe for k in string) - string.count(u'\u202c')) * u'\u202c'
+
+
 class Language(models.Model):
     key = models.CharField(max_length=6, verbose_name='Short identifier', unique=True)
     name = models.CharField(max_length=20, verbose_name='Long name')

@@ -3,10 +3,10 @@ from operator import attrgetter
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import Q
-from django.forms import ModelForm, CharField, Textarea
+from django.forms import ModelForm, CharField
 
 from django_ace import AceWidget
-from judge.models import Organization, Profile, Submission, Problem, PrivateMessage
+from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 
@@ -14,6 +14,9 @@ class ProfileForm(ModelForm):
     class Meta:
         model = Profile
         fields = ['name', 'about', 'organization', 'timezone', 'language', 'ace_theme']
+
+    def clean_name(self):
+        return fix_unicode(self.cleaned_data['name'])
 
 
 class ProblemSubmitForm(ModelForm):
