@@ -120,7 +120,7 @@ def make_latex(markdown, style='problem'):
         html = html.encode('utf-8')
     if pandoc is not None:
         proc = subprocess.Popen([pandoc, '-f', 'html', '-t', 'latex'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        return proc.communicate(html)[0]
+        return proc.communicate(html)[0].decode('utf-8')
     else:
         # Sorry, but can't install haskell on openshift.
         stream = urllib2.urlopen('http://johnmacfarlane.net/cgi-bin/trypandoc?%s' % urllib.urlencode({
