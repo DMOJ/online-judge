@@ -101,10 +101,10 @@ retablebegin = re.compile(r'\\begin\{longtable\}\[c\]\{@\{\}l+@\{\}\}')
 
 class DollarMath(MathHTMLParser):
     def inline_math(self, math):
-        return r'\(%s\)' % math
+        return r'\\(%s\\)' % math
 
     def display_math(self, math):
-        return r'\[%s\]' % math
+        return r'\\[%s\\]' % math
 
 
 def format_markdown(markdown):
