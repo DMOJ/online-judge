@@ -97,6 +97,8 @@ LATEX_REPLACE = [
 
 retable = re.compile(r'(?<=\\begin\{longtable\}\[c\]\{@\{\})l+(?=@\{\}\})')
 retablebegin = re.compile(r'\\begin\{longtable\}\[c\]\{@\{\}l+@\{\}\}')
+remath = re.compile('(?<=\\\().+?(?=\\\))')
+redisplaymath = re.compile('(?<=\\\[).+?(?=\\\])')
 
 
 class DollarMath(MathHTMLParser):
@@ -148,6 +150,8 @@ def latex_document(title, author, fragment):
     latex = latex.replace(r'\textbackslash{}ge', r'\ge')
     latex = latex.replace(r'\textbackslash{}ne', r'\ne')
     latex = latex.replace(r'\paragraph{', r'\section{')
+    latex = remath.sub(lambda m: m.group(0).replace('\textbackslash{}', '\\'), latex)
+    latex = redisplaymath.sub(lambda m: m.group(0).replace('\textbackslash{}', '\\'), latex)
     latex = retablebegin.sub(lambda m: r'%s\hline' % m.group(0), latex)
     latex = retable.sub(lambda m: '| %s |' % ' | '.join(['l' for l in m.group(0)[:-1]]+['X']), latex)
     latex = latex.replace(r'\tabularnewline', r'\\ \hline')
