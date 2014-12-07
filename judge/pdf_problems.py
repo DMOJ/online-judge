@@ -97,8 +97,8 @@ LATEX_REPLACE = [
 
 retable = re.compile(r'(?<=\\begin\{longtable\}\[c\]\{@\{\})l+(?=@\{\}\})')
 retablebegin = re.compile(r'\\begin\{longtable\}\[c\]\{@\{\}l+@\{\}\}')
-remath = re.compile('(?<=\\\().+?(?=\\\))')
-redisplaymath = re.compile('(?<=\\\[).+?(?=\\\])')
+remath = re.compile(r'(?<=\\\().+?(?=\\\))')
+redisplaymath = re.compile(r'(?<=\\\[).+?(?=\\\])')
 
 
 class DollarMath(MathHTMLParser):
