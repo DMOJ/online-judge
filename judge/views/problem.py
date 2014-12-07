@@ -165,12 +165,12 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
             else:
                 self.logger.info('Successfully rendered: %s.pdf', problem.code)
 
-        #if hasattr(settings, 'PROBLEM_PDF_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
-        #    response = HttpResponse()
-        #    response['X-Accel-Redirect'] = '/%s/%s.pdf' % (settings.PROBLEM_PDF_INTERNAL, problem.code)
-        #else:
-        with open(cache, 'rb') as f:
-            response = HttpResponse(f.read())
+        response = HttpResponse()
+        if hasattr(settings, 'PROBLEM_PDF_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
+            response['X-Accel-Redirect'] = '%s/%s.pdf' % (settings.PROBLEM_PDF_INTERNAL, problem.code)
+        else:
+            with open(cache, 'rb') as f:
+                response.content = f.read()
 
         response['Content-Type'] = 'application/pdf'
         response['Content-Disposition'] = 'inline; filename=%s.pdf' % problem.code
