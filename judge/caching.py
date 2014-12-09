@@ -9,8 +9,7 @@ def update_submission(id):
 
 
 def update_stats():
-    cache.delete('sub_stats_table')
-    cache.delete('sub_stats_data')
+    cache.delete_many(('sub_stats_table', 'sub_stats_data'))
 
 
 def point_update(profile):
@@ -18,10 +17,11 @@ def point_update(profile):
 
 
 def finished_submission(sub):
-    cache.delete('user_complete:%d' % sub.user_id)
+    keys = ['user_complete:%d' % sub.user_id]
     if hasattr(sub, 'contest'):
         participation = sub.contest.participation
-        cache.delete('contest_complete:%d' % participation.id)
-        cache.delete(make_template_fragment_key('conrank_user_prob',
-                                                (participation.profile.user_id,
-                                                 participation.contest_id)))
+        keys += ['contest_complete:%d' % participation.id,
+                 make_template_fragment_key('conrank_user_prob',
+                                            (participation.profile.user_id,
+                                             participation.contest_id))]
+    cache.delete_many(keys)
