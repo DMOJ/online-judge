@@ -34,10 +34,12 @@ def problem_update(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Profile)
 def profile_update(sender, instance, **kwargs):
-    cache.delete(make_template_fragment_key('user_on_rank', (instance.id,)))
-    cache.delete(make_template_fragment_key('user_org_on_rank', (instance.id,)))
-    cache.delete(make_template_fragment_key('submission_user', (instance.id,)))
-    cache.delete(make_template_fragment_key('org_member_count', (instance.organization_id,)))
+    cache.delete_many([
+        make_template_fragment_key('user_on_rank', (instance.id,)),
+        make_template_fragment_key('user_org_on_rank', (instance.id,)),
+        make_template_fragment_key('submission_user', (instance.id,)),
+        make_template_fragment_key('org_member_count', (instance.organization_id,))
+    ])
 
 
 @receiver(post_save, sender=Contest)
@@ -99,9 +101,7 @@ def organization_update(sender, instance, **kwargs):
 
 @receiver(post_save, sender=NavigationBar)
 def navigation_update(sender, instance, **kwargs):
-    cache.delete('navbar')
-    cache.delete('navbar_dict')
-    cache.delete(make_template_fragment_key('navbar'))
+    cache.delete_many(['navbar', 'navbar_dict', make_template_fragment_key('navbar')])
 
 
 @receiver(post_save, sender=MiscConfig)
