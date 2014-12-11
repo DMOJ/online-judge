@@ -13,13 +13,13 @@ class CheckboxSelectMultipleWithSelectAll(forms.CheckboxSelectMultiple):
         empty = False
         if not self.choices:
             empty = True
-        has_id = kwargs and ("attrs" in kwargs) and ("id" in kwargs["attrs"])
+        has_id = kwargs and ('attrs' in kwargs) and ('id' in kwargs['attrs'])
         if not has_id:
-            raise FieldError("id required")
-        select_all_id = kwargs["attrs"]["id"] + "_all"
-        select_all_name = args[0] + "_all"
+            raise FieldError('id required')
+        select_all_id = kwargs['attrs']['id'] + '_all'
+        select_all_name = args[0] + '_all'
         renderer = super(CheckboxSelectMultipleWithSelectAll, self).get_renderer(*args, **kwargs)
-        template = get_template("widgets/select_all.jade")
+        template = get_template('widgets/select_all.jade')
         context = Context({'original_widget': renderer.render(),
                            'select_all_id': select_all_id,
                            'select_all_name': select_all_name,
@@ -29,7 +29,7 @@ class CheckboxSelectMultipleWithSelectAll(forms.CheckboxSelectMultiple):
 
     def value_from_datadict(self, *args, **kwargs):
         original = super(CheckboxSelectMultipleWithSelectAll, self).value_from_datadict(*args, **kwargs)
-        select_all_name = args[2] + "_all"
+        select_all_name = args[2] + '_all'
         if select_all_name in args[0]:
             self._all_selected = True
         else:
