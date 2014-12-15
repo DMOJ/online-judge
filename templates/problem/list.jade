@@ -59,10 +59,7 @@ block body
                 if has_search
                     label(for='search') Search:
                     input(type='text', name='search', id='search', value=search_query)
-                if hide_solved
-                    input(type='checkbox', name='hide_solved', id='hide_solved', checked='checked')
-                else
-                    input(type='checkbox', name='hide_solved', id='hide_solved', value='1')
+                input(type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
                 label(for='hide_solved') Hide solved problems
                 input(type='submit', value='Filter', style='display: inline; padding: 0px 5px')
     table#problem-table.table.striped
