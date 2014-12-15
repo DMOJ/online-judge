@@ -170,7 +170,7 @@ class ProblemSubmissions(SubmissionsListBase):
 
     def access_check(self, request):
         if not self.problem.is_public:
-            if not self.request.user.has_perm('judge.see_private_problem') and \
+            if not self.problem.authors.filter(id=self.profile.id).exists() and not self.request.user.has_perm('judge.see_private_problem') and \
                     not (self.in_contest and self.contest.problems.filter(id=self.problem.id).exists()):
                 raise Http404()
 
