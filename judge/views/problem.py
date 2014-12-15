@@ -219,7 +219,8 @@ class ProblemList(TitleMixin, ListView):
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, result='AC')
                                .values_list('problem__id', flat=True))
         if settings.ENABLE_FTS and 'search' in self.request.GET:
-            queryset = queryset.search(' '.join(self.request.GET.getlist('search')))
+            self.search_query = query = ' '.join(self.request.GET.getlist('search'))
+            queryset = queryset.search(query)
         return queryset
 
     def get_queryset(self):
@@ -237,11 +238,14 @@ class ProblemList(TitleMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(ProblemList, self).get_context_data(**kwargs)
         context['hide_solved'] = int(self.hide_solved)
+        context['has_search'] = settings.ENABLE_FTS
+        context['search_query'] = self.search_query
         context['completed_problem_ids'] = self.get_completed_problems()
         return context
 
     def get(self, request, *args, **kwargs):
         self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
+        self.search_query = None
         return super(ProblemList, self).get(request, *args, **kwargs)
 
 
