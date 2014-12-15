@@ -219,8 +219,9 @@ class ProblemList(TitleMixin, ListView):
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, result='AC')
                                .values_list('problem__id', flat=True))
         if settings.ENABLE_FTS and 'search' in self.request.GET:
-            self.search_query = query = ' '.join(self.request.GET.getlist('search'))
-            queryset = queryset.search(query)
+            self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
+            if query:
+                queryset = queryset.search(query)
         return queryset
 
     def get_queryset(self):
