@@ -1,6 +1,6 @@
 # From: http://www.mercurytide.co.uk/news/article/django-full-text-search/
 
-from django.db import models, backend
+from django.db import models, connection
 from django.db.models.query import QuerySet
 
 
@@ -21,8 +21,8 @@ class SearchQuerySet(QuerySet):
         # in `table_name`.`column_name` style
         columns = [meta.get_field(name, many_to_many=False).column for name in self._search_fields]
         full_names = ['%s.%s' %
-                      (backend.quote_name(meta.db_table),
-                       backend.quote_name(column))
+                      (connection.ops.quote_name(meta.db_table),
+                       connection.ops.quote_name(column))
                       for column in columns]
 
         # Create the MATCH...AGAINST expressions
