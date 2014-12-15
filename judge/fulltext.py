@@ -9,6 +9,11 @@ class SearchQuerySet(QuerySet):
         super(SearchQuerySet, self).__init__(model, query, using)
         self._search_fields = fields
 
+    def _clone(self, *args, **kwargs):
+        queryset = super(SearchQuerySet, self)._clone(*args, **kwargs)
+        queryset._search_fields = self._search_fields
+        return queryset
+
     def search(self, query):
         meta = self.model._meta
 
