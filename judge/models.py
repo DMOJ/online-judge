@@ -15,6 +15,7 @@ from django.utils import timezone
 from timedelta.fields import TimedeltaField
 
 from judge.caching import point_update
+from judge.fulltext import SearchManager
 from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
 from judge.ordered_model import OrderedModel
@@ -212,6 +213,8 @@ class Problem(models.Model):
     partial = models.BooleanField(verbose_name='Allows partial points')
     allowed_languages = models.ManyToManyField(Language, verbose_name='Allowed languages')
     is_public = models.BooleanField(verbose_name='Publicly visible', db_index=True)
+
+    objects = SearchManager(('code', 'name', 'description'))
 
     def types_list(self):
         return map(attrgetter('full_name'), self.types.all())

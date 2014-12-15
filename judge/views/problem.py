@@ -218,6 +218,8 @@ class ProblemList(TitleMixin, ListView):
         if self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, result='AC')
                                .values_list('problem__id', flat=True))
+        if settings.ENABLE_FTS and 'search' in self.request.GET:
+            queryset = queryset.search(' '.join(self.request.GET.getlist('search')))
         return queryset
 
     def get_queryset(self):

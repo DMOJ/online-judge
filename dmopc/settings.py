@@ -240,6 +240,7 @@ DATABASES = {
     }
 }
 
+ENABLE_FTS = False
 
 # Bridged configuration
 BRIDGED_JUDGE_HOST = 'localhost'
