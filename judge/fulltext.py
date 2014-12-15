@@ -31,8 +31,9 @@ class SearchQuerySet(QuerySet):
 
         # Add the extra SELECT and WHERE options
         return self.extra(select={'relevance': match_expr},
+                          select_params=[query],
                           where=[match_expr],
-                          params=[query, query])
+                          params=[query])
 
 
 class SearchManager(models.Manager):
