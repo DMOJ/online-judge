@@ -56,11 +56,14 @@ block body
     block before_table
         if not IN_CONTEST and request.user.is_authenticated
             form#filter-form(name='form', action='', method='get')
+                label(for='search') Search:
+                input(type='text', name='search', id='search')
                 if hide_solved
-                    input(type='checkbox', name='hide_solved', id='hide_solved', onclick='document.form.submit()', checked='checked')
+                    input(type='checkbox', name='hide_solved', id='hide_solved', checked='checked')
                 else
-                    input(type='checkbox', name='hide_solved', id='hide_solved', value='1', onclick='document.form.submit()')
+                    input(type='checkbox', name='hide_solved', id='hide_solved', value='1')
                 label(for='hide_solved') Hide solved problems
+                input(type='submit', value='Filter')
     table#problem-table.table.striped
         thead
             tr
