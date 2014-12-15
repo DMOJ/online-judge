@@ -35,8 +35,8 @@ class SearchManager(models.Manager):
         super(SearchManager, self).__init__()
         self._search_fields = fields
 
-    def get_query_set(self):
+    def get_queryset(self):
         return SearchQuerySet(self.model, fields=self._search_fields)
 
     def search(self, query):
-        return self.get_query_set().search(query)
+        return self.get_queryset().search(query)
