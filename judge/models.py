@@ -214,8 +214,6 @@ class Problem(models.Model):
     allowed_languages = models.ManyToManyField(Language, verbose_name='Allowed languages')
     is_public = models.BooleanField(verbose_name='Publicly visible', db_index=True)
 
-    objects = SearchManager(('code', 'name', 'description'))
-
     def types_list(self):
         return map(attrgetter('full_name'), self.types.all())
 
