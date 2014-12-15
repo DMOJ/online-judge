@@ -55,7 +55,7 @@ class RankedSubmissions(ProblemSubmissions):
                 WHERE sub.problem_id = %s AND sub.case_points > 0 {constraint}
                 GROUP BY sub.user_id
             ) AS highscore INNER JOIN (
-                SELECT sub.user_id AS uid, sub.case_points, MIN(sub.time) as time
+                SELECT sub.user_id AS uid, sub.case_points as points, MIN(sub.time) as time
                 FROM judge_submission AS sub INNER JOIN
                      judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
                 WHERE sub.problem_id = %s AND sub.case_points > 0 {constraint}
