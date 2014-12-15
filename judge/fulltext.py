@@ -5,9 +5,9 @@ from django.db.models.query import QuerySet
 
 
 class SearchQuerySet(QuerySet):
-    def __init__(self, model=None, query=None, using=None):
-        super(SearchQuerySet, self).__init__(model, None, using)
-        self._search_fields = query
+    def __init__(self, model=None, query=None, using=None, fields=None):
+        super(SearchQuerySet, self).__init__(model, query, using)
+        self._search_fields = fields
 
     def search(self, query):
         meta = self.model._meta
@@ -36,7 +36,7 @@ class SearchManager(models.Manager):
         self._search_fields = fields
 
     def get_query_set(self):
-        return SearchQuerySet(self.model, self._search_fields)
+        return SearchQuerySet(self.model, fields=self._search_fields)
 
     def search(self, query):
         return self.get_query_set().search(query)
