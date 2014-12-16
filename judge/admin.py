@@ -89,11 +89,6 @@ class ProblemAdmin(admin.ModelAdmin):
     actions_on_top = True
     actions_on_bottom = True
 
-    def get_search_results(self, request, queryset, search_term):
-        if settings.ENABLE_FTS:
-            return queryset.search(search_term), False
-        return super(ProblemAdmin, self).get_search_results(request, queryset, search_term)
-
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
             TextField: {'widget': MathJaxAdminPagedownWidget},
