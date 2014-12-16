@@ -100,5 +100,5 @@ html(lang='en')
             footer
                 p
         if misc_config.announcement
-            div#announcement #{misc_config.announcement}
+            div#announcement #{misc_config.announcement|safe}
         block bodyend
