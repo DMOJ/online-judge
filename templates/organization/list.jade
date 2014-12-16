@@ -1,9 +1,16 @@
 extends base
 - load cache
 
+block media
+    script(src='{% static "tablesorter.js" %}', type='text/javascript')
+    script(type='text/javascript')
+        $(document).ready(function () {
+            $("#organization-table").tablesorter();
+        });
+
 block body
     br
-    table.table
+    table.table#organization-table
         thead
             tr
                 th ID
