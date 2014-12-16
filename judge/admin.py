@@ -91,7 +91,7 @@ class ProblemAdmin(admin.ModelAdmin):
 
     def get_search_results(self, request, queryset, search_term):
         if settings.ENABLE_FTS:
-            return queryset.search(search_term)
+            return queryset.search(search_term), False
         return super(ProblemAdmin, self).get_search_results(request, queryset, search_term)
 
     if MathJaxAdminPagedownWidget is not None:
