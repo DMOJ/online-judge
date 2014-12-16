@@ -37,12 +37,14 @@ class SearchQuerySet(QuerySet):
 
 
 class SearchManager(models.Manager):
-    def __init__(self, fields):
+    def __init__(self, fields=None):
         super(SearchManager, self).__init__()
         self._search_fields = fields
 
     def get_queryset(self):
-        return SearchQuerySet(self.model, fields=self._search_fields)
+        if self._search_fields is not None:
+            return SearchQuerySet(self.model, fields=self._search_fields)
+        return super(SearchManager, self).get_queryset()
 
     def search(self, query):
         return self.get_queryset().search(query)
