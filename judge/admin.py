@@ -1,4 +1,5 @@
 from operator import itemgetter, attrgetter
+from django.conf import settings
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
@@ -81,7 +82,10 @@ class ProblemAdmin(admin.ModelAdmin):
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public']
     filter_horizontal = ['authors']
     ordering = ['code']
-    search_fields = ('^code', 'name')
+    if settings.ENABLE_FTS:
+        search_fields = ('@code', '@name', '@description')
+    else:
+        search_fields = ('^code', 'name')
     actions = ['make_public', 'make_private']
     list_per_page = 500
     list_max_show_all = 1000
