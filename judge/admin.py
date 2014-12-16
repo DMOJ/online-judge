@@ -82,15 +82,17 @@ class ProblemAdmin(admin.ModelAdmin):
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public']
     filter_horizontal = ['authors']
     ordering = ['code']
-    if settings.ENABLE_FTS:
-        search_fields = ('@code', '@name', '@description')
-    else:
-        search_fields = ('^code', 'name')
+    search_fields = ('^code', 'name')
     actions = ['make_public', 'make_private']
     list_per_page = 500
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
+
+    def get_search_results(self, request, queryset, search_term):
+        if settings.ENABLE_FTS:
+            return queryset.search(search_term)
+        return super(ProblemAdmin, self).get_search_results(request, queryset, search_term)
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
