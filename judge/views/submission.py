@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
@@ -6,6 +7,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, H
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.html import format_html
 from django.views.generic import TemplateView, ListView
@@ -27,11 +29,10 @@ class SubmissionDetailBase(TitleMixin, SubmissionMixin, SingleObjectMixin, Templ
     def get(self, request, *args, **kwargs):
         self.object = submission = self.get_object()
 
-        if not request.user.is_authenticated():
-            raise PermissionDenied()
-
-        if not request.user.profile.is_admin and submission.user != request.user.profile and \
-                not Submission.objects.filter(user=request.user.profile, result='AC',
+        profile = request.user.profile
+        if not profile.is_admin and submission.user_id != profile.id and \
+                not submission.problem.authors.objects.filter(id=profile.id).exists() and \
+                not Submission.objects.filter(user_id=profile.id, result='AC',
                                               problem__code=submission.problem.code,
                                               points=F('problem__points')).exists():
             raise PermissionDenied()
@@ -41,6 +42,10 @@ class SubmissionDetailBase(TitleMixin, SubmissionMixin, SingleObjectMixin, Templ
     def get_title(self):
         submission = self.object
         return 'Submission of %s by %s' % (submission.problem.name, submission.user.user.username)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(SubmissionDetailBase, self).dispatch(*args, **kwargs)
 
 
 class SubmissionSource(SubmissionDetailBase):
