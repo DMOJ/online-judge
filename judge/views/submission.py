@@ -31,7 +31,7 @@ class SubmissionDetailBase(TitleMixin, SubmissionMixin, SingleObjectMixin, Templ
 
         profile = request.user.profile
         if not profile.is_admin and submission.user_id != profile.id and \
-                not submission.problem.authors.objects.filter(id=profile.id).exists() and \
+                not submission.problem.authors.filter(id=profile.id).exists() and \
                 not Submission.objects.filter(user_id=profile.id, result='AC',
                                               problem__code=submission.problem.code,
                                               points=F('problem__points')).exists():
