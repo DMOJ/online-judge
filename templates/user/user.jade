@@ -105,10 +105,7 @@ block body
             each problem in authored
                 li
                     a(href='{% url "problem_detail" problem.code %}')= problem.name
-                    | (#{problem.points|floatformat}
-                    if problem.partial
-                        | p
-                    | )
+                    |  (#{problem.points|floatformat}{% if problem.partial %}p{% endif %})
     hr
     - regroup best_submissions by group as problems
     each group in problems
