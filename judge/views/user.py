@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from judge.forms import ProfileForm
-from judge.models import Profile, Submission
+from judge.models import Profile, Submission, Problem
 from judge.utils.ranker import ranker
 from .contests import contest_ranking_view
 
@@ -32,7 +32,7 @@ def user(request, user=None):
             'problem__group__full_name': 'group'
         })
         return render_to_response('user/user.jade', {
-            'user': user, 'best_submissions': result,
+            'user': user, 'best_submissions': result, 'authored': user.authored_problems.all(),
             'title': 'My Account' if request.user == user.user else 'User %s' % user.long_display_name,
         },  context_instance=RequestContext(request))
     except ObjectDoesNotExist:
