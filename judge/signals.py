@@ -17,8 +17,10 @@ def problem_update(sender, instance, **kwargs):
     cache.delete_many([
         make_template_fragment_key('problem_html', (instance.id,)),
         make_template_fragment_key('problem_authors', (instance.id,)),
-        make_template_fragment_key('submission_problem', (instance.id,))
+        make_template_fragment_key('submission_problem', (instance.id,)),
+        make_template_fragment_key('problem_feed', (instance.id,))
     ])
+
     if hasattr(settings, 'PROBLEM_PDF_CACHE'):
         try:
             os.unlink(os.path.join(settings.PROBLEM_PDF_CACHE, '%s.pdf' % instance.code))
@@ -60,11 +62,6 @@ def language_update(sender, instance, **kwargs):
 @receiver(post_save, sender=Comment)
 def comment_update(sender, instance, **kwargs):
     cache.delete('comment_feed:%d' % instance.id)
-
-@receiver(post_save, sender=Problem)
-def problem_update(sender, instance, **kwargs):
-    cache.delete('problem_feed:%d' % instance.id)
-
 
 @receiver(post_save, sender=BlogPost)
 def post_update(sender, instance, **kwargs):
