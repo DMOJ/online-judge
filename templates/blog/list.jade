@@ -102,7 +102,7 @@ block body
                 div(style='margin-bottom:10px;')
                     include list_pages
         div.comment-content
-            h3 Comment Stream
+            h3 Comment stream
             ul
                 for comment in comments
                     li
@@ -121,7 +121,7 @@ block body
                     = '/ '
                     a(href='{% url "comment_atom" %}') Atom
         div.comment-content
-            h3 Recent Added Problems
+            h3 Recent added problems
             ul
                 for problem in problems
                     li
