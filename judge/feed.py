@@ -18,13 +18,14 @@ class FeedMath(MathHTMLParser):
         return (r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>' %
                 (MATHTEX_CGI, urlquote(math), math))
 
+
 class ProblemFeed(Feed):
     title = 'Recently added DMOJ problems'
     link = '/'
     description = 'The latest problems added on the Don Mills Online Judge website'
 
     def items(self):
-        return Problem.objects.filter(is_public=True).order_by('-id')[:25]
+        return Problem.objects.filter(is_public=True).order_by('-date', '-id')[:25]
 
     def item_title(self, problem):
         return problem.name
@@ -37,9 +38,14 @@ class ProblemFeed(Feed):
             cache.set(key, desc, 86400)
         return desc
 
+    def item_pubdate(self, problem):
+        return problem.date
+
+
 class AtomProblemFeed(ProblemFeed):
     feed_type = Atom1Feed
     subtitle = ProblemFeed.description
+
 
 class CommentFeed(Feed):
     title = 'Latest DMOJ comments'
