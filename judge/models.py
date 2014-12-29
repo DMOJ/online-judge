@@ -213,7 +213,7 @@ class Problem(models.Model):
     partial = models.BooleanField(verbose_name='Allows partial points')
     allowed_languages = models.ManyToManyField(Language, verbose_name='Allowed languages')
     is_public = models.BooleanField(verbose_name='Publicly visible', db_index=True)
-    date = models.DateTimeField(verbose_name='Date of publishing', null=True, blank=True,
+    date = models.DateTimeField(verbose_name='Date of publishing', null=True, blank=True, db_index=True,
                                 help_text="Doesn't have magic ability to auto-publish due to backward compatibility")
 
     objects = SearchManager(('code', 'name', 'description'))
