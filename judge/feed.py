@@ -5,7 +5,7 @@ from django.utils.feedgenerator import Atom1Feed
 from django.utils.http import urlquote
 
 from judge.math_parser import MathHTMLParser, MATHTEX_CGI
-from judge.models import Comment, BlogPost
+from judge.models import Comment, BlogPost, Problem
 from markdown_trois import markdown
 
 
@@ -18,6 +18,28 @@ class FeedMath(MathHTMLParser):
         return (r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>' %
                 (MATHTEX_CGI, urlquote(math), math))
 
+class ProblemFeed(Feed):
+    title = 'Recently added DMOJ problems'
+    link = '/'
+    description = 'The latest problems added on the Don Mills Online Judge website'
+
+    def items(self):
+        return Problem.objects.order_by('-id')[:25]
+
+    def item_title(self, problem):
+        return problem.name
+
+    def item_description(self, problem):
+        key = 'problem_feed:%d' % problem.id
+        desc = cache.get(key)
+        if desc is None:
+            desc = FeedMath.convert(markdown(problem.description, 'problem'))[:100] + '...'
+            cache.set(key, desc, 86400)
+        return desc
+
+class AtomProblemFeed(ProblemFeed):
+    feed_type = Atom1Feed
+    subtitle = ProblemFeed.description
 
 class CommentFeed(Feed):
     title = 'Latest DMOJ comments'

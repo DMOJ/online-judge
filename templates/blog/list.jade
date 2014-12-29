@@ -126,5 +126,12 @@ block body
                 for problem in problems
                     li
                         a(href='{% url "problem_detail" problem.code %}')= problem.name
+            div.dashed
+            span.rssatom
+                a(href='{% url "problem_rss" %}')
+                    img(src='{% static "icons/feed.png" %}')
+                    | RSS
+                = '/ '
+            a(href='{% url "problem_atom" %}') Atom
 
     block after_posts
