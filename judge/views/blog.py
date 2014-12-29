@@ -28,8 +28,8 @@ class PostList(ListView):
         context['title'] = self.title or 'Page %d of Posts' % context['page_obj'].number
         context['first_page_href'] = reverse('home')
         context['page_prefix'] = reverse('blog_post_list')
-        context['comments'] = Comment.objects.all().order_by('-id')[:10]
-        context['problems'] = Problem.objects.all().filter(is_public=True).order_by('-id')[:7]
+        context['comments'] = Comment.objects.order_by('-id')[:10]
+        context['problems'] = Problem.objects.filter(is_public=True).order_by('-date', '-id')[:7]
         return context
 
 
