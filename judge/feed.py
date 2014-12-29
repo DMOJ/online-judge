@@ -33,7 +33,7 @@ class ProblemFeed(Feed):
         key = 'problem_feed:%d' % problem.id
         desc = cache.get(key)
         if desc is None:
-            desc = FeedMath.convert(markdown(problem.description, 'problem'))[:100] + '...'
+            desc = FeedMath.convert(markdown(problem.description, 'problem'))[:500] + '...'
             cache.set(key, desc, 86400)
         return desc
 
