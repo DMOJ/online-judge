@@ -3,7 +3,7 @@ from django.http import Http404
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from judge.comments import CommentedDetailView
-from judge.models import BlogPost, Comment
+from judge.models import BlogPost, Comment, Problem
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.views import TitleMixin
 
@@ -29,7 +29,7 @@ class PostList(ListView):
         context['first_page_href'] = reverse('home')
         context['page_prefix'] = reverse('blog_post_list')
         context['comments'] = Comment.objects.all().order_by('-id')[:15]
-        context['problems'] = Comment.objects.all().order_by('-id')[:7]
+        context['problems'] = Problem.objects.all().order_by('-id')[:7]
         return context
 
 
