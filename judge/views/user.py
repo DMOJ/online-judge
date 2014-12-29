@@ -32,7 +32,7 @@ def user(request, user=None):
             'problem__group__full_name': 'group'
         })
         return render_to_response('user/user.jade', {
-            'user': user, 'best_submissions': result, 'authored': user.authored_problems.filter(is_public=True),
+            'user': user, 'best_submissions': result, 'authored': user.authored_problems.filter(is_public=True).order_by('code'),
             'title': 'My Account' if request.user == user.user else 'User %s' % user.long_display_name,
         },  context_instance=RequestContext(request))
     except ObjectDoesNotExist:
