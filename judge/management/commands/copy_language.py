@@ -13,9 +13,9 @@ class Command(BaseCommand):
         try:
             source = Language.objects.get(key=source)
         except Language.DoesNotExist:
-            raise CommandError('Invalid source language: %s', source)
+            raise CommandError('Invalid source language: %s' % source)
         try:
             target = Language.objects.get(key=target)
         except Language.DoesNotExist:
-            raise CommandError('Invalid target language: %s', source)
+            raise CommandError('Invalid target language: %s' % target)
         target.problem_set.add(*source.problem_set.all())
