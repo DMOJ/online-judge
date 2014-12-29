@@ -29,7 +29,7 @@ class PostList(ListView):
         context['first_page_href'] = reverse('home')
         context['page_prefix'] = reverse('blog_post_list')
         context['comments'] = Comment.objects.all().order_by('-id')[:15]
-        context['problems'] = Problem.objects.all().order_by('-id')[:7]
+        context['problems'] = Problem.objects.all().filter(is_public=True).order_by('-id')[:7]
         return context
 
 
