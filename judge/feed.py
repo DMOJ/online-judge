@@ -24,7 +24,7 @@ class ProblemFeed(Feed):
     description = 'The latest problems added on the Don Mills Online Judge website'
 
     def items(self):
-        return Problem.objects.order_by('-id')[:25]
+        return Problem.objects.filter(is_public=True).order_by('-id')[:25]
 
     def item_title(self, problem):
         return problem.name
