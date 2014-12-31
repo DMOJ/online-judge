@@ -6,6 +6,7 @@
                 editor.hooks.chain('onPreviewRefresh', function () {
                     MathJax.Hub.Queue(["Typeset", MathJax.Hub, preview]);
                 });
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, preview]);
             });
         });
     }
