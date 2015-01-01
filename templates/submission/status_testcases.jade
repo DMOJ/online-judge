@@ -25,6 +25,8 @@ if submission.status != 'IE'
                                             | &mdash;
                                         else
                                             = case.status
+                                    if case.feedback
+                                        | &nbsp;(#{case.feedback})
                                 td
                                     | [#{case.time|floatformat:"3"}s,
                                     - with memory=case.memory|default_if_none:0
