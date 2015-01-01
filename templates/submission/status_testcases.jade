@@ -12,7 +12,7 @@ if submission.status != 'IE'
         each batch in batches
             if batch.grouper
                 b Batch ##{batch.grouper}
-                    | &nbsp;(#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
+                |  (#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
                 br
                 | <div class="batch-cases">
             table
@@ -34,17 +34,18 @@ if submission.status != 'IE'
                             if case.feedback
                                 | &nbsp;(#{case.feedback})
                         td
-                            | [#{case.time|floatformat:"3"}s,
-                            - with memory=case.memory|default_if_none:0
-                                if memory < 1000
-                                    | #{memory|floatformat:"-2"}kb]
-                                else
-                                    - math memory "$1 / 1024" as megabytes
-                                    | #{megabytes|floatformat:"-2"}mb]
+                            if case.status != 'SC'
+                                | [#{case.time|floatformat:"3"}s,
+                                - with memory=case.memory|default_if_none:0
+                                    if memory < 1000
+                                        | #{memory|floatformat:"-2"}kb]
+                                    else
+                                        - math memory "$1 / 1024" as megabytes
+                                        | #{megabytes|floatformat:"-2"}mb]
                         if not batch.grouper
                             td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
                     if case.status != 'AC' and case.output
-                        tr(id=case.id, style="display:none").toggled
+                        tr(id=case.id, style='display:none').toggled
                             td(colspan='4')
                                 .case-info
                                     strong Your output (clipped)
