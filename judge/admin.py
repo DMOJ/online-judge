@@ -175,6 +175,7 @@ class SubmissionTestCaseAdmin(admin.TabularInline):
     readonly_fields = ('case', 'batch', 'total')
     model = SubmissionTestCase
     can_delete = False
+    max_num = 0
 
 
 class SubmissionAdmin(admin.ModelAdmin):
