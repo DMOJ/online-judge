@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.forms import ModelForm, CharField
 
 from django_ace import AceWidget
-from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode
+from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode, Language
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 
@@ -28,6 +28,7 @@ class ProblemSubmitForm(ModelForm):
         self.fields['problem'].widget = forms.HiddenInput()
         self.fields['language'].empty_label = None
         self.fields['language'].label_from_instance = attrgetter('display_name')
+        self.fields['language'].queryset = Language.objects.filter(judges__online=True).distinct()
 
     class Meta:
         model = Submission
