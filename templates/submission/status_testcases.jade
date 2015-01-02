@@ -15,7 +15,7 @@ if submission.status != 'IE'
         - get_counter test_case_id
         each batch in batches
             if batch.grouper
-                b Batch ##{batch.grouper}
+                b Batch ##{test_case_id}
                 |  (#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
                 br
                 | <div class="batch-cases">
