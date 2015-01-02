@@ -1,5 +1,7 @@
 - load list_processor
 - load mathtag
+- load counter
+
 if submission.status != 'IE'
     if submission.status != 'CE'
         h3 Execution Results
@@ -10,6 +12,7 @@ if submission.status != 'IE'
             br
         - regroup test_cases by batch as batches
         - var time_limit = submission.problem.time_limit
+        - get_counter test_case_id
         each batch in batches
             if batch.grouper
                 b Batch ##{batch.grouper}
@@ -25,7 +28,7 @@ if submission.status != 'IE'
                             if batch.grouper
                                 b Case ##{forloop.counter}:
                             else
-                                b Test case ##{forloop.counter}:
+                                b Test case ##{test_case_id}:
                         td
                             span(class=case.status, title=case.long_status)
                                 if case.status == 'SC'
