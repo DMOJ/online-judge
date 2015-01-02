@@ -170,7 +170,7 @@ class SubmissionResultFilter(admin.SimpleListFilter):
             return queryset.filter(result=self.value())
 
 
-class SubmissionTestCaseAdmin(admin.StackedInline):
+class SubmissionTestCaseAdmin(admin.TabularInline):
     fields = ('case', 'batch', 'status', 'time', 'memory', 'points', 'total')
     readonly_fields = ('case', 'batch', 'total')
     model = SubmissionTestCase
