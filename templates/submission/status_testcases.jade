@@ -37,7 +37,7 @@ if submission.status != 'IE'
                         td
                             if case.status != 'SC'
                                 if case.status == 'TLE'
-                                    | [&ge;#{time_limit|floatformat:"3"}s,
+                                    | [&gt;#{time_limit|floatformat:"3"}s,
                                 else
                                     | [#{case.time|floatformat:"3"}s,
                                 - with memory=case.memory|default_if_none:0
