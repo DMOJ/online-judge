@@ -234,6 +234,10 @@ class Problem(models.Model):
     def author_ids(self):
         return self.authors.values_list('id', flat=True)
 
+    @cached_property
+    def usable_languages(self):
+        return self.allowed_languages.filter(judges__id__in=self.judges.filter(online=True).values('id')).distinct()
+
     class Meta:
         permissions = (
             ('see_private_problem', 'See hidden problems'),
@@ -463,7 +467,7 @@ class Judge(models.Model):
     load = models.FloatField(verbose_name='System load', null=True,
                              help_text='Load for the last minute, divided by processors to be fair.')
     description = models.TextField(blank=True)
-    problems = models.ManyToManyField(Problem)
+    problems = models.ManyToManyField(Problem, related_name='judges')
     runtimes = models.ManyToManyField(Language, related_name='judges')
 
     def __unicode__(self):
