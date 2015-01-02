@@ -9,6 +9,7 @@ if submission.status != 'IE'
             pre #{submission.error}
             br
         - regroup test_cases by batch as batches
+        - var time_limit = submission.problem.time_limit
         each batch in batches
             if batch.grouper
                 b Batch ##{batch.grouper}
@@ -35,7 +36,10 @@ if submission.status != 'IE'
                                 | &nbsp;(#{case.feedback})
                         td
                             if case.status != 'SC'
-                                | [#{case.time|floatformat:"3"}s,
+                                if case.status == 'TLE'
+                                    | [&ge;#{time_limit|floatformat:"3"}s,
+                                else
+                                    | [#{case.time|floatformat:"3"}s,
                                 - with memory=case.memory|default_if_none:0
                                     if memory < 1000
                                         | #{memory|floatformat:"-2"}kb]
