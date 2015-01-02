@@ -5,13 +5,12 @@ register = template.Library()
 
 
 class GetCounterNode(template.Node):
-    def __init__(self, var_name, start=1, step=1):
+    def __init__(self, var_name, start=1):
         self.var_name = var_name
         self.start = start
-        self.step = step
 
     def render(self, context):
-        context[self.var_name] = count(self.start, self.step).next
+        context[self.var_name] = count(self.start).next
         return ''
 
 
