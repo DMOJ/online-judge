@@ -40,6 +40,8 @@ if submission.status != 'IE'
                                     | [&gt;#{time_limit|floatformat:"3"}s,
                                 else
                                     | [#{case.time|floatformat:"3"}s,
+                        td
+                            if case.status != 'SC'
                                 - with memory=case.memory|default_if_none:0
                                     if memory < 1000
                                         | #{memory|floatformat:"-2"}kb]
