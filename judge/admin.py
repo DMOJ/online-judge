@@ -14,7 +14,7 @@ from django.utils.safestring import mark_safe
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
-    ContestProfile
+    ContestProfile, SubmissionTestCase
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 
@@ -170,6 +170,13 @@ class SubmissionResultFilter(admin.SimpleListFilter):
             return queryset.filter(result=self.value())
 
 
+class SubmissionTestCaseAdmin(admin.StackedInline):
+    fields = ('case', 'batch', 'status', 'time', 'memory', 'points', 'total')
+    readonly_fields = ('case', 'batch', 'total')
+    model = SubmissionTestCase
+    can_delete = False
+
+
 class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date')
     fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result')
@@ -180,6 +187,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     search_fields = ('problem__code', 'problem__name', 'user__user__username', 'user__name')
     actions_on_top = True
     actions_on_bottom = True
+    inlines = [SubmissionTestCaseAdmin]
 
     def get_queryset(self, request):
         if request.user.has_perm('judge.edit_all_problem'):
