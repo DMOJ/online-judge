@@ -18,7 +18,7 @@ if submission.status != 'IE'
                 | <div class="batch-cases">
             table
                 each case in batch.list
-                    tr(id=case.id).toggle.closed
+                    tr(id=case.id).case-row.toggle.closed
                         td
                             if case.status != 'AC' and case.output
                                 span.icon
