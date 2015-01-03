@@ -97,16 +97,17 @@ block body
                             | This user has not shared any information.
                 br
     hr
-    div.user-problem-group
-        h3.unselectable.toggle.open
-            span.icon
-            | Authored Problems
-        ul.toggled
-            each problem in authored
-                li
-                    a(href='{% url "problem_detail" problem.code %}')= problem.name
-                    |  (#{problem.points|floatformat}{% if problem.partial %}p{% endif %})
-    hr
+    if authored
+        div.user-problem-group
+            h3.unselectable.toggle.open
+                span.icon
+                | Authored Problems
+            ul.toggled
+                each problem in authored
+                    li
+                        a(href='{% url "problem_detail" problem.code %}')= problem.name
+                        |  (#{problem.points|floatformat}{% if problem.partial %}p{% endif %})
+        hr
     - regroup best_submissions by group as problems
     each group in problems
         div.user-problem-group
