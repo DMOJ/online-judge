@@ -11,7 +11,7 @@ block header
         span.submission-date
             | #{submission.date|date:"N j, o, g:i a"}
             br
-            | #{submission.language}
+            a(href='{% url "runtime_info“ submission.language.key %}')= submission.language
             if perms.judge.change_submission
                 | [
                 a(href='{% url "admin:judge_submission_change" submission.id %}') Admin
