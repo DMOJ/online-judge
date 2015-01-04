@@ -47,5 +47,5 @@ class LanguageJudgesAjaxList(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(LanguageJudgesAjaxList, self).get_context_data(**kwargs)
-        context['judges'] = Judge.objects.filter(runtimes__key=self.lang).order_by('load')
+        context['judges'] = Judge.objects.filter(runtimes__key=self.lang, online=True).order_by('load')
         return context
