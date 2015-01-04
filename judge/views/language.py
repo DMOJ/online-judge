@@ -25,7 +25,7 @@ class LanguageDetail(TitleMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(LanguageDetail, self).get_context_data(**kwargs)
-        context['judges'] = self.object.judges.order_by('load')
+        context['judges'] = self.object.judges.filter(online=True).order_by('load')
         return context
 
 
