@@ -24,7 +24,7 @@ def judge_request(packet, reply=True):
 
     if reply:
         reader = sock.makefile('r', -1)
-        input = reader.read(4)
+        input = reader.read(size_pack.size)
         if not input:
             raise ValueError('Judge did not respond')
         length = size_pack.unpack(input)[0]
