@@ -325,7 +325,8 @@ def problem_submit(request, problem=None, submission=None):
         form_data = initial
     if 'problem' in form_data:
         form.fields['language'].queryset = form_data['problem'].usable_languages
-    form.fields['source'].widget.mode = form_data['language'].ace
+    if 'language' in form_data:
+        form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = request.user.profile.ace_theme
     return render_to_response('problem/submit.jade', {
         'form': form,
