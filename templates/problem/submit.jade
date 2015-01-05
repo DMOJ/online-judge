@@ -54,4 +54,7 @@ block body
                 | #{form.language.errors}
                 | #{form.language}
         hr
-        input(class="button", style="float:right;", type='submit', value='Submit!')
+        if no_judges
+            span(style='color: red') No Judge is available for this problem.
+        else
+            input(class="button", style="float:right;", type='submit', value='Submit!')

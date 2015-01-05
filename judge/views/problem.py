@@ -332,4 +332,5 @@ def problem_submit(request, problem=None, submission=None):
         'form': form,
         'title': 'Submit',
         'langs': Language.objects.all(),
+        'no_judges': not form.fields['language'].queryset
     }, context_instance=RequestContext(request))
