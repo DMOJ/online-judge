@@ -266,9 +266,11 @@ class SubmissionAdmin(admin.ModelAdmin):
 
     def problem_code(self, obj):
         return obj.problem.code
+    problem_code.admin_order_field = 'problem__code'
 
     def problem_name(self, obj):
         return obj.problem.name
+    problem_name.admin_order_field = 'problem__name'
 
     def get_urls(self):
         urls = super(SubmissionAdmin, self).get_urls()
