@@ -182,13 +182,20 @@ class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date')
     fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result')
     actions = ('judge', 'recalculate_score')
-    list_display = ('id', 'problem_code', 'problem_name', 'user', 'execution_time', 'pretty_memory',
+    list_display = ('id', 'problem_code', 'problem_name', 'user_column', 'execution_time', 'pretty_memory',
                     'points', 'language', 'status', 'result', 'judge_column')
     list_filter = ('language', SubmissionStatusFilter, SubmissionResultFilter)
     search_fields = ('problem__code', 'problem__name', 'user__user__username', 'user__name')
     actions_on_top = True
     actions_on_bottom = True
     inlines = [SubmissionTestCaseAdmin]
+
+    def user_column(self, obj):
+        return format_html('<span title="{display}">{username}</span>',
+                           username=obj.user.user.username,
+                           display=obj.user.name)
+    user_column.admin_order_field = 'user__user__username'
+    user_column.short_description = 'User'
 
     def get_queryset(self, request):
         if request.user.has_perm('judge.edit_all_problem'):
