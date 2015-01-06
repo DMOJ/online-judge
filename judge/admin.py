@@ -191,7 +191,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     inlines = [SubmissionTestCaseAdmin]
 
     def user_column(self, obj):
-        return format_html('<span title="{display}">{username}</span>',
+        return format_html(u'<span title="{display}">{username}</span>',
                            username=obj.user.user.username,
                            display=obj.user.name)
     user_column.admin_order_field = 'user__user__username'
