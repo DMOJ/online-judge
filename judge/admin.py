@@ -515,6 +515,16 @@ class ContestAdmin(admin.ModelAdmin):
             return True
         return obj.organizers.filter(id=request.user.profile.id).exists()
 
+    def get_form(self, *args, **kwargs):
+        form = super(ProblemAdmin, self).get_form(*args, **kwargs)
+        perms = ('judge.edit_own_contest', 'judge.edit_all_contest')
+        form.base_fields['authors'].queryset = Profile.objects.filter(
+            Q(user__is_superuser=True) |
+            Q(user__groups__permissions__codename__in=perms) |
+            Q(user__user_permissions__codename__in=perms)
+        )
+        return form
+
 
 class ContestParticipationAdmin(admin.ModelAdmin):
     fields = ('contest', 'profile', 'start')
