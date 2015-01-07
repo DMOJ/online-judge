@@ -493,13 +493,11 @@ class ContestAdmin(admin.ModelAdmin):
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self.message_user(request, "%d contest%s successfully marked as public." % (count, 's'[count == 1:]))
-
     make_public.short_description = 'Mark contests as public'
 
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
         self.message_user(request, "%d contest%s successfully marked as private." % (count, 's'[count == 1:]))
-
     make_private.short_description = 'Mark contests as private'
 
     def get_queryset(self, request):
@@ -517,7 +515,7 @@ class ContestAdmin(admin.ModelAdmin):
 
     def get_form(self, *args, **kwargs):
         form = super(ContestAdmin, self).get_form(*args, **kwargs)
-        perms = ('judge.edit_own_contest', 'judge.edit_all_contest')
+        perms = ('edit_own_contest', 'edit_all_contest')
         form.base_fields['organizers'].queryset = Profile.objects.filter(
             Q(user__is_superuser=True) |
             Q(user__groups__permissions__codename__in=perms) |
