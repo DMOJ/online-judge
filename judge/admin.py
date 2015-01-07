@@ -518,7 +518,7 @@ class ContestAdmin(admin.ModelAdmin):
     def get_form(self, *args, **kwargs):
         form = super(ContestAdmin, self).get_form(*args, **kwargs)
         perms = ('judge.edit_own_contest', 'judge.edit_all_contest')
-        form.base_fields['authors'].queryset = Profile.objects.filter(
+        form.base_fields['organizers'].queryset = Profile.objects.filter(
             Q(user__is_superuser=True) |
             Q(user__groups__permissions__codename__in=perms) |
             Q(user__user_permissions__codename__in=perms)
