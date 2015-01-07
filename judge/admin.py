@@ -477,7 +477,7 @@ class ContestProblemInline(admin.TabularInline):
 
 
 class ContestAdmin(admin.ModelAdmin):
-    fields = ('key', 'name', 'description', 'ongoing', 'is_public', 'start_time', 'time_limit')
+    fields = ('key', 'name', 'organizers', 'description', 'ongoing', 'is_public', 'start_time', 'time_limit')
     list_display = ('key', 'name', 'ongoing', 'is_public', 'time_limit')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
@@ -500,6 +500,19 @@ class ContestAdmin(admin.ModelAdmin):
         self.message_user(request, "%d contest%s successfully marked as private." % (count, 's'[count == 1:]))
 
     make_private.short_description = 'Mark contests as private'
+
+    def get_queryset(self, request):
+        if request.user.has_perm('judge.edit_all_contest'):
+            return Contest.objects.all()
+        else:
+            return Contest.objects.filter(organizers__id=request.user.profile.id)
+
+    def has_change_permission(self, request, obj=None):
+        if not request.user.has_perm('judge.edit_own_contest'):
+            return False
+        if request.user.has_perm('judge.edit_all_contest') or obj is None:
+            return True
+        return obj.organizers.filter(id=request.user.profile.id).exists()
 
 
 class ContestParticipationAdmin(admin.ModelAdmin):
