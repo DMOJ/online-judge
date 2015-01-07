@@ -483,6 +483,7 @@ class ContestAdmin(admin.ModelAdmin):
     inlines = [ContestProblemInline]
     actions_on_top = True
     actions_on_bottom = True
+    filter_horizontal = ['organizers']
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
