@@ -522,7 +522,7 @@ class ContestAdmin(admin.ModelAdmin):
             Q(user__is_superuser=True) |
             Q(user__groups__permissions__codename__in=perms) |
             Q(user__user_permissions__codename__in=perms)
-        )
+        ).distinct()
         return form
 
 
