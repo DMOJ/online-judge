@@ -395,7 +395,7 @@ class Comment(models.Model):
                 return Contest.objects.get(key=self.page[2:]).name
             elif self.page.startswith('b:'):
                 return BlogPost.objects.get(id=self.page[2:]).title
-            raise ObjectDoesNotExist()
+            return '<unknown>'
         except ObjectDoesNotExist:
             return '<deleted>'
 
