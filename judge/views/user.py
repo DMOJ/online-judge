@@ -36,9 +36,10 @@ def user(request, user=None):
             'title': 'My Account' if request.user == user.user else 'User %s' % user.long_display_name,
         },  context_instance=RequestContext(request))
     except ObjectDoesNotExist:
-        return render_to_response('generic_message.jade', {'message': 'No user handle "%s".' % user,
-                                                   'title': 'No such user'},
-                                  context_instance=RequestContext(request))
+        return render_to_response('generic_message.jade', {
+            'message': 'No user handle "%s".' % user,
+            'title': 'No such user'
+        }, context_instance=RequestContext(request))
 
 
 @login_required
