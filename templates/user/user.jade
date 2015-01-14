@@ -122,6 +122,5 @@ block body
                     li
                         a(href='{% url "problem_detail" entry.code %}') #{entry.name}
                         |  (
-                        a(href='{% url "user_submissions" entry.code user.user.username %}')
-                            | #{entry.points} / #{entry.total}
+                        a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
                         | )
