@@ -121,6 +121,7 @@ block body
                 each entry in group.list
                     li
                         a(href='{% url "problem_detail" entry.code %}') #{entry.name}
-                        = ' '
+                        |  (
                         a(href='{% url "user_submissions" entry.code user.user.username %}')
-                            | (#{entry.points} / #{entry.total})
+                            | #{entry.points} / #{entry.total}
+                        | )
