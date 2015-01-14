@@ -107,7 +107,7 @@ block body
                     li
                         a(href='{% url "problem_detail" problem.code %}')= problem.name
                         |  (
-                        a(href='{% url "ranked_submissions" problem.code %}')= '#{problem.points|floatformat}{% if problem.partial %}p{% endif %}'
+                        a(href='{% url "ranked_submissions" problem.code %}') #{problem.points|floatformat}{% if problem.partial %}p{% endif %}
                         | )
         hr
     - regroup best_submissions by group as problems
