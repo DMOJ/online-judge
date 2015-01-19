@@ -195,7 +195,10 @@ class JudgeHandler(ZlibPacketHandler):
         logger.info('Submission generated compiler messages: %s', packet['submission-id'])
 
     def on_bad_problem(self, packet):
-        logger.error('Judge client failed while handling submission %s: %s', packet['submission-id'], packet['message'])
+        try:
+            raise ValueError('\n\n' + packet['message'])
+        except ValueError:
+            logger.exception('Judge client failed while handling submission %s: %s', packet['submission-id'])
         self._free_self(packet)
 
     def on_submission_terminated(self, packet):
