@@ -101,7 +101,7 @@ block body
         div.user-problem-group
             h3.unselectable.toggle.open
                 span.icon
-                | Authored Problems
+                | Authored Problems (#{authored|length})
             ul.toggled
                 each problem in authored
                     li
