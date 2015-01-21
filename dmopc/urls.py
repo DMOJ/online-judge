@@ -115,10 +115,9 @@ urlpatterns = patterns('',
         url(r'^rank/(?P<page>\d+)$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
         url(r'^submissions/$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
         url(r'^submissions/(?P<page>\d+)$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
+        url(r'^submissions/(?P<user>\w+)/$', views.UserProblemSubmissions.as_view(), name='user_submissions'),
+        url(r'^submissions/(?P<user>\w+)/(?P<page>\d+)$', views.UserProblemSubmissions.as_view(), name='user_submissions'),
     ))),
-
-    url(r'^problem/(?P<problem>\w+)/submissions/(?P<user>\w+)/$', views.UserProblemSubmissions.as_view(), name='user_submissions'),
-    url(r'^problem/(?P<problem>\w+)/submissions/(?P<user>\w+)/(?P<page>\d+)$', views.UserProblemSubmissions.as_view(), name='user_submissions'),
 
     url(r'^user/(?P<user>\w+)/submissions/$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
     url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
