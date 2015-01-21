@@ -286,7 +286,7 @@ class ForceContestMixin(object):
             raise ImproperlyConfigured('Must pass a contest')
         try:
             self._contest = Contest.objects.get(key=kwargs['contest'])
-        except Problem.DoesNotExist:
+        except Contest.DoesNotExist:
             raise Http404()
         return super(ForceContestMixin, self).get(request, *args, **kwargs)
 
