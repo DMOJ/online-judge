@@ -13,11 +13,30 @@ block content_media
             padding-top: 1em;
         }
 
-block header
-    a.view-pdf(href='{% url "problem_pdf" problem.code %}')
-        img(style='position:relative;top:2px', src='http://www.adobe.com/images/pdficon_small.png')
-        = ' View as PDF'
-        sup= ' (beta)'
+        .problem-title {
+            display: -moz-box;
+            -moz-box-orient: horizontal;
+            -moz-box-pack: center;
+            -moz-box-align: center;
+            display: -webkit-box;
+            -webkit-box-orient: horizontal;
+            -webkit-box-pack: center;
+            -webkit-box-align: center;
+        }
+
+        .problem-title .spacer {
+            -moz-box-flex: 1;
+            -webkit-box-flex: 1;
+        }
+
+block title_row
+    div.problem-title
+        h2(style='color:#393630; display:inline')= title
+        div.spacer
+        a.view-pdf(href='{% url "problem_pdf" problem.code %}')
+            img(style='position:relative;top:2px', src='http://www.adobe.com/images/pdficon_small.png')
+            = ' View as PDF'
+            sup= ' (beta)'
 
 block info_float
     a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution

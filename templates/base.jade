@@ -83,12 +83,13 @@ html(lang='en')
                         a(href='/accounts/register/') Register
         br
         div#content
-            h2(style='color:#393630; display:inline')
-                block content_title
-                    if content_title
-                        | #{content_title}
-                    else
-                        | #{title}
+            block title_row
+                h2(style='color:#393630; display:inline')
+                    block content_title
+                        if content_title
+                            | #{content_title}
+                        else
+                            | #{title}
             block header
             if subtitle
                 br
