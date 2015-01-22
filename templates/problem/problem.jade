@@ -9,8 +9,8 @@ block content_media
     script(type='text/javascript', src='{% static "common.js" %}')
     style
         a.view-pdf {
-            float: right;
-            padding-top: 1em;
+            padding-top: 1em
+            display: inline-block;
         }
 
         .problem-title {
@@ -25,14 +25,15 @@ block content_media
         }
 
         .problem-title .spacer {
+            display: inline-block;
             -moz-box-flex: 1;
             -webkit-box-flex: 1;
         }
 
 block title_row
     div.problem-title
-        h2(style='color:#393630; display:inline')= title
-        div.spacer
+        h2(style='color:#393630; display: inline-block')= title
+        span.spacer
         a.view-pdf(href='{% url "problem_pdf" problem.code %}')
             img(style='position:relative;top:2px', src='http://www.adobe.com/images/pdficon_small.png')
             = ' View as PDF'
