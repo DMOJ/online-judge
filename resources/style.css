@@ -226,7 +226,7 @@ h4 {
     display: block;
     height: 65px;
     margin-top: -10px;
-    padding: 10px 10px 10px 60px;
+    padding: 10px 10px 10px 5%;
 }
 
 #user-links {
@@ -242,9 +242,11 @@ h4 {
 }
 
 nav ul {
-    list-style: none none;
-    margin: 0;
-    padding: 0 0 0 60px
+    margin: 0 0 0 -5px;
+    padding: 0 0 0 5%;
+    text-align: left;
+    display: inline;
+    list-style: none
 }
 
 nav {
@@ -258,6 +260,7 @@ nav ul li {
     color: #FFF;
     text-transform: uppercase;
     font-size: 1em;
+    position: relative;
 }
 
 nav ul li a {
@@ -279,17 +282,6 @@ nav ul li a:hover {
 nav ul li a.active {
     color: #FFF;
     background: #2980b9
-}
-
-nav ul {
-    text-align: left;
-    display: inline;
-    margin: 0;
-    list-style: none;
-}
-
-nav ul li {
-    position: relative;
 }
 
 nav ul li ul {
@@ -447,32 +439,32 @@ noscript, #announcement {
 }
 
 .comment-score {
-	font-weight:bold;
-	text-align: center;
+    font-weight: bold;
+    text-align: center;
 }
 
 a.upvote-link {
-	width:.7em;
-	height:.7em;
-	display:inline-block;
-	background-size:.7em .7em;
-	background-image:url('icons/arrow.png');
-	-webkit-transform:rotate(-90deg);
-	-moz-transform:rotate(-90deg);
-	-ms-transform:rotate(-90deg);
-	-o-transform:rotate(-90deg);
-	transform:rotate(-90deg)
+    width: .7em;
+    height: .7em;
+    display: inline-block;
+    background-size: .7em .7em;
+    background-image: url('icons/arrow.png');
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg)
 }
 
 a.downvote-link {
-	width:.7em;
-	height:.7em;
-	display:inline-block;
-	background-size:.7em .7em;
-	background-image:url('icons/arrow.png');
-	-webkit-transform:rotate(90deg);
-	-moz-transform:rotate(90deg);
-	-ms-transform:rotate(90deg);
-	-o-transform:rotate(90deg);
-	transform:rotate(90deg)
+    width: .7em;
+    height: .7em;
+    display: inline-block;
+    background-size: .7em .7em;
+    background-image: url('icons/arrow.png');
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg)
 }
