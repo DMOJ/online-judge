@@ -9,14 +9,14 @@ block media
                 return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
                     'width': '11%',
                     'max-width': '10em',
-                    'padding-left': '2%',
+                    'padding-left': '1em',
                     'display': 'table-cell'
                 }).prependTo('#content-body');
             });
         });
     block content_media
 block body
-    .info-float(style='width:11%; max-width:10em')
+    .info-float(style='width:11%; max-width:10em; padding-left:1em')
         block info_float
     .content-description
         block description
