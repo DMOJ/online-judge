@@ -51,14 +51,13 @@ block info_float
         br
     hr
     br
+    b Points:
     if contest_problem
-        b Points:
-        | &nbsp;#{contest_problem.points}
+        |  #{contest_problem.points}
         if contest_problem.partial
             | (partial)
     else
-        b Points:
-        | &nbsp;#{problem.points|floatformat}
+        |  #{problem.points|floatformat}
         if problem.partial
             | (partial)
     br
