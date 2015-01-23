@@ -1,6 +1,5 @@
 extends base
 - load staticfiles
-
 block media
     link(rel='stylesheet', href='{% static "content-description.css" %}')
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
@@ -9,6 +8,7 @@ block media
             fix_div($('.info-float'), 40, true, function (info) {
                 return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
                     'width': '11%',
+                    'max-width': '10em',
                     'padding-left': '2%',
                     'display': 'table-cell'
                 }).prependTo('#content-body');
@@ -16,12 +16,11 @@ block media
         });
     block content_media
 block body
-    .info-float(style='width:11%')
+    .info-float(style='width:11%; max-width:10em')
         block info_float
     .content-description
         block description
         hr
     block comments
-
 block bodyend
     include mathjax_load
