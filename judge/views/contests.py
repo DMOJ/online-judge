@@ -43,9 +43,9 @@ class ContestList(TitleMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.has_perm('judge.see_private_contest'):
-            return Contest.objects.order_by('key')
+            return Contest.objects.order_by('start_time', 'key')
         else:
-            return Contest.objects.filter(is_public=True).order_by('key')
+            return Contest.objects.filter(is_public=True).order_by('start_time', 'key')
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)

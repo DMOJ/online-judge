@@ -497,7 +497,7 @@ class Contest(models.Model):
     description = models.TextField(blank=True)
     ongoing = models.BooleanField(default=True)
     problems = models.ManyToManyField(Problem, verbose_name='Problems', through='ContestProblem')
-    start_time = models.DateTimeField(verbose_name='Start time', null=True, blank=True)
+    start_time = models.DateTimeField(verbose_name='Start time', null=True, blank=True, db_index=True)
     time_limit = TimedeltaField(verbose_name='Time limit')
     is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
 
