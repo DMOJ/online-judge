@@ -60,6 +60,7 @@ class ContestList(TitleMixin, ListView):
                 future.append(contest)
             else:
                 present.append(contest)
+        future.sort(key=attrgetter('start_time'))
         context['current_contests'] = present
         context['past_contests'] = past
         context['future_contests'] = future
