@@ -129,10 +129,8 @@ def join_contest(request, key):
         return contest
 
     if not contest.can_join:
-        return render_to_response('generic_message.jade', {
-            'message': '"%s" is not currently ongoing.' % contest.name,
-            'title': 'Contest not ongoing'
-        }, context_instance=RequestContext(request))
+        return generic_message(request, 'Contest not ongoing',
+                               '"%s" is not currently ongoing.' % contest.name)
 
     contest_profile = request.user.profile.contest
     if contest_profile.current is not None:
@@ -147,10 +145,8 @@ def join_contest(request, key):
         }
     )
     if not created and participation.ended:
-        return render_to_response('generic_message.jade', {
-            'message': 'Too late! You already used up your time limit for "%s".' % contest.name,
-            'title': 'Time limit exceeded'
-        }, context_instance=RequestContext(request))
+        return generic_message(request, 'Time limit exceeded',
+                               'Too late! You already used up your time limit for "%s".' % contest.name)
 
     contest_profile.current = participation
     contest_profile.save()
@@ -167,10 +163,8 @@ def leave_contest(request, key):
 
     contest_profile = request.user.profile.contest
     if contest_profile.current is None or contest_profile.current.contest != contest:
-        return render_to_response('generic_message.jade', {
-            'message': 'You are not in contest "%s".' % key,
-            'title': 'No such contest'
-        }, context_instance=RequestContext(request))
+        return generic_message(request, 'No such contest',
+                               'You are not in contest "%s".' % key, 404)
     contest_profile.current = None
     contest_profile.save()
     return HttpResponseRedirect(reverse('contest_view', args=(key,)))
