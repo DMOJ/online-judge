@@ -134,10 +134,8 @@ def join_contest(request, key):
 
     contest_profile = request.user.profile.contest
     if contest_profile.current is not None:
-        return render_to_response('generic_message.jade', {
-            'message': 'You are already in a contest: "%s".' % contest_profile.current.contest.name,
-            'title': 'Already in contest'
-        }, context_instance=RequestContext(request))
+        return generic_message(request, 'Already in contest',
+                               'You are already in a contest: "%s".' % contest_profile.current.contest.name)
 
     participation, created = ContestParticipation.objects.get_or_create(
         contest=contest, profile=contest_profile, defaults={
