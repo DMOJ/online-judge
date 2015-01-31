@@ -99,7 +99,7 @@ class ProblemEdit(ProblemMixin, TitleMixin, UpdateView):
             return super(ProblemEdit, self).dispatch(request, *args, **kwargs)
         except PermissionDenied:
             return generic_message(request, "Can't edit problem",
-                                   'You are not allowed to edit this problem.')
+                                   'You are not allowed to edit this problem.', status=403)
 
 
 class ProblemCreate(ProblemMixin, TitleMixin, CreateView):
