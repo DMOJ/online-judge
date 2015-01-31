@@ -55,7 +55,8 @@ class ProblemMixin(object):
             return super(ProblemMixin, self).get(request, *args, **kwargs)
         except Http404:
             code = kwargs.get(self.slug_url_kwarg, None)
-            return generic_message(request, 'No such problem', 'Could not find a problem with the code "%s".' % code)
+            return generic_message(request, 'No such problem',
+                                   'Could not find a problem with the code "%s".' % code, status=404)
 
 
 class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
