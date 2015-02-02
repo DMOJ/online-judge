@@ -29,10 +29,8 @@ def _find_contest(request, key, private_check=True):
         if private_check and not contest.is_public and not request.user.has_perm('judge.see_private_contest'):
             raise ObjectDoesNotExist()
     except ObjectDoesNotExist:
-        return render_to_response('generic_message.jade', {
-            'message': 'Could not find a contest with the key "%s".' % key,
-            'title': 'No such contest'
-        }, context_instance=RequestContext(request)), False
+        return generic_message(request, 'No such contest',
+                               'Could not find a contest with the key "%s".' % key, status=404)
     return contest, True
 
 
