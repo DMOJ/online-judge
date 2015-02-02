@@ -51,7 +51,12 @@ class DjangoJudgeHandler(JudgeHandler):
         Judge.objects.filter(name=self.name).update(online=False)
 
     def _update_ping(self):
-        Judge.objects.filter(name=self.name).update(ping=self.latency, load=self.load)
+        try:
+            Judge.objects.filter(name=self.name).update(ping=self.latency, load=self.load)
+        except Exception as e:
+            # What can I do? I don't want to tie this to MySQL.
+            if e.__class__.__name__ == 'OperationalError' and e.__module__ == '_mysql_exceptions' and e.args[0] == 2006:
+                db.close_connection()
 
     def on_grading_begin(self, packet):
         super(DjangoJudgeHandler, self).on_grading_begin(packet)
