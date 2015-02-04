@@ -362,4 +362,4 @@ def clone_problem(request, code):
             else:
                 break
     problem.authors.add(request.user.profile)
-    return HttpResponseRedirect(reverse('judge_problem_change', problem.id, current_app='admin'))
+    return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
