@@ -357,4 +357,4 @@ def clone_problem(request, code):
             problem.code = '%s%d' % (code, i)
             problem.save()
     problem.authors.add(request.user.profile)
-    return HttpResponseRedirect(reverse('admin:judge_problem_change', problem.id))
+    return HttpResponseRedirect(reverse('judge_problem_change', problem.id, current_app='admin'))
