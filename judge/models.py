@@ -243,6 +243,7 @@ class Problem(models.Model):
             ('see_private_problem', 'See hidden problems'),
             ('edit_own_problem', 'Edit own problems'),
             ('edit_all_problem', 'Edit all problems'),
+            ('clone_problem', 'Clone problem'),
         )
 
 

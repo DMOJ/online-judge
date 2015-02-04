@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
+from django.db import IntegrityError
 from django.db.models import Count
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
@@ -14,6 +15,7 @@ from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.views.generic import ListView, View, UpdateView, CreateView
 from django.views.generic.detail import SingleObjectMixin
+import itertools
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm, ProblemEditForm, ProblemAddForm
@@ -335,3 +337,24 @@ def problem_submit(request, problem=None, submission=None):
         'langs': Language.objects.all(),
         'no_judges': not form.fields['language'].queryset
     }, context_instance=RequestContext(request))
+
+
+@login_required
+@permission_required('judge.clone_problem')
+def clone_problem(request, code):
+    try:
+        problem = Problem.objects.get(code=code)
+    except Problem.DoesNotExist:
+        raise Http404()
+    problem.pk = None
+    problem.is_public = False
+    problem.code += '_clone'
+    try:
+        problem.save()
+    except IntegrityError:
+        code = problem.code
+        for i in itertools.count(1):
+            problem.code = '%s%d' % (code, i)
+            problem.save()
+    problem.authors.add(request.user.profile)
+    return HttpResponseRedirect(reverse('admin:judge_problem_change', problem.id))

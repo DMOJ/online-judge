@@ -97,6 +97,7 @@ urlpatterns = patterns('',
     url(r'^problem/(?P<code>\w+)/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
     url(r'^problem/(?P<code>\w+)/latex$', problem.ProblemLatexView.as_view(), name='problem_latex'),
     url(r'^problem/(?P<code>\w+)/edit', problem.ProblemEdit.as_view(), name='problem_edit'),
+    url(r'^problem/(?P<code>\w+)/clone', problem.clone_problem, name='problem_clone'),
     url(r'^problem/(\w+)/submit$', 'judge.views.problem_submit'),
     url(r'^problem/(\w+)/resubmit/(\d+)$', 'judge.views.problem_submit'),
 
