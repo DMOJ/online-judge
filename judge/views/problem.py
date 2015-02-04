@@ -346,6 +346,7 @@ def clone_problem(request, code):
         problem = Problem.objects.get(code=code)
     except Problem.DoesNotExist:
         raise Http404()
+    languages = problem.allowed_languages.all()
     problem.pk = None
     problem.is_public = False
     problem.code += '_clone'
@@ -362,4 +363,5 @@ def clone_problem(request, code):
             else:
                 break
     problem.authors.add(request.user.profile)
+    problem.allowed_languages = languages
     return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
