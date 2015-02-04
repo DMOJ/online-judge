@@ -30,7 +30,7 @@ def _find_contest(request, key, private_check=True):
             raise ObjectDoesNotExist()
     except ObjectDoesNotExist:
         return generic_message(request, 'No such contest',
-                               'Could not find a contest with the key "%s".' % key, status=404)
+                               'Could not find a contest with the key "%s".' % key, status=404), False
     return contest, True
 
 
