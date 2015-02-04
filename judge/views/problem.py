@@ -355,6 +355,11 @@ def clone_problem(request, code):
         code = problem.code
         for i in itertools.count(1):
             problem.code = '%s%d' % (code, i)
-            problem.save()
+            try:
+                problem.save()
+            except IntegrityError:
+                pass
+            else:
+                break
     problem.authors.add(request.user.profile)
     return HttpResponseRedirect(reverse('judge_problem_change', problem.id, current_app='admin'))
