@@ -274,12 +274,7 @@ STATICFILES_DIRS = [
 STATIC_URL = '/static/'
 
 # Define a cache
-CACHES = {
-    'fast': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'dmoj-fast-memory'
-    }
-}
+CACHES = {}
 
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:
