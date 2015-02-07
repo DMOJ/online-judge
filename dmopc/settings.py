@@ -260,6 +260,7 @@ EVENT_DAEMON_KEY = None
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
+DEFAULT_USER_TIME_ZONE = 'America/Toronto'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True

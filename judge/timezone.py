@@ -1,6 +1,7 @@
 import pytz
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 
 from judge.models import Profile
 
@@ -11,9 +12,9 @@ class TimezoneMiddleware(object):
             try:
                 tzname = Profile.objects.get(user=request.user).timezone
             except ObjectDoesNotExist:
-                tzname = 'America/Toronto'
+                tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Tronto')
         else:
-            tzname = 'America/Toronto'
+            tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Tronto')
         timezone.activate(pytz.timezone(tzname))
 
     def process_response(self, request, response):
