@@ -12,9 +12,9 @@ class TimezoneMiddleware(object):
             try:
                 tzname = Profile.objects.get(user=request.user).timezone
             except ObjectDoesNotExist:
-                tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Tronto')
+                tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto')
         else:
-            tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Tronto')
+            tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto')
         timezone.activate(pytz.timezone(tzname))
 
     def process_response(self, request, response):
