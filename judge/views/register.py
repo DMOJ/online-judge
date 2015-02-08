@@ -1,5 +1,6 @@
 import re
 from django import forms
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.forms import CharField, ChoiceField, ModelChoiceField
 from django.utils import timezone
@@ -54,7 +55,7 @@ class RegistrationView(OldRegistrationView):
 
     def get_initial(self, request=None):
         initial = super(RegistrationView, self).get_initial(request)
-        initial['timezone'] = 'America/Toronto'
+        initial['timezone'] = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto')
         initial['language'] = Language.get_python2()
         return initial
 

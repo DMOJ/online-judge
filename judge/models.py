@@ -1,6 +1,7 @@
 import re
 from collections import defaultdict
 from operator import itemgetter, attrgetter
+from django.conf import settings
 from django.core.cache import cache
 
 import pytz
@@ -111,7 +112,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name='User associated')
     name = models.CharField(max_length=50, verbose_name='Display name', null=True, blank=True)
     about = models.TextField(verbose_name='Self-description', null=True, blank=True)
-    timezone = models.CharField(max_length=50, verbose_name='Location', default='America/Toronto', choices=TIMEZONE)
+    timezone = models.CharField(max_length=50, verbose_name='Location', choices=TIMEZONE,
+                                default=getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto'))
     language = models.ForeignKey(Language, verbose_name='Preferred language')
     points = models.FloatField(default=0, db_index=True)
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
