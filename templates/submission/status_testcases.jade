@@ -57,7 +57,7 @@ if submission.status != 'IE'
                             td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
                     if case.status != 'AC' and case.output
                         tr(id=case.id, style='display:none').toggled
-                            td(colspan='4')
+                            td(colspan='5')
                                 .case-info
                                     strong Your output (clipped)
                                     .case-output #{case.output|linebreaksbr}
