@@ -191,3 +191,6 @@ handler500 = 'judge.views.error.error500'
 
 if 'tinymce' in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^tinymce/', include('tinymce.urls')))
+
+if 'newsletter' in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', (r'^newsletter/', include('newsletter.urls')))
