@@ -6,6 +6,6 @@ block before_posts
     if misc_config.home_page_top
         | {% evaluate misc_config.home_page_top %}
 
-block media
+block meta
     if misc_config.meta_description
         meta(name='description', content=misc_config['meta_description'])
