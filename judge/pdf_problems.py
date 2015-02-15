@@ -133,8 +133,11 @@ def make_latex(markdown, style='problem'):
 
 def wget_graphics(match):
     path = match.group(1)
-    return r'''\immediate\write18{wget %s}
-\includegraphics{%s}
+    return r'''
+\begin{center}
+    \immediate\write18{wget %s}
+    \makebox[\textwidth]{\includegraphics[width=\paperwidth]{%s}}
+\end{center}
 ''' % (path, path[path.rfind('/') + 1:])
 
 
