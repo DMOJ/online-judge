@@ -137,7 +137,7 @@ def wget_graphics(match):
     return r'''
 \begin{center}
     \immediate\write18{wget %s}
-    \includegraphics[max width=\paperwidth]{%s}
+    \includegraphics[max width=\textwidth]{%s}
 \end{center}
 ''' % (path, path[path.rfind('/') + 1:])
 
