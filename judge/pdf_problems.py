@@ -30,6 +30,7 @@ PROLOGUE = r'''\documentclass[a4paper]{article}
 \usepackage{longtable}
 \usepackage{tabu}
 \usepackage{tabulary}
+\usepackage[export]{adjustbox}
 
 \setlength{\parskip}{1em}
 \renewcommand{\arraystretch}{1.5}
@@ -136,7 +137,7 @@ def wget_graphics(match):
     return r'''
 \begin{center}
     \immediate\write18{wget %s}
-    \makebox[\textwidth]{\includegraphics[width=\paperwidth]{%s}}
+    \makebox[max width=\textwidth]{\includegraphics[width=\paperwidth]{%s}}
 \end{center}
 ''' % (path, path[path.rfind('/') + 1:])
 
