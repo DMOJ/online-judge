@@ -11,7 +11,7 @@ def api_contest_list(request):
         js[c.key] = {
             'name': c.name,
             'free_start': c.free_start,
-            'start_time': c.start_time.isoformat(),
+            'start_time': c.start_time.isoformat() if c.start_time is not None else None,
             'time_limit': nice_repr(c.time_limit, 'concise'),
             'ongoing': c.ongoing
         }
