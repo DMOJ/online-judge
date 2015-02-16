@@ -219,7 +219,7 @@ h4 {
     margin: 0
 }
 
-#header h1 {
+#header a {
     background: #111;
     color: #aaa;
     text-align: left;
