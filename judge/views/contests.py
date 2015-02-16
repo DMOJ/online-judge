@@ -50,7 +50,7 @@ class ContestList(TitleMixin, ListView):
         now = timezone.now()
         past, present, future = [], [], []
         for contest in self.get_queryset():
-            if contest.start_time is None:
+            if contest.free_start:
                 (present if contest.ongoing else past).append(contest)
             elif contest.end_time < now:
                 past.append(contest)
@@ -137,7 +137,7 @@ def join_contest(request, key):
 
     participation, created = ContestParticipation.objects.get_or_create(
         contest=contest, profile=contest_profile, defaults={
-            'start': contest.start_time or timezone.now()
+            'start': timezone.now() if contest.free_start else contest.start_time
         }
     )
     if not created and participation.ended:

@@ -499,6 +499,7 @@ class Contest(models.Model):
     organizers = models.ManyToManyField(Profile, help_text='These people will be able to edit the contest.')
     description = models.TextField(blank=True)
     ongoing = models.BooleanField(default=True)
+    free_start = models.BooleanField(default=False)
     problems = models.ManyToManyField(Problem, verbose_name='Problems', through='ContestProblem')
     start_time = models.DateTimeField(verbose_name='Start time', null=True, blank=True, db_index=True)
     time_limit = TimedeltaField(verbose_name='Time limit')
@@ -510,9 +511,9 @@ class Contest(models.Model):
 
     @cached_property
     def can_join(self):
-        if not self.ongoing:
+        if self.free_start and not self.ongoing:
             return False
-        if self.start_time is not None:
+        if not self.free_start and self.start_time is not None:
             now = timezone.now()
             if now < self.start_time or now > self.start_time + self.time_limit:
                 return False
@@ -520,7 +521,7 @@ class Contest(models.Model):
 
     @cached_property
     def end_time(self):
-        if self.start_time is None:
+        if self.free_start:
             return None
         return self.start_time + self.time_limit
 
@@ -536,7 +537,7 @@ class Contest(models.Model):
 
     @property
     def time_before_end(self):
-        if self.start_time is None:
+        if self.free_start:
             return None
         now = timezone.now()
         if self.end_time >= now:
@@ -574,7 +575,7 @@ class ContestParticipation(models.Model):
     @property
     def end_time(self):
         contest = self.contest
-        if contest.start_time is not None:
+        if not contest.free_start and contest.start_time is not None:
             return contest.start_time + contest.time_limit
         return self.start + contest.time_limit
 

@@ -30,7 +30,7 @@ block info_float
         a(href='{% url "admin:judge_contest_change" contest.id %}') Edit contest
     hr
     br
-    if contest.start_time
+    if not contest.free_start
         if contest.start_time > now
             b Starting in:
             .time-remaining #{contest.time_before_start|timedelta:"simple"}
