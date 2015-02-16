@@ -54,8 +54,9 @@ html(lang='en')
         noscript This site works best with JavaScript enabled.
         #header.unselectable
             h1
-                span(style='color: #FFDE05') DM::
-                | OJ
+                a(href='/')
+                    span(style='color: #FFDE05') DM::
+                    | OJ
             if IN_CONTEST
                 #contest-info
                     a(href='{% url "contest_view" CONTEST.contest.key %}')
