@@ -60,8 +60,8 @@ block body
                                     if contest.time_before_end
                                         span.time Ending in&nbsp;
                                         span.time.time-remaining #{contest.time_before_end|timedelta:"simple"}
-                                    elif contest.free_start
-                                        span.time Started at #{contest.end_time|date:"N j, o, G:i"}
+                                    elif contest.free_start and contest.start_time
+                                        span.time Started at #{contest.start_time|date:"N j, o, G:i"}
                                     .time.floating-time #{contest.end_time|date:"N j, o, G:i"}
                         td #{contest.time_limit}
                         td
