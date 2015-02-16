@@ -159,7 +159,7 @@ urlpatterns = patterns('',
     url(r'^status-table/$', 'judge.views.status_table'),
     url(r'^judge/(?P<name>[\w.]+)$', status.JudgeDetail.as_view(), name='judge_info'),
 
-    url(r'^api_lscontests/$', 'judge.views.api_contest_list'),
+    url(r'^api/contest/list$', 'judge.views.api_contest_list'),
 
     url(r'^blog/$', blog.PostList.as_view(), name='blog_post_list'),
     url(r'^blog/(?P<page>\d+)$', blog.PostList.as_view(), name='blog_post_list'),
