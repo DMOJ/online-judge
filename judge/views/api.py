@@ -7,7 +7,7 @@ from judge.models import Contest
 def api_contest_list(request):
     js = {}
     for c in Contest.objects.filter(is_public=True):
-        c[c.name] = {
+        js[c.name] = {
             "description": c.description,
             "ongoing": c.ongoing
         }
