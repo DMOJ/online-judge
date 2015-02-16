@@ -9,7 +9,7 @@ from .submission import *
 from .ranked_submission import RankedSubmissions, ContestRankedSubmission
 from .status import *
 from .widgets import *
-
+from .api import *
 
 class TemplateView(OldTemplateView):
     title = None
