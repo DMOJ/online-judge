@@ -562,7 +562,7 @@ class Contest(models.Model):
 class ContestParticipation(models.Model):
     contest = models.ForeignKey(Contest, verbose_name='Associated contest', related_name='users')
     profile = models.ForeignKey('ContestProfile', verbose_name='User', related_name='history')
-    start = models.DateTimeField(verbose_name='Start time', default=timezone.now)
+    real_start = models.DateTimeField(verbose_name='Start time', default=timezone.now, db_column='start')
     score = models.IntegerField(verbose_name='score', default=0, db_index=True)
     cumtime = models.PositiveIntegerField(default=0)
 
@@ -571,6 +571,11 @@ class ContestParticipation(models.Model):
                              self.submissions.values('submission__problem').annotate(points=Max('points'))))
         self.save()
         return self.score
+
+    @cached_property
+    def start(self):
+        contest = self.contest
+        return self.real_start if contest.free_start else contest.start_time
 
     @property
     def end_time(self):

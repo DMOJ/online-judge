@@ -137,7 +137,7 @@ def join_contest(request, key):
 
     participation, created = ContestParticipation.objects.get_or_create(
         contest=contest, profile=contest_profile, defaults={
-            'start': timezone.now() if contest.free_start else contest.start_time
+            'start_': timezone.now()
         }
     )
     if not created and participation.ended:
