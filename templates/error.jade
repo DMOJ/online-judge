@@ -36,5 +36,5 @@ html
             br
             | panic:&nbsp;
             a(href='javascript:history.back()') go back
-        if request.user.profile.is_admin and traceback
+        if request.user.is_superuser and traceback
             pre #{traceback}
