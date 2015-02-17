@@ -14,6 +14,7 @@ from django.template import RequestContext
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.views.generic import ListView, View, UpdateView, CreateView
+from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 import itertools
 
@@ -60,14 +61,16 @@ class ProblemMixin(object):
             return generic_message(request, 'No such problem',
                                    'Could not find a problem with the code "%s".' % code, status=404)
 
-
-class ProblemRaw(ProblemMixin, TitleMixin, View):
+class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
     context_object_name = 'problem'
     template_name = 'problem/raw.jade'
 
     def get_title(self):
-        return "Raw problem data"
+        return self.get_object().name
 
+    def get_context_data(self, **kwargs):
+        context = super(ProblemRaw, self).get_context_data(**kwargs)
+        return context
 
 class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
     context_object_name = 'problem'
