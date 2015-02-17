@@ -22,7 +22,7 @@ class Command(BaseCommand):
             print 'Bad problem code'
             return
         directory = None if len(args) < 2 else args[2]
-        with WebKitPdfMaker(directory) as maker:
+        with WebKitPdfMaker(directory, clean_up=directory is None) as maker:
             maker.html = get_template('problem/raw.jade').render(Context({
                 'problem': problem
             }))

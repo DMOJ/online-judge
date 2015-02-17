@@ -213,12 +213,13 @@ class LatexPdfMaker(object):
 
 
 class WebKitPdfMaker(object):
-    def __init__(self, dir=None):
+    def __init__(self, dir=None, clean_up=True):
         self.dir = dir or os.path.join(getattr(settings, 'WKHTMLTOPDF_TEMP_DIR', tempfile.gettempdir()), str(uuid.uuid1()))
         self.proc = None
         self.log = None
         self.htmlfile = os.path.join(self.dir, 'input.html')
         self.pdffile = os.path.join(self.dir, 'output.pdf')
+        self.clean_up = clean_up
 
     def make(self):
         self.proc = subprocess.Popen([
@@ -260,7 +261,8 @@ class WebKitPdfMaker(object):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        shutil.rmtree(self.dir, ignore_errors=True)
+        if self.clean_up:
+            shutil.rmtree(self.dir, ignore_errors=True)
 
 
 def main():
