@@ -27,7 +27,7 @@ def api_problem_list(request):
             'points': p.points,
             'partial': p.partial,
             'name': p.name,
-            'group': p.group
+            'group': p.group.full_name
         }
     jso = json.dumps(js)
     return HttpResponse(jso, mimetype='application/json')
@@ -39,14 +39,14 @@ def api_problem_info(request, problem):
         p = Problem.objects.get(code=problem)
         js = {
             'name': p.name,
-            'authors': p.authors,
-            'types': p.types,
-            'group': p.group,
+            'authors': [a.name for a in p.authors],
+            'types': [t.full_name for t in p.types],
+            'group': p.group.full_name,
             'time_limit': p.time_limit,
             'memory_limit': p.memory_limit,
             'points': p.points,
             'partial': p.partial,
-            'languages': p.allowed_languages,
+            'languages': [l.key for l in p.allowed_languages],
         }
     except ObjectDoesNotExist:
         pass
