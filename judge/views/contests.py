@@ -5,7 +5,7 @@ from datetime import timedelta
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.db.models import Max
+from django.db.models import Max, Count
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -40,10 +40,11 @@ class ContestList(TitleMixin, ListView):
     title = 'Contests'
 
     def get_queryset(self):
-        if self.request.user.has_perm('judge.see_private_contest'):
-            return Contest.objects.order_by('-start_time', 'key')
-        else:
-            return Contest.objects.filter(is_public=True).order_by('-start_time', 'key')
+        queryset = Contest.objects.order_by('-start_time', 'key')
+        if not self.request.user.has_perm('judge.see_private_contest'):
+            queryset = queryset.filter(is_public=True)
+        queryset = queryset.annotate(participation_count=Count('users'))
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
