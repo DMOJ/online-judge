@@ -33,7 +33,8 @@ class ContestProfileInline(admin.StackedInline):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    fields = ('user', 'name', 'about', 'organization', 'timezone', 'language', 'ace_theme', 'last_access', 'ip')
+    fields = ('user', 'name', 'display_rank', 'about', 'organization', 'timezone', 'language', 'ace_theme',
+              'last_access', 'ip')
     list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip')
     ordering = ('user__username',)
     search_fields = ('user__username', 'name', 'ip', 'user__email')
