@@ -122,6 +122,8 @@ class Profile(models.Model):
     organization = models.ForeignKey(Organization, verbose_name='Organization', null=True, blank=True,
                                      on_delete=models.SET_NULL, related_name='members', related_query_name='member')
     organization_join_time = models.DateTimeField(verbose_name='Organization joining date', null=True, blank=True)
+    display_rank = models.CharField(max_length=10, default='user',
+                                    choices=(('user', 'Normal User'), ('setter', 'Problem Setter'), ('admin', 'Admin')))
 
     def calculate_points(self):
         points = sum(map(itemgetter('points'),
@@ -145,18 +147,6 @@ class Profile(models.Model):
         if self.name:
             return u'%s (%s)' % (self.user.username, self.name)
         return self.user.username
-
-    @cached_property
-    def display_rank(self):
-        return 'admin' if self.is_admin else ('setter' if self.is_problem_setter else 'user')
-
-    @cached_property
-    def is_admin(self):
-        return self.user.is_superuser or self.user.groups.filter(name='Admin').exists()
-
-    @cached_property
-    def is_problem_setter(self):
-        return self.user.is_superuser or self.user.groups.filter(name='ProblemSetter').exists()
 
     @cached_property
     def contest(self):
