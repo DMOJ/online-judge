@@ -6,6 +6,15 @@ from judge.models import Contest, Problem, Profile
 from judge.templatetags.timedelta import nice_repr
 
 
+def sane_time_repr(delta):
+    days = delta.days % 7
+    hours = delta.seconds / 3600
+    minutes = (delta.seconds % 3600) / 60
+    if days > 0:
+        return "%dd %02d%02d" % (days, hours, minutes)
+    return "%02d:%02d" % (hours, minutes)
+
+
 def api_contest_list(request):
     js = {}
     for c in Contest.objects.filter(is_public=True):
@@ -13,7 +22,7 @@ def api_contest_list(request):
             'name': c.name,
             'free_start': c.free_start,
             'start_time': c.start_time.isoformat() if c.start_time is not None else None,
-            'time_limit': nice_repr(c.time_limit, 'concise'),
+            'time_limit': sane_time_repr(c.time_limit),
             'ongoing': c.ongoing
         }
     return HttpResponse(json.dumps(js), mimetype='application/json')
