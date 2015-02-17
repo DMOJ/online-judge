@@ -61,7 +61,7 @@ class ProblemMixin(object):
                                    'Could not find a problem with the code "%s".' % code, status=404)
 
 
-class ProblemRaw(ProblemMixin, TitleMixin):
+class ProblemRaw(ProblemMixin, TitleMixin, View):
     context_object_name = 'problem'
     template_name = 'problem/raw.jade'
 
