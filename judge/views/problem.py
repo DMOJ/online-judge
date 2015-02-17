@@ -168,7 +168,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
             if getattr(settings, 'WEBKIT_PDF', False):
                 with WebKitPdfMaker() as maker:
                     maker.html = get_template('problem/raw.jade').render(RequestContext(request, {
-                        'problem': problem, 'title': problem.name
+                        'problem': problem
                     }))
                     for file in ('style.css', 'content-description.css', 'pygment-github.css'):
                         maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
