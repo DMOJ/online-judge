@@ -23,8 +23,7 @@ def api_contest_list(request):
 def api_problem_list(request):
     js = {}
     for p in Problem.objects.filter(is_public=True):
-        js[p.key] = {
-            'code': p.code,
+        js[p.code] = {
             'points': p.points,
             'partial': p.partial,
             'name': p.name,
