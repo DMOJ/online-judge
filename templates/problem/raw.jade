@@ -1,7 +1,5 @@
 - load staticfiles
-- load mathtag
 - load markdown_trois_tags
-- load cache
 - load smart_math
 
 doctype 5
@@ -9,20 +7,8 @@ doctype 5
 html
     head
         link(rel='stylesheet', href='{% static "style.css" %}')
-        link(rel='canonical', href='http://{{ site.domain }}{{ request.get_full_path }}')
         link(rel='stylesheet', href='{% static "content-description.css" %}')
         link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
-        script(type='text/javascript')
-            $(function () {
-                fix_div($('.info-float'), 40, true, function (info) {
-                    return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
-                        'width': '11%',
-                        'max-width': '10em',
-                        'padding-left': '1em',
-                        'display': 'table-cell'
-                    }).prependTo('#content-body');
-                });
-            });
         style
             body {
                 overflow: hidden;
@@ -44,4 +30,4 @@ html
         |     }
         |   });
         | </script>
-        script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG')
+        script(type='text/javascript', src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG')

@@ -11,6 +11,7 @@ from django.db.models import Count
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.template.loader import get_template
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.views.generic import ListView, View, UpdateView, CreateView
@@ -165,7 +166,10 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.pdf', problem.code)
             if getattr(settings, 'WEBKIT_PDF', False):
-                with WebKitPdfMaker(request.build_absolute_uri(reverse('problem_raw', args=[problem.code]))) as maker:
+                with WebKitPdfMaker() as maker:
+                    maker.html = get_template('problem/raw.jade').render(RequestContext(request, {
+                        'problem': problem
+                    }))
                     maker.make()
                     if not maker.success:
                         with open(error_cache, 'wb') as f:

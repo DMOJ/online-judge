@@ -212,33 +212,48 @@ class LatexPdfMaker(object):
 
 
 class WebKitPdfMaker(object):
-    def __init__(self, url):
-        self.path = os.path.join(getattr(settings, 'WKHTMLTOPDF_TEMP_DIR', tempfile.gettempdir()),
-                                 str(uuid.uuid1()) + '.pdf')
-        self.url = url
+    def __init__(self):
+        self.dir = os.path.join(getattr(settings, 'WKHTMLTOPDF_TEMP_DIR', tempfile.gettempdir()), str(uuid.uuid1()))
         self.proc = None
         self.log = None
+        self.htmlfile = os.path.join(self.dir, 'input.html')
+        self.pdffile = os.path.join(self.dir, 'output.pdf')
 
     def make(self):
         self.proc = subprocess.Popen([
             getattr(settings, 'WKHTMLTOPDF', 'wkhtmltopdf'), '--enable-javascript', '--javascript-delay', '5000',
-            self.url, self.path
-        ], stdout=subprocess.PIPE)
+            'input.html', 'output.pdf'
+        ], stdout=subprocess.PIPE, cwd=self.dir)
         self.log = self.proc.communicate()[0]
+
+    @property
+    def html(self):
+        with open(self.htmlfile) as f:
+            return f.read()
+
+    @html.setter
+    def html(self, data):
+        with open(self.htmlfile, 'w') as f:
+            f.write(data)
 
     @property
     def success(self):
         return self.proc.returncode == 0
 
+    @property
+    def created(self):
+        return os.path.exists(self.pdffile)
+
     def __enter__(self):
+        try:
+            os.makedirs(self.dir)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        try:
-            os.remove(self.path)
-        except OSError as e:
-            if e.errno != errno.ENOENT:
-                raise
+        shutil.rmtree(self.dir, ignore_errors=True)
 
 
 def main():
