@@ -25,10 +25,6 @@ block media
             });
         });
     style
-        a.view-pdf {
-            padding-top: 1em;
-        display: inline-block;
-        }
         .problem-title {
             display: flex;
         }
@@ -36,16 +32,20 @@ block media
             display: inline-block;
             flex: 1 1 0;
         }
+        body {
+            overflow: hidden;
+            page-break-after: always;
+        }
 
-block title_row
+body
     div.problem-title
         h2(style='color:#393630; display: inline-block')= title
     hr
 
-block body
     .content-description
         | #{problem.description | markdown:"problem"|smart_math}
         hr
+
 block bodyend
     include mathjax_load
 
