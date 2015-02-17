@@ -79,4 +79,4 @@ def api_user_info(request, user):
     except ObjectDoesNotExist:
         pass
     jso = json.dumps(js)
-    return HttpResponse(jso, mimetype='a
+    return HttpResponse(jso, mimetype='application/json')
