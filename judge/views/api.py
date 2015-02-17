@@ -16,8 +16,7 @@ def api_contest_list(request):
             'time_limit': nice_repr(c.time_limit, 'concise'),
             'ongoing': c.ongoing
         }
-    jso = json.dumps(js)
-    return HttpResponse(jso, mimetype='application/json')
+    return HttpResponse(json.dumps(js), mimetype='application/json')
 
 
 def api_problem_list(request):
@@ -29,26 +28,23 @@ def api_problem_list(request):
             'name': p.name,
             'group': p.group.full_name
         }
-    jso = json.dumps(js)
-    return HttpResponse(jso, mimetype='application/json')
+    return HttpResponse(json.dumps(js), mimetype='application/json')
 
 
 def api_problem_info(request, problem):
-    js = {}
     try:
         p = Problem.objects.get(code=problem)
         js = {
             'name': p.name,
-            'authors': [a.user.username for a in p.authors.all()],
-            'types': [t.full_name for t in p.types.all()],
+            'authors': list(p.authors.values_list('user__username', flat=True)),
+            'types': list(p.types.values_list('full_name', flat=True)),
             'group': p.group.full_name,
             'time_limit': p.time_limit,
             'memory_limit': p.memory_limit,
             'points': p.points,
             'partial': p.partial,
-            'languages': [l.key for l in p.allowed_languages.all()],
+            'languages': list(p.allowed_languages.values_list('key', flat=True)),
         }
     except ObjectDoesNotExist:
-        pass
-    jso = json.dumps(js)
-    return HttpResponse(jso, mimetype='application/json')
+        raise Http404()
+    return HttpResponse(json.dumps(js), mimetype='application/json')
