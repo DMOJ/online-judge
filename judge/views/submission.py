@@ -30,7 +30,7 @@ class SubmissionDetailBase(TitleMixin, SubmissionMixin, SingleObjectMixin, Templ
         self.object = submission = self.get_object()
 
         profile = request.user.profile
-        if not profile.is_admin and submission.user_id != profile.id and \
+        if not request.user.has_perm('judge.view_all_submission') and submission.user_id != profile.id and \
                 not submission.problem.authors.filter(id=profile.id).exists() and \
                 not Submission.objects.filter(user_id=profile.id, result='AC',
                                               problem__code=submission.problem.code,

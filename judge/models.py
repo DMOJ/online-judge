@@ -338,7 +338,8 @@ class Submission(models.Model):
             ('abort_any_submission', 'Abort any submission'),
             ('rejudge_submission', 'Rejudge the submission'),
             ('rejudge_submission_lot', 'Rejudge a lot of submissions'),
-            ('spam_submission', 'Submit without limit')
+            ('spam_submission', 'Submit without limit'),
+            ('view_all_submission', 'View all submission')
         )
 
 
