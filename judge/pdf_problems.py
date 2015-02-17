@@ -10,6 +10,7 @@ import tempfile
 import re
 
 from django.conf import settings
+import io
 from judge.math_parser import MathHTMLParser
 
 from markdown_trois import markdown as markdown_trois
@@ -234,12 +235,12 @@ class WebKitPdfMaker(object):
 
     @property
     def html(self):
-        with open(self.htmlfile) as f:
+        with io.open(self.htmlfile, encoding='utf-8') as f:
             return f.read()
 
     @html.setter
     def html(self, data):
-        with open(self.htmlfile, 'w') as f:
+        with io.open(self.htmlfile, 'w', encoding='utf-8') as f:
             f.write(data)
 
     @property
