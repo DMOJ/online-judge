@@ -28,7 +28,7 @@ class Command(BaseCommand):
             }))
             for file in ('style.css', 'content-description.css', 'pygment-github.css'):
                 maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
-            maker.make()
+            maker.make(debug=True)
             if not maker.success:
                 print>>sys.stderr, maker.log
             elif directory is None:

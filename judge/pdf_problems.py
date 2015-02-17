@@ -221,13 +221,16 @@ class WebKitPdfMaker(object):
         self.pdffile = os.path.join(self.dir, 'output.pdf')
         self.clean_up = clean_up
 
-    def make(self):
-        self.proc = subprocess.Popen([
+    def make(self, debug=True):
+        command = [
             getattr(settings, 'WKHTMLTOPDF', 'wkhtmltopdf'), '--enable-javascript', '--javascript-delay', '5000',
             '--footer-center', 'Page [page] of [topage]', '--footer-font-name', 'Segoe UI',
             '--footer-font-size', '10',
             'input.html', 'output.pdf'
-        ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir)
+        ]
+        if debug:
+            print subprocess.list2cmdline(command)
+        self.proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir)
         self.log = self.proc.communicate()[0]
 
     def load(self, file, source):
