@@ -222,7 +222,7 @@ class WebKitPdfMaker(object):
     def make(self):
         self.proc = subprocess.Popen([
             getattr(settings, 'WKHTMLTOPDF', 'wkhtmltopdf'), '--enable-javascript', '--javascript-delay', '5000',
-            self.url, elf.path
+            self.url, self.path
         ], stdout=subprocess.PIPE)
         self.log = self.proc.communicate()[0]
 
