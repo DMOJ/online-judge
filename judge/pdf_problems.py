@@ -212,8 +212,8 @@ class LatexPdfMaker(object):
 
 
 class WebKitPdfMaker(object):
-    def __init__(self):
-        self.dir = os.path.join(getattr(settings, 'WKHTMLTOPDF_TEMP_DIR', tempfile.gettempdir()), str(uuid.uuid1()))
+    def __init__(self, dir=None):
+        self.dir = dir or os.path.join(getattr(settings, 'WKHTMLTOPDF_TEMP_DIR', tempfile.gettempdir()), str(uuid.uuid1()))
         self.proc = None
         self.log = None
         self.htmlfile = os.path.join(self.dir, 'input.html')
