@@ -62,6 +62,7 @@ def users(request):
         return contest_ranking_view(request, request.user.profile.contest.current.contest)
     return render_to_response('user/list.jade', {
         'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
-                               .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')),
+                               .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
+                               .select_related('user__username', 'organization').defer('about', 'organization__about')),
         'title': 'Users'
     }, context_instance=RequestContext(request))

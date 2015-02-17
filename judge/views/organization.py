@@ -69,12 +69,14 @@ class OrganizationUsers(OrganizationMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = '%s Members' % self.object.name
-        context['users'] = ranker(chain(
-            self.object.members.filter(submission__points__gt=0).order_by('-points')
-                .annotate(problems=Count('submission__problem', distinct=True)),
-            self.object.members.annotate(problems=Max('submission__points')).filter(problems=0),
-            self.object.members.annotate(problems=Count('submission__problem', distinct=True)).filter(problems=0),
-        ))
+        context['users'] = ranker(chain(*[
+            i.select_related('user__username', 'organization').defer('about', 'organization__about') for i in (
+                self.object.members.filter(submission__points__gt=0).order_by('-points')
+                    .annotate(problems=Count('submission__problem', distinct=True)),
+                self.object.members.annotate(problems=Max('submission__points')).filter(problems=0),
+                self.object.members.annotate(problems=Count('submission__problem', distinct=True)).filter(problems=0),
+            )
+        ]))
         context['partial'] = True
         return context
 

@@ -12,18 +12,16 @@ thead
             tr
                 td= rank
                 if show_organization
-                    - cache 86400 user_org_on_rank user.id
-                        td(class=user.display_rank)
-                            .userinfo
-                                - with org=user.organization
-                                    if org
-                                        span.organization
-                                            a(href='{% url "organization_home" org.key %}')= org.short_name
-                                a(href='{% url "judge.views.user" user.user.username %}')= user.long_display_name
-                else
-                    - cache 86400 user_on_rank user.id
-                        td(class=user.display_rank)
+                    td(class=user.display_rank)
+                        .userinfo
+                            - with org=user.organization
+                                if org
+                                    span.organization
+                                        a(href='{% url "organization_home" org.key %}')= org.short_name
                             a(href='{% url "judge.views.user" user.user.username %}')= user.long_display_name
+                else
+                    td(class=user.display_rank)
+                        a(href='{% url "judge.views.user" user.user.username %}')= user.long_display_name
                 block before_point
                 td.user-points= user.points
                 block after_point
