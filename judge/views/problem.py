@@ -177,7 +177,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                         with open(error_cache, 'wb') as f:
                             f.write(maker.log)
                         return HttpResponse(maker.log, status=500, content_type='text/plain')
-                    os.rename(maker.path, cache)
+                    os.rename(maker.pdffile, cache)
             else:
                 try:
                     authors = ', '.join(map(attrgetter('user.username'), problem.authors.select_related('user')))
