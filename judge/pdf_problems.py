@@ -222,8 +222,7 @@ class WebKitPdfMaker(object):
     def make(self):
         self.proc = subprocess.Popen([
             getattr(settings, 'WKHTMLTOPDF', 'wkhtmltopdf'), '--enable-javascript', '--javascript-delay', '5000',
-            '--footer-center [page]/[topage]',
-            'input.html', 'output.pdf'
+            'input.html', '--footer-center', '[page]/[topage]', 'output.pdf'
         ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir)
         self.log = self.proc.communicate()[0]
 
