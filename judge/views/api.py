@@ -24,6 +24,7 @@ def api_problem_list(request):
     js = {}
     for p in Problem.objects.filter(is_public=True):
         js[p.key] = {
+            'code': p.code,
             'points': p.points,
             'partial': p.partial,
             'name': p.name,
@@ -36,7 +37,7 @@ def api_problem_list(request):
 def api_problem_info(request, problem):
     js = {}
     try:
-        p = Problem.objects.get(key=problem)
+        p = Problem.objects.get(code=problem)
         js = {
             'name': p.name,
             'authors': p.authors,
