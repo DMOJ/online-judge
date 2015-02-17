@@ -22,7 +22,7 @@ html
         h2(style='color:#393630; display: inline-block')= problem.name
         hr
 
-        .content-description
+        .content-description.printing
             | #{problem.description|markdown:"problem"|smart_math:"tex"}
 
         | <script type='text/x-mathjax-config'>
