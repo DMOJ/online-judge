@@ -27,7 +27,7 @@ def api_problem_list(request):
             'points': p.points,
             'partial': p.partial,
             'name': p.name,
-            'group': p.category
+            'group': p.group
         }
     jso = json.dumps(js)
     return HttpResponse(jso, mimetype='application/json')
