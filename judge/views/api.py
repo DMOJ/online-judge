@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import *
 
 import json
-from judge.models import Contest, Problem
+from judge.models import Contest, Problem, Profile
 from judge.templatetags.timedelta import nice_repr
 
 
@@ -52,6 +52,7 @@ def api_problem_info(request, problem):
         pass
     jso = json.dumps(js)
     return HttpResponse(jso, mimetype='application/json')
+
 
 def api_user_list(request):
     js = {}
