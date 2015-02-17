@@ -16,8 +16,7 @@ def api_contest_list(request):
             'time_limit': nice_repr(c.time_limit, 'concise'),
             'ongoing': c.ongoing
         }
-    jso = json.dumps(js)
-    return HttpResponse(jso, mimetype='application/json')
+    return HttpResponse(json.dumps(js), mimetype='application/json')
 
 
 def api_problem_list(request):
@@ -29,18 +28,16 @@ def api_problem_list(request):
             'name': p.name,
             'group': p.group.full_name
         }
-    jso = json.dumps(js)
-    return HttpResponse(jso, mimetype='application/json')
+    return HttpResponse(json.dumps(js), mimetype='application/json')
 
 
 def api_problem_info(request, problem):
-    js = {}
     try:
         p = Problem.objects.get(code=problem)
         js = {
             'name': p.name,
-            'authors': [a.user.username for a in p.authors.all()],
-            'types': [t.full_name for t in p.types.all()],
+            'authors': list(p.authors.values_list('user__username', flat=True)),
+            'types': list(p.types.values_list('full_name', flat=True)),
             'group': p.group.full_name,
             'time_limit': p.time_limit,
             'memory_limit': p.memory_limit,
@@ -49,25 +46,22 @@ def api_problem_info(request, problem):
             'languages': list(p.allowed_languages.values_list('key', flat=True)),
         }
     except ObjectDoesNotExist:
-        pass
-    jso = json.dumps(js)
-    return HttpResponse(jso, mimetype='application/json')
+        raise Http404()
+    return HttpResponse(json.dumps(js), mimetype='application/json')
 
 
 def api_user_list(request):
     js = {}
-    for p in Profile.objects.all():
+    for p in Profile.objects.select_related('user'):
         js[p.user.username] = {
             'display_name': p.name,
             'points': p.points,
             'rank': p.display_rank
         }
-    jso = json.dumps(js)
-    return HttpResponse(jso, mimetype='application/json')
+    return HttpResponse(json.dumps(js), mimetype='application/json')
 
 
 def api_user_info(request, user):
-    js = {}
     try:
         p = Profile.objects.get(user__username=user)
         js = {
@@ -77,6 +71,5 @@ def api_user_info(request, user):
             'solved_problems': [],  # TODO
         }
     except ObjectDoesNotExist:
-        pass
-    jso = json.dumps(js)
-    return HttpResponse(jso, mimetype='application/json')
+        raise Http404()
+    return HttpResponse(json.dumps(js), mimetype='application/json')
