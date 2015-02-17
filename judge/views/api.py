@@ -7,12 +7,10 @@ from judge.templatetags.timedelta import nice_repr
 
 
 def sane_time_repr(delta):
-    days = delta.days % 7
+    days = delta.days
     hours = delta.seconds / 3600
     minutes = (delta.seconds % 3600) / 60
-    if days > 0:
-        return "%dd %02d%02d" % (days, hours, minutes)
-    return "%02d:%02d" % (hours, minutes)
+    return "%02d:%02d:%02d" % (days, hours, minutes)
 
 
 def api_contest_list(request):
