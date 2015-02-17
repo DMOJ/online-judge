@@ -36,14 +36,16 @@ block media
             display: inline-block;
             flex: 1 1 0;
         }
-block body
-    .content-description
-        | #{problem.description | markdown:"problem"|smart_math}
-        hr
-block bodyend
-    include mathjax_load
 
 block title_row
     div.problem-title
         h2(style='color:#393630; display: inline-block')= title
+
+block body
+    .content-description
+        hr
+        | #{problem.description | markdown:"problem"|smart_math}
+        hr
+block bodyend
+    include mathjax_load
 
