@@ -39,14 +39,14 @@ def api_problem_info(request, problem):
         p = Problem.objects.get(code=problem)
         js = {
             'name': p.name,
-            'authors': [a.name for a in p.authors],
-            'types': [t.full_name for t in p.types],
+            'authors': [a.name for a in p.authors.all()],
+            'types': [t.full_name for t in p.types.all()],
             'group': p.group.full_name,
             'time_limit': p.time_limit,
             'memory_limit': p.memory_limit,
             'points': p.points,
             'partial': p.partial,
-            'languages': [l.key for l in p.allowed_languages],
+            'languages': [l.key for l in p.allowed_languages.all()],
         }
     except ObjectDoesNotExist:
         pass
