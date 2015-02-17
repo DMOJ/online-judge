@@ -61,6 +61,18 @@ class ProblemMixin(object):
                                    'Could not find a problem with the code "%s".' % code, status=404)
 
 
+class ProblemRaw(ProblemMixin, TitleMixin, CommentedDetailView):
+    context_object_name = 'problem'
+    template_name = 'problem/raw.jade'
+
+    def get_title(self):
+        return "Raw problem data"
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemRaw, self).get_context_data(**kwargs)
+        return context
+
+
 class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
     context_object_name = 'problem'
     template_name = 'problem/problem.jade'
@@ -154,7 +166,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                     latex.make()
                     if not latex.success:
                         # try:
-                        #     raise LatexError(latex.log)
+                        # raise LatexError(latex.log)
                         # except LatexError:
                         #     self.logger.exception('Latex error while rendering: %s.pdf', problem.code)
                         if not latex.created:
@@ -202,25 +214,25 @@ class ProblemList(TitleMixin, ListView):
 
     def get_contest_queryset(self):
         queryset = self.contest_profile.current.contest.contest_problems.select_related('problem__group') \
-                       .defer('problem__description').order_by('problem__code') \
-                       .annotate(number_of_users=Count('submission__participation', distinct=True))
+            .defer('problem__description').order_by('problem__code') \
+            .annotate(number_of_users=Count('submission__participation', distinct=True))
         return [{
-            'id': p.problem.id,
-            'code': p.problem.code,
-            'name': p.problem.name,
-            'group': p.problem.group,
-            'points': p.points,
-            'partial': p.partial,
-            'number_of_users': p.number_of_users
-        } for p in queryset]
+                    'id': p.problem.id,
+                    'code': p.problem.code,
+                    'name': p.problem.name,
+                    'group': p.problem.group,
+                    'points': p.points,
+                    'partial': p.partial,
+                    'number_of_users': p.number_of_users
+                } for p in queryset]
 
     def get_normal_queryset(self):
         queryset = Problem.objects.filter(is_public=True) \
-                          .annotate(number_of_users=Count('submission__user', distinct=True))\
-                          .select_related('group').defer('description').order_by('code')
+            .annotate(number_of_users=Count('submission__user', distinct=True)) \
+            .select_related('group').defer('description').order_by('code')
         if self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, result='AC')
-                               .values_list('problem__id', flat=True))
+                                        .values_list('problem__id', flat=True))
         if settings.ENABLE_FTS and 'search' in self.request.GET:
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
@@ -260,8 +272,8 @@ class OwnProblemList(TitleMixin, ListView):
 
     def get_queryset(self):
         return Problem.objects.filter(authors__id=self.request.user.profile.id) \
-                      .annotate(number_of_users=Count('submission__user', distinct=True))\
-                      .select_related('group').defer('description').order_by('code')
+            .annotate(number_of_users=Count('submission__user', distinct=True)) \
+            .select_related('group').defer('description').order_by('code')
 
     def get_context_data(self, **kwargs):
         context = super(OwnProblemList, self).get_context_data(**kwargs)

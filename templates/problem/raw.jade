@@ -1,0 +1,27 @@
+extends common-content
+- load staticfiles
+- load mathtag
+- load markdown_trois_tags
+- load cache
+- load smart_math
+
+block content_media
+    style
+        a.view-pdf {
+            padding-top: 1em;
+            display: inline-block;
+        }
+        .problem-title {
+            display: flex;
+        }
+        .problem-title .spacer {
+            display: inline-block;
+            flex: 1 1 0;
+        }
+block title_row
+    div.problem-title
+        h2(style='color:#393630; display: inline-block')= title
+
+block description
+    - cache 86400 problem_html problem.id
+    | #{problem.description | markdown:"problem"|smart_math}
