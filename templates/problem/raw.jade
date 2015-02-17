@@ -4,38 +4,41 @@
 - load cache
 - load smart_math
 
-block media
-    link(rel='stylesheet', href='{% static "style.css" %}')
-    link(rel='canonical', href='http://{{ site.domain }}{{ request.get_full_path }}')
-    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
-    script(src='{% static "navbar.js" %}')
-    script(src='{% static "clock.js" %}')
-    meta(name='viewport', content='width=device-width, initial-scale=1')
-    link(rel='stylesheet', href='{% static "content-description.css" %}')
-    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
-    script(type='text/javascript')
-        $(function () {
-            fix_div($('.info-float'), 40, true, function (info) {
-                return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
-                    'width': '11%',
-                    'max-width': '10em',
-                    'padding-left': '1em',
-                    'display': 'table-cell'
-                }).prependTo('#content-body');
+doctype 5
+
+html
+    head
+        link(rel='stylesheet', href='{% static "style.css" %}')
+        link(rel='canonical', href='http://{{ site.domain }}{{ request.get_full_path }}')
+        script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+        script(src='{% static "navbar.js" %}')
+        script(src='{% static "clock.js" %}')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel='stylesheet', href='{% static "content-description.css" %}')
+        link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+        script(type='text/javascript')
+            $(function () {
+                fix_div($('.info-float'), 40, true, function (info) {
+                    return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
+                        'width': '11%',
+                        'max-width': '10em',
+                        'padding-left': '1em',
+                        'display': 'table-cell'
+                    }).prependTo('#content-body');
+                });
             });
-        });
-    style
-        .problem-title {
-            display: flex;
-        }
-        .problem-title .spacer {
-            display: inline-block;
-            flex: 1 1 0;
-        }
-        body {
-            overflow: hidden;
-            page-break-after: always;
-        }
+        style
+            .problem-title {
+                display: flex;
+            }
+            .problem-title .spacer {
+                display: inline-block;
+                flex: 1 1 0;
+            }
+            body {
+                overflow: hidden;
+                page-break-after: always;
+            }
 
 body
     div.problem-title
@@ -43,9 +46,21 @@ body
     hr
 
     .content-description
-        | #{problem.description | markdown:"problem"|smart_math}
+        | #{problem.description|markdown:"problem"|smart_math}
         hr
 
-block bodyend
-    include mathjax_load
+    | <script type='text/x-mathjax-config'>
+    |   MathJax.Hub.Config({
+    |     tex2jax: {
+    |       inlineMath: [['~', '~'], ['\\(', '\\)']],
+    |       jax: ['input/TeX', 'output/SVG']
+    |     }
+    |   });
+    | </script>
+    script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
+    script(type='text/javascript')
+        MathJax.Hub.queue.Push(function () {
+            $('.tex-image').hide();
+            $('.tex-text').show();
+        });
 
