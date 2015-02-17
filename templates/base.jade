@@ -73,7 +73,7 @@ html(lang='en')
                             | Hello,&nbsp;
                             b #{request.user.username}
                         | &nbsp;|
-                        if request.user.is_staff or request.user.profile.is_admin
+                        if request.user.is_staff or request.user.is_superuser
                             a(href='{% url "admin:index" %}') admin
                             | &nbsp;|
                         a(href='{% url "django.contrib.auth.views.logout" %}?next=')
