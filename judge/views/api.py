@@ -69,7 +69,7 @@ def api_user_list(request):
 def api_user_info(request, user):
     js = {}
     try:
-        p = Profile.objects.get(user_username=user)
+        p = Profile.objects.get(user__username=user)
         js = {
             'display_name': p.name,
             'points': p.points,
