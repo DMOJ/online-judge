@@ -225,7 +225,7 @@ class WebKitPdfMaker(object):
         command = [
             getattr(settings, 'WKHTMLTOPDF', 'wkhtmltopdf'), '--enable-javascript', '--javascript-delay', '5000',
             '--footer-center', 'Page [page] of [topage]', '--footer-font-name', 'Segoe UI',
-            '--footer-font-size', '10',
+            '--footer-font-size', '10', '--encoding', 'utf-8',
             'input.html', 'output.pdf'
         ]
         if debug:
