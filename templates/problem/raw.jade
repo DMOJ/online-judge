@@ -52,12 +52,11 @@ body
     | <script type='text/x-mathjax-config'>
     |   MathJax.Hub.Config({
     |     tex2jax: {
-    |       inlineMath: [['~', '~'], ['\\(', '\\)']],
-    |       jax: ['input/TeX', 'output/SVG']
+    |       inlineMath: [['~', '~'], ['\\(', '\\)']]
     |     }
     |   });
     | </script>
-    script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
+    script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG')
     script(type='text/javascript')
         MathJax.Hub.queue.Push(function () {
             $('.tex-image').hide();
