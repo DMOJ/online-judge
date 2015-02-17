@@ -21,7 +21,7 @@ import itertools
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm, ProblemEditForm, ProblemAddForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile
-from judge.pdf_problems import make_latex, format_markdown, latex_document, LatexPdfMaker
+from judge.pdf_problems import make_latex, format_markdown, latex_document, LatexPdfMaker, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
 
@@ -164,26 +164,35 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
 
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.pdf', problem.code)
-            try:
-                authors = ', '.join(map(attrgetter('user.username'), problem.authors.select_related('user')))
-                document = latex_document(problem.name, authors, make_latex(format_markdown(problem.description)))
-                with LatexPdfMaker(document) as latex:
-                    latex.make()
-                    if not latex.success:
-                        # try:
-                        # raise LatexError(latex.log)
-                        # except LatexError:
-                        #     self.logger.exception('Latex error while rendering: %s.pdf', problem.code)
-                        if not latex.created:
-                            with open(error_cache, 'wb') as f:
-                                f.write(latex.log)
-                            return HttpResponse(latex.log, status=500, content_type='text/plain')
-                    os.rename(latex.pdffile, cache)
-            except:
-                self.logger.exception('Error while rendering: %s.pdf', problem.code)
-                raise
+            if getattr(settings, 'WEBKIT_PDF', False):
+                with WebKitPdfMaker(request.build_absolute_uri(reverse('problem_raw', args=[problem.code]))) as maker:
+                    maker.make()
+                    if not maker.success:
+                        with open(error_cache, 'wb') as f:
+                            f.write(maker.log)
+                        return HttpResponse(maker.log, status=500, content_type='text/plain')
+                    os.rename(maker.path, cache)
             else:
-                self.logger.info('Successfully rendered: %s.pdf', problem.code)
+                try:
+                    authors = ', '.join(map(attrgetter('user.username'), problem.authors.select_related('user')))
+                    document = latex_document(problem.name, authors, make_latex(format_markdown(problem.description)))
+                    with LatexPdfMaker(document) as latex:
+                        latex.make()
+                        if not latex.success:
+                            # try:
+                            # raise LatexError(latex.log)
+                            # except LatexError:
+                            #     self.logger.exception('Latex error while rendering: %s.pdf', problem.code)
+                            if not latex.created:
+                                with open(error_cache, 'wb') as f:
+                                    f.write(latex.log)
+                                return HttpResponse(latex.log, status=500, content_type='text/plain')
+                        os.rename(latex.pdffile, cache)
+                except:
+                    self.logger.exception('Error while rendering: %s.pdf', problem.code)
+                    raise
+                else:
+                    self.logger.info('Successfully rendered: %s.pdf', problem.code)
 
         response = HttpResponse()
         if hasattr(settings, 'PROBLEM_PDF_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):

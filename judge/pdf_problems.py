@@ -211,6 +211,37 @@ class LatexPdfMaker(object):
         shutil.rmtree(self.dir, ignore_errors=True)
 
 
+class WebKitPdfMaker(object):
+    def __init__(self, url):
+        self.path = os.path.join(getattr(settings, 'WKHTMLTOPDF_TEMP_DIR', tempfile.gettempdir()),
+                                 str(uuid.uuid1()) + '.pdf')
+        self.url = url
+        self.proc = None
+        self.log = None
+
+    def make(self):
+        self.proc = subprocess.Popen([
+            getattr(settings, 'XVFB_RUN', 'xvfb-run'), '-a',
+            getattr(settings, 'WKHTMLTOPDF', 'wkhtmltopdf'), '--disable-javascript', self.url,
+            self.path
+        ], stdout=subprocess.PIPE)
+        self.log = self.proc.communicate()[0]
+
+    @property
+    def success(self):
+        return self.proc.returncode == 0
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        try:
+            os.remove(self.path)
+        except OSError as e:
+            if e.errno != errno.ENOENT:
+                raise
+
+
 def main():
     import sys
     import argparse
