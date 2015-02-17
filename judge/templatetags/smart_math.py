@@ -20,6 +20,17 @@ class MathJaxTexFallbackMath(MathHTMLParser):
                 '</span>') % (MATHTEX_CGI, urlquote(math), math, math)
 
 
+class MathJaxTexOnlyMath(MathHTMLParser):
+    def inline_math(self, math):
+        return '\(%s\)' % math
+
+    def display_math(self, math):
+        return '\[%s\]' % math
+
+
 @register.filter(name='smart_math', is_safe=True)
-def math(page):
-    return MathJaxTexFallbackMath.convert(page)
+def math(page, style='fallback'):
+    if style == 'tex':
+        return MathJaxTexOnlyMath.convert(page)
+    else:
+        return MathJaxTexFallbackMath.convert(page)

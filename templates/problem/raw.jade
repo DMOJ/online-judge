@@ -10,10 +10,6 @@ html
     head
         link(rel='stylesheet', href='{% static "style.css" %}')
         link(rel='canonical', href='http://{{ site.domain }}{{ request.get_full_path }}')
-        script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
-        script(src='{% static "navbar.js" %}')
-        script(src='{% static "clock.js" %}')
-        meta(name='viewport', content='width=device-width, initial-scale=1')
         link(rel='stylesheet', href='{% static "content-description.css" %}')
         link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
         script(type='text/javascript')
@@ -28,25 +24,17 @@ html
                 });
             });
         style
-            .problem-title {
-                display: flex;
-            }
-            .problem-title .spacer {
-                display: inline-block;
-                flex: 1 1 0;
-            }
             body {
                 overflow: hidden;
                 page-break-after: always;
             }
 
 body
-    div.problem-title
-        h2(style='color:#393630; display: inline-block')= title
+    h2(style='color:#393630; display: inline-block')= title
     hr
 
     .content-description
-        | #{problem.description|markdown:"problem"|smart_math}
+        | #{problem.description|markdown:"problem"|smart_math:"tex"}
         hr
 
     | <script type='text/x-mathjax-config'>
@@ -57,9 +45,3 @@ body
     |   });
     | </script>
     script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG')
-    script(type='text/javascript')
-        MathJax.Hub.queue.Push(function () {
-            $('.tex-image').hide();
-            $('.tex-text').show();
-        });
-
