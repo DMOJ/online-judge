@@ -269,6 +269,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
+DMOJ_RESOURCES = os.path.join(BASE_DIR, 'resources')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'resources'),
 ]
