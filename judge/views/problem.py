@@ -68,10 +68,6 @@ class ProblemRaw(ProblemMixin, TitleMixin, View):
     def get_title(self):
         return "Raw problem data"
 
-    def get_context_data(self, **kwargs):
-        context = super(ProblemRaw, self).get_context_data(**kwargs)
-        return context
-
 
 class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
     context_object_name = 'problem'
