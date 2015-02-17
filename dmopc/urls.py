@@ -160,6 +160,9 @@ urlpatterns = patterns('',
     url(r'^judge/(?P<name>[\w.]+)$', status.JudgeDetail.as_view(), name='judge_info'),
 
     url(r'^api/contest/list$', 'judge.views.api_contest_list'),
+    url(r'^api/problem/list$', 'judge.views.api_problem_list'),
+    url(r'^api/problem/info/(\\w+)', 'judge.views.api_problem_info'),
+
 
     url(r'^blog/$', blog.PostList.as_view(), name='blog_post_list'),
     url(r'^blog/(?P<page>\d+)$', blog.PostList.as_view(), name='blog_post_list'),
