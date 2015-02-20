@@ -41,28 +41,29 @@ class RankedSubmissions(ProblemSubmissions):
             contest_join = ''
             points = 'sub.points'
             constraint = ''
-        ids = Submission.objects.raw('''
-            SELECT sub.id
-            FROM (
-                SELECT sub.user_id AS uid, MAX(sub.points) AS points
-                FROM judge_submission AS sub INNER JOIN
-                     judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
+        return super(RankedSubmissions, self).get_queryset().order_by('-points', 'time').extra(where=['''
+            judge_submission.id IN (
+                SELECT sub.id
+                FROM (
+                    SELECT sub.user_id AS uid, MAX(sub.points) AS points
+                    FROM judge_submission AS sub INNER JOIN
+                         judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
+                    WHERE sub.problem_id = %s AND {points} > 0 {constraint}
+                    GROUP BY sub.user_id
+                ) AS highscore INNER JOIN (
+                    SELECT sub.user_id AS uid, sub.points, MIN(sub.time) as time
+                    FROM judge_submission AS sub INNER JOIN
+                         judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
+                    WHERE sub.problem_id = %s AND {points} > 0 {constraint}
+                    GROUP BY sub.user_id, {points}
+                ) AS fastest ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
+                    INNER JOIN judge_submission AS sub
+                        ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
                 WHERE sub.problem_id = %s AND {points} > 0 {constraint}
-                GROUP BY sub.user_id
-            ) AS highscore INNER JOIN (
-                SELECT sub.user_id AS uid, sub.points, MIN(sub.time) as time
-                FROM judge_submission AS sub INNER JOIN
-                     judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
-                WHERE sub.problem_id = %s AND {points} > 0 {constraint}
-                GROUP BY sub.user_id, {points}
-            ) AS fastest ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
-                INNER JOIN judge_submission AS sub
-                    ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
-            WHERE sub.problem_id = %s AND {points} > 0 {constraint}
-            GROUP BY fastest.uid
-        '''.format(points=points, contest_join=contest_join, constraint=constraint),
-                (self.problem.id, self.contest.id) * 3 if self.in_contest else (self.problem.id,) * 3)
-        return super(RankedSubmissions, self).get_queryset().filter(id__in=ids).order_by('-points', 'time')
+                GROUP BY fastest.uid
+            )
+        '''.format(points=points, contest_join=contest_join, constraint=constraint)],
+            params=(self.problem.id, self.contest.id) * 3 if self.in_contest else (self.problem.id,) * 3)
 
     def get_title(self):
         return 'Best solutions for %s' % self.problem.name
