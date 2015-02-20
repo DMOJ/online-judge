@@ -73,7 +73,7 @@ if show_prop
 td.sub-usage
     if submission.status != 'QU' and submission.status != 'G' and submission.status != 'CE' and submission.status != 'IE' and submission.status != 'AB'
         if "TLE" != submission.result
-            .time(alt='{{submission.time|default_if_none:0}}s') #{submission.time|default_if_none:0|floatformat:"2"}s
+            div(alt='{{ submission.time|default_if_none:0 }}s').time #{submission.time|default_if_none:0|floatformat:"2"}s
         else
             .time ---
         .memory
