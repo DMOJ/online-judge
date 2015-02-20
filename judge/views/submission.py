@@ -110,8 +110,8 @@ class SubmissionsListBase(TitleMixin, ListView):
         return self.request.user.profile.contest.current.contest
 
     def get_queryset(self):
-        queryset = Submission.objects.order_by('-id').select_related('user__user', 'problem')\
-            .defer('source', 'error', 'user__about', 'problem__description')
+        queryset = Submission.objects.order_by('-id').select_related('user__user', 'problem', 'language')\
+            .defer('source', 'error', 'user__about', 'problem__description', 'language__description')
         if self.in_contest:
             return queryset.filter(contest__participation__contest_id=self.contest.id)
         else:
