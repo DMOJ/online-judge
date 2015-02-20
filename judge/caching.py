@@ -2,12 +2,6 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 
 
-def update_submission(id):
-    key = 'version:submission-%d' % id
-    cache.add(key, 0, None)
-    cache.incr(key)
-
-
 def update_stats():
     cache.delete_many(('sub_stats_table', 'sub_stats_data'))
 

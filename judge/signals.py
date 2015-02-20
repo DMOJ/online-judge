@@ -9,7 +9,7 @@ from django.core.cache import cache
 
 from .models import Problem, Contest, Submission, Organization, Profile, NavigationBar, MiscConfig, Language, Judge, \
     BlogPost, ContestSubmission, Comment
-from .caching import update_submission, finished_submission
+from .caching import finished_submission
 
 
 @receiver(post_save, sender=Problem)
@@ -69,11 +69,6 @@ def post_update(sender, instance, **kwargs):
         'blog_slug:%d' % instance.id,
         'blog_feed:%d' % instance.id,
     ])
-
-
-@receiver(post_save, sender=Submission)
-def submission_update(sender, instance, **kwargs):
-    update_submission(instance.id)
 
 
 @receiver(post_delete, sender=Submission)
