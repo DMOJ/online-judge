@@ -68,7 +68,7 @@ class RankedSubmissions(ProblemSubmissions):
                 INNER JOIN judge_submission AS sub
                     ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
                 INNER JOIN judge_profile prof ON ( sub.user_id = prof.id )
-                INNER JOIN auth_user usr ON ( prof.user_id = usr )
+                INNER JOIN auth_user usr ON ( prof.user_id = usr.id )
                 INNER JOIN judge_problem prob ON ( sub.problem_id = prob.id )
                 INNER JOIN judge_language lang ON ( sub.language_id = lang.id)
             WHERE sub.problem_id = %s AND {points} > 0 {constraint}
