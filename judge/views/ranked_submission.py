@@ -49,7 +49,9 @@ class RankedSubmissions(ProblemSubmissions):
         ranking = FancyRawQuerySetWrapper(Submission, count, '''
             SELECT sub.id, sub.user_id, sub.problem_id, sub.date, sub.time,
                    sub.memory, sub.points, sub.language_id,
-                   sub.status, sub.result, sub.case_points, sub.case_total
+                   sub.status, sub.result, sub.case_points, sub.case_total,
+                   usr.username, prof.name, prof.display_rank, prob.name,
+                   prob.code, lang.short_name, lang.key
             FROM (
                 SELECT sub.user_id AS uid, MAX(sub.points) AS points
                 FROM judge_submission AS sub INNER JOIN
@@ -65,12 +67,15 @@ class RankedSubmissions(ProblemSubmissions):
             ) AS fastest ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
                 INNER JOIN judge_submission AS sub
                     ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
+                INNER JOIN judge_profile prof ON ( sub.user_id = prof.id )
+                INNER JOIN auth_user usr ON ( prof.user_id = usr )
+                INNER JOIN judge_problem prob ON ( sub.problem_id = prob.id )
+                INNER JOIN judge_language lang ON ( sub.language_id = lang.id)
             WHERE sub.problem_id = %s AND {points} > 0 {constraint}
             GROUP BY fastest.uid
             ORDER BY {points} DESC, sub.time ASC
         '''.format(points=points, contest_join=contest_join, constraint=constraint),
-                                          (self.problem.id, self.contest.id) * 3 if self.in_contest else (
-                                                                                                         self.problem.id,) * 3)
+                (self.problem.id, self.contest.id) * 3 if self.in_contest else (self.problem.id,) * 3)
         return ranking
 
     def get_title(self):
