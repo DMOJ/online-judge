@@ -21,6 +21,13 @@ from judge.utils.views import TitleMixin
 from judge import event_poster as event
 
 
+def submission_related(queryset):
+    return queryset.select_related('user__user', 'problem', 'language')\
+                   .only('id', 'user__user__username', 'user__name', 'user__display_rank', 'problem__name',
+                         'problem__code', 'language__short_name', 'language__key', 'date', 'time', 'memory',
+                         'points', 'result', 'status', 'case_points', 'case_total', 'current_testcase')
+
+
 class SubmissionMixin(object):
     model = Submission
 
@@ -110,10 +117,7 @@ class SubmissionsListBase(TitleMixin, ListView):
         return self.request.user.profile.contest.current.contest
 
     def get_queryset(self):
-        queryset = Submission.objects.order_by('-id').select_related('user__user', 'problem', 'language')\
-            .only('id', 'user__user__username', 'user__name', 'user__display_rank', 'problem__name', 'problem__code',
-                  'language__short_name', 'language__key', 'date', 'time', 'memory', 'points', 'result', 'status',
-                  'case_points', 'case_total', 'current_testcase')
+        queryset = submission_related(Submission.objects.order_by('-id'))
         if self.in_contest:
             return queryset.filter(contest__participation__contest_id=self.contest.id)
         else:
@@ -214,7 +218,7 @@ def single_submission(request, id):
     try:
         authenticated = request.user.is_authenticated()
         return render_to_response('submission/row.jade', {
-            'submission': Submission.objects.get(id=int(id)),
+            'submission': submission_related(Submission.objects).get(id=int(id)),
             'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
             'show_problem': True,
             'profile_id': request.user.profile.id if authenticated else 0,
@@ -228,9 +232,8 @@ def submission_testcases_query(request):
         return HttpResponseBadRequest()
     try:
         submission = Submission.objects.get(id=int(request.GET['id']))
-        test_cases = SubmissionTestCase.objects.filter(submission=submission)
         return render_to_response('submission/status_testcases.jade', {
-            'submission': submission, 'test_cases': test_cases
+            'submission': submission, 'test_cases': submission.test_cases.all()
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()

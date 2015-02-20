@@ -300,6 +300,10 @@ class Submission(models.Model):
     case_total = models.FloatField(verbose_name='Test case total points', default=0)
 
     @property
+    def memory_bytes(self):
+        return self.memory * 1024 if self.memory is not None else 0
+
+    @property
     def long_status(self):
         return Submission.USER_DISPLAY_CODES.get(self.result if self.result else self.status, '')
 

@@ -1,40 +1,28 @@
 - load static from staticfiles
-- load mathtag
-- load admin_urls
-- load variables
 - load tz
-
-if submission.status == 'IE' or submission.status == 'CE'
-    submission_class = submission.status
-else
-    submission_class = submission.result
 
 if profile_id
     - var can_view = profile_id == submission.user_id or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids
-    - var show_prop = can_view
-    if show_prop
-        - var info_colspan = 1
-    else
-        - var info_colspan = 2
+    - var info_colspan = (1 if can_view else 2)
 else
-    - var show_prop = false
+    - var can_view = false
     - var info_colspan = 2
 
 if submission.status != 'G'
     - var info_colspan = info_colspan + 1
 
-td.sub-result(class=submission_class)
+td.sub-result(class=(submission.status if submission.status == 'IE' or submission.status == 'CE' else submission.result))
     .score
-        if not submission.is_graded
-            img(src='{% static "loading.gif" %}', alt='Grading...', height='20px')
-        else
-            if submission.status == 'IE' or submission.status == 'CE' or submission.status == 'AB'
+        if submission.is_graded
+            if submission.status in 'IECEAB'
                 | ---
             else
-                | #{submission.case_points|default_if_none:0|floatformat:"0"} / #{submission.case_total|floatformat:"0"}
+                | #{submission.case_points|floatformat:"0"} / #{submission.case_total|floatformat:"0"}
+        else
+            img(src='{% static "loading.gif" %}', alt='Grading...', height='20px')
     .state
         span.status(title=submission.long_status) #{submission.result|default_if_none:submission.status}
-        | &nbsp;|&nbsp;
+        = ' | '
         span.language #{submission.language.short_display_name}
 
 td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status == 'G' else 'sub-info'))
@@ -56,30 +44,23 @@ if submission.status == 'G'
         else
             | ...
 
-if show_prop
+if can_view
     td.sub-prop
-        if can_view
-            a(href='{% url "submission_status" submission.id %}') view
+        a(href='{% url "submission_status" submission.id %}') view
         if perms.judge.rejudge_submission
-            | &nbsp;|&nbsp;
+            = ' | '
             a(href='javascript:rejudge_submission({{ submission.id }})') rejudge
         if perms.judge.change_submission
-            | &nbsp;|&nbsp;
+            = ' | '
             a(href='{% url "admin:judge_submission_change" submission.id %}') admin
 
 td.sub-usage
-    if submission.status != 'QU' and submission.status != 'G' and submission.status != 'CE' and submission.status != 'IE' and submission.status != 'AB'
+    if submission.status in 'QUGCEIEAB'
+        .time ---
+        .memory ---
+    else
         if "TLE" != submission.result
             .time(title='{{ submission.time|default_if_none:0 }}s') #{submission.time|default_if_none:0|floatformat:"2"}s
         else
             .time ---
-        .memory
-            - with memory=submission.memory|default_if_none:0
-                if memory < 1000
-                    | #{memory|floatformat:"-2"} K
-                else
-                    - math memory "$1 / 1024" as megabytes
-                    | #{megabytes|floatformat:"-2"} M
-    else
-        .time ---
-        .memory ---
+        .memory= submission.memory_bytes|filesizeformat
