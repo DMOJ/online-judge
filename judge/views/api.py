@@ -85,10 +85,9 @@ def api_user_info(request, user):
 def api_user_submissions(request, user):
     try:
         p = Profile.objects.get(user__username=user)
-        subs = Submission.objects.filter(user=p, problem__is_public=True) \
-            .select_related('id', 'problem__code', 'time', 'memory', 'points', 'language__key', 'status', 'result')
-        js = {
-        }
+        subs = Submission.objects.filter(user=p, problem__is_public=True).select_related('problem', 'language') \
+            .only('id', 'problem__code', 'time', 'memory', 'points', 'language__key', 'status', 'result')
+        js = {}
 
         for s in subs:
             js[s.id] = {
