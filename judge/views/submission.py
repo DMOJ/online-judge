@@ -111,7 +111,7 @@ class SubmissionsListBase(TitleMixin, ListView):
 
     def get_queryset(self):
         queryset = Submission.objects.order_by('-id').select_related('user__user', 'problem', 'language')\
-            .only('id', 'user__user__username', 'user__user__name', 'problem__name', 'problem__code',
+            .only('id', 'user__user__username', 'user__name', 'problem__name', 'problem__code',
                   'language__short_name', 'language__key', 'date', 'time', 'memory', 'points', 'result', 'status',
                   'case_points', 'case_total', 'current_testcase')
         if self.in_contest:
