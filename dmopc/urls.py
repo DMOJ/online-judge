@@ -165,6 +165,7 @@ urlpatterns = patterns('',
     url(r'^api/problem/info/(\w+)', 'judge.views.api_problem_info'),
     url(r'^api/user/list', 'judge.views.api_user_list'),
     url(r'^api/user/info/(\w+)', 'judge.views.api_user_info'),
+    url(r'^api/user/submissions/(\w+)', 'judge.views.api_user_submissions'),
 
     url(r'^blog/$', blog.PostList.as_view(), name='blog_post_list'),
     url(r'^blog/(?P<page>\d+)$', blog.PostList.as_view(), name='blog_post_list'),

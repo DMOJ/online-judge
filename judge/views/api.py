@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import *
 
 import json
-from judge.models import Contest, Problem, Profile
+from judge.models import Contest, Problem, Profile, Submission
 from judge.templatetags.timedelta import nice_repr
 
 
@@ -77,6 +77,29 @@ def api_user_info(request, user):
             'rank': p.display_rank,
             'solved_problems': [],  # TODO
         }
+    except ObjectDoesNotExist:
+        raise Http404()
+    return HttpResponse(json.dumps(js), mimetype='application/json')
+
+
+def api_user_submissions(request, user):
+    try:
+        p = Profile.objects.get(user__username=user)
+        subs = Submission.objects.filter(user=p) \
+            .select_related('id', 'problem__code', 'time', 'memory', 'points', 'language__key', 'status', 'result')
+        js = {
+        }
+
+        for s in subs:
+            js[s.id] = {
+                'problem': s.problem.code,
+                'time': s.time,
+                'memory': s.memory,
+                'points': s.points,
+                'language': s.language.key,
+                'status': s.status,
+                'result': s.result
+            }
     except ObjectDoesNotExist:
         raise Http404()
     return HttpResponse(json.dumps(js), mimetype='application/json')
