@@ -11,3 +11,4 @@ Disallow: /single_submission
 Disallow: /edit/profile/
 Disallow: /src/
 Disallow: /comments/
+Disallow: /api/
