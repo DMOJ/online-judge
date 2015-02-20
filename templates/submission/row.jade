@@ -3,7 +3,6 @@
 - load admin_urls
 - load variables
 - load tz
-- load cache
 
 if submission.status == 'IE' or submission.status == 'CE'
     submission_class = submission.status
@@ -36,8 +35,7 @@ td.sub-result(class=submission_class)
     .state
         span.status(title=submission.long_status) #{submission.result|default_if_none:submission.status}
         | &nbsp;|&nbsp;
-        - cache 86400 submission_lang submission.language_id
-            span.language #{submission.language.short_display_name}
+        span.language #{submission.language.short_display_name}
 
 td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status == 'G' else 'sub-info'))
     if show_problem
@@ -45,9 +43,8 @@ td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status
             - with problem=submission.problem
                 a(href='{% url "problem_detail" problem.code %}') #{problem.name}
     div
-        - cache 3600 submission_user submission.user_id
-            span(class=submission.user.display_rank)
-                a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
+        span(class=submission.user.display_rank)
+            a(href='{% url "judge.views.user" submission.user.user.username %}') #{submission.user.user.username}
         span.moment(style='display: none') #{submission.date|utc|date:"c"}
         = ' '
         span.time on #{submission.date|date:"N j, o, g:i a"}
