@@ -24,7 +24,7 @@ block info_float
                 a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}') Join contest
             hr
 
-    if not contest.start_time or contest.start_time > now or perms.judge.see_private_contest
+    if not contest.start_time or contest.start_time <= now or perms.judge.see_private_contest
         a(href='{% url "judge.views.contest_ranking" contest.key %}') View rankings
     if perms.judge.change_problem
         hr
