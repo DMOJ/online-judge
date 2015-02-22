@@ -26,10 +26,10 @@ block info_float
 
     if not contest.start_time or contest.start_time <= now or perms.judge.see_private_contest
         a(href='{% url "judge.views.contest_ranking" contest.key %}') View rankings
-    if perms.judge.change_problem
         hr
+    if perms.judge.change_problem
         a(href='{% url "admin:judge_contest_change" contest.id %}') Edit contest
-    hr
+        hr
     br
     if not contest.free_start
         if contest.start_time > now
