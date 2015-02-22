@@ -228,6 +228,12 @@ def contest_ranking_ajax(request, key):
 
 
 def contest_ranking_view(request, contest):
+    if not request.user.has_perm('judge.see_private_contest'):
+        if not contest.is_public:
+            raise Http404()
+        if contest.start_time is not None and contest.start_time > timezone.now():
+            raise Http404()
+
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description'))
     return render_to_response('contest/ranking.jade', {
         'users': ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')),
