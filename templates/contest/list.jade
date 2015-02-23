@@ -76,7 +76,7 @@ block body
                                     elif contest.free_start and contest.start_time
                                         span.time Started at #{contest.start_time|date:"N j, o, G:i"}
                                     .time.floating-time #{contest.end_time|date:"N j, o, G:i"}
-                                    if contest.is_external:
+                                    if contest.is_external
                                         .external-notice
                                             a(href='/about#external-contests') External contest
                         td #{contest.time_limit}
