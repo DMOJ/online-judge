@@ -610,7 +610,7 @@ class ContestParticipation(models.Model):
 class ContestProfile(models.Model):
     user = models.OneToOneField(Profile, verbose_name='User', related_name='+')
     current = models.OneToOneField(ContestParticipation, verbose_name='Current contest',
-                                   null=True, blank=True, related_name='+')
+                                   null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
 
     def __unicode__(self):
         return 'Contest: %s' % self.user.long_display_name
