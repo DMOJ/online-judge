@@ -29,6 +29,19 @@ block media
             right: 0;
             bottom: 0
         }
+
+        .external-notice {
+            font-style:italic;
+            position:absolute;
+            bottom:0;
+        }
+        .external-notice a {
+            color:#777;
+        }
+        .external-notice:hover {
+            text-decoration: underline;
+        }
+
     script(type='text/javascript')
         $(document).ready(function () {
             $('.time-remaining').each(function () {
@@ -63,6 +76,9 @@ block body
                                     elif contest.free_start and contest.start_time
                                         span.time Started at #{contest.start_time|date:"N j, o, G:i"}
                                     .time.floating-time #{contest.end_time|date:"N j, o, G:i"}
+                                    if contest.is_external:
+                                        .external-notice
+                                            a(href='/about#external-contests') External contest
                         td #{contest.time_limit}
                         td
                             a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}

@@ -499,6 +499,7 @@ class Contest(models.Model):
     start_time = models.DateTimeField(verbose_name='Start time', null=True, blank=True, db_index=True)
     time_limit = TimedeltaField(verbose_name='Time limit')
     is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
+    is_external = models.BooleanField(verbose_name='External contest', default=False)
 
     @cached_property
     def can_join(self):
