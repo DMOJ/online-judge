@@ -3,6 +3,8 @@ from django.conf import settings
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.contrib.flatpages.admin import FlatPageAdmin
+from django.contrib.flatpages.models import FlatPage
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db.models import TextField, ManyToManyField, Q
@@ -583,6 +585,21 @@ class BlogPostAdmin(admin.ModelAdmin):
             TextField: {'widget': AdminPagedownWidget},
         }
 
+
+class Solutions(FlatPage):
+    class Meta:
+        proxy = True
+
+
+class SolutionAdmin(FlatPageAdmin):
+    def get_queryset(self, request):
+        return Solutions.objects.filter(url__startswith='/solution/')
+
+    if MathJaxAdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': MathJaxAdminPagedownWidget},
+        }
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
@@ -597,3 +614,4 @@ admin.site.register(Contest, ContestAdmin)
 admin.site.register(ContestParticipation, ContestParticipationAdmin)
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
+admin.site.register(Solutions, SolutionAdmin)
