@@ -586,7 +586,7 @@ class BlogPostAdmin(admin.ModelAdmin):
         }
 
 
-class Solutions(FlatPage):
+class Solution(FlatPage):
     class Meta:
         proxy = True
 
@@ -614,4 +614,4 @@ admin.site.register(Contest, ContestAdmin)
 admin.site.register(ContestParticipation, ContestParticipationAdmin)
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
-admin.site.register(Solutions, SolutionAdmin)
+admin.site.register(Solution, SolutionAdmin)
