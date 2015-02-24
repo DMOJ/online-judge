@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -62,6 +62,7 @@ class ProblemMixin(object):
             return generic_message(request, 'No such problem',
                                    'Could not find a problem with the code "%s".' % code, status=404)
 
+
 class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
     context_object_name = 'problem'
     template_name = 'problem/raw.jade'
@@ -78,6 +79,7 @@ class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMi
         return self.render_to_response(self.get_context_data(
             object=self.object,
         ))
+
 
 class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
     context_object_name = 'problem'
@@ -247,7 +249,10 @@ class ProblemList(TitleMixin, ListView):
                 } for p in queryset]
 
     def get_normal_queryset(self):
-        queryset = Problem.objects.filter(is_public=True) \
+        filter = Q(is_public=True)
+        if self.profile is not None:
+            filter |= Q(authors=self.profile)
+        queryset = Problem.objects.filter(filter) \
             .annotate(number_of_users=Count('submission__user', distinct=True)) \
             .select_related('group').defer('description').order_by('code')
         if self.hide_solved:
