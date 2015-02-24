@@ -55,8 +55,9 @@ html(lang='en')
         #header.unselectable
             h1
                 a(href='/')
-                    span(style='color: #FFDE05') DM::
-                    | OJ
+                    block site_title
+                        span(style='color: #FFDE05') DM::
+                        | OJ
             if IN_CONTEST
                 #contest-info
                     a(href='{% url "contest_view" CONTEST.contest.key %}')
