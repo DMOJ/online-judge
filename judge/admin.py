@@ -593,7 +593,7 @@ class Solution(FlatPage):
 
 class SolutionAdmin(FlatPageAdmin):
     def get_queryset(self, request):
-        return Solutions.objects.filter(url__startswith='/solution/')
+        return Solution.objects.filter(url__startswith='/solution/')
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
