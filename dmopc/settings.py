@@ -76,6 +76,7 @@ else:
                     'judge.problemgroup',
                     'judge.problemtype',
                     'judge.contest',
+                    'judge.solution',
                 ),
             },
             {
