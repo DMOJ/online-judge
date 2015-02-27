@@ -27,8 +27,8 @@ block media
 
         #problem-table td:nth-child(3),
         td:nth-child(4),
-        td:nth-child(5),
-        td:nth-child(6) {
+        td:nth-child(6),
+        td:nth-child(7) {
             text-align: left;
             padding: 0 1em 0 1em;
         }
@@ -64,6 +64,8 @@ block body
                     input(type='text', name='search', id='search', value=search_query)
                 input(type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
                 label(for='hide_solved') Hide solved problems
+                input(type='checkbox' name='hide_tags' id ='hide_tags', checked=('checked' if hide_tags else undefined), value='1')
+                label(for='hide_tags') Hide problem tags
                 input(type='submit', value='Filter', style='display: inline; padding: 0px 5px')
     table#problem-table.table.striped
         thead
@@ -73,6 +75,8 @@ block body
                 th.category Category
                 th.code Code
                 th.points Points
+                if not hide_tags
+                    th Types
                 th.users Users
         tbody
             each problem in problems
@@ -86,6 +90,8 @@ block body
                         a(href='{% url "problem_detail" problem.code %}')= problem.name
                     td= problem.group.full_name
                     td= problem.code
+                    if not hide_tags
+                        td #{problem.types_list|join:", "}
                     td.p #{problem.points|floatformat}
                         if problem.partial
                             | p
