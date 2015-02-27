@@ -64,7 +64,7 @@ block body
                     input(type='text', name='search', id='search', value=search_query)
                 input(type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
                 label(for='hide_solved') Hide solved problems
-                input(type='checkbox' name='show_types', id='show_types', checked=('checked' if show_types else undefined), value='0')
+                input(type='checkbox' name='show_types', id='show_types', checked=('checked' if show_types else undefined), value='1')
                 label(for='show_types') Show problem tags
                 input(type='submit', value='Filter', style='display: inline; padding: 0px 5px 0px 5px')
     table#problem-table.table.striped
