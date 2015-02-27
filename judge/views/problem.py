@@ -279,7 +279,7 @@ class ProblemList(TitleMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(ProblemList, self).get_context_data(**kwargs)
         context['hide_solved'] = int(self.hide_solved)
-        context['hide_tags'] = int(self.hide_tags)
+        context['show_types'] = int(self.show_types)
         context['has_search'] = settings.ENABLE_FTS
         context['search_query'] = self.search_query
         context['completed_problem_ids'] = self.get_completed_problems()
@@ -287,7 +287,7 @@ class ProblemList(TitleMixin, ListView):
 
     def get(self, request, *args, **kwargs):
         self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
-        self.hide_tags = request.GET.get('hide_tags') == '1' if 'hide_tags' in request.GET else False
+        self.show_types = request.GET.get('show_types') == '1' if 'show_types' in request.GET else False
         self.search_query = None
         return super(ProblemList, self).get(request, *args, **kwargs)
 
