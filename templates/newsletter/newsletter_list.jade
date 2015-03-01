@@ -11,7 +11,7 @@ block body
         form(method='POST', action='')
             - csrf_token
             | {{ formset.management_form }}
-            table
+            table.form-area
                 tr
                     th Newsletter
                     th Subscribe
@@ -24,7 +24,7 @@ block body
         p
             input(id='id_submit', name='submit', value='Update subscriptions', type='submit')
     else
-        table
+        table.form-area
             tr
                 th Newsletter
             each newsletter in object_list
