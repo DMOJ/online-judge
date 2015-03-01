@@ -21,8 +21,9 @@ block body
                             a(href='{% url "newsletter_detail" form.instance.newsletter.slug %}')
                                 = form.instance.newsletter.title
                         td #{form.subscribed}
-        p
-            input(id='id_submit', name='submit', value='Update subscriptions', type='submit')
+            hr
+            p
+                input(id='id_submit', name='submit', value='Update subscriptions', type='submit', style='float: right')
     else
         table.form-area
             tr
