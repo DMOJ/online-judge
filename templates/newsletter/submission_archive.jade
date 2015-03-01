@@ -1,0 +1,16 @@
+extends base
+
+block title
+    | {{ object.title }} - Newsletter Archive - Don Mills Online Judge
+
+block content_title
+    | Newsletter Archive: {{ object.title }}
+
+block body
+    ul
+        each submission in latest
+            li
+                a(href=submission.get_absolute_url)= submission
+    hr
+    p
+        a(href='{% url "newsletter_list" %}') Back to list
