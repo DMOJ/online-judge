@@ -8,10 +8,10 @@ block content_title
 
 block body
     if user.is_authenticated
-        form(method='POST', action='')
+        form.form-area(method='POST', action='')
             - csrf_token
             | {{ formset.management_form }}
-            table.form-area
+            table
                 tr
                     th Newsletter
                     th Subscribe
