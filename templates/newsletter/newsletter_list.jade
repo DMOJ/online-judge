@@ -15,7 +15,7 @@ block body
                 each form in formset.forms
                     tr
                         td {{ form.id }}{{ form.newsletter }}
-                            a(href='{% url 'newsletter_detail' form.instance.newsletter.slug %}')
+                            a(href='{% url "newsletter_detail" form.instance.newsletter.slug %}')
                                 = form.instance.newsletter.title
                         td= form.subscribed
         p
@@ -27,4 +27,4 @@ block body
             each newsletter in object_list
                 tr
                     td
-                        a(href='{% url 'newsletter_detail' newsletter.slug %}')= newsletter.title
+                        a(href='{% url "newsletter_detail" newsletter.slug %}')= newsletter.title
