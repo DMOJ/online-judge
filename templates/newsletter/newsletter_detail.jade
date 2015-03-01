@@ -1,0 +1,19 @@
+extends base
+
+block title
+    | {{ object.title }} - Newsletter - Don Mills Online Judge
+
+block content_title
+    | Newsletter: {{ object.title }}
+
+block body
+    ul
+        li
+            a(href='{% url "newsletter_subscribe_request" object.slug %}') Subscribe
+        li
+            a(href='{% url "newsletter_unsubscribe_request" object.slug %}') Unsubscribe
+        li
+            a(href='{% url "newsletter_archive" object.slug %}') Archive
+        li
+            a(href='{% url "newsletter_list" %}') Back to list
+
