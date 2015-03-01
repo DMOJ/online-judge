@@ -11,13 +11,13 @@ block body
             table
                 tr
                     th Newsletter
-                    if user
-                        th Subscribe
-            each form in formset.forms
-                tr
-                    td {{ form.id }}{{ form.newsletter }}
-                        a(href='{% url 'newsletter_detail' form.instance.newsletter.slug %}')= form.instance.newsletter.title
-                    td= form.subscribed
+                    th Subscribe
+                each form in formset.forms
+                    tr
+                        td {{ form.id }}{{ form.newsletter }}
+                            a(href='{% url 'newsletter_detail' form.instance.newsletter.slug %}')
+                                = form.instance.newsletter.title
+                        td= form.subscribed
         p
             input(id='id_submit', name='submit', value='{% trans 'Update subscriptions' %}', type='submit')
     else
@@ -25,6 +25,6 @@ block body
             tr
                 th Newsletter
             each newsletter in object_list
-            tr
-                td
-                    a(href='{% url 'newsletter_detail' newsletter.slug %}')= newsletter.title
+                tr
+                    td
+                        a(href='{% url 'newsletter_detail' newsletter.slug %}')= newsletter.title
