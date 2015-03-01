@@ -10,7 +10,7 @@ block body
     ul
         each submission in latest
             li
-                a(href=submission.get_absolute_url)= submission
+                a(href='{{ submission.get_absolute_url }}')= submission
     hr
     p
         a(href='{% url "newsletter_list" %}') Back to list
