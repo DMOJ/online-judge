@@ -17,7 +17,7 @@ block body
                         td {{ form.id }}{{ form.newsletter }}
                             a(href='{% url "newsletter_detail" form.instance.newsletter.slug %}')
                                 = form.instance.newsletter.title
-                        td= form.subscribed
+                        td #{form.subscribed}
         p
             input(id='id_submit', name='submit', value='Update subscriptions', type='submit')
     else
