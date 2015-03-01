@@ -1,0 +1,9 @@
+Dear {{ subscription.name }},
+
+you, or someone in your name requested updating your personal information for {{ newsletter.title }}.
+
+To make changes to your information in our database, please follow this activation link:
+http://{{ site.domain }}{{ subscription.update_activate_url }}
+
+Kind regards,
+{{ newsletter.sender }}

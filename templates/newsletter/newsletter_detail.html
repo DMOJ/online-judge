@@ -1,0 +1,31 @@
+{% extends "newsletter/common.html" %}
+
+{% load i18n %}
+{% load url from future %}
+
+{% block title %}{% trans "Newsletter detail" %}{% endblock title %}
+
+{% block body %}
+<table>
+    <tr>
+        <th>{% trans "Newsletter" %} {{ object.title }}</th>
+    </tr>
+    <tr>
+        <td><a href="{% url "newsletter_subscribe_request" object.slug %}">Subscribe</a></td>
+    </tr>
+    {% if not user.is_authenticated %}
+    <tr>
+        <td><a href="{% url "newsletter_update_request" object.slug %}">Update</a></td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td><a href="{% url "newsletter_unsubscribe_request" object.slug %}">Unsubscribe</a></td>
+    </tr>
+    <tr>
+        <td><a href="{% url "newsletter_archive" object.slug %}">Archive</a></td>
+    </tr>
+    <tr>
+        <td><a href="../">Back to list</a></td>
+    </tr>
+</table>
+{% endblock body %}

@@ -1,0 +1,9 @@
+Dear {{ subscription.name }},
+
+you, or someone in your name requested unsubscription from {{ newsletter.title }}.
+
+If you would like to confirm your unsubscription, please follow this activation link:
+http://{{ site.domain }}{{ subscription.unsubscribe_activate_url }}
+
+Kind regards,
+{{ newsletter.sender }}
