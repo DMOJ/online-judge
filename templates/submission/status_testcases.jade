@@ -28,7 +28,10 @@ if submission.status != 'IE'
                             if batch.grouper
                                 b Case ##{forloop.counter}:
                             else
-                                b Test case ##{test_case_id}:
+                                if case.points == 0:
+                                    b Pretest ##{test_case_id}:
+                                else
+                                    b Test case ##{test_case_id}:
                         td
                             span(class=case.status, title=case.long_status)
                                 if case.status == 'SC'
