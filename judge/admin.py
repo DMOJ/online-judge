@@ -1,22 +1,20 @@
 from operator import itemgetter, attrgetter
-from django.conf import settings
+
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.flatpages.admin import FlatPageAdmin
-from django.contrib.flatpages.models import FlatPage
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
-from django.db.models import TextField, ManyToManyField, Q
+from django.db.models import TextField, Q
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
-from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
+from django.http import HttpResponseRedirect, Http404
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
-    ContestProfile, SubmissionTestCase
+    ContestProfile, SubmissionTestCase, Solution
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 
@@ -584,15 +582,6 @@ class BlogPostAdmin(admin.ModelAdmin):
         formfield_overrides = {
             TextField: {'widget': AdminPagedownWidget},
         }
-
-
-class Solution(FlatPage):
-    def __init__(self, *args, **kwargs):
-        self._meta.get_field('template_name').default = 'flatpages/dmsolutions.jade'
-        super(FlatPage, self).__init__(*args, **kwargs)
-
-    class Meta:
-        proxy = True
 
 
 class SolutionAdmin(FlatPageAdmin):

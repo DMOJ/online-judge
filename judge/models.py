@@ -2,6 +2,7 @@ import re
 from collections import defaultdict
 from operator import itemgetter, attrgetter
 from django.conf import settings
+from django.contrib.flatpages.models import FlatPage
 from django.core.cache import cache
 
 import pytz
@@ -665,3 +666,12 @@ class PrivateMessage(models.Model):
 
 class PrivateMessageThread(models.Model):
     messages = models.ManyToManyField(PrivateMessage, verbose_name='Messages in the thread')
+
+
+class Solution(FlatPage):
+    def __init__(self, *args, **kwargs):
+        self._meta.get_field('template_name').default = 'flatpages/dmsolutions.jade'
+        super(FlatPage, self).__init__(*args, **kwargs)
+
+    class Meta:
+        proxy = True
