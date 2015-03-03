@@ -585,6 +585,11 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 
 class SolutionAdmin(FlatPageAdmin):
+    fieldsets = (
+        (None, {'fields': ('url', 'title', 'content', 'sites')}),
+        ('Advanced options', {'classes': ('collapse',), 'fields': ('enable_comments', 'registration_required')}),
+    )
+
     def get_queryset(self, request):
         return Solution.objects.filter(url__startswith='/solution/')
 

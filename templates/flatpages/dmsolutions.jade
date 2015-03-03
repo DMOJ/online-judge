@@ -3,3 +3,11 @@ extends flatpages/markdown_math
 block site_title
     span(style='color: #FFDE05') DM::
     | Solutions
+
+block content_title
+    | #{flatpage.title}
+    if perms.judge.change_solution
+        div(style='float:right')
+            | [
+            a(href='{% url "admin:judge_solution_change" flatpage.id %}') Edit
+            | ]
