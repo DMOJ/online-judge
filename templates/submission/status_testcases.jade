@@ -28,7 +28,7 @@ if submission.status != 'IE'
                             if batch.grouper
                                 b Case ##{forloop.counter}:
                             else
-                                if not case.points
+                                if not case.total
                                     b Pretest ##{test_case_id}:
                                 else
                                     b Test case ##{test_case_id}:
