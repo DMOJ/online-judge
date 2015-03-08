@@ -8,8 +8,6 @@
 </head>
 <body style="background:#ccc">
     {% for article in message.articles.all %}
-        <h3>{{ article.title }}</h3>
-
         <div>{{ article.text|safe }}</div>
         
         {% if article.url %}
