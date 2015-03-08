@@ -6,15 +6,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>{{ newsletter.title }}: {{ message.title }}</title>
 </head>
-<body>
-    <h1>{{ newsletter.title }}</h1>
-    <h2>{{ message.title }}</h2>
+<body style="background:#ccc">
     {% for article in message.articles.all %}
         <h3>{{ article.title }}</h3>
-        
-        {% thumbnail article.image "200x200" as image %}
-            <img src="http://{{ site.domain }}{{ image.url }}" width="{{ image.width }}" height="{{ image.height }}">
-        {% endthumbnail %}
 
         <div>{{ article.text|safe }}</div>
         
