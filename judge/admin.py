@@ -38,7 +38,7 @@ class ContestProfileInlineForm(ModelForm):
     class Meta:
         if use_select2:
             widgets = {
-                'current': Select2MultipleWidget,
+                'current': Select2Widget,
             }
 
 
