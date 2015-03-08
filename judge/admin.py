@@ -42,6 +42,16 @@ class ContestProfileInline(admin.StackedInline):
     can_delete = False
 
 
+class ProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        if use_select2:
+            widgets = {
+                'timezone': Select2Widget,
+                'organization': Select2MultipleWidget,
+            }
+
+
 class ProfileAdmin(admin.ModelAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organization', 'timezone', 'language', 'ace_theme',
               'last_access', 'ip')
@@ -53,6 +63,7 @@ class ProfileAdmin(admin.ModelAdmin):
     inlines = [ContestProfileInline]
     actions_on_top = True
     actions_on_bottom = True
+    form = ProfileForm
 
     def admin_user_admin(self, obj):
         return obj.long_display_name
@@ -505,7 +516,7 @@ class ContestProblemInline(admin.TabularInline):
 
 class ContestForm(ModelForm):
     class Meta:
-        model = Problem
+        model = Contest
         if use_select2:
             widgets = {
                 'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
