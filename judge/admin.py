@@ -49,7 +49,7 @@ class ProfileForm(ModelForm):
         if use_select2:
             widgets = {
                 'timezone': Select2Widget,
-                'organization': HeavySelect2MultipleWidget(data_view='organization_select2'),
+                'organization': HeavySelect2Widget(data_view='organization_select2'),
             }
 
 
