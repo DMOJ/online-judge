@@ -6,7 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>{{ newsletter.title }}: {{ message.title }}</title>
 </head>
-<body style="background:#eee">
+<body>
     {% for article in message.articles.all %}
         <div>{{ article.text|safe }}</div>
         
