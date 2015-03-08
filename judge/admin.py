@@ -19,8 +19,9 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 try:
-    from django_select2.widgets import HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
+    from django_select2.widgets import HeavySelect2Widget, HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
 except ImportError:
+    HeavySelect2Widget = None
     HeavySelect2MultipleWidget = None
     Select2Widget = None
     Select2MultipleWidget = None
@@ -48,6 +49,7 @@ class ProfileForm(ModelForm):
         if use_select2:
             widgets = {
                 'timezone': Select2Widget,
+                'organization': HeavySelect2MultipleWidget(data_view='organization_select2'),
             }
 
 
