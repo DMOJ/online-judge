@@ -324,19 +324,24 @@ def problem_submit(request, problem=None, submission=None):
     except Submission.DoesNotExist:
         raise Http404()
 
+    profile = request.user.profile
     if request.method == 'POST':
-        form = ProblemSubmitForm(request.POST, instance=Submission(user=request.user.profile))
+        form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))
         if form.is_valid():
             if (not request.user.has_perm('judge.spam_submission') and
-                        Submission.objects.filter(user=request.user.profile).exclude(
+                        Submission.objects.filter(user=profile).exclude(
                                 status__in=['D', 'IE', 'CE', 'AB']).count() > 2):
                 return HttpResponse('<h1>You submitted too many submissions.</h1>', status=503)
             if not form.cleaned_data['problem'].allowed_languages.filter(
                     id=form.cleaned_data['language'].id).exists():
                 raise PermissionDenied()
+            if form.cleaned_data['problem'].banned_users.filter(id=profile.id).exists():
+                return generic_message(request, 'Banned from Submitting',
+                                       'You have been declared persona non grata for this problem. '
+                                       'You are permanently barred from submitting this problem.')
             model = form.save()
 
-            cp = request.user.profile.contest
+            cp = profile.contest
             if cp.current is not None:
                 try:
                     contest_problem = model.problem.contests.get(contest=cp.current.contest)
@@ -352,7 +357,7 @@ def problem_submit(request, problem=None, submission=None):
         else:
             form_data = form.cleaned_data
     else:
-        initial = {'language': request.user.profile.language}
+        initial = {'language': profile.language}
         if problem is not None:
             try:
                 initial['problem'] = Problem.objects.get(code=problem)
@@ -371,7 +376,7 @@ def problem_submit(request, problem=None, submission=None):
         form.fields['language'].queryset = form_data['problem'].usable_languages
     if 'language' in form_data:
         form.fields['source'].widget.mode = form_data['language'].ace
-    form.fields['source'].widget.theme = request.user.profile.ace_theme
+    form.fields['source'].widget.theme = profile.ace_theme
     return render_to_response('problem/submit.jade', {
         'form': form,
         'title': 'Submit',
