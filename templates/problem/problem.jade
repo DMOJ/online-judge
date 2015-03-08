@@ -22,12 +22,6 @@ block content_media
             flex: 1 1 0;
         }
 
-        .info-float .fa {
-            width: 16px;
-            margin-right: 2px;
-            text-align: center;
-        }
-
 block title_row
     div.problem-title
         h2(style='color:#393630; display: inline-block')= title
@@ -42,37 +36,37 @@ block info_float
     hr
     if request.user.is_authenticated and has_submissions
         a(href='{% url "user_submissions" problem.code request.user.username %}')
-            i.fa.fa-user
+            i.fa.fa-user.fa-fw
             | My submissions
         br
     a(href='{% url "chronological_submissions" problem.code %}')
-        i.fa.fa-users
+        i.fa.fa-users.fa-fw
         | All submissions
     br
     a(href='{% url "ranked_submissions" problem.code %}')
-        i.fa.fa-bar-chart
+        i.fa.fa-bar-chart.fa-fw
         | Best submissions
 
     if perms.judge.change_problem
         hr
         a(href='{% url "admin:judge_problem_change" problem.id %}')
-            i.fa.fa-edit
+            i.fa.fa-edit.fa-fw
             | Edit problem
         br
     elif perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids
         hr
         a(href='{% url "problem_edit" problem.code %}')
-            i.fa.fa-edit
+            i.fa.fa-edit.fa-fw
             | Edit problem
         br
     if perms.judge.clone_problem
         a(href='{% url "problem_clone" problem.code %}')
-            i.fa.fa-copy
+            i.fa.fa-copy.fa-fw
             | Clone problem
         br
     hr
     br
-    i.fa.fa-check
+    i.fa.fa-check.fa-fw
     b Points:
     if contest_problem
         |  #{contest_problem.points}
@@ -83,11 +77,11 @@ block info_float
         if problem.partial
             | (partial)
     br
-    i.fa.fa-clock-o
+    i.fa.fa-clock-o.fa-fw
     b Time limit:
     |  #{problem.time_limit}s
     br
-    i.fa.fa-database
+    i.fa.fa-database.fa-fw
     b Memory limit:
     -with memory=problem.memory_limit
         if memory < 1000
