@@ -618,6 +618,7 @@ class OrganizationForm(ModelForm):
         if use_select2:
             widgets = {
                 'admins': HeavySelect2MultipleWidget(data_view='profile_select2'),
+                'registrant': HeavySelect2Widget(data_view='profile_select2'),
             }
 
 
