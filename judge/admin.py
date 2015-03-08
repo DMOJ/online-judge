@@ -63,7 +63,7 @@ class ProfileForm(ModelForm):
 
 class ProfileAdmin(admin.ModelAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organization', 'timezone', 'language', 'ace_theme',
-              'last_access', 'ip')
+              'last_access', 'ip', 'mute')
     readonly_fields = ('user',)
     list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip')
     ordering = ('user__username',)
