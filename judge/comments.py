@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
 from django.views.generic import View
@@ -16,10 +17,16 @@ class CommentForm(ModelForm):
             'parent': forms.HiddenInput(),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
         super(CommentForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'style': 'min-width:100%', 'placeholder': 'Comment title'})
         self.fields['body'].widget.attrs.update({'style': 'min-width:100%', 'placeholder': 'Comment body'})
+
+    def clean(self):
+        if self.request is not None and self.request.user.is_authenticated() and self.request.user.profile.mute:
+            raise ValidationError('You are not allowed to comment...')
+        return super(CommentForm, self).clean()
 
 
 class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
@@ -33,7 +40,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        form = CommentForm(request.POST)
+        form = CommentForm(request, request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.author = request.user.profile
@@ -48,7 +55,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         self.object = self.get_object()
         return self.render_to_response(self.get_context_data(
             object=self.object,
-            comment_form=CommentForm(initial={'page': self.get_comment_page(), 'parent': None})
+            comment_form=CommentForm(request, initial={'page': self.get_comment_page(), 'parent': None})
         ))
 
     def get_context_data(self, **kwargs):
