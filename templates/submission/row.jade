@@ -19,7 +19,7 @@ td.sub-result(class=(submission.status if submission.status in 'IECE' else submi
             else
                 | #{submission.case_points|floatformat:"0"} / #{submission.case_total|floatformat:"0"}
         else
-            img(src='{% static "loading.gif" %}', alt='Grading...', height='20px')
+            i.fa.fa-spinner.fa-pulse
     .state
         span.status(title=submission.long_status) #{submission.result|default_if_none:submission.status}
         = ' | '
