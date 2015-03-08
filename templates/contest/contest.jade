@@ -15,6 +15,11 @@ block content_media
             });
         });
 
+    style
+        .info-float .fa {
+            color: #000;
+        }
+
 block info_float
     if contest.can_join or in_contest
         if not participating or not participation.ended
