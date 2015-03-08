@@ -33,8 +33,8 @@ block title_row
         h2(style='color:#393630; display: inline-block')= title
         span.spacer
         a.view-pdf(href='{% url "problem_pdf" problem.code %}')
-            img(style='position:relative;top:2px', src='http://www.adobe.com/images/pdficon_small.png')
-            = ' View as PDF'
+            i.fa.fa-pdf-o(style='padding-right: 0.2em')
+            | View as PDF
             sup= ' (beta)'
 
 block info_float
