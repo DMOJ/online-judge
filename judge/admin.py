@@ -102,6 +102,11 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class ProblemForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProblemForm, self).__init__(*args, **kwargs)
+        self.fields['authors'].can_add_related = False
+        self.fields['banned_users'].can_add_related = False
+
     class Meta:
         model = Problem
         if use_select2:
