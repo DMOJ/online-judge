@@ -49,6 +49,8 @@ class ProfileForm(ModelForm):
         if use_select2:
             widgets = {
                 'timezone': Select2Widget,
+                'language': Select2Widget,
+                'ace_theme': Select2Widget,
                 'organization': HeavySelect2Widget(data_view='organization_select2'),
             }
 
@@ -56,6 +58,7 @@ class ProfileForm(ModelForm):
 class ProfileAdmin(admin.ModelAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organization', 'timezone', 'language', 'ace_theme',
               'last_access', 'ip')
+    readonly_fields = ('user',)
     list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip')
     ordering = ('user__username',)
     search_fields = ('user__username', 'name', 'ip', 'user__email')
