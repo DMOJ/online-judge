@@ -36,7 +36,7 @@ input[type="text"] {
     border-radius: 4px;
 }
 
-input[type="text"] {
+input[type="text"]:focus {
     border-color: rgba(82, 168, 236, 0.8);
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
