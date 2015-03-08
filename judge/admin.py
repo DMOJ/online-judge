@@ -383,6 +383,7 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ['author__user__username', 'author__name', 'page', 'title', 'body']
     actions_on_top = True
     actions_on_bottom = True
+    form = ContestForm
 
     def linked_page(self, obj):
         link = obj.link
