@@ -42,11 +42,15 @@ block media
             white-space: nowrap
         }
 
-        #problem-table tr:hover {
-            background: #EAEAEA;
+        #problem-table tr {
+            -webkit-transition: background linear .2s;
+            -moz-transition: background linear .2s;
+            -o-transition: background linear .2s;
+            transition: background linear .2s;
         }
 
-        #problem-table tr:not(hover) {
+        #problem-table tr:hover {
+            background: #EAEAEA;
         }
 
         #filter-form {
