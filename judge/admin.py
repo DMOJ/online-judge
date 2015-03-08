@@ -19,9 +19,11 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 try:
-    from django_select2.widgets import HeavySelect2MultipleWidget
+    from django_select2.widgets import HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
 except ImportError:
     HeavySelect2MultipleWidget = None
+    Select2Widget = None
+    Select2MultipleWidget = None
 
 use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
 
@@ -85,6 +87,8 @@ class ProblemForm(ModelForm):
             widgets = {
                 'authors': HeavySelect2MultipleWidget(data_view='profile_select2'),
                 'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2'),
+                'types': Select2MultipleWidget,
+                'group': Select2Widget,
             }
 
 
