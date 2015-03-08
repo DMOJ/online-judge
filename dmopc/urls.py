@@ -208,5 +208,5 @@ if 'django_select2' in settings.INSTALLED_APPS:
 
     urlpatterns += patterns('',
         url(r'^select2/', include('django_select2.urls')),
-        url(r'^judge-select2/profile/', UserSelect2View),
+        url(r'^judge-select2/profile/', UserSelect2View.as_view()),
     )
