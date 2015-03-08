@@ -94,7 +94,10 @@ block body
                     - url "problem_detail" problem.code as problem_url
                     td
                         a(href=problem_url)
-                            img(src=('{% static "admin/img/icon-yes.gif" %}' if problem.id in completed_problem_ids else '{% static "admin/img/icon-no.gif" %}'))
+                            if problem.id in completed_problem_ids
+                                img(src='{% static "admin/img/icon-yes.gif" %}')
+                            else
+                                img(src='{% static "admin/img/icon-no.gif" %}')
                     td
                         a(href=problem_url)= problem.name
                     td= problem.group.full_name
