@@ -3,7 +3,7 @@ from django.db.models import Q
 from judge.models import Profile
 
 try:
-    from django_select2.views.Select2View import Select2View
+    from django_select2.views import Select2View
 except ImportError:
     pass
 else:
