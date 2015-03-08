@@ -125,7 +125,8 @@ class Profile(models.Model):
     organization_join_time = models.DateTimeField(verbose_name='Organization joining date', null=True, blank=True)
     display_rank = models.CharField(max_length=10, default='user',
                                     choices=(('user', 'Normal User'), ('setter', 'Problem Setter'), ('admin', 'Admin')))
-    mute = models.BooleanField(verbose_name='Comment mute', help_text='Some users are at their best when silent.')
+    mute = models.BooleanField(verbose_name='Comment mute', help_text='Some users are at their best when silent.',
+                               default=False)
 
     def calculate_points(self):
         points = sum(map(itemgetter('points'),
