@@ -208,7 +208,7 @@ class Problem(models.Model):
     is_public = models.BooleanField(verbose_name='Publicly visible', db_index=True)
     date = models.DateTimeField(verbose_name='Date of publishing', null=True, blank=True, db_index=True,
                                 help_text="Doesn't have magic ability to auto-publish due to backward compatibility")
-    banned_users = models.ManyToManyField(Profile, verbose_name='Personae non gratae',
+    banned_users = models.ManyToManyField(Profile, verbose_name='Personae non gratae', blank=True,
                                           help_text='Bans the selected users from submitting to this problem')
 
     objects = SearchManager(('code', 'name', 'description'))
