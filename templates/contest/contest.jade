@@ -15,6 +15,13 @@ block content_media
             });
         });
 
+    style
+        .info-float .fa {
+            width: 16px;
+            margin-right: 2px;
+            text-align: center;
+        }
+
 block info_float
     if contest.can_join or in_contest
         if not participating or not participation.ended
@@ -25,12 +32,17 @@ block info_float
             hr
 
     if not contest.start_time or contest.start_time <= now or perms.judge.see_private_contest
-        a(href='{% url "judge.views.contest_ranking" contest.key %}') View rankings
+        a(href='{% url "judge.views.contest_ranking" contest.key %}')
+            i.fa.fa-bar-chart
+            | View rankings
         hr
     if perms.judge.change_problem
-        a(href='{% url "admin:judge_contest_change" contest.id %}') Edit contest
+        a(href='{% url "admin:judge_contest_change" contest.id %}')
+            i.fa.fa-edit
+            | Edit contest
         hr
     br
+    i.fa.fa-clock-o
     if not contest.free_start
         if contest.start_time > now
             b Starting in:
