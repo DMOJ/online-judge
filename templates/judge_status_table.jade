@@ -14,9 +14,9 @@ for judge in judges
             a(href='{% url "judge_info" judge.name %}')= judge.name
         td
             if judge.online
-                img(src='{% static "admin/img/icon-yes.gif" %}')
+                i.fa.fa-check-circle(style='color:green')
             else
-                img(src='{% static "admin/img/icon-no.gif" %}')
+                i.fa.fa-minus-circle(style='color:red')
         td
             if judge.online
                 | #{judge.uptime|timedelta:"simple"}
