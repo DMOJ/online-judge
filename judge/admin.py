@@ -364,6 +364,16 @@ class SubmissionAdmin(admin.ModelAdmin):
     judge_column.allow_tags = True
 
 
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        if use_select2:
+            widgets = {
+                'author': HeavySelect2Widget(data_view='profile_select2'),
+                'parent': HeavySelect2Widget(data_view='comment_select2'),
+            }
+
+
 class CommentAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('author', 'page', 'parent', 'score')}),
