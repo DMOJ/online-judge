@@ -17,6 +17,11 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
     ContestProfile, SubmissionTestCase, Solution
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
+try:
+    from django_select2.widgets import HeavySelect2MultipleWidget
+except ImportError:
+    HeavySelect2MultipleWidget = None
+
 
 class ContestProfileInlineForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -70,6 +75,16 @@ class ProfileAdmin(admin.ModelAdmin):
     recalculate_points.short_description = 'Recalculate scores'
 
 
+class ProblemForm(ModelForm):
+    class Meta:
+        model = Problem
+        if HeavySelect2MultipleWidget is not None:
+            widgets = {
+                'authors': HeavySelect2MultipleWidget,
+                'banned_users': HeavySelect2MultipleWidget
+            }
+
+
 class ProblemAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
@@ -90,6 +105,7 @@ class ProblemAdmin(admin.ModelAdmin):
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
+    form = ProblemForm
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
