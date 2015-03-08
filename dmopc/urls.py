@@ -202,3 +202,6 @@ if 'tinymce' in settings.INSTALLED_APPS:
 
 if 'newsletter' in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^newsletter/', include('newsletter.urls')))
+
+if 'django_select2' in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', url(r'^select2/', include('django_select2.urls')))

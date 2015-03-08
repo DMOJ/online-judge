@@ -1,4 +1,5 @@
 from operator import itemgetter, attrgetter
+from django.conf import settings
 
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
@@ -18,9 +19,9 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 try:
-    from django_select2.widgets import HeavySelect2MultipleWidget
+    from django_select2.widgets import AutoHeavySelect2MultipleWidget
 except ImportError:
-    HeavySelect2MultipleWidget = None
+    AutoHeavySelect2MultipleWidget = None
 
 
 class ContestProfileInlineForm(ModelForm):
@@ -78,10 +79,10 @@ class ProfileAdmin(admin.ModelAdmin):
 class ProblemForm(ModelForm):
     class Meta:
         model = Problem
-        if HeavySelect2MultipleWidget is not None:
+        if AutoHeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS:
             widgets = {
-                'authors': HeavySelect2MultipleWidget,
-                'banned_users': HeavySelect2MultipleWidget
+                'authors': AutoHeavySelect2MultipleWidget,
+                'banned_users': AutoHeavySelect2MultipleWidget
             }
 
 
