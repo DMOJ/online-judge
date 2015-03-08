@@ -86,9 +86,9 @@ block body
                 tr
                     td
                         if problem.id in completed_problem_ids
-                            img(src='{% static "admin/img/icon-yes.gif" %}')
+                            i.fa.fa-check-circle(style='color:green')
                         else
-                            img(src='{% static "admin/img/icon-no.gif" %}')
+                            i.fa.fa-minus-circle(style='color:red')
                     td
                         a(href='{% url "problem_detail" problem.code %}')= problem.name
                     td= problem.group.full_name
