@@ -35,25 +35,32 @@ block info_float
     a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
     hr
     if request.user.is_authenticated and has_submissions
+        i.fa.fa-user
         a(href='{% url "user_submissions" problem.code request.user.username %}') My submissions
         br
+    i.fa.fa-users
     a(href='{% url "chronological_submissions" problem.code %}') All submissions
     br
+    i.fa.fa-bar-chart
     a(href='{% url "ranked_submissions" problem.code %}') Best submissions
 
     if perms.judge.change_problem
         hr
+        i.fa.fa-edit
         a(href='{% url "admin:judge_problem_change" problem.id %}') Edit problem
         br
     elif perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids
         hr
+        i.fa.fa-edit
         a(href='{% url "problem_edit" problem.code %}') Edit problem
         br
     if perms.judge.clone_problem
+        i.fa.fa-copy
         a(href='{% url "problem_clone" problem.code %}') Clone problem
         br
     hr
     br
+    i.fa.fa-check
     b Points:
     if contest_problem
         |  #{contest_problem.points}
@@ -64,9 +71,11 @@ block info_float
         if problem.partial
             | (partial)
     br
+    i.fa.fa-clock-o
     b Time limit:
     |  #{problem.time_limit}s
     br
+    i.fa.fa-database
     b Memory limit:
     -with memory=problem.memory_limit
         if memory < 1000
@@ -78,6 +87,7 @@ block info_float
     - cache 86400 problem_authors problem.id
         - with authors=problem.authors.all
             if authors
+                i.fa.fa-pencil-square
                 if authors|length > 1
                     b Authors:
                 else
