@@ -157,6 +157,7 @@ require('http').createServer(function (req, res) {
     if (!parts.pathname.startsWith('/channels/')) {
         res.writeHead(404, {'Content-Type': 'text/plain'});
         res.end('404 Not Found');
+        return;
     }
     var channels = parts.pathname.slice(10).split('|');
     req.channels = {};
