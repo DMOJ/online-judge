@@ -204,4 +204,9 @@ if 'newsletter' in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^newsletter/', include('newsletter.urls')))
 
 if 'django_select2' in settings.INSTALLED_APPS:
-    urlpatterns += patterns('', url(r'^select2/', include('django_select2.urls')))
+    from judge.views.select2 import UserSelect2View
+
+    urlpatterns += patterns('',
+        url(r'^select2/', include('django_select2.urls')),
+        url(r'^judge-select2/profile/', UserSelect2View),
+    )

@@ -19,11 +19,12 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 try:
-    from django_select2.widgets import AutoHeavySelect2MultipleWidget
+    from django_select2.widgets import HeavySelect2MultipleWidget
 except ImportError:
-    AutoHeavySelect2MultipleWidget = None
+    HeavySelect2MultipleWidget = None
+    from judge.views.select2 import UserSelect2View
 
-use_select2 = AutoHeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
+use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
 
 
 class ContestProfileInlineForm(ModelForm):
@@ -83,8 +84,8 @@ class ProblemForm(ModelForm):
         model = Problem
         if use_select2:
             widgets = {
-                'authors': AutoHeavySelect2MultipleWidget,
-                'banned_users': AutoHeavySelect2MultipleWidget
+                'authors': HeavySelect2MultipleWidget(data_view=UserSelect2View),
+                'banned_users': HeavySelect2MultipleWidget(data_view=UserSelect2View),
             }
 
 
