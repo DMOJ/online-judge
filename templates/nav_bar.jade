@@ -1,6 +1,6 @@
 each item in nav_bar
     li
-        a(href=item.path, class='nav-{{ item.key }}')= item.label
+        a(href=item.path, class='nav-{{ item.key }}') {{ item.label|safe }}
         - with nav_bar=item.children.all template='nav_bar.jade'
             if nav_bar
                 ul
