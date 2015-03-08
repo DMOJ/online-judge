@@ -612,13 +612,25 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     recalculate_cumtime.short_description = 'Recalculate cumulative time'
 
 
+class OrganizationForm(ModelForm):
+    class Meta:
+        model = Problem
+        if use_select2:
+            widgets = {
+                'admins': HeavySelect2MultipleWidget(data_view='profile_select2'),
+            }
+
+
 class OrganizationAdmin(admin.ModelAdmin):
     readonly_fields = ('creation_date',)
     fields = ('name', 'key', 'short_name', 'about', 'registrant', 'creation_date', 'admins')
     list_display = ('name', 'key', 'short_name', 'registrant', 'creation_date')
     actions_on_top = True
     actions_on_bottom = True
-    filter_horizontal = ('admins',)
+    form = OrganizationForm
+
+    if not use_select2:
+        filter_horizontal = ('admins',)
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
