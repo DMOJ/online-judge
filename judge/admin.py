@@ -78,7 +78,8 @@ class ProblemAdmin(admin.ModelAdmin):
         ('Taxonomy', {'fields': ('types', 'group')}),
         ('Points', {'fields': (('points', 'partial'), 'short_circuit')}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
-        ('Language', {'fields': ('allowed_languages',)})
+        ('Language', {'fields': ('allowed_languages',)}),
+        ('Justice', {'fields': ('banned_users',)})
     )
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public']
     filter_horizontal = ['authors']
