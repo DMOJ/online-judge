@@ -82,7 +82,7 @@ class ProblemAdmin(admin.ModelAdmin):
         ('Justice', {'fields': ('banned_users',)})
     )
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public']
-    filter_horizontal = ['authors']
+    filter_horizontal = ['authors', 'banned_users']
     ordering = ['code']
     search_fields = ('code', 'name')
     actions = ['make_public', 'make_private']
