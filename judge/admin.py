@@ -503,6 +503,15 @@ class ContestProblemInline(admin.TabularInline):
     fields = ('problem', 'points', 'partial')
 
 
+class ContestForm(ModelForm):
+    class Meta:
+        model = Problem
+        if use_select2:
+            widgets = {
+                'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
+            }
+
+
 class ContestAdmin(admin.ModelAdmin):
     fields = ('key', 'name', 'organizers', 'description', 'ongoing', 'free_start', 'is_public', 'is_external', 'start_time', 'time_limit')
     list_display = ('key', 'name', 'ongoing', 'is_public', 'is_external', 'time_limit')
@@ -510,7 +519,10 @@ class ContestAdmin(admin.ModelAdmin):
     inlines = [ContestProblemInline]
     actions_on_top = True
     actions_on_bottom = True
-    filter_horizontal = ['organizers']
+    form = ContestForm
+
+    if not use_select2:
+        filter_horizontal = ['organizers']
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
