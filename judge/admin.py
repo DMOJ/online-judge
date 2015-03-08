@@ -137,6 +137,7 @@ class ProblemAdmin(admin.ModelAdmin):
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
+    list_filter = ('is_public', 'authors')
     form = ProblemForm
 
     if not use_select2:
