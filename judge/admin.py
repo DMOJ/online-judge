@@ -614,7 +614,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
 
 class OrganizationForm(ModelForm):
     class Meta:
-        model = Problem
+        model = Organization
         if use_select2:
             widgets = {
                 'admins': HeavySelect2MultipleWidget(data_view='profile_select2'),
