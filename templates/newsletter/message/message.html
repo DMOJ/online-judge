@@ -15,11 +15,9 @@
         {% endif %}
     {% endfor %}
     
-    <ul>
+    <a href="http://{{ site.domain }}{% url "newsletter_unsubscribe_request" newsletter.slug %}" style="color:#ddd">Unsubscribe</a>
         {% if submission.publish %}
-        <li><a href="http://{{ site.domain }}{{ submission.get_absolute_url }}">Read message online</a></li>
+        <span style="color:#ddd">&nbsp;|&nbsp;</span><a href="http://{{ site.domain }}{{ submission.get_absolute_url }}" style="color:#ddd">Read message online</a>
         {% endif %}
-        <li><a href="http://{{ site.domain }}{% url "newsletter_unsubscribe_request" newsletter.slug %}">Unsubscribe</a></li>
-    </ul>
 </body>
 </html>
