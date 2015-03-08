@@ -126,6 +126,8 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
                 Profile.objects.exclude(authored_problems=None).values_list('user__username', 'name')]
 
     def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
         return queryset.filter(authors__user__username=self.value())
 
 
