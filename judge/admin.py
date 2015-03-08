@@ -22,6 +22,7 @@ try:
     from django_select2.widgets import HeavySelect2MultipleWidget
 except ImportError:
     HeavySelect2MultipleWidget = None
+else:
     from judge.views.select2 import UserSelect2View
 
 use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
