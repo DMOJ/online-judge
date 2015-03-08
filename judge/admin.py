@@ -47,7 +47,7 @@ class ProfileForm(ModelForm):
         model = Profile
         if use_select2:
             widgets = {
-                'organization': Select2MultipleWidget,
+                'timezone': Select2Widget,
             }
 
 
