@@ -23,6 +23,8 @@ try:
 except ImportError:
     AutoHeavySelect2MultipleWidget = None
 
+use_select2 = AutoHeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
+
 
 class ContestProfileInlineForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -79,7 +81,7 @@ class ProfileAdmin(admin.ModelAdmin):
 class ProblemForm(ModelForm):
     class Meta:
         model = Problem
-        if AutoHeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS:
+        if use_select2:
             widgets = {
                 'authors': AutoHeavySelect2MultipleWidget,
                 'banned_users': AutoHeavySelect2MultipleWidget
@@ -98,7 +100,6 @@ class ProblemAdmin(admin.ModelAdmin):
         ('Justice', {'fields': ('banned_users',)})
     )
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public']
-    filter_horizontal = ['authors', 'banned_users']
     ordering = ['code']
     search_fields = ('code', 'name')
     actions = ['make_public', 'make_private']
@@ -107,6 +108,9 @@ class ProblemAdmin(admin.ModelAdmin):
     actions_on_top = True
     actions_on_bottom = True
     form = ProblemForm
+
+    if not use_select2:
+        filter_horizontal = ['authors', 'banned_users']
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
