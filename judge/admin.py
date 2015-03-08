@@ -118,6 +118,17 @@ class ProblemForm(ModelForm):
             }
 
 
+class ProblemCreatorListFilter(admin.SimpleListFilter):
+    title = parameter_name = 'creator'
+
+    def lookups(self, request, model_admin):
+        return [(name, '%s (%s)' % (name, display) if display else name)for name, display in
+                Profile.objects.exclude(authored_problems=None).values_list('user__username', 'name')]
+
+    def queryset(self, request, queryset):
+        return queryset.filter(author__user__username=self.value())
+
+
 class ProblemAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
@@ -137,7 +148,7 @@ class ProblemAdmin(admin.ModelAdmin):
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
-    list_filter = ('is_public', 'authors')
+    list_filter = ('is_public', ProblemCreatorListFilter)
     form = ProblemForm
 
     if not use_select2:
