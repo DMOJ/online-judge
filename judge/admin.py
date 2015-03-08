@@ -35,6 +35,12 @@ class ContestProfileInlineForm(ModelForm):
         self.fields['current'].queryset = self.instance.history.select_related('contest').all()
         self.fields['current'].label_from_instance = lambda obj: obj.contest.name
 
+    class Meta:
+        if use_select2:
+            widgets = {
+                'current': Select2MultipleWidget,
+            }
+
 
 class ContestProfileInline(admin.StackedInline):
     fields = ('current',)
