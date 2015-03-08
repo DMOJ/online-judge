@@ -380,7 +380,8 @@ class LanguageForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text='These problems are allowed to be submitted in this language',
-        widget=FilteredSelectMultiple('problems', False))
+        widget=Select2MultipleWidget(data_view='problem_select2') if use_select2 else
+               FilteredSelectMultiple('problems', False))
 
 
 class LanguageAdmin(admin.ModelAdmin):
@@ -408,7 +409,8 @@ class ProblemGroupForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text='These problems are included in this group of problems',
-        widget=FilteredSelectMultiple('problems', False))
+        widget=Select2MultipleWidget(data_view='problem_select2') if use_select2 else
+               FilteredSelectMultiple('problems', False))
 
 
 class ProblemGroupAdmin(admin.ModelAdmin):
@@ -431,7 +433,8 @@ class ProblemTypeForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text='These problems are included in this type of problems',
-        widget=FilteredSelectMultiple('problems', False))
+        widget=Select2MultipleWidget(data_view='problem_select2') if use_select2 else
+               FilteredSelectMultiple('problems', False))
 
 
 class ProblemTypeAdmin(admin.ModelAdmin):
