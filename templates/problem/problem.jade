@@ -41,28 +41,34 @@ block info_float
     a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
     hr
     if request.user.is_authenticated and has_submissions
-        i.fa.fa-user
-        a(href='{% url "user_submissions" problem.code request.user.username %}') My submissions
+        a(href='{% url "user_submissions" problem.code request.user.username %}')
+            i.fa.fa-user
+            | My submissions
         br
-    i.fa.fa-users
-    a(href='{% url "chronological_submissions" problem.code %}') All submissions
+    a(href='{% url "chronological_submissions" problem.code %}')
+        i.fa.fa-users
+        | All submissions
     br
-    i.fa.fa-bar-chart
-    a(href='{% url "ranked_submissions" problem.code %}') Best submissions
+    a(href='{% url "ranked_submissions" problem.code %}')
+        i.fa.fa-bar-chart
+        | Best submissions
 
     if perms.judge.change_problem
         hr
-        i.fa.fa-edit
-        a(href='{% url "admin:judge_problem_change" problem.id %}') Edit problem
+        a(href='{% url "admin:judge_problem_change" problem.id %}')
+            i.fa.fa-edit
+            | Edit problem
         br
     elif perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids
         hr
-        i.fa.fa-edit
-        a(href='{% url "problem_edit" problem.code %}') Edit problem
+        a(href='{% url "problem_edit" problem.code %}')
+            i.fa.fa-edit
+            | Edit problem
         br
     if perms.judge.clone_problem
-        i.fa.fa-copy
-        a(href='{% url "problem_clone" problem.code %}') Clone problem
+        a(href='{% url "problem_clone" problem.code %}')
+            i.fa.fa-copy
+            | Clone problem
         br
     hr
     br
