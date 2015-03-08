@@ -25,6 +25,12 @@ block media
             width: 100%
         }
 
+        #problem-table a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
         #problem-table td:nth-child(3),
         td:nth-child(4),
         td:nth-child(6),
@@ -85,15 +91,15 @@ block body
         tbody
             each problem in problems
                 tr
+                    - url "problem_detail" problem.code as problem_url
                     td
-                        if problem.id in completed_problem_ids
-                            img(src='{% static "admin/img/icon-yes.gif" %}')
-                        else
-                            img(src='{% static "admin/img/icon-no.gif" %}')
+                        a(href=problem_url)
+                            img(src=('{% static "admin/img/icon-yes.gif" %}' if problem.id in completed_problem_ids else '{% static "admin/img/icon-no.gif" %}'))
                     td
-                        a(href='{% url "problem_detail" problem.code %}')= problem.name
+                        a(href=problem_url)= problem.name
                     td= problem.group.full_name
-                    td= problem.code
+                    td
+                        a(href=problem_url)= problem.code
                     if show_types
                         td #{problem.types_list|join:", "}
                     td.p #{problem.points|floatformat}
