@@ -11,7 +11,7 @@ class Command(NoArgsCommand):
 
     def handle_noargs(self, **options):
         for profile in RegistrationProfile.objects.exclude(activation_key=RegistrationProfile.ACTIVATED)\
-                      .filter(user__data_joined__le=timezone.now() - timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)):
+                      .filter(user__date_joined__le=timezone.now() - timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)):
             try:
                 print profile.user.username
             except User.DoesNotExist:
