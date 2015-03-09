@@ -11,7 +11,7 @@ logger = logging.getLogger('judge.bridge')
 
 
 def reset_judges():
-    Judge.objects.update(online=False, last_connect=None, ping=None, load=None)
+    Judge.objects.update(online=False, ping=None, load=None)
 
 
 class JudgeServer(get_preferred_engine()):
