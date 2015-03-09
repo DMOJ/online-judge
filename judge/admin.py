@@ -406,11 +406,12 @@ class CommentAdmin(admin.ModelAdmin):
 
 class LanguageForm(ModelForm):
     problems = ModelMultipleChoiceField(
-        label='Allowed problems',
+        label='Disallowed problems',
         queryset=Problem.objects.all(),
         required=False,
         help_text='These problems are allowed to be submitted in this language',
-        widget=FilteredSelectMultiple('problems', False))
+        widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
+               FilteredSelectMultiple('problems', False))
 
 
 class LanguageAdmin(admin.ModelAdmin):
@@ -424,11 +425,11 @@ class LanguageAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super(LanguageAdmin, self).save_model(request, obj, form, change)
-        obj.problem_set = form.cleaned_data['problems']
-        obj.save()
+        obj.problem_set = Problem.objects.exclude(id__in=form.cleaned_data['problems'].values('id'))
 
     def get_form(self, request, obj=None, **kwargs):
-        self.form.base_fields['problems'].initial = [o.pk for o in obj.problem_set.all()] if obj else []
+        self.form.base_fields['problems'].initial = \
+            Problem.objects.exclude(id__in=obj.problem_set.values('id')).values_list('pk', flat=True) if obj else []
         return super(LanguageAdmin, self).get_form(request, obj, **kwargs)
 
 
@@ -438,7 +439,8 @@ class ProblemGroupForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text='These problems are included in this group of problems',
-        widget=FilteredSelectMultiple('problems', False))
+        widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
+               FilteredSelectMultiple('problems', False))
 
 
 class ProblemGroupAdmin(admin.ModelAdmin):
@@ -461,7 +463,8 @@ class ProblemTypeForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text='These problems are included in this type of problems',
-        widget=FilteredSelectMultiple('problems', False))
+        widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
+               FilteredSelectMultiple('problems', False))
 
 
 class ProblemTypeAdmin(admin.ModelAdmin):
