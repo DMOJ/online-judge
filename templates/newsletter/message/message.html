@@ -17,7 +17,7 @@
     
     <a href="http://{{ site.domain }}{% url "newsletter_unsubscribe_request" newsletter.slug %}" style="color:#999;float:right">Unsubscribe</a>
         {% if submission.publish %}
-        <span style="color:#ddd">&nbsp;|&nbsp;</span><a href="http://{{ site.domain }}{{ submission.get_absolute_url }}" style="color:#ddd">Read message online</a>
+        <span style="color:#999">&nbsp;|&nbsp;</span><a href="http://{{ site.domain }}{{ submission.get_absolute_url }}" style="color:#ddd">Read message online</a>
         {% endif %}
 </body>
 </html>
