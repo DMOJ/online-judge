@@ -13,8 +13,6 @@ class Command(NoArgsCommand):
         for profile in RegistrationProfile.objects.exclude(activation_key=RegistrationProfile.ACTIVATED)\
                       .filter(user__date_joined__lt=timezone.now() - timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS))\
                       .filter(user__is_active=False):
-            assert not profile.user.profile.submission_set.exists()
-            try:
-                print profile.user.username
-            except User.DoesNotExist:
-                pass
+            if not profile.user.profile.submission_set.exists():
+                profile.user.delete()
+                profile.delete()
