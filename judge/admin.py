@@ -409,7 +409,7 @@ class LanguageForm(ModelForm):
         label='Disallowed problems',
         queryset=Problem.objects.all(),
         required=False,
-        help_text='These problems are allowed to be submitted in this language',
+        help_text='These problems are NOT allowed to be submitted in this language',
         widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
                FilteredSelectMultiple('problems', False))
 
