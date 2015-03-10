@@ -564,7 +564,7 @@ class ContestParticipation(models.Model):
     @cached_property
     def end_time(self):
         contest = self.contest
-        return contest.end_time if contest.time_limit else self.real_start + contest.time_limit
+        return contest.end_time if contest.time_limit is None else self.real_start + contest.time_limit
 
     @property
     def ended(self):
