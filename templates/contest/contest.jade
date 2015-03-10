@@ -21,7 +21,7 @@ block content_media
         }
 
 block info_float
-    if contest.can_join or in_contest
+    if contest.can_join or participating
         if not participating or not participation.ended
             if in_contest
                 a.unselectable.button.full(href='{% url "judge.views.leave_contest" contest.key %}') Leave contest
@@ -29,46 +29,42 @@ block info_float
                 a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}') Join contest
             hr
 
-    if not contest.start_time or contest.start_time <= now or perms.judge.see_private_contest
+    if contest.start_time <= now or perms.judge.see_private_contest
         a(href='{% url "judge.views.contest_ranking" contest.key %}')
             i.fa.fa-bar-chart.fa-fw
             | View rankings
         hr
-    if perms.judge.change_problem
+
+    if perms.judge.change_contest
         a(href='{% url "admin:judge_contest_change" contest.id %}')
             i.fa.fa-edit.fa-fw
             | Edit contest
         hr
     br
+
     i.fa.fa-clock-o.fa-fw
-    if not contest.free_start
-        if contest.start_time > now
-            b Starting in:
-            .time-remaining #{contest.time_before_start|timedelta:"simple"}
-        elif contest.end_time < now or not contest.can_join
-            if participating
-                b Time is up!
-            else
-                b Contest is over.
+    if contest.start_time > now
+        b Starting in:
+        .time-remaining #{contest.time_before_start|timedelta:"simple"}
+    elif participating
+        if participation.ended
+            b Time is up!
         else
             b Time remaining:
             = ' '
-            .time-remaining #{contest.time_before_end|timedelta:"simple"}
+            .time-remaining #{participation.time_remaining|timedelta:"simple"}
+    elif contest.end_time < now
+        b Contest is over.
     else
-        if participating
-            if not contest.can_join or participation.ended
-                b Time is up!
-            else
-                b Time remaining:
-                .time-remaining #{participation.time_remaining|timedelta:"simple"}
-        elif not contest.can_join
-            b Contest not started.
+        if contest.time_limit
+            b Can join until:
         else
-            b Time limit:
-            | &nbsp;#{contest.time_limit}
+            b Time remaining:
+        = ' '
+        .time-remaining #{contest.time_before_end|timedelta:"simple"}
 
 block description
-    -cache 3600 contest_html contest.id
+    - cache 3600 contest_html contest.id
         | #{contest.description|markdown:"contest"|smart_math}
 
 block comments

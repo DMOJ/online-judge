@@ -18,10 +18,9 @@ def api_contest_list(request):
     for c in Contest.objects.filter(is_public=True):
         js[c.key] = {
             'name': c.name,
-            'free_start': c.free_start,
-            'start_time': c.start_time.isoformat() if c.start_time is not None else None,
-            'time_limit': sane_time_repr(c.time_limit),
-            'ongoing': c.ongoing
+            'start_time': c.start_time.isoformat(),
+            'end_time':  c.end_time.isoformat(),
+            'time_limit': c.time_limit and sane_time_repr(c.time_limit),
         }
     return HttpResponse(json.dumps(js), mimetype='application/json')
 

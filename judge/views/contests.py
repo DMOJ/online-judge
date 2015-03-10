@@ -51,9 +51,7 @@ class ContestList(TitleMixin, ListView):
         now = timezone.now()
         past, present, future = [], [], []
         for contest in self.get_queryset():
-            if contest.free_start:
-                (present if contest.ongoing else past).append(contest)
-            elif contest.end_time < now:
+            if contest.end_time < now:
                 past.append(contest)
             elif contest.start_time > now:
                 future.append(contest)
@@ -141,6 +139,7 @@ def join_contest(request, key):
             'real_start': timezone.now()
         }
     )
+
     if not created and participation.ended:
         return generic_message(request, 'Time limit exceeded',
                                'Too late! You already used up your time limit for "%s".' % contest.name)

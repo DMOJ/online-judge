@@ -500,34 +500,21 @@ class Contest(models.Model):
     name = models.CharField(max_length=100, verbose_name='Contest name', db_index=True)
     organizers = models.ManyToManyField(Profile, help_text='These people will be able to edit the contest.')
     description = models.TextField(blank=True)
+    problems = models.ManyToManyField(Problem, verbose_name='Problems', through='ContestProblem')
     ongoing = models.BooleanField(default=True)
     free_start = models.BooleanField(default=False)
-    problems = models.ManyToManyField(Problem, verbose_name='Problems', through='ContestProblem')
-    start_time = models.DateTimeField(verbose_name='Start time', null=True, blank=True, db_index=True)
-    time_limit = TimedeltaField(verbose_name='Time limit')
+    start_time = models.DateTimeField(db_index=True)
+    end_time = models.DateTimeField(db_index=True)
+    time_limit = TimedeltaField(verbose_name='Time limit', blank=True, null=True)
     is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
     is_external = models.BooleanField(verbose_name='External contest', default=False)
 
     @cached_property
     def can_join(self):
-        if self.free_start and not self.ongoing:
-            return False
-        if not self.free_start and self.start_time is not None:
-            now = timezone.now()
-            if now < self.start_time or now > self.start_time + self.time_limit:
-                return False
-        return True
-
-    @cached_property
-    def end_time(self):
-        if self.free_start:
-            return None
-        return self.start_time + self.time_limit
+        return self.start_time <= timezone.now() < self.end_time
 
     @property
     def time_before_start(self):
-        if self.start_time is None:
-            return None
         now = timezone.now()
         if self.start_time >= now:
             return self.start_time - now
@@ -536,8 +523,6 @@ class Contest(models.Model):
 
     @property
     def time_before_end(self):
-        if self.free_start:
-            return None
         now = timezone.now()
         if self.end_time >= now:
             return self.end_time - now
@@ -574,14 +559,12 @@ class ContestParticipation(models.Model):
     @cached_property
     def start(self):
         contest = self.contest
-        return self.real_start if contest.free_start else contest.start_time
+        return contest.start_time if contest.time_limit is None else self.real_start
 
-    @property
+    @cached_property
     def end_time(self):
         contest = self.contest
-        if not contest.free_start and contest.start_time is not None:
-            return contest.start_time + contest.time_limit
-        return self.start + contest.time_limit
+        return contest.end_time if contest.time_limit else self.real_start + contest.time_limit
 
     @property
     def ended(self):
@@ -600,7 +583,6 @@ class ContestParticipation(models.Model):
         cumtime = 0
         profile_id = self.profile.user_id
         for problem in self.contest.contest_problems.all():
-            assert isinstance(problem, ContestProblem)
             solution = problem.submissions.filter(submission__user_id=profile_id, points__gt=0) \
                 .values('submission__user_id').annotate(time=Max('submission__date'))
             if not solution:
