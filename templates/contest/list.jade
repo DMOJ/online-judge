@@ -118,7 +118,13 @@ block body
                                     if contest.is_external
                                         .external-notice
                                             a(href='/about#external-contests') External contest
-                        td #{contest.time_limit}
+                        td
+                            if contest.time_limit
+                                | #{contest.time_limit}
+                            else
+                                | Until:
+                                br
+                                | #{contest.end_time|date:"N j, o, G:i"}
     else
         i There are no scheduled contests at this time.
 
