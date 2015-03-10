@@ -568,7 +568,7 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(admin.ModelAdmin):
     fields = ('key', 'name', 'organizers', 'description', 'is_public', 'is_external', 'start_time', 'end_time', 'time_limit')
-    list_display = ('key', 'name', 'ongoing', 'is_public', 'is_external', 'time_limit')
+    list_display = ('key', 'name', 'is_public', 'is_external', 'time_limit')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
     actions_on_top = True
