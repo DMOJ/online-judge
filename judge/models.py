@@ -501,8 +501,6 @@ class Contest(models.Model):
     organizers = models.ManyToManyField(Profile, help_text='These people will be able to edit the contest.')
     description = models.TextField(blank=True)
     problems = models.ManyToManyField(Problem, verbose_name='Problems', through='ContestProblem')
-    ongoing = models.BooleanField(default=True)
-    free_start = models.BooleanField(default=False)
     start_time = models.DateTimeField(db_index=True)
     end_time = models.DateTimeField(db_index=True)
     time_limit = TimedeltaField(verbose_name='Time limit', blank=True, null=True)
