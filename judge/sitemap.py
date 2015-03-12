@@ -65,7 +65,7 @@ class SolutionSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Solution.objects.all()
+        return Solution.objects.filter(url__startswith='/solution/')
 
     def location(self, obj):
         return obj.url
