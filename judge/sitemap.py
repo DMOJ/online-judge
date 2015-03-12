@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.sitemaps import Sitemap
 from django.contrib.auth.models import User
 from django.utils import timezone
-from judge.models import Problem, Organization, Contest, BlogPost
+from judge.models import Problem, Organization, Contest, BlogPost, Solution
 
 
 class ProblemSitemap(Sitemap):
@@ -58,6 +58,17 @@ class BlogPostSitemap(Sitemap):
 
     def location(self, obj):
         return reverse('blog_post', args=(obj.id, obj.slug))
+
+
+class SolutionSitemap(Sitemap):
+    changefreq = 'hourly'
+    priority = 0.8
+
+    def items(self):
+        return Solution.objects.all()
+
+    def location(self, obj):
+        return obj.url
 
 
 class HomePageSitemap(Sitemap):
