@@ -170,6 +170,7 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
         context = super(AllUserSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
         context['dynamic_user_id'] = self.profile.id
+        context['last_msg'] = event.last()
         return context
 
 
@@ -210,6 +211,7 @@ class ProblemSubmissions(SubmissionsListBase):
         context = super(ProblemSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
         context['dynamic_problem_id'] = self.problem.id
+        context['last_msg'] = event.last()
         return context
 
 
