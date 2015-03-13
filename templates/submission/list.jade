@@ -128,6 +128,18 @@ block media
         else
             script(type='text/javascript')
                 window.current_contest = null;
+        if dynamic_user_id
+            script(type='text/javascript')
+                window.dynamic_user_id = #{dynamic_user_id};
+        else
+            script(type='text/javascript')
+                window.dynamic_user_id = null;
+        if dynamic_problem_id
+            script(type='text/javascript')
+                window.dynamic_problem_id = #{dynamic_problem_id};
+        else
+            script(type='text/javascript')
+                window.dynamic_problem_id = null;
         script(type='text/javascript')
             $(function () {
                 var table = $('#submissions-table');
@@ -170,6 +182,9 @@ block media
                         "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                         ['submissions'], #{last_msg}, function (message) {
                             if (current_contest && message.contest != current_contest)
+                                return;
+                            if (dynamic_user_id && message.user != dynamic_user_id ||
+                                dynamic_problem_id && message.problem != dynamic_problem_id)
                                 return;
                             if (message.type == 'update-submission') {
                                 if (message.state == 'grading-end')

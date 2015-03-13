@@ -166,6 +166,12 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
         return format_html(u'All submissions by <a href="{1}">{0}</a>', self.username,
                            reverse('judge.views.user', args=[self.username]))
 
+    def get_context_data(self, **kwargs):
+        context = super(AllUserSubmissions, self).get_context_data(**kwargs)
+        context['dynamic_update'] = context['page_obj'].number == 1
+        context['dynamic_user_id'] = self.profile.id
+        return context
+
 
 class ProblemSubmissions(SubmissionsListBase):
     show_problem = False
@@ -200,6 +206,12 @@ class ProblemSubmissions(SubmissionsListBase):
             raise Http404()
         return super(ProblemSubmissions, self).get(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSubmissions, self).get_context_data(**kwargs)
+        context['dynamic_update'] = context['page_obj'].number == 1
+        context['dynamic_problem_id'] = self.problem.id
+        return context
+
 
 class UserProblemSubmissions(UserMixin, ProblemSubmissions):
     def get_queryset(self):
@@ -212,6 +224,11 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
         return format_html(u'''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
                            self.username, reverse('judge.views.user', args=[self.username]),
                            self.problem.name, reverse('problem_detail', args=[self.problem.code]))
+
+    def get_context_data(self, **kwargs):
+        context = super(UserProblemSubmissions, self).get_context_data(**kwargs)
+        context['dynamic_user_id'] = self.profile.id
+        return context
 
 
 def single_submission(request, id):
