@@ -61,6 +61,19 @@ class ProfileForm(ModelForm):
             }
 
 
+class TimezoneFilter(admin.SimpleListFilter):
+    title = 'Location'
+    parameter_name = 'timezone'
+
+    def lookups(self, request, model_admin):
+        return Profile.objects.values_list('timezone').distinct()
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+        return queryset.filter(timezone=self.value())
+
+
 class ProfileAdmin(admin.ModelAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organization', 'timezone', 'language', 'ace_theme',
               'last_access', 'ip', 'mute')
@@ -68,7 +81,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip')
     ordering = ('user__username',)
     search_fields = ('user__username', 'name', 'ip', 'user__email')
-    list_filter = ('language', 'timezone')
+    list_filter = ('language', TimezoneFilter)
     actions = ('recalculate_points',)
     inlines = [ContestProfileInline]
     actions_on_top = True
