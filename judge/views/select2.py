@@ -17,13 +17,13 @@ else:
 
     class OrganizationSelect2View(Select2View):
         def get_results(self, request, term, page, context):
-            queryset = Organization.objects.filter(Q(key__icontains=term) | Q(name__contains=term))
+            queryset = Organization.objects.filter(Q(key__icontains=term) | Q(name__icontains=term))
             page = Paginator(queryset, 20).page(page)
             return 'nil', page.has_next(), [(org.id, org.name) for org in page]
 
     class ProblemSelect2View(Select2View):
         def get_results(self, request, term, page, context):
-            queryset = Problem.objects.filter(Q(code__icontains=term) | Q(name__contains=term))
+            queryset = Problem.objects.filter(Q(code__icontains=term) | Q(name__icontains=term))
             if request.user.has_perm('judge.see_private_problem'):
                 filter = Q(is_public=True)
                 if request.user.is_authenticated():
