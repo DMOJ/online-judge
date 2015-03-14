@@ -140,6 +140,12 @@ block media
         else
             script(type='text/javascript')
                 window.dynamic_problem_id = null;
+        if show_problem
+            script(type='text/javascript')
+                window.show_problem = 1;
+        else
+            script(type='text/javascript')
+                window.show_problem = 0;
         script(type='text/javascript')
             $(function () {
                 var table = $('#submissions-table');
@@ -162,7 +168,7 @@ block media
                         if (!force) doing_ajax = true;
                         $.ajax({
                             url: '{% url "judge.views.single_submission_query" %}',
-                            data: {id: id}
+                            data: {id: id, show_problem: show_problem}
                         }).done(function (data) {
                             var was_shown = row.is(':visible');
                             row.html(data);

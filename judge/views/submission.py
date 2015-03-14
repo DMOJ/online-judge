@@ -235,13 +235,13 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
         return context
 
 
-def single_submission(request, id):
+def single_submission(request, id, show_problem=True):
     try:
         authenticated = request.user.is_authenticated()
         return render_to_response('submission/row.jade', {
             'submission': submission_related(Submission.objects).get(id=int(id)),
             'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
-            'show_problem': True,
+            'show_problem': show_problem,
             'profile_id': request.user.profile.id if authenticated else 0,
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
@@ -271,7 +271,7 @@ def statistics_table_query(request):
 def single_submission_query(request):
     if 'id' not in request.GET or not request.GET['id'].isdigit():
         return HttpResponseBadRequest()
-    return single_submission(request, int(request.GET['id']))
+    return single_submission(request, int(request.GET['id']), request.GET.get('show_problem', True))
 
 
 class AllSubmissions(SubmissionsListBase):
