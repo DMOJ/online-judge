@@ -271,7 +271,11 @@ def statistics_table_query(request):
 def single_submission_query(request):
     if 'id' not in request.GET or not request.GET['id'].isdigit():
         return HttpResponseBadRequest()
-    return single_submission(request, int(request.GET['id']), request.GET.get('show_problem', True))
+    try:
+        show_problem = int(request.GET.get('show_problem', '1'))
+    except ValueError:
+        return HttpResponseBadRequest()
+    return single_submission(request, int(request.GET['id']), show_problem)
 
 
 class AllSubmissions(SubmissionsListBase):
