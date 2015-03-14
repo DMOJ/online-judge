@@ -319,7 +319,8 @@ class OwnProblemList(TitleMixin, ListView):
 @login_required
 def problem_submit(request, problem=None, submission=None):
     try:
-        if submission is not None and Submission.objects.get(id=int(submission)).user.user != request.user:
+        if submission is not None and not request.user.has_perm('judge.resubmit_other') and \
+                Submission.objects.get(id=int(submission)).user.user != request.user:
             raise PermissionDenied()
     except Submission.DoesNotExist:
         raise Http404()
