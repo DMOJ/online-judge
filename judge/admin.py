@@ -567,6 +567,7 @@ class JudgeAdmin(admin.ModelAdmin):
 
 class ContestProblemInline(admin.TabularInline):
     model = ContestProblem
+    verbose_name = 'Problems'
     fields = ('problem', 'points', 'partial')
 
 
@@ -580,7 +581,11 @@ class ContestForm(ModelForm):
 
 
 class ContestAdmin(admin.ModelAdmin):
-    fields = ('key', 'name', 'organizers', 'description', 'is_public', 'is_external', 'start_time', 'end_time', 'time_limit')
+    fieldsets = (
+        (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
+        ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
+        ('Details', {'fields': ('description', 'is_external')}),
+    )
     list_display = ('key', 'name', 'is_public', 'is_external', 'start_time', 'end_time', 'time_limit')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
