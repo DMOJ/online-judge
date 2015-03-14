@@ -567,7 +567,8 @@ class JudgeAdmin(admin.ModelAdmin):
 
 class ContestProblemInline(admin.TabularInline):
     model = ContestProblem
-    verbose_name = 'Problems'
+    verbose_name = 'Problem'
+    verbose_name_plural = 'Problems'
     fields = ('problem', 'points', 'partial')
 
 
