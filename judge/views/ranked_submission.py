@@ -31,6 +31,8 @@ class FancyRawQuerySetWrapper(object):
 
 
 class RankedSubmissions(ProblemSubmissions):
+    dynamic_update = False
+
     def get_queryset(self):
         if self.in_contest:
             contest_join = '''INNER JOIN judge_contestsubmission AS cs ON (sub.id = cs.submission_id)

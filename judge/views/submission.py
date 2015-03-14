@@ -176,6 +176,7 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
 
 class ProblemSubmissions(SubmissionsListBase):
     show_problem = False
+    dynamic_update = True
 
     def get_queryset(self):
         return super(ProblemSubmissions, self).get_queryset().filter(problem__code=self.problem.code)
@@ -209,9 +210,10 @@ class ProblemSubmissions(SubmissionsListBase):
 
     def get_context_data(self, **kwargs):
         context = super(ProblemSubmissions, self).get_context_data(**kwargs)
-        context['dynamic_update'] = context['page_obj'].number == 1
-        context['dynamic_problem_id'] = self.problem.id
-        context['last_msg'] = event.last()
+        if self.dynamic_update:
+            context['dynamic_update'] = context['page_obj'].number == 1
+            context['dynamic_problem_id'] = self.problem.id
+            context['last_msg'] = event.last()
         return context
 
 
