@@ -214,3 +214,6 @@ if 'django_select2' in settings.INSTALLED_APPS:
         url(r'^judge-select2/problem/', ProblemSelect2View.as_view(), name='problem_select2'),
         url(r'^judge-select2/comment/', CommentSelect2View.as_view(), name='comment_select2'),
     )
+
+if 'django_uwsgi' in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', url(r'^admin/uwsgi/', include('django_uwsgi.urls')))
