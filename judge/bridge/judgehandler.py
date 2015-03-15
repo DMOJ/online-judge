@@ -131,17 +131,20 @@ class JudgeHandler(ZlibPacketHandler):
         logger.error('Judge seems dead: %s: %s', self.name, self._working)
         self.close()
 
+    def on_submission_processing(self, packet):
+        pass
+
     def on_submission_acknowledged(self, packet):
         if not packet.get('submission-id', None) == self._working:
             logger.error('Wrong acknowledgement: %s: %s, expected: %s', self.name, packet.get('submission-id', None),
                          self._working)
             self.close()
-            return
         logger.info('Submission acknowledged: %d', self._working)
         if self._no_response_job:
             self.server.unschedule(self._no_response_job)
             self._received.set()
             self._no_response_job = None
+        self.on_submission_processing(packet)
 
     def abort(self):
         self.send({'name': 'terminate-submission'})

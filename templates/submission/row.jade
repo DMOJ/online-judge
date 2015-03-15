@@ -21,7 +21,7 @@ td.sub-result(class=(submission.status if submission.status in 'IECE' else submi
         else
             i.fa.fa-spinner.fa-pulse
     .state
-        span.status(title=submission.long_status) #{submission.result|default_if_none:submission.status}
+        span.status(title=submission.long_status)= submission.short_status
         = ' | '
         span.language #{submission.language.short_display_name}
 
@@ -55,7 +55,7 @@ if can_view
             a(href='{% url "admin:judge_submission_change" submission.id %}') admin
 
 td.sub-usage
-    if submission.status in 'QUGCEIEAB'
+    if submission.status in 'QUPGCEIEAB'
         .time ---
         .memory ---
     else

@@ -3,7 +3,14 @@
 - load counter
 
 if submission.status != 'IE'
-    if submission.status != 'CE'
+    if submission.status == 'QU'
+        h4 We are waiting for a suitable judge to process your submission...
+    elif submission.status == 'P'
+        h4 Your submission is being processed...
+    elif submission.status == 'CE'
+        h4 Compilation Error
+        pre #{submission.error}
+    else
         h3 Execution Results
         br
         if submission.error
@@ -75,10 +82,6 @@ if submission.status != 'IE'
             else
                 b Submission aborted!
             br
-    else
-        h4 Compilation Error
-        pre #{submission.error}
-
 else
     h3(style='color:red;font-weight:bold') 
         if request.user == submission.user.user

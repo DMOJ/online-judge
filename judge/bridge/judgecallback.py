@@ -56,6 +56,21 @@ class DjangoJudgeHandler(JudgeHandler):
             if e.__class__.__name__ == 'OperationalError' and e.__module__ == '_mysql_exceptions' and e.args[0] == 2006:
                 db.close_connection()
 
+    def on_submission_processing(self, packet):
+        try:
+            submission = Submission.objects.get(id=packet['submission-id'])
+        except Submission.DoesNotExist:
+            logger.warning('Unknown submission: %d', packet['submission-id'])
+            return
+        submission.status = 'P'
+        submission.save()
+        event.post('sub_%d' % submission.id, {'type': 'processing'})
+        if not submission.problem.is_public:
+            return
+        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
+                                   'state': 'processing', 'contest': submission.contest_key,
+                                   'user': submission.user_id, 'problem': submission.problem_id})
+
     def on_grading_begin(self, packet):
         super(DjangoJudgeHandler, self).on_grading_begin(packet)
         try:

@@ -309,8 +309,12 @@ class Submission(models.Model):
         return self.memory * 1024 if self.memory is not None else 0
 
     @property
+    def short_status(self):
+        return self.result or self.status
+
+    @property
     def long_status(self):
-        return Submission.USER_DISPLAY_CODES.get(self.result or self.status, '')
+        return Submission.USER_DISPLAY_CODES.get(self.short_status, '')
 
     def judge(self):
         return judge_submission(self)
@@ -319,7 +323,7 @@ class Submission(models.Model):
         return abort_submission(self)
 
     def is_graded(self):
-        return self.status not in ['QU', 'C', 'G']
+        return self.status not in ('QU', 'P', 'G')
 
     @property
     def contest_key(self):
