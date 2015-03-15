@@ -261,7 +261,7 @@ SUBMISSION_RESULT = (
 class Submission(models.Model):
     STATUS = (
         ('QU', 'Queued'),
-        ('C', 'Compiled'),
+        ('P', 'Processing'),
         ('G', 'Grading'),
         ('D', 'Completed'),
         ('IE', 'Internal Error'),
@@ -281,7 +281,7 @@ class Submission(models.Model):
         'CE': 'Compile Error',
         'IE': 'Internal Error (judging server error)',
         'QU': 'Queued',
-        'C': 'Compiled',
+        'P': 'Processing',
         'G': 'Grading',
         'D': 'Completed',
         'AB': 'Aborted',
@@ -310,7 +310,7 @@ class Submission(models.Model):
 
     @property
     def long_status(self):
-        return Submission.USER_DISPLAY_CODES.get(self.result if self.result else self.status, '')
+        return Submission.USER_DISPLAY_CODES.get(self.result or self.status, '')
 
     def judge(self):
         return judge_submission(self)
