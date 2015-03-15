@@ -24,7 +24,7 @@ else:
     class ProblemSelect2View(Select2View):
         def get_results(self, request, term, page, context):
             queryset = Problem.objects.filter(Q(code__icontains=term) | Q(name__icontains=term))
-            if request.user.has_perm('judge.see_private_problem'):
+            if not request.user.has_perm('judge.see_private_problem'):
                 filter = Q(is_public=True)
                 if request.user.is_authenticated():
                     filter |= Q(authors=request.user.profile)
