@@ -172,9 +172,9 @@ block media
                         }).done(function (data) {
                             var was_shown = row.is(':visible');
                             row.html(data);
+                            update_relative_time(row);
                             if (!was_shown)
                                 row.show('slow');
-                            update_relative_time(row);
                             if (!force) doing_ajax = false;
                         }).fail(function () {
                             console.log('Failed to update submission: ' + id);
