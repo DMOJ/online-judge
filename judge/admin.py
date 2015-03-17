@@ -27,7 +27,7 @@ except ImportError:
     Select2MultipleWidget = None
 
 try:
-    from suit import SortableModelAdmin
+    from suit.admin import SortableModelAdmin
 except ImportError:
     SortableModelAdmin = object
 
