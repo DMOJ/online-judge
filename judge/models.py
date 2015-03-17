@@ -4,7 +4,9 @@ from operator import itemgetter, attrgetter
 from django.conf import settings
 from django.contrib.flatpages.models import FlatPage
 from django.core.cache import cache
+from django.db import transaction
 from mptt.fields import TreeForeignKey
+from mptt.managers import TreeManager
 from mptt.models import MPTTModel
 
 import pytz
@@ -13,7 +15,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
-from django.db import models
+from django.db import models, connection
 from django.db.models import Max
 from django.utils import timezone
 from timedelta.fields import TimedeltaField
@@ -418,6 +420,33 @@ class Comment(models.Model):
         return self.title
 
 
+class TableLock(object):
+    def __init__(self, table):
+        self.table = table
+
+    def __enter__(self):
+        self.auto_commit = transaction.get_autocommit()
+        transaction.set_autocommit(False)
+        cursor = connection.cursor()
+        cursor.execute('LOCK TABLES %s WRITE', (self.table,))
+        cursor.fetchone()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type is None:
+            transaction.commit()
+        else:
+            transaction.rollback()
+        transaction.set_autocommit(self.auto_commit)
+        cursor = connection.cursor()
+        cursor.execute('UNLOCK TABLES')
+        cursor.fetchone()
+
+
+class LockingTreeManager(TreeManager):
+    def lock(self):
+        return TableLock(self.model._meta.db_table)
+
+
 class CommentMPTT(MPTTModel):
     author = models.ForeignKey(Profile, verbose_name='Commenter')
     time = models.DateTimeField(verbose_name='Posted time', auto_now_add=True)
@@ -428,6 +457,8 @@ class CommentMPTT(MPTTModel):
     title = models.CharField(max_length=200, verbose_name='Title of comment')
     body = models.TextField(verbose_name='Body of comment', blank=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='replies')
+
+    objects = LockingTreeManager()
 
     class MPTTMeta:
         order_insertion_by = ['time']

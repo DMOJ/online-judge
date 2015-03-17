@@ -45,7 +45,8 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
             comment = form.save(commit=False)
             comment.author = request.user.profile
             comment.page = self.get_comment_page()
-            comment.save()
+            with CommentMPTT.objects.lock():
+                comment.save()
             return HttpResponseRedirect(request.path)
 
         context = self.get_context_data(object=self.object, comment_form=form)
