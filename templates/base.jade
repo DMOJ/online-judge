@@ -76,7 +76,7 @@ html(lang='en')
         header#nav-head
             nav#navigation.unselectable
                 ul
-                    - recursetree comment_list
+                    - recursetree nav_bar
                         li
                             a(href=node.path, class='nav-{{ node.key }}')= node.label
                         ul {{ children }}
