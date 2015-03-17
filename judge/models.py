@@ -423,13 +423,12 @@ class Comment(models.Model):
 class TableLock(object):
     def __init__(self, table):
         self.table = table
+        self.cursor = connection.cursor()
 
     def __enter__(self):
         self.auto_commit = transaction.get_autocommit()
         transaction.set_autocommit(False)
-        cursor = connection.cursor()
-        cursor.execute('LOCK TABLES `%s` WRITE' % self.table)
-        cursor.fetchone()
+        self.cursor.execute('LOCK TABLES `%s` WRITE' % self.table)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type is None:
@@ -437,9 +436,8 @@ class TableLock(object):
         else:
             transaction.rollback()
         transaction.set_autocommit(self.auto_commit)
-        cursor = connection.cursor()
-        cursor.execute('UNLOCK TABLES')
-        cursor.fetchone()
+        self.cursor.execute('UNLOCK TABLES')
+        self.cursor.close()
 
 
 class LockingTreeManager(TreeManager):
