@@ -76,7 +76,7 @@ ul.comments.top-level-comments
                                 a(href='{% url "admin:judge_comment_change" comment.id %}') &nbsp;Admin
                     .comment-body #{comment.body|markdown:"comment"}
                     ul.comments
-                        | {{ chldren }}
+                        | {{ children }}
     else
         p There are no comments at the moment.
 
