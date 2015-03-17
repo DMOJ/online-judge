@@ -659,10 +659,15 @@ class PrivateMessageThread(models.Model):
     messages = models.ManyToManyField(PrivateMessage, verbose_name='Messages in the thread')
 
 
-class Solution(FlatPage):
-    def __init__(self, *args, **kwargs):
-        self._meta.get_field('template_name').default = 'flatpages/dmsolutions.jade'
-        super(FlatPage, self).__init__(*args, **kwargs)
+class Solution(models.Model):
+    url = models.CharField('URL', max_length=100, db_index=True, blank=True)
+    title = models.CharField(max_length=200)
+    is_public = models.BooleanField()
+    publish_on = models.DateTimeField()
+    content = models.TextField()
+    authors = models.ManyToManyField(Profile, blank=True)
 
     class Meta:
-        proxy = True
+        permissions = (
+            ('see_private_solution', 'See hidden solutions'),
+        )

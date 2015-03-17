@@ -716,7 +716,7 @@ class SolutionAdmin(FlatPageAdmin):
     )
 
     def get_queryset(self, request):
-        return Solution.objects.filter(url__startswith='/solution/')
+        return Solution.objects.all()
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
