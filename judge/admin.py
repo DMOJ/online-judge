@@ -744,7 +744,7 @@ class CommentMPTTAdmin(admin.ModelAdmin):
     form = CommentMPTTForm
 
     def get_queryset(self, request):
-        return CommentMPTT.objects.order_by('-date')
+        return CommentMPTT.objects.order_by('-time')
 
     def linked_page(self, obj):
         link = obj.link
