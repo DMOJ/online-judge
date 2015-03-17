@@ -390,7 +390,7 @@ class CommentForm(ModelForm):
 
 class CommentAdmin(admin.ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('author', 'page', 'parent', 'score')}),
+        (None, {'fields': ('author', 'page', 'parent', 'score', 'hidden')}),
         ('Content', {'fields': ('title', 'body')}),
     )
     list_display = ['title', 'author', 'linked_page', 'time']
