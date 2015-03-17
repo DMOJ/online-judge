@@ -78,7 +78,7 @@ ul.comments.top-level-comments
                         .comment-body #{comment.body|markdown:"comment"}
                         ul.comments
                             | {{ children }}
-        - endrecursetree
+            - endrecursetree
     else
         p There are no comments at the moment.
 
