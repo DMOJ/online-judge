@@ -8,6 +8,7 @@ class SolutionView(DetailView):
     model = Solution
     slug_field = slug_url_kwarg = 'url'
     template_name = 'flatpages/dmsolutions.jade'
+    context_object_name = 'flatpage'
 
     def get_object(self, queryset=None):
         solution = super(SolutionView, self).get_object(queryset)
