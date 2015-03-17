@@ -50,7 +50,7 @@ script(type='text/javascript')
     });
 
 ul.comments.top-level-comments
-    if comment_list
+    if has_comments
         - recursetree comment_list
             li.comment(id='comment-{{ node.id }}')
                 .comment-box
