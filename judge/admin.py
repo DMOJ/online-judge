@@ -11,7 +11,6 @@ from django.http import HttpResponseRedirect, Http404
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django_mptt_admin.admin import DjangoMpttAdmin
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
@@ -733,7 +732,7 @@ class CommentMPTTForm(ModelForm):
             }
 
 
-class CommentMPTTAdmin(DjangoMpttAdmin):
+class CommentMPTTAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('author', 'page', 'parent', 'score')}),
         ('Content', {'fields': ('title', 'body')}),
