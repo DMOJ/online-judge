@@ -461,7 +461,7 @@ class CommentMPTT(MPTTModel):
     objects = LockingTreeManager()
 
     class MPTTMeta:
-        order_insertion_by = ['id']
+        order_insertion_by = ['time']
 
     @cached_property
     def link(self):
