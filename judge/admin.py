@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.contrib.flatpages.admin import FlatPageAdmin
 from django.core.cache import cache
 from django.db.models import TextField, Q
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
@@ -12,6 +11,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django_mptt_admin.admin import DjangoMpttAdmin
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
@@ -723,7 +723,17 @@ class SolutionAdmin(admin.ModelAdmin):
         }
 
 
-class CommentMPTTAdmin(admin.ModelAdmin):
+class CommentMPTTForm(ModelForm):
+    class Meta:
+        model = Comment
+        if use_select2:
+            widgets = {
+                'author': HeavySelect2Widget(data_view='profile_select2'),
+                'parent': HeavySelect2Widget(data_view='comment_mptt_select2'),
+            }
+
+
+class CommentMPTTAdmin(DjangoMpttAdmin):
     fieldsets = (
         (None, {'fields': ('author', 'page', 'parent', 'score')}),
         ('Content', {'fields': ('title', 'body')}),

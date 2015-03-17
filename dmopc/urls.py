@@ -207,7 +207,8 @@ if 'newsletter' in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^newsletter/', include('newsletter.urls')))
 
 if 'django_select2' in settings.INSTALLED_APPS:
-    from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View
+    from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
+        CommentMPTTSelect2View
 
     urlpatterns += patterns('',
         url(r'^select2/', include('django_select2.urls')),
@@ -215,6 +216,7 @@ if 'django_select2' in settings.INSTALLED_APPS:
         url(r'^judge-select2/organization/', OrganizationSelect2View.as_view(), name='organization_select2'),
         url(r'^judge-select2/problem/', ProblemSelect2View.as_view(), name='problem_select2'),
         url(r'^judge-select2/comment/', CommentSelect2View.as_view(), name='comment_select2'),
+        url(r'^judge-select2/comment_mptt/', CommentMPTTSelect2View.as_view(), name='comment_mptt_select2'),
     )
 
 if 'django_uwsgi' in settings.INSTALLED_APPS:
