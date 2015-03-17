@@ -104,6 +104,7 @@ INSTALLED_APPS += (
     'django.contrib.sitemaps',
     'registration',
     'markdown_trois',
+    'mptt',
 )
 
 MIDDLEWARE_CLASSES = (
