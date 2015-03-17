@@ -404,6 +404,8 @@ class Comment(MPTTModel):
                     slug = ''
                 cache.set(key, slug, 3600)
             link = reverse('blog_post', args=(self.page[2:], slug))
+        elif self.page.startswith('s:'):
+            link = reverse('solution', args=(self.page[2:],))
         return link
 
     @cached_property
@@ -415,6 +417,8 @@ class Comment(MPTTModel):
                 return Contest.objects.get(key=self.page[2:]).name
             elif self.page.startswith('b:'):
                 return BlogPost.objects.get(id=self.page[2:]).title
+            elif self.page.startswith('s:'):
+                return Solution.objects.get(url=self.page[2:]).title
             return '<unknown>'
         except ObjectDoesNotExist:
             return '<deleted>'
