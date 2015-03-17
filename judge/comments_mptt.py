@@ -76,5 +76,6 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
 
     def get_context_data(self, **kwargs):
         context = super(CommentedDetailView, self).get_context_data(**kwargs)
-        context['comment_list'] = CommentMPTT.objects.filter(page=self.get_comment_page())
+        context['comment_list'] = CommentMPTT.objects.filter(page=self.get_comment_page()) \
+            .select_related('author__user').defer('author__about')
         return context
