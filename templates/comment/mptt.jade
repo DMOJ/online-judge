@@ -51,34 +51,33 @@ script(type='text/javascript')
 
 ul.comments.top-level-comments
     if comment_list
-        - with node as comment
-            - recursetree comment_list
-                li.comment(id='comment-{{comment.id}}')
-                    .comment-box
-                        div(style='float:left')
-                            if request.user.is_authenticated
-                                a.upvote-link(href='javascript:comment_upvote({{comment.id}})')
-                            br
-                            .comment-score #{comment.score}
-                            if request.user.is_authenticated
-                                a.downvote-link(href='javascript:comment_downvote({{comment.id}})')
-                            br
-                        .comment-header
-                            a.comment-link(name='comment-{{comment.id}}-link')
-                            span.comment-author
-                                span(class=comment.author.display_rank)
-                                    a(href='{% url "judge.views.user" comment.author.user.username %}') #{comment.author.user.username}
-                            |  on
-                            span.comment-time  #{comment.time|date:"N j, o, g:i a"}
-                            span.comment-title  #{comment.title}
-                            span.comment-operation
-                                a(href='javascript:comment_set_parent({{comment.id}})') &nbsp;Reply
-                                if perms.judge.change_comment
-                                    a(href='{% url "admin:judge_comment_change" comment.id %}') &nbsp;Admin
-                        .comment-body #{comment.body|markdown:"comment"}
-                        ul.comments
-                            | {{ children }}
-            - endrecursetree
+        - recursetree comment_list
+            li.comment(id='comment-{{ node.id }}')
+                .comment-box
+                    div(style='float:left')
+                        if request.user.is_authenticated
+                            a.upvote-link(href='javascript:comment_upvote({{ node.id }})')
+                        br
+                        .comment-score #{node.score}
+                        if request.user.is_authenticated
+                            a.downvote-link(href='javascript:comment_downvote({{ node.id }})')
+                        br
+                    .comment-header
+                        a.comment-link(name='comment-{{node.id}}-link')
+                        span.comment-author
+                            span(class=node.author.display_rank)
+                                a(href='{% url "judge.views.user" node.author.user.username %}') #{node.author.user.username}
+                        |  on
+                        span.comment-time  #{node.time|date:"N j, o, g:i a"}
+                        span.comment-title  #{node.title}
+                        span.comment-operation
+                            a(href='javascript:comment_set_parent({{ node.id }})') &nbsp;Reply
+                            if perms.judge.change_comment
+                                a(href='{% url "admin:judge_comment_change" node.id %}') &nbsp;Admin
+                    .comment-body #{node.body|markdown:"comment"}
+                    ul.comments
+                        | {{ children }}
+        - endrecursetree
     else
         p There are no comments at the moment.
 
