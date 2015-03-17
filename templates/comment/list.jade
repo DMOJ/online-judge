@@ -1,5 +1,7 @@
--load staticfiles
--load markdown_trois_tags
+- load staticfiles
+- load markdown_trois_tags
+- load mptt_tags
+
 script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
 script(type='text/javascript')
     $(document).ready(function () {
@@ -48,9 +50,35 @@ script(type='text/javascript')
     });
 
 ul.comments.top-level-comments
-    if comment_list
-        each comment in comment_list
-            include comment/comment
+    if has_comments
+        - recursetree comment_list
+            li.comment(id='comment-{{ node.id }}')
+                .comment-box
+                    div(style='float:left')
+                        if request.user.is_authenticated
+                            a.upvote-link(href='javascript:comment_upvote({{ node.id }})')
+                        br
+                        .comment-score #{node.score}
+                        if request.user.is_authenticated
+                            a.downvote-link(href='javascript:comment_downvote({{ node.id }})')
+                        br
+                    .comment-header
+                        a.comment-link(name='comment-{{node.id}}-link')
+                        span.comment-author
+                            span(class=node.author.display_rank)
+                                a(href='{% url "judge.views.user" node.author.user.username %}') #{node.author.user.username}
+                        = ' on '
+                        span.comment-time #{node.time|date:"N j, o, g:i a"}
+                        = ' '
+                        span.comment-title #{node.title}
+                        span.comment-operation
+                            a(href='javascript:comment_set_parent({{ node.id }})') &nbsp;Reply
+                            if perms.judge.change_comment
+                                a(href='{% url "admin:judge_comment_change" node.id %}') &nbsp;Admin
+                    .comment-body #{node.body|markdown:"comment"}
+                    ul.comments
+                        | {{ children }}
+        - endrecursetree
     else
         p There are no comments at the moment.
 

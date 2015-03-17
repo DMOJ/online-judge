@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.utils import timezone
 from judge.models import Solution
-from judge.comments_mptt import CommentedDetailView
+from judge.comments import CommentedDetailView
 
 
 class SolutionView(CommentedDetailView):

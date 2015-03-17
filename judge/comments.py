@@ -1,12 +1,13 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db import transaction, connection
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 
-from judge.models import Comment
+from judge.models import Comment, Profile
 
 
 class CommentForm(ModelForm):
@@ -39,14 +40,29 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+        page = self.get_comment_page()
 
-        form = CommentForm(request, request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user.profile
-            comment.page = self.get_comment_page()
-            comment.save()
-            return HttpResponseRedirect(request.path)
+        cursor = connection.cursor()
+        auto_commit = transaction.get_autocommit()
+        try:
+            transaction.set_autocommit(False)
+            cursor.execute('LOCK TABLES %s WRITE, %s READ' % (Comment._meta.db_table, Profile._meta.db_table))
+
+            form = CommentForm(request, request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.author = request.user.profile
+                comment.page = page
+                comment.save()
+                return HttpResponseRedirect(request.path)
+        except:
+            transaction.rollback()
+            raise
+        else:
+            transaction.commit()
+        finally:
+            transaction.set_autocommit(auto_commit)
+            cursor.execute('UNLOCK TABLES')
 
         context = self.get_context_data(object=self.object, comment_form=form)
         return self.render_to_response(context)
@@ -60,5 +76,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
 
     def get_context_data(self, **kwargs):
         context = super(CommentedDetailView, self).get_context_data(**kwargs)
-        context['comment_list'] = Comment.objects.filter(page=self.get_comment_page(), parent=None).order_by('-id')
+        queryset = Comment.objects.filter(page=self.get_comment_page())
+        context['has_comments'] = queryset.exists()
+        context['comment_list'] = queryset.select_related('author__user').defer('author__about')
         return context
