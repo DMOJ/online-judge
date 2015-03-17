@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from mptt.admin import MPTTModelAdmin
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
@@ -24,6 +25,11 @@ except ImportError:
     HeavySelect2MultipleWidget = None
     Select2Widget = None
     Select2MultipleWidget = None
+
+try:
+    from suit import SortableModelAdmin
+except ImportError:
+    SortableModelAdmin = object
 
 use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
 
@@ -498,6 +504,13 @@ class ProblemTypeAdmin(admin.ModelAdmin):
         return super(ProblemTypeAdmin, self).get_form(request, obj, **kwargs)
 
 
+class NavigationBarAdmin(MPTTModelAdmin, SortableModelAdmin):
+    list_display = ('key', 'label', 'path')
+    fields = ('key', 'label', 'path', 'regex', 'parent')
+    mptt_level_indent = 20
+    sortable = 'order'
+
+
 class GenerateKeyTextInput(TextInput):
     def render(self, name, value, attrs=None):
         text = super(TextInput, self).render(name, value, attrs)
@@ -520,15 +533,6 @@ class GenerateKeyTextInput(TextInput):
 }})(django.jQuery);
 </script>
 ''', name))
-
-
-class NavigationBarAdmin(admin.ModelAdmin):
-    list_display = ('key', 'label', 'path', 'order', 'order_link', 'parent_name')
-    fields = ('key', 'label', 'path', 'regex', 'parent')
-
-    def parent_name(self, obj):
-        return obj.parent and obj.parent.label
-    parent_name.short_description = 'Parent'
 
 
 class JudgeAdminForm(ModelForm):

@@ -16,26 +16,12 @@ def comet_location(request):
             'EVENT_DAEMON_POLL_LOCATION': settings.EVENT_DAEMON_POLL}
 
 
-def __tab(request):
-    nav = cache.get('navbar_dict')
-    if nav is None:
-        nav = dict((n['id'], n) for n in NavigationBar.objects.values('id', 'key', 'parent_id'))
-        nav[None] = None
-        cache.set('navbar_dict', nav, 86400)
-    for item in NavigationBar.objects.all():
-        if item.pattern.match(request.path):
-            yield item.key
-            item = nav[item.parent_id]
-            while item is not None:
-                yield item['key']
-                item = nav[item['parent_id']]
-
-
 def general_info(request):
     path = request.get_full_path()
+    result = list(NavigationBar.objects.extra(where=['%s REGEXP BINARY regex'], params=[request.path])[:1])
     return {
-        'nav_tab': list(__tab(request)),
-        'nav_bar': SimpleLazyObject(lambda: NavigationBar.objects.filter(parent=None)),
+        'nav_tab': result[0].get_ancestors(include_self=True).values_list('key', flat=True) if result else [],
+        'nav_bar': NavigationBar.objects.all(),
         'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path
     }
 

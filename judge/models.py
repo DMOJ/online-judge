@@ -455,17 +455,20 @@ def validate_regex(regex):
         raise ValidationError('Invalid regex: %s' % e.message)
 
 
-class NavigationBar(OrderedModel):
+class NavigationBar(MPTTModel):
     class Meta:
-        ordering = ['order']
         verbose_name = 'navigation item'
         verbose_name_plural = 'navigation bar'
+
+    class MPTTMeta:
+        order_insertion_by = ['order']
 
     key = models.CharField(max_length=10, unique=True, verbose_name='Identifier')
     label = models.CharField(max_length=20)
     path = models.CharField(max_length=30, verbose_name='Link path')
     regex = models.TextField(verbose_name='Highlight regex', validators=[validate_regex])
-    parent = models.ForeignKey('self', verbose_name='Parent item', null=True, blank=True, related_name='children')
+    parent = TreeForeignKey('self', verbose_name='Parent item', null=True, blank=True, related_name='children')
+    order = models.PositiveIntegerField(editable=False, db_index=True)
 
     def __unicode__(self):
         return self.label

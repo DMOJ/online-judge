@@ -4,6 +4,7 @@ doctype 5
 - load variables
 - load timedelta
 - load cache
+- load mptt_tags
 html(lang='en')
     head
         title
@@ -74,9 +75,12 @@ html(lang='en')
                         #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
         header#nav-head
             nav#navigation.unselectable
-                - cache 86400 navbar
-                    ul
-                        include nav_bar
+                ul
+                    - recursetree comment_list
+                        li
+                            a(href=node.path, class='nav-{{ node.key }}')= node.label
+                        ul {{ children }}
+                    - endrecursetree
                 span#user-links
                     if request.user.is_authenticated
                         a(href='{% url "judge.views.user" %}')

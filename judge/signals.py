@@ -92,11 +92,6 @@ def organization_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('organization_html', (instance.id,)))
 
 
-@receiver(post_save, sender=NavigationBar)
-def navigation_update(sender, instance, **kwargs):
-    cache.delete_many(['navbar', 'navbar_dict', make_template_fragment_key('navbar')])
-
-
 @receiver(post_save, sender=MiscConfig)
 def misc_config_update(sender, instance, **kwargs):
     cache.delete('misc_config:%s' % instance.key)
