@@ -681,6 +681,9 @@ class Solution(models.Model):
     content = models.TextField()
     authors = models.ManyToManyField(Profile, blank=True)
 
+    def __unicode__(self):
+        return self.title
+
     class Meta:
         permissions = (
             ('see_private_solution', 'See hidden solutions'),
