@@ -51,7 +51,7 @@ script(type='text/javascript')
 
 ul.comments.top-level-comments
     if comment_list
-        - recursetree nodes
+        - recursetree comment_list
             li.comment(id='comment-{{comment.id}}')
                 .comment-box
                     div(style='float:left')
@@ -77,6 +77,7 @@ ul.comments.top-level-comments
                     .comment-body #{comment.body|markdown:"comment"}
                     ul.comments
                         | {{ children }}
+        - endrecursetree
     else
         p There are no comments at the moment.
 
