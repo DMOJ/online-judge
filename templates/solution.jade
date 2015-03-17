@@ -1,0 +1,32 @@
+extends base
+- load markdown_trois_tags
+- load staticfiles
+- load smart_math
+
+block media
+    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')                                                                                         
+    link(rel='stylesheet', href='{% static "content-description.css" %}')
+
+block site_title
+    span(style='color: #FFDE05') DM::
+    | Solutions
+
+block title
+    | #{flatpage.title} - Don Mills Online Judge
+
+block content_title
+    | #{flatpage.title}
+    if perms.judge.change_solution
+        div(style='float:right')
+            | [
+            a(href='{% url "admin:judge_solution_change" flatpage.id %}') Edit
+            | ]
+
+block body
+    .content-description
+        | #{flatpage.content|markdown:"trusted"|smart_math}
+
+    include comment/mptt
+
+block bodyend
+    include mathjax_load

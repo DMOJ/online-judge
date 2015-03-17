@@ -1,0 +1,101 @@
+- load staticfiles
+- load markdown_trois_tags
+- load mptt_tags
+
+script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
+script(type='text/javascript')
+    $(document).ready(function () {
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                }
+            }
+        });
+
+        window.comment_set_parent = function (parent) {
+            $('form#comment-submit input#id_parent').val(parent);
+            $('form#comment-submit input#id_title').val('Re: ' + $('#comment-' + parent + ' .comment-title').first().text());
+        };
+
+        function ajax_vote(url, id, delta) {
+            return $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    id: id
+                },
+                success: function (data, textStatus, jqXHR) {
+                    var score = $('#comment-' + id + ' .comment-score').first();
+                    score.text(parseInt(score.text()) + delta);
+                },
+                error: function (data, textStatus, jqXHR) {
+                    alert('Could not vote: ' + data.responseText);
+                }
+            });
+        }
+
+        window.comment_upvote = function (id) {
+            ajax_vote('{% url "judge.views.upvote_comment" %}', id, 1);
+        };
+
+        window.comment_downvote = function (id) {
+            ajax_vote('{% url "judge.views.downvote_comment" %}', id, -1);
+        };
+    });
+
+ul.comments.top-level-comments
+    if comment_list
+        - recursetree nodes
+            li.comment(id='comment-{{comment.id}}')
+                .comment-box
+                    div(style='float:left')
+                        if request.user.is_authenticated
+                            a.upvote-link(href='javascript:comment_upvote({{comment.id}})')
+                        br
+                        .comment-score #{comment.score}
+                        if request.user.is_authenticated
+                            a.downvote-link(href='javascript:comment_downvote({{comment.id}})')
+                        br
+                    .comment-header
+                        a.comment-link(name='comment-{{comment.id}}-link')
+                        span.comment-author
+                            span(class=comment.author.display_rank)
+                                a(href='{% url "judge.views.user" comment.author.user.username %}') #{comment.author.user.username}
+                        |  on
+                        span.comment-time  #{comment.time|date:"N j, o, g:i a"}
+                        span.comment-title  #{comment.title}
+                        span.comment-operation
+                            a(href='javascript:comment_set_parent({{comment.id}})') &nbsp;Reply
+                            if perms.judge.change_comment
+                                a(href='{% url "admin:judge_comment_change" comment.id %}') &nbsp;Admin
+                    .comment-body #{comment.body|markdown:"comment"}
+                    ul.comments
+                        | {{ chldren }}
+    else
+        p There are no comments at the moment.
+
+if request.user.is_authenticated and comment_form
+    .form-area.comment-submit
+        block comment_submit_title
+            h3 New comment
+            hr
+        form#comment-submit(action='', method='post')
+            -csrf_token
+            | #{comment_form.non_field_errors}
+            | #{comment_form.parent.errors}
+            | #{comment_form.parent}
+            #comment-post-wrapper
+                #comment-form-title
+                    | #{comment_form.title.errors}
+                    | #{comment_form.title}
+                #comment-form-body
+                    | #{comment_form.body.errors}
+                    | #{comment_form.body}
+            hr
+            input.button(style="float:right;",type='submit', value='Post!')

@@ -7,8 +7,8 @@ from judge.comments_mptt import CommentedDetailView
 class SolutionView(CommentedDetailView):
     model = Solution
     slug_field = slug_url_kwarg = 'url'
-    template_name = 'flatpages/dmsolutions.jade'
-    context_object_name = 'flatpage'
+    template_name = 'solution.jade'
+    context_object_name = 'solution'
 
     def get_comment_page(self):
         return 's:' + self.object.url
