@@ -428,7 +428,7 @@ class TableLock(object):
         self.auto_commit = transaction.get_autocommit()
         transaction.set_autocommit(False)
         cursor = connection.cursor()
-        cursor.execute('LOCK TABLES %s WRITE', (self.table,))
+        cursor.execute('LOCK TABLES `%s` WRITE' % self.table)
         cursor.fetchone()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
