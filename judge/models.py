@@ -420,24 +420,6 @@ class Comment(models.Model):
         return self.title
 
 
-class TableLock(object):
-    def __init__(self, table):
-        self.table = table
-        self.cursor = connection.cursor()
-
-    def __enter__(self):
-        self.cursor.execute('LOCK TABLES `%s` WRITE' % self.table)
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.cursor.execute('UNLOCK TABLES')
-        self.cursor.close()
-
-
-class LockingTreeManager(TreeManager):
-    def lock(self):
-        return TableLock(self.model._meta.db_table)
-
-
 class CommentMPTT(MPTTModel):
     author = models.ForeignKey(Profile, verbose_name='Commenter')
     time = models.DateTimeField(verbose_name='Posted time', auto_now_add=True)
@@ -448,8 +430,6 @@ class CommentMPTT(MPTTModel):
     title = models.CharField(max_length=200, verbose_name='Title of comment')
     body = models.TextField(verbose_name='Body of comment', blank=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='replies')
-
-    objects = LockingTreeManager()
 
     class MPTTMeta:
         order_insertion_by = ['time']
