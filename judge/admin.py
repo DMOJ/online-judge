@@ -507,7 +507,7 @@ class ProblemTypeAdmin(admin.ModelAdmin):
 class NavigationBarAdmin(MPTTModelAdmin, SortableModelAdmin):
     list_display = ('label', 'key', 'path')
     fields = ('key', 'label', 'path', 'regex', 'parent')
-    list_editable = ()
+    list_editable = ()  # Bug in SortableModelAdmin: 500 without list_editable being set
     mptt_level_indent = 20
     sortable = 'order'
 
