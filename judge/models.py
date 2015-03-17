@@ -4,6 +4,8 @@ from operator import itemgetter, attrgetter
 from django.conf import settings
 from django.contrib.flatpages.models import FlatPage
 from django.core.cache import cache
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
 
 import pytz
 from django.utils.functional import cached_property
@@ -376,6 +378,59 @@ class Comment(models.Model):
     score = models.IntegerField(verbose_name='Votes', default=0)
     title = models.CharField(max_length=200, verbose_name='Title of comment')
     body = models.TextField(verbose_name='Body of comment', blank=True)
+
+    @cached_property
+    def link(self):
+        link = None
+        if self.page.startswith('p:'):
+            link = reverse('problem_detail', args=(self.page[2:],))
+        elif self.page.startswith('c:'):
+            link = reverse('contest_view', args=(self.page[2:],))
+        elif self.page.startswith('b:'):
+            key = 'blog_slug:%s' % self.page[2:]
+            slug = cache.get(key)
+            if slug is None:
+                try:
+                    slug = BlogPost.objects.get(id=self.page[2:]).slug
+                except ObjectDoesNotExist:
+                    slug = ''
+                cache.set(key, slug, 3600)
+            link = reverse('blog_post', args=(self.page[2:], slug))
+        return link
+
+    @cached_property
+    def page_title(self):
+        try:
+            if self.page.startswith('p:'):
+                return Problem.objects.get(code=self.page[2:]).name
+            elif self.page.startswith('c:'):
+                return Contest.objects.get(key=self.page[2:]).name
+            elif self.page.startswith('b:'):
+                return BlogPost.objects.get(id=self.page[2:]).title
+            return '<unknown>'
+        except ObjectDoesNotExist:
+            return '<deleted>'
+
+    def get_absolute_url(self):
+        return '%s#comment-%d-link' % (self.link, self.id)
+
+    def __unicode__(self):
+        return self.title
+
+
+class CommentMPTT(MPTTModel):
+    author = models.ForeignKey(Profile, verbose_name='Commenter')
+    time = models.DateTimeField(verbose_name='Posted time', auto_now_add=True)
+    page = models.CharField(max_length=30, verbose_name='Associated Page',
+                            validators=[RegexValidator('^[pc]:[a-z0-9]+$|^b:\d+$',
+                                                       'Page code must be ^[pc]:[a-z0-9]+$|^b:\d+$')])
+    score = models.IntegerField(verbose_name='Votes', default=0)
+    title = models.CharField(max_length=200, verbose_name='Title of comment')
+    body = models.TextField(verbose_name='Body of comment', blank=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='replies')
+
+    class MPTTMeta:
+        order_insertion_by = ['time']
 
     @cached_property
     def link(self):
