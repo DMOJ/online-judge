@@ -67,9 +67,10 @@ ul.comments.top-level-comments
                         span.comment-author
                             span(class=node.author.display_rank)
                                 a(href='{% url "judge.views.user" node.author.user.username %}') #{node.author.user.username}
-                        |  on
-                        span.comment-time  #{node.time|date:"N j, o, g:i a"}
-                        span.comment-title  #{node.title}
+                        = ' on '
+                        span.comment-time #{node.time|date:"N j, o, g:i a"}
+                        = ' '
+                        span.comment-title #{node.title}
                         span.comment-operation
                             a(href='javascript:comment_set_parent({{ node.id }})') &nbsp;Reply
                             if perms.judge.change_comment
