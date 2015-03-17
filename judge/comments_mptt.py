@@ -7,7 +7,7 @@ from django.views.generic import View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 
-from judge.models import CommentMPTT
+from judge.models import CommentMPTT, Profile
 
 
 class CommentForm(ModelForm):
@@ -46,7 +46,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         auto_commit = transaction.get_autocommit()
         try:
             transaction.set_autocommit(False)
-            cursor.execute('LOCK TABLES judge_commentmptt WRITE, judge_profile READ')
+            cursor.execute('LOCK TABLES %s WRITE, %s READ' % (CommentMPTT._meta.db_table, Profile._meta.db_table))
 
             form = CommentForm(request, request.POST)
             if form.is_valid():
