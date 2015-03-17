@@ -725,7 +725,7 @@ class SolutionAdmin(admin.ModelAdmin):
 
 class CommentMPTTForm(ModelForm):
     class Meta:
-        model = Comment
+        model = CommentMPTT
         if use_select2:
             widgets = {
                 'author': HeavySelect2Widget(data_view='profile_select2'),
@@ -742,7 +742,7 @@ class CommentMPTTAdmin(DjangoMpttAdmin):
     search_fields = ['author__user__username', 'author__name', 'page', 'title', 'body']
     actions_on_top = True
     actions_on_bottom = True
-    form = CommentForm
+    form = CommentMPTTForm
 
     def linked_page(self, obj):
         link = obj.link
