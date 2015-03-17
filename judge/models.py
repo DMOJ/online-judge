@@ -426,16 +426,9 @@ class TableLock(object):
         self.cursor = connection.cursor()
 
     def __enter__(self):
-        self.auto_commit = transaction.get_autocommit()
-        transaction.set_autocommit(False)
         self.cursor.execute('LOCK TABLES `%s` WRITE' % self.table)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_type is None:
-            transaction.commit()
-        else:
-            transaction.rollback()
-        transaction.set_autocommit(self.auto_commit)
         self.cursor.execute('UNLOCK TABLES')
         self.cursor.close()
 
