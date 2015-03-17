@@ -710,10 +710,7 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 
 class SolutionAdmin(FlatPageAdmin):
-    fieldsets = (
-        (None, {'fields': ('url', 'title', 'content', 'sites')}),
-        ('Advanced options', {'classes': ('collapse',), 'fields': ('enable_comments', 'registration_required')}),
-    )
+    fields = ('url', 'title', 'is_public', 'publish_on', 'content')
 
     def get_queryset(self, request):
         return Solution.objects.all()
