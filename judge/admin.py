@@ -711,7 +711,7 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 class SolutionAdmin(admin.ModelAdmin):
     fields = ('url', 'title', 'is_public', 'publish_on', 'content')
-    list_display = ('url', 'title')
+    list_display = ('title', 'url')
     search_fields = ('url', 'title')
 
     def get_queryset(self, request):
