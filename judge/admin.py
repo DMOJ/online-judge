@@ -15,7 +15,7 @@ from django.utils.safestring import mark_safe
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
-    ContestProfile, SubmissionTestCase, Solution
+    ContestProfile, SubmissionTestCase, Solution, CommentMPTT
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 try:
@@ -722,8 +722,37 @@ class SolutionAdmin(admin.ModelAdmin):
             TextField: {'widget': MathJaxAdminPagedownWidget},
         }
 
+
+class CommentMPTTAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('author', 'page', 'parent', 'score')}),
+        ('Content', {'fields': ('title', 'body')}),
+    )
+    list_display = ['title', 'author', 'linked_page', 'time']
+    search_fields = ['author__user__username', 'author__name', 'page', 'title', 'body']
+    actions_on_top = True
+    actions_on_bottom = True
+    form = CommentForm
+
+    def linked_page(self, obj):
+        link = obj.link
+
+        if link is not None:
+            return format_html('<a href="{0}">{1}</a>', link, obj.page)
+        else:
+            return format_html('{0}', obj.page)
+    linked_page.short_description = 'Associated page'
+    linked_page.allow_tags = True
+    linked_page.admin_order_field = 'page'
+
+    if AdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': AdminPagedownWidget},
+        }
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(CommentMPTT, CommentMPTTAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(ProblemGroup, ProblemGroupAdmin)

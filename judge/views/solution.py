@@ -1,14 +1,17 @@
 from django.http import Http404
 from django.utils import timezone
-from django.views.generic import DetailView
 from judge.models import Solution
+from judge.comments_mptt import CommentedDetailView
 
 
-class SolutionView(DetailView):
+class SolutionView(CommentedDetailView):
     model = Solution
     slug_field = slug_url_kwarg = 'url'
     template_name = 'flatpages/dmsolutions.jade'
     context_object_name = 'flatpage'
+
+    def get_comment_page(self):
+        return 's:' + self.object.url
 
     def get_object(self, queryset=None):
         solution = super(SolutionView, self).get_object(queryset)
