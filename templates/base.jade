@@ -79,7 +79,8 @@ html(lang='en')
                     - recursetree nav_bar
                         li
                             a(href=node.path, class='nav-{{ node.key }}')= node.label
-                        ul {{ children }}
+                            if not node.is_leaf_node
+                                ul {{ children }}
                     - endrecursetree
                 span#user-links
                     if request.user.is_authenticated
