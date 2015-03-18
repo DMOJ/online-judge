@@ -402,9 +402,20 @@ class CommentAdmin(admin.ModelAdmin):
     )
     list_display = ['title', 'author', 'linked_page', 'time']
     search_fields = ['author__user__username', 'author__name', 'page', 'title', 'body']
+    actions = ['hide_comment', 'unhide_comment']
     actions_on_top = True
     actions_on_bottom = True
     form = CommentForm
+
+    def hide_comment(self, request, queryset):
+        count = queryset.update(hidden=True)
+        self.message_user(request, "%d comment%s successfully hidden." % (count, 's'[count == 1:]))
+    hide_comment.short_description = 'Hide comments'
+
+    def unhide_comment(self, request, queryset):
+        count = queryset.update(hidden=False)
+        self.message_user(request, "%d comment%s successfully unhidden." % (count, 's'[count == 1:]))
+    unhide_comment.short_description = 'Unhide comments'
 
     def get_queryset(self, request):
         return Comment.objects.order_by('-time')
