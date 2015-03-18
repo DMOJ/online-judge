@@ -21,6 +21,7 @@ from django.utils import timezone
 from timedelta.fields import TimedeltaField
 
 from judge.caching import point_update
+from judge.dblock import LockModel
 from judge.fulltext import SearchManager
 from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
@@ -479,6 +480,12 @@ class NavigationBar(MPTTModel):
         else:
             pattern = cache[self.regex] = re.compile(self.regex, re.VERBOSE)
             return pattern
+
+    def save(self, *args, **kwargs):
+        with NavigationBar.objects.disable_mptt_updates():
+            super(NavigationBar, self).save(*args, **kwargs)
+        with LockModel(write=(NavigationBar,)):
+            NavigationBar.objects.rebuild()
 
 
 class Judge(models.Model):
