@@ -75,10 +75,6 @@ def exception(request):
 
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'dmopc.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
     url(r'^$', blog.PostList.as_view(template_name='home.jade', title='Home'), kwargs={'page': 1}, name='home'),
     url(r'^500/$', exception),
     url(r'^admin/', include(admin.site.urls)),

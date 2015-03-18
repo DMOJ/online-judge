@@ -52,7 +52,7 @@ def main():
     logging.getLogger().addHandler(handler)
 
     parser = argparse.ArgumentParser(description='''
-        Runs the bridge between DMOPC website and judges.
+        Runs the bridge between DMOJ website and judges.
     ''')
     parser.add_argument('judge_host', nargs='?', default='127.0.0.1',
                         help='host to listen for the judge')

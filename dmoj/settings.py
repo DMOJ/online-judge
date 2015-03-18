@@ -1,5 +1,5 @@
 """
-Django settings for dmopc project.
+Django settings for dmoj project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -29,7 +29,7 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 SITE_ID = 1
-SITE_NAME = 'DMOPC'
+SITE_NAME = 'DMOJ'
 
 # Application definition
 
@@ -122,9 +122,9 @@ MIDDLEWARE_CLASSES = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-ROOT_URLCONF = 'dmopc.urls'
+ROOT_URLCONF = 'dmoj.urls'
 
-WSGI_APPLICATION = 'dmopc.wsgi.application'
+WSGI_APPLICATION = 'dmoj.wsgi.application'
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
