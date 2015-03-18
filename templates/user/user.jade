@@ -75,7 +75,7 @@ block body
         tr
             td
                 .user-gravatar
-                    img(src='{% gravatar_url user.user.email 135 %}', alt='gravatar')    
+                    img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar')
                 br
                 h4 #{user.solved_problems} problems solved.
                 b Total points:&nbsp;

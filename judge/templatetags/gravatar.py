@@ -15,9 +15,10 @@ register = template.Library()
 
 
 class GravatarUrlNode(template.Node):
-    def __init__(self, email, size='80'):
+    def __init__(self, email, size='80', default=False):
         self.email = template.Variable(email)
         self.size = template.Variable(size)
+        self.default = default
  
     def render(self, context):
         try:
@@ -30,7 +31,10 @@ class GravatarUrlNode(template.Node):
             size = 80
 
         gravatar_url = 'http://www.gravatar.com/avatar/' + hashlib.md5(email.strip().lower()).hexdigest() + '?'
-        gravatar_url += urllib.urlencode({'d': 'identicon', 's': str(size)})
+        args = {'d': 'identicon', 's': str(size)}
+        if self.default:
+            args['f'] = 'y'
+        gravatar_url += urllib.urlencode(args)
  
         return gravatar_url
  
