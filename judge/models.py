@@ -382,9 +382,6 @@ class Comment(MPTTModel):
     hidden = models.BooleanField(verbose_name='Hide the comment', default=0)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='replies')
 
-    class Meta:
-        db_table = 'judge_commentmptt'
-
     class MPTTMeta:
         order_insertion_by = ['-time']
 
