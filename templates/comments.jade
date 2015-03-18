@@ -77,8 +77,9 @@ ul.comments.top-level-comments
                                 if perms.judge.change_comment
                                     a(href='{% url "admin:judge_comment_change" node.id %}') &nbsp;Admin
                         .comment-body #{node.body|markdown:"comment"}
-                        ul.comments
-                            | {{ children }}
+                        if not node.is_leaf_node 
+                            ul.comments
+                                | {{ children }}
         - endrecursetree
     else
         p There are no comments at the moment.
