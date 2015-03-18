@@ -1,12 +1,12 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db import transaction, connection
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 
+from judge.dblock import LockModel
 from judge.models import Comment, Profile
 
 
@@ -42,12 +42,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         self.object = self.get_object()
         page = self.get_comment_page()
 
-        cursor = connection.cursor()
-        auto_commit = transaction.get_autocommit()
-        try:
-            transaction.set_autocommit(False)
-            cursor.execute('LOCK TABLES %s WRITE, %s READ' % (Comment._meta.db_table, Profile._meta.db_table))
-
+        with LockModel(write=(Comment,), read=(Profile,)):
             form = CommentForm(request, request.POST)
             if form.is_valid():
                 comment = form.save(commit=False)
@@ -55,14 +50,6 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
                 comment.page = page
                 comment.save()
                 return HttpResponseRedirect(request.path)
-        except:
-            transaction.rollback()
-            raise
-        else:
-            transaction.commit()
-        finally:
-            transaction.set_autocommit(auto_commit)
-            cursor.execute('UNLOCK TABLES')
 
         context = self.get_context_data(object=self.object, comment_form=form)
         return self.render_to_response(context)
