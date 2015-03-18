@@ -18,7 +18,7 @@ class GravatarUrlNode(template.Node):
     def __init__(self, email, size='80', default=False):
         self.email = template.Variable(email)
         self.size = template.Variable(size)
-        self.default = template.Variable(size)
+        self.default = template.Variable(default)
  
     def render(self, context):
         try:
