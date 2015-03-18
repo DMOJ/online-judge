@@ -53,7 +53,7 @@ class CommentFeed(Feed):
     description = 'The latest comments on the Don Mills Online Judge website'
 
     def items(self):
-        return Comment.objects.order_by('-time')[:25]
+        return Comment.objects.filter(hidden=False).order_by('-time')[:25]
 
     def item_title(self, comment):
         return '%s -> %s' % (comment.author.long_display_name,
