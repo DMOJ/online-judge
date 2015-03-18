@@ -36,7 +36,7 @@ class GravatarUrlNode(template.Node):
 
         gravatar_url = 'http://www.gravatar.com/avatar/' + hashlib.md5(email.strip().lower()).hexdigest() + '?'
         args = {'d': 'identicon', 's': str(size)}
-        if default in ('1', 'True'):
+        if default:
             args['f'] = 'y'
         gravatar_url += urllib.urlencode(args)
  
