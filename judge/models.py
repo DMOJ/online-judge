@@ -481,12 +481,6 @@ class NavigationBar(MPTTModel):
             pattern = cache[self.regex] = re.compile(self.regex, re.VERBOSE)
             return pattern
 
-    def save(self, *args, **kwargs):
-        with NavigationBar.objects.disable_mptt_updates():
-            super(NavigationBar, self).save(*args, **kwargs)
-        with LockModel(write=(NavigationBar,)):
-            NavigationBar.objects.rebuild()
-
 
 class Judge(models.Model):
     name = models.CharField(max_length=50, help_text='Server name, hostname-style', unique=True)

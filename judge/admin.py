@@ -12,6 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin
+from judge.dblock import LockModel
 
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
@@ -510,6 +511,23 @@ class NavigationBarAdmin(MPTTModelAdmin, SortableModelAdmin):
     list_editable = ()  # Bug in SortableModelAdmin: 500 without list_editable being set
     mptt_level_indent = 20
     sortable = 'order'
+
+    def __init__(self, *args, **kwargs):
+        super(NavigationBarAdmin, self).__init__(*args, **kwargs)
+        self.__save_model_calls = 0
+
+    def save_model(self, request, obj, form, change):
+        self.__save_model_calls += 1
+        return super(NavigationBarAdmin, self).save_model(request, obj, form, change)
+
+    def changelist_view(self, request, extra_context=None):
+        self.__save_model_calls = 0
+        with NavigationBar.objects.disable_mptt_updates():
+            result = super(NavigationBarAdmin, self).changelist_view(request, extra_context)
+        if self.__save_model_calls:
+            with LockModel(write=(NavigationBar,)):
+                NavigationBar.objects.rebuild()
+        return result
 
 
 class GenerateKeyTextInput(TextInput):
