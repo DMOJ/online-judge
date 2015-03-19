@@ -15,13 +15,11 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
-from django.db import models, connection
+from django.db import models
 from django.db.models import Max
 from django.utils import timezone
 from timedelta.fields import TimedeltaField
 
-from judge.caching import point_update
-from judge.dblock import LockModel
 from judge.fulltext import SearchManager
 from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
@@ -140,9 +138,8 @@ class Profile(models.Model):
                          .annotate(points=Max('points'))))
         if self.points != points:
             self.points = points
-            point_update(self)
             self.save()
-        return self.points
+        return points
 
     @cached_property
     def display_name(self):

@@ -7,7 +7,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.cache import cache
 
-from .models import Problem, Contest, Submission, Organization, Profile, NavigationBar, MiscConfig, Language, Judge, \
+from .models import Problem, Contest, Submission, Organization, Profile, MiscConfig, Language, Judge, \
     BlogPost, ContestSubmission, Comment
 from .caching import finished_submission
 
