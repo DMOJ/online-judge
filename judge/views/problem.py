@@ -47,8 +47,7 @@ class ProblemMixin(object):
 
             if self.request.user.is_authenticated():
                 cp = self.request.user.profile.contest
-                assert isinstance(cp, ContestProfile)
-                if cp.current is None or not cp.current.contest.problems.filter(id=problem.id).exists():
+                if not Problem.objects.filter(id=problem.id, contest__users__profile=cp).exists():
                     raise Http404()
             else:
                 raise Http404()
