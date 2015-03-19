@@ -262,14 +262,6 @@ def submission_testcases_query(request):
         raise Http404()
 
 
-def statistics_table_query(request):
-    page = cache.get('sub_stats_table')
-    if page is None:
-        page = loader.render_to_string('problem/statistics_table.jade', {'results': get_result_table()})
-        cache.set('sub_stats_table', page, 86400)
-    return HttpResponse(page)
-
-
 def single_submission_query(request):
     if 'id' not in request.GET or not request.GET['id'].isdigit():
         return HttpResponseBadRequest()

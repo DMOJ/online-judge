@@ -2,10 +2,6 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 
 
-def update_stats():
-    cache.delete_many(('sub_stats_table', 'sub_stats_data'))
-
-
 def point_update(profile):
     cache.delete(make_template_fragment_key('global_user'))
 

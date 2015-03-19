@@ -122,7 +122,6 @@ urlpatterns = patterns('',
     
     url(r'^single_submission', 'judge.views.single_submission_query'),
     url(r'^submission_testcases', 'judge.views.submission_testcases_query'),
-    url(r'^statistics_table', 'judge.views.statistics_table_query'),
 
     url(r'^comments/upvote/$', 'judge.views.upvote_comment'),
     url(r'^comments/downvote/$', 'judge.views.downvote_comment'),

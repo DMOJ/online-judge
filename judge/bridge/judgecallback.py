@@ -1,7 +1,7 @@
 import logging
 from django import db
 from django.utils import timezone
-from judge.caching import update_stats, finished_submission
+from judge.caching import finished_submission
 
 from .judgehandler import JudgeHandler
 from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language
@@ -158,7 +158,6 @@ class DjangoJudgeHandler(JudgeHandler):
             submission.contest.participation.recalculate_score()
             submission.contest.participation.update_cumtime()
 
-        update_stats()
         finished_submission(submission)
 
         event.post('sub_%d' % submission.id, {
