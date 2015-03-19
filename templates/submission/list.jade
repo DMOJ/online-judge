@@ -202,7 +202,7 @@ block media
                                 update_submission(message.id, true);
 
                                 $.ajax({
-                                    url: '{% url "judge.views.statistics_table_query" %}'
+                                    url: '?results'
                                 }).done(function (data) {
                                     statistics.html(data);
                                 }).fail(function () {
