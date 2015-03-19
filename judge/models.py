@@ -10,6 +10,7 @@ from mptt.managers import TreeManager
 from mptt.models import MPTTModel
 
 import pytz
+import reversion
 from django.utils.functional import cached_property
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
@@ -686,3 +687,7 @@ class Solution(models.Model):
         permissions = (
             ('see_private_solution', 'See hidden solutions'),
         )
+
+
+reversion.register(Problem)
+reversion.register(Contest, follow=['contest_problems'])

@@ -1,1 +1,1 @@
-from . import signals, admin
+from . import signals
