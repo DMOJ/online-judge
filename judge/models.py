@@ -23,7 +23,6 @@ from timedelta.fields import TimedeltaField
 from judge.fulltext import SearchManager
 from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
-from judge.ordered_model import OrderedModel
 
 
 def make_timezones():

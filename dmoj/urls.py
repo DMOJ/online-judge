@@ -4,7 +4,6 @@ from django.contrib import admin
 from judge import views
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
 from judge.views import organization, language, status, blog, problem, solution
-from judge.ordered_model import urls as ordered_model_urls
 
 from judge.views import RegistrationView, ActivationView, TemplateView
 from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap, \
@@ -78,7 +77,6 @@ urlpatterns = patterns('',
     url(r'^$', blog.PostList.as_view(template_name='home.jade', title='Home'), kwargs={'page': 1}, name='home'),
     url(r'^500/$', exception),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include(ordered_model_urls)),
     url(r'^accounts/', include(register_patterns)),
 
     url(r'^users/$', 'judge.views.users'),
