@@ -139,6 +139,8 @@ class SubmissionsListBase(TitleMixin, ListView):
         check = self.access_check(request)
         if check is not None:
             return check
+        if 'results' in request.GET:
+            return render_to_response('problem/statistics_table.jade', {'results': self.get_result_table()})
         return super(SubmissionsListBase, self).get(request, *args, **kwargs)
 
 
