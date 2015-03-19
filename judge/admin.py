@@ -39,7 +39,7 @@ class Select2SuitMixin(object):
     if 'suit' in settings.INSTALLED_APPS and use_select2:
         class Media:
             css = {
-                'all': ('css/admin/select2bootstrap.css',)
+                'all': ('admin/css/select2bootstrap.css',)
             }
 
 
