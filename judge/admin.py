@@ -724,7 +724,7 @@ class OrganizationForm(ModelForm):
             }
 
 
-class OrganizationAdmin(Select2SuitMixin, admin.ModelAdmin):
+class OrganizationAdmin(Select2SuitMixin, reversion.VersionAdmin):
     readonly_fields = ('creation_date',)
     fields = ('name', 'key', 'short_name', 'about', 'registrant', 'creation_date', 'admins')
     list_display = ('name', 'key', 'short_name', 'registrant', 'creation_date')
