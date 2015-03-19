@@ -12,7 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin
-from reversion_compare.admin import CompareVersionAdmin
+import reversion
 
 from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
@@ -157,7 +157,7 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
         return queryset.filter(authors__user__username=self.value())
 
 
-class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
+class ProblemAdmin(Select2SuitMixin, reversion.VersionAdmin):
     fieldsets = (
         (None, {
             'fields': ('code', 'name', 'is_public', 'date', 'authors', 'description')
