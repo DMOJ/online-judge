@@ -691,3 +691,4 @@ class Solution(models.Model):
 
 reversion.register(Problem)
 reversion.register(Contest, follow=['contest_problems'])
+reversion.register(ContestProblem)
