@@ -88,7 +88,7 @@ class TimezoneFilter(admin.SimpleListFilter):
         return queryset.filter(timezone=self.value())
 
 
-class ProfileAdmin(Select2SuitMixin, admin.ModelAdmin):
+class ProfileAdmin(Select2SuitMixin, reversion.VersionAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organization', 'timezone', 'language', 'ace_theme',
               'last_access', 'ip', 'mute')
     readonly_fields = ('user',)
