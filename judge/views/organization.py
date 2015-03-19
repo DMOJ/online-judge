@@ -3,11 +3,13 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.db.models import Count, Max
 from django.http import HttpResponseRedirect, Http404
 from django.utils import timezone
 from django.views.generic import CreateView, DetailView, ListView, View, UpdateView
 from django.views.generic.detail import SingleObjectMixin
+import reversion
 
 from judge.forms import EditOrganizationForm, NewOrganizationForm
 from judge.models import Organization
@@ -121,7 +123,10 @@ class NewOrganization(LoginRequiredMixin, TitleMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.registrant = self.request.user.profile
-        return super(NewOrganization, self).form_valid(form)
+        with transaction.atomic(), reversion.create_revision():
+            reversion.set_comment('Edited from site')
+            reversion.set_user(self.request.user)
+            return super(NewOrganization, self).form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
         profile = request.user.profile
@@ -147,6 +152,12 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
         if not self.can_edit_organization(object):
             raise PermissionDenied()
         return object
+
+    def form_valid(self, form):
+        with transaction.atomic(), reversion.create_revision():
+            reversion.set_comment('Edited from site')
+            reversion.set_user(self.request.user)
+            return super(EditOrganization, self).form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
         try:
