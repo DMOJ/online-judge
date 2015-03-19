@@ -75,8 +75,15 @@ else:
                     'judge.problem',
                     'judge.problemgroup',
                     'judge.problemtype',
-                    'judge.contest',
                     'judge.solution',
+                ),
+            },
+            {
+                'label': 'Contests',
+                'icon': 'icon-signal',
+                'models': (
+                    'judge.contest',
+                    'judge.contestparticipation',
                 ),
             },
             {
