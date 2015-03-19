@@ -251,6 +251,8 @@ class ProblemList(TitleMixin, ListView):
     def get_normal_queryset(self):
         filter = Q(is_public=True)
         if self.profile is not None:
+            filter |= Q(id__in=Problem.objects.filter(contest__users__profile=self.profile.contest)
+                                      .values('id').distinct())
             filter |= Q(authors=self.profile)
         queryset = Problem.objects.filter(filter) \
             .annotate(number_of_users=Count('submission__user', distinct=True)) \
