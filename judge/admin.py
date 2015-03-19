@@ -57,7 +57,6 @@ class ContestProfileInline(admin.StackedInline):
 
 class ProfileForm(ModelForm):
     class Meta:
-        model = Profile
         if use_select2:
             widgets = {
                 'timezone': Select2Widget,
@@ -127,7 +126,6 @@ class ProblemForm(ModelForm):
         self.fields['banned_users'].widget.can_add_related = False
 
     class Meta:
-        model = Problem
         if use_select2:
             widgets = {
                 'authors': HeavySelect2MultipleWidget(data_view='profile_select2'),
@@ -256,7 +254,7 @@ class SubmissionResultFilter(admin.SimpleListFilter):
             return queryset.filter(result=self.value())
 
 
-class SubmissionTestCaseAdmin(admin.TabularInline):
+class SubmissionTestCaseInline(admin.TabularInline):
     fields = ('case', 'batch', 'status', 'time', 'memory', 'points', 'total')
     readonly_fields = ('case', 'batch', 'total')
     model = SubmissionTestCase
@@ -275,7 +273,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     search_fields = ('problem__code', 'problem__name', 'user__user__username', 'user__name')
     actions_on_top = True
     actions_on_bottom = True
-    inlines = [SubmissionTestCaseAdmin]
+    inlines = [SubmissionTestCaseInline]
 
     def user_column(self, obj):
         return format_html(u'<span title="{display}">{username}</span>',
@@ -388,7 +386,6 @@ class SubmissionAdmin(admin.ModelAdmin):
 
 class CommentForm(ModelForm):
     class Meta:
-        model = Comment
         if use_select2:
             widgets = {
                 'author': HeavySelect2Widget(data_view='profile_select2'),
@@ -568,7 +565,6 @@ class GenerateKeyTextInput(TextInput):
 
 class JudgeAdminForm(ModelForm):
     class Meta:
-        model = Judge
         widgets = {
             'auth_key': GenerateKeyTextInput(),
         }
@@ -603,16 +599,24 @@ class JudgeAdmin(admin.ModelAdmin):
         }
 
 
+class ContestProblemInlineForm(ModelForm):
+    class Meta:
+        if use_select2:
+            widgets = {
+                'problem': HeavySelect2Widget(data_view='problem_select2'),
+            }
+
+
 class ContestProblemInline(admin.TabularInline):
     model = ContestProblem
     verbose_name = 'Problem'
     verbose_name_plural = 'Problems'
     fields = ('problem', 'points', 'partial')
+    form = ContestProblemInlineForm
 
 
 class ContestForm(ModelForm):
     class Meta:
-        model = Contest
         if use_select2:
             widgets = {
                 'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
@@ -704,7 +708,6 @@ class ContestParticipationAdmin(admin.ModelAdmin):
 
 class OrganizationForm(ModelForm):
     class Meta:
-        model = Organization
         if use_select2:
             widgets = {
                 'admins': HeavySelect2MultipleWidget(data_view='profile_select2'),
