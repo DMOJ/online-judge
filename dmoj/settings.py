@@ -112,6 +112,8 @@ INSTALLED_APPS += (
     'registration',
     'markdown_trois',
     'mptt',
+    'reversion',
+    'reversion_compare',
 )
 
 MIDDLEWARE_CLASSES = (
