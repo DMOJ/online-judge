@@ -741,7 +741,7 @@ class OrganizationAdmin(Select2SuitMixin, admin.ModelAdmin):
         }
 
 
-class BlogPostAdmin(admin.ModelAdmin):
+class BlogPostAdmin(reversion.VersionAdmin):
     fieldsets = (
         (None, {'fields': ('title', 'slug', 'visible', 'sticky', 'publish_on')}),
         ('Content', {'fields': ('content',)}),
