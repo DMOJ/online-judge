@@ -1,5 +1,4 @@
 from collections import defaultdict
-from operator import itemgetter
 from django.core.cache import cache
 from django.db.models import F, Count
 from judge.models import Submission
@@ -34,8 +33,8 @@ def get_result_table(*args, **kwargs):
             raise ValueError("Can't pass both queryset and keyword filters")
     else:
         submissions = Submission.objects.filter(**kwargs) if kwargs is not None else Submission.objects
-    raw = submissions.values('result').annotate(count=Count('result'))
-    results = defaultdict(int, zip(map(itemgetter('result'), raw), map(itemgetter('count'), raw)))
+    raw = submissions.values('result').annotate(count=Count('result')).values_list('result', 'count')
+    results = defaultdict(int, raw)
     return [('Accepted', 'AC', results['AC']),
             ('Wrong Answer', 'WA', results['WA']),
             ('Compile Error', 'CE', results['CE']),
