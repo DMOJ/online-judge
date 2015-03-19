@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Max, Count
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+import reversion
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Submission, Problem
@@ -51,7 +53,8 @@ def edit_profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)
         if form.is_valid():
-            form.save()
+            with transaction.atomic(), reversion.create_revision():
+                form.save()
             return HttpResponseRedirect(request.path)
     else:
         form = ProfileForm(instance=profile)
