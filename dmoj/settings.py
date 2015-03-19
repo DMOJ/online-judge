@@ -113,7 +113,6 @@ INSTALLED_APPS += (
     'markdown_trois',
     'mptt',
     'reversion',
-    'reversion_compare',
 )
 
 MIDDLEWARE_CLASSES = (
