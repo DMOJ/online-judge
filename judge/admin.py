@@ -758,7 +758,7 @@ class BlogPostAdmin(admin.ModelAdmin):
         }
 
 
-class SolutionAdmin(admin.ModelAdmin):
+class SolutionAdmin(reversion.VersionAdmin):
     fields = ('url', 'title', 'is_public', 'publish_on', 'content')
     list_display = ('title', 'url')
     search_fields = ('url', 'title')
