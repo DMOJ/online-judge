@@ -273,16 +273,6 @@ def single_submission_query(request):
 
 
 class AllSubmissions(SubmissionsListBase):
-    def get_result_table(self):
-        if self.in_contest:
-            return super(AllSubmissions, self).get_result_table()
-        results = cache.get('sub_stats_data')
-        if results is not None:
-            return results
-        results = super(AllSubmissions, self).get_result_table()
-        cache.set('sub_stats_data', results, 86400)
-        return results
-
     def get_context_data(self, **kwargs):
         context = super(AllSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
