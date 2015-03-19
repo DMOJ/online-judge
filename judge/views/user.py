@@ -55,6 +55,8 @@ def edit_profile(request):
         if form.is_valid():
             with transaction.atomic(), reversion.create_revision():
                 form.save()
+                reversion.set_user(request.user)
+                reversion.set_comment('Updated on site')
             return HttpResponseRedirect(request.path)
     else:
         form = ProfileForm(instance=profile)
