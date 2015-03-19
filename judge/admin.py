@@ -35,6 +35,14 @@ except ImportError:
 use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
 
 
+class Select2SuitMixin(object):
+    if 'suit' in settings.INSTALLED_APPS and use_select2:
+        class Media:
+            css = {
+                'all': ('css/admin/select2bootstrap.css',)
+            }
+
+
 class ContestProfileInlineForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ContestProfileInlineForm, self).__init__(*args, **kwargs)
@@ -79,7 +87,7 @@ class TimezoneFilter(admin.SimpleListFilter):
         return queryset.filter(timezone=self.value())
 
 
-class ProfileAdmin(admin.ModelAdmin):
+class ProfileAdmin(Select2SuitMixin, admin.ModelAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organization', 'timezone', 'language', 'ace_theme',
               'last_access', 'ip', 'mute')
     readonly_fields = ('user',)
@@ -148,7 +156,7 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
         return queryset.filter(authors__user__username=self.value())
 
 
-class ProblemAdmin(admin.ModelAdmin):
+class ProblemAdmin(Select2SuitMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('code', 'name', 'is_public', 'date', 'authors', 'description')
@@ -393,7 +401,7 @@ class CommentForm(ModelForm):
             }
 
 
-class CommentAdmin(admin.ModelAdmin):
+class CommentAdmin(Select2SuitMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('author', 'page', 'parent', 'score', 'hidden')}),
         ('Content', {'fields': ('title', 'body')}),
@@ -445,7 +453,7 @@ class LanguageForm(ModelForm):
                FilteredSelectMultiple('problems', False))
 
 
-class LanguageAdmin(admin.ModelAdmin):
+class LanguageAdmin(Select2SuitMixin, admin.ModelAdmin):
     fields = ('key', 'name', 'short_name', 'common_name', 'ace', 'pygments', 'info', 'description', 'problems')
     list_display = ('key', 'name', 'common_name', 'info')
     form = LanguageForm
@@ -475,7 +483,7 @@ class ProblemGroupForm(ModelForm):
                FilteredSelectMultiple('problems', False))
 
 
-class ProblemGroupAdmin(admin.ModelAdmin):
+class ProblemGroupAdmin(Select2SuitMixin, admin.ModelAdmin):
     fields = ('name', 'full_name', 'problems')
     form = ProblemGroupForm
 
@@ -499,7 +507,7 @@ class ProblemTypeForm(ModelForm):
                FilteredSelectMultiple('problems', False))
 
 
-class ProblemTypeAdmin(admin.ModelAdmin):
+class ProblemTypeAdmin(Select2SuitMixin, admin.ModelAdmin):
     fields = ('name', 'full_name', 'problems')
     form = ProblemTypeForm
 
@@ -623,7 +631,7 @@ class ContestForm(ModelForm):
             }
 
 
-class ContestAdmin(admin.ModelAdmin):
+class ContestAdmin(Select2SuitMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
         ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
@@ -715,7 +723,7 @@ class OrganizationForm(ModelForm):
             }
 
 
-class OrganizationAdmin(admin.ModelAdmin):
+class OrganizationAdmin(Select2SuitMixin, admin.ModelAdmin):
     readonly_fields = ('creation_date',)
     fields = ('name', 'key', 'short_name', 'about', 'registrant', 'creation_date', 'admins')
     list_display = ('name', 'key', 'short_name', 'registrant', 'creation_date')
