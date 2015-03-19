@@ -689,6 +689,7 @@ class Solution(models.Model):
         )
 
 
+reversion.register(Profile, exclude=['points', 'last_access', 'ip'])
 reversion.register(Problem)
 reversion.register(Contest, follow=['contest_problems'])
 reversion.register(ContestProblem)
