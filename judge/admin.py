@@ -454,7 +454,7 @@ class LanguageForm(ModelForm):
                FilteredSelectMultiple('problems', False))
 
 
-class LanguageAdmin(Select2SuitMixin, admin.ModelAdmin):
+class LanguageAdmin(Select2SuitMixin, reversion.VersionAdmin):
     fields = ('key', 'name', 'short_name', 'common_name', 'ace', 'pygments', 'info', 'description', 'problems')
     list_display = ('key', 'name', 'common_name', 'info')
     form = LanguageForm
@@ -579,7 +579,7 @@ class JudgeAdminForm(ModelForm):
         }
 
 
-class JudgeAdmin(admin.ModelAdmin):
+class JudgeAdmin(reversion.VersionAdmin):
     form = JudgeAdminForm
     readonly_fields = ('created', 'online', 'last_connect', 'ping', 'load', 'runtimes', 'problems')
     fieldsets = (
