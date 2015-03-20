@@ -73,8 +73,6 @@ class CommentEdit(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         comment = super(CommentEdit, self).get_object(queryset)
-        if self.request.user.is_authenticated():
-            return False
         if self.request.user.has_perm('judge.change_comment'):
             return comment
         profile = self.request.user.profile
