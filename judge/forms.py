@@ -1,6 +1,7 @@
 from operator import attrgetter
 
 from django import forms
+from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import Q
 from django.forms import ModelForm, CharField
@@ -8,6 +9,13 @@ from django.forms import ModelForm, CharField
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode, Language
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
+
+try:
+    from django_select2.widgets import  HeavySelect2MultipleWidget
+except ImportError:
+    HeavySelect2MultipleWidget = None
+
+use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
 
 
 class ProfileForm(ModelForm):
@@ -35,18 +43,13 @@ class ProblemSubmitForm(ModelForm):
         fields = ['problem', 'source', 'language']
 
 
-class OrganizationForm(ModelForm):
-    class Meta:
-        model = Organization
-        fields = ['name', 'key', 'about']
-
-
 class EditOrganizationForm(ModelForm):
     class Meta:
         model = Organization
         fields = ['name', 'short_name', 'about', 'admins']
         widgets = {
-            'admins': FilteredSelectMultiple('Admins', False)
+            'admins': HeavySelect2MultipleWidget(data_view='profile_select2') if use_select2 else
+                      FilteredSelectMultiple('Admins', False),
         }
         if PagedownWidget is not None:
             widgets['about'] = MathJaxPagedownWidget
