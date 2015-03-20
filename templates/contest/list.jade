@@ -83,9 +83,7 @@ block body
                             if contest.time_limit
                                 | #{contest.time_limit}
                             else
-                                | Until:
-                                br
-                                | #{contest.end_time|date:"N j, o, G:i"}
+                                | Full contest window
                         td
                             a(href='{% url "judge.views.contest_ranking" contest.key %}') x#{contest.participation_count}
                         if not IN_CONTEST
@@ -122,9 +120,7 @@ block body
                             if contest.time_limit
                                 | #{contest.time_limit}
                             else
-                                | Until:
-                                br
-                                | #{contest.end_time|date:"N j, o, G:i"}
+                                | Full contest window
     else
         i There are no scheduled contests at this time.
 
