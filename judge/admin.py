@@ -693,7 +693,7 @@ class ContestParticipationForm(ModelForm):
         if use_select2:
             widgets = {
                 'contest': Select2Widget(),
-                'profile': Select2Widget(data_view='contest_profile_select2'),
+                'profile': HeavySelect2Widget(data_view='contest_profile_select2'),
             }
 
 
