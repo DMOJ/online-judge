@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
@@ -43,7 +44,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         self.object = self.get_object()
         page = self.get_comment_page()
 
-        with LockModel(write=(Comment,), read=(Profile,)):
+        with LockModel(write=(Comment,), read=(Profile, ContentType)):
             form = CommentForm(request, request.POST)
             if form.is_valid():
                 comment = form.save(commit=False)
