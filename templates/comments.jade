@@ -58,10 +58,14 @@ ul.comments.top-level-comments
                         div(style='float:left')
                             if request.user.is_authenticated
                                 a.upvote-link(href='javascript:comment_upvote({{ node.id }})')
+                            else
+                                a.upvote-link(href='javascript:void(0)', title='Please login to vote')
                             br
                             .comment-score #{node.score}
                             if request.user.is_authenticated
                                 a.downvote-link(href='javascript:comment_downvote({{ node.id }})')
+                            else
+                                a.downvote-link(href='javascript:void(0)', title='Please login to vote')
                             br
                         .comment-header
                             a.comment-link(name='comment-{{node.id}}-link')
