@@ -51,6 +51,7 @@ script(type='text/javascript')
 
 ul.comments.top-level-comments
     if has_comments
+        - var profile = request.user.profile
         - recursetree comment_list
             if not node.hidden
                 li.comment(id='comment-{{ node.id }}')
@@ -77,10 +78,16 @@ ul.comments.top-level-comments
                             = ' '
                             span.comment-title #{node.title}
                             span.comment-operation
-                                a(href='javascript:comment_set_parent({{ node.id }})') &nbsp;Reply
-                                a(href='{% url "comment_history" node.id %}', data-featherlight='ajax') &nbsp;History
+                                - var can_edit = comment.author == profile and not profile.mute
+                                if can_edit
+                                    a(href='{% url "comment_edit" node.id %}', data-featherlight='ajax')= ' Edit'
+                                else
+                                    a(href='javascript:comment_set_parent({{ node.id }})')= ' Reply'
+                                a(href='{% url "comment_history" node.id %}', data-featherlight='ajax')= ' History'
                                 if perms.judge.change_comment
-                                    a(href='{% url "admin:judge_comment_change" node.id %}') &nbsp;Admin
+                                    if not can_edit
+                                        a(href='{% url "comment_edit" node.id %}', data-featherlight='ajax')= ' Edit'
+                                    a(href='{% url "admin:judge_comment_change" node.id %}')= ' Admin'
                         .comment-body #{node.body|markdown:"comment"}
                         if not node.is_leaf_node 
                             ul.comments
