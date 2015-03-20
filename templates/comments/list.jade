@@ -78,7 +78,7 @@ ul.comments.top-level-comments
                             = ' '
                             span.comment-title #{node.title}
                             span.comment-operation
-                                - var can_edit = comment.author == profile and not profile.mute
+                                - var can_edit = node.author == profile and not profile.mute
                                 if can_edit
                                     a(href='{% url "comment_edit" node.id %}', data-featherlight='ajax')= ' Edit'
                                 else
