@@ -2,7 +2,7 @@
 
 h2 Revisions for {{ comment.title }}
 hr
-span.commen-author Author: {{ comment.author.long_display_name }}
+span.comment-author Author: {{ comment.author.long_display_name }}
 each version in revisions
     table.comment-revision(id='revision-{{ forloop.counter }}')
         tr
