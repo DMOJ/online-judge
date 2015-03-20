@@ -125,7 +125,7 @@ urlpatterns = patterns('',
     url(r'^comments/downvote/$', 'judge.views.downvote_comment'),
     url(r'^comments/revisions/(?P<id>\d+)$', views.CommentHistory.as_view(), name='comment_history'),
     url(r'^comments/edit/(?P<id>\d+)$', views.CommentEdit.as_view(), name='comment_edit'),
-    url(r'^comments/edit/(?P<id>\d+)/done$', views.CommentEditDone.as_view(), name='comment_edit_done'),
+    url(r'^comments/render/(?P<id>\d+)$', views.CommentContent.as_view(), name='comment_content'),
 
     url(r'^contests/$', views.ContestList.as_view(), name='contest_list'),
     url(r'^contest/(?P<key>\w+)$', views.ContestDetail.as_view(), name='contest_view'),
