@@ -95,11 +95,11 @@ if request.user.is_authenticated and comment_form
             h3 New comment
             hr
         form#comment-submit(action='', method='post')
-            -csrf_token
+            - csrf_token
             | #{comment_form.non_field_errors}
             | #{comment_form.parent.errors}
             | #{comment_form.parent}
-            #comment-post-wrapper
+            .comment-post-wrapper
                 #comment-form-title
                     | #{comment_form.title.errors}
                     | #{comment_form.title}
@@ -107,4 +107,4 @@ if request.user.is_authenticated and comment_form
                     | #{comment_form.body.errors}
                     | #{comment_form.body}
             hr
-            input.button(style="float:right;",type='submit', value='Post!')
+            input.button(style='float:right', type='submit', value='Post!')

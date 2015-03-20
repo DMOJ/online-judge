@@ -1,11 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse
-from django.views.generic import DetailView
+from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
+from django.views.generic import DetailView, UpdateView
 import reversion
-from judge.models import Comment, CommentVote
 
-__all__ = ['upvote_comment', 'downvote_comment', 'CommentHistory']
+from judge.models import Comment, CommentVote
+from judge.utils.views import LoginRequiredMixin
+
+
+__all__ = ['upvote_comment', 'downvote_comment', 'CommentHistory', 'CommentEdit']
 
 
 @login_required
@@ -52,10 +55,29 @@ def downvote_comment(request):
 class CommentHistory(DetailView):
     model = Comment
     pk_url_kwarg = 'id'
-    template_name = 'comments/history.jade'
     context_object_name = 'comment'
+    template_name = 'comments/history.jade'
 
     def get_context_data(self, **kwargs):
         context = super(CommentHistory, self).get_context_data(**kwargs)
         context['revisions'] = reversion.get_for_object(self.object)
         return context
+
+
+class CommentEdit(LoginRequiredMixin, UpdateView):
+    model = Comment
+    pk_url_kwarg = 'id'
+    context_object_name = 'comment'
+    template_name = 'comments/edit.jade'
+    fields = ['title', 'body']
+
+    def get_object(self, queryset=None):
+        comment = super(CommentEdit, self).get_object(queryset)
+        if self.request.user.is_authenticated():
+            return False
+        if self.request.user.has_perm('judge.change_comment'):
+            return comment
+        profile = self.request.user.profile
+        if profile != comment.author or profile.mute:
+            raise Http404()
+        return comment

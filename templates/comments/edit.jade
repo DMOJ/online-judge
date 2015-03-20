@@ -1,0 +1,15 @@
+.comment-submit
+    form#comment-edit(action='', method='post')
+        - csrf_token
+        | #{form.non_field_errors}
+        | #{form.parent.errors}
+        | #{form.parent}
+        .comment-post-wrapper
+            #comment-form-title
+                | #{form.title.errors}
+                | #{form.title}
+            #comment-form-body
+                | #{form.body.errors}
+                | #{form.body}
+        hr
+        input.button(style='float:right', type='submit', value='Post!')

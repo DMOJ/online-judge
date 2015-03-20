@@ -178,7 +178,7 @@ hr {
     min-width: 40%;
 }
 
-#comment-post-wrapper div {
+.comment-post-wrapper div {
     padding-top: 2px;
     padding-bottom: 2px;
     padding-right: 10px;
