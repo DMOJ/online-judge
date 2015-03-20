@@ -121,8 +121,17 @@ script(type='text/javascript')
         afterOpen: function () {
             $('#comment-edit').submit(function(event) {
                 event.preventDefault();
+                var id = $("#comment-edit").find('.comment-id').text();
+                var readback = $("#comment-edit").find('.read-back').text();
                 $.post($(this).attr('action'), $(this).serialize()).done(function(data) {
                     $.featherlight.current().close();
+                    $.ajax({
+                        url: readback
+                    }).done(function (data) {
+                        $('#comment-' + id).find('.comment-body').first().html(data);
+                    }).fail(function () {
+                        console.log('Failed to update comment:' + id);
+                    });
                 });
             });
         }
