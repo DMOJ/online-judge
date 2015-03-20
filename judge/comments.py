@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
+import reversion
 
 from judge.dblock import LockModel
 from judge.models import Comment, Profile
@@ -48,7 +49,10 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
                 comment = form.save(commit=False)
                 comment.author = request.user.profile
                 comment.page = page
-                comment.save()
+                with reversion.create_revision():
+                    reversion.set_user(request.user)
+                    reversion.set_comment('Posted comment')
+                    comment.save()
                 return HttpResponseRedirect(request.path)
 
         context = self.get_context_data(object=self.object, comment_form=form)
