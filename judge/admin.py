@@ -410,6 +410,7 @@ class CommentAdmin(Select2SuitMixin, reversion.VersionAdmin):
     list_display = ['title', 'author', 'linked_page', 'time']
     search_fields = ['author__user__username', 'author__name', 'page', 'title', 'body']
     actions = ['hide_comment', 'unhide_comment']
+    list_filter = ['hidden']
     actions_on_top = True
     actions_on_bottom = True
     form = CommentForm
