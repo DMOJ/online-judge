@@ -115,3 +115,11 @@ if request.user.is_authenticated and comment_form
                     | #{comment_form.body}
             hr
             input.button(style='float:right', type='submit', value='Post!')
+
+script(type='text/javascript')
+    $('#comment-edit').submit(function(event) {
+        event.preventDefault();
+        $.post($(this).attr('action'), $(this).serialize()).done(function(data) {
+            $.featherlight.current().close();
+        });
+    });
