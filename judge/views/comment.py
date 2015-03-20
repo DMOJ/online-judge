@@ -5,10 +5,11 @@ from django.views.generic import DetailView, UpdateView
 import reversion
 
 from judge.models import Comment, CommentVote
-from judge.utils.views import LoginRequiredMixin
+from judge.utils.views import LoginRequiredMixin, TitleMixin
 
 
-__all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentEditAjax', 'CommentContent']
+__all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentEditAjax', 'CommentContent',
+           'CommentEdit', 'CommentHistory']
 
 
 @login_required
@@ -64,6 +65,13 @@ class CommentHistoryAjax(DetailView):
         return context
 
 
+class CommentHistory(CommentHistoryAjax, TitleMixin):
+    template_name = 'comments/history.jade'
+
+    def get_title(self):
+        return 'Revisions for %s' % self.object.title
+
+
 class CommentEditAjax(LoginRequiredMixin, UpdateView):
     model = Comment
     pk_url_kwarg = 'id'
@@ -88,6 +96,13 @@ class CommentEditAjax(LoginRequiredMixin, UpdateView):
         if profile != comment.author or profile.mute:
             raise Http404()
         return comment
+
+
+class CommentEdit(CommentEditAjax, TitleMixin):
+    template_name = 'comments/edit.jade'
+
+    def get_title(self):
+        return 'Editing %s' % self.object.title
 
 
 class CommentContent(DetailView):
