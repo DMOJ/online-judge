@@ -79,7 +79,7 @@ class CommentEdit(LoginRequiredMixin, UpdateView):
             return super(CommentEdit, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('comment_edit_done', args=(self.object.id,))
+        return self.object.get_absolute_url()
 
     def get_object(self, queryset=None):
         comment = super(CommentEdit, self).get_object(queryset)
