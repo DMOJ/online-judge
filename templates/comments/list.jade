@@ -80,8 +80,8 @@ ul.comments.top-level-comments
                             = ' '
                             span.comment-title #{node.title}
                             span.comment-operation
-                                a(href='{% url "comment_history" node.id %}',
-                                  data-featherlight='{% url "comment_history_ajax" node.id %}')= ' History'
+                                a.history-link(data-featherlight='{% url "comment_history_ajax" node.id %}',
+                                               href='{% url "comment_history" node.id %}')= ' History'
                                 if logged_in
                                     - var can_edit = node.author.id == profile.id and not profile.mute
                                     if can_edit
@@ -142,5 +142,11 @@ script(type='text/javascript')
                     });
                 });
             });
+        }
+    });
+    $('.comments').find('a.history-link').featherlight({
+        afterOpen: function () {
+            if ('MathJax' in window)
+                MathJax.Hub.Queue(['Typeset', MathJax.Hub, $('.featherlight-content').get(0)]);
         }
     });
