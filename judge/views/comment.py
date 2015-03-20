@@ -65,7 +65,7 @@ class CommentHistoryAjax(DetailView):
         return context
 
 
-class CommentHistory(CommentHistoryAjax, TitleMixin):
+class CommentHistory(TitleMixin, CommentHistoryAjax):
     template_name = 'comments/history.jade'
 
     def get_title(self):
@@ -98,7 +98,7 @@ class CommentEditAjax(LoginRequiredMixin, UpdateView):
         return comment
 
 
-class CommentEdit(CommentEditAjax, TitleMixin):
+class CommentEdit(TitleMixin, CommentEditAjax):
     template_name = 'comments/edit.jade'
 
     def get_title(self):
