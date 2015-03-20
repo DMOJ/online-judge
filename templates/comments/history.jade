@@ -4,7 +4,7 @@ h2 Revisions for {{ comment.title }}
 hr
 span.comment-author Author:
     = ' '
-    span(class='{{ commen.author.display_rank }}') {{ comment.author.long_display_name }}
+    span(class='{{ comment.author.display_rank }}') {{ comment.author.long_display_name }}
 each version in revisions
     table.comment-revision(id='revision-{{ forloop.counter }}')
         tr
