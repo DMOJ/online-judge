@@ -53,6 +53,8 @@ ul.comments.top-level-comments
     if has_comments
         if request.user.is_authenticated
             - var profile = request.user.profile
+        else
+            - var profile = null
         - recursetree comment_list
             if not node.hidden
                 li.comment(id='comment-{{ node.id }}')
