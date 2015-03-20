@@ -402,7 +402,7 @@ class CommentForm(ModelForm):
             }
 
 
-class CommentAdmin(Select2SuitMixin, admin.ModelAdmin):
+class CommentAdmin(Select2SuitMixin, reversion.VersionAdmin):
     fieldsets = (
         (None, {'fields': ('author', 'page', 'parent', 'score', 'hidden')}),
         ('Content', {'fields': ('title', 'body')}),
