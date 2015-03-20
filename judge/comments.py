@@ -24,8 +24,8 @@ class CommentForm(ModelForm):
     def __init__(self, request, *args, **kwargs):
         self.request = request
         super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs.update({'style': 'min-width:100%', 'placeholder': 'Comment title'})
-        self.fields['body'].widget.attrs.update({'style': 'min-width:100%', 'placeholder': 'Comment body'})
+        self.fields['title'].widget.attrs.update({'placeholder': 'Comment title'})
+        self.fields['body'].widget.attrs.update({'placeholder': 'Comment body'})
 
     def clean(self):
         if self.request is not None and self.request.user.is_authenticated() and self.request.user.profile.mute:

@@ -184,6 +184,10 @@ hr {
     padding-right: 10px;
 }
 
+.comment-post-wrapper input, .comment-post-wrapper textarea {
+	min-width: 100%;
+}
+
 div.info-float {
     float: right;
     padding: 10px;
