@@ -1,7 +1,8 @@
 - load markdown_trois_tags
 
-h2 Revisions for {{ comment.title }}
-hr
+if not title
+    h2 Revisions for {{ comment.title }}
+    hr
 span.comment-author Author:
     = ' '
     - with author=comment.author
