@@ -2,11 +2,11 @@
 
 h2 Revisions for {{ comment.title }}
 hr
-span Author: {{ comment.author.long_display_name }}
+span.commen-author Author: {{ comment.author.long_display_name }}
 each version in revisions
-    table
+    table.comment-revision(id='revision-{{ forloop.counter }}')
         tr
             th Date:
-            td #{version.revision.date_created|date:"N j, o, g:i a"}
+            td.revision-date #{version.revision.date_created|date:"N j, o, g:i a"}
         tr
-            td(colspan=2) #{version.field_dict.body|markdown:"comment"}
+            td.revision-text(colspan=2) #{version.field_dict.body|markdown:"comment"}
