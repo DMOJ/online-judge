@@ -10,3 +10,5 @@ each version in revisions
             td.revision-date #{version.revision.date_created|date:"N j, o, g:i a"}
         tr
             td.revision-text(colspan=2) #{version.field_dict.body|markdown:"comment"}
+    if not forloop.last
+        hr
