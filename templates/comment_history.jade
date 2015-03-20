@@ -1,0 +1,12 @@
+- load markdown_trois_tags
+
+h2 Revisions for {{ comment.title }}
+hr
+span Author: {{ comment.author.long_display_name }}
+each version in revisions
+    table
+        tr
+            th Date:
+            td #{version.revision.date_created}
+        tr
+            td(colspan=2) #{version.field_dict.body|markdown:"comment"}
