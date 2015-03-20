@@ -64,6 +64,12 @@ class CommentHistoryAjax(DetailView):
         context['revisions'] = reversion.get_for_object(self.object)
         return context
 
+    def get_object(self, queryset=None):
+        comment = super(CommentHistoryAjax, self).get_object(queryset)
+        if comment.hidden and not self.request.user.has_perm('judge.change_comment'):
+            raise Http404()
+        return comment
+
 
 class CommentHistory(TitleMixin, CommentHistoryAjax):
     template_name = 'comments/history.jade'
@@ -93,7 +99,7 @@ class CommentEditAjax(LoginRequiredMixin, UpdateView):
         if self.request.user.has_perm('judge.change_comment'):
             return comment
         profile = self.request.user.profile
-        if profile != comment.author or profile.mute:
+        if profile != comment.author or profile.mute or comment.hidden:
             raise Http404()
         return comment
 
