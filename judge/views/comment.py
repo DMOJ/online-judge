@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
 from django.views.generic import DetailView, UpdateView
 import reversion
@@ -70,6 +70,12 @@ class CommentEdit(LoginRequiredMixin, UpdateView):
     context_object_name = 'comment'
     template_name = 'comments/edit.jade'
     fields = ['title', 'body']
+
+    def form_valid(self, form):
+        with transaction.atomic(), reversion.create_revision():
+            reversion.set_comment('Edited from site')
+            reversion.set_user(self.request.user)
+            return super(CommentEdit, self).form_valid(form)
 
     def get_object(self, queryset=None):
         comment = super(CommentEdit, self).get_object(queryset)
