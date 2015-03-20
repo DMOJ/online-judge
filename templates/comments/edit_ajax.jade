@@ -1,0 +1,17 @@
+.comment-submit
+    form#comment-edit(action='{{ request.get_full_path }}', method='post')
+        span.comment-id(style='display: none')= comment.id
+        span.read-back(style='display: none') {% url "comment_content" comment.id %}
+        - csrf_token
+        | #{form.non_field_errors}
+        | #{form.parent.errors}
+        | #{form.parent}
+        .comment-post-wrapper
+            #comment-form-title
+                | #{form.title.errors}
+                | #{form.title}
+            #comment-form-body
+                | #{form.body.errors}
+                | #{form.body}
+        hr
+        input.button(style='float: right', type='submit', value='Post!')

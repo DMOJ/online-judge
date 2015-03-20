@@ -8,7 +8,7 @@ from judge.models import Comment, CommentVote
 from judge.utils.views import LoginRequiredMixin
 
 
-__all__ = ['upvote_comment', 'downvote_comment', 'CommentHistory', 'CommentEdit', 'CommentContent']
+__all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentEditAjax', 'CommentContent']
 
 
 @login_required
@@ -52,36 +52,36 @@ def downvote_comment(request):
     return vote_comment(request, -1)
 
 
-class CommentHistory(DetailView):
+class CommentHistoryAjax(DetailView):
     model = Comment
     pk_url_kwarg = 'id'
     context_object_name = 'comment'
-    template_name = 'comments/history.jade'
+    template_name = 'comments/history_ajax.jade'
 
     def get_context_data(self, **kwargs):
-        context = super(CommentHistory, self).get_context_data(**kwargs)
+        context = super(CommentHistoryAjax, self).get_context_data(**kwargs)
         context['revisions'] = reversion.get_for_object(self.object)
         return context
 
 
-class CommentEdit(LoginRequiredMixin, UpdateView):
+class CommentEditAjax(LoginRequiredMixin, UpdateView):
     model = Comment
     pk_url_kwarg = 'id'
     context_object_name = 'comment'
-    template_name = 'comments/edit.jade'
+    template_name = 'comments/edit_ajax.jade'
     fields = ['title', 'body']
 
     def form_valid(self, form):
         with transaction.atomic(), reversion.create_revision():
             reversion.set_comment('Edited from site')
             reversion.set_user(self.request.user)
-            return super(CommentEdit, self).form_valid(form)
+            return super(CommentEditAjax, self).form_valid(form)
 
     def get_success_url(self):
         return self.object.get_absolute_url()
 
     def get_object(self, queryset=None):
-        comment = super(CommentEdit, self).get_object(queryset)
+        comment = super(CommentEditAjax, self).get_object(queryset)
         if self.request.user.has_perm('judge.change_comment'):
             return comment
         profile = self.request.user.profile

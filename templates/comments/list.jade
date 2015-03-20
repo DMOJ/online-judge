@@ -80,13 +80,13 @@ ul.comments.top-level-comments
                             span.comment-operation
                                 - var can_edit = node.author.id == profile.id and not profile.mute
                                 if can_edit
-                                    a.edit-link(data-featherlight='{% url "comment_edit" node.id %}', href='#')= ' Edit'
+                                    a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}', href='#')= ' Edit'
                                 else
                                     a(href='javascript:comment_set_parent({{ node.id }})')= ' Reply'
-                                a(href='{% url "comment_history" node.id %}', data-featherlight='ajax')= ' History'
+                                a(href='{% url "comment_history_ajax" node.id %}', data-featherlight='ajax')= ' History'
                                 if perms.judge.change_comment
                                     if not can_edit
-                                        a.edit-link(data-featherlight='{% url "comment_edit" node.id %}', href='#')= ' Edit'
+                                        a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}', href='#')= ' Edit'
                                     a(href='{% url "admin:judge_comment_change" node.id %}')= ' Admin'
                         .comment-body #{node.body|markdown:"comment"}
                         if not node.is_leaf_node 

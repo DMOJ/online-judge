@@ -123,8 +123,8 @@ urlpatterns = patterns('',
 
     url(r'^comments/upvote/$', 'judge.views.upvote_comment'),
     url(r'^comments/downvote/$', 'judge.views.downvote_comment'),
-    url(r'^comments/revisions/(?P<id>\d+)$', views.CommentHistory.as_view(), name='comment_history'),
-    url(r'^comments/edit/(?P<id>\d+)$', views.CommentEdit.as_view(), name='comment_edit'),
+    url(r'^comments/revisions/(?P<id>\d+)$', views.CommentHistoryAjax.as_view(), name='comment_history_ajax'),
+    url(r'^comments/edit/(?P<id>\d+)$', views.CommentEditAjax.as_view(), name='comment_edit_ajax'),
     url(r'^comments/render/(?P<id>\d+)$', views.CommentContent.as_view(), name='comment_content'),
 
     url(r'^contests/$', views.ContestList.as_view(), name='contest_list'),
