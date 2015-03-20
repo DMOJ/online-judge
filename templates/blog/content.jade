@@ -4,6 +4,7 @@ extends base
 - load markdown_trois_tags
 
 block media
+    include comments/media
 
 block body
     div.post-full
@@ -15,4 +16,4 @@ block body
     .comment-area
         script(src='{% static "placeholder-compat.js" %}')
         h2 Comments
-        include comments
+        include comments/list

@@ -6,6 +6,7 @@ extends base
 block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')                                                                                         
     link(rel='stylesheet', href='{% static "content-description.css" %}')
+    include comments/media
 
 block site_title
     span(style='color: #FFDE05') DM::
@@ -26,7 +27,7 @@ block body
     .content-description
         | #{solution.content|markdown:"trusted"|smart_math}
 
-    include comments
+    include comments/list
 
 block bodyend
     include mathjax_load

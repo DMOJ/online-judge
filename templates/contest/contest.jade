@@ -20,6 +20,8 @@ block content_media
             color: #000;
         }
 
+    include comments/media
+
 block info_float
     if contest.can_join or participating
         if not participating or not participation.ended
@@ -71,4 +73,4 @@ block comments
     .comment-area
         h2 Comments
         script(src='{% static "placeholder-compat.js" %}')
-        include comments
+        include comments/list

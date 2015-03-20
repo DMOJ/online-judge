@@ -52,7 +52,7 @@ def downvote_comment(request):
 class CommentHistory(DetailView):
     model = Comment
     pk_url_kwarg = 'id'
-    template_name = 'comment_history.jade'
+    template_name = 'comments/history.jade'
     context_object_name = 'comment'
 
     def get_context_data(self, **kwargs):

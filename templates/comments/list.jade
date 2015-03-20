@@ -78,6 +78,7 @@ ul.comments.top-level-comments
                             span.comment-title #{node.title}
                             span.comment-operation
                                 a(href='javascript:comment_set_parent({{ node.id }})') &nbsp;Reply
+                                a(href='{% url "comment_history" node.id %}', data-featherlight='ajax') &nbsp;History
                                 if perms.judge.change_comment
                                     a(href='{% url "admin:judge_comment_change" node.id %}') &nbsp;Admin
                         .comment-body #{node.body|markdown:"comment"}
