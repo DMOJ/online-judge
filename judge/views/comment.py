@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.db import IntegrityError, transaction
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
 from django.views.generic import DetailView, UpdateView
@@ -8,7 +9,7 @@ from judge.models import Comment, CommentVote
 from judge.utils.views import LoginRequiredMixin
 
 
-__all__ = ['upvote_comment', 'downvote_comment', 'CommentHistory', 'CommentEdit']
+__all__ = ['upvote_comment', 'downvote_comment', 'CommentHistory', 'CommentEdit', 'CommentEditDone']
 
 
 @login_required
@@ -77,6 +78,9 @@ class CommentEdit(LoginRequiredMixin, UpdateView):
             reversion.set_user(self.request.user)
             return super(CommentEdit, self).form_valid(form)
 
+    def get_success_url(self):
+        return reverse('comment_edit_done', args=(self.object.id,))
+
     def get_object(self, queryset=None):
         comment = super(CommentEdit, self).get_object(queryset)
         if self.request.user.has_perm('judge.change_comment'):
@@ -85,3 +89,10 @@ class CommentEdit(LoginRequiredMixin, UpdateView):
         if profile != comment.author or profile.mute:
             raise Http404()
         return comment
+
+
+class CommentEditDone(DetailView):
+    model = Comment
+    pk_url_kwarg = 'id'
+    context_object_name = 'comment'
+    template_name = 'comments/closebox.jade'

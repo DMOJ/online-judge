@@ -1,0 +1,5 @@
+script(type='text/javascript')
+    if ('$' in window && 'featherlight' in window.$)
+        $.featherlight.current().close();
+    else
+        window.location.href = '{{ comment.get_absolute_url }}';
