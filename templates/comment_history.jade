@@ -7,6 +7,6 @@ each version in revisions
     table
         tr
             th Date:
-            td #{version.revision.date_created}
+            td #{version.revision.date_created|date:"N j, o, g:i a"}
         tr
             td(colspan=2) #{version.field_dict.body|markdown:"comment"}
