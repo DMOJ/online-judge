@@ -688,12 +688,22 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         return form
 
 
+class ContestParticipationForm(ModelForm):
+    class Meta:
+        if use_select2:
+            widgets = {
+                'contest': Select2Widget(),
+                'profile': Select2Widget(data_view='contest_profile_select2'),
+            }
+
+
 class ContestParticipationAdmin(admin.ModelAdmin):
     fields = ('contest', 'profile', 'real_start')
     list_display = ('contest', 'username', 'real_start')
     actions = ['recalculate_points', 'recalculate_cumtime']
     actions_on_bottom = actions_on_top = True
     search_fields = ('contest__key', 'contest__name', 'profile__user__user__username', 'profile__user__name')
+    form = ContestParticipationForm
 
     def username(self, obj):
         return obj.profile.user.long_display_name

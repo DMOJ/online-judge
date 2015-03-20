@@ -1,7 +1,7 @@
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
-from judge.models import Profile, Organization, Problem, Comment
+from judge.models import Profile, Organization, Problem, Comment, ContestProfile
 
 try:
     from django_select2.views import Select2View
@@ -33,11 +33,19 @@ else:
             return 'nil', page.has_next(), [(problem.id, problem.name) for problem in page]
 
     class CommentSelect2View(Select2View):
-        def check_all_permissions(self, request, *args, **kwargs):
-            if not request.user.has_perm('judge.change_comment'):
-                raise PermissionDenied()
 
         def get_results(self, request, term, page, context):
             queryset = Comment.objects.filter(Q(title__icontains=term) | Q(page__icontains=term))
             page = Paginator(queryset, 20).page(page)
             return 'nil', page.has_next(), [(comment.id, '-' * comment.level + comment.title) for comment in page]
+
+    class ContestProfileSelect2View(Select2View):
+        def check_all_permissions(self, request, *args, **kwargs):
+            if not request.user.has_perm('judge.change_contestparticipation'):
+                raise PermissionDenied()
+
+        def get_results(self, request, term, page, context):
+            queryset = ContestProfile.objects.filter(Q(user__user__username__icontains=term) | Q(user__name__icontains=term))\
+                                     .select_related('user__user')
+            page = Paginator(queryset, 20).page(page)
+            return 'nil', page.has_next(), [(profile.id, 'Contest: ' + profile.user.long_display_name) for profile in page]
