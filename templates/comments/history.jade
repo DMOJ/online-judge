@@ -4,7 +4,9 @@ h2 Revisions for {{ comment.title }}
 hr
 span.comment-author Author:
     = ' '
-    span(class='{{ comment.author.display_rank }}') {{ comment.author.long_display_name }}
+    - with author=comment.author
+        span(class='{{ author.display_rank }}')
+            a(href='{% url "judge.views.user" author.user.username %}')= author.long_display_name
 each version in revisions
     table.comment-revision(id='revision-{{ forloop.counter }}')
         tr
