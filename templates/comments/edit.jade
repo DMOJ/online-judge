@@ -1,5 +1,5 @@
 .comment-submit
-    form#comment-edit(action='', method='post')
+    form#comment-edit(action='{{ request.get_full_path }}', method='post')
         - csrf_token
         | #{form.non_field_errors}
         | #{form.parent.errors}
