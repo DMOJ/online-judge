@@ -90,7 +90,9 @@ ul.comments.top-level-comments
                                     else
                                         a(href='javascript:comment_set_parent({{ node.id }})')= ' Reply'
                                     if perms.judge.change_comment
-                                        if not can_edit
+                                        if can_edit
+                                            a(href='javascript:comment_set_parent({{ node.id }})')= ' Reply'
+                                        else
                                             a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}',
                                                         href='{% url "comment_edit" node.id %}')= ' Edit'
                                         a(href='{% url "admin:judge_comment_change" node.id %}')= ' Admin'
