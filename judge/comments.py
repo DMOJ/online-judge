@@ -7,7 +7,7 @@ from django.views.generic import View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 import reversion
-from reversion.models import Revision
+from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
 from judge.models import Comment, Profile
@@ -45,7 +45,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         self.object = self.get_object()
         page = self.get_comment_page()
 
-        with LockModel(write=(Comment, Revision), read=(Profile, ContentType)):
+        with LockModel(write=(Comment, Revision, Version), read=(Profile, ContentType)):
             form = CommentForm(request, request.POST)
             if form.is_valid():
                 comment = form.save(commit=False)
