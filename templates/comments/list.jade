@@ -78,13 +78,14 @@ ul.comments.top-level-comments
                             = ' '
                             span.comment-title #{node.title}
                             span.comment-operation
-                                if node.author == profile and not profile.mute
+                                - var can_edit = node.author == profile
+                                if can_edit
                                     a(href='{% url "comment_edit" node.id %}', data-featherlight='ajax')= ' Edit'
                                 else
                                     a(href='javascript:comment_set_parent({{ node.id }})')= ' Reply'
                                 a(href='{% url "comment_history" node.id %}', data-featherlight='ajax')= ' History'
                                 if perms.judge.change_comment
-                                    if node.author != profile
+                                    if not can_edit
                                         a(href='{% url "comment_edit" node.id %}', data-featherlight='ajax')= ' Edit'
                                     a(href='{% url "admin:judge_comment_change" node.id %}')= ' Admin'
                         .comment-body #{node.body|markdown:"comment"}
