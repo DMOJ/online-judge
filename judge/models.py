@@ -525,6 +525,10 @@ class Contest(models.Model):
     is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
     is_external = models.BooleanField(verbose_name='External contest', default=False)
 
+    def clean(self):
+        if self.start_time >= self.end_time:
+            raise ValidationError('What is this? A contest that ended before it starts?')
+
     @cached_property
     def can_join(self):
         return self.start_time <= timezone.now() < self.end_time
