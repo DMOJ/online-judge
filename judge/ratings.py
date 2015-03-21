@@ -80,8 +80,14 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated):
             else:
                 new_rating[i] = old_rating[i] - Cap
 
+    # try to keep the sum of ratings constant
     adjust = float(sum(old_rating) - sum(new_rating)) / N
     new_rating = map(adjust.__add__, new_rating)
+    # inflate a little if we have to so people who placed first don't lose rating
+    best_rank = min(actual_rank)
+    for i in xrange(N):
+        if abs(actual_rank[i] - best_rank) <= 1e-3 and new_rating[i] < old_rating[i] + 1:
+            new_rating[i] = old_rating[i] + 1
     return map(int, map(round, new_rating)), map(int, map(round, new_volatility))
 
 
