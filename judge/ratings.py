@@ -98,7 +98,7 @@ def rate_contest(contest):
     cursor.close()
 
     user_ids = contest.users.order_by('-score', 'cumtime').values_list('profile__user_id', flat=True)
-    old_data = [data.get(user, (1000, 500)) for user in user_ids]
+    old_data = [data.get(user, (1200, 535)) for user in user_ids]
     old_rating = map(itemgetter(0), old_data)
     old_volatility = map(itemgetter(1), old_data)
     times_ranked = map(itemgetter(1), old_data)
