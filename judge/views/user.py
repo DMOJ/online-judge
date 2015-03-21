@@ -113,5 +113,5 @@ class UserRating(TitleMixin, UserMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserRating, self).get_context_data(**kwargs)
-        context['ratings'] = self.object.ratings.all()
+        context['ratings'] = self.object.ratings.order_by('contest__end_time').defer('contest__description')
         return context
