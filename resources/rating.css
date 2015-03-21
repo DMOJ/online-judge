@@ -1,0 +1,28 @@
+.rating {
+  font-weight: bold;
+}
+
+.rate-none {
+  color: black;
+  font-weight: lighter;
+}
+
+.rate-newbie {
+  color: #999;
+}
+
+.rate-amateur {
+  color: #00a900;
+}
+
+.rate-expert {
+  color: #66f;
+}
+
+.rate-master {
+  color: #dc0;
+}
+
+.rate-grandmaster, .rate-target {
+  color: #e00;
+}
