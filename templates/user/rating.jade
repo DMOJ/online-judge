@@ -2,84 +2,88 @@ extends base
 - load staticfiles
 
 block body
-    table.table
-        tr
-            th Contest
-            th Rating
-        each rating in ratings
+    if ratings
+        table.table
             tr
-                td= rating.contest.name
-                td= rating.rating
+                th Contest
+                th Rating
+            each rating in ratings
+                tr
+                    td= rating.contest.name
+                    td= rating.rating
 
-    #rating-chart(style='min-width: 310px; height: 400px; margin: 0 auto')
+        #rating-chart(style='min-width: 310px; height: 400px; margin: 0 auto')
+    else
+        p This user has not participated in any rated contests.
 
 block bodyend
-    script(src='http://code.highcharts.com/highcharts.js')
+    if ratings
+        script(src='http://code.highcharts.com/highcharts.js')
 
-    | <script type="text/javascript">
-    |     var rating_history = [
-    each rating in ratings
-        | {
-        |     name: '#{rating.contest.name|escapejs}',
-        |     x: new Date('#{rating.contest.end_time|date:"c"}'),
-        |     y: #{rating.rating},
-        | },
-    |    ];
-    | </script>
+        | <script type="text/javascript">
+        |     var rating_history = [
+        each rating in ratings
+            | {
+            |     name: '#{rating.contest.name|escapejs}',
+            |     x: new Date('#{rating.contest.end_time|date:"c"}'),
+            |     y: #{rating.rating},
+            | },
+        |    ];
+        | </script>
 
-    script(type='text/javascript')
-        $(function () {
-            $('#rating-chart').highcharts({
-                chart: {
-                    zoomType: 'x'
-                },
-                title: {
-                    text: 'Rating History for #{user.user.username}'
-                },
-                subtitle: {
-                    text: document.ontouchstart === undefined ?
-                            'Click and drag in the plot area to zoom in' :
-                            'Pinch the chart to zoom in'
-                },
-                xAxis: {
-                    type: 'datetime'
-                },
-                yAxis: {
-                    endOnTick: false,
-                    min: #{min_graph},
-                    max: #{max_graph},
+        script(type='text/javascript')
+            $(function () {
+                $('#rating-chart').highcharts({
+                    chart: {
+                        zoomType: 'x'
+                    },
                     title: {
-                        text: 'Rating'
-                    }
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    area: {
-                        fillColor: {
-                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
-                            stops: [
-                                [0, Highcharts.getOptions().colors[0]],
-                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                            ]
-                        },
-                        marker: {
-                            radius: 2
-                        },
-                        lineWidth: 1,
-                        states: {
-                            hover: {
-                                lineWidth: 1
-                            }
-                        },
-                        threshold: null
-                    }
-                },
-                series: [{
-                    type: 'area',
-                    name: 'Rating',
-                    data: rating_history
-                }]
+                        text: 'Rating History for #{user.user.username}'
+                    },
+                    subtitle: {
+                        text: document.ontouchstart === undefined ?
+                                'Click and drag in the plot area to zoom in' :
+                                'Pinch the chart to zoom in'
+                    },
+                    xAxis: {
+                        type: 'datetime'
+                    },
+                    yAxis: {
+                        endOnTick: false,
+                        min: #{min_graph},
+                        max: #{max_graph},
+                        title: {
+                            text: 'Rating'
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        area: {
+                            fillColor: {
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+                                stops: [
+                                    [0, Highcharts.getOptions().colors[0]],
+                                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                                ]
+                            },
+                            marker: {
+                                radius: 2
+                            },
+                            lineWidth: 1,
+                            states: {
+                                hover: {
+                                    lineWidth: 1
+                                }
+                            },
+                            threshold: null
+                        }
+                    },
+                    series: [{
+                        type: 'area',
+                        name: 'Rating',
+                        data: rating_history
+                    }]
+                });
             });
-        });
