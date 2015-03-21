@@ -1,6 +1,8 @@
 extends user/base_users_table
 
 block after_point_head
+	th Rating
     th.problems Problems
 block after_point
+	td.rating(class='{{ rating.rating|rating_class }}', title='{{ rating.rating|rating_name }}')= rating.rating
     td #{user.problems}
