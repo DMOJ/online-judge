@@ -21,7 +21,7 @@ block bodyend
     each rating in ratings
         | {
         |     name: '#{rating.contest.name|escapejs}',
-        |     x: new Date(#{rating.contest.end_time|date:"c"}),
+        |     x: new Date('#{rating.contest.end_time|date:"c"}'),
         |     y: #{rating.rating},
         | },
     |    ];
