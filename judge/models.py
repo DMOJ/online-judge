@@ -642,6 +642,14 @@ class ContestSubmission(models.Model):
     points = models.FloatField(default=0.0)
 
 
+class Rating(models.Model):
+    profile = models.ForeignKey(Profile, related_name='ratings')
+    contest = models.ForeignKey(Contest, related_name='ratings')
+    rating = models.IntegerField()
+    volatility = models.IntegerField()
+    last_rated = models.DateTimeField()
+
+
 class BlogPost(models.Model):
     title = models.CharField(verbose_name='Post title', max_length=100)
     slug = models.SlugField(verbose_name='Slug')
