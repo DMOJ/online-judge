@@ -15,7 +15,7 @@ block body
                 tr
                     td
                         a(href='{% url "contest_ranking" rating.contest.key %}')= rating.contest.name
-                    td.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}')= rating.rating
+                    td.rating(class='{{ rating.rating|rating_class }}', title='{{ rating.rating|rating_name }}')= rating.rating
 
         #rating-chart(style='min-width: 310px; height: 400px; margin: 0 auto')
     else
