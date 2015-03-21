@@ -98,10 +98,10 @@ def rate_contest(contest):
     cursor.close()
 
     user_ids = contest.users.order_by('-score', 'cumtime').values_list('profile__user_id', flat=True)
-    old_data = [data.get(user, (1200, 535)) for user in user_ids]
+    old_data = [data.get(user, (1200, 535, 0)) for user in user_ids]
     old_rating = map(itemgetter(0), old_data)
     old_volatility = map(itemgetter(1), old_data)
-    times_ranked = map(itemgetter(1), old_data)
+    times_ranked = map(itemgetter(2), old_data)
     rating, volatility = recalculate_ratings(old_rating, old_volatility, range(1, len(user_ids) + 1), times_ranked)
 
     now = timezone.now()
