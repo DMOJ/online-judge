@@ -639,7 +639,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
         ('Details', {'fields': ('description', 'is_external')}),
     )
-    list_display = ('key', 'name', 'is_public', 'is_external', 'rated', 'start_time', 'end_time', 'time_limit')
+    list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time', 'end_time', 'time_limit')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
     actions_on_top = True
