@@ -113,13 +113,14 @@ class UserRating(TitleMixin, UserMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserRating, self).get_context_data(**kwargs)
-        context['ratings'] = self.object.ratings.order_by('contest__end_time').defer('contest__description')
-        user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
-        global_data = Rating.objects.aggregate(Min('rating'), Max('rating'))
-        min_ever, max_ever = global_data['rating__min'], global_data['rating__max']
-        min_user, max_user = user_data['rating__min'], user_data['rating__max']
-        delta = max_user - min_user
-        ratio = (max_ever - max_user + 0.0) / (max_ever - min_ever)
-        context['max_graph'] = max_user + ratio * delta
-        context['min_graph'] = min_user + ratio * delta - delta
+        ratings = context['ratings'] = self.object.ratings.order_by('contest__end_time').defer('contest__description')
+        if ratings:
+            user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
+            global_data = Rating.objects.aggregate(Min('rating'), Max('rating'))
+            min_ever, max_ever = global_data['rating__min'], global_data['rating__max']
+            min_user, max_user = user_data['rating__min'], user_data['rating__max']
+            delta = max_user - min_user
+            ratio = (max_ever - max_user + 0.0) / (max_ever - min_ever)
+            context['max_graph'] = max_user + ratio * delta
+            context['min_graph'] = min_user + ratio * delta - delta
         return context
