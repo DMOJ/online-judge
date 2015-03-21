@@ -130,7 +130,7 @@ def rate_contest(contest):
                for id, p, r, v, z in izip(user_ids, participation_ids, rating, volatility, ranking)]
     cursor = connection.cursor()
     cursor.execute('CREATE TEMPORARY TABLE _profile_rating_update(id integer, rating integer)')
-    cursor.executemany('INSERT INTO _profile_rating_update VALUES (%s, %s)', izip(user_ids, rating))
+    cursor.executemany('INSERT INTO _profile_rating_update VALUES (%s, %s)', zip(user_ids, rating))
     with transaction.atomic():
         Rating.objects.filter(contest=contest).delete()
         Rating.objects.bulk_create(ratings)
