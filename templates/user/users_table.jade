@@ -2,9 +2,9 @@ extends user/base_users_table
 - load rating
 
 block after_point_head
-	th Rating
+    th Rating
     th.problems Problems
 
 block after_point
-	td.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}')= user.rating
+    td.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}')= user.rating
     td #{user.problems}
