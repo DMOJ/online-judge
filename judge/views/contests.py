@@ -211,8 +211,7 @@ def contest_ranking_list(contest, problems):
             problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.user, participation))
         )
 
-    return map(make_ranking_profile, contest.users.select_related('profile', 'rating').order_by('-score', 'cumtime')
-                                            .defer('profile__about'))
+    return map(make_ranking_profile, contest.users.select_related('profile', 'rating').order_by('-score', 'cumtime'))
 
 
 def contest_ranking_ajax(request, key):

@@ -3,6 +3,7 @@
 thead
     tr
         th.header.rank Rank
+        block after_rank_head
         th.header.username Username
         block before_point_head
         th.header.points Points
@@ -11,6 +12,7 @@ thead
         for rank, user in users
             tr
                 td= rank
+                block after_rank
                 if show_organization
                     td(class=user.display_rank)
                         .userinfo
