@@ -74,7 +74,7 @@ ul.comments.top-level-comments
                             a.comment-link(name='comment-{{node.id}}-link')
                             span.comment-author
                                 span(class=node.author.display_rank)
-                                    a(href='{% url "judge.views.user" node.author.user.username %}') #{node.author.user.username}
+                                    a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
                             = ' on '
                             span.comment-time #{node.time|date:"N j, o, g:i a"}
                             = ' '

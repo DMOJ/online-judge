@@ -166,7 +166,7 @@ class Profile(models.Model):
         return Submission.objects.filter(user_id=self.id, points__gt=0).values('problem').distinct().count()
 
     def get_absolute_url(self):
-        return reverse('judge.views.user', args=(self.user.username,))
+        return reverse('user_page', args=(self.user.username,))
 
     def __unicode__(self):
         # return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)

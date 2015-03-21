@@ -18,10 +18,10 @@ thead
                                 if org
                                     span.organization
                                         a(href='{% url "organization_home" org.key %}')= org.short_name
-                            a(href='{% url "judge.views.user" user.user.username %}')= user.long_display_name
+                            a(href='{% url "user_page" user.user.username %}')= user.long_display_name
                 else
                     td(class=user.display_rank)
-                        a(href='{% url "judge.views.user" user.user.username %}')= user.long_display_name
+                        a(href='{% url "user_page" user.user.username %}')= user.long_display_name
                 block before_point
                 td.user-points= user.points
                 block after_point

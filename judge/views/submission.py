@@ -166,7 +166,7 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
 
     def get_content_title(self):
         return format_html(u'All submissions by <a href="{1}">{0}</a>', self.username,
-                           reverse('judge.views.user', args=[self.username]))
+                           reverse('user_page', args=[self.username]))
 
     def get_context_data(self, **kwargs):
         context = super(AllUserSubmissions, self).get_context_data(**kwargs)
@@ -228,7 +228,7 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
 
     def get_content_title(self):
         return format_html(u'''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
-                           self.username, reverse('judge.views.user', args=[self.username]),
+                           self.username, reverse('user_page', args=[self.username]),
                            self.problem.name, reverse('problem_detail', args=[self.problem.code]))
 
     def get_context_data(self, **kwargs):
@@ -312,6 +312,6 @@ class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
 
     def get_content_title(self):
         return format_html(u'<a href="{1}">{0}</a>\'s submissions for <a href="{3}">{2}</a> in <a href="{5}">{4}</a>',
-                           self.username, reverse('judge.views.user', args=[self.username]),
+                           self.username, reverse('user_page', args=[self.username]),
                            self.problem.name, reverse('problem_detail', args=[self.problem.code]),
                            self.contest.name, reverse('contest_view', args=[self.contest.key]))

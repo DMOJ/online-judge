@@ -84,7 +84,7 @@ html(lang='en')
                     - endrecursetree
                 span#user-links
                     if request.user.is_authenticated
-                        a(href='{% url "judge.views.user" %}')
+                        a(href='{% url "user_page" %}')
                             | Hello,&nbsp;
                             b #{request.user.username}
                         | &nbsp;|

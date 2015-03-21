@@ -107,7 +107,7 @@ block body
                 for comment in comments
                     li
                         span(class=comment.author.display_rank)
-                            a(href='{% url "judge.views.user" comment.author.user.username %}') #{comment.author.user.username}
+                            a(href='{% url "user_page" comment.author.user.username %}') #{comment.author.user.username}
                         | &nbsp;&rarr;
                         if comment.parent
                             a(href='{{comment.link}}#comment-{{comment.id}}-link') #{comment.parent.title}

@@ -4,7 +4,7 @@ block content_title
     = 'Submission of '
     a(href='{% url "problem_detail" submission.problem.code %}')= submission.problem.name
     = ' by '
-    a(href='{% url "judge.views.user" submission.user.user.username %}')= submission.user.user.username
+    a(href='{% url "user_page" submission.user.user.username %}')= submission.user.user.username
 
 block header
     span.submission-info

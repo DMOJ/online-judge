@@ -7,7 +7,7 @@ span.comment-author Author:
     = ' '
     - with author=comment.author
         span(class='{{ author.display_rank }}')
-            a(href='{% url "judge.views.user" author.user.username %}')= author.long_display_name
+            a(href='{% url "user_page" author.user.username %}')= author.long_display_name
 each version in revisions
     table.comment-revision(id='revision-{{ forloop.counter }}')
         tr
