@@ -18,6 +18,7 @@ from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
     ContestProfile, SubmissionTestCase, Solution
+from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 try:
@@ -681,6 +682,32 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         if request.user.has_perm('judge.edit_all_contest') or obj is None:
             return True
         return obj.organizers.filter(id=request.user.profile.id).exists()
+
+    def get_urls(self):
+        urls = super(SubmissionAdmin, self).get_urls()
+        my_urls = patterns('',
+                           url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
+        )
+        return my_urls + urls
+
+    def rate_view(self, request, id):
+        if not request.user.has_perm('judge.edit_all_contest') or not request.user.has_perm('judge.edit_own_contest'):
+            raise PermissionDenied()
+
+        try:
+            contest = Contest.objects.get(id=id)
+        except ObjectDoesNotExist:
+            raise Http404()
+
+        if not contest.is_rated:
+            raise PermissionDenied()
+
+        if not request.user.has_perm('judge.edit_all_contest') and \
+                not contest.organizers.filter(id=request.user.profile.id).exists().exists():
+            raise PermissionDenied()
+
+        rate_contest(contest)
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
     def get_form(self, *args, **kwargs):
         form = super(ContestAdmin, self).get_form(*args, **kwargs)
