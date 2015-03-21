@@ -4,7 +4,7 @@ extends user/base_users_table
 - load cache
 
 block after_rank_head
-    if has_ratings
+    if has_rating
         th Rating
 
 block before_point_head
@@ -25,5 +25,5 @@ block before_point
                 td
 
 block after_rank
-    if has_ratings
+    if has_rating
         td= user.rating
