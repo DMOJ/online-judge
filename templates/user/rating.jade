@@ -10,11 +10,13 @@ block body
         table.table
             tr
                 th Contest
+                th Rank
                 th Rating
             each rating in ratings
                 tr
                     td
                         a(href='{% url "contest_ranking" rating.contest.key %}')= rating.contest.name
+                    td= rating.rank
                     td.rating(class='{{ rating.rating|rating_class }}', title='{{ rating.rating|rating_name }}')= rating.rating
 
         #rating-chart(style='min-width: 310px; height: 400px; margin: 0 auto')
