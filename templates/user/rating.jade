@@ -17,9 +17,13 @@ block bodyend
     script(src='http://code.highcharts.com/highcharts.js')
 
     | <script type="text/javascript">
-    |    var rating_history = [
+    |     var rating_history = [
     each rating in ratings
-        | { name: '#{rating.contest.name|escapejs}', y: #{rating.rating} },
+        | {
+        |     name: '#{rating.contest.name|escapejs}',
+        |     x: new Date(#{rating.contest.end_time|date:"c"}),
+        |     y: #{rating.rating},
+        | },
     |    ];
     | </script>
 
