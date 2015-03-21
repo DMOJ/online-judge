@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count
@@ -14,9 +15,9 @@ from judge.forms import ProfileForm
 from judge.models import Profile, Submission
 from judge.utils.ranker import ranker
 from .contests import contest_ranking_view
-from judge.utils.views import TitleMixin, generic_message
+from judge.utils.views import TitleMixin
 
-__all__ = ['UserPage', 'users', 'edit_profile', 'UserRating']
+__all__ = ['user_page', 'users', 'edit_profile', 'UserRating']
 
 
 def remap_keys(iterable, mapping):
@@ -30,38 +31,31 @@ class UserMixin(object):
     context_object_name = 'user'
 
 
-class UserPage(TitleMixin, UserMixin, DetailView):
-    template_name = 'user/user.jade'
-
-    def get_object(self, queryset=None):
-        if self.kwargs.get(self.slug_url_kwarg, None) is None:
-            if not self.request.user.is_authenticated():
-                return redirect_to_login(self.request.get_full_path())
-            return self.request.user.profile
-        return super(UserPage, self).get_object(queryset)
-
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            return super(UserPage, self).dispatch(request, *args, **kwargs)
-        except Http404:
-            return generic_message(request, 'No such user', 'No user handle "%s".' %
-                                   self.kwargs.get(self.slug_url_kwarg, None))
-
-    def get_title(self):
-        return 'My Account' if self.request.user == self.object.user else 'User %s' % self.object.long_display_name
-
-    def get_context_data(self, **kwargs):
-        context = super(UserPage, self).get_context_data(**kwargs)
-
-        result = Submission.objects.filter(user=self.object, points__gt=0, problem__is_public=True) \
+def user_page(request, user=None):
+    try:
+        if user is None:
+            if not request.user.is_authenticated():
+                return redirect_to_login(request.get_full_path())
+            user = request.user.profile
+        else:
+            user = Profile.objects.select_related('user').get(user__username=user)
+        result = Submission.objects.filter(user=user, points__gt=0, problem__is_public=True) \
             .values('problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
             .distinct().annotate(points=Max('points')).order_by('problem__group__full_name', 'problem__name')
-        context['best_submissions'] = remap_keys(result, {
+        result = remap_keys(result, {
             'problem__code': 'code', 'problem__name': 'name', 'problem__points': 'total',
             'problem__group__full_name': 'group'
         })
-        context['authored'] = self.object.authored_problems.filter(is_public=True).order_by('code')
-        return context
+        return render_to_response('user/user.jade', {
+            'user': user, 'best_submissions': result,
+            'authored': user.authored_problems.filter(is_public=True).order_by('code'),
+            'title': 'My Account' if request.user == user.user else 'User %s' % user.long_display_name,
+        },  context_instance=RequestContext(request))
+    except ObjectDoesNotExist:
+        return render_to_response('generic_message.jade', {
+            'message': 'No user handle "%s".' % user,
+            'title': 'No such user'
+        }, context_instance=RequestContext(request))
 
 
 @login_required
