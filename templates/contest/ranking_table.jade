@@ -28,5 +28,5 @@ block before_point
 block after_rank
     if has_rating
         td
-            a.rating(class='{{ user.rating|rating_class }}',
+            a.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}',
                      href='{% url "user_rating" user.user.username %}') #{user.rating|default_if_none:"N/A"}
