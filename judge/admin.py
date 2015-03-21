@@ -684,7 +684,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         return obj.organizers.filter(id=request.user.profile.id).exists()
 
     def get_urls(self):
-        urls = super(SubmissionAdmin, self).get_urls()
+        urls = super(ContestAdmin, self).get_urls()
         my_urls = patterns('',
                            url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
         )
