@@ -130,6 +130,7 @@ class Profile(models.Model):
                                     choices=(('user', 'Normal User'), ('setter', 'Problem Setter'), ('admin', 'Admin')))
     mute = models.BooleanField(verbose_name='Comment mute', help_text='Some users are at their best when silent.',
                                default=False)
+    rating = models.IntegerField(null=True, default=None)
 
     def calculate_points(self):
         points = sum(map(itemgetter('points'),
@@ -708,7 +709,7 @@ class Solution(models.Model):
         )
 
 
-reversion.register(Profile, exclude=['points', 'last_access', 'ip'])
+reversion.register(Profile, exclude=['points', 'last_access', 'ip', 'rating'])
 reversion.register(Problem)
 reversion.register(Contest, follow=['contest_problems'])
 reversion.register(ContestProblem)

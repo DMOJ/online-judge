@@ -2,10 +2,12 @@ from bisect import bisect
 from itertools import izip
 import math
 from operator import itemgetter
+
 from django.db import connection, transaction
 from django.db.models import Count
 from django.utils import timezone
-from judge.models import Rating
+
+from judge.models import Rating, Profile
 from judge.utils.ranker import tie_ranker
 
 
@@ -129,6 +131,15 @@ def rate_contest(contest):
     with transaction.atomic():
         Rating.objects.filter(contest=contest).delete()
         Rating.objects.bulk_create(ratings)
+        cursor = connection.cursor()
+        cursor.execute('CREATE TEMPORARY TABLE _profile_rating_update(id integer, rating integer)')
+        cursor.executemany('INSERT INTO _profile_rating_update VALUES (%s, %s)', izip(user_ids, rating))
+        cursor.execute('''
+            UPDATE `%s` p INNER JOIN `_profile_rating_update` tmp ON (p.id = tmp.id)
+            SET p.rating = tmp.rating
+        ''' % Profile._meta.db_table)
+        cursor.execute('DROP TABLE _profile_rating_update')
+        cursor.close()
     return old_rating, old_volatility, ranking, times_ranked, rating, volatility
 
 

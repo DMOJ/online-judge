@@ -704,6 +704,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
                 cursor = connection.cursor()
                 cursor.execute('TRUNCATE TABLE `%s`' % Rating._meta.db_table)
                 cursor.close()
+            Profile.objects.update(rating=None)
             for contest in Contest.objects.filter(is_rated=True).order_by('end_time'):
                 rate_contest(contest)
         return HttpResponseRedirect(reverse('admin:judge_contest_changelist'))
