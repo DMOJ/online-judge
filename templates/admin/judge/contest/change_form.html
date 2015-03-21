@@ -26,7 +26,7 @@
 
 {% block after_field_sets %}{{ block.super }}
     {% if original and original.is_rated %}
-        <a class="rejudgelink" href="{% url 'admin:judge_contest_rate' original.pk %}">Rate</a>
+        <a class="reratelink" href="{% url 'admin:judge_contest_rate' original.pk %}">Rate</a>
         <div style="display: none">
             <ul>
                 <li id="suit-rerate"><a href="{% url 'admin:judge_contest_rate' original.pk %}"><i class="icon-refresh icon-alpha75"></i>Rate</a></li>
