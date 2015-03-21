@@ -81,6 +81,7 @@ urlpatterns = patterns('',
 
     url(r'^users/$', 'judge.views.users'),
     url(r'^user/(\w+)$', 'judge.views.user'),
+    url(r'^user/(\w+)/rating$', views.UserRating.as_view(), name='user_rating'),
     url(r'^user$', 'judge.views.user'),
     url(r'^edit/profile/$', 'judge.views.edit_profile'),
 

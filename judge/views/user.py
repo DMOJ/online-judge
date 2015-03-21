@@ -12,10 +12,12 @@ from django.views.generic import DetailView
 import reversion
 
 from judge.forms import ProfileForm
-from judge.models import Profile, Submission, Problem
+from judge.models import Profile, Submission
 from judge.utils.ranker import ranker
 from .contests import contest_ranking_view
 from judge.utils.views import TitleMixin
+
+__all__ = ['user', 'edit_profile', 'UserRating']
 
 
 def remap_keys(iterable, mapping):
