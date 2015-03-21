@@ -167,7 +167,7 @@ def leave_contest(request, key):
 
 
 ContestRankingProfile = namedtuple('ContestRankingProfile',
-                                   'id user display_rank long_display_name points cumtime problems organization')
+                                   'id user display_rank long_display_name points cumtime problems rating organization')
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
 
 
@@ -207,7 +207,7 @@ def contest_ranking_list(contest, problems):
             points=participation.score,
             cumtime=participation.cumtime,
             organization=SimpleLazyObject(lambda: contest_profile.user.organization),
-            ratings=participation.rating.rating if hasattr(participation, 'rating') else None,
+            rating=participation.rating.rating if hasattr(participation, 'rating') else None,
             problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.user, participation))
         )
 
