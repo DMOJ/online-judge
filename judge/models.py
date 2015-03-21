@@ -647,7 +647,7 @@ class Rating(models.Model):
     contest = models.ForeignKey(Contest, related_name='ratings')
     rating = models.IntegerField()
     volatility = models.IntegerField()
-    last_rated = models.DateTimeField()
+    last_rated = models.DateTimeField(db_index=True)
 
     class Meta:
         unique_together = ('user', 'contest')
