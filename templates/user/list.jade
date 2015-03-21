@@ -5,6 +5,11 @@ extends user/base_users
 
 block users_media
     link(rel='stylesheet', href='{% static "rating.css" %}')
+    script(src='{% static "tablesorter.js" %}', type='text/javascript')
+    script(type='text/javascript')
+        $(document).ready(function () {
+            $("#users-table").tablesorter();
+        });
 
 block users_table
     include user/users_table
