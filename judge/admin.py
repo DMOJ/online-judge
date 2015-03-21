@@ -699,7 +699,7 @@ class ContestParticipationForm(ModelForm):
 
 class ContestParticipationAdmin(admin.ModelAdmin):
     fields = ('contest', 'profile', 'real_start')
-    list_display = ('contest', 'username', 'real_start')
+    list_display = ('contest', 'username', 'real_start', 'score', 'cumtime')
     actions = ['recalculate_points', 'recalculate_cumtime']
     actions_on_bottom = actions_on_top = True
     search_fields = ('contest__key', 'contest__name', 'profile__user__user__username', 'profile__user__name')
