@@ -649,6 +649,9 @@ class Rating(models.Model):
     volatility = models.IntegerField()
     last_rated = models.DateTimeField()
 
+    class Meta:
+        unique_together = ('user', 'contest')
+
 
 class BlogPost(models.Model):
     title = models.CharField(verbose_name='Post title', max_length=100)
