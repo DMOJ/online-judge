@@ -103,7 +103,7 @@ def rate_contest(contest):
     cursor.close()
 
     users = contest.users.order_by('-score', 'cumtime').annotate(submissions=Count('submission')) \
-                   .values_list('profile__user_id', 'score', 'cumtime', 'submissions')
+                   .filter(submissions__gt=0).values_list('profile__user_id', 'score', 'cumtime', 'submissions')
     users = list(tie_ranker(users, key=itemgetter(1, 2)))
     user_ids = [user[1][0] for user in users]
     ranking = map(itemgetter(0), users)
