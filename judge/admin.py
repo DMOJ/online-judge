@@ -5,6 +5,7 @@ from django.contrib import admin, messages
 from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 from django.db.models import TextField, Q
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, Http404
@@ -686,9 +687,17 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
     def get_urls(self):
         urls = super(ContestAdmin, self).get_urls()
         my_urls = patterns('',
+                           url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
                            url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
         )
         return my_urls + urls
+
+    def rate_all_view(self, request):
+        if not request.user.has_perm('judge.contest_rating'):
+            raise PermissionDenied()
+        for contest in Contest.objects.filter(is_rated=True).order_by('end_time'):
+            rate_contest(contest)
+        return HttpResponseRedirect(reverse('admin:judge_contest_changelist'))
 
     def rate_view(self, request, id):
         if not request.user.has_perm('judge.contest_rating'):
@@ -700,7 +709,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         if not contest.is_rated:
             raise Http404()
         rate_contest(contest)
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('admin:judge_contest_changelist')))
 
     def get_form(self, *args, **kwargs):
         form = super(ContestAdmin, self).get_form(*args, **kwargs)
