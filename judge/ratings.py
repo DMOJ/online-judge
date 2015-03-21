@@ -1,4 +1,8 @@
+from itertools import izip
 import math
+from operator import itemgetter
+from django.db import connection, transaction
+from django.utils import timezone
 from judge.models import Rating
 
 
@@ -73,3 +77,36 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated):
     adjust = float(sum(old_rating) - sum(new_rating)) / N
     new_rating = map(adjust.__add__, new_rating)
     return map(int, map(round, new_rating)), map(int, map(round, new_volatility))
+
+
+def rate_contest(contest):
+    cursor = connection.cursor()
+    cursor.execute('''
+        SELECT judge_rating.user_id, judge_rating.rating, judge_rating.volatility, r.times
+        FROM judge_rating INNER JOIN (
+            SELECT judge_rating.user_id AS id, MAX(judge_rating.last_rated) AS last_time,
+                   COUNT(judge_rating.user_id) AS times
+            FROM judge_contestparticipation INNER JOIN
+                 judge_contestprofile ON (judge_contestparticipation.profile_id = judge_contestprofile.id)
+                 judge_rating ON (judge_rating.user_id = judge_contestprofile.user_id)
+            WHERE judge_contestparticipation.contest_id = %s AND judge_rating.last_rated < %s
+            GROUP BY judge_rating.user_id
+            ORDER BY judge_contestparticipation.score DESC, judge_contestparticipation.cumtime ASC
+        ) AS r ON (judge_rating.user_id = r.id AND judge_rating.last_rated = r.last_time)
+    ''', (contest.id, contest.end_time))
+    data = {user: (rating, volatility, times) for user, rating, volatility, times in cursor.fetchall()}
+    cursor.close()
+
+    user_ids = contest.users.order_by('-score', 'cumtime').values_list('profile__user_id', flat=True)
+    old_data = [data.get(user, (1000, 500)) for user in user_ids]
+    old_rating = map(itemgetter(0), old_data)
+    old_volatility = map(itemgetter(1), old_data)
+    times_ranked = map(itemgetter(1), old_data)
+    rating, volatility = recalculate_ratings(old_rating, old_volatility, range(1, len(user_ids) + 1), times_ranked)
+
+    now = timezone.now()
+    with transaction.atomic():
+        Rating.objects.filter(contest=contest).delete()
+        ratings = [Rating(user_id=id, contest=contest, rating=r, volatility=v, last_rated=now)
+                   for id, r, v in izip(user_ids, rating, volatility)]
+        Rating.objects.bulk_create(ratings)
