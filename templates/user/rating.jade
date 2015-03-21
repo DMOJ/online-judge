@@ -9,5 +9,6 @@ block body
             th Contest
             th Rating
         each rating in ratings
-            td= rating.contest.name
-            td= rating.rating
+            tr
+                td= rating.contest.name
+                td= rating.rating
