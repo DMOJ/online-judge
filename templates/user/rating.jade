@@ -45,10 +45,11 @@ block bodyend
                     type: 'datetime'
                 },
                 yAxis: {
+                    min: #{min_graph},
+                    max: #{max_graph},
                     title: {
                         text: 'Rating'
-                    },
-                    floor: 1000
+                    }
                 },
                 legend: {
                     enabled: false
