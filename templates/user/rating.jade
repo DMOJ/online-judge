@@ -19,7 +19,7 @@ block bodyend
     | <script type="text/javascript">
     |    var rating_history = [
     each rating in ratings
-        | {name: #{rating.contest.name}, y: #{rating.rating}}
+        | { name: '#{rating.contest.name|escapejs}', y: #{rating.rating} },
     |    ];
     | </script>
 
