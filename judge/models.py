@@ -643,7 +643,7 @@ class ContestSubmission(models.Model):
 
 
 class Rating(models.Model):
-    profile = models.ForeignKey(Profile, related_name='ratings')
+    user = models.ForeignKey(Profile, related_name='ratings')
     contest = models.ForeignKey(Contest, related_name='ratings')
     rating = models.IntegerField()
     volatility = models.IntegerField()
