@@ -120,3 +120,4 @@ def rate_contest(contest):
     with transaction.atomic():
         Rating.objects.filter(contest=contest).delete()
         Rating.objects.bulk_create(ratings)
+    return old_rating, old_volatility, ranking, times_ranked, ratings, volatility
