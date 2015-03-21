@@ -6,5 +6,6 @@ block after_point_head
     th.problems Problems
 
 block after_point
-    td.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}') #{user.rating|default_if_none:"N/A"}
+    td.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}')
+    	a(href='{% url "user_rating" user.user.username %}') #{user.rating|default_if_none:"N/A"}
     td #{user.problems}
