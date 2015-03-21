@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.db.models import Max, Count
+from django.db.models import Max, Count, Min
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext, Context
@@ -11,7 +11,7 @@ from django.views.generic import DetailView
 import reversion
 
 from judge.forms import ProfileForm
-from judge.models import Profile, Submission
+from judge.models import Profile, Submission, Rating
 from judge.utils.ranker import ranker
 from .contests import contest_ranking_view
 from judge.utils.views import TitleMixin, generic_message
@@ -114,4 +114,12 @@ class UserRating(TitleMixin, UserMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(UserRating, self).get_context_data(**kwargs)
         context['ratings'] = self.object.ratings.order_by('contest__end_time').defer('contest__description')
+        user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
+        global_data = Rating.objects.aggregate(Min('rating'), Max('rating'))
+        min_ever, max_ever = global_data['rating__min'], global_data['rating__max']
+        min_user, max_user = user_data['rating__min'], user_data['rating__max']
+        delta = max_user - min_user
+        ratio = (max_ever - max_user) / (max_ever - min_ever)
+        context['max_graph'] = max_user + ratio * delta
+        context['min_graph'] = min_user + ratio * delta - delta
         return context
