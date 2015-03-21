@@ -2,8 +2,10 @@ from itertools import izip
 import math
 from operator import itemgetter
 from django.db import connection, transaction
+from django.db.models import Count
 from django.utils import timezone
 from judge.models import Rating
+from judge.utils.ranker import tie_ranker
 
 
 def rational_approximation(t):
@@ -100,12 +102,16 @@ def rate_contest(contest):
     data = {user: (rating, volatility, times) for user, rating, volatility, times in cursor.fetchall()}
     cursor.close()
 
-    user_ids = contest.users.order_by('-score', 'cumtime').values_list('profile__user_id', flat=True)
+    users = contest.users.order_by('-score', 'cumtime').annotate(submissions=Count('submission')) \
+                   .values_list('profile__user_id', 'score', 'cumtime', 'submissions')
+    users = list(tie_ranker(users, key=itemgetter(1, 2)))
+    user_ids = [user[1][0] for user in users]
+    ranking = map(itemgetter(0), users)
     old_data = [data.get(user, (1200, 535, 0)) for user in user_ids]
     old_rating = map(itemgetter(0), old_data)
     old_volatility = map(itemgetter(1), old_data)
     times_ranked = map(itemgetter(2), old_data)
-    rating, volatility = recalculate_ratings(old_rating, old_volatility, range(1, len(user_ids) + 1), times_ranked)
+    rating, volatility = recalculate_ratings(old_rating, old_volatility, ranking, times_ranked)
 
     now = timezone.now()
     with transaction.atomic():
