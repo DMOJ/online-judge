@@ -645,6 +645,7 @@ class ContestSubmission(models.Model):
 class Rating(models.Model):
     user = models.ForeignKey(Profile, related_name='ratings')
     contest = models.ForeignKey(Contest, related_name='ratings')
+    participation = models.OneToOneField(ContestParticipation, related_name='rating')
     rating = models.IntegerField()
     volatility = models.IntegerField()
     last_rated = models.DateTimeField(db_index=True)

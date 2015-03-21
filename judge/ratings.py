@@ -103,9 +103,10 @@ def rate_contest(contest):
     cursor.close()
 
     users = contest.users.order_by('-score', 'cumtime').annotate(submissions=Count('submission')) \
-                   .filter(submissions__gt=0).values_list('profile__user_id', 'score', 'cumtime', 'submissions')
-    users = list(tie_ranker(users, key=itemgetter(1, 2)))
-    user_ids = [user[1][0] for user in users]
+                   .filter(submissions__gt=0).values_list('id', 'profile__user_id', 'score', 'cumtime')
+    users = list(tie_ranker(users, key=itemgetter(2, 3)))
+    participation_ids = [user[1][0] for user in users]
+    user_ids = [user[1][1] for user in users]
     ranking = map(itemgetter(0), users)
     old_data = [data.get(user, (1200, 535, 0)) for user in user_ids]
     old_rating = map(itemgetter(0), old_data)
@@ -114,8 +115,8 @@ def rate_contest(contest):
     rating, volatility = recalculate_ratings(old_rating, old_volatility, ranking, times_ranked)
 
     now = timezone.now()
+    ratings = [Rating(user_id=id, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p)
+               for id, p, r, v in izip(user_ids, participation_ids, rating, volatility)]
     with transaction.atomic():
         Rating.objects.filter(contest=contest).delete()
-        ratings = [Rating(user_id=id, contest=contest, rating=r, volatility=v, last_rated=now)
-                   for id, r, v in izip(user_ids, rating, volatility)]
         Rating.objects.bulk_create(ratings)
