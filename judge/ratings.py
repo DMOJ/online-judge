@@ -118,8 +118,8 @@ def rate_contest(contest):
     rating, volatility = recalculate_ratings(old_rating, old_volatility, ranking, times_ranked)
 
     now = timezone.now()
-    ratings = [Rating(user_id=id, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p)
-               for id, p, r, v in izip(user_ids, participation_ids, rating, volatility)]
+    ratings = [Rating(user_id=id, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p, rank=z)
+               for id, p, r, v, z in izip(user_ids, participation_ids, rating, volatility, ranking)]
     with transaction.atomic():
         Rating.objects.filter(contest=contest).delete()
         Rating.objects.bulk_create(ratings)
