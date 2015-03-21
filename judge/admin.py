@@ -647,6 +647,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
     actions_on_top = True
     actions_on_bottom = True
     form = ContestForm
+    change_list_template = 'admin/judge/contest/change_list.html'
 
     if not use_select2:
         filter_horizontal = ['organizers']
