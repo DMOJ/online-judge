@@ -1,0 +1,13 @@
+extends base
+- load staticfiles
+
+block media
+
+block body
+    table.table
+        tr
+            th Contest
+            th Rating
+        each rating in ratings
+            td= rating.contest.name
+            td= rating.rating

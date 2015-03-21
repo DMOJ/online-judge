@@ -1,17 +1,21 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.html import format_html
+from django.views.generic import DetailView
 import reversion
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Submission, Problem
 from judge.utils.ranker import ranker
 from .contests import contest_ranking_view
+from judge.utils.views import TitleMixin
 
 
 def remap_keys(iterable, mapping):
@@ -73,3 +77,23 @@ def users(request):
                                .select_related('user__username', 'organization').defer('about', 'organization__about')),
         'title': 'Users'
     }, context_instance=RequestContext(request))
+
+
+class UserRating(TitleMixin, DetailView):
+    model = Profile
+    slug_url_kwarg = 'username'
+    slug_field = 'user__username'
+    template_name = 'user/rating.jade'
+
+    def get_title(self):
+        return 'Rating history for %s' % self.object.long_display_name
+
+    def get_content_title(self):
+        return format_html(u'Rating history for <span class="{1}"><a href="{2}">{0}</a></span>',
+                           self.object.long_display_name, self.object.display_rank,
+                           reverse('judge.views.user', args=[self.object.user.username]))
+
+    def get_context_data(self, **kwargs):
+        context = super(UserRating, self).get_context_data(**kwargs)
+        context['ratings'] = self.object.ratings.all()
+        return context
