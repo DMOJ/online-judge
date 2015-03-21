@@ -87,7 +87,7 @@ def rate_contest(contest):
             SELECT judge_rating.user_id AS id, MAX(judge_rating.last_rated) AS last_time,
                    COUNT(judge_rating.user_id) AS times
             FROM judge_contestparticipation INNER JOIN
-                 judge_contestprofile ON (judge_contestparticipation.profile_id = judge_contestprofile.id)
+                 judge_contestprofile ON (judge_contestparticipation.profile_id = judge_contestprofile.id) INNER JOIN
                  judge_rating ON (judge_rating.user_id = judge_contestprofile.user_id)
             WHERE judge_contestparticipation.contest_id = %s AND judge_rating.last_rated < %s
             GROUP BY judge_rating.user_id
