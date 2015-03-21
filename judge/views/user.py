@@ -17,7 +17,7 @@ from judge.utils.ranker import ranker
 from .contests import contest_ranking_view
 from judge.utils.views import TitleMixin
 
-__all__ = ['edit_profile', 'UserRating']
+__all__ = ['user', 'users', 'edit_profile', 'UserRating']
 
 
 def remap_keys(iterable, mapping):
