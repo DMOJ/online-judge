@@ -635,11 +635,11 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
+        (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'is_rated')}),
         ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
         ('Details', {'fields': ('description', 'is_external')}),
     )
-    list_display = ('key', 'name', 'is_public', 'is_external', 'start_time', 'end_time', 'time_limit')
+    list_display = ('key', 'name', 'is_public', 'is_external', 'rated', 'start_time', 'end_time', 'time_limit')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
     actions_on_top = True
@@ -669,6 +669,11 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
             return Contest.objects.all()
         else:
             return Contest.objects.filter(organizers__id=request.user.profile.id)
+
+    def get_readonly_fields(self, request, obj=None):
+        if request.user.has_perm('judge.contest_set_rated'):
+            return []
+        return ['is_rated']
 
     def has_change_permission(self, request, obj=None):
         if not request.user.has_perm('judge.edit_own_contest'):

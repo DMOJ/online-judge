@@ -524,6 +524,7 @@ class Contest(models.Model):
     time_limit = TimedeltaField(verbose_name='Time limit', blank=True, null=True)
     is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
     is_external = models.BooleanField(verbose_name='External contest', default=False)
+    is_rated = models.BooleanField(help_text='Whether this contest can be rated.', default=False)
 
     def clean(self):
         if self.start_time >= self.end_time:
@@ -560,6 +561,7 @@ class Contest(models.Model):
             ('see_private_contest', 'See private contests'),
             ('edit_own_contest', 'Edit own contests'),
             ('edit_all_contest', 'Edit all contests'),
+            ('contest_set_rated', 'Allow contest rating'),
         )
 
 
