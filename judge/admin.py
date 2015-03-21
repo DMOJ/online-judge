@@ -6,6 +6,7 @@ from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.db.models import TextField, Q
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, Http404
@@ -696,8 +697,9 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
     def rate_all_view(self, request):
         if not request.user.has_perm('judge.contest_rating'):
             raise PermissionDenied()
-        for contest in Contest.objects.filter(is_rated=True).order_by('end_time'):
-            rate_contest(contest)
+        with transaction.atomic():
+            for contest in Contest.objects.filter(is_rated=True).order_by('end_time'):
+                rate_contest(contest)
         return HttpResponseRedirect(reverse('admin:judge_contest_changelist'))
 
     def rate_view(self, request, id):
