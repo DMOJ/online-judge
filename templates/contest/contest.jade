@@ -32,7 +32,7 @@ block info_float
             hr
 
     if contest.start_time <= now or perms.judge.see_private_contest
-        a(href='{% url "judge.views.contest_ranking" contest.key %}')
+        a(href='{% url "contest_ranking" contest.key %}')
             i.fa.fa-bar-chart.fa-fw
             | View rankings
         hr

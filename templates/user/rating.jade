@@ -9,7 +9,8 @@ block body
                 th Rating
             each rating in ratings
                 tr
-                    td= rating.contest.name
+                    td
+                        a(href='{% url "contest_ranking" rating.contest.key %}')= rating.contest.name
                     td= rating.rating
 
         #rating-chart(style='min-width: 310px; height: 400px; margin: 0 auto')

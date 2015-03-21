@@ -68,7 +68,7 @@ block users_media
                         switch (message.type) {
                             case 'update':
                                 $.ajax({
-                                    url: '{% url "judge.views.contest_ranking_ajax" contest.key %}'
+                                    url: '{% url "contest_ranking_ajax" contest.key %}'
                                 }).done(function (data) {
                                     table.html(data);
                                 }).fail(function () {
