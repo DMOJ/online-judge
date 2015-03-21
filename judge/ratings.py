@@ -132,7 +132,7 @@ RATING_CLASS = ['rate-newbie', 'rate-amateur', 'rate-expert', 'rate-master', 'ra
 
 
 def rating_level(rating):
-    return bisect(RATING_VALUES, 999)
+    return bisect(RATING_VALUES, rating)
 
 
 def rating_name(rating):
