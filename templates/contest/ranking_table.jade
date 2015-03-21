@@ -3,6 +3,10 @@ extends user/base_users_table
 - load timedelta
 - load cache
 
+block after_rank_head
+    if has_ratings
+        th Rating
+
 block before_point_head
     each problem in problems
         th.points.header
@@ -19,3 +23,7 @@ block before_point
                         .solving-time #{problem.time|timedelta:"noday"}
             else
                 td
+
+block after_rank_head
+    if has_ratings
+        td= user.rating

@@ -207,10 +207,12 @@ def contest_ranking_list(contest, problems):
             points=participation.score,
             cumtime=participation.cumtime,
             organization=SimpleLazyObject(lambda: contest_profile.user.organization),
+            ratings=participation.rating.rating if hasattr(participation, 'rating') else None,
             problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.user, participation))
         )
 
-    return map(make_ranking_profile, contest.users.select_related('profile').order_by('-score', 'cumtime'))
+    return map(make_ranking_profile, contest.users.select_related('profile', 'rating').order_by('-score', 'cumtime')
+                                            .defer('profile__about'))
 
 
 def contest_ranking_ajax(request, key):
@@ -223,6 +225,7 @@ def contest_ranking_ajax(request, key):
         'problems': problems,
         'contest': contest,
         'show_organization': True,
+        'has_rating': contest.ratings.exists(),
     }, context_instance=RequestContext(request))
 
 
@@ -243,6 +246,7 @@ def contest_ranking_view(request, contest):
         'contest': contest,
         'show_organization': True,
         'last_msg': event.last(),
+        'has_rating': contest.ratings.exists(),
     }, context_instance=RequestContext(request))
 
 
