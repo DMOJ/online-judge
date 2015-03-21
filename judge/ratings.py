@@ -1,3 +1,4 @@
+from bisect import bisect
 from itertools import izip
 import math
 from operator import itemgetter
@@ -123,3 +124,20 @@ def rate_contest(contest):
         Rating.objects.filter(contest=contest).delete()
         Rating.objects.bulk_create(ratings)
     return old_rating, old_volatility, ranking, times_ranked, rating, volatility
+
+
+RATING_LEVELS = ['Newbie', 'Amateur', 'Expert', 'Master', 'Grandmaster', 'Target']
+RATING_VALUES = [1000, 1200, 1500, 2200, 3000]
+RATING_CLASS = ['rate-newbie', 'rate-amateur', 'rate-expert', 'rate-master', 'rate-grandmaster', 'rate-target']
+
+
+def rating_level(rating):
+    return bisect(RATING_VALUES, 999)
+
+
+def rating_name(rating):
+    return RATING_LEVELS[rating_level(rating)]
+
+
+def rating_class(rating):
+    return RATING_CLASS[rating_level(rating)]

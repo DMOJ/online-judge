@@ -2,6 +2,7 @@ extends user/base_users
 - load staticfiles
 
 block users_media
+    link(rel='stylesheet', href='{% static "rating.css" %}')
     style
         #users-table td {
             height: 2.5em;

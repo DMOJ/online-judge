@@ -2,6 +2,7 @@ extends user/base_users_table
 
 - load timedelta
 - load cache
+- load rating
 
 block after_rank_head
     if has_rating
@@ -27,4 +28,5 @@ block before_point
 block after_rank
     if has_rating
         td
-            a(href='{% url "user_rating" user.user.username %}') #{user.rating|default_if_none:"N/A"}
+            a.rating(class='{{ user.rating|rating_class }}',
+                     href='{% url "user_rating" user.user.username %}') #{user.rating|default_if_none:"N/A"}
