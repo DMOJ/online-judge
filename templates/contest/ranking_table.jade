@@ -26,4 +26,5 @@ block before_point
 
 block after_rank
     if has_rating
-        td= user.rating
+        td
+            a(href='{% url "user_rating" user.user.username %}')= user.rating
