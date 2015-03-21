@@ -672,7 +672,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
             return Contest.objects.filter(organizers__id=request.user.profile.id)
 
     def get_readonly_fields(self, request, obj=None):
-        if request.user.has_perm('judge.contest_set_rated'):
+        if request.user.has_perm('judge.contest_rating'):
             return []
         return ['is_rated']
 
@@ -691,21 +691,14 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         return my_urls + urls
 
     def rate_view(self, request, id):
-        if not request.user.has_perm('judge.edit_all_contest') or not request.user.has_perm('judge.edit_own_contest'):
+        if not request.user.has_perm('judge.contest_rating'):
             raise PermissionDenied()
-
         try:
             contest = Contest.objects.get(id=id)
         except ObjectDoesNotExist:
             raise Http404()
-
         if not contest.is_rated:
-            raise PermissionDenied()
-
-        if not request.user.has_perm('judge.edit_all_contest') and \
-                not contest.organizers.filter(id=request.user.profile.id).exists().exists():
-            raise PermissionDenied()
-
+            raise Http404()
         rate_contest(contest)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 

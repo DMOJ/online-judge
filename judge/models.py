@@ -561,7 +561,7 @@ class Contest(models.Model):
             ('see_private_contest', 'See private contests'),
             ('edit_own_contest', 'Edit own contests'),
             ('edit_all_contest', 'Edit all contests'),
-            ('contest_set_rated', 'Allow contest rating'),
+            ('contest_rating', 'Rate contests'),
         )
 
 
