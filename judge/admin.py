@@ -666,9 +666,10 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'is_rated')}),
+        (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
         ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
         ('Details', {'fields': ('description', 'is_external')}),
+        ('Rating', {'fields': ('is_rated', 'rate_exclude')}),
     )
     list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time', 'end_time', 'time_limit')
     actions = ['make_public', 'make_private']
@@ -677,9 +678,10 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
     actions_on_bottom = True
     form = ContestForm
     change_list_template = 'admin/judge/contest/change_list.html'
+    filter_horizontal = ['rate_exclude']
 
     if not use_select2:
-        filter_horizontal = ['organizers']
+        filter_horizontal += ['organizers']
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
