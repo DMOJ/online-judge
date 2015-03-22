@@ -526,7 +526,7 @@ class Contest(models.Model):
     is_public = models.BooleanField(verbose_name='Publicly visible', default=False)
     is_external = models.BooleanField(verbose_name='External contest', default=False)
     is_rated = models.BooleanField(help_text='Whether this contest can be rated.', default=False)
-    rate_exclude = models.ManyToManyField(Profile, verbose_name='exclude from ratings', blank=True)
+    rate_exclude = models.ManyToManyField(Profile, verbose_name='exclude from ratings', blank=True, related_name='+')
 
     def clean(self):
         if self.start_time >= self.end_time:
