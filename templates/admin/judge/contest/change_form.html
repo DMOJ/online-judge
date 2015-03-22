@@ -25,7 +25,7 @@
 {% endblock extrahead %}
 
 {% block after_field_sets %}{{ block.super }}
-    {% if original and original.is_rated %}
+    {% if original and original.is_rated and perms.judge.contest_rating %}
         <a class="reratelink" href="{% url 'admin:judge_contest_rate' original.pk %}">Rate</a>
         <div style="display: none">
             <ul>
