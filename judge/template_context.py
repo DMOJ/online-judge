@@ -2,8 +2,20 @@ from functools import partial
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.cache import cache
-from django.utils.functional import SimpleLazyObject
+from django.utils.functional import SimpleLazyObject, new_method_proxy
+import operator
 from .models import Profile, MiscConfig, NavigationBar
+
+
+class FixedSimpleLazyObject(SimpleLazyObject):
+    if not hasattr(SimpleLazyObject, '__len__'):
+        __len__ = new_method_proxy(len)
+
+    if not hasattr(SimpleLazyObject, '__iter__'):
+        __iter__ = new_method_proxy(iter)
+
+    if not hasattr(SimpleLazyObject, '__contains__'):
+        __contains__ = new_method_proxy(operator.contains)
 
 
 def get_profile(request):
@@ -25,7 +37,7 @@ def __nav_tab(path):
 def general_info(request):
     path = request.get_full_path()
     return {
-        'nav_tab': __nav_tab(request.path),
+        'nav_tab': FixedSimpleLazyObject(partial(__nav_tab, request.path)),
         'nav_bar': NavigationBar.objects.all(),
         'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path
     }
