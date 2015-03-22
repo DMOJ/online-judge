@@ -4,7 +4,7 @@
     border-radius: 50%;
     overflow: hidden;
     position: relative;
-    border: solid;
+    border: solid 2px;
 }
 
 .rate-box div {
