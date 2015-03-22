@@ -9,7 +9,8 @@ block after_rank
         a.fill(href='{% url "user_rating" user.user.username %}')
             span.rate-box(class='{{ user.rating|rating_class }}')
                 span(style='height: {{ user.rating|rating_progress }}em')
-            span.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}') #{user.rating|default_if_none:"N/A"}
+            if user.rating
+                span.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}') #{user.rating}
 
 block after_point_head
     th.problems Problems
