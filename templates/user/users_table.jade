@@ -11,9 +11,9 @@ block after_rank
             span.rate-box(class='{{ user.rating|rating_class }}')
                 span(style='height: {{ user.rating|rating_progress }}em')
     td
-        a(href='{% url "user_rating" user.user.username %}')
-            if user.rating
-                span.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}') #{user.rating}
+        if user.rating
+            a.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}',
+                     href='{% url "user_rating" user.user.username %}') #{user.rating}
 
 block after_point_head
     th.problems Problems
