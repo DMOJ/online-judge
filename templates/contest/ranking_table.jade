@@ -6,7 +6,18 @@ extends user/base_users_table
 
 block after_rank_head
     if has_rating
-        th Rating
+        th(colspan=2) Rating
+
+block after_rank
+    if has_rating
+        td
+            a(href='{% url "user_rating" user.user.username %}')
+                span.rate-box(class='{{ user.rating|rating_class }}')
+                    span(style='height: {{ user.rating|rating_progress }}em')
+        td
+            if user.rating
+                a.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}',
+                         href='{% url "user_rating" user.user.username %}') #{user.rating}
 
 block before_point_head
     each problem in problems
@@ -23,10 +34,4 @@ block before_point
                         | #{problem.points|floatformat}
                         .solving-time #{problem.time|timedelta:"noday"}
             else
-                td
-
-block after_rank
-    if has_rating
-        td
-            a.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}',
-                     href='{% url "user_rating" user.user.username %}') #{user.rating|default_if_none:"N/A"}
+                td{% url "user_rating" user.user.username %}') #{user.rating|default_if_none:"N/A"}

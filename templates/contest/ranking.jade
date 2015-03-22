@@ -58,6 +58,21 @@ block users_media
             border-top: 1px solid gray;
             font-size: 0.7em;
         }
+    if has_rating
+        style
+            #users-table td:nth-child(2) {
+                font-size: 0.85em;
+                border-right: none;
+                padding-right: 0;
+            }
+
+            #users-table td:nth-child(3) {
+                text-align: left;
+            }
+
+            #users-table th:nth-child(2), #users-table td:nth-child(3), #users-table th:nth-child(3) {
+                border-right: none;
+            }
     if last_msg
         script(type='text/javascript', src='{% static "event.js" %}')
         script(type='text/javascript')
