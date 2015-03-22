@@ -82,9 +82,6 @@ def submission_delete(sender, instance, **kwargs):
 def contest_submission_delete(sender, instance, **kwargs):
     participation = instance.participation
     participation.recalculate_score()
-    cache.delete(make_template_fragment_key('conrank_user_prob',
-                                            (participation.profile.user_id,
-                                             participation.contest_id)))
 
 
 @receiver(post_save, sender=Organization)
