@@ -285,16 +285,20 @@ class ContestSubmissionInline(admin.StackedInline):
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         submission = kwargs.pop('obj', None)
+        label = None
         if submission:
             if db_field.name == 'participation':
-                kwargs['queryset'] = ContestParticipation.objects.filter(profile__user=submission.user)
+                kwargs['queryset'] = ContestParticipation.objects.filter(profile__user=submission.user,
+                                                                         contest__problems=submission.problem) \
+                                                         .only('id', 'contest__name')
+                label = lambda obj: obj.contest.name
             elif db_field.name == 'problem':
                 kwargs['queryset'] = ContestProblem.objects.filter(problem=submission.problem) \
-                                                   .only('id', 'contest__name')
+                                                   .only('id', 'problem__name', 'contest__name')
+                label = lambda obj: '%s in %s' % (obj.problem.name, obj.contest.name)
         field = super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, **kwargs)
-        if submission:
-            if db_field.name == 'problem':
-                field.label_from_instance = lambda obj: obj.contest.name
+        if label is not None:
+            field.label_from_instance = label
         return field
 
 
