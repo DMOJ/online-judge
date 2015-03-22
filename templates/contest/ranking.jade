@@ -60,15 +60,20 @@ block users_media
         }
     if has_rating
         style
-            #users-table td:nth-child(2) {
+            #users-table .rate-box {
                 font-size: 0.85em;
-                border-right: none;
-                padding-right: 0;
+                float: left;
             }
 
-            #users-table td:nth-child(3) {
-                text-align: left;
+            #users-table .rating {
+                margin-left: 1.25em;
+                display: block;
             }
+
+            #users-table td:nth-child(2) a {
+                display: block;
+            }
+
     if last_msg
         script(type='text/javascript', src='{% static "event.js" %}')
         script(type='text/javascript')
