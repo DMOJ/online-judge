@@ -5,6 +5,7 @@ from datetime import timedelta
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.db import connection
 from django.db.models import Max, Count
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
 from django.shortcuts import render_to_response
@@ -171,47 +172,49 @@ ContestRankingProfile = namedtuple('ContestRankingProfile',
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
 
 
-def get_best_contest_solutions(problems, profile, participation):
-    solutions = []
-    assert isinstance(profile, Profile)
-    assert isinstance(participation, ContestParticipation)
-    for problem in problems:
-        assert isinstance(problem, ContestProblem)
-        queryset = problem.submissions.filter(submission__user_id=profile.id).values('submission__user_id')
-        solution = queryset.annotate(best=Max('points'))
-        if not solution:
-            solutions.append(None)
-            continue
-        time = queryset.filter(points__gt=0).annotate(time=Max('submission__date'))
-        best = solution[0]['best']
-        solutions.append(BestSolutionData(
-            code=problem.problem.code,
-            points=best,
-            time=time[0]['time'] - participation.start if time else timedelta(seconds=0),
-            state='failed-score' if not best else
-                  ('full-score' if best == problem.points else 'partial-score'),
-        ))
-    return solutions
-
-
 def contest_ranking_list(contest, problems):
-    assert isinstance(contest, Contest)
+    cursor = connection.cursor()
+    cursor.execute('''
+        SELECT part.id, prob.id, p.code, MAX(cs1.points) AS best,
+               (SELECT MAX(sub.date)
+                FROM judge_submission sub INNER JOIN judge_contestsubmission cs2 ON
+                    (sub.id = cs2.submission_id)
+                WHERE cs2.participation_id = part.id AND cs2.problem_id = prob.id) AS `last`
+        FROM judge_contestproblem prob CROSS JOIN judge_contestparticipation part INNER JOIN
+             judge_problem p ON (prob.problem_id = p.id) LEFT OUTER JOIN
+             judge_contestsubmission cs1 ON (cs1.problem_id = prob.id AND cs1.participation_id = part.id)
+        WHERE prob.contest_id = %s AND part.contest_id = %s
+        GROUP BY prob.id, part.id
+    ''', (contest.id, contest.id))
+    data = {(part, prob): (code, best, last) for part, prob, code, best, last in cursor.fetchall()}
+    problems = map(attrgetter('id', 'points'), problems)
+    cursor.close()
 
     def make_ranking_profile(participation):
         contest_profile = participation.profile
+        user = contest_profile.user
+        part = participation.id
         return ContestRankingProfile(
             id=contest_profile.user_id,
-            user=SimpleLazyObject(lambda: contest_profile.user.user),
-            display_rank=SimpleLazyObject(lambda: contest_profile.user.display_rank),
-            long_display_name=SimpleLazyObject(lambda: contest_profile.user.long_display_name),
+            user=user.user,
+            display_rank=user.display_rank,
+            long_display_name=user.long_display_name,
             points=participation.score,
             cumtime=participation.cumtime,
-            organization=SimpleLazyObject(lambda: contest_profile.user.organization),
+            organization=user.organization,
             rating=participation.rating.rating if hasattr(participation, 'rating') else None,
-            problems=SimpleLazyObject(lambda: get_best_contest_solutions(problems, contest_profile.user, participation))
+            problems=[BestSolutionData(
+                code=data[part, prob][0], points=data[part, prob][1],
+                time=data[part, prob][2]['time'] - participation.start,
+                state='failed-score' if not data[part, prob][1] else
+                      ('full-score' if data[part, prob][1] == points else 'partial-score'),
+            ) if data[part, prob][1] is not None else None for prob, points in problems]
         )
 
-    return map(make_ranking_profile, contest.users.select_related('profile', 'rating').order_by('-score', 'cumtime'))
+    return map(make_ranking_profile,
+               contest.users.select_related('profile__user__user', 'profile__user__organization', 'rating')
+                      .defer('profile__user__about', 'profile__user__organization__about')
+                      .order_by('-score', 'cumtime'))
 
 
 def contest_ranking_ajax(request, key):
