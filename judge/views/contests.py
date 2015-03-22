@@ -175,16 +175,13 @@ BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
 def contest_ranking_list(contest, problems):
     cursor = connection.cursor()
     cursor.execute('''
-        SELECT part.id, prob.id, p.code, MAX(cs1.points) AS best,
-               (SELECT MAX(sub.date)
-                FROM judge_submission sub INNER JOIN judge_contestsubmission cs2 ON
-                    (sub.id = cs2.submission_id)
-                WHERE cs2.participation_id = part.id AND cs2.problem_id = prob.id) AS `last`
-        FROM judge_contestproblem prob CROSS JOIN judge_contestparticipation part INNER JOIN
-             judge_problem p ON (prob.problem_id = p.id) LEFT OUTER JOIN
-             judge_contestsubmission cs1 ON (cs1.problem_id = prob.id AND cs1.participation_id = part.id)
-        WHERE prob.contest_id = %s AND part.contest_id = %s
-        GROUP BY prob.id, part.id
+        SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, MAX(sub.date) AS `last`
+        FROM judge_contestproblem cp CROSS JOIN judge_contestparticipation part INNER JOIN
+             judge_problem prob ON (cp.problem_id = prob.id) LEFT OUTER JOIN
+             judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = part.id) LEFT OUTER JOIN
+             judge_submission sub ON (sub.id = cs.submission_id)
+        WHERE cp.contest_id = 39 AND part.contest_id = 39
+        GROUP BY cp.id, part.id
     ''', (contest.id, contest.id))
     data = {(part, prob): (code, best, last) for part, prob, code, best, last in cursor.fetchall()}
     problems = map(attrgetter('id', 'points'), problems)
