@@ -757,7 +757,10 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
             raise Http404()
         if not contest.is_rated:
             raise Http404()
-        rate_contest(contest)
+        with transaction.atomic():
+            Rating.objects.filter(contest__end_time__gte=contest.end_time).delete()
+            for contest in Contest.objects.filter(is_rated=True, end_time__gte=contest.end_time).order_by('end_time'):
+                rate_contest(contest)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('admin:judge_contest_changelist')))
 
     def get_form(self, *args, **kwargs):
