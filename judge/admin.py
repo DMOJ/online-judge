@@ -8,7 +8,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import transaction, connection
-from django.db.models import TextField, Q
+from django.db.models import TextField, Q, Count
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, Http404
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
@@ -674,7 +674,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         ('Details', {'fields': ('description', 'is_external')}),
         ('Rating', {'fields': ('is_rated', 'rate_exclude')}),
     )
-    list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time', 'end_time', 'time_limit')
+    list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time', 'end_time', 'time_limit', 'users')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
     actions_on_top = True
@@ -702,10 +702,11 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
     make_private.short_description = 'Mark contests as private'
 
     def get_queryset(self, request):
+        queryset = Contest.objects.annotate(users=Count('users'))
         if request.user.has_perm('judge.edit_all_contest'):
-            return Contest.objects.all()
+            return queryset
         else:
-            return Contest.objects.filter(organizers__id=request.user.profile.id)
+            return queryset.filter(organizers__id=request.user.profile.id)
 
     def get_readonly_fields(self, request, obj=None):
         if request.user.has_perm('judge.contest_rating'):
