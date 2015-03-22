@@ -657,6 +657,10 @@ class ContestProblemInline(admin.TabularInline):
 
 
 class ContestForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ContestForm, self).__init__(*args, **kwargs)
+        self.fields['rate_exclude'].queryset = Profile.objects.filter(contest__history__contest=self.instance)
+
     class Meta:
         if use_select2:
             widgets = {
@@ -687,11 +691,6 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         formfield_overrides = {
             TextField: {'widget': MathJaxAdminPagedownWidget},
         }
-
-    def formfield_for_manytomany(self, db_field, request=None, **kwargs):
-        if db_field.name == 'rate_exclude':
-            kwargs['queryset'] = Profile.objects.filter(contest__history__contest=self.instance)
-        return super(ContestAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
