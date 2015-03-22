@@ -11,17 +11,12 @@ block users_media
             $("#users-table").tablesorter();
         });
     style
-        #users-table td:nth-child(2) {
+        #users-table .rate-box {
             font-size: 0.85em;
-            border-right: none;
-            padding-right: 0;
+            float: left;
         }
 
-        #users-table td:nth-child(3) {
-            text-align: left;
-        }
-
-        #users-table th:nth-child(2), #users-table td:nth-child(3), #users-table th:nth-child(3) {
+        #users-table td:nth-child(2), #users-table th:nth-child(2) {
             border-right: none;
         }
 

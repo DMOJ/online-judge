@@ -3,17 +3,14 @@ extends user/base_users_table
 
 block after_rank_head
     th
-    th
 
 block after_rank
     td
-        a(href='{% url "user_rating" user.user.username %}')
-            span.rate-box(class='{{ user.rating|rating_class }}')
-                span(style='height: {{ user.rating|rating_progress }}em')
-    td
         if user.rating
-            a.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}',
-                     href='{% url "user_rating" user.user.username %}') #{user.rating}
+            a(href='{% url "user_rating" user.user.username %}', title='{{ user.rating|rating_name }}')
+                span.rate-box(class='{{ user.rating|rating_class }}')
+                    span(style='height: {{ user.rating|rating_progress|floatformat:"-3" }}em')
+                span.rating(class='{{ user.rating|rating_class }}') #{user.rating}
 
 block after_point_head
     th.problems Problems
