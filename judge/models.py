@@ -517,7 +517,8 @@ class Contest(models.Model):
     key = models.CharField(max_length=20, verbose_name='Contest id', unique=True,
                            validators=[RegexValidator('^[a-z0-9]+$', 'Contest id must be ^[a-z0-9]+$')])
     name = models.CharField(max_length=100, verbose_name='Contest name', db_index=True)
-    organizers = models.ManyToManyField(Profile, help_text='These people will be able to edit the contest.')
+    organizers = models.ManyToManyField(Profile, help_text='These people will be able to edit the contest.',
+                                        related_name='+')
     description = models.TextField(blank=True)
     problems = models.ManyToManyField(Problem, verbose_name='Problems', through='ContestProblem')
     start_time = models.DateTimeField(db_index=True)
