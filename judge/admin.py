@@ -674,7 +674,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         ('Details', {'fields': ('description', 'is_external')}),
         ('Rating', {'fields': ('is_rated', 'rate_exclude')}),
     )
-    list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time', 'end_time', 'time_limit', 'users')
+    list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
     actions_on_top = True
@@ -702,7 +702,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
     make_private.short_description = 'Mark contests as private'
 
     def get_queryset(self, request):
-        queryset = Contest.objects.annotate(users=Count('users'))
+        queryset = Contest.objects.annotate(user_count=Count('users'))
         if request.user.has_perm('judge.edit_all_contest'):
             return queryset
         else:
