@@ -285,9 +285,17 @@ class ContestSubmissionInline(admin.StackedInline):
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         submission = kwargs.pop('obj', None)
-        if db_field.name == 'participation' and submission:
-            kwargs['queryset'] = ContestParticipation.objects.filter(profile__user=submission.user)
-        return super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, **kwargs)
+        if submission:
+            if db_field.name == 'participation':
+                kwargs['queryset'] = ContestParticipation.objects.filter(profile__user=submission.user)
+            elif db_field.name == 'problem':
+                kwargs['queryset'] = ContestProblem.objects.filter(problem=submission.problem) \
+                                                   .only('id', 'contest__name')
+        field = super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, **kwargs)
+        if submission:
+            if db_field.name == 'problem':
+                field.label_from_instance = lambda obj: obj.contest.name
+        return field
 
 
 class SubmissionAdmin(admin.ModelAdmin):
