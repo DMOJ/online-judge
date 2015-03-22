@@ -92,7 +92,7 @@ class Organization(models.Model):
                                   help_text='Displayed beside user name during contests')
     about = models.TextField(verbose_name='Organization description')
     registrant = models.ForeignKey('Profile', verbose_name='Registrant',
-                                   related_name='+',
+                                   related_name='registrant+',
                                    help_text='User who registered this organization')
     admins = models.ManyToManyField('Profile', verbose_name='Administrators', related_name='+',
                                     help_text='Those who can edit this organization')
@@ -518,7 +518,7 @@ class Contest(models.Model):
                            validators=[RegexValidator('^[a-z0-9]+$', 'Contest id must be ^[a-z0-9]+$')])
     name = models.CharField(max_length=100, verbose_name='Contest name', db_index=True)
     organizers = models.ManyToManyField(Profile, help_text='These people will be able to edit the contest.',
-                                        related_name='+')
+                                        related_name='organizers+')
     description = models.TextField(blank=True)
     problems = models.ManyToManyField(Problem, verbose_name='Problems', through='ContestProblem')
     start_time = models.DateTimeField(db_index=True)
