@@ -162,3 +162,12 @@ def rating_name(rating):
 
 def rating_class(rating):
     return RATING_CLASS[rating_level(rating)]
+
+
+def rating_progress(rating):
+    level = bisect(RATING_VALUES, rating)
+    if level == 5:
+        return 1.0
+    prev = 0 if not level else RATING_VALUES[level - 1]
+    next = RATING_VALUES[level]
+    return (rating - prev + 0.0) / (next - prev)

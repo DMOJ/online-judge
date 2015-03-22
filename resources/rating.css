@@ -1,28 +1,87 @@
+.rate-box {
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    border: solid;
+}
+
+.rate-box div {
+    width: 1em;
+    position: absolute;
+    bottom: 0;
+}
+
+.rate-box.rate-none {
+    border: none;
+}
+
+.rate-box.rate-newbie {
+    border-color: #999;
+}
+
+.rate-box.rate-amateur {
+    border-color: #00a900;
+}
+
+.rate-box.rate-expert {
+    border-color: #66f;
+}
+
+.rate-box.rate-master {
+    border-color: #dc0;
+}
+
+.rate-box.rate-grandmaster, .rate-box.rate-target {
+    border-color: #e00;
+}
+
+.rate-box.rate-newbie div {
+    background: #999;
+}
+
+.rate-box.rate-amateur div {
+    background: #00a900;
+}
+
+.rate-box.rate-expert div {
+    background: #66f;
+}
+
+.rate-box.rate-master div {
+    background: #dc0;
+}
+
+.rate-box.rate-grandmaster div, .rate-box.rate-target div {
+    background: #e00;
+}
+
 .rating {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .rate-none {
-  color: black;
-  font-weight: lighter;
+    color: black;
+    font-weight: lighter;
 }
 
 .rate-newbie {
-  color: #999;
+    color: #999;
 }
 
 .rate-amateur {
-  color: #00a900;
+    color: #00a900;
 }
 
 .rate-expert {
-  color: #66f;
+    color: #66f;
 }
 
 .rate-master {
-  color: #dc0;
+    color: #dc0;
 }
 
 .rate-grandmaster, .rate-target {
-  color: #e00;
+    color: #e00;
 }

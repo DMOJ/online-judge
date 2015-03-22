@@ -1,6 +1,14 @@
 extends user/base_users_table
 - load rating
 
+block after_rank_head
+    th
+
+block after_rank
+    td
+        div.rate-box(class='{{ user.rating|rating_class }}')
+            div(style='height: {{ user.rating|rating_progress }}em')
+
 block after_point_head
     th Rating
     th.problems Problems
