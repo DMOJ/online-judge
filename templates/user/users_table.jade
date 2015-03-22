@@ -3,12 +3,15 @@ extends user/base_users_table
 
 block after_rank_head
     th
+    th
 
 block after_rank
     td
-        a.fill(href='{% url "user_rating" user.user.username %}')
+        a(href='{% url "user_rating" user.user.username %}')
             span.rate-box(class='{{ user.rating|rating_class }}')
                 span(style='height: {{ user.rating|rating_progress }}em')
+    td
+        a(href='{% url "user_rating" user.user.username %}')
             if user.rating
                 span.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}') #{user.rating}
 
