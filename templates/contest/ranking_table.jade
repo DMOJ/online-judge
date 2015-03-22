@@ -26,12 +26,11 @@ block before_point_head
                 div.point-denominator= problem.points
 
 block before_point
-    - cache 86400 conrank_user_prob user.id contest.id
-        each problem in user.problems
-            if problem
-                td(class=problem.state)
-                    a(href='{% url "contest_user_submissions" contest.key user.user.username problem.code %}')
-                        | #{problem.points|floatformat}
-                        .solving-time #{problem.time|timedelta:"noday"}
-            else
-                td
+    each problem in user.problems
+        if problem
+            td(class=problem.state)
+                a(href='{% url "contest_user_submissions" contest.key user.user.username problem.code %}')
+                    | #{problem.points|floatformat}
+                    .solving-time #{problem.time|timedelta:"noday"}
+        else
+            td
