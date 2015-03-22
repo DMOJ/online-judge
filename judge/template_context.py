@@ -1,3 +1,4 @@
+from functools import partial
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.cache import cache
@@ -16,11 +17,15 @@ def comet_location(request):
             'EVENT_DAEMON_POLL_LOCATION': settings.EVENT_DAEMON_POLL}
 
 
+def __nav_tab(path):
+    result = list(NavigationBar.objects.extra(where=['%s REGEXP BINARY regex'], params=[path])[:1])
+    return result[0].get_ancestors(include_self=True).values_list('key', flat=True) if result else []
+
+
 def general_info(request):
     path = request.get_full_path()
-    result = list(NavigationBar.objects.extra(where=['%s REGEXP BINARY regex'], params=[request.path])[:1])
     return {
-        'nav_tab': result[0].get_ancestors(include_self=True).values_list('key', flat=True) if result else [],
+        'nav_tab': SimpleLazyObject(partial(__nav_tab, request.path)),
         'nav_bar': NavigationBar.objects.all(),
         'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path
     }
