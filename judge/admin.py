@@ -192,7 +192,7 @@ class ProblemAdmin(Select2SuitMixin, reversion.VersionAdmin):
         }
 
     def show_authors(self, obj):
-        return ', '.join(map(attrgetter('user.username'), obj.authors.select_related('user')))
+        return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
     show_authors.short_description = 'Authors'
 
     def make_public(self, request, queryset):
