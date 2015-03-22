@@ -1,3 +1,13 @@
+@-ms-viewport {
+    min-width: 700px;
+    max-width: device-width;
+}
+
+@-o-viewport {
+    min-width: 700px;
+    max-width: device-width;
+}
+
 @viewport {
     min-width: 700px;
     max-width: device-width;
