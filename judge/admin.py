@@ -691,6 +691,10 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
             TextField: {'widget': MathJaxAdminPagedownWidget},
         }
 
+    def user_count(self, obj):
+        return obj.user_count
+    user_count.admin_order_field = 'user_count'
+
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self.message_user(request, "%d contest%s successfully marked as public." % (count, 's'[count == 1:]))
