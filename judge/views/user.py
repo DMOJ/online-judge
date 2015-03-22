@@ -41,12 +41,13 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
     def get_object(self, queryset=None):
         if self.kwargs.get(self.slug_url_kwarg, None) is None:
-            if not self.request.user.is_authenticated():
-                return redirect_to_login(self.request.get_full_path())
             return self.request.user.profile
         return super(UserPage, self).get_object(queryset)
 
     def dispatch(self, request, *args, **kwargs):
+        if self.kwargs.get(self.slug_url_kwarg, None) is None:
+            if not self.request.user.is_authenticated():
+                return redirect_to_login(self.request.get_full_path())
         try:
             return super(UserPage, self).dispatch(request, *args, **kwargs)
         except Http404:
