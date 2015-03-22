@@ -117,7 +117,7 @@ def rate_contest(contest):
     cursor.close()
 
     users = contest.users.order_by('-score', 'cumtime').annotate(submissions=Count('submission')) \
-                   .filter(submissions__gt=0, profile__user_id__not_in=contest.rate_exclude.all()) \
+                   .filter(submissions__gt=0).exclude(profile__user_id__in=contest.rate_exclude.all()) \
                    .values_list('id', 'profile__user_id', 'score', 'cumtime')
     users = list(tie_ranker(users, key=itemgetter(2, 3)))
     participation_ids = [user[1][0] for user in users]
