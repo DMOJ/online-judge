@@ -287,7 +287,7 @@ class ContestSubmissionInline(admin.StackedInline):
         submission = kwargs.pop('obj', None)
         if db_field.name == 'participation' and submission:
             kwargs['queryset'] = ContestParticipation.objects.filter(profile__user=submission.user)
-        return super(ContestSubmissionInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        return super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, request, **kwargs)
 
 
 class SubmissionAdmin(admin.ModelAdmin):
