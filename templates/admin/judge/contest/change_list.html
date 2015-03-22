@@ -2,7 +2,7 @@
 
 {% block object-tools-items %}
     {% if not is_popup and perms.judge.contest_rating %}
-        <a href="{% url 'admin:judge_contest_rate_all' %}" class="ratealllink btn">
+        <a href="{% url 'admin:judge_contest_rate_all' %}" class="ratealllink btn btn-info">
             <i class="icon-signal"></i>&nbsp;
             Rate all ratable contests
         </a>
