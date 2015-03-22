@@ -688,6 +688,11 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
             TextField: {'widget': MathJaxAdminPagedownWidget},
         }
 
+    def formfield_for_manytomany(self, db_field, request=None, **kwargs):
+        if db_field.name == 'rate_exclude':
+            kwargs['queryset'] = Profile.objects.filter(contest__history__contest=self.instance)
+        return super(ContestAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self.message_user(request, "%d contest%s successfully marked as public." % (count, 's'[count == 1:]))
