@@ -283,11 +283,11 @@ class ContestSubmissionInline(admin.StackedInline):
         kwargs['formfield_callback'] = partial(self.formfield_for_dbfield, request=request, obj=obj)
         return super(ContestSubmissionInline, self).get_formset(request, obj, **kwargs)
 
-    def formfield_for_dbfield(self, db_field, request=None, **kwargs):
+    def formfield_for_dbfield(self, db_field, **kwargs):
         submission = kwargs.pop('obj', None)
         if db_field.name == 'participation' and submission:
             kwargs['queryset'] = ContestParticipation.objects.filter(profile__user=submission.user)
-        return super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, request, **kwargs)
+        return super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, **kwargs)
 
 
 class SubmissionAdmin(admin.ModelAdmin):
