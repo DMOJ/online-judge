@@ -205,7 +205,7 @@ def contest_ranking_list(contest, problems):
             rating=participation.rating.rating if hasattr(participation, 'rating') else None,
             problems=[BestSolutionData(
                 code=data[part, prob][0], points=data[part, prob][1],
-                time=data[part, prob][2]['time'] - participation.start,
+                time=data[part, prob][2] - participation.start,
                 state='failed-score' if not data[part, prob][1] else
                       ('full-score' if data[part, prob][1] == points else 'partial-score'),
             ) if data[part, prob][1] is not None else None for prob, points in problems]
