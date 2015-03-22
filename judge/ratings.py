@@ -105,16 +105,20 @@ def rate_contest(contest):
                  judge_contestprofile ON (judge_contestparticipation.profile_id = judge_contestprofile.id) INNER JOIN
                  judge_rating ON (judge_rating.user_id = judge_contestprofile.user_id) INNER JOIN
                  judge_contest ON (judge_contest.id = judge_rating.contest_id)
-            WHERE judge_contestparticipation.contest_id = %s AND judge_contest.end_time < %s
+            WHERE judge_contestparticipation.contest_id = %s AND judge_contest.end_time < %s AND
+                  judge_contestprofile.user_id NOT IN (
+                      SELECT profile_id FROM judge_contest_rate_exclude WHERE contest_id = %s
+                  )
             GROUP BY judge_rating.user_id
             ORDER BY judge_contestparticipation.score DESC, judge_contestparticipation.cumtime ASC
         ) AS r ON (judge_rating.user_id = r.id AND judge_contest.end_time = r.last_time)
-    ''', (contest.id, contest.end_time))
+    ''', (contest.id, contest.end_time, contest.id))
     data = {user: (rating, volatility, times) for user, rating, volatility, times in cursor.fetchall()}
     cursor.close()
 
     users = contest.users.order_by('-score', 'cumtime').annotate(submissions=Count('submission')) \
-                   .filter(submissions__gt=0).values_list('id', 'profile__user_id', 'score', 'cumtime')
+                   .filter(submissions__gt=0, profile__user_id__not_in=contest.rate_exclude.all()) \
+                   .values_list('id', 'profile__user_id', 'score', 'cumtime')
     users = list(tie_ranker(users, key=itemgetter(2, 3)))
     participation_ids = [user[1][0] for user in users]
     user_ids = [user[1][1] for user in users]
