@@ -10,6 +10,10 @@ block users_media
         $(document).ready(function () {
             $("#users-table").tablesorter();
         });
+    style
+        #users-table td:nth-child(2) {
+            font-size: 0.85em;
+        }
 
 block users_table
     include user/users_table
