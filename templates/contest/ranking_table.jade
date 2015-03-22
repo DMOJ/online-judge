@@ -34,4 +34,4 @@ block before_point
                         | #{problem.points|floatformat}
                         .solving-time #{problem.time|timedelta:"noday"}
             else
-                td{% url "user_rating" user.user.username %}') #{user.rating|default_if_none:"N/A"}
+                td
