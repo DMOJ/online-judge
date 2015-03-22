@@ -6,15 +6,13 @@ block after_rank_head
 
 block after_rank
     td
-        div.rate-box(class='{{ user.rating|rating_class }}')
-            div(style='height: {{ user.rating|rating_progress }}em')
+        a.fill(href='{% url "user_rating" user.user.username %}')
+            span.rate-box(class='{{ user.rating|rating_class }}')
+                span(style='height: {{ user.rating|rating_progress }}em')
+            span.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}') #{user.rating|default_if_none:"N/A"}
 
 block after_point_head
-    th Rating
     th.problems Problems
 
 block after_point
-    td
-        a.rating(class='{{ user.rating|rating_class }}', title='{{ user.rating|rating_name }}',
-                 href='{% url "user_rating" user.user.username %}') #{user.rating|default_if_none:"N/A"}
     td #{user.problems}

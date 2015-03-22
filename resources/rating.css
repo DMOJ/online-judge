@@ -5,12 +5,14 @@
     overflow: hidden;
     position: relative;
     border: solid 2px;
+    display: block;
 }
 
-.rate-box div {
+.rate-box span {
     width: 1em;
     position: absolute;
     bottom: 0;
+    display: block;
 }
 
 .rate-box.rate-none {
@@ -37,23 +39,23 @@
     border-color: #e00;
 }
 
-.rate-box.rate-newbie div {
+.rate-box.rate-newbie span {
     background: #999;
 }
 
-.rate-box.rate-amateur div {
+.rate-box.rate-amateur span {
     background: #00a900;
 }
 
-.rate-box.rate-expert div {
+.rate-box.rate-expert span {
     background: #66f;
 }
 
-.rate-box.rate-master div {
+.rate-box.rate-master span {
     background: #dc0;
 }
 
-.rate-box.rate-grandmaster div, .rate-box.rate-target div {
+.rate-box.rate-grandmaster span, .rate-box.rate-target span {
     background: #e00;
 }
 

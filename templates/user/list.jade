@@ -16,9 +16,11 @@ block users_media
             border-right: none;
         }
 
-        #users-table th:nth-child(2) {
-            border-right: none;
-        }
+        #users-table th:nth-child(2) { border-right: none; }
+        #users-table td:nth-child(2) a { width: 2em; }
+        #users-table td:nth-child(2):hover .rate-box { display: none; }
+        #users-table td:nth-child(2) .rating { display: none; }
+        #users-table td:nth-child(2):hover .rating { display: inline; font-size: 1.1em; font-weight: bold }
 
 block users_table
     include user/users_table
