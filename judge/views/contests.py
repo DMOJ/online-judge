@@ -180,7 +180,7 @@ def contest_ranking_list(contest, problems):
              judge_problem prob ON (cp.problem_id = prob.id) LEFT OUTER JOIN
              judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = part.id) LEFT OUTER JOIN
              judge_submission sub ON (sub.id = cs.submission_id)
-        WHERE cp.contest_id = 39 AND part.contest_id = 39
+        WHERE cp.contest_id = %s AND part.contest_id = %s
         GROUP BY cp.id, part.id
     ''', (contest.id, contest.id))
     data = {(part, prob): (code, best, last) for part, prob, code, best, last in cursor.fetchall()}
