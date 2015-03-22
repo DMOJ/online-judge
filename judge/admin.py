@@ -1,3 +1,4 @@
+from functools import partial
 from operator import itemgetter, attrgetter
 from django.conf import settings
 
@@ -277,6 +278,16 @@ class SubmissionTestCaseInline(admin.TabularInline):
 class ContestSubmissionInline(admin.StackedInline):
     fields = ('problem', 'participation', 'points')
     model = ContestSubmission
+
+    def get_formset(self, request, obj=None, **kwargs):
+        kwargs['formfield_callback'] = partial(self.formfield_for_dbfield, request=request, obj=obj)
+        return super(ContestSubmissionInline, self).get_formset(request, obj, **kwargs)
+
+    def formfield_for_dbfield(self, db_field, request=None, **kwargs):
+        submission = kwargs.pop('obj', None)
+        if db_field.name == 'participation' and submission:
+            kwargs['queryset'] = ContestParticipation.objects.filter(profile__user=submission.user)
+        return super(ContestSubmissionInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class SubmissionAdmin(admin.ModelAdmin):
