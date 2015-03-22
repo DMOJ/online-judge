@@ -198,20 +198,19 @@ class ProblemAdmin(Select2SuitMixin, reversion.VersionAdmin):
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self.message_user(request, "%d problem%s successfully marked as public." % (count, 's'[count == 1:]))
-
     make_public.short_description = 'Mark problems as public'
 
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
         self.message_user(request, "%d problem%s successfully marked as private." % (count, 's'[count == 1:]))
-
     make_private.short_description = 'Mark problems as private'
 
     def get_queryset(self, request):
+        queryset = Problem.objects.prefetch_related('authors__user')
         if request.user.has_perm('judge.edit_all_problem'):
-            return Problem.objects.all()
+            return queryset
         else:
-            return Problem.objects.filter(authors__id=request.user.profile.id)
+            return queryset.filter(authors__id=request.user.profile.id)
 
     def has_change_permission(self, request, obj=None):
         if not request.user.has_perm('judge.edit_own_problem'):
