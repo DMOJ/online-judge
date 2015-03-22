@@ -658,7 +658,8 @@ class ContestProblemInline(admin.TabularInline):
 class ContestForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ContestForm, self).__init__(*args, **kwargs)
-        self.fields['rate_exclude'].queryset = Profile.objects.filter(contest__history__contest=self.instance)
+        if 'rate_exclude' in self.fields:
+            self.fields['rate_exclude'].queryset = Profile.objects.filter(contest__history__contest=self.instance)
 
     class Meta:
         if use_select2:
