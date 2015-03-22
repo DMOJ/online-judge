@@ -19,7 +19,7 @@ import reversion
 from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
-    ContestProfile, SubmissionTestCase, Solution, Rating
+    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission
 from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
@@ -274,6 +274,11 @@ class SubmissionTestCaseInline(admin.TabularInline):
     max_num = 0
 
 
+class ContestSubmissionInline(admin.StackedInline):
+    fields = ('problem', 'participation', 'points')
+    model = ContestSubmission
+
+
 class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date')
     fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result',
@@ -285,7 +290,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     search_fields = ('problem__code', 'problem__name', 'user__user__username', 'user__name')
     actions_on_top = True
     actions_on_bottom = True
-    inlines = [SubmissionTestCaseInline]
+    inlines = [SubmissionTestCaseInline, ContestSubmissionInline]
 
     def user_column(self, obj):
         return format_html(u'<span title="{display}">{username}</span>',
