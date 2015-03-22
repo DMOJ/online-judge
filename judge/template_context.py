@@ -25,7 +25,7 @@ def __nav_tab(path):
 def general_info(request):
     path = request.get_full_path()
     return {
-        'nav_tab': SimpleLazyObject(partial(__nav_tab, request.path)),
+        'nav_tab': __nav_tab(request.path),
         'nav_bar': NavigationBar.objects.all(),
         'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path
     }
