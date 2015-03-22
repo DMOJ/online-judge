@@ -672,7 +672,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
         ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
         ('Details', {'fields': ('description', 'is_external')}),
-        ('Rating', {'fields': ('is_rated', 'rate_exclude')}),
+        ('Rating', {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
     )
     list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
     actions = ['make_public', 'make_private']
