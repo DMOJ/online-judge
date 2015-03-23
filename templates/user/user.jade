@@ -82,6 +82,7 @@ block body
                 h4 #{user.solved_problems} problems solved.
                 b Rank:
                 |  #{rank} of #{users}
+                br
                 b Total points:
                 |  #{user.points}
                 br
@@ -100,12 +101,14 @@ block body
                     |  #{rating.volatility}
                     br
                     b Minimum rating:
+                    = ' '
                     a.rate-group(href='{% url "user_rating" user.user.username %}', title='{{ min_rating|rating_name }}')
                         span.rate-box(class='{{ min_rating|rating_class }}')
                             span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
                         span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
                     br
                     b Maximum rating:
+                    = ' '
                     a.rate-group(href='{% url "user_rating" user.user.username %}', title='{{ max_rating|rating_name }}')
                         span.rate-box(class='{{ max_rating|rating_class }}')
                             span(style='height: {{ max_rating|rating_progress|floatformat:3 }}em')
