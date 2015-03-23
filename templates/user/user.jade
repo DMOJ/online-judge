@@ -79,7 +79,7 @@ block body
                 br
                 h4 #{user.solved_problems} problems solved.
                 b Total points:&nbsp;
-                | #{user.calculate_points}
+                | #{user.point}
                 br
                 a(href='{% url "all_user_submissions" user.user.username %}') View submissions
             td.user-info-cell
