@@ -99,6 +99,10 @@
     color: #e00;
 }
 
+.rate-group {
+	white-space: nowrap;
+}
+
 .rate-group, .rate-group .rating {
     display: inline-block;
 }
