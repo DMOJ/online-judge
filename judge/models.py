@@ -2,6 +2,7 @@ import re
 from collections import defaultdict
 from operator import itemgetter, attrgetter
 from django.conf import settings
+from django.contrib.contenttypes.generic import GenericRelation
 from django.contrib.flatpages.models import FlatPage
 from django.core.cache import cache
 from django.db import transaction
@@ -19,6 +20,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Max
 from django.utils import timezone
+from reversion.models import Version
 from timedelta.fields import TimedeltaField
 
 from judge.fulltext import SearchManager
@@ -380,6 +382,7 @@ class Comment(MPTTModel):
     body = models.TextField(verbose_name='Body of comment', blank=True)
     hidden = models.BooleanField(verbose_name='Hide the comment', default=0)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='replies')
+    versions = GenericRelation(Version)
 
     class MPTTMeta:
         order_insertion_by = ['-time']
