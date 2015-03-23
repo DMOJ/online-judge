@@ -68,7 +68,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
             'problem__group__full_name': 'group'
         })
         context['authored'] = self.object.authored_problems.filter(is_public=True).order_by('code')
-        rating = self.object.ratings.order_by('contest__end_time')[:1]
+        rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
         context['rank'] = Profile.objects.filter(points__gt=self.object.points).count()
         context['users'] = Profile.objects.filter(points__gt=0).count()
