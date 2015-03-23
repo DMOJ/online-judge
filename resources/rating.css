@@ -55,8 +55,19 @@
     background: #dc0;
 }
 
-.rate-box.rate-grandmaster span, .rate-box.rate-target span {
+.rate-box.rate-grandmaster span {
     background: #e00;
+}
+
+.rate-box.rate-target span {
+    top: 0.28em;
+    bottom: 0.28em;
+    left: 0.28em;
+    right: 0.28em;
+    background: #e00;
+    height: auto !important;
+    width: auto !important;
+    border-radius: 50%;
 }
 
 .rating {
