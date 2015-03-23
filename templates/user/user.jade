@@ -62,7 +62,12 @@ block media
             vertical-align: top;
         }
 
+        .rate-box {
+            font-size: 0.8em;
+        }
+
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+    link(rel='stylesheet', href='{% static "rating.css" %}', type='text/css')
     script(type='text/javascript', src='{% static "common.js" %}')
 
 block header
@@ -79,11 +84,12 @@ block body
                     img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar')
                 br
                 h4 #{user.solved_problems} problems solved.
-                b Total points:&nbsp;
-                | #{user.point}
+                b Total points:
+                |  #{user.points}
                 br
                 if user.rating
                     b Rating:
+                    = ' '
                     a(href='{% url "user_rating" user.user.username %}', title='{{ user.rating|rating_name }}')
                         span.rate-box(class='{{ user.rating|rating_class }}')
                             span(style='height: {{ user.rating|rating_progress|floatformat:3 }}em')
