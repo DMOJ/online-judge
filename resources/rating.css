@@ -98,3 +98,15 @@
 .rate-grandmaster, .rate-target {
     color: #e00;
 }
+
+.rate-group, .rate-group .rating {
+    display: inline-block;
+}
+
+.rate-group .rate-box {
+    display: inline-block;
+    margin-right: 0.2em;
+    vertical-align: bottom;
+    font-size: 0.8em;
+}
+
