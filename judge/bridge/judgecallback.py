@@ -168,6 +168,9 @@ class DjangoJudgeHandler(JudgeHandler):
             'total': float(submission.problem.points),
             'result': submission.result
         })
+        if hasattr(submission, 'contest'):
+            participation = submission.contest.participation
+            event.post('contest_%d' % participation.contest_id, {'type': 'update'})
         if not submission.problem.is_public:
             return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
@@ -176,9 +179,6 @@ class DjangoJudgeHandler(JudgeHandler):
         event.post('submissions', {'type': 'done-submission', 'id': submission.id,
                                    'contest': submission.contest_key,
                                    'user': submission.user_id, 'problem': submission.problem_id})
-        if hasattr(submission, 'contest'):
-            participation = submission.contest.participation
-            event.post('contest_%d' % participation.contest_id, {'type': 'update'})
 
     def on_compile_error(self, packet):
         super(DjangoJudgeHandler, self).on_compile_error(packet)
