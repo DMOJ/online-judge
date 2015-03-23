@@ -81,10 +81,12 @@ ul.comments.top-level-comments
                                 |  (
                                 span.comment-edited Edited
                                     if node.revisions > 2
-                                        = node.revisions - 1
+                                        - var edited = node.revisions - 1
+                                        = ' '
+                                        = edited
                                         |  times
                                     else
-                                        | once
+                                        = 'once'
                                 | )
                             = ' '
                             span.comment-title #{node.title}
