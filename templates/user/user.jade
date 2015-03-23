@@ -80,18 +80,43 @@ block body
                     img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar')
                 br
                 h4 #{user.solved_problems} problems solved.
+                b Rank:
+                |  #{rank} of #{users}
                 b Total points:
                 |  #{user.points}
                 br
-                if user.rating
+                a(href='{% url "all_user_submissions" user.user.username %}') View submissions
+                if rating
+                    br
+                    h4 Contest History
                     b Rating:
                     = ' '
-                    a.rate-group(href='{% url "user_rating" user.user.username %}', title='{{ user.rating|rating_name }}')
-                        span.rate-box(class='{{ user.rating|rating_class }}')
-                            span(style='height: {{ user.rating|rating_progress|floatformat:3 }}em')
-                        span.rating(class='{{ user.rating|rating_class }}') #{user.rating}
+                    a.rate-group(href='{% url "user_rating" user.user.username %}', title='{{ rating.rating|rating_name }}')
+                        span.rate-box(class='{{ rating.rating|rating_class }}')
+                            span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
+                        span.rating(class='{{ rating.rating|rating_class }}') #{rating.rating}
                     br
-                a(href='{% url "all_user_submissions" user.user.username %}') View submissions
+                    b Volatility:
+                    |  #{rating.volatility}
+                    br
+                    b Minimum rating:
+                    a.rate-group(href='{% url "user_rating" user.user.username %}', title='{{ min_rating|rating_name }}')
+                        span.rate-box(class='{{ min_rating|rating_class }}')
+                            span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
+                        span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
+                    br
+                    b Maximum rating:
+                    a.rate-group(href='{% url "user_rating" user.user.username %}', title='{{ max_rating|rating_name }}')
+                        span.rate-box(class='{{ max_rating|rating_class }}')
+                            span(style='height: {{ max_rating|rating_progress|floatformat:3 }}em')
+                        span.rating(class='{{ max_rating|rating_class }}') #{max_rating}
+                    br
+                    b Competitions:
+                    |  #{contests}
+                    br
+                    b Most recent:
+                    = ' '
+                    a(href='{% url "contest_view" rating.contest.key %}')= rating.contest.name
             td.user-info-cell
                 - with org=user.organization
                     if org
