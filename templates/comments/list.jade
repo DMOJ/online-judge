@@ -77,6 +77,15 @@ ul.comments.top-level-comments
                                     a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
                             = ' on '
                             span.comment-time #{node.time|date:"N j, o, g:i a"}
+                            if node.revisions > 1
+                                |  (
+                                span.comment-edited Edited
+                                    if node.revisions > 2
+                                        = node.revisions - 1
+                                        |  times
+                                    else
+                                        | once
+                                | )
                             = ' '
                             span.comment-title #{node.title}
                             = ' '

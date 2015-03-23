@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
+from django.db.models import Count
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
 from django.views.generic import View
@@ -71,5 +72,6 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         context = super(CommentedDetailView, self).get_context_data(**kwargs)
         queryset = Comment.objects.filter(page=self.get_comment_page())
         context['has_comments'] = queryset.exists()
-        context['comment_list'] = queryset.select_related('author__user').defer('author__about')
+        context['comment_list'] = queryset.select_related('author__user').defer('author__about') \
+                                          .annotate(revisions=Count('versions'))
         return context
