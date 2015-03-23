@@ -81,6 +81,13 @@ block body
                 b Total points:&nbsp;
                 | #{user.point}
                 br
+                if user.rating
+                    b Rating:
+                    a(href='{% url "user_rating" user.user.username %}', title='{{ user.rating|rating_name }}')
+                        span.rate-box(class='{{ user.rating|rating_class }}')
+                            span(style='height: {{ user.rating|rating_progress|floatformat:3 }}em')
+                        span.rating(class='{{ user.rating|rating_class }}') #{user.rating}
+                    br
                 a(href='{% url "all_user_submissions" user.user.username %}') View submissions
             td.user-info-cell
                 - with org=user.organization
