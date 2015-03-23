@@ -73,7 +73,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context['rank'] = Profile.objects.filter(points__gt=self.object.points).count()
         context['users'] = Profile.objects.filter(points__gt=0).count()
         context.update(self.object.ratings.aggregate(min_rating=Min('rating'), max_rating=Max('rating'),
-                                                     contests=Count('contest_id')))
+                                                     contests=Count('contest')))
         return context
 
 
