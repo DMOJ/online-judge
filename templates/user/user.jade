@@ -57,6 +57,11 @@ block media
             border-left: 1px solid #CCC;
         }
 
+        .contest-history-cell {
+            border-left: 1px solid #CCC;
+            padding-right: 15px;
+        }
+
         table td {
             margin: 0;
             vertical-align: top;
@@ -88,7 +93,7 @@ block body
                 br
                 a(href='{% url "all_user_submissions" user.user.username %}') View submissions
             if rating
-                td
+                td.contest-history-cell
                     h4 Contest History
                     b Rank (by rating):
                     |  #{rating_rank} of #{rated_users}
