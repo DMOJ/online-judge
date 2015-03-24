@@ -92,6 +92,7 @@ block body
                     h4 Contest History
                     b Rank (by rating):
                     |  #{rating_rank} of #{rated_users}
+                    br
                     b Rating:
                     = ' '
                     a.rate-group(href='{% url "user_rating" user.user.username %}', title='{{ rating.rating|rating_name }}')
