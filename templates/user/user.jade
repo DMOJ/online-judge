@@ -87,8 +87,8 @@ block body
                 |  #{user.points}
                 br
                 a(href='{% url "all_user_submissions" user.user.username %}') View submissions
-                if rating
-                    br
+            if rating
+                td
                     h4 Contest History
                     b Rank (by rating):
                     |  #{rating_rank} of #{rated_users}
