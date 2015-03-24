@@ -80,7 +80,7 @@ block body
                     img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar')
                 br
                 h4 #{user.solved_problems} problems solved.
-                b Rank:
+                b Rank by points:
                 |  #{rank} of #{users}
                 br
                 b Total points:
@@ -90,6 +90,8 @@ block body
                 if rating
                     br
                     h4 Contest History
+                    b Rank (by rating):
+                    |  #{rating_rank} of #{rated_users}
                     b Rating:
                     = ' '
                     a.rate-group(href='{% url "user_rating" user.user.username %}', title='{{ rating.rating|rating_name }}')
