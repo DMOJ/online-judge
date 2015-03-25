@@ -3,7 +3,6 @@ from django.shortcuts import *
 
 import json
 from judge.models import Contest, Problem, Profile, Submission
-from judge.templatetags.timedelta import nice_repr
 
 
 def sane_time_repr(delta):
@@ -22,7 +21,7 @@ def api_contest_list(request):
             'end_time':  c.end_time.isoformat(),
             'time_limit': c.time_limit and sane_time_repr(c.time_limit),
         }
-    return HttpResponse(json.dumps(js), mimetype='application/json')
+    return HttpResponse(json.dumps(js), content_type='application/json')
 
 
 def api_problem_list(request):
