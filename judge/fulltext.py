@@ -5,8 +5,8 @@ from django.db.models.query import QuerySet
 
 
 class SearchQuerySet(QuerySet):
-    def __init__(self, model=None, query=None, using=None, fields=None):
-        super(SearchQuerySet, self).__init__(model, query, using)
+    def __init__(self, fields=None, **kwargs):
+        super(SearchQuerySet, self).__init__(**kwargs)
         self._search_fields = fields
 
     def _clone(self, *args, **kwargs):
@@ -43,7 +43,7 @@ class SearchManager(models.Manager):
 
     def get_queryset(self):
         if self._search_fields is not None:
-            return SearchQuerySet(self.model, fields=self._search_fields)
+            return SearchQuerySet(model=self.model, fields=self._search_fields)
         return super(SearchManager, self).get_queryset()
 
     def search(self, query):
