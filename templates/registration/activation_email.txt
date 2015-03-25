@@ -2,3 +2,8 @@ Please activate your DMOJ account in {{ expiration_days }} days.
 
 Please click on the following link to activate your account:
     http://{{ site.domain }}/accounts/activate/{{ activation_key }}/
+
+Alternatively, you can reply to this message to activate your account.
+Your reply must keep the following text intact for this to work:
+
+{{ activation_key }}
