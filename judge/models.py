@@ -1,17 +1,10 @@
 import re
 from collections import defaultdict
 from operator import itemgetter, attrgetter
+
 from django.conf import settings
 from django.contrib.contenttypes.generic import GenericRelation
-from django.contrib.flatpages.models import FlatPage
 from django.core.cache import cache
-from django.db import transaction
-from mptt.fields import TreeForeignKey
-from mptt.managers import TreeManager
-from mptt.models import MPTTModel
-
-import pytz
-import reversion
 from django.utils.functional import cached_property
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
@@ -20,8 +13,12 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Max
 from django.utils import timezone
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
 from reversion.models import Version
 from timedelta.fields import TimedeltaField
+import pytz
+import reversion
 
 from judge.fulltext import SearchManager
 from judge.judgeapi import judge_submission, abort_submission
