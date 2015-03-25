@@ -34,7 +34,7 @@ def api_problem_list(request):
             'name': p.name,
             'group': p.group.full_name
         }
-    return HttpResponse(json.dumps(js), mimetype='application/json')
+    return HttpResponse(json.dumps(js), content_type='application/json')
 
 
 def api_problem_info(request, problem):
@@ -53,7 +53,7 @@ def api_problem_info(request, problem):
         }
     except ObjectDoesNotExist:
         raise Http404()
-    return HttpResponse(json.dumps(js), mimetype='application/json')
+    return HttpResponse(json.dumps(js), content_type='application/json')
 
 
 def api_user_list(request):
@@ -64,7 +64,7 @@ def api_user_list(request):
             'points': p.points,
             'rank': p.display_rank
         }
-    return HttpResponse(json.dumps(js), mimetype='application/json')
+    return HttpResponse(json.dumps(js), content_type='application/json')
 
 
 def api_user_info(request, user):
@@ -78,7 +78,7 @@ def api_user_info(request, user):
         }
     except ObjectDoesNotExist:
         raise Http404()
-    return HttpResponse(json.dumps(js), mimetype='application/json')
+    return HttpResponse(json.dumps(js), content_type='application/json')
 
 
 def api_user_submissions(request, user):
@@ -100,4 +100,4 @@ def api_user_submissions(request, user):
             }
     except ObjectDoesNotExist:
         raise Http404()
-    return HttpResponse(json.dumps(js), mimetype='application/json')
+    return HttpResponse(json.dumps(js), content_type='application/json')
