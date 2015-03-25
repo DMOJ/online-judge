@@ -17,8 +17,8 @@ logger = logging.getLogger('judge.mail.activate')
 
 
 if hasattr(settings, 'MAILGUN_ACCESS_KEY'):
-    @method_decorator(csrf_exempt)
     class MailgunActivationView(View):
+        @method_decorator(csrf_exempt)
         def post(self, request, *args, **kwargs):
             params = request.POST
             timestamp = params.get('timestamp', '')
