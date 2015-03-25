@@ -15,8 +15,11 @@ if hasattr(settings, 'MAILGUN_ACCESS_KEY'):
         def post(self, request, *args, **kwargs):
             params = request.POST
             timestamp = params.get('timestamp', '')
-            token = params.get('timestamp', '')
-            signature = params.get('timestamp', '')
+            token = params.get('token', '')
+            signature = params.get('signature', '')
+
+            print request.POST
+
             if signature != hmac.new(key=settings.MAILGUN_ACCESS_KEY, msg='%s%s' % (timestamp, token),
                                      digestmod=hashlib.sha256).hexdigest():
                 raise PermissionDenied()
