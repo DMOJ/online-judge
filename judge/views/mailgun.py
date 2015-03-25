@@ -16,9 +16,8 @@ from registration.models import RegistrationProfile
 logger = logging.getLogger('judge.mail.activate')
 
 
-if hasattr(settings, 'MAILGUN_ACCESS_KEY'):
-    class MailgunActivationView(View):
-        @method_decorator(csrf_exempt)
+class MailgunActivationView(View):
+    if hasattr(settings, 'MAILGUN_ACCESS_KEY'):
         def post(self, request, *args, **kwargs):
             params = request.POST
             timestamp = params.get('timestamp', '')
@@ -58,6 +57,7 @@ if hasattr(settings, 'MAILGUN_ACCESS_KEY'):
             else:
                 logger.info('Activation key not found: %s: %s', sender, params.get('from'))
             return HttpResponse(status=406)
-else:
-    class MailgunActivationView(View):
-        pass
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(MailgunActivationView, self).dispatch(request, *args, **kwargs)
