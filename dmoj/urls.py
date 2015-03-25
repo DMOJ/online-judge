@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from judge import views
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
-from judge.views import organization, language, status, blog, problem, solution
+from judge.views import organization, language, status, blog, problem, solution, mailgun
 
 from judge.views import RegistrationView, ActivationView, TemplateView
 from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap, \
@@ -173,6 +173,8 @@ urlpatterns = patterns('',
     url(r'^post/(?P<id>\d+)-(?P<slug>.*)$', blog.PostView.as_view(), name='blog_post'),
 
     url(r'^solution/(?P<url>.*)$', solution.SolutionView.as_view(), name='solution'),
+
+    url(r'^mailgun/mail_activate/$', mailgun.MailgunActivationView.as_view(), name='mailgun_activate'),
 
     url(r'^feed/', include(patterns('',
         url(r'^problems/rss/$', ProblemFeed(), name='problem_rss'),
