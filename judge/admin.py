@@ -16,6 +16,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin
 import reversion
+from reversion_compare.admin import CompareVersionAdmin
 
 from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
@@ -161,7 +162,7 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
         return queryset.filter(authors__user__username=self.value())
 
 
-class ProblemAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
     fieldsets = (
         (None, {
             'fields': ('code', 'name', 'is_public', 'date', 'authors', 'description')
@@ -668,7 +669,7 @@ class ContestForm(ModelForm):
             }
 
 
-class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class ContestAdmin(Select2SuitMixin, CompareVersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
         ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
