@@ -669,7 +669,7 @@ class ContestForm(ModelForm):
             }
 
 
-class ContestAdmin(Select2SuitMixin, CompareVersionAdmin):
+class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
         ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
