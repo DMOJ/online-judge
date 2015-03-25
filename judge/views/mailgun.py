@@ -7,7 +7,9 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
+from django.utils.decorators import method_decorator
 from django.views.generic import View
+from django.views.decorators.csrf import csrf_exempt
 from registration.models import RegistrationProfile
 
 
@@ -15,6 +17,7 @@ logger = logging.getLogger('judge.mail.activate')
 
 
 if hasattr(settings, 'MAILGUN_ACCESS_KEY'):
+    @method_decorator(csrf_exempt)
     class MailgunActivationView(View):
         def post(self, request, *args, **kwargs):
             params = request.POST
