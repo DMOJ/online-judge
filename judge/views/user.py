@@ -105,7 +105,8 @@ def users(request):
     return render_to_response('user/list.jade', {
         'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
                                .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
-                               .select_related('user__username', 'organization').defer('about', 'organization__about')),
+                               .select_related('user__username')
+                               .only('display_rank', 'user__username', 'name', 'points', 'rating')),
         'title': 'Users'
     }, context_instance=RequestContext(request))
 
