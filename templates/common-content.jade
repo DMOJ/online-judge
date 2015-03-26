@@ -5,13 +5,19 @@ block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
     script(type='text/javascript')
         $(function () {
-            fix_div($('.info-float'), 40, true);
+            fix_div($('.info-float'), 40);
         });
     style
         .content-body { display: table; }
         .content-container { display: table-row; }
         .content-left { display: table-cell; }
-        .content-right { display: table-cell; width: 11%; max-width: 12em; min-width: 7em; }
+        .content-right {
+            display: table-cell;
+            width: 11%;
+            max-width: 12em;
+            min-width: 7em; 
+            padding-left: 1em;
+        }
     block content_media
 block body
     .content-container
