@@ -165,7 +165,7 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
 class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
     fieldsets = (
         (None, {
-            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'description')
+            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'description', 'license')
         }),
         ('Taxonomy', {'fields': ('types', 'group')}),
         ('Points', {'fields': (('points', 'partial'), 'short_circuit')}),
