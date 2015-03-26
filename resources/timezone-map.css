@@ -1,6 +1,6 @@
 .map-inset {
     padding-bottom: 50%;
-    background-size: cover;
+    background-size: cover !important;
     position: relative;
     border-radius: 2px;
 }
