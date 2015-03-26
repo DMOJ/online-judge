@@ -78,4 +78,4 @@ window.timezone_picker = function ($map, $field, data) {
             changeCenter(closestCenter);
         }
     });
-}
+};

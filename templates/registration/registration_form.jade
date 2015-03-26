@@ -25,5 +25,5 @@ block bodyend
     script(type='text/javascript', src='{% static "timezone-picker.js" %}')
     script(type='text/javascript')
         $(function () {
-            timezone_picker($('.map-inset'), $('#id_timezone'));
+            timezone_picker($('.map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
         });
