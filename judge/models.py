@@ -207,6 +207,9 @@ class License(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('license', args=(self.key,))
+
 
 class Problem(models.Model):
     code = models.CharField(max_length=20, verbose_name='Problem code', unique=True,
