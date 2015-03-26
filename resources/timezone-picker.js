@@ -55,7 +55,7 @@ window.timezone_picker = function ($map, $field, json_data) {
             centers.push(new Center(data.zones[name]));
     });
 
-    $('.map-inset').click(function (e) {
+    $map.click(function (e) {
         var offset = $(this).offset(),
             x = e.pageX - offset.left,
             y = e.pageY - offset.top,
@@ -78,4 +78,13 @@ window.timezone_picker = function ($map, $field, json_data) {
             changeCenter(closestCenter);
         }
     });
+
+    $field.change(function(e) {
+        var tz = $(this).val();
+        for (var i = 0; i < centers.length; i++)
+            if (centers[i].name == tz) {
+                changeCenter(centers[i]);
+                break;
+            }
+    })
 };
