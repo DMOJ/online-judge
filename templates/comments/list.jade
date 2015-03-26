@@ -142,6 +142,10 @@ if request.user.is_authenticated and comment_form
 script(type='text/javascript')
     $('.comments').find('a.edit-link').featherlight({
         afterOpen: function () {
+            if ('DjangoPagedown' in window) {
+                var $wmd = $('.featherlight .wmd-input');
+                if (wmd.length) window.DjangoPagedown.createEditor($wmd.get(0));
+            }
             $('#comment-edit').submit(function(event) {
                 event.preventDefault();
                 var id = $("#comment-edit").find('.comment-id').text();
