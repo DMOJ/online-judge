@@ -12,6 +12,7 @@ from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
 from judge.models import Comment, Profile
+from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 
 class CommentForm(ModelForm):
@@ -21,6 +22,8 @@ class CommentForm(ModelForm):
         widgets = {
             'parent': forms.HiddenInput(),
         }
+        if PagedownWidget is not None:
+            widgets['body'] = MathJaxPagedownWidget
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
