@@ -126,8 +126,10 @@ block info_float
 block description
     - cache 86400 problem_html problem.id
         | #{problem.description|markdown:"problem"|smart_math}
-    if problem.license
-        span(style='float: left; color: gray; font-size: 0.85em')= problem.license.display
+    - with license=problem.license
+        if license
+            span(style='float: left; font-size: 0.85em')
+                a(href='color: gray', href='{% url "license" license.key %}')= license.display
 
 block comments
     .comment-area
