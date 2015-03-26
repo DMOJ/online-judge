@@ -29,6 +29,7 @@ block bodyend
             var $map = $('.map-inset'),
                 $axisX = $('.map-axis-x'),
                 $axisY = $('.map-axis-y'),
+                $field = $('#id_timezone'),
                 width = $map.outerWidth(),
                 height = $map.outerHeight(),
                 lastCenter,
@@ -58,9 +59,8 @@ block bodyend
                     left: this.x * 100 + '%',
                     top: this.y * 100 + '%'
                 });
-                if (this.name === 'America/Toronto') {
+                if (this.name === $field.val())
                     changeCenter(this);
-                }
             }
 
             Center.prototype = {
@@ -70,8 +70,7 @@ block bodyend
                     return dx * dx + dy * dy;
                 },
                 activate : function () {
-                    var m = moment().tz(this.name);
-                    console.log(this.name);
+                    $field.val(this.name);
                     $axisX.css('left', this.x * 100 + '%');
                     $axisY.css('top', this.y * 100 + '%');
                 },
@@ -86,7 +85,7 @@ block bodyend
                 }
             });
 
-            $('.map-inset').mousemove(function (e) {
+            $('.map-inset').click(function (e) {
                 var offset = $(this).offset(),
                     x = e.pageX - offset.left,
                     y = e.pageY - offset.top,
