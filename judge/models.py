@@ -195,6 +195,15 @@ class ProblemGroup(models.Model):
         ordering = ['full_name']
 
 
+class License(models.Model):
+    key = models.CharField(max_length=20)
+    link = models.CharField(max_length=256)
+    name = models.CharField(max_length=256)
+    display = models.CharField(max_length=256, blank=True, help_text='Displayed on pages under this license')
+    icon = models.CharField(max_length=256, blank=True, help_text='URL to the icon')
+    text = models.TextField(verbose_name='License text')
+
+
 class Problem(models.Model):
     code = models.CharField(max_length=20, verbose_name='Problem code', unique=True,
                             validators=[RegexValidator('^[a-z0-9]+$', 'Problem code must be ^[a-z0-9]+$')])
@@ -214,6 +223,7 @@ class Problem(models.Model):
                                 help_text="Doesn't have magic ability to auto-publish due to backward compatibility")
     banned_users = models.ManyToManyField(Profile, verbose_name='Personae non gratae', blank=True,
                                           help_text='Bans the selected users from submitting to this problem')
+    license = models.ForeignKey(License, null=True, blank=True, on_delete=models.SET_NULL)
 
     objects = SearchManager(('code', 'name', 'description'))
 
