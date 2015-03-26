@@ -119,7 +119,7 @@ class UserRating(TitleMixin, UserMixin, DetailView):
 
     def get_content_title(self):
         return format_html(u'Rating history for <span class="{1}"><a href="{2}">{0}</a></span>',
-                           self.object.long_display_name, self.object.display_rank,
+                           self.object.user.username, self.object.display_rank,
                            reverse('user_page', args=[self.object.user.username]))
 
     def get_context_data(self, **kwargs):
