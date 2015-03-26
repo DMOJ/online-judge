@@ -264,7 +264,7 @@ class Problem(models.Model):
 
 
 class LanguageLimit(models.Model):
-    problem = models.ForeignKey(Problem)
+    problem = models.ForeignKey(Problem, related_name='language_limits')
     language = models.ForeignKey(Language)
     time_limit = models.FloatField()
     memory_limit = models.IntegerField()
@@ -743,7 +743,8 @@ class Solution(models.Model):
 
 
 reversion.register(Profile, exclude=['points', 'last_access', 'ip', 'rating'])
-reversion.register(Problem)
+reversion.register(Problem, follow=['language_limits'])
+reversion.register(LanguageLimit)
 reversion.register(Contest, follow=['contest_problems'])
 reversion.register(ContestProblem)
 reversion.register(Organization)

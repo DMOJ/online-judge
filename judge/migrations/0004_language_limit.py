@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('time_limit', models.FloatField()),
                 ('memory_limit', models.IntegerField()),
                 ('language', models.ForeignKey(to='judge.Language')),
-                ('problem', models.ForeignKey(to='judge.Problem')),
+                ('problem', models.ForeignKey(related_name='language_limits', to='judge.Problem')),
             ],
             options={
             },
