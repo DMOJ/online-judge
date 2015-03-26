@@ -58,7 +58,7 @@ else:
     class MathJaxPagedownWidget(BaseMathJaxPagedownWidget):
         def _media(self):
             media = super(MathJaxPagedownWidget, self)._media()
-            media.add_css([staticfiles_storage.url('pagedown_widget.css')])
+            media.add_css({'all': [staticfiles_storage.url('pagedown_widget.css')]})
             return media
         media = property(_media)
 
