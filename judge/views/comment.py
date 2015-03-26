@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
-from django.forms import MathJaxPagedownWidget
 from django.forms.models import modelform_factory
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
 from django.views.generic import DetailView, UpdateView
@@ -8,6 +7,7 @@ import reversion
 
 from judge.models import Comment, CommentVote
 from judge.utils.views import LoginRequiredMixin, TitleMixin
+from judge.widgets import MathJaxPagedownWidget
 
 
 __all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentEditAjax', 'CommentContent',
