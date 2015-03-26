@@ -5,20 +5,13 @@ block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
     script(type='text/javascript')
         $(function () {
-            fix_div($('.info-float'), 40, true, function (info) {
-                return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
-                    'width': '11%',
-                    'max-width': '12em',
-                    'min-width': '7em',
-                    'padding-left': '1em',
-                    'display': 'table-cell'
-                }).insertBefore('.info-float');
-            });
+            fix_div($('.info-float'), 40, true);
         });
     style
         .content-body { display: table; }
         .content-container { display: table-row; }
         .content-left { display: table-cell; }
+        .content-right { display: table-cell; width: 11%; max-width: 12em; min-width: 7em; }
     block content_media
 block body
     .content-container
@@ -27,7 +20,8 @@ block body
                 block description
                 hr
             block comments
-        .info-float(style='width:11%; max-width:12em; min-width:7em; padding-left:1em; display: table-cell')
-            block info_float
+        .content-right
+            .info-float
+                block info_float
 block bodyend
     include mathjax_load
