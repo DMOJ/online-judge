@@ -1,4 +1,4 @@
-window.timezone_picker = function ($map, $field, data) {
+window.timezone_picker = function ($map, $field, json_data) {
     var $axisX = $map.find('.map-axis-x'),
         $axisY = $map.find('.map-axis-y'),
         width = $map.outerWidth(),
@@ -50,7 +50,7 @@ window.timezone_picker = function ($map, $field, data) {
         }
     };
 
-    $.getJSON(data).then(function (data) {
+    $.getJSON(json_data).then(function (data) {
         for (var name in data.zones)
             centers.push(new Center(data.zones[name]));
     });
