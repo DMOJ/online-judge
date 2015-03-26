@@ -1,4 +1,13 @@
 extends base
+- load staticfiles
+
+block media
+    link(rel='stylesheet', href='{% static "timezone-map.css" %}')
+    style
+        .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
+    if TIMEZONE_BG
+        style
+            .map-wrap { background: #{TIMEZONE_BG} }
 
 block body
     form.form-area(action='', method='post')
@@ -7,3 +16,14 @@ block body
         hr
         button(style="float:right;", type='submit') Register!
         input(type='hidden', name='next', value=next)
+    div.map-wrap
+        div.map-inset
+            div.map-axis-x
+            div.map-axis-y
+
+block bodyend
+    script(type='text/javascript', src='{% static "timezone-picker.js" %}')
+    script(type='text/javascript')
+        $(function () {
+            timezone_picker($('.map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
+        });
