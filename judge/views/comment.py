@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
-from django.forms.models import modelform_factory
+from django.forms.models import modelform_factory, ModelForm
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
 from django.views.generic import DetailView, UpdateView
 import reversion
@@ -80,14 +80,20 @@ class CommentHistory(TitleMixin, CommentHistoryAjax):
         return 'Revisions for %s' % self.object.title
 
 
+class CommentEditForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['title', 'body']
+        if MathJaxPagedownWidget is not None:
+            widgets = {'body': MathJaxPagedownWidget}
+
+
 class CommentEditAjax(LoginRequiredMixin, UpdateView):
     model = Comment
     pk_url_kwarg = 'id'
     context_object_name = 'comment'
     template_name = 'comments/edit_ajax.jade'
-    fields = ['title', 'body']
-    if MathJaxPagedownWidget is not None:
-        form_class = modelform_factory(Comment, widgets={'body': MathJaxPagedownWidget})
+    form_class = CommentEditForm
 
     def form_valid(self, form):
         with transaction.atomic(), reversion.create_revision():
