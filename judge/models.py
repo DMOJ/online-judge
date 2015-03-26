@@ -263,6 +263,16 @@ class Problem(models.Model):
         )
 
 
+class LanguageLimit(models.Model):
+    problem = models.ForeignKey(Problem)
+    language = models.ForeignKey(Language)
+    time_limit = models.FloatField()
+    memory_limit = models.IntegerField()
+
+    class Meta:
+        unique_together = ('problem', 'language')
+
+
 SUBMISSION_RESULT = (
     ('AC', 'Accepted'),
     ('WA', 'Wrong Answer'),
