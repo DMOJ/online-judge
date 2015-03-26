@@ -8,19 +8,26 @@ block media
             fix_div($('.info-float'), 40, true, function (info) {
                 return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
                     'width': '11%',
-                    'max-width': '10em',
+                    'max-width': '12em',
+                    'min-width': '7em',
                     'padding-left': '1em',
                     'display': 'table-cell'
                 }).prependTo('#content-body');
             });
         });
+    style
+        .content-body { display: table; }
+        .content-container { display: table-row; }
+        .content-left { display: table-cell; }
     block content_media
 block body
-    .info-float(style='width:11%; max-width:12em; padding-left:1em')
-        block info_float
-    .content-description.screen
-        block description
-        hr
-    block comments
+    .content-container
+        .content-left
+            .content-description.screen
+                block description
+                hr
+            block comments
+        .info-float(style='width:11%; max-width:12em; min-width:7em; padding-left:1em; display: table-cell')
+            block info_float
 block bodyend
     include mathjax_load
