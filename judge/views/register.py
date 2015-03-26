@@ -37,6 +37,9 @@ class RegistrationView(OldRegistrationView):
     def get_context_data(self, **kwargs):
         if 'title' not in kwargs:
             kwargs['title'] = self.title
+        tzmap = settings.get('TIMEZONE_MAP', None)
+        kwargs['TIMEZONE_MAP'] = tzmap or 'http://momentjs.com/static/img/world.png'
+        kwargs['TIMEZONE_BG'] = settings.get('TIMEZONE_BG', None if tzmap else '#4E7CAD')
         return super(RegistrationView, self).get_context_data(**kwargs)
 
     def register(self, request, **cleaned_data):

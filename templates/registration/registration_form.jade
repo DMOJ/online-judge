@@ -1,6 +1,14 @@
 extends base
 - load staticfiles
 
+block media
+    link(rel='stylesheet', href='{% static "timezone-map.css" %}')
+    style
+        .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
+    if TIMEZONE_BG
+        style
+            .map-wrap { background: #{TIMEZONE_BG} }
+
 block body
     form.form-area(action='', method='post')
         -csrf_token
@@ -50,7 +58,7 @@ block bodyend
                     left: this.x * 100 + '%',
                     top: this.y * 100 + '%'
                 });
-                if (this.name === 'America/Los_Angeles') {
+                if (this.name === 'America/Toronto') {
                     changeCenter(this);
                 }
             }
