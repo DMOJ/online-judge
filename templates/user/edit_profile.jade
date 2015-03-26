@@ -19,6 +19,10 @@ block body
         a(href='{% url "password_change" %}') Change your password
         hr
         input(type='submit', style="float:right;", value='Update profile')
+    div.map-wrap
+        div.map-inset
+            div.map-axis-x
+            div.map-axis-y
 
 block bodyend
     script(type='text/javascript', src='{% static "timezone-picker.js" %}')
