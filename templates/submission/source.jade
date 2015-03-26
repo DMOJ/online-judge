@@ -39,7 +39,7 @@ block body
     br
     a(href='{% url "submission_status" submission.id %}') View status
     br
-    if request.user == submission.user.user
+    if request.user == submission.user.user or perms.judge.resubmit_other
         a(href='{% url "judge.views.problem_submit" submission.problem.code submission.id %}') Resubmit
         br
     hr(style='float:left;width:30%')
