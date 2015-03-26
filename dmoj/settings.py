@@ -224,6 +224,7 @@ MARKDOWN_TROIS_STYLES = {
     'problem': markdown_admin_editable_style,
     'contest': markdown_admin_editable_style,
     'language': markdown_admin_editable_style,
+    'license': markdown_admin_editable_style,
     'judge': markdown_admin_editable_style,
     'blog': markdown_admin_editable_style,
     'organization-about': {
