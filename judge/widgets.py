@@ -44,7 +44,7 @@ except ImportError:
     MathJaxPagedownWidget = None
     MathJaxAdminPagedownWidget = None
 else:
-    class MathJaxPagedownWidget(PagedownWidget):
+    class BaseMathJaxPagedownWidget(PagedownWidget):
         @property
         def media(self):
             media = self._media()
@@ -55,5 +55,12 @@ else:
             ])
             return media
 
-    class MathJaxAdminPagedownWidget(AdminPagedownWidget, MathJaxPagedownWidget):
+    class MathJaxPagedownWidget(BaseMathJaxPagedownWidget):
+        @property
+        def media(self):
+            media = super(MathJaxPagedownWidget, self).media()
+            media.add_css([staticfiles_storage.url('pagedown_widget.css')])
+            return media
+
+    class MathJaxAdminPagedownWidget(AdminPagedownWidget, BaseMathJaxPagedownWidget):
         pass
