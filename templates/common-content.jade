@@ -3,14 +3,12 @@ extends base
 block media
     link(rel='stylesheet', href='{% static "content-description.css" %}')
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
-    script(type='text/javascript')
-        $(function () {
-            fix_div($('.info-float'), 40);
-        });
+    link(rel='stylesheet', href='{% static "fixedsticky.css" %}', type='text/css')
+    script(type='text/javascript', src='{% static "fixedsticky.js" %}')
     style
         .content-body { display: table; width: 100%; }
         .content-container { display: table-row; width: 100%; }
-        .content-left { display: table-cell; }
+        .content-left { display: table-cell; width: 89%; }
         .content-right {
             display: table-cell;
             width: 11%;
@@ -18,7 +16,7 @@ block media
             min-width: 7em; 
             padding-left: 1em;
         }
-        div.info-float { float: none; }
+        div.info-float { float: none; top: 40px; }
     block content_media
 block body
     .content-container
@@ -28,7 +26,7 @@ block body
                 hr
             block comments
         .content-right
-            .info-float
+            .info-float.fixedsticky
                 block info_float
 block bodyend
     include mathjax_load
