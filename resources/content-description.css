@@ -1,7 +1,9 @@
 .content-description {
     line-height: 1.5em;
     font-size: 1em;
+    width: 84%;
     font-family: 'Segoe UI', 'Lucida Grande', Arial, sans-serif;
+    display: table-cell
 }
 
 .content-description a {

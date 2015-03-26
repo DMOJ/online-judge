@@ -3,30 +3,24 @@ extends base
 block media
     link(rel='stylesheet', href='{% static "content-description.css" %}')
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
-    link(rel='stylesheet', href='{% static "fixedsticky.css" %}', type='text/css')
-    script(type='text/javascript', src='{% static "fixedsticky.js" %}')
-    style
-        .content-body { display: table; width: 100%; }
-        .content-container { display: table-row; width: 100%; }
-        .content-left { display: table-cell; width: 89%; }
-        .content-right {
-            display: table-cell;
-            width: 11%;
-            max-width: 12em;
-            min-width: 7em; 
-            padding-left: 1em;
-        }
-        div.info-float { float: none; top: 40px; }
+    script(type='text/javascript')
+        $(function () {
+            fix_div($('.info-float'), 40, true, function (info) {
+                return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
+                    'width': '11%',
+                    'max-width': '10em',
+                    'padding-left': '1em',
+                    'display': 'table-cell'
+                }).prependTo('#content-body');
+            });
+        });
     block content_media
 block body
-    .content-container
-        .content-left
-            .content-description.screen
-                block description
-                hr
-            block comments
-        .content-right
-            .info-float.fixedsticky
-                block info_float
+    .info-float(style='width:11%; max-width:12em; padding-left:1em')
+        block info_float
+    .content-description.screen
+        block description
+        hr
+    block comments
 block bodyend
     include mathjax_load
