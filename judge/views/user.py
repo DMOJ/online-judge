@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.core.urlresolvers import reverse
@@ -95,8 +96,12 @@ def edit_profile(request):
             return HttpResponseRedirect(request.path)
     else:
         form = ProfileForm(instance=profile)
-    return render_to_response('user/edit_profile.jade', {'form': form, 'title': 'Edit profile'},
-                              context_instance=RequestContext(request))
+    tzmap = getattr(settings, 'TIMEZONE_MAP', None)
+    return render_to_response('user/edit_profile.jade', {
+        'form': form, 'title': 'Edit profile',
+        'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
+        'TIMEZONE_BG': getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD'),
+    }, context_instance=RequestContext(request))
 
 
 def users(request):
