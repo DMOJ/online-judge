@@ -4,7 +4,7 @@ from django.utils import timezone
 from judge.caching import finished_submission
 
 from .judgehandler import JudgeHandler
-from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language
+from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit
 from judge import event_poster as event
 
 logger = logging.getLogger('judge.bridge')
@@ -25,10 +25,17 @@ class DjangoJudgeHandler(JudgeHandler):
             submission.status = 'IE'
             submission.save()
 
-    def problem_data(self, problem):
+    def problem_data(self, problem, language):
         _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
         problem = Problem.objects.get(code=problem)
-        return problem.time_limit, problem.memory_limit, problem.short_circuit
+        time, memory = problem.time_limit, problem.memory_limit
+        try:
+            limit = LanguageLimit.objects.get(problem=problem, language__key=language)
+        except LanguageLimit.DoesNotExist:
+            pass
+        else:
+            time, memory = limit.time_limit, limit.memory_limit
+        return time, memory, problem.short_circuit
 
     def _authenticate(self, id, key):
         try:
