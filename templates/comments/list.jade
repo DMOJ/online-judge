@@ -21,6 +21,9 @@ script(type='text/javascript')
         window.comment_set_parent = function (parent) {
             $('form#comment-submit input#id_parent').val(parent);
             $('form#comment-submit input#id_title').val('Re: ' + $('#comment-' + parent + ' .comment-title').first().text());
+            $('html, body').animate({
+                scrollTop: $(".form-area .comment-submit").offset().top
+            }, 500);
         };
 
         function ajax_vote(url, id, delta) {
