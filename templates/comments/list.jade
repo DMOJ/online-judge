@@ -22,7 +22,7 @@ script(type='text/javascript')
             $('form#comment-submit input#id_parent').val(parent);
             $('form#comment-submit input#id_title').val('Re: ' + $('#comment-' + parent + ' .comment-title').first().text());
             $('html, body').animate({
-                scrollTop: $(".comments.top-level-comments").offset().bottom
+                scrollTop: $(".form-area.comment-submit").offset().top - $('#navigation').height() - 4
             }, 500);
         };
 
@@ -151,7 +151,7 @@ script(type='text/javascript')
                     window.DjangoPagedown.createEditor($wmd.get(0));
                     if ('MathJax' in window) {
                         var preview = $('.featherlight div.wmd-preview')[0];
-                        editor.hooks.chain('onPreviewRefresh', function () {
+                        window.editors[$wmd.attr('id')].hooks.chain('onPreviewRefresh', function () {
                             MathJax.Hub.Queue(["Typeset", MathJax.Hub, preview]);
                         });
                         MathJax.Hub.Queue(["Typeset", MathJax.Hub, preview]);
@@ -167,7 +167,9 @@ script(type='text/javascript')
                     $.ajax({
                         url: readback
                     }).done(function (data) {
-                        $('#comment-' + id).find('.comment-body').first().html(data);
+                        var $area = $('#comment-' + id).find('.comment-body').first();
+                        $area.html(data);
+                        if ('MathJax' in window) MathJax.Hub.Queue(["Typeset", MathJax.Hub, $area.get(0)]);
                     }).fail(function () {
                         console.log('Failed to update comment:' + id);
                     });
