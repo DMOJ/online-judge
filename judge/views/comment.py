@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError, transaction
+from django.forms import MathJaxPagedownWidget
+from django.forms.models import modelform_factory
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
 from django.views.generic import DetailView, UpdateView
 import reversion
@@ -84,6 +86,8 @@ class CommentEditAjax(LoginRequiredMixin, UpdateView):
     context_object_name = 'comment'
     template_name = 'comments/edit_ajax.jade'
     fields = ['title', 'body']
+    if MathJaxPagedownWidget is not None:
+        form_class = modelform_factory(Comment, widgets={'body': MathJaxPagedownWidget})
 
     def form_valid(self, form):
         with transaction.atomic(), reversion.create_revision():
