@@ -144,7 +144,7 @@ script(type='text/javascript')
         afterOpen: function () {
             if ('DjangoPagedown' in window) {
                 var $wmd = $('.featherlight .wmd-input');
-                if (wmd.length) window.DjangoPagedown.createEditor($wmd.get(0));
+                if ($wmd.length) window.DjangoPagedown.createEditor($wmd.get(0));
             }
             $('#comment-edit').submit(function(event) {
                 event.preventDefault();
