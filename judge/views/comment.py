@@ -85,7 +85,7 @@ class CommentEditForm(ModelForm):
         model = Comment
         fields = ['title', 'body']
         if MathJaxPagedownWidget is not None:
-            widgets = {'body': MathJaxPagedownWidget}
+            widgets = {'body': MathJaxPagedownWidget(attrs={'id': 'id-edit-comment-body'})}
 
 
 class CommentEditAjax(LoginRequiredMixin, UpdateView):
