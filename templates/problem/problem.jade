@@ -129,7 +129,7 @@ block description
     - with license=problem.license
         if license
             span(style='float: left; font-size: 0.85em')
-                a(style='color: gray', href='{% url "license" license.key %}')= license.display
+                a(style='color: gray; text-decoration: none', href='{% url "license" license.key %}')= license.display
 
 block comments
     .comment-area
