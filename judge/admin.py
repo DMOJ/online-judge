@@ -21,7 +21,7 @@ from reversion_compare.admin import CompareVersionAdmin
 from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
-    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission
+    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission, License
 from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
@@ -870,6 +870,16 @@ class SolutionAdmin(reversion.VersionAdmin):
         }
 
 
+class LicenseAdmin(admin.ModelAdmin):
+    fields = ('key', 'link', 'name', 'display', 'icon', 'text')
+    list_display = ('name', 'key')
+
+    if MathJaxAdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': MathJaxAdminPagedownWidget},
+        }
+
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
@@ -885,3 +895,4 @@ admin.site.register(ContestParticipation, ContestParticipationAdmin)
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Solution, SolutionAdmin)
+admin.site.register(License, LicenseAdmin)

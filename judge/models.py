@@ -203,6 +203,9 @@ class License(models.Model):
     icon = models.CharField(max_length=256, blank=True, help_text='URL to the icon')
     text = models.TextField(verbose_name='License text')
 
+    def __unicode__(self):
+        return self.name
+
 
 class Problem(models.Model):
     code = models.CharField(max_length=20, verbose_name='Problem code', unique=True,
