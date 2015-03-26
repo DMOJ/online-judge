@@ -21,7 +21,7 @@ from reversion_compare.admin import CompareVersionAdmin
 from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
-    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission, License
+    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit
 from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
@@ -162,6 +162,20 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
         return queryset.filter(authors__user__username=self.value())
 
 
+class LanguageLimitInlineForm(ModelForm):
+    class Meta:
+        if use_select2:
+            widgets = {
+                'language': Select2Widget,
+            }
+
+
+class LanguageLimitInline(admin.TabularInline):
+    model = LanguageLimit
+    fields = ('language', 'time_limit', 'memory_limit')
+    form = LanguageLimitInlineForm
+
+
 class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
     fieldsets = (
         (None, {
@@ -177,6 +191,7 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
     ordering = ['code']
     search_fields = ('code', 'name')
     actions = ['make_public', 'make_private']
+    inlines = [LanguageLimitInline]
     list_per_page = 500
     list_max_show_all = 1000
     actions_on_top = True
