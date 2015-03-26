@@ -167,7 +167,9 @@ script(type='text/javascript')
                     $.ajax({
                         url: readback
                     }).done(function (data) {
-                        $('#comment-' + id).find('.comment-body').first().html(data);
+                        var $area = $('#comment-' + id).find('.comment-body').first();
+                        $area.html(data);
+                        if ('MathJax' in window) MathJax.Hub.Queue(["Typeset", MathJax.Hub, $area.get(0)]);
                     }).fail(function () {
                         console.log('Failed to update comment:' + id);
                     });
