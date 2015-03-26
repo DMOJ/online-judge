@@ -1,4 +1,13 @@
 extends base
+- load staticfiles
+
+block media
+    link(rel='stylesheet', href='{% static "timezone-map.css" %}')
+    style
+        .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
+    if TIMEZONE_BG
+        style
+            .map-wrap { background: #{TIMEZONE_BG} }
 
 block body
     form.form-area(action='', method='post')
@@ -10,3 +19,10 @@ block body
         a(href='{% url "password_change" %}') Change your password
         hr
         input(type='submit', style="float:right;", value='Update profile')
+
+block bodyend
+    script(type='text/javascript', src='{% static "timezone-picker.js" %}')
+    script(type='text/javascript')
+        $(function () {
+            timezone_picker($('.map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
+        });
