@@ -45,22 +45,22 @@ except ImportError:
     MathJaxAdminPagedownWidget = None
 else:
     class BaseMathJaxPagedownWidget(PagedownWidget):
-        @property
-        def media(self):
-            media = self._media()
+        def _media(self):
+            media = super(BaseMathJaxPagedownWidget, self)._media()
             media.add_js([
                 staticfiles_storage.url('mathjax_config.js'),
                 '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
                 staticfiles_storage.url('pagedown_math.js'),
             ])
             return media
+        media = property(_media)
 
     class MathJaxPagedownWidget(BaseMathJaxPagedownWidget):
-        @property
-        def media(self):
-            media = super(MathJaxPagedownWidget, self).media()
+        def _media(self):
+            media = super(MathJaxPagedownWidget, self)._media()
             media.add_css([staticfiles_storage.url('pagedown_widget.css')])
             return media
+        media = property(_media)
 
     class MathJaxAdminPagedownWidget(AdminPagedownWidget, BaseMathJaxPagedownWidget):
         pass
