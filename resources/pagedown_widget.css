@@ -9,6 +9,7 @@
 .wmd-panel {
     margin: 0;
     width: 100%;
+	min-width: 0;
 }
 
 .wmd-wrapper, .wmd-wrapper div {
