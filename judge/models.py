@@ -394,7 +394,7 @@ class Comment(MPTTModel):
                                                        'Page code must be ^[pc]:[a-z0-9]+$|^b:\d+$')])
     score = models.IntegerField(verbose_name='Votes', default=0)
     title = models.CharField(max_length=200, verbose_name='Title of comment')
-    body = models.TextField(verbose_name='Body of comment', blank=True)
+    body = models.TextField(verbose_name='Body of comment')
     hidden = models.BooleanField(verbose_name='Hide the comment', default=0)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='replies')
     versions = GenericRelation(Version)
