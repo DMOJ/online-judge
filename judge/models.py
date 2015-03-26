@@ -207,9 +207,9 @@ class Problem(models.Model):
     memory_limit = models.IntegerField(verbose_name='Memory limit')
     short_circuit = models.BooleanField(default=False)
     points = models.FloatField(verbose_name='Points')
-    partial = models.BooleanField(verbose_name='Allows partial points')
+    partial = models.BooleanField(verbose_name='Allows partial points', default=False)
     allowed_languages = models.ManyToManyField(Language, verbose_name='Allowed languages')
-    is_public = models.BooleanField(verbose_name='Publicly visible', db_index=True)
+    is_public = models.BooleanField(verbose_name='Publicly visible', db_index=True, default=False)
     date = models.DateTimeField(verbose_name='Date of publishing', null=True, blank=True, db_index=True,
                                 help_text="Doesn't have magic ability to auto-publish due to backward compatibility")
     banned_users = models.ManyToManyField(Profile, verbose_name='Personae non gratae', blank=True,
@@ -638,7 +638,7 @@ class ContestProblem(models.Model):
     problem = models.ForeignKey(Problem, related_name='contests')
     contest = models.ForeignKey(Contest, related_name='contest_problems')
     points = models.IntegerField()
-    partial = models.BooleanField()
+    partial = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ('problem', 'contest')
@@ -667,8 +667,8 @@ class Rating(models.Model):
 class BlogPost(models.Model):
     title = models.CharField(verbose_name='Post title', max_length=100)
     slug = models.SlugField(verbose_name='Slug')
-    visible = models.BooleanField(verbose_name='Public visibility')
-    sticky = models.BooleanField(verbose_name='Sticky')
+    visible = models.BooleanField(verbose_name='Public visibility', default=False)
+    sticky = models.BooleanField(verbose_name='Sticky', default=False)
     publish_on = models.DateTimeField(verbose_name='Publish after')
     content = models.TextField(verbose_name='Post content')
     summary = models.TextField(verbose_name='Post summary', blank=True)
@@ -691,7 +691,7 @@ class PrivateMessage(models.Model):
     sender = models.ForeignKey(Profile, verbose_name='Sender', related_name='sent_messages')
     target = models.ForeignKey(Profile, verbose_name='Target', related_name='received_messages')
     timestamp = models.DateTimeField(verbose_name='Message timestamp', auto_now_add=True)
-    read = models.BooleanField(verbose_name='Read')
+    read = models.BooleanField(verbose_name='Read', default=False)
 
 
 class PrivateMessageThread(models.Model):
@@ -701,7 +701,7 @@ class PrivateMessageThread(models.Model):
 class Solution(models.Model):
     url = models.CharField('URL', max_length=100, db_index=True, blank=True)
     title = models.CharField(max_length=200)
-    is_public = models.BooleanField()
+    is_public = models.BooleanField(default=False)
     publish_on = models.DateTimeField()
     content = models.TextField()
     authors = models.ManyToManyField(Profile, blank=True)
