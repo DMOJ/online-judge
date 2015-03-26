@@ -22,7 +22,7 @@ script(type='text/javascript')
             $('form#comment-submit input#id_parent').val(parent);
             $('form#comment-submit input#id_title').val('Re: ' + $('#comment-' + parent + ' .comment-title').first().text());
             $('html, body').animate({
-                scrollTop: $(".form-area.comment-submit").offset().top
+                scrollTop: $(".form-area.comment-submit").offset().top - $('#navigation').height() - 4
             }, 500);
         };
 
