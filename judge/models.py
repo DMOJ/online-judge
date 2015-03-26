@@ -196,7 +196,8 @@ class ProblemGroup(models.Model):
 
 
 class License(models.Model):
-    key = models.CharField(max_length=20)
+    key = models.CharField(max_length=20, unique=True,
+                           validators=[RegexValidator(r'^[-\w.]+$', r'License key must be ^[-\w.]+$')])
     link = models.CharField(max_length=256)
     name = models.CharField(max_length=256)
     display = models.CharField(max_length=256, blank=True, help_text='Displayed on pages under this license')
