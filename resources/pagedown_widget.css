@@ -11,3 +11,6 @@
     width: 100%;
 }
 
+.wmd-wrapper, .wmd-wrapper div {
+    padding-right: 0 !important;
+}
