@@ -7,20 +7,54 @@ block media
         $(function () {
             fix_div($('.info-float'), 40, true, function (info) {
                 return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
-                    'width': '11%',
-                    'max-width': '10em',
-                    'padding-left': '1em',
-                    'display': 'table-cell'
+                    'width': '100%'
                 }).prependTo('#content-body');
             });
         });
+    style
+        #content-body {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: reverse;
+            -webkit-flex-direction: row-reverse;
+                -ms-flex-direction: row-reverse;
+                    flex-direction: row-reverse;
+        }
+
+        .content-left {
+            -webkit-box-flex: 89%;
+            -webkit-flex: 89%;
+                -ms-flex: 89%;
+                    flex: 89%;
+            width: 100%;
+        }
+
+        .content-description {
+            width: 100%;
+        }
+
+        .info-float {
+            -webkit-box-flex: 11%;
+            -webkit-flex: 11%;
+                -ms-flex: 11%;
+                    flex: 11%;
+            max-width: 12em;
+            min-width: 7em;
+            padding-left: 1em; 
+        }
+
     block content_media
 block body
-    .info-float(style='width:11%; max-width:12em; padding-left:1em')
-        block info_float
-    .content-description.screen
-        block description
-        hr
-    block comments
+    .content-right
+        .info-float(style='width:100%; float: none')
+            block info_float
+    .content-left
+        .content-description.screen
+            block description
+            hr
+        block comments
 block bodyend
     include mathjax_load
