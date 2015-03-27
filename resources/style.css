@@ -148,10 +148,6 @@ hr {
     text-align: center
 }
 
-.top-level-comments {
-    width: 80%
-}
-
 .comment {
     list-style: none none;
     background: rgba(0, 0, 0, 0.01);
