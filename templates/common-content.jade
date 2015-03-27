@@ -5,7 +5,13 @@ block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
     script(type='text/javascript')
         $(function () {
-            fix_div($('.info-float'), 40);
+            var info_float = $('.info-float');
+            var container = $('#content-right');
+            fix_div(info_float, 40);
+            $(window).resize(function() {
+                info_float.width(container.width());
+            });
+            info_float.width(container.width());
         });
     style
         #content-body {
