@@ -8,7 +8,7 @@ block media
             fix_div($('.info-float'), 40, true, function (info) {
                 return $('<div/>', {id: 'fake-info-float', class: 'info-float'}).css({
                     'width': '100%'
-                }).prependTo('#content-body');
+                }).prependTo('.content-right');
             });
         });
     style
@@ -24,7 +24,7 @@ block media
                     flex-direction: row-reverse;
         }
 
-        .content-left {
+        #content-left {
             -webkit-box-flex: 89%;
             -webkit-flex: 89%;
                 -ms-flex: 89%;
@@ -32,11 +32,7 @@ block media
             width: 100%;
         }
 
-        .content-description {
-            width: 100%;
-        }
-
-        .info-float {
+        #content-right {
             -webkit-box-flex: 11%;
             -webkit-flex: 11%;
                 -ms-flex: 11%;
@@ -46,12 +42,16 @@ block media
             padding-left: 1em; 
         }
 
+        .content-description {
+            width: 100%;
+        }
+
     block content_media
 block body
-    .content-right
+    #content-right
         .info-float(style='width:100%; float: none')
             block info_float
-    .content-left
+    #content-left
         .content-description.screen
             block description
             hr
