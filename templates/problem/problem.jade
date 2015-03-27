@@ -14,12 +14,18 @@ block content_media
         }
 
         .problem-title {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
         }
 
         .problem-title .spacer {
             display: inline-block;
-            flex: 1 1 0;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1 1 0;
+                -ms-flex: 1 1 0;
+                    flex: 1 1 0;
         }
 
         .info-float .fa {
