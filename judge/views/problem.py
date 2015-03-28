@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.db.models import Count, Q
+from django.db.models import Count, Q, F
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext, Context
@@ -257,7 +257,7 @@ class ProblemList(TitleMixin, ListView):
             .annotate(number_of_users=Count('submission__user', distinct=True)) \
             .select_related('group').defer('description').order_by('code')
         if self.hide_solved:
-            queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, result='AC')
+            queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
                                         .values_list('problem__id', flat=True))
         if self.show_types:
             queryset = queryset.prefetch_related('types')

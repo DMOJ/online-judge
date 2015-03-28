@@ -3,7 +3,8 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from judge import views
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
-from judge.views import organization, language, status, blog, problem, solution, mailgun
+from judge.forms import CustomAuthenticationForm
+from judge.views import organization, language, status, blog, problem, solution, mailgun, license
 
 from judge.views import RegistrationView, ActivationView, TemplateView
 from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap, \
@@ -36,7 +37,8 @@ register_patterns = patterns('',
         name='registration_disallowed'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
-        {'template_name': 'registration/login.jade', 'extra_context': {'title': 'Login'}},
+        {'template_name': 'registration/login.jade', 'extra_context': {'title': 'Login'},
+         'authentication_form': CustomAuthenticationForm},
         name='auth_login'),
     url(r'^logout/$',
         'django.contrib.auth.views.logout',
@@ -52,7 +54,9 @@ register_patterns = patterns('',
         name='password_change_done'),
     url(r'^password/reset/$',
         'django.contrib.auth.views.password_reset',
-        {'template_name': 'registration/password_reset.jade', 'extra_context': {'title': 'Reset Password'}},
+        {'template_name': 'registration/password_reset.jade', 'extra_context': {'title': 'Reset Password'},
+         'html_email_template_name': 'registration/password_reset_email.html',
+         'email_template_name': 'registration/password_reset_email.txt'},
         name='password_reset'),
     url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
         'django.contrib.auth.views.password_reset_confirm',
@@ -173,6 +177,7 @@ urlpatterns = patterns('',
     url(r'^post/(?P<id>\d+)-(?P<slug>.*)$', blog.PostView.as_view(), name='blog_post'),
 
     url(r'^solution/(?P<url>.*)$', solution.SolutionView.as_view(), name='solution'),
+    url(r'^license/(?P<key>[-\w.]+)$', license.LicenseDetail.as_view(), name='license'),
 
     url(r'^mailgun/mail_activate/$', mailgun.MailgunActivationView.as_view(), name='mailgun_activate'),
 

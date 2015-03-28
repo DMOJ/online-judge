@@ -25,4 +25,4 @@ def rejudge_submission(request):
         return HttpResponseForbidden()
 
     submission.judge()
-    return HttpResponse('success', mimetype='text/plain')
+    return HttpResponse('success', content_type='text/plain')

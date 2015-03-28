@@ -21,7 +21,7 @@ from reversion_compare.admin import CompareVersionAdmin
 from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
-    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission
+    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit
 from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
@@ -162,10 +162,24 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
         return queryset.filter(authors__user__username=self.value())
 
 
+class LanguageLimitInlineForm(ModelForm):
+    class Meta:
+        if use_select2:
+            widgets = {
+                'language': Select2Widget,
+            }
+
+
+class LanguageLimitInline(admin.TabularInline):
+    model = LanguageLimit
+    fields = ('language', 'time_limit', 'memory_limit')
+    form = LanguageLimitInlineForm
+
+
 class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
     fieldsets = (
         (None, {
-            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'description')
+            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'description', 'license')
         }),
         ('Taxonomy', {'fields': ('types', 'group')}),
         ('Points', {'fields': (('points', 'partial'), 'short_circuit')}),
@@ -177,6 +191,7 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
     ordering = ['code']
     search_fields = ('code', 'name')
     actions = ['make_public', 'make_private']
+    inlines = [LanguageLimitInline]
     list_per_page = 500
     list_max_show_all = 1000
     actions_on_top = True
@@ -870,6 +885,16 @@ class SolutionAdmin(reversion.VersionAdmin):
         }
 
 
+class LicenseAdmin(admin.ModelAdmin):
+    fields = ('key', 'link', 'name', 'display', 'icon', 'text')
+    list_display = ('name', 'key')
+
+    if MathJaxAdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': MathJaxAdminPagedownWidget},
+        }
+
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
@@ -885,3 +910,4 @@ admin.site.register(ContestParticipation, ContestParticipationAdmin)
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Solution, SolutionAdmin)
+admin.site.register(License, LicenseAdmin)

@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from django.core.cache import cache
 
 from .models import Problem, Contest, Submission, Organization, Profile, MiscConfig, Language, Judge, \
-    BlogPost, ContestSubmission, Comment
+    BlogPost, ContestSubmission, Comment, License
 from .caching import finished_submission
 
 
@@ -45,6 +45,11 @@ def profile_update(sender, instance, **kwargs):
 @receiver(post_save, sender=Contest)
 def contest_update(sender, instance, **kwargs):
     cache.delete(make_template_fragment_key('contest_html', (instance.id,)))
+
+
+@receiver(post_save, sender=License)
+def license_update(sender, instance, **kwargs):
+    cache.delete(make_template_fragment_key('license_html', (instance.id,)))
 
 
 @receiver(post_save, sender=Language)

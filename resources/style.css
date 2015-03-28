@@ -148,10 +148,6 @@ hr {
     text-align: center
 }
 
-.top-level-comments {
-    width: 80%
-}
-
 .comment {
     list-style: none none;
     background: rgba(0, 0, 0, 0.01);
@@ -190,7 +186,8 @@ hr {
 }
 
 .comment-submit {
-    min-width: 40%;
+    width: 100%;
+    max-width: 500px;
 }
 
 .comment-post-wrapper div {

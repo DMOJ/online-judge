@@ -3,6 +3,7 @@ from operator import attrgetter
 from django import forms
 from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from django.forms import ModelForm, CharField
 
@@ -11,7 +12,7 @@ from judge.models import Organization, Profile, Submission, Problem, PrivateMess
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 try:
-    from django_select2.widgets import  HeavySelect2MultipleWidget
+    from django_select2.widgets import HeavySelect2MultipleWidget
 except ImportError:
     HeavySelect2MultipleWidget = None
 
@@ -91,3 +92,10 @@ class ProblemEditForm(ModelForm):
 class ProblemAddForm(ProblemEditForm):
     class Meta(ProblemEditForm.Meta):
         fields = ['code'] + ProblemEditForm.Meta.fields
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomAuthenticationForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'placeholder': 'Username'})
+        self.fields['password'].widget.attrs.update({'placeholder': 'Password'})

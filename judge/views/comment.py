@@ -40,11 +40,11 @@ def vote_comment(request, delta):
             comment.save()
             vote.delete()
         else:
-            return HttpResponseBadRequest('You already voted.', mimetype='text/plain')
+            return HttpResponseBadRequest('You already voted.', content_type='text/plain')
     else:
         comment.score += delta
         comment.save()
-    return HttpResponse('success', mimetype='text/plain')
+    return HttpResponse('success', content_type='text/plain')
 
 
 def upvote_comment(request):
