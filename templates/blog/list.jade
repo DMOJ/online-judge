@@ -64,12 +64,22 @@ block media
             margin-right: -1em;
         }
 
-        .rssatom img {
+        .rssatom span {
+            width: 1em;
             height: 1em;
-            vertical-align: middle;
-            padding-right: 0.2em;
-            margin-top: 0.75em;
-            margin-bottom: 0.75em;
+            padding: 0.1em;
+            font-size: 0.8em;
+            color: white;
+            border-radius: 0.2em;
+            display: inline-block;
+            margin-right: 0.2em;
+            border: 1px solid rgb(201, 90, 18);
+            background: linear-gradient(135deg, #e46d27 0%,#fb9e39 47%,#e46d27 100%); 
+        }
+
+        .rssatom span i {
+            text-align: center;
+            display: block;
         }
 
         .rssatom {
@@ -115,11 +125,12 @@ block body
                             a(href='{{comment.link}}#comment-{{comment.id}}-link') #{comment.page_title}
             div.dashed
             span.rssatom
-                    a(href='{% url "comment_rss" %}')
-                        img(src='{% static "icons/feed.png" %}')
-                        | RSS
-                    = '/ '
-                    a(href='{% url "comment_atom" %}') Atom
+                a(href='{% url "comment_rss" %}')
+                    span
+                        i.fa.fa-rss
+                    | RSS
+                = '/ '
+                a(href='{% url "comment_atom" %}') Atom
         div.comment-content
             h3 Recent added problems
             ul
@@ -129,7 +140,8 @@ block body
             div.dashed
             span.rssatom
                 a(href='{% url "problem_rss" %}')
-                    img(src='{% static "icons/feed.png" %}')
+                    span
+                        i.fa.fa-rss
                     | RSS
                 = '/ '
                 a(href='{% url "problem_atom" %}') Atom
