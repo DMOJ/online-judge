@@ -31,7 +31,7 @@ if submission.status != 'IE'
                     tr(id=case.id).case-row.toggle.closed
                         td
                             if case.status != 'AC' and case.output
-                                span.icon
+                                span.fa.fa-chevron-right.fa-fw
                             if batch.grouper
                                 b Case ##{forloop.counter}:
                             else

@@ -149,7 +149,7 @@ block body
     if authored
         div.user-problem-group
             h3.unselectable.toggle.open
-                span.icon
+                span.fa.fa-chevron-right.fa-fw
                 | Authored Problems (#{authored|length})
             ul.toggled
                 each problem in authored
@@ -163,7 +163,7 @@ block body
     each group in problems
         div.user-problem-group
             h3.unselectable.toggle.open
-                span.icon
+                span.fa.fa-chevron-right.fa-fw
                 | #{group.grouper}
                 | (#{group.list|list_getitem:"points"|sum_list|floatformat:1} points)
             ul.toggled
