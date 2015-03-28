@@ -88,8 +88,10 @@ block media
             padding-right: 1em;
         }
 
-
-
+        h3 .fa {
+            float: right;
+            margin: 0.2em 0.4em 0px 0px;
+        }
 
 block body
     block before_posts
@@ -114,6 +116,7 @@ block body
                     include list_pages
         div.comment-content
             h3 Comment stream
+                i.fa.fa-comments
             ul
                 for comment in comments
                     li
@@ -134,6 +137,7 @@ block body
                 a(href='{% url "comment_atom" %}') Atom
         div.comment-content
             h3 Recent added problems
+                i.fa.fa-question-circle
             ul
                 for problem in problems
                     li
