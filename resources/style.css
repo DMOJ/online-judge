@@ -459,7 +459,7 @@ noscript, #announcement {
     font-weight: bold;
 }
 
-.toggle.open .icon {
+.toggle.open .fa {
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
