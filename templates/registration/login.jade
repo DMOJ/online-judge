@@ -21,8 +21,9 @@ block body
     #login-panel
         form.form-area(action='', method='post')
             -csrf_token
-            #form-errors
-                if form.errors
+            
+            if form.errors
+                #form-errors
                     p.error Invalid username or password.
             table(border=0, style='text-align:left')
                 tr
