@@ -467,10 +467,6 @@ noscript, #announcement {
     transform: rotate(90deg);
 }
 
-.toggle .toggled {
-    margin-left: 1.3em;
-}
-
 .comment-score {
     font-weight: bold;
     text-align: center;
