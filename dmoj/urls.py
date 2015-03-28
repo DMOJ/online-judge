@@ -3,6 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from judge import views
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
+from judge.forms import CustomAuthenticationForm
 from judge.views import organization, language, status, blog, problem, solution, mailgun, license
 
 from judge.views import RegistrationView, ActivationView, TemplateView
@@ -36,7 +37,8 @@ register_patterns = patterns('',
         name='registration_disallowed'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
-        {'template_name': 'registration/login.jade', 'extra_context': {'title': 'Login'}},
+        {'template_name': 'registration/login.jade', 'extra_context': {'title': 'Login'},
+         'authentication_form': CustomAuthenticationForm},
         name='auth_login'),
     url(r'^logout/$',
         'django.contrib.auth.views.logout',
