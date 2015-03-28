@@ -479,30 +479,8 @@ noscript, #announcement {
     text-align: center;
 }
 
-a.upvote-link {
-    width: .7em;
-    height: .7em;
-    display: inline-block;
-    background-size: .7em .7em;
-    background-image: url('icons/arrow.png');
-    -webkit-transform: rotate(-90deg);
-    -moz-transform: rotate(-90deg);
-    -ms-transform: rotate(-90deg);
-    -o-transform: rotate(-90deg);
-    transform: rotate(-90deg)
-}
-
-a.downvote-link {
-    width: .7em;
-    height: .7em;
-    display: inline-block;
-    background-size: .7em .7em;
-    background-image: url('icons/arrow.png');
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    transform: rotate(90deg)
+a.upvote-link, a.downvote-link {
+    color: black;
 }
 
 #form-errors {
