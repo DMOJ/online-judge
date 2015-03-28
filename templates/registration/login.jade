@@ -1,13 +1,45 @@
 extends base
 
+block media
+    style
+        #content-body {
+          position: fixed;
+          top: 170px;
+          left: 0px;
+          right: 0px;
+          bottom: 0px;
+        }
+
+        #login-panel {
+          position: absolute;
+          margin: -5em auto auto -10em;
+          top: 50%;
+          left: 50%;
+        }
+
 block body
-    if form.errors
-        p.error Invalid username or password.
-    form.form-area(action='', method='post')
-        -csrf_token
-        table(border=0, style='text-align:left') #{form.as_table}
-        hr
-        button(style="float:right;", type='submit') Login!
-        input(type='hidden', name='next', value=next)
-    br
-    a(href='{% url "password_reset" %}') Forgot your password?
+    #login-form
+        form.form-area(action='', method='post')
+            -csrf_token
+            #form-errors
+                if form.errors
+                    p.error Invalid username or password.
+                | #{form.non_field_errors}
+                | #{form.username.errors}
+                | #{form.password.errors}
+            table(border=0, style='text-align:left')
+                tr
+                    th
+                        i.fa.fa-user.fa-fw
+                    td
+                        | #{form.username}
+                tr
+                    th
+                        i.fa.fa-key.fa-fw
+                    td
+                        | #{form.password}
+            hr
+            button(style="float:right;", type='submit') Login!
+            input(type='hidden', name='next', value=next)
+        br
+        a(href='{% url "password_reset" %}') Forgot your password?
