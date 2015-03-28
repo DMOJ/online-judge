@@ -138,6 +138,7 @@ WSGI_APPLICATION = 'dmoj.wsgi.application'
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
     'judge.template_context.comet_location',
+    'judge.template_context.get_resource',
     'judge.template_context.general_info',
     'judge.template_context.site',
     'judge.template_context.misc_config',
