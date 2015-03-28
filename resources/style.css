@@ -459,6 +459,13 @@ noscript, #announcement {
     font-weight: bold;
 }
 
+.toggle .fa {
+    -webkit-transition: transform .4s;
+    -moz-transition: transform .4s;
+    -o-transition: transform .4s;
+    transition: transform .4s;
+}
+
 .toggle.open .fa {
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
