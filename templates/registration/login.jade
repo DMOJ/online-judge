@@ -24,9 +24,6 @@ block body
             #form-errors
                 if form.errors
                     p.error Invalid username or password.
-                | #{form.non_field_errors}
-                | #{form.username.errors}
-                | #{form.password.errors}
             table(border=0, style='text-align:left')
                 tr
                     th
