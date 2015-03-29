@@ -338,7 +338,7 @@ nav ul li ul li a {
     display: block;
 }
 
-nav ul li:hover > ul {
+nav ul li:hover > ul, nav ul li:active > ul, nav ul li:focus > ul {
     display: block;
     background: #000;
     color: #fff;
