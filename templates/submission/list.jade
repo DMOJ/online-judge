@@ -26,34 +26,34 @@ block media
             background: #F2F2F2
         }
 
-        td.sub-result {
+        .sub-result {
             min-width: 80px;
         }
 
-        td.sub-result .state {
+        .sub-result .state {
             font-size: 0.7em;
             font-weight: bold;
             padding-top: 0.5em
         }
 
-        td.sub-result .score {
+        .sub-result .score {
             font-size: 1.3em;
             color: black
         }
 
-        td.sub-info {
+        .sub-info {
             width: 78%;
             text-align: left;
             padding-left: 20px;
             border-right: none;
         }
 
-        td.sub-info-grading {
+        .sub-info-grading {
             width: auto !important;
             min-width: 58% !important;
         }
 
-        td.sub-testcase {
+        .sub-testcase {
             color: #555;
             min-width: 32%;
             vertical-align: middle;
@@ -62,28 +62,24 @@ block media
             border-right: none;
         }
 
-        td.sub-info .name {
+        .sub-info .name {
             font-size: 1.3em;
             font-weight: bold
         }
 
-        td.sub-info .time {
+        .sub-info .time {
             color: #555
         }
 
-        td.sub-prop {
-            width: 22%
-        }
-
-        td.sub-prop a {
+        .sub-prop a {
             white-space: nowrap;
         }
 
-        td.sub-usage {
+        .sub-usage {
             white-space: nowrap;
         }
 
-        td.sub-usage .time {
+        .sub-usage .time {
             font-weight: bold;
         }
 
@@ -236,6 +232,12 @@ block body
             include list_pages
 
     table#submissions-table.table
+        colgroup
+            col.sub-result
+            col.sub-info
+            col.sub-testcase
+            col.sub-prop
+            col.sub-usage
         if request.user.is_authenticated
             - var profile_id = request.user.profile.id
         else
