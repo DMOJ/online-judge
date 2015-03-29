@@ -42,7 +42,7 @@ block media
         }
 
         td.sub-info {
-            width: 90%;
+            width: 78%;
             text-align: left;
             padding-left: 20px;
             border-right: none;
@@ -71,13 +71,25 @@ block media
             color: #555
         }
 
-        td.sub-prop, td.sub-usage {
+        td.sub-prop {
+            width: 22%
+        }
+
+        td.sub-prop a {
+            white-space: nowrap;
+        }
+
+        td.sub-usage {
             white-space: nowrap;
         }
 
         td.sub-usage .time {
             font-weight: bold;
         }
+
+    if perms.judge.change_submission and perms.judge.rejudge_submission
+        style
+            td.sub-prop { width: 22% }
 
     if request.user.is_authenticated and perms.judge.rejudge_submission
         script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
