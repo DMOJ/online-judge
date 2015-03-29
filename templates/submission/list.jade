@@ -80,10 +80,6 @@ block media
         }
 
         .sub-prop .fa { display: none; }
-        @media (max-width: 700px) {
-            .sub-prop .label { display: none; }
-            .sub-prop .fa { display: inline-block; }
-        }
 
         td.sub-usage {
             white-space: nowrap;
@@ -91,6 +87,16 @@ block media
 
         td.sub-usage .time {
             font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+            .sub-prop .label { display: none; }
+            .sub-prop .fa { display: inline-block; }
+            #fake-info-float { display: none; }
+            #statistics-table {
+                display: none;
+                width: 100%;
+            }
         }
 
     if perms.judge.change_submission and perms.judge.rejudge_submission

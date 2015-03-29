@@ -31,5 +31,17 @@ window.fix_div = function (div, height, right, fake_gen) {
 $(function () {
     fix_div($('#navigation'), 0, false, function (nav) {
         $('<div/>', {id: 'fake-nav'}).css('height', nav.height()).prependTo('#nav-head');
-    })
+    });
+
+    var $nav_list = $('#nav-list');
+    $('#navicon').click(function (event) {
+        event.stopPropagation();
+        $nav_list.show('slow');
+        $nav_list.click(function (event) {
+            event.stopPropagation();
+        });
+        $('html').click(function () {
+            $nav_list.hide('slow');
+        });
+    });
 });

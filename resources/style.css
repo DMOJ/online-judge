@@ -293,7 +293,7 @@ nav {
     background: rgba(0, 0, 0, 0.77);
     text-align: left;
     -webkit-box-shadow: 0 0 10px #333;
-            box-shadow: 0 0 10px #333
+    box-shadow: 0 0 10px #333
 }
 
 nav ul li {
@@ -345,7 +345,7 @@ nav ul li:hover > ul {
     border-left: 4px solid #2980b9;
     background: rgba(0, 0, 0, 0.77);
     -webkit-box-shadow: 0 0 10px #333;
-            box-shadow: 0 0 10px #333
+    box-shadow: 0 0 10px #333
 }
 
 hr {
@@ -484,4 +484,59 @@ a.upvote-link, a.downvote-link {
     border-radius: 4px;
     padding: 0 1em 0.1em 1em;
     margin: 0.3em 0 0.5em 0;
+}
+
+#navicon {
+    display: none
+}
+
+@media (max-width: 700px) {
+    #navigation {
+        display: flex;
+    }
+
+    #navicon {
+        display: block;
+        line-height: 1em;
+        font-size: 1.5em;
+        color: white;
+        padding-left: 0.2em
+    }
+
+    #nav-list {
+        display: none
+    }
+
+    #navigation ul {
+        position: fixed;
+        top: 0;
+        background: black;
+        bottom: 0;
+        width: 8em;
+        padding: 0;
+        left: 0
+    }
+
+    #navigation ul li, #navigation ul li a {
+        display: block;
+    }
+
+    #navigation ul li ul {
+        left: 8em;
+        top: auto;
+        bottom: auto;
+        margin-top: -36px
+    }
+
+    #user-links {
+        display: block;
+        height: 1.5em;
+        width: 100%;
+        max-width: none;
+        position: static;
+        vertical-align: bottom;
+        text-align: right;
+        padding-top: 0.25em;
+        margin-right: 1em;
+    }
 }
