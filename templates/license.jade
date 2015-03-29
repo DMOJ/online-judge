@@ -5,3 +5,7 @@ extends common-content
 block description
     - cache 3600 license_html license.id
         | #{license.text|markdown:"license"}
+
+block info_float
+    b Source:
+    a(href='{{ license.link }}')  #{license.link}
