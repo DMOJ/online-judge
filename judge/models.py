@@ -57,6 +57,7 @@ class Language(models.Model):
     pygments = models.CharField(max_length=20, verbose_name='Pygments Name')
     info = models.CharField(max_length=50, verbose_name='Basic runtime info', blank=True)
     description = models.TextField(verbose_name='Description for model', blank=True)
+    extension = models.CharField(max_length=10)
 
     @cached_property
     def short_display_name(self):
