@@ -50,12 +50,10 @@ if can_view
             i.fa.fa-eye.fa-fw
             | view
         if perms.judge.rejudge_submission
-            = ' | '
             a(href='javascript:rejudge_submission({{ submission.id }})')
                 i.fa.fa-refresh.fa-fw
                 | rejudge
         if perms.judge.change_submission
-            = ' | '
             a(href='{% url "admin:judge_submission_change" submission.id %}')
                 i.fa.fa-cog.fa-fw
                 | admin
