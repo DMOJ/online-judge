@@ -507,28 +507,27 @@ a.upvote-link, a.downvote-link {
         padding-right: 0.5em;
     }
 
-	#navicon:hover{
-		color:#2980B9;
-		transition-duration:.25s
-	}
+    #navicon:hover {
+        color: #2980B9;
+        transition-duration: .25s
+    }
 
-	#nav-list{
-		display:none
-	}
+    #nav-list {
+        display: none
+    }
 
-	#navigation ul{
-		padding:0;
-		margin-left:0;
-		border-left:4px solid #2980B9;
-		position:fixed;
-		top:0;
-		background:black;
-		bottom:0;
-		width:8em;
-		left:0;
-		box-shadow: none;
-	}
-
+    #navigation ul {
+        padding: 0;
+        margin-left: 0;
+        border-left: 4px solid #2980B9;
+        position: fixed;
+        top: 0;
+        background: black;
+        bottom: 0;
+        width: 8em;
+        left: 0;
+        box-shadow: none;
+    }
 
     #navigation ul li, #navigation ul li a {
         display: block
@@ -553,11 +552,14 @@ a.upvote-link, a.downvote-link {
         margin-right: 1em
     }
 
+    #content {
+        width: auto;
+        padding: 0 5px;
+    }
 }
 
 @media (min-width: 761px) {
     #nav-list {
         display: block !important
     }
-
 }
