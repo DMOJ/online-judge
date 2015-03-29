@@ -494,11 +494,6 @@ a.upvote-link, a.downvote-link {
         height: 36px;
     }
 
-    #navicon:after {
-        content: ' MENU';
-        white-space: nowrap;
-    }
-
     #navicon {
         transition-duration: 0.25s;
         display: block;
@@ -509,10 +504,11 @@ a.upvote-link, a.downvote-link {
         margin: 4px 0.25em;
         border: 1px solid #888;
         border-radius: 5px;
+        white-space: nowrap;
     }
 
     #navicon:hover {
-        color: #2980B9;
+        background: #2980B9;
         transition-duration: .25s
     }
 
