@@ -540,3 +540,9 @@ a.upvote-link, a.downvote-link {
         margin-right: 1em;
     }
 }
+
+@media (min-width: 701px) {
+    #nav-list {
+        display: block !important;
+    }
+}
