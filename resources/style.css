@@ -521,7 +521,7 @@ a.upvote-link, a.downvote-link {
         border-left: 4px solid #2980B9;
         position: fixed;
         top: 0;
-        background: black;
+        background:rgba(0, 0, 0, 0.77);
         bottom: 0;
         width: 8em;
         left: 0;
