@@ -36,12 +36,12 @@ $(function () {
     var $nav_list = $('#nav-list');
     $('#navicon').click(function (event) {
         event.stopPropagation();
-        $nav_list.show('slow');
+        $nav_list.show();
         $nav_list.click(function (event) {
             event.stopPropagation();
         });
         $('html').click(function () {
-            $nav_list.hide('slow');
+            $nav_list.hide();
         });
     });
 });
