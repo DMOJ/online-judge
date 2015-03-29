@@ -490,7 +490,7 @@ class NavigationBar(MPTTModel):
     order = models.PositiveIntegerField(db_index=True)
     key = models.CharField(max_length=10, unique=True, verbose_name='Identifier')
     label = models.CharField(max_length=20)
-    path = models.CharField(max_length=30, verbose_name='Link path')
+    path = models.CharField(max_length=255, verbose_name='Link path')
     regex = models.TextField(verbose_name='Highlight regex', validators=[validate_regex])
     parent = TreeForeignKey('self', verbose_name='Parent item', null=True, blank=True, related_name='children')
 
