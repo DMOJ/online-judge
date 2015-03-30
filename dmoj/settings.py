@@ -99,6 +99,7 @@ else:
     }
 
 INSTALLED_APPS += (
+    'django_social_share',
     'django.contrib.admin',
     'judge',
     'django.contrib.auth',

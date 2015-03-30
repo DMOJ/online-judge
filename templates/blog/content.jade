@@ -2,16 +2,28 @@ extends base
 - load staticfiles
 - load cache
 - load markdown_trois_tags
+- load social_share
 
 block media
     include comments/media
-
+    style(type='text/css')
+        .social i {
+            display:inline;
+            font-size:1.9em;
+            color:#133783;
+         }
+         .facebook-this {
+            display:inline;
+         }
+         .social { font-size:1.3em; display:block; text-align:right; }
 block body
     div.post-full
         div.time #{post.publish_on|date:"N j, o, G:i"}
         div.body
             - cache 86400 post_content post.id
                 | #{post.content|markdown:"blog"}
+    span.social
+       - post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>"
     hr
     .comment-area
         script(src='{% static "placeholder-compat.js" %}')
