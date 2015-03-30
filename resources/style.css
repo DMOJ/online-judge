@@ -490,7 +490,6 @@ a.upvote-link, a.downvote-link {
 
 @media (max-width: 760px) {
     #navigation {
-        display: flex;
         height: 36px;
     }
 
@@ -500,11 +499,12 @@ a.upvote-link, a.downvote-link {
         line-height: 28px;
         font-size: 1.5em;
         color: #FFF;
-        padding: 0 1.1em 0 .25em;
+        padding: 0 .25em;
         margin: 4px .25em;
         border: 1px solid #888;
         border-radius: 5px;
         white-space: nowrap;
+        float: left;
     }
 
     #navicon:hover {
