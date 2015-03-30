@@ -19,6 +19,23 @@ block content_media
         .info-float .fa {
             color: #000;
         }
+        .social i {
+            display:inline;
+            font-size:1.9em;
+        }
+        .facebook-this {
+            display:inline;
+        }
+        .tweet-this {
+            display:inline;
+        }
+        .tweet-this i {
+            color:#55ACEE;
+        }
+        .facebook-this i {
+            color:#133783;
+        }
+        .social { font-size:1.3em; float:right; }
 
     include comments/media
 
@@ -70,6 +87,9 @@ block description
         | #{contest.description|markdown:"contest"|smart_math}
 
 block comments
+    span.social
+       - post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>"
+       - post_to_twitter "DMOJ:" post "<i class=\"fa fa-twitter\"></i>"
     .comment-area
         h2 Comments
         script(src='{% static "placeholder-compat.js" %}')
