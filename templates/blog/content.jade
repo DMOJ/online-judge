@@ -32,7 +32,7 @@ block body
                 | #{post.content|markdown:"blog"}
     span.social
        - post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>"
-       - post_to_twitter "Post on the DMOJ" post "<i class=\"fa fa-twitter\"></i>"
+       - post_to_twitter "DMOJ:" post "<i class=\"fa fa-twitter\"></i>"
     hr
     .comment-area
         script(src='{% static "placeholder-compat.js" %}')
