@@ -495,15 +495,16 @@ a.upvote-link, a.downvote-link {
     }
 
     #navicon {
-        transition-duration: 0.25s;
+        transition-duration: .25s;
         display: block;
         line-height: 28px;
         font-size: 1.5em;
         color: #FFF;
-        padding: 0 0.25em;
-        margin: 4px 0.25em;
+        padding: 0 1.1em 0 .25em;
+        margin: 4px .25em;
         border: 1px solid #888;
         border-radius: 5px;
+        white-space: nowrap;
     }
 
     #navicon:hover {
@@ -521,7 +522,7 @@ a.upvote-link, a.downvote-link {
         border-left: 4px solid #2980B9;
         position: fixed;
         top: 0;
-        background:rgba(0, 0, 0, 0.77);
+        background: rgba(0, 0, 0, 0.77);
         bottom: 0;
         width: 8em;
         left: 0;

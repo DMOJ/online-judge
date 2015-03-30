@@ -78,7 +78,9 @@ html(lang='en')
                         #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
         header#nav-head
             nav#navigation.unselectable
-                a#navicon.fa.fa-bars(href='javascript:void(0)') &nbsp;MENU
+                a#navicon(href='javascript:void(0)')
+                    i.fa.fa-bars
+                    &nbsp;MENU
                 ul#nav-list
                     - recursetree nav_bar
                         li
