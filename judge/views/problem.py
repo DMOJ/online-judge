@@ -337,7 +337,7 @@ def problem_submit(request, problem=None, submission=None):
             if not form.cleaned_data['problem'].allowed_languages.filter(
                     id=form.cleaned_data['language'].id).exists():
                 raise PermissionDenied()
-            if form.cleaned_data['problem'].banned_users.filter(id=profile.id).exists():
+            if not request.user.is_admin and form.cleaned_data['problem'].banned_users.filter(id=profile.id).exists():
                 return generic_message(request, 'Banned from Submitting',
                                        'You have been declared persona non grata for this problem. '
                                        'You are permanently barred from submitting this problem.')
