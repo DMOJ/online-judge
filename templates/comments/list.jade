@@ -131,15 +131,16 @@ if request.user.is_authenticated and comment_form
             hr
         form#comment-submit(action='', method='post')
             - csrf_token
-            #form-errors
-                | #{comment_form.non_field_errors}
-                | #{comment_form.parent.errors}
-                | #{comment_form.parent}
-                if comment_form.title.errors
-                    | Invalid comment title.
-                    br
-                if comment_form.body.errors
-                    | Invalid comment body.
+            if comment_form.errors
+                #form-errors
+                    | #{comment_form.non_field_errors}
+                    | #{comment_form.parent.errors}
+                    | #{comment_form.parent}
+                    if comment_form.title.errors
+                        | Invalid comment title.
+                        br
+                    if comment_form.body.errors
+                        | Invalid comment body.
             .comment-post-wrapper
                 #comment-form-title
                     | #{comment_form.title}
