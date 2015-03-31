@@ -258,7 +258,7 @@ class ProblemList(TitleMixin, ListView):
             .select_related('group').defer('description').order_by('code')
         if self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
-                                        .values_list('problem__id', flat=True))a
+                                        .values_list('problem__id', flat=True))
         if self.show_types:
             queryset = queryset.prefetch_related('types')
         if settings.ENABLE_FTS and 'search' in self.request.GET:
