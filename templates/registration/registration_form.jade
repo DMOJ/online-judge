@@ -3,6 +3,8 @@ extends base
 
 block media
     link(rel='stylesheet', href='{% static "timezone-map.css" %}')
+    link(href=FEATHERLIGHT_CSS, type='text/css', rel='stylesheet')
+    script(src=FEATHERLIGHT_JS, type='text/javascript', charset='utf-8')
     style
         .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
     if TIMEZONE_BG
