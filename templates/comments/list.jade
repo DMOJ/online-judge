@@ -131,7 +131,7 @@ if request.user.is_authenticated and comment_form
             hr
         form#comment-submit(action='', method='post')
             - csrf_token
-            .form-errors
+            #form-errors
                 | #{comment_form.non_field_errors}
                 | #{comment_form.parent.errors}
                 | #{comment_form.parent}
