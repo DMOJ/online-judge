@@ -7,6 +7,7 @@ block media
     script(src=FEATHERLIGHT_JS, type='text/javascript', charset='utf-8')
     style
         .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
+        .map-wrap { display: none }
     if TIMEZONE_BG
         style
             .map-wrap { background: #{TIMEZONE_BG} }
@@ -68,7 +69,7 @@ block body
             hr
             button(style="float:right;", type='submit') Register!
             input(type='hidden', name='next', value=next)
-    div.map-wrap(style='display:none')
+    div.map-wrap
         div.map-inset
             div.map-axis-x
             div.map-axis-y
