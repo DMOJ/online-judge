@@ -60,7 +60,7 @@ html(lang='en')
         if misc_config.analytics
             | #{misc_config.analytics|safe}
         if request.user.is_superuser
-            link(href='http://fonts.googleapis.com/css?family=Open Sans:300,400,700', rel='stylesheet', type='text/css')
+            link(href='//fonts.googleapis.com/css?family=Open Sans:300,400,700', rel='stylesheet', type='text/css')
             style
                 body, .content-description { font-family: 'Open Sans', sans-serif !important; }
     body
