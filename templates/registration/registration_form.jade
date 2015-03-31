@@ -63,10 +63,11 @@ block body
             hr
             button(style="float:right;", type='submit') Register!
             input(type='hidden', name='next', value=next)
-    div.map-wrap(display='none')
-        div.map-inset
-            div.map-axis-x
-            div.map-axis-y
+    div.tz-map(display='none')
+        div.map-wrap
+            div.map-inset
+                div.map-axis-x
+                div.map-axis-y
 
 block bodyend
     script(type='text/javascript', src='{% static "timezone-picker.js" %}')
