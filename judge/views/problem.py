@@ -258,7 +258,7 @@ class ProblemList(TitleMixin, ListView):
             .select_related('group').defer('description').order_by('code')
         if self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
-                                        .values_list('problem__id', flat=True))
+                                        .values_list('problem__id', flat=True))a
         if self.show_types:
             queryset = queryset.prefetch_related('types')
         if settings.ENABLE_FTS and 'search' in self.request.GET:
@@ -337,7 +337,7 @@ def problem_submit(request, problem=None, submission=None):
             if not form.cleaned_data['problem'].allowed_languages.filter(
                     id=form.cleaned_data['language'].id).exists():
                 raise PermissionDenied()
-            if not request.user.is_admin and form.cleaned_data['problem'].banned_users.filter(id=profile.id).exists():
+            if not request.user.profileis_admin and form.cleaned_data['problem'].banned_users.filter(id=profile.id).exists():
                 return generic_message(request, 'Banned from Submitting',
                                        'You have been declared persona non grata for this problem. '
                                        'You are permanently barred from submitting this problem.')
