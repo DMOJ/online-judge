@@ -48,7 +48,10 @@ block body
                     th
                         b Timezone:
                     td
-                        | #{form.timezone}    
+                        | #{form.timezone}
+                        = ' or '
+                        a(href='#', data-featherlight='.map-wrap')
+                            pick from map
                 tr
                     th
                         b Organization:
