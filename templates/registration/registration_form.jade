@@ -11,12 +11,60 @@ block media
 
 block body
     form.form-area(action='', method='post')
-        -csrf_token
-        table(border=0, style='text-align:left') #{form.as_table}
+        -csrf_tokenform#comment-submit(action='', method='post')
+    - csrf_token
+    if form.errors
+        #form-errors
+            | #{form.non_field_errors}
+            | #{form.parent.errors}
+            | #{form.parent}
+    .reg-post-wrapper
+        table(border=0, style='text-align:left')
+            tr
+                th
+                    b Username:
+                td
+                    | #{form.username}
+            tr
+                th
+                    b Email:
+                td
+                    | #{form.email}
+            tr
+                th
+                    b Password:
+                td
+                    | #{form.password1}
+            tr
+                th
+                    b Password (again):
+                td
+                    | #{form.password2}
+            tr
+                th
+                    b Display name:
+                td
+                    | #{form.display_name}
+            tr
+                th
+                    b Timezone:
+                td
+                    | #{form.timezone}    
+            tr
+                th
+                    b Organization:
+                td
+                    | #{form.organization}
+            tr
+                th
+                    b Language:
+                td
+                    | #{form.language}
+        
         hr
         button(style="float:right;", type='submit') Register!
         input(type='hidden', name='next', value=next)
-    div.map-wrap
+    div.map-wrap(display='none')
         div.map-inset
             div.map-axis-x
             div.map-axis-y
