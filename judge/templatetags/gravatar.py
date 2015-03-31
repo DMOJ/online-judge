@@ -34,7 +34,7 @@ class GravatarUrlNode(template.Node):
         except template.VariableDoesNotExist:
             default = False
 
-        gravatar_url = 'http://www.gravatar.com/avatar/' + hashlib.md5(email.strip().lower()).hexdigest() + '?'
+        gravatar_url = '//www.gravatar.com/avatar/' + hashlib.md5(email.strip().lower()).hexdigest() + '?'
         args = {'d': 'identicon', 's': str(size)}
         if default:
             args['f'] = 'y'
