@@ -129,7 +129,7 @@ class UserRating(TitleMixin, UserMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserRating, self).get_context_data(**kwargs)
-        ratings = context['ratings'] = self.object.ratings.order_by('contest__end_time').select_related('contest') \
+        ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
                                            .defer('contest__description')
         if ratings:
             user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
