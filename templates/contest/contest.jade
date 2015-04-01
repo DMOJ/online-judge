@@ -30,11 +30,17 @@ block content_media
         .tweet-this {
             display:inline;
         }
+        .gplus-this {
+            display:inline;
+        }
         .tweet-this i {
             color:#55ACEE;
         }
         .facebook-this i {
             color:#133783;
+        }
+        .gplus-this i {
+            color:#DD4B38;
         }
         .social { font-size:1.3em; float:right; }
 
@@ -89,6 +95,7 @@ block description
 
 block comments
     span.social
+       - post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>"
        - post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>"
        - post_to_twitter "DMOJ:" post "<i class=\"fa fa-twitter\"></i>"
     .comment-area
