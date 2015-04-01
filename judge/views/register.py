@@ -26,6 +26,10 @@ class CustomRegistrationForm(RegistrationForm):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
             raise forms.ValidationError(u'The email address "%s" is already taken. '
                                         u'Only one registration is allowed per address.' % self.cleaned_data['email'])
+        if '@' in self.cleaned_data['email'] and \
+                  self.cleaned_data['email'].split('@')[-1] in getattr(settings, 'BAD_MAIL_PROVIDERS', set()):
+            raise forms.ValidationError(u'Your email provider is not allowed due to history of abuse. '
+                                        u'Please use a reputable email provider.')
         return self.cleaned_data['email']
 
 
