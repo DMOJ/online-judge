@@ -17,11 +17,17 @@ block media
         .tweet-this {
             display:inline;
         }
+        .gplus-this {
+            display:inline;
+        }
         .tweet-this i {
             color:#55ACEE;
         }
         .facebook-this i {
             color:#133783;
+        }
+        .gplus-this i {
+            color:#DD4B38;
         }
         .social { font-size:1.3em; float:right; }
 block body
@@ -32,6 +38,7 @@ block body
                 | #{post.content|markdown:"blog"}
     hr
     span.social
+       - post_to_gplus post "<i class=\"fa fa-google-plus\"></i>"
        - post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>"
        - post_to_twitter "DMOJ:" post "<i class=\"fa fa-twitter\"></i>"
     .comment-area
