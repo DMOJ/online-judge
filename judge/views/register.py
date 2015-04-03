@@ -80,7 +80,7 @@ class ActivationView(OldActivationView):
 
 
 def social_auth_error(request):
-    return render('generic_message.jade', {
+    return render(request, 'generic_message.jade', {
         'title': 'Authentication failure',
         'message': request.GET.get('message')
-    }, context_instance=RequestContext(request))
+    })
