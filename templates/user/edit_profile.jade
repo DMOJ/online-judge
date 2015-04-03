@@ -5,13 +5,16 @@ block media
     link(rel='stylesheet', href='{% static "timezone-map.css" %}')
     style
         .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
+        .map-wrap { display: none }
+        .featherlight { z-index: 1000 }
+        .featherlight .featherlight-content { min-width: 80% }
     if TIMEZONE_BG
         style
             .map-wrap { background: #{TIMEZONE_BG} }
 
 block body
     form.form-area(action='', method='post')
-        -csrf_token
+        - csrf_token
         table(border=0, style='text-align:left') #{form.as_table}
         a(href='http://www.gravatar.com/', title='Change your avatar...', target='_blank') Change your avatar
         br
@@ -28,5 +31,9 @@ block bodyend
     script(type='text/javascript', src='{% static "timezone-picker.js" %}')
     script(type='text/javascript')
         $(function () {
-            timezone_picker($('.map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
+            $('#open-map').featherlight({
+                afterOpen: function () {
+                    timezone_picker($('.featherlight-inner .map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
+                }
+            });
         });
