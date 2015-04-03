@@ -2,12 +2,13 @@ import logging
 from operator import itemgetter
 
 from django.db import transaction
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from requests import HTTPError
 import reversion
+from social.apps.django_app.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
 from social.backends.github import GithubOAuth2
-from social.exceptions import InvalidEmail
+from social.exceptions import InvalidEmail, SocialAuthBaseException
 from social.pipeline.partial import partial
 
 from judge.forms import ProfileForm
@@ -70,3 +71,12 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
                     return
         return render_to_response('registration/profile_creation.jade', {'form': form},
                                   context_instance=RequestContext(backend.strategy.request))
+
+
+class SocialAuthExceptionMiddleware(OldSocialAuthExceptionMiddleware):
+    def process_exception(self, request, exception):
+        if isinstance(exception, SocialAuthBaseException):
+            return render(request, 'generic_message.jade', {
+                'title': 'Authentication failure',
+                'message': self.get_message(request, exception)
+            })
