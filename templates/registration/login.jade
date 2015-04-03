@@ -44,6 +44,8 @@ block body
         h4 Or login with...
         a(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}') Google
         = ' '
+        a(href='{% url "social:begin" "facebook" %}?next={{ next }}') Facebook
+        = ' '
         a(href='{% url "social:begin" "github-secure" %}?next={{ next }}') GitHub
         = ' '
         a(href='{% url "social:begin" "dropbox-oauth2" %}?next={{ next }}') Dropbox
