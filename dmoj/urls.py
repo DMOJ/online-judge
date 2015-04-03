@@ -70,6 +70,7 @@ register_patterns = patterns('',
         'django.contrib.auth.views.password_reset_done',
         {'template_name': 'registration/password_reset_done.jade', 'extra_context': {'title': 'Password Reset Successful'}},
         name='password_reset_done'),
+    url(r'^social/error/$', 'judge.views.register.social_auth_error'),
 )
 
 

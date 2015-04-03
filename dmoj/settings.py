@@ -320,6 +320,7 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SOCIAL_AUTH_GITHUB_SECURE_SCOPE = ['user:email']
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/accounts/social/error/'
 
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:
