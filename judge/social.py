@@ -13,7 +13,7 @@ def make_profile(backend, user, response, *args, **kwargs):
         logger.info('Creating profile for %s', user.username)
         if backend.name == 'google-oauth2':
             logger.info('Using display name from %s: %s', backend.name, response['displayName'])
-            profile.display_name = response['displayName']
+            profile.name = response['displayName']
         else:
             logger.info('Unknown backend: %s', backend.name)
         profile.save()
