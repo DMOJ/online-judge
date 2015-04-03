@@ -16,7 +16,22 @@ block media
           top: 40%;
           left: 50%;
         }
-
+        i {
+            display:inline;
+            font-size:1.9em;
+        }
+        .google-icon {
+            display:inline;
+        }
+        .google-icon i {
+            color:#55ACEE;
+        }
+        .facebook-icon {
+            display:inline;
+        }
+        .facebook-icon i {
+            color:#133783;
+        }
 block body
     #login-panel
         form.form-area(action='', method='post')
@@ -42,10 +57,14 @@ block body
         br
         a(href='{% url "password_reset" %}') Forgot your password?
         h4 Or login with...
-        a(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}') Google
+        a.google-icon(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}')
+            i.fa.fa-google-plus-square
         = ' '
-        a(href='{% url "social:begin" "facebook" %}?next={{ next }}') Facebook
+        a.facebook-icon(href='{% url "social:begin" "facebook" %}?next={{ next }}')
+            i.fa.fa-facebook-square
         = ' '
-        a(href='{% url "social:begin" "github-secure" %}?next={{ next }}') GitHub
+        a.github-icon(href='{% url "social:begin" "github-secure" %}?next={{ next }}')
+            i.fa.fa-github-square
         = ' '
-        a(href='{% url "social:begin" "dropbox-oauth2" %}?next={{ next }}') Dropbox
+        a.dropbox-icon(href='{% url "social:begin" "dropbox-oauth2" %}?next={{ next }}')
+            i.fa.fa-dropbox
