@@ -59,7 +59,7 @@ class UsernameForm(forms.Form):
 
 
 @partial
-def choose_username(backend, user, *args, **kwargs):
+def choose_username(backend, user, username=None, *args, **kwargs):
     if not user:
         request = backend.strategy.request
         if request.POST:
@@ -67,7 +67,7 @@ def choose_username(backend, user, *args, **kwargs):
             if form.is_valid():
                 return {'username': form.cleaned_data['username']}
         else:
-            form = UsernameForm()
+            form = UsernameForm(initial={'username': username})
         return render(request, 'registration/username_select.jade', {
             'title': 'Choose a username', 'form': form
         })
