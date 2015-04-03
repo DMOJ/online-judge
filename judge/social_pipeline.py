@@ -1,13 +1,43 @@
+import logging
+from operator import itemgetter
+
 from django.db import transaction
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from requests import HTTPError
 import reversion
+from social.backends.github import GithubOAuth2
+from social.exceptions import InvalidEmail
 from social.pipeline.partial import partial
+
 from judge.forms import ProfileForm
 from judge.models import Profile, Language
-import logging
+
 
 logger = logging.getLogger('judge.social_auth')
+
+
+class GitHubSecureEmailOAuth2(GithubOAuth2):
+    def user_data(self, access_token, *args, **kwargs):
+        data = self._user_data(access_token)
+        try:
+            emails = self._user_data(access_token, '/emails')
+        except (HTTPError, ValueError, TypeError):
+            emails = []
+
+        emails = [(e, e.get('primary'), False) for e in emails if isinstance(e, dict) and e.get('verified')]
+        emails.sort(key=itemgetter(1), reverse=True)
+        emails = map(itemgetter(0), emails)
+
+        if emails:
+            data['email'] = emails[0]
+        else:
+            data['email'] = None
+
+
+def verify_email(backend, details, *args, **kwargs):
+    if not details['email']:
+        raise InvalidEmail(backend)
 
 
 @partial
