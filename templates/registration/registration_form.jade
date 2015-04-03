@@ -78,10 +78,9 @@ block bodyend
     script(type='text/javascript', src='{% static "timezone-picker.js" %}')
     script(type='text/javascript')
         $(function () {
-            var click = timezone_picker($('.map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
             $('#open-map').featherlight({
                 afterOpen: function () {
-                    $('.map-wrap.featherlight-inner').click(click);
+                    timezone_picker($('.featherlight-inner .map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
                 }
             });
         });
