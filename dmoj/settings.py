@@ -129,7 +129,7 @@ MIDDLEWARE_CLASSES = (
     'judge.user_log.LogUserAccessMiddleware',
     'judge.timezone.TimezoneMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'judge.social_auth.SocialAuthExceptionMiddleware',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
@@ -320,7 +320,6 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SOCIAL_AUTH_GITHUB_SECURE_SCOPE = ['user:email']
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/accounts/social/error/'
 
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:
