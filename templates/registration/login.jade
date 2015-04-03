@@ -16,9 +16,12 @@ block media
           top: 40%;
           left: 50%;
         }
+        h4 {
+            padding-top:1em;
+        }
         .social {
             display:inline;
-            font-size:1.9em;
+            font-size:2.3em;
         }
         .google-icon i {
             color:#DD4B38;
@@ -56,7 +59,7 @@ block body
             input(type='hidden', name='next', value=next)
         br
         a(href='{% url "password_reset" %}') Forgot your password?
-        h4 Or login with...
+        h4 Or log in with...
         a.social.google-icon(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}')
             i.fa.fa-google-plus-square
         = ' '
