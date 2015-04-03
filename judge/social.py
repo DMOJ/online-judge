@@ -14,6 +14,8 @@ def make_profile(backend, user, response, *args, **kwargs):
         if backend.name == 'google-oauth2':
             logging.info('Using display name from %s: %s', backend.name, response['displayName'])
             profile.display_name = response['displayName']
+        else:
+            logger.info('Unknown backend: %s', backend.name)
         profile.save()
     else:
         logger.info('Already have profile: %s', user.profile)
