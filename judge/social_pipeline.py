@@ -33,4 +33,4 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
                     reversion.set_user(user)
                     reversion.set_comment('Updated on registration')
                     return
-        return render_to_response('registration/profile-creation.jade', {'form': form})
+        return render_to_response('registration/profile_creation.jade', {'form': form})
