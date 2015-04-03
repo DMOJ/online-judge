@@ -81,7 +81,7 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
             profile.language = Language.get_python2()
             if backend.name == 'google-oauth2':
                 profile.name = response['displayName']
-            elif backend.name == 'github' and 'name' in response:
+            elif backend.name in ('github', 'facebook') and 'name' in response:
                 profile.name = response['name']
             else:
                 logger.info('Info from %s: %s', backend.name, response)
