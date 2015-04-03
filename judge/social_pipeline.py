@@ -22,6 +22,9 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
             if backend.name == 'google-oauth2':
                 logger.info('Using display name from %s: %s', backend.name, response['displayName'])
                 profile.name = response['displayName']
+            elif backend.name == 'github':
+                logger.info('Using display name from %s: %s', backend.name, response['name'])
+                profile.name = response['name']
             profile.save()
             form = ProfileForm(instance=profile)
         else:
