@@ -7,11 +7,15 @@ block media
         $(function () {
             var info_float = $('.info-float');
             var container = $('#content-right');
-            fix_div(info_float, 40);
-            $(window).resize(function() {
+            if (window.bad_browser) {
+                container.css('float', 'right');
+            } else {
+                fix_div(info_float, 40);
+                $(window).resize(function() {
+                    info_float.width(container.width());
+                });
                 info_float.width(container.width());
-            });
-            info_float.width(container.width());
+            }
         });
     style
         #content-body {
