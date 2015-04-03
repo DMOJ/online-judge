@@ -129,6 +129,7 @@ MIDDLEWARE_CLASSES = (
     'judge.user_log.LogUserAccessMiddleware',
     'judge.timezone.TimezoneMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
