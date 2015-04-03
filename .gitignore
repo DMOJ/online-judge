@@ -2,3 +2,4 @@
 *.sqlite3
 *.pyc
 *~
+dmoj/local_settings.py
