@@ -1,12 +1,13 @@
 import logging
 from operator import itemgetter
 from urllib import quote
+import re
 
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-import re
 from requests import HTTPError
 import reversion
 from social.apps.django_app.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
@@ -50,6 +51,26 @@ def slugify_username(username, renotword=re.compile('[^\w]')):
 def verify_email(backend, details, *args, **kwargs):
     if not details['email']:
         raise InvalidEmail(backend)
+
+
+class UsernameForm(forms.Form):
+    username = forms.RegexField(regex=r'^\w+$', max_length=30, label='Username',
+                                error_messages={'invalid': 'A username must contain letters, numbers, or underscores'})
+
+
+@partial
+def choose_username(backend, user, *args, **kwargs):
+    if not user:
+        request = backend.strategy.request
+        if request.POST:
+            form = UsernameForm(request.POST)
+            if form.is_valid():
+                return {'username': form.cleaned_data['username']}
+        else:
+            form = UsernameForm()
+        return render(request, 'registration/username_select.jade', {
+            'title': 'Choose a username', 'form': form
+        })
 
 
 @partial
