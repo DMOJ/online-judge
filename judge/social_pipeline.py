@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.shortcuts import render_to_response
+from django.template import RequestContext
 import reversion
 from social.pipeline.partial import partial
 from judge.forms import ProfileForm
@@ -33,4 +34,5 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
                     reversion.set_user(user)
                     reversion.set_comment('Updated on registration')
                     return
-        return render_to_response('registration/profile_creation.jade', {'form': form})
+        return render_to_response('registration/profile_creation.jade', {'form': form},
+                                  context_instance=RequestContext(backend.strategy.request))
