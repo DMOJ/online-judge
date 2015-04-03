@@ -1,0 +1,8 @@
+extends base
+- load staticfiles
+
+block body
+    form.form-area(action='', method='post')
+        - csrf_token
+        table(border=0, style='text-align:left') #{form.as_table}
+        input(type='submit', style="float:right;", value='Continue >')
