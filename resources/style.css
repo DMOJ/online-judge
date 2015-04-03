@@ -288,6 +288,7 @@ nav ul {
 }
 
 nav {
+    background: black;
     background: rgba(0, 0, 0, 0.77);
     text-align: left;
     -webkit-box-shadow: 0 0 10px #333;
