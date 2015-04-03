@@ -99,7 +99,6 @@ else:
     }
 
 INSTALLED_APPS += (
-    'django_social_share',
     'django.contrib.admin',
     'judge',
     'django.contrib.auth',
@@ -115,6 +114,8 @@ INSTALLED_APPS += (
     'mptt',
     'reversion',
     'reversion_compare',
+    'django_social_share',
+    'social.apps.django_app.default',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -144,6 +145,8 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     'judge.template_context.site',
     'judge.template_context.misc_config',
     'judge.template_context.contest',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
 )
 
 TEMPLATE_LOADERS = (
@@ -291,6 +294,12 @@ STATIC_URL = '/static/'
 
 # Define a cache
 CACHES = {}
+
+# Authentication
+AUTHENTICATION_BACKENDS = (
+    'social.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:

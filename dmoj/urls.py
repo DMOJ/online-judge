@@ -82,6 +82,7 @@ urlpatterns = patterns('',
     url(r'^500/$', exception),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include(register_patterns)),
+    url('', include('social.apps.django_app.urls', namespace='social')),
 
     url(r'^users/$', 'judge.views.users'),
     url(r'^user/(?P<username>\w+)$', views.UserPage.as_view(), name='user_page'),
