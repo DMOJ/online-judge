@@ -28,7 +28,7 @@ class GitHubSecureEmailOAuth2(GithubOAuth2):
             emails = []
 
         logger.info('Got emails from GitHub: %s', emails)
-        emails = [(e, e.get('primary'), False) for e in emails if isinstance(e, dict) and e.get('verified')]
+        emails = [(e.get('email'), e.get('primary'), 0) for e in emails if isinstance(e, dict) and e.get('verified')]
         emails.sort(key=itemgetter(1), reverse=True)
         emails = map(itemgetter(0), emails)
         logger.info('Usable emails: %s', emails)
