@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+import re
 from requests import HTTPError
 import reversion
 from social.apps.django_app.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
@@ -40,6 +41,10 @@ class GitHubSecureEmailOAuth2(GithubOAuth2):
             data['email'] = None
 
         return data
+
+
+def slugify_username(username, renotword=re.compile('[^\w]')):
+    return renotword.sub('', username.replace('-', '_'))
 
 
 def verify_email(backend, details, *args, **kwargs):

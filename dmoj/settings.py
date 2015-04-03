@@ -320,6 +320,9 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SOCIAL_AUTH_GITHUB_SECURE_SCOPE = ['user:email']
+SOCIAL_AUTH_SLUGIFY_USERNAMES = True
+SOCIAL_AUTH_SLUGIFY_FUNCTION = 'judge.social_auth.slugify_username'
+
 
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:
