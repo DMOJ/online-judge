@@ -27,19 +27,25 @@ class GitHubSecureEmailOAuth2(GithubOAuth2):
         except (HTTPError, ValueError, TypeError):
             emails = []
 
+        logger.info('Got emails from GitHub: %s', emails)
         emails = [(e, e.get('primary'), False) for e in emails if isinstance(e, dict) and e.get('verified')]
         emails.sort(key=itemgetter(1), reverse=True)
         emails = map(itemgetter(0), emails)
+        logger.info('Usable emails: %s', emails)
 
         if emails:
             data['email'] = emails[0]
         else:
             data['email'] = None
+        logger.info('Setting email: %s', data['email'])
 
 
 def verify_email(backend, details, *args, **kwargs):
     if not details['email']:
+        logger.info('Denying: %s', details)
         raise InvalidEmail(backend)
+    else:
+        logger.info('Allowing: %s', details)
 
 
 @partial
