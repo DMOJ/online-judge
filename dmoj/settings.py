@@ -309,7 +309,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.user.get_username',
     'social.pipeline.social_auth.associate_by_email',
     'social.pipeline.user.create_user',
-    'judge.social.make_profile',
+    'judge.social_pipeline.make_profile',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details'
