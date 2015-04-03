@@ -1,9 +1,11 @@
 import logging
 from operator import itemgetter
+from urllib import quote
 
+from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.shortcuts import render_to_response, render
-from django.template import RequestContext
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from requests import HTTPError
 import reversion
 from social.apps.django_app.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
@@ -69,14 +71,11 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
                     reversion.set_user(user)
                     reversion.set_comment('Updated on registration')
                     return
-        return render_to_response('registration/profile_creation.jade', {'form': form},
-                                  context_instance=RequestContext(backend.strategy.request))
+        return render(backend.strategy.request, 'registration/profile_creation.jade', {'form': form})
 
 
 class SocialAuthExceptionMiddleware(OldSocialAuthExceptionMiddleware):
     def process_exception(self, request, exception):
         if isinstance(exception, SocialAuthBaseException):
-            return render(request, 'generic_message.jade', {
-                'title': 'Authentication failure',
-                'message': self.get_message(request, exception)
-            })
+            return HttpResponseRedirect('%s?message=%s' % (reverse('social_auth_error'),
+                                                           quote(self.get_message(request, exception))))

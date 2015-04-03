@@ -3,6 +3,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.forms import CharField, ChoiceField, ModelChoiceField
+from django.shortcuts import render
 from django.utils import timezone
 from registration.backends.default.views import\
     RegistrationView as OldRegistrationView,\
@@ -75,3 +76,10 @@ class ActivationView(OldActivationView):
         if 'title' not in kwargs:
             kwargs['title'] = self.title
         return super(ActivationView, self).get_context_data(**kwargs)
+
+
+def social_auth_error(request):
+    return render(request, 'generic_message.jade', {
+        'title': 'Authentication failure',
+        'message': request.GET.get('message')
+    })
