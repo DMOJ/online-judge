@@ -16,7 +16,7 @@ block media
           top: 40%;
           left: 50%;
         }
-        i {
+        .social {
             display:inline;
             font-size:1.9em;
         }
@@ -57,14 +57,14 @@ block body
         br
         a(href='{% url "password_reset" %}') Forgot your password?
         h4 Or login with...
-        a.google-icon(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}')
+        a.social.google-icon(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}')
             i.fa.fa-google-plus-square
         = ' '
-        a.facebook-icon(href='{% url "social:begin" "facebook" %}?next={{ next }}')
+        a.social.facebook-icon(href='{% url "social:begin" "facebook" %}?next={{ next }}')
             i.fa.fa-facebook-square
         = ' '
-        a.github-icon(href='{% url "social:begin" "github-secure" %}?next={{ next }}')
+        a.social.github-icon(href='{% url "social:begin" "github-secure" %}?next={{ next }}')
             i.fa.fa-github-square
         = ' '
-        a.dropbox-icon(href='{% url "social:begin" "dropbox-oauth2" %}?next={{ next }}')
+        a.social.dropbox-icon(href='{% url "social:begin" "dropbox-oauth2" %}?next={{ next }}')
             i.fa.fa-dropbox
