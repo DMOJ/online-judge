@@ -40,7 +40,7 @@ td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status
 if submission.status == 'G'
     td.sub-testcase
         if submission.current_testcase > 0
-            | Running on test case ##{submission.current_testcase}
+            | Case ##{submission.current_testcase}
         else
             | ...
 
