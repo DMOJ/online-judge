@@ -45,3 +45,5 @@ block body
         a(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}') Google
         = ' '
         a(href='{% url "social:begin" "github" %}?next={{ next }}') GitHub
+        = ' '
+        a(href='{% url "social:begin" "dropbox-oauth2" %}?next={{ next }}') Dropbox
