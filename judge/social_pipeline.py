@@ -18,6 +18,8 @@ logger = logging.getLogger('judge.social_auth')
 
 
 class GitHubSecureEmailOAuth2(GithubOAuth2):
+    name = 'github-secure'
+
     def user_data(self, access_token, *args, **kwargs):
         data = self._user_data(access_token)
         try:
