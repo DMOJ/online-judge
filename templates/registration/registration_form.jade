@@ -8,6 +8,8 @@ block media
     style
         .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
         .map-wrap { display: none }
+        .featherlight { z-index: 1000 }
+        .featherlight .featherlight-content { min-width: 80% }
     if TIMEZONE_BG
         style
             .map-wrap { background: #{TIMEZONE_BG} }
