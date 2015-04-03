@@ -42,8 +42,8 @@ window.timezone_picker = function ($map, $field, json_data) {
         },
         activate: function () {
             $field.val(this.name);
-            $axisX.animate({left: this.x * 100 + '%'}, 100);
-            $axisY.animate({top: this.y * 100 + '%'}, 100);
+            $axisX.animate({left: this.x * 100 + '%'}, 100, 'linear');
+            $axisY.animate({top: this.y * 100 + '%'}, 100, 'linear');
         },
         deactivate: function () {
             this.dom.removeClass('active');
