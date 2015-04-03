@@ -316,6 +316,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.user.user_details'
 )
 
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
+
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:
         exec f in globals()
