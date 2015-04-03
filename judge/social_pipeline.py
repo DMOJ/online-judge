@@ -38,6 +38,7 @@ class GitHubSecureEmailOAuth2(GithubOAuth2):
         else:
             data['email'] = None
         logger.info('Setting email: %s', data['email'])
+        return data
 
 
 def verify_email(backend, details, *args, **kwargs):
