@@ -76,7 +76,9 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
                     reversion.set_user(user)
                     reversion.set_comment('Updated on registration')
                     return
-        return render(backend.strategy.request, 'registration/profile_creation.jade', {'form': form})
+        return render(backend.strategy.request, 'registration/profile_creation.jade', {
+            'title': 'Create your profile', 'form': form
+        })
 
 
 class SocialAuthExceptionMiddleware(OldSocialAuthExceptionMiddleware):
