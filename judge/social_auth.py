@@ -2,6 +2,7 @@ import logging
 from operator import itemgetter
 from urllib import quote
 import re
+from django.contrib.auth.models import User
 
 from django.core.urlresolvers import reverse
 from django.db import transaction
@@ -56,6 +57,11 @@ def verify_email(backend, details, *args, **kwargs):
 class UsernameForm(forms.Form):
     username = forms.RegexField(regex=r'^\w+$', max_length=30, label='Username',
                                 error_messages={'invalid': 'A username must contain letters, numbers, or underscores'})
+
+    def clean_username(self):
+        if User.objects.filter(username=self.cleaned_data['username']).exists():
+            raise forms.ValidationError('Sorry, the username is taken.')
+        return self.cleaned_data['username']
 
 
 @partial
