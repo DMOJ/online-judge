@@ -68,7 +68,7 @@ class SolutionSitemap(Sitemap):
         return Solution.objects.filter(is_public=True, publish_on__lte=timezone.now())
 
     def location(self, obj):
-        return obj.url
+        return reverse('solution', args=[obj.url])
 
 
 class HomePageSitemap(Sitemap):
