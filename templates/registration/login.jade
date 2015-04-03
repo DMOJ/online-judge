@@ -41,4 +41,7 @@ block body
             input(type='hidden', name='next', value=next)
         br
         a(href='{% url "password_reset" %}') Forgot your password?
-        a(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}') Login with Google
+        h4 Or login with...
+        a(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}') Google
+        = ' '
+        a(href='{% url "social:begin" "github" %}?next={{ next }}') GitHub
