@@ -299,6 +299,7 @@ CACHES = {}
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'social.backends.github.GithubOAuth2',
+    'social.backends.dropbox.DropboxOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
