@@ -53,7 +53,7 @@ block body
                     td
                         | #{form.timezone}
                         = ' or '
-                        a(href='#', data-featherlight='.map-wrap')
+                        a#open-map(href='#', data-featherlight='.map-wrap')
                             | pick from map
                 tr
                     th
@@ -78,5 +78,9 @@ block bodyend
     script(type='text/javascript', src='{% static "timezone-picker.js" %}')
     script(type='text/javascript')
         $(function () {
-            timezone_picker($('.map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
+            $('#open-map').featherlight({
+                afterOpen: function () {
+                    timezone_picker($('.map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
+                }
+            });
         });
