@@ -71,3 +71,6 @@ block body
         = ' '
         a.social.dropbox-icon(href='{% url "social:begin" "dropbox-oauth2" %}?next={{ next }}')
             i.fa.fa-dropbox
+        = ' '
+        a.stackoverflow-icon(href='{% url "social:begin" "stackoverflow" %}?next={{ next }}')
+            i.fa.fa-stack-overflow
