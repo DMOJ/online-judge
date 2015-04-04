@@ -9,6 +9,12 @@ block media
     script(type='text/javascript', src='{% static "event.js" %}')
     script(type='text/javascript', src='{% static "moment.min.js" %}')
     style
+        .info-float {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 40px;
+        }
+
         #submissions-table {
             width: 75%;
             border: 0;
@@ -119,13 +125,14 @@ block media
             }
     script(type='text/javascript')
         $(function () {
-            fix_div($('.info-float'), 40, true, function (info) {
-                info.css('width', (info.width() / $(window).width() * 100) + '%');
-                return $('<div/>', {
-                    id: 'fake-info-float',
-                    class: 'info-float'
-                }).css('width', '20%').height(info.height()).prependTo('#content-body');
-            });
+            if (!featureTest('position', 'sticky'))
+                fix_div($('.info-float'), 40, true, function (info) {
+                    info.css('width', (info.width() / $(window).width() * 100) + '%');
+                    return $('<div/>', {
+                        id: 'fake-info-float',
+                        class: 'info-float'
+                    }).css('width', '20%').height(info.height()).prependTo('#content-body');
+                });
 
             var time_cache = {};
             window.update_relative_time = function (row) {
@@ -239,7 +246,7 @@ block media
 
 block body
     br
-    .info-float(style='width:20%')
+    .info-float
         #statistics-table
             include problem/statistics_table
     if page_obj.num_pages > 1
