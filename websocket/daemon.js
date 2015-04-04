@@ -8,6 +8,7 @@ var messages = new queue();
 var followers = new set();
 var pollers = new set();
 var max_queue = config.max_queue || 50;
+var long_poll_timeout = config.long_poll_timeout || 60000;
 var message_id = Date.now();
 
 if (typeof String.prototype.startsWith != 'function') {
@@ -188,5 +189,12 @@ require('http').createServer(function (req, res) {
         if (!got && message.id > req.last_msg)
             got = req.got_message(message);
     });
-    if (!got) pollers.add(req);
+    if (!got) {
+        pollers.add(req);
+        res.setTimeout(long_poll_timeout, function () {
+            pollers.remove(req);
+            res.writeHead(504, {'Content-Type': 'application/json'});
+            res.end('{"error": "timeout"}');
+        });
+    }
 }).listen(config.http_port, config.http_host);
