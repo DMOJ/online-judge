@@ -351,9 +351,14 @@ hr {
     color: rgba(0, 0, 0, 0.2)
 }
 
-#navigation {
+#nav-head {
     position: -webkit-sticky;
     position: sticky;
+    top: 0;
+}
+
+#navigation {
+    position: relative;
     top: 0;
     width: 100%;
     z-index: 500
