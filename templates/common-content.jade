@@ -9,7 +9,7 @@ block media
             var container = $('#content-right');
             if (window.bad_browser) {
                 container.css('float', 'right');
-            } else {
+            } else if (!featureTest('position', 'sticky')) {
                 fix_div(info_float, 40);
                 $(window).resize(function() {
                     info_float.width(container.width());
@@ -48,6 +48,14 @@ block media
             padding-left: 1em; 
         }
 
+        #content-right .info-float {
+            float: none;
+            padding: 10px 0 0 0;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 40px;
+        }
+
         .content-description {
             width: 100%;
         }
@@ -55,7 +63,7 @@ block media
     block content_media
 block body
     #content-right
-        .info-float(style='float: none; padding: 10px 0 0 0')
+        .info-float
             block info_float
     #content-left
         .content-description.screen

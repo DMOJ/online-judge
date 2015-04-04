@@ -1,3 +1,16 @@
+function featureTest(property, value, noPrefixes) {
+    var prop = property + ':',
+        el = document.createElement('test'),
+        mStyle = el.style;
+
+    if (!noPrefixes) {
+        mStyle.cssText = prop + ['-webkit-', '-moz-', '-ms-', '-o-', ''].join(value + ';' + prop) + value + ';';
+    } else {
+        mStyle.cssText = prop + value;
+    }
+    return !!mStyle[property];
+}
+
 window.fix_div = function (div, height, right, fake_gen) {
     var div_offset = div.offset().top;
     if (right)
