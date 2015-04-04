@@ -24,7 +24,7 @@ window.timezone_picker = function ($map, $field, json_data) {
 
     function Center(data) {
         this.name = data.name;
-        this.x = (180 + data.long) / 360;
+        this.x = (180 + data['long']) / 360;
         this.y = (90 - data.lat) / 180;
         this.dom = $('<span>').appendTo($map).css({
             left: this.x * 100 + '%',
