@@ -5,7 +5,6 @@ extends base
 
 block media
     link(rel='stylesheet', href='{% static "status.css" %}')
-    script(type='text/javascript', src='{% static "common.js" %}')
     script(type='text/javascript', src='{% static "event.js" %}')
     script(type='text/javascript', src='{% static "moment.min.js" %}')
     style
@@ -152,7 +151,6 @@ block media
             update_all_time();
         });
     if dynamic_update and last_msg
-        script(type='text/javascript', src='{% static "common.js" %}')
         if IN_CONTEST
             script(type='text/javascript')
                 window.current_contest = '#{CONTEST.contest.key}';
