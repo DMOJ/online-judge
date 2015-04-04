@@ -42,9 +42,10 @@ window.fix_div = function (div, height, right, fake_gen) {
 };
 
 $(function () {
-    fix_div($('#navigation'), 0, false, function (nav) {
-        $('<div/>', {id: 'fake-nav'}).css('height', nav.height()).prependTo('#nav-head');
-    });
+    if (!featureTest('position', 'sticky'))
+        fix_div($('#navigation'), 0, false, function (nav) {
+            $('<div/>', {id: 'fake-nav'}).css('height', nav.height()).prependTo('#nav-head');
+        });
 
     var $nav_list = $('#nav-list');
     $('#navicon').click(function (event) {
