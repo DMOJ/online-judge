@@ -173,6 +173,10 @@ class Profile(models.Model):
         # return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
         return self.long_display_name
 
+    class Meta:
+        permissions = (
+            ('test_site', 'Shows in-progress development stuff'),
+        )
 
 class ProblemType(models.Model):
     name = models.CharField(max_length=20, verbose_name='Problem category ID', unique=True)
