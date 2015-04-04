@@ -12,3 +12,6 @@ Disallow: /edit/profile/
 Disallow: /src/
 Disallow: /comments/
 Disallow: /api/
+Disallow: /contest/*/submissions/*/*/
+Disallow: /contest/*/join
+Disallow: /contest/*/leave
