@@ -24,10 +24,16 @@ block media
             color: #555;
         }
 
-        .floating-time {
+        .floating-time-left {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        .floating-time-right {
             position: absolute;
             right: 0;
-            bottom: 0
+            bottom: 0;
         }
 
         .external-notice {
@@ -35,9 +41,11 @@ block media
             position:absolute;
             bottom:0;
         }
+
         .external-notice a {
             color:#777;
         }
+
         .external-notice:hover {
             text-decoration: underline;
         }
@@ -75,7 +83,7 @@ block body
                                         span.time.time-remaining #{contest.time_before_end|timedelta:"simple"}
                                     elif contest.free_start and contest.start_time
                                         span.time Started at #{contest.start_time|date:"N j, o, G:i"}
-                                    .time.floating-time #{contest.end_time|date:"N j, o, G:i"}
+                                    .time.floating-time-right #{contest.end_time|date:"N j, o, G:i"}
                                     if contest.is_external
                                         .external-notice
                                             a(href='/about#external-contests') External contest
@@ -112,7 +120,7 @@ block body
                                     if contest.time_before_start
                                         span.time Starting in&nbsp;
                                         span.time.time-remaining #{contest.time_before_start|timedelta:"simple"}
-                                    .time.floating-time #{contest.start_time|date:"N j, o, G:i"}
+                                    .time.floating-time-right #{contest.start_time|date:"N j, o, G:i"}
                                     if contest.is_external
                                         .external-notice
                                             a(href='/about#external-contests') External contest
@@ -142,10 +150,8 @@ block body
                     td
                         div(style='position:relative')
                             a(href='{% url "contest_view" contest.key %}')= contest.name
-                            if contest.start_time
-                                .time.floating-time #{contest.start_time|date:"N j, o, G:i"} to #{contest.end_time|date:"N j, o, G:i"}
-                            else
-                                .time.floating-time #{contest.time_limit}
+                            .time.floating-time-left #{contest.start_time|date:"N j, o, G:i"}
+                            .time.floating-time-right #{contest.end_time|date:"N j, o, G:i"}
                             if contest.is_external
                                 .external-notice
                                     a(href='/about#external-contests') External contest
