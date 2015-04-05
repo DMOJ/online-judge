@@ -112,6 +112,10 @@
     box-sizing: border-box;
 }
 
+.wmd-preview:empty {
+    display: none;
+}
+
 .wmd-preview h1, .wmd-preview h2, .wmd-preview h3, .wmd-preview h4, .wmd-preview h5, .wmd-preview h6 {
     font-weight: bold;
     color: #111;
