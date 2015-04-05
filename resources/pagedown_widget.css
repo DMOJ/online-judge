@@ -117,28 +117,23 @@
 }
 
 .wmd-preview h1, .wmd-preview h2, .wmd-preview h3, .wmd-preview h4, .wmd-preview h5, .wmd-preview h6 {
-    font-weight: bold;
-    color: #111;
-    margin-bottom: .75em;
-    padding: 0;
-    background: 0;
-    margin-left: 0;
+    font-weight: bold !important;
 }
 
 .wmd-preview h1 {
-    font-size: 1.6em;
-    margin: 0;
-    padding: 0;
+    font-size: 1.6em !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .wmd-preview h2 {
-    font-size: 1.4em
+    font-size: 1.4em !important
 }
 
 .wmd-preview h3 {
-    font-size: 1em
+    font-size: 1em !important
 }
 
 .wmd-preview h4, .wmd-preview h5, .wmd-preview h6 {
-    font-size: .9em
+    font-size: .9em !important
 }
