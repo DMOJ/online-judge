@@ -94,10 +94,16 @@ block bodyend
                     var button = $(this).html('detecting...');
                     navigator.geolocation.getCurrentPosition(function(position) {
                         $.ajax({
-                            url: '{% url "detect_timezone" %}',
-                            data: {lat: position.coords.latitude, long: position.coords.longitude}
+                            url: 'https://maps.googleapis.com/maps/api/timezone/json',
+                            data: {
+                                location: position.coords.latitude + ',' + position.coords.longitude,
+                                timestamp: Math.floor(Date.now() / 1000)
+                            }
                         }).done(function (data) {
-                            $('#id_timezone').val(data);
+                            if (data['timeZoneId'])
+                                $('#id_timezone').val(data.timeZoneId);
+                            else
+                                alert('Invalid response from Google: ' + data);
                         }).fail(function (jqXHR, status) {
                             alert(status);
                         }).always(function () {
