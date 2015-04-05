@@ -34,6 +34,12 @@ block media
             right: 0;
         }
 
+        .floating-time {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+
         .external-notice {
             font-style:italic;
             position:absolute;
@@ -81,7 +87,7 @@ block body
                                         span.time.time-remaining #{contest.time_before_end|timedelta:"simple"}
                                     elif contest.free_start and contest.start_time
                                         span.time Started at #{contest.start_time|date:"N j, o, G:i"}
-                                    .time.floating-time-right #{contest.end_time|date:"N j, o, G:i"}
+                                    .time.floating-time #{contest.end_time|date:"N j, o, G:i"}
                                     if contest.is_external
                                         .external-notice
                                             a(href='/about#external-contests') External contest
@@ -118,7 +124,7 @@ block body
                                     if contest.time_before_start
                                         span.time Starting in&nbsp;
                                         span.time.time-remaining #{contest.time_before_start|timedelta:"simple"}
-                                    .time.floating-time-right #{contest.start_time|date:"N j, o, G:i"}
+                                    .time.floating-time #{contest.start_time|date:"N j, o, G:i"}
                                     if contest.is_external
                                         .external-notice
                                             a(href='/about#external-contests') External contest
