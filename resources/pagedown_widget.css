@@ -109,6 +109,7 @@
     font-size: 1em;
     border: 1px solid #a9a9a9;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 .wmd-preview h1, .wmd-preview h2, .wmd-preview h3, .wmd-preview h4, .wmd-preview h5, .wmd-preview h6 {
