@@ -1,15 +1,15 @@
 @-ms-viewport {
-    min-width: 420px;
+    min-width: 480px;
     max-width: device-width
 }
 
 @-o-viewport {
-    min-width: 420px;
+    min-width: 480px;
     max-width: device-width
 }
 
 @viewport {
-    min-width: 420px;
+    min-width: 480px;
     max-width: device-width
 }
 

@@ -116,7 +116,7 @@ $(function () {
     if (typeof window.orientation !== 'undefined') {
         $(window).resize(function () {
             var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-            $('#viewport').attr('content', width > 420 ? 'initial-scale=1' : 'width=420');
+            $('#viewport').attr('content', width > 480 ? 'initial-scale=1' : 'width=480');
         });
     }
 
