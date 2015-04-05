@@ -1,0 +1,9 @@
+<div class="wmd-wrapper" id="{{ id }}-wmd-wrapper">
+    <div class="wmd-panel">
+        <div id="{{ id|safe }}_wmd_button_bar"></div>
+        <textarea{{ attrs|safe }}>{{ body }}</textarea>
+    </div>
+    {% if show_preview %}
+        <div id="{{ id|safe }}_wmd_preview" class="wmd-panel wmd-preview content-description"></div>
+    {% endif %}
+</div>

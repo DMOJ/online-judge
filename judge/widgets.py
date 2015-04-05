@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.admin import widgets as admin_widgets
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.template import Context
 from django.template.loader import get_template
@@ -62,5 +63,11 @@ else:
             return media
         media = property(_media)
 
-    class MathJaxAdminPagedownWidget(AdminPagedownWidget, BaseMathJaxPagedownWidget):
-        pass
+    class MathJaxAdminPagedownWidget(BaseMathJaxPagedownWidget, admin_widgets.AdminTextareaWidget):
+        class Media:
+            css = {
+                'all': (staticfiles_storage.url('content-description.css'),)
+            }
+            js = (
+                staticfiles_storage.url('admin/js/pagedown.js'),
+            )
