@@ -114,8 +114,8 @@ window.fix_div = function (div, height, right, fake_gen) {
 
 $(function () {
     if (!featureTest('position', 'sticky'))
-        fix_div($('#navigation'), 0, false, function (nav) {
-            $('<div/>', {id: 'fake-nav'}).css('height', nav.height()).prependTo('#nav-head');
+        fix_div($('nav'), 0, false, function (nav) {
+            $('<div/>', {id: 'fake-nav'}).css('height', nav.height()).insertBefore('nav');
         });
 
     var $nav_list = $('#nav-list');
