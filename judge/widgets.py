@@ -64,7 +64,10 @@ else:
     class MathJaxAdminPagedownWidget(MathJaxPagedownWidget, admin_widgets.AdminTextareaWidget):
         def _media(self):
             media = super(MathJaxAdminPagedownWidget, self)._media()
-            media.add_css({'all': [staticfiles_storage.url('content-description.css')]})
+            media.add_css({'all': [
+                staticfiles_storage.url('content-description.css'),
+                staticfiles_storage.url('admin/css/pagedown.css'),
+            ]})
             media.add_js([staticfiles_storage.url('admin/js/pagedown.js')])
             return media
         media = property(_media)
