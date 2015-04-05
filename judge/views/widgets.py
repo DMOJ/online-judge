@@ -41,7 +41,7 @@ class DetectTimezone(View):
         try:
             lat, long = float(request.GET['lat']), float(request.GET['long'])
         except (ValueError, KeyError):
-            raise Http404()
+            return HttpResponse('Bad latitude or longitude', content_type='text/plain', status=404)
         with closing(urllib2.urlopen('http://api.askgeo.com/v1/%s/%s/query.json?databases=TimeZone&points=%f,%f' %
                      (settings.ASKGEO_ACCOUNT_ID, settings.ASKGEO_ACCOUNT_API_KEY, lat, long))) as f:
             data = json.load(f)
