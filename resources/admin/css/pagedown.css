@@ -20,7 +20,8 @@
     color: #111;
     margin-bottom: .75em;
     padding: 0;
-    background: 0
+    background: 0;
+    margin-left: 0;
 }
 
 .wmd-preview h1 {
