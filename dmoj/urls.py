@@ -182,7 +182,7 @@ urlpatterns = patterns('',
     url(r'^license/(?P<key>[-\w.]+)$', license.LicenseDetail.as_view(), name='license'),
 
     url(r'^mailgun/mail_activate/$', mailgun.MailgunActivationView.as_view(), name='mailgun_activate'),
-    url(r'^detect_timezone', views.DetectTimezone.as_view(), name='detect_timezone'),
+    url(r'^detect_timezone$', views.DetectTimezone.as_view(), name='detect_timezone'),
 
     url(r'^feed/', include(patterns('',
         url(r'^problems/rss/$', ProblemFeed(), name='problem_rss'),
