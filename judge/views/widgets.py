@@ -4,6 +4,7 @@ import urllib2
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
 from django.views.generic import View
 
@@ -35,13 +36,9 @@ def rejudge_submission(request):
 
 
 class DetectTimezone(View):
-    def get(self, request, *args, **kwargs):
+    def askgeo(self, lat, long):
         if not hasattr(settings, 'ASKGEO_ACCOUNT_ID') or not hasattr(settings, 'ASKGEO_ACCOUNT_API_KEY'):
-            raise Http404()
-        try:
-            lat, long = float(request.GET['lat']), float(request.GET['long'])
-        except (ValueError, KeyError):
-            return HttpResponse('Bad latitude or longitude', content_type='text/plain', status=404)
+            raise ImproperlyConfigured()
         with closing(urllib2.urlopen('http://api.askgeo.com/v1/%s/%s/query.json?databases=TimeZone&points=%f,%f' %
                      (settings.ASKGEO_ACCOUNT_ID, settings.ASKGEO_ACCOUNT_API_KEY, lat, long))) as f:
             data = json.load(f)
@@ -49,3 +46,28 @@ class DetectTimezone(View):
                 return HttpResponse(data['data'][0]['TimeZone']['TimeZoneId'], content_type='text/plain')
             except (IndexError, KeyError):
                 return HttpResponse('Invalid upstream data: %s' % data, content_type='text/plain', status=500)
+
+    def geonames(self, lat, long):
+        if not hasattr(settings, 'GEONAMES_USERNAME'):
+            raise ImproperlyConfigured()
+        with closing(urllib2.urlopen('http://api.geonames.org/timezoneJSON?lat=%f&lng=%f&username=%s' %
+                     (lat, long, settings.GEONAMES_USERNAME))) as f:
+            data = json.load(f)
+            try:
+                return HttpResponse(data['timezoneId'], content_type='text/plain')
+            except KeyError:
+                return HttpResponse('Invalid upstream data: %s' % data, content_type='text/plain', status=500)
+
+    def default(self, lat, long):
+        raise Http404()
+
+    def get(self, request, *args, **kwargs):
+        backend = getattr(settings, 'TIMEZONE_DETECT_BACKEND')
+        try:
+            lat, long = float(request.GET['lat']), float(request.GET['long'])
+        except (ValueError, KeyError):
+            return HttpResponse('Bad latitude or longitude', content_type='text/plain', status=404)
+        return {
+            'askgeo': self.askgeo,
+            'geonames': self.geonames,
+        }.get(backend, self.default)(lat, long)
