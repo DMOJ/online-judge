@@ -45,7 +45,3 @@ block body
         script(src='{% static "placeholder-compat.js" %}')
         h2 Comments
         include comments/list
-
-block bodyend
-    | #{block.super}
-    include comments/math

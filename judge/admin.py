@@ -867,7 +867,7 @@ class BlogPostAdmin(reversion.VersionAdmin):
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': MathJaxAdminPagedownWidget},
+            TextField: {'widget': MathJaxAdminPagedownWidget(load_math=False)},
         }
 
 
