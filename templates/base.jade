@@ -68,7 +68,7 @@ html(lang='en')
                 body, .content-description { font-family: 'Open Sans', sans-serif !important; }
     body
         noscript This site works best with JavaScript enabled.
-        #header.unselectable
+        header.unselectable
             h1
                 a(href='/')
                     block site_title
@@ -78,34 +78,33 @@ html(lang='en')
                     a(href='{% url "contest_view" CONTEST.contest.key %}')
                         | #{CONTEST.contest.name} -
                         #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
-        header#nav-head
-            nav#navigation.unselectable
-                a#navicon(href='javascript:void(0)')
-                    i.fa.fa-bars
-                    &nbsp;MENU
-                ul#nav-list
-                    - recursetree nav_bar
-                        li
-                            a(href=node.path, class='nav-{{ node.key }}')= node.label
-                            if not node.is_leaf_node
-                                ul {{ children }}
-                    - endrecursetree
-                span#user-links
-                    if request.user.is_authenticated
-                        a(href='{% url "user_page" %}')
-                            | Hello,&nbsp;
-                            b #{request.user.username}
+        nav#navigation.unselectable
+            a#navicon(href='javascript:void(0)')
+                i.fa.fa-bars
+                | &nbsp;MENU
+            ul#nav-list
+                - recursetree nav_bar
+                    li
+                        a(href=node.path, class='nav-{{ node.key }}')= node.label
+                        if not node.is_leaf_node
+                            ul {{ children }}
+                - endrecursetree
+            span#user-links
+                if request.user.is_authenticated
+                    a(href='{% url "user_page" %}')
+                        | Hello,&nbsp;
+                        b #{request.user.username}
+                    | &nbsp;|
+                    if request.user.is_staff or request.user.is_superuser
+                        a(href='{% url "admin:index" %}') admin
                         | &nbsp;|
-                        if request.user.is_staff or request.user.is_superuser
-                            a(href='{% url "admin:index" %}') admin
-                            | &nbsp;|
-                        a(href='{% url "django.contrib.auth.views.logout" %}?next=')
-                            | &nbsp;log out
-                    else
-                        a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
-                            b Login
-                        | &nbsp;|&nbsp;
-                        a(href='/accounts/register/') Register
+                    a(href='{% url "django.contrib.auth.views.logout" %}?next=')
+                        | &nbsp;log out
+                else
+                    a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
+                        b Login
+                    | &nbsp;|&nbsp;
+                    a(href='/accounts/register/') Register
         br
         div#content
             block title_row

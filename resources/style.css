@@ -258,7 +258,7 @@ h4 {
     margin: 0
 }
 
-#header a {
+header {
     background: #111;
     color: #aaa;
     text-align: left;
@@ -277,6 +277,15 @@ h4 {
 
 #user-links a {
     color: #FFF
+}
+
+nav {
+    position: relative;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 500
 }
 
 nav ul {
@@ -349,20 +358,6 @@ nav ul li:hover > ul, nav ul li:active > ul, nav ul li:focus > ul {
 
 hr {
     color: rgba(0, 0, 0, 0.2)
-}
-
-#nav-head {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    z-index: 500;
-}
-
-#navigation {
-    position: relative;
-    top: 0;
-    width: 100%;
-    z-index: 500
 }
 
 #content {
