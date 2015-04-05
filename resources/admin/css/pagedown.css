@@ -4,11 +4,13 @@
 
 .wmd-preview {
     margin-top: 15px;
-    padding: 0 15px;
-    background-color: #f8f8f8;
+    padding: 10px 0 10px 10px;
+    background: white;
     overflow-y: scroll;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     line-height: 1.5em;
     font-size: 1em;
+    border: 1px solid #a9a9a9;
+    border-radius: 5px;
 }
