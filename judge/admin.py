@@ -865,9 +865,9 @@ class BlogPostAdmin(reversion.VersionAdmin):
     list_display_links = ('id', 'title')
     ordering = ('-publish_on',)
 
-    if AdminPagedownWidget is not None:
+    if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
+            TextField: {'widget': MathJaxAdminPagedownWidget},
         }
 
 
