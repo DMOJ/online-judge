@@ -47,7 +47,7 @@ except ImportError:
 else:
     class MathJaxPagedownWidget(PagedownWidget):
         def __init__(self, *args, **kwargs):
-            kwargs['css'] = staticfiles_storage.url('pagedown_widget.css')
+            kwargs.setdefault('css', (staticfiles_storage.url('pagedown_widget.css'),))
             super(MathJaxPagedownWidget, self).__init__(*args, **kwargs)
 
         def _media(self):
@@ -57,7 +57,6 @@ else:
                 '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
                 staticfiles_storage.url('pagedown_math.js'),
             ])
-            media.add_css({'all': [staticfiles_storage.url('pagedown_widget.css')]})
             return media
         media = property(_media)
 
