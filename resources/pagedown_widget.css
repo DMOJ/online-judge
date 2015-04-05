@@ -14,6 +14,7 @@
     width: 100%;
     background: #fff;
     border: 1px solid DarkGray;
+    font-family: Consolas, "Liberation Mono", Monaco, "Courier New", monospace;
 }
 
 .wmd-preview {
@@ -22,11 +23,8 @@
 
 .wmd-button-row {
     position: relative;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    margin-top: 10px;
-    padding: 0px;
+    margin: 10px 5px 5px;
+    padding: 0;
     height: 20px;
 }
 
