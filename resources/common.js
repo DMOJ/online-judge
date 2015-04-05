@@ -113,6 +113,13 @@ window.fix_div = function (div, height, right, fake_gen) {
 };
 
 $(function () {
+    if (typeof window.orientation !== 'undefined') {
+        $(window).resize(function () {
+            var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            $('#viewport').attr('content', width > 420 ? 'initial-scale=1' : 'width=420');
+        });
+    }
+
     if (!featureTest('position', 'sticky'))
         fix_div($('nav'), 0, false, function (nav) {
             $('<div/>', {id: 'fake-nav'}).css('height', nav.height()).insertBefore('nav');

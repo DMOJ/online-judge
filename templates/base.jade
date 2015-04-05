@@ -13,6 +13,7 @@ html(lang='en')
         meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
         if misc_config.meta_keywords
             meta(name='keywords', content=misc_config['meta_keywords'])
+        meta#viewport(name='viewport', content='initial-scale=1')
         link(rel='stylesheet', href='{% static "style.css" %}')
         link(rel='stylesheet', href=FONTAWESOME_CSS)
         link(rel='canonical', href='http://{{ site.domain }}{{ request.get_full_path }}')
