@@ -1,3 +1,9 @@
 .wmd-wrapper {
     padding-right: 15px !important;
 }
+
+
+.wmd-preview {
+    margin-top: 15px;
+    padding: 15px;
+}
