@@ -47,8 +47,8 @@ except ImportError:
 else:
     class BaseMathJaxPagedownWidget(PagedownWidget):
         def __init__(self, *args, **kwargs):
+            kwargs['css'] = staticfiles_storage.url('pagedown_widget.css')
             super(BaseMathJaxPagedownWidget, self).__init__(*args, **kwargs)
-            self.css = staticfiles_storage.url('pagedown_widget.css')
 
         def _media(self):
             media = super(BaseMathJaxPagedownWidget, self)._media()
