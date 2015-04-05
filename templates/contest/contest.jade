@@ -102,3 +102,7 @@ block comments
         h2 Comments
         script(src='{% static "placeholder-compat.js" %}')
         include comments/list
+
+block bodyend
+    | #{block.super}
+    include comments/math

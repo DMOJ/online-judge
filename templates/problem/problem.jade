@@ -144,3 +144,7 @@ block comments
             i.fa.fa-comments(style='padding-right: 0.2em')
             | Comments
         include comments/list
+
+block bodyend
+    | #{block.super}
+    include comments/math

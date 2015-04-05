@@ -23,7 +23,7 @@ class CommentForm(ModelForm):
             'parent': forms.HiddenInput(),
         }
         if PagedownWidget is not None:
-            widgets['body'] = MathJaxPagedownWidget
+            widgets['body'] = MathJaxPagedownWidget(load_math=False)
 
     def __init__(self, request, *args, **kwargs):
         self.request = request

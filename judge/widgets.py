@@ -48,15 +48,17 @@ else:
     class MathJaxPagedownWidget(PagedownWidget):
         def __init__(self, *args, **kwargs):
             kwargs.setdefault('css', (staticfiles_storage.url('pagedown_widget.css'),))
+            self._load_math = kwargs.pop('load_math', True)
             super(MathJaxPagedownWidget, self).__init__(*args, **kwargs)
 
         def _media(self):
             media = super(MathJaxPagedownWidget, self)._media()
-            media.add_js([
-                staticfiles_storage.url('mathjax_config.js'),
-                '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
-                staticfiles_storage.url('pagedown_math.js'),
-            ])
+            if self._load_math:
+                media.add_js([
+                    staticfiles_storage.url('mathjax_config.js'),
+                    '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
+                    staticfiles_storage.url('pagedown_math.js'),
+                ])
             return media
         media = property(_media)
 
