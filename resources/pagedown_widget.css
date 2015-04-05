@@ -98,3 +98,42 @@
 .wmd-wrapper {
     padding-right: 0 !important;
 }
+
+.wmd-preview {
+    margin-top: 15px;
+    padding: 7px;
+    background: white;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    line-height: 1.5em;
+    font-size: 1em;
+    border: 1px solid #a9a9a9;
+    border-radius: 5px;
+}
+
+.wmd-preview h1, .wmd-preview h2, .wmd-preview h3, .wmd-preview h4, .wmd-preview h5, .wmd-preview h6 {
+    font-weight: bold;
+    color: #111;
+    margin-bottom: .75em;
+    padding: 0;
+    background: 0;
+    margin-left: 0;
+}
+
+.wmd-preview h1 {
+    font-size: 1.6em;
+    margin: 0;
+    padding: 0;
+}
+
+.wmd-preview h2 {
+    font-size: 1.4em
+}
+
+.wmd-preview h3 {
+    font-size: 1em
+}
+
+.wmd-preview h4, .wmd-preview h5, .wmd-preview h6 {
+    font-size: .9em
+}
