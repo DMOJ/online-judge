@@ -9,7 +9,7 @@ span.comment-author Author:
         span(class='{{ author.display_rank }}')
             a(href='{% url "user_page" author.user.username %}')= author.long_display_name
 each version in revisions
-    table.comment-revision(id='revision-{{ forloop.counter }}')
+    table.comment-revision.content-description(id='revision-{{ forloop.counter }}')
         tr
             th Date:
             td.revision-date #{version.revision.date_created|date:"N j, o, g:i a"}
