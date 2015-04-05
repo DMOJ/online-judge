@@ -4,7 +4,7 @@
 
 .wmd-preview {
     margin-top: 15px;
-    padding: 7px;
+    padding: 7px !important;
     background: white;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
