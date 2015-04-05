@@ -118,13 +118,13 @@
 
 .wmd-preview h1, .wmd-preview h2, .wmd-preview h3, .wmd-preview h4, .wmd-preview h5, .wmd-preview h6 {
     font-weight: bold !important;
+    margin-left: 0 !important;
 }
 
 .wmd-preview h1 {
     font-size: 1.6em !important;
     margin: 0 !important;
     padding: 0 !important;
-    margin-left: 0 !important;
 }
 
 .wmd-preview h2 {
