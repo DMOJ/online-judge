@@ -95,7 +95,17 @@ block bodyend
                         var button = $(this).html('detecting...');
                         navigator.geolocation.getCurrentPosition(function(position) {
                             console.log(position.coords.latitude, position.coords.longitude);
-                            button.html('detect');
+                            $.ajax({
+                                url: '{% url "detect_timezone" %}',
+                                data: {lat: position.coords.latitude, long: position.coords.longitude}
+                            }).done(function (data) {
+                                console.log(data);
+                                $('#id_timezone').val(data);
+                            }).fail(function (jqXHR, status) {
+                                alert(status);
+                            }).always(function () {
+                                button.html('detect');
+                            });
                         }, function () {
                             button.html('detect');
                             alert('Unable to detect');
