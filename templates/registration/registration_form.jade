@@ -90,14 +90,14 @@ block bodyend
         script(type='text/javascript')
             if ('geolocation' in navigator) {
                 $(function () {
-                    $('<span>, <a href="#" id="detect-tz">detect</a></span>').insertBefore('#open-map');
+                    $('<span>, <a href="#" id="detect-tz">detect</a></span>').insertAfter('#open-map');
                     $('#detect-tz').click(function (event) {
-                        $(this).html('detecting...');
+                        var button = $(this).html('detecting...');
                         navigator.geolocation.getCurrentPosition(function(position) {
                             console.log(position.coords.latitude, position.coords.longitude);
-                            $(this).html('detect');
+                            button.html('detect');
                         }, function () {
-                            $(this).html('detect');
+                            button.html('detect');
                             alert('Unable to detect');
                         });
                         event.preventDefault();
