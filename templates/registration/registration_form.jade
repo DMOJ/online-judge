@@ -86,3 +86,21 @@ block bodyend
                 }
             });
         });
+    if perms.judge.test_site
+        script(type='text/javascript')
+            if ('geolocation' in navigator) {
+                $(function () {
+                    $('<span>, <a href="#" id="detect-tz">detect</a></span>').insertBefore('#open-map');
+                    $('#detect-tz').click(function (event) {
+                        $(this).html('detecting...');
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            console.log(position.coords.latitude, position.coords.longitude);
+                            $(this).html('detect');
+                        }, function () {
+                            $(this).html('detect');
+                            alert('Unable to detect');
+                        });
+                        event.preventDefault();
+                    });
+                });
+            }
