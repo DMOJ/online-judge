@@ -116,7 +116,7 @@ ul.comments.top-level-comments
                                                         href='{% url "comment_edit" node.id %}') Edit
                                         = ' '
                                         a(href='{% url "admin:judge_comment_change" node.id %}') Admin
-                        .comment-body #{node.body|markdown:"comment"}
+                        .comment-body.content-description #{node.body|markdown:"comment"}
                         if not node.is_leaf_node 
                             ul.comments
                                 | {{ children }}
