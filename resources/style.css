@@ -163,8 +163,9 @@ hr {
 }
 
 .comment-body {
-    padding-right: 2px;
-    padding-left: 30px
+    padding-right: 30px;
+    padding-left: 30px;
+    width: auto;
 }
 
 .comment-author {
