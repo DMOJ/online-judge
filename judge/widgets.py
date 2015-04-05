@@ -45,33 +45,26 @@ except ImportError:
     MathJaxPagedownWidget = None
     MathJaxAdminPagedownWidget = None
 else:
-    class BaseMathJaxPagedownWidget(PagedownWidget):
+    class MathJaxPagedownWidget(PagedownWidget):
         def __init__(self, *args, **kwargs):
             kwargs['css'] = staticfiles_storage.url('pagedown_widget.css')
-            super(BaseMathJaxPagedownWidget, self).__init__(*args, **kwargs)
+            super(MathJaxPagedownWidget, self).__init__(*args, **kwargs)
 
         def _media(self):
-            media = super(BaseMathJaxPagedownWidget, self)._media()
+            media = super(MathJaxPagedownWidget, self)._media()
             media.add_js([
                 staticfiles_storage.url('mathjax_config.js'),
                 '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
                 staticfiles_storage.url('pagedown_math.js'),
             ])
-            return media
-        media = property(_media)
-
-    class MathJaxPagedownWidget(BaseMathJaxPagedownWidget):
-        def _media(self):
-            media = super(MathJaxPagedownWidget, self)._media()
             media.add_css({'all': [staticfiles_storage.url('pagedown_widget.css')]})
             return media
         media = property(_media)
 
-    class MathJaxAdminPagedownWidget(BaseMathJaxPagedownWidget, admin_widgets.AdminTextareaWidget):
-        class Media:
-            css = {
-                'all': (staticfiles_storage.url('content-description.css'),)
-            }
-            js = (
-                staticfiles_storage.url('admin/js/pagedown.js'),
-            )
+    class MathJaxAdminPagedownWidget(MathJaxPagedownWidget, admin_widgets.AdminTextareaWidget):
+        def _media(self):
+            media = super(MathJaxAdminPagedownWidget, self)._media()
+            media.add_css({'all': [staticfiles_storage.url('content-description.css')]})
+            media.add_js([staticfiles_storage.url('admin/js/pagedown.js')])
+            return media
+        media = property(_media)
