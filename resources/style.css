@@ -165,7 +165,7 @@ hr {
 .comment-body {
     padding-right: 30px;
     padding-left: 30px;
-    width: auto;
+    width: auto !important;
 }
 
 .comment-author {
