@@ -19,6 +19,13 @@ class FixedSimpleLazyObject(SimpleLazyObject):
 
 
 def get_resource(request):
+    use_https = getattr(settings, 'DMOJ_SSL', 0)
+    if use_https == 1:
+        scheme = 'https' if request.is_secure() else 'http'
+    elif use_https > 1:
+        scheme = 'https'
+    else:
+        scheme = 'http'
     return {
         'JQUERY_JS': getattr(settings, 'JQUERY_JS', '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'),
         'FONTAWESOME_CSS': getattr(settings, 'FONTAWESOME_CSS',
@@ -27,6 +34,7 @@ def get_resource(request):
                                     '//cdn.rawgit.com/noelboss/featherlight/1.2.2/release/featherlight.min.css'),
         'FEATHERLIGHT_JS': getattr(settings, 'FEATHERLIGHT_CSS',
                                    '//cdn.rawgit.com/noelboss/featherlight/1.2.2/release/featherlight.min.js'),
+        'DMOJ_SCHEME': scheme,
     }
 
 
