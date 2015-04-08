@@ -45,6 +45,7 @@ def judge_submission(submission):
     submission.memory = None
     submission.points = None
     submission.result = None
+    submission.error = None
     submission.save()
     SubmissionTestCase.objects.filter(submission=submission).delete()
     try:
