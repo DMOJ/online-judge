@@ -34,9 +34,10 @@ except ImportError:
     Select2MultipleWidget = None
 
 try:
-    from suit.admin import SortableModelAdmin
+    from suit.admin import SortableModelAdmin, SortableTabularInline
 except ImportError:
     SortableModelAdmin = object
+    SortableTabularInline = admin.TabularInline
 
 use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
 
@@ -663,12 +664,15 @@ class ContestProblemInlineForm(ModelForm):
             }
 
 
-class ContestProblemInline(admin.TabularInline):
+class ContestProblemInline(SortableTabularInline):
     model = ContestProblem
     verbose_name = 'Problem'
     verbose_name_plural = 'Problems'
     fields = ('problem', 'points', 'partial')
     form = ContestProblemInlineForm
+    sortable = 'order'
+    if SortableTabularInline is admin.TabularInline:
+        fields += ('order',)
 
 
 class ContestForm(ModelForm):
