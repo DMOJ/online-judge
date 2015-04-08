@@ -218,7 +218,7 @@ def contest_ranking_ajax(request, key):
     contest, exists = _find_contest(request, key)
     if not exists:
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
-    problems = list(contest.contest_problems.select_related('problem').defer('problem__description'))
+    problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
     return render_to_response('contest/ranking_table.jade', {
         'users': ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')),
         'problems': problems,
@@ -235,7 +235,7 @@ def contest_ranking_view(request, contest):
         if contest.start_time is not None and contest.start_time > timezone.now():
             raise Http404()
 
-    problems = list(contest.contest_problems.select_related('problem').defer('problem__description'))
+    problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
     return render_to_response('contest/ranking.jade', {
         'users': ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')),
         'title': '%s Rankings' % contest.name,

@@ -236,7 +236,8 @@ class ProblemList(TitleMixin, ListView):
     def get_contest_queryset(self):
         queryset = self.contest_profile.current.contest.contest_problems.select_related('problem__group') \
             .defer('problem__description').order_by('problem__code') \
-            .annotate(number_of_users=Count('submission__participation', distinct=True))
+            .annotate(number_of_users=Count('submission__participation', distinct=True)) \
+            .order_by('order')
         return [{
                     'id': p.problem.id,
                     'code': p.problem.code,
