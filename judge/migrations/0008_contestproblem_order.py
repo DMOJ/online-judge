@@ -8,7 +8,7 @@ from collections import defaultdict
 def add_contest_problem_order(apps, schema_editor):
     ContestProblem = apps.get_model('judge', 'ContestProblem')
     db_alias = schema_editor.connection.alias
-    order = defaultdict(0)
+    order = defaultdict(lambda: 0)
     for cp in ContestProblem.objects.using(db_alias):
         cp.order = order[cp.problem_id, cp.contest_id]
         cp.save()
