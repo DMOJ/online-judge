@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contestproblem',
             name='order',
-            field=models.PositiveIntegerField(default=0),
+            field=models.PositiveIntegerField(default=0, db_index=True),
             preserve_default=False,
         ),
         migrations.RunPython(add_contest_problem_order, lambda apps, schema_editor: None),
