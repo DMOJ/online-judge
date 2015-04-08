@@ -10,9 +10,9 @@ def add_contest_problem_order(apps, schema_editor):
     db_alias = schema_editor.connection.alias
     order = defaultdict(lambda: 0)
     for cp in ContestProblem.objects.using(db_alias):
-        cp.order = order[cp.problem_id, cp.contest_id]
+        cp.order = order[cp.contest_id]
         cp.save()
-        order[cp.problem_id, cp.contest_id] += 1
+        order[cp.contest_id] += 1
 
 
 class Migration(migrations.Migration):
