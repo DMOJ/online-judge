@@ -1,3 +1,4 @@
 [submodule "resources/pagedown"]
 	path = resources/pagedown
 	url = https://github.com/DMOJ/dmoj-pagedown.git
+	branch = master
