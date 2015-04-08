@@ -32,9 +32,7 @@
     width: 1px;
     height: 20px;
     margin-left: 14px;
-
     position: absolute;
-    background-color: Silver;
     display: inline-block;
     list-style: none;
 }
