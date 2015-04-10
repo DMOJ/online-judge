@@ -238,7 +238,7 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
                     ) deltas GROUP BY id
                 ) `data` ON (`data`.id = prof.id)
                 SET points = points {} delta
-            '''.format(', '.join(['%s'] * len(ids)), sign), (ids,))
+            '''.format(', '.join(['%s'] * len(ids)), sign), ids)
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
