@@ -246,6 +246,13 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         form.base_fields['authors'].queryset = Profile.objects.all()
         return form
 
+    def save_model(self, request, obj, form, change):
+        if form.changed_data and 'is_public' in form.changed_data:
+            self.message_user(request, 'You changed is_public.')
+        else:
+            self.message_user(request, "You didn't change is_public.")
+        return super(ProblemAdmin, self).save_model(request, obj, form, change)
+
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
     parameter_name = title = 'status'
