@@ -225,13 +225,30 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
                 SET points = points {} delta
             '''.format(sign), (problem_id,))
 
+    def _update_points_many(self, ids, sign):
+        with connection.cursor() as c:
+            c.execute('''
+                UPDATE judge_profile prof INNER JOIN (
+                    SELECT deltas.id, SUM(deltas) AS delta FROM (
+                        SELECT prof.id AS id, MAX(sub.points) AS deltas
+                             FROM judge_profile prof INNER JOIN
+                                  judge_submission sub ON (sub.user_id = prof.id)
+                             WHERE sub.problem_id IN ({})
+                             GROUP BY prof.id, sub.problem_id
+                    ) deltas GROUP BY id
+                ) `data` ON (`data`.id = prof.id)
+                SET points = points {} delta
+            '''.format(', '.join(['%s'] * len(ids)), sign), (ids,))
+
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
+        self._update_points_many(queryset.values_list('id', flat=True), '+')
         self.message_user(request, "%d problem%s successfully marked as public." % (count, 's'[count == 1:]))
     make_public.short_description = 'Mark problems as public'
 
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
+        self._update_points_many(queryset.values_list('id', flat=True), '-')
         self.message_user(request, "%d problem%s successfully marked as private." % (count, 's'[count == 1:]))
     make_private.short_description = 'Mark problems as private'
 
