@@ -212,6 +212,19 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
     show_authors.short_description = 'Authors'
 
+    def _update_points(self, problem_id, sign):
+        with connection.cursor() as c:
+            c.execute('''
+                UPDATE judge_profile prof INNER JOIN (
+                    SELECT prof.id AS id, MAX(sub.points) AS delta
+                    FROM judge_profile prof INNER JOIN
+                         judge_submission sub ON (sub.user_id = prof.id)
+                    WHERE sub.problem_id = %s
+                    GROUP BY sub.problem_id
+                ) `data` ON (`data`.id = prof.id)
+                SET points = points {} delta
+            '''.format(sign), (problem_id,))
+
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self.message_user(request, "%d problem%s successfully marked as public." % (count, 's'[count == 1:]))
@@ -247,11 +260,9 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         return form
 
     def save_model(self, request, obj, form, change):
+        super(ProblemAdmin, self).save_model(request, obj, form, change)
         if form.changed_data and 'is_public' in form.changed_data:
-            self.message_user(request, 'You changed is_public.')
-        else:
-            self.message_user(request, "You didn't change is_public.")
-        return super(ProblemAdmin, self).save_model(request, obj, form, change)
+            self._update_points(obj.id, '+' if obj.is_public else '-')
 
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
