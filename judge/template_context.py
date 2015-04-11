@@ -30,10 +30,6 @@ def get_resource(request):
         'JQUERY_JS': getattr(settings, 'JQUERY_JS', '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'),
         'FONTAWESOME_CSS': getattr(settings, 'FONTAWESOME_CSS',
                                    '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'),
-        'FEATHERLIGHT_CSS': getattr(settings, 'FEATHERLIGHT_CSS',
-                                    '//cdn.rawgit.com/noelboss/featherlight/1.2.2/release/featherlight.min.css'),
-        'FEATHERLIGHT_JS': getattr(settings, 'FEATHERLIGHT_CSS',
-                                   '//cdn.rawgit.com/noelboss/featherlight/1.2.2/release/featherlight.min.js'),
         'DMOJ_SCHEME': scheme,
     }
 
