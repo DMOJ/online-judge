@@ -40,10 +40,10 @@ class MathHTMLParser(HTMLParser):
         self.data_buffer = []
 
     def _sub_inline(self, match):
-        return self.inline_math(format_math(match.group(1) or match.group(2)))
+        return self.inline_math(format_math(match.group(1) or match.group(2) or ''))
 
     def _sub_display(self, match):
-        return self.display_math(format_math(match.group(1) or match.group(2)))
+        return self.display_math(format_math(match.group(1) or match.group(2) or ''))
 
     def inline_math(self, math):
         raise NotImplementedError()
