@@ -83,7 +83,7 @@ class SubmissionTestCaseQuery(SubmissionStatus):
     def get(self, request, *args, **kwargs):
         if 'id' not in request.GET or not request.GET['id'].isdigit():
             return HttpResponseBadRequest()
-        kwargs[self.pk_url_kwarg] = int(request.GET.pop('id'))
+        kwargs[self.pk_url_kwarg] = int(request.GET['id'])
         return super(SubmissionTestCaseQuery, self).get(request, *args, **kwargs)
 
 
