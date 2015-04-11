@@ -1,25 +1,31 @@
-link(href=FEATHERLIGHT_CSS, type='text/css', rel='stylesheet')
-script(src=FEATHERLIGHT_JS, type='text/javascript', charset='utf-8')
-style.
-    .featherlight {
-        z-index: 1000;
-    }
+- load media_extract
+- load compressor
 
-    .revision-text p:first-child { margin-top: 0; }
-    .revision-text p:last-child { margin-bottom: 0; }
-    .comment-author { margin-bottom: 1em }
-    .featherlight-edit .featherlight-content {
-        background: #FAFAFA;
-        padding: 10px 15px 10px 10px;
-        border-radius: 10px;
-        border: 1px solid #CCC;
-    }
+- compress js
+    script(src=FEATHERLIGHT_JS, type='text/javascript', charset='utf-8')
+    | #{comment_form.media|media_type:"js"}
+- compress css
+    link(href=FEATHERLIGHT_CSS, type='text/css', rel='stylesheet')
+    | #{comment_form.media|media_type:"css"}
+    style.
+        .featherlight {
+            z-index: 1000;
+        }
 
-    .comment-author img {
-        width: 1.25em;
-        height: 1.25em;
-        border-radius: 0.2em;
-        vertical-align: bottom;
-        margin-right: 0.3em;
-    }
-| #{comment_form.media}
+        .revision-text p:first-child { margin-top: 0; }
+        .revision-text p:last-child { margin-bottom: 0; }
+        .comment-author { margin-bottom: 1em }
+        .featherlight-edit .featherlight-content {
+            background: #FAFAFA;
+            padding: 10px 15px 10px 10px;
+            border-radius: 10px;
+            border: 1px solid #CCC;
+        }
+
+        .comment-author img {
+            width: 1.25em;
+            height: 1.25em;
+            border-radius: 0.2em;
+            vertical-align: bottom;
+            margin-right: 0.3em;
+        }
