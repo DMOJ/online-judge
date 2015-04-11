@@ -18,7 +18,6 @@ if submission.status != 'IE'
             pre #{submission.error}
             br
         - regroup test_cases by batch as batches
-        - var time_limit = submission.problem.time_limit
         - get_counter test_case_id
         each batch in batches
             if batch.grouper

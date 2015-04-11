@@ -74,6 +74,13 @@ class SubmissionStatus(SubmissionDetailBase):
         submission = self.object
         context['last_msg'] = event.last()
         context['test_cases'] = submission.test_cases.all()
+        context['time_limit'] = submission.problem.time_limit
+        try:
+            lang_limit = submission.problem.language_limits.get(language=submission.language)
+        except ObjectDoesNotExist:
+            pass
+        else:
+            context['time_limit'] = lang_limit.time_limit
         return context
 
 
