@@ -105,7 +105,7 @@ block media
                             case 'grading-begin':
                             case 'processing':
                                 $.ajax({
-                                    url: '{% url "judge.views.submission_testcases_query" %}',
+                                    url: '{% url "submission_testcases_query" %}',
                                     data: {id: '{{ submission.id }}'}
                                 }).done(function (data) {
                                     list.html(data);

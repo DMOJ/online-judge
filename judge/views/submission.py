@@ -77,6 +77,16 @@ class SubmissionStatus(SubmissionDetailBase):
         return context
 
 
+class SubmissionTestCaseQuery(SubmissionStatus):
+    template_name = 'submission/status_testcases.jade'
+
+    def get(self, request, *args, **kwargs):
+        if 'id' not in request.GET or not request.GET['id'].isdigit():
+            return HttpResponseBadRequest()
+        kwargs[self.pk_url_kwarg] = int(request.GET.pop('id'))
+        return super(SubmissionTestCaseQuery, self).get(request, *args, **kwargs)
+
+
 def abort_submission(request, code):
     if request.method != 'POST':
         raise Http404()
@@ -245,18 +255,6 @@ def single_submission(request, id, show_problem=True):
             'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
             'show_problem': show_problem,
             'profile_id': request.user.profile.id if authenticated else 0,
-        }, context_instance=RequestContext(request))
-    except ObjectDoesNotExist:
-        raise Http404()
-
-
-def submission_testcases_query(request):
-    if 'id' not in request.GET or not request.GET['id'].isdigit():
-        return HttpResponseBadRequest()
-    try:
-        submission = Submission.objects.get(id=int(request.GET['id']))
-        return render_to_response('submission/status_testcases.jade', {
-            'submission': submission, 'test_cases': submission.test_cases.all()
         }, context_instance=RequestContext(request))
     except ObjectDoesNotExist:
         raise Http404()

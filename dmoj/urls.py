@@ -126,7 +126,7 @@ urlpatterns = patterns('',
     url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
     
     url(r'^single_submission', 'judge.views.single_submission_query'),
-    url(r'^submission_testcases', 'judge.views.submission_testcases_query'),
+    url(r'^submission_testcases', views.SubmissionTestCaseQuery.as_view(), 'submission_testcases_query'),
 
     url(r'^comments/upvote/$', 'judge.views.upvote_comment'),
     url(r'^comments/downvote/$', 'judge.views.downvote_comment'),
