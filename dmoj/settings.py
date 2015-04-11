@@ -116,6 +116,7 @@ INSTALLED_APPS += (
     'reversion_compare',
     'django_social_share',
     'social.apps.django_app.default',
+    'compressor',
 )
 
 MIDDLEWARE_CLASSES = (
