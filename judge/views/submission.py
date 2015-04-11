@@ -133,14 +133,17 @@ class SubmissionsListBase(TitleMixin, ListView):
     def contest(self):
         return self.request.user.profile.contest.current.contest
 
-    def get_queryset(self):
+    def _get_queryset(self):
         queryset = submission_related(Submission.objects.order_by('-id'))
         if self.in_contest:
             return queryset.filter(contest__participation__contest_id=self.contest.id)
-        else:
-            if not self.request.user.has_perm('judge.see_private_problem'):
-                queryset = queryset.filter(problem__is_public=True)
-            return queryset
+        return queryset
+
+    def get_queryset(self):
+        queryset = self._get_queryset()
+        if not self.in_contest and not self.request.user.has_perm('judge.see_private_problem'):
+            queryset = queryset.filter(problem__is_public=True)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(SubmissionsListBase, self).get_context_data(**kwargs)
@@ -198,7 +201,7 @@ class ProblemSubmissions(SubmissionsListBase):
     dynamic_update = True
 
     def get_queryset(self):
-        return super(ProblemSubmissions, self).get_queryset().filter(problem__code=self.problem.code)
+        return super(ProblemSubmissions, self)._get_queryset().filter(problem__code=self.problem.code)
 
     def get_title(self):
         return 'All submissions for %s' % self.problem.name
