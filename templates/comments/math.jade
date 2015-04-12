@@ -1,2 +1,4 @@
 - load staticfiles
-script(src='{% static "pagedown_math.js" %}')
+- load compressor
+- compressor js inline
+    script(src='{% static "pagedown_math.js" %}')
