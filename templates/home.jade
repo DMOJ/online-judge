@@ -9,3 +9,14 @@ block before_posts
 block meta
     if misc_config.meta_description
         meta(name='description', content=misc_config['meta_description'])
+    script(type='application/ld+json')
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "url": "https://www.dmoj.ca/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.dmoj.ca/problems/?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
