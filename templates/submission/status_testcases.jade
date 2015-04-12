@@ -39,7 +39,7 @@ if submission.status != 'IE'
                                 else
                                     b Test case ##{test_case_id}:
                         td
-                            span(class=case.status, title=case.long_status)
+                            span(class='case-{{ case.status }}', title=case.long_status)
                                 if case.status == 'SC'
                                     | &mdash;
                                 else
