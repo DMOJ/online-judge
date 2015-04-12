@@ -6,9 +6,9 @@
     script(src='{% static "featherlight.min.js" %}', type='text/javascript', charset='utf-8')
     | #{comment_form.media|media_type:"js"}
 - compress css
-    link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet')
+    link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
     | #{comment_form.media|media_type:"css"}
-    style.
+    style(media='all').
         .featherlight {
             z-index: 1000;
         }
