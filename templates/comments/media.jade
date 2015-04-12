@@ -4,6 +4,7 @@
 
 - compress js
     script(src='{% static "featherlight.min.js" %}', type='text/javascript', charset='utf-8')
+    script(src='{% static "placeholder-compat.js" %}', type='text/javascript')
     | #{comment_form.media|media_type:"js"}
 - compress css
     link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
