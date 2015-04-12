@@ -2,9 +2,6 @@ extends base
 - load staticfiles
 - load rating
 
-block media
-    link(rel='stylesheet', href='{% static "rating.css" %}')
-
 block body
     if ratings
         table.table
