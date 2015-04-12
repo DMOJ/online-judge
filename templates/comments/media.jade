@@ -6,6 +6,57 @@
     script(src='{% static "featherlight.min.js" %}', type='text/javascript', charset='utf-8')
     script(src='{% static "placeholder-compat.js" %}', type='text/javascript')
     | #{comment_form.media|media_type:"js"}
+
+    script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
+    script(type='text/javascript')
+        $(document).ready(function () {
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                    }
+                }
+            });
+
+            window.comment_set_parent = function (parent) {
+                $('form#comment-submit input#id_parent').val(parent);
+                $('form#comment-submit input#id_title').val('Re: ' + $('#comment-' + parent + ' .comment-title').first().text());
+                $('html, body').animate({
+                    scrollTop: $(".form-area.comment-submit").offset().top - $('#navigation').height() - 4
+                }, 500);
+            };
+
+            function ajax_vote(url, id, delta) {
+                return $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        id: id
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        var score = $('#comment-' + id + ' .comment-score').first();
+                        score.text(parseInt(score.text()) + delta);
+                    },
+                    error: function (data, textStatus, jqXHR) {
+                        alert('Could not vote: ' + data.responseText);
+                    }
+                });
+            }
+
+            window.comment_upvote = function (id) {
+                ajax_vote('{% url "judge.views.upvote_comment" %}', id, 1);
+            };
+
+            window.comment_downvote = function (id) {
+                ajax_vote('{% url "judge.views.downvote_comment" %}', id, -1);
+            };
+        });
+
 - compress css
     link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
     | #{comment_form.media|media_type:"css"}
