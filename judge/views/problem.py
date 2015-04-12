@@ -171,7 +171,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                     maker.html = get_template('problem/raw.jade').render(Context({
                         'problem': problem
                     }))
-                    for file in ('style.css', 'content-description.css', 'pygment-github.css'):
+                    for file in ('style.css', 'pygment-github.css'):
                         maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
                     maker.make()
                     if not maker.success:
