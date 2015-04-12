@@ -3,10 +3,10 @@
 - load staticfiles
 
 - compress js
-    script(src='{{ STATIC_URL }}featherlight.min.js', type='text/javascript', charset='utf-8')
+    script(src='{% static "featherlight.min.js" %}', type='text/javascript', charset='utf-8')
     | #{comment_form.media|media_type:"js"}
 - compress css
-    link(href='{{ STATIC_URL }}featherlight.min.css', type='text/css', rel='stylesheet')
+    link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet')
     | #{comment_form.media|media_type:"css"}
     style.
         .featherlight {
