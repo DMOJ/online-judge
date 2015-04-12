@@ -57,6 +57,48 @@
             };
         });
 
+        $('.comments').find('a.edit-link').featherlight({
+            afterOpen: function () {
+                if ('DjangoPagedown' in window) {
+                    var $wmd = $('.featherlight .wmd-input');
+                    if ($wmd.length) {
+                        window.DjangoPagedown.createEditor($wmd.get(0));
+                        if ('MathJax' in window) {
+                            var preview = $('.featherlight div.wmd-preview')[0];
+                            window.editors[$wmd.attr('id')].hooks.chain('onPreviewRefresh', function () {
+                                MathJax.Hub.Queue(["Typeset", MathJax.Hub, preview]);
+                            });
+                            MathJax.Hub.Queue(["Typeset", MathJax.Hub, preview]);
+                        }
+                    }
+                }
+                $('#comment-edit').submit(function(event) {
+                    event.preventDefault();
+                    var id = $("#comment-edit").find('.comment-id').text();
+                    var readback = $("#comment-edit").find('.read-back').text();
+                    $.post($(this).attr('action'), $(this).serialize()).done(function(data) {
+                        $.featherlight.current().close();
+                        $.ajax({
+                            url: readback
+                        }).done(function (data) {
+                            var $area = $('#comment-' + id).find('.comment-body').first();
+                            $area.html(data);
+                            if ('MathJax' in window) MathJax.Hub.Queue(["Typeset", MathJax.Hub, $area.get(0)]);
+                        }).fail(function () {
+                            console.log('Failed to update comment:' + id);
+                        });
+                    });
+                });
+            },
+            variant: 'featherlight-edit'
+        });
+        $('.comments').find('a.history-link').featherlight({
+            afterOpen: function () {
+                if ('MathJax' in window)
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, $('.featherlight-content').get(0)]);
+            }
+        });
+
 - compress css
     link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
     | #{comment_form.media|media_type:"css"}
