@@ -3,3 +3,4 @@
 *.pyc
 *~
 dmoj/local_settings.py
+resources/style.css
