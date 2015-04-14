@@ -15,7 +15,8 @@ from .caching import finished_submission
 @receiver(post_save, sender=Problem)
 def problem_update(sender, instance, **kwargs):
     cache.delete_many([
-        make_template_fragment_key('problem_html', (instance.id,)),
+        make_template_fragment_key('problem_html', (instance.id, True)),
+        make_template_fragment_key('problem_html', (instance.id, False)),
         make_template_fragment_key('problem_authors', (instance.id,)),
         make_template_fragment_key('submission_problem', (instance.id,)),
         make_template_fragment_key('problem_feed', (instance.id,))
