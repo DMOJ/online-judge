@@ -66,6 +66,7 @@ class DetectSVGTag(Node):
     def render(self, context):
         user_agent = context['request'].META.get('HTTP_USER_AGENT', '')
         context[self.variable] = SVG_MATH_LEVEL == 2 or SVG_MATH_LEVEL == 1 and 'Firefox/' in user_agent
+        return ''
 
 
 @register.tag
