@@ -16,8 +16,12 @@ html(lang='en')
         if misc_config.meta_keywords
             meta(name='keywords', content=misc_config['meta_keywords'])
         meta#viewport(name='viewport', content='initial-scale=1')
-        link(rel='stylesheet', href='{% static "style.css" %}')
-        link(rel='stylesheet', href=FONTAWESOME_CSS)
+        if INLINE_FONTAWESOME
+            link(rel='stylesheet', href='{% static "style.css" %}')
+            link(rel='stylesheet', href='{% static "libs/font-awesome.css" %}')
+        else
+            link(rel='stylesheet', href='{% static "style.css" %}')
+            link(rel='stylesheet', href=FONTAWESOME_CSS)
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         if INLINE_JQUERY
             - compress js

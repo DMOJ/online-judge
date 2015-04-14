@@ -28,6 +28,7 @@ def get_resource(request):
         scheme = 'http'
     return {
         'INLINE_JQUERY': getattr(settings, 'INLINE_JQUERY', True),
+        'INLINE_FONTAWESOME': getattr(settings, 'INLINE_FONTAWESOME', True),
         'JQUERY_JS': getattr(settings, 'JQUERY_JS', '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'),
         'FONTAWESOME_CSS': getattr(settings, 'FONTAWESOME_CSS',
                                    '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'),
