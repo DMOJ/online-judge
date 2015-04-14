@@ -24,7 +24,7 @@ class MathJaxTexFallbackMath(MathHTMLParser):
 class MathJaxSmartSVGFallbackMath(MathHTMLParser):
     def __init__(self, agent):
         MathHTMLParser.__init__(self)
-        self.use_svg = 'Firefox/' in agent
+        self.use_svg = SVG_MATH_LEVEL == 2 or SVG_MATH_LEVEL == 1 and 'Firefox/' in agent
 
     def inline_math(self, math):
         return ('<span class="inline-math">'

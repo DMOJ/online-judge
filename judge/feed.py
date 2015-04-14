@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
 from django.utils.http import urlquote
 
-from judge.math_parser import MathHTMLParser, MATHTEX_CGI
+from judge.math_parser import MathHTMLParser, INLINE_MATH_PNG, DISPLAY_MATH_PNG
 from judge.models import Comment, BlogPost, Problem
 from markdown_trois import markdown
 
@@ -12,11 +12,11 @@ from markdown_trois import markdown
 class FeedMath(MathHTMLParser):
     def inline_math(self, math):
         return (r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>' %
-                (MATHTEX_CGI, urlquote(math), math))
+                (INLINE_MATH_PNG, urlquote(math), math))
 
     def display_math(self, math):
         return (r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>' %
-                (MATHTEX_CGI, urlquote(math), math))
+                (DISPLAY_MATH_PNG, urlquote(math), math))
 
 
 class ProblemFeed(Feed):
