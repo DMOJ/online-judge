@@ -4,7 +4,12 @@ import re
 from django.conf import settings
 
 
-MATHTEX_CGI = getattr(settings, 'MATHTEX_CGI', 'http://www.forkosh.com/mathtex.cgi')
+INLINE_MATH_PNG = getattr(settings, 'INLINE_MATH_PNG', 'http://www.forkosh.com/mathtex.cgi')
+DISPLAY_MATH_PNG = getattr(settings, 'DISPLAY_MATH_PNG', INLINE_MATH_PNG)
+INLINE_MATH_SVG = getattr(settings, 'INLINE_MATH_SVG', INLINE_MATH_PNG)
+DISPLAY_MATH_SVG = getattr(settings, 'DISPLAY_MATH_SVG', DISPLAY_MATH_PNG)
+SVG_MATH_LEVEL = getattr(settings, 'SVG_MATH_LEVEL', 0)
+
 inline_math = re.compile(r'~(.*?)~|\\\((.*?)\\\)')
 display_math = re.compile(r'\$\$(.*?)\$\$|\\\[(.*?)\\\]')
 
@@ -29,8 +34,8 @@ def format_math(math):
 
 class MathHTMLParser(HTMLParser):
     @classmethod
-    def convert(cls, html):
-        converter = cls()
+    def convert(cls, html, *args, **kwargs):
+        converter = cls(*args, **kwargs)
         converter.feed(html)
         return converter.result
 

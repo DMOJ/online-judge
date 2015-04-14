@@ -131,7 +131,7 @@ block info_float
 
 block description
     - cache 86400 problem_html problem.id
-        | #{problem.description|markdown:"problem"|smart_math}
+        | #{problem.description|markdown:"problem"|smart_svg_math:request.META.HTTP_USER_AGENT}
     - with license=problem.license
         if license
             span(style='float: left; font-size: 0.85em')
