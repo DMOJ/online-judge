@@ -17,8 +17,9 @@ html(lang='en')
             meta(name='keywords', content=misc_config['meta_keywords'])
         meta#viewport(name='viewport', content='initial-scale=1')
         if INLINE_FONTAWESOME
-            link(rel='stylesheet', href='{% static "style.css" %}')
-            link(rel='stylesheet', href='{% static "libs/font-awesome.css" %}')
+            - compress css
+                link(rel='stylesheet', href='{% static "style.css" %}')
+                link(rel='stylesheet', href='{% static "libs/font-awesome.css" %}')
         else
             link(rel='stylesheet', href='{% static "style.css" %}')
             link(rel='stylesheet', href=FONTAWESOME_CSS)
