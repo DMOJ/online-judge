@@ -1,4 +1,5 @@
 from django.template import Library, Node, TemplateSyntaxError
+from django.utils.html import escape
 from django.utils.http import urlquote
 
 from judge.math_parser import MathHTMLParser, INLINE_MATH_PNG, INLINE_MATH_SVG, \
@@ -12,13 +13,13 @@ class MathJaxTexFallbackMath(MathHTMLParser):
         return ('<span class="inline-math">'
                     r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>'
                     r'<span class="tex-text" style="display:none">~%s~</span>'
-                '</span>') % (INLINE_MATH_PNG, urlquote(math), math, math)
+                '</span>') % (INLINE_MATH_PNG, urlquote(math), math, escape(math))
 
     def display_math(self, math):
         return ('<span class="display-math">'
                    r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>'
                    r'<span class="tex-text" style="display:none">$$%s$$</span>'
-                '</span>') % (DISPLAY_MATH_PNG, urlquote(math), math, math)
+                '</span>') % (DISPLAY_MATH_PNG, urlquote(math), math, escape(math))
 
 
 class MathJaxSmartSVGFallbackMath(MathHTMLParser):
@@ -31,21 +32,22 @@ class MathJaxSmartSVGFallbackMath(MathHTMLParser):
                     r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>'
                     r'<span class="tex-text" style="display:none">~%s~</span>'
                 '</span>') % ((INLINE_MATH_PNG, INLINE_MATH_SVG)[self.use_svg],
-                              urlquote(math), math, math)
+                              urlquote(math), math, escape(math))
 
     def display_math(self, math):
         return ('<span class="display-math">'
                    r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>'
                    r'<span class="tex-text" style="display:none">$$%s$$</span>'
-                '</span>') % ((DISPLAY_MATH_PNG, DISPLAY_MATH_SVG)[self.use_svg], urlquote(math), math, math)
+                '</span>') % ((DISPLAY_MATH_PNG, DISPLAY_MATH_SVG)[self.use_svg],
+                              urlquote(math), math, escape(math))
 
 
 class MathJaxTexOnlyMath(MathHTMLParser):
     def inline_math(self, math):
-        return '~%s~' % math
+        return '~%s~' % escape(math)
 
     def display_math(self, math):
-        return '$$%s$$' % math
+        return '$$%s$$' % escape(math)
 
 @register.filter(name='smart_math', is_safe=True)
 def math(page, style='fallback'):
