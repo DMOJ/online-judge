@@ -20,7 +20,7 @@ from django.views.generic.detail import SingleObjectMixin
 import itertools
 
 from judge.comments import CommentedDetailView
-from judge.forms import ProblemSubmitForm, ProblemEditForm, ProblemAddForm
+from judge.forms import ProblemSubmitForm, ProblemEditForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile
 from judge.pdf_problems import make_latex, format_markdown, latex_document, LatexPdfMaker, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
@@ -99,40 +99,6 @@ class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         return context
-
-
-class ProblemEdit(ProblemMixin, TitleMixin, UpdateView):
-    template_name = 'problem/edit.jade'
-    form_class = ProblemEditForm
-
-    def get_title(self):
-        return 'Editing %s' % self.object.name
-
-    def get_object(self, queryset=None):
-        problem = super(ProblemEdit, self).get_object()
-        if not self.request.user.has_perm('judge.edit_own_problem'):
-            raise PermissionDenied()
-        if not problem.authors.filter(id=self.request.user.profile.id).exists():
-            raise PermissionDenied()
-        return problem
-
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            return super(ProblemEdit, self).dispatch(request, *args, **kwargs)
-        except PermissionDenied:
-            return generic_message(request, "Can't edit problem",
-                                   'You are not allowed to edit this problem.', status=403)
-
-
-class ProblemCreate(ProblemMixin, TitleMixin, CreateView):
-    template_name = 'problem/edit.jade'
-    form_class = ProblemAddForm
-    title = 'Adding new problem'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.has_perm('judge.change_problem') and not request.user.has_perm('judge.edit_own_problem'):
-            raise PermissionDenied()
-        return super(ProblemCreate, self).dispatch(request, *args, **kwargs)
 
 
 class LatexError(Exception):
