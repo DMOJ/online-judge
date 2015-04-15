@@ -1,5 +1,6 @@
 extends base
--load staticfiles
+- load staticfiles
+- load media_extract
 
 block js_media
     | <script type='text/javascript'>
@@ -27,9 +28,10 @@ block js_media
                 }
             });
         });
+    | #{form.media|media_type:"js"}
 
 block media
-    | #{form.media}
+    | #{form.media|media_type:"css"}
     style
         #submit-wrapper {
             margin-top: 0.7em;
