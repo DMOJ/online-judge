@@ -21,14 +21,40 @@ html(lang='en')
                 color: #FFF;
                 background: #2980b9
             }
+        if IN_CONTEST
+            style.
+                #contest-info {
+                    position: fixed;
+                    padding: 3px 5px 3px 3px;
+                    right: 10px;
+                    top: 35px;
+                    height: 1.4em;
+                    font-size: 1.5em;
+                    border: 1px solid gray;
+                    border-radius: 4px;
+                    background-color: #111;
+                    z-index: 1000;
+                }
+
+                #contest-info a {
+                    height: 1.4em;
+                    padding: 0;
+                    margin: 0;
+                    color: white;
+                }
+
+                #contest-time-remaining {
+                    display: inline-block;
+                }
         block meta
         if INLINE_FONTAWESOME
             - compress css
-                link(rel='stylesheet', href='{% static "style.css" %}')
-                link(rel='stylesheet', href='{% static "libs/font-awesome.css" %}')
+            link(rel='stylesheet', href='{% static "style.css" %}')
+            link(rel='stylesheet', href='{% static "libs/font-awesome.css" %}')
         else
             link(rel='stylesheet', href='{% static "style.css" %}')
             link(rel='stylesheet', href=FONTAWESOME_CSS)
+        block media
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         if INLINE_JQUERY
             - compress js
@@ -46,32 +72,6 @@ html(lang='en')
                 $(document).ready(function () {
                     count_down($("#contest-time-remaining"));
                 });
-            style.
-                #contest-info {
-                    position: fixed;
-                    padding: 3px 5px 3px 3px;
-                    right: 10px;
-                    top: 35px;
-                    height: 1.4em;
-                    font-size: 1.5em;
-                    border: 1px solid gray;
-                    border-radius: 4px;
-                    background-color: #111;
-                    z-index: 1000;
-                }
-                
-                #contest-info a {
-                    height: 1.4em;
-                    padding:0;
-                    margin:0;
-                    color: white;
-                }
-                
-                #contest-time-remaining {
-                    display: inline-block;
-                }
-
-        block media
         
         if misc_config.analytics
             | #{misc_config.analytics|safe}
