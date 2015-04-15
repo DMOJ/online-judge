@@ -60,6 +60,20 @@ html(lang='en')
             link(rel='stylesheet', href=FONTAWESOME_CSS)
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         block media
+        if INLINE_JQUERY
+            - compress js
+                script(src='{% static "libs/jquery-1.11.2.min.js" %}')
+                script(src='{% static "common.js" %}')
+        else
+            script(src=JQUERY_JS)
+            script(src='{% static "common.js" %}')
+        block js_media
+        if IN_CONTEST
+            script(type='text/javascript')
+                $(document).ready(function () {
+                    count_down($("#contest-time-remaining"));
+                });
+        
         if misc_config.analytics
             | #{misc_config.analytics|safe}
     body
@@ -123,17 +137,3 @@ html(lang='en')
         if misc_config.announcement
             div#announcement #{misc_config.announcement|safe}
         block bodyend
-
-        if INLINE_JQUERY
-            - compress js
-                script(src='{% static "libs/jquery-1.11.2.min.js" %}')
-                script(src='{% static "common.js" %}')
-        else
-            script(src=JQUERY_JS)
-            script(src='{% static "common.js" %}')
-        if IN_CONTEST
-            script(type='text/javascript')
-                $(document).ready(function () {
-                    count_down($("#contest-time-remaining"));
-                });
-        block js_media
