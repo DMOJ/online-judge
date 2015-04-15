@@ -16,7 +16,7 @@ block media
             .featherlight .featherlight-content { min-width: 80% }
 
 block js_media
-    script(src='featherlight.min.js', type='text/javascript', charset='utf-8')
+    script(src='{% static "featherlight.min.js" %}', type='text/javascript', charset='utf-8')
 
 block body
     form.form-area(action='', method='post')
