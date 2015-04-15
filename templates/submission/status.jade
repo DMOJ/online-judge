@@ -4,6 +4,43 @@ extends submission/info_base
 block js_media
     script(type='text/javascript', src='{% static "event.js" %}')
 
+    if not submission.is_graded and last_msg
+        script(type='text/javascript')
+            $(function () {
+                var receiver = new EventReceiver(
+                    "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                    ['sub_{{ submission.id }}'], {{ last_msg }}, function (message) {
+                        var list = $('#test-cases');
+                        switch (message.type) {   
+                            case 'internal-error':
+                            case 'grading-end':                                                                           
+                            case 'compile-error':
+                               $('#abort-button').remove();
+                               $('#grading-label').remove();
+                            case 'test-case':
+                            case 'grading-begin':
+                            case 'processing':
+                                $.ajax({
+                                    url: '{% url "submission_testcases_query" %}',
+                                    data: {id: '{{ submission.id }}'}
+                                }).done(function (data) {
+                                    list.html(data);
+                                    list.find('.toggle').each(function () {
+                                        register_toggle($(this));
+                                    });
+                                }).fail(function (data) {
+                                    console.log('Failed to update testcases!');
+                                });
+                                
+                                if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                                    $("html, body").animate({ scrollTop: $(document).height() }, 0);
+                                }
+                                
+                        }                        
+                    }
+                );
+            });
+
 block media
     style
         #test-cases .toggle .fa {
@@ -87,45 +124,6 @@ block media
         .toggle {
             font-weight:normal;
         }
-
-
-
-    if not submission.is_graded and last_msg
-        script(type='text/javascript')
-            $(function () {
-                var receiver = new EventReceiver(
-                    "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
-                    ['sub_{{ submission.id }}'], {{ last_msg }}, function (message) {
-                        var list = $('#test-cases');
-                        switch (message.type) {   
-                            case 'internal-error':
-                            case 'grading-end':                                                                           
-                            case 'compile-error':
-                               $('#abort-button').remove();
-                               $('#grading-label').remove();
-                            case 'test-case':
-                            case 'grading-begin':
-                            case 'processing':
-                                $.ajax({
-                                    url: '{% url "submission_testcases_query" %}',
-                                    data: {id: '{{ submission.id }}'}
-                                }).done(function (data) {
-                                    list.html(data);
-                                    list.find('.toggle').each(function () {
-                                        register_toggle($(this));
-                                    });
-                                }).fail(function (data) {
-                                    console.log('Failed to update testcases!');
-                                });
-                                
-                                if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
-                                    $("html, body").animate({ scrollTop: $(document).height() }, 0);
-                                }
-                                
-                        }                        
-                    }
-                );
-            });
 
 block body
     br
