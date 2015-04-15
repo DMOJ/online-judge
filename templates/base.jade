@@ -20,11 +20,6 @@ html(lang='en')
         | <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         | <script>window.bad_browser = true</script>
         | <![endif]-->
-        style.
-            {% for item in nav_tab %}nav ul li a.nav-{{ item }}{% if not forloop.last %},{% endif %} {% endfor %}{
-                color: #FFF;
-                background: #2980b9
-            }
         if IN_CONTEST
             style.
                 #contest-info {
@@ -60,6 +55,11 @@ html(lang='en')
             link(rel='stylesheet', href=FONTAWESOME_CSS)
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         block media
+        style.
+            {% for item in nav_tab %}nav ul li a.nav-{{ item }}{% if not forloop.last %},{% endif %} {% endfor %}{
+                color: #FFF;
+                background: #2980b9;
+            }
         if INLINE_JQUERY
             - compress js
                 script(src='{% static "libs/jquery-1.11.2.min.js" %}')
