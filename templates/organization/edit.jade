@@ -1,7 +1,9 @@
 extends base
 - load staticfiles
+- load media_extract
 
 block js_media
+    | #{form.media|media_type:"js"}
     script(type='text/javascript')
         window.django = {jQuery: $};
         function pluralidx(count) { return (count == 1) ? 0 : 1; }
@@ -16,7 +18,7 @@ block js_media
 
 block media
     link(rel='stylesheet', href='{% static "admin/css/widgets.css" %}', type='text/css')
-    | #{form.media}
+    | #{form.media|media_type:"css"}
     link(rel='stylesheet', href='{% static "admin/css/pagedown.css" %}', type='text/css')
     link(rel='stylesheet', href='{% static "problem_edit.css" %}', type='text/css')
 
