@@ -23,13 +23,14 @@ block js_media
     block content_js_media
 
 block body
-    #content-right
-        .info-float
-            block info_float
-    #content-left
-        .content-description.screen
-            block description
-            hr
-        block comments
+    #common-content
+        #content-right
+            .info-float
+                block info_float
+        #content-left
+            .content-description.screen
+                block description
+                hr
+            block comments
 block bodyend
     include mathjax_load
