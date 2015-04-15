@@ -49,8 +49,8 @@ html(lang='en')
         block meta
         if INLINE_FONTAWESOME
             - compress css
-            link(rel='stylesheet', href='{% static "style.css" %}')
-            link(rel='stylesheet', href='{% static "libs/font-awesome.css" %}')
+                link(rel='stylesheet', href='{% static "style.css" %}')
+                link(rel='stylesheet', href='{% static "libs/font-awesome.css" %}')
         else
             link(rel='stylesheet', href='{% static "style.css" %}')
             link(rel='stylesheet', href=FONTAWESOME_CSS)
@@ -58,8 +58,8 @@ html(lang='en')
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         if INLINE_JQUERY
             - compress js
-            script(src='{% static "libs/jquery-1.11.2.min.js" %}')
-            script(src='{% static "common.js" %}')
+                script(src='{% static "libs/jquery-1.11.2.min.js" %}')
+                script(src='{% static "common.js" %}')
         else
             script(src=JQUERY_JS)
             script(src='{% static "common.js" %}')
