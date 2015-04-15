@@ -6,6 +6,7 @@ doctype 5
 - load cache
 - load mptt_tags
 - load compress
+
 html(lang='en')
     head
         title
@@ -17,46 +18,13 @@ html(lang='en')
         meta#viewport(name='viewport', content='initial-scale=1')
         block meta
         style.
-            {
-            %
-            for
-            item
-            in
-            nav_tab
-            %
+            {% for item in nav_tab %}nav ul li a.nav-{{ item }}{% if not forloop.last %},{% endif %} {% endfor %}{
+                color: #FFF;
+                background: #2980b9
             }
-            nav ul li a.nav- {
-
-            {
-                item
-            }
-            }
-            {
-            %
-            if
-            not
-            forloop
-            .
-            last
-            %
-            }
-            ,
-            {
-            %
-            endif
-            %
-            }
-            {
-            %
-            endfor
-            %
-            }
-            {
-                color: #FFF
-            ;
         if INLINE_FONTAWESOME
             - compress css
-            link(rel='stylesheet', href='{% static "style.css" %}')
+                link(rel='stylesheet', href='{% static "style.css" %}')
                 link(rel='stylesheet', href='{% static "libs/font-awesome.css" %}')
         else
             link(rel='stylesheet', href='{% static "style.css" %}')
@@ -64,7 +32,7 @@ html(lang='en')
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         if INLINE_JQUERY
             - compress js
-            script(src='{% static "libs/jquery-1.11.2.min.js" %}')
+                script(src='{% static "libs/jquery-1.11.2.min.js" %}')
                 script(src='{% static "common.js" %}')
         else
             script(src=JQUERY_JS)
@@ -72,102 +40,103 @@ html(lang='en')
         | <!--[if lt IE 9]>
         | <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         | <script>window.bad_browser = true</script>
-        | <![endif]-->background: #2980b9
-}
-    if IN_CONTEST
-        script(type='text/javascript')
-        $(document).ready(function () {
-    count_down($("#contest-time-remaining"));
-});
-style.
-    #contest-info {
-        position: fixed;
-        padding: 3px 5px 3px 3px;
-        right: 10px;
-        top: 35px;
-        height: 1.4em;
-        font-size: 1.5em;
-        border: 1px solid gray;
-        border-radius: 4px;
-        background-color: #111;
-        z-index: 1000;
-    }
-
-    #contest-info a {
-        height: 1.4em;
-        padding: 0;
-        margin: 0;
-        color: white;
-    }
-
-    #contest-time-remaining {
-        display: inline-block;
-    }
-block media
-if misc_config.analytics
-    | #{misc_config.analytics | safe}
-if perms.judge.test_site
-    link(href='//fonts.googleapis.com/css?family=Open Sans:300,400,700', rel='stylesheet', type='text/css')
-    style
-        body, .content-description { font-family: 'Open Sans', sans-serif !important; }
-body
-    noscript This site works best with JavaScript enabled.
-    header.unselectable
-        h1
-            a(href='/')
-                block site_title
-                    include logo.svg
+        | <![endif]-->
         if IN_CONTEST
-            #contest-info
-                a(href='{% url "contest_view" CONTEST.contest.key %}')
-                    | #{CONTEST.contest.name} -
-                    #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
-    nav#navigation.unselectable
-        a#navicon(href='javascript:void(0)')
-            i.fa.fa-bars
-            | &nbsp;MENU
-        ul#nav-list
-            - recursetree nav_bar
-            li
-                a(href=node.path, class='nav-{{ node.key }}')= node.label
-                if not node.is_leaf_node
-                    ul {{ children }}
-            - endrecursetree
-        span#user-links
-            if request.user.is_authenticated
-                a(href='{% url "user_page" %}')
-                    | Hello,&nbsp;
-                    b #{request.user.username}
-                | &nbsp;|
-                if request.user.is_staff or request.user.is_superuser
-                    a(href='{% url "admin:index" %}') admin
+            script(type='text/javascript')
+                $(document).ready(function () {
+                    count_down($("#contest-time-remaining"));
+                });
+            style.
+                #contest-info {
+                    position: fixed;
+                    padding: 3px 5px 3px 3px;
+                    right: 10px;
+                    top: 35px;
+                    height: 1.4em;
+                    font-size: 1.5em;
+                    border: 1px solid gray;
+                    border-radius: 4px;
+                    background-color: #111;
+                    z-index: 1000;
+                }
+                
+                #contest-info a {
+                    height: 1.4em;
+                    padding:0;
+                    margin:0;
+                    color: white;
+                }
+                
+                #contest-time-remaining {
+                    display: inline-block;
+                }
+
+        block media
+        
+        if misc_config.analytics
+            | #{misc_config.analytics|safe}
+        if perms.judge.test_site
+            link(href='//fonts.googleapis.com/css?family=Open Sans:300,400,700', rel='stylesheet', type='text/css')
+            style
+                body, .content-description { font-family: 'Open Sans', sans-serif !important; }
+    body
+        noscript This site works best with JavaScript enabled.
+        header.unselectable
+            h1
+                a(href='/')
+                    block site_title
+                        include logo.svg
+            if IN_CONTEST
+                #contest-info
+                    a(href='{% url "contest_view" CONTEST.contest.key %}')
+                        | #{CONTEST.contest.name} -
+                        #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
+        nav#navigation.unselectable
+            a#navicon(href='javascript:void(0)')
+                i.fa.fa-bars
+                | &nbsp;MENU
+            ul#nav-list
+                - recursetree nav_bar
+                    li
+                        a(href=node.path, class='nav-{{ node.key }}')= node.label
+                        if not node.is_leaf_node
+                            ul {{ children }}
+                - endrecursetree
+            span#user-links
+                if request.user.is_authenticated
+                    a(href='{% url "user_page" %}')
+                        | Hello,&nbsp;
+                        b #{request.user.username}
                     | &nbsp;|
-                a(href='{% url "django.contrib.auth.views.logout" %}?next=')
-                    | &nbsp;log out
-            else
-                a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
-                    b Login
-                | &nbsp;|&nbsp;
-                a(href='/accounts/register/') Register
-    br
-    div#content
-        block title_row
-            h2(style='color:#393630; display:inline')
-                block content_title
-                    if content_title
-                        | #{content_title}
-                    else
-                        | #{title}
-        block header
-        if subtitle
-            br
-            block content_subtitle
-                h3(style='display:inline; font-size:1.5em; color:gray; font-style:italic') #{subtitle}
-        hr
-        div#content-body
-            block body
-        footer
-            p
-    if misc_config.announcement
-        div#announcement #{misc_config.announcement | safe}
-    block bodyend
+                    if request.user.is_staff or request.user.is_superuser
+                        a(href='{% url "admin:index" %}') admin
+                        | &nbsp;|
+                    a(href='{% url "django.contrib.auth.views.logout" %}?next=')
+                        | &nbsp;log out
+                else
+                    a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
+                        b Login
+                    | &nbsp;|&nbsp;
+                    a(href='/accounts/register/') Register
+        br
+        div#content
+            block title_row
+                h2(style='color:#393630; display:inline')
+                    block content_title
+                        if content_title
+                            | #{content_title}
+                        else
+                            | #{title}
+            block header
+            if subtitle
+                br
+                block content_subtitle
+                    h3(style='display:inline; font-size:1.5em; color:gray; font-style:italic') #{subtitle}
+            hr
+            div#content-body
+                block body
+            footer
+                p
+        if misc_config.announcement
+            div#announcement #{misc_config.announcement|safe}
+        block bodyend
