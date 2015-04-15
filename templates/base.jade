@@ -16,12 +16,12 @@ html(lang='en')
         if misc_config.meta_keywords
             meta(name='keywords', content=misc_config['meta_keywords'])
         meta#viewport(name='viewport', content='initial-scale=1')
-        block meta
         style.
             {% for item in nav_tab %}nav ul li a.nav-{{ item }}{% if not forloop.last %},{% endif %} {% endfor %}{
                 color: #FFF;
                 background: #2980b9
             }
+        block meta
         if INLINE_FONTAWESOME
             - compress css
                 link(rel='stylesheet', href='{% static "style.css" %}')
