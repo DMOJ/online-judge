@@ -2,20 +2,6 @@ extends base
 - load staticfiles
 block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
-    script(type='text/javascript')
-        $(function () {
-            var info_float = $('.info-float');
-            var container = $('#content-right');
-            if (window.bad_browser) {
-                container.css('float', 'right');
-            } else if (!featureTest('position', 'sticky')) {
-                fix_div(info_float, 40);
-                $(window).resize(function() {
-                    info_float.width(container.width());
-                });
-                info_float.width(container.width());
-            }
-        });
     style
         #content-body {
             display: -webkit-box;
@@ -60,6 +46,21 @@ block media
         }
 
     block content_media
+    script(type='text/javascript')
+        $(function () {
+            var info_float = $('.info-float');
+            var container = $('#content-right');
+            if (window.bad_browser) {
+                container.css('float', 'right');
+            } else if (!featureTest('position', 'sticky')) {
+                fix_div(info_float, 40);
+                $(window).resize(function() {
+                    info_float.width(container.width());
+                });
+                info_float.width(container.width());
+            }
+        });
+
 block body
     #content-right
         .info-float
