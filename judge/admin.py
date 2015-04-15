@@ -521,9 +521,9 @@ class CommentAdmin(Select2SuitMixin, reversion.VersionAdmin):
     linked_page.allow_tags = True
     linked_page.admin_order_field = 'page'
 
-    if AdminPagedownWidget is not None:
+    if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
+            TextField: {'widget': MathJaxAdminPagedownWidget},
         }
 
 
