@@ -3,9 +3,11 @@ extends base
 - load cache
 - load cache_key
 
-block media
+block js_media
     script(type='text/javascript', src='{% static "event.js" %}')
     script(type='text/javascript', src='{% static "moment.min.js" %}')
+
+block media
     style
         .info-float {
             position: -webkit-sticky;

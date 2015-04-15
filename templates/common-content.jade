@@ -1,5 +1,6 @@
 extends base
 - load staticfiles
+
 block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
     style
@@ -46,6 +47,8 @@ block media
         }
 
     block content_media
+
+block js_media
     script(type='text/javascript')
         $(function () {
             var info_float = $('.info-float');
@@ -60,6 +63,7 @@ block media
                 info_float.width(container.width());
             }
         });
+    block content_js_media
 
 block body
     #content-right

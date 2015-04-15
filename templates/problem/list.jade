@@ -5,7 +5,7 @@ extends base
 block meta
     meta(name='description', content="The DMOJ's large archive of problems - CCC, COCI, IOI and more.")
 
-block media
+block js_media
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
     script(type='text/javascript')
         $(document).ready(function () {
@@ -20,6 +20,8 @@ block media
                 }
             });
         });
+
+block media
     style
         #problem-table .problem {
             width: 100%

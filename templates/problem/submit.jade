@@ -1,9 +1,7 @@
 extends base
 -load staticfiles
 
-block media
-    | #{form.media}
-
+block js_media
     | <script type='text/javascript'>
     |     var modes = {
     each lang in langs
@@ -29,6 +27,9 @@ block media
                 }
             });
         });
+
+block media
+    | #{form.media}
     style
         #submit-wrapper {
             margin-top: 0.7em;

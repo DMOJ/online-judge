@@ -3,8 +3,11 @@ extends base
 - load staticfiles
 - load smart_math
 
-block media
+block js_media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+    include comments/js_media
+
+block media
     include comments/media
 
 block site_title

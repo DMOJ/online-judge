@@ -3,12 +3,14 @@ extends user/base_users
 - load staticfiles
 - load cache
 
-block users_media
+block users_js_media
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
     script(type='text/javascript')
         $(document).ready(function () {
             $("#users-table").tablesorter();
         });
+
+block users_media
     style
         #users-table td:nth-child(2), #users-table th:nth-child(2) {
             border-right: none;

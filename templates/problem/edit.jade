@@ -1,7 +1,7 @@
 extends base
 - load staticfiles
 
-block media
+block js_media
     script(type='text/javascript')
         window.django = {jQuery: $};
         function pluralidx(count) { return (count == 1) ? 0 : 1; }
@@ -13,6 +13,8 @@ block media
                 return fmt.replace(/%s/g, function(match) {return String(obj.shift())});
             }
         }
+
+block media
     | #{form.media}
     link(rel='stylesheet', href='{% static "admin/css/pagedown.css" %}', type='text/css')
     link(rel='stylesheet', href='{% static "problem_edit.css" %}', type='text/css')

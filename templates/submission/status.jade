@@ -1,8 +1,10 @@
 extends submission/info_base
 -load staticfiles
 
-block media
+block js_media
     script(type='text/javascript', src='{% static "event.js" %}')
+
+block media
     style
         #test-cases .toggle .fa {
             margin-left: -1.28571em;

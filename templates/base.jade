@@ -55,6 +55,7 @@ html(lang='en')
             link(rel='stylesheet', href='{% static "style.css" %}')
             link(rel='stylesheet', href=FONTAWESOME_CSS)
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
+        block media
         if INLINE_JQUERY
             - compress js
                 script(src='{% static "libs/jquery-1.11.2.min.js" %}')
@@ -66,7 +67,7 @@ html(lang='en')
         | <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         | <script>window.bad_browser = true</script>
         | <![endif]-->
-        block media
+        block js_media
         if IN_CONTEST
             script(type='text/javascript')
                 $(document).ready(function () {

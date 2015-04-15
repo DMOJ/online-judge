@@ -8,14 +8,16 @@ extends common-content
 -load smart_math
 -load social_share
 
-block content_media
+block content_js_media
     script(type='text/javascript')
         $(document).ready(function () {
             $('.time-remaining').each(function () {
                 count_down($(this));
             });
         });
+    include comments/js_media
 
+block content_media
     style
         .info-float .fa {
             color: #000;
