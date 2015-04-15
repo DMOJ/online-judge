@@ -67,7 +67,6 @@ html(lang='en')
         else
             script(src=JQUERY_JS)
             script(src='{% static "common.js" %}')
-        block js_media
         if IN_CONTEST
             script(type='text/javascript')
                 $(document).ready(function () {
@@ -137,3 +136,4 @@ html(lang='en')
         if misc_config.announcement
             div#announcement #{misc_config.announcement|safe}
         block bodyend
+        block js_media
