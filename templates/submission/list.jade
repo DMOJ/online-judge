@@ -2,53 +2,9 @@ extends base
 - load staticfiles
 - load cache
 - load cache_key
+- load compress
 
 block js_media
-    script(type='text/javascript', src='{% static "event.js" %}')
-    script(type='text/javascript', src='{% static "moment.min.js" %}')
-
-    if request.user.is_authenticated and perms.judge.rejudge_submission
-        script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
-        script(type='text/javascript')
-            window.rejudge_submission = function(id) {
-                if (confirm('Are you sure you want to rejudge?')) {
-                    $.ajax({
-                        url: '{% url "judge.views.rejudge_submission" %}',
-                        type: "POST",
-                        data: {
-                            id: id,
-                            csrfmiddlewaretoken: $.cookie('csrftoken')
-                        }
-                    });
-                }
-            }
-    script(type='text/javascript')
-        $(function () {
-            if (!featureTest('position', 'sticky'))
-                fix_div($('.info-float'), 40, true, function (info) {
-                    info.css('width', (info.width() / $(window).width() * 100) + '%');
-                    return $('<div/>', {
-                        id: 'fake-info-float',
-                        class: 'info-float'
-                    }).css('width', '20%').height(info.height()).prependTo('#content-body');
-                });
-
-            var time_cache = {};
-            window.update_relative_time = function (row) {
-                var id = row.attr('id');
-                if (!(id in time_cache))
-                    time_cache[id] = row.find('span.time').text();
-                row.find('span.time').text(moment(row.find('span.moment').text()).fromNow() + ' (' + time_cache[id] + ')');
-            };
-
-            function update_all_time() {
-                $('#submissions-table').find('tr').each(function () {
-                    update_relative_time($(this));
-                });
-            }
-            setInterval(update_all_time, 60000);
-            update_all_time();
-        });
     if dynamic_update and last_msg
         if IN_CONTEST
             script(type='text/javascript')
@@ -74,170 +30,122 @@ block js_media
         else
             script(type='text/javascript')
                 window.show_problem = 0;
+
+    - compress js
+        script(type='text/javascript', src='{% static "event.js" %}')
+        script(type='text/javascript', src='{% static "moment.min.js" %}')
+        if request.user.is_authenticated and perms.judge.rejudge_submission
+            script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
+            script(type='text/javascript')
+                window.rejudge_submission = function(id) {
+                    if (confirm('Are you sure you want to rejudge?')) {
+                        $.ajax({
+                            url: '{% url "judge.views.rejudge_submission" %}',
+                            type: "POST",
+                            data: {
+                                id: id,
+                                csrfmiddlewaretoken: $.cookie('csrftoken')
+                            }
+                        });
+                    }
+                }
         script(type='text/javascript')
             $(function () {
-                var table = $('#submissions-table');
-                var statistics = $("#statistics-table");
-                var doing_ajax = false;
-                var first = parseInt(table.find('tr:first-child').attr('id'));
+                if (!featureTest('position', 'sticky'))
+                    fix_div($('.info-float'), 40, true, function (info) {
+                        info.css('width', (info.width() / $(window).width() * 100) + '%');
+                        return $('<div/>', {
+                            id: 'fake-info-float',
+                            class: 'info-float'
+                        }).css('width', '20%').height(info.height()).prependTo('#content-body');
+                    });
 
-                var update_submission = function (id, force) {
-                    var row = table.find('tr#' + id);
-                    if (row.length < 1) {
-                        if (id < first)
-                            return;
-                        first = id;
-                        row = $('<tr/>', {id: id}).hide().prependTo(table);
-                        table.find('tr:last-child').hide('slow', function () {
-                            $(this).remove();
-                        });
-                    }
-                    if (force || !doing_ajax) {
-                        if (!force) doing_ajax = true;
-                        $.ajax({
-                            url: '{% url "judge.views.single_submission_query" %}',
-                            data: {id: id, show_problem: show_problem}
-                        }).done(function (data) {
-                            var was_shown = row.is(':visible');
-                            row.html(data);
-                            update_relative_time(row);
-                            if (!was_shown)
-                                row.show('slow');
-                            if (!force) doing_ajax = false;
-                        }).fail(function () {
-                            console.log('Failed to update submission: ' + id);
-                            if (!force) doing_ajax = false;
-                        });
-                    }
+                var time_cache = {};
+                window.update_relative_time = function (row) {
+                    var id = row.attr('id');
+                    if (!(id in time_cache))
+                        time_cache[id] = row.find('span.time').text();
+                    row.find('span.time').text(moment(row.find('span.moment').text()).fromNow() + ' (' + time_cache[id] + ')');
                 };
 
-                var $body = $(document.body);
-                var receiver = new EventReceiver(
-                        "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
-                        ['submissions'], #{last_msg}, function (message) {
-                            if (current_contest && message.contest != current_contest)
-                                return;
-                            if (dynamic_user_id && message.user != dynamic_user_id ||
-                                dynamic_problem_id && message.problem != dynamic_problem_id)
-                                return;
-                            if (message.type == 'update-submission') {
-                                if (message.state == 'grading-end')
-                                    return;
-                                if (message.state == 'test-case' && $body.hasClass('window-hidden'))
-                                    return;
-                                update_submission(message.id);
-                            } else if (message.type == 'done-submission') {
-                                update_submission(message.id, true);
-
-                                $.ajax({
-                                    url: '?results'
-                                }).done(function (data) {
-                                    statistics.html(data);
-                                }).fail(function () {
-                                    console.log('Failed to update statistics table!' + id);
-                                });
-                            }
-                        }
-                );
+                function update_all_time() {
+                    $('#submissions-table').find('tr').each(function () {
+                        update_relative_time($(this));
+                    });
+                }
+                setInterval(update_all_time, 60000);
+                update_all_time();
             });
 
+        if dynamic_update and last_msg
+            script(type='text/javascript')
+                $(function () {
+                    var table = $('#submissions-table');
+                    var statistics = $("#statistics-table");
+                    var doing_ajax = false;
+                    var first = parseInt(table.find('tr:first-child').attr('id'));
+
+                    var update_submission = function (id, force) {
+                        var row = table.find('tr#' + id);
+                        if (row.length < 1) {
+                            if (id < first)
+                                return;
+                            first = id;
+                            row = $('<tr/>', {id: id}).hide().prependTo(table);
+                            table.find('tr:last-child').hide('slow', function () {
+                                $(this).remove();
+                            });
+                        }
+                        if (force || !doing_ajax) {
+                            if (!force) doing_ajax = true;
+                            $.ajax({
+                                url: '{% url "judge.views.single_submission_query" %}',
+                                data: {id: id, show_problem: show_problem}
+                            }).done(function (data) {
+                                var was_shown = row.is(':visible');
+                                row.html(data);
+                                update_relative_time(row);
+                                if (!was_shown)
+                                    row.show('slow');
+                                if (!force) doing_ajax = false;
+                            }).fail(function () {
+                                console.log('Failed to update submission: ' + id);
+                                if (!force) doing_ajax = false;
+                            });
+                        }
+                    };
+
+                    var $body = $(document.body);
+                    var receiver = new EventReceiver(
+                            "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                            ['submissions'], #{last_msg}, function (message) {
+                                if (current_contest && message.contest != current_contest)
+                                    return;
+                                if (dynamic_user_id && message.user != dynamic_user_id ||
+                                    dynamic_problem_id && message.problem != dynamic_problem_id)
+                                    return;
+                                if (message.type == 'update-submission') {
+                                    if (message.state == 'grading-end')
+                                        return;
+                                    if (message.state == 'test-case' && $body.hasClass('window-hidden'))
+                                        return;
+                                    update_submission(message.id);
+                                } else if (message.type == 'done-submission') {
+                                    update_submission(message.id, true);
+
+                                    $.ajax({
+                                        url: '?results'
+                                    }).done(function (data) {
+                                        statistics.html(data);
+                                    }).fail(function () {
+                                        console.log('Failed to update statistics table!' + id);
+                                    });
+                                }
+                            }
+                    );
+                });
+
 block media
-    style
-        .info-float {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 40px;
-            width: 20%;
-        }
-
-        #submissions-table {
-            width: 75%;
-            border: 0;
-            margin-left: 0
-        }
-
-        #submissions-table tr {
-            -webkit-transition: background-color linear .2s;
-            -moz-transition: background-color linear .2s;
-            -o-transition: background-color linear .2s;
-            transition: background-color linear .2s;
-        }
-
-        #submissions-table tr:hover {
-            background: #F2F2F2
-        }
-
-        col.sub-result, td.sub-result {
-            min-width: 80px;
-        }
-
-        td.sub-result .state {
-            font-size: 0.7em;
-            font-weight: bold;
-            padding-top: 0.5em
-        }
-
-        td.sub-result .score {
-            font-size: 1.3em;
-            color: black
-        }
-
-        col.sub-info, td.sub-info {
-            width: 90%;
-            text-align: left;
-            padding-left: 20px;
-            border-right: none;
-        }
-
-        td.sub-info-grading {
-            width: auto !important;
-            min-width: 58% !important;
-        }
-
-        td.sub-testcase {
-            color: #555;
-            white-space: nowrap;
-            vertical-align: middle;
-            text-align: right;
-            padding-right: 2%;
-            border-right: none;
-        }
-
-        td.sub-info .name {
-            font-size: 1.3em;
-            font-weight: bold
-        }
-
-        td.sub-info .time {
-            color: #555
-        }
-
-        td.sub-prop, col.sub-prop {
-            text-align: right;
-        }
-
-        td.sub-prop a {
-            white-space: nowrap;
-        }
-
-        .sub-prop .fa { display: none; }
-
-        td.sub-usage {
-            white-space: nowrap;
-        }
-
-        td.sub-usage .time {
-            font-weight: bold;
-        }
-
-        @media (max-width: 700px) {
-            .sub-prop .label { display: none; }
-            .sub-prop .fa { display: inline-block; }
-            #fake-info-float { display: none; }
-            #statistics-table { display: none; }
-            #submissions-table { width: 100%; }
-        }
-
     if perms.judge.change_submission and perms.judge.rejudge_submission
         style
             td.sub-prop, col.sub-prop { width: 22% }

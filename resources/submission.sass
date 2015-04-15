@@ -1,0 +1,89 @@
+.info-float
+  position: sticky
+  top: 40px
+  width: 20%
+
+#submissions-table
+  width: 75%
+  border: 0
+  margin-left: 0
+  tr
+    //If you use compass, instead of the line below you could use +transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: background-color linear .2s
+    &:hover
+      background: $concrete
+
+col
+  &.sub-result
+    min-width: 80px
+
+  &.sub-prop
+    text-align: right
+
+td
+  &.sub-result
+    min-width: 80px
+    .state
+      font-size: 0.7em
+      font-weight: bold
+      padding-top: 0.5em
+
+    .score
+      font-size: 1.3em
+      color: $black
+
+  &.sub-info
+    .name
+      font-size: 1.3em
+      font-weight: bold
+
+    .time
+      color: #555
+
+  &.sub-info-grading
+    width: auto !important
+    min-width: 58% !important
+
+  &.sub-testcase
+    color: #555
+    white-space: nowrap
+    vertical-align: middle
+    text-align: right
+    padding-right: 2%
+    border-right: none
+
+  &.sub-prop
+    text-align: right
+    a
+      white-space: nowrap
+
+  &.sub-usage
+    white-space: nowrap
+    .time
+      font-weight: bold
+
+col.sub-info, td.sub-info
+  width: 90%
+  text-align: left
+  padding-left: 20px
+  border-right: none
+
+@media(max-width: 700px)
+  .sub-prop
+    .label
+      display: none
+
+    .fa
+      display: inline-block
+
+  #fake-info-float
+    display: none
+
+  #statistics-table
+    display: none
+
+  #submissions-table
+    width: 100%
+
+.sub-prop .fa
+  display: none
