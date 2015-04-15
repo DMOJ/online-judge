@@ -9,30 +9,6 @@ block js_media
 
 block media
     include comments/media
-    style(type='text/css')
-        .social i {
-            display:inline;
-            font-size:1.9em;
-        }
-        .facebook-this {
-            display:inline;
-        }
-        .tweet-this {
-            display:inline;
-        }
-        .gplus-this {
-            display:inline;
-        }
-        .tweet-this i {
-            color:#55ACEE;
-        }
-        .facebook-this i {
-            color:#133783;
-        }
-        .gplus-this i {
-            color:#DD4B38;
-        }
-        .social { font-size:1.3em; float:right; }
 block body
     div.post-full
         div.time #{post.publish_on|date:"N j, o, G:i"}
