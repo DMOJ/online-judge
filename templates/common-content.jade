@@ -3,49 +3,6 @@ extends base
 
 block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
-    style
-        #content-body {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: horizontal;
-            -webkit-box-direction: reverse;
-            -webkit-flex-direction: row-reverse;
-                -ms-flex-direction: row-reverse;
-                    flex-direction: row-reverse;
-        }
-
-        #content-left {
-            -webkit-box-flex: 86%;
-            -webkit-flex: 86%;
-                -ms-flex: 86%;
-                    flex: 86%;
-            width: 100%;
-        }
-
-        #content-right {
-            -webkit-box-flex: 14%;
-            -webkit-flex: 14%;
-                -ms-flex: 14%;
-                    flex: 14%;
-            max-width: 12.5em;
-            min-width: 8em;
-            padding-left: 1em; 
-        }
-
-        #content-right .info-float {
-            float: none;
-            padding: 10px 0 0 0;
-            position: -webkit-sticky;
-            position: sticky;
-            top: 40px;
-        }
-
-        .content-description {
-            width: 100%;
-        }
-
     block content_media
 
 block js_media

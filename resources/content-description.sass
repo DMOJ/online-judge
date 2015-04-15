@@ -1,139 +1,160 @@
 .content-description
-    line-height: 1.5em
+  line-height: 1.5em
+  font-size: 1em
+  font-family: 'Segoe UI', 'Lucida Grande', Arial, sans-serif
+  a
+    color: #5b80b2
+    text-decoration: underline
+    &:visited
+      color: #0b0080
+    &:hover
+      color: #0645ad
+    &:active
+      color: #faa700
+    &:focus
+      outline: thin dotted
+    &:hover, &:active
+      outline: 0
+  p
+    margin: 1em 0 !important
+    padding: 0 !important
+    font-size: 14px !important
+  img
+    max-width: 100%
+  h1, h2, h3, h4, h5, h6
+    font-weight: normal
+    color: #111
+    margin-bottom: .75em
+    padding: 0
+    background: 0
+  h3, h4, h5, h6
+    font-weight: bold
+  h1
+    font-size: 2.5em
+  h2
+    font-size: 2em
+  h3
+    font-size: 1.6em
+    margin: 0
+    padding: 0
+  h4
+    font-size: 1.4em
+  h5
     font-size: 1em
-    font-family: 'Segoe UI', 'Lucida Grande', Arial, sans-serif
-    a
-        color: #5b80b2
-        text-decoration: underline
-        &:visited
-            color: #0b0080
-        &:hover
-            color: #0645ad
-        &:active
-            color: #faa700
-        &:focus
-            outline: thin dotted
-        &:hover, &:active
-            outline: 0
-    p
-        margin: 1em 0 !important
-        padding: 0 !important
-        font-size: 14px !important
-    img
-        max-width: 100%
-    h1, h2, h3, h4, h5, h6
-        font-weight: normal
-        color: #111
-        margin-bottom: .75em
-        padding: 0
-        background: 0
-    h3, h4, h5, h6
-        font-weight: bold
-    h1
-        font-size: 2.5em
-    h2
-        font-size: 2em
-    h3
-        font-size: 1.6em
-        margin: 0
-        padding: 0
-    h4
-        font-size: 1.4em
-    h5
-        font-size: 1em
-    h6
-        font-size: 0.9em
-    blockquote
-        color: #666
-        margin: 0
-        padding-left: 1.5em
-        border-left: 0.5em #EEE solid
-    hr
-        display: block
-        height: 0
-        border: 0
-        font-style: italic
-        border-bottom: 1px solid #CCC
-        margin: 25px 0 20px 0
-        padding: 0
-    pre, code, kbd, samp
-        color: #000
-        font-family: monospace, monospace
-        _font-family: 'courier new', monospace
-        font-size: 0.98em
+  h6
+    font-size: 0.9em
+  blockquote
+    color: #666
+    margin: 0
+    padding-left: 1.5em
+    border-left: 0.5em #EEE solid
+  hr
+    display: block
+    height: 0
+    border: 0
+    font-style: italic
+    border-bottom: 1px solid #CCC
+    margin: 25px 0 20px 0
+    padding: 0
+  pre, code, kbd, samp
+    color: #000
+    font-family: monospace, monospace
+    _font-family: 'courier new', monospace
+    font-size: 0.98em
+  code
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace !important
+    margin: 0 2px
+    padding: 0 5px
+    border: 1px solid #ddd
+    background-color: #f8f8f8
+    border-radius: 2px
+    font-size: .95em
+    color: #444
+  pre
     code
-        font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace !important
-        margin: 0 2px
-        padding: 0 5px
-        border: 1px solid #ddd
-        background-color: #f8f8f8
-        border-radius: 2px
-        font-size: .95em
-        color: #444
-    pre
-        code
-            border: 0
-            line-height: 1em
-            margin: 0
-            padding: 0
-            background: transparent
-            font-size: 1em
-            color: black
-        white-space: pre
-        white-space: pre-wrap
-        word-wrap: break-word
-        margin: 1.5em 0 1.5em 0
-        padding: 1em
-        border: 1px solid #ddd
-        background-color: #f8f8f8
-        color: black
-        border-radius: 4px
-    b, strong
-        font-weight: bold
-    dfn
-        font-style: italic
-    ins
-        background: #ff9
-        color: #000
-        text-decoration: none
-    mark
-        background: #ff0
-        color: #000
-        font-style: italic
-        font-weight: bold
-    sub
-        font-size: 75%
-        line-height: 0
-        position: relative
-        vertical-align: baseline
-    sup
-        font-size: 75%
-        line-height: 0
-        position: relative
-        vertical-align: baseline
-        top: -0.5em
-    sub
-        bottom: -0.25em
-    ul, ol
-        margin: 1em 0 !important
-        padding: 0 0 0 2em !important
-    ul li, ol li
-        font-size: 14px !important
-    li p:last-child
-        margin: 0
-    dd
-        margin: 0 0 0 2em
-    img
-        border: 0
-        -ms-interpolation-mode: bicubic
-        vertical-align: middle
-    table
-        border-collapse: collapse
-        border-spacing: 0
-    td
-        vertical-align: top
+      border: 0
+      line-height: 1em
+      margin: 0
+      padding: 0
+      background: transparent
+      font-size: 1em
+      color: black
+    white-space: pre-wrap
+    word-wrap: break-word
+    margin: 1.5em 0 1.5em 0
+    padding: 1em
+    border: 1px solid #ddd
+    background-color: #f8f8f8
+    color: black
+    border-radius: 4px
+  b, strong
+    font-weight: bold
+  dfn
+    font-style: italic
+  ins
+    background: #ff9
+    color: #000
+    text-decoration: none
+  mark
+    background: #ff0
+    color: #000
+    font-style: italic
+    font-weight: bold
+  sub
+    font-size: 75%
+    line-height: 0
+    position: relative
+    vertical-align: baseline
+  sup
+    font-size: 75%
+    line-height: 0
+    position: relative
+    vertical-align: baseline
+    top: -0.5em
+  sub
+    bottom: -0.25em
+  ul, ol
+    margin: 1em 0 !important
+    padding: 0 0 0 2em !important
+  ul li, ol li
+    font-size: 14px !important
+  li p:last-child
+    margin: 0
+  dd
+    margin: 0 0 0 2em
+  img
+    border: 0
+    -ms-interpolation-mode: bicubic
+    vertical-align: middle
+  table
+    border-collapse: collapse
+    border-spacing: 0
+  td
+    vertical-align: top
 
 .display-math
-    display: block
-    text-align: center
- 
+  display: block
+  text-align: center
+
+#content-body
+  display: flex
+  flex-direction: row-reverse
+
+#content-left
+  flex: 86%
+  width: 100%
+
+  .content-description
+    width: 100%
+
+#content-right
+  flex: 14%
+  max-width: 12.5em
+  min-width: 8em
+  padding-left: 1em
+
+  .info-float
+    float: none
+    padding: 10px 0 0
+    position: sticky
+    top: 40px
