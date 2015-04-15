@@ -27,7 +27,7 @@ ul.comments.top-level-comments
                         .comment-header
                             a.comment-link(name='comment-{{node.id}}-link')
                             span.comment-author
-                                img(src='{% gravatar_url node.author.user.email 24 node.author.mute %}', width='24' height='24')
+                                img(src='{% gravatar_url node.author.user.email 24 node.author.mute %}', width='24', height='24')
                                 span(class=node.author.display_rank)
                                     a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
                             = ' on '
