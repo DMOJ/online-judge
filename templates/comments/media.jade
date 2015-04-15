@@ -2,6 +2,32 @@
 - load compress
 - load staticfiles
 
+- compress css
+    link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
+    | #{comment_form.media|media_type:"css"}
+    style(media='all').
+        .featherlight {
+            z-index: 1000;
+        }
+
+        .revision-text p:first-child { margin-top: 0; }
+        .revision-text p:last-child { margin-bottom: 0; }
+        .comment-author { margin-bottom: 1em }
+        .featherlight-edit .featherlight-content {
+            background: #FAFAFA;
+            padding: 10px 15px 10px 10px;
+            border-radius: 10px;
+            border: 1px solid #CCC;
+        }
+
+        .comment-author img {
+            width: 1.25em;
+            height: 1.25em;
+            border-radius: 0.2em;
+            vertical-align: bottom;
+            margin-right: 0.3em;
+        }
+
 - compress js
     script(src='{% static "featherlight.min.js" %}', type='text/javascript', charset='utf-8')
     script(src='{% static "placeholder-compat.js" %}', type='text/javascript')
@@ -98,29 +124,3 @@
                     MathJax.Hub.Queue(['Typeset', MathJax.Hub, $('.featherlight-content').get(0)]);
             }
         });
-
-- compress css
-    link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
-    | #{comment_form.media|media_type:"css"}
-    style(media='all').
-        .featherlight {
-            z-index: 1000;
-        }
-
-        .revision-text p:first-child { margin-top: 0; }
-        .revision-text p:last-child { margin-bottom: 0; }
-        .comment-author { margin-bottom: 1em }
-        .featherlight-edit .featherlight-content {
-            background: #FAFAFA;
-            padding: 10px 15px 10px 10px;
-            border-radius: 10px;
-            border: 1px solid #CCC;
-        }
-
-        .comment-author img {
-            width: 1.25em;
-            height: 1.25em;
-            border-radius: 0.2em;
-            vertical-align: bottom;
-            margin-right: 0.3em;
-        }
