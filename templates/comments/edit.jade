@@ -7,8 +7,7 @@ block media
         | #{form.media|media_type:"css"}
 
 block js_media
-    - compress js
-        | #{form.media|media_type:"js"}
+    | #{form.media|media_type:"js"}
 
 block body
     .form-area
