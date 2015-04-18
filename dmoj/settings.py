@@ -50,11 +50,12 @@ else:
                 'label': 'Site',
                 'icon': 'icon-leaf',
                 'models': (
+                    'judge.blogpost',
+                    'judge.comment',
                     'sites.site',
                     'flatpages.flatpage',
-                    'judge.blogpost',
                     'judge.miscconfig',
-                    'judge.navigationbar'
+                    'judge.navigationbar',
                 ),
             },
             {
