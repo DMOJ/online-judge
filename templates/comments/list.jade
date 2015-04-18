@@ -46,29 +46,29 @@ ul.comments.top-level-comments
                             span.comment-title #{node.title}
                             = ' '
                             span.comment-operation
-                                a.comment-link(href='#comment-{{ node.id }}')
+                                a.comment-link(href='#comment-{{ node.id }}', title='Link')
                                     i.fa.fa-link.fa-fw
                                 a.history-link(data-featherlight='{% url "comment_history_ajax" node.id %}',
-                                               href='{% url "comment_history" node.id %}')
+                                               href='{% url "comment_history" node.id %}', title='History')
                                     i.fa.fa-history.fa-fw
                                 if logged_in
                                     - var can_edit = node.author.id == profile.id and not profile.mute
                                     if can_edit
                                         a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}',
-                                                    href='{% url "comment_edit" node.id %}')
+                                                    href='{% url "comment_edit" node.id %}', title='Edit')
                                             i.fa.fa-pencil.fa-fw
                                     else
-                                        a(href='javascript:comment_set_parent({{ node.id }})')
+                                        a(href='javascript:comment_set_parent({{ node.id }})', title='Reply')
                                             i.fa.fa-reply.fa-fw
                                     if perms.judge.change_comment
                                         if can_edit
-                                            a(href='javascript:comment_set_parent({{ node.id }})')
+                                            a(href='javascript:comment_set_parent({{ node.id }})', title='Reply')
                                                 i.fa.fa-reply.fa-fw
                                         else
                                             a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}',
-                                                        href='{% url "comment_edit" node.id %}')
+                                                        href='{% url "comment_edit" node.id %}', title='Edit')
                                                 i.fa.fa-pencil.fa-fw
-                                        a(href='{% url "admin:judge_comment_change" node.id %}')
+                                        a(href='{% url "admin:judge_comment_change" node.id %}', title='Admin')
                                             i.fa.fa-cog.fa-fw
                         .comment-body.content-description #{node.body|markdown:"comment"}
                         if not node.is_leaf_node 
