@@ -25,27 +25,28 @@ ul.comments.top-level-comments
                                 a.downvote-link.fa.fa-chevron-down.fa-fw(href='javascript:void(0)', title='Please login to vote')
                             br
                         .comment-header
-                            span.comment-author
-                                img(src='{% gravatar_url node.author.user.email 24 node.author.mute %}', width='24', height='24')
-                                span(class=node.author.display_rank)
-                                    a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
-                            = ' on '
-                            span.comment-time #{node.time|date:"N j, o, g:i a"}
-                            if node.revisions > 1
-                                |  (
-                                span.comment-edited Edited
-                                    if node.revisions > 2
-                                        - var edited = node.revisions - 1
-                                        = ' '
-                                        = edited
-                                        |  times
-                                    else
-                                        = 'once'
-                                | )
-                            = ' '
-                            span.comment-title #{node.title}
-                            = ' '
-                            span.comment-operation
+                            .comment-info
+                                span.comment-author
+                                    img(src='{% gravatar_url node.author.user.email 24 node.author.mute %}', width='24', height='24')
+                                    span(class=node.author.display_rank)
+                                        a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
+                                = ' on '
+                                span.comment-time #{node.time|date:"N j, o, g:i a"}
+                                if node.revisions > 1
+                                    |  (
+                                    span.comment-edited Edited
+                                        if node.revisions > 2
+                                            - var edited = node.revisions - 1
+                                            = ' '
+                                            = edited
+                                            |  times
+                                        else
+                                            = 'once'
+                                    | )
+                                = ' '
+                                span.comment-title #{node.title}
+                            .comment-spacer
+                            .comment-operation
                                 a.comment-link(href='#comment-{{ node.id }}', title='Link')
                                     i.fa.fa-link.fa-fw
                                 a.history-link(data-featherlight='{% url "comment_history_ajax" node.id %}',
