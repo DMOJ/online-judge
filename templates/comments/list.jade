@@ -25,7 +25,7 @@ ul.comments.top-level-comments
                                 a.downvote-link.fa.fa-chevron-down.fa-fw(href='javascript:void(0)', title='Please login to vote')
                             br
                         .comment-header
-                            .comment-info
+                            span.comment-info
                                 span.comment-author
                                     img(src='{% gravatar_url node.author.user.email 24 node.author.mute %}', width='24', height='24')
                                     span(class=node.author.display_rank)
@@ -45,8 +45,8 @@ ul.comments.top-level-comments
                                     | )
                                 = ' '
                                 span.comment-title #{node.title}
-                            .comment-spacer
-                            .comment-operation
+                            span.comment-spacer
+                            span.comment-operation
                                 a.comment-link(href='#comment-{{ node.id }}', title='Link')
                                     i.fa.fa-link.fa-fw
                                 a.history-link(data-featherlight='{% url "comment_history_ajax" node.id %}',
