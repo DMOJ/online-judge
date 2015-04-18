@@ -454,7 +454,7 @@ class Comment(MPTTModel):
             return '<deleted>'
 
     def get_absolute_url(self):
-        return '%s#comment-%d-link' % (self.link, self.id)
+        return '%s#comment-%d' % (self.link, self.id)
 
     def __unicode__(self):
         return self.title
