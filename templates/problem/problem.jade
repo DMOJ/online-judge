@@ -92,9 +92,9 @@ block info_float
     b Memory limit:
     -with memory=problem.memory_limit
         if memory < 1000
-            | #{memory|floatformat:"-2"}K
+            |  #{memory|floatformat:"-2"}K
         else
-            -math memory "$1 / 1024" as megabytes
+            - math memory "$1 / 1024" as megabytes
             | #{megabytes|floatformat:"-2"}M
     br
     - cache 86400 problem_authors problem.id
