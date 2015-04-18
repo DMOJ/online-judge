@@ -32,21 +32,17 @@ ul.comments.top-level-comments
                                         a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
                                 = ' on '
                                 span.comment-time #{node.time|date:"N j, o, g:i a"}
-                                if node.revisions > 1
-                                    |  (
-                                    span.comment-edited Edited
-                                        if node.revisions > 2
-                                            - var edited = node.revisions - 1
-                                            = ' '
-                                            = edited
-                                            |  times
-                                        else
-                                            = 'once'
-                                    | )
-                                = ' '
                                 span.comment-title #{node.title}
                             span.comment-spacer
                             span.comment-operation
+                                if node.revisions > 2
+                                    span.comment-edits
+                                        = node.revisions - 1
+                                        |  edits
+                                elif node.revisions > 1
+                                    span.comment-edits edited
+                                else
+                                    span.comment-edits
                                 a.comment-link(href='#comment-{{ node.id }}', title='Link')
                                     i.fa.fa-link.fa-fw
                                 a.history-link(data-featherlight='{% url "comment_history_ajax" node.id %}',
