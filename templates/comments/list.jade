@@ -53,7 +53,6 @@ ul.comments.top-level-comments
                                     i.fa.fa-history.fa-fw
                                 if logged_in
                                     - var can_edit = node.author.id == profile.id and not profile.mute
-                                    = ' '
                                     if can_edit
                                         a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}',
                                                     href='{% url "comment_edit" node.id %}')
@@ -62,7 +61,6 @@ ul.comments.top-level-comments
                                         a(href='javascript:comment_set_parent({{ node.id }})')
                                             i.fa.fa-reply.fa-fw
                                     if perms.judge.change_comment
-                                        = ' '
                                         if can_edit
                                             a(href='javascript:comment_set_parent({{ node.id }})')
                                                 i.fa.fa-reply.fa-fw
@@ -70,7 +68,6 @@ ul.comments.top-level-comments
                                             a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}',
                                                         href='{% url "comment_edit" node.id %}')
                                                 i.fa.fa-pencil.fa-fw
-                                        = ' '
                                         a(href='{% url "admin:judge_comment_change" node.id %}')
                                             i.fa.fa-cog.fa-fw
                         .comment-body.content-description #{node.body|markdown:"comment"}
