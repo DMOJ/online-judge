@@ -92,9 +92,21 @@
             },
             variant: 'featherlight-edit'
         });
+
         $('.comments').find('a.history-link').featherlight({
             afterOpen: function () {
                 if ('MathJax' in window)
                     MathJax.Hub.Queue(['Typeset', MathJax.Hub, $('.featherlight-content').get(0)]);
             }
+        });
+
+        var $root = $('html, body');
+        $('.comments').find('a.comment-link').click(function() {
+            var href = $.attr(this, 'href');
+            $root.animate({
+                scrollTop: $(href).offset().top
+            }, 500, function () {
+                window.location.hash = href;
+            });
+            return false;
         });
