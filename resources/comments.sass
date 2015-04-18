@@ -44,17 +44,22 @@ a
   input, textarea
     min-width: 100%
 
-.comment
-  list-style: none none
-  background: rgba(0, 0, 0, 0.01)
+.comment-box
   border-radius: 4px
   padding: 5px 10px 10px 15px
+  border: 1px solid #ccc
+  background: rgba(0, 0, 0, .01)
+
+.comment
+  list-style: none none
+  border-radius: 4px
   margin-left: -40px
   margin-bottom: 10px
   border: 1px solid #ccc
-  position: relative
+  margin-top: -50px
+  padding-top:  50px
 
-  &:target
+  &:target .comment-box
     border-left: 10px solid #00f
     padding-left: 5px
 
