@@ -46,6 +46,8 @@ ul.comments.top-level-comments
                             span.comment-title #{node.title}
                             = ' '
                             span.comment-operation
+                                a.comment-link(href='#comment-{{ node.id }}')
+                                    i.fa.fa-link.fa-fw
                                 a.history-link(data-featherlight='{% url "comment_history_ajax" node.id %}',
                                                href='{% url "comment_history" node.id %}')
                                     i.fa.fa-history.fa-fw
