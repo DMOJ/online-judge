@@ -37,8 +37,8 @@ ul.comments.top-level-comments
                             span.comment-operation
                                 if node.revisions > 2
                                     span.comment-edits
-                                        = node.revisions - 1
-                                        |  edits
+                                        - var edits = node.revisions - 1
+                                        | #{edits} edits
                                 elif node.revisions > 1
                                     span.comment-edits edited
                                 else
