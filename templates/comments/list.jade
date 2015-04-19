@@ -32,6 +32,7 @@ ul.comments.top-level-comments
                                         a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
                                 = ' on '
                                 span.comment-time #{node.time|date:"N j, o, g:i a"}
+                                = ' '
                                 span.comment-title #{node.title}
                             span.comment-spacer
                             span.comment-operation
