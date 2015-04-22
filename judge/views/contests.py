@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.db import connection
 from django.db.models import Max, Count
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from django.utils import timezone
 from django.utils.functional import SimpleLazyObject
@@ -219,13 +219,13 @@ def contest_ranking_ajax(request, key):
     if not exists:
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
-    return render_to_response('contest/ranking_table.jade', {
+    return render(request, 'contest/ranking_table.jade', {
         'users': ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')),
         'problems': problems,
         'contest': contest,
         'show_organization': True,
         'has_rating': contest.ratings.exists(),
-    }, context_instance=RequestContext(request))
+    })
 
 
 def contest_ranking_view(request, contest):
@@ -236,7 +236,7 @@ def contest_ranking_view(request, contest):
             raise Http404()
 
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
-    return render_to_response('contest/ranking.jade', {
+    return render(request, 'contest/ranking.jade', {
         'users': ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')),
         'title': '%s Rankings' % contest.name,
         'content_title': contest.name,
@@ -246,7 +246,7 @@ def contest_ranking_view(request, contest):
         'show_organization': True,
         'last_msg': event.last(),
         'has_rating': contest.ratings.exists(),
-    }, context_instance=RequestContext(request))
+    })
 
 
 def contest_ranking(request, key):
