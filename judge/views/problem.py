@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Count, Q, F
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext, Context
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
@@ -346,12 +346,12 @@ def problem_submit(request, problem=None, submission=None):
     if 'language' in form_data:
         form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = profile.ace_theme
-    return render_to_response('problem/submit.jade', {
+    return render(request, 'problem/submit.jade', {
         'form': form,
         'title': 'Submit',
         'langs': Language.objects.all(),
         'no_judges': not form.fields['language'].queryset
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required

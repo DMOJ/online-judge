@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count, Min
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext, Context
 from django.utils.html import format_html
 from django.views.generic import DetailView
@@ -97,23 +97,23 @@ def edit_profile(request):
     else:
         form = ProfileForm(instance=profile)
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
-    return render_to_response('user/edit_profile.jade', {
+    return render(request, 'user/edit_profile.jade', {
         'form': form, 'title': 'Edit profile',
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD'),
-    }, context_instance=RequestContext(request))
+    })
 
 
 def users(request):
     if request.user.is_authenticated() and request.user.profile.contest.current is not None:
         return contest_ranking_view(request, request.user.profile.contest.current.contest)
-    return render_to_response('user/list.jade', {
+    return render(request, 'user/list.jade', {
         'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
                                .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
                                .select_related('user__username')
                                .only('display_rank', 'user__username', 'name', 'points', 'rating')),
         'title': 'Users'
-    }, context_instance=RequestContext(request))
+    })
 
 
 class UserRating(TitleMixin, UserMixin, DetailView):

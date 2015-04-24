@@ -1,6 +1,6 @@
 from django.http import Http404
 
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from django.views.generic import DetailView
 
@@ -12,16 +12,16 @@ __all__ = ['status_all', 'status_table']
 
 
 def status_all(request):
-    return render_to_response('judge_status.jade', {
+    return render(request, 'judge_status.jade', {
         'judges': Judge.objects.all(),
         'title': 'Status',
-    }, context_instance=RequestContext(request))
+    })
 
 
 def status_table(request):
-    return render_to_response('judge_status_table.jade', {
+    return render(request, 'judge_status_table.jade', {
         'judges': Judge.objects.all(),
-    }, context_instance=RequestContext(request))
+    })
 
 
 class JudgeDetail(TitleMixin, DetailView):
