@@ -77,7 +77,12 @@ if submission.status != 'IE'
             br
             if submission.result != "AB"
                 b Final score:
-                | &nbsp;#{submission.case_points|floatformat:"0"}/#{submission.case_total|floatformat:"0"} (#{submission.points|floatformat:"1"}/#{submission.problem.points|floatformat:"-1"} points)
+                |  #{submission.case_points|floatformat:"0"}/#{submission.case_total|floatformat:"0"}
+                if IN_CONTEST and submission.contest_or_none
+                    - with contest=submission.contest_or_none
+                        | (#{contest.points|floatformat:"1"}/#{contest.problem.points} points)
+                else
+                    | (#{submission.points|floatformat:"1"}/#{submission.problem.points|floatformat:"-1"} points)
             else
                 b Submission aborted!
             br

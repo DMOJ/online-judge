@@ -371,6 +371,13 @@ class Submission(models.Model):
     def get_absolute_url(self):
         return reverse('submission_status', args=(self.id,))
 
+    @cached_property
+    def contest_or_none(self):
+        try:
+            return self.contest
+        except ObjectDoesNotExist:
+            return None
+
     class Meta:
         permissions = (
             ('abort_any_submission', 'Abort any submission'),
