@@ -1,5 +1,6 @@
 from functools import partial
 from operator import itemgetter, attrgetter
+from django import forms
 from django.conf import settings
 
 from django.contrib import admin, messages
@@ -135,10 +136,13 @@ class ProfileAdmin(Select2SuitMixin, reversion.VersionAdmin):
 
 
 class ProblemForm(ModelForm):
+    change_message = forms.CharField(max_length=256)
+
     def __init__(self, *args, **kwargs):
         super(ProblemForm, self).__init__(*args, **kwargs)
         self.fields['authors'].widget.can_add_related = False
         self.fields['banned_users'].widget.can_add_related = False
+        self.fields['change_message'].widget.attrs.update({'placeholder': 'Describe the changes you made (optional)'})
 
     class Meta:
         if use_select2:
@@ -280,6 +284,11 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         super(ProblemAdmin, self).save_model(request, obj, form, change)
         if form.changed_data and 'is_public' in form.changed_data:
             self._update_points(obj.id, '+' if obj.is_public else '-')
+
+    def construct_change_message(self, request, form, formsets):
+        if form.cleaned_data.get('change_message'):
+            return form.cleaned_data['change_message']
+        return super(ProblemAdmin, self).construct_change_message(request, form, formsets)
 
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
