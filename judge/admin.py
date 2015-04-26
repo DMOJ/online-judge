@@ -136,7 +136,7 @@ class ProfileAdmin(Select2SuitMixin, reversion.VersionAdmin):
 
 
 class ProblemForm(ModelForm):
-    change_message = forms.CharField(max_length=256)
+    change_message = forms.CharField(max_length=256, label='Edit reason', required=False)
 
     def __init__(self, *args, **kwargs):
         super(ProblemForm, self).__init__(*args, **kwargs)
@@ -190,7 +190,8 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         ('Points', {'fields': (('points', 'partial'), 'short_circuit')}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
         ('Language', {'fields': ('allowed_languages',)}),
-        ('Justice', {'fields': ('banned_users',)})
+        ('Justice', {'fields': ('banned_users',)}),
+        ('History', {'fields': ('change_message',)})
     )
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public']
     ordering = ['code']
