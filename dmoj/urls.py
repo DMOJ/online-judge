@@ -93,6 +93,7 @@ urlpatterns = patterns('',
 
     url(r'^problems/$', problem.ProblemList.as_view(), name='problem_list'),
     url(r'^problems/own/$', problem.OwnProblemList.as_view(), name='own_problem_list'),
+    url(r'^problems/random/$', problem.random_problem, name='problem_random'),
     url(r'^problem/(?P<code>[^/]+)$', problem.ProblemDetail.as_view(), name='problem_detail'),
     url(r'^problem/(?P<code>[^/]+)/raw$', problem.ProblemRaw.as_view(), name='problem_raw'),
     url(r'^problem/(?P<code>[^/]+)/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),

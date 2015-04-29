@@ -1,6 +1,7 @@
 import logging
 from operator import attrgetter
 import os
+from random import randrange
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
@@ -380,3 +381,8 @@ def clone_problem(request, code):
     problem.authors.add(request.user.profile)
     problem.allowed_languages = languages
     return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
+
+
+def random_problem(request):
+    count = Problem.objects.filter(is_public=True).aggregate(count=Count('id'))['count']
+    return HttpResponseRedirect(Problem.objects.all()[randrange(count)].get_absolute_url())
