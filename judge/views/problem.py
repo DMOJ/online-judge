@@ -385,4 +385,4 @@ def clone_problem(request, code):
 
 def random_problem(request):
     count = Problem.objects.filter(is_public=True).aggregate(count=Count('id'))['count']
-    return HttpResponseRedirect(Problem.objects.all()[randrange(count)].get_absolute_url())
+    return HttpResponseRedirect(Problem.objects.filter(is_public=True)[randrange(count)].get_absolute_url())
