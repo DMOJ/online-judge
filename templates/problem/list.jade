@@ -71,8 +71,8 @@ block body
                 label(for='hide_solved') Hide solved problems
                 input(type='checkbox', name='show_types', id='show_types', checked=('checked' if show_types else undefined), value='1')
                 label(for='show_types') Show problem tags
-                input(type='submit', value='Filter', style='display: inline; padding: 0px 5px 0px 5px')
-                a.button(href='{% url "problem_random" %}') Random
+                input(type='submit', value='Filter', style='display: inline; padding: 0px 5px')
+                a.button(href='{% url "problem_random" %}', style='display: inline; padding: 1.5px 5px; margin-left: 5px') Random
     table#problem-table.table.striped
         thead
             tr
