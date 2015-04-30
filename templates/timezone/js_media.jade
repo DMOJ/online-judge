@@ -1,0 +1,43 @@
+- load compress
+- compress js
+    script(src='{% static "featherlight.min.js" %}', type='text/javascript', charset='utf-8')
+    script(type='text/javascript', src='{% static "timezone-picker.js" %}')
+    script(type='text/javascript')
+        $(function () {
+            $('#open-map').featherlight({
+                afterOpen: function () {
+                    timezone_picker($('.featherlight-inner .map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
+                }
+            });
+        });
+
+        if ('geolocation' in navigator) {
+            $(function () {
+                $('<span>, <a href="#" id="detect-tz">detect</a></span>').insertAfter('#open-map');
+                $('#detect-tz').click(function (event) {
+                    var button = $(this).html('detecting...');
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        $.ajax({
+                            url: 'https://maps.googleapis.com/maps/api/timezone/json',
+                            data: {
+                                location: position.coords.latitude + ',' + position.coords.longitude,
+                                timestamp: Math.floor(Date.now() / 1000)
+                            }
+                        }).done(function (data) {
+                            if (data['timeZoneId'])
+                                $('#id_timezone').val(data.timeZoneId);
+                            else
+                                alert('Invalid response from Google: ' + data);
+                        }).fail(function (jqXHR, status) {
+                            alert(status);
+                        }).always(function () {
+                            button.html('detect');
+                        });
+                    }, function () {
+                        button.html('detect');
+                        alert('Unable to detect');
+                    });
+                    event.preventDefault();
+                });
+            });
+        }

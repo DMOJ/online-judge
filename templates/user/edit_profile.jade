@@ -2,15 +2,10 @@ extends base
 - load staticfiles
 
 block media
-    link(rel='stylesheet', href='{% static "timezone-map.css" %}')
-    style
-        .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
-        .map-wrap { display: none }
-        .featherlight { z-index: 1000 }
-        .featherlight .featherlight-content { min-width: 80% }
-    if TIMEZONE_BG
-        style
-            .map-wrap { background: #{TIMEZONE_BG} }
+    include timezone/media
+
+block js_media
+    include timezone/js_media
 
 block body
     form.form-area(action='', method='post')
@@ -54,19 +49,8 @@ block body
         hr
         a(href='{% url "password_change" %}') Change your password
         hr
-        input(type='submit', style="float:right;", value='Update profile')
+        input(type='submit', style='float:right', value='Update profile')
     div.map-wrap
         div.map-inset
             div.map-axis-x
             div.map-axis-y
-
-block bodyend
-    script(type='text/javascript', src='{% static "timezone-picker.js" %}')
-    script(type='text/javascript')
-        $(function () {
-            $('#open-map').featherlight({
-                afterOpen: function () {
-                    timezone_picker($('.featherlight-inner .map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
-                }
-            });
-        });

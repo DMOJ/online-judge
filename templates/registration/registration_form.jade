@@ -3,20 +3,10 @@ extends base
 - load compress
 
 block media
-    - compress css
-        if TIMEZONE_BG
-            style
-                .map-wrap { background: #{TIMEZONE_BG} }
-        link(rel='stylesheet', href='{% static "timezone-map.css" %}')
-        link(type='text/css', rel='stylesheet', href='{% static "featherlight.min.css" %}')
-        style
-            .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
-            .map-wrap { display: none }
-            .featherlight { z-index: 1000 }
-            .featherlight .featherlight-content { min-width: 80% }
+    include timezone/media
 
 block js_media
-    script(src='{% static "featherlight.min.js" %}', type='text/javascript', charset='utf-8')
+    include timezone/js_media
 
 block body
     form.form-area(action='', method='post')
@@ -77,45 +67,3 @@ block body
         div.map-inset
             div.map-axis-x
             div.map-axis-y
-
-block bodyend
-    script(type='text/javascript', src='{% static "timezone-picker.js" %}')
-    script(type='text/javascript')
-        $(function () {
-            $('#open-map').featherlight({
-                afterOpen: function () {
-                    timezone_picker($('.featherlight-inner .map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
-                }
-            });
-        });
-    script(type='text/javascript')
-        if ('geolocation' in navigator) {
-            $(function () {
-                $('<span>, <a href="#" id="detect-tz">detect</a></span>').insertAfter('#open-map');
-                $('#detect-tz').click(function (event) {
-                    var button = $(this).html('detecting...');
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        $.ajax({
-                            url: 'https://maps.googleapis.com/maps/api/timezone/json',
-                            data: {
-                                location: position.coords.latitude + ',' + position.coords.longitude,
-                                timestamp: Math.floor(Date.now() / 1000)
-                            }
-                        }).done(function (data) {
-                            if (data['timeZoneId'])
-                                $('#id_timezone').val(data.timeZoneId);
-                            else
-                                alert('Invalid response from Google: ' + data);
-                        }).fail(function (jqXHR, status) {
-                            alert(status);
-                        }).always(function () {
-                            button.html('detect');
-                        });
-                    }, function () {
-                        button.html('detect');
-                        alert('Unable to detect');
-                    });
-                    event.preventDefault();
-                });
-            });
-        }
