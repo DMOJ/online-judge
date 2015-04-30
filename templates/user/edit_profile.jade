@@ -15,7 +15,40 @@ block media
 block body
     form.form-area(action='', method='post')
         - csrf_token
-        table(border=0, style='text-align:left') #{form.as_table}
+        table(border=0, style='text-align:left')
+            tr
+                th
+                    b Display name:
+                td
+                    | #{form.display_name}
+            tr
+                th
+                    b Self-description:
+                td
+                    | #{form.about}
+            tr
+                th
+                    b Organization:
+                td
+                    | #{form.organization}
+            tr
+                th
+                    b Location:
+                td
+                    | #{form.timezone}
+                    = ' or '
+                    a#open-map(href='#', data-featherlight='.map-wrap')
+                        | pick from map
+            tr
+                th
+                    b Preferred language:
+                td
+                    | #{form.language}
+            tr
+                th
+                    b Ace theme:
+                td
+                    | #{form.ace_theme}
         a(href='http://www.gravatar.com/', title='Change your avatar...', target='_blank') Change your avatar
         br
         hr
