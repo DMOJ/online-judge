@@ -26,7 +26,7 @@ class ProfileForm(ModelForm):
         fields = ['name', 'about', 'organization', 'timezone', 'language', 'ace_theme']
         widgets = {}
         if Select2Widget is not None:
-            widgets['timezone'] = Select2Widget({'style': 'width: 200px'})
+            widgets['timezone'] = Select2Widget(attrs={'style': 'width: 200px'})
 
     def clean_name(self):
         return fix_unicode(self.cleaned_data['name'])
