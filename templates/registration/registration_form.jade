@@ -24,8 +24,6 @@ block body
         if form.errors
             #form-errors
                 | #{form.non_field_errors}
-                | #{form.parent.errors}
-                | #{form.parent}
         .reg-post-wrapper
             table(border=0, style='text-align:left')
                 tr
