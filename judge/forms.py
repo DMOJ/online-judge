@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
-from django.forms import ModelForm, CharField
+from django.forms import ModelForm, CharField, TextInput
 
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode, Language
@@ -24,7 +24,7 @@ class ProfileForm(ModelForm):
     class Meta:
         model = Profile
         fields = ['name', 'about', 'organization', 'timezone', 'language', 'ace_theme']
-        widgets = {}
+        widgets = {'name': TextInput(attrs={'style': 'width: 100%; box-sizing: border-box'})}
         if Select2Widget is not None:
             widgets['timezone'] = Select2Widget(attrs={'style': 'width: 200px'})
             widgets['language'] = Select2Widget(attrs={'style': 'width: 300px'})
