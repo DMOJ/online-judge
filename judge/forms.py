@@ -27,6 +27,11 @@ class ProfileForm(ModelForm):
         widgets = {}
         if Select2Widget is not None:
             widgets['timezone'] = Select2Widget(attrs={'style': 'width: 200px'})
+            widgets['language'] = Select2Widget(attrs={'style': 'width: 300px'})
+            widgets['ace_theme'] = Select2Widget(attrs={'style': 'width: 300px'})
+        if HeavySelect2MultipleWidget is not None:
+            widgets['organization'] = HeavySelect2MultipleWidget(data_view='organization_select2',
+                                                                 attrs={'style': 'width: 300px'})
 
     def clean_name(self):
         return fix_unicode(self.cleaned_data['name'])
