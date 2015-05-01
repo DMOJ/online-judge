@@ -12,11 +12,10 @@ from judge.models import Organization, Profile, Submission, Problem, PrivateMess
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 try:
-    from django_select2.widgets import HeavySelect2MultipleWidget, Select2Widget, HeavySelect2Widget
+    from django_select2.widgets import HeavySelect2MultipleWidget, Select2Widget
 except ImportError:
     HeavySelect2MultipleWidget = None
     Select2Widget = None
-    HeavySelect2Widget = None
 
 use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
 
@@ -30,9 +29,7 @@ class ProfileForm(ModelForm):
             widgets['timezone'] = Select2Widget(attrs={'style': 'width: 200px'})
             widgets['language'] = Select2Widget(attrs={'style': 'width: 300px'})
             widgets['ace_theme'] = Select2Widget(attrs={'style': 'width: 300px'})
-        if HeavySelect2Widget is not None:
-            widgets['organization'] = HeavySelect2Widget(data_view='organization_select2',
-                                                                 attrs={'style': 'width: 300px'})
+            widgets['organization'] = Select2Widget(attrs={'style': 'width: 300px'})
 
     def clean_name(self):
         return fix_unicode(self.cleaned_data['name'])
