@@ -1,8 +1,3 @@
-script(type='text/javascript')
-    var imgs = document.getElementsByClassName('tex-image');
-    for (var i = 0; i < imgs.length; ++i) imgs[i].style.display = 'none';
-    var txts = document.getElementsByClassName('tex-text');
-    for (var i = 0; i < txts.length; ++i) txts[i].style.display = '';
 | <script type='text/x-mathjax-config'>
 |   MathJax.Hub.Config({
 |     messageStyle: 'none',
@@ -12,3 +7,8 @@ script(type='text/javascript')
 |   });
 | </script>
 script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
+script(type='text/javascript')
+    MathJax.Hub.queue.Push(function () {
+        $('.tex-image').hide();
+        $('.tex-text').show();
+    });
