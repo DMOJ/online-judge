@@ -28,6 +28,11 @@ from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidg
 
 try:
     from django_select2.widgets import HeavySelect2Widget, HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
+
+    class HeavySelect2Widget(HeavySelect2Widget):
+        @property
+        def is_hidden(self):
+            return False
 except ImportError:
     HeavySelect2Widget = None
     HeavySelect2MultipleWidget = None
