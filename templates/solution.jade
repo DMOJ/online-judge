@@ -19,8 +19,12 @@ block title
 
 block content_title
     | #{solution.title}
-    if perms.judge.change_solution
-        div(style='float:right')
+    div(style='float:right')
+        if solution.problem
+            | [
+            a(href='{% url "problem_detail" solution.problem.code %}') Problem
+            | ]
+        if perms.judge.change_solution
             | [
             a(href='{% url "admin:judge_solution_change" solution.id %}') Edit
             | ]
