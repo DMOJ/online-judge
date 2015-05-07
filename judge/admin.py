@@ -929,7 +929,7 @@ class SolutionForm(ModelForm):
     class Meta:
         if use_select2:
             widgets = {
-                'problem': HeavySelect2Widget(data_view='problem_select2'),
+                'problem': HeavySelect2Widget(data_view='problem_select2', attrs={'style': 'width: 250px'}),
             }
 
 
