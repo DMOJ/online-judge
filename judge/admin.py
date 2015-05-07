@@ -925,13 +925,19 @@ class BlogPostAdmin(reversion.VersionAdmin):
         }
 
 
-class SolutionAdmin(reversion.VersionAdmin):
-    fields = ('url', 'title', 'is_public', 'publish_on', 'content')
-    list_display = ('title', 'url')
-    search_fields = ('url', 'title')
+class SolutionForm(ModelForm):
+    class Meta:
+        if use_select2:
+            widgets = {
+                'problem': HeavySelect2Widget(data_view='problem_select2'),
+            }
 
-    def get_queryset(self, request):
-        return Solution.objects.all()
+
+class SolutionAdmin(reversion.VersionAdmin):
+    fields = ('url', 'title', 'is_public', 'publish_on', 'content', 'problem')
+    list_display = ('title', 'url', 'problem')
+    search_fields = ('url', 'title')
+    form = SolutionForm
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
