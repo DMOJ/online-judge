@@ -745,6 +745,8 @@ class Solution(models.Model):
     publish_on = models.DateTimeField()
     content = models.TextField()
     authors = models.ManyToManyField(Profile, blank=True)
+    problem = models.ForeignKey(Problem, on_delete=models.SET_NULL, verbose_name='Associated problem',
+                                null=True, blank=True)
 
     def __unicode__(self):
         return self.title
