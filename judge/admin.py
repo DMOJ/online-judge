@@ -934,7 +934,7 @@ class SolutionForm(ModelForm):
 
 
 class SolutionAdmin(reversion.VersionAdmin):
-    fields = ('url', 'title', 'is_public', 'publish_on', 'content', 'problem')
+    fields = ('url', 'title', 'is_public', 'publish_on', 'problem', 'content')
     list_display = ('title', 'url', 'problem')
     search_fields = ('url', 'title')
     form = SolutionForm
