@@ -940,6 +940,8 @@ class SolutionAdmin(reversion.VersionAdmin):
     form = SolutionForm
 
     def problem_link(self, obj):
+        if obj is None:
+            return 'N/A'
         return format_html('<a href="{}">{}</a>', reverse('admin:judge_problem_change', args=[obj.problem_id]),
                            obj.problem.name)
     problem_link.admin_order_field = 'problem__name'
