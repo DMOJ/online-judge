@@ -935,7 +935,7 @@ class SolutionForm(ModelForm):
 
 class SolutionAdmin(reversion.VersionAdmin):
     fields = ('url', 'title', 'is_public', 'publish_on', 'problem', 'content')
-    list_display = ('title', 'url', 'problem_link')
+    list_display = ('title', 'url', 'problem_link', 'link')
     search_fields = ('url', 'title')
     form = SolutionForm
 
@@ -945,6 +945,9 @@ class SolutionAdmin(reversion.VersionAdmin):
         return format_html('<a href="{}">{}</a>', reverse('admin:judge_problem_change', args=[obj.problem_id]),
                            obj.problem.name)
     problem_link.admin_order_field = 'problem__name'
+
+    def link(self, obj):
+        return format_html('<a href="{}">Link</a>', obj.get_absolute_url())
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {

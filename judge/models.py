@@ -748,6 +748,9 @@ class Solution(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.SET_NULL, verbose_name='Associated problem',
                                 null=True, blank=True)
 
+    def get_absolute_url(self):
+        return reverse('solution', args=[self.link])
+
     def __unicode__(self):
         return self.title
 
