@@ -749,7 +749,7 @@ class Solution(models.Model):
                                 null=True, blank=True)
 
     def get_absolute_url(self):
-        return reverse('solution', args=[self.link])
+        return reverse('solution', args=[self.url])
 
     def __unicode__(self):
         return self.title
