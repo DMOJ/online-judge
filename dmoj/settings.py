@@ -141,6 +141,40 @@ ROOT_URLCONF = 'dmoj.urls'
 
 WSGI_APPLICATION = 'dmoj.wsgi.application'
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
+                'judge.template_context.comet_location',
+                'judge.template_context.get_resource',
+                'judge.template_context.general_info',
+                'judge.template_context.site',
+                'judge.template_context.misc_config',
+                'judge.template_context.contest',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
+            ],
+            'loaders': [
+                ('pyjade.ext.django.Loader', (
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                ))
+            ]
+        },
+    },
+]
+
+
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
     'judge.template_context.comet_location',
