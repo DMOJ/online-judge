@@ -559,7 +559,7 @@ class LanguageAdmin(Select2SuitMixin, reversion.VersionAdmin):
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
+            TextField: {'widget': MathJaxAdminPagedownWidget(load_math=False)},
         }
 
     def save_model(self, request, obj, form, change):
