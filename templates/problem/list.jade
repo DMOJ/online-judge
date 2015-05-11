@@ -10,9 +10,6 @@ block js_media
     script(type='text/javascript')
         $(document).ready(function () {
             $("#problem-table").tablesorter({
-                sortList: [
-                    [3, 0]
-                ],
                 textExtraction: function (node) {
                     node = $(node);
                     var text = node.text().replace(/^\s+|\s+$/g, '');
