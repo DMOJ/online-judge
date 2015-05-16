@@ -1,6 +1,5 @@
 extends common-content
 - load staticfiles
-- load mathtag
 - load markdown_trois_tags
 - load cache
 - load smart_math
@@ -90,12 +89,7 @@ block info_float
     br
     i.fa.fa-database.fa-fw
     b Memory limit:
-    -with memory=problem.memory_limit
-        if memory < 1000
-            |  #{memory|floatformat:"-2"}K
-        else
-            - math memory "$1 / 1024" as megabytes
-            | #{megabytes|floatformat:"-2"}M
+    |  #{memory|filesizeformat}
     br
     - cache 86400 problem_authors problem.id
         - with authors=problem.authors.all
