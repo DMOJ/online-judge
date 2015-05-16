@@ -1,5 +1,6 @@
 from django.template import Library
 from django.utils.html import avoid_wrapping
+from django.template.defaultfilters import filesizeformat
 
 register = Library()
 
@@ -31,3 +32,7 @@ def detailfilesizeformat(bytes):
         value = '%.2f PB' % (bytes / PB)
 
     return avoid_wrapping(value)
+
+@register.filter(is_safe=True)
+def kbfilesizeformat(kb):
+    return filesizeformat(kb * 1024)
