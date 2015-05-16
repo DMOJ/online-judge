@@ -29,7 +29,7 @@ def _format_size(bytes, callback):
 
 @register.filter(is_safe=True)
 def detailfilesizeformat(bytes):
-    return avoid_wrapping(_format_size(bytes, lambda x, y: ['%d B', '%.2f %sB'][bool(x)] % y))
+    return avoid_wrapping(_format_size(bytes, lambda x, y: ['%d %sB', '%.2f %sB'][bool(x)] % (y, x)))
 
 @register.filter(is_safe=True)
 def kbsimpleformat(kb):
