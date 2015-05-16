@@ -1,3 +1,4 @@
+import django
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
@@ -31,7 +32,7 @@ class UserMixin(object):
     context_object_name = 'user'
 
     def render_to_response(self, context, **response_kwargs):
-        if not isinstance(context, Context):
+        if django.VERSION < (1, 8) and not isinstance(context, Context):
             context = RequestContext(self.request, context)
             context[self.context_object_name] = self.object
         return super(UserMixin, self).render_to_response(context, **response_kwargs)
