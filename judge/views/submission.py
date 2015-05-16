@@ -120,7 +120,7 @@ class SubmissionsListBase(TitleMixin, ListView):
                              orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
 
     def get_result_table(self):
-        return get_result_table(self.get_queryset().defer(None))
+        return get_result_table(self.get_queryset().order_by())
 
     def access_check(self, request):
         pass
