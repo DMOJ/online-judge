@@ -89,7 +89,7 @@ block info_float
     br
     i.fa.fa-database.fa-fw
     b Memory limit:
-    |  #{memory|filesizeformat}
+    |  #{problem.memory_limit|filesizeformat}
     br
     - cache 86400 problem_authors problem.id
         - with authors=problem.authors.all
