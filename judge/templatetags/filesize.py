@@ -4,12 +4,8 @@ from django.template.defaultfilters import filesizeformat
 
 register = Library()
 
-@register.filter(is_safe=True)
-def detailfilesizeformat(bytes):
-    """
-    Formats the value like a 'human-readable' file size (i.e. 13 KB, 4.1 MB,
-    102 bytes, etc).
-    """
+
+def _format_size(bytes, callback):
     bytes = float(bytes)
 
     KB = 1 << 10
@@ -19,20 +15,23 @@ def detailfilesizeformat(bytes):
     PB = 1 << 50
 
     if bytes < KB:
-        value = '%d B' % bytes
+        return callback('', bytes)
     elif bytes < MB:
-        value = '%.2f KB' % (bytes / KB)
+        return callback('K', bytes / KB)
     elif bytes < GB:
-        value = '%.2f MB' % (bytes / MB)
+        return callback('M', bytes / MB)
     elif bytes < TB:
-        value = '%.2f GB' % (bytes / GB)
+        return callback('G', bytes / GB)
     elif bytes < PB:
-        value = '%.2f TB' % (bytes / TB)
+        return callback('T', bytes / TB)
     else:
-        value = '%.2f PB' % (bytes / PB)
-
-    return avoid_wrapping(value)
+        return callback('P', bytes / PB)
+    
 
 @register.filter(is_safe=True)
-def kbfilesizeformat(kb):
-    return filesizeformat(kb * 1024)
+def detailfilesizeformat(bytes):
+    return avoid_wrapping(_format_size(bytes, lambda x, y: ['%d B', '%.2f %sB'][bool(x)] % y))
+
+@register.filter(is_safe=True)
+def kbsimpleformat(kb):
+    return filesizeformat(kb * 1024, lambda x, y: '%.0f%s' % (y, x or 'B'))
