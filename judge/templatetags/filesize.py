@@ -34,4 +34,4 @@ def detailfilesizeformat(bytes):
 
 @register.filter(is_safe=True)
 def kbsimpleformat(kb):
-    return filesizeformat(kb * 1024, lambda x, y: '%.0f%s' % (y, x or 'B'))
+    return _format_size(kb * 1024, lambda x, y: '%.0f%s' % (y, x or 'B'))
