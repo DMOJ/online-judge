@@ -56,7 +56,7 @@ if submission.status != 'IE'
                                     span #{case.time|floatformat:"3"}s,
                         td
                             if case.status != 'SC'
-                                | #{memory|detailfilesizeformat}
+                                | #{case.memory|detailfilesizeformat}
                         if not batch.grouper
                             td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
                     if case.status != 'AC' and case.output
