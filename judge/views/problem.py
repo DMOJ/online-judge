@@ -137,7 +137,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                 with WebKitPdfMaker() as maker:
                     maker.html = get_template('problem/raw.jade').render(Context({
                         'problem': problem
-                    }))
+                    })).replace('"//', '"http://')
                     for file in ('style.css', 'pygment-github.css'):
                         maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
                     maker.make()
