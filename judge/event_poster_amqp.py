@@ -23,7 +23,7 @@ class EventPoster(object):
         try:
             id = int(time() * 1000000)
             self._chan.basic_publish(self._exchange, '',
-                                     json.dumps({'time': id, 'channel': channel, 'message': message}))
+                                     json.dumps({'id': id, 'channel': channel, 'message': message}))
             return id
         except AMQPError:
             if tries > 10:
