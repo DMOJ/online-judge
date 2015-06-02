@@ -118,6 +118,9 @@ INSTALLED_APPS += (
     'django_social_share',
     'social.apps.django_app.default',
     'compressor',
+    'django_ace',
+    'pagedown',
+
 )
 
 MIDDLEWARE_CLASSES = (
