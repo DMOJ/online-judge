@@ -419,7 +419,7 @@ class Comment(MPTTModel):
     body = models.TextField(verbose_name='Body of comment')
     hidden = models.BooleanField(verbose_name='Hide the comment', default=0)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='replies')
-    versions = GenericRelation(Version)
+    versions = GenericRelation(Version, object_id_field='object_id_int')
 
     class MPTTMeta:
         order_insertion_by = ['-time']
