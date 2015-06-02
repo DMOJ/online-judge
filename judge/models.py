@@ -411,7 +411,7 @@ class SubmissionTestCase(models.Model):
 class Comment(MPTTModel):
     author = models.ForeignKey(Profile, verbose_name='Commenter')
     time = models.DateTimeField(verbose_name='Posted time', auto_now_add=True)
-    page = models.CharField(max_length=30, verbose_name='Associated Page',
+    page = models.CharField(max_length=30, verbose_name='Associated Page', index=True,
                             validators=[RegexValidator('^[pc]:[a-z0-9]+$|^b:\d+$|^s:',
                                                        'Page code must be ^[pc]:[a-z0-9]+$|^b:\d+$')])
     score = models.IntegerField(verbose_name='Votes', default=0)
