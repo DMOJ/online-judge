@@ -700,9 +700,9 @@ class JudgeAdmin(reversion.VersionAdmin):
             return not obj.online
         return result
 
-    if AdminPagedownWidget is not None:
+    if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
+            TextField: {'widget': MathJaxAdminPagedownWidget(load_math=False)},
         }
 
 
