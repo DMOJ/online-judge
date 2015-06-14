@@ -1,0 +1,13 @@
+- load compress
+- load staticfiles
+- compress css
+    if TIMEZONE_BG
+        style
+            .map-wrap { background: #{TIMEZONE_BG} }
+    link(rel='stylesheet', href='{% static "timezone-map.css" %}')
+    link(type='text/css', rel='stylesheet', href='{% static "featherlight.min.css" %}')
+    style
+        .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
+        .map-wrap { display: none }
+        .featherlight { z-index: 1000 }
+        .featherlight .featherlight-content { min-width: 80% }

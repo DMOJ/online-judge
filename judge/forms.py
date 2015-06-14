@@ -5,16 +5,17 @@ from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
-from django.forms import ModelForm, CharField
+from django.forms import ModelForm, CharField, TextInput
 
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode, Language
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 try:
-    from django_select2.widgets import HeavySelect2MultipleWidget
+    from django_select2.widgets import HeavySelect2MultipleWidget, Select2Widget
 except ImportError:
     HeavySelect2MultipleWidget = None
+    Select2Widget = None
 
 use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
 
@@ -23,6 +24,12 @@ class ProfileForm(ModelForm):
     class Meta:
         model = Profile
         fields = ['name', 'about', 'organization', 'timezone', 'language', 'ace_theme']
+        widgets = {'name': TextInput(attrs={'style': 'width: 100%; box-sizing: border-box'})}
+        if Select2Widget is not None:
+            widgets['timezone'] = Select2Widget(attrs={'style': 'width: 200px'})
+            widgets['language'] = Select2Widget(attrs={'style': 'width: 300px'})
+            widgets['ace_theme'] = Select2Widget(attrs={'style': 'width: 300px'})
+            widgets['organization'] = Select2Widget(attrs={'style': 'width: 300px'})
 
     def clean_name(self):
         return fix_unicode(self.cleaned_data['name'])

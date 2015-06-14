@@ -50,11 +50,12 @@ else:
                 'label': 'Site',
                 'icon': 'icon-leaf',
                 'models': (
+                    'judge.blogpost',
+                    'judge.comment',
                     'sites.site',
                     'flatpages.flatpage',
-                    'judge.blogpost',
                     'judge.miscconfig',
-                    'judge.navigationbar'
+                    'judge.navigationbar',
                 ),
             },
             {
@@ -117,6 +118,9 @@ INSTALLED_APPS += (
     'django_social_share',
     'social.apps.django_app.default',
     'compressor',
+    'django_ace',
+    'pagedown',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -125,6 +129,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'judge.user_log.LogUserAccessMiddleware',
@@ -136,8 +141,39 @@ MIDDLEWARE_CLASSES = (
 ACCOUNT_ACTIVATION_DAYS = 7
 
 ROOT_URLCONF = 'dmoj.urls'
-
+LOGIN_REDIRECT_URL = '/user'
 WSGI_APPLICATION = 'dmoj.wsgi.application'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.media',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
+                'judge.template_context.comet_location',
+                'judge.template_context.get_resource',
+                'judge.template_context.general_info',
+                'judge.template_context.site',
+                'judge.template_context.misc_config',
+                'judge.template_context.contest',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
+            ],
+            'loaders': [
+                ('pyjade.ext.django.Loader', (
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                ))
+            ]
+        },
+    },
+]
+
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',

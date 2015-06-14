@@ -371,6 +371,13 @@ class Submission(models.Model):
     def get_absolute_url(self):
         return reverse('submission_status', args=(self.id,))
 
+    @cached_property
+    def contest_or_none(self):
+        try:
+            return self.contest
+        except ObjectDoesNotExist:
+            return None
+
     class Meta:
         permissions = (
             ('abort_any_submission', 'Abort any submission'),
@@ -404,7 +411,7 @@ class SubmissionTestCase(models.Model):
 class Comment(MPTTModel):
     author = models.ForeignKey(Profile, verbose_name='Commenter')
     time = models.DateTimeField(verbose_name='Posted time', auto_now_add=True)
-    page = models.CharField(max_length=30, verbose_name='Associated Page',
+    page = models.CharField(max_length=30, verbose_name='Associated Page', db_index=True,
                             validators=[RegexValidator('^[pc]:[a-z0-9]+$|^b:\d+$|^s:',
                                                        'Page code must be ^[pc]:[a-z0-9]+$|^b:\d+$')])
     score = models.IntegerField(verbose_name='Votes', default=0)
@@ -412,7 +419,7 @@ class Comment(MPTTModel):
     body = models.TextField(verbose_name='Body of comment')
     hidden = models.BooleanField(verbose_name='Hide the comment', default=0)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='replies')
-    versions = GenericRelation(Version)
+    versions = GenericRelation(Version, object_id_field='object_id_int')
 
     class MPTTMeta:
         order_insertion_by = ['-time']
@@ -454,7 +461,7 @@ class Comment(MPTTModel):
             return '<deleted>'
 
     def get_absolute_url(self):
-        return '%s#comment-%d-link' % (self.link, self.id)
+        return '%s#comment-%d' % (self.link, self.id)
 
     def __unicode__(self):
         return self.title
@@ -738,6 +745,11 @@ class Solution(models.Model):
     publish_on = models.DateTimeField()
     content = models.TextField()
     authors = models.ManyToManyField(Profile, blank=True)
+    problem = models.ForeignKey(Problem, on_delete=models.SET_NULL, verbose_name='Associated problem',
+                                null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('solution', args=[self.url])
 
     def __unicode__(self):
         return self.title

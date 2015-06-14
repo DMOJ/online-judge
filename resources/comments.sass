@@ -1,54 +1,82 @@
 .comment-score
-    font-weight: bold
-    text-align: center
+  font-weight: bold
+  text-align: center
 
 a
-    &.upvote-link, &.downvote-link
-        color: black
+  &.upvote-link, &.downvote-link
+    color: black
 
 .comment-area
-    margin-top: 40px
-
-.comment-link
-    display: block
-    position: relative
-    top: -50px
-    visibility: hidden
+  margin-top: 40px
 
 .comment-body
-    padding-right: 30px
-    padding-left: 30px
-    width: auto !important
+  padding-right: 30px
+  padding-left: 30px
+  width: auto !important
 
 .comment-author
-    font-weight: bold
-    color: #333
+  font-weight: bold
+  color: #333
 
 .comment-header
-    color: rgba(1, 1, 1, 1)
-    background: rgba(0, 0, 0, 0.1)
-    padding: 5px 10px 5px 5px
-    margin-left: 30px
-    border: 1px solid #ccc
-    border-radius: 4px
+  color: rgba(1, 1, 1, 1)
+  background: rgba(0, 0, 0, 0.1)
+  padding: 5px 10px 5px 5px
+  margin-left: 30px
+  border: 1px solid #ccc
+  border-radius: 4px
+  display: flex
+
+.comment-spacer
+  flex: 1
+
+.comment-edits:not(:empty)
+  padding-right: 2px
+  color: #444
+
+.comment-operation
+  float: right
+
+  .fa
+    color: #444
+
+  a + a
+    padding-left: 2px
 
 .comment-submit
-    width: 100%
-    max-width: 500px
+  width: 100%
+  max-width: 500px
 
 .comment-post-wrapper
-    div
-        padding-top: 2px
-        padding-bottom: 2px
-        padding-right: 10px
-    input, textarea
-        min-width: 100%
+  div
+    padding-top: 2px
+    padding-bottom: 2px
+    padding-right: 10px
+  input, textarea
+    min-width: 100%
+
+.comment-box
+  border-radius: 4px
+  padding: 5px 10px 10px 15px
+  border: 1px solid #ccc
+  background: rgba(0, 0, 0, .01)
 
 .comment
-    list-style: none none
-    background: rgba(0, 0, 0, 0.01)
-    border-radius: 4px
-    padding: 5px 10px 10px 15px
-    margin-left: -40px
-    margin-bottom: 10px
-    border: 1px solid #ccc
+  list-style: none none
+  border-radius: 4px
+  margin: -50px 0 10px -40px
+  padding-top:  50px
+
+  &:target > .comment-box
+    border-left: 10px solid #2980B9
+    padding-left: 5px
+
+  &:before
+    display: block
+    content: " "
+    margin-top: -50px
+    height: 50px
+    visibility: hidden
+
+.comment-title
+  font-weight: bold

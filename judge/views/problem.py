@@ -1,6 +1,7 @@
 import logging
 from operator import attrgetter
 import os
+from random import randrange
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
@@ -9,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Count, Q, F
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext, Context
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
@@ -136,7 +137,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                 with WebKitPdfMaker() as maker:
                     maker.html = get_template('problem/raw.jade').render(Context({
                         'problem': problem
-                    }))
+                    })).replace('"//', '"http://').replace("'//", "'http://")
                     for file in ('style.css', 'pygment-github.css'):
                         maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
                     maker.make()
@@ -346,12 +347,12 @@ def problem_submit(request, problem=None, submission=None):
     if 'language' in form_data:
         form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = profile.ace_theme
-    return render_to_response('problem/submit.jade', {
+    return render(request, 'problem/submit.jade', {
         'form': form,
         'title': 'Submit',
         'langs': Language.objects.all(),
         'no_judges': not form.fields['language'].queryset
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required
@@ -380,3 +381,8 @@ def clone_problem(request, code):
     problem.authors.add(request.user.profile)
     problem.allowed_languages = languages
     return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
+
+
+def random_problem(request):
+    count = Problem.objects.filter(is_public=True).aggregate(count=Count('id'))['count']
+    return HttpResponseRedirect(Problem.objects.filter(is_public=True)[randrange(count)].get_absolute_url())

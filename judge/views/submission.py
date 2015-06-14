@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, Imprope
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext, loader
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -120,7 +120,7 @@ class SubmissionsListBase(TitleMixin, ListView):
                              orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
 
     def get_result_table(self):
-        return get_result_table(self.get_queryset())
+        return get_result_table(self.get_queryset().order_by())
 
     def access_check(self, request):
         pass
@@ -160,7 +160,7 @@ class SubmissionsListBase(TitleMixin, ListView):
         if check is not None:
             return check
         if 'results' in request.GET:
-            return render_to_response('problem/statistics_table.jade', {'results': self.get_result_table()})
+            return render(request, 'problem/statistics_table.jade', {'results': self.get_result_table()})
         return super(SubmissionsListBase, self).get(request, *args, **kwargs)
 
 
@@ -260,12 +260,12 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
 def single_submission(request, id, show_problem=True):
     try:
         authenticated = request.user.is_authenticated()
-        return render_to_response('submission/row.jade', {
+        return render(request, 'submission/row.jade', {
             'submission': submission_related(Submission.objects).get(id=int(id)),
             'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
             'show_problem': show_problem,
             'profile_id': request.user.profile.id if authenticated else 0,
-        }, context_instance=RequestContext(request))
+        })
     except ObjectDoesNotExist:
         raise Http404()
 

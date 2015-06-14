@@ -10,7 +10,7 @@ block media
         .blog-content {
             padding-right: 1em;
             padding-left: 1em;
-            width: 81%;
+            width: 77.5%;
             display: table-cell;
             border: 1px solid #CCC;
             border-radius: 4px;
@@ -128,9 +128,9 @@ block body
                             a(href='{% url "user_page" comment.author.user.username %}') #{comment.author.user.username}
                         | &nbsp;&rarr;
                         if comment.parent
-                            a(href='{{comment.link}}#comment-{{comment.id}}-link') #{comment.parent.title}
+                            a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.parent.title}
                         else
-                            a(href='{{comment.link}}#comment-{{comment.id}}-link') #{comment.page_title}
+                            a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.page_title}
             div.dashed
             span.rssatom
                 a(href='{% url "comment_rss" %}')

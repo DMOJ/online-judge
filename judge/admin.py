@@ -1,5 +1,6 @@
 from functools import partial
 from operator import itemgetter, attrgetter
+from django import forms
 from django.conf import settings
 
 from django.contrib import admin, messages
@@ -27,6 +28,11 @@ from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidg
 
 try:
     from django_select2.widgets import HeavySelect2Widget, HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
+
+    class HeavySelect2Widget(HeavySelect2Widget):
+        @property
+        def is_hidden(self):
+            return False
 except ImportError:
     HeavySelect2Widget = None
     HeavySelect2MultipleWidget = None
@@ -135,10 +141,13 @@ class ProfileAdmin(Select2SuitMixin, reversion.VersionAdmin):
 
 
 class ProblemForm(ModelForm):
+    change_message = forms.CharField(max_length=256, label='Edit reason', required=False)
+
     def __init__(self, *args, **kwargs):
         super(ProblemForm, self).__init__(*args, **kwargs)
         self.fields['authors'].widget.can_add_related = False
         self.fields['banned_users'].widget.can_add_related = False
+        self.fields['change_message'].widget.attrs.update({'placeholder': 'Describe the changes you made (optional)'})
 
     class Meta:
         if use_select2:
@@ -186,7 +195,8 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         ('Points', {'fields': (('points', 'partial'), 'short_circuit')}),
         ('Limits', {'fields': ('time_limit', 'memory_limit')}),
         ('Language', {'fields': ('allowed_languages',)}),
-        ('Justice', {'fields': ('banned_users',)})
+        ('Justice', {'fields': ('banned_users',)}),
+        ('History', {'fields': ('change_message',)})
     )
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public']
     ordering = ['code']
@@ -280,6 +290,11 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         super(ProblemAdmin, self).save_model(request, obj, form, change)
         if form.changed_data and 'is_public' in form.changed_data:
             self._update_points(obj.id, '+' if obj.is_public else '-')
+
+    def construct_change_message(self, request, form, formsets):
+        if form.cleaned_data.get('change_message'):
+            return form.cleaned_data['change_message']
+        return super(ProblemAdmin, self).construct_change_message(request, form, formsets)
 
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
@@ -544,7 +559,7 @@ class LanguageAdmin(Select2SuitMixin, reversion.VersionAdmin):
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
+            TextField: {'widget': MathJaxAdminPagedownWidget(load_math=False)},
         }
 
     def save_model(self, request, obj, form, change):
@@ -685,9 +700,9 @@ class JudgeAdmin(reversion.VersionAdmin):
             return not obj.online
         return result
 
-    if AdminPagedownWidget is not None:
+    if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
+            TextField: {'widget': MathJaxAdminPagedownWidget(load_math=False)},
         }
 
 
@@ -910,13 +925,29 @@ class BlogPostAdmin(reversion.VersionAdmin):
         }
 
 
-class SolutionAdmin(reversion.VersionAdmin):
-    fields = ('url', 'title', 'is_public', 'publish_on', 'content')
-    list_display = ('title', 'url')
-    search_fields = ('url', 'title')
+class SolutionForm(ModelForm):
+    class Meta:
+        if use_select2:
+            widgets = {
+                'problem': HeavySelect2Widget(data_view='problem_select2', attrs={'style': 'width: 250px'}),
+            }
 
-    def get_queryset(self, request):
-        return Solution.objects.all()
+
+class SolutionAdmin(reversion.VersionAdmin):
+    fields = ('url', 'title', 'is_public', 'publish_on', 'problem', 'content')
+    list_display = ('title', 'url', 'problem_link', 'link')
+    search_fields = ('url', 'title')
+    form = SolutionForm
+
+    def problem_link(self, obj):
+        if obj.problem is None:
+            return 'N/A'
+        return format_html('<a href="{}">{}</a>', reverse('admin:judge_problem_change', args=[obj.problem_id]),
+                           obj.problem.name)
+    problem_link.admin_order_field = 'problem__name'
+
+    def link(self, obj):
+        return format_html('<a href="{}">Link</a>', obj.get_absolute_url())
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {

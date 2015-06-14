@@ -25,47 +25,49 @@ ul.comments.top-level-comments
                                 a.downvote-link.fa.fa-chevron-down.fa-fw(href='javascript:void(0)', title='Please login to vote')
                             br
                         .comment-header
-                            a.comment-link(name='comment-{{node.id}}-link')
-                            span.comment-author
-                                img(src='{% gravatar_url node.author.user.email 24 node.author.mute %}', width='24', height='24')
-                                span(class=node.author.display_rank)
-                                    a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
-                            = ' on '
-                            span.comment-time #{node.time|date:"N j, o, g:i a"}
-                            if node.revisions > 1
-                                |  (
-                                span.comment-edited Edited
-                                    if node.revisions > 2
-                                        - var edited = node.revisions - 1
-                                        = ' '
-                                        = edited
-                                        |  times
-                                    else
-                                        = 'once'
-                                | )
-                            = ' '
-                            span.comment-title #{node.title}
-                            = ' '
+                            span.comment-info
+                                span.comment-author
+                                    img(src='{% gravatar_url node.author.user.email 24 node.author.mute %}', width='24', height='24')
+                                    span(class=node.author.display_rank)
+                                        a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
+                                = ' on '
+                                span.comment-time #{node.time|date:"N j, o, g:i a"}
+                                = ' '
+                                span.comment-title #{node.title}
+                            span.comment-spacer
                             span.comment-operation
+                                if node.revisions > 2
+                                    span.comment-edits
+                                        - var edits = node.revisions - 1
+                                        | #{edits} edits
+                                elif node.revisions > 1
+                                    span.comment-edits edited
+                                else
+                                    span.comment-edits
+                                a.comment-link(href='#comment-{{ node.id }}', title='Link')
+                                    i.fa.fa-link.fa-fw
                                 a.history-link(data-featherlight='{% url "comment_history_ajax" node.id %}',
-                                               href='{% url "comment_history" node.id %}') History
+                                               href='{% url "comment_history" node.id %}', title='History')
+                                    i.fa.fa-history.fa-fw
                                 if logged_in
                                     - var can_edit = node.author.id == profile.id and not profile.mute
-                                    = ' '
                                     if can_edit
                                         a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}',
-                                                    href='{% url "comment_edit" node.id %}') Edit
+                                                    href='{% url "comment_edit" node.id %}', title='Edit')
+                                            i.fa.fa-pencil.fa-fw
                                     else
-                                        a(href='javascript:comment_set_parent({{ node.id }})') Reply
+                                        a(href='javascript:comment_set_parent({{ node.id }})', title='Reply')
+                                            i.fa.fa-reply.fa-fw
                                     if perms.judge.change_comment
-                                        = ' '
                                         if can_edit
-                                            a(href='javascript:comment_set_parent({{ node.id }})') Reply
+                                            a(href='javascript:comment_set_parent({{ node.id }})', title='Reply')
+                                                i.fa.fa-reply.fa-fw
                                         else
                                             a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}',
-                                                        href='{% url "comment_edit" node.id %}') Edit
-                                        = ' '
-                                        a(href='{% url "admin:judge_comment_change" node.id %}') Admin
+                                                        href='{% url "comment_edit" node.id %}', title='Edit')
+                                                i.fa.fa-pencil.fa-fw
+                                        a(href='{% url "admin:judge_comment_change" node.id %}', title='Admin')
+                                            i.fa.fa-cog.fa-fw
                         .comment-body.content-description #{node.body|markdown:"comment"}
                         if not node.is_leaf_node 
                             ul.comments
