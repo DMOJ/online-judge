@@ -39,7 +39,7 @@ block js_media
                 
                 $('#language-current').click(function() {
                     var $current = $(this);
-                    $('#language-expand').toggle(400, function () {
+                    $('#language-expand').slideToggle(400, function () {
                         if ($(this).is(':visible'))
                             $current.addClass('expanded');
                         else
