@@ -132,6 +132,7 @@ block body
                     | #{form.language}
                     #language-select
                         #language-details
+                        hr
                         ul
                             each lang in form.fields.language.queryset
                                 li(data-id=lang.id, data-info=lang.info, data-ace=lang.ace)= lang.name
