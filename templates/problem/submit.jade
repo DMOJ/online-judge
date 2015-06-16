@@ -127,7 +127,11 @@ block media
             color:black;
             font-weight: bold;
         }
-        
+
+        #language-current { display: flex }
+        #language-current .expanded { border-bottom: 1px solid #2980B9 }
+
+        #language-current { display: flex; }
         #language-current .info:before { content: ' ('}
         #language-current .info:after { content: ')'}
         #language-current .name { font-weight: bold; }
@@ -135,22 +139,15 @@ block media
             background-image: -moz-linear-gradient(center bottom, #EEE 0px, #FFF 50%);
             color: #444;
             padding: 8px;
-            border-radius: 4px;
+            border-radius: 4px 0 0 4px;
             flex: 1;
         }
 
-        #language-current {
-            display: flex;
-        }
-
-        #language-current .expanded {
-            border-bottom: 1px solid #2980B9;
-        }
-
-        #language-current .fa-chevron-down {
+        #language-current .language-drop {
             float: right;
             padding: 8px;
             border-left: 1px solid #AAA;
+            border-radius: 0 4px 4px 0;
             background: #CCC -moz-linear-gradient(center bottom, #CCC 0px, #EEE 60%) repeat scroll 0% 0%;
         }
 
@@ -158,6 +155,9 @@ block media
             padding: 8px;
             display: none;
         }
+        
+        #language-current .language-drop:before { content:"\f078" }
+        #language-current.expanded .language-drop:before { content:"\f077" }
 
 block body
     br
