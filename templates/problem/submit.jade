@@ -39,12 +39,13 @@ block js_media
                 
                 $('#language-current').click(function() {
                     var $expand = $('#language-expand');
+                    var $current = $(this);
                     if ($expand.is(':visible'))
                         $expand.slideUp(400, function () {
-                            $(this).removeClass('expanded');
+                            $current.removeClass('expanded');
                         });
                     else {
-                        $(this).addClass('expanded');
+                        $current.addClass('expanded');
                         $expand.slideDown(400);
                     }
                 });
