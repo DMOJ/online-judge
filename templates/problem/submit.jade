@@ -38,13 +38,12 @@ block js_media
                 info.text(selected.attr('data-info'));
                 
                 $('#language-current').click(function() {
-                    var $current = $(this);
-                    $('#language-expand').slideToggle(400, function () {
-                        if ($(this).is(':visible'))
-                            $current.addClass('expanded');
-                        else
-                            $current.removeClass('expanded');
-                    });
+                    var $expand = $('#language-expand');
+                    if ($expand.is(':visible'))
+                        $(this).removeClass('expanded');
+                    else
+                        $(this).addClass('expanded');
+                    $expand.slideToggle(400);
                 });
             });
     else
