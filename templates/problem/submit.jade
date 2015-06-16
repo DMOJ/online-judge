@@ -41,6 +41,46 @@ block media
             margin-top: 4px;
         }
 
+        #language-select {
+            margin: 0;
+            background: #fefefe;
+            padding: 8px;
+            border: 1px solid #2980B9;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        #language-select li {
+            list-style: none;
+        }
+
+        #language-select ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            -moz-columns: 5 0px;
+        }
+
+        #language-select li {
+            color: #757575;
+        }
+
+        #language-details {
+            text-align: right;
+            color: #757575;
+            font-size: 1.2em;
+        }
+
+        #language-select li:hover {
+            text-decoration: underline;
+            color: #252525;
+        }
+
+        #language-select li.selected {
+            color:black;
+            font-weight: bold;
+        }
+
 block body
     br
     form#problem_submit.form-area(action='', method='post')
@@ -57,6 +97,11 @@ block body
                 #language
                     | #{form.language.errors}
                     | #{form.language}
+                    #language-select
+                        #language-details
+                        ul
+                            each lang in form.fields.language.queryset
+                                li(data-id=lang.id, data-info=lang.info)= lang.name
         hr
         if no_judges
             span(style='color: red') No judge is available for this problem.
