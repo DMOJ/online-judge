@@ -30,6 +30,10 @@ block js_media
                 });
                 var selected = select.find('[data-id=' + current + ']').addClass('selected');
                 info.text(selected.attr('data-info'));
+                
+                $('#language-current').click(function() {
+                    $('#language-expand').toggle();
+                });
             });
     else
         | <script type='text/javascript'>
@@ -113,6 +117,34 @@ block media
             color:black;
             font-weight: bold;
         }
+        
+        #language-current .info:before { content: ' ('}
+        #language-current .info:after { content: ')'}
+        #language-current .name { font-weight: bold; }
+        #language-current .data {
+            background-image: -moz-linear-gradient(center bottom, #EEE 0px, #FFF 50%);
+            color: #444;
+            padding: 8px;
+            border-radius: 4px;
+            flex: 1;
+        }
+
+        #language-current {
+            display: flex;
+        }
+
+        #language-current .fa-chevron-down {
+            float: right;
+            padding: 8px;
+            border-left: 1px solid #AAA;
+            border-radius: 0px 4px 4px 0px;
+            background: #CCC -moz-linear-gradient(center bottom, #CCC 0px, #EEE 60%) repeat scroll 0% 0%;
+        }
+
+        #language-expand {
+            padding: 8px;
+            display: none;
+        }
 
 block body
     br
@@ -131,11 +163,13 @@ block body
                     | #{form.language.errors}
                     | #{form.language}
                     #language-select
-                        #language-details
-                        hr
-                        ul
-                            each lang in form.fields.language.queryset
-                                li(data-id=lang.id, data-info=lang.info, data-ace=lang.ace)= lang.name
+                        
+                        #language-expand
+                            #language-details
+                                hr
+                                ul
+                                each lang in form.fields.language.queryset
+                                    li(data-id=lang.id, data-info=lang.info, data-ace=lang.ace)= lang.name
         hr
         if no_judges
             span(style='color: red') No judge is available for this problem.
