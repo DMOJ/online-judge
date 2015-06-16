@@ -49,13 +49,6 @@ block js_media
                 }
             });
         });
-    else
-        | <script type='text/javascript'>
-        |     var modes = {
-        each lang in langs
-            |      "#{lang.id}": "#{lang.ace|escapejs}",
-        |     };
-        | </script>
 
     script(type='text/javascript')
         $(document).ready(function () {
