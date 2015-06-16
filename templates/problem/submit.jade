@@ -17,6 +17,10 @@ block js_media
                 }).appendTo(container);
                 var info = $('#language-details');
 
+                function update_selected() {
+                    $('#language-current').find('.name').text(selected.text());
+                    $('#language-current').find('.info').text(selected.attr('data-info'));
+                }
                 select.remove();
                 select = $('#language-select').show();
                 select.find('li').mouseenter(function () {
@@ -24,13 +28,13 @@ block js_media
                 }).mouseout(function() {
                     info.text(selected.attr('data-info'));
                 }).click(function () {
-                    if (selected) selected.removeClass('selected');
-                    field.attr('value', (selected = $(this).addClass('selected')).attr('data-id'));
+                    selected.removeClass('selected');
                     window.ace_source.getSession().setMode("ace/mode/" + selected.attr('data-ace'));
-                    $('#language-current').find('.name').text(selected.text());
-                    $('#language-current').find('.info').text(selected.attr('data-info'));
+                    field.attr('value', (selected = $(this).addClass('selected')).attr('data-id'));
+                    update_selected();
                 });
-                var selected = select.find('[data-id=' + current + ']').addClass('selected').click();
+                var selected = select.find('[data-id=' + current + ']').addClass('selected');
+                update_selected(selected);
                 
                 $('#language-current').click(function() {
                     $('#language-expand').toggle();
@@ -79,7 +83,6 @@ block media
         #language-select {
             margin: 0;
             background: #fefefe;
-            padding: 8px;
             border: 1px solid #2980B9;
             border-radius: 4px;
             display: none;
