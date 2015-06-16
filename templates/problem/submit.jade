@@ -40,10 +40,13 @@ block js_media
                 $('#language-current').click(function() {
                     var $expand = $('#language-expand');
                     if ($expand.is(':visible'))
-                        $(this).removeClass('expanded');
-                    else
+                        $expand.slideUp(400, function () {
+                            $(this).removeClass('expanded');
+                        });
+                    else {
                         $(this).addClass('expanded');
-                    $expand.slideToggle(400);
+                        $expand.slideDown(400);
+                    }
                 });
             });
     else
