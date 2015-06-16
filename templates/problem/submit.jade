@@ -3,53 +3,52 @@ extends base
 - load media_extract
 
 block js_media
-    if perms.judge.test_site
-        script(type='text/javascript')
-            $(function () {
-                var select = $('#id_language');
-                var container = select.parent();
-                var current = select.find(':selected').attr('value');
-                var field = $('<input/>', {
-                    id: 'id_language',
-                    name: 'language',
-                    type: 'hidden',
-                    value: current
-                }).appendTo(container);
-                var info = $('#language-details');
+    script(type='text/javascript')
+        $(function () {
+            var select = $('#id_language');
+            var container = select.parent();
+            var current = select.find(':selected').attr('value');
+            var field = $('<input/>', {
+                id: 'id_language',
+                name: 'language',
+                type: 'hidden',
+                value: current
+            }).appendTo(container);
+            var info = $('#language-details');
 
-                function update_selected() {
-                    $('#language-current').find('.name').text(selected.text());
-                    $('#language-current').find('.info').text(selected.attr('data-info'));
-                }
-                select.remove();
-                select = $('#language-select').show();
-                select.find('li').mouseenter(function () {
-                    info.text($(this).attr('data-info'));
-                }).mouseout(function() {
-                    info.text(selected.attr('data-info'));
-                }).click(function () {
-                    selected.removeClass('selected');
-                    window.ace_source.getSession().setMode("ace/mode/" + selected.attr('data-ace'));
-                    field.attr('value', (selected = $(this).addClass('selected')).attr('data-id'));
-                    update_selected();
-                });
-                var selected = select.find('[data-id=' + current + ']').addClass('selected');
-                update_selected(selected);
+            function update_selected() {
+                $('#language-current').find('.name').text(selected.text());
+                $('#language-current').find('.info').text(selected.attr('data-info'));
+            }
+            select.remove();
+            select = $('#language-select').show();
+            select.find('li').mouseenter(function () {
+                info.text($(this).attr('data-info'));
+            }).mouseout(function() {
                 info.text(selected.attr('data-info'));
-                
-                $('#language-current').click(function() {
-                    var $expand = $('#language-expand');
-                    var $current = $(this);
-                    if ($expand.is(':visible'))
-                        $expand.slideUp(400, function () {
-                            $current.removeClass('expanded');
-                        });
-                    else {
-                        $current.addClass('expanded');
-                        $expand.slideDown(400);
-                    }
-                });
+            }).click(function () {
+                selected.removeClass('selected');
+                window.ace_source.getSession().setMode("ace/mode/" + selected.attr('data-ace'));
+                field.attr('value', (selected = $(this).addClass('selected')).attr('data-id'));
+                update_selected();
             });
+            var selected = select.find('[data-id=' + current + ']').addClass('selected');
+            update_selected(selected);
+            info.text(selected.attr('data-info'));
+            
+            $('#language-current').click(function() {
+                var $expand = $('#language-expand');
+                var $current = $(this);
+                if ($expand.is(':visible'))
+                    $expand.slideUp(400, function () {
+                        $current.removeClass('expanded');
+                    });
+                else {
+                    $current.addClass('expanded');
+                    $expand.slideDown(400);
+                }
+            });
+        });
     else
         | <script type='text/javascript'>
         |     var modes = {
