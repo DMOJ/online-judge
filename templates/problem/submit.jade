@@ -35,6 +35,7 @@ block js_media
                 });
                 var selected = select.find('[data-id=' + current + ']').addClass('selected');
                 update_selected(selected);
+                info.text(selected.attr('data-info'));
                 
                 $('#language-current').click(function() {
                     $('#language-expand').toggle();
