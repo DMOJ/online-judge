@@ -24,12 +24,13 @@ block js_media
                 }).mouseout(function() {
                     info.text(selected.attr('data-info'));
                 }).click(function () {
-                    selected.removeClass('selected');
+                    if (selected) selected.removeClass('selected');
                     field.attr('value', (selected = $(this).addClass('selected')).attr('data-id'));
                     window.ace_source.getSession().setMode("ace/mode/" + selected.attr('data-ace'));
+                    $('#language-current').find('.name').text(selected.text());
+                    $('#language-current').find('.info').text(selected.attr('data-info'));
                 });
-                var selected = select.find('[data-id=' + current + ']').addClass('selected');
-                info.text(selected.attr('data-info'));
+                var selected = select.find('[data-id=' + current + ']').addClass('selected').click();
                 
                 $('#language-current').click(function() {
                     $('#language-expand').toggle();
@@ -163,7 +164,11 @@ block body
                     | #{form.language.errors}
                     | #{form.language}
                     #language-select
-                        
+                        #language-current
+                            .data
+                                span.name
+                                span.info
+                            .fa.fa-chevron-down
                         #language-expand
                             #language-details
                                 hr
