@@ -38,7 +38,13 @@ block js_media
                 info.text(selected.attr('data-info'));
                 
                 $('#language-current').click(function() {
-                    $('#language-expand').toggle();
+                    var $current = $(this);
+                    $('#language-expand').toggle(400, function () {
+                        if ($(this).is(':visible'))
+                            $current.addClass('expanded');
+                        else
+                            $current.removeClass('expanded');
+                    });
                 });
             });
     else
