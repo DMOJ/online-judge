@@ -79,84 +79,89 @@ block js_media
 block media
     | #{form.media|media_type:"css"}
     style
-        #submit-wrapper {
-            margin-top: 0.7em;
-        }
+      #submit-wrapper {
+          margin-top: 0.7em;
+      }
 
-        #submit-wrapper #problem-id, #submit-wrapper #editor, #submit-wrapper #language {
-            margin-top: 4px;
-        }
+      #submit-wrapper #problem-id, #submit-wrapper #editor, #submit-wrapper #language {
+          margin-top: 4px;
+      }
 
-        #language-select {
-            margin: 0;
-            background: #fefefe;
-            border: 1px solid #2980B9;
-            display: none;
-        }
+      #language-select {
+          margin: 0;
+          background: #fefefe;
+          border: 1px solid #2980B9;
+          display: none;
+      }
 
-        #language-select li {
-            list-style: none;
-            cursor: pointer;
-        }
+      #language-select li {
+          list-style: none;
+          cursor: pointer;
+      }
 
-        #language-select ul {
-            margin: 0;
-            padding: 0;
-            list-style-type: none;
-            -webkit-columns: 5 0px;
-               -moz-columns: 5 0px;
-                    columns: 5 0px;
-        }
+      #language-select ul {
+          margin: 0;
+          padding: 0;
+          list-style-type: none;
+          -webkit-columns: 5 0px;
+             -moz-columns: 5 0px;
+                  columns: 5 0px;
+      }
 
-        #language-select li {
-            color: #757575;
-        }
+      #language-select li {
+          color: #757575;
+      }
 
-        #language-details {
-            text-align: right;
-            color: #757575;
-            font-size: 1.2em;
-        }
+      #language-details {
+          text-align: right;
+          color: #757575;
+          font-size: 1.2em;
+      }
 
-        #language-select li:hover {
-            text-decoration: underline;
-            color: #252525;
-        }
+      #language-select li:hover {
+          text-decoration: underline;
+          color: #252525;
+      }
 
-        #language-select li.selected {
-            color:black;
-            font-weight: bold;
-        }
+      #language-select li.selected {
+          color:black;
+          font-weight: bold;
+      }
 
-        #language-current { display: flex }
-        #language-current.expanded { border-bottom: 1px solid #2980B9 }
+      #language-current { display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex }
+      #language-current.expanded { border-bottom: 1px solid #2980B9 }
 
-        #language-current { display: flex; }
-        #language-current .info:before { content: ' ('}
-        #language-current .info:after { content: ')'}
-        #language-current .name { font-weight: bold; }
-        #language-current .data {
-            background-image: -moz-linear-gradient(center bottom, #EEE 0px, #FFF 50%);
-            color: #444;
-            padding: 8px;
-            border-radius: 4px 0 0 4px;
-            flex: 1;
-        }
+      #language-current { display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; }
+      #language-current .info:before { content: ' ('}
+      #language-current .info:after { content: ')'}
+      #language-current .name { font-weight: bold; }
+      #language-current .data {
+          background-image: -webkit-linear-gradient(center bottom, #EEE 0px, #FFF 50%);
+          background-image: linear-gradient(center bottom, #EEE 0px, #FFF 50%);
+          color: #444;
+          padding: 8px;
+          border-radius: 4px 0 0 4px;
+          -webkit-box-flex: 1;
+          -webkit-flex: 1;
+              -ms-flex: 1;
+                  flex: 1;
+      }
 
-        #language-current .language-drop {
-            float: right;
-            padding: 8px;
-            border-left: 1px solid #AAA;
-            background: #CCC -moz-linear-gradient(center bottom, #CCC 0px, #EEE 60%) repeat scroll 0% 0%;
-        }
+      #language-current .language-drop {
+          float: right;
+          padding: 8px;
+          border-left: 1px solid #AAA;
+          background: #CCC -webkit-linear-gradient(center bottom, #CCC 0px, #EEE 60%) repeat scroll 0% 0%;
+          background: #CCC linear-gradient(center bottom, #CCC 0px, #EEE 60%) repeat scroll 0% 0%;
+      }
 
-        #language-expand {
-            padding: 8px;
-            display: none;
-        }
-        
-        #language-current .language-drop:before { content:"\f078" }
-        #language-current.expanded .language-drop:before { content:"\f077" }
+      #language-expand {
+          padding: 8px;
+          display: none;
+      }
+      
+      #language-current .language-drop:before { content:"\f078" }
+      #language-current.expanded .language-drop:before { content:"\f077" }
 
 block body
     br
