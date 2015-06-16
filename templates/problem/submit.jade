@@ -3,12 +3,42 @@ extends base
 - load media_extract
 
 block js_media
-    | <script type='text/javascript'>
-    |     var modes = {
-    each lang in langs
-        |      "#{lang.id}": "#{lang.ace|escapejs}",
-    |     };
-    | </script>
+    if perms.judge.test_site
+        script(type='text/javascript')
+            $(function () {
+                var select = $('#id_language');
+                var container = select.parent();
+                var current = select.find(':selected').attr('value');
+                var field = $('<input/>', {
+                    id: 'id_language',
+                    name: 'language',
+                    type: 'hidden',
+                    value: current
+                }).appendTo(container);
+                var info = $('#language-details');
+
+                select.remove();
+                select = $('#language-select').show();
+                select.find('li').mouseenter(function () {
+                    info.text($(this).attr('data-info'));
+                }).mouseout(function() {
+                    info.text(selected.attr('data-info'));
+                }).click(function () {
+                    selected.removeClass('selected');
+                    field.attr('value', (selected = $(this).addClass('selected')).attr('data-id'));
+                    window.ace_source.getSession().setMode("ace/mode/" + selected.attr('data-ace'));
+                });
+                var selected = select.find('[data-id=' + current + ']').addClass('selected');
+                info.text(selected.attr('data-info'));
+            });
+    else
+        | <script type='text/javascript'>
+        |     var modes = {
+        each lang in langs
+            |      "#{lang.id}": "#{lang.ace|escapejs}",
+        |     };
+        | </script>
+
     script(type='text/javascript')
         $(document).ready(function () {
             $('#id_language').change(function () {
@@ -49,16 +79,19 @@ block media
             border-radius: 4px;
             display: none;
         }
-        
+
         #language-select li {
             list-style: none;
+            cursor: pointer;
         }
 
         #language-select ul {
             margin: 0;
             padding: 0;
             list-style-type: none;
-            -moz-columns: 5 0px;
+            -webkit-columns: 5 0px;
+               -moz-columns: 5 0px;
+                    columns: 5 0px;
         }
 
         #language-select li {
@@ -84,7 +117,7 @@ block media
 block body
     br
     form#problem_submit.form-area(action='', method='post')
-        -csrf_token
+        - csrf_token
         | #{form.non_field_errors}
         #submit-wrapper
             #problem-id
@@ -99,10 +132,9 @@ block body
                     | #{form.language}
                     #language-select
                         #language-details
-                        hr
                         ul
                             each lang in form.fields.language.queryset
-                                li(data-id=lang.id, data-info=lang.info)= lang.name
+                                li(data-id=lang.id, data-info=lang.info, data-ace=lang.ace)= lang.name
         hr
         if no_judges
             span(style='color: red') No judge is available for this problem.
