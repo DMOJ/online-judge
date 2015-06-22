@@ -1,11 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db.models import F
-from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
-from django.template import RequestContext, loader
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
@@ -14,7 +12,7 @@ from django.views.generic import TemplateView, ListView
 from django.views.generic.detail import SingleObjectMixin
 
 from judge.highlight_code import highlight_code
-from judge.models import Problem, Submission, SubmissionTestCase, Profile, Contest
+from judge.models import Problem, Submission, Profile, Contest
 from judge.utils.problems import user_completed_ids, get_result_table
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.views import TitleMixin
