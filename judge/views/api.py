@@ -9,7 +9,7 @@ def sane_time_repr(delta):
     days = delta.days
     hours = delta.seconds / 3600
     minutes = (delta.seconds % 3600) / 60
-    return "%02d:%02d:%02d" % (days, hours, minutes)
+    return '%02d:%02d:%02d' % (days, hours, minutes)
 
 
 def api_contest_list(request):
