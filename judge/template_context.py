@@ -1,9 +1,10 @@
 from functools import partial
+
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.utils.functional import SimpleLazyObject, new_method_proxy
-import operator
+
 from .models import Profile, MiscConfig, NavigationBar
 
 
