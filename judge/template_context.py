@@ -8,14 +8,8 @@ from .models import Profile, MiscConfig, NavigationBar
 
 
 class FixedSimpleLazyObject(SimpleLazyObject):
-    if not hasattr(SimpleLazyObject, '__len__'):
-        __len__ = new_method_proxy(len)
-
     if not hasattr(SimpleLazyObject, '__iter__'):
         __iter__ = new_method_proxy(iter)
-
-    if not hasattr(SimpleLazyObject, '__contains__'):
-        __contains__ = new_method_proxy(operator.contains)
 
 
 def get_resource(request):
