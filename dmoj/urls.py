@@ -151,7 +151,6 @@ urlpatterns = patterns('',
     url(r'^contest/(?P<contest>\w+)/submissions/(?P<user>\w+)/(?P<problem>\w+)/(?P<page>\d+)$', views.UserContestSubmissions.as_view(), name='contest_user_submissions'),
     
     url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
-    url(r'^organizations/add$', organization.NewOrganization.as_view()),
     url(r'^organization/(?P<key>\w+)$', organization.OrganizationHome.as_view(), name='organization_home'),
     url(r'^organization/(?P<key>\w+)/users$', organization.OrganizationUsers.as_view(), name='organization_users'),
     url(r'^organization/(?P<key>\w+)/join', organization.JoinOrganization.as_view(), name='join_organization'),

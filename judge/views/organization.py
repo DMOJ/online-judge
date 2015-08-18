@@ -18,7 +18,7 @@ from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
 
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'JoinOrganization',
-           'LeaveOrganization', 'NewOrganization', 'EditOrganization']
+           'LeaveOrganization', 'EditOrganization']
 
 
 class OrganizationMixin(object):
@@ -113,30 +113,6 @@ class LeaveOrganization(OrganizationMembershipChange):
         profile.organization_join_time = None
         profile.save()
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
-
-
-class NewOrganization(LoginRequiredMixin, TitleMixin, CreateView):
-    template_name = 'organization/new.jade'
-    model = Organization
-    form_class = NewOrganizationForm
-    title = 'New Organization'
-
-    def form_valid(self, form):
-        form.instance.registrant = self.request.user.profile
-        with transaction.atomic(), reversion.create_revision():
-            reversion.set_comment('Edited from site')
-            reversion.set_user(self.request.user)
-            return super(NewOrganization, self).form_valid(form)
-
-    def dispatch(self, request, *args, **kwargs):
-        profile = request.user.profile
-        if profile.points < 50:
-            return generic_message(request, "Can't add organization",
-                                   'You need 50 points to add an organization.')
-        elif profile.organization is not None:
-            return generic_message(request, "Can't add organization",
-                                   'You are already in an organization.')
-        return super(NewOrganization, self).dispatch(request, *args, **kwargs)
 
 
 class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, UpdateView):

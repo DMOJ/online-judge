@@ -54,13 +54,7 @@ class ProblemSubmitForm(ModelForm):
 class EditOrganizationForm(ModelForm):
     class Meta:
         model = Organization
-        fields = ['name', 'short_name', 'about', 'admins']
-        widgets = {
-            'admins': HeavySelect2MultipleWidget(data_view='profile_select2') if use_select2 else
-                      FilteredSelectMultiple('Admins', False),
-        }
-        if PagedownWidget is not None:
-            widgets['about'] = MathJaxPagedownWidget
+        fields = ['about']
 
 
 class NewMessageForm(ModelForm):
