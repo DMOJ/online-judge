@@ -99,6 +99,8 @@ class JoinOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
         if profile.organization_id is not None:
             return generic_message(request, 'Joining organization', 'You are already in an organization.')
+        if not org.is_open:
+            return generic_message(request, 'Joining organization', 'This organization is not open.')
         profile.organization = org
         profile.organization_join_time = timezone.now()
         profile.save()
