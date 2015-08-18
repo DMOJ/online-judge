@@ -97,6 +97,7 @@ class Organization(models.Model):
     admins = models.ManyToManyField('Profile', verbose_name='Administrators', related_name='+',
                                     help_text='Those who can edit this organization')
     creation_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
+    is_open = models.BooleanField(help_text='Allow joining organization', default=True)
 
     def __unicode__(self):
         return self.name
@@ -110,6 +111,9 @@ class Organization(models.Model):
 
     class Meta:
         ordering = ['key']
+        permissions = (
+            ('organization_admin', 'Administer organizations'),
+        )
 
 
 class Profile(models.Model):

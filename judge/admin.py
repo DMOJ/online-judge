@@ -893,11 +893,16 @@ class OrganizationForm(ModelForm):
 
 class OrganizationAdmin(Select2SuitMixin, reversion.VersionAdmin):
     readonly_fields = ('creation_date',)
-    fields = ('name', 'key', 'short_name', 'about', 'registrant', 'creation_date', 'admins')
+    fields = ('name', 'key', 'short_name', 'is_open', 'about', 'registrant', 'creation_date', 'admins')
     list_display = ('name', 'key', 'short_name', 'registrant', 'creation_date')
     actions_on_top = True
     actions_on_bottom = True
     form = OrganizationForm
+
+    def get_readonly_fields(self, request, obj=None):
+        if request.user.has_perm('judge.organization_admin'):
+            return self.readonly_fields
+        return self.readonly_fields + ('registrant', 'admins', 'is_open')
 
     if not use_select2:
         filter_horizontal = ('admins',)
