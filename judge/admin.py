@@ -920,7 +920,7 @@ class OrganizationAdmin(Select2SuitMixin, reversion.VersionAdmin):
             return queryset.filter(admins=request.user.profile.id)
 
     def has_change_permission(self, request, obj=None):
-        if not request.user.has_perm('judge.edit_organization'):
+        if not request.user.has_perm('judge.change_organization'):
             return False
         if request.user.has_perm('judge.edit_all_organization') or obj is None:
             return True
