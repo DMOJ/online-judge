@@ -913,7 +913,7 @@ class OrganizationAdmin(Select2SuitMixin, reversion.VersionAdmin):
         }
 
     def get_queryset(self, request):
-        queryset = Contest.objects.annotate(user_count=Count('users'))
+        queryset = Organization.objects.all()
         if request.user.has_perm('judge.edit_all_organization'):
             return queryset
         else:
