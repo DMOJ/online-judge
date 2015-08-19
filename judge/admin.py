@@ -912,6 +912,20 @@ class OrganizationAdmin(Select2SuitMixin, reversion.VersionAdmin):
             TextField: {'widget': MathJaxAdminPagedownWidget},
         }
 
+    def get_queryset(self, request):
+        queryset = Contest.objects.annotate(user_count=Count('users'))
+        if request.user.has_perm('judge.edit_all_organization'):
+            return queryset
+        else:
+            return queryset.filter(admins=request.user.profile.id)
+
+    def has_change_permission(self, request, obj=None):
+        if not request.user.has_perm('judge.edit_organization'):
+            return False
+        if request.user.has_perm('judge.edit_all_organization') or obj is None:
+            return True
+        return obj.admins.filter(id=request.user.profile.id).exists()
+
 
 class BlogPostAdmin(reversion.VersionAdmin):
     fieldsets = (

@@ -113,6 +113,7 @@ class Organization(models.Model):
         ordering = ['key']
         permissions = (
             ('organization_admin', 'Administer organizations'),
+            ('edit_all_organization', 'Edit all organizations'),
         )
 
 
