@@ -183,6 +183,7 @@ class Profile(models.Model):
             ('test_site', 'Shows in-progress development stuff'),
         )
 
+
 class ProblemType(models.Model):
     name = models.CharField(max_length=20, verbose_name='Problem category ID', unique=True)
     full_name = models.CharField(max_length=100, verbose_name='Problem category name')
