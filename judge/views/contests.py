@@ -1,21 +1,18 @@
 from collections import namedtuple
 from operator import attrgetter
-from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import connection
-from django.db.models import Max, Count
+from django.db.models import Count
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
 from django.shortcuts import render
-from django.template import RequestContext
 from django.utils import timezone
-from django.utils.functional import SimpleLazyObject
 from django.views.generic import ListView
 
 from judge.comments import CommentedDetailView
-from judge.models import Contest, ContestParticipation, ContestProblem, Profile
+from judge.models import Contest, ContestParticipation
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
 from judge import event_poster as event
