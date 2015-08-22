@@ -576,6 +576,9 @@ class Contest(models.Model):
     rate_all = models.BooleanField(help_text='Rate all users who joined.', default=False)
     rate_exclude = models.ManyToManyField(Profile, verbose_name='exclude from ratings', blank=True,
                                           related_name='rate_exclude+')
+    is_private = models.BooleanField(verbose_name='Private to organizations', default=False)
+    organizations = models.ManyToManyField(Organization, blank=True,
+                                           help_text='If private, only these organizations may see the contest')
 
     def clean(self):
         if self.start_time >= self.end_time:
