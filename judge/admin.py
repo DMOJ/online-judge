@@ -735,6 +735,7 @@ class ContestForm(ModelForm):
         if use_select2:
             widgets = {
                 'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
+                'organizations': HeavySelect2MultipleWidget(data_view='organization_select2')
             }
 
 
@@ -744,6 +745,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
         ('Details', {'fields': ('description', 'is_external')}),
         ('Rating', {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
+        ('Organization', {'fields': ('is_private', 'organizations')}),
     )
     list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
     actions = ['make_public', 'make_private']
@@ -755,7 +757,7 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
     filter_horizontal = ['rate_exclude']
 
     if not use_select2:
-        filter_horizontal += ['organizers']
+        filter_horizontal += ['organizers', 'organizations']
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
