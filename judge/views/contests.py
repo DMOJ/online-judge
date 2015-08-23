@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import connection
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
 from django.shortcuts import render
 from django.utils import timezone
@@ -41,6 +41,11 @@ class ContestList(TitleMixin, ListView):
         queryset = Contest.objects.order_by('-start_time', 'key')
         if not self.request.user.has_perm('judge.see_private_contest'):
             queryset = queryset.filter(is_public=True)
+        if not self.request.user.has_perm('judge.edit_all_contest'):
+            q = Q(is_private=False)
+            if self.request.user.is_authenticated():
+                q |= Q(organizations__id=self.request.user.profile.organization_id)
+            queryset = queryset.filter(q)
         queryset = queryset.annotate(participation_count=Count('users'))
         return queryset
 
