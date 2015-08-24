@@ -105,7 +105,7 @@ class ContestMixin(object):
                                        'Could not find such contest.')
         except PrivateContestError as e:
             return render(request, 'contest/private.jade', {
-                'orgs': e.orgs, 'title': 'Access to contest "%s" denied.' % escape(e.name)
+                'orgs': e.orgs, 'title': 'Access to contest "%s" denied' % escape(e.name)
             }, status=403)
 
 
