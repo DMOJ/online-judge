@@ -9,6 +9,7 @@ from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
 from django.shortcuts import render
 from django.utils import timezone
+from django.utils.html import escape
 from django.views.generic import ListView
 
 from judge.comments import CommentedDetailView
@@ -67,6 +68,12 @@ class ContestList(TitleMixin, ListView):
         return context
 
 
+class PrivateContestError(Exception):
+    def __init__(self, name, orgs):
+        self.name = name
+        self.orgs = orgs
+
+
 class ContestMixin(object):
     context_object_name = 'contest'
     model = Contest
@@ -76,8 +83,12 @@ class ContestMixin(object):
 
     def get_object(self, queryset=None):
         contest = super(ContestMixin, self).get_object(queryset)
-        if self.private_check and not contest.is_public and not self.request.user.has_perm('judge.see_private_contest'):
-            raise Http404()
+        if self.private_check:
+            if not contest.is_public and not self.request.user.has_perm('judge.see_private_contest'):
+                raise Http404()
+            if contest.is_private and (not self.request.user.is_authenticated() or
+                    not contest.organizations.filter(id=self.request.user.profile.organization_id).exists()):
+                raise PrivateContestError(contest.name, contest.organizations.all())
         return contest
 
     def dispatch(self, request, *args, **kwargs):
@@ -91,6 +102,10 @@ class ContestMixin(object):
             else:
                 return generic_message(request, 'No such contest',
                                        'Could not find such contest.')
+        except PrivateContestError as e:
+            return render(request, 'contest/private.jade', {
+                'orgs': e.orgs, 'title': 'Access to contest "%s" denied.' % escape(e.name)
+            }, status=403)
 
 
 class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):

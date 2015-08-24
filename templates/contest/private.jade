@@ -1,0 +1,8 @@
+extends base
+
+block body
+    p Only the following organizations may access this contest:
+    ul
+        each org in orgs
+            li
+                a(href='{% url "organization_home" org.key %}')= org.name
