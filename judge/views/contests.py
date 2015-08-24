@@ -86,7 +86,8 @@ class ContestMixin(object):
         if self.private_check:
             if not contest.is_public and not self.request.user.has_perm('judge.see_private_contest'):
                 raise Http404()
-            if contest.is_private and (not self.request.user.is_authenticated() or
+            if contest.is_private and not self.request.user.has_perm('judge.edit_all_contest') and (
+                    not self.request.user.is_authenticated() or
                     not contest.organizations.filter(id=self.request.user.profile.organization_id).exists()):
                 raise PrivateContestError(contest.name, contest.organizations.all())
         return contest
