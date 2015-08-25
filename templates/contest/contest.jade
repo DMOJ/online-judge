@@ -28,9 +28,9 @@ block info_float
     if contest.can_join or participating
         if not participating or not participation.ended
             if in_contest
-                a.unselectable.button.full(href='{% url "judge.views.leave_contest" contest.key %}') Leave contest
+                a.unselectable.button.full(href='{% url "contest_leave" contest.key %}') Leave contest
             else
-                a.unselectable.button.full(href='{% url "judge.views.join_contest" contest.key %}') Join contest
+                a.unselectable.button.full(href='{% url "contest_join" contest.key %}') Join contest
             hr
 
     if contest.start_time <= now or perms.judge.see_private_contest

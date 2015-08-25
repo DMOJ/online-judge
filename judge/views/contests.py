@@ -1,7 +1,6 @@
 from collections import namedtuple
 from operator import attrgetter
 
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import connection
@@ -11,15 +10,16 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.utils.html import escape
 from django.views.generic import ListView
+from django.views.generic.detail import BaseDetailView
 
 from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation
 from judge.utils.ranker import ranker
-from judge.utils.views import TitleMixin, generic_message
+from judge.utils.views import TitleMixin, generic_message, LoginRequiredMixin
 from judge import event_poster as event
 
 
-__all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'join_contest', 'leave_contest', 'contest_ranking_ajax']
+__all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'contest_ranking_ajax']
 
 
 def _find_contest(request, key, private_check=True):
@@ -138,51 +138,48 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         return context
 
 
-@login_required
-def join_contest(request, key):
-    contest, exists = _find_contest(request, key)
-    if not exists:
-        return contest
+class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
+    def get(self, request, *args, **kwargs):
+        contest = self.get_object()
+        if not contest.can_join:
+            return generic_message(request, 'Contest not ongoing',
+                                   '"%s" is not currently ongoing.' % contest.name)
 
-    if not contest.can_join:
-        return generic_message(request, 'Contest not ongoing',
-                               '"%s" is not currently ongoing.' % contest.name)
+        contest_profile = request.user.profile.contest
+        if contest_profile.current is not None:
+            return generic_message(request, 'Already in contest',
+                                   'You are already in a contest: "%s".' % contest_profile.current.contest.name)
 
-    contest_profile = request.user.profile.contest
-    if contest_profile.current is not None:
-        return generic_message(request, 'Already in contest',
-                               'You are already in a contest: "%s".' % contest_profile.current.contest.name)
+        participation, created = ContestParticipation.objects.get_or_create(
+            contest=contest, profile=contest_profile, defaults={
+                'real_start': timezone.now()
+            }
+        )
 
-    participation, created = ContestParticipation.objects.get_or_create(
-        contest=contest, profile=contest_profile, defaults={
-            'real_start': timezone.now()
-        }
-    )
+        if not created and participation.ended:
+            return generic_message(request, 'Time limit exceeded',
+                                   'Too late! You already used up your time limit for "%s".' % contest.name)
 
-    if not created and participation.ended:
-        return generic_message(request, 'Time limit exceeded',
-                               'Too late! You already used up your time limit for "%s".' % contest.name)
-
-    contest_profile.current = participation
-    contest_profile.save()
-    return HttpResponseRedirect(reverse('problem_list'))
+        contest_profile.current = participation
+        contest_profile.save()
+        return HttpResponseRedirect(reverse('problem_list'))
 
 
-@login_required
-def leave_contest(request, key):
+class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
     # No public checking because if we hide the contest people should still be able to leave.
     # No lock ins.
-    contest, exists = _find_contest(request, key, False)
-    if not exists:
-        return contest
+    private_check = False
 
-    contest_profile = request.user.profile.contest
-    if contest_profile.current is None or contest_profile.current.contest != contest:
-        return generic_message(request, 'No such contest',
-                               'You are not in contest "%s".' % key, 404)
-    contest_profile.current = None
-    contest_profile.save()
-    return HttpResponseRedirect(reverse('contest_view', args=(key,)))
+    def get(self, request, *args, **kwargs):
+        contest = self.get_object()
+
+        contest_profile = request.user.profile.contest
+        if contest_profile.current is None or contest_profile.current.contest != contest:
+            return generic_message(request, 'No such contest',
+                                   'You are not in contest "%s".' % key, 404)
+        contest_profile.current = None
+        contest_profile.save()
+        return HttpResponseRedirect(reverse('contest_view', args=(key,)))
 
 
 ContestRankingProfile = namedtuple('ContestRankingProfile',
