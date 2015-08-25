@@ -79,16 +79,22 @@ class ContestMixin(object):
     model = Contest
     slug_field = 'key'
     slug_url_kwarg = 'key'
-    private_check = True
 
     def get_object(self, queryset=None):
         contest = super(ContestMixin, self).get_object(queryset)
-        if self.private_check:
-            if not contest.is_public and not self.request.user.has_perm('judge.see_private_contest'):
-                raise Http404()
-            if contest.is_private and not self.request.user.has_perm('judge.edit_all_contest') and (
-                    not self.request.user.is_authenticated() or
-                    not contest.organizations.filter(id=self.request.user.profile.organization_id).exists()):
+        user = self.request.user
+        profile = self.request.user.profile if user.is_authenticated() else None
+
+        if (profile is not None and
+                ContestParticipation.objects.filter(id=profile.contest.current_id, contest_id=contest.id).exists()):
+            return contest
+
+        if not contest.is_public and not user.has_perm('judge.see_private_contest'):
+            raise Http404()
+
+        if contest.is_private:
+            if profile is None or (not user.has_perm('judge.edit_all_contest') and
+                                   not contest.organizations.filter(id=profile.organization_id).exists()):
                 raise PrivateContestError(contest.name, contest.organizations.all())
         return contest
 
@@ -166,10 +172,6 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
 
 
 class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
-    # No public checking because if we hide the contest people should still be able to leave.
-    # No lock ins.
-    private_check = False
-
     def get(self, request, *args, **kwargs):
         contest = self.get_object()
 
