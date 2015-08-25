@@ -176,10 +176,10 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
         contest_profile = request.user.profile.contest
         if contest_profile.current is None or contest_profile.current.contest != contest:
             return generic_message(request, 'No such contest',
-                                   'You are not in contest "%s".' % key, 404)
+                                   'You are not in contest "%s".' % contest.key, 404)
         contest_profile.current = None
         contest_profile.save()
-        return HttpResponseRedirect(reverse('contest_view', args=(key,)))
+        return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
 
 
 ContestRankingProfile = namedtuple('ContestRankingProfile',
