@@ -3,7 +3,7 @@ from collections import defaultdict
 from operator import itemgetter, attrgetter
 
 from django.conf import settings
-from django.contrib.contenttypes.generic import GenericRelation
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.utils.functional import cached_property
 from django.contrib.auth.models import User
