@@ -45,7 +45,7 @@ class ContestList(TitleMixin, ListView):
         if not self.request.user.has_perm('judge.edit_all_contest'):
             q = Q(is_private=False)
             if self.request.user.is_authenticated():
-                q |= Q(organizations__id=self.request.user.profile.organization_id)
+                q |= Q(organizations__in=self.request.user.profile.organizations.all())
             queryset = queryset.filter(q)
         queryset = queryset.annotate(participation_count=Count('users'))
         return queryset
