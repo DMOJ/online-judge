@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations
+from sortedm2m.fields import SortedManyToManyField
 
 
 def to_many_to_many_organization(apps, schema_editor):
@@ -23,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='organizations',
-            field=models.ManyToManyField(related_query_name=b'member', related_name='members', verbose_name=b'Organization', to='judge.Organization', blank=True),
+            field=SortedManyToManyField(related_query_name=b'member', related_name='members', verbose_name=b'Organization', to='judge.Organization', blank=True),
             preserve_default=True,
         ),
         migrations.RunPython(to_many_to_many_organization, lambda apps, schema_editor: None),

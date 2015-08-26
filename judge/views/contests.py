@@ -94,7 +94,7 @@ class ContestMixin(object):
 
         if contest.is_private:
             if profile is None or (not user.has_perm('judge.edit_all_contest') and
-                                   not contest.organizations.filter(id=profile.organization_id).exists()):
+                                   not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
                 raise PrivateContestError(contest.name, contest.organizations.all())
         return contest
 

@@ -19,6 +19,7 @@ from reversion.models import Version
 from timedelta.fields import TimedeltaField
 import pytz
 import reversion
+from sortedm2m.fields import SortedManyToManyField
 
 from judge.fulltext import SearchManager
 from judge.judgeapi import judge_submission, abort_submission
@@ -128,13 +129,18 @@ class Profile(models.Model):
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
     last_access = models.DateTimeField(verbose_name='Last access time', default=now)
     ip = models.GenericIPAddressField(verbose_name='Last IP', blank=True, null=True)
-    organizations = models.ManyToManyField(Organization, verbose_name='Organization', blank=True,
-                                           related_name='members', related_query_name='member')
+    organizations = SortedManyToManyField(Organization, verbose_name='Organization', blank=True,
+                                          related_name='members', related_query_name='member')
     display_rank = models.CharField(max_length=10, default='user',
                                     choices=(('user', 'Normal User'), ('setter', 'Problem Setter'), ('admin', 'Admin')))
     mute = models.BooleanField(verbose_name='Comment mute', help_text='Some users are at their best when silent.',
                                default=False)
     rating = models.IntegerField(null=True, default=None)
+
+    @cached_property
+    def organization(self):
+        # TODO: get the first organization
+        return '(unknown)'
 
     def calculate_points(self):
         points = sum(map(itemgetter('points'),

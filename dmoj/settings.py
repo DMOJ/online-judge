@@ -120,7 +120,7 @@ INSTALLED_APPS += (
     'compressor',
     'django_ace',
     'pagedown',
-
+    'sortedm2m',
 )
 
 MIDDLEWARE_CLASSES = (
