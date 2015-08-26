@@ -5,7 +5,7 @@ extends user/base_users
 
 block users_js_media
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
-    script(type='text/javascript')
+    script(type='text/javascript').
         $(document).ready(function () {
             $("#users-table").tablesorter();
         });

@@ -7,28 +7,28 @@ extends base
 block js_media
     if dynamic_update and last_msg
         if IN_CONTEST
-            script(type='text/javascript')
+            script(type='text/javascript').
                 window.current_contest = '#{CONTEST.contest.key}';
         else
-            script(type='text/javascript')
+            script(type='text/javascript').
                 window.current_contest = null;
         if dynamic_user_id
-            script(type='text/javascript')
+            script(type='text/javascript').
                 window.dynamic_user_id = #{dynamic_user_id};
         else
-            script(type='text/javascript')
+            script(type='text/javascript').
                 window.dynamic_user_id = null;
         if dynamic_problem_id
-            script(type='text/javascript')
+            script(type='text/javascript').
                 window.dynamic_problem_id = #{dynamic_problem_id};
         else
-            script(type='text/javascript')
+            script(type='text/javascript').
                 window.dynamic_problem_id = null;
         if show_problem
-            script(type='text/javascript')
+            script(type='text/javascript').
                 window.show_problem = 1;
         else
-            script(type='text/javascript')
+            script(type='text/javascript').
                 window.show_problem = 0;
 
     - compress js
@@ -36,7 +36,7 @@ block js_media
         script(type='text/javascript', src='{% static "moment.min.js" %}')
         if request.user.is_authenticated and perms.judge.rejudge_submission
             script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
-            script(type='text/javascript')
+            script(type='text/javascript').
                 window.rejudge_submission = function(id) {
                     if (confirm('Are you sure you want to rejudge?')) {
                         $.ajax({
@@ -48,8 +48,8 @@ block js_media
                             }
                         });
                     }
-                }
-        script(type='text/javascript')
+                };
+        script(type='text/javascript').
             $(function () {
                 if (!featureTest('position', 'sticky'))
                     fix_div($('.info-float'), 40, true, function (info) {
@@ -78,7 +78,7 @@ block js_media
             });
 
         if dynamic_update and last_msg
-            script(type='text/javascript')
+            script(type='text/javascript').
                 $(function () {
                     var table = $('#submissions-table');
                     var statistics = $("#statistics-table");

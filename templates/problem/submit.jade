@@ -3,7 +3,7 @@ extends base
 - load media_extract
 
 block js_media
-    script(type='text/javascript')
+    script(type='text/javascript').
         $(function () {
             var select = $('#id_language');
             var container = select.parent();
@@ -48,10 +48,7 @@ block js_media
                     $expand.slideDown(400);
                 }
             });
-        });
 
-    script(type='text/javascript')
-        $(document).ready(function () {
             $('#id_language').change(function () {
                 var lang = $("#id_language").find("option:selected").attr('value');
                 window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);

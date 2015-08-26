@@ -84,7 +84,7 @@ block users_media
 
     if last_msg
         script(type='text/javascript', src='{% static "event.js" %}')
-        script(type='text/javascript')
+        script(type='text/javascript').
             $(function () {
                 var receiver = new EventReceiver(
                     "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",

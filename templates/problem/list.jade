@@ -7,7 +7,7 @@ block meta
 
 block js_media
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
-    script(type='text/javascript')
+    script(type='text/javascript').
         $(document).ready(function () {
             $("#problem-table").tablesorter({
                 textExtraction: function (node) {

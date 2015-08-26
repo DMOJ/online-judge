@@ -4,7 +4,7 @@ extends base
 
 block js_media
     | #{form.media|media_type:"js"}
-    script(type='text/javascript')
+    script(type='text/javascript').
         window.django = {jQuery: $};
         function pluralidx(count) { return (count == 1) ? 0 : 1; }
         function gettext(msgid) { return msgid; }

@@ -8,7 +8,7 @@ div(style='border:none', id=select_all_name)
             input.checkall(id=select_all_id, name=select_all_name, checked=all_selected, type='checkbox')
             = ' '
             | Check all
-script(type='text/javascript')
+script(type='text/javascript').
     django.jQuery(function($) {
         var box = $('div#' + '{{ select_all_name }}');
         var original = box.find('.original-checkboxes');

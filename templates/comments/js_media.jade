@@ -8,7 +8,7 @@
     | #{comment_form.media|media_type:"js"}
 
     script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
-    script(type='text/javascript')
+    script(type='text/javascript').
         $(document).ready(function () {
             function csrfSafeMethod(method) {
                 // these HTTP methods do not require CSRF protection

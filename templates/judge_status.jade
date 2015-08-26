@@ -4,7 +4,7 @@ extends base
 
 block js_media
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
-    script(type='text/javascript')
+    script(type='text/javascript').
         $(document).ready(function () {
             var table = $("#judge-status");
             table.tablesorter();

@@ -73,7 +73,7 @@ html(lang='en')
             script(src='{% static "common.js" %}')
         block js_media
         if IN_CONTEST
-            script(type='text/javascript')
+            script(type='text/javascript').
                 $(document).ready(function () {
                     count_down($("#contest-time-remaining"));
                 });
