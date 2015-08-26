@@ -148,7 +148,7 @@ class Profile(models.Model):
     @cached_property
     def organization(self):
         # TODO: get the first organization
-        return '(unknown)'
+        return {'key': 'null', 'name': '(unknown)', 'short_name': '(unknown)'}
 
     def calculate_points(self):
         points = sum(map(itemgetter('points'),
