@@ -127,12 +127,15 @@ block body
                     = ' '
                     a(href='{% url "contest_view" rating.contest.key %}')= rating.contest.name
             td.user-info-cell
-                - with org=user.organization
-                    if org
+                - with orgs=user.organizations.all
+                    if orgs
                         p
-                            b Organization:
+                            b Organizations:
                             = ' '
-                            a(href='{% url "organization_home" org.key %}')= org.name
+                            each org in orgs
+                                a(href='{% url "organization_home" org.key %}')= org.name
+                                if not forloop.last
+                                    = ', '
                 if user.about
                     h4 About
                     | #{user.about|markdown:"self-description"}

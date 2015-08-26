@@ -100,6 +100,14 @@ class Organization(models.Model):
     creation_date = models.DateTimeField(verbose_name='Creation date', auto_now_add=True)
     is_open = models.BooleanField(help_text='Allow joining organization', default=True)
 
+    def __contains__(self, item):
+        if isinstance(item, (int, long)):
+            return self.members.filter(id=item).exists()
+        elif isinstance(item, Profile):
+            return self.members.filter(id=item.id).exists()
+        else:
+            raise TypeError('Organization membership test must be Profile or primany key')
+
     def __unicode__(self):
         return self.name
 
