@@ -97,23 +97,20 @@ class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, Single
 
 class JoinOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
-        if profile.organization_id is not None:
-            return generic_message(request, 'Joining organization', 'You are already in an organization.')
+        if profile.organizations.filter(id=org.id).exists():
+            return generic_message(request, 'Joining organization', 'You are already in the organization.')
         if not org.is_open:
             return generic_message(request, 'Joining organization', 'This organization is not open.')
-        profile.organization = org
-        profile.organization_join_time = timezone.now()
+        profile.organizations.add(org)
         profile.save()
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
 
 class LeaveOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
-        if org.id != profile.organization_id:
+        if not profile.organizations.filter(id=org.id).exists():
             return generic_message(request, 'Leaving organization', 'You are not in "%s".' % org.key)
-        profile.organization = None
-        profile.organization_join_time = None
-        profile.save()
+        profile.organizations.remove(org)
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
 
