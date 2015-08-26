@@ -1,10 +1,14 @@
+- load media_extract
+
 extends base
 
 block media
     include timezone/media
+    | #{form.media | media_type:"css"}
 
 block js_media
     include timezone/js_media
+    | #{form.media|media_type:"js"}
 
 block body
     form.form-area(action='', method='post')
