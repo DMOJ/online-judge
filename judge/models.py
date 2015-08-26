@@ -147,8 +147,9 @@ class Profile(models.Model):
 
     @cached_property
     def organization(self):
-        # TODO: get the first organization
-        return {'key': 'null', 'name': '(unknown)', 'short_name': '(unknown)'}
+        # We do this to take advantage of prefetch_related
+        orgs = self.organizations.all()
+        return orgs[0] if orgs else None
 
     def calculate_points(self):
         points = sum(map(itemgetter('points'),
