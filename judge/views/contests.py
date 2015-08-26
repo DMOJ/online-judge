@@ -227,7 +227,7 @@ def contest_ranking_list(contest, problems):
 
     return map(make_ranking_profile,
                contest.users.select_related('profile__user__user', 'rating')
-                      .defer('profile__user__about', 'profile__user__organization__about')
+                      .defer('profile__user__about')
                       .order_by('-score', 'cumtime'))
 
 
