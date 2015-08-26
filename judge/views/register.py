@@ -50,8 +50,8 @@ class RegistrationView(OldRegistrationView):
         kwargs['TIMEZONE_BG'] = getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD')
         return super(RegistrationView, self).get_context_data(**kwargs)
 
-    def register(self, request, **cleaned_data):
-        user = super(RegistrationView, self).register(request, **cleaned_data)
+    def register(self, *args, **cleaned_data):
+        user = super(RegistrationView, self).register(*args, **cleaned_data)
         profile, _ = Profile.objects.get_or_create(user=user, defaults={
             'language': Language.get_python2()
         })
