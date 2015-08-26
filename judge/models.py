@@ -128,9 +128,8 @@ class Profile(models.Model):
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
     last_access = models.DateTimeField(verbose_name='Last access time', default=now)
     ip = models.GenericIPAddressField(verbose_name='Last IP', blank=True, null=True)
-    organization = models.ForeignKey(Organization, verbose_name='Organization', null=True, blank=True,
-                                     on_delete=models.SET_NULL, related_name='members', related_query_name='member')
-    organization_join_time = models.DateTimeField(verbose_name='Organization joining date', null=True, blank=True)
+    organizations = models.ManyToManyField(Organization, verbose_name='Organization', blank=True,
+                                           related_name='members', related_query_name='member')
     display_rank = models.CharField(max_length=10, default='user',
                                     choices=(('user', 'Normal User'), ('setter', 'Problem Setter'), ('admin', 'Admin')))
     mute = models.BooleanField(verbose_name='Comment mute', help_text='Some users are at their best when silent.',
