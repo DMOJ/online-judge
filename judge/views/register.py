@@ -1,14 +1,16 @@
 import re
+
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.forms import CharField, ChoiceField, ModelChoiceField
 from django.shortcuts import render
-from django.utils import timezone
 from registration.backends.default.views import\
     RegistrationView as OldRegistrationView,\
     ActivationView as OldActivationView
 from registration.forms import RegistrationForm
+from sortedm2m.forms import SortedMultipleChoiceField
+
 from judge.models import Profile, Language, Organization, TIMEZONE
 
 
@@ -20,6 +22,8 @@ class CustomRegistrationForm(RegistrationForm):
                                 error_messages={'invalid': 'A username must contain letters, numbers, or underscores'})
     display_name = CharField(max_length=50, required=False, label='Real name (optional)')
     timezone = ChoiceField(label='Location', choices=TIMEZONE)
+    organizations = SortedMultipleChoiceField(queryset=Organization.objects.filter(is_open=True),
+                                              label='Organizations', required=False)
     language = ModelChoiceField(queryset=Language.objects.all(), label='Preferred language', empty_label=None)
 
     def clean_email(self):
@@ -54,6 +58,7 @@ class RegistrationView(OldRegistrationView):
         profile.name = cleaned_data['display_name']
         profile.timezone = cleaned_data['timezone']
         profile.language = cleaned_data['language']
+        profile.organizations.add(*cleaned_data['organizations'])
         profile.save()
         return user
 
