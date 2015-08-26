@@ -88,7 +88,7 @@ def edit_profile(request):
     if profile.mute:
         raise Http404()
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
+        form = ProfileForm(request.POST, instance=profile, user=request.user)
         if form.is_valid():
             with transaction.atomic(), reversion.create_revision():
                 form.save()
@@ -96,7 +96,7 @@ def edit_profile(request):
                 reversion.set_comment('Updated on site')
             return HttpResponseRedirect(request.path)
     else:
-        form = ProfileForm(instance=profile)
+        form = ProfileForm(instance=profile, user=request.user)
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
     return render(request, 'user/edit_profile.jade', {
         'form': form, 'title': 'Edit profile',

@@ -92,11 +92,11 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
             else:
                 logger.info('Info from %s: %s', backend.name, response)
             profile.save()
-            form = ProfileForm(instance=profile)
+            form = ProfileForm(instance=profile, user=user)
         else:
             data = backend.strategy.request_data()
             logger.info(data)
-            form = ProfileForm(data, instance=user.profile)
+            form = ProfileForm(data, instance=user.profile, user=user)
             if form.is_valid():
                 with transaction.atomic(), reversion.create_revision():
                     form.save()

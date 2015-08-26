@@ -31,8 +31,11 @@ class ProfileForm(ModelForm):
             widgets['ace_theme'] = Select2Widget(attrs={'style': 'width: 300px'})
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super(ProfileForm, self).__init__(*args, **kwargs)
-        self.fields['organizations'].queryset = Organization.objects.filter(is_open=True)
+        self.fields['organizations'].queryset = Organization.objects.filter(
+            Q(is_open=True) | Q(id__in=user.profile.organizations.all())
+        )
 
     def clean_name(self):
         return fix_unicode(self.cleaned_data['name'])
