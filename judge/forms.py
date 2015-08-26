@@ -23,13 +23,12 @@ use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in set
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['name', 'about', 'organization', 'timezone', 'language', 'ace_theme']
+        fields = ['name', 'about', 'timezone', 'language', 'ace_theme']
         widgets = {'name': TextInput(attrs={'style': 'width: 100%; box-sizing: border-box'})}
         if Select2Widget is not None:
             widgets['timezone'] = Select2Widget(attrs={'style': 'width: 200px'})
             widgets['language'] = Select2Widget(attrs={'style': 'width: 300px'})
             widgets['ace_theme'] = Select2Widget(attrs={'style': 'width: 300px'})
-            widgets['organization'] = Select2Widget(attrs={'style': 'width: 300px'})
 
     def clean_name(self):
         return fix_unicode(self.cleaned_data['name'])

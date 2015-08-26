@@ -83,7 +83,6 @@ class ProfileForm(ModelForm):
                 'timezone': Select2Widget,
                 'language': Select2Widget,
                 'ace_theme': Select2Widget,
-                'organization': HeavySelect2Widget(data_view='organization_select2'),
             }
 
 
@@ -101,7 +100,7 @@ class TimezoneFilter(admin.SimpleListFilter):
 
 
 class ProfileAdmin(Select2SuitMixin, reversion.VersionAdmin):
-    fields = ('user', 'name', 'display_rank', 'about', 'organization', 'timezone', 'language', 'ace_theme',
+    fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
               'last_access', 'ip', 'mute')
     readonly_fields = ('user',)
     list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip')
