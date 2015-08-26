@@ -37,10 +37,9 @@ def problem_update(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Profile)
 def profile_update(sender, instance, **kwargs):
-    cache.delete_many([
-        make_template_fragment_key('submission_user', (instance.id,)),
-        make_template_fragment_key('org_member_count', (instance.organization_id,))
-    ])
+    cache.delete_many([make_template_fragment_key('submission_user', (instance.id,))] +
+                      [make_template_fragment_key('org_member_count', (org_id,))
+                       for org_id in instance.organizations.values_list('id', flat=True)])
 
 
 @receiver(post_save, sender=Contest)
