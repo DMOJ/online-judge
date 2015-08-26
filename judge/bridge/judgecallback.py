@@ -14,7 +14,7 @@ def _ensure_connection():
     try:
         db.connection.cursor().execute('SELECT 1').fetchall()
     except Exception:
-        db.close_connection()
+        db.connection.close()
 
 
 class DjangoJudgeHandler(JudgeHandler):
