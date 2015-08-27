@@ -5,8 +5,8 @@ from judge.rabbitmq.connection import vhost
 
 
 def auth_user(request):
-    return ['deny', 'allow'][Judge.objects.filter(name=request.GET.get('username'),
-                                                  auth_key=request.GET.get('password')).exists()]
+    return HttpResponse(['deny', 'allow'][Judge.objects.filter(name=request.GET.get('username'),
+                                                               auth_key=request.GET.get('password')).exists()])
 
 
 def auth_vhost(request):
