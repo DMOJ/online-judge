@@ -12,8 +12,6 @@ class LockModel(object):
         self.cursor = connection.cursor()
 
     def __enter__(self):
-        self.auto_commit = transaction.get_autocommit()
-        transaction.set_autocommit(False)
         self.cursor.execute('LOCK TABLES ' + self.tables)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -21,6 +19,5 @@ class LockModel(object):
             transaction.commit()
         else:
             transaction.rollback()
-        transaction.set_autocommit(self.auto_commit)
         self.cursor.execute('UNLOCK TABLES')
         self.cursor.close()
