@@ -9,13 +9,8 @@ conn = None
 
 def connect():
     global conn, chan
-    conn = pika.BlockingConnection(params)
-    return conn
-
-
-def initialize():
     if conn is None:
-        raise SystemError('Not connected')
+        conn = pika.BlockingConnection(params)
     chan = conn.channel()
     chan.queue_declare(queue='submission', durable=True)
     chan.queue_declare(queue='judge-response', durable=True)
@@ -25,3 +20,4 @@ def initialize():
     chan.exchange_declare(exchange='ping', exchange_type='fanout', durable=True)
     chan.queue_bind(queue='judge-response', exchange='submission-response')
     chan.queue_bind(queue='judge-ping', exchange='ping')
+    return conn
