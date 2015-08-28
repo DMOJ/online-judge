@@ -11,13 +11,13 @@ def connect():
     global conn, chan
     if conn is None:
         conn = pika.BlockingConnection(params)
-    chan = conn.channel()
-    chan.queue_declare(queue='submission', durable=True)
-    chan.queue_declare(queue='judge-response', durable=True)
-    chan.queue_declare(queue='judge-ping', durable=True)
-    chan.exchange_declare(exchange='broadcast', exchange_type='fanout', durable=True)
-    chan.exchange_declare(exchange='submission-response', exchange_type='fanout', durable=True)
-    chan.exchange_declare(exchange='ping', exchange_type='fanout', durable=True)
-    chan.queue_bind(queue='judge-response', exchange='submission-response')
-    chan.queue_bind(queue='judge-ping', exchange='ping')
+        chan = conn.channel()
+        chan.queue_declare(queue='submission', durable=True)
+        chan.queue_declare(queue='judge-response', durable=True)
+        chan.queue_declare(queue='judge-ping', durable=True)
+        chan.exchange_declare(exchange='broadcast', exchange_type='fanout', durable=True)
+        chan.exchange_declare(exchange='submission-response', exchange_type='fanout', durable=True)
+        chan.exchange_declare(exchange='ping', exchange_type='fanout', durable=True)
+        chan.queue_bind(queue='judge-response', exchange='submission-response')
+        chan.queue_bind(queue='judge-ping', exchange='ping')
     return conn
