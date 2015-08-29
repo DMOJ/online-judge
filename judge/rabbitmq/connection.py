@@ -8,7 +8,7 @@ conn = None
 
 
 def connect():
-    global conn, chan
+    global conn
     if conn is None:
         conn = pika.BlockingConnection(params)
         chan = conn.channel()
