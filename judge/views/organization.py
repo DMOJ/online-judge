@@ -195,10 +195,7 @@ class OrganizationRequestView(LoginRequiredMixin, SingleObjectTemplateResponseMi
 
     def post(self, request, *args, **kwargs):
         self.object = organization = self.get_object()
-        self.formset = formset = OrganizationRequestFormSet(
-            request.POST, request.FILES,
-            queryset=OrganizationRequest.objects.filter(state='P', organization=self.object)
-        )
+        self.formset = formset = OrganizationRequestFormSet(request.POST, request.FILES)
         if formset.is_valid():
             approved, rejected = 0, 0
             for obj in formset.save():
