@@ -173,7 +173,7 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
     slug_url_kwarg = 'key'
 
     def get_object(self, queryset=None):
-        organization = super(OrganizationRequestView, self).get_object(queryset)
+        organization = super(OrganizationRequestBaseView, self).get_object(queryset)
         if not organization.admins.filter(id=self.request.user.profile.id).exists():
             raise PermissionDenied()
         return organization
