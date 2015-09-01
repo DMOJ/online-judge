@@ -124,6 +124,10 @@ class RequestJoinOrganization(LoginRequiredMixin, OrganizationMixin, SingleObjec
     template_name = 'organization/request.jade'
     form_class = OrganizationRequestForm
 
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(RequestJoinOrganization, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(RequestJoinOrganization, self).get_context_data(**kwargs)
         if not self.object.is_private:
