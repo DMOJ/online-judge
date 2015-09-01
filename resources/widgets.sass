@@ -18,26 +18,34 @@
     font-size: 1.3em
     float: right
 
-.button, button, input[type='submit']
-    cursor: pointer
-    display: block
+// Bootstrap-y buttons
+.button, button, input[type=submit]
+    margin-top: 5px
+    margin-bottom: 5px
+    background: linear-gradient(to bottom, #337AB7 0px, #265A88 100%) repeat-x
+    text-shadow: 0px -1px 0 rgba(0, 0, 0, 0.2)
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset, 0 1px 1px rgba(0, 0, 0, 0.075)
+    display: inline-block
+    padding: 6px 12px
+    font-size: 14px
+    font-weight: 400
+    line-height: 1.42857
     text-align: center
-    padding: 4px 2px 5px
-    color: white
-    border: 1px solid #666
-    border-radius: 1px
-    background: #2980b9
-    background: -webkit-linear-gradient(270deg, #00aee0, #2980b9)
-    background: linear-gradient(180deg, #00aee0, #2980b9)
-    text-decoration: none
+    white-space: nowrap
+    vertical-align: middle
+    cursor: pointer
+    -moz-user-select: none
+    border: 1px solid transparent
+    border-radius: 4px
+    color: #FFF
 
-.button:hover, button:hover, input[type='submit']:hover
-    background: #00a3e0
+.button:hover, button:hover, input[type=submit]:hover
+  background: #265A88 0px -15px
+  text-decoration: none
 
-.button:active, button:active, input[type='submit']:hover
-    background: #00aee0
-    background: -webkit-linear-gradient(270deg, #2980b9, #00aee0)
-    background: linear-gradient(180deg, #2980b9, #00aee0)
+.button:active, button:active, input[type=submit]:hover
+  border-color: #245580
+  background: #265a88 none
 
 textarea
     border: 1px solid #CCC
