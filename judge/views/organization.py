@@ -1,24 +1,26 @@
 from itertools import chain
+from django import forms
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Count, Max
+from django.forms import Form
 from django.http import HttpResponseRedirect, Http404
 from django.utils import timezone
-from django.views.generic import CreateView, DetailView, ListView, View, UpdateView
+from django.views.generic import CreateView, DetailView, ListView, View, UpdateView, FormView
 from django.views.generic.detail import SingleObjectMixin
 import reversion
 
 from judge.forms import EditOrganizationForm, NewOrganizationForm
-from judge.models import Organization
+from judge.models import Organization, OrganizationRequest
 from judge.utils.ranker import ranker
 from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
 
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'JoinOrganization',
-           'LeaveOrganization', 'EditOrganization']
+           'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization', 'OrganizationRequestDetail']
 
 
 class OrganizationMixin(object):
@@ -112,6 +114,43 @@ class LeaveOrganization(OrganizationMembershipChange):
             return generic_message(request, 'Leaving organization', 'You are not in "%s".' % org.key)
         profile.organizations.remove(org)
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
+
+
+class OrganizationRequestForm(Form):
+    reason = forms.Textarea()
+
+
+class RequestJoinOrganization(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, FormView):
+    template_name = 'organization/request.jade'
+    form_class = OrganizationRequestForm
+
+    def get_context_data(self, **kwargs):
+        context = super(RequestJoinOrganization, self).get_context_data(**kwargs)
+        if not self.object.is_private:
+            raise Http404()
+        context['title'] = 'Request to join %s' % self.object.name
+        return context
+
+    def form_valid(self, form):
+        request = OrganizationRequest()
+        request.organization = self.get_object()
+        request.user = self.request.user.profile
+        request.reason = form.cleaned_data['reason']
+        request.state = 'P'
+        request.save()
+        return HttpResponseRedirect(reverse('request_organization_detail', args=(request.organization.key, request.id)))
+
+
+class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
+    model = OrganizationRequest
+    template_name = 'organization/request_detail.jade'
+    title = 'Join request detail'
+
+    def get_object(self, queryset=None):
+        object = super(OrganizationRequestDetail, self).get_object(queryset)
+        if object.user != self.request.user.profile:
+            raise PermissionDenied()
+        return object
 
 
 class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, UpdateView):

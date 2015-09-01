@@ -1,0 +1,21 @@
+extends base
+
+block body
+    table
+        tr
+            th User:
+            - with user=object.user
+                td(class=user.display_rank)
+                    a(href='{% url "user_page" user.user.username %}')= user.long_display_name
+        tr
+            th Organization:
+            td
+                - with org=object.organization
+                    a(href='{% url "organization_home" org.key %}')= org.name
+        tr
+            th Time:
+            td #{object.time|date:"N j, o, g:i a"}
+        tr
+            th(colspan=2) Reason:
+        tr
+            td(colspan=2) #{object.reason}
