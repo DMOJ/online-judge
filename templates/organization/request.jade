@@ -3,7 +3,8 @@ extends base
 block body
     form.form-area(action='', method='post')
         - csrf_token
-        label(for='{{ form.reason.id_for_label }}') Your reason for joining:
-        br
-        | #{form.reason}
+        p
+            label(for='{{ form.reason.id_for_label }}')
+                b Your reason for joining:
+        p #{form.reason}
         button(type='submit') Request
