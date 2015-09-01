@@ -6,6 +6,8 @@ block body
             each message in messages
                 li(class=message.tags) #{message}
 
+    include organization/requests/tab
+
     if formset.forms
         form(action='', method='post')
             - csrf_token

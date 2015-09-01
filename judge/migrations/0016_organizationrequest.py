@@ -18,8 +18,8 @@ class Migration(migrations.Migration):
                 ('time', models.DateTimeField(verbose_name=b'Request time', auto_now_add=True)),
                 ('state', models.CharField(max_length=1, choices=[(b'P', b'Pending'), (b'A', b'Approved'), (b'R', b'Rejected')])),
                 ('reason', models.TextField()),
-                ('organization', models.ForeignKey(to='judge.Organization')),
-                ('user', models.ForeignKey(to='judge.Profile')),
+                ('organization', models.ForeignKey(to='judge.Organization', related_name='requests')),
+                ('user', models.ForeignKey(to='judge.Profile', related_name='requests')),
             ],
             options={
             },

@@ -199,8 +199,8 @@ class Profile(models.Model):
 
 
 class OrganizationRequest(models.Model):
-    user = models.ForeignKey(Profile)
-    organization = models.ForeignKey(Organization)
+    user = models.ForeignKey(Profile, related_name='requests')
+    organization = models.ForeignKey(Organization, related_name='requests')
     time = models.DateTimeField(verbose_name='Request time', auto_now_add=True)
     state = models.CharField(max_length=1, choices=(
         ('P', 'Pending'),

@@ -22,7 +22,7 @@ from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'JoinOrganization',
            'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization', 'OrganizationRequestDetail',
-           'OrganizationRequestView']
+           'OrganizationRequestView', 'OrganizationRequestLog']
 
 
 class OrganizationMixin(object):
@@ -126,7 +126,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
     model = Organization
     slug_field = 'key'
     slug_url_kwarg = 'key'
-    template_name = 'organization/request.jade'
+    template_name = 'organization/requests/request.jade'
     form_class = OrganizationRequestForm
 
     def dispatch(self, request, *args, **kwargs):
@@ -152,7 +152,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
 
 class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
     model = OrganizationRequest
-    template_name = 'organization/request_detail.jade'
+    template_name = 'organization/requests/detail.jade'
     title = 'Join request detail'
 
     def get_object(self, queryset=None):
@@ -167,11 +167,10 @@ OrganizationRequestFormSet = modelformset_factory(
 )
 
 
-class OrganizationRequestView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, SingleObjectMixin, View):
+class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, SingleObjectMixin, View):
     model = Organization
     slug_field = 'key'
     slug_url_kwarg = 'key'
-    template_name = 'organization/requests.jade'
 
     def get_object(self, queryset=None):
         organization = super(OrganizationRequestView, self).get_object(queryset)
@@ -179,9 +178,14 @@ class OrganizationRequestView(LoginRequiredMixin, SingleObjectTemplateResponseMi
             raise PermissionDenied()
         return organization
 
+
+class OrganizationRequestView(OrganizationRequestBaseView):
+    template_name = 'organization/requests/pending.jade'
+
     def get_context_data(self, **kwargs):
         context = super(OrganizationRequestView, self).get_context_data(**kwargs)
         context['formset'] = self.formset
+        context['tab'] = 'pending'
         context['title'] = 'Managing join requests for %s' % self.object.name
         return context
 
@@ -212,6 +216,22 @@ class OrganizationRequestView(LoginRequiredMixin, SingleObjectTemplateResponseMi
         return self.render_to_response(context)
 
     put = post
+
+
+class OrganizationRequestLog(OrganizationRequestBaseView):
+    states = ('A', 'R')
+    tab = 'log'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = super(OrganizationRequestLog, self).get_context_data(**kwargs)
+        context['requests'] = self.object.requests.filter(state__in=self.states)
+        context['tab'] = self.tab
+        return context
 
 
 class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, UpdateView):
