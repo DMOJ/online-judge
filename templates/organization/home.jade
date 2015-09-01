@@ -24,6 +24,7 @@ block info_float
         br
         if not organization.is_open
             a(href='{% url "organization_requests_pending" organization.key %}') View requests
+            br
     a(href='{% url "organization_users" organization.key %}') View members
         
 block description
