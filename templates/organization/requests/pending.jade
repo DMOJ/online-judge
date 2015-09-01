@@ -6,7 +6,7 @@ block body
             each message in messages
                 li(class=message.tags) #{message}
 
-    include organization/requests/tab
+    include organization/requests/tabs
 
     if formset.forms
         form(action='', method='post')
