@@ -201,7 +201,7 @@ class Profile(models.Model):
 class OrganizationRequest(models.Model):
     user = models.ForeignKey(Profile)
     organization = models.ForeignKey(Organization)
-    time = models.DateTimeField(verbose_name='Request time')
+    time = models.DateTimeField(verbose_name='Request time', auto_now_add=True)
     state = models.CharField(max_length=1, choices=(
         ('P', 'Pending'),
         ('A', 'Approved'),

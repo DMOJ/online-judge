@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='OrganizationRequest',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('time', models.DateTimeField(verbose_name=b'Request time')),
+                ('time', models.DateTimeField(verbose_name=b'Request time', auto_now_add=True)),
                 ('state', models.CharField(max_length=1, choices=[(b'P', b'Pending'), (b'A', b'Approved'), (b'R', b'Rejected')])),
                 ('reason', models.TextField()),
                 ('organization', models.ForeignKey(to='judge.Organization')),
