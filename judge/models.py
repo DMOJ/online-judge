@@ -198,6 +198,18 @@ class Profile(models.Model):
         )
 
 
+class OrganizationRequest(models.Model):
+    user = models.ForeignKey(Profile)
+    organization = models.ForeignKey(Organization)
+    time = models.DateTimeField(verbose_name='Request time')
+    state = models.CharField(max_length=1, choices=(
+        ('P', 'Pending'),
+        ('A', 'Approved'),
+        ('R', 'Rejected'),
+    ))
+    reason = models.TextField()
+
+
 class ProblemType(models.Model):
     name = models.CharField(max_length=20, verbose_name='Problem category ID', unique=True)
     full_name = models.CharField(max_length=100, verbose_name='Problem category name')
