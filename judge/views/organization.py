@@ -117,7 +117,7 @@ class LeaveOrganization(OrganizationMembershipChange):
 
 
 class OrganizationRequestForm(Form):
-    reason = forms.Textarea()
+    reason = forms.CharField(widget=forms.Textarea)
 
 
 class RequestJoinOrganization(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, FormView):
