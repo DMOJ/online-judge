@@ -1,197 +1,80 @@
-extends base
-- load staticfiles
-- load media_extract
+.social i
+    display: inline
+    font-size: 1.9em
 
-block js_media
-    script(type='text/javascript').
-        $(function () {
-            var select = $('#id_language');
-            var container = select.parent();
-            var current = select.find(':selected').attr('value');
-            var field = $('<input/>', {
-                id: 'id_language',
-                name: 'language',
-                type: 'hidden',
-                value: current
-            }).appendTo(container);
-            var info = $('#language-details');
+.facebook-this, .tweet-this, .gplus-this
+    display: inline
 
-            function update_selected() {
-                $('#language-current').find('.name').text(selected.text());
-                $('#language-current').find('.info').text(selected.attr('data-info'));
-            }
-            select.remove();
-            select = $('#language-select').show();
-            select.find('li').mouseenter(function () {
-                info.text($(this).attr('data-info'));
-            }).mouseout(function() {
-                info.text(selected.attr('data-info'));
-            }).click(function () {
-                selected.removeClass('selected');
-                window.ace_source.getSession().setMode("ace/mode/" + selected.attr('data-ace'));
-                field.attr('value', (selected = $(this).addClass('selected')).attr('data-id'));
-                update_selected();
-            });
-            var selected = select.find('[data-id=' + current + ']').addClass('selected');
-            update_selected(selected);
-            info.text(selected.attr('data-info'));
-            
-            $('#language-current').click(function() {
-                var $expand = $('#language-expand');
-                var $current = $(this);
-                if ($expand.is(':visible'))
-                    $expand.slideUp(400, function () {
-                        $current.removeClass('expanded');
-                    });
-                else {
-                    $current.addClass('expanded');
-                    $expand.slideDown(400);
-                }
-            });
+.tweet-this i
+    color: #55ACEE
 
-            $('#id_language').change(function () {
-                var lang = $("#id_language").find("option:selected").attr('value');
-                window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
-            });
+.facebook-this i
+    color: #133783
 
-            $('#ace_source').on('ace_load', function (e, editor) {
-                var source = $('textarea#id_source');
-                if (source.val() == '') {
-                    var problem = $('#id_problem').find('option:selected').attr('value');
-                    var code = localStorage.getItem('submit:' + problem);
-                    if (code) {
-                        source.val(code);
-                        editor.getSession().setValue(code);
-                    }
-                }
-            });
-        });
-    | #{form.media|media_type:"js"}
+.gplus-this i
+    color: #DD4B38
 
-block media
-    | #{form.media|media_type:"css"}
-    style.
-        #submit-wrapper {
-            margin-top: 0.7em;
-        }
+.social
+    font-size: 1.3em
+    float: right
 
-        #submit-wrapper #problem-id, #submit-wrapper #editor, #submit-wrapper #language {
-            margin-top: 4px;
-        }
+// Bootstrap-y buttons
+.button, input[type=submit]
+    color: white
+    cursor: pointer
+    vertical-align: middle
+    white-space: nowrap
+    font-size: 14px
+    font-weight: 400
+    line-height: 1.4
+    background: rgb(51, 122, 183) none repeat scroll 0% (0% / auto) padding-box border-box
+    background: -webkit-linear-gradient(top, #337ab7 0, #265a88 100%) repeat-x
+    background: linear-gradient(to bottom, #337ab7 0, #265a88 100%) repeat-x
+    border-radius: 4px 4px 4px 4px
+    padding: 6px 0px
+    display: block
+    border-color: #245580
+    text-align: center
+    &:hover
+        background: #265a88
 
-        #language-select {
-            margin: 0;
-            background: #fefefe;
-            border: 1px solid #2980B9;
-            display: none;
-        }
+button:hover, input[type=submit]:hover
+    background: #265a88
 
-        #language-select li {
-            list-style: none;
-            cursor: pointer;
-        }
+.button:active, button:active, input[type=submit]:hover
+    border-color: #245580
+    background: #265a88
 
-        #language-select ul {
-            margin: 0;
-            padding: 0;
-            list-style-type: none;
-            -webkit-columns: 5;
-               -moz-columns: 5;
-                    columns: 5;
-        }
+textarea
+    border: 1px solid #CCC
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075)
+    transition: border linear .2s, box-shadow linear .2s
+    border-radius: 4px
 
-        #language-select li {
-            color: #757575;
-        }
+input
+    &[type="text"], &[type="password"]
+        border: 1px solid #CCC
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075)
+        transition: border linear .2s, box-shadow linear .2s
+        border-radius: 4px
 
-        #language-details {
-            text-align: right;
-            color: #757575;
-            font-size: 1.2em;
-        }
+textarea:hover
+    border-color: rgba(82, 168, 236, 0.8)
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px rgba(82, 168, 236, 0.6)
 
-        #language-select li:hover {
-            text-decoration: underline;
-            color: #252525;
-        }
+input
+    &[type="text"]:hover, &[type="password"]:hover
+        border-color: rgba(82, 168, 236, 0.8)
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px rgba(82, 168, 236, 0.6)
 
-        #language-select li.selected {
-            color:black;
-            font-weight: bold;
-        }
+textarea:focus
+    border-color: rgba(82, 168, 236, 0.8)
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6)
+    outline: 0
 
-        #language-current { display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex }
-        #language-current.expanded { border-bottom: 1px solid #2980B9 }
+input
+    &[type="text"]:focus, &[type="password"]:focus
+        border-color: rgba(82, 168, 236, 0.8)
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6)
+        outline: 0
 
-        #language-current { display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; }
-        #language-current .info:before { content: ' ('}
-        #language-current .info:after { content: ')'}
-        #language-current .name { font-weight: bold; }
-        #language-current .data {
-            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0,#fff), color-stop(0.5,#eee));
-            background-image: -webkit-linear-gradient(center top, #fff 0, #eee 50%);
-            background-image: -moz-linear-gradient(center top, #fff 0, #eee 50%);
-            background-image: -o-linear-gradient(top, #fff 0, #eee 50%);
-            background-image: -ms-linear-gradient(bottom, #fff 0, #eee 50%);
-            background-image: linear-gradient(bottom, #fff 0, #eee 50%);
-            color: #444;
-            padding: 8px;
-            -webkit-box-flex: 1;
-            -webkit-flex: 1;
-                -ms-flex: 1;
-                    flex: 1;
-        }
-
-        #language-current .language-drop {
-            float: right;
-            padding: 8px;
-            border-left: 1px solid #AAA;
-            background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0,#ccc), color-stop(0.6,#eee));
-            background-image: -webkit-linear-gradient(center bottom, #ccc 0, #eee 60%);
-            background-image: -moz-linear-gradient(center bottom,#ccc 0,#eee 60%);
-            background-image: -o-linear-gradient(bottom, #ccc 0, #eee 60%);
-            background-image: -ms-linear-gradient(top, #ccc 0, #eee 60%);
-            background-image: linear-gradient(top, #ccc 0, #eee 60%)
-        }
-
-        #language-expand {
-            padding: 8px;
-            display: none;
-        }
-        
-        #language-current .language-drop:before { content: "\f078" }
-        #language-current.expanded .language-drop:before { content: "\f077" }
-
-block body
-    br
-    form#problem_submit.form-area(action='', method='post')
-        - csrf_token
-        | #{form.non_field_errors}
-        #submit-wrapper
-            #problem-id
-                | #{form.problem.errors}
-                | #{form.problem}
-            #editor
-                | #{form.source.errors}
-                | #{form.source}
-            if not no_judges
-                #language
-                    | #{form.language.errors}
-                    | #{form.language}
-                    #language-select
-                        #language-current
-                            .data
-                                span.name
-                                span.info
-                            .fa.language-drop
-                        #language-expand
-                            #language-details
-                            hr
-                            ul
-                                each lang in form.fields.language.queryset
-                                    li(data-id=lang.id, data-info=lang.info, data-ace=lang.ace)= lang.name
-        hr
-        if no_judges
-            span(style='color: red') No judge is available for this problem.
-        else
-            input(class="button", style="float:right;padding:6px 12px", type='submit', value='Submit!')
