@@ -10,26 +10,6 @@ from judge.utils.problems import get_result_table
 __all__ = ['RankedSubmissions']
 
 
-class FancyRawQuerySetWrapper(object):
-    def __init__(self, type, count, query, args):
-        self._count = count
-        self._type = type
-        self._query = query
-        self._args = args
-
-    def count(self):
-        return self._count
-
-    def __getitem__(self, item):
-        if isinstance(item, slice):
-            offset = item.start
-            limit = item.stop - item.start
-        else:
-            offset = item
-            limit = 1
-        return list(Submission.objects.raw(self._query + 'LIMIT %s OFFSET %s', self._args + (limit, offset)))
-
-
 class RankedSubmissions(ProblemSubmissions):
     dynamic_update = False
 
