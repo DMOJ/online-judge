@@ -200,7 +200,7 @@ class OrganizationRequestView(LoginRequiredMixin, SingleObjectTemplateResponseMi
             approved, rejected = 0, 0
             for obj in formset.save():
                 if obj.state == 'A':
-                    obj.user.organizations.add(obj.organizations)
+                    obj.user.organizations.add(obj.organization)
                     approved += 1
                 elif obj.state == 'R':
                     rejected += 1
