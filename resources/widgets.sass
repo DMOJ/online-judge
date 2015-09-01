@@ -19,33 +19,29 @@
     float: right
 
 // Bootstrap-y buttons
-.button, button, input[type=submit]
-    margin-top: 5px
-    margin-bottom: 5px
-    background: linear-gradient(to bottom, #337AB7 0px, #265A88 100%) repeat-x
-    text-shadow: 0px -1px 0 rgba(0, 0, 0, 0.2)
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset, 0 1px 1px rgba(0, 0, 0, 0.075)
-    display: inline-block
-    padding: 6px 12px
+.button
+    color: white
+    cursor: pointer
+    vertical-align: middle
+    white-space: nowrap
     font-size: 14px
     font-weight: 400
-    line-height: 1.42857
-    text-align: center
-    white-space: nowrap
-    vertical-align: middle
-    cursor: pointer
-    -moz-user-select: none
-    border: 1px solid transparent
-    border-radius: 4px
-    color: #FFF
+    line-height: 1.4
+    background: rgb(51, 122, 183) none repeat scroll 0% (0% / auto) padding-box border-box
+    background: -webkit-linear-gradient(top, #337ab7 0, #265a88 100%) repeat-x
+    background: linear-gradient(to bottom, #337ab7 0, #265a88 100%) repeat-x
+    border: 1px solid rgb(46, 109, 164)
+    border-radius: 4px 4px 4px 4px
+    padding: 6px 12px
+    &:hover
+        background: #265a88
 
-.button:hover, button:hover, input[type=submit]:hover
-    background: #265A88 0px -15px
-    text-decoration: none
+button:hover, input[type=submit]:hover
+    background: #265a88
 
 .button:active, button:active, input[type=submit]:hover
     border-color: #245580
-    background: #265a88 none
+    background: #265a88
 
 textarea
     border: 1px solid #CCC
