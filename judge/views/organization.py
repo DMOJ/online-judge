@@ -120,7 +120,10 @@ class OrganizationRequestForm(Form):
     reason = forms.CharField(widget=forms.Textarea)
 
 
-class RequestJoinOrganization(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, FormView):
+class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
+    model = Organization
+    slug_field = 'key'
+    slug_url_kwarg = 'key'
     template_name = 'organization/request.jade'
     form_class = OrganizationRequestForm
 
