@@ -987,6 +987,7 @@ class LicenseAdmin(admin.ModelAdmin):
 
 class OrganizationRequestAdmin(admin.ModelAdmin):
     list_display = ('username', 'organization', 'state', 'time')
+    readonly_fields = ('user', 'organization')
 
     def username(self, obj):
         return obj.user.long_display_name
