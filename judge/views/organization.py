@@ -204,9 +204,9 @@ class OrganizationRequestView(LoginRequiredMixin, SingleObjectTemplateResponseMi
                     approved += 1
                 elif obj.state == 'R':
                     rejected += 1
-                messages.success(request, 'Approved %d user%s and rejected %d user%s in %s.' % (
-                                 approved, 's'[approved == 1:], rejected, 's'[rejected == 1:],
-                                 organization.name))
+            messages.success(request, 'Approved %d user%s and rejected %d user%s in %s.' % (
+                             approved, 's'[approved == 1:], rejected, 's'[rejected == 1:],
+                             organization.name))
             return HttpResponseRedirect(request.get_full_path())
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
