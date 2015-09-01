@@ -221,6 +221,7 @@ class OrganizationRequestView(OrganizationRequestBaseView):
 class OrganizationRequestLog(OrganizationRequestBaseView):
     states = ('A', 'R')
     tab = 'log'
+    template_name = 'organization/requests/log.jade'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
