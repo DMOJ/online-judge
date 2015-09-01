@@ -130,7 +130,7 @@ class RequestJoinOrganization(LoginRequiredMixin, OrganizationMixin, SingleObjec
 
     def get_context_data(self, **kwargs):
         context = super(RequestJoinOrganization, self).get_context_data(**kwargs)
-        if not self.object.is_private:
+        if self.object.is_open:
             raise Http404()
         context['title'] = 'Request to join %s' % self.object.name
         return context
