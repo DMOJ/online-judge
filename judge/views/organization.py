@@ -162,7 +162,7 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
 
 
 OrganizationRequestFormSet = modelformset_factory(
-    OrganizationRequest, extra=0, fields=('state', 'reason'), can_delete=True
+    OrganizationRequest, extra=0, fields=('state',), can_delete=True
 )
 
 
