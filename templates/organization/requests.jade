@@ -20,7 +20,7 @@ block body
             each form in formset
                 tr(id='request-{{ form.instance.id }}')
                     - with user=form.instance.user
-                        td(class=user.display_rank)
+                        td(class=user.display_rank) #{form.id}
                             a(href='{% url "user_page" user.user.username %}', target='_blank')= user.long_display_name
                     td #{form.instance.time|date:"N j, o, h:i"}
                     td #{form.state}
