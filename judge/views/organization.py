@@ -166,7 +166,7 @@ OrganizationRequestFormSet = modelformset_factory(
 )
 
 
-class OrganizationRequestView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, View):
+class OrganizationRequestView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, SingleObjectMixin, View):
     model = Organization
     slug_field = 'key'
     slug_url_kwarg = 'key'
