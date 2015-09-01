@@ -158,6 +158,7 @@ urlpatterns = patterns('',
     url(r'^organization/(?P<key>\w+)/edit$', organization.EditOrganization.as_view(), name='edit_organization'),
     url(r'^organization/(?P<key>\w+)/request$', organization.RequestJoinOrganization.as_view(), name='request_organization'),
     url(r'^organization/(?P<key>\w+)/request/(?P<pk>\d+)$', organization.OrganizationRequestDetail.as_view(), name='request_organization_detail'),
+    url(r'^organization/(?P<key>\w+)/requests$', organization.OrganizationRequestView.as_view(), name='organization_requests'),
 
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
     url(r'^runtime/(?P<key>\w+)$', language.LanguageDetail.as_view(), name='runtime_info'),

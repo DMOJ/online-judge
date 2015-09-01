@@ -6,11 +6,11 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Count, Max
-from django.forms import Form
+from django.forms import Form, modelformset_factory
 from django.http import HttpResponseRedirect, Http404
 from django.utils import timezone
 from django.views.generic import CreateView, DetailView, ListView, View, UpdateView, FormView
-from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 import reversion
 
 from judge.forms import EditOrganizationForm, NewOrganizationForm
@@ -20,7 +20,8 @@ from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
 
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'JoinOrganization',
-           'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization', 'OrganizationRequestDetail']
+           'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization', 'OrganizationRequestDetail',
+           'OrganizationRequestView']
 
 
 class OrganizationMixin(object):
@@ -158,6 +159,52 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
         if object.user != self.request.user.profile:
             raise PermissionDenied()
         return object
+
+
+OrganizationRequestFormSet = modelformset_factory(
+    OrganizationRequest, extra=0, fields=('user', 'organizations', 'date', 'state', 'reason')
+)
+
+
+class OrganizationRequestView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, View):
+    model = Organization
+    slug_field = 'key'
+    slug_url_kwarg = 'key'
+    template_name = 'organization/requests.jade'
+
+    def get_object(self, queryset=None):
+        organization = super(OrganizationRequestView, self).get_object(queryset)
+        if not organization.admins.filter(id=self.request.user.profile.id).exists():
+            raise PermissionDenied()
+        return organization
+
+    def get_context_data(self, **kwargs):
+        context = super(OrganizationRequestView, self).get_context_data(**kwargs)
+        context['formset'] = self.formset
+        context['title'] = 'Managing join requests for %s' % self.object.name
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.formset = OrganizationRequestFormSet(
+            queryset=OrganizationRequest.objects.filter(state='P', organization=self.object)
+        )
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.formset = formset = OrganizationRequestFormSet(
+            request.POST, request.FILES,
+            queryset=OrganizationRequest.objects.filter(state='P', organization=self.object)
+        )
+        if formset.is_valid():
+            formset.save()
+            return HttpResponseRedirect(request.get_full_path())
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    put = post
 
 
 class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, UpdateView):
