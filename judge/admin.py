@@ -22,7 +22,7 @@ from reversion_compare.admin import CompareVersionAdmin
 from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
-    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit
+    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit, OrganizationRequest
 from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
@@ -985,6 +985,14 @@ class LicenseAdmin(admin.ModelAdmin):
         }
 
 
+class OrganizationRequestAdmin(admin.ModelAdmin):
+    list_display = ('username', 'organization', 'state', 'time')
+
+    def username(self, obj):
+        return obj.user.long_display_name
+    username.admin_order_field = 'user__user__username'
+
+
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
@@ -1001,3 +1009,4 @@ admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Solution, SolutionAdmin)
 admin.site.register(License, LicenseAdmin)
+admin.site.register(OrganizationRequest, OrganizationRequestAdmin)
