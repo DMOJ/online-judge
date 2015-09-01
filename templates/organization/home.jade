@@ -22,6 +22,8 @@ block info_float
     if can_edit
         a(href='{% url "edit_organization" organization.key %}') Edit organization
         br
+        if not organization.is_open
+            a(href='{% url "organization_requests_pending" organization.key %}') View requests
     a(href='{% url "organization_users" organization.key %}') View members
         
 block description
