@@ -1,5 +1,9 @@
 extends base
 
+block media
+    style.
+        th { text-align: left }
+
 block body
     table
         tr
@@ -18,4 +22,4 @@ block body
         tr
             th(colspan=2) Reason:
         tr
-            td(colspan=2) #{object.reason}
+            td(colspan=2, style='padding-left: 2em') #{object.reason}
