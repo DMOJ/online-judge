@@ -1,6 +1,11 @@
 extends base
 
 block body
+    if messages
+        ul.messages
+            each message in messages
+                li(class=message.tags) #{message}
+
     form(action='', method='post')
         - csrf_token
         #{formset.management_form}

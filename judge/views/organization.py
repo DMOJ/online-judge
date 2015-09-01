@@ -1,5 +1,6 @@
 from itertools import chain
 from django import forms
+from django.contrib import messages
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
@@ -193,13 +194,22 @@ class OrganizationRequestView(LoginRequiredMixin, SingleObjectTemplateResponseMi
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        self.object = organization = self.get_object()
         self.formset = formset = OrganizationRequestFormSet(
             request.POST, request.FILES,
             queryset=OrganizationRequest.objects.filter(state='P', organization=self.object)
         )
         if formset.is_valid():
-            formset.save()
+            approved, rejected = 0, 0
+            for obj in formset.save():
+                if obj.state == 'A':
+                    obj.user.organizations.add(obj.organizations)
+                    approved += 1
+                elif obj.state == 'R':
+                    rejected += 1
+                messages.success(request, 'Approved %d user%s and rejected %d user%s in %s.' % (
+                                 approved, 's'[approved == 1:], rejected, 's'[rejected == 1:],
+                                 organization.name))
             return HttpResponseRedirect(request.get_full_path())
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
