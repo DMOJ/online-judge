@@ -171,6 +171,7 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
     model = Organization
     slug_field = 'key'
     slug_url_kwarg = 'key'
+    tab = None
 
     def get_object(self, queryset=None):
         organization = super(OrganizationRequestBaseView, self).get_object(queryset)
@@ -178,15 +179,20 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
             raise PermissionDenied()
         return organization
 
+    def get_context_data(self, **kwargs):
+        context = super(OrganizationRequestBaseView, self).get_context_data(**kwargs)
+        context['title'] = 'Managing join requests for %s' % self.object.name
+        context['tab'] = self.tab
+        return context
+
 
 class OrganizationRequestView(OrganizationRequestBaseView):
     template_name = 'organization/requests/pending.jade'
+    tab = 'pending'
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationRequestView, self).get_context_data(**kwargs)
         context['formset'] = self.formset
-        context['tab'] = 'pending'
-        context['title'] = 'Managing join requests for %s' % self.object.name
         return context
 
     def get(self, request, *args, **kwargs):
@@ -231,7 +237,6 @@ class OrganizationRequestLog(OrganizationRequestBaseView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationRequestLog, self).get_context_data(**kwargs)
         context['requests'] = self.object.requests.filter(state__in=self.states)
-        context['tab'] = self.tab
         return context
 
 
