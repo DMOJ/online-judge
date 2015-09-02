@@ -23,7 +23,7 @@ block js_media
                     info_float.width(container.width());
                 }
 
-                ZeroClipboard.config({swfPath: '{% static "zerocopy/ZeroClipboard.js" %}'});
+                ZeroClipboard.config({swfPath: '{% static "zerocopy/ZeroClipboard.swf" %}'});
                 var copyButton;
                 $('pre.code code').each(function () {
                     $(this).parent().before($('<div/>', {'class': 'zero-clipboard'})
