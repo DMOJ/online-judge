@@ -31,12 +31,7 @@ block js_media
                                 'class': 'btn-clipboard',
                                 'data-clipboard-text': $(this).text()
                             }).text('Copy')));
-                    var client = new ZeroClipboard(copyButton.get(0));
-                    client.on("ready", function (readyEvent) {
-                        client.on("aftercopy", function (event) {
-                            alert('Copied!')
-                        });
-                    });
+                    new ZeroClipboard(copyButton.get(0));
                 });
             });
     block content_js_media
