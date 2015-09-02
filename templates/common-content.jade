@@ -1,25 +1,37 @@
 extends base
 - load staticfiles
+- load compress
 
 block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
     block content_media
 
 block js_media
-    script(type='text/javascript').
-        $(function () {
-            var info_float = $('.info-float');
-            var container = $('#content-right');
-            if (window.bad_browser) {
-                container.css('float', 'right');
-            } else if (!featureTest('position', 'sticky')) {
-                fix_div(info_float, 40);
-                $(window).resize(function() {
+    - compress js
+        script(src='{% static "zerocopy/ZeroClipboard.js" %}')
+        script(type='text/javascript').
+            $(function () {
+                var info_float = $('.info-float');
+                var container = $('#content-right');
+                if (window.bad_browser) {
+                    container.css('float', 'right');
+                } else if (!featureTest('position', 'sticky')) {
+                    fix_div(info_float, 40);
+                    $(window).resize(function () {
+                        info_float.width(container.width());
+                    });
                     info_float.width(container.width());
+                }
+
+                $('pre.code code').each(function () {
+                    $(this).insertBefore($('<div/>', {'class': 'zero-clipboard'})
+                            .appendChild($('<span/>', {
+                                'class': 'btn-clipboard',
+                                'data-clipboard-text': $(this).text()
+                            }).text('Copy')));
+                    var client = new ZeroClipboard(copyButton.get(0));
                 });
-                info_float.width(container.width());
-            }
-        });
+            });
     block content_js_media
 
 block body
