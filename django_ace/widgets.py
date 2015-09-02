@@ -18,7 +18,7 @@ ACE_URL = getattr(settings, 'ACE_URL', '//cdnjs.cloudflare.com/ajax/libs/ace/1.1
 
 
 class AceWidget(forms.Textarea):
-    def __init__(self, mode=None, theme=None, wordwrap=False, width='100%', height='400px', *args, **kwargs):
+    def __init__(self, mode=None, theme=None, wordwrap=False, width='100%', height='300px', *args, **kwargs):
         self.mode = mode
         self.theme = theme
         self.wordwrap = wordwrap
