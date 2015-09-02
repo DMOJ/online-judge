@@ -47,7 +47,6 @@ class ProblemSubmitForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProblemSubmitForm, self).__init__(*args, **kwargs)
-        self.fields['source'].widget.attrs.update({'style': 'width: 100%;height: 400px'})
         self.fields['problem'].empty_label = None
         self.fields['problem'].widget = forms.HiddenInput()
         self.fields['language'].empty_label = None
