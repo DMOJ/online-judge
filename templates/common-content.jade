@@ -23,9 +23,10 @@ block js_media
                     info_float.width(container.width());
                 }
 
+                var copyButton;
                 $('pre.code code').each(function () {
                     $(this).insertBefore($('<div/>', {'class': 'zero-clipboard'})
-                            .append($('<span/>', {
+                            .append(copyButton = $('<span/>', {
                                 'class': 'btn-clipboard',
                                 'data-clipboard-text': $(this).text()
                             }).text('Copy')));
