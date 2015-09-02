@@ -1,18 +1,30 @@
-.pagination
+ul.pagination
     if page_obj.has_previous
         if page_obj.previous_page_number == 1 and first_page_href != None
-            a(href='{{ first_page_href }}') <<
+            li
+                a(href='{{ first_page_href }}') «
         else
-            a(href='{{ page_prefix }}{{ page_obj.previous_page_number }}') <<
+            li
+                a(href='{{ page_prefix }}{{ page_obj.previous_page_number }}') «
+    else
+        li.disabled-page
+            span «
 
     each page in page_obj.page_range
         if not page
-            | ...
+            li.disabled-page
+                span ...
         else
             if page == 1 and first_page_href != None
-                a(class=('active-page' if page == page_obj.number else undefined), href='{{ first_page_href }}')= page
+                li(class=('active-page' if page == page_obj.number else undefined))
+                    a(href='{{ first_page_href }}')= page
             else
-                a(class=('active-page' if page == page_obj.number else undefined), href='{{ page_prefix }}{{ page }}')= page
+                li(class=('active-page' if page == page_obj.number else undefined))
+                    a(href='{{ page_prefix }}{{ page }}')= page
 
     if page_obj.has_next
-        a(href='{{ page_prefix }}{{ page_obj.next_page_number }}') >>
+        li
+            a(href='{{ page_prefix }}{{ page_obj.next_page_number }}') »
+    else
+        li.disabled-page
+            span »
