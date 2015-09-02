@@ -25,7 +25,7 @@ block js_media
 
                 var copyButton;
                 $('pre.code code').each(function () {
-                    $(this).prepend($('<div/>', {'class': 'zero-clipboard'})
+                    $(this).parent().before($('<div/>', {'class': 'zero-clipboard'})
                             .append(copyButton = $('<span/>', {
                                 'class': 'btn-clipboard',
                                 'data-clipboard-text': $(this).text()
