@@ -25,7 +25,7 @@ block js_media
 
                 $('pre.code code').each(function () {
                     $(this).insertBefore($('<div/>', {'class': 'zero-clipboard'})
-                            .appendChild($('<span/>', {
+                            .append($('<span/>', {
                                 'class': 'btn-clipboard',
                                 'data-clipboard-text': $(this).text()
                             }).text('Copy')));
