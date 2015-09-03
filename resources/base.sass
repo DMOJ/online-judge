@@ -170,7 +170,7 @@ nav
     background: black
     background: rgba(0, 0, 0, 0.77)
     li
-      display: inline
+      display: inline-block
       color: #FFF
       text-transform: uppercase
       font-size: 1.1em
@@ -195,12 +195,16 @@ nav
       ul
         padding: 0
         position: absolute
-        left: 13px
+        left: 12px
         display: none
         li a
           padding: 8px 15px 8px 8px
           font-size: .8em
           display: block
+          &:hover
+            border-bottom: none
+        &:hover
+	      margin-top: 8px
       &:hover > ul, &:active > ul, &:focus > ul
         display: block
         background: #000
