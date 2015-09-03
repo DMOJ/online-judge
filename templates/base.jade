@@ -103,6 +103,7 @@ html(lang='en')
                         if not node.is_leaf_node
                             ul {{ children }}
                 - endrecursetree
+            #nav-shadow
             span#user-links
                 if request.user.is_authenticated
                     a(href='{% url "user_page" %}')
