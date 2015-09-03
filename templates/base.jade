@@ -97,6 +97,14 @@ html(lang='en')
                 i.fa.fa-bars
                 | &nbsp;MENU
             ul#nav-list
+                li
+                    a(href='/')
+                        img(src='//dmoj.ca/logo.png', style='width: 42px; display: inline-block; vertical-align: middle; padding: 2px; margin: 2px -1px 2px 2px;')
+                        span(style='font-weight: bold; vertical-align: middle; padding-bottom: 5px; font-size: 2.2em;"><span style="color: rgb(255, 222, 5);')
+                            span(style='color: rgb(255, 222, 5)') DM::
+                            span(style='color: #AAA') OJ
+                        // Divider
+                        span(style='width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);')
                 - recursetree nav_bar
                     li
                         a(href=node.path, class='nav-{{ node.key }}')= node.label
