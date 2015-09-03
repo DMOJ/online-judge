@@ -16,7 +16,7 @@ block js_media
                 if (window.bad_browser) {
                     container.css('float', 'right');
                 } else if (!featureTest('position', 'sticky')) {
-                    fix_div(info_float, 40);
+                    fix_div(info_float, 55);
                     $(window).resize(function () {
                         info_float.width(container.width());
                     });
