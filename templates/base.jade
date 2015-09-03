@@ -82,7 +82,7 @@ html(lang='en')
             | #{misc_config.analytics|safe}
     body
         noscript This site works best with JavaScript enabled.
-        header.unselectable
+        header.unselectable(style='display:none')
             h1
                 a(href='/')
                     block site_title
