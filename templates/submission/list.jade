@@ -157,8 +157,8 @@ block body
         #statistics-table
             include problem/statistics_table
     if page_obj.num_pages > 1
-        // div(style='margin-bottom:10px; position: sticky; top: 40px')
-        include list_pages
+        div(style='margin-bottom:10px;')
+            include list_pages
 
     table#submissions-table.table
         colgroup
