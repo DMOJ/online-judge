@@ -62,7 +62,10 @@ html(lang='en')
         style.
             {% for item in nav_tab %}nav ul li a.nav-{{ item }}{% if not forloop.last %},{% endif %} {% endfor %}{
                 color: #FFF;
-                background: #2980b9;
+                border-bottom: 4px solid #2980B9;
+                padding-top: 6px;
+                margin-bottom: 0px;
+                padding-bottom: 3px;
             }
         if INLINE_JQUERY
             - compress js
