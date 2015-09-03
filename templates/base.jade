@@ -96,25 +96,26 @@ html(lang='en')
                         | #{CONTEST.contest.name} -
                         #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
         nav#navigation.unselectable
-            a#navicon(href='javascript:void(0)')
-                i.fa.fa-bars
-                | &nbsp;MENU
-            ul#nav-list
-                li#home-nav-element
-                    a(href='/')
-                        img(src='//dmoj.ca/logo.png', style='width: 42px; display: inline-block; vertical-align: middle; padding: 2px; margin: 2px -1px 2px 2px;')
-                        span(style='display:inline-block; font-weight: bold; vertical-align: middle; padding-bottom: 5px; font-size: 2.2em; margin-left: 5px')
-                            span(style='color: rgb(255, 222, 5)') DM::
-                            span(style='color: #AAA') OJ
-                // Divider
-                li
-                    span(style='width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);')
-                - recursetree nav_bar
+            #nav-container
+                a#navicon(href='javascript:void(0)')
+                    i.fa.fa-bars
+                    | &nbsp;MENU
+                ul#nav-list
+                    li#home-nav-element
+                        a(href='/')
+                            img(src='//dmoj.ca/logo.png', style='width: 42px; display: inline-block; vertical-align: middle; padding: 2px; margin: 2px -1px 2px 2px;')
+                            span(style='display:inline-block; font-weight: bold; vertical-align: middle; padding-bottom: 5px; font-size: 2.2em; margin-left: 5px')
+                                span(style='color: rgb(255, 222, 5)') DM::
+                                span(style='color: #AAA') OJ
+                    // Divider
                     li
-                        a(href=node.path, class='nav-{{ node.key }}')= node.label
-                        if not node.is_leaf_node
-                            ul {{ children }}
-                - endrecursetree
+                        span(style='width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);')
+                    - recursetree nav_bar
+                        li
+                            a(href=node.path, class='nav-{{ node.key }}')= node.label
+                            if not node.is_leaf_node
+                                ul {{ children }}
+                    - endrecursetree
             #nav-shadow
             span#user-links
                 if request.user.is_authenticated
