@@ -76,6 +76,49 @@ html(lang='en')
         if misc_config.analytics
             | #{misc_config.analytics|safe}
     body
+        nav#navigation.unselectable
+            #nav-container
+                a#navicon(href='javascript:void(0)')
+                    i.fa.fa-bars
+                    | &nbsp;MENU
+                ul#nav-list
+                    li#home-nav-element
+                        a(href='/')
+                            img(src='//dmoj.ca/logo.png', style='width: 42px; display: inline-block; vertical-align: middle; padding: 0px 2px; margin: 0px -1px 0px 2px;')
+                            span(style='display:inline-block; font-weight: bold; vertical-align: middle; padding-bottom: 5px; font-size: 2.2em; margin-left: 5px')
+                                span(style='color: rgb(255, 222, 5)') DM::
+                                span(style='color: #AAA') OJ
+                    // Divider
+                    li
+                        span(style='width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);')
+                    - recursetree nav_bar
+                        li
+                            a(href=node.path, class='nav-{{ node.key }}')= node.label
+                            if not node.is_leaf_node
+                                ul {{ children }}
+                    - endrecursetree
+                span#user-links(style='text-align: right')
+                    if request.user.is_authenticated
+                        if IN_CONTEST
+                            #contest-info
+                                a(href='{% url "contest_view" CONTEST.contest.key %}')
+                                    | #{CONTEST.contest.name} -
+                                    #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
+                        a(href='{% url "user_page" %}')
+                            | Hello,&nbsp;
+                            b #{request.user.username}
+                        | &nbsp;|
+                        if request.user.is_staff or request.user.is_superuser
+                            a(href='{% url "admin:index" %}') admin
+                            | &nbsp;|
+                        a(href='{% url "django.contrib.auth.views.logout" %}?next=')
+                            | &nbsp;log out
+                    else
+                        a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
+                            b Login
+                        | &nbsp;|&nbsp;
+                        a(href='/accounts/register/') Register
+            #nav-shadow
         #page-container
             noscript This site works best with JavaScript enabled.
             header.unselectable(style='display:none')
@@ -83,50 +126,6 @@ html(lang='en')
                     a(href='/')
                         block site_title
                             include logo.svg
-            nav#navigation.unselectable
-                #nav-container
-                    a#navicon(href='javascript:void(0)')
-                        i.fa.fa-bars
-                        | &nbsp;MENU
-                    ul#nav-list
-                        li#home-nav-element
-                            a(href='/')
-                                img(src='//dmoj.ca/logo.png', style='width: 42px; display: inline-block; vertical-align: middle; padding: 0px 2px; margin: 0px -1px 0px 2px;')
-                                span(style='display:inline-block; font-weight: bold; vertical-align: middle; padding-bottom: 5px; font-size: 2.2em; margin-left: 5px')
-                                    span(style='color: rgb(255, 222, 5)') DM::
-                                    span(style='color: #AAA') OJ
-                        // Divider
-                        li
-                            span(style='width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);')
-                        - recursetree nav_bar
-                            li
-                                a(href=node.path, class='nav-{{ node.key }}')= node.label
-                                if not node.is_leaf_node
-                                    ul {{ children }}
-                        - endrecursetree
-                    span#user-links(style='text-align: right')
-                        if request.user.is_authenticated
-                            if IN_CONTEST
-                                #contest-info
-                                    a(href='{% url "contest_view" CONTEST.contest.key %}')
-                                        | #{CONTEST.contest.name} -
-                                        #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
-                            a(href='{% url "user_page" %}')
-                                | Hello,&nbsp;
-                                b #{request.user.username}
-                            | &nbsp;|
-                            if request.user.is_staff or request.user.is_superuser
-                                a(href='{% url "admin:index" %}') admin
-                                | &nbsp;|
-                            a(href='{% url "django.contrib.auth.views.logout" %}?next=')
-                                | &nbsp;log out
-                        else
-                            a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
-                                b Login
-                            | &nbsp;|&nbsp;
-                            a(href='/accounts/register/') Register
-                #nav-shadow
-
             br
             div#content
                 block title_row
