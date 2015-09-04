@@ -66,7 +66,9 @@ block js_media
                     if (!(id in time_cache))
                         time_cache[id] = row.find('span.time .absolute').text();
                     // TODO: only if within the last X hours
-                    row.find('span.time .relative').text(moment(row.find('span.moment').text()).fromNow());
+                    var when = moment(row.find('span.moment').text());
+                    if(Math.abs(moment().diff(when, 'days')) < 1)
+                        row.find('span.time .relative').text(when.fromNow());
                     row.find('span.time .absolute').text(time_cache[id]);
                 };
 
