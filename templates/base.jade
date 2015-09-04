@@ -85,10 +85,7 @@ html(lang='en')
                 ul#nav-list
                     li#home-nav-element
                         a(href='/')
-                            img(src='//dmoj.ca/logo.png', style='width: 42px; display: inline-block; vertical-align: middle; padding: 0px 2px; margin: 0px -1px 0px 2px;')
-                            span(style='display:inline-block; font-weight: bold; vertical-align: middle; padding-bottom: 5px; font-size: 2.2em; margin-left: 5px')
-                                span(style='color: rgb(255, 222, 5)') DM::
-                                span(style='color: #AAA') OJ
+                            include logo2.svg
                     // Divider
                     li
                         span(style='width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);')
@@ -122,11 +119,6 @@ html(lang='en')
             #nav-shadow
         #page-container
             noscript This site works best with JavaScript enabled.
-            header.unselectable(style='display:none')
-                h1
-                    a(href='/')
-                        block site_title
-                            include logo.svg
             br
             div#content
                 block title_row
