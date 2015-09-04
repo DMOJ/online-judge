@@ -158,7 +158,6 @@ header
   background: rgba(0, 0, 0, 0.77)
   height: 100%
 
-
 nav
   position: relative
   position: -webkit-sticky
@@ -166,28 +165,34 @@ nav
   top: 0
   width: 100%
   z-index: 500
+  text-align: left
   ul
     margin: 0 0 0 -5px
     padding: 0 0 0 1%
     text-align: left
     display: inline
     list-style: none
+    background: transparent
     li
-      display: inline
+      display: inline-block
       color: #FFF
       text-transform: uppercase
-      font-size: 1em
+      font-size: 1.1em
       position: relative
+      &#home-nav-element a
+        padding: 0
       a
         display: inline-block
         text-decoration: none
-        padding: 10px 7px
+        vertical-align: middle
         color: #FFF
+        padding: 13px 7px
         &:link
           color: #FFF
         &:hover
           color: #FFF
           background: rgba(255, 255, 255, 0.25)
+          margin: 0
         &.active
           color: #FFF
           background: #2980b9
@@ -206,7 +211,11 @@ nav
         color: #fff
         border-left: 4px solid #2980b9
         background: rgba(0, 0, 0, 0.77)
-        //box-shadow: 0 0 10px #333
+        box-shadow: 0 0 10px #333
+      &#home-nav-element a:hover
+        border-bottom: 0
+        padding-top: 0
+        padding-bottom: 0
 
 nav
   ul
