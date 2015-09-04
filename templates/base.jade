@@ -106,7 +106,7 @@ html(lang='en')
                                 ul {{ children }}
                     - endrecursetree
             #nav-shadow
-            span#user-links
+            span#user-links(style='text-align: right')
                 if request.user.is_authenticated
                     if IN_CONTEST
                         #contest-info
