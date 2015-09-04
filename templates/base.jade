@@ -136,8 +136,9 @@ html(lang='en')
                 hr
                 div#content-body
                     block body
-                footer
-                    p
             if misc_config.announcement
                 div#announcement #{misc_config.announcement|safe}
             block bodyend
+        footer
+            span.
+                Footer test
