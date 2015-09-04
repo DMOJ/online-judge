@@ -57,6 +57,16 @@ block media
             margin-bottom: 0.5em;
         }
 
+        #filter-form a {
+            margin-left: 5px;
+            display: inline;
+            padding: 3px 12px;
+        }
+
+        #filter-form a, #filter-form input, #filter-form label {
+            vertical-align: middle;
+        }
+
         #search {
             width: 250px;
         }
@@ -69,12 +79,12 @@ block body
             form#filter-form(name='form', action='', method='get')
                 if has_search
                     input(type='text', name='search', id='search', value=search_query, placeholder='Search problems...')
-                input(type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
+                a.button(onclick="form.submit()") Go
+                a.button(href='{% url "problem_random" %}') Random
+                input(onclick="form.submit()" type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
                 label(for='hide_solved') Hide solved problems
-                input(type='checkbox', name='show_types', id='show_types', checked=('checked' if show_types else undefined), value='1')
+                input(onclick="form.submit()" type='checkbox', name='show_types', id='show_types', checked=('checked' if show_types else undefined), value='1')
                 label(for='show_types') Show problem tags
-                input(type='submit', value='Filter', style='display: inline; padding: 0px 5px')
-                a.button(href='{% url "problem_random" %}', style='display: inline; padding: 1.5px 5px; margin-left: 5px') Random
     table#problem-table.table.striped
         thead
             tr
