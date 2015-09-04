@@ -140,5 +140,5 @@ html(lang='en')
                 div#announcement #{misc_config.announcement|safe}
             block bodyend
             footer
-                span.
-                    Footer test
+                if misc_config.footer
+                    span#footer-content #{misc_config.footer|safe}
