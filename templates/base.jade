@@ -19,7 +19,7 @@ html(lang='en')
         meta(property='og:image', content='https://dmoj.ca/logo.png')
         meta(property='og:title', content='{{ title }} - Don Mills Online Judge')
         meta(property='og:site_name', content='Don Mills Online Judge')
-        
+
         | <!--[if lt IE 9]>
         | <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         | <script>window.bad_browser = true</script>
@@ -27,16 +27,10 @@ html(lang='en')
         if IN_CONTEST
             style.
                 #contest-info {
-                    position: absolute;
-                    padding: 3px 5px 3px 3px;
-                    right: 10px;
-                    top: 35px;
                     height: 1.4em;
-                    font-size: 1.5em;
-                    border: 1px solid gray;
-                    border-radius: 4px;
-                    background-color: #111;
-                    z-index: 1000;
+                    font-size: 1.25em;
+                    border-bottom: 1px solid #2980B9;
+                    margin-bottom: 2px;
                 }
 
                 #contest-info a {
@@ -80,7 +74,7 @@ html(lang='en')
                 $(document).ready(function () {
                     count_down($("#contest-time-remaining"));
                 });
-        
+
         if misc_config.analytics
             | #{misc_config.analytics|safe}
     body
@@ -90,11 +84,6 @@ html(lang='en')
                 a(href='/')
                     block site_title
                         include logo.svg
-            if IN_CONTEST
-                #contest-info
-                    a(href='{% url "contest_view" CONTEST.contest.key %}')
-                        | #{CONTEST.contest.name} -
-                        #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
         nav#navigation.unselectable
             #nav-container
                 a#navicon(href='javascript:void(0)')
@@ -119,6 +108,11 @@ html(lang='en')
             #nav-shadow
             span#user-links
                 if request.user.is_authenticated
+                    if IN_CONTEST
+                        #contest-info
+                            a(href='{% url "contest_view" CONTEST.contest.key %}')
+                                | #{CONTEST.contest.name} -
+                                #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
                     a(href='{% url "user_page" %}')
                         | Hello,&nbsp;
                         b #{request.user.username}
