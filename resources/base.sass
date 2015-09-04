@@ -188,10 +188,9 @@ nav
           color: #FFF
         &:hover
           color: #FFF
-          border-bottom: 4px solid rgba(255, 255, 255, .25)
-          padding-top: 7px
+          background: rgba(255, 255, 255, .25)
           margin-bottom: 0px
-          padding-bottom: 3px
+          padding: 13px 7px
         &.active
           color: #FFF
           background: #2980b9
@@ -296,6 +295,8 @@ noscript
 @media (max-width: 760px)
   #navigation
     height: 36px
+  #navigation ul li.home-nav-element
+    display: none
   #navicon
     transition-duration: .25s
     display: block

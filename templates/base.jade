@@ -56,10 +56,9 @@ html(lang='en')
         style.
             {% for item in nav_tab %}nav ul li a.nav-{{ item }}{% if not forloop.last %},{% endif %} {% endfor %}{
                 color: #FFF;
-                border-bottom: 4px solid #2980B9;
-                padding-top: 7px;
+                background: #2980B9;
                 margin-bottom: 0px;
-                padding-bottom: 3px;
+                padding: 13px 7px;
             }
         if INLINE_JQUERY
             - compress js
@@ -92,7 +91,7 @@ html(lang='en')
                 ul#nav-list
                     li#home-nav-element
                         a(href='/')
-                            img(src='//dmoj.ca/logo.png', style='width: 42px; display: inline-block; vertical-align: middle; padding: 2px; margin: 2px -1px 2px 2px;')
+                            img(src='//dmoj.ca/logo.png', style='width: 42px; display: inline-block; vertical-align: middle; padding: 0px 2px; margin: 0px -1px 0px 2px;')
                             span(style='display:inline-block; font-weight: bold; vertical-align: middle; padding-bottom: 5px; font-size: 2.2em; margin-left: 5px')
                                 span(style='color: rgb(255, 222, 5)') DM::
                                 span(style='color: #AAA') OJ
