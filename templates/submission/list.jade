@@ -64,7 +64,7 @@ block js_media
                 window.update_relative_time = function (row) {
                     var id = row.attr('id');
                     if (!(id in time_cache))
-                        time_cache[id] = row.find('span.time').text();
+                        time_cache[id] = row.find('span.time.absolute').text();
                     // TODO: only if within the last X hours
                     row.find('span.time.relative').text(moment(row.find('span.moment').text()).fromNow());
                     row.find('span.time.absolute').text(time_cache[id]);
