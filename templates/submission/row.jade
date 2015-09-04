@@ -35,7 +35,9 @@ td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status
             a(href='{% url "user_page" submission.user.user.username %}') #{submission.user.user.username}
         span.moment(style='display: none') #{submission.date|utc|date:"c"}
         = ' '
-        span.time on #{submission.date|date:"N j, o, g:i a"}
+        span.time
+            .relative on #{submission.date|date:"N j, o, g:i a"}
+            .absolute on #{submission.date|date:"N j, o, g:i a"}
 
 if submission.status == 'G'
     td.sub-testcase
