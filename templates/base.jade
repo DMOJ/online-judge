@@ -105,28 +105,29 @@ html(lang='en')
                             if not node.is_leaf_node
                                 ul {{ children }}
                     - endrecursetree
-            #nav-shadow
-            span#user-links(style='text-align: right')
-                if request.user.is_authenticated
-                    if IN_CONTEST
-                        #contest-info
-                            a(href='{% url "contest_view" CONTEST.contest.key %}')
-                                | #{CONTEST.contest.name} -
-                                #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
-                    a(href='{% url "user_page" %}')
-                        | Hello,&nbsp;
-                        b #{request.user.username}
-                    | &nbsp;|
-                    if request.user.is_staff or request.user.is_superuser
-                        a(href='{% url "admin:index" %}') admin
+                span#user-links(style='text-align: right')
+                    if request.user.is_authenticated
+                        if IN_CONTEST
+                            #contest-info
+                                a(href='{% url "contest_view" CONTEST.contest.key %}')
+                                    | #{CONTEST.contest.name} -
+                                    #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
+                        a(href='{% url "user_page" %}')
+                            | Hello,&nbsp;
+                            b #{request.user.username}
                         | &nbsp;|
-                    a(href='{% url "django.contrib.auth.views.logout" %}?next=')
-                        | &nbsp;log out
-                else
-                    a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
-                        b Login
-                    | &nbsp;|&nbsp;
-                    a(href='/accounts/register/') Register
+                        if request.user.is_staff or request.user.is_superuser
+                            a(href='{% url "admin:index" %}') admin
+                            | &nbsp;|
+                        a(href='{% url "django.contrib.auth.views.logout" %}?next=')
+                            | &nbsp;log out
+                    else
+                        a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
+                            b Login
+                        | &nbsp;|&nbsp;
+                        a(href='/accounts/register/') Register
+            #nav-shadow
+
         br
         div#content
             block title_row
