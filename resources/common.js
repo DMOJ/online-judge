@@ -120,11 +120,6 @@ $(function () {
         });
     }
 
-    if (!featureTest('position', 'sticky'))
-        fix_div($('nav'), 0, false, function (nav) {
-            $('<div/>', {id: 'fake-nav'}).css('height', nav.height()).insertBefore('nav');
-        });
-
     var $nav_list = $('#nav-list');
     $('#navicon').click(function (event) {
         event.stopPropagation();
