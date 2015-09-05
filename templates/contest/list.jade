@@ -160,11 +160,14 @@ block body
                                 .external-notice
                                     a(href='/about#external-contests') External contest
                     td
-                        | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
+                        if contest.time_limit
+                            | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
+                        else
+                            | #{contest.start_time|date:"M j, Y, G:i"}
                         br
                         if contest.time_limit
                             | #{contest.time_limit} window
                         else
-                            | Full contest window
+                            | #{contest.contest_window_length} long
                     td
                         a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
