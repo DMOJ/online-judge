@@ -147,26 +147,27 @@ block body
     table.contest-list.table.striped
         thead
             tr
-                th(style='width:85%') Name
+                th(style='width:70%') Name
+                th(style='width:25%') Time
                 th Rankings
         tbody
             each contest in past_contests
                 tr
-                    td
+                    td(style='border-right:none')
                         div(style='position:relative')
                             a(href='{% url "contest_view" contest.key %}')= contest.name
                             if contest.is_external
                                 .external-notice
                                     a(href='/about#external-contests') External contest
-                            span(style='text-align:right')
-                                if contest.time_limit
-                                    | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
-                                else
-                                    | #{contest.start_time|date:"M j, Y, G:i"}
-                                br
-                                if contest.time_limit
-                                    | #{contest.time_limit} window
-                                else
-                                    | #{contest.contest_window_length} long
+                    td(style='text-align:right')
+                        if contest.time_limit
+                            | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
+                        else
+                            | #{contest.start_time|date:"M j, Y, G:i"}
+                        br
+                        if contest.time_limit
+                            | #{contest.time_limit} window
+                        else
+                            | #{contest.contest_window_length} long
                     td
                         a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
