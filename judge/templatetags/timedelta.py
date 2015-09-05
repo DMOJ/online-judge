@@ -30,7 +30,9 @@ def nice_repr(timedelta, display='long', sep=', '):
     if display == 'simple-no-seconds':
         days += weeks * 7
         if days:
-            return '%d day%s %02d:%02d' % (days, 's'[days == 1:], hours, minutes)
+            if hours or minutes:
+                return '%d day%s %02d:%02d' % (days, 's'[days == 1:], hours, minutes)
+            return '%d day%s' % (days, 's'[days == 1:])
         else:
             return '%02d:%02d' % (hours, minutes)
     if display == 'sql':
