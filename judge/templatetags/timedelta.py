@@ -26,7 +26,13 @@ def nice_repr(timedelta, display='long', sep=', '):
     hours = timedelta.seconds / 3600
     minutes = (timedelta.seconds % 3600) / 60
     seconds = timedelta.seconds % 60
-    
+
+    if display == 'simple-no-seconds':
+        days += weeks * 7
+        if days:
+            return '%d day%s %02d:%02d' % (days, 's'[days == 1:], hours, minutes)
+        else:
+            return '%02d:%02d' % (hours, minutes)
     if display == 'sql':
         days += weeks * 7
         return '%d %02d:%02d:%02d' % (days, hours, minutes, seconds)
