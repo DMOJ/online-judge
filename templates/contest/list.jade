@@ -94,7 +94,7 @@ block body
                                             a(href='/about#external-contests') External contest
                         td
                             if contest.time_limit
-                                | #{contest.time_limit}
+                                | #{contest.time_limit|timedelta:"simple-no-seconds"}
                             else
                                 | Full contest window
                         td
