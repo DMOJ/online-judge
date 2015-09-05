@@ -158,7 +158,7 @@ block body
                             if contest.is_external
                                 .external-notice
                                     a(href='/about#external-contests') External contest
-                    td(style='text-align:right;color:#777')
+                    td(style='text-align:right;color:#777;width:34%')
                         if contest.time_limit
                             | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
                         else
