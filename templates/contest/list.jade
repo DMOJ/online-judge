@@ -125,7 +125,7 @@ block body
                                     if contest.time_before_start
                                         span.time Starting in&nbsp;
                                         span.time.time-remaining #{contest.time_before_start|timedelta:"simple"}
-                                    .time.floating-time #{contest.start_time|date:"N j, o, G:i"}
+                                    .time.floating-time #{contest.start_time|date:"M j, Y, G:i"}
                                     if contest.is_external
                                         .external-notice
                                             a(href='/about#external-contests') External contest
@@ -147,8 +147,8 @@ block body
     table.contest-list.table.striped
         thead
             tr
-                th(style='width:85%') Name
-                th(style='width:10%') Time
+                th(style='width:75%') Name
+                th(style='width:20%') Time
                 th Rankings
         tbody
             each contest in past_contests
@@ -160,7 +160,7 @@ block body
                                 .external-notice
                                     a(href='/about#external-contests') External contest
                     td
-                        | #{contest.start_time|date:"N/j/y"} - #{contest.end_time|date:"N/j/y"}
+                        | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
                         br
                         if contest.time_limit
                             | #{contest.time_limit} window
