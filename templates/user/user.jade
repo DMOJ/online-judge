@@ -71,8 +71,10 @@ block media
 
 block header
     if user.user == request.user
-        a.edit-profile(href='{% url "judge.views.edit_profile" %}')
-            | Edit profile
+        a.edit-profile(href='{% url "judge.views.edit_profile" %}') Edit profile
+    else
+        if perms.judge.change_user
+            a.edit-profile(href='{% url "admin:judge_user_change" user.id %}') Admin
 
 block body
     br
