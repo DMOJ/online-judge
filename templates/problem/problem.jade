@@ -43,25 +43,25 @@ block title_row
     div.problem-title
         h2(style='color:#393630; display: inline-block')= title
         span.spacer
-        a.view-pdf(href='{% url "problem_pdf" problem.code %}')
-            span(style='position: relative; display: inline-block; font-size: 1.5em')
-                span.fa.fa-file-pdf-o(style='color: #d40e13')
-                span(style='height: 0.2em; display: block; position: absolute; top: 0.3em; background: #d40e13; width: 0.6em; margin-left: -0.15em')
-            = ' View as PDF'
+        ul.tabs(style='margin:0px;padding:0px;margin-bottom:-7px')
+            li.active
+                a(href='#') Statement
+            if request.user.is_authenticated and has_submissions
+                li
+                    a(href='{% url "user_submissions" problem.code request.user.username %}') My submissions
+            li
+                a(href='{% url "chronological_submissions" problem.code %}') Status
+            li
+                a(href='{% url "ranked_submissions" problem.code %}') Ranking
+
+        //a.view-pdf(href='{% url "problem_pdf" problem.code %}')
+        //    span(style='position: relative; display: inline-block; font-size: 1.5em')
+        //        span.fa.fa-file-pdf-o(style='color: #d40e13')
+        //        span(style='height: 0.2em; display: block; position: absolute; top: 0.3em; background: #d40e13; width: 0.6em; margin-left: -0.15em')
+        //    = ' View as PDF'
 
 block info_float
     a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
-    hr
-    if request.user.is_authenticated and has_submissions
-        a(href='{% url "user_submissions" problem.code request.user.username %}')
-            | My submissions
-        br
-    a(href='{% url "chronological_submissions" problem.code %}')
-        | All submissions
-    br
-    a(href='{% url "ranked_submissions" problem.code %}')
-        | Best submissions
-
     if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids
         hr
         a(href='{% url "admin:judge_problem_change" problem.id %}')
