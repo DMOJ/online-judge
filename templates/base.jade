@@ -133,7 +133,8 @@ html(lang='en')
                     br
                     block content_subtitle
                         h3(style='display:inline; font-size:1.5em; color:gray; font-style:italic') #{subtitle}
-                hr
+                block title_ruler
+                    hr
                 div#content-body
                     block body
             if misc_config.announcement
