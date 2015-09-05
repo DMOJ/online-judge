@@ -152,13 +152,13 @@ block body
         tbody
             each contest in past_contests
                 tr
-                    td(style='border-right:none')
+                    td
                         div(style='position:relative')
                             a(href='{% url "contest_view" contest.key %}')= contest.name
                             if contest.is_external
                                 .external-notice
                                     a(href='/about#external-contests') External contest
-                            span(style='text-align:right;color:#777;max-width:30%')
+                            span.floating-time-right(style='text-align:right;color:#777;')
                                 if contest.time_limit
                                     | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
                                 else
