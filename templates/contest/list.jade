@@ -147,8 +147,8 @@ block body
     table.contest-list.table.striped
         thead
             tr
-                th(style='width:95%') Name
-                th Time
+                th(style='width:85%') Name
+                th(style='width:10%') Time
                 th Rankings
         tbody
             each contest in past_contests
@@ -160,7 +160,7 @@ block body
                                 .external-notice
                                     a(href='/about#external-contests') External contest
                     td
-                        | #{contest.start_time|date:"N/j/y, G:i"} - #{contest.end_time|date:"N/j/y, G:i"}
+                        | #{contest.start_time|date:"N/j/y"} - #{contest.end_time|date:"N/j/y"}
                         br
                         if contest.time_limit
                             | #{contest.time_limit} window
