@@ -63,7 +63,7 @@ block title_row
         //    = ' View as PDF'
 
 block info_float
-    a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}', style='font-weight:600') Submit solution
+    a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}', style='font-weight:600;padding: 10px 0px;') Submit solution
     if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids
         hr
         a(href='{% url "admin:judge_problem_change" problem.id %}')
