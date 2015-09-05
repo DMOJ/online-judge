@@ -610,6 +610,10 @@ class Contest(models.Model):
         if self.start_time >= self.end_time:
             raise ValidationError('What is this? A contest that ended before it starts?')
 
+    @property
+    def contest_window_length(self):
+        return self.end_time - self.start_time
+
     @cached_property
     def can_join(self):
         return self.start_time <= timezone.now() < self.end_time
