@@ -124,7 +124,7 @@ block body
                                     br
                                     if contest.time_before_start
                                         span.time Starting in&nbsp;
-                                        span.time.time-remaining #{contest.time_before_start|timedelta:"simple"}
+                                        span.time.time-remaining #{contest.time_before_start|timedelta:"simple-no-seconds"}
                                     .time.floating-time #{contest.start_time|date:"M j, Y, G:i"}
                                     if contest.is_external
                                         .external-notice
