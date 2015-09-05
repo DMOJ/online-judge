@@ -74,7 +74,7 @@ block header
         a.edit-profile(href='{% url "judge.views.edit_profile" %}') Edit profile
     else
         if perms.judge.change_user
-            a.edit-profile(href='{% url "admin:judge_user_change" user.id %}') Admin
+            a.edit-profile(href='{% url "admin:auth_user_change" user.user.id %}') Admin
 
 block body
     br
