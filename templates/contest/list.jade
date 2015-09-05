@@ -147,7 +147,7 @@ block body
     table.contest-list.table.striped
         thead
             tr
-                th(style='width:95%', colspan=2) Contest
+                th(style='width:95%') Contest
                 th Rankings
         tbody
             each contest in past_contests
@@ -158,15 +158,15 @@ block body
                             if contest.is_external
                                 .external-notice
                                     a(href='/about#external-contests') External contest
-                    td(style='text-align:right;color:#777;width:34%')
-                        if contest.time_limit
-                            | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
-                        else
-                            | #{contest.start_time|date:"M j, Y, G:i"}
-                        br
-                        if contest.time_limit
-                            | #{contest.time_limit} window
-                        else
-                            | #{contest.contest_window_length} long
+                            span(style='text-align:right;color:#777;max-width:30%')
+                                if contest.time_limit
+                                    | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
+                                else
+                                    | #{contest.start_time|date:"M j, Y, G:i"}
+                                br
+                                if contest.time_limit
+                                    | #{contest.time_limit} window
+                                else
+                                    | #{contest.contest_window_length} long
                     td
                         a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
