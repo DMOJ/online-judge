@@ -176,31 +176,30 @@ block media
         }
 
 block body
+    br
+    .info-float
+        #statistics-table
+            include problem/statistics_table
 
-    #content-right
-        .info-float
-            #statistics-table
-                include problem/statistics_table
-    #content-left
-        if page_obj.num_pages > 1
-            div(style='margin-bottom:10px;')
-                include list_pages
+    if page_obj.num_pages > 1
+        div(style='margin-bottom:10px;')
+            include list_pages
 
-        table#submissions-table.table
-            colgroup
-                col.sub-result
-                col.sub-info
-                col.sub-testcase
-                col.sub-prop
-                col.sub-usage
-            if request.user.is_authenticated
-                - var profile_id = request.user.profile.id
-            else
-                - var profile_id = 0
-            each submission in submissions
-                tr(id=submission.id)
-                    include submission/row
+    table#submissions-table.table
+        colgroup
+            col.sub-result
+            col.sub-info
+            col.sub-testcase
+            col.sub-prop
+            col.sub-usage
+        if request.user.is_authenticated
+            - var profile_id = request.user.profile.id
+        else
+            - var profile_id = 0
+        each submission in submissions
+            tr(id=submission.id)
+                include submission/row
 
-        if page_obj.num_pages > 1
-            div(style='margin-top:10px;')
-                include list_pages
+    if page_obj.num_pages > 1
+        div(style='margin-top:10px;')
+            include list_pages
