@@ -199,9 +199,8 @@ block body
                 | (#{group.list|list_getitem:"points"|sum_list|floatformat:1} points)
             ul.toggled
                 each entry in group.list
-                    if entry.id not in completed_problem_ids
-                        li
-                            a(href='{% url "problem_detail" entry.code %}') #{entry.name}
-                            |  (
-                            a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
-                            | )
+                    li
+                        a(href='{% url "problem_detail" entry.code %}') #{entry.name}
+                        |  (
+                        a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
+                        | )
