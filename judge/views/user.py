@@ -86,8 +86,8 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context = super(UserPage, self).get_context_data(**kwargs)
 
         context['hide_solved'] = int(self.hide_solved)
-        result = Submission.objects.exclude(id__in=self.get_completed_problems() if self.hide_solved else []).filter(user=self.object, points__gt=0, problem__is_public=True) \
-            .values('problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
+        result = Submission.objects.filter(user=self.object, points__gt=0, problem__is_public=True) \
+            .values('problem__id', 'problem__code', 'problem__name', 'problem__points', 'problem__group__full_name').exclude(id__in=self.get_completed_problems() if self.hide_solved else []) \
             .distinct().annotate(points=Max('points')).order_by('problem__group__full_name', 'problem__name')
         context['best_submissions'] = remap_keys(result, {
             'problem__code': 'code', 'problem__name': 'name', 'problem__points': 'total',
