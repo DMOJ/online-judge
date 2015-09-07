@@ -4,7 +4,6 @@ extends common-content
 - load cache
 - load smart_math
 - load filesize
-
 block content_media
     style.
         a.view-pdf {
@@ -23,8 +22,8 @@ block content_media
             display: inline-block;
             -webkit-box-flex: 1;
             -webkit-flex: 1 1 1px;
-                -ms-flex: 1 1 1px;
-                    flex: 1 1 1px;
+            -ms-flex: 1 1 1px;
+            flex: 1 1 1px;
         }
 
         .info-float .fa {
@@ -35,36 +34,30 @@ block content_media
             margin-left: 1.3em;
         }
     include comments/media
-
-block content_js_media
+        block content_js_media
     include comments/js_media
-
-block title_ruler
-
-block title_row
+        block title_row
     div.problem-title
-        ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
-            h2(style='color:#393630; display: inline-block')= title
-            span.spacer
-            li.active
-                a Statement
-            if request.user.is_authenticated and has_submissions
-                li
-                    a(href='{% url "user_submissions" problem.code request.user.username %}') My submissions
-            li
-                a(href='{% url "chronological_submissions" problem.code %}') Status
-            li
-                a(href='{% url "ranked_submissions" problem.code %}') Ranking
-
-        //a.view-pdf(href='{% url "problem_pdf" problem.code %}')
-        //    span(style='position: relative; display: inline-block; font-size: 1.5em')
-        //        span.fa.fa-file-pdf-o(style='color: #d40e13')
-        //        span(style='height: 0.2em; display: block; position: absolute; top: 0.3em; background: #d40e13; width: 0.6em; margin-left: -0.15em')
-        //    = ' View as PDF'
-
-block info_float
-    a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}', style='font-weight:600;padding: 10px 0px;') Submit solution
-    if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids
+        h2(style='color:#393630; display: inline-block')= title
+        span.spacer
+        a.view-pdf(href='{% url "problem_pdf" problem.code %}')
+            span(style='position: relative; display: inline-block; font-size: 1.5em')
+                span.fa.fa-file-pdf-o(style='color: #d40e13')
+                span(style='height: 0.2em; display: block; position: absolute; top: 0.3em; background: #d40e13; width: 0.6em; margin-left: -0.15em')
+            = ' View as PDF'
+            block info_float
+    a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
+    hr
+    if request.user.is_authenticated and has_submissions
+        a(href='{% url "user_submissions" problem.code request.user.username %}')
+            | My submissions
+        br
+    a(href='{% url "chronological_submissions" problem.code %}')
+        | All submissions
+    br
+    a(href='{% url "ranked_submissions" problem.code %}')
+        | Best submissions
+        if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids
         hr
         a(href='{% url "admin:judge_problem_change" problem.id %}')
             | Edit problem
@@ -82,7 +75,7 @@ block info_float
         if contest_problem.partial
             | (partial)
     else
-        |  #{problem.points|floatformat}
+        |  #{problem.points | floatformat}
         if problem.partial
             | (partial)
     br
@@ -92,54 +85,51 @@ block info_float
     br
     i.fa.fa-database.fa-fw
     b Memory limit:
-    |  #{problem.memory_limit|kbsimpleformat}
+    |  #{problem.memory_limit | kbsimpleformat}
     br
     - cache 86400 problem_authors problem.id
-        - with authors=problem.authors.all
-            if authors
-                i.fa.fa-pencil-square.fa-fw
-                if authors|length > 1
-                    b Authors:
-                else
-                    b Author:
-                = ' '
-                for author in authors
-                    span(class=author.display_rank)
-                        a(href='{% url "user_page" author.user.username %}') #{author.user.username}
-                    if not forloop.last
-                        = ', '
-                br
+    - with authors=problem.authors.all
+    if authors
+        i.fa.fa-pencil-square.fa-fw
+        if authors | length > 1
+            b Authors:
+        else
+            b Author:
+        = ' '
+        for author in authors
+            span(class=author.display_rank)
+                a(href='{% url "user_page" author.user.username %}') #{author.user.username}
+            if not forloop.last
+                = ', '
+        br
     br
     div#problem-types
         div.toggle.closed.unselectable
             span.fa.fa-chevron-right.fa-fw
             | Problem type(s)
-        div.toggled(style="display:none") #{problem.types_list|join:", "}
+        div.toggled(style="display:none") #{problem.types_list | join:", "}
     br
     if show_languages
         div#allowed-langs
             div.toggle.open.unselectable
                 span.fa.fa-chevron-right.fa-fw
                 | Allowed languages
-            div.toggled(style="margin-bottom:-1em") #{problem.languages_list|join:", "}
+            div.toggled(style="margin-bottom:-1em") #{problem.languages_list | join:", "}
         br
-
-block description
+            block description
     - detect_svg use_svg
     - cache 86400 problem_html problem.id use_svg
-        | #{problem.description|markdown:"problem"|smart_svg_math:use_svg}
+    | #{problem.description | markdown:"problem"|smart_svg_math:use_svg}
     - with license=problem.license
-        if license
-            span(style='float: left; font-size: 0.85em')
-                a(style='color: gray; text-decoration: none', href='{% url "license" license.key %}')= license.display
-
-block comments
+    if license
+        span(style='float: left; font-size: 0.85em')
+            a(style='color: gray; text-decoration: none', href='{% url "license" license.key %}')= license.display
+            block comments
     .comment-area
         h2
             i.fa.fa-comments(style='padding-right: 0.2em')
             | Comments
         include comments/list
-
-block bodyend
+            block bodyend
     | #{block.super}
     include comments/math
