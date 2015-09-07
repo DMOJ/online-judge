@@ -51,7 +51,7 @@ block js_media
                 };
         script(type='text/javascript').
             $(function () {
-                if (!featureTest('position', 'sticky'))
+                if (false && !featureTest('position', 'sticky'))
                     fix_div($('.info-float'), 40, true, function (info) {
                         info.css('width', (info.width() / $('#page-container').width() * 100) + '%');
                         return $('<div/>', {
