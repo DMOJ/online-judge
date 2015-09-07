@@ -10,6 +10,7 @@ from django.shortcuts import render
 from django.template import RequestContext, Context
 from django.utils.html import format_html
 from django.views.generic import DetailView
+from django.utils.functional import cached_property
 import reversion
 
 from judge.forms import ProfileForm
@@ -61,6 +62,20 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         return 'My Account' if self.request.user == self.object.user else 'User %s' % self.object.long_display_name
 
     # TODO: the same code exists in problem.py, maybe move to problems.py?
+    @cached_property
+    def profile(self):
+        if not self.request.user.is_authenticated():
+            return None
+        return self.request.user.profile
+
+    @cached_property
+    def contest_profile(self):
+        return self.profile and self.profile.contest
+
+    @cached_property
+    def in_contest(self):
+        return self.contest_profile is not None and self.contest_profile.current is not None
+
     def get_completed_problems(self):
         if self.in_contest:
             return contest_completed_ids(self.contest_profile.current)
