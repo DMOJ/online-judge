@@ -100,7 +100,7 @@ block body
         tbody
             each problem in problems
                 tr
-                    td
+                    td(solved-data='{% problem.id in completed_problem_ids %}')
                         if problem.id in completed_problem_ids
                             i.fa.fa-check-circle(style='color:#44AD41')
                         else
