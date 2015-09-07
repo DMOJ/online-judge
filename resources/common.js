@@ -91,7 +91,7 @@ window.fix_div = function (div, height, right, fake_gen, par) {
     if (typeof fake_gen !== 'undefined')
         var fake = fake_gen(div);
     var moving = function () {
-        div.css('position', 'relative').css('top', div_offset);
+        div.css('position', 'absolute').css('top', div_offset);
         is_moving = true;
     };
     var fix = function () {
