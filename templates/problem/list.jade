@@ -100,10 +100,11 @@ block body
         tbody
             each problem in problems
                 tr
-                    td(solved-data='{% problem.id in completed_problem_ids %}')
-                        if problem.id in completed_problem_ids
+                    if problem.id in completed_problem_ids
+                        td(solved='1')
                             i.fa.fa-check-circle(style='color:#44AD41')
-                        else
+                    else
+                        td(solved='0')
                             i.fa.fa-minus-circle(style='color:#DE2121')
                     td
                         a(href='{% url "problem_detail" problem.code %}')= problem.name
