@@ -8,9 +8,25 @@ block meta
 block js_media
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
     script(type='text/javascript').
-        $(document).ready(function () {
-            $("#problem-table").tablesorter({
-                textExtraction: function (node) {
+        $(document).ready(function() {
+            $.tablesorter.addParser({
+                id: 'solvedsort',
+                is: function(s) {
+                    return false;
+                },
+                format: function(s, table, cell, cellIndex) {
+                    return $(cell).attr('solved');
+                },
+                type: 'numeric'
+            });
+
+            $('#problem-table').tablesorter({
+                headers: {
+                    0: {
+                        sorter: 'solvedsort'
+                    }
+                },
+                textExtraction: function(node) {
                     node = $(node);
                     var text = node.text().replace(/^\s+|\s+$/g, '');
                     return (node.hasClass('p') ? text.replace(/p$/, '') : text);
