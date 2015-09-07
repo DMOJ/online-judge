@@ -53,7 +53,7 @@ block js_media
             $(function () {
                 if (!featureTest('position', 'sticky'))
                     fix_div($('.info-float'), 40, true, function (info) {
-                        info.css('width', (info.width() / $(window).width() * 100) + '%');
+                        info.css('width', (info.width() / $('#page-container').width() * 100) + '%');
                         return $('<div/>', {
                             id: 'fake-info-float',
                             class: 'info-float'
