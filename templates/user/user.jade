@@ -67,6 +67,27 @@ block media
             vertical-align: top;
         }
 
+        .strike {
+            text-align: right;
+            overflow: hidden;
+        }
+
+        .strike > span {
+            position: relative;
+            display: inline-block;
+        }
+
+        .strike > span:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 100000px;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.2);
+            right: 100%;
+            margin-right: 5px;
+        }
+
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
 
 block header
@@ -148,8 +169,8 @@ block body
                         else
                             | This user has not shared any information.
                 br
-    hr
     if authored
+        hr
         div.user-problem-group
             h3.unselectable.toggle.open
                 span.fa.fa-chevron-right.fa-fw
@@ -161,6 +182,13 @@ block body
                         |  (
                         a(href='{% url "ranked_submissions" problem.code %}') #{problem.points|floatformat}{% if problem.partial %}p{% endif %}
                         | )
+    if request.user.is_authenticated and request.user != user.user
+        .strike
+            span
+                form(name='form', action='', method='get')
+                    input(style='vertical-align:middle', onclick='form.submit()' name='hide_solved', id='hide_solved', value='1', type='checkbox')
+                    label(style='vertical-align:middle', for='hide_solved') Hide problems I've solved
+    else
         hr
     - regroup best_submissions by group as problems
     each group in problems
@@ -171,8 +199,9 @@ block body
                 | (#{group.list|list_getitem:"points"|sum_list|floatformat:1} points)
             ul.toggled
                 each entry in group.list
-                    li
-                        a(href='{% url "problem_detail" entry.code %}') #{entry.name}
-                        |  (
-                        a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
-                        | )
+                    if entry.id not in completed_problem_ids
+                        li
+                            a(href='{% url "problem_detail" entry.code %}') #{entry.name}
+                            |  (
+                            a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
+                            | )

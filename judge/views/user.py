@@ -14,6 +14,7 @@ import reversion
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Submission, Rating
+from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
 from .contests import contest_ranking_view
 from judge.utils.views import TitleMixin, generic_message
@@ -59,8 +60,18 @@ class UserPage(TitleMixin, UserMixin, DetailView):
     def get_title(self):
         return 'My Account' if self.request.user == self.object.user else 'User %s' % self.object.long_display_name
 
+    # TODO: the same code exists in problem.py, maybe move to problems.py?
+    def get_completed_problems(self):
+        if self.in_contest:
+            return contest_completed_ids(self.contest_profile.current)
+        else:
+            return user_completed_ids(self.profile) if self.profile is not None else ()
+
     def get_context_data(self, **kwargs):
         context = super(UserPage, self).get_context_data(**kwargs)
+
+        context['hide_solved'] = int(self.hide_solved)
+        context['completed_problem_ids'] = self.get_completed_problems() if self.hide_solved else []
 
         result = Submission.objects.filter(user=self.object, points__gt=0, problem__is_public=True) \
             .values('problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
@@ -80,6 +91,10 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context.update(self.object.ratings.aggregate(min_rating=Min('rating'), max_rating=Max('rating'),
                                                      contests=Count('contest')))
         return context
+
+    def get(self, request, *args, **kwargs):
+        self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
+        return super(UserPage, self).get(request, *args, **kwargs)
 
 
 @login_required
