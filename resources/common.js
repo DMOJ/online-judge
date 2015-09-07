@@ -83,14 +83,15 @@ function featureTest(property, value, noPrefixes) {
 }
 
 window.fix_div = function (div, height, right, fake_gen) {
-    var div_offset = div.offset().top;
+    par = par || $('html');
+    var div_offset = div.offset().top - par.offset().top;
     if (right)
-        var div_right = $(window).width() - div.offset().left - div.outerWidth();
+        var div_right = par.width() - div.offset().left - div.outerWidth();
     var is_moving;
     if (typeof fake_gen !== 'undefined')
         var fake = fake_gen(div);
     var moving = function () {
-        div.css('position', 'absolute').css('top', div_offset);
+        div.css('position', 'relative').css('top', div_offset);
         is_moving = true;
     };
     var fix = function () {

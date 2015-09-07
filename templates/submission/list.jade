@@ -58,7 +58,7 @@ block js_media
                             id: 'fake-info-float',
                             class: 'info-float'
                         }).css('width', '20%').height(info.height()).prependTo('#content-body');
-                    });
+                    }, $('#page-container'));
 
                 var time_cache = {};
                 window.update_relative_time = function (row) {
