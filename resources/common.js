@@ -82,7 +82,7 @@ function featureTest(property, value, noPrefixes) {
     return !!mStyle[property];
 }
 
-window.fix_div = function (div, height, right, fake_gen) {
+window.fix_div = function (div, height, right, fake_gen, par) {
     par = par || $('html');
     var div_offset = div.offset().top - par.offset().top;
     if (right)
