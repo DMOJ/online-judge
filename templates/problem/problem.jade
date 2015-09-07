@@ -45,7 +45,7 @@ block title_row
                 span.fa.fa-file-pdf-o(style='color: #d40e13')
                 span(style='height: 0.2em; display: block; position: absolute; top: 0.3em; background: #d40e13; width: 0.6em; margin-left: -0.15em')
             = ' View as PDF'
-            block info_float
+block info_float
     a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
     hr
     if request.user.is_authenticated and has_submissions
@@ -57,7 +57,7 @@ block title_row
     br
     a(href='{% url "ranked_submissions" problem.code %}')
         | Best submissions
-        if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids
+    if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids
         hr
         a(href='{% url "admin:judge_problem_change" problem.id %}')
             | Edit problem
@@ -116,7 +116,7 @@ block title_row
                 | Allowed languages
             div.toggled(style="margin-bottom:-1em") #{problem.languages_list | join:", "}
         br
-            block description
+block description
     - detect_svg use_svg
     - cache 86400 problem_html problem.id use_svg
     | #{problem.description | markdown:"problem"|smart_svg_math:use_svg}
@@ -124,12 +124,12 @@ block title_row
     if license
         span(style='float: left; font-size: 0.85em')
             a(style='color: gray; text-decoration: none', href='{% url "license" license.key %}')= license.display
-            block comments
+block comments
     .comment-area
         h2
             i.fa.fa-comments(style='padding-right: 0.2em')
             | Comments
         include comments/list
-            block bodyend
+block bodyend
     | #{block.super}
     include comments/math
