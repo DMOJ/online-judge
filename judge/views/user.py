@@ -116,7 +116,7 @@ class UserAboutPage(UserPage):
 
 
 class UserProblemsPage(UserPage):
-    template_name = 'user/user_problems.jde'
+    template_name = 'user/user_problems.jade'
 
 
 @login_required
