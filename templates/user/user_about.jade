@@ -87,13 +87,6 @@ block user_media
 
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
 
-block header
-    if user.user == request.user
-        a.edit-profile(href='{% url "judge.views.edit_profile" %}') Edit profile
-    else
-        if perms.judge.change_user
-            a.edit-profile(href='{% url "admin:auth_user_change" user.user.id %}') Admin
-
 block title_ruler
 
 block title_row
