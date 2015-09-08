@@ -180,7 +180,8 @@ block user_content
                             span.rate-box(class='{{ rating.rating|rating_class }}')
                                 span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
                             span.rating(class='{{ rating.rating|rating_class }}')= rating.rating
-        #rating-chart(style='min-width: 310px; height: 400px; margin: 0 auto')
+        // TODO: if on mobile, show a "Can't show chart on this display" box instead
+        #rating-chart(style='height: 400px; margin: 0 auto')
     else
         p This user has not participated in any rated contests.
 block bodyend
