@@ -20,7 +20,7 @@ from judge.utils.ranker import ranker
 from .contests import contest_ranking_view
 from judge.utils.views import TitleMixin, generic_message
 
-__all__ = ['UserPage', 'users', 'edit_profile', 'UserRating']
+__all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile', 'UserRating']
 
 
 def remap_keys(iterable, mapping):
@@ -111,6 +111,14 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         return super(UserPage, self).get(request, *args, **kwargs)
 
 
+class UserAboutPage(UserPage):
+    template_name = 'user/user_about.jade'
+
+
+class UserProblemsPage(UserPage):
+    template_name = 'user/user_problems.jde'
+
+
 @login_required
 def edit_profile(request):
     profile = Profile.objects.get(user=request.user)
@@ -139,9 +147,9 @@ def users(request):
         return contest_ranking_view(request, request.user.profile.contest.current.contest)
     return render(request, 'user/list.jade', {
         'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
-                               .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
-                               .select_related('user__username')
-                               .only('display_rank', 'user__username', 'name', 'points', 'rating')),
+                        .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
+                        .select_related('user__username')
+                        .only('display_rank', 'user__username', 'name', 'points', 'rating')),
         'title': 'Users'
     })
 
@@ -160,7 +168,7 @@ class UserRating(TitleMixin, UserMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(UserRating, self).get_context_data(**kwargs)
         ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
-                                           .defer('contest__description')
+            .defer('contest__description')
         if ratings:
             user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
             global_data = Rating.objects.aggregate(Min('rating'), Max('rating'))

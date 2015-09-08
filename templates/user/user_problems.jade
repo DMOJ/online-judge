@@ -1,0 +1,139 @@
+extends user_base
+- load staticfiles
+- load gravatar
+- load list_processor
+- load markdown_trois_tags
+- load rating
+block user_media
+    style.
+        a.edit-profile {
+            float: right;
+            padding-top: 1em;
+        }
+
+        .user-problem-group h3 {
+            font-weight: bold;
+            font-size: 1.25em;
+            margin-bottom: -10px;
+            max-height: 20%;
+            line-height: 2.5em;
+        }
+
+        .user-problem-group ul {
+            -webkit-columns: 300px 4;
+            -moz-columns: 300px 4;
+            columns: 300px 4;
+            list-style-type: none;
+            margin-top: 0;
+            margin-left: -20px;
+            margin-bottom: 0;
+        }
+
+        .user-problem-group a img {
+            max-width: 1em;
+            margin-right: 3px;
+            padding-bottom: 1px;
+            vertical-align: middle;
+        }
+
+        .user-gravatar {
+            display: block;
+            padding-right: 15px;
+        }
+
+        .user-gravatar img {
+            width: 135px;
+            padding: 5px;
+            border: 1px solid gray;
+            border-radius: 4px;
+        }
+
+        .user-info-cell {
+            padding-left: 15px;
+            border-left: 1px solid #CCC;
+        }
+
+        .contest-history-cell {
+            border-left: 1px solid #CCC;
+            padding: 0 0.5em;
+        }
+
+        table td {
+            margin: 0;
+            vertical-align: top;
+        }
+
+        .strike {
+            text-align: right;
+            overflow: hidden;
+        }
+
+        .strike > span {
+            position: relative;
+            display: inline-block;
+        }
+
+        .strike > span:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 100000px;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.2);
+            right: 100%;
+            margin-right: 5px;
+        }
+    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+block header
+    if user.user == request.user
+        a.edit-profile(href='{% url "judge.views.edit_profile" %}') Edit profile
+    else
+        if perms.judge.change_user
+            a.edit-profile(href='{% url "admin:auth_user_change" user.user.id %}') Admin
+block title_ruler
+block title_row
+    div.problem-title
+        ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
+            h2(style='color:#393630; display: inline-block')= title
+            span.spacer
+            li
+                a(href='{% url "user_about" user.user.username %}') About
+            li.active
+                a Solved
+
+block user_content
+    br
+    if authored
+        div.user-problem-group
+            h3.unselectable.toggle.open
+                span.fa.fa-chevron-right.fa-fw
+                | Authored Problems (#{authored | length})
+            ul.toggled
+                each problem in authored
+                    li
+                        a(href='{% url "problem_detail" problem.code %}')= problem.name
+                        |  (
+                        a(href='{% url "ranked_submissions" problem.code %}') #{problem.points | floatformat}{% if problem.partial %}p{% endif %}
+                        | )
+    if request.user.is_authenticated and request.user != user.user
+        .strike
+            span
+                form(name='form', action='', method='get')
+                    input(style='vertical-align:middle', onclick="form.submit()", type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
+                    label(style='vertical-align:middle', for='hide_solved') Hide problems I've solved
+    else
+        hr
+    - regroup best_submissions by group as problems
+    each group in problems
+        div.user-problem-group
+            h3.unselectable.toggle.open
+                span.fa.fa-chevron-right.fa-fw
+                | #{group.grouper}
+                | (#{group.list | list_getitem:"points"|sum_list|floatformat:1} points)
+            ul.toggled
+                each entry in group.list
+                    li
+                        a(href='{% url "problem_detail" entry.code %}') #{entry.name}
+                        |  (
+                        a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
+                        | )

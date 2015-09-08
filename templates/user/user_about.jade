@@ -1,14 +1,11 @@
-extends base
+extends user_base
 - load staticfiles
 - load gravatar
 - load list_processor
 - load markdown_trois_tags
 - load rating
 
-block meta
-    meta(name='description', content="User list. Join the community!")
-
-block media
+block user_media
     style.
         a.edit-profile {
             float: right;
@@ -97,22 +94,22 @@ block header
         if perms.judge.change_user
             a.edit-profile(href='{% url "admin:auth_user_change" user.user.id %}') Admin
 
-block body
+block title_ruler
+
+block title_row
+    div.problem-title
+        ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
+            h2(style='color:#393630; display: inline-block')= title
+            span.spacer
+            li.active
+                a About
+            li
+                a(href='{% url "user_problems" user.user.username %}') Solved
+
+block user_content
     br
     table
         tr
-            td
-                .user-gravatar
-                    img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar')
-                br
-                h4 #{user.solved_problems} problems solved.
-                b Rank by points:
-                |  #{rank} of #{users}
-                br
-                b Total points:
-                |  #{user.points}
-                br
-                a(href='{% url "all_user_submissions" user.user.username %}') View submissions
             if rating
                 td.contest-history-cell
                     h4 Contest History
@@ -169,38 +166,3 @@ block body
                         else
                             | This user has not shared any information.
                 br
-    if authored
-        hr
-        div.user-problem-group
-            h3.unselectable.toggle.open
-                span.fa.fa-chevron-right.fa-fw
-                | Authored Problems (#{authored|length})
-            ul.toggled
-                each problem in authored
-                    li
-                        a(href='{% url "problem_detail" problem.code %}')= problem.name
-                        |  (
-                        a(href='{% url "ranked_submissions" problem.code %}') #{problem.points|floatformat}{% if problem.partial %}p{% endif %}
-                        | )
-    if request.user.is_authenticated and request.user != user.user
-        .strike
-            span
-                form(name='form', action='', method='get')
-                    input(style='vertical-align:middle', onclick="form.submit()", type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
-                    label(style='vertical-align:middle', for='hide_solved') Hide problems I've solved
-    else
-        hr
-    - regroup best_submissions by group as problems
-    each group in problems
-        div.user-problem-group
-            h3.unselectable.toggle.open
-                span.fa.fa-chevron-right.fa-fw
-                | #{group.grouper}
-                | (#{group.list|list_getitem:"points"|sum_list|floatformat:1} points)
-            ul.toggled
-                each entry in group.list
-                    li
-                        a(href='{% url "problem_detail" entry.code %}') #{entry.name}
-                        |  (
-                        a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
-                        | )
