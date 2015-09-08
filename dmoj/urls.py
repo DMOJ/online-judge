@@ -88,7 +88,7 @@ urlpatterns = patterns('',
     url(r'^users/$', 'judge.views.users'),
     url(r'^user/(?P<username>\w+)$', views.UserAboutPage.as_view(), name='user_page'),
     url(r'^user/(?P<username>\w+)/solved$', views.UserProblemsPage.as_view(), name='user_problems'),
-    url(r'^user$', views.UserPage.as_view(), name='user_page'),
+    url(r'^user$', views.UserAboutPage.as_view(), name='user_page'),
     url(r'^edit/profile/$', 'judge.views.edit_profile'),
 
     url(r'^problems/$', problem.ProblemList.as_view(), name='problem_list'),
