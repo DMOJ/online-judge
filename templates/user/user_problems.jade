@@ -104,7 +104,6 @@ block title_row
                         a(href='{% url "admin:auth_user_change" user.user.id %}') Admin
 
 block user_content
-    br
     if authored
         div.user-problem-group
             h3.unselectable.toggle.open
