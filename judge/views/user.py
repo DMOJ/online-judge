@@ -41,7 +41,7 @@ class UserMixin(object):
 
 
 class UserPage(TitleMixin, UserMixin, DetailView):
-    template_name = 'user/user.jade'
+    template_name = 'user/user_base.jade'
 
     def get_object(self, queryset=None):
         if self.kwargs.get(self.slug_url_kwarg, None) is None:
