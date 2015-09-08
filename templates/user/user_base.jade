@@ -19,6 +19,21 @@ block media
             border: 1px solid gray;
             border-radius: 4px;
         }
+
+        .page-title {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .page-title .spacer {
+            display: inline-block;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1 1 1px;
+            -ms-flex: 1 1 1px;
+            flex: 1 1 1px;
+        }
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
 
 block body
