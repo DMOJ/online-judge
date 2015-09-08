@@ -124,7 +124,7 @@ block user_content
                     br
                     b Rating:
                     = ' '
-                    a.rate-group(href='{% url "user_rating" user.user.username %}', title='{{ rating.rating|rating_name }}')
+                    span.rate-group
                         span.rate-box(class='{{ rating.rating|rating_class }}')
                             span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
                         span.rating(class='{{ rating.rating|rating_class }}') #{rating.rating}
