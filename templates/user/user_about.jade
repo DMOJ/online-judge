@@ -134,14 +134,14 @@ block user_content
                     br
                     b Minimum rating:
                     = ' '
-                    a.rate-group(href='{% url "user_rating" user.user.username %}', title='{{ min_rating|rating_name }}')
+                    span.rate-group
                         span.rate-box(class='{{ min_rating|rating_class }}')
                             span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
                         span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
                     br
                     b Maximum rating:
                     = ' '
-                    a.rate-group(href='{% url "user_rating" user.user.username %}', title='{{ max_rating|rating_name }}')
+                    span.rate-group
                         span.rate-box(class='{{ max_rating|rating_class }}')
                             span(style='height: {{ max_rating|rating_progress|floatformat:3 }}em')
                         span.rating(class='{{ max_rating|rating_class }}') #{max_rating}
@@ -172,3 +172,93 @@ block user_content
                         else
                             | This user has not shared any information.
                 br
+    if ratings
+        table.table
+            tr
+                th Contest
+                th Rank
+                th Rating
+            each rating in ratings
+                tr
+                    td
+                        a(href='{% url "contest_ranking" rating.contest.key %}')= rating.contest.name
+                    td= rating.rank
+                    td
+                        .rate-group(title='{{ rating.rating|rating_name }}')
+                            span.rate-box(class='{{ rating.rating|rating_class }}')
+                                span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
+                            span.rating(class='{{ rating.rating|rating_class }}')= rating.rating
+        #rating-chart(style='min-width: 310px; height: 400px; margin: 0 auto')
+    else
+        p This user has not participated in any rated contests.
+block bodyend
+    if ratings
+        script(src='//code.highcharts.com/highcharts.js')
+
+        | <script type="text/javascript">
+        |     var rating_history = [
+        each rating in ratings
+            | {
+            |     name: '#{rating.contest.name|escapejs}',
+            |     x: new Date('#{rating.contest.end_time|date:"c"}'),
+            |     y: #{rating.rating},
+            | },
+        |    ];
+        | </script>
+
+        script(type='text/javascript').
+            $(function () {
+                $('#rating-chart').highcharts({
+                    chart: {
+                        zoomType: 'x'
+                    },
+                    title: {
+                        text: 'Rating History for #{user.user.username}'
+                    },
+                    subtitle: {
+                        text: document.ontouchstart === undefined ?
+                                'Click and drag in the plot area to zoom in' :
+                                'Pinch the chart to zoom in'
+                    },
+                    xAxis: {
+                        type: 'datetime'
+                    },
+                    yAxis: {
+                        endOnTick: false,
+                        min: #{min_graph},
+                        max: #{max_graph},
+                        title: {
+                            text: 'Rating'
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        area: {
+                            fillColor: {
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+                                stops: [
+                                    [0, Highcharts.getOptions().colors[0]],
+                                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                                ]
+                            },
+                            marker: {
+                                radius: 2
+                            },
+                            lineWidth: 1,
+                            states: {
+                                hover: {
+                                    lineWidth: 1
+                                }
+                            },
+                            threshold: null
+                        }
+                    },
+                    series: [{
+                        type: 'area',
+                        name: 'Rating',
+                        data: rating_history
+                    }]
+                });
+            });

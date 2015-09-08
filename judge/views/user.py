@@ -20,7 +20,7 @@ from judge.utils.ranker import ranker
 from .contests import contest_ranking_view
 from judge.utils.views import TitleMixin, generic_message
 
-__all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile', 'UserRating']
+__all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile']
 
 
 def remap_keys(iterable, mapping):
@@ -114,6 +114,21 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 class UserAboutPage(UserPage):
     template_name = 'user/user_about.jade'
 
+    def get_context_data(self, **kwargs):
+        context = super(UserAboutPage, self).get_context_data(**kwargs)
+        ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
+            .defer('contest__description')
+        if ratings:
+            user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
+            global_data = Rating.objects.aggregate(Min('rating'), Max('rating'))
+            min_ever, max_ever = global_data['rating__min'], global_data['rating__max']
+            min_user, max_user = user_data['rating__min'], user_data['rating__max']
+            delta = max_user - min_user
+            ratio = (max_ever - max_user + 0.0) / (max_ever - min_ever)
+            context['max_graph'] = max_user + ratio * delta
+            context['min_graph'] = min_user + ratio * delta - delta
+        return context
+
 
 class UserProblemsPage(UserPage):
     template_name = 'user/user_problems.jade'
@@ -152,30 +167,3 @@ def users(request):
                         .only('display_rank', 'user__username', 'name', 'points', 'rating')),
         'title': 'Users'
     })
-
-
-class UserRating(TitleMixin, UserMixin, DetailView):
-    template_name = 'user/rating.jade'
-
-    def get_title(self):
-        return 'Rating history for %s' % self.object.long_display_name
-
-    def get_content_title(self):
-        return format_html(u'Rating history for <span class="{1}"><a href="{2}">{0}</a></span>',
-                           self.object.user.username, self.object.display_rank,
-                           reverse('user_page', args=[self.object.user.username]))
-
-    def get_context_data(self, **kwargs):
-        context = super(UserRating, self).get_context_data(**kwargs)
-        ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
-            .defer('contest__description')
-        if ratings:
-            user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
-            global_data = Rating.objects.aggregate(Min('rating'), Max('rating'))
-            min_ever, max_ever = global_data['rating__min'], global_data['rating__max']
-            min_user, max_user = user_data['rating__min'], user_data['rating__max']
-            delta = max_user - min_user
-            ratio = (max_ever - max_user + 0.0) / (max_ever - min_ever)
-            context['max_graph'] = max_user + ratio * delta
-            context['min_graph'] = min_user + ratio * delta - delta
-        return context
