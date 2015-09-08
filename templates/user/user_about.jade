@@ -141,10 +141,6 @@ block user_content
                     br
                     b Competitions:
                     |  #{contests}
-                    br
-                    b Most recent:
-                    = ' '
-                    a(href='{% url "contest_view" rating.contest.key %}')= rating.contest.name
             td.user-info-cell
                 - with orgs=user.organizations.all
                     if orgs
@@ -166,6 +162,9 @@ block user_content
                             | This user has not shared any information.
                 br
     if ratings
+        br
+        hr
+        br
         table.table
             tr
                 th Contest
