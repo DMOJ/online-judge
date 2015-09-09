@@ -12,7 +12,7 @@ block after_rank
     if has_rating
         td
             if user.rating
-                a(href='{% url "user_rating" user.user.username %}', title='{{ user.rating|rating_name }}')
+                span
                     span.rate-box(class='{{ user.rating|rating_class }}')
                         span(style='height: {{ user.rating|rating_progress|floatformat:3 }}em')
                     span.rating(class='{{ user.rating|rating_class }}') #{user.rating}
