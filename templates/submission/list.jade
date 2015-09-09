@@ -1,4 +1,4 @@
-extends base
+extends common-content
 - load staticfiles
 - load cache
 - load cache_key
@@ -51,14 +51,17 @@ block js_media
                 };
         script(type='text/javascript').
             $(function () {
-                if (false && !featureTest('position', 'sticky'))
-                    fix_div($('.info-float'), 40, true, function (info) {
-                        info.css('width', (info.width() / $('#page-container').width() * 100) + '%');
-                        return $('<div/>', {
-                            id: 'fake-info-float',
-                            class: 'info-float'
-                        }).css('width', '20%').height(info.height()).prependTo('#content-body');
-                    }, $('#page-container'));
+                var info_float = $('.info-float');
+                var container = $('#content-right');
+                if (window.bad_browser) {
+                    container.css('float', 'right');
+                } else if (!featureTest('position', 'sticky')) {
+                    fix_div(info_float, 55);
+                    $(window).resize(function () {
+                        info_float.width(container.width());
+                    });
+                    info_float.width(container.width());
+                }
 
                 var time_cache = {};
                 window.update_relative_time = function (row) {
@@ -175,12 +178,11 @@ block media
             width: 100%;
         }*/
 
-block body
-    br
-    .info-float
-        #statistics-table
-            include problem/statistics_table
+block info_float
+    #statistics-table
+        include problem/statistics_table
 
+block description
     if page_obj.num_pages > 1
         div(style='margin-bottom:10px;')
             include list_pages
