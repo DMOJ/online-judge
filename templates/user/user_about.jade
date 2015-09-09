@@ -202,6 +202,9 @@ block bodyend
         script(type='text/javascript').
             $(function () {
                 $('#rating-chart').highcharts({
+                    title: {
+                        text: 'Rating History'
+                    },
                     chart: {
                         zoomType: 'x'
                     },
