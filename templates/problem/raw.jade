@@ -18,11 +18,66 @@ html
                 page-break-inside: avoid;
             }
 
+            #info-table {
+                width: auto;
+                background: white;
+            }
+
+            #info-table td {
+                text-align: left;
+            }
+
+            #info-table td.value {
+                min-width: 10em;
+            }
+
+            #info-table td.key {
+                font-weight: bold;
+            }
     body
         h2(style='color:#393630; display: inline-block')= problem.name
         hr
 
+        table.table(id='#info-table')
+            tbody
+                tr
+                    td.key Points:
+                    td.value
+                    if contest_problem
+                        |  #{contest_problem.points}
+                        if contest_problem.partial
+                            | (partial)
+                    else
+                        |  #{problem.points|floatformat}
+                        if problem.partial
+                            | (partial)
+                    td.key
+                        if problem.types_list|length > 1
+                            | Problem types:
+                        else
+                            | Problem type:
+                    td.value #{problem.types_list|join:", "}
+                tr
+                    td.key Time limit:
+                    td.value #{problem.time_limit}s
+                    td.key Allowed languages:
+                    td.value
+                        if show_languages
+                            | #{problem.languages_list|join:", "}
+                        else
+                            | All
+                tr
+                    td.key Memory limit:
+                    td.value #{problem.memory_limit|kbsimpleformat}
+                    td.key
+                        if authors|length > 1
+                            | Authors:
+                        else
+                            | Author:
+                    td.value #{authors|join:", "}
+        hr(style='border-bottom: 1px dashed;')
+
         .content-description.printing
-            | #{problem.description|markdown:"problem"|smart_math:"tex"}
+            | #{problem.description | markdown:"problem"|smart_math:"tex"}
 
         include mathjax_load
