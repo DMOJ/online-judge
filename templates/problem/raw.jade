@@ -24,11 +24,4 @@ html
         .content-description.printing
             | #{problem.description|markdown:"problem"|smart_math:"tex"}
 
-        | <script type='text/x-mathjax-config'>
-        |   MathJax.Hub.Config({
-        |     tex2jax: {
-        |       inlineMath: [['~', '~'], ['\\(', '\\)']]
-        |     }
-        |   });
-        | </script>
-        script(type='text/javascript', src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG')
+        include mathjax_load
