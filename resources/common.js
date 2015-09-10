@@ -82,14 +82,9 @@ function featureTest(property, value, noPrefixes) {
     return !!mStyle[property];
 }
 
-window.fix_div = function (div, height, right, fake_gen, par) {
-    par = par || $('html');
-    var div_offset = div.offset().top - par.offset().top;
-    if (right)
-        var div_right = $(window).width() - (par.offset().left - div.offset().left) - div.outerWidth();
+window.fix_div = function (div, height) {
+    var div_offset = div.offset().top - $('html').offset().top;
     var is_moving;
-    if (typeof fake_gen !== 'undefined')
-        var fake = fake_gen(div);
     var moving = function () {
         div.css('position', 'absolute').css('top', div_offset);
         is_moving = true;
@@ -98,14 +93,6 @@ window.fix_div = function (div, height, right, fake_gen, par) {
         div.css('position', 'fixed').css('top', height);
         is_moving = false;
     };
-    if (right)
-        div.css('right', div_right);
-    if (typeof fake != 'undefined') {
-        div.css('left', fake.offset().left).css('right', undefined);
-        $(window).resize(function () {
-            div.css('left', fake.offset().left);
-        });
-    }
     ($(window).scrollTop() - div_offset > -height) ? fix() : moving();
     $(window).scroll(function () {
         if (($(window).scrollTop() - div_offset > -height) == is_moving)
