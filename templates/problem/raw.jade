@@ -70,12 +70,13 @@ html
                 tr
                     td.key Memory limit:
                     td.value #{problem.memory_limit|kbsimpleformat}
-                    td.key
-                        if authors|length > 1
-                            | Authors:
-                        else
-                            | Author:
-                    td.value #{authors|join:", "}
+                    if authors
+                        td.key
+                            if authors|length > 1
+                                | Authors:
+                            else
+                                | Author:
+                        td.value #{authors|join:", "}
         hr(style='border-bottom: 1px dashed;')
 
         .content-description.printing
