@@ -44,14 +44,14 @@ html
                 tr
                     td.key Points:
                     td.value
-                    if contest_problem
-                        |  #{contest_problem.points}
-                        if contest_problem.partial
-                            | (partial)
-                    else
-                        |  #{problem.points|floatformat}
-                        if problem.partial
-                            | (partial)
+                        if contest_problem
+                            |  #{contest_problem.points}
+                            if contest_problem.partial
+                                | (partial)
+                        else
+                            |  #{problem.points|floatformat}
+                            if problem.partial
+                                | (partial)
                     td.key
                         if problem.types_list|length > 1
                             | Problem types:
