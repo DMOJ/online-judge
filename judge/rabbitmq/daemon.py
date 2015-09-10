@@ -34,14 +34,20 @@ class AMQPResponseDaemon(object):
         self.chan.stop_consuming()
 
     def _handle_judge_response(self, chan, method, properties, body):
-        packet = json.loads(body)
-        self._judge_response_handlers.get(packet['name'], self.on_malformed)(packet)
-        chan.basic_ack(delivery_tag=method.delivery_tag)
+        try:
+            packet = json.loads(body)
+            self._judge_response_handlers.get(packet['name'], self.on_malformed)(packet)
+            chan.basic_ack(delivery_tag=method.delivery_tag)
+        except Exception:
+            logger.exception('Error in AMQP judge response handling')
 
     def _handle_ping(self, chan, method, properties, body):
-        packet = json.loads(body)
-        self._ping_handlers.get(packet['name'], self.on_malformed)(packet)
-        chan.basic_ack(delivery_tag=method.delivery_tag)
+        try:
+            packet = json.loads(body)
+            self._ping_handlers.get(packet['name'], self.on_malformed)(packet)
+            chan.basic_ack(delivery_tag=method.delivery_tag)
+        except Exception:
+            logger.exception('Error in AMQP judge ping handling')
 
     def on_acknowledged(self, packet):
         logger.info('Submission acknowledged: %d', packet['id'])
