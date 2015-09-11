@@ -13,10 +13,10 @@ block meta
         |    {
         |      "@context": "https://schema.org",
         |      "@type": "WebSite",
-        |      "url": "https://www.dmoj.ca/",
+        |      "url": "//{{ site.domain }}/",
         |      "potentialAction": {
         |        "@type": "SearchAction",
-        |        "target": "https://www.dmoj.ca/problems/?search={search_term_string}",
+        |        "target": "//{{ site.domain }}/problems/?search={search_term_string}",
         |        "query-input": "required name=search_term_string"
         |      }
         |    }

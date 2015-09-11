@@ -1,1 +1,1 @@
-Activate your DMOJ account
+Activate your {{ SITE_NAME }} account

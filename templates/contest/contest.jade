@@ -75,7 +75,7 @@ block comments
     span.social
        - post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>"
        - post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>"
-       - post_to_twitter "DMOJ:" post "<i class=\"fa fa-twitter\"></i>"
+       - post_to_twitter "{{ SITE_NAME }}:" post "<i class=\"fa fa-twitter\"></i>"
     .comment-area
         h2 Comments
         include comments/list

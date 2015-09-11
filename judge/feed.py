@@ -3,6 +3,7 @@ from django.core.cache import cache
 from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
 from django.utils.http import urlquote
+from django.conf import settings
 
 from judge.math_parser import MathHTMLParser, INLINE_MATH_PNG, DISPLAY_MATH_PNG
 from judge.models import Comment, BlogPost, Problem
@@ -20,9 +21,9 @@ class FeedMath(MathHTMLParser):
 
 
 class ProblemFeed(Feed):
-    title = 'Recently added DMOJ problems'
+    title = 'Recently added %s problems' % getattr(settings, 'SITE_NAME', 'DMOJ')
     link = '/'
-    description = 'The latest problems added on the Don Mills Online Judge website'
+    description = 'The latest problems added on the %s website' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
 
     def items(self):
         return Problem.objects.filter(is_public=True).order_by('-date', '-id')[:25]
@@ -48,9 +49,9 @@ class AtomProblemFeed(ProblemFeed):
 
 
 class CommentFeed(Feed):
-    title = 'Latest DMOJ comments'
+    title = 'Latest %s comments' % getattr(settings, 'SITE_NAME', 'DMOJ')
     link = '/'
-    description = 'The latest comments on the Don Mills Online Judge website'
+    description = 'The latest comments on the %s website' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
 
     def items(self):
         return Comment.objects.filter(hidden=False).order_by('-time')[:25]
@@ -77,9 +78,9 @@ class AtomCommentFeed(CommentFeed):
 
 
 class BlogFeed(Feed):
-    title = 'Latest DMOJ Blog Posts'
+    title = 'Latest %s Blog Posts' % getattr(settings, 'SITE_NAME', 'DMOJ')
     link = '/'
-    description = 'The latest blog posts from the Don Mills Online Judge'
+    description = 'The latest blog posts from the %s' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
 
     def items(self):
         return BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).order_by('-sticky', '-publish_on')

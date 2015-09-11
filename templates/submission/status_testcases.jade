@@ -84,7 +84,7 @@ if submission.status != 'IE'
 else
     h3(style='color:red;font-weight:bold') 
         if request.user == submission.user.user
-            | An internal error occurred while grading, and the DMOJ administrators have been notified.
+            | An internal error occurred while grading, and the {{ SITE_NAME }} administrators have been notified.
             br
             | In the meantime, try resubmitting in a few seconds.
         else
