@@ -99,6 +99,7 @@ class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
         context['contest_problem'] = (None if not authed or user.profile.contest.current is None else
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
+        context['wkhtmltopdf_installed'] = getattr(settings, 'WEBKIT_PDF', False)
         return context
 
 
