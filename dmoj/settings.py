@@ -107,6 +107,7 @@ INSTALLED_APPS += (
     'django.contrib.flatpages',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.redirects',
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
@@ -136,6 +137,7 @@ MIDDLEWARE_CLASSES = (
     'judge.timezone.TimezoneMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'judge.social_auth.SocialAuthExceptionMiddleware',
+    'django.contrib.redirects.middleware.RedirectFallbackMiddleware,
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
