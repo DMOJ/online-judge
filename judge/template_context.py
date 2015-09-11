@@ -93,3 +93,7 @@ def contest(request):
         in_contest = False
         participation = None
     return {'IN_CONTEST': in_contest, 'CONTEST': participation}
+
+
+def site_name(request):
+    return {'SITE_NAME': settings.SITE_NAME}

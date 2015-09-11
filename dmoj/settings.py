@@ -183,6 +183,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     'judge.template_context.site',
     'judge.template_context.misc_config',
     'judge.template_context.contest',
+    'judge.template_context.site_name',
     'social.apps.django_app.context_processors.backends',
     'social.apps.django_app.context_processors.login_redirect',
 )
