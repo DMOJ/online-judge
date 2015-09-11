@@ -225,7 +225,7 @@ class ProblemList(TitleMixin, ListView):
         queryset = Problem.objects.filter(filter) \
             .annotate(number_of_users=Count('submission__user', distinct=True)) \
             .select_related('group').defer('description').order_by('code')
-        if self.hide_solved:
+        if self.profile is not None and self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
                                         .values_list('problem__id', flat=True))
         if self.show_types:
