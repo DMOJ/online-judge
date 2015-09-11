@@ -37,21 +37,17 @@ block media
             width: 100%
         }
 
-        #problem-table td:nth-child(3),
-        td:nth-child(4),
-        td:nth-child(6),
-        td:nth-child(7) {
+        #problem-table td.category,
+        td.code,
+        td.users,
+        td.types {
             text-align: left;
             padding: 0 1em 0 1em;
         }
 
-        #problem-table td:nth-child(2) {
+        #problem-table td.problem {
             text-align: left;
             padding-left: 1em;
-        }
-
-        .h {
-            display: none;
         }
 
         #problem-table .code, .points, .users {
@@ -109,8 +105,6 @@ block body
                 if request.user.is_authenticated
                     th.solved
                         i.fa.fa-check
-                else
-                    th.h
                 th.problem Problem
                 th.category Category
                 th.code Code
@@ -128,16 +122,14 @@ block body
                         else
                             td(solved='0')
                                 i.fa.fa-minus-circle(style='color:#DE2121')
-                    else
-                        td.h
-                    td
+                    td.problem
                         a(href='{% url "problem_detail" problem.code %}')= problem.name
-                    td= problem.group.full_name
-                    td= problem.code
+                    td.category= problem.group.full_name
+                    td.code= problem.code
                     if show_types
-                        td #{problem.types_list|join:", "}
+                        td.types #{problem.types_list|join:", "}
                     td.p #{problem.points|floatformat}
                         if problem.partial
                             | p
-                    td
+                    td.users
                         a(href='{% url "ranked_submissions" problem.code %}')= problem.number_of_users
