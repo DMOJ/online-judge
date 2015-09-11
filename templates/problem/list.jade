@@ -101,8 +101,9 @@ block body
     table#problem-table.table.striped
         thead
             tr
-                th.solved
-                    i.fa.fa-check
+                if request.user.is_authenticated
+                    th.solved
+                        i.fa.fa-check
                 th.problem Problem
                 th.category Category
                 th.code Code
@@ -113,12 +114,13 @@ block body
         tbody
             each problem in problems
                 tr
-                    if problem.id in completed_problem_ids
-                        td(solved='1')
-                            i.fa.fa-check-circle(style='color:#44AD41')
-                    else
-                        td(solved='0')
-                            i.fa.fa-minus-circle(style='color:#DE2121')
+                    if request.user.is_authenticated
+                        if problem.id in completed_problem_ids
+                            td(solved='1')
+                                i.fa.fa-check-circle(style='color:#44AD41')
+                        else
+                            td(solved='0')
+                                i.fa.fa-minus-circle(style='color:#DE2121')
                     td
                         a(href='{% url "problem_detail" problem.code %}')= problem.name
                     td= problem.group.full_name
