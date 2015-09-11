@@ -88,7 +88,7 @@ block media
 block body
     br
     block before_table
-        if not IN_CONTEST and request.user.is_authenticated
+        if not IN_CONTEST
             form#filter-form(name='form', action='', method='get')
                 if has_search
                     input(type='text', name='search', id='search', value=search_query, placeholder='Search problems...')
