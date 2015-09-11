@@ -9,7 +9,7 @@ if submission.status != 'IE'
         h4 Your submission is being processed...
     elif submission.status == 'CE'
         h4 Compilation Error
-        pre #{submission.error}
+        pre #{submission.error|safe}
     else
         h3 Execution Results
         br
