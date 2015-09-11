@@ -37,13 +37,21 @@ block media
             width: 100%
         }
 
-        #problem-table td {
+        #problem-table td:nth-child(3),
+        td:nth-child(4),
+        td:nth-child(6),
+        td:nth-child(7) {
             text-align: left;
             padding: 0 1em 0 1em;
         }
 
-        #problem-table td.id {
-            padding: 0 0 0 1em;
+        #problem-table td:nth-child(2) {
+            text-align: left;
+            padding-left: 1em;
+        }
+
+        .h {
+            display: none;
         }
 
         #problem-table .code, .points, .users {
@@ -101,6 +109,8 @@ block body
                 if request.user.is_authenticated
                     th.solved
                         i.fa.fa-check
+                else
+                    th.h
                 th.problem Problem
                 th.category Category
                 th.code Code
@@ -118,7 +128,9 @@ block body
                         else
                             td(solved='0')
                                 i.fa.fa-minus-circle(style='color:#DE2121')
-                    td.id
+                    else
+                        td.h
+                    td
                         a(href='{% url "problem_detail" problem.code %}')= problem.name
                     td= problem.group.full_name
                     td= problem.code
