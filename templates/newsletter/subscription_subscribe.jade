@@ -1,0 +1,16 @@
+extends base
+
+block title
+    | Newsletter subscribe
+
+block body
+    h1 Newsletter subscribe #{newsletter.title}
+
+    if error
+        p Due to a technical error we were not able to submit your confirmation email. This could be because your email address is invalid.
+    else
+        form(enctype='multipart/form-data', method='post', action='.')
+            - csrf_token
+            | #{form.as_p}
+            p
+                input(id='id_submit', name='submit', value='Subscribe', type='submit')

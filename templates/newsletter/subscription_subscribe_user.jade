@@ -1,0 +1,22 @@
+extends base
+
+-load url from future
+
+block title
+    | Newsletter subscribe
+
+block body
+    h1 Newsletter subscribe #{newsletter.title}
+
+    p Welcome, #{user}!
+
+    if messages
+        ul
+            for message in messages
+                li #{message}
+    else
+        | Do you want to subscribe to this newsletter?
+        form(enctype='multipart/form-data', method='post', action='{% url "newsletter_subscribe_confirm" newsletter.slug %}')
+            - csrf_token
+            p
+                input(id='id_submit', name='submit', value='Subscribe', type='submit')
