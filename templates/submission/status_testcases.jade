@@ -15,7 +15,7 @@ if submission.status != 'IE'
         br
         if submission.error
             h4 Compilation Warnings
-            pre #{submission.error}
+            pre #{submission.error|safe}
             br
         - regroup test_cases by batch as batches
         - get_counter test_case_id
