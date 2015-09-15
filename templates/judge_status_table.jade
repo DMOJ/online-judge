@@ -3,7 +3,8 @@
 
 tr
     th Name
-    th Online
+    if request.user.is_superuser or request.user.is_staff
+        th Online
     th Uptime
     th Ping
     th Load
@@ -13,11 +14,12 @@ for judge in judges
         tr
             td
                 a(href='{% url "judge_info" judge.name %}')= judge.name
-            td
-                if judge.online
-                    i.fa.fa-check-circle(style='color:#44AD41')
-                else
-                    i.fa.fa-minus-circle(style='color:#DE2121')
+            if request.user.is_superuser or request.user.is_staff
+                td
+                    if judge.online
+                        i.fa.fa-check-circle(style='color:#44AD41')
+                    else
+                        i.fa.fa-minus-circle(style='color:#DE2121')
             td
                 if judge.online
                     | #{judge.uptime|timedelta:"simple"}
