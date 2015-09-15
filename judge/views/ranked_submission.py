@@ -1,11 +1,9 @@
 from django.core.urlresolvers import reverse
-from django.db.models import Q
 from django.utils.html import format_html
 
 from judge.models import Submission
 from judge.views.submission import ProblemSubmissions, ForceContestMixin
 from judge.utils.problems import get_result_table
-
 
 __all__ = ['RankedSubmissions']
 
