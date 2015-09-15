@@ -27,21 +27,21 @@ block body
         - csrf_token
         if form.errors
             #form-errors
-                | #{form.non_field_errors}
+                p.error #{form.non_field_errors}
                 if form.username.errors
-                    | Your chosen username is already taken.
+                    p.error Your chosen username is already taken.
                 if form.email.errors
-                    | Please enter a valid email.
+                    p.error Please enter a valid email.
                 if form.password1.errors or form.password2.errors
-                    | Passwords don't match.
+                    p.error Passwords don't match.
                 if form.display_name.errors
-                    | Invalid display name.
+                    p.error Invalid display name.
                 if form.timezone.errors
-                    | Invalid timezone.
+                    p.error Invalid timezone.
                 if form.organizations.errors
-                    | Invalid organizations specified.
+                    p.error Invalid organizations specified.
                 if form.language.errors
-                    | Invalid language specified.
+                    p.error Invalid language specified.
         .reg-post-wrapper
             table(border=0, style='text-align:left')
                 tr
