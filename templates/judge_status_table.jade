@@ -9,7 +9,7 @@ tr
     th Load
     th Runtimes
 for judge in judges
-    if judge.online or request.user.is_superuser
+    if judge.online or request.user.is_superuser or request.user.is_staff
         tr
             td
                 a(href='{% url "judge_info" judge.name %}')= judge.name
