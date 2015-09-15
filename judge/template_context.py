@@ -98,4 +98,4 @@ def contest(request):
 def site_name(request):
     return {'SITE_NAME': getattr(settings, 'SITE_NAME', 'DMOJ'),
             'SITE_LONG_NAME': getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ')),
-            'SITE_ADMIN_EMAIL': getattr(settings, 'SITE_ADMIN_EMAIL', False)};
+            'SITE_ADMIN_EMAIL': getattr(settings, 'SITE_ADMIN_EMAIL', False)}
