@@ -219,6 +219,10 @@ nav
         left: 5px
         display: none
         li
+          &:first-child
+            a.active
+              border-top: 1px dashed black
+        li
           display: block
           a
             padding: 8px 15px 8px 8px
@@ -231,7 +235,6 @@ nav
         color: #fff
         background: #3B3B3B
         background: rgba(0, 0, 0, 0.77)
-        border-top: 1px dashed #2980b9
       &.home-nav-element a:hover
         border-bottom: 0
         padding-top: 0
