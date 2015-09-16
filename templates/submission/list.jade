@@ -6,30 +6,23 @@ extends common-content
 
 block js_media
     if dynamic_update and last_msg
-        if IN_CONTEST
-            script(type='text/javascript').
-                window.current_contest = '#{CONTEST.contest.key}';
-        else
-            script(type='text/javascript').
-                window.current_contest = null;
-        if dynamic_user_id
-            script(type='text/javascript').
-                window.dynamic_user_id = #{dynamic_user_id};
-        else
-            script(type='text/javascript').
-                window.dynamic_user_id = null;
-        if dynamic_problem_id
-            script(type='text/javascript').
-                window.dynamic_problem_id = #{dynamic_problem_id};
-        else
-            script(type='text/javascript').
-                window.dynamic_problem_id = null;
-        if show_problem
-            script(type='text/javascript').
-                window.show_problem = 1;
-        else
-            script(type='text/javascript').
-                window.show_problem = 0;
+        script(type='text/javascript')
+            if IN_CONTEST
+                | window.current_contest = '#{CONTEST.contest.key}';
+            else
+                | window.current_contest = null;
+            if dynamic_user_id
+                | window.dynamic_user_id = #{dynamic_user_id};
+            else
+                | window.dynamic_user_id = null;
+            if dynamic_problem_id
+                | window.dynamic_problem_id = #{dynamic_problem_id};
+            else
+                | window.dynamic_problem_id = null;
+            if show_problem
+                | window.show_problem = 1;
+            else
+                | window.show_problem = 0;
 
     - compress js
         script(type='text/javascript', src='{% static "event.js" %}')
