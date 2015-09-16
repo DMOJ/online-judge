@@ -53,12 +53,6 @@ html(lang='en')
             link(rel='stylesheet', href=FONTAWESOME_CSS)
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         block media
-        style.
-            {% for item in nav_tab %}nav ul li a.nav-{{ item }}{% if not forloop.last %},{% endif %} {% endfor %}{
-                color: #FFF;
-                background: #2980B9;
-                margin: 0px;
-            }
         if INLINE_JQUERY
             - compress js
                 script(src='{% static "libs/jquery-1.11.2.min.js" %}')
