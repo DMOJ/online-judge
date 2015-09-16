@@ -90,7 +90,7 @@ html(lang='en')
                         span(style='width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);')
                     - recursetree nav_bar
                         li
-                            a(href=node.path, class='nav-{{ node.key }}')= node.label
+                            a(href=node.path, class='nav-{{ node.key }} {% if node.key in nav_tab %}active{% endif %}')= node.label
                             if not node.is_leaf_node
                                 ul {{ children }}
                     - endrecursetree
