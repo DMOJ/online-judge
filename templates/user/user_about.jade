@@ -107,66 +107,61 @@ block title_row
                         a(href='{% url "admin:auth_user_change" user.user.id %}') Admin
 
 block user_content
-    table
-        tr
-            if rating
-                td.contest-history-cell
-                    h4 Contest History
-                    b Rank by rating:
-                    |  #{rating_rank} of #{rated_users}
-                    br
-                    b Rating:
-                    = ' '
-                    span.rate-group
-                        span.rate-box(class='{{ rating.rating|rating_class }}')
-                            span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
-                        span.rating(class='{{ rating.rating|rating_class }}') #{rating.rating}
-                    br
-                    b Volatility:
-                    |  #{rating.volatility}
-                    br
-                    b Minimum rating:
-                    = ' '
-                    span.rate-group
-                        span.rate-box(class='{{ min_rating|rating_class }}')
-                            span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
-                        span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
-                    br
-                    b Maximum rating:
-                    = ' '
-                    span.rate-group
-                        span.rate-box(class='{{ max_rating|rating_class }}')
-                            span(style='height: {{ max_rating|rating_progress|floatformat:3 }}em')
-                        span.rating(class='{{ max_rating|rating_class }}') #{max_rating}
-                    br
-                    b Competitions:
-                    |  #{contests}
-            td.user-info-cell
-                - with orgs=user.organizations.all
-                    if orgs
-                        p
-                            b Organizations:
-                            = ' '
-                            each org in orgs
-                                a(href='{% url "organization_home" org.key %}')= org.name
-                                if not forloop.last
-                                    = ', '
-                if user.about
-                    h4 About
-                    | #{user.about|markdown:"self-description"}
-                else
-                    i
-                        if user.user == request.user
-                            | You have not shared any information.
-                        else
-                            | This user has not shared any information.
-                br
-    if ratings
+    - with orgs=user.organizations.all
+        if orgs
+            p
+                b Organizations:
+                = ' '
+                each org in orgs
+                    a(href='{% url "organization_home" org.key %}')= org.name
+                    if not forloop.last
+                        = ', '
+    if user.about
+        h4 About
+        | #{user.about|markdown:"self-description"}
+    else
+        i
+            if user.user == request.user
+                | You have not shared any information.
+            else
+                | This user has not shared any information.
+        br
+    if rating
         br
         hr
         br
         // TODO: if on mobile, show a "Can't show chart on this display" box instead
         #rating-chart(style='height: 400px; margin: 0 auto')
+        h4 Contest History
+        b Rank by rating:
+        |  #{rating_rank} of #{rated_users}
+        br
+        b Rating:
+        = ' '
+        span.rate-group
+            span.rate-box(class='{{ rating.rating|rating_class }}')
+                span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
+            span.rating(class='{{ rating.rating|rating_class }}') #{rating.rating}
+        br
+        b Volatility:
+        |  #{rating.volatility}
+        br
+        b Minimum rating:
+        = ' '
+        span.rate-group
+            span.rate-box(class='{{ min_rating|rating_class }}')
+                span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
+            span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
+        br
+        b Maximum rating:
+        = ' '
+        span.rate-group
+            span.rate-box(class='{{ max_rating|rating_class }}')
+                span(style='height: {{ max_rating|rating_progress|floatformat:3 }}em')
+            span.rating(class='{{ max_rating|rating_class }}') #{max_rating}
+        br
+        b Competitions:
+        |  #{contests}
         table.table
             tr
                 th Contest
@@ -183,7 +178,7 @@ block user_content
                                 span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
                             span.rating(class='{{ rating.rating|rating_class }}')= rating.rating
     else
-        p This user has not participated in any rated contests.
+        p.about This user has not participated in any rated contests.
 block bodyend
     if ratings
         script(src='//code.highcharts.com/highcharts.js')
