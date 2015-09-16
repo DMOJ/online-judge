@@ -47,10 +47,13 @@ html(lang='en')
         if INLINE_FONTAWESOME
             - compress css
                 link(rel='stylesheet', href='{% static "style.css" %}')
+                link(rel='stylesheet', href='{% static "pygments-github.css" %}')
                 link(rel='stylesheet', href='{% static "libs/font-awesome.css" %}')
         else
-            link(rel='stylesheet', href='{% static "style.css" %}')
-            link(rel='stylesheet', href=FONTAWESOME_CSS)
+            - compress css
+                link(rel='stylesheet', href='{% static "style.css" %}')
+                link(rel='stylesheet', href='{% static "pygments-github.css" %}')
+                link(rel='stylesheet', href=FONTAWESOME_CSS)
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         block media
         if INLINE_JQUERY
