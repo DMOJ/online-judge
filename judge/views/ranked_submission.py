@@ -53,7 +53,7 @@ class RankedSubmissions(ProblemSubmissions):
                            reverse('problem_detail', args=[self.problem.code]))
 
     def get_result_table(self):
-        return get_result_table(super(RankedSubmissions, self).get_queryset())
+        return get_result_table(super(RankedSubmissions, self).get_queryset().order_by())
 
 
 class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
