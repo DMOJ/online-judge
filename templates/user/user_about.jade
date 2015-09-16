@@ -177,8 +177,6 @@ block user_content
                             span.rate-box(class='{{ rating.rating|rating_class }}')
                                 span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
                             span.rating(class='{{ rating.rating|rating_class }}')= rating.rating
-    else
-        p.about This user has not participated in any rated contests.
 block bodyend
     if ratings
         script(src='//code.highcharts.com/highcharts.js')
