@@ -98,7 +98,7 @@ block user_content
     - with orgs=user.organizations.all
         if orgs
             p(style='margin-top: 0px;')
-                b Organizations:
+                b From
                 = ' '
                 each org in orgs
                     a(href='{% url "organization_home" org.key %}')= org.name
