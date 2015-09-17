@@ -43,7 +43,7 @@ link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css'
 block body
     table
         tr
-            td
+            td(style='padding-left:1em')
                 .user-gravatar
                     img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar', width="135px")
                 br
