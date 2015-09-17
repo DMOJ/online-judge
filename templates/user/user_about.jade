@@ -97,7 +97,7 @@ block title_row
 block user_content
     - with orgs=user.organizations.all
         if orgs
-            p
+            p(style='margin-top: 0px;')
                 b Organizations:
                 = ' '
                 each org in orgs
