@@ -5,7 +5,7 @@ div.page-title
         li(class=('active' if user_tab == 'about' else ''))
             a(href='{% url "user_page" user.user.username %}') About
         li(class=('active' if user_tab == 'problems' else ''))
-            a Problems
+            a(href='{% url "user_problems" user.user.username %}') Problems
         if user.user == request.user
             li(class=('active' if user_tab == 'edit' else ''))
                 a(href='{% url "judge.views.edit_profile" %}') Edit profile
