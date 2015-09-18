@@ -23,6 +23,12 @@ block js_media
     include timezone/js_media
     | #{form.media|media_type:"js"}
 
+block title_ruler
+
+block title_row
+    - var user_tab = 'edit'
+    include user/user_tabs
+
 block body
     form.form-area(action='', method='post')
         - csrf_token
