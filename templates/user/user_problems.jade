@@ -74,22 +74,10 @@ block user_media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
 
 block title_ruler
+
 block title_row
-    div.page-title
-        ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
-            h2(style='color:#393630; display: inline-block')= title
-            span.spacer
-            li
-                a(href='{% url "user_page" user.user.username %}') About
-            li.active
-                a Problems
-            if user.user == request.user
-                li
-                    a(href='{% url "judge.views.edit_profile" %}') Edit profile
-            else
-                if perms.judge.change_user
-                    li
-                        a(href='{% url "admin:auth_user_change" user.user.id %}') Admin
+    - var user_tab = 'problems'
+    include user/user_tabs
 
 block user_content
     if authored
