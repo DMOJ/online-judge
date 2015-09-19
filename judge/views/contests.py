@@ -1,7 +1,7 @@
 from calendar import Calendar, SUNDAY
 from collections import namedtuple, defaultdict
 from operator import attrgetter
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime, time
 from django.core.cache import cache
 
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
@@ -227,9 +227,9 @@ class ContestCalendar(TemplateView):
 
     def get_table(self):
         calendar = Calendar(self.firstweekday).monthdatescalendar(self.year, self.month)
-        calendar = [map(timezone.make_aware, week) for week in calendar]
         today = timezone.now().date()
-        starts, ends, oneday = self.get_contest_data(calendar[0][0], calendar[-1][-1])
+        starts, ends, oneday = self.get_contest_data(timezone.make_aware(datetime.combine(calendar[0][0], time.min)),
+                                                     timezone.make_aware(datetime.combine(calendar[-1][-1], time.min)))
         return [[ContestDay(
             date=date, weekday=self.weekday_classes[weekday], is_pad=date.month != self.month,
             is_today=date == today, starts=starts[date], ends=ends[date], oneday=oneday[date],
