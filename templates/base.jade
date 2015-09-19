@@ -97,7 +97,7 @@ html(lang='en')
                     if request.user.is_authenticated
                         if IN_CONTEST
                             #contest-info
-                                a(href='{% url "contest_view" CONTEST.contest.key %}')
+                                a(href='{% url "contest_view" CONTEST.contest.key %}', style='vertical-align: middle;')
                                     | #{CONTEST.contest.name} -
                                     #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
                         a(href='{% url "user_page" %}')
