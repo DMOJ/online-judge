@@ -114,7 +114,7 @@ block body
         each week in calendar
             tr
                 each day in week
-                    td(class=day.weekday + (' today' if day.is_today else '') + (' noday' if day.is_pad else ''))
+                    td(class='{{ day.weekday }}{% if day.is_today %} today{% endif %}{% if day.is_pad%} noday{% endif %}'))
                         ul
                             each contest in day.starts
                                 li.start
