@@ -224,10 +224,8 @@ class ContestCalendar(ContestListMixin, TemplateView):
             if start_date == end_date:
                 oneday[start_date].append(contest)
             else:
-                if start_date.month == self.month:
-                    starts[start_date].append(contest)
-                if end_date.month == self.month:
-                    ends[end_date].append(contest)
+                starts[start_date].append(contest)
+                ends[end_date].append(contest)
         return starts, ends, oneday
 
     def get_table(self):
