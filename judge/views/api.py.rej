@@ -1,0 +1,15 @@
+--- judge/views/api.py
++++ judge/views/api.py
+@@ -16,10 +16,11 @@
+ def api_contest_list(request):
+     js = {}
+     for c in Contest.objects.filter(is_public=True):
++        #if 'TSOC' in c.name or 'CSPC' in c.name: continue
+         js[c.key] = {
+             'name': c.name,
+             'free_start': c.free_start,
+-            'start_time': c.start_time.isoformat() if c.start_time is not None else None,
++            'start_time': ('2013-02-12T20:00:00+00:00' if ('TSOC' in c.name or 'CSPC' in c.name) else c.start_time.isoformat() if c.start_time is not None else None),
+             'time_limit': sane_time_repr(c.time_limit),
+             'ongoing': c.ongoing
+         }
