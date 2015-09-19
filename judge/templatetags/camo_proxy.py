@@ -28,7 +28,7 @@ class CamoClient(object):
         elif url.startswith(('http://', 'https://')):
             return self.image_url(url)
         elif url.startswith('//'):
-            return self.image_url(('https:' if self.https else 'http:') + url)
+            return self._rewrite_url(('https:' if self.https else 'http:') + url)
         else:
             return url
 
