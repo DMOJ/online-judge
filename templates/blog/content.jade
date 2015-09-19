@@ -3,6 +3,7 @@ extends base
 - load cache
 - load markdown_trois_tags
 - load social_share
+- load camo_proxy
 
 block js_media
     include comments/js_media
@@ -14,7 +15,7 @@ block body
         div.time #{post.publish_on|date:"N j, o, G:i"}
         div.body
             - cache 86400 post_content post.id
-                | #{post.content|markdown:"blog"}
+                | #{post.content|markdown:"blog"|proxy_images}
     hr
     span.social
        - post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>"

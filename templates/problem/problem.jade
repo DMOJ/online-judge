@@ -4,6 +4,7 @@ extends common-content
 - load cache
 - load smart_math
 - load filesize
+- load camo_proxy
 
 block content_media
     style.
@@ -126,7 +127,7 @@ block info_float
 block description
     - detect_svg use_svg
     - cache 86400 problem_html problem.id use_svg
-        | #{problem.description|markdown:"problem"|smart_svg_math:use_svg}
+        | #{problem.description|markdown:"problem"|proxy_images|smart_svg_math:use_svg}
     - with license=problem.license
         if license
             span(style='float: left; font-size: 0.85em')
