@@ -82,7 +82,7 @@ html(lang='en')
                     | &nbsp;MENU
                 ul#nav-list
                     li.home-nav-element
-                        a(href='/')
+                        a(href='{% url "home" %}')
                             include site_logo.svg
                     // Divider
                     li.home-nav-element
