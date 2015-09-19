@@ -138,6 +138,7 @@ urlpatterns = patterns('',
     ))),
 
     url(r'^contests/$', views.ContestList.as_view(), name='contest_list'),
+    url(r'^contests/(?P<year>\d+)/(?P<month>\d+)/$', views.ContestCalendar.as_view(), name='contest_calendar'),
     url(r'^contest/(?P<key>\w+)$', views.ContestDetail.as_view(), name='contest_view'),
     url(r'^contest/(\w+)/ranking/$', 'judge.views.contest_ranking', name='contest_ranking'),
     url(r'^contest/(\w+)/ranking/ajax$', 'judge.views.contest_ranking_ajax', name='contest_ranking_ajax'),

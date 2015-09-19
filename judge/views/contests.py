@@ -1,15 +1,18 @@
-from collections import namedtuple
+from calendar import Calendar, SUNDAY
+from collections import namedtuple, defaultdict
 from operator import attrgetter
+from datetime import timedelta, date
+from django.core.cache import cache
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import connection
 from django.db.models import Count, Q
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.html import escape
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView
 
 from judge.comments import CommentedDetailView
@@ -19,7 +22,8 @@ from judge.utils.views import TitleMixin, generic_message, LoginRequiredMixin
 from judge import event_poster as event
 
 
-__all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'contest_ranking_ajax']
+__all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
+           'contest_ranking_ajax']
 
 
 def _find_contest(request, key, private_check=True):
@@ -182,6 +186,74 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
         contest_profile.current = None
         contest_profile.save()
         return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
+
+
+ContestDay = namedtuple('ContestDay', 'date weekday is_pad is_today starts ends oneday')
+
+
+class ContestCalendar(TemplateView):
+    firstweekday = SUNDAY
+    weekday_classes = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    template_name = 'contest/calendar.jade'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.year = kwargs['year']
+            self.month = kwargs['month']
+        except KeyError:
+            raise ImproperlyConfigured('ContestCalender requires year and month')
+        return self.render()
+
+    def render(self):
+        context = self.get_context_data()
+        return self.render_to_response(context)
+
+    def get_contest_data(self, start, end):
+        end += timedelta(days=1)
+        contests = Contest.objects.filter(Q(start_time__gte=start, start_time__lt=end) |
+                                          Q(end_time__gte=start, end_time__lt=end)).defer('description')
+        starts, ends, oneday = (defaultdict(list) for i in xrange(3))
+        for contest in contests:
+            start_date = contest.start_time.date()
+            end_date = contest.end_time.date()
+            if start_date == end_date:
+                oneday[start_date].append(contest)
+            else:
+                if start_date.month == self.month:
+                    starts[start_date].append(contest)
+                if end_date.month == self.month:
+                    ends[end_date].append(contest)
+        return starts, ends, oneday
+
+    def get_table(self):
+        calendar = Calendar(self.firstweekday).monthdatescalendar(self.year, self.month)
+        calendar = [map(timezone.make_aware, week) for week in calendar]
+        today = timezone.now().date()
+        starts, ends, oneday = self.get_contest_data(calendar[0][0], calendar[-1][-1])
+        return [[ContestDay(
+            date=date, weekday=self.weekday_classes[weekday], is_pad=date.month != self.month,
+            is_today=date == today, starts=starts[date], ends=ends[date], oneday=oneday[date],
+        ) for weekday, date in enumerate(week)] for week in calendar]
+
+    def get_context_data(self, **kwargs):
+        context = super(ContestCalendar, self).get_context_data(**kwargs)
+        context['calendar'] = self.get_table()
+        context['month'] = date(self.year, self.month, 1)
+        context['prev_month'] = date(self.year - (self.month == 1), 12 if self.month == 1 else self.month - 1, 1)
+        context['next_month'] = date(self.year + (self.month == 12), 1 if self.month == 12 else self.month + 1, 1)
+        return context
+
+
+class CachedContestCalendar(ContestCalendar):
+    def render(self):
+        key = 'contest_cal:%d:%d' % (self.year, self.month)
+        cached = cache.get(key)
+        if cached is not None:
+            return HttpResponse(cached)
+        response = super(CachedContestCalendar, self).render()
+        response.render()
+        cached.set(key, response.content)
+        return response
 
 
 ContestRankingProfile = namedtuple('ContestRankingProfile',
