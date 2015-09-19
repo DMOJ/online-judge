@@ -37,13 +37,9 @@ def _find_contest(request, key, private_check=True):
     return contest, True
 
 
-class ContestList(TitleMixin, ListView):
-    model = Contest
-    template_name = 'contest/list.jade'
-    title = 'Contests'
-
+class ContestListMixin(object):
     def get_queryset(self):
-        queryset = Contest.objects.order_by('-start_time', 'key')
+        queryset = Contest.objects.all()
         if not self.request.user.has_perm('judge.see_private_contest'):
             queryset = queryset.filter(is_public=True)
         if not self.request.user.has_perm('judge.edit_all_contest'):
@@ -51,8 +47,17 @@ class ContestList(TitleMixin, ListView):
             if self.request.user.is_authenticated():
                 q |= Q(organizations__in=self.request.user.profile.organizations.all())
             queryset = queryset.filter(q)
-        queryset = queryset.annotate(participation_count=Count('users'))
         return queryset
+
+
+class ContestList(TitleMixin, ContestListMixin, ListView):
+    model = Contest
+    template_name = 'contest/list.jade'
+    title = 'Contests'
+
+    def get_queryset(self):
+        return super(ContestList, self).get_queryset().annotate(participation_count=Count('users')) \
+                                       .order_by('-start_time', 'key')
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
@@ -191,7 +196,7 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
 ContestDay = namedtuple('ContestDay', 'date weekday is_pad is_today starts ends oneday')
 
 
-class ContestCalendar(TemplateView):
+class ContestCalendar(ContestListMixin, TemplateView):
     firstweekday = SUNDAY
     weekday_classes = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     template_name = 'contest/calendar.jade'
@@ -210,8 +215,8 @@ class ContestCalendar(TemplateView):
 
     def get_contest_data(self, start, end):
         end += timedelta(days=1)
-        contests = Contest.objects.filter(Q(start_time__gte=start, start_time__lt=end) |
-                                          Q(end_time__gte=start, end_time__lt=end)).defer('description')
+        contests = self.get_queryset().filter(Q(start_time__gte=start, start_time__lt=end) |
+                                              Q(end_time__gte=start, end_time__lt=end)).defer('description')
         starts, ends, oneday = (defaultdict(list) for i in xrange(3))
         for contest in contests:
             start_date = contest.start_time.date()
