@@ -99,7 +99,8 @@ block title_row
         div(style='flex: 1')
         div
             a(href='{% url "contest_calendar" prev_month.year prev_month.month %}') &laquo; Prev
-            a(href='{% url "contest_calendar" next_month.year next_month.month %}') &raquo; Next
+            = ' '
+            a(href='{% url "contest_calendar" next_month.year next_month.month %}') Next &raquo;
 
 block body
     table
