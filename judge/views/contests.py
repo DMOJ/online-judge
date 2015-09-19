@@ -198,10 +198,10 @@ class ContestCalendar(TemplateView):
 
     def get(self, request, *args, **kwargs):
         try:
-            self.year = kwargs['year']
-            self.month = kwargs['month']
-        except KeyError:
-            raise ImproperlyConfigured('ContestCalender requires year and month')
+            self.year = int(kwargs['year'])
+            self.month = int(kwargs['month'])
+        except (KeyError, ValueError):
+            raise ImproperlyConfigured('ContestCalender requires integer year and month')
         return self.render()
 
     def render(self):
