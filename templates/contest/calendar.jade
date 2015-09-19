@@ -97,7 +97,7 @@ block title_row
     div(style='display: flex')
         h2 Contests in #{month|date:"F Y"}
         div(style='flex: 1')
-        div
+        div(style='font-size: 1.6em; margin-top: 0.3em')
             a(href='{% url "contest_calendar" prev_month.year prev_month.month %}') &laquo; Prev
             = ' '
             a(href='{% url "contest_calendar" next_month.year next_month.month %}') Next &raquo;
