@@ -36,6 +36,9 @@ class CamoClient(object):
         for img in node.xpath('.//img'):
             if img.get('src'):
                 img.set('src', self._rewrite_url(img.get('src')))
+        for obj in node.xpath('.//object'):
+            if obj.get('data'):
+                obj.set('data', self._rewrite_url(obj.get('data')))
         return node
 
     def parse_html(self, string):
