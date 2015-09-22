@@ -68,7 +68,7 @@ block js_media
             
             $(window).resize(function () {
                 $('#ace_source').height($(window).height() - 353);
-            });
+            }).resize();
         });
     | #{form.media|media_type:"js"}
 
