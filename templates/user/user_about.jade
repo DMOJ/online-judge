@@ -4,6 +4,7 @@ extends user/user_base
 - load list_processor
 - load markdown_trois_tags
 - load rating
+- load camo_proxy
 
 block user_media
     style.
@@ -93,7 +94,7 @@ block user_content
                         = ', '
     if user.about
         h4 About
-        | #{user.about|markdown:"self-description"}
+        | #{user.about|markdown:"self-description"|proxy_images}
     else
         i
             if user.user == request.user
