@@ -1,72 +1,78 @@
 extends base
 - load staticfiles
 - load media_extract
+- load compress
 
 block js_media
-    script(type='text/javascript').
-        $(function () {
-            var select = $('#id_language');
-            var container = select.parent();
-            var current = select.find(':selected').attr('value');
-            var field = $('<input/>', {
-                id: 'id_language',
-                name: 'language',
-                type: 'hidden',
-                value: current
-            }).appendTo(container);
-            var info = $('#language-details');
-
-            function update_selected() {
-                $('#language-current').find('.name').text(selected.text());
-                $('#language-current').find('.info').text(selected.attr('data-info'));
-            }
-            select.remove();
-            select = $('#language-select').show();
-            select.find('li').mouseenter(function () {
-                info.text($(this).attr('data-info'));
-            }).mouseout(function() {
+    - compress js
+        script(type='text/javascript').
+            $(function () {
+                var select = $('#id_language');
+                var container = select.parent();
+                var current = select.find(':selected').attr('value');
+                var field = $('<input/>', {
+                    id: 'id_language',
+                    name: 'language',
+                    type: 'hidden',
+                    value: current
+                }).appendTo(container);
+                var info = $('#language-details');
+    
+                function update_selected() {
+                    $('#language-current').find('.name').text(selected.text());
+                    $('#language-current').find('.info').text(selected.attr('data-info'));
+                }
+                select.remove();
+                select = $('#language-select').show();
+                select.find('li').mouseenter(function () {
+                    info.text($(this).attr('data-info'));
+                }).mouseout(function() {
+                    info.text(selected.attr('data-info'));
+                }).click(function () {
+                    selected.removeClass('selected');
+                    window.ace_source.getSession().setMode("ace/mode/" + selected.attr('data-ace'));
+                    field.attr('value', (selected = $(this).addClass('selected')).attr('data-id'));
+                    update_selected();
+                });
+                var selected = select.find('[data-id=' + current + ']').addClass('selected');
+                update_selected(selected);
                 info.text(selected.attr('data-info'));
-            }).click(function () {
-                selected.removeClass('selected');
-                window.ace_source.getSession().setMode("ace/mode/" + selected.attr('data-ace'));
-                field.attr('value', (selected = $(this).addClass('selected')).attr('data-id'));
-                update_selected();
-            });
-            var selected = select.find('[data-id=' + current + ']').addClass('selected');
-            update_selected(selected);
-            info.text(selected.attr('data-info'));
-            
-            $('#language-current').click(function() {
-                var $expand = $('#language-expand');
-                var $current = $(this);
-                if ($expand.is(':visible'))
-                    $expand.slideUp(400, function () {
-                        $current.removeClass('expanded');
-                    });
-                else {
-                    $current.addClass('expanded');
-                    $expand.slideDown(400);
-                }
-            });
-
-            $('#id_language').change(function () {
-                var lang = $("#id_language").find("option:selected").attr('value');
-                window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
-            });
-
-            $('#ace_source').on('ace_load', function (e, editor) {
-                var source = $('textarea#id_source');
-                if (source.val() == '') {
-                    var problem = $('#id_problem').find('option:selected').attr('value');
-                    var code = localStorage.getItem('submit:' + problem);
-                    if (code) {
-                        source.val(code);
-                        editor.getSession().setValue(code);
+                
+                $('#language-current').click(function() {
+                    var $expand = $('#language-expand');
+                    var $current = $(this);
+                    if ($expand.is(':visible'))
+                        $expand.slideUp(400, function () {
+                            $current.removeClass('expanded');
+                        });
+                    else {
+                        $current.addClass('expanded');
+                        $expand.slideDown(400);
                     }
-                }
+                });
+    
+                $('#id_language').change(function () {
+                    var lang = $("#id_language").find("option:selected").attr('value');
+                    window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
+                });
+    
+                $('#ace_source').on('ace_load', function (e, editor) {
+                    var source = $('textarea#id_source');
+                    if (source.val() == '') {
+                        var problem = $('#id_problem').find('option:selected').attr('value');
+                        var code = localStorage.getItem('submit:' + problem);
+                        if (code) {
+                            source.val(code);
+                            editor.getSession().setValue(code);
+                        }
+                    }
+                });
+                
+                $(window).resize(function () {
+                    $('#ace_source').height($(window).height() - 353);
+                });
             });
-        });
-    | #{form.media|media_type:"js"}
+        | #{form.media|media_type:"js"}
 
 block media
     | #{form.media|media_type:"css"}
