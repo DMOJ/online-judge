@@ -74,6 +74,16 @@ html(lang='en')
 
         if misc_config.analytics
             | #{misc_config.analytics|safe}
+
+        noscript
+            style.
+                #content {
+                    margin: 80px auto auto;
+                }
+                
+                #navigation {
+                    top: 27px;
+                }
     body
         nav#navigation.unselectable
             #nav-container
