@@ -1,4 +1,4 @@
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="160" height="44" viewBox="0 0 160 44.000001" id="svg2" version="1.1" style="vertical-align:middle">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="160" height="44" viewBox="0 0 160 44.000001" id="svg2" version="1.1" style="vertical-align:middle">
   <defs id="defs4">
     <linearGradient id="linearGradient4202">
       <stop style="stop-color:#000000;stop-opacity:1;" offset="0" id="stop4204"></stop>
@@ -17,7 +17,6 @@
     <radialGradient xlink:href="#linearGradient4202" id="radialGradient4222" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1,0,0,0.23088023,0,26.488485)" cx="105.65" cy="34.439999" fx="105.65" fy="34.439999" r="103.95"></radialGradient>
     <radialGradient xlink:href="#linearGradient4202" id="radialGradient4224" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1,0,0,0.23088023,0,26.488485)" cx="105.65" cy="34.439999" fx="105.65" fy="34.439999" r="103.95"></radialGradient>
   </defs>
-  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" showgrid="false" units="px" fit-margin-top="-1.4"></sodipodi:namedview>
   <g id="layer1" transform="translate(0,-1008.3622)">
     <g id="g10" transform="matrix(0.0826481,0,0,-0.08268604,-18.736119,1063.7367)">
       <g id="g12">
