@@ -1,3 +1,4 @@
+from django.utils.safestring import mark_safe
 from lxml import html
 
 
@@ -14,7 +15,7 @@ class HTMLTreeString(object):
         setattr(self._tree, key, value)
 
     def __str__(self):
-        return html.tostring(self._tree)
+        return mark_safe(html.tostring(self._tree))
 
     def __unicode__(self):
-        return html.tostring(self._tree, encoding='unicode')
+        return mark_safe(html.tostring(self._tree, encoding='unicode'))
