@@ -19,3 +19,9 @@ class HTMLTreeString(object):
 
     def __unicode__(self):
         return mark_safe(html.tostring(self._tree, encoding='unicode'))
+
+
+def fromstring(str):
+    if isinstance(str, HTMLTreeString):
+        return str
+    return HTMLTreeString(str)
