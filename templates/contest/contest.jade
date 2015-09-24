@@ -70,7 +70,7 @@ block info_float
 
 block description
     - cache 3600 contest_html contest.id
-        | #{contest.description|markdown:"contest"|proxy_images|smart_math}
+        | #{contest.description|markdown:"contest"|smart_math|proxy_images}
 
 block comments
     span.social
