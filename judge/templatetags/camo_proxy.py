@@ -3,7 +3,7 @@ from hashlib import sha1
 
 from django import template
 from django.conf import settings
-from lxml import html
+from judge import lxml_tree
 
 register = template.Library()
 
@@ -32,21 +32,15 @@ class CamoClient(object):
         else:
             return url
 
-    def _rewrite_image_urls(self, node):
-        for img in node.xpath('.//img'):
+    def parse_html(self, string):
+        doc = lxml_tree.fromstring(string.join(['<div>', '</div>']))
+        for img in doc.xpath('.//img'):
             if img.get('src'):
                 img.set('src', self._rewrite_url(img.get('src')))
-        for obj in node.xpath('.//object'):
+        for obj in doc.xpath('.//object'):
             if obj.get('data'):
                 obj.set('data', self._rewrite_url(obj.get('data')))
-        return node
-
-    def parse_html(self, string):
-        doc = html.fromstring(string.join(['<div>', '</div>']))
-        doc = self._rewrite_image_urls(doc)
-        # iterating over a node returns all the tags within that node
-        # ..if there are none, return the original string
-        return ''.join(map(html.tostring, doc)) or string
+        return doc
 
 if getattr(settings, 'CAMO_URL', None) and getattr(settings, 'CAMO_KEY', None):
     client = CamoClient(settings.CAMO_URL, key=settings.CAMO_KEY,
