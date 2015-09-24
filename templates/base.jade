@@ -47,18 +47,17 @@ html(lang='en')
         if INLINE_FONTAWESOME
             - compress css
                 link(rel='stylesheet', href='{% static "style.css" %}')
+                if PYGMENT_THEME
+                    link(rel='stylesheet', href='{% static PYGMENT_THEME %}')
                 link(rel='stylesheet', href='{% static "libs/font-awesome.css" %}')
         else
-            link(rel='stylesheet', href='{% static "style.css" %}')
-            link(rel='stylesheet', href=FONTAWESOME_CSS)
+            - compress css
+                link(rel='stylesheet', href='{% static "style.css" %}')
+                if PYGMENT_THEME
+                    link(rel='stylesheet', href='{% static PYGMENT_THEME %}')
+                link(rel='stylesheet', href=FONTAWESOME_CSS)
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         block media
-        style.
-            {% for item in nav_tab %}nav ul li a.nav-{{ item }}{% if not forloop.last %},{% endif %} {% endfor %}{
-                color: #FFF;
-                background: #2980B9;
-                margin: 0px;
-            }
         if INLINE_JQUERY
             - compress js
                 script(src='{% static "libs/jquery-1.11.2.min.js" %}')
@@ -75,6 +74,16 @@ html(lang='en')
 
         if misc_config.analytics
             | #{misc_config.analytics|safe}
+
+        noscript
+            style.
+                #content {
+                    margin: 80px auto auto;
+                }
+                
+                #navigation {
+                    top: 27px;
+                }
     body
         nav#navigation.unselectable
             #nav-container
@@ -83,14 +92,14 @@ html(lang='en')
                     | &nbsp;MENU
                 ul#nav-list
                     li.home-nav-element
-                        a(href='/')
+                        a(href='{% url "home" %}')
                             include site_logo.svg
                     // Divider
                     li.home-nav-element
                         span(style='width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);')
                     - recursetree nav_bar
                         li
-                            a(href=node.path, class='nav-{{ node.key }}')= node.label
+                            a(href=node.path, class='nav-{{ node.key }} {% if node.key in nav_tab %}active{% endif %}')= node.label
                             if not node.is_leaf_node
                                 ul {{ children }}
                     - endrecursetree
@@ -98,7 +107,7 @@ html(lang='en')
                     if request.user.is_authenticated
                         if IN_CONTEST
                             #contest-info
-                                a(href='{% url "contest_view" CONTEST.contest.key %}')
+                                a(href='{% url "contest_view" CONTEST.contest.key %}', style='vertical-align: middle;')
                                     | #{CONTEST.contest.name} -
                                     #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
                         a(href='{% url "user_page" %}')

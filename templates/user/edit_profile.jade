@@ -1,7 +1,7 @@
 extends user/user_base
 - load media_extract
 
-block media
+block user_media
     include timezone/media
     | #{form.media|media_type:"css"}
     style.
@@ -22,6 +22,13 @@ block media
 block js_media
     include timezone/js_media
     | #{form.media|media_type:"js"}
+
+block title_ruler
+
+block title_row
+    - var user_tab = 'edit'
+    - var user = request.user.profile
+    include user/user_tabs
 
 block body
     form.form-area(action='', method='post')

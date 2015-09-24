@@ -4,6 +4,7 @@ extends user/user_base
 - load list_processor
 - load markdown_trois_tags
 - load rating
+- load camo_proxy
 
 block user_media
     style.
@@ -35,18 +36,6 @@ block user_media
             margin-right: 3px;
             padding-bottom: 1px;
             vertical-align: middle;
-        }
-
-        .user-gravatar {
-            display: block;
-            padding-right: 15px;
-        }
-
-        .user-gravatar img {
-            width: 135px;
-            padding: 5px;
-            border: 1px solid gray;
-            border-radius: 4px;
         }
 
         .user-info-cell {
@@ -90,83 +79,65 @@ block user_media
 block title_ruler
 
 block title_row
-    div.page-title
-        ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
-            h2(style='color:#393630; display: inline-block')= title
-            span.spacer
-            li.active
-                a About
-            li
-                a(href='{% url "user_problems" user.user.username %}') Problems
-            if user.user == request.user
-                li
-                    a(href='{% url "judge.views.edit_profile" %}') Edit profile
-            else
-                if perms.judge.change_user
-                    li
-                        a(href='{% url "admin:auth_user_change" user.user.id %}') Admin
+    - var user_tab = 'about'
+    include user/user_tabs
 
 block user_content
-    table
-        tr
-            if rating
-                td.contest-history-cell
-                    h4 Contest History
-                    b Rank by rating:
-                    |  #{rating_rank} of #{rated_users}
-                    br
-                    b Rating:
-                    = ' '
-                    span.rate-group
-                        span.rate-box(class='{{ rating.rating|rating_class }}')
-                            span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
-                        span.rating(class='{{ rating.rating|rating_class }}') #{rating.rating}
-                    br
-                    b Volatility:
-                    |  #{rating.volatility}
-                    br
-                    b Minimum rating:
-                    = ' '
-                    span.rate-group
-                        span.rate-box(class='{{ min_rating|rating_class }}')
-                            span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
-                        span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
-                    br
-                    b Maximum rating:
-                    = ' '
-                    span.rate-group
-                        span.rate-box(class='{{ max_rating|rating_class }}')
-                            span(style='height: {{ max_rating|rating_progress|floatformat:3 }}em')
-                        span.rating(class='{{ max_rating|rating_class }}') #{max_rating}
-                    br
-                    b Competitions:
-                    |  #{contests}
-            td.user-info-cell
-                - with orgs=user.organizations.all
-                    if orgs
-                        p
-                            b Organizations:
-                            = ' '
-                            each org in orgs
-                                a(href='{% url "organization_home" org.key %}')= org.name
-                                if not forloop.last
-                                    = ', '
-                if user.about
-                    h4 About
-                    | #{user.about|markdown:"self-description"}
-                else
-                    i
-                        if user.user == request.user
-                            | You have not shared any information.
-                        else
-                            | This user has not shared any information.
-                br
-    if ratings
+    - with orgs=user.organizations.all
+        if orgs
+            p(style='margin-top: 0px;')
+                b From
+                = ' '
+                each org in orgs
+                    a(href='{% url "organization_home" org.key %}')= org.name
+                    if not forloop.last
+                        = ', '
+    if user.about
+        h4 About
+        | #{user.about|markdown:"self-description"|proxy_images}
+    else
+        i
+            if user.user == request.user
+                | You have not shared any information.
+            else
+                | This user has not shared any information.
+        br
+    if rating
         br
         hr
         br
         // TODO: if on mobile, show a "Can't show chart on this display" box instead
         #rating-chart(style='height: 400px; margin: 0 auto')
+        h4 Contest History
+        b Rank by rating:
+        |  #{rating_rank} of #{rated_users}
+        br
+        b Rating:
+        = ' '
+        span.rate-group
+            span.rate-box(class='{{ rating.rating|rating_class }}')
+                span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
+            span.rating(class='{{ rating.rating|rating_class }}') #{rating.rating}
+        br
+        b Volatility:
+        |  #{rating.volatility}
+        br
+        b Minimum rating:
+        = ' '
+        span.rate-group
+            span.rate-box(class='{{ min_rating|rating_class }}')
+                span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
+            span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
+        br
+        b Maximum rating:
+        = ' '
+        span.rate-group
+            span.rate-box(class='{{ max_rating|rating_class }}')
+                span(style='height: {{ max_rating|rating_progress|floatformat:3 }}em')
+            span.rating(class='{{ max_rating|rating_class }}') #{max_rating}
+        br
+        b Competitions:
+        |  #{contests}
         table.table
             tr
                 th Contest
@@ -182,8 +153,6 @@ block user_content
                             span.rate-box(class='{{ rating.rating|rating_class }}')
                                 span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
                             span.rating(class='{{ rating.rating|rating_class }}')= rating.rating
-    else
-        p This user has not participated in any rated contests.
 block bodyend
     if ratings
         script(src='//code.highcharts.com/highcharts.js')

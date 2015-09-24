@@ -13,11 +13,12 @@ block media
             padding-right: 15px;
         }
 
-        .user-gravatar img {
+        .user-gravatar img {    
             width: 135px;
-            padding: 5px;
-            border: 1px solid gray;
-            border-radius: 4px;
+            height: 135px;
+            display: block;
+            border: 1px solid none;
+            border-radius: 6px;
         }
 
         .page-title {
@@ -44,9 +45,9 @@ link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css'
 block body
     table
         tr
-            td
+            td(style='padding-left:1em')
                 .user-gravatar
-                    img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar', width="135px")
+                    img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar', width="135px", height="135px")
                 br
                 h4 #{user.solved_problems} problems solved.
                 b Rank by points:

@@ -6,30 +6,23 @@ extends common-content
 
 block js_media
     if dynamic_update and last_msg
-        if IN_CONTEST
-            script(type='text/javascript').
-                window.current_contest = '#{CONTEST.contest.key}';
-        else
-            script(type='text/javascript').
-                window.current_contest = null;
-        if dynamic_user_id
-            script(type='text/javascript').
-                window.dynamic_user_id = #{dynamic_user_id};
-        else
-            script(type='text/javascript').
-                window.dynamic_user_id = null;
-        if dynamic_problem_id
-            script(type='text/javascript').
-                window.dynamic_problem_id = #{dynamic_problem_id};
-        else
-            script(type='text/javascript').
-                window.dynamic_problem_id = null;
-        if show_problem
-            script(type='text/javascript').
-                window.show_problem = 1;
-        else
-            script(type='text/javascript').
-                window.show_problem = 0;
+        script(type='text/javascript')
+            if IN_CONTEST
+                | window.current_contest = '#{CONTEST.contest.key}';
+            else
+                | window.current_contest = null;
+            if dynamic_user_id
+                | window.dynamic_user_id = #{dynamic_user_id};
+            else
+                | window.dynamic_user_id = null;
+            if dynamic_problem_id
+                | window.dynamic_problem_id = #{dynamic_problem_id};
+            else
+                | window.dynamic_problem_id = null;
+            if show_problem
+                | window.show_problem = 1;
+            else
+                | window.show_problem = 0;
 
     - compress js
         script(type='text/javascript', src='{% static "event.js" %}')
@@ -157,26 +150,6 @@ block media
         style.
             td.sub-prop, col.sub-prop { width: 22% }
             col.sub-info, td.sub-info { width: 78% }
-    style.
-        /*#content-body {
-            padding-bottom: 4em;
-            display: flex;
-            flex-direction: row-reverse;
-            padding-top: 1em;
-        }
-
-        #content-right {
-            max-width: 19.5em;
-            min-width: 8em;
-            padding-left: 3em;
-            padding-top: 1em;
-            flex: 1 1 35%;
-        }
-
-        #content-left {
-            flex: 1 1 65%;
-            width: 100%;
-        }*/
 
 block body
     #common-content
@@ -207,3 +180,6 @@ block body
             if page_obj.num_pages > 1
                 div(style='margin-top:10px;')
                     include list_pages
+
+block bodyend
+// Don't load MathJax from common-content!
