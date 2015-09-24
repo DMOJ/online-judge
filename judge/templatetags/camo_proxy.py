@@ -33,7 +33,7 @@ class CamoClient(object):
             return url
 
     def parse_html(self, string):
-        doc = lxml_tree.fromstring(string.join(['<div>', '</div>']))
+        doc = lxml_tree.fromstring(string)
         for img in doc.xpath('.//img'):
             if img.get('src'):
                 img.set('src', self._rewrite_url(img.get('src')))
