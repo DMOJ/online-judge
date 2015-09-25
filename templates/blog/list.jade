@@ -137,6 +137,7 @@ block body
                     .name
                         a(href='{% url "contest_view" contest.key %}')= contest.name
                     .time Starts in
+                        = ' '
                         span.time-remaining #{contest.time_before_start|timedelta:"simple-no-seconds"}
         div.comment-content
             h3 Comment stream
