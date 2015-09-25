@@ -109,6 +109,15 @@ block media
             font-size: 1.5em;
         }
 
+
+block js_media
+    script(type='text/javascript').
+        $(document).ready(function () {
+            $('.time-remaining').each(function () {
+                count_down($(this));
+            });
+        });
+
 block body
     block before_posts
 
@@ -138,7 +147,7 @@ block body
                         a(href='{% url "contest_view" contest.key %}')= contest.name
                     .time Starts in
                         = ' '
-                        span.time-remaining #{contest.time_before_start|timedelta:"simple-no-seconds"}
+                        span.time-remaining #{contest.time_before_start|timedelta:"simple"}
         div.comment-content
             h3 Comment stream
                 i.fa.fa-comments
