@@ -121,8 +121,8 @@ block body
             each contest in future_contests
                 .contest
                     .name= contest.name
-                    .date Starts in
-                        span.time.time-remaining #{contest.time_before_start|timedelta:"simple-no-seconds"}
+                    .time Starts in
+                        span.time-remaining #{contest.time_before_start|timedelta:"simple-no-seconds"}
         div.comment-content
             h3 Comment stream
                 i.fa.fa-comments
