@@ -2,6 +2,7 @@ extends base
 - load staticfiles
 - load cache
 - load markdown_trois_tags
+- load timedelta
 
 block media
     link(rel='alternate', type='application/atom+xml', href='{% url "comment_atom" %}', title='Atom Comment Feed')
@@ -91,6 +92,7 @@ block media
         h3 .fa {
             float: right;
             margin: 0.2em 0.4em 0px 0px;
+            color: #777;
         }
 
 block body
@@ -113,6 +115,14 @@ block body
             if page_obj.num_pages > 1
                 div(style='margin-bottom:10px;margin-top:10px')
                     include list_pages
+        div.comment-content
+            h3 Upcoming contests
+                i.fa.fa-trophy
+            each contest in future_contests
+                .contest
+                    .name= contest.name
+                    .date Starts in
+                        span.time.time-remaining #{contest.time_before_start|timedelta:"simple-no-seconds"}
         div.comment-content
             h3 Comment stream
                 i.fa.fa-comments
