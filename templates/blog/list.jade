@@ -120,7 +120,8 @@ block body
                 i.fa.fa-trophy
             each contest in future_contests
                 .contest
-                    .name= contest.name
+                    .name
+                        a(href='{% url "contest_view" contest.key %}')= contest.name
                     .time Starts in
                         span.time-remaining #{contest.time_before_start|timedelta:"simple-no-seconds"}
         div.comment-content
