@@ -46,10 +46,7 @@ block info_float
     br
 
     i.fa.fa-clock-o.fa-fw
-    if contest.start_time > now
-        b Starting in:
-        .time-remaining #{contest.time_before_start|timedelta:"simple"}
-    elif participating
+    if participating
         if participation.ended
             b Time is up!
         else
@@ -70,7 +67,7 @@ block description
     if contest.start_time > now
         #banner(style='border-bottom: 1px solid rgba(0, 0, 0, 0.2); padding-bottom: 1em;')
             div(style='margin: 0.5em 0px;')
-                a(style='display: block; text-decoration: none; text-align: center; line-height: 1.3; font-size: 2.3em; padding-bottom: 0.1em;', href='#')
+                a(href='http://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name }}&amp;iso={{contest.start_time|date:"Y-m-d\TH:m:s"}}', style='display: block; text-decoration: none; text-align: center; line-height: 1.3; font-size: 2.3em; padding-bottom: 0.1em;', href='#')
                     | Starting in 
                     span.time-remaining #{contest.time_before_start|timedelta:"simple"}
                 #time(style='text-align: center; display: block; color: rgb(85, 85, 85);')
