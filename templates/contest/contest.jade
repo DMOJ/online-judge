@@ -45,7 +45,7 @@ block info_float
         hr
     br
 
-    if not contest.start_time <= now
+    if not contest.start_time > now
         i.fa.fa-clock-o.fa-fw
         if participating
             if participation.ended
