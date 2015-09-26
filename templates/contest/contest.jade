@@ -75,7 +75,7 @@ block description
                     if contest.time_limit
                         b #{contest.time_limit|timedelta:"simple-no-seconds"}
                         |  window from 
-                        b #{contest.start_time|date:"F j, Y, G:i"}
+                        b #{contest.start_time|date:"F j, Y, G:i"} EST
                         |  to 
                         b #{contest.end_time|date:"F j, Y, G:i"} EST
                     else
