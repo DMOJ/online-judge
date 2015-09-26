@@ -102,11 +102,6 @@ block body
                                     else
                                         | #{contest.contest_window_length|timedelta:"simple-no-seconds"} long
                         td
-                            if contest.time_limit
-                                | #{contest.time_limit|timedelta:"simple-no-seconds"}
-                            else
-                                | Full contest window
-                        td
                             a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
                         if not IN_CONTEST
                             td
