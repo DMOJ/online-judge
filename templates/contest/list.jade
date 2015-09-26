@@ -71,7 +71,6 @@ block body
             thead
                 tr
                     th(style='width:90%') Name
-                    th Time limit
                     th Rankings
                     if not IN_CONTEST
                         th(style='width:15%')
@@ -92,6 +91,16 @@ block body
                                     if contest.is_external
                                         .external-notice
                                             a(href='/about#external-contests') External contest
+                                span.floating-time-right(style='text-align:right;color:#777;')
+                                    if contest.time_limit
+                                        | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
+                                    else
+                                        | #{contest.start_time|date:"M j, Y, G:i"}
+                                    br
+                                    if contest.time_limit
+                                        | #{contest.time_limit|timedelta:"simple-no-seconds"} window
+                                    else
+                                        | #{contest.contest_window_length|timedelta:"simple-no-seconds"} long
                         td
                             if contest.time_limit
                                 | #{contest.time_limit|timedelta:"simple-no-seconds"}
@@ -112,8 +121,7 @@ block body
         table.contest-list.table.striped
             thead
                 tr
-                    th(style='width:90%') Name
-                    th Time limit
+                    th Name
             tbody
                 each contest in future_contests
                     tr
@@ -129,11 +137,16 @@ block body
                                     if contest.is_external
                                         .external-notice
                                             a(href='/about#external-contests') External contest
-                        td
-                            if contest.time_limit
-                                | #{contest.time_limit|timedelta:"simple-no-seconds"}
-                            else
-                                | Full contest window
+                                span.floating-time-right(style='text-align:right;color:#777;')
+                                    if contest.time_limit
+                                        | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
+                                    else
+                                        | #{contest.start_time|date:"M j, Y, G:i"}
+                                    br
+                                    if contest.time_limit
+                                        | #{contest.time_limit|timedelta:"simple-no-seconds"} window
+                                    else
+                                        | #{contest.contest_window_length|timedelta:"simple-no-seconds"} long
     else
         i There are no scheduled contests at this time.
 
