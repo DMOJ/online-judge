@@ -36,13 +36,11 @@ block info_float
 
     if contest.start_time <= now or perms.judge.see_private_contest
         a(href='{% url "contest_ranking" contest.key %}')
-            i.fa.fa-bar-chart.fa-fw
             | View rankings
         hr
 
     if perms.judge.change_contest
         a(href='{% url "admin:judge_contest_change" contest.id %}')
-            i.fa.fa-edit.fa-fw
             | Edit contest
         hr
     br
@@ -86,7 +84,7 @@ block description
                         b #{contest.start_time|date:"M j, Y, G:i"}              
     
     - cache 3600 contest_html contest.id
-        | #{contest.description|markdown:"contest"|proxy_images|smart_math}
+        | #{contest.description|markdown:"contest"|smart_math|proxy_images}
 
 block comments
     span.social
