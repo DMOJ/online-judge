@@ -45,23 +45,24 @@ block info_float
         hr
     br
 
-    i.fa.fa-clock-o.fa-fw
-    if participating
-        if participation.ended
-            b Time is up!
+    if not contest.start_time <= now
+        i.fa.fa-clock-o.fa-fw
+        if participating
+            if participation.ended
+                b Time is up!
+            else
+                b Time remaining:
+                = ' '
+                .time-remaining #{participation.time_remaining|timedelta:"simple"}
+        elif contest.end_time < now
+            b Contest is over.
         else
-            b Time remaining:
+            if contest.time_limit
+                b Can join until:
+            else
+                b Time remaining:
             = ' '
-            .time-remaining #{participation.time_remaining|timedelta:"simple"}
-    elif contest.end_time < now
-        b Contest is over.
-    else
-        if contest.time_limit
-            b Can join until:
-        else
-            b Time remaining:
-        = ' '
-        .time-remaining #{contest.time_before_end|timedelta:"simple"}
+            .time-remaining #{contest.time_before_end|timedelta:"simple"}
 
 block description
     if contest.start_time > now
