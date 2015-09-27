@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from django import template
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from lxml import html
@@ -13,10 +15,9 @@ register = template.Library()
 def lazy_load(text):
     tree = lxml_tree.fromstring(text)
     for img in tree.xpath('.//img'):
-        parent = img.getparent()
         noscript = html.Element('noscript')
-        noscript.append(img)
-        parent.insert(parent.index(img), noscript)
+        noscript.append(deepcopy(img))
+        img.addprevious(noscript)
         img.set('data-src', img.get('src'))
         img.set('src', blank)
     return tree
