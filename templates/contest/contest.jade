@@ -7,6 +7,7 @@ extends common-content
 -load smart_math
 -load social_share
 -load camo_proxy
+-load tz
 
 block content_js_media
     script(type='text/javascript').
@@ -76,7 +77,7 @@ block description
     if contest.start_time > now
         #banner(style='border-bottom: 1px solid rgba(0, 0, 0, 0.2); padding-bottom: 1em;')
             div(style='margin: 0.5em 0px;')
-                a.date(href='http://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name }}&amp;iso={{contest.start_time|date:"Y-m-d\TH:i:s"}}', style='display: block; text-decoration: none; text-align: center; line-height: 1.3; font-size: 2.3em; padding-bottom: 0.15em;')
+                a.date(href='http://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name }}&amp;iso={{contest.start_time|utc|date:"Y-m-d\TH:i:s"}}', style='display: block; text-decoration: none; text-align: center; line-height: 1.3; font-size: 2.3em; padding-bottom: 0.15em;')
                     | Starting in 
                     span.time-remaining #{contest.time_before_start|timedelta:"simple"}
                 #time(style='text-align: center; display: block; color: rgb(85, 85, 85); font-size: 14px')
