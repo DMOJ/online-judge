@@ -20,4 +20,5 @@ def lazy_load(text):
         img.addprevious(noscript)
         img.set('data-src', img.get('src'))
         img.set('src', blank)
+        img.set('class', img.get('class') + ' unveil' if img.get('class') else 'unveil')
     return tree
