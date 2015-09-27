@@ -3,6 +3,7 @@
 - load mptt_tags
 - load gravatar
 - load camo_proxy
+- load lazy_load
 
 ul.comments.top-level-comments
     if has_comments
@@ -69,7 +70,7 @@ ul.comments.top-level-comments
                                                 i.fa.fa-pencil.fa-fw
                                         a(href='{% url "admin:judge_comment_change" node.id %}', title='Admin')
                                             i.fa.fa-cog.fa-fw
-                        .comment-body.content-description #{node.body|markdown:"comment"|proxy_images}
+                        .comment-body.content-description #{node.body|markdown:"comment"|proxy_images|lazy_load}
                         if not node.is_leaf_node 
                             ul.comments
                                 | {{ children }}
