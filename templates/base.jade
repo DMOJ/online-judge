@@ -62,9 +62,15 @@ html(lang='en')
             - compress js
                 script(src='{% static "libs/jquery-1.11.2.min.js" %}')
                 script(src='{% static "common.js" %}')
+                script(src='{% static "jquery.unveil.js" %}')
+                script.
+                    $(function () { $('img.unveil').unveil(200); });
         else
             script(src=JQUERY_JS)
             script(src='{% static "common.js" %}')
+            script(src='{% static "jquery.unveil.js" %}')
+            script.
+                $(function () { $('img.unveil').unveil(200); });
         block js_media
         if IN_CONTEST
             script(type='text/javascript').

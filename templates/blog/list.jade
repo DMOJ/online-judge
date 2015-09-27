@@ -3,6 +3,7 @@ extends base
 - load cache
 - load markdown_trois_tags
 - load timedelta
+- load lazy_load
 
 block media
     link(rel='alternate', type='application/atom+xml', href='{% url "comment_atom" %}', title='Atom Comment Feed')
@@ -133,7 +134,7 @@ block body
                         | #{post.publish_on|date:"N j, o, G:i"}
                     div.summary
                         - cache 86400 post_summary post.id
-                            | #{post.summary|default:post.content|markdown:"blog"}
+                            | #{post.summary|default:post.content|markdown:"blog"|lazy_load}
 
             if page_obj.num_pages > 1
                 div(style='margin-bottom:10px;margin-top:10px')
