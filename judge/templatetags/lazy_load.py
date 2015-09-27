@@ -15,7 +15,7 @@ def lazy_load(text):
     for img in tree.xpath('.//img'):
         parent = img.getparent()
         noscript = html.Element('noscript')
-        noscript.add(img)
+        noscript.append(img)
         parent.insert(parent.index(img), noscript)
         img.set('data-src', img.get('src'))
         img.set('src', blank)
