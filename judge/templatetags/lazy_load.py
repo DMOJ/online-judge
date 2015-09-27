@@ -12,7 +12,7 @@ register = template.Library()
 @register.filter(is_safe=True)
 def lazy_load(text):
     tree = lxml_tree.fromstring(text)
-    for img in tree.find('.//img'):
+    for img in tree.xpath('.//img'):
         parent = img.getparent()
         noscript = html.Element('noscript')
         noscript.add(img)
