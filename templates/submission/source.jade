@@ -15,11 +15,15 @@ block media
             color: gray;
         }
 
-        .source-ln {
+        .source-ln, .source-ln a {
             color: gray;
             border-right: 1px solid gray;
             padding-right: 5px;
             text-align: right;
+        }
+        
+        .source-ln a:hover {
+            text-decoration: underline;
         }
 
         pre {
@@ -50,7 +54,8 @@ block body
                 td.source-ln
                     div
                         for line in raw_source|split
-                            pre #{forloop.counter}
+                            a(href='#line-{{ forloop.counter }}', name='line-{{ forloop.counter }}')
+                                pre #{forloop.counter}
                 td.source-code #{highlighted_source}
     .submission-info
         
