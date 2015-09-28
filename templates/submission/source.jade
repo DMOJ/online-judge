@@ -24,10 +24,19 @@ block media
         
         .source-ln a {
             color: gray;
+            display: block;
         }
         
         .source-ln a:hover {
             text-decoration: underline;
+        }
+        
+        .source-ln a::before {
+            display: block;
+            content: " ";
+            margin-top: -50px;
+            height: 50px;
+            visibility: hidden;
         }
 
         pre {
