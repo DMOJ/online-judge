@@ -8,108 +8,6 @@ extends base
 block media
     link(rel='alternate', type='application/atom+xml', href='{% url "comment_atom" %}', title='Atom Comment Feed')
     link(rel='alternate', type='application/rss+xml', href='{% url "comment_rss" %}', title='RSS Comment Feed')
-    style.
-        .blog-content {
-            padding-right: 1em;
-            width: 73.5%;
-            display: table-cell;
-            border-radius: 4px;
-            vertical-align: top;
-        }
-
-        .blog-content .post {
-            border-bottom: 1px dashed #CCC;
-            padding-top: 0.5em;
-        }
-
-        .blog-content .post:last-child {
-            border-bottom: none;
-        }
-
-        .comment-content {
-            position: relative;
-            display: table-cell;
-            float: right;
-            border: 1px solid #CCC;
-            border-radius: 4px;
-            width:100%;
-            margin-bottom:1em;
-        }
-
-        .comment-content h3 {
-            padding-bottom: 0.25em;
-            padding-left: 0.5em;
-            border-bottom: 1px dashed #CCC;
-        }
-
-        .comment-content ul {
-            list-style: none;
-            padding-left: 1em;
-            padding-right: 0.5em;
-            font-size: 110%;
-        }
-
-        .comment-content ul li {
-            margin-bottom: 0.75em;
-        }
-
-        .time {
-            color: #555;
-        }
-
-        .container {
-            display: table;
-            border-collapse: separate;
-            border-spacing: 1em;
-            margin-left: -1em;
-            margin-right: -1em;
-        }
-
-        .rssatom span {
-            width: 1em;
-            height: 1em;
-            padding: 0.1em;
-            font-size: 0.8em;
-            color: white;
-            border-radius: 0.2em;
-            display: inline-block;
-            margin-right: 0.2em;
-            border: 1px solid rgb(201, 90, 18);
-            background: #fb9e39;
-            background: -webkit-linear-gradient(315deg, #e46d27 0%, #fb9e39 47%, #e46d27 100%);
-            background: linear-gradient(135deg, #e46d27 0%,#fb9e39 47%,#e46d27 100%); 
-        }
-
-        .rssatom span i {
-            text-align: center;
-            display: block;
-        }
-
-        .rssatom {
-            float: right;
-            padding-right: 1em;
-        }
-
-        h3 .fa {
-            float: right;
-            margin: 0.2em 0.4em 0px 0px;
-            color: #777;
-        }
-        
-        .contest {
-            padding: 1.25em 0 1.5em 0;
-            text-align: center;
-            border-bottom: 1px dashed #ccc;
-        }
-        
-        .contest:last-child {
-            border-bottom: none;
-        }
-        
-        .contest .name {
-            font-size: 1.5em;
-        }
-
 
 block js_media
     script(type='text/javascript').
@@ -122,7 +20,7 @@ block js_media
 block body
     block before_posts
 
-    div.container
+    #blog-container
         div.blog-content
             each post in posts
                 div(class=('sticky post' if post.sticky else 'post'))
@@ -139,7 +37,7 @@ block body
             if page_obj.num_pages > 1
                 div(style='margin-bottom:10px;margin-top:10px')
                     include list_pages
-        div.comment-content
+        div.blog-sidebox
             h3 Upcoming contests
                 i.fa.fa-trophy
             each contest in future_contests
@@ -149,7 +47,7 @@ block body
                     .time Starts in
                         = ' '
                         span.time-remaining #{contest.time_before_start|timedelta:"simple"}
-        div.comment-content
+        div.blog-sidebox
             h3 Comment stream
                 i.fa.fa-comments
             ul
@@ -170,7 +68,7 @@ block body
                     | RSS
                 = '/ '
                 a(href='{% url "comment_atom" %}') Atom
-        div.comment-content
+        div.blog-sidebox
             h3 New problems
                 i.fa.fa-puzzle-piece
             ul
