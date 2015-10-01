@@ -1,5 +1,6 @@
-from django.shortcuts import *
 import traceback
+
+from django.shortcuts import *
 
 
 def error(request, context, status):
