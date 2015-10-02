@@ -1,12 +1,22 @@
 extends base
 
+block media
+    style.
+        .table td.info .content-description {
+          margin-top: -1em;
+          margin-bottom: -1em;
+        }
+        
+        .table td {
+          text-align: left;
+        }
+
 block body
     table.table
         thead
             tr
                 th ID
                 th Name
-                th Category
                 th Runtime Info
         tbody
             each language in languages
@@ -14,5 +24,10 @@ block body
                     td= language.short_display_name
                     td
                         a(href='{% url "runtime_info" language.key %}')= language.name
-                    td= language.common_name
-                    td= language.info
+                    td.info
+                        if language.description
+                            .content-description
+                                - cache 86400 language_html language.id
+                                    | #{language.description|markdown:"language"}
+                        else
+                            | #{language.info}
