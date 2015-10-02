@@ -32,4 +32,5 @@ block body
                                 - cache 86400 language_html language.id
                                     | #{language.description|markdown:"language"}
                         else
-                            | #{language.info}
+                            .content-description
+                                p= language.info
