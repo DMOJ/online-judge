@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.utils import timezone
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 
 from judge.comments import CommentedDetailView
 from judge.models import BlogPost, Comment, Problem, Contest
