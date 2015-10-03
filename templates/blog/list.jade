@@ -58,7 +58,7 @@ block body
                         span.poster(class=comment.author.display_rank, style='padding-left:0.25em')
                             a(href='{% url "user_page" comment.author.user.username %}') #{comment.author.user.username}
                         | &nbsp;&rarr;&nbsp;
-                        a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.page_title}
+                        a(href='{{comment.link}}') #{comment.page_title}
             div.dashed
             span.rssatom
                 a(href='{% url "comment_rss" %}')
