@@ -53,13 +53,12 @@ block body
             ul
                 for comment in comments
                     li
-                        span(class=comment.author.display_rank)
+                        div(style='font-size:1.1em;font-style:italic')
+                            a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.title}
+                        span.poster(class=comment.author.display_rank, style='padding-left:0.25em')
                             a(href='{% url "user_page" comment.author.user.username %}') #{comment.author.user.username}
                         | &nbsp;&rarr;
-                        if comment.parent
-                            a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.parent.title}
-                        else
-                            a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.page_title}
+                        a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.page_title}
             div.dashed
             span.rssatom
                 a(href='{% url "comment_rss" %}')
