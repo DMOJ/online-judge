@@ -1,19 +1,18 @@
 import traceback
 
-from django.shortcuts import *
+from django.shortcuts import render
 
 
 def error(request, context, status):
-    template = loader.get_template('error.jade')
-    return HttpResponse(template.render(RequestContext(request, context)), status=status)
+    return render(request, 'error.jade', context=context, status=status)
 
 
 def error404(request):
     # TODO: "panic: go back"
-    template = loader.get_template('generic_message.jade')
-    return HttpResponse(template.render(RequestContext(request, {
+    return render(request, 'generic_message.jade', {
         'title': '404 error',
-        'message': 'Could not find page "%s"' % request.path})), status=404)
+        'message': 'Could not find page "%s"' % request.path
+    }, status=404)
 
 
 def error403(request):
