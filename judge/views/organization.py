@@ -1,4 +1,5 @@
 from itertools import chain
+
 from django import forms
 from django.contrib import messages
 from django.core.cache import cache
@@ -9,16 +10,14 @@ from django.db import transaction
 from django.db.models import Count, Max
 from django.forms import Form, modelformset_factory
 from django.http import HttpResponseRedirect, Http404
-from django.utils import timezone
-from django.views.generic import CreateView, DetailView, ListView, View, UpdateView, FormView
+from django.views.generic import DetailView, ListView, View, UpdateView, FormView
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 import reversion
 
-from judge.forms import EditOrganizationForm, NewOrganizationForm
+from judge.forms import EditOrganizationForm
 from judge.models import Organization, OrganizationRequest
 from judge.utils.ranker import ranker
 from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
-
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'JoinOrganization',
            'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization', 'OrganizationRequestDetail',
