@@ -4,7 +4,7 @@ from lxml import html
 
 class HTMLTreeString(object):
     def __init__(self, str):
-        self._tree = html.fromstring(str, recover=True)
+        self._tree = html.fromstring(str, parser=html.HTMLParser(recover=True))
 
     def __getattr__(self, attr):
         try:
