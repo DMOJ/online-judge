@@ -1,10 +1,20 @@
+import logging
+
 from django.utils.safestring import mark_safe
 from lxml import html
+from lxml.etree import ParserError, XMLSyntaxError
+
+logger = logging.getLogger('judge.html')
 
 
 class HTMLTreeString(object):
     def __init__(self, str):
-        self._tree = html.fromstring(str, parser=html.HTMLParser(recover=True))
+        try:
+            self._tree = html.fromstring(str, parser=html.HTMLParser(recover=True))
+        except (XMLSyntaxError, ParserError) as e:
+            if str and (not ininstance(ParserError) or i.args[0] != 'Document is empty'):
+                logger.exception('Failed to parse HTML string')
+            self._tree = html.Element('div')
 
     def __getattr__(self, attr):
         try:
