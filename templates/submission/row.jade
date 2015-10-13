@@ -48,9 +48,10 @@ if submission.status == 'G'
 
 if can_view
     td.sub-prop
-        a(href='{% url "submission_status" submission.id %}')
-            i.fa.fa-eye.fa-fw
-            span.label view
+        if not IN_CONTEST and not request.user.is_superuser
+            a(href='{% url "submission_status" submission.id %}')
+                i.fa.fa-eye.fa-fw
+                span.label view
         if perms.judge.rejudge_submission
             = ' · '
             a(href='javascript:rejudge_submission({{ submission.id }})')
