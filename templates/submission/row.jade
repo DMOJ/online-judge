@@ -48,7 +48,7 @@ if submission.status == 'G'
 
 if can_view
     td.sub-prop
-        if not IN_CONTEST and not request.user.is_superuser
+        if not IN_CONTEST and perms['judge']['change_submission'] 
             a(href='{% url "submission_status" submission.id %}')
                 i.fa.fa-eye.fa-fw
                 span.label view
