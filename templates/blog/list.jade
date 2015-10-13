@@ -37,16 +37,17 @@ block body
             if page_obj.num_pages > 1
                 div(style='margin-bottom:10px;margin-top:10px')
                     include list_pages
-        div.blog-sidebox
-            h3 Upcoming contests
-                i.fa.fa-trophy
-            each contest in future_contests
-                .contest
-                    .name
-                        a(href='{% url "contest_view" contest.key %}')= contest.name
-                    .time Starts in
-                        = ' '
-                        span.time-remaining #{contest.time_before_start|timedelta:"simple"}
+        if future_contests
+            div.blog-sidebox
+                h3 Upcoming contests
+                    i.fa.fa-trophy
+                each contest in future_contests
+                    .contest
+                        .name
+                            a(href='{% url "contest_view" contest.key %}')= contest.name
+                        .time Starts in
+                            = ' '
+                            span.time-remaining #{contest.time_before_start|timedelta:"simple"}
         div.blog-sidebox
             h3 Comment stream
                 i.fa.fa-comments
