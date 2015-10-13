@@ -128,7 +128,7 @@ block body
                                     br
                                     if contest.time_before_start
                                         span.time Starting in&nbsp;
-                                        span.time.time-remaining #{contest.time_before_start|timedelta:"simple-no-seconds"}
+                                        span.time.time-remaining #{contest.time_before_start|timedelta:"simple"}
                                     
                                     .time.floating-time(style='text-align:right')
                                         span(style='text-align:right;color:#777;')
