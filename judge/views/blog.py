@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import Http404
 from django.utils import timezone
 from django.views.generic import ListView
@@ -32,8 +33,14 @@ class PostList(ListView):
         context['comments'] = Comment.objects.filter(hidden=False).select_related('author__user').defer('author__about').order_by('-id')[:10]
         context['problems'] = Problem.objects.filter(is_public=True).order_by('-date', '-id')[:7]
         now = timezone.now()
-        context['current_contests'] = Contest.objects.filter(start_time__lte=now, end_time__gt=now)
-        context['future_contests'] = Contest.objects.filter(start_time__gt=now)
+
+        visible_contests = Contest.objects.filter(is_public=True)
+        q = Q(is_private=False)
+        if self.request.user.is_authenticated():
+            q |= Q(organizations__in=self.request.user.profile.organizations.all())
+        visible_contests = visible_contests.filter(q)
+        context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
+        context['future_contests'] = visible_contests.filter(start_time__gt=now)
         return context
 
 
