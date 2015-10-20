@@ -2,13 +2,11 @@ import django
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count, Min
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template import RequestContext, Context
-from django.utils.html import format_html
 from django.views.generic import DetailView
 from django.utils.functional import cached_property
 import reversion
