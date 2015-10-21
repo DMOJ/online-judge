@@ -1,5 +1,6 @@
 Site
 =====
+[![Documentation Status](https://dmoj.readthedocs.org/en/latest/)](http://dmoj.readthedocs.org/en/latest/?badge=latest)
 Django [AGPLv3](https://github.com/DMOJ/site/blob/master/LICENSE) contest judge frontend for the [DMOJ judge](https://github.com/DMOJ/judge) system.
 
 <table>
