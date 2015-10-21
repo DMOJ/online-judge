@@ -1,6 +1,5 @@
 Site
 =====
-[![Documentation Status](https://readthedocs.org/projects/dmoj/badge/?version=latest)](http://dmoj.readthedocs.org/en/latest/?badge=latest)
 Django [AGPLv3](https://github.com/DMOJ/site/blob/master/LICENSE) contest judge frontend for the [DMOJ judge](https://github.com/DMOJ/judge) system.
 
 <table>
@@ -16,4 +15,4 @@ A modern online judge and contest platform system, supporting <b>IO-based</b>, <
 </tr>
 </table>
 
-[Read the documentation.](https://dmoj.readthedocs.org/en/latest/)
+[![Documentation Status](https://readthedocs.org/projects/dmoj/badge/?version=latest)](http://dmoj.readthedocs.org/en/latest/?badge=latest) [Read the documentation.](https://dmoj.readthedocs.org/en/latest/)
