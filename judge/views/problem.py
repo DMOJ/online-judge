@@ -231,7 +231,7 @@ class ProblemList(TitleMixin, ListView):
         if self.show_types:
             queryset = queryset.prefetch_related('types')
         if self.category is not None:
-            queryset = queryset.filter(category_id=self.category)
+            queryset = queryset.filter(group_id=self.category)
         if settings.ENABLE_FTS and 'search' in self.request.GET:
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
