@@ -230,6 +230,8 @@ class ProblemList(TitleMixin, ListView):
                                         .values_list('problem__id', flat=True))
         if self.show_types:
             queryset = queryset.prefetch_related('types')
+        if self.category is not None:
+            queryset = queryset.filter(category_id=self.category)
         if settings.ENABLE_FTS and 'search' in self.request.GET:
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
@@ -261,6 +263,12 @@ class ProblemList(TitleMixin, ListView):
         self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
         self.show_types = request.GET.get('show_types') == '1' if 'show_types' in request.GET else False
         self.search_query = None
+        self.category = None
+        if 'category' in request.GET:
+            try:
+                self.category = int(request.GET.get('category'))
+            except ValueError:
+                pass
         return super(ProblemList, self).get(request, *args, **kwargs)
 
 
