@@ -85,7 +85,7 @@ block description
                         b #{contest.end_time|date:"F j, Y, G:i T"}
                     else
                         b #{contest.contest_window_length|timedelta:"simple-no-seconds"}
-                        | long starting on
+                        |  long starting on 
                         b #{contest.start_time|date:"F j, Y, G:i T"}
     
     - cache 3600 contest_html contest.id
