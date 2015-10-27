@@ -47,7 +47,7 @@ block body
                 label(for='show_types') Show problem tags
                 label(for='category') Category
                 select#category(name='category', onclick='form.submit()')
-                    if category is None
+                    if category
                         option(selected) All
                     else
                         option All
