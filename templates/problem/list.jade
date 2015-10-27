@@ -48,9 +48,9 @@ block body
                 label(for='category') Category
                 select#category(name='category', onclick='form.submit()')
                     if category
-                        option(selected) All
+                        option(value='', selected) All
                     else
-                        option All
+                        option(value='') All
                     option(disabled) ---
                     each group in categories
                         if group.id == category
