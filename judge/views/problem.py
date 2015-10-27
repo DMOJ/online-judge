@@ -22,7 +22,7 @@ import itertools
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm, ProblemEditForm
-from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile
+from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile, ProblemGroup
 from judge.pdf_problems import make_latex, format_markdown, latex_document, LatexPdfMaker, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
@@ -254,6 +254,8 @@ class ProblemList(TitleMixin, ListView):
         context = super(ProblemList, self).get_context_data(**kwargs)
         context['hide_solved'] = int(self.hide_solved)
         context['show_types'] = int(self.show_types)
+        context['category'] = self.category
+        context['categories'] = ProblemGroup.objects.all()
         context['has_search'] = settings.ENABLE_FTS
         context['search_query'] = self.search_query
         context['completed_problem_ids'] = self.get_completed_problems()
