@@ -46,7 +46,7 @@ block body
                 input(onclick="form.submit()" type='checkbox', name='show_types', id='show_types', checked=('checked' if show_types else undefined), value='1')
                 label(for='show_types') Show problem tags
                 label(for='category') Category
-                select#category(name='category', onclick='form.submit()')
+                select#category(name='category', onchange='form.submit()')
                     if category
                         option(value='', selected) All
                     else
