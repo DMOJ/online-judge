@@ -45,6 +45,19 @@ block body
                     label(for='hide_solved') Hide solved problems
                 input(onclick="form.submit()" type='checkbox', name='show_types', id='show_types', checked=('checked' if show_types else undefined), value='1')
                 label(for='show_types') Show problem tags
+                label(for='category') Category
+                select#category(name='category', onclick='form.submit()')
+                    if category is None
+                        option(selected) All
+                    else
+                        option All
+                    option(disabled) ---
+                    each group in categories
+                        if group.id == category
+                            option(value=group.id, selected)= group.full_name
+                        else
+                            option(value=group.id)= group.full_name
+
     table#problem-table.table.striped
         thead
             tr
