@@ -38,7 +38,7 @@ block body
             form#filter-form(name='form', action='', method='get')
                 if has_search
                     input(type='text', name='search', id='search', value=search_query, placeholder='Search problems...')
-                a.button(onclick="form.submit()") Go
+                a.button(onclick='form.submit()') Go
                 a.button(href='{% url "problem_random" %}') Random
                 if request.user.is_authenticated
                     input(onclick='form.submit()', type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
