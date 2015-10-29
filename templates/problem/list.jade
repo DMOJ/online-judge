@@ -41,9 +41,9 @@ block body
                 a.button(onclick="form.submit()") Go
                 a.button(href='{% url "problem_random" %}') Random
                 if request.user.is_authenticated
-                    input(onclick="form.submit()" type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
+                    input(onclick='form.submit()', type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
                     label(for='hide_solved') Hide solved problems
-                input(onclick="form.submit()" type='checkbox', name='show_types', id='show_types', checked=('checked' if show_types else undefined), value='1')
+                input(onclick='form.submit()', type='checkbox', name='show_types', id='show_types', checked=('checked' if show_types else undefined), value='1')
                 label(for='show_types') Show problem tags
                 label(for='category') Category
                 select#category(name='category', onchange='form.submit()')
