@@ -96,7 +96,7 @@ block user_content
         .strike
             span
                 form(name='form', action='', method='get')
-                    input(style='vertical-align:middle', onclick="form.submit()", type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
+                    input#hide_solved(style='vertical-align:middle', onclick="form.submit()", type='checkbox', name='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
                     label(style='vertical-align:middle', for='hide_solved') Hide problems I've solved
     else
         hr
