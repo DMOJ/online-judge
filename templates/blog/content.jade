@@ -12,7 +12,7 @@ block media
     include comments/media
 
 block header
-    div(style='float: right')
+    div(style='float: right; margin-top: 1.2em')
         if perms.judge.change_blogpost
             | [
             a(href='{% url "admin:judge_blogpost_change" post.id %}') Edit
