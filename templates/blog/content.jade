@@ -10,6 +10,14 @@ block js_media
 
 block media
     include comments/media
+
+block header
+    div(style='float: right')
+        if perms.judge.change_blogpost
+            | [
+            a(href='{% url "admin:judge_blogpost_change" post.id %}') Edit
+            | ]
+
 block body
     div.post-full
         div.time #{post.publish_on|date:"N j, o, G:i"}
