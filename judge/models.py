@@ -292,7 +292,7 @@ class Problem(models.Model):
 
     @cached_property
     def usable_languages(self):
-        return self.allowed_languages.filter(judges__in=self.judges.filter(online=True)).distinct()
+        return self.allowed_languages.filter(judges__online=True).distinct()
 
     class Meta:
         permissions = (
