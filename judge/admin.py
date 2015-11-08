@@ -1,22 +1,22 @@
 from functools import partial
 from operator import itemgetter, attrgetter
+
+import reversion
 from django import forms
 from django.conf import settings
-
-from django.contrib import admin, messages
 from django.conf.urls import patterns, url
+from django.contrib import admin, messages
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import transaction, connection
 from django.db.models import TextField, Q, Count
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, Http404
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin
-import reversion
 from reversion_compare.admin import CompareVersionAdmin
 
 from judge.dblock import LockModel
@@ -1011,3 +1011,4 @@ admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Solution, SolutionAdmin)
 admin.site.register(License, LicenseAdmin)
 admin.site.register(OrganizationRequest, OrganizationRequestAdmin)
+patch_admin(FlatPage)
