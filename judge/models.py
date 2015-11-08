@@ -291,6 +291,10 @@ class Problem(models.Model):
         return self.authors.values_list('id', flat=True)
 
     @cached_property
+    def usable_common_names(self):
+        return set(self.allowed_languages.filter(judges__online=True).values_list('common_name', flat=True).distinct())
+
+    @cached_property
     def usable_languages(self):
         return self.allowed_languages.filter(judges__online=True).distinct()
 

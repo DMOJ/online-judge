@@ -93,7 +93,15 @@ block info_float
             div.toggle.open.unselectable
                 span.fa.fa-chevron-right.fa-fw
                 | Allowed languages
-            div.toggled(style="margin-bottom:-1em") #{problem.languages_list|join:", "}
+            div.toggled(style="margin-bottom:-1em")
+                - with usable=problem.usable_common_names langs=problem.languages_list
+                    each lang in langs
+                        if lang in usable
+                            = lang
+                        else
+                            del= lang
+                        if not forloop.last
+                            = ', '
         br
 
 block description
