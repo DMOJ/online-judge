@@ -99,7 +99,7 @@ block info_float
                         if lang in usable
                             = lang
                         else
-                            del= lang
+                            del(title='No {{ lang }} judge online')= lang
                         if not forloop.last
                             = ', '
         br
