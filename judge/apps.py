@@ -6,3 +6,7 @@ class JudgeAppConfig(AppConfig):
 
     def ready(self):
         from . import signals
+
+        from django.contrib.flatpages.models import FlatPage
+        from reversion.helpers import patch_admin
+        patch_admin(FlatPage)

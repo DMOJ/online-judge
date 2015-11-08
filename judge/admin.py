@@ -7,7 +7,6 @@ from django.conf import settings
 from django.conf.urls import patterns, url
 from django.contrib import admin, messages
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.contrib.flatpages.models import FlatPage
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
@@ -18,7 +17,6 @@ from django.http import HttpResponseRedirect, Http404
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin
-from reversion.helpers import patch_admin
 from reversion_compare.admin import CompareVersionAdmin
 
 from judge.dblock import LockModel
@@ -1013,4 +1011,3 @@ admin.site.register(BlogPost, BlogPostAdmin)
 admin.site.register(Solution, SolutionAdmin)
 admin.site.register(License, LicenseAdmin)
 admin.site.register(OrganizationRequest, OrganizationRequestAdmin)
-patch_admin(FlatPage)
