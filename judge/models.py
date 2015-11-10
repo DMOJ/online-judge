@@ -292,11 +292,11 @@ class Problem(models.Model):
 
     @cached_property
     def usable_common_names(self):
-        return set(self.allowed_languages.filter(judges__online=True).values_list('common_name', flat=True).distinct())
+        return set(self.usable_languages.values_list('common_name', flat=True))
 
     @cached_property
     def usable_languages(self):
-        return self.allowed_languages.filter(judges__online=True).distinct()
+        return self.allowed_languages.filter(judges__in=self.judges.filter(online=True)).distinct()
 
     class Meta:
         permissions = (
