@@ -94,7 +94,8 @@ block user_content
                         = ', '
     if user.about
         h4 About
-        | #{user.about|markdown:"self-description"|proxy_images}
+        - cache 86400 user_about user.id
+            | #{user.about|markdown:"self-description"|proxy_images}
     else
         i
             if user.user == request.user
