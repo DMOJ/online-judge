@@ -17,6 +17,13 @@ block js_media
             }, 10000);
         });
 
+block header
+    div(style='float: right; margin-top: 1.2em')
+        if perms.judge.change_judge
+            | [
+            a(href='{% url "admin:judge_judge_change" judge.id %}') Edit
+            | ]
+
 block body
     p This page shows the live status of #{SITE_NAME}'s judging servers.
     h3 Judges
