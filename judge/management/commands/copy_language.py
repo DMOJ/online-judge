@@ -1,21 +1,24 @@
 from django.core.management.base import BaseCommand, CommandError
+
 from judge.models import Language
 
 
 class Command(BaseCommand):
-    args = '<source> <target>'
     help = 'allows the problems allowed to be submitted in the <source> language to be submitted in <target> language'
 
+    def add_arguments(self, parser):
+        parser.add_argument('source', help='language to copy from')
+        parser.add_argument('target', help='language to copy to')
+
     def handle(self, *args, **options):
-        if len(args) != 2:
-            raise CommandError('Usage: python manage.py copy_language <source> <target>')
-        source, target = args
         try:
-            source = Language.objects.get(key=source)
+            source = Language.objects.get(key=options['source'])
         except Language.DoesNotExist:
-            raise CommandError('Invalid source language: %s' % source)
+            raise CommandError('Invalid source language: %s' % options['source'])
+
         try:
-            target = Language.objects.get(key=target)
+            target = Language.objects.get(key=options['target'])
         except Language.DoesNotExist:
-            raise CommandError('Invalid target language: %s' % target)
+            raise CommandError('Invalid target language: %s' % options['target'])
+
         target.problem_set = source.problem_set.all()
