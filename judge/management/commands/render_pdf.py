@@ -35,4 +35,4 @@ class Command(BaseCommand):
             if not maker.success:
                 print>>sys.stderr, maker.log
             elif directory is None:
-                os.rename(maker.pdffile, args[0] + '.pdf')
+                os.rename(maker.pdffile, problem.code + '.pdf')
