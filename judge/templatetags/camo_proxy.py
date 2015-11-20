@@ -3,6 +3,7 @@ from hashlib import sha1
 
 from django import template
 from django.conf import settings
+
 from judge import lxml_tree
 
 register = template.Library()
@@ -42,12 +43,14 @@ class CamoClient(object):
                 obj.set('data', self._rewrite_url(obj.get('data')))
         return doc
 
+
 if getattr(settings, 'CAMO_URL', None) and getattr(settings, 'CAMO_KEY', None):
     client = CamoClient(settings.CAMO_URL, key=settings.CAMO_KEY,
                         excluded=getattr(settings, 'CAMO_EXCLUDE', ()),
                         https=getattr(settings, 'CAMO_HTTPS', False))
 else:
     client = None
+
 
 @register.filter(is_safe=True)
 def proxy_images(text):
