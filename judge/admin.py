@@ -265,6 +265,8 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         queryset = Problem.objects.prefetch_related('authors__user')
         if request.user.has_perm('judge.edit_all_problem'):
             return queryset
+        elif request.user.has_perm('judge.edit_public_problem'):
+            return queryset.filter(is_public=True)
         else:
             return queryset.filter(authors__id=request.user.profile.id)
 
@@ -272,6 +274,8 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         if not request.user.has_perm('judge.edit_own_problem'):
             return False
         if request.user.has_perm('judge.edit_all_problem') or obj is None:
+            return True
+        if request.user.has_perm('judge.edit_public_problem') and obj.is_public:
             return True
         return obj.authors.filter(id=request.user.profile.id).exists()
 
