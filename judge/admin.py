@@ -271,11 +271,11 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
             return queryset.filter(authors__id=request.user.profile.id)
 
     def has_change_permission(self, request, obj=None):
+        if request.user.has_perm('judge.edit_public_problem') and obj.is_public:
+            return True
         if not request.user.has_perm('judge.edit_own_problem'):
             return False
         if request.user.has_perm('judge.edit_all_problem') or obj is None:
-            return True
-        if request.user.has_perm('judge.edit_public_problem') and obj.is_public:
             return True
         return obj.authors.filter(id=request.user.profile.id).exists()
 
