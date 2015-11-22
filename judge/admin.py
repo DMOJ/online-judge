@@ -5,7 +5,7 @@ import reversion
 from django import forms
 from django.conf import settings
 from django.conf.urls import patterns, url
-from django.contrib import admin, messages
+from django.contrib import admin, messaoges
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
@@ -271,12 +271,12 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
             return queryset.filter(authors__id=request.user.profile.id)
 
     def has_change_permission(self, request, obj=None):
+        if request.user.has_perm('judge.edit_all_problem') or obj is None:
+            return True
         if request.user.has_perm('judge.edit_public_problem') and obj.is_public:
             return True
         if not request.user.has_perm('judge.edit_own_problem'):
             return False
-        if request.user.has_perm('judge.edit_all_problem') or obj is None:
-            return True
         return obj.authors.filter(id=request.user.profile.id).exists()
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
