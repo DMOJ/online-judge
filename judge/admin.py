@@ -5,7 +5,7 @@ import reversion
 from django import forms
 from django.conf import settings
 from django.conf.urls import patterns, url
-from django.contrib import admin, messaoges
+from django.contrib import admin, messages
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
