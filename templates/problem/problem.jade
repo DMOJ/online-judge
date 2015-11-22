@@ -36,7 +36,7 @@ block info_float
     a(href='{% url "ranked_submissions" problem.code %}')
         | Best submissions
 
-    if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids
+    if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids or perms.judge.edit_public_problem and problem.is_public
         hr
         a(href='{% url "admin:judge_problem_change" problem.id %}')
             | Edit problem
