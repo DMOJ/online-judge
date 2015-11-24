@@ -99,7 +99,8 @@ else:
                     'judge.judge',
                 ),
             }
-        )
+        ),
+        'SEARCH_URL': 'admin:judge_problem_changelist',
     }
 
 INSTALLED_APPS += (
