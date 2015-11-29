@@ -1,7 +1,8 @@
 from django import template
-register = template.Library()
 
 from judge.ratings import rating_class, rating_name, rating_progress
+
+register = template.Library()
 
 
 @register.filter(name='rating_class')

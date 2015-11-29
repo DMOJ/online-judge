@@ -1,6 +1,7 @@
+import re
+
 from django import template
 from django.core.cache import cache
-import re
 
 register = template.Library()
 

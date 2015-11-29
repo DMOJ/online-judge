@@ -2,6 +2,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.tag(name='evaluate')
 def do_evaluate(parser, token):
     """

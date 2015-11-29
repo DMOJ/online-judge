@@ -1,5 +1,5 @@
 from django import template
-from django.template import Node, NodeList, Variable, VariableDoesNotExist
+from django.template import Node, NodeList, Variable
 
 register = template.Library()
 
@@ -37,14 +37,14 @@ class IfStartsWithNode(Node):
         self.negate = negate
 
     def __repr__(self):
-        return "<IfStartsWithNode>"
+        return '<IfStartsWithNode>'
 
     def render(self, context):
         string = self.string.resolve(context)
         start_string = self.start_string.resolve(context)
 
         if (self.negate and not string.startswith(start_string)) or (
-            not self.negate and string.startswith(start_string)):
+                    not self.negate and string.startswith(start_string)):
             return self.nodelist_true.render(context)
         return self.nodelist_false.render(context)
 
