@@ -1,8 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-__author__ = 'Quantum'
-
 
 def generic_message(request, title, message, status=None):
     return render(request, 'generic_message.jade', {
