@@ -25,15 +25,15 @@ block body
         each week in calendar
             tr
                 each day in week
-                    td(class='{{ day.weekday }}{% if day.is_today %} today{% endif %}{% if day.is_pad%} noday{% endif %}')
+                    td(class='{{ day.weekday }}{% if day.is_today %} today{% endif %}{% if day.is_pad %} noday{% endif %}')
                         span.num= day.date.day
-                        ul
+                        ul.fa-ul
                             each contest in day.starts
-                                li.start
+                                li.fa.fa-li.fa-lg.fa-step-forward.start
                                     a(href='{% url "contest_view" contest.key %}')= contest.name
                             each contest in day.oneday
-                                li.oneday
+                                li.fa.fa-li.fa-lg.fa-step-backward.oneday
                                     a(href='{% url "contest_view" contest.key %}')= contest.name
                             each contest in day.ends
-                                li.end
+                                li.fa.fa-li.fa-lg.fa-play.end
                                     a(href='{% url "contest_view" contest.key %}')= contest.name
