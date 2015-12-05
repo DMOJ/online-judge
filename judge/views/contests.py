@@ -74,6 +74,7 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
         context['current_contests'] = present
         context['past_contests'] = past
         context['future_contests'] = future
+        context['now'] = timezone.now()
         return context
 
 

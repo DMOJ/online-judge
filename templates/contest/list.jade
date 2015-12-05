@@ -62,6 +62,10 @@ block js_media
             });
         });
 
+block header
+    div(style='float: right; margin-top: 0.9em; font-size: 1.3em;')
+        a(href='{% url "contest_calendar" now.year now.month %}') Calendar view
+
 block body
     if current_contests
         br
