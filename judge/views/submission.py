@@ -37,9 +37,10 @@ class SubmissionDetailBase(TitleMixin, SubmissionMixin, SingleObjectMixin, Templ
         profile = request.user.profile
         if not request.user.has_perm('judge.view_all_submission') and submission.user_id != profile.id and \
                 not submission.problem.authors.filter(id=profile.id).exists() and \
-                not Submission.objects.filter(user_id=profile.id, result='AC',
-                                              problem__code=submission.problem.code,
-                                              points=F('problem__points')).exists():
+                not (submission.problem.is_public and
+                     Submission.objects.filter(user_id=profile.id, result='AC',
+                                               problem__code=submission.problem.code,
+                                               points=F('problem__points')).exists()):
             raise PermissionDenied()
 
         return super(SubmissionDetailBase, self).get(request, *args, submission=self.object, **kwargs)
