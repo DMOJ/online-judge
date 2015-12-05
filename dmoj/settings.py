@@ -14,8 +14,6 @@ import re
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -181,30 +179,6 @@ TEMPLATES = [
     },
 ]
 
-
-TEMPLATE_CONTEXT_PROCESSORS += (
-    'django.core.context_processors.request',
-    'judge.template_context.comet_location',
-    'judge.template_context.get_resource',
-    'judge.template_context.general_info',
-    'judge.template_context.site',
-    'judge.template_context.misc_config',
-    'judge.template_context.contest',
-    'judge.template_context.site_name',
-    'social.apps.django_app.context_processors.backends',
-    'social.apps.django_app.context_processors.login_redirect',
-)
-
-TEMPLATE_LOADERS = (
-    ('pyjade.ext.django.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )),
-)
-
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
 
 # Markdown Trois
 from markdown_trois.conf.settings import MARKDOWN_TROIS_DEFAULT_STYLE
