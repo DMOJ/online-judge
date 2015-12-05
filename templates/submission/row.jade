@@ -2,7 +2,7 @@
 - load tz
 
 if profile_id
-    - var can_view = profile_id == submission.user_id or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids
+    - var can_view = profile_id == submission.user_id or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids and submission.problem.is_public
     - var info_colspan = (1 if can_view else 2)
 else
     - var can_view = false
@@ -48,10 +48,9 @@ if submission.status == 'G'
 
 if can_view
     td.sub-prop
-        if not IN_CONTEST or perms.judge.change_submission or profile_id == submission.user_id
-            a(href='{% url "submission_status" submission.id %}')
-                i.fa.fa-eye.fa-fw
-                span.label view
+        a(href='{% url "submission_status" submission.id %}')
+            i.fa.fa-eye.fa-fw
+            span.label view
         if perms.judge.rejudge_submission
             = ' · '
             a(href='javascript:rejudge_submission({{ submission.id }})')
