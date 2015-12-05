@@ -223,6 +223,7 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
 
     def show_public(self, obj):
         return format_html('<a href="{0}">View on site</a>', obj.get_absolute_url())
+    show_public.short_description = ''
 
     def _update_points(self, problem_id, sign):
         with connection.cursor() as c:
