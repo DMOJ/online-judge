@@ -240,8 +240,13 @@ class ContestCalendar(ContestListMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ContestCalendar, self).get_context_data(**kwargs)
+
+        try:
+            context['month'] = date(self.year, self.month, 1)
+        except ValueError:
+            raise Http404()
+
         context['calendar'] = self.get_table()
-        context['month'] = date(self.year, self.month, 1)
         context['prev_month'] = date(self.year - (self.month == 1), 12 if self.month == 1 else self.month - 1, 1)
         context['next_month'] = date(self.year + (self.month == 12), 1 if self.month == 12 else self.month + 1, 1)
         return context
