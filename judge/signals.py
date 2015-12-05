@@ -21,7 +21,7 @@ def problem_update(sender, instance, **kwargs):
         make_template_fragment_key('submission_problem', (instance.id,)),
         make_template_fragment_key('problem_feed', (instance.id,))
     ])
-l
+
     if hasattr(settings, 'PROBLEM_PDF_CACHE'):
         try:
             os.unlink(os.path.join(settings.PROBLEM_PDF_CACHE, '%s.pdf' % instance.code))
