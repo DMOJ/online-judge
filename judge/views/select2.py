@@ -1,63 +1,51 @@
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import JsonResponse
-from django.utils.encoding import smart_text
-from django.views.generic.list import BaseListView
-
 from judge.models import Profile, Organization, Problem, Comment, ContestProfile
 
+try:
+    from django_select2.views import Select2View
+except ImportError:
+    pass
+else:
+    class UserSelect2View(Select2View):
+        def get_results(self, request, term, page, context):
+            queryset = Profile.objects.filter(Q(user__username__icontains=term) | Q(name__icontains=term))\
+                              .select_related('user')
+            page = Paginator(queryset, 20).page(page)
+            return 'nil', page.has_next(), [(user.id, user.long_display_name) for user in page]
 
-class Select2View(BaseListView):
-    def get(self, request, *args, **kwargs):
-        self.request = request
-        self.term = kwargs.get('term', request.GET.get('term', ''))
-        self.object_list = self.get_queryset()
-        context = self.get_context_data()
+    class OrganizationSelect2View(Select2View):
+        def get_results(self, request, term, page, context):
+            queryset = Organization.objects.filter(Q(key__icontains=term) | Q(name__icontains=term))
+            page = Paginator(queryset, 20).page(page)
+            return 'nil', page.has_next(), [(org.id, org.name) for org in page]
 
-        return JsonResponse({
-            'results': [
-                {
-                    'text': smart_text(self.get_name(obj)),
-                    'id': obj.pk,
-                } for obj in context['object_list']],
-            'more': context['page_obj'].has_next(),
-        })
+    class ProblemSelect2View(Select2View):
+        def get_results(self, request, term, page, context):
+            queryset = Problem.objects.filter(Q(code__icontains=term) | Q(name__icontains=term))
+            if not request.user.has_perm('judge.see_private_problem'):
+                filter = Q(is_public=True)
+                if request.user.is_authenticated():
+                    filter |= Q(authors=request.user.profile)
+                queryset = queryset.filter(filter)
+            page = Paginator(queryset, 20).page(page)
+            return 'nil', page.has_next(), [(problem.id, problem.name) for problem in page]
 
-    def get_name(self, obj):
-        return unicode(obj)
+    class CommentSelect2View(Select2View):
 
+        def get_results(self, request, term, page, context):
+            queryset = Comment.objects.filter(Q(title__icontains=term) | Q(page__icontains=term))
+            page = Paginator(queryset, 20).page(page)
+            return 'nil', page.has_next(), [(comment.id, '-' * comment.level + comment.title) for comment in page]
 
-class UserSelect2View(Select2View):
-    def get_queryset(self):
-        return Profile.objects.filter(Q(user__username__icontains=(self.term)) | Q(name__icontains=(self.term))) \
-            .select_related('user')
+    class ContestProfileSelect2View(Select2View):
+        def check_all_permissions(self, request, *args, **kwargs):
+            if not request.user.has_perm('judge.change_contestparticipation'):
+                raise PermissionDenied()
 
-
-class OrganizationSelect2View(Select2View):
-    def get_queryset(self):
-        return Organization.objects.filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
-
-
-class ProblemSelect2View(Select2View):
-    def get_queryset(self):
-        queryset = Problem.objects.filter(Q(code__icontains=self.term) | Q(name__icontains=self.term))
-        if not self.request.user.has_perm('judge.see_private_problem'):
-            filter = Q(is_public=True)
-            if self.request.user.is_authenticated():
-                filter |= Q(authors=self.request.user.profile)
-            queryset = queryset.filter(filter)
-        return queryset
-
-
-class CommentSelect2View(Select2View):
-    def get_queryset(self):
-        return Comment.objects.filter(Q(title__icontains=self.term) | Q(page__icontains=self.term))
-
-
-class ContestProfileSelect2View(Select2View):
-    def get_queryset(self):
-        if not self.request.user.has_perm('judge.change_contestparticipation'):
-            raise PermissionDenied()
-        return ContestProfile.objects.filter(
-            Q(user__user__username__icontains=self.term) | Q(user__name__icontains=self.term)) \
-            .select_related('user__user')
+        def get_results(self, request, term, page, context):
+            queryset = ContestProfile.objects.filter(Q(user__user__username__icontains=term) | Q(user__name__icontains=term))\
+                                     .select_related('user__user')
+            page = Paginator(queryset, 20).page(page)
+            return 'nil', page.has_next(), [(profile.id, 'Contest: ' + profile.user.long_display_name) for profile in page]
