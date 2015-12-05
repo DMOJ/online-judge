@@ -38,5 +38,5 @@ block body
                                     a(href='{% url "contest_view" contest.key %}')= contest.name
                             each contest in day.ends
                                 li.end
-                                    i.fa.fa-li.fa-lg.fa-play
+                                    i.fa.fa-li.fa-lg.fa-step-backward
                                     a(href='{% url "contest_view" contest.key %}')= contest.name
