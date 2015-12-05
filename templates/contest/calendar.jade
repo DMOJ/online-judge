@@ -29,11 +29,14 @@ block body
                         span.num= day.date.day
                         ul.fa-ul
                             each contest in day.starts
-                                li.fa.fa-li.fa-lg.fa-step-forward.start
+                                li.start
+                                    i.fa.fa-li.fa-lg.fa-step-forward
                                     a(href='{% url "contest_view" contest.key %}')= contest.name
                             each contest in day.oneday
-                                li.fa.fa-li.fa-lg.fa-step-backward.oneday
+                                li.oneday
+                                    i.fa.fa-li.fa-lg.fa-step-backward
                                     a(href='{% url "contest_view" contest.key %}')= contest.name
                             each contest in day.ends
-                                li.fa.fa-li.fa-lg.fa-play.end
+                                li.end
+                                    i.fa.fa-li.fa-lg.fa-play
                                     a(href='{% url "contest_view" contest.key %}')= contest.name
