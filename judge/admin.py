@@ -197,7 +197,7 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         ('Justice', {'fields': ('banned_users',)}),
         ('History', {'fields': ('change_message',)})
     )
-    list_display = ['code', 'name', 'show_authors', 'points', 'is_public']
+    list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'show_public']
     ordering = ['code']
     search_fields = ('code', 'name')
     actions = ['make_public', 'make_private']
@@ -220,6 +220,9 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
     show_authors.short_description = 'Authors'
+
+    def show_public(self, obj):
+        return format_html('<a href="{0}">View on site</a>', obj.get_absolute_url())
 
     def _update_points(self, problem_id, sign):
         with connection.cursor() as c:
