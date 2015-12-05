@@ -151,7 +151,11 @@ WSGI_APPLICATION = 'dmoj.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            # This is to make django-suit use our own jQuery.
+            os.path.join(BASE_DIR, 'dmoj', 'suit_template_patch'),
+        ],
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
