@@ -213,6 +213,14 @@ urlpatterns = patterns('',
             {'location': '/about/', 'priority': 0.9},
         ]),
     }}),
+
+    url(r'^judge-select2/', include(patterns('',
+        url(r'^profile/', UserSelect2View.as_view(), name='profile_select2'),
+        url(r'^organization/', OrganizationSelect2View.as_view(), name='organization_select2'),
+        url(r'^problem/', ProblemSelect2View.as_view(), name='problem_select2'),
+        url(r'^comment/', CommentSelect2View.as_view(), name='comment_select2'),
+        url(r'^contest_profile/', ContestProfileSelect2View.as_view(), name='contest_profile_select2'),
+    ))),
 )
 
 handler404 = 'judge.views.error.error404'
@@ -231,11 +239,6 @@ if 'django_select2' in settings.INSTALLED_APPS:
 
     urlpatterns += patterns('',
         url(r'^select2/', include('django_select2.urls')),
-        url(r'^judge-select2/profile/', UserSelect2View.as_view(), name='profile_select2'),
-        url(r'^judge-select2/organization/', OrganizationSelect2View.as_view(), name='organization_select2'),
-        url(r'^judge-select2/problem/', ProblemSelect2View.as_view(), name='problem_select2'),
-        url(r'^judge-select2/comment/', CommentSelect2View.as_view(), name='comment_select2'),
-        url(r'^judge-select2/contest_profile/', ContestProfileSelect2View.as_view(), name='contest_profile_select2'),
     )
 
 if 'django_uwsgi' in settings.INSTALLED_APPS:
