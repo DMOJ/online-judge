@@ -1,14 +1,16 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+
 from judge import views
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
 from judge.forms import CustomAuthenticationForm
-from judge.views import organization, language, status, blog, problem, solution, mailgun, license
-
-from judge.views import RegistrationView, ActivationView, TemplateView
 from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap, \
     BlogPostSitemap, SolutionSitemap
+from judge.views import RegistrationView, ActivationView, TemplateView
+from judge.views import organization, language, status, blog, problem, solution, mailgun, license
+from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
+        ContestProfileSelect2View
 
 admin.autodiscover()
 
@@ -123,7 +125,7 @@ urlpatterns = patterns('',
 
     url(r'^user/(?P<user>\w+)/submissions/$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
     url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
-    
+
     url(r'^single_submission', 'judge.views.single_submission_query'),
     url(r'^submission_testcases', views.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
 
@@ -150,7 +152,7 @@ urlpatterns = patterns('',
 
     url(r'^contest/(?P<contest>\w+)/submissions/(?P<user>\w+)/(?P<problem>\w+)/$', views.UserContestSubmissions.as_view(), name='contest_user_submissions'),
     url(r'^contest/(?P<contest>\w+)/submissions/(?P<user>\w+)/(?P<problem>\w+)/(?P<page>\d+)$', views.UserContestSubmissions.as_view(), name='contest_user_submissions'),
-    
+
     url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
     url(r'^organization/(?P<key>\w+)$', organization.OrganizationHome.as_view(), name='organization_home'),
     url(r'^organization/(?P<key>\w+)/users$', organization.OrganizationUsers.as_view(), name='organization_users'),
@@ -234,9 +236,6 @@ if 'newsletter' in settings.INSTALLED_APPS:
     urlpatterns += patterns('', (r'^newsletter/', include('newsletter.urls')))
 
 if 'django_select2' in settings.INSTALLED_APPS:
-    from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
-        ContestProfileSelect2View
-
     urlpatterns += patterns('',
         url(r'^select2/', include('django_select2.urls')),
     )
