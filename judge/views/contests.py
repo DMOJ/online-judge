@@ -220,8 +220,8 @@ class ContestCalendar(ContestListMixin, TemplateView):
                                               Q(end_time__gte=start, end_time__lt=end)).defer('description')
         starts, ends, oneday = (defaultdict(list) for i in xrange(3))
         for contest in contests:
-            start_date = contest.start_time.date()
-            end_date = contest.end_time.date()
+            start_date = timezone.localtime(contest.start_time).date()
+            end_date = timezone.localtime(contest.end_time).date()
             if start_date == end_date:
                 oneday[start_date].append(contest)
             else:
