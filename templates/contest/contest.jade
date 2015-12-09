@@ -53,10 +53,7 @@ block info_float
         elif contest.end_time < now
             b Contest is over.
         else
-            if contest.time_limit
-                b Can join until:
-            else
-                b Time remaining:
+            b Time remaining:
             = ' '
             .time-remaining #{contest.time_before_end|timedelta:"simple"}
 
