@@ -10,11 +10,16 @@
     margin-left: 0;
 }
 
-.content-description h1,
-.content-description h2,
-.content-description h3,
-.content-description h4,
-.content-description h5,
-.content-description h6 {
-  padding: 0 !important;
+#content .content-description h1,
+#content .content-description h2,
+#content .content-description h3,
+#content .content-description h4,
+#content .content-description h5,
+#content .content-description h6 {
+    padding: 0;
+}
+
+#content input.select2-search__field {
+    border: none;
+    box-shadow: none;
 }
