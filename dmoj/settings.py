@@ -37,68 +37,24 @@ PYGMENT_THEME = 'pygment-github.css'
 INSTALLED_APPS = ()
 
 try:
-    import suit
+    import wpadmin
 except ImportError:
     pass
 else:
-    del suit
-    INSTALLED_APPS += ('suit',)
-    SUIT_CONFIG = {
-        'ADMIN_NAME': 'DMOJ Admin',
-        'LIST_PER_PAGE': 100,
-        'MENU': (
-            {
-                'label': 'Site',
-                'icon': 'icon-leaf',
-                'models': (
-                    'judge.blogpost',
-                    'judge.comment',
-                    'sites.site',
-                    'flatpages.flatpage',
-                    'judge.miscconfig',
-                    'judge.navigationbar',
-                ),
+    del wpadmin
+    INSTALLED_APPS += ('wpadmin',)
+
+    WPADMIN = {
+        'admin': {
+            'title': 'Don Mills Online Judge Admin',
+            'menu': {
+                'top': 'wpadmin.menu.menus.BasicTopMenu',
+                'left': 'wpadmin.menu.menus.BasicLeftMenu',
             },
-            {
-                'label': 'Users',
-                'icon': 'icon-user',
-                'models': (
-                    'auth.user',
-                    'auth.group',
-                    'judge.profile',
-                    'judge.organization',
-                    'registration.registrationprofile',
-                ),
+            'dashboard': {
+                'breadcrumbs': True,
             },
-            {
-                'label': 'Problems',
-                'icon': 'icon-question-sign',
-                'models': (
-                    'judge.problem',
-                    'judge.problemgroup',
-                    'judge.problemtype',
-                    'judge.solution',
-                ),
-            },
-            {
-                'label': 'Contests',
-                'icon': 'icon-signal',
-                'models': (
-                    'judge.contest',
-                    'judge.contestparticipation',
-                ),
-            },
-            {
-                'label': 'Judging',
-                'icon': 'icon-ok',
-                'models': (
-                    'judge.submission',
-                    'judge.language',
-                    'judge.judge',
-                ),
-            }
-        ),
-        'SEARCH_URL': 'admin:judge_problem_changelist',
+        }
     }
 
 INSTALLED_APPS += (
