@@ -202,7 +202,6 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
     search_fields = ('code', 'name')
     actions = ['make_public', 'make_private']
     inlines = [LanguageLimitInline]
-    list_per_page = 500
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
