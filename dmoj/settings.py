@@ -92,6 +92,14 @@ else:
                         'judge.Judge',
                     ],
                 },
+                {
+                    'model': 'newsletter.Message',
+                    'icon': 'fa-envelope',
+                    'children': [
+                        'newsletter.Submission',
+                        'newsletter.Newsletter',
+                    ]
+                },
             ],
             'dashboard': {
                 'breadcrumbs': True,
