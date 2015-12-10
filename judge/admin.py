@@ -151,8 +151,8 @@ class ProblemForm(ModelForm):
     class Meta:
         if use_select2:
             widgets = {
-                'authors': HeavySelect2MultipleWidget(data_view='profile_select2'),
-                'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2'),
+                'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+                'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
                 'types': Select2MultipleWidget,
                 'group': Select2Widget,
             }
