@@ -67,6 +67,7 @@ else:
                         'judge.Organization',
                     ],
                 },
+                ('flatpages.FlatPage', 'fa-file-text-o'),
                 {
                     'model': 'judge.Problem',
                     'icon': 'fa-question-circle',
