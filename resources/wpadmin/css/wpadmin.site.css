@@ -9,3 +9,12 @@
 .wmd-wrapper ul.wmd-button-row {
     margin-left: 0;
 }
+
+.content-description h1,
+.content-description h2,
+.content-description h3,
+.content-description h4,
+.content-description h5,
+.content-description h6 {
+  padding: 0 !important;
+}
