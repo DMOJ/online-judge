@@ -151,9 +151,6 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            # This is to make django-suit use our own jQuery.
-            # But we currently don't because we are still using select2 3.x.
-            # os.path.join(BASE_DIR, 'dmoj', 'suit_template_patch'),
         ],
         'OPTIONS': {
             'context_processors': [
