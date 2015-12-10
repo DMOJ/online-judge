@@ -1,3 +1,11 @@
 .select2-selection ul li {
-	list-style-type: inherit
+    list-style-type: inherit
+}
+
+.wmd-wrapper {
+    padding-top: 2em;
+}
+
+.wmd-wrapper ul.wmd-button-row {
+    margin-left: 0;
 }
