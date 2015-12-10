@@ -78,7 +78,7 @@ else:
                 ('judge.Solution', 'fa-pencil'),
                 {
                     'model': 'judge.Contest',
-                    'icon': 'bar-chart',
+                    'icon': 'fa-bar-chart',
                     'children': [
                         'judge.ContestParticipation',
                     ],
