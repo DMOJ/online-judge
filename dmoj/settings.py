@@ -49,8 +49,49 @@ else:
             'title': 'Don Mills Online Judge Admin',
             'menu': {
                 'top': 'wpadmin.menu.menus.BasicTopMenu',
-                'left': 'wpadmin.menu.menus.BasicLeftMenu',
+                'left': 'wpadmin.menu.custom.CustomModelLeftMenuWithDashboard',
             },
+            'custom_menu': [
+                {
+                    'model': 'auth.User',
+                    'icon': 'fa-user',
+                    'children': [
+                        'auth.Group',
+                        'registration.RegistrationProfile',
+                    ],
+                },
+                {
+                    'model': 'judge.Profile',
+                    'icon': 'fa-user-plus',
+                    'children': [
+                        'judge.Organization',
+                    ],
+                },
+                {
+                    'model': 'judge.Problem',
+                    'icon': 'fa-question-circle',
+                    'children': [
+                        'judge.ProblemGroup',
+                        'judge.ProblemType',
+                    ],
+                },
+                ('judge.Solution', 'fa-pencil'),
+                {
+                    'model': 'judge.Contest',
+                    'icon': 'bar-chart',
+                    'children': [
+                        'judge.ContestParticipation',
+                    ],
+                },
+                {
+                    'model': 'judge.Submission',
+                    'icon': 'fa-check-square-o',
+                    'children': [
+                        'judge.Language',
+                        'judge.Judge',
+                    ],
+                },
+            ],
             'dashboard': {
                 'breadcrumbs': True,
             },
