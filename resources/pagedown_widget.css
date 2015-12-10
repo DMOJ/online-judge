@@ -14,7 +14,7 @@
     width: 100%;
     background: #fff;
     border: 1px solid DarkGray;
-    font-family: Consolas, "Liberation Mono", Monaco, "Courier New", monospace;
+    font-family: Consolas, "Liberation Mono", Monaco, "Courier New", monospace !important;
 }
 
 .wmd-preview {
