@@ -15,7 +15,8 @@ __all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentE
 
 @login_required
 def vote_comment(request, delta):
-    assert abs(delta) == 1
+    if abs(delta) != 1:
+        return HttpResponseBadRequest('Messing around, are we?', content_type='text/plain')
 
     if request.method != 'POST':
         return HttpResponseForbidden()
