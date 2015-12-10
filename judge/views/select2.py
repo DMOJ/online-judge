@@ -8,6 +8,8 @@ from judge.models import Profile, Organization, Problem, Comment, ContestProfile
 
 
 class Select2View(BaseListView):
+    paginate_by = 20
+
     def get(self, request, *args, **kwargs):
         self.request = request
         self.term = kwargs.get('term', request.GET.get('term', ''))
