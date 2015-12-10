@@ -6,54 +6,6 @@ extends base
 block meta
     meta(name='description', content="The {{ SITE_NAME }}'s contest list - past, present, and future.")
 
-block media
-    style.
-        .contest-list td:nth-child(2) {
-            min-width: 9.8em;
-        }
-
-        .contest-list td:nth-child(3) {
-            min-width: 6em;
-        }
-
-        .contest-list tbody tr {
-            height: 4em;
-        }
-
-        .time {
-            color: #555;
-        }
-
-        .floating-time-left {
-            position: absolute;
-            left: 0;
-        }
-
-        .floating-time-right {
-            position: absolute;
-            right: 0;
-        }
-
-        .floating-time {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-        }
-
-        .external-notice {
-            font-style:italic;
-            position:absolute;
-            bottom:0;
-        }
-
-        .external-notice a {
-            color:#777;
-        }
-
-        .external-notice:hover {
-            text-decoration: underline;
-        }
-
 block js_media
     script(type='text/javascript').
         $(document).ready(function () {
