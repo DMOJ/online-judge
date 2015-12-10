@@ -39,11 +39,11 @@ except ImportError:
     Select2Widget = None
     Select2MultipleWidget = None
 
-try:
-    from suit.admin import SortableModelAdmin, SortableTabularInline
-except ImportError:
-    SortableModelAdmin = object
-    SortableTabularInline = admin.TabularInline
+#try:
+#    from suit.admin import SortableModelAdmin, SortableTabularInline
+#except ImportError:
+SortableModelAdmin = object
+SortableTabularInline = admin.TabularInline
 
 use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
 
