@@ -12,7 +12,7 @@ from judge.models import Organization, Profile, Submission, Problem, PrivateMess
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 try:
-    from django_select2.widgets import Select2Widget
+    from django_select2.forms import Select2Widget
 except ImportError:
     Select2Widget = None
 
