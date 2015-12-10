@@ -53,6 +53,29 @@ else:
             },
             'custom_menu': [
                 {
+                    'model': 'judge.Problem',
+                    'icon': 'fa-question-circle',
+                    'children': [
+                        'judge.ProblemGroup',
+                        'judge.ProblemType',
+                    ],
+                },
+                {
+                    'model': 'judge.Submission',
+                    'icon': 'fa-check-square-o',
+                    'children': [
+                        'judge.Language',
+                        'judge.Judge',
+                    ],
+                },
+                {
+                    'model': 'judge.Contest',
+                    'icon': 'fa-bar-chart',
+                    'children': [
+                        'judge.ContestParticipation',
+                    ],
+                },
+                {
                     'model': 'auth.User',
                     'icon': 'fa-user',
                     'children': [
@@ -68,30 +91,7 @@ else:
                     ],
                 },
                 ('flatpages.FlatPage', 'fa-file-text-o'),
-                {
-                    'model': 'judge.Problem',
-                    'icon': 'fa-question-circle',
-                    'children': [
-                        'judge.ProblemGroup',
-                        'judge.ProblemType',
-                    ],
-                },
                 ('judge.Solution', 'fa-pencil'),
-                {
-                    'model': 'judge.Contest',
-                    'icon': 'fa-bar-chart',
-                    'children': [
-                        'judge.ContestParticipation',
-                    ],
-                },
-                {
-                    'model': 'judge.Submission',
-                    'icon': 'fa-check-square-o',
-                    'children': [
-                        'judge.Language',
-                        'judge.Judge',
-                    ],
-                },
                 {
                     'model': 'newsletter.Message',
                     'icon': 'fa-envelope',
