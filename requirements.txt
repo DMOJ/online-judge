@@ -1,0 +1,19 @@
+Django>=1.9,<=1.10
+django-compressor
+-e git://github.com/django-mptt/django-mptt.git#egg=django-mptt
+django-newsletter
+django-pagedown
+-e git://github.com/macropin/django-registration.git#egg=django-registration-redux
+django-reversion
+django-reversion-compare
+-e git+https://quantum5@github.com/DMOJ/django-select2.git#egg=django-select2
+django-social-share
+django-sortedm2m
+django-timedeltafield
+-e git+https://quantum5@github.com/DMOJ/dmoj-wpadmin.git#egg=dmoj-wpadmin
+lxml
+markdown2
+Pygments
+-e git://github.com/syrusakbary/pyjade.git#egg=pyjade
+python-social-auth
+pytz
