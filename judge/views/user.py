@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.template import RequestContext, Context
 from django.views.generic import DetailView
 from django.utils.functional import cached_property
-import reversion
+from reversion import revisions
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Submission, Rating
@@ -140,10 +140,10 @@ def edit_profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile, user=request.user)
         if form.is_valid():
-            with transaction.atomic(), reversion.create_revision():
+            with transaction.atomic(), revisions.create_revision():
                 form.save()
-                reversion.set_user(request.user)
-                reversion.set_comment('Updated on site')
+                revisions.set_user(request.user)
+                revisions.set_comment('Updated on site')
             return HttpResponseRedirect(request.path)
     else:
         form = ProfileForm(instance=profile, user=request.user)

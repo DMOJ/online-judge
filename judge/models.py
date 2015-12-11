@@ -18,7 +18,7 @@ from mptt.models import MPTTModel
 from reversion.models import Version
 from timedelta.fields import TimedeltaField
 import pytz
-from reversion import revisions as reversion
+from reversion import revisions
 from sortedm2m.fields import SortedManyToManyField
 
 from judge.fulltext import SearchManager
@@ -808,14 +808,14 @@ class Solution(models.Model):
         )
 
 
-reversion.register(Profile, exclude=['points', 'last_access', 'ip', 'rating'])
-reversion.register(Problem, follow=['language_limits'])
-reversion.register(LanguageLimit)
-reversion.register(Contest, follow=['contest_problems'])
-reversion.register(ContestProblem)
-reversion.register(Organization)
-reversion.register(BlogPost)
-reversion.register(Solution)
-reversion.register(Judge, fields=['name', 'created', 'auth_key', 'description'])
-reversion.register(Language)
-reversion.register(Comment, fields=['author', 'time', 'page', 'score', 'title', 'body', 'hidden', 'parent'])
+revisions.register(Profile, exclude=['points', 'last_access', 'ip', 'rating'])
+revisions.register(Problem, follow=['language_limits'])
+revisions.register(LanguageLimit)
+revisions.register(Contest, follow=['contest_problems'])
+revisions.register(ContestProblem)
+revisions.register(Organization)
+revisions.register(BlogPost)
+revisions.register(Solution)
+revisions.register(Judge, fields=['name', 'created', 'auth_key', 'description'])
+revisions.register(Language)
+revisions.register(Comment, fields=['author', 'time', 'page', 'score', 'title', 'body', 'hidden', 'parent'])

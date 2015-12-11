@@ -1,10 +1,10 @@
-import reversion
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError, transaction
 from django.forms.models import ModelForm
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
 from django.views.generic import DetailView, UpdateView
+from reversion import revisions
 
 from judge.models import Comment, CommentVote
 from judge.utils.views import TitleMixin
@@ -64,7 +64,7 @@ class CommentHistoryAjax(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CommentHistoryAjax, self).get_context_data(**kwargs)
-        context['revisions'] = reversion.get_for_object(self.object)
+        context['revisions'] = revisions.get_for_object(self.object)
         return context
 
     def get_object(self, queryset=None):
@@ -97,9 +97,9 @@ class CommentEditAjax(LoginRequiredMixin, UpdateView):
     form_class = CommentEditForm
 
     def form_valid(self, form):
-        with transaction.atomic(), reversion.create_revision():
-            reversion.set_comment('Edited from site')
-            reversion.set_user(self.request.user)
+        with transaction.atomic(), revisions.create_revision():
+            revisions.set_comment('Edited from site')
+            revisions.set_user(self.request.user)
             return super(CommentEditAjax, self).form_valid(form)
 
     def get_success_url(self):

@@ -13,7 +13,7 @@ from django.forms import Form, modelformset_factory
 from django.http import HttpResponseRedirect, Http404
 from django.views.generic import DetailView, ListView, View, UpdateView, FormView
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
-import reversion
+from reversion import revisions
 
 from judge.forms import EditOrganizationForm
 from judge.models import Organization, OrganizationRequest
@@ -255,9 +255,9 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
         return object
 
     def form_valid(self, form):
-        with transaction.atomic(), reversion.create_revision():
-            reversion.set_comment('Edited from site')
-            reversion.set_user(self.request.user)
+        with transaction.atomic(), revisions.create_revision():
+            revisions.set_comment('Edited from site')
+            revisions.set_user(self.request.user)
             return super(EditOrganization, self).form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
