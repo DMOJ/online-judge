@@ -1,35 +1,19 @@
 {% extends "admin/change_form.html" %}
 
-{% load staticfiles %}
-
 {% block extrahead %}{{ block.super }}
-<script>
-    django.jQuery(document).ready(function($) {
-        var suit = $('ul.box.menu-box li:first');
-        if (suit.length) {
-            $('li#suit-rejudge').insertBefore(suit);
-            $('.rejudgelink').remove();
-        } else {
-            $('.rejudgelink').insertAfter('.deletelink-box>a:last');
-        }
-    });
-</script>
-<style type="text/css">
-.submit-row .rejudgelink {
-    background: url("{% static 'admin/img/icon_clock.gif' %}") no-repeat scroll 0 50% transparent;
-    margin-left: 20px;
-    padding-left: 18px;
-}
-</style>
+    <script>
+        django.jQuery(function ($) {
+            $('.rejudgelink').appendTo('div#bottombar').show();
+        });
+    </script>
 {% endblock extrahead %}
 
 {% block after_field_sets %}{{ block.super }}
     {% if original %}
-        <a class="rejudgelink" href="{% url 'admin:judge_submission_rejudge' original.pk %}">Rejudge</a>
-        <div style="display: none">
-            <ul>
-                <li id="suit-rejudge"><a href="{% url 'admin:judge_submission_rejudge' original.pk %}"><i class="icon-refresh icon-alpha75"></i>Rejudge</a></li>
-            </ul>
-        </div>
+        <a style="display: none" title="Rejudge" href="{% url 'admin:judge_submission_rejudge' original.pk %}"
+           class="button rejudgelink">
+            <i class="fa fa-lg fa-question"></i>
+            <span class="text">Rejudge</span>
+        </a>
     {% endif %}
 {% endblock %}
