@@ -2,6 +2,8 @@ from calendar import Calendar, SUNDAY
 from collections import namedtuple, defaultdict
 from operator import attrgetter
 from datetime import timedelta, date, datetime, time
+
+from django.conf import settings
 from django.core.cache import cache
 
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
@@ -12,6 +14,7 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, H
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.html import escape
+from django.utils.timezone import make_aware
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView
 
@@ -270,7 +273,7 @@ ContestRankingProfile = namedtuple('ContestRankingProfile',
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
 
 
-def contest_ranking_list(contest, problems):
+def contest_ranking_list(contest, problems, tz=getattr(settings, 'TIME_ZONE', 'UTC')):
     cursor = connection.cursor()
     cursor.execute('''
         SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, MAX(sub.date) AS `last`
@@ -281,7 +284,7 @@ def contest_ranking_list(contest, problems):
         WHERE cp.contest_id = %s AND part.contest_id = %s
         GROUP BY cp.id, part.id
     ''', (contest.id, contest.id))
-    data = {(part, prob): (code, best, last) for part, prob, code, best, last in cursor.fetchall()}
+    data = {(part, prob): (code, best, make_aware(last, tz)) for part, prob, code, best, last in cursor.fetchall()}
     problems = map(attrgetter('id', 'points'), problems)
     cursor.close()
 
