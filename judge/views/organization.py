@@ -6,6 +6,7 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Count, Max
 from django.forms import Form, modelformset_factory
@@ -17,7 +18,7 @@ import reversion
 from judge.forms import EditOrganizationForm
 from judge.models import Organization, OrganizationRequest
 from judge.utils.ranker import ranker
-from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
+from judge.utils.views import generic_message, TitleMixin
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'JoinOrganization',
            'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization', 'OrganizationRequestDetail',

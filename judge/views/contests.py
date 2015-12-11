@@ -9,6 +9,7 @@ from django.core.cache import cache
 
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import connection
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
@@ -22,7 +23,7 @@ from django.views.generic.detail import BaseDetailView
 from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation
 from judge.utils.ranker import ranker
-from judge.utils.views import TitleMixin, generic_message, LoginRequiredMixin
+from judge.utils.views import TitleMixin, generic_message
 from judge import event_poster as event
 
 

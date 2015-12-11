@@ -1,12 +1,13 @@
+import reversion
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError, transaction
 from django.forms.models import ModelForm
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
 from django.views.generic import DetailView, UpdateView
-import reversion
 
 from judge.models import Comment, CommentVote
-from judge.utils.views import LoginRequiredMixin, TitleMixin
+from judge.utils.views import TitleMixin
 from judge.widgets import MathJaxPagedownWidget
 
 __all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentEditAjax', 'CommentContent',

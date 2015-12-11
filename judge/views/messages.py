@@ -3,6 +3,7 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Max
 from django.http import HttpResponseRedirect, Http404
 from django.utils import timezone
@@ -12,7 +13,7 @@ from django.views.generic.detail import SingleObjectMixin
 from judge.forms import EditOrganizationForm, NewOrganizationForm, NewMessageForm
 from judge.models import Organization, PrivateMessage, Profile
 from judge.utils.ranker import ranker
-from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
+from judge.utils.views import generic_message, TitleMixin
 
 
 class NewMessage(LoginRequiredMixin, TitleMixin, CreateView):
