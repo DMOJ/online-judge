@@ -285,7 +285,7 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
         WHERE cp.contest_id = %s AND part.contest_id = %s
         GROUP BY cp.id, part.id
     ''', (contest.id, contest.id))
-    data = {(part, prob): (code, best, make_aware(last, tz)) for part, prob, code, best, last in cursor.fetchall()}
+    data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in cursor.fetchall()}
     problems = map(attrgetter('id', 'points'), problems)
     cursor.close()
 
