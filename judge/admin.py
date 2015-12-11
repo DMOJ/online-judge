@@ -400,6 +400,9 @@ class SubmissionAdmin(admin.ModelAdmin):
         else:
             return Submission.objects.filter(problem__authors__id=request.user.profile.id)
 
+    def has_add_permission(self, request):
+        return False
+
     def has_change_permission(self, request, obj=None):
         if not request.user.has_perm('judge.edit_own_problem'):
             return False
