@@ -1,7 +1,6 @@
 from functools import partial
 from operator import itemgetter, attrgetter
 
-import reversion
 from django import forms
 from django.conf import settings
 from django.conf.urls import patterns, url
@@ -17,6 +16,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin
+from reversion.admin import VersionAdmin
 from reversion_compare.admin import CompareVersionAdmin
 
 from judge.dblock import LockModel
@@ -99,7 +99,7 @@ class TimezoneFilter(admin.SimpleListFilter):
         return queryset.filter(timezone=self.value())
 
 
-class ProfileAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class ProfileAdmin(Select2SuitMixin, VersionAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
               'last_access', 'ip', 'mute')
     readonly_fields = ('user',)
@@ -508,7 +508,7 @@ class CommentForm(ModelForm):
             }
 
 
-class CommentAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class CommentAdmin(Select2SuitMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('author', 'page', 'parent', 'score', 'hidden')}),
         ('Content', {'fields': ('title', 'body')}),
@@ -561,7 +561,7 @@ class LanguageForm(ModelForm):
                FilteredSelectMultiple('problems', False))
 
 
-class LanguageAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class LanguageAdmin(Select2SuitMixin, VersionAdmin):
     fields = ('key', 'name', 'short_name', 'common_name', 'ace', 'pygments', 'info', 'description', 'problems')
     list_display = ('key', 'name', 'common_name', 'info')
     form = LanguageForm
@@ -686,7 +686,7 @@ class JudgeAdminForm(ModelForm):
         }
 
 
-class JudgeAdmin(reversion.VersionAdmin):
+class JudgeAdmin(VersionAdmin):
     form = JudgeAdminForm
     readonly_fields = ('created', 'online', 'last_connect', 'ping', 'load', 'runtimes', 'problems')
     fieldsets = (
@@ -748,7 +748,7 @@ class ContestForm(ModelForm):
             }
 
 
-class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class ContestAdmin(Select2SuitMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
         ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
@@ -902,7 +902,7 @@ class OrganizationForm(ModelForm):
             }
 
 
-class OrganizationAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class OrganizationAdmin(Select2SuitMixin, VersionAdmin):
     readonly_fields = ('creation_date',)
     fields = ('name', 'key', 'short_name', 'is_open', 'about', 'registrant', 'creation_date', 'admins')
     list_display = ('name', 'key', 'short_name', 'is_open', 'registrant', 'creation_date')
@@ -938,7 +938,7 @@ class OrganizationAdmin(Select2SuitMixin, reversion.VersionAdmin):
         return obj.admins.filter(id=request.user.profile.id).exists()
 
 
-class BlogPostAdmin(reversion.VersionAdmin):
+class BlogPostAdmin(VersionAdmin):
     fieldsets = (
         (None, {'fields': ('title', 'slug', 'visible', 'sticky', 'publish_on')}),
         ('Content', {'fields': ('content',)}),
@@ -963,7 +963,7 @@ class SolutionForm(ModelForm):
             }
 
 
-class SolutionAdmin(reversion.VersionAdmin):
+class SolutionAdmin(VersionAdmin):
     fields = ('url', 'title', 'is_public', 'publish_on', 'problem', 'content')
     list_display = ('title', 'url', 'problem_link', 'link')
     search_fields = ('url', 'title')

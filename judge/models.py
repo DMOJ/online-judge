@@ -18,7 +18,7 @@ from mptt.models import MPTTModel
 from reversion.models import Version
 from timedelta.fields import TimedeltaField
 import pytz
-import reversion
+from reversion import revisions as reversion
 from sortedm2m.fields import SortedManyToManyField
 
 from judge.fulltext import SearchManager
