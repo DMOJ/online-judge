@@ -33,8 +33,8 @@ block body
                         | Your chosen username is already taken.
                     if form.email.errors
                         | Please enter a valid email.
-                    = form.password1.errors
-                    = form.password2.errors
+                    | #{form.password1.errors|striptags}
+                    | #{form.password2.errors|striptags}
                     if form.display_name.errors
                         | Invalid display name.
                     if form.timezone.errors
