@@ -3,6 +3,7 @@ from collections import namedtuple, defaultdict
 from operator import attrgetter
 from datetime import timedelta, date, datetime, time
 
+import pytz
 from django.conf import settings
 from django.core.cache import cache
 
@@ -273,7 +274,7 @@ ContestRankingProfile = namedtuple('ContestRankingProfile',
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
 
 
-def contest_ranking_list(contest, problems, tz=getattr(settings, 'TIME_ZONE', 'UTC')):
+def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, 'TIME_ZONE', 'UTC'))):
     cursor = connection.cursor()
     cursor.execute('''
         SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, MAX(sub.date) AS `last`
