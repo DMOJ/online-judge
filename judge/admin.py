@@ -3,7 +3,7 @@ from operator import itemgetter, attrgetter
 
 from django import forms
 from django.conf import settings
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
@@ -476,11 +476,8 @@ class SubmissionAdmin(admin.ModelAdmin):
     problem_name.admin_order_field = 'problem__name'
 
     def get_urls(self):
-        urls = super(SubmissionAdmin, self).get_urls()
-        my_urls = patterns('',
-                           url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge'),
-        )
-        return my_urls + urls
+        return [url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge')] + \
+               super(SubmissionAdmin, self).get_urls()
 
     def judge_view(self, request, id):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
@@ -810,12 +807,10 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
         return obj.organizers.filter(id=request.user.profile.id).exists()
 
     def get_urls(self):
-        urls = super(ContestAdmin, self).get_urls()
-        my_urls = patterns('',
-                           url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
-                           url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
-        )
-        return my_urls + urls
+        return [
+                   url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
+                   url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate')
+               ] + super(ContestAdmin, self).get_urls()
 
     def rate_all_view(self, request):
         if not request.user.has_perm('judge.contest_rating'):
