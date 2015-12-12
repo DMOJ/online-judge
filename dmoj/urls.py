@@ -1,20 +1,24 @@
 from django.conf import settings
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from django.contrib.sitemaps.views import sitemap
+from social.apps.django_app.urls import urlpatterns as social_auth_patterns
 
 from judge import views
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
 from judge.forms import CustomAuthenticationForm
+from judge.rabbitmq import views as rabbitmq_views
 from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap, \
     BlogPostSitemap, SolutionSitemap
 from judge.views import RegistrationView, ActivationView, TemplateView
-from judge.views import organization, language, status, blog, problem, solution, mailgun, license
+from judge.views import organization, language, status, blog, problem, solution, mailgun, license, register, user, submission, widgets, comment, contests, api
 from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
         ContestProfileSelect2View
 
 admin.autodiscover()
 
-register_patterns = patterns('',
+register_patterns = [
     url(r'^activate/complete/$',
         TemplateView.as_view(template_name='registration/activation_complete.jade',
                              title='Activation Successful!'),
@@ -37,61 +41,60 @@ register_patterns = patterns('',
         TemplateView.as_view(template_name='registration/registration_closed.html',
                              title='Registration not allowed'),
         name='registration_disallowed'),
-    url(r'^login/$',
-        'django.contrib.auth.views.login',
+    url(r'^login/$', auth_views.login,
         {'template_name': 'registration/login.jade', 'extra_context': {'title': 'Login'},
          'authentication_form': CustomAuthenticationForm},
         name='auth_login'),
     url(r'^logout/$',
-        'django.contrib.auth.views.logout',
+        auth_views.logout,
         {'template_name': 'registration/logout.jade', 'extra_context': {'title': 'You have been successfully logged out.'}},
         name='auth_logout'),
     url(r'^password/change/$',
-        'django.contrib.auth.views.password_change',
+        auth_views.password_change,
         {'template_name': 'registration/password_change_form.jade', 'extra_context': {'title': 'Change Password'}},
         name='password_change'),
     url(r'^password/change/done/$',
-        'django.contrib.auth.views.password_change_done',
+        auth_views.password_change_done,
         {'template_name': 'registration/password_change_done.jade', 'extra_context': {'title': 'Password Changed'}},
         name='password_change_done'),
     url(r'^password/reset/$',
-        'django.contrib.auth.views.password_reset',
+        auth_views.password_reset,
         {'template_name': 'registration/password_reset.jade', 'extra_context': {'title': 'Reset Password'},
          'html_email_template_name': 'registration/password_reset_email.html',
          'email_template_name': 'registration/password_reset_email.txt'},
         name='password_reset'),
     url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
-        'django.contrib.auth.views.password_reset_confirm',
+        auth_views.password_reset_confirm,
         {'template_name': 'registration/password_reset_confirm.jade', 'extra_context': {'title': 'Confirm Reset Password'}},
         name='password_reset_confirm'),
     url(r'^password/reset/complete/$',
-        'django.contrib.auth.views.password_reset_complete',
+        auth_views.password_reset_complete,
         {'template_name': 'registration/password_reset_complete.jade', 'extra_context': {'title': 'Password Reset Complete'}},
         name='password_reset_complete'),
     url(r'^password/reset/done/$',
-        'django.contrib.auth.views.password_reset_done',
+        auth_views.password_reset_done,
         {'template_name': 'registration/password_reset_done.jade', 'extra_context': {'title': 'Password Reset Successful'}},
         name='password_reset_done'),
-    url(r'^social/error/$', 'judge.views.register.social_auth_error', name='social_auth_error'),
-)
+    url(r'^social/error/$', register.social_auth_error, name='social_auth_error'),
+]
 
 
 def exception(request):
     raise RuntimeError('@Xyene asked me to cause this')
 
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', blog.PostList.as_view(template_name='home.jade', title='Home'), kwargs={'page': 1}, name='home'),
     url(r'^500/$', exception),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include(register_patterns)),
-    url('', include('social.apps.django_app.urls', namespace='social')),
+    url('', include(social_auth_patterns, namespace='social')),
 
-    url(r'^users/$', 'judge.views.users'),
+    url(r'^users/$', user.users),
     url(r'^user/(?P<username>\w+)$', views.UserAboutPage.as_view(), name='user_page'),
     url(r'^user/(?P<username>\w+)/solved$', views.UserProblemsPage.as_view(), name='user_problems'),
     url(r'^user$', views.UserAboutPage.as_view(), name='user_page'),
-    url(r'^edit/profile/$', 'judge.views.edit_profile'),
+    url(r'^edit/profile/$', user.edit_profile),
 
     url(r'^problems/$', problem.ProblemList.as_view(), name='problem_list'),
     url(r'^problems/own/$', problem.OwnProblemList.as_view(), name='own_problem_list'),
@@ -101,49 +104,49 @@ urlpatterns = patterns('',
     url(r'^problem/(?P<code>[^/]+)/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
     url(r'^problem/(?P<code>[^/]+)/latex$', problem.ProblemLatexView.as_view(), name='problem_latex'),
     url(r'^problem/(?P<code>[^/]+)/clone', problem.clone_problem, name='problem_clone'),
-    url(r'^problem/([^/]+)/submit$', 'judge.views.problem_submit'),
-    url(r'^problem/([^/]+)/resubmit/(\d+)$', 'judge.views.problem_submit'),
+    url(r'^problem/([^/]+)/submit$', problem.problem_submit),
+    url(r'^problem/([^/]+)/resubmit/(\d+)$', problem.problem_submit),
 
-    url(r'^submit/problem/$', 'judge.views.problem_submit'),
-    url(r'^rejudge$', 'judge.views.rejudge_submission'),
+    url(r'^submit/problem/$', problem.problem_submit),
+    url(r'^rejudge$', widgets.rejudge_submission),
     url(r'^src/(?P<pk>\d+)$', views.SubmissionSource.as_view(), name='submission_source'),
     url(r'^submission/(?P<pk>\d+)$', views.SubmissionStatus.as_view(), name='submission_status'),
-    url(r'^submission/(\d+)/abort$', 'judge.views.abort_submission'),
-    url(r'^submission/(\d+)/html$', 'judge.views.single_submission'),
+    url(r'^submission/(\d+)/abort$', submission.abort_submission),
+    url(r'^submission/(\d+)/html$', submission.single_submission),
 
     url(r'^submissions/$', views.AllSubmissions.as_view(), name='all_submissions'),
     url(r'^submissions/(?P<page>\d+)$', views.AllSubmissions.as_view(), name='all_submissions'),
 
-    url(r'^problem/(?P<problem>\w+)/', include(patterns('',
+    url(r'^problem/(?P<problem>\w+)/', include([
         url(r'^rank/$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
         url(r'^rank/(?P<page>\d+)$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
         url(r'^submissions/$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
         url(r'^submissions/(?P<page>\d+)$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
         url(r'^submissions/(?P<user>\w+)/$', views.UserProblemSubmissions.as_view(), name='user_submissions'),
         url(r'^submissions/(?P<user>\w+)/(?P<page>\d+)$', views.UserProblemSubmissions.as_view(), name='user_submissions'),
-    ))),
+    ])),
 
     url(r'^user/(?P<user>\w+)/submissions/$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
     url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
 
-    url(r'^single_submission', 'judge.views.single_submission_query'),
+    url(r'^single_submission', submission.single_submission_query),
     url(r'^submission_testcases', views.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
 
-    url(r'^comments/upvote/$', 'judge.views.upvote_comment'),
-    url(r'^comments/downvote/$', 'judge.views.downvote_comment'),
-    url(r'^comments/(?P<id>\d+)/', include(patterns('',
+    url(r'^comments/upvote/$', comment.upvote_comment),
+    url(r'^comments/downvote/$', comment.downvote_comment),
+    url(r'^comments/(?P<id>\d+)/', include([
         url(r'^revisions$', views.CommentHistory.as_view(), name='comment_history'),
         url(r'^edit$', views.CommentEdit.as_view(), name='comment_edit'),
         url(r'^revisions/ajax$', views.CommentHistoryAjax.as_view(), name='comment_history_ajax'),
         url(r'^edit/ajax$', views.CommentEditAjax.as_view(), name='comment_edit_ajax'),
         url(r'^render$', views.CommentContent.as_view(), name='comment_content'),
-    ))),
+    ])),
 
     url(r'^contests/$', views.ContestList.as_view(), name='contest_list'),
     url(r'^contests/(?P<year>\d+)/(?P<month>\d+)/$', views.ContestCalendar.as_view(), name='contest_calendar'),
     url(r'^contest/(?P<key>\w+)$', views.ContestDetail.as_view(), name='contest_view'),
-    url(r'^contest/(\w+)/ranking/$', 'judge.views.contest_ranking', name='contest_ranking'),
-    url(r'^contest/(\w+)/ranking/ajax$', 'judge.views.contest_ranking_ajax', name='contest_ranking_ajax'),
+    url(r'^contest/(\w+)/ranking/$', contests.contest_ranking, name='contest_ranking'),
+    url(r'^contest/(\w+)/ranking/ajax$', contests.contest_ranking_ajax, name='contest_ranking_ajax'),
     url(r'^contest/(?P<key>\w+)/join$', views.ContestJoin.as_view(), name='contest_join'),
     url(r'^contest/(?P<key>\w+)/leave$', views.ContestLeave.as_view(), name='contest_leave'),
 
@@ -170,19 +173,19 @@ urlpatterns = patterns('',
     url(r'^runtime/(?P<key>\w+)$', language.LanguageDetail.as_view(), name='runtime_info'),
     url(r'^runtime/(?P<key>\w+)/judges$', language.LanguageJudgesAjaxList.as_view(), name='runtime_judge_ajax'),
 
-    url(r'^status/$', 'judge.views.status_all'),
-    url(r'^status-table/$', 'judge.views.status_table'),
+    url(r'^status/$', status.status_all),
+    url(r'^status-table/$', status.status_table),
     url(r'^judge/(?P<name>[\w.]+)$', status.JudgeDetail.as_view(), name='judge_info'),
 
-    url(r'^api/contest/list$', 'judge.views.api_contest_list'),
-    url(r'^api/problem/list$', 'judge.views.api_problem_list'),
-    url(r'^api/problem/info/(\w+)', 'judge.views.api_problem_info'),
-    url(r'^api/user/list', 'judge.views.api_user_list'),
-    url(r'^api/user/info/(\w+)', 'judge.views.api_user_info'),
-    url(r'^api/user/submissions/(\w+)', 'judge.views.api_user_submissions'),
-    url(r'^api/judge/auth/rabbitmq/user$', 'judge.rabbitmq.views.auth_user'),
-    url(r'^api/judge/auth/rabbitmq/vhost$', 'judge.rabbitmq.views.auth_vhost'),
-    url(r'^api/judge/auth/rabbitmq/resource$', 'judge.rabbitmq.views.auth_resource'),
+    url(r'^api/contest/list$', api.api_contest_list),
+    url(r'^api/problem/list$', api.api_problem_list),
+    url(r'^api/problem/info/(\w+)', api.api_problem_info),
+    url(r'^api/user/list', api.api_user_list),
+    url(r'^api/user/info/(\w+)', api.api_user_info),
+    url(r'^api/user/submissions/(\w+)', api.api_user_submissions),
+    url(r'^api/judge/auth/rabbitmq/user$', rabbitmq_views.auth_user),
+    url(r'^api/judge/auth/rabbitmq/vhost$', rabbitmq_views.auth_vhost),
+    url(r'^api/judge/auth/rabbitmq/resource$', rabbitmq_views.auth_resource),
 
     url(r'^blog/$', blog.PostList.as_view(), name='blog_post_list'),
     url(r'^blog/(?P<page>\d+)$', blog.PostList.as_view(), name='blog_post_list'),
@@ -194,16 +197,16 @@ urlpatterns = patterns('',
     url(r'^mailgun/mail_activate/$', mailgun.MailgunActivationView.as_view(), name='mailgun_activate'),
     url(r'^detect_timezone$', views.DetectTimezone.as_view(), name='detect_timezone'),
 
-    url(r'^feed/', include(patterns('',
+    url(r'^feed/', include([
         url(r'^problems/rss/$', ProblemFeed(), name='problem_rss'),
         url(r'^problems/atom/$', AtomProblemFeed(), name='problem_atom'),
         url(r'^comment/rss/$', CommentFeed(), name='comment_rss'),
         url(r'^comment/atom/$', AtomCommentFeed(), name='comment_atom'),
         url(r'^blog/rss/$', BlogFeed()),
         url(r'^blog/atom/$', AtomBlogFeed()),
-    ))),
+    ])),
 
-    url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': {
         'problem': ProblemSitemap,
         'user': UserSitemap,
         'home': HomePageSitemap,
@@ -216,29 +219,27 @@ urlpatterns = patterns('',
         ]),
     }}),
 
-    url(r'^judge-select2/', include(patterns('',
+    url(r'^judge-select2/', include([
         url(r'^profile/', UserSelect2View.as_view(), name='profile_select2'),
         url(r'^organization/', OrganizationSelect2View.as_view(), name='organization_select2'),
         url(r'^problem/', ProblemSelect2View.as_view(), name='problem_select2'),
         url(r'^comment/', CommentSelect2View.as_view(), name='comment_select2'),
         url(r'^contest_profile/', ContestProfileSelect2View.as_view(), name='contest_profile_select2'),
-    ))),
-)
+    ])),
+]
 
 handler404 = 'judge.views.error.error404'
 handler403 = 'judge.views.error.error403'
 handler500 = 'judge.views.error.error500'
 
 if 'tinymce' in settings.INSTALLED_APPS:
-    urlpatterns += patterns('', (r'^tinymce/', include('tinymce.urls')))
+    urlpatterns.append(url(r'^tinymce/', include('tinymce.urls')))
 
 if 'newsletter' in settings.INSTALLED_APPS:
-    urlpatterns += patterns('', (r'^newsletter/', include('newsletter.urls')))
+    urlpatterns.append(url(r'^newsletter/', include('newsletter.urls')))
 
 if 'django_select2' in settings.INSTALLED_APPS:
-    urlpatterns += patterns('',
-        url(r'^select2/', include('django_select2.urls')),
-    )
+    urlpatterns.append(url(r'^select2/', include('django_select2.urls')))
 
 if 'django_uwsgi' in settings.INSTALLED_APPS:
-    urlpatterns = patterns('', url(r'^admin/uwsgi/', include('django_uwsgi.urls'))) + urlpatterns
+    urlpatterns.insert(0, url(r'^admin/uwsgi/', include('django_uwsgi.urls')))
