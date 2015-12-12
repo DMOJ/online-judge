@@ -157,7 +157,7 @@ urlpatterns = [
             paged_list_view(ranked_submission.ContestRankedSubmission, 'contest_ranked_submissions')),
 
         url(r'^/submissions/(?P<user>\w+)/(?P<problem>\w+)/',
-            paged_list_view(submission.UserContestSubmissions.as_view(), 'contest_user_submissions')),
+            paged_list_view(submission.UserContestSubmissions, 'contest_user_submissions')),
     ])),
 
     url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
