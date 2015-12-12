@@ -6,11 +6,11 @@ django-pagedown
 -e git://github.com/macropin/django-registration.git#egg=django-registration-redux
 django-reversion
 django-reversion-compare
--e git+https://quantum5@github.com/DMOJ/django-select2.git#egg=django-select2
+-e git://github.com/DMOJ/django-select2.git#egg=django-select2
 django-social-share
 django-sortedm2m
 django-timedeltafield
--e git+https://quantum5@github.com/DMOJ/dmoj-wpadmin.git#egg=dmoj-wpadmin
+-e git://github.com/DMOJ/dmoj-wpadmin.git#egg=dmoj-wpadmin
 lxml
 markdown2
 Pygments
