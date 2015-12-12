@@ -83,6 +83,13 @@ def exception(request):
     raise RuntimeError('@Xyene asked me to cause this')
 
 
+def paged_list_view(view, name):
+    return include([
+        url(r'$', view, name=name),
+        url(r'^(?P<page>\d+)$', view, name=name),
+    ])
+
+
 urlpatterns = [
     url(r'^$', blog.PostList.as_view(template_name='home.jade', title='Home'), kwargs={'page': 1}, name='home'),
     url(r'^500/$', exception),
@@ -100,13 +107,19 @@ urlpatterns = [
     url(r'^problems/own/$', problem.OwnProblemList.as_view(), name='own_problem_list'),
     url(r'^problems/random/$', problem.random_problem, name='problem_random'),
 
-    url(r'^problem/(?P<problem>[^/]+)$', problem.ProblemDetail.as_view(), name='problem_detail'),
-    url(r'^problem/(?P<problem>[^/]+)/raw$', problem.ProblemRaw.as_view(), name='problem_raw'),
-    url(r'^problem/(?P<problem>[^/]+)/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
-    url(r'^problem/(?P<problem>[^/]+)/latex$', problem.ProblemLatexView.as_view(), name='problem_latex'),
-    url(r'^problem/(?P<problem>[^/]+)/clone', problem.clone_problem, name='problem_clone'),
-    url(r'^problem/([^/]+)/submit$', problem.problem_submit, name='problem_submit'),
-    url(r'^problem/([^/]+)/resubmit/(\d+)$', problem.problem_submit, name='problem_submit'),
+    url(r'^problem/(?P<problem>[^/]+)', include([
+        url(r'^$', problem.ProblemDetail.as_view(), name='problem_detail'),
+        url(r'^/raw$', problem.ProblemRaw.as_view(), name='problem_raw'),
+        url(r'^/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
+        url(r'^/latex$', problem.ProblemLatexView.as_view(), name='problem_latex'),
+        url(r'^/clone', problem.clone_problem, name='problem_clone'),
+        url(r'^/submit$', problem.problem_submit, name='problem_submit'),
+        url(r'^/resubmit/(?P<submission>\d+)$', problem.problem_submit, name='problem_submit'),
+
+        url(r'^/rank/$', paged_list_view(ranked_submission.RankedSubmissions.as_view(), 'ranked_submissions')),
+        url(r'^/submissions/$', paged_list_view(submission.ProblemSubmissions.as_view(), 'chronological_submissions')),
+        url(r'^/submissions/(?P<user>\w+)/$', paged_list_view(submission.UserProblemSubmissions.as_view(), 'user_submissions')),
+    ])),
 
     url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
     url(r'^src/(?P<pk>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
@@ -116,15 +129,6 @@ urlpatterns = [
 
     url(r'^submissions/$', submission.AllSubmissions.as_view(), name='all_submissions'),
     url(r'^submissions/(?P<page>\d+)$', submission.AllSubmissions.as_view(), name='all_submissions'),
-
-    url(r'^problem/(?P<problem>\w+)/', include([
-        url(r'^rank/$', ranked_submission.RankedSubmissions.as_view(), name='ranked_submissions'),
-        url(r'^rank/(?P<page>\d+)$', ranked_submission.RankedSubmissions.as_view(), name='ranked_submissions'),
-        url(r'^submissions/$', submission.ProblemSubmissions.as_view(), name='chronological_submissions'),
-        url(r'^submissions/(?P<page>\d+)$', submission.ProblemSubmissions.as_view(), name='chronological_submissions'),
-        url(r'^submissions/(?P<user>\w+)/$', submission.UserProblemSubmissions.as_view(), name='user_submissions'),
-        url(r'^submissions/(?P<user>\w+)/(?P<page>\d+)$', submission.UserProblemSubmissions.as_view(), name='user_submissions'),
-    ])),
 
     url(r'^user/(?P<user>\w+)/submissions/$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),
     url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),
