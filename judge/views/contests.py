@@ -93,7 +93,7 @@ class ContestMixin(object):
     context_object_name = 'contest'
     model = Contest
     slug_field = 'key'
-    slug_url_kwarg = 'key'
+    slug_url_kwarg = 'contest'
 
     def get_object(self, queryset=None):
         contest = super(ContestMixin, self).get_object(queryset)
