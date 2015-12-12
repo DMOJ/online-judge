@@ -37,7 +37,8 @@ def get_contest_problem(problem, profile):
 
 class ProblemMixin(object):
     model = Problem
-    slug_url_kwarg = slug_field = 'code'
+    slug_url_kwarg = 'problem'
+    slug_field = 'code'
 
     def get_object(self, queryset=None):
         problem = super(ProblemMixin, self).get_object(queryset)

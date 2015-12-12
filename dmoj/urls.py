@@ -99,11 +99,12 @@ urlpatterns = [
     url(r'^problems/$', problem.ProblemList.as_view(), name='problem_list'),
     url(r'^problems/own/$', problem.OwnProblemList.as_view(), name='own_problem_list'),
     url(r'^problems/random/$', problem.random_problem, name='problem_random'),
-    url(r'^problem/(?P<code>[^/]+)$', problem.ProblemDetail.as_view(), name='problem_detail'),
-    url(r'^problem/(?P<code>[^/]+)/raw$', problem.ProblemRaw.as_view(), name='problem_raw'),
-    url(r'^problem/(?P<code>[^/]+)/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
-    url(r'^problem/(?P<code>[^/]+)/latex$', problem.ProblemLatexView.as_view(), name='problem_latex'),
-    url(r'^problem/(?P<code>[^/]+)/clone', problem.clone_problem, name='problem_clone'),
+
+    url(r'^problem/(?P<problem>[^/]+)$', problem.ProblemDetail.as_view(), name='problem_detail'),
+    url(r'^problem/(?P<problem>[^/]+)/raw$', problem.ProblemRaw.as_view(), name='problem_raw'),
+    url(r'^problem/(?P<problem>[^/]+)/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
+    url(r'^problem/(?P<problem>[^/]+)/latex$', problem.ProblemLatexView.as_view(), name='problem_latex'),
+    url(r'^problem/(?P<problem>[^/]+)/clone', problem.clone_problem, name='problem_clone'),
     url(r'^problem/([^/]+)/submit$', problem.problem_submit, name='problem_submit'),
     url(r'^problem/([^/]+)/resubmit/(\d+)$', problem.problem_submit, name='problem_submit'),
 
