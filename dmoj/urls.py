@@ -10,7 +10,7 @@ from judge.forms import CustomAuthenticationForm
 from judge.rabbitmq import views as rabbitmq_views
 from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap, \
     BlogPostSitemap, SolutionSitemap
-from judge.views.register import RegistrationView, ActivationView, TemplateView
+from judge.views.register import RegistrationView, ActivationView
 from judge.views import TitledTemplateView
 from judge.views import organization, language, status, blog, problem, solution, mailgun, license, register, user, submission, widgets, comment, contests, api, ranked_submission
 from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
