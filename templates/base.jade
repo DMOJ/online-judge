@@ -116,15 +116,24 @@ html(lang='en')
                                 a(href='{% url "contest_view" CONTEST.contest.key %}', style='vertical-align: middle;')
                                     | #{CONTEST.contest.name} -
                                     #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
-                        a(href='{% url "user_page" %}')
-                            | Hello,&nbsp;
-                            b #{request.user.username}
-                        | &nbsp;|
-                        if request.user.is_staff or request.user.is_superuser
-                            a(href='{% url "admin:index" %}') admin
+                        if perms.test_site
+                            li(style='float: right; width: 124px; height: 44px;text-transform: none;')
+                                a(href='{% url "user_page" %}', style='display: block; padding: 0px; height: 100%;')
+                                    div(style='font-size: 13px; height: 100%; padding-top: 8px;')
+                                        img(src='{% gravatar_url request.user.email 135 request.user.profile.mute %}', style='vertical-align: middle; border-radius: 6px; display: inline; margin-right: 3px; margin-top: 2px; margin-left: 5px;', height='24', width='24')
+                                        span(style='color: rgb(238, 238, 238); vertical-align: middle; display: inline; text-transform: unset; margin-top: 11px; padding: 0px; margin-right: 5px;')
+                                            | Hello,&nbsp;
+                                            b #{request.user.username}
+                        else
+                            a(href='{% url "user_page" %}')
+                                | Hello,&nbsp;
+                                b #{request.user.username}
                             | &nbsp;|
-                        a(href='{% url "django.contrib.auth.views.logout" %}?next=')
-                            | &nbsp;log out
+                            if request.user.is_staff or request.user.is_superuser
+                                a(href='{% url "admin:index" %}') admin
+                                | &nbsp;|
+                            a(href='{% url "django.contrib.auth.views.logout" %}?next=')
+                                | &nbsp;log out
                     else
                         a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
                             b Login
