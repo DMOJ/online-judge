@@ -85,7 +85,7 @@ def exception(request):
 
 def paged_list_view(view, name):
     return include([
-        url(r'$', view, name=name),
+        url(r'^$', view, name=name),
         url(r'^(?P<page>\d+)$', view, name=name),
     ])
 
