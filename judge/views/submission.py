@@ -96,7 +96,7 @@ def abort_submission(request, submission):
             request.user.profile != submission.user and not request.user.has_perm('abort_any_submission'):
         raise PermissionDenied()
     submission.abort()
-    return HttpResponseRedirect(reverse('submission_status', args=(submission,)))
+    return HttpResponseRedirect(reverse('submission_status', args=(submission.id,)))
 
 
 class SubmissionsListBase(TitleMixin, ListView):
