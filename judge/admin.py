@@ -297,10 +297,10 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         if form.changed_data and 'is_public' in form.changed_data:
             self._update_points(obj.id, '+' if obj.is_public else '-')
 
-    def construct_change_message(self, request, form, formsets):
+    def construct_change_message(self, request, form, *args, **kwargs):
         if form.cleaned_data.get('change_message'):
             return form.cleaned_data['change_message']
-        return super(ProblemAdmin, self).construct_change_message(request, form, formsets)
+        return super(ProblemAdmin, self).construct_change_message(request, form, *args, **kwargs)
 
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
