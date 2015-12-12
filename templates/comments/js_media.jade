@@ -49,11 +49,11 @@
             }
 
             window.comment_upvote = function (id) {
-                ajax_vote('{% url "judge.views.upvote_comment" %}', id, 1);
+                ajax_vote('{% url "comment_upvote" %}', id, 1);
             };
 
             window.comment_downvote = function (id) {
-                ajax_vote('{% url "judge.views.downvote_comment" %}', id, -1);
+                ajax_vote('{% url "comment_downvote" %}', id, -1);
             };
 
             $('.comments').find('a.edit-link').featherlight({

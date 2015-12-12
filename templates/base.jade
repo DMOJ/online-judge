@@ -130,8 +130,8 @@ html(lang='en')
                                 div(style='width:150px')
                                     div
                                         a.user-opt(href='{% url "admin:index" %}') Admin
-                                        a.user-opt(href='{% url "judge.views.edit_profile" %}') Edit profile
-                                        a.user-opt(href='{% url "django.contrib.auth.views.logout" %}?next=') Log out
+                                        a.user-opt(href='{% url "user_edit_profile" %}') Edit profile
+                                        a.user-opt(href='{% url "auth_logout" %}?next=') Log out
                 span#user-links(style='text-align: right')
                     if request.user.is_authenticated
                         if IN_CONTEST

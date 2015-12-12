@@ -33,7 +33,7 @@ block js_media
                 window.rejudge_submission = function(id) {
                     if (confirm('Are you sure you want to rejudge?')) {
                         $.ajax({
-                            url: '{% url "judge.views.rejudge_submission" %}',
+                            url: '{% url "submission_rejudge" %}',
                             type: "POST",
                             data: {
                                 id: id,
@@ -99,7 +99,7 @@ block js_media
                         if (force || !doing_ajax) {
                             if (!force) doing_ajax = true;
                             $.ajax({
-                                url: '{% url "judge.views.single_submission_query" %}',
+                                url: '{% url "submission_single_query" %}',
                                 data: {id: id, show_problem: show_problem}
                             }).done(function (data) {
                                 var was_shown = row.is(':visible');

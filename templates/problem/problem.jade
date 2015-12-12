@@ -24,7 +24,7 @@ block title_row
                 = ' View as PDF'
 
 block info_float
-    a.unselectable.button.full(href='{% url "judge.views.problem_submit" problem.code %}') Submit solution
+    a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') Submit solution
     hr
     if request.user.is_authenticated and has_submissions
         a(href='{% url "user_submissions" problem.code request.user.username %}')

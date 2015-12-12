@@ -10,7 +10,7 @@ block js_media
             table.tablesorter();
             setInterval(function () {
                 $.ajax({
-                    url: '{% url "judge.views.status_table" %}'
+                    url: '{% url "status_table" %}'
                 }).done(function (data) {
                     table.html(data);
                 });

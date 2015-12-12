@@ -8,7 +8,7 @@ div.page-title
             a(href='{% url "user_problems" user.user.username %}') Problems
         if user.user == request.user
             li(class=('active' if user_tab == 'edit' else ''))
-                a(href='{% url "judge.views.edit_profile" %}') Edit profile
+                a(href='{% url "user_edit_profile" %}') Edit profile
         elif perms.judge.change_user
             li
                 a(href='{% url "admin:auth_user_change" user.user.id %}') Admin

@@ -94,7 +94,7 @@ urlpatterns = [
     url(r'^user/(?P<username>\w+)$', views.UserAboutPage.as_view(), name='user_page'),
     url(r'^user/(?P<username>\w+)/solved$', views.UserProblemsPage.as_view(), name='user_problems'),
     url(r'^user$', views.UserAboutPage.as_view(), name='user_page'),
-    url(r'^edit/profile/$', user.edit_profile),
+    url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
 
     url(r'^problems/$', problem.ProblemList.as_view(), name='problem_list'),
     url(r'^problems/own/$', problem.OwnProblemList.as_view(), name='own_problem_list'),
@@ -104,14 +104,13 @@ urlpatterns = [
     url(r'^problem/(?P<code>[^/]+)/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
     url(r'^problem/(?P<code>[^/]+)/latex$', problem.ProblemLatexView.as_view(), name='problem_latex'),
     url(r'^problem/(?P<code>[^/]+)/clone', problem.clone_problem, name='problem_clone'),
-    url(r'^problem/([^/]+)/submit$', problem.problem_submit),
-    url(r'^problem/([^/]+)/resubmit/(\d+)$', problem.problem_submit),
+    url(r'^problem/([^/]+)/submit$', problem.problem_submit, name='problem_submit'),
+    url(r'^problem/([^/]+)/resubmit/(\d+)$', problem.problem_submit, name='problem_submit'),
 
-    url(r'^submit/problem/$', problem.problem_submit),
-    url(r'^rejudge$', widgets.rejudge_submission),
+    url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
     url(r'^src/(?P<pk>\d+)$', views.SubmissionSource.as_view(), name='submission_source'),
     url(r'^submission/(?P<pk>\d+)$', views.SubmissionStatus.as_view(), name='submission_status'),
-    url(r'^submission/(\d+)/abort$', submission.abort_submission),
+    url(r'^submission/(\d+)/abort$', submission.abort_submission, name='submission_abort'),
     url(r'^submission/(\d+)/html$', submission.single_submission),
 
     url(r'^submissions/$', views.AllSubmissions.as_view(), name='all_submissions'),
@@ -129,11 +128,11 @@ urlpatterns = [
     url(r'^user/(?P<user>\w+)/submissions/$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
     url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
 
-    url(r'^single_submission', submission.single_submission_query),
+    url(r'^single_submission', submission.single_submission_query, name='submission_single_query'),
     url(r'^submission_testcases', views.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
 
-    url(r'^comments/upvote/$', comment.upvote_comment),
-    url(r'^comments/downvote/$', comment.downvote_comment),
+    url(r'^comments/upvote/$', comment.upvote_comment, name='comment_upvote'),
+    url(r'^comments/downvote/$', comment.downvote_comment, name='comment_dowmvote'),
     url(r'^comments/(?P<id>\d+)/', include([
         url(r'^revisions$', views.CommentHistory.as_view(), name='comment_history'),
         url(r'^edit$', views.CommentEdit.as_view(), name='comment_edit'),
@@ -173,8 +172,8 @@ urlpatterns = [
     url(r'^runtime/(?P<key>\w+)$', language.LanguageDetail.as_view(), name='runtime_info'),
     url(r'^runtime/(?P<key>\w+)/judges$', language.LanguageJudgesAjaxList.as_view(), name='runtime_judge_ajax'),
 
-    url(r'^status/$', status.status_all),
-    url(r'^status-table/$', status.status_table),
+    url(r'^status/$', status.status_all, name='status_all'),
+    url(r'^status-table/$', status.status_table, name='status_table'),
     url(r'^judge/(?P<name>[\w.]+)$', status.JudgeDetail.as_view(), name='judge_info'),
 
     url(r'^api/contest/list$', api.api_contest_list),
