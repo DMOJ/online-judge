@@ -93,15 +93,15 @@ class SubmissionTestCaseQuery(SubmissionStatus):
         return super(SubmissionTestCaseQuery, self).get(request, *args, **kwargs)
 
 
-def abort_submission(request, code):
+def abort_submission(request, pk):
     if request.method != 'POST':
         raise Http404()
-    submission = Submission.objects.get(id=int(code))
+    submission = Submission.objects.get(id=int(pk))
     if not request.user.is_authenticated() or \
             request.user.profile != submission.user and not request.user.has_perm('abort_any_submission'):
         raise PermissionDenied()
     submission.abort()
-    return HttpResponseRedirect(reverse('submission_status', args=(code,)))
+    return HttpResponseRedirect(reverse('submission_status', args=(pk,)))
 
 
 class SubmissionsListBase(TitleMixin, ListView):
@@ -256,11 +256,11 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
         return context
 
 
-def single_submission(request, id, show_problem=True):
+def single_submission(request, pk, show_problem=True):
     try:
         authenticated = request.user.is_authenticated()
         return render(request, 'submission/row.jade', {
-            'submission': submission_related(Submission.objects).get(id=int(id)),
+            'submission': submission_related(Submission.objects).get(id=int(pk)),
             'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
             'show_problem': show_problem,
             'profile_id': request.user.profile.id if authenticated else 0,
