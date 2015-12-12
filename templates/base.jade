@@ -114,7 +114,7 @@ html(lang='en')
                         li(style='float: right; width: 124px; height: 44px;text-transform: none;')
                             a(href='{% url "user_page" %}', style='display: block; padding: 0px; height: 100%;')
                                 div(style='font-size: 13px; height: 100%; padding-top: 8px;')
-                                    img(src='{% gravatar_url request.user.email 32 %}', style='vertical-align: middle; border-radius: 6px; display: inline; margin-right: 9px; margin-top: 2px; margin-left: 5px;', height='24', width='24')
+                                    img(src='{% gravatar_url request.user.email 32 %}', style='vertical-align: middle; border-radius: 6px; display: inline; margin-right: 6px; margin-top: 2px; margin-left: 5px;', height='24', width='24')
                                     span(style='color: rgb(238, 238, 238); vertical-align: middle; display: inline; text-transform: unset; margin-top: 11px; padding: 0px; margin-right: 5px;')
                                         | Hello,&nbsp;
                                         b #{request.user.username}
