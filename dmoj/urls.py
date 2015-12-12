@@ -97,12 +97,6 @@ urlpatterns = [
     url(r'^accounts/', include(register_patterns)),
     url(r'^', include(social_auth_patterns, namespace='social')),
 
-    url(r'^users/$', user.users),
-    url(r'^user/(?P<username>\w+)$', user.UserAboutPage.as_view(), name='user_page'),
-    url(r'^user/(?P<username>\w+)/solved$', user.UserProblemsPage.as_view(), name='user_problems'),
-    url(r'^user$', user.UserAboutPage.as_view(), name='user_page'),
-    url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
-
     url(r'^problems/$', problem.ProblemList.as_view(), name='problem_list'),
     url(r'^problems/own/$', problem.OwnProblemList.as_view(), name='own_problem_list'),
     url(r'^problems/random/$', problem.random_problem, name='problem_random'),
@@ -122,21 +116,25 @@ urlpatterns = [
     ])),
 
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
-    url(r'^src/(?P<submission>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
+    url(r'^src/(?P<pk>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
 
-    url(r'^submission/(?P<submission>\d+)', include([
+    url(r'^submission/(?P<pk>\d+)', include([
         url(r'^$', submission.SubmissionStatus.as_view(), name='submission_status'),
         url(r'^abort$', submission.abort_submission, name='submission_abort'),
         url(r'^html$', submission.single_submission),
     ])),
 
     url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
-
-    url(r'^user/(?P<user>\w+)/submissions/$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),
-    url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),
-
     url(r'^single_submission', submission.single_submission_query, name='submission_single_query'),
     url(r'^submission_testcases', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
+
+    url(r'^users/$', user.users),
+    url(r'^user/(?P<username>\w+)$', user.UserAboutPage.as_view(), name='user_page'),
+    url(r'^user/(?P<username>\w+)/solved$', user.UserProblemsPage.as_view(), name='user_problems'),
+    url(r'^user$', user.UserAboutPage.as_view(), name='user_page'),
+    url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
+    url(r'^user/(?P<user>\w+)/submissions/$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),
+    url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),
 
     url(r'^comments/upvote/$', comment.upvote_comment, name='comment_upvote'),
     url(r'^comments/downvote/$', comment.downvote_comment, name='comment_dowmvote'),
