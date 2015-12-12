@@ -182,15 +182,19 @@ urlpatterns = [
     url(r'^status/$', status.status_all, name='status_all'),
     url(r'^judge/(?P<name>[\w.]+)$', status.JudgeDetail.as_view(), name='judge_info'),
 
-    url(r'^api/contest/list$', api.api_contest_list),
-    url(r'^api/problem/list$', api.api_problem_list),
-    url(r'^api/problem/info/(\w+)', api.api_problem_info),
-    url(r'^api/user/list', api.api_user_list),
-    url(r'^api/user/info/(\w+)', api.api_user_info),
-    url(r'^api/user/submissions/(\w+)', api.api_user_submissions),
-    url(r'^api/judge/auth/rabbitmq/user$', rabbitmq_views.auth_user),
-    url(r'^api/judge/auth/rabbitmq/vhost$', rabbitmq_views.auth_vhost),
-    url(r'^api/judge/auth/rabbitmq/resource$', rabbitmq_views.auth_resource),
+    url(r'^api/', include([
+        url(r'^contest/list$', api.api_contest_list),
+        url(r'^problem/list$', api.api_problem_list),
+        url(r'^problem/info/(\w+)', api.api_problem_info),
+        url(r'^user/list', api.api_user_list),
+        url(r'^user/info/(\w+)', api.api_user_info),
+        url(r'^user/submissions/(\w+)', api.api_user_submissions),
+        url(r'^judge/auth/rabbitmq/', include([
+            url(r'^user$', rabbitmq_views.auth_user),
+            url(r'^vhost$', rabbitmq_views.auth_vhost),
+            url(r'^resource$', rabbitmq_views.auth_resource),
+        ])),
+    ])),
 
     url(r'^blog/', paged_list_view(blog.PostList, 'blog_post_list')),
     url(r'^post/(?P<id>\d+)-(?P<slug>.*)$', blog.PostView.as_view(), name='blog_post'),
