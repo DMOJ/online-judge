@@ -318,8 +318,8 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
                       .order_by('-score', 'cumtime'))
 
 
-def contest_ranking_ajax(request, key):
-    contest, exists = _find_contest(request, key)
+def contest_ranking_ajax(request, contest):
+    contest, exists = _find_contest(request, contest)
     if not exists:
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
@@ -353,8 +353,8 @@ def contest_ranking_view(request, contest):
     })
 
 
-def contest_ranking(request, key):
-    contest, exists = _find_contest(request, key)
+def contest_ranking(request, contest):
+    contest, exists = _find_contest(request, contest)
     if not exists:
         return contest
     return contest_ranking_view(request, contest)
