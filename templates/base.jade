@@ -111,6 +111,13 @@ html(lang='en')
                                 ul {{ children }}
                     - endrecursetree
                     if perms.test_site
+                        style.
+                            .user-opt {
+                              display:block;
+                              padding: 7px;
+                              padding-right: 5px;
+                              font-size:0.9em;
+                            }
                         li(style='float: right; width: auto; height: 44px;text-transform: none;')
                             a(href='{% url "user_page" %}', style='display: block; padding: 0px; height: 100%;')
                                 div(style='font-size: 13px; height: 100%; padding-top: 8px;')
@@ -119,6 +126,12 @@ html(lang='en')
                                         | Hello,&nbsp;
                                         b #{request.user.username}
                                         | .
+                            ul
+                                div(style='width:150px')
+                                    div
+                                        a.user-opt(href='{% url "admin:index" %}') Admin
+                                        a.user-opt(href='{% url "judge.views.edit_profile" %}') Edit profile
+                                        a.user-opt(href='{% url "django.contrib.auth.views.logout" %}?next=') Log out
                 span#user-links(style='text-align: right')
                     if request.user.is_authenticated
                         if IN_CONTEST
