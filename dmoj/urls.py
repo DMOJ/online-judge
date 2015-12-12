@@ -150,17 +150,19 @@ urlpatterns = [
     url(r'^contests/$', contests.ContestList.as_view(), name='contest_list'),
     url(r'^contests/(?P<year>\d+)/(?P<month>\d+)/$', contests.ContestCalendar.as_view(), name='contest_calendar'),
 
-    url(r'^contest/(?P<contest>\w+)$', contests.ContestDetail.as_view(), name='contest_view'),
-    url(r'^contest/(\w+)/ranking/$', contests.contest_ranking, name='contest_ranking'),
-    url(r'^contest/(\w+)/ranking/ajax$', contests.contest_ranking_ajax, name='contest_ranking_ajax'),
-    url(r'^contest/(?P<contest>\w+)/join$', contests.ContestJoin.as_view(), name='contest_join'),
-    url(r'^contest/(?P<contest>\w+)/leave$', contests.ContestLeave.as_view(), name='contest_leave'),
+    url(r'^contest/(?P<contest>\w+)', include([
+        url(r'^$', contests.ContestDetail.as_view(), name='contest_view'),
+        url(r'^/ranking/$', contests.contest_ranking, name='contest_ranking'),
+        url(r'^/ranking/ajax$', contests.contest_ranking_ajax, name='contest_ranking_ajax'),
+        url(r'^/join$', contests.ContestJoin.as_view(), name='contest_join'),
+        url(r'^/leave$', contests.ContestLeave.as_view(), name='contest_leave'),
 
-    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/$', ranked_submission.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
-    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/(?P<page>\d+)$', ranked_submission.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
+        url(r'^/rank/(?P<problem>\w+)/',
+            paged_list_view(ranked_submission.ContestRankedSubmission, 'contest_ranked_submissions')),
 
-    url(r'^contest/(?P<contest>\w+)/submissions/(?P<user>\w+)/(?P<problem>\w+)/$', submission.UserContestSubmissions.as_view(), name='contest_user_submissions'),
-    url(r'^contest/(?P<contest>\w+)/submissions/(?P<user>\w+)/(?P<problem>\w+)/(?P<page>\d+)$', submission.UserContestSubmissions.as_view(), name='contest_user_submissions'),
+        url(r'^/submissions/(?P<user>\w+)/(?P<problem>\w+)/',
+            paged_list_view(submission.UserContestSubmissions.as_view(), 'contest_user_submissions')),
+    ])),
 
     url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
     url(r'^organization/(?P<key>\w+)', include([
