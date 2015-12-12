@@ -5,14 +5,14 @@ from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
 from social.apps.django_app.urls import urlpatterns as social_auth_patterns
 
-from judge import views
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
 from judge.forms import CustomAuthenticationForm
 from judge.rabbitmq import views as rabbitmq_views
 from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap, \
     BlogPostSitemap, SolutionSitemap
-from judge.views import RegistrationView, ActivationView, TemplateView
-from judge.views import organization, language, status, blog, problem, solution, mailgun, license, register, user, submission, widgets, comment, contests, api
+from judge.views.register import RegistrationView, ActivationView, TemplateView
+from judge.views import TitledTemplateView
+from judge.views import organization, language, status, blog, problem, solution, mailgun, license, register, user, submission, widgets, comment, contests, api, ranked_submission
 from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
         ContestProfileSelect2View
 
@@ -20,8 +20,8 @@ admin.autodiscover()
 
 register_patterns = [
     url(r'^activate/complete/$',
-        TemplateView.as_view(template_name='registration/activation_complete.jade',
-                             title='Activation Successful!'),
+        TitledTemplateView.as_view(template_name='registration/activation_complete.jade',
+                                   title='Activation Successful!'),
         name='registration_activation_complete'),
     # Activation keys get matched by \w+ instead of the more specific
     # [a-fA-F0-9]{40} because a bad activation key should still get to the view;
@@ -34,12 +34,12 @@ register_patterns = [
         RegistrationView.as_view(title='Register'),
         name='registration_register'),
     url(r'^register/complete/$',
-        TemplateView.as_view(template_name='registration/registration_complete.jade',
-                             title='Registration Completed'),
+        TitledTemplateView.as_view(template_name='registration/registration_complete.jade',
+                                   title='Registration Completed'),
         name='registration_complete'),
     url(r'^register/closed/$',
-        TemplateView.as_view(template_name='registration/registration_closed.html',
-                             title='Registration not allowed'),
+        TitledTemplateView.as_view(template_name='registration/registration_closed.html',
+                                   title='Registration not allowed'),
         name='registration_disallowed'),
     url(r'^login/$', auth_views.login,
         {'template_name': 'registration/login.jade', 'extra_context': {'title': 'Login'},
@@ -88,12 +88,12 @@ urlpatterns = [
     url(r'^500/$', exception),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include(register_patterns)),
-    url('', include(social_auth_patterns, namespace='social')),
+    url(r'^', include(social_auth_patterns, namespace='social')),
 
     url(r'^users/$', user.users),
-    url(r'^user/(?P<username>\w+)$', views.UserAboutPage.as_view(), name='user_page'),
-    url(r'^user/(?P<username>\w+)/solved$', views.UserProblemsPage.as_view(), name='user_problems'),
-    url(r'^user$', views.UserAboutPage.as_view(), name='user_page'),
+    url(r'^user/(?P<username>\w+)$', user.UserAboutPage.as_view(), name='user_page'),
+    url(r'^user/(?P<username>\w+)/solved$', user.UserProblemsPage.as_view(), name='user_problems'),
+    url(r'^user$', user.UserAboutPage.as_view(), name='user_page'),
     url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
 
     url(r'^problems/$', problem.ProblemList.as_view(), name='problem_list'),
@@ -108,52 +108,52 @@ urlpatterns = [
     url(r'^problem/([^/]+)/resubmit/(\d+)$', problem.problem_submit, name='problem_submit'),
 
     url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
-    url(r'^src/(?P<pk>\d+)$', views.SubmissionSource.as_view(), name='submission_source'),
-    url(r'^submission/(?P<pk>\d+)$', views.SubmissionStatus.as_view(), name='submission_status'),
+    url(r'^src/(?P<pk>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
+    url(r'^submission/(?P<pk>\d+)$', submission.SubmissionStatus.as_view(), name='submission_status'),
     url(r'^submission/(\d+)/abort$', submission.abort_submission, name='submission_abort'),
     url(r'^submission/(\d+)/html$', submission.single_submission),
 
-    url(r'^submissions/$', views.AllSubmissions.as_view(), name='all_submissions'),
-    url(r'^submissions/(?P<page>\d+)$', views.AllSubmissions.as_view(), name='all_submissions'),
+    url(r'^submissions/$', submission.AllSubmissions.as_view(), name='all_submissions'),
+    url(r'^submissions/(?P<page>\d+)$', submission.AllSubmissions.as_view(), name='all_submissions'),
 
     url(r'^problem/(?P<problem>\w+)/', include([
-        url(r'^rank/$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
-        url(r'^rank/(?P<page>\d+)$', views.RankedSubmissions.as_view(), name='ranked_submissions'),
-        url(r'^submissions/$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
-        url(r'^submissions/(?P<page>\d+)$', views.ProblemSubmissions.as_view(), name='chronological_submissions'),
-        url(r'^submissions/(?P<user>\w+)/$', views.UserProblemSubmissions.as_view(), name='user_submissions'),
-        url(r'^submissions/(?P<user>\w+)/(?P<page>\d+)$', views.UserProblemSubmissions.as_view(), name='user_submissions'),
+        url(r'^rank/$', ranked_submission.RankedSubmissions.as_view(), name='ranked_submissions'),
+        url(r'^rank/(?P<page>\d+)$', ranked_submission.RankedSubmissions.as_view(), name='ranked_submissions'),
+        url(r'^submissions/$', submission.ProblemSubmissions.as_view(), name='chronological_submissions'),
+        url(r'^submissions/(?P<page>\d+)$', submission.ProblemSubmissions.as_view(), name='chronological_submissions'),
+        url(r'^submissions/(?P<user>\w+)/$', submission.UserProblemSubmissions.as_view(), name='user_submissions'),
+        url(r'^submissions/(?P<user>\w+)/(?P<page>\d+)$', submission.UserProblemSubmissions.as_view(), name='user_submissions'),
     ])),
 
-    url(r'^user/(?P<user>\w+)/submissions/$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
-    url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', views.AllUserSubmissions.as_view(), name='all_user_submissions'),
+    url(r'^user/(?P<user>\w+)/submissions/$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),
+    url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),
 
     url(r'^single_submission', submission.single_submission_query, name='submission_single_query'),
-    url(r'^submission_testcases', views.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
+    url(r'^submission_testcases', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
 
     url(r'^comments/upvote/$', comment.upvote_comment, name='comment_upvote'),
     url(r'^comments/downvote/$', comment.downvote_comment, name='comment_dowmvote'),
     url(r'^comments/(?P<id>\d+)/', include([
-        url(r'^revisions$', views.CommentHistory.as_view(), name='comment_history'),
-        url(r'^edit$', views.CommentEdit.as_view(), name='comment_edit'),
-        url(r'^revisions/ajax$', views.CommentHistoryAjax.as_view(), name='comment_history_ajax'),
-        url(r'^edit/ajax$', views.CommentEditAjax.as_view(), name='comment_edit_ajax'),
-        url(r'^render$', views.CommentContent.as_view(), name='comment_content'),
+        url(r'^revisions$', comment.CommentHistory.as_view(), name='comment_history'),
+        url(r'^edit$', comment.CommentEdit.as_view(), name='comment_edit'),
+        url(r'^revisions/ajax$', comment.CommentHistoryAjax.as_view(), name='comment_history_ajax'),
+        url(r'^edit/ajax$', comment.CommentEditAjax.as_view(), name='comment_edit_ajax'),
+        url(r'^render$', comment.CommentContent.as_view(), name='comment_content'),
     ])),
 
-    url(r'^contests/$', views.ContestList.as_view(), name='contest_list'),
-    url(r'^contests/(?P<year>\d+)/(?P<month>\d+)/$', views.ContestCalendar.as_view(), name='contest_calendar'),
-    url(r'^contest/(?P<key>\w+)$', views.ContestDetail.as_view(), name='contest_view'),
+    url(r'^contests/$', contests.ContestList.as_view(), name='contest_list'),
+    url(r'^contests/(?P<year>\d+)/(?P<month>\d+)/$', contests.ContestCalendar.as_view(), name='contest_calendar'),
+    url(r'^contest/(?P<key>\w+)$', contests.ContestDetail.as_view(), name='contest_view'),
     url(r'^contest/(\w+)/ranking/$', contests.contest_ranking, name='contest_ranking'),
     url(r'^contest/(\w+)/ranking/ajax$', contests.contest_ranking_ajax, name='contest_ranking_ajax'),
-    url(r'^contest/(?P<key>\w+)/join$', views.ContestJoin.as_view(), name='contest_join'),
-    url(r'^contest/(?P<key>\w+)/leave$', views.ContestLeave.as_view(), name='contest_leave'),
+    url(r'^contest/(?P<key>\w+)/join$', contests.ContestJoin.as_view(), name='contest_join'),
+    url(r'^contest/(?P<key>\w+)/leave$', contests.ContestLeave.as_view(), name='contest_leave'),
 
-    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/$', views.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
-    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/(?P<page>\d+)$', views.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
+    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/$', ranked_submission.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
+    url(r'^contest/(?P<contest>\w+)/rank/(?P<problem>\w+)/(?P<page>\d+)$', ranked_submission.ContestRankedSubmission.as_view(), name='contest_ranked_submissions'),
 
-    url(r'^contest/(?P<contest>\w+)/submissions/(?P<user>\w+)/(?P<problem>\w+)/$', views.UserContestSubmissions.as_view(), name='contest_user_submissions'),
-    url(r'^contest/(?P<contest>\w+)/submissions/(?P<user>\w+)/(?P<problem>\w+)/(?P<page>\d+)$', views.UserContestSubmissions.as_view(), name='contest_user_submissions'),
+    url(r'^contest/(?P<contest>\w+)/submissions/(?P<user>\w+)/(?P<problem>\w+)/$', submission.UserContestSubmissions.as_view(), name='contest_user_submissions'),
+    url(r'^contest/(?P<contest>\w+)/submissions/(?P<user>\w+)/(?P<problem>\w+)/(?P<page>\d+)$', submission.UserContestSubmissions.as_view(), name='contest_user_submissions'),
 
     url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
     url(r'^organization/(?P<key>\w+)$', organization.OrganizationHome.as_view(), name='organization_home'),
@@ -194,7 +194,7 @@ urlpatterns = [
     url(r'^license/(?P<key>[-\w.]+)$', license.LicenseDetail.as_view(), name='license'),
 
     url(r'^mailgun/mail_activate/$', mailgun.MailgunActivationView.as_view(), name='mailgun_activate'),
-    url(r'^detect_timezone$', views.DetectTimezone.as_view(), name='detect_timezone'),
+    url(r'^detect_timezone$', widgets.DetectTimezone.as_view(), name='detect_timezone'),
 
     url(r'^feed/', include([
         url(r'^problems/rss/$', ProblemFeed(), name='problem_rss'),
