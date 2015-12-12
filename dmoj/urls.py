@@ -124,10 +124,6 @@ urlpatterns = [
         url(r'^html$', submission.single_submission),
     ])),
 
-    url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
-    url(r'^single_submission', submission.single_submission_query, name='submission_single_query'),
-    url(r'^submission_testcases', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
-
     url(r'^users/$', user.users),
     url(r'^user$', user.UserAboutPage.as_view(), name='user_page'),
     url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
@@ -184,7 +180,6 @@ urlpatterns = [
     url(r'^runtime/(?P<key>\w+)/judges$', language.LanguageJudgesAjaxList.as_view(), name='runtime_judge_ajax'),
 
     url(r'^status/$', status.status_all, name='status_all'),
-    url(r'^status-table/$', status.status_table, name='status_table'),
     url(r'^judge/(?P<name>[\w.]+)$', status.JudgeDetail.as_view(), name='judge_info'),
 
     url(r'^api/contest/list$', api.api_contest_list),
@@ -204,7 +199,14 @@ urlpatterns = [
     url(r'^license/(?P<key>[-\w.]+)$', license.LicenseDetail.as_view(), name='license'),
 
     url(r'^mailgun/mail_activate/$', mailgun.MailgunActivationView.as_view(), name='mailgun_activate'),
-    url(r'^detect_timezone$', widgets.DetectTimezone.as_view(), name='detect_timezone'),
+
+    url(r'^widgets/', include([
+        url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
+        url(r'^single_submission', submission.single_submission_query, name='submission_single_query'),
+        url(r'^submission_testcases', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
+        url(r'^detect_timezone$', widgets.DetectTimezone.as_view(), name='detect_timezone'),
+        url(r'^status-table$', status.status_table, name='status_table'),
+    ])),
 
     url(r'^feed/', include([
         url(r'^problems/rss/$', ProblemFeed(), name='problem_rss'),
