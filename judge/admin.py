@@ -875,6 +875,12 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     search_fields = ('contest__key', 'contest__name', 'profile__user__user__username', 'profile__user__name')
     form = ContestParticipationForm
 
+    def get_queryset(self, request):
+        return super(ContestParticipationAdmin, self).get_queryset(request).only(
+            'contest__name', 'profile__user__user__username', 'profile__user__name',
+            'real_start', 'score', 'cumtime'
+        )
+
     def username(self, obj):
         return obj.profile.user.long_display_name
     username.admin_order_field = 'profile__user__user__username'
