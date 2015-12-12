@@ -129,12 +129,13 @@ urlpatterns = [
     url(r'^submission_testcases', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
 
     url(r'^users/$', user.users),
-    url(r'^user/(?P<user>\w+)$', user.UserAboutPage.as_view(), name='user_page'),
-    url(r'^user/(?P<user>\w+)/solved$', user.UserProblemsPage.as_view(), name='user_problems'),
     url(r'^user$', user.UserAboutPage.as_view(), name='user_page'),
     url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
-    url(r'^user/(?P<user>\w+)/submissions/$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),
-    url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),
+    url(r'^user/(?P<user>\w+)', include([
+        url(r'^$', user.UserAboutPage.as_view(), name='user_page'),
+        url(r'^/solved$', user.UserProblemsPage.as_view(), name='user_problems'),
+        url(r'^/submissions/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
+    ])),
 
     url(r'^comments/upvote/$', comment.upvote_comment, name='comment_upvote'),
     url(r'^comments/downvote/$', comment.downvote_comment, name='comment_dowmvote'),
