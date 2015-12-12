@@ -197,8 +197,7 @@ urlpatterns = [
     url(r'^api/judge/auth/rabbitmq/vhost$', rabbitmq_views.auth_vhost),
     url(r'^api/judge/auth/rabbitmq/resource$', rabbitmq_views.auth_resource),
 
-    url(r'^blog/$', blog.PostList.as_view(), name='blog_post_list'),
-    url(r'^blog/(?P<page>\d+)$', blog.PostList.as_view(), name='blog_post_list'),
+    url(r'^blog/', paged_list_view(blog.PostList, 'blog_post_list')),
     url(r'^post/(?P<id>\d+)-(?P<slug>.*)$', blog.PostView.as_view(), name='blog_post'),
 
     url(r'^solution/(?P<url>.*)$', solution.SolutionView.as_view(), name='solution'),
