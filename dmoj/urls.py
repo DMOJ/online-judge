@@ -85,8 +85,8 @@ def exception(request):
 
 def paged_list_view(view, name):
     return include([
-        url(r'^$', view, name=name),
-        url(r'^(?P<page>\d+)$', view, name=name),
+        url(r'^$', view.as_view(), name=name),
+        url(r'^(?P<page>\d+)$', view.as_view(), name=name),
     ])
 
 
@@ -116,9 +116,9 @@ urlpatterns = [
         url(r'^/submit$', problem.problem_submit, name='problem_submit'),
         url(r'^/resubmit/(?P<submission>\d+)$', problem.problem_submit, name='problem_submit'),
 
-        url(r'^/rank/$', paged_list_view(ranked_submission.RankedSubmissions.as_view(), 'ranked_submissions')),
-        url(r'^/submissions/$', paged_list_view(submission.ProblemSubmissions.as_view(), 'chronological_submissions')),
-        url(r'^/submissions/(?P<user>\w+)/$', paged_list_view(submission.UserProblemSubmissions.as_view(), 'user_submissions')),
+        url(r'^/rank/', paged_list_view(ranked_submission.RankedSubmissions, 'ranked_submissions')),
+        url(r'^/submissions/', paged_list_view(submission.ProblemSubmissions, 'chronological_submissions')),
+        url(r'^/submissions/(?P<user>\w+)/', paged_list_view(submission.UserProblemSubmissions, 'user_submissions')),
     ])),
 
     url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
