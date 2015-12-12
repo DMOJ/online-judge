@@ -120,8 +120,8 @@ urlpatterns = [
 
     url(r'^submission/(?P<pk>\d+)', include([
         url(r'^$', submission.SubmissionStatus.as_view(), name='submission_status'),
-        url(r'^abort$', submission.abort_submission, name='submission_abort'),
-        url(r'^html$', submission.single_submission),
+        url(r'^/abort$', submission.abort_submission, name='submission_abort'),
+        url(r'^/html$', submission.single_submission),
     ])),
 
     url(r'^users/$', user.users),
