@@ -28,7 +28,7 @@ def remap_keys(iterable, mapping):
 class UserMixin(object):
     model = Profile
     slug_field = 'user__username'
-    slug_url_kwarg = 'username'
+    slug_url_kwarg = 'user'
     context_object_name = 'user'
 
     def render_to_response(self, context, **response_kwargs):
