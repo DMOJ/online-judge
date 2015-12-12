@@ -395,10 +395,13 @@ class SubmissionAdmin(admin.ModelAdmin):
     user_column.short_description = 'User'
 
     def get_queryset(self, request):
-        if request.user.has_perm('judge.edit_all_problem'):
-            return Submission.objects.all()
-        else:
-            return Submission.objects.filter(problem__authors__id=request.user.profile.id)
+        queryset = Submission.objects.only(
+            'problem__code', 'problem__name', 'user__user__username', 'user__name', 'language__name',
+            'time', 'memory', 'points', 'status', 'result'
+        )
+        if not request.user.has_perm('judge.edit_all_problem'):
+            queryset = queryset.filter(problem__authors__id=request.user.profile.id)
+        return queryset
 
     def has_add_permission(self, request):
         return False
