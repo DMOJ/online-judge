@@ -239,6 +239,3 @@ if 'newsletter' in settings.INSTALLED_APPS:
 
 if 'django_select2' in settings.INSTALLED_APPS:
     urlpatterns.append(url(r'^select2/', include('django_select2.urls')))
-
-if 'django_uwsgi' in settings.INSTALLED_APPS:
-    urlpatterns.insert(0, url(r'^admin/uwsgi/', include('django_uwsgi.urls')))
