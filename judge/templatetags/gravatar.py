@@ -18,7 +18,7 @@ class GravatarUrlNode(template.Node):
     def __init__(self, email, size='80', default=False, as_=None, variable=None):
         self.email = template.Variable(email)
         self.size = template.Variable(size)
-        self.default = template.Variable(default)
+        self.default = default
         self.variable = as_ and variable
  
     def render(self, context):
@@ -30,14 +30,10 @@ class GravatarUrlNode(template.Node):
             size = self.size.resolve(context)
         except template.VariableDoesNotExist:
             size = 80
-        try:
-            default = self.default.resolve(context)
-        except template.VariableDoesNotExist:
-            default = False
 
         gravatar_url = '//www.gravatar.com/avatar/' + hashlib.md5(email.strip().lower()).hexdigest() + '?'
         args = {'d': 'identicon', 's': str(size)}
-        if default:
+        if self.default:
             args['f'] = 'y'
         gravatar_url += urllib.urlencode(args)
 
