@@ -121,14 +121,16 @@ urlpatterns = [
         url(r'^/submissions/(?P<user>\w+)/', paged_list_view(submission.UserProblemSubmissions, 'user_submissions')),
     ])),
 
-    url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
-    url(r'^src/(?P<pk>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
-    url(r'^submission/(?P<pk>\d+)$', submission.SubmissionStatus.as_view(), name='submission_status'),
-    url(r'^submission/(\d+)/abort$', submission.abort_submission, name='submission_abort'),
-    url(r'^submission/(\d+)/html$', submission.single_submission),
+    url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
+    url(r'^src/(?P<submission>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
 
-    url(r'^submissions/$', submission.AllSubmissions.as_view(), name='all_submissions'),
-    url(r'^submissions/(?P<page>\d+)$', submission.AllSubmissions.as_view(), name='all_submissions'),
+    url(r'^submission/(?P<submission>\d+)', include([
+        url(r'^$', submission.SubmissionStatus.as_view(), name='submission_status'),
+        url(r'^abort$', submission.abort_submission, name='submission_abort'),
+        url(r'^html$', submission.single_submission),
+    ])),
+
+    url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
 
     url(r'^user/(?P<user>\w+)/submissions/$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),
     url(r'^user/(?P<user>\w+)/submissions/(?P<page>\d+)$', submission.AllUserSubmissions.as_view(), name='all_user_submissions'),

@@ -28,6 +28,7 @@ def submission_related(queryset):
 
 class SubmissionMixin(object):
     model = Submission
+    pk_url_kwarg = 'submission'
 
 
 class SubmissionDetailBase(TitleMixin, SubmissionMixin, SingleObjectMixin, TemplateView):
