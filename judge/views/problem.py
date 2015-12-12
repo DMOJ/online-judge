@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Count, Q, F
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, Context
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
@@ -369,11 +369,8 @@ def problem_submit(request, problem=None, submission=None):
 
 @login_required
 @permission_required('judge.clone_problem')
-def clone_problem(request, code):
-    try:
-        problem = Problem.objects.get(code=code)
-    except Problem.DoesNotExist:
-        raise Http404()
+def clone_problem(request, problem):
+    problem = get_object_or_404(Problem, code=problem)
     languages = problem.allowed_languages.all()
     problem.pk = None
     problem.is_public = False
