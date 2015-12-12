@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, Imprope
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import format_html
@@ -27,6 +27,7 @@ def submission_related(queryset):
 class SubmissionMixin(object):
     model = Submission
     context_object_name = 'submission'
+    pk_url_kwarg = 'submission'
 
 
 class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, DetailView):
@@ -87,15 +88,15 @@ class SubmissionTestCaseQuery(SubmissionStatus):
         return super(SubmissionTestCaseQuery, self).get(request, *args, **kwargs)
 
 
-def abort_submission(request, pk):
+def abort_submission(request, submission):
     if request.method != 'POST':
         raise Http404()
-    submission = Submission.objects.get(id=int(pk))
+    submission = get_object_or_404(Submission, id=int(submission))
     if not request.user.is_authenticated() or \
             request.user.profile != submission.user and not request.user.has_perm('abort_any_submission'):
         raise PermissionDenied()
     submission.abort()
-    return HttpResponseRedirect(reverse('submission_status', args=(pk,)))
+    return HttpResponseRedirect(reverse('submission_status', args=(submission,)))
 
 
 class SubmissionsListBase(TitleMixin, ListView):
@@ -250,11 +251,11 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
         return context
 
 
-def single_submission(request, pk, show_problem=True):
+def single_submission(request, submission, show_problem=True):
     try:
         authenticated = request.user.is_authenticated()
         return render(request, 'submission/row.jade', {
-            'submission': submission_related(Submission.objects).get(id=int(pk)),
+            'submission': get_object_or_404(submission_related(Submission.objects.all()), id=int(submission)),
             'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
             'show_problem': show_problem,
             'profile_id': request.user.profile.id if authenticated else 0,

@@ -116,9 +116,9 @@ urlpatterns = [
     ])),
 
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
-    url(r'^src/(?P<pk>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
+    url(r'^src/(?P<submission>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
 
-    url(r'^submission/(?P<pk>\d+)', include([
+    url(r'^submission/(?P<submission>\d+)', include([
         url(r'^$', submission.SubmissionStatus.as_view(), name='submission_status'),
         url(r'^/abort$', submission.abort_submission, name='submission_abort'),
         url(r'^/html$', submission.single_submission),
