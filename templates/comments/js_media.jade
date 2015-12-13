@@ -5,7 +5,7 @@
 - compress js
     script(src='{% static "featherlight.min.js" %}', type='text/javascript', charset='utf-8')
     script(src='{% static "placeholder-compat.js" %}', type='text/javascript')
-    | #{comment_form.media|media_type:"js"}
+    | #{comment_form.media.js}
 
     script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
     script(type='text/javascript').
