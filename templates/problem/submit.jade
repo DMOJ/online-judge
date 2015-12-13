@@ -1,6 +1,5 @@
 extends base
 - load staticfiles
-- load media_extract
 
 block js_media
     script(type='text/javascript').
@@ -70,10 +69,10 @@ block js_media
                 $('#ace_source').height($(window).height() - 353);
             }).resize();
         });
-    | #{form.media|media_type:"js"}
+    | #{form.media.js}
 
 block media
-    | #{form.media|media_type:"css"}
+    | #{form.media.js}
     style.
         #submit-wrapper {
             margin-top: 0.7em;

@@ -1,9 +1,8 @@
 extends user/user_base
-- load media_extract
 
 block user_media
     include timezone/media
-    | #{form.media|media_type:"css"}
+    | #{form.media.css}
     style.
         .sortedm2m-container, .sortedm2m-container p.selector-filter {
             width: 300px;
@@ -21,7 +20,7 @@ block user_media
 
 block js_media
     include timezone/js_media
-    | #{form.media|media_type:"js"}
+    | #{form.media.js}
 
 block title_ruler
 

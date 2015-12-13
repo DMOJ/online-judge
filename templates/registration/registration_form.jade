@@ -1,9 +1,8 @@
 extends base
-- load media_extract
 
 block media
     include timezone/media
-    | #{form.media|media_type:"css"}
+    | #{form.media.css}
     style.
         .sortedm2m-container, .sortedm2m-container p.selector-filter {
             width: 300px;
@@ -20,7 +19,7 @@ block media
         }
 block js_media
     include timezone/js_media
-    | #{form.media|media_type:"js"}
+    | #{form.media.js}
 
 block body
     form.form-area(action='', method='post')
