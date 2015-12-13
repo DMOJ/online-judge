@@ -15,7 +15,7 @@ register = template.Library()
 
 
 class GravatarUrlNode(template.Node):
-    def __init__(self, email, size='80', default='', as_=None, variable=None):
+    def __init__(self, email, size='80', default='""', as_=None, variable=None):
         self.email = template.Variable(email)
         self.size = template.Variable(size)
         self.default = template.Variable(default)
