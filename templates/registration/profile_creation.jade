@@ -3,7 +3,7 @@ extends base
 
 block media
     link(rel='stylesheet', href='{% static "timezone-map.css" %}')
-    | #{form.media.js}
+    | #{form.media.css}
     style.
         .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
         .map-wrap { display: none }
