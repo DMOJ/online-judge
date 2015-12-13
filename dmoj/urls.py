@@ -133,7 +133,7 @@ urlpatterns = [
     ])),
 
     url(r'^comments/upvote/$', comment.upvote_comment, name='comment_upvote'),
-    url(r'^comments/downvote/$', comment.downvote_comment, name='comment_dowmvote'),
+    url(r'^comments/downvote/$', comment.downvote_comment, name='comment_downvote'),
     url(r'^comments/(?P<id>\d+)/', include([
         url(r'^revisions$', comment.CommentHistory.as_view(), name='comment_history'),
         url(r'^edit$', comment.CommentEdit.as_view(), name='comment_edit'),
