@@ -1,6 +1,7 @@
 import traceback
-from django.utils.log import AdminEmailHandler
+
 from django.core.cache import cache
+from django.utils.log import AdminEmailHandler
 
 
 def new_email():
@@ -9,6 +10,12 @@ def new_email():
 
 
 class ThrottledEmailHandler(AdminEmailHandler):
+    def __init__(self, *args, **kwargs):
+        super(ThrottledEmailHandler, self).__init__(*args, **kwargs)
+
+        from django.conf import settings
+        self.throttle = getattr(settings, 'EMAIL_THROTTLING', 10)
+
     def emit(self, record):
         try:
             count = new_email()
@@ -16,6 +23,6 @@ class ThrottledEmailHandler(AdminEmailHandler):
             traceback.print_exc()
             pass
         else:
-            if count >= 10:
+            if count >= self.throttle:
                 return
         AdminEmailHandler.emit(self, record)
