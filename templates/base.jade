@@ -127,7 +127,8 @@ html(lang='en')
                                             b #{request.user.username}
                                             | .
                                 ul(style='width: 150px')
-                                    li: a(href='{% url "admin:index" %}') Admin
+                                    if request.user.is_staff or request.user.is_superuser
+                                        li: a(href='{% url "admin:index" %}') Admin
                                     li: a(href='{% url "user_edit_profile" %}') Edit profile
                                     li: a(href='{% url "auth_logout" %}?next=') Log out
                     else
