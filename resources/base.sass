@@ -161,12 +161,35 @@ header
   padding: 10px 10px 10px 5%
 
 #user-links
-  bottom: 10px
-  right: 6px
+  top: 0
+  right: 0
   position: absolute
   color: #5c5954
   a
     color: #FFF
+  li
+    text-transform: none
+  & > ul
+    display: block
+    margin: 0
+    & > li > a > span
+      font-size: 13px
+      height: 36px
+      padding-top: 8px
+      display: block
+      & > img
+        vertical-align: middle
+        border-radius: 6px
+        display: inline
+        margin: 2px 6px 0 5px
+
+      & > span
+        color: #eee
+        vertical-align: middle
+        display: inline
+        margin-top: 11px
+        margin-right: 9px
+        padding: 0px
 
 #nav-shadow
   height: 3px
@@ -368,8 +391,6 @@ noscript #noscript
 @media (max-width: 760px)
   #navigation
     height: 36px
-  #navigation ul li.home-nav-element
-    display: none
   #navicon
     transition-duration: .25s
     display: block
@@ -387,7 +408,6 @@ noscript #noscript
       transition-duration: 0.25s
   #nav-list
     display: none
-  #navigation ul
     padding: 0
     margin-left: 0
     border-left: 4px solid #2980B9
@@ -408,10 +428,19 @@ noscript #noscript
         top: auto
         bottom: auto
         margin-top: -36px
+      &.home-nav-element
+        display: none
   #user-links
     bottom: 6px
     right: 6px
     position: absolute
+    & > ul > li
+      & > a > span
+        padding-top: 4px
+        height: 32px
+      & > ul
+        left: 0 !important
+        margin-top: 0 !important
   #content
     width: auto
     padding: 0 5px

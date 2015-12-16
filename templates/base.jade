@@ -110,45 +110,26 @@ html(lang='en')
                             if not node.is_leaf_node
                                 ul {{ children }}
                     - endrecursetree
-                    if perms.test_site
-                        style.
-                            .user-opt {
-                              display:block;
-                              padding: 7px;
-                              padding-right: 5px;
-                              font-size:0.9em;
-                            }
-                        li(style='float: right; width: auto; height: 44px;text-transform: none;')
-                            a(href='{% url "user_page" %}', style='display: block; padding: 0px; height: 100%;')
-                                div(style='font-size: 13px; height: 100%; padding-top: 8px;')
-                                    img(src='{% gravatar_url request.user.email 32 %}', style='vertical-align: middle; border-radius: 6px; display: inline; margin-right: 6px; margin-top: 2px; margin-left: 5px;', height='24', width='24')
-                                    span(style='color: rgb(238, 238, 238); vertical-align: middle; display: inline; text-transform: unset; margin-top: 11px; padding: 0px; margin-right: 9px;')
-                                        | Hello,&nbsp;
-                                        b #{request.user.username}
-                                        | .
-                            ul
-                                div(style='width:150px')
-                                    div
-                                        a.user-opt(href='{% url "admin:index" %}') Admin
-                                        a.user-opt(href='{% url "user_edit_profile" %}') Edit profile
-                                        a.user-opt(href='{% url "auth_logout" %}?next=') Log out
-                span#user-links(style='text-align: right')
+                span#user-links(style='height: 100%')
                     if request.user.is_authenticated
                         if IN_CONTEST
                             #contest-info
                                 a(href='{% url "contest_view" CONTEST.contest.key %}', style='vertical-align: middle;')
                                     | #{CONTEST.contest.name} -
                                     #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
-                        if not perms.test_site
-                            a(href='{% url "user_page" %}')
-                                | Hello,&nbsp;
-                                b #{request.user.username}
-                            | &nbsp;|
-                            if request.user.is_staff or request.user.is_superuser
-                                a(href='{% url "admin:index" %}') admin
-                                | &nbsp;|
-                            a(href='{% url "django.contrib.auth.views.logout" %}?next=')
-                                | &nbsp;log out
+                        ul(style='display: block; margin: 0')
+                            li(style='display: block; height: 100%')
+                                a(href='{% url "user_page" %}', style='display: block; padding: 0px; height: 100%')
+                                    span
+                                        img(src='{% gravatar_url request.user.email 32 %}', height='24', width='24')
+                                        span
+                                            | Hello, 
+                                            b #{request.user.username}
+                                            | .
+                                ul(style='width: 150px')
+                                    li: a(href='{% url "admin:index" %}') Admin
+                                    li: a(href='{% url "user_edit_profile" %}') Edit profile
+                                    li: a(href='{% url "auth_logout" %}?next=') Log out
                     else
                         a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
                             b Login
