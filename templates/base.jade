@@ -131,10 +131,11 @@ html(lang='en')
                                     li: a(href='{% url "user_edit_profile" %}') Edit profile
                                     li: a(href='{% url "auth_logout" %}?next=') Log out
                     else
-                        a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
-                            b Login
-                        | &nbsp;|&nbsp;
-                        a(href='/accounts/register/') Register
+                        span.anon
+                            a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
+                                b Login
+                            | &nbsp;|&nbsp;
+                            a(href='/accounts/register/') Register
             #nav-shadow
         #page-container
             noscript
