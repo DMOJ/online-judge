@@ -7,6 +7,7 @@ doctype 5
 - load mptt_tags
 - load compress
 - load gravatar
+- load i18n
 
 html(lang='en')
     head
@@ -96,7 +97,7 @@ html(lang='en')
             #nav-container
                 a#navicon(href='javascript:void(0)')
                     i.fa.fa-bars
-                    | &nbsp;MENU
+                    | &nbsp;{% trans "MENU" %}
                 ul#nav-list
                     li.home-nav-element
                         a(href='{% url "home" %}')
@@ -116,31 +117,32 @@ html(lang='en')
                             #contest-info
                                 a(href='{% url "contest_view" CONTEST.contest.key %}', style='vertical-align: middle;')
                                     | #{CONTEST.contest.name} -
-                                    #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
+                                    #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
                         ul(style='display: block; margin: 0')
                             li(style='display: block; height: 100%')
                                 a(href='{% url "user_page" %}', style='display: block; padding: 0px; height: 100%')
                                     span
                                         img(src='{% gravatar_url request.user.email 32 %}', height='24', width='24')
                                         span
-                                            | Hello,&nbsp;
-                                            b #{request.user.username}
-                                            | .
+                                            - blocktrans
+                                                | Hello,&nbsp;
+                                                b #{request.user.username}
+                                                | .
                                 ul(style='width: 150px')
                                     if request.user.is_staff or request.user.is_superuser
-                                        li: a(href='{% url "admin:index" %}') Admin
-                                    li: a(href='{% url "user_edit_profile" %}') Edit profile
-                                    li: a(href='{% url "auth_logout" %}?next=') Log out
+                                        li: a(href='{% url "admin:index" %}') {% trans "Admin" %}
+                                    li: a(href='{% url "user_edit_profile" %}') {% trans "Edit profile" %}
+                                    li: a(href='{% url "auth_logout" %}?next=') {% trans "Log out" %}
                     else
                         span.anon
                             a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
-                                b Login
+                                b {% trans "Login" %}
                             | &nbsp;|&nbsp;
-                            a(href='/accounts/register/') Register
+                            a(href='/accounts/register/') {% trans "Register" %}
             #nav-shadow
         #page-container
-            noscript
-                #noscript This site works best with JavaScript enabled.
+            noscript: #noscript
+                - trans "This site works best with JavaScript enabled."
             br
             div#content
                 block title_row
