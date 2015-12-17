@@ -34,44 +34,35 @@ block body
         - csrf_token
         table(border=0, style='text-align:left')
             tr
-                th
-                    b Display name:
-                td
-                    | #{form.name}
+                th: b {% trans "Display name" %}:
+                td #{form.name}
             tr
-                th
-                    b Self-description:
-                td
-                    | #{form.about}
+                th: b {% trans "Self-description" %}:
+                td #{form.about}
             tr
-                th
-                    b Organizations:
-                td
-                    | #{form.organizations}
+                th: b {% trans "Organizations" %}:
+                td #{form.organizations}
             tr
-                th
-                    b Location:
-                td
-                    | #{form.timezone}
-                    = ' or '
+                th: b {% trans "Location" %}:
+                td #{form.timezone}
+                    |  {% trans "or" %}
+                    = ' '
                     a#open-map(href='#', data-featherlight='.map-wrap')
-                        | pick from map
+                        - trans "pick from map"
             tr
-                th
-                    b Preferred language:
-                td
-                    | #{form.language}
+                th: b {% trans "Preferred language" %}:
+                td #{form.language}
             tr
-                th
-                    b Ace theme:
-                td
-                    | #{form.ace_theme}
-        a(href='http://www.gravatar.com/', title='Change your avatar...', target='_blank') Change your avatar
+                th: b {% trans "Ace theme" %}:
+                td #{form.ace_theme}
+        a(href='http://www.gravatar.com/', title='{% trans "Change your avatar" %}', target='_blank')
+            - trans "Change your avatar"
         br
         hr
-        a(href='{% url "password_change" %}') Change your password
+        a(href='{% url "password_change" %}')
+            - trans "Change your password"
         hr
-        input(type='submit', style='float:right', value='Update profile')
+        input(type='submit', style='float:right', value='{% trans "Update profile" %}')
     div.map-wrap
         div.map-inset
             div.map-axis-x
