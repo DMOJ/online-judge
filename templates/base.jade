@@ -124,10 +124,8 @@ html(lang='en')
                                     span
                                         img(src='{% gravatar_url request.user.email 32 %}', height='24', width='24')
                                         span
-                                            - blocktrans
-                                                | Hello,&nbsp;
-                                                b {{ request.user.username }}
-                                                | .
+                                            - blocktrans username=request.user.username
+                                                | Hello, #[b #{username}].
                                 ul(style='width: 150px')
                                     if request.user.is_staff or request.user.is_superuser
                                         li: a(href='{% url "admin:index" %}') {% trans "Admin" %}
