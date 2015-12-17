@@ -1,25 +1,34 @@
-from collections import namedtuple
+from calendar import Calendar, SUNDAY
+from collections import namedtuple, defaultdict
 from operator import attrgetter
+from datetime import timedelta, date, datetime, time
 
-from django.core.exceptions import ObjectDoesNotExist
+import pytz
+from django.conf import settings
+from django.core.cache import cache
+
+from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import connection
 from django.db.models import Count, Q
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.html import escape
-from django.views.generic import ListView
+from django.utils.timezone import make_aware
+from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView
 
 from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation
 from judge.utils.ranker import ranker
-from judge.utils.views import TitleMixin, generic_message, LoginRequiredMixin
+from judge.utils.views import TitleMixin, generic_message
 from judge import event_poster as event
 
 
-__all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'contest_ranking_ajax']
+__all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
+           'contest_ranking_ajax']
 
 
 def _find_contest(request, key, private_check=True):
@@ -33,13 +42,9 @@ def _find_contest(request, key, private_check=True):
     return contest, True
 
 
-class ContestList(TitleMixin, ListView):
-    model = Contest
-    template_name = 'contest/list.jade'
-    title = 'Contests'
-
+class ContestListMixin(object):
     def get_queryset(self):
-        queryset = Contest.objects.order_by('-start_time', 'key')
+        queryset = Contest.objects.all()
         if not self.request.user.has_perm('judge.see_private_contest'):
             queryset = queryset.filter(is_public=True)
         if not self.request.user.has_perm('judge.edit_all_contest'):
@@ -47,8 +52,17 @@ class ContestList(TitleMixin, ListView):
             if self.request.user.is_authenticated():
                 q |= Q(organizations__in=self.request.user.profile.organizations.all())
             queryset = queryset.filter(q)
-        queryset = queryset.annotate(participation_count=Count('users'))
         return queryset
+
+
+class ContestList(TitleMixin, ContestListMixin, ListView):
+    model = Contest
+    template_name = 'contest/list.jade'
+    title = 'Contests'
+
+    def get_queryset(self):
+        return super(ContestList, self).get_queryset().annotate(participation_count=Count('users')) \
+                                       .order_by('-start_time', 'key')
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
@@ -65,6 +79,7 @@ class ContestList(TitleMixin, ListView):
         context['current_contests'] = present
         context['past_contests'] = past
         context['future_contests'] = future
+        context['now'] = timezone.now()
         return context
 
 
@@ -78,7 +93,7 @@ class ContestMixin(object):
     context_object_name = 'contest'
     model = Contest
     slug_field = 'key'
-    slug_url_kwarg = 'key'
+    slug_url_kwarg = 'contest'
 
     def get_object(self, queryset=None):
         contest = super(ContestMixin, self).get_object(queryset)
@@ -184,12 +199,83 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
         return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
 
 
+ContestDay = namedtuple('ContestDay', 'date weekday is_pad is_today starts ends oneday')
+
+
+class ContestCalendar(ContestListMixin, TemplateView):
+    firstweekday = SUNDAY
+    weekday_classes = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    template_name = 'contest/calendar.jade'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.year = int(kwargs['year'])
+            self.month = int(kwargs['month'])
+        except (KeyError, ValueError):
+            raise ImproperlyConfigured('ContestCalender requires integer year and month')
+        return self.render()
+
+    def render(self):
+        context = self.get_context_data()
+        return self.render_to_response(context)
+
+    def get_contest_data(self, start, end):
+        end += timedelta(days=1)
+        contests = self.get_queryset().filter(Q(start_time__gte=start, start_time__lt=end) |
+                                              Q(end_time__gte=start, end_time__lt=end)).defer('description')
+        starts, ends, oneday = (defaultdict(list) for i in xrange(3))
+        for contest in contests:
+            start_date = timezone.localtime(contest.start_time).date()
+            end_date = timezone.localtime(contest.end_time).date()
+            if start_date == end_date:
+                oneday[start_date].append(contest)
+            else:
+                starts[start_date].append(contest)
+                ends[end_date].append(contest)
+        return starts, ends, oneday
+
+    def get_table(self):
+        calendar = Calendar(self.firstweekday).monthdatescalendar(self.year, self.month)
+        today = timezone.now().date()
+        starts, ends, oneday = self.get_contest_data(timezone.make_aware(datetime.combine(calendar[0][0], time.min)),
+                                                     timezone.make_aware(datetime.combine(calendar[-1][-1], time.min)))
+        return [[ContestDay(
+            date=date, weekday=self.weekday_classes[weekday], is_pad=date.month != self.month,
+            is_today=date == today, starts=starts[date], ends=ends[date], oneday=oneday[date],
+        ) for weekday, date in enumerate(week)] for week in calendar]
+
+    def get_context_data(self, **kwargs):
+        context = super(ContestCalendar, self).get_context_data(**kwargs)
+
+        try:
+            context['month'] = date(self.year, self.month, 1)
+        except ValueError:
+            raise Http404()
+
+        context['calendar'] = self.get_table()
+        context['prev_month'] = date(self.year - (self.month == 1), 12 if self.month == 1 else self.month - 1, 1)
+        context['next_month'] = date(self.year + (self.month == 12), 1 if self.month == 12 else self.month + 1, 1)
+        return context
+
+
+class CachedContestCalendar(ContestCalendar):
+    def render(self):
+        key = 'contest_cal:%d:%d' % (self.year, self.month)
+        cached = cache.get(key)
+        if cached is not None:
+            return HttpResponse(cached)
+        response = super(CachedContestCalendar, self).render()
+        response.render()
+        cached.set(key, response.content)
+        return response
+
+
 ContestRankingProfile = namedtuple('ContestRankingProfile',
                                    'id user display_rank long_display_name points cumtime problems rating organization')
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
 
 
-def contest_ranking_list(contest, problems):
+def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, 'TIME_ZONE', 'UTC'))):
     cursor = connection.cursor()
     cursor.execute('''
         SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, MAX(sub.date) AS `last`
@@ -200,7 +286,7 @@ def contest_ranking_list(contest, problems):
         WHERE cp.contest_id = %s AND part.contest_id = %s
         GROUP BY cp.id, part.id
     ''', (contest.id, contest.id))
-    data = {(part, prob): (code, best, last) for part, prob, code, best, last in cursor.fetchall()}
+    data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in cursor.fetchall()}
     problems = map(attrgetter('id', 'points'), problems)
     cursor.close()
 
@@ -232,8 +318,8 @@ def contest_ranking_list(contest, problems):
                       .order_by('-score', 'cumtime'))
 
 
-def contest_ranking_ajax(request, key):
-    contest, exists = _find_contest(request, key)
+def contest_ranking_ajax(request, contest):
+    contest, exists = _find_contest(request, contest)
     if not exists:
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
@@ -267,8 +353,8 @@ def contest_ranking_view(request, contest):
     })
 
 
-def contest_ranking(request, key):
-    contest, exists = _find_contest(request, key)
+def contest_ranking(request, contest):
+    contest, exists = _find_contest(request, contest)
     if not exists:
         return contest
     return contest_ranking_view(request, contest)

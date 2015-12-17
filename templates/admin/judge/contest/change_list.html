@@ -1,11 +1,12 @@
 {% extends "reversion/change_list.html" %}
 
 {% block object-tools-items %}
-    {% if not is_popup and perms.judge.contest_rating %}
-        <a href="{% url 'admin:judge_contest_rate_all' %}" class="ratealllink btn btn-info">
-            <i class="icon-signal"></i>&nbsp;
-            Rate all ratable contests
-        </a>
-    {% endif %}
     {{ block.super }}
+    {% if not is_popup and perms.judge.contest_rating %}
+        <li>
+            <a href="{% url 'admin:judge_contest_rate_all' %}" class="ratealllink">
+                <i class="fa fa-signal"></i> Rate all ratable contests
+            </a>
+        </li>
+    {% endif %}
 {% endblock %}

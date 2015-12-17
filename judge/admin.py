@@ -1,22 +1,22 @@
 from functools import partial
 from operator import itemgetter, attrgetter
+
 from django import forms
 from django.conf import settings
-
+from django.conf.urls import url
 from django.contrib import admin, messages
-from django.conf.urls import patterns, url
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import transaction, connection
 from django.db.models import TextField, Q, Count
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, Http404
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin
-import reversion
+from reversion.admin import VersionAdmin
 from reversion_compare.admin import CompareVersionAdmin
 
 from judge.dblock import LockModel
@@ -27,7 +27,7 @@ from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 try:
-    from django_select2.widgets import HeavySelect2Widget, HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
+    from django_select2.forms import HeavySelect2Widget, HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
 
     class HeavySelect2Widget(HeavySelect2Widget):
         @property
@@ -39,11 +39,11 @@ except ImportError:
     Select2Widget = None
     Select2MultipleWidget = None
 
-try:
-    from suit.admin import SortableModelAdmin, SortableTabularInline
-except ImportError:
-    SortableModelAdmin = object
-    SortableTabularInline = admin.TabularInline
+#try:
+#    from suit.admin import SortableModelAdmin, SortableTabularInline
+#except ImportError:
+SortableModelAdmin = object
+SortableTabularInline = admin.TabularInline
 
 use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
 
@@ -99,7 +99,7 @@ class TimezoneFilter(admin.SimpleListFilter):
         return queryset.filter(timezone=self.value())
 
 
-class ProfileAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class ProfileAdmin(Select2SuitMixin, VersionAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
               'last_access', 'ip', 'mute')
     readonly_fields = ('user',)
@@ -151,8 +151,8 @@ class ProblemForm(ModelForm):
     class Meta:
         if use_select2:
             widgets = {
-                'authors': HeavySelect2MultipleWidget(data_view='profile_select2'),
-                'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2'),
+                'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+                'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
                 'types': Select2MultipleWidget,
                 'group': Select2Widget,
             }
@@ -197,12 +197,11 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         ('Justice', {'fields': ('banned_users',)}),
         ('History', {'fields': ('change_message',)})
     )
-    list_display = ['code', 'name', 'show_authors', 'points', 'is_public']
+    list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'show_public']
     ordering = ['code']
     search_fields = ('code', 'name')
     actions = ['make_public', 'make_private']
     inlines = [LanguageLimitInline]
-    list_per_page = 500
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
@@ -220,6 +219,10 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
     show_authors.short_description = 'Authors'
+
+    def show_public(self, obj):
+        return format_html('<a href="{0}">View on site</a>', obj.get_absolute_url())
+    show_public.short_description = ''
 
     def _update_points(self, problem_id, sign):
         with connection.cursor() as c:
@@ -265,14 +268,18 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         queryset = Problem.objects.prefetch_related('authors__user')
         if request.user.has_perm('judge.edit_all_problem'):
             return queryset
+        elif request.user.has_perm('judge.edit_public_problem'):
+            return queryset.filter(is_public=True)
         else:
             return queryset.filter(authors__id=request.user.profile.id)
 
     def has_change_permission(self, request, obj=None):
-        if not request.user.has_perm('judge.edit_own_problem'):
-            return False
         if request.user.has_perm('judge.edit_all_problem') or obj is None:
             return True
+        if request.user.has_perm('judge.edit_public_problem') and obj.is_public:
+            return True
+        if not request.user.has_perm('judge.edit_own_problem'):
+            return False
         return obj.authors.filter(id=request.user.profile.id).exists()
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
@@ -290,10 +297,10 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         if form.changed_data and 'is_public' in form.changed_data:
             self._update_points(obj.id, '+' if obj.is_public else '-')
 
-    def construct_change_message(self, request, form, formsets):
+    def construct_change_message(self, request, form, *args, **kwargs):
         if form.cleaned_data.get('change_message'):
             return form.cleaned_data['change_message']
-        return super(ProblemAdmin, self).construct_change_message(request, form, formsets)
+        return super(ProblemAdmin, self).construct_change_message(request, form, *args, **kwargs)
 
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
@@ -388,10 +395,16 @@ class SubmissionAdmin(admin.ModelAdmin):
     user_column.short_description = 'User'
 
     def get_queryset(self, request):
-        if request.user.has_perm('judge.edit_all_problem'):
-            return Submission.objects.all()
-        else:
-            return Submission.objects.filter(problem__authors__id=request.user.profile.id)
+        queryset = Submission.objects.only(
+            'problem__code', 'problem__name', 'user__user__username', 'user__name', 'language__name',
+            'time', 'memory', 'points', 'status', 'result'
+        )
+        if not request.user.has_perm('judge.edit_all_problem'):
+            queryset = queryset.filter(problem__authors__id=request.user.profile.id)
+        return queryset
+
+    def has_add_permission(self, request):
+        return False
 
     def has_change_permission(self, request, obj=None):
         if not request.user.has_perm('judge.edit_own_problem'):
@@ -463,11 +476,8 @@ class SubmissionAdmin(admin.ModelAdmin):
     problem_name.admin_order_field = 'problem__name'
 
     def get_urls(self):
-        urls = super(SubmissionAdmin, self).get_urls()
-        my_urls = patterns('',
-                           url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge'),
-        )
-        return my_urls + urls
+        return [url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge')] + \
+               super(SubmissionAdmin, self).get_urls()
 
     def judge_view(self, request, id):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
@@ -498,7 +508,7 @@ class CommentForm(ModelForm):
             }
 
 
-class CommentAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class CommentAdmin(Select2SuitMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('author', 'page', 'parent', 'score', 'hidden')}),
         ('Content', {'fields': ('title', 'body')}),
@@ -551,7 +561,7 @@ class LanguageForm(ModelForm):
                FilteredSelectMultiple('problems', False))
 
 
-class LanguageAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class LanguageAdmin(Select2SuitMixin, VersionAdmin):
     fields = ('key', 'name', 'short_name', 'common_name', 'ace', 'pygments', 'info', 'description', 'problems')
     list_display = ('key', 'name', 'common_name', 'info')
     form = LanguageForm
@@ -676,7 +686,7 @@ class JudgeAdminForm(ModelForm):
         }
 
 
-class JudgeAdmin(reversion.VersionAdmin):
+class JudgeAdmin(VersionAdmin):
     form = JudgeAdminForm
     readonly_fields = ('created', 'online', 'last_connect', 'ping', 'load', 'runtimes', 'problems')
     fieldsets = (
@@ -738,7 +748,7 @@ class ContestForm(ModelForm):
             }
 
 
-class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class ContestAdmin(Select2SuitMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
         ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
@@ -797,12 +807,10 @@ class ContestAdmin(Select2SuitMixin, reversion.VersionAdmin):
         return obj.organizers.filter(id=request.user.profile.id).exists()
 
     def get_urls(self):
-        urls = super(ContestAdmin, self).get_urls()
-        my_urls = patterns('',
-                           url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
-                           url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
-        )
-        return my_urls + urls
+        return [
+                   url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
+                   url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate')
+               ] + super(ContestAdmin, self).get_urls()
 
     def rate_all_view(self, request):
         if not request.user.has_perm('judge.contest_rating'):
@@ -862,6 +870,12 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     search_fields = ('contest__key', 'contest__name', 'profile__user__user__username', 'profile__user__name')
     form = ContestParticipationForm
 
+    def get_queryset(self, request):
+        return super(ContestParticipationAdmin, self).get_queryset(request).only(
+            'contest__name', 'profile__user__user__username', 'profile__user__name',
+            'real_start', 'score', 'cumtime'
+        )
+
     def username(self, obj):
         return obj.profile.user.long_display_name
     username.admin_order_field = 'profile__user__user__username'
@@ -892,7 +906,7 @@ class OrganizationForm(ModelForm):
             }
 
 
-class OrganizationAdmin(Select2SuitMixin, reversion.VersionAdmin):
+class OrganizationAdmin(Select2SuitMixin, VersionAdmin):
     readonly_fields = ('creation_date',)
     fields = ('name', 'key', 'short_name', 'is_open', 'about', 'registrant', 'creation_date', 'admins')
     list_display = ('name', 'key', 'short_name', 'is_open', 'registrant', 'creation_date')
@@ -928,7 +942,7 @@ class OrganizationAdmin(Select2SuitMixin, reversion.VersionAdmin):
         return obj.admins.filter(id=request.user.profile.id).exists()
 
 
-class BlogPostAdmin(reversion.VersionAdmin):
+class BlogPostAdmin(VersionAdmin):
     fieldsets = (
         (None, {'fields': ('title', 'slug', 'visible', 'sticky', 'publish_on')}),
         ('Content', {'fields': ('content',)}),
@@ -953,7 +967,7 @@ class SolutionForm(ModelForm):
             }
 
 
-class SolutionAdmin(reversion.VersionAdmin):
+class SolutionAdmin(VersionAdmin):
     fields = ('url', 'title', 'is_public', 'publish_on', 'problem', 'content')
     list_display = ('title', 'url', 'problem_link', 'link')
     search_fields = ('url', 'title')

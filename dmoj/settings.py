@@ -14,8 +14,6 @@ import re
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -30,73 +28,83 @@ ALLOWED_HOSTS = []
 
 SITE_ID = 1
 SITE_NAME = 'DMOJ'
+SITE_LONG_NAME = 'Don Mills Online Judge'
+
+PYGMENT_THEME = 'pygment-github.css'
 
 # Application definition
 
 INSTALLED_APPS = ()
 
 try:
-    import suit
+    import wpadmin
 except ImportError:
     pass
 else:
-    del suit
-    INSTALLED_APPS += ('suit',)
-    SUIT_CONFIG = {
-        'ADMIN_NAME': 'DMOJ Admin',
-        'LIST_PER_PAGE': 100,
-        'MENU': (
-            {
-                'label': 'Site',
-                'icon': 'icon-leaf',
-                'models': (
-                    'judge.blogpost',
-                    'judge.comment',
-                    'sites.site',
-                    'flatpages.flatpage',
-                    'judge.miscconfig',
-                    'judge.navigationbar',
-                ),
+    del wpadmin
+    INSTALLED_APPS += ('wpadmin',)
+
+    WPADMIN = {
+        'admin': {
+            'title': 'Don Mills Online Judge Admin',
+            'menu': {
+                'top': 'wpadmin.menu.menus.BasicTopMenu',
+                'left': 'wpadmin.menu.custom.CustomModelLeftMenuWithDashboard',
             },
-            {
-                'label': 'Users',
-                'icon': 'icon-user',
-                'models': (
-                    'auth.user',
-                    'auth.group',
-                    'judge.profile',
-                    'judge.organization',
-                    'registration.registrationprofile',
-                ),
+            'custom_menu': [
+                {
+                    'model': 'judge.Problem',
+                    'icon': 'fa-question-circle',
+                    'children': [
+                        'judge.ProblemGroup',
+                        'judge.ProblemType',
+                    ],
+                },
+                {
+                    'model': 'judge.Submission',
+                    'icon': 'fa-check-square-o',
+                    'children': [
+                        'judge.Language',
+                        'judge.Judge',
+                    ],
+                },
+                {
+                    'model': 'judge.Contest',
+                    'icon': 'fa-bar-chart',
+                    'children': [
+                        'judge.ContestParticipation',
+                    ],
+                },
+                {
+                    'model': 'auth.User',
+                    'icon': 'fa-user',
+                    'children': [
+                        'auth.Group',
+                        'registration.RegistrationProfile',
+                    ],
+                },
+                {
+                    'model': 'judge.Profile',
+                    'icon': 'fa-user-plus',
+                    'children': [
+                        'judge.Organization',
+                    ],
+                },
+                ('flatpages.FlatPage', 'fa-file-text-o'),
+                ('judge.Solution', 'fa-pencil'),
+                {
+                    'model': 'newsletter.Message',
+                    'icon': 'fa-envelope',
+                    'children': [
+                        'newsletter.Submission',
+                        'newsletter.Newsletter',
+                    ]
+                },
+            ],
+            'dashboard': {
+                'breadcrumbs': True,
             },
-            {
-                'label': 'Problems',
-                'icon': 'icon-question-sign',
-                'models': (
-                    'judge.problem',
-                    'judge.problemgroup',
-                    'judge.problemtype',
-                    'judge.solution',
-                ),
-            },
-            {
-                'label': 'Contests',
-                'icon': 'icon-signal',
-                'models': (
-                    'judge.contest',
-                    'judge.contestparticipation',
-                ),
-            },
-            {
-                'label': 'Judging',
-                'icon': 'icon-ok',
-                'models': (
-                    'judge.submission',
-                    'judge.language',
-                    'judge.judge',
-                ),
-            }
-        )
+        }
     }
 
 INSTALLED_APPS += (
@@ -107,6 +115,7 @@ INSTALLED_APPS += (
     'django.contrib.flatpages',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.redirects',
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
@@ -121,6 +130,7 @@ INSTALLED_APPS += (
     'django_ace',
     'pagedown',
     'sortedm2m',
+    'pyjade.ext.django',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -136,9 +146,25 @@ MIDDLEWARE_CLASSES = (
     'judge.timezone.TimezoneMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'judge.social_auth.SocialAuthExceptionMiddleware',
+    'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 ROOT_URLCONF = 'dmoj.urls'
 LOGIN_REDIRECT_URL = '/user'
@@ -147,7 +173,9 @@ WSGI_APPLICATION = 'dmoj.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
@@ -159,6 +187,7 @@ TEMPLATES = [
                 'judge.template_context.get_resource',
                 'judge.template_context.general_info',
                 'judge.template_context.site',
+                'judge.template_context.site_name',
                 'judge.template_context.misc_config',
                 'judge.template_context.contest',
                 'social.apps.django_app.context_processors.backends',
@@ -169,34 +198,16 @@ TEMPLATES = [
                     'django.template.loaders.filesystem.Loader',
                     'django.template.loaders.app_directories.Loader',
                 ))
-            ]
+            ],
+            'builtins': ['pyjade.ext.django.templatetags'],
         },
     },
 ]
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
 
-TEMPLATE_CONTEXT_PROCESSORS += (
-    'django.core.context_processors.request',
-    'judge.template_context.comet_location',
-    'judge.template_context.get_resource',
-    'judge.template_context.general_info',
-    'judge.template_context.site',
-    'judge.template_context.misc_config',
-    'judge.template_context.contest',
-    'social.apps.django_app.context_processors.backends',
-    'social.apps.django_app.context_processors.login_redirect',
-)
-
-TEMPLATE_LOADERS = (
-    ('pyjade.ext.django.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )),
-)
-
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
 
 # Markdown Trois
 from markdown_trois.conf.settings import MARKDOWN_TROIS_DEFAULT_STYLE

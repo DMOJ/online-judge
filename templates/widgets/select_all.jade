@@ -1,5 +1,5 @@
 div(style='border:none', id=select_all_name)
-    div.original-checkboxes(style='-moz-columns:9em; -webkit-columns:9em; columns:9em')
+    div.original-checkboxes(style='-moz-columns: 15em 5; -webkit-columns: 15em 5; columns: 15em 5')
         | {{ original_widget }}
     if empty
         | Nothing here.
@@ -8,6 +8,18 @@ div(style='border:none', id=select_all_name)
             input.checkall(id=select_all_id, name=select_all_name, checked=all_selected, type='checkbox')
             = ' '
             | Check all
+
+style.
+    div.original-checkboxes ul {
+        margin: 0 0 0 2em;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    div.original-checkboxes ul li {
+        list-style-type: none;
+    }
+
 script(type='text/javascript').
     django.jQuery(function($) {
         var box = $('div#' + '{{ select_all_name }}');

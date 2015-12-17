@@ -1,36 +1,19 @@
 {% extends "admin/change_form.html" %}
 
-{% load staticfiles %}
-
 {% block extrahead %}{{ block.super }}
-<script>
-    django.jQuery(document).ready(function($) {
-        var suit = $('ul.box.menu-box li:first');
-        if (suit.length) {
-            $('li#suit-rerate').insertBefore(suit);
-            $('.reratelink').remove();
-        } else {
-            $('.reratelink').insertAfter('.deletelink-box>a:last');
-        }
-    });
-</script>
-
-<style type="text/css">
-.submit-row .reratelink {
-    background: url("{% static 'admin/img/icon_clock.gif' %}") no-repeat scroll 0 50% transparent;
-    margin-left: 20px;
-    padding-left: 18px;
-}
-</style>
+    <script>
+        django.jQuery(function ($) {
+            $('.reratelink').appendTo('div#bottombar').show();
+        });
+    </script>
 {% endblock extrahead %}
 
 {% block after_field_sets %}{{ block.super }}
     {% if original and original.is_rated and perms.judge.contest_rating %}
-        <a class="reratelink" href="{% url 'admin:judge_contest_rate' original.pk %}">Rate</a>
-        <div style="display: none">
-            <ul>
-                <li id="suit-rerate"><a href="{% url 'admin:judge_contest_rate' original.pk %}"><i class="icon-refresh icon-alpha75"></i>Rate</a></li>
-            </ul>
-        </div>
+        <a style="display: none" title="Rate" href="{% url 'admin:judge_contest_rate' original.pk %}"
+           class="button reratelink">
+            <i class="fa fa-lg fa-signal"></i>
+            <span class="text">Rate</span>
+        </a>
     {% endif %}
 {% endblock %}

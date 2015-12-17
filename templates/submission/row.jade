@@ -2,7 +2,7 @@
 - load tz
 
 if profile_id
-    - var can_view = profile_id == submission.user_id or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids
+    - var can_view = profile_id == submission.user_id or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids and submission.problem.is_public
     - var info_colspan = (1 if can_view else 2)
 else
     - var can_view = false
@@ -11,7 +11,7 @@ else
 if submission.status != 'G'
     - var info_colspan = info_colspan + 1
 
-td.sub-result(class=(submission.status if submission.status in 'IECE' else submission.result))
+td.sub-result(class=(submission.status if submission.status in 'IECE' else (('AC' if submission.case_points == submission.case_total else '_AC') if submission.result == 'AC' else submission.result)))
     .score
         if submission.is_graded
             if submission.status in 'IECEAB'

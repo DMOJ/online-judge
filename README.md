@@ -15,4 +15,4 @@ A modern online judge and contest platform system, supporting <b>IO-based</b>, <
 </tr>
 </table>
 
-[Read the documentation.](https://github.com/DMOJ/docs)
+[![Documentation Status](https://readthedocs.org/projects/dmoj/badge/?version=latest)](http://dmoj.readthedocs.org/en/latest/?badge=latest) [Read the documentation.](https://dmoj.readthedocs.org/en/latest/)

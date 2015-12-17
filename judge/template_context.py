@@ -22,9 +22,10 @@ def get_resource(request):
     else:
         scheme = 'http'
     return {
+        'PYGMENT_THEME': getattr(settings, 'PYGMENT_THEME', None),
         'INLINE_JQUERY': getattr(settings, 'INLINE_JQUERY', True),
         'INLINE_FONTAWESOME': getattr(settings, 'INLINE_FONTAWESOME', True),
-        'JQUERY_JS': getattr(settings, 'JQUERY_JS', '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'),
+        'JQUERY_JS': getattr(settings, 'JQUERY_JS', '//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'),
         'FONTAWESOME_CSS': getattr(settings, 'FONTAWESOME_CSS',
                                    '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'),
         'DMOJ_SCHEME': scheme,
@@ -93,3 +94,9 @@ def contest(request):
         in_contest = False
         participation = None
     return {'IN_CONTEST': in_contest, 'CONTEST': participation}
+
+
+def site_name(request):
+    return {'SITE_NAME': getattr(settings, 'SITE_NAME', 'DMOJ'),
+            'SITE_LONG_NAME': getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ')),
+            'SITE_ADMIN_EMAIL': getattr(settings, 'SITE_ADMIN_EMAIL', False)}

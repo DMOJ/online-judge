@@ -2,6 +2,8 @@
 - load markdown_trois_tags
 - load mptt_tags
 - load gravatar
+- load camo_proxy
+- load lazy_load
 
 ul.comments.top-level-comments
     if has_comments
@@ -27,7 +29,10 @@ ul.comments.top-level-comments
                         .comment-header
                             span.comment-info
                                 span.comment-author
-                                    img(src='{% gravatar_url node.author.user.email 24 node.author.mute %}', width='24', height='24')
+                                    - gravatar_url node.author.user.email 24 node.author.mute as gravatar
+                                    noscript
+                                        img(src=gravatar, width='24', height='24')
+                                    img.unveil(src='{% static "blank.gif" %}', data-src=gravatar, width='24', height='24')
                                     span(class=node.author.display_rank)
                                         a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
                                 = ' on '
@@ -68,7 +73,7 @@ ul.comments.top-level-comments
                                                 i.fa.fa-pencil.fa-fw
                                         a(href='{% url "admin:judge_comment_change" node.id %}', title='Admin')
                                             i.fa.fa-cog.fa-fw
-                        .comment-body.content-description #{node.body|markdown:"comment"}
+                        .comment-body.content-description #{node.body|markdown:"comment"|proxy_images|lazy_load}
                         if not node.is_leaf_node 
                             ul.comments
                                 | {{ children }}

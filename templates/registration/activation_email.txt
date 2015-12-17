@@ -1,4 +1,4 @@
-Please activate your DMOJ account in {{ expiration_days }} days.
+Please activate your {{ SITE_NAME }} account in {{ expiration_days }} days.
 
 Please click on the following link to activate your account:
     http://{{ site.domain }}/accounts/activate/{{ activation_key }}/

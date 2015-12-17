@@ -18,6 +18,13 @@ block js_media
             }, 10000);
         });
 
+block header
+    div(style='float: right; margin-top: 1.2em')
+        if perms.judge.change_language
+            | [
+            a(href='{% url "admin:judge_language_change" language.id %}') Edit
+            | ]
+
 block body
     ul
         li

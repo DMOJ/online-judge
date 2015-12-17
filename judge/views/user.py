@@ -2,16 +2,14 @@ import django
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count, Min
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template import RequestContext, Context
-from django.utils.html import format_html
 from django.views.generic import DetailView
 from django.utils.functional import cached_property
-import reversion
+from reversion import revisions
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Submission, Rating
@@ -20,7 +18,7 @@ from judge.utils.ranker import ranker
 from .contests import contest_ranking_view
 from judge.utils.views import TitleMixin, generic_message
 
-__all__ = ['UserPage', 'users', 'edit_profile', 'UserRating']
+__all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile']
 
 
 def remap_keys(iterable, mapping):
@@ -30,7 +28,7 @@ def remap_keys(iterable, mapping):
 class UserMixin(object):
     model = Profile
     slug_field = 'user__username'
-    slug_url_kwarg = 'username'
+    slug_url_kwarg = 'user'
     context_object_name = 'user'
 
     def render_to_response(self, context, **response_kwargs):
@@ -41,7 +39,7 @@ class UserMixin(object):
 
 
 class UserPage(TitleMixin, UserMixin, DetailView):
-    template_name = 'user/user.jade'
+    template_name = 'user/user_base.jade'
 
     def get_object(self, queryset=None):
         if self.kwargs.get(self.slug_url_kwarg, None) is None:
@@ -86,11 +84,10 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context = super(UserPage, self).get_context_data(**kwargs)
 
         context['hide_solved'] = int(self.hide_solved)
-        context['completed_problem_ids'] = self.get_completed_problems() if self.hide_solved else []
-
         result = Submission.objects.filter(user=self.object, points__gt=0, problem__is_public=True) \
-            .values('problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
-            .distinct().annotate(points=Max('points')).order_by('problem__group__full_name', 'problem__name')
+            .exclude(problem__id__in=self.get_completed_problems() if self.hide_solved else []) \
+            .values('problem__id', 'problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
+            .distinct().annotate(points=Max('points')).order_by('problem__group__full_name', 'problem__code')
         context['best_submissions'] = remap_keys(result, {
             'problem__code': 'code', 'problem__name': 'name', 'problem__points': 'total',
             'problem__group__full_name': 'group'
@@ -112,6 +109,29 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         return super(UserPage, self).get(request, *args, **kwargs)
 
 
+class UserAboutPage(UserPage):
+    template_name = 'user/user_about.jade'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserAboutPage, self).get_context_data(**kwargs)
+        ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
+            .defer('contest__description')
+        if ratings:
+            user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
+            global_data = Rating.objects.aggregate(Min('rating'), Max('rating'))
+            min_ever, max_ever = global_data['rating__min'], global_data['rating__max']
+            min_user, max_user = user_data['rating__min'], user_data['rating__max']
+            delta = max_user - min_user
+            ratio = (max_ever - max_user + 0.0) / (max_ever - min_ever)
+            context['max_graph'] = max_user + ratio * delta
+            context['min_graph'] = min_user + ratio * delta - delta
+        return context
+
+
+class UserProblemsPage(UserPage):
+    template_name = 'user/user_problems.jade'
+
+
 @login_required
 def edit_profile(request):
     profile = Profile.objects.get(user=request.user)
@@ -120,10 +140,10 @@ def edit_profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile, user=request.user)
         if form.is_valid():
-            with transaction.atomic(), reversion.create_revision():
+            with transaction.atomic(), revisions.create_revision():
                 form.save()
-                reversion.set_user(request.user)
-                reversion.set_comment('Updated on site')
+                revisions.set_user(request.user)
+                revisions.set_comment('Updated on site')
             return HttpResponseRedirect(request.path)
     else:
         form = ProfileForm(instance=profile, user=request.user)
@@ -140,35 +160,8 @@ def users(request):
         return contest_ranking_view(request, request.user.profile.contest.current.contest)
     return render(request, 'user/list.jade', {
         'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
-                               .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
-                               .select_related('user__username')
-                               .only('display_rank', 'user__username', 'name', 'points', 'rating')),
+                        .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
+                        .select_related('user__username')
+                        .only('display_rank', 'user__username', 'name', 'points', 'rating')),
         'title': 'Users'
     })
-
-
-class UserRating(TitleMixin, UserMixin, DetailView):
-    template_name = 'user/rating.jade'
-
-    def get_title(self):
-        return 'Rating history for %s' % self.object.long_display_name
-
-    def get_content_title(self):
-        return format_html(u'Rating history for <span class="{1}"><a href="{2}">{0}</a></span>',
-                           self.object.user.username, self.object.display_rank,
-                           reverse('user_page', args=[self.object.user.username]))
-
-    def get_context_data(self, **kwargs):
-        context = super(UserRating, self).get_context_data(**kwargs)
-        ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
-                                           .defer('contest__description')
-        if ratings:
-            user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
-            global_data = Rating.objects.aggregate(Min('rating'), Max('rating'))
-            min_ever, max_ever = global_data['rating__min'], global_data['rating__max']
-            min_user, max_user = user_data['rating__min'], user_data['rating__max']
-            delta = max_user - min_user
-            ratio = (max_ever - max_user + 0.0) / (max_ever - min_ever)
-            context['max_graph'] = max_user + ratio * delta
-            context['min_graph'] = min_user + ratio * delta - delta
-        return context

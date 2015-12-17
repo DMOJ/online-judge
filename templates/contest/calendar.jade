@@ -1,0 +1,42 @@
+extends base
+
+block title
+    | Contests in #{month|date:"F Y"}
+
+block title_row
+    div(style='display: flex')
+        h2 Contests in #{month|date:"F Y"}
+        div(style='flex: 1')
+        div(style='font-size: 1.6em; margin-top: 0.3em')
+            a(href='{% url "contest_calendar" prev_month.year prev_month.month %}') &laquo; Prev
+            = ' '
+            a(href='{% url "contest_calendar" next_month.year next_month.month %}') Next &raquo;
+
+block body
+    table#contest-calendar
+        tr
+            th Sunday
+            th Monday
+            th Tuesday
+            th Wednesday
+            th Thursday
+            th Friday
+            th Saturday
+        each week in calendar
+            tr
+                each day in week
+                    td(class='{{ day.weekday }}{% if day.is_today %} today{% endif %}{% if day.is_pad %} noday{% endif %}')
+                        span.num= day.date.day
+                        ul.fa-ul
+                            each contest in day.starts
+                                li.start
+                                    i.fa.fa-li.fa-lg.fa-step-forward
+                                    a(href='{% url "contest_view" contest.key %}')= contest.name
+                            each contest in day.oneday
+                                li.oneday
+                                    i.fa.fa-li.fa-lg.fa-play
+                                    a(href='{% url "contest_view" contest.key %}')= contest.name
+                            each contest in day.ends
+                                li.end
+                                    i.fa.fa-li.fa-lg.fa-step-backward
+                                    a(href='{% url "contest_view" contest.key %}')= contest.name

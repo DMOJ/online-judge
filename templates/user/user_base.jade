@@ -1,0 +1,62 @@
+extends base
+- load staticfiles
+- load gravatar
+- load list_processor
+- load markdown_trois_tags
+- load rating
+
+block media
+    block user_media
+    style.
+        .user-gravatar {
+            display: block;
+            padding-right: 15px;
+        }
+
+        .user-gravatar img {    
+            width: 135px;
+            height: 135px;
+            display: block;
+            border: 1px solid none;
+            border-radius: 6px;
+        }
+
+        .page-title {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .page-title .spacer {
+            display: inline-block;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1 1 1px;
+            -ms-flex: 1 1 1px;
+            flex: 1 1 1px;
+        }
+
+        .user-content {
+            width: 100%;
+        }
+
+link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+
+block body
+    table
+        tr
+            td(style='padding-left:1em')
+                .user-gravatar
+                    img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar', width="135px", height="135px")
+                br
+                h4 #{user.solved_problems} problems solved.
+                b Rank by points:
+                |  #{rank} of #{users}
+                br
+                b Total points:
+                |  #{user.points}
+                br
+                a(href='{% url "all_user_submissions" user.user.username %}') View submissions
+
+            td.user-content
+                block user_content

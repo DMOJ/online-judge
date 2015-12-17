@@ -25,6 +25,9 @@ th
   &.headerSortUp:after
     content: " ▴"
 
+pre
+  white-space: pre-wrap
+
 hr
   display: block
   height: 0
@@ -56,6 +59,10 @@ hr
     border-width: 1px 1px 1px 0
   thead th
     vertical-align: middle
+    &:first-child
+      border-top-left-radius: 6px
+    &:last-child
+      border-top-right-radius: 6px
 
 th
   vertical-align: middle
@@ -67,9 +74,13 @@ th
     border-color: #555
     border-width: 1px 1px 0 0
     border-style: solid
-    padding: 3px
+    padding: 4px 10px
     vertical-align: top
     text-align: center
+    &:first-child
+      border-top-left-radius: 6px
+    &:last-child
+      border-top-right-radius: 6px
   td
     border-color: #d4d4d4
     border-width: 1px 1px 0 0
@@ -150,18 +161,46 @@ header
   padding: 10px 10px 10px 5%
 
 #user-links
-  bottom: 10px
-  right: 6px
+  top: 0
+  right: 0
   position: absolute
   color: #5c5954
+  .anon
+    position: absolute
+    bottom: 6px
+    right: 5px
   a
     color: #FFF
+  li
+    text-transform: none
+  & > ul
+    display: block
+    margin: 0
+    & > li > a > span
+      font-size: 13px
+      height: 36px
+      padding-top: 8px
+      display: block
+      & > img
+        vertical-align: middle
+        border-radius: 6px
+        display: inline
+        margin: 2px 6px 0 5px
+
+      & > span
+        color: #eee
+        vertical-align: middle
+        display: inline
+        margin-top: 11px
+        margin-right: 9px
+        padding: 0px
 
 #nav-shadow
   height: 3px
   background: linear-gradient(rgba(0, 0, 0, 0.5), transparent)
 
 #nav-container
+  background: #3B3B3B
   background: rgba(0, 0, 0, 0.77)
   // opacity: 0.77
   // filter: alpha(opacity=77)
@@ -218,6 +257,10 @@ nav
         left: 5px
         display: none
         li
+          &:first-child
+            a.active
+              border-top: 1px dashed #3B3B3B
+        li
           display: block
           a
             padding: 8px 15px 8px 8px
@@ -228,8 +271,8 @@ nav
         display: block
         background: #000
         color: #fff
+        background: #3B3B3B
         background: rgba(0, 0, 0, 0.77)
-        border-top: 1px dashed #2980b9
       &.home-nav-element a:hover
         border-bottom: 0
         padding-top: 0
@@ -280,11 +323,10 @@ noscript #noscript
   font-weight: bold
   background: #ae0000
   text-align: center
-  max-width: 30%
-  padding: 15px 10px 5px
+  padding: 5px 0px
+  left: 0
   right: 0
   position: fixed
-  border-radius: 4px
   z-index: 100
 
 #announcement
@@ -353,8 +395,6 @@ noscript #noscript
 @media (max-width: 760px)
   #navigation
     height: 36px
-  #navigation ul li.home-nav-element
-    display: none
   #navicon
     transition-duration: .25s
     display: block
@@ -372,12 +412,12 @@ noscript #noscript
       transition-duration: 0.25s
   #nav-list
     display: none
-  #navigation ul
     padding: 0
     margin-left: 0
     border-left: 4px solid #2980B9
     position: fixed
     top: 0
+    background: #3B3B3B
     background: rgba(0, 0, 0, 0.77)
     bottom: 0
     width: 8em
@@ -392,10 +432,19 @@ noscript #noscript
         top: auto
         bottom: auto
         margin-top: -36px
+      &.home-nav-element
+        display: none
   #user-links
     bottom: 6px
     right: 6px
     position: absolute
+    & > ul > li
+      & > a > span
+        padding-top: 4px
+        height: 32px
+      & > ul
+        left: 0 !important
+        margin-top: 0 !important
   #content
     width: auto
     padding: 0 5px

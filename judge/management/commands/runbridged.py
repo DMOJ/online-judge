@@ -1,10 +1,10 @@
 import threading
 
-from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
+from django.core.management.base import BaseCommand
 
-from judge.bridge import DjangoJudgeHandler, JudgeServer
 from judge.bridge import DjangoHandler, DjangoServer
+from judge.bridge import DjangoJudgeHandler, JudgeServer
 
 
 class Command(BaseCommand):

@@ -1,16 +1,16 @@
 import logging
+import re
 from operator import itemgetter
 from urllib import quote
-import re
-from django.contrib.auth.models import User
 
+from django import forms
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django import forms
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from requests import HTTPError
-import reversion
+from reversion import revisions
 from social.apps.django_app.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
 from social.backends.github import GithubOAuth2
 from social.exceptions import InvalidEmail, SocialAuthBaseException
@@ -18,7 +18,6 @@ from social.pipeline.partial import partial
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Language
-
 
 logger = logging.getLogger('judge.social_auth')
 
@@ -98,10 +97,10 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
             logger.info(data)
             form = ProfileForm(data, instance=user.profile, user=user)
             if form.is_valid():
-                with transaction.atomic(), reversion.create_revision():
+                with transaction.atomic(), revisions.create_revision():
                     form.save()
-                    reversion.set_user(user)
-                    reversion.set_comment('Updated on registration')
+                    revisions.set_user(user)
+                    revisions.set_comment('Updated on registration')
                     return
         return render(backend.strategy.request, 'registration/profile_creation.jade', {
             'title': 'Create your profile', 'form': form

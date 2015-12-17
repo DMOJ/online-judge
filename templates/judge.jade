@@ -11,12 +11,19 @@ block js_media
             table.tablesorter();
             setInterval(function () {
                 $.ajax({
-                    url: '{% url "judge.views.status_table" %}'
+                    url: '{% url "status_table" %}'
                 }).done(function (data) {
                     table.html(data);
                 });
             }, 10000);
         });
+
+block header
+    if perms.judge.change_judge
+        div(style='float: right; margin-top: 1.2em')
+            | [
+            a(href='{% url "admin:judge_judge_change" judge.id %}') Edit
+            | ]
 
 block body
     .content-description

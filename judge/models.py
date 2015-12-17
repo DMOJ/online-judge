@@ -18,7 +18,7 @@ from mptt.models import MPTTModel
 from reversion.models import Version
 from timedelta.fields import TimedeltaField
 import pytz
-import reversion
+from reversion import revisions
 from sortedm2m.fields import SortedManyToManyField
 
 from judge.fulltext import SearchManager
@@ -78,6 +78,9 @@ class Language(models.Model):
     def get_python2(cls):
         # We really need a default language, and this app is in Python 2
         return Language.objects.get_or_create(key='PY2', name='Python 2')[0]
+
+    def get_absolute_url(self):
+        return reverse('runtime_info', args=(self.key,))
 
     class Meta:
         ordering = ['key']
@@ -288,6 +291,10 @@ class Problem(models.Model):
         return self.authors.values_list('id', flat=True)
 
     @cached_property
+    def usable_common_names(self):
+        return set(self.usable_languages.values_list('common_name', flat=True))
+
+    @cached_property
     def usable_languages(self):
         return self.allowed_languages.filter(judges__in=self.judges.filter(online=True)).distinct()
 
@@ -296,6 +303,7 @@ class Problem(models.Model):
             ('see_private_problem', 'See hidden problems'),
             ('edit_own_problem', 'Edit own problems'),
             ('edit_all_problem', 'Edit all problems'),
+            ('edit_public_problem', 'Edit all public problems'),
             ('clone_problem', 'Clone problem'),
         )
 
@@ -670,7 +678,8 @@ class ContestParticipation(models.Model):
     @cached_property
     def end_time(self):
         contest = self.contest
-        return contest.end_time if contest.time_limit is None else self.real_start + contest.time_limit
+        return contest.end_time if contest.time_limit is None else \
+            min(self.real_start + contest.time_limit, contest.end_time)
 
     @property
     def ended(self):
@@ -799,14 +808,14 @@ class Solution(models.Model):
         )
 
 
-reversion.register(Profile, exclude=['points', 'last_access', 'ip', 'rating'])
-reversion.register(Problem, follow=['language_limits'])
-reversion.register(LanguageLimit)
-reversion.register(Contest, follow=['contest_problems'])
-reversion.register(ContestProblem)
-reversion.register(Organization)
-reversion.register(BlogPost)
-reversion.register(Solution)
-reversion.register(Judge, fields=['name', 'created', 'auth_key', 'description'])
-reversion.register(Language)
-reversion.register(Comment, fields=['author', 'time', 'page', 'score', 'title', 'body', 'hidden', 'parent'])
+revisions.register(Profile, exclude=['points', 'last_access', 'ip', 'rating'])
+revisions.register(Problem, follow=['language_limits'])
+revisions.register(LanguageLimit)
+revisions.register(Contest, follow=['contest_problems'])
+revisions.register(ContestProblem)
+revisions.register(Organization)
+revisions.register(BlogPost)
+revisions.register(Solution)
+revisions.register(Judge, fields=['name', 'created', 'auth_key', 'description'])
+revisions.register(Language)
+revisions.register(Comment, fields=['author', 'time', 'page', 'score', 'title', 'body', 'hidden', 'parent'])

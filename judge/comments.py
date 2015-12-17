@@ -1,13 +1,15 @@
 from django import forms
+from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Count
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
-import reversion
+from reversion import revisions
 from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
@@ -45,6 +47,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
             raise NotImplementedError()
         return self.comment_page
 
+    @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         page = self.get_comment_page()
@@ -55,9 +58,9 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
                 comment = form.save(commit=False)
                 comment.author = request.user.profile
                 comment.page = page
-                with reversion.create_revision():
-                    reversion.set_user(request.user)
-                    reversion.set_comment('Posted comment')
+                with revisions.create_revision():
+                    revisions.set_user(request.user)
+                    revisions.set_comment('Posted comment')
                     comment.save()
                 return HttpResponseRedirect(request.path)
 

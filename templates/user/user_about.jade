@@ -1,0 +1,209 @@
+extends user/user_base
+- load staticfiles
+- load gravatar
+- load list_processor
+- load markdown_trois_tags
+- load rating
+- load camo_proxy
+- load cache
+
+block user_media
+    style.
+        a.edit-profile {
+            float: right;
+            padding-top: 1em;
+        }
+
+        .user-problem-group h3 {
+            font-weight: bold;
+            font-size: 1.25em;
+            margin-bottom: -10px;
+            max-height: 20%;
+            line-height: 2.5em;
+        }
+
+        .user-problem-group ul {
+            -webkit-columns: 300px 4;
+            -moz-columns: 300px 4;
+            columns: 300px 4;
+            list-style-type: none;
+            margin-top: 0;
+            margin-left: -20px;
+            margin-bottom: 0;
+        }
+
+        .user-problem-group a img {
+            max-width: 1em;
+            margin-right: 3px;
+            padding-bottom: 1px;
+            vertical-align: middle;
+        }
+
+        .user-info-cell {
+            padding-left: 15px;
+            border-left: 1px solid #CCC;
+        }
+
+        .contest-history-cell {
+            border-left: 1px solid #CCC;
+            padding: 0 0.5em;
+        }
+
+        table td {
+            margin: 0;
+            vertical-align: top;
+        }
+
+        .strike {
+            text-align: right;
+            overflow: hidden;
+        }
+
+        .strike > span {
+            position: relative;
+            display: inline-block;
+        }
+
+        .strike > span:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 100000px;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.2);
+            right: 100%;
+            margin-right: 5px;
+        }
+
+    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+
+block title_ruler
+
+block title_row
+    - var user_tab = 'about'
+    include user/user_tabs
+
+block user_content
+    - with orgs=user.organizations.all
+        if orgs
+            p(style='margin-top: 0px;')
+                b From
+                = ' '
+                each org in orgs
+                    a(href='{% url "organization_home" org.key %}')= org.name
+                    if not forloop.last
+                        = ', '
+    if user.about
+        h4 About
+        - cache 86400 user_about user.id
+            | #{user.about|markdown:"self-description"|proxy_images}
+    else
+        i
+            if user.user == request.user
+                | You have not shared any information.
+            else
+                | This user has not shared any information.
+        br
+    if rating
+        br
+        hr
+        br
+        // TODO: if on mobile, show a "Can't show chart on this display" box instead
+        #rating-chart(style='height: 400px; margin: 0 auto')
+        h4 Contest History
+        b Rank by rating:
+        |  #{rating_rank} of #{rated_users}
+        br
+        b Rating:
+        = ' '
+        span.rate-group
+            span.rate-box(class='{{ rating.rating|rating_class }}')
+                span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
+            span.rating(class='{{ rating.rating|rating_class }}') #{rating.rating}
+        br
+        b Volatility:
+        |  #{rating.volatility}
+        br
+        b Minimum rating:
+        = ' '
+        span.rate-group
+            span.rate-box(class='{{ min_rating|rating_class }}')
+                span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
+            span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
+        br
+        b Maximum rating:
+        = ' '
+        span.rate-group
+            span.rate-box(class='{{ max_rating|rating_class }}')
+                span(style='height: {{ max_rating|rating_progress|floatformat:3 }}em')
+            span.rating(class='{{ max_rating|rating_class }}') #{max_rating}
+        br
+        b Competitions:
+        |  #{contests}
+        table.table
+            tr
+                th Contest
+                th Rank
+                th Rating
+            each rating in ratings
+                tr
+                    td
+                        a(href='{% url "contest_ranking" rating.contest.key %}')= rating.contest.name
+                    td= rating.rank
+                    td
+                        .rate-group(title='{{ rating.rating|rating_name }}')
+                            span.rate-box(class='{{ rating.rating|rating_class }}')
+                                span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
+                            span.rating(class='{{ rating.rating|rating_class }}')= rating.rating
+block bodyend
+    if ratings
+        script(src='//code.highcharts.com/highcharts.js')
+
+        | <script type="text/javascript">
+        |     var rating_history = [
+        each rating in ratings
+            | {
+            |     name: '#{rating.contest.name|escapejs}',
+            |     x: new Date('#{rating.contest.end_time|date:"c"}'),
+            |     y: #{rating.rating},
+            | },
+        |    ];
+        | </script>
+
+        script(type='text/javascript').
+            $(function () {
+                $('#rating-chart').highcharts({
+                    title: {
+                        text: 'Rating History'
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    chart: {
+                        zoomType: 'x'
+                    },
+                    xAxis: {
+                        type: 'datetime'
+                    },
+                    yAxis: {
+                        endOnTick: false,
+                        min: #{min_graph},
+                        max: #{max_graph},
+                        title: {
+                            text: 'Rating'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Rating',
+                        data: rating_history
+                    }]
+                });
+            });

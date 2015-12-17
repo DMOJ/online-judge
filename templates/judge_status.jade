@@ -10,7 +10,7 @@ block js_media
             table.tablesorter();
             setInterval(function () {
                 $.ajax({
-                    url: '{% url "judge.views.status_table" %}'
+                    url: '{% url "status_table" %}'
                 }).done(function (data) {
                     table.html(data);
                 });
@@ -18,7 +18,7 @@ block js_media
         });
 
 block body
-    p This page shows the live status of DMOJ's judging servers.
+    p This page shows the live status of #{SITE_NAME}'s judging servers.
     h3 Judges
     hr
     table#judge-status.table

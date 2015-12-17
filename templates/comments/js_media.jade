@@ -1,11 +1,10 @@
-- load media_extract
 - load compress
 - load staticfiles
 
 - compress js
     script(src='{% static "featherlight.min.js" %}', type='text/javascript', charset='utf-8')
     script(src='{% static "placeholder-compat.js" %}', type='text/javascript')
-    | #{comment_form.media|media_type:"js"}
+    | #{comment_form.media.js}
 
     script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
     script(type='text/javascript').
@@ -49,11 +48,11 @@
             }
 
             window.comment_upvote = function (id) {
-                ajax_vote('{% url "judge.views.upvote_comment" %}', id, 1);
+                ajax_vote('{% url "comment_upvote" %}', id, 1);
             };
 
             window.comment_downvote = function (id) {
-                ajax_vote('{% url "judge.views.downvote_comment" %}', id, -1);
+                ajax_vote('{% url "comment_downvote" %}', id, -1);
             };
 
             $('.comments').find('a.edit-link').featherlight({
@@ -115,4 +114,6 @@
                 });
                 return false;
             });
+
+            $('img.unveil').unveil(200);
         });

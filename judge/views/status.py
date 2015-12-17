@@ -1,7 +1,5 @@
 from django.http import Http404
-
 from django.shortcuts import render
-from django.template import RequestContext
 from django.views.generic import DetailView
 
 from judge.utils.views import TitleMixin, generic_message

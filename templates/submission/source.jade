@@ -22,7 +22,24 @@ block media
             text-align: right;
         }
 
-        pre {
+        .source-ln a {
+            color: gray;
+            display: block;
+        }
+
+        .source-ln a:hover {
+            text-decoration: underline;
+        }
+        
+        .source-ln a::before {
+            display: block;
+            content: " ";
+            margin-top: -50px;
+            height: 50px;
+            visibility: hidden;
+        }
+
+        .source-code pre, .source-ln pre {
             margin: 0;
             padding: 0;
         }
@@ -40,7 +57,7 @@ block body
     a(href='{% url "submission_status" submission.id %}') View status
     br
     if request.user == submission.user.user or perms.judge.resubmit_other
-        a(href='{% url "judge.views.problem_submit" submission.problem.code submission.id %}') Resubmit
+        a(href='{% url "problem_submit" submission.problem.code submission.id %}') Resubmit
         br
     hr(style='float:left;width:30%')
     br
@@ -50,7 +67,8 @@ block body
                 td.source-ln
                     div
                         for line in raw_source|split
-                            pre #{forloop.counter}
+                            a(href='#line-{{ forloop.counter }}', name='line-{{ forloop.counter }}')
+                                pre #{forloop.counter}
                 td.source-code #{highlighted_source}
     .submission-info
         

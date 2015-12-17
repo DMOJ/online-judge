@@ -1,6 +1,7 @@
 import datetime
 
 from django import template
+
 register = template.Library()
 
 
@@ -16,11 +17,11 @@ def nice_repr(timedelta, display='long', sep=', '):
     >>> nice_repr(td(days=1, seconds=1), 'minimal')
     '1d, 1s'
     """
-    
+
     assert isinstance(timedelta, datetime.timedelta), 'First argument must be a timedelta.'
-    
+
     result = []
-    
+
     weeks = timedelta.days / 7
     days = timedelta.days % 7
     hours = timedelta.seconds / 3600
@@ -60,17 +61,18 @@ def nice_repr(timedelta, display='long', sep=', '):
         words = [' wks', ' days', ' hrs', ' min', ' sec']
     else:
         words = [' weeks', ' days', ' hours', ' minutes', ' seconds']
-    
+
     values = [weeks, days, hours, minutes, seconds]
-    
+
     for i in range(len(values)):
         if values[i]:
             if values[i] == 1 and len(words[i]) > 1:
                 result.append('%i%s' % (values[i], words[i].rstrip('s')))
             else:
                 result.append('%i%s' % (values[i], words[i]))
-    
+
     return sep.join(result)
+
 
 @register.filter(name='timedelta')
 def timedelta(value, display='long'):

@@ -1,13 +1,12 @@
 extends base
-- load media_extract
 - load compress
 
 block media
     - compress css
-        | #{form.media|media_type:"css"}
+        | #{form.media.css}
 
 block js_media
-    | #{form.media|media_type:"js"}
+    | #{form.media.js}
 
 block body
     .form-area

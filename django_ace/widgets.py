@@ -52,6 +52,7 @@ class AceWidget(forms.Textarea):
         if self.wordwrap:
             ace_attrs['data-wordwrap'] = 'true'
 
+        attrs.update(style='width: 100%; min-width: 100%; max-width: 100%; resize: none')
         textarea = super(AceWidget, self).render(name, value, attrs)
 
         html = '<div%s><div></div></div>%s' % (flatatt(ace_attrs), textarea)

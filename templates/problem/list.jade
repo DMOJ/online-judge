@@ -2,9 +2,6 @@ extends base
 - load staticfiles
 - load cache
 
-block meta
-    meta(name='description', content="The DMOJ's large archive of problems - CCC, COCI, IOI and more.")
-
 block js_media
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
     script(type='text/javascript').
@@ -34,78 +31,39 @@ block js_media
             });
         });
 
-block media
-    style.
-        #problem-table .problem {
-            width: 100%
-        }
-
-        #problem-table td:nth-child(3),
-        td:nth-child(4),
-        td:nth-child(6),
-        td:nth-child(7) {
-            text-align: left;
-            padding: 0 1em 0 1em;
-        }
-
-        #problem-table td:nth-child(2) {
-            text-align: left;
-            padding-left: 1em;
-        }
-
-        #problem-table .code, .points, .users {
-            white-space: nowrap
-        }
-
-        #problem-table tr {
-            -webkit-transition: background-color linear .2s;
-            -moz-transition: background-color linear .2s;
-            -o-transition: background-color linear .2s;
-            transition: background-color linear .2s;
-        }
-
-        #problem-table tr:hover {
-            background: #EAEAEA;
-        }
-
-        #filter-form {
-            vertical-align: top;
-            margin-bottom: 0.5em;
-        }
-
-        #filter-form a {
-            margin-left: 5px;
-            display: inline;
-            padding: 3px 10px;
-        }
-
-        #filter-form a, #filter-form input, #filter-form label {
-            vertical-align: middle;
-        }
-
-        #search {
-            width: 250px;
-        }
-
-
 block body
     br
     block before_table
-        if not IN_CONTEST and request.user.is_authenticated
+        if not IN_CONTEST
             form#filter-form(name='form', action='', method='get')
                 if has_search
-                    input(type='text', name='search', id='search', value=search_query, placeholder='Search problems...')
-                a.button(onclick="form.submit()") Go
+                    input#search(type='text', name='search', value=search_query, placeholder='Search problems...')
+                a.button(onclick='form.submit()') Go
                 a.button(href='{% url "problem_random" %}') Random
-                input(onclick="form.submit()" type='checkbox', name='hide_solved', id='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
-                label(for='hide_solved') Hide solved problems
-                input(onclick="form.submit()" type='checkbox', name='show_types', id='show_types', checked=('checked' if show_types else undefined), value='1')
+                if request.user.is_authenticated
+                    input#hide_solved(onclick='form.submit()', type='checkbox', name='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
+                    label(for='hide_solved') Hide solved problems
+                input#show_types(onclick='form.submit()', type='checkbox', name='show_types', checked=('checked' if show_types else undefined), value='1')
                 label(for='show_types') Show problem tags
+                label(for='category') Category
+                select#category(name='category', onchange='form.submit()')
+                    if category
+                        option(value='', selected) All
+                    else
+                        option(value='') All
+                    option(disabled) ---
+                    each group in categories
+                        if group.id == category
+                            option(value=group.id, selected)= group.full_name
+                        else
+                            option(value=group.id)= group.full_name
+
     table#problem-table.table.striped
         thead
             tr
-                th.solved
-                    i.fa.fa-check
+                if request.user.is_authenticated
+                    th.solved
+                        i.fa.fa-check
                 th.problem Problem
                 th.category Category
                 th.code Code
@@ -116,20 +74,21 @@ block body
         tbody
             each problem in problems
                 tr
-                    if problem.id in completed_problem_ids
-                        td(solved='1')
-                            i.fa.fa-check-circle(style='color:#44AD41')
-                    else
-                        td(solved='0')
-                            i.fa.fa-minus-circle(style='color:#DE2121')
-                    td
+                    if request.user.is_authenticated
+                        if problem.id in completed_problem_ids
+                            td(solved='1')
+                                i.fa.fa-check-circle(style='color:#44AD41')
+                        else
+                            td(solved='0')
+                                i.fa.fa-minus-circle(style='color:#DE2121')
+                    td.problem
                         a(href='{% url "problem_detail" problem.code %}')= problem.name
-                    td= problem.group.full_name
-                    td= problem.code
+                    td.category= problem.group.full_name
+                    td.code= problem.code
                     if show_types
-                        td #{problem.types_list|join:", "}
+                        td.types #{problem.types_list|join:", "}
                     td.p #{problem.points|floatformat}
                         if problem.partial
                             | p
-                    td
+                    td.users
                         a(href='{% url "ranked_submissions" problem.code %}')= problem.number_of_users

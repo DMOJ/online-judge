@@ -3,23 +3,33 @@ extends base
 - load cache
 - load markdown_trois_tags
 - load social_share
+- load camo_proxy
+- load i18n
 
 block js_media
     include comments/js_media
 
 block media
     include comments/media
+
+block header
+    div(style='float: right; margin-top: 1.2em')
+        if perms.judge.change_blogpost
+            | [
+            a(href='{% url "admin:judge_blogpost_change" post.id %}') {% trans "Edit" %}
+            | ]
+
 block body
     div.post-full
         div.time #{post.publish_on|date:"N j, o, G:i"}
         div.body
             - cache 86400 post_content post.id
-                | #{post.content|markdown:"blog"}
+                | #{post.content|markdown:"blog"|proxy_images}
     hr
     span.social
        - post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>"
        - post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>"
-       - post_to_twitter "DMOJ:" post "<i class=\"fa fa-twitter\"></i>"
+       - post_to_twitter "{{ SITE_NAME }}:" post "<i class=\"fa fa-twitter\"></i>"
     .comment-area
-        h2 Comments
+        h2 {% trans "Comments" %}
         include comments/list

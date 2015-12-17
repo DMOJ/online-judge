@@ -1,12 +1,10 @@
-extends base
-
-- load media_extract
+extends baset
 
 block js_media
-    | #{form.media|media_type:"js"}
+    | #{form.media.js}
 
 block media
-    | #{form.media|media_type:"css"}
+    | #{form.media.css}
 
 block body
     form.form-area(action='', method='post')

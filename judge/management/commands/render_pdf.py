@@ -1,27 +1,30 @@
 import os
+import sys
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.template import Context
 from django.template.loader import get_template
-import sys
+
 from judge.models import Problem
 from judge.pdf_problems import WebKitPdfMaker
 
 
 class Command(BaseCommand):
-    args = '<code> [directory]'
-    help = 'reloads permissions for specified apps, or all apps if no args are specified'
+    help = 'renders a PDF file of a problem'
+
+    def add_arguments(self, parser):
+        parser.add_argument('code', help='code of problem to render')
+        parser.add_argument('directory', nargs='?', help='directory to store temporaries')
 
     def handle(self, *args, **options):
-        if not 1 <= len(args) <= 2:
-            self.usage('render_pdf')
-            return
         try:
-            problem = Problem.objects.get(code=args[0])
+            problem = Problem.objects.get(code=options['code'])
         except Problem.DoesNotExist:
             print 'Bad problem code'
             return
-        directory = None if len(args) < 2 else args[1]
+
+        directory = options['directory']
         with WebKitPdfMaker(directory, clean_up=directory is None) as maker:
             maker.html = get_template('problem/raw.jade').render(Context({
                 'problem': problem
@@ -32,4 +35,4 @@ class Command(BaseCommand):
             if not maker.success:
                 print>>sys.stderr, maker.log
             elif directory is None:
-                os.rename(maker.pdffile, args[0] + '.pdf')
+                os.rename(maker.pdffile, problem.code + '.pdf')

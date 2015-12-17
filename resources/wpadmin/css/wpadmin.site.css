@@ -1,0 +1,25 @@
+.select2-selection ul li {
+    list-style-type: inherit
+}
+
+.wmd-wrapper {
+    padding-top: 2em;
+}
+
+.wmd-wrapper ul.wmd-button-row {
+    margin-left: 0;
+}
+
+#content .content-description h1,
+#content .content-description h2,
+#content .content-description h3,
+#content .content-description h4,
+#content .content-description h5,
+#content .content-description h6 {
+    padding: 0;
+}
+
+#content input.select2-search__field {
+    border: none;
+    box-shadow: none !important;
+}

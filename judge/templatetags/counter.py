@@ -1,5 +1,6 @@
-from django import template
 from itertools import count
+
+from django import template
 
 register = template.Library()
 

@@ -2,101 +2,25 @@ extends base
 - load staticfiles
 - load cache
 - load markdown_trois_tags
+- load timedelta
+- load lazy_load
 
 block media
     link(rel='alternate', type='application/atom+xml', href='{% url "comment_atom" %}', title='Atom Comment Feed')
     link(rel='alternate', type='application/rss+xml', href='{% url "comment_rss" %}', title='RSS Comment Feed')
-    style.
-        .blog-content {
-            padding-right: 1em;
-            width: 73.5%;
-            display: table-cell;
-            border-radius: 4px;
-            vertical-align: top;
-        }
 
-        .blog-content .post {
-            border-bottom: 1px dashed #CCC;
-            padding-top: 0.5em;
-        }
-
-        .blog-content .post:last-child {
-            border-bottom: none;
-        }
-
-        .comment-content {
-            position: relative;
-            display: table-cell;
-            float: right;
-            border: 1px solid #CCC;
-            border-radius: 4px;
-            width:100%;
-            margin-bottom:1em;
-        }
-
-        .comment-content h3 {
-            padding-bottom: 0.25em;
-            padding-left: 0.5em;
-            border-bottom: 1px dashed #CCC;
-        }
-
-        .comment-content ul {
-            list-style: none;
-            padding-left: 1em;
-            padding-right: 0.5em;
-            font-size: 110%;
-        }
-
-        .comment-content ul li {
-            margin-bottom: 0.75em;
-        }
-
-        .time {
-            color: #555;
-        }
-
-        .container {
-            display: table;
-            border-collapse: separate;
-            border-spacing: 1em;
-            margin-left: -1em;
-            margin-right: -1em;
-        }
-
-        .rssatom span {
-            width: 1em;
-            height: 1em;
-            padding: 0.1em;
-            font-size: 0.8em;
-            color: white;
-            border-radius: 0.2em;
-            display: inline-block;
-            margin-right: 0.2em;
-            border: 1px solid rgb(201, 90, 18);
-            background: #fb9e39;
-            background: -webkit-linear-gradient(315deg, #e46d27 0%, #fb9e39 47%, #e46d27 100%);
-            background: linear-gradient(135deg, #e46d27 0%,#fb9e39 47%,#e46d27 100%); 
-        }
-
-        .rssatom span i {
-            text-align: center;
-            display: block;
-        }
-
-        .rssatom {
-            float: right;
-            padding-right: 1em;
-        }
-
-        h3 .fa {
-            float: right;
-            margin: 0.2em 0.4em 0px 0px;
-        }
+block js_media
+    script(type='text/javascript').
+        $(document).ready(function () {
+            $('.time-remaining').each(function () {
+                count_down($(this));
+            });
+        });
 
 block body
     block before_posts
 
-    div.container
+    #blog-container
         div.blog-content
             each post in posts
                 div(class=('sticky post' if post.sticky else 'post'))
@@ -108,24 +32,45 @@ block body
                         | #{post.publish_on|date:"N j, o, G:i"}
                     div.summary
                         - cache 86400 post_summary post.id
-                            | #{post.summary|default:post.content|markdown:"blog"}
+                            | #{post.summary|default:post.content|markdown:"blog"|lazy_load}
 
             if page_obj.num_pages > 1
                 div(style='margin-bottom:10px;margin-top:10px')
                     include list_pages
-        div.comment-content
+        if current_contests
+            div.blog-sidebox
+                h3 Ongoing contests
+                    i.fa.fa-trophy
+                each contest in current_contests
+                    .contest
+                        .name
+                            a(href='{% url "contest_view" contest.key %}')= contest.name
+                        .time Ends in
+                            = ' '
+                            span.time-remaining #{contest.time_before_end|timedelta:"simple"}
+        if future_contests
+            div.blog-sidebox
+                h3 Upcoming contests
+                    i.fa.fa-trophy
+                each contest in future_contests
+                    .contest
+                        .name
+                            a(href='{% url "contest_view" contest.key %}')= contest.name
+                        .time Starts in
+                            = ' '
+                            span.time-remaining #{contest.time_before_start|timedelta:"simple"}
+        div.blog-sidebox
             h3 Comment stream
                 i.fa.fa-comments
             ul
                 for comment in comments
                     li
-                        span(class=comment.author.display_rank)
+                        div(style='font-size:1.1em;font-style:italic')
+                            a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.title}
+                        span.poster(class=comment.author.display_rank, style='padding-left:0.25em')
                             a(href='{% url "user_page" comment.author.user.username %}') #{comment.author.user.username}
-                        | &nbsp;&rarr;
-                        if comment.parent
-                            a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.parent.title}
-                        else
-                            a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.page_title}
+                        | &nbsp;&rarr;&nbsp;
+                        a(href='{{comment.link}}') #{comment.page_title}
             div.dashed
             span.rssatom
                 a(href='{% url "comment_rss" %}')
@@ -134,7 +79,7 @@ block body
                     | RSS
                 = '/ '
                 a(href='{% url "comment_atom" %}') Atom
-        div.comment-content
+        div.blog-sidebox
             h3 New problems
                 i.fa.fa-puzzle-piece
             ul

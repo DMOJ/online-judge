@@ -1,4 +1,4 @@
-extends base
+extends common-content
 - load staticfiles
 - load cache
 - load cache_key
@@ -6,30 +6,23 @@ extends base
 
 block js_media
     if dynamic_update and last_msg
-        if IN_CONTEST
-            script(type='text/javascript').
-                window.current_contest = '#{CONTEST.contest.key}';
-        else
-            script(type='text/javascript').
-                window.current_contest = null;
-        if dynamic_user_id
-            script(type='text/javascript').
-                window.dynamic_user_id = #{dynamic_user_id};
-        else
-            script(type='text/javascript').
-                window.dynamic_user_id = null;
-        if dynamic_problem_id
-            script(type='text/javascript').
-                window.dynamic_problem_id = #{dynamic_problem_id};
-        else
-            script(type='text/javascript').
-                window.dynamic_problem_id = null;
-        if show_problem
-            script(type='text/javascript').
-                window.show_problem = 1;
-        else
-            script(type='text/javascript').
-                window.show_problem = 0;
+        script(type='text/javascript')
+            if IN_CONTEST
+                | window.current_contest = '#{CONTEST.contest.key}';
+            else
+                | window.current_contest = null;
+            if dynamic_user_id
+                | window.dynamic_user_id = #{dynamic_user_id};
+            else
+                | window.dynamic_user_id = null;
+            if dynamic_problem_id
+                | window.dynamic_problem_id = #{dynamic_problem_id};
+            else
+                | window.dynamic_problem_id = null;
+            if show_problem
+                | window.show_problem = 1;
+            else
+                | window.show_problem = 0;
 
     - compress js
         script(type='text/javascript', src='{% static "event.js" %}')
@@ -40,7 +33,7 @@ block js_media
                 window.rejudge_submission = function(id) {
                     if (confirm('Are you sure you want to rejudge?')) {
                         $.ajax({
-                            url: '{% url "judge.views.rejudge_submission" %}',
+                            url: '{% url "submission_rejudge" %}',
                             type: "POST",
                             data: {
                                 id: id,
@@ -51,14 +44,17 @@ block js_media
                 };
         script(type='text/javascript').
             $(function () {
-                if (false && !featureTest('position', 'sticky'))
-                    fix_div($('.info-float'), 40, true, function (info) {
-                        info.css('width', (info.width() / $('#page-container').width() * 100) + '%');
-                        return $('<div/>', {
-                            id: 'fake-info-float',
-                            class: 'info-float'
-                        }).css('width', '20%').height(info.height()).prependTo('#content-body');
-                    }, $('#page-container'));
+                var info_float = $('.info-float');
+                var container = $('#content-right');
+                if (window.bad_browser) {
+                    container.css('float', 'right');
+                } else if (!featureTest('position', 'sticky')) {
+                    fix_div(info_float, 55);
+                    $(window).resize(function () {
+                        info_float.width(container.width());
+                    });
+                    info_float.width(container.width());
+                }
 
                 var time_cache = {};
                 window.update_relative_time = function (row) {
@@ -103,7 +99,7 @@ block js_media
                         if (force || !doing_ajax) {
                             if (!force) doing_ajax = true;
                             $.ajax({
-                                url: '{% url "judge.views.single_submission_query" %}',
+                                url: '{% url "submission_single_query" %}',
                                 data: {id: id, show_problem: show_problem}
                             }).done(function (data) {
                                 var was_shown = row.is(':visible');
@@ -154,52 +150,36 @@ block media
         style.
             td.sub-prop, col.sub-prop { width: 22% }
             col.sub-info, td.sub-info { width: 78% }
-    style.
-        /*#content-body {
-            padding-bottom: 4em;
-            display: flex;
-            flex-direction: row-reverse;
-            padding-top: 1em;
-        }
-
-        #content-right {
-            max-width: 19.5em;
-            min-width: 8em;
-            padding-left: 3em;
-            padding-top: 1em;
-            flex: 1 1 35%;
-        }
-
-        #content-left {
-            flex: 1 1 65%;
-            width: 100%;
-        }*/
 
 block body
-    br
-    .info-float
-        #statistics-table
-            include problem/statistics_table
+    #common-content
+        #content-right.submission
+            .info-float
+                #statistics-table
+                    include problem/statistics_table
+        #content-left.submission
+            if page_obj.num_pages > 1
+                div(style='margin-bottom:10px;')
+                    include list_pages
 
-    if page_obj.num_pages > 1
-        div(style='margin-bottom:10px;')
-            include list_pages
+            table#submissions-table.table
+                colgroup
+                    col.sub-result
+                    col.sub-info
+                    col.sub-testcase
+                    col.sub-prop
+                    col.sub-usage
+                if request.user.is_authenticated
+                    - var profile_id = request.user.profile.id
+                else
+                    - var profile_id = 0
+                each submission in submissions
+                    tr(id=submission.id)
+                        include submission/row
 
-    table#submissions-table.table
-        colgroup
-            col.sub-result
-            col.sub-info
-            col.sub-testcase
-            col.sub-prop
-            col.sub-usage
-        if request.user.is_authenticated
-            - var profile_id = request.user.profile.id
-        else
-            - var profile_id = 0
-        each submission in submissions
-            tr(id=submission.id)
-                include submission/row
+            if page_obj.num_pages > 1
+                div(style='margin-top:10px;')
+                    include list_pages
 
-    if page_obj.num_pages > 1
-        div(style='margin-top:10px;')
-            include list_pages
+block bodyend
+// Don't load MathJax from common-content!

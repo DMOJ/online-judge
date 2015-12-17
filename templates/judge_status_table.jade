@@ -3,43 +3,46 @@
 
 tr
     th Name
-    th Online
+    if request.user.is_superuser or request.user.is_staff
+        th Online
     th Uptime
     th Ping
     th Load
     th Runtimes
 for judge in judges
-    tr
-        td
-            a(href='{% url "judge_info" judge.name %}')= judge.name
-        td
-            if judge.online
-                i.fa.fa-check-circle(style='color:#44AD41')
-            else
-                i.fa.fa-minus-circle(style='color:#DE2121')
-        td
-            if judge.online
-                | #{judge.uptime|timedelta:"simple"}
-            else
-                | N/A
-        td
-            if judge.online
-                | #{judge.ping_ms|floatformat:3} ms
-            else
-                | N/A
-        td
-            if judge.online
-                | #{judge.load|floatformat:3}
-            else
-                | N/A
-        td
-            if judge.online
-                each runtime in judge.runtimes.all
-                    a(href='{% url "runtime_info" runtime.key %}')= runtime.name
-                    if not forloop.last
-                        = ', '
-            else
-                | N/A
+    if judge.online or request.user.is_superuser or request.user.is_staff
+        tr
+            td
+                a(href='{% url "judge_info" judge.name %}')= judge.name
+            if request.user.is_superuser or request.user.is_staff
+                td
+                    if judge.online
+                        i.fa.fa-check-circle(style='color:#44AD41')
+                    else
+                        i.fa.fa-minus-circle(style='color:#DE2121')
+            td
+                if judge.online
+                    | #{judge.uptime|timedelta:"simple"}
+                else
+                    | N/A
+            td
+                if judge.online
+                    | #{judge.ping_ms|floatformat:3} ms
+                else
+                    | N/A
+            td
+                if judge.online
+                    | #{judge.load|floatformat:3}
+                else
+                    | N/A
+            td
+                if judge.online
+                    each runtime in judge.runtimes.all
+                        a(href='{% url "runtime_info" runtime.key %}')= runtime.name
+                        if not forloop.last
+                            = ', '
+                else
+                    | N/A
 if not judges
     tr
         td(colspan='6')

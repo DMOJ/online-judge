@@ -1,10 +1,9 @@
 extends base
 - load staticfiles
-- load media_extract
 
 block media
     link(rel='stylesheet', href='{% static "timezone-map.css" %}')
-    | #{form.media|media_type:"css"}
+    | #{form.media.css}
     style.
         .map-inset { background: url('#{TIMEZONE_MAP}') 50% 50% }
         .map-wrap { display: none }
@@ -15,7 +14,7 @@ block media
             .map-wrap { background: #{TIMEZONE_BG} }
 
 block js_media
-    | #{form.media|media_type:"js"}
+    | #{form.media.js}
 
 block body
     form.form-area(action='', method='post')

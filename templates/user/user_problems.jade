@@ -1,0 +1,116 @@
+extends user/user_base
+- load staticfiles
+- load gravatar
+- load list_processor
+- load markdown_trois_tags
+- load rating
+block user_media
+    style.
+        a.edit-profile {
+            float: right;
+            padding-top: 1em;
+        }
+
+        .user-problem-group h3 {
+            font-weight: bold;
+            font-size: 1.25em;
+            margin-bottom: -10px;
+            max-height: 20%;
+            line-height: 2.5em;
+        }
+
+        .user-problem-group ul {
+            -webkit-columns: 300px 4;
+            -moz-columns: 300px 4;
+            columns: 300px 4;
+            list-style-type: none;
+            margin-top: 0;
+            margin-left: -20px;
+            margin-bottom: 0;
+        }
+
+        .user-problem-group a img {
+            max-width: 1em;
+            margin-right: 3px;
+            padding-bottom: 1px;
+            vertical-align: middle;
+        }
+
+        .user-info-cell {
+            padding-left: 15px;
+            border-left: 1px solid #CCC;
+        }
+
+        .contest-history-cell {
+            border-left: 1px solid #CCC;
+            padding: 0 0.5em;
+        }
+
+        table td {
+            margin: 0;
+            vertical-align: top;
+        }
+
+        .strike {
+            text-align: right;
+            overflow: hidden;
+        }
+
+        .strike > span {
+            position: relative;
+            display: inline-block;
+        }
+
+        .strike > span:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 100000px;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.2);
+            right: 100%;
+            margin-right: 5px;
+        }
+    link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
+
+block title_ruler
+
+block title_row
+    - var user_tab = 'problems'
+    include user/user_tabs
+
+block user_content
+    if authored
+        div.user-problem-group
+            h3.unselectable.toggle.open
+                span.fa.fa-chevron-right.fa-fw
+                | Authored Problems (#{authored | length})
+            ul.toggled
+                each problem in authored
+                    li
+                        a(href='{% url "problem_detail" problem.code %}')= problem.name
+                        |  (
+                        a(href='{% url "ranked_submissions" problem.code %}') #{problem.points | floatformat}{% if problem.partial %}p{% endif %}
+                        | )
+    if request.user.is_authenticated and request.user != user.user
+        .strike
+            span
+                form(name='form', action='', method='get')
+                    input#hide_solved(style='vertical-align:middle', onclick="form.submit()", type='checkbox', name='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
+                    label(style='vertical-align:middle', for='hide_solved') Hide problems I've solved
+    else
+        hr
+    - regroup best_submissions by group as problems
+    each group in problems
+        div.user-problem-group
+            h3.unselectable.toggle.open
+                span.fa.fa-chevron-right.fa-fw
+                | #{group.grouper}
+                | (#{group.list | list_getitem:"points"|sum_list|floatformat:1} points)
+            ul.toggled
+                each entry in group.list
+                    li
+                        a(href='{% url "problem_detail" entry.code %}') #{entry.name}
+                        |  (
+                        a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
+                        | )

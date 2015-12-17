@@ -12,12 +12,11 @@ from judge.models import Organization, Profile, Submission, Problem, PrivateMess
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 try:
-    from django_select2.widgets import HeavySelect2MultipleWidget, Select2Widget
+    from django_select2.forms import Select2Widget
 except ImportError:
-    HeavySelect2MultipleWidget = None
     Select2Widget = None
 
-use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
+use_select2 = Select2Widget is not None and 'django_select2' in settings.INSTALLED_APPS
 
 
 class ProfileForm(ModelForm):

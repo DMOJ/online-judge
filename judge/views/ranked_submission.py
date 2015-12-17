@@ -1,11 +1,9 @@
 from django.core.urlresolvers import reverse
-from django.db.models import Q
 from django.utils.html import format_html
 
 from judge.models import Submission
 from judge.views.submission import ProblemSubmissions, ForceContestMixin
 from judge.utils.problems import get_result_table
-
 
 __all__ = ['RankedSubmissions']
 
@@ -55,7 +53,7 @@ class RankedSubmissions(ProblemSubmissions):
                            reverse('problem_detail', args=[self.problem.code]))
 
     def get_result_table(self):
-        return get_result_table(super(RankedSubmissions, self).get_queryset())
+        return get_result_table(super(RankedSubmissions, self).get_queryset().order_by())
 
 
 class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):

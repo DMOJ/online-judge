@@ -1,0 +1,115 @@
+#contest-calendar
+  border-collapse: collapse
+  th
+    border-bottom: 1px solid #aaa
+
+    &.sun
+      border-left: 1px solid #aaa
+
+    &.sun, &.mon, &.tue, &.wed, &.thu, &.fri, &.sat
+      font-size: 0.95em
+      border-right: 1px solid #aaa
+      background: #f2f2f2
+
+  td
+    height: 110px
+    width: 170px
+    color: #000
+    vertical-align: top
+    text-align: right
+    font-size: 0.75em
+    border-right: 1px solid #aaa
+    border-bottom: 1px solid #aaa
+    transition-duration: 0.2s
+
+    .num
+      font-size: 1.1em
+      font-weight: bold
+      display: block
+      border-bottom: 1px dashed #ccc
+      padding-right: 0.2em
+      margin-bottom: 0.4em
+
+    ul
+      text-decoration: none
+      text-align: left
+      padding: 0
+      margin: 0
+
+      li
+        margin-left: 17px
+        margin-bottom: 0.2em
+
+        i.fa
+          color: orange
+
+        a
+          text-decoration: none
+          color: #222
+
+          &:hover
+            text-decoration: underline
+
+    &:hover
+      background: rgba(0, 0, 255, 0.3)
+      color: white
+
+      .num
+        font-weight: bold
+
+      ul li a
+        font-weight: normal
+
+  .noday
+    background: #f1f1f1
+
+  .today
+    background: rgba(255, 255, 100, 0.5)
+
+  tr td:first-child
+    border-left: 1px solid #aaa
+
+#banner a.date
+  &:link, &:visited
+    color: #5B80B9
+
+  &:hover
+    color: #0645AD
+
+.contest-list
+  td
+    &:nth-child(2)
+      min-width: 9.8em
+
+    &:nth-child(3)
+      min-width: 6em
+
+  tbody tr
+    height: 4em
+
+  .time
+    color: #555
+
+  .floating-time-left
+    position: absolute
+    left: 0
+
+  .floating-time-right
+    position: absolute
+    right: 0
+
+  .floating-time
+    position: absolute
+    right: 0
+    bottom: 0
+
+  .external-notice
+    font-style: italic
+    position: absolute
+    bottom: 0
+
+    a
+      color: #777
+
+    &:hover
+      text-decoration: underline

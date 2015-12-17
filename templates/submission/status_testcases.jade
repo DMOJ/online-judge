@@ -9,13 +9,13 @@ if submission.status != 'IE'
         h4 Your submission is being processed...
     elif submission.status == 'CE'
         h4 Compilation Error
-        pre #{submission.error}
+        pre #{submission.error|safe}
     else
         h3 Execution Results
         br
         if submission.error
             h4 Compilation Warnings
-            pre #{submission.error}
+            pre #{submission.error|safe}
             br
         - regroup test_cases by batch as batches
         - get_counter test_case_id
@@ -84,7 +84,7 @@ if submission.status != 'IE'
 else
     h3(style='color:red;font-weight:bold') 
         if request.user == submission.user.user
-            | An internal error occurred while grading, and the DMOJ administrators have been notified.
+            | An internal error occurred while grading, and the #{SITE_NAME} administrators have been notified.
             br
             | In the meantime, try resubmitting in a few seconds.
         else

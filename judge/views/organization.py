@@ -1,24 +1,24 @@
 from itertools import chain
+
 from django import forms
 from django.contrib import messages
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Count, Max
 from django.forms import Form, modelformset_factory
 from django.http import HttpResponseRedirect, Http404
-from django.utils import timezone
-from django.views.generic import CreateView, DetailView, ListView, View, UpdateView, FormView
+from django.views.generic import DetailView, ListView, View, UpdateView, FormView
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
-import reversion
+from reversion import revisions
 
-from judge.forms import EditOrganizationForm, NewOrganizationForm
+from judge.forms import EditOrganizationForm
 from judge.models import Organization, OrganizationRequest
 from judge.utils.ranker import ranker
-from judge.utils.views import generic_message, TitleMixin, LoginRequiredMixin
-
+from judge.utils.views import generic_message, TitleMixin
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'JoinOrganization',
            'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization', 'OrganizationRequestDetail',
@@ -255,9 +255,9 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
         return object
 
     def form_valid(self, form):
-        with transaction.atomic(), reversion.create_revision():
-            reversion.set_comment('Edited from site')
-            reversion.set_user(self.request.user)
+        with transaction.atomic(), revisions.create_revision():
+            revisions.set_comment('Edited from site')
+            revisions.set_user(self.request.user)
             return super(EditOrganization, self).form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):

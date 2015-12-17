@@ -15,10 +15,11 @@ register = template.Library()
 
 
 class GravatarUrlNode(template.Node):
-    def __init__(self, email, size='80', default=False):
+    def __init__(self, email, size='80', default='""', as_=None, variable=None):
         self.email = template.Variable(email)
         self.size = template.Variable(size)
         self.default = template.Variable(default)
+        self.variable = as_ and variable
  
     def render(self, context):
         try:
@@ -39,7 +40,10 @@ class GravatarUrlNode(template.Node):
         if default:
             args['f'] = 'y'
         gravatar_url += urllib.urlencode(args)
- 
+
+        if self.variable is not None:
+            context[self.variable] = gravatar_url
+            return ''
         return gravatar_url
  
 @register.tag

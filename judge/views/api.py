@@ -13,7 +13,7 @@ def sane_time_repr(delta):
 
 def api_contest_list(request):
     contests = {}
-    for c in Contest.objects.filter(is_public=True, is_private=False):
+    for c in Contest.objects.filter(is_public=True, is_private=False, is_external=False):
         contests[c.key] = {
             'name': c.name,
             'start_time': c.start_time.isoformat(),

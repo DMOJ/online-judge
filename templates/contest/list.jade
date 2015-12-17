@@ -4,55 +4,7 @@ extends base
 - load tz
 
 block meta
-    meta(name='description', content="The DMOJ's contest list - past, present, and future.")
-
-block media
-    style.
-        .contest-list td:nth-child(2) {
-            min-width: 9.8em;
-        }
-
-        .contest-list td:nth-child(3) {
-            min-width: 6em;
-        }
-
-        .contest-list tbody tr {
-            height: 4em;
-        }
-
-        .time {
-            color: #555;
-        }
-
-        .floating-time-left {
-            position: absolute;
-            left: 0;
-        }
-
-        .floating-time-right {
-            position: absolute;
-            right: 0;
-        }
-
-        .floating-time {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-        }
-
-        .external-notice {
-            font-style:italic;
-            position:absolute;
-            bottom:0;
-        }
-
-        .external-notice a {
-            color:#777;
-        }
-
-        .external-notice:hover {
-            text-decoration: underline;
-        }
+    meta(name='description', content="The {{ SITE_NAME }}'s contest list - past, present, and future.")
 
 block js_media
     script(type='text/javascript').
@@ -62,6 +14,10 @@ block js_media
             });
         });
 
+block header
+    div(style='float: right; margin-top: 0.9em; font-size: 1.3em;')
+        a(href='{% url "contest_calendar" now.year now.month %}') Calendar view
+
 block body
     if current_contests
         br
@@ -70,8 +26,7 @@ block body
         table.contest-list.table.striped
             thead
                 tr
-                    th(style='width:90%') Name
-                    th Time limit
+                    th(style='width:90%') Contest
                     th Rankings
                     if not IN_CONTEST
                         th(style='width:15%')
@@ -88,15 +43,21 @@ block body
                                         span.time.time-remaining #{contest.time_before_end|timedelta:"simple"}
                                     elif contest.free_start and contest.start_time
                                         span.time Started at #{contest.start_time|date:"N j, o, G:i"}
-                                    .time.floating-time #{contest.end_time|date:"N j, o, G:i"}
+                                    .time.floating-time(style='text-align:right')
+                                        span(style='text-align:right;color:#777;')
+                                        if contest.time_limit
+                                            | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
+                                        else
+                                            | #{contest.start_time|date:"M j, Y, G:i"}
+                                        br
+                                        if contest.time_limit
+                                            | #{contest.time_limit|timedelta:"simple-no-seconds"} window
+                                        else
+                                            | #{contest.contest_window_length|timedelta:"simple-no-seconds"} long
                                     if contest.is_external
                                         .external-notice
                                             a(href='/about#external-contests') External contest
-                        td
-                            if contest.time_limit
-                                | #{contest.time_limit|timedelta:"simple-no-seconds"}
-                            else
-                                | Full contest window
+                                
                         td
                             a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
                         if not IN_CONTEST
@@ -112,8 +73,7 @@ block body
         table.contest-list.table.striped
             thead
                 tr
-                    th(style='width:90%') Name
-                    th Time limit
+                    th Contest
             tbody
                 each contest in future_contests
                     tr
@@ -124,16 +84,22 @@ block body
                                     br
                                     if contest.time_before_start
                                         span.time Starting in&nbsp;
-                                        span.time.time-remaining #{contest.time_before_start|timedelta:"simple-no-seconds"}
-                                    .time.floating-time #{contest.start_time|date:"M j, Y, G:i"}
+                                        span.time.time-remaining #{contest.time_before_start|timedelta:"simple"}
+                                    
+                                    .time.floating-time(style='text-align:right')
+                                        span(style='text-align:right;color:#777;')
+                                        if contest.time_limit
+                                            | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
+                                        else
+                                            | #{contest.start_time|date:"M j, Y, G:i"}
+                                        br
+                                        if contest.time_limit
+                                            | #{contest.time_limit|timedelta:"simple-no-seconds"} window
+                                        else
+                                            | #{contest.contest_window_length|timedelta:"simple-no-seconds"} long
                                     if contest.is_external
                                         .external-notice
                                             a(href='/about#external-contests') External contest
-                        td
-                            if contest.time_limit
-                                | #{contest.time_limit|timedelta:"simple-no-seconds"}
-                            else
-                                | Full contest window
     else
         i There are no scheduled contests at this time.
 

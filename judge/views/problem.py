@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Count, Q, F
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, Context
 from django.template.loader import get_template
 from django.utils.decorators import method_decorator
@@ -22,7 +22,7 @@ import itertools
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm, ProblemEditForm
-from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile
+from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile, ProblemGroup
 from judge.pdf_problems import make_latex, format_markdown, latex_document, LatexPdfMaker, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
@@ -37,7 +37,8 @@ def get_contest_problem(problem, profile):
 
 class ProblemMixin(object):
     model = Problem
-    slug_url_kwarg = slug_field = 'code'
+    slug_url_kwarg = 'problem'
+    slug_field = 'code'
 
     def get_object(self, queryset=None):
         problem = super(ProblemMixin, self).get_object(queryset)
@@ -99,6 +100,7 @@ class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
         context['contest_problem'] = (None if not authed or user.profile.contest.current is None else
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
+        context['wkhtmltopdf_installed'] = getattr(settings, 'WEBKIT_PDF', False)
         return context
 
 
@@ -224,11 +226,13 @@ class ProblemList(TitleMixin, ListView):
         queryset = Problem.objects.filter(filter) \
             .annotate(number_of_users=Count('submission__user', distinct=True)) \
             .select_related('group').defer('description').order_by('code')
-        if self.hide_solved:
+        if self.profile is not None and self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
                                         .values_list('problem__id', flat=True))
         if self.show_types:
             queryset = queryset.prefetch_related('types')
+        if self.category is not None:
+            queryset = queryset.filter(group_id=self.category)
         if settings.ENABLE_FTS and 'search' in self.request.GET:
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
@@ -251,6 +255,8 @@ class ProblemList(TitleMixin, ListView):
         context = super(ProblemList, self).get_context_data(**kwargs)
         context['hide_solved'] = int(self.hide_solved)
         context['show_types'] = int(self.show_types)
+        context['category'] = self.category
+        context['categories'] = ProblemGroup.objects.all()
         context['has_search'] = settings.ENABLE_FTS
         context['search_query'] = self.search_query
         context['completed_problem_ids'] = self.get_completed_problems()
@@ -260,29 +266,13 @@ class ProblemList(TitleMixin, ListView):
         self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
         self.show_types = request.GET.get('show_types') == '1' if 'show_types' in request.GET else False
         self.search_query = None
+        self.category = None
+        if 'category' in request.GET:
+            try:
+                self.category = int(request.GET.get('category'))
+            except ValueError:
+                pass
         return super(ProblemList, self).get(request, *args, **kwargs)
-
-
-class OwnProblemList(TitleMixin, ListView):
-    title = 'My Problems'
-    context_object_name = 'problems'
-    template_name = 'problem/own_list.jade'
-
-    def get_queryset(self):
-        return Problem.objects.filter(authors__id=self.request.user.profile.id) \
-            .annotate(number_of_users=Count('submission__user', distinct=True)) \
-            .select_related('group').defer('description').order_by('code')
-
-    def get_context_data(self, **kwargs):
-        context = super(OwnProblemList, self).get_context_data(**kwargs)
-        context['completed_problem_ids'] = user_completed_ids(self.request.user.profile)
-        return context
-
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.has_perm('judge.change_problem') and not request.user.has_perm('judge.edit_own_problem'):
-            raise PermissionDenied()
-        return super(OwnProblemList, self).dispatch(request, *args, **kwargs)
 
 
 @login_required
@@ -357,11 +347,8 @@ def problem_submit(request, problem=None, submission=None):
 
 @login_required
 @permission_required('judge.clone_problem')
-def clone_problem(request, code):
-    try:
-        problem = Problem.objects.get(code=code)
-    except Problem.DoesNotExist:
-        raise Http404()
+def clone_problem(request, problem):
+    problem = get_object_or_404(Problem, code=problem)
     languages = problem.allowed_languages.all()
     problem.pk = None
     problem.is_public = False

@@ -1,14 +1,14 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError, transaction
-from django.forms.models import modelform_factory, ModelForm
+from django.forms.models import ModelForm
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
 from django.views.generic import DetailView, UpdateView
-import reversion
+from reversion import revisions
 
 from judge.models import Comment, CommentVote
-from judge.utils.views import LoginRequiredMixin, TitleMixin
+from judge.utils.views import TitleMixin
 from judge.widgets import MathJaxPagedownWidget
-
 
 __all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentEditAjax', 'CommentContent',
            'CommentEdit', 'CommentHistory']
@@ -16,7 +16,8 @@ __all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentE
 
 @login_required
 def vote_comment(request, delta):
-    assert abs(delta) == 1
+    if abs(delta) != 1:
+        return HttpResponseBadRequest('Messing around, are we?', content_type='text/plain')
 
     if request.method != 'POST':
         return HttpResponseForbidden()
@@ -63,7 +64,7 @@ class CommentHistoryAjax(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CommentHistoryAjax, self).get_context_data(**kwargs)
-        context['revisions'] = reversion.get_for_object(self.object)
+        context['revisions'] = revisions.get_for_object(self.object)
         return context
 
     def get_object(self, queryset=None):
@@ -96,9 +97,9 @@ class CommentEditAjax(LoginRequiredMixin, UpdateView):
     form_class = CommentEditForm
 
     def form_valid(self, form):
-        with transaction.atomic(), reversion.create_revision():
-            reversion.set_comment('Edited from site')
-            reversion.set_user(self.request.user)
+        with transaction.atomic(), revisions.create_revision():
+            revisions.set_comment('Edited from site')
+            revisions.set_user(self.request.user)
             return super(CommentEditAjax, self).form_valid(form)
 
     def get_success_url(self):

@@ -1,22 +1,20 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.html import format_html
-from django.views.generic import TemplateView, ListView
-from django.views.generic.detail import SingleObjectMixin
+from django.views.generic import ListView, DetailView
 
+from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, Profile, Contest
-from judge.utils.problems import user_completed_ids, get_result_table
 from judge.utils.diggpaginator import DiggPaginator
+from judge.utils.problems import user_completed_ids, get_result_table
 from judge.utils.views import TitleMixin
-from judge import event_poster as event
 
 
 def submission_related(queryset):
@@ -28,29 +26,27 @@ def submission_related(queryset):
 
 class SubmissionMixin(object):
     model = Submission
+    context_object_name = 'submission'
+    pk_url_kwarg = 'submission'
 
 
-class SubmissionDetailBase(TitleMixin, SubmissionMixin, SingleObjectMixin, TemplateView):
-    def get(self, request, *args, **kwargs):
-        self.object = submission = self.get_object()
+class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, DetailView):
+    def get_object(self, queryset=None):
+        submission = super(SubmissionDetailBase, self).get_object(queryset)
+        profile = self.request.user.profile
 
-        profile = request.user.profile
-        if not request.user.has_perm('judge.view_all_submission') and submission.user_id != profile.id and \
+        if not self.request.user.has_perm('judge.view_all_submission') and submission.user_id != profile.id and \
                 not submission.problem.authors.filter(id=profile.id).exists() and \
-                not Submission.objects.filter(user_id=profile.id, result='AC',
-                                              problem__code=submission.problem.code,
-                                              points=F('problem__points')).exists():
+                not (submission.problem.is_public and
+                     Submission.objects.filter(user_id=profile.id, result='AC',
+                                               problem__code=submission.problem.code,
+                                               points=F('problem__points')).exists()):
             raise PermissionDenied()
-
-        return super(SubmissionDetailBase, self).get(request, *args, submission=self.object, **kwargs)
+        return submission
 
     def get_title(self):
         submission = self.object
         return 'Submission of %s by %s' % (submission.problem.name, submission.user.user.username)
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(SubmissionDetailBase, self).dispatch(*args, **kwargs)
 
 
 class SubmissionSource(SubmissionDetailBase):
@@ -92,15 +88,15 @@ class SubmissionTestCaseQuery(SubmissionStatus):
         return super(SubmissionTestCaseQuery, self).get(request, *args, **kwargs)
 
 
-def abort_submission(request, code):
+def abort_submission(request, submission):
     if request.method != 'POST':
         raise Http404()
-    submission = Submission.objects.get(id=int(code))
+    submission = get_object_or_404(Submission, id=int(submission))
     if not request.user.is_authenticated() or \
             request.user.profile != submission.user and not request.user.has_perm('abort_any_submission'):
         raise PermissionDenied()
     submission.abort()
-    return HttpResponseRedirect(reverse('submission_status', args=(code,)))
+    return HttpResponseRedirect(reverse('submission_status', args=(submission.id,)))
 
 
 class SubmissionsListBase(TitleMixin, ListView):
@@ -255,11 +251,11 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
         return context
 
 
-def single_submission(request, id, show_problem=True):
+def single_submission(request, submission, show_problem=True):
     try:
         authenticated = request.user.is_authenticated()
         return render(request, 'submission/row.jade', {
-            'submission': submission_related(Submission.objects).get(id=int(id)),
+            'submission': get_object_or_404(submission_related(Submission.objects.all()), id=int(submission)),
             'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
             'show_problem': show_problem,
             'profile_id': request.user.profile.id if authenticated else 0,

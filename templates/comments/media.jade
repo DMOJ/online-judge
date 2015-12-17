@@ -1,10 +1,9 @@
-- load media_extract
 - load compress
 - load staticfiles
 
 - compress css
     link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
-    | #{comment_form.media|media_type:"css"}
+    | #{comment_form.media.css}
     style(media='all').
         .featherlight {
             z-index: 1000;
