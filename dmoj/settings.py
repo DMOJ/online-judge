@@ -204,6 +204,10 @@ TEMPLATES = [
     },
 ]
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
+
 
 # Markdown Trois
 from markdown_trois.conf.settings import MARKDOWN_TROIS_DEFAULT_STYLE
