@@ -1,9 +1,11 @@
 from django import forms
+from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Count
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
@@ -45,6 +47,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
             raise NotImplementedError()
         return self.comment_page
 
+    @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         page = self.get_comment_page()
