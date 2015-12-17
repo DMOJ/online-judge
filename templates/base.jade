@@ -126,7 +126,7 @@ html(lang='en')
                                         span
                                             - blocktrans
                                                 | Hello,&nbsp;
-                                                b #{request.user.username}
+                                                b {{ request.user.username }}
                                                 | .
                                 ul(style='width: 150px')
                                     if request.user.is_staff or request.user.is_superuser
