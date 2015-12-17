@@ -3,10 +3,11 @@ extends user/base_users_table
 - load timedelta
 - load cache
 - load rating
+- load i18n
 
 block after_rank_head
     if has_rating
-        th Rating
+        th {% trans "Rating" %}
 
 block after_rank
     if has_rating

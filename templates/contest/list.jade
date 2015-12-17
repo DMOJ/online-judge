@@ -2,6 +2,7 @@ extends base
 - load staticfiles
 - load timedelta
 - load tz
+- load i18n
 
 block meta
     meta(name='description', content="The {{ SITE_NAME }}'s contest list - past, present, and future.")
@@ -16,18 +17,18 @@ block js_media
 
 block header
     div(style='float: right; margin-top: 0.9em; font-size: 1.3em;')
-        a(href='{% url "contest_calendar" now.year now.month %}') Calendar view
+        a(href='{% url "contest_calendar" now.year now.month %}') {% trans "Calendar view" %}
 
 block body
     if current_contests
         br
-        h3 Ongoing Contests
+        h3 {% trans "Ongoing Contests" %}
         br
         table.contest-list.table.striped
             thead
                 tr
-                    th(style='width:90%') Contest
-                    th Rankings
+                    th(style='width:90%') {% trans "Contest
+                    th {% trans "Rankings
                     if not IN_CONTEST
                         th(style='width:15%')
             tbody
@@ -39,10 +40,10 @@ block body
                                 if contest.start_time
                                     br
                                     if contest.time_before_end
-                                        span.time Ending in&nbsp;
+                                        span.time {% trans "Ending in" %}&nbsp;
                                         span.time.time-remaining #{contest.time_before_end|timedelta:"simple"}
                                     elif contest.free_start and contest.start_time
-                                        span.time Started at #{contest.start_time|date:"N j, o, G:i"}
+                                        span.time {% trans "Started at" %} #{contest.start_time|date:"N j, o, G:i"}
                                     .time.floating-time(style='text-align:right')
                                         span(style='text-align:right;color:#777;')
                                         if contest.time_limit
@@ -51,12 +52,12 @@ block body
                                             | #{contest.start_time|date:"M j, Y, G:i"}
                                         br
                                         if contest.time_limit
-                                            | #{contest.time_limit|timedelta:"simple-no-seconds"} window
+                                            | #{contest.time_limit|timedelta:"simple-no-seconds"} {% trans "window" %}
                                         else
-                                            | #{contest.contest_window_length|timedelta:"simple-no-seconds"} long
+                                            | #{contest.contest_window_length|timedelta:"simple-no-seconds"} {% trans "long" %}
                                     if contest.is_external
                                         .external-notice
-                                            a(href='/about#external-contests') External contest
+                                            a(href='/about#external-contests') {% trans "External contest" %}
                                 
                         td
                             a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
@@ -67,13 +68,13 @@ block body
         .dashed
         
     br
-    h3 Upcoming Contests
+    h3 {% trans "Upcoming Contests" %}
     br
     if future_contests
         table.contest-list.table.striped
             thead
                 tr
-                    th Contest
+                    th {% trans "Contest" %}
             tbody
                 each contest in future_contests
                     tr
@@ -83,7 +84,7 @@ block body
                                 if contest.start_time
                                     br
                                     if contest.time_before_start
-                                        span.time Starting in&nbsp;
+                                        span.time {% trans "Starting in" %}&nbsp;
                                         span.time.time-remaining #{contest.time_before_start|timedelta:"simple"}
                                     
                                     .time.floating-time(style='text-align:right')
@@ -94,27 +95,27 @@ block body
                                             | #{contest.start_time|date:"M j, Y, G:i"}
                                         br
                                         if contest.time_limit
-                                            | #{contest.time_limit|timedelta:"simple-no-seconds"} window
+                                            | #{contest.time_limit|timedelta:"simple-no-seconds"} {% trans "window" %}
                                         else
-                                            | #{contest.contest_window_length|timedelta:"simple-no-seconds"} long
+                                            | #{contest.contest_window_length|timedelta:"simple-no-seconds"} {% trans "long" %}
                                     if contest.is_external
                                         .external-notice
-                                            a(href='/about#external-contests') External contest
+                                            a(href='/about#external-contests') {% trans "External contest" %}
     else
-        i There are no scheduled contests at this time.
+        i {% trans "There are no scheduled contests at this time." %}
 
 
 
     br
     hr.dashed
     br
-    h3 Past Contests
+    h3 {% trans "Past Contests
     br
     table.contest-list.table.striped
         thead
             tr
-                th(style='width:95%') Contest
-                th Rankings
+                th(style='width:95%') {% trans "Contest
+                th {% trans "Rankings
         tbody
             each contest in past_contests
                 tr
@@ -123,7 +124,7 @@ block body
                             a(href='{% url "contest_view" contest.key %}')= contest.name
                             if contest.is_external
                                 .external-notice
-                                    a(href='/about#external-contests') External contest
+                                    a(href='/about#external-contests') {% trans "External contest
                             span.floating-time-right(style='text-align:right;color:#777;')
                                 if contest.time_limit
                                     | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
@@ -131,8 +132,8 @@ block body
                                     | #{contest.start_time|date:"M j, Y, G:i"}
                                 br
                                 if contest.time_limit
-                                    | #{contest.time_limit|timedelta:"simple-no-seconds"} window
+                                    | #{contest.time_limit|timedelta:"simple-no-seconds"} {% trans "window
                                 else
-                                    | #{contest.contest_window_length|timedelta:"simple-no-seconds"} long
+                                    | #{contest.contest_window_length|timedelta:"simple-no-seconds"} {% trans "long
                     td
                         a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}

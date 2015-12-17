@@ -1,7 +1,9 @@
 extends base
 
+- load i18n
+
 block body
-    p Only the following organizations may access this contest:
+    p {% trans "Only the following organizations may access this contest:" %}
     ul
         each org in orgs
             li

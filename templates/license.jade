@@ -1,12 +1,13 @@
 extends common-content
 - load cache
 - load markdown_trois_tags
+- load i18n
 
 block description
     - cache 3600 license_html license.id
         | #{license.text|markdown:"license"}
 
 block info_float
-    b Source:
+    b {% trans "Source:" %}
     = ' '
     a(href='{{ license.link }}') #{license.link}

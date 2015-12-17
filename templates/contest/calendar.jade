@@ -1,4 +1,5 @@
 extends base
+- load i18n
 
 block title
     | Contests in #{month|date:"F Y"}
@@ -15,13 +16,13 @@ block title_row
 block body
     table#contest-calendar
         tr
-            th Sunday
-            th Monday
-            th Tuesday
-            th Wednesday
-            th Thursday
-            th Friday
-            th Saturday
+            th {% trans "Sunday" %}
+            th {% trans "Monday" %}
+            th {% trans "Tuesday" %}
+            th {% trans "Wednesday" %}
+            th {% trans "Thursday" %}
+            th {% trans "Friday" %}
+            th {% trans "Saturday" %}
         each week in calendar
             tr
                 each day in week

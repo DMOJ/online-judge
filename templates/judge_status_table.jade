@@ -1,14 +1,15 @@
 - load static from staticfiles
 - load timedelta
+- load i18n
 
 tr
-    th Name
+    th {% trans "Name" %}
     if request.user.is_superuser or request.user.is_staff
-        th Online
-    th Uptime
-    th Ping
-    th Load
-    th Runtimes
+        th {% trans "Online" %}
+    th {% trans "Uptime" %}
+    th {% trans "Ping" %}
+    th {% trans "Load" %}
+    th {% trans "Runtimes" %}
 for judge in judges
     if judge.online or request.user.is_superuser or request.user.is_staff
         tr
@@ -46,4 +47,4 @@ for judge in judges
 if not judges
     tr
         td(colspan='6')
-            em There are no judges available for this language.
+            em {% trans "There are no judges available for this language." %}

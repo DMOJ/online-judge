@@ -4,6 +4,7 @@
 - load gravatar
 - load camo_proxy
 - load lazy_load
+- load i18n
 
 ul.comments.top-level-comments
     if has_comments
@@ -79,12 +80,12 @@ ul.comments.top-level-comments
                                 | {{ children }}
         - endrecursetree
     else
-        p There are no comments at the moment.
+        p {% trans "There are no comments at the moment." %}
 
 if request.user.is_authenticated and comment_form
     .form-area.comment-submit
         block comment_submit_title
-            h3 New comment
+            h3 {% trans "New comment" %}
             hr
         form#comment-submit(action='', method='post')
             - csrf_token
@@ -93,10 +94,10 @@ if request.user.is_authenticated and comment_form
                     | #{comment_form.non_field_errors}
                     | #{comment_form.parent.errors}
                     if comment_form.title.errors
-                        | Invalid comment title.
+                        | {% trans "Invalid comment title." %}
                         br
                     if comment_form.body.errors
-                        | Invalid comment body.
+                        | {% trans "Invalid comment body." %}
             | #{comment_form.parent}
             .comment-post-wrapper
                 #comment-form-title

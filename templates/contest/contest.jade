@@ -1,13 +1,14 @@
 extends common-content
 
--load staticfiles
--load markdown_trois_tags
--load cache
--load timedelta
--load smart_math
--load social_share
--load camo_proxy
--load tz
+- load staticfiles
+- load markdown_trois_tags
+- load cache
+- load timedelta
+- load smart_math
+- load social_share
+- load camo_proxy
+- load tz
+- load i18n
 
 block content_js_media
     script(type='text/javascript').
@@ -25,19 +26,19 @@ block info_float
     if contest.can_join or participating
         if not participating or not participation.ended
             if in_contest
-                a.unselectable.button.full(href='{% url "contest_leave" contest.key %}') Leave contest
+                a.unselectable.button.full(href='{% url "contest_leave" contest.key %}') {% trans "Leave contest" %}
             else
-                a.unselectable.button.full(href='{% url "contest_join" contest.key %}') Join contest
+                a.unselectable.button.full(href='{% url "contest_join" contest.key %}') {% trans "Join contest" %}
             hr
 
     if contest.start_time <= now or perms.judge.see_private_contest
         a(href='{% url "contest_ranking" contest.key %}')
-            | View rankings
+            | {% trans "View rankings" %}
         hr
 
     if perms.judge.change_contest
         a(href='{% url "admin:judge_contest_change" contest.id %}')
-            | Edit contest
+            | {% trans "Edit contest" %}
         hr
     br
 
@@ -45,15 +46,15 @@ block info_float
         i.fa.fa-clock-o.fa-fw
         if participating
             if participation.ended
-                b Time is up!
+                b {% trans "Time is up!" %}
             else
-                b Time remaining:
+                b {% trans "Time remaining:" %}
                 = ' '
                 .time-remaining #{participation.time_remaining|timedelta:"simple"}
         elif contest.end_time < now
-            b Contest is over.
+            b {% trans "Contest is over." %}
         else
-            b Time remaining:
+            b {% trans "Time remaining:" %}
             = ' '
             .time-remaining #{contest.time_before_end|timedelta:"simple"}
 
@@ -62,18 +63,18 @@ block description
         #banner(style='border-bottom: 1px solid rgba(0, 0, 0, 0.2); padding-bottom: 1em;')
             div(style='margin: 0.5em 0px;')
                 a.date(href='http://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name }}&amp;iso={{contest.start_time|utc|date:"Y-m-d\TH:i:s"}}', style='display: block; text-decoration: none; text-align: center; line-height: 1.3; font-size: 2.3em; padding-bottom: 0.15em;')
-                    | Starting in 
+                    | {% trans "Starting in " %}
                     span.time-remaining #{contest.time_before_start|timedelta:"simple"}
                 #time(style='text-align: center; display: block; color: rgb(85, 85, 85); font-size: 14px')
                     if contest.time_limit
                         b #{contest.time_limit|timedelta:"simple-no-seconds"}
-                        |  window from 
+                        | {% trans " window from " %}
                         b #{contest.start_time|date:"F j, Y, G:i T"}
-                        |  to 
+                        | {% trans " to " %}
                         b #{contest.end_time|date:"F j, Y, G:i T"}
                     else
                         b #{contest.contest_window_length|timedelta:"simple-no-seconds"}
-                        |  long starting on 
+                        | {% trans " long starting on " %}
                         b #{contest.start_time|date:"F j, Y, G:i T"}
     
     - cache 3600 contest_html contest.id
@@ -85,7 +86,7 @@ block comments
        - post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>"
        - post_to_twitter "{{ SITE_NAME }}:" post "<i class=\"fa fa-twitter\"></i>"
     .comment-area
-        h2 Comments
+        h2 {% trans "Comments" %}
         include comments/list
 
 block bodyend
