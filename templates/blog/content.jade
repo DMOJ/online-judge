@@ -16,7 +16,7 @@ block header
     div(style='float: right; margin-top: 1.2em')
         if perms.judge.change_blogpost
             | [
-            a(href='{% url "admin:judge_blogpost_change" post.id %}') {% "Edit" %}
+            a(href='{% url "admin:judge_blogpost_change" post.id %}') {% trans "Edit" %}
             | ]
 
 block body
