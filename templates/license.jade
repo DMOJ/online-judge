@@ -7,6 +7,6 @@ block description
         | #{license.text|markdown:"license"}
 
 block info_float
-    b Source:
+    b {% trans "Source:" %}
     = ' '
     a(href='{{ license.link }}') #{license.link}

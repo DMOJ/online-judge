@@ -22,7 +22,7 @@ block header
     if perms.judge.change_judge
         div(style='float: right; margin-top: 1.2em')
             | [
-            a(href='{% url "admin:judge_judge_change" judge.id %}') Edit
+            a(href='{% url "admin:judge_judge_change" judge.id %}') {% trans "Edit" %}
             | ]
 
 block body
@@ -30,7 +30,7 @@ block body
         - cache 86400 judge_html judge.id
             | #{judge.description|markdown:"judge"}
 
-    h3 All Judges
+    h3 {% trans "All Judges" %}
     hr
     table#judge-status.table
         include judge_status_table

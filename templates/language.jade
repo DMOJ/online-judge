@@ -22,21 +22,21 @@ block header
     div(style='float: right; margin-top: 1.2em')
         if perms.judge.change_language
             | [
-            a(href='{% url "admin:judge_language_change" language.id %}') Edit
+            a(href='{% url "admin:judge_language_change" language.id %}') {% trans "Edit" %}
             | ]
 
 block body
     ul
         li
-            b Short name:
+            b {% trans "Short name:" %}
             = ' '
             = language.short_display_name
         li
-            b Category:
+            b {% trans "Category:" %}
             = ' '
             = language.common_name
         li
-            b Basic Runtime Info:
+            b {% trans "Basic Runtime Info:" %}
             = ' '
             = language.info
     if language.description
