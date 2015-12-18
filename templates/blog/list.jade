@@ -57,7 +57,11 @@ block body
                     .contest
                         .name
                             a(href='{% url "contest_view" contest.key %}')= contest.name
+<<<<<<< HEAD
                         .time {% trans "Starts in"}
+=======
+                        .time {% trans "Starts in" %}
+>>>>>>> refs/remotes/DMOJ/master
                             = ' '
                             span.time-remaining #{contest.time_before_start|timedelta:"simple"}
         div.blog-sidebox
