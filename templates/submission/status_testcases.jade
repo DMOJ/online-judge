@@ -85,6 +85,7 @@ if submission.status != 'IE'
 else
     h3(style='color:red;font-weight:bold') 
         if request.user == submission.user.user
+            //TODO: Make it beautiful..
             | {% blocktrans with site_n = SITE_NAME %}An internal error occurred while grading, and the {{site_n}} administrators have been notified.{% endblocktrans %}
             br
             | {% trans "In the meantime, try resubmitting in a few seconds." %}
