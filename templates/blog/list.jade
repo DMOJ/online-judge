@@ -4,6 +4,7 @@ extends base
 - load markdown_trois_tags
 - load timedelta
 - load lazy_load
+- load i18n
 
 block media
     link(rel='alternate', type='application/atom+xml', href='{% url "comment_atom" %}', title='Atom Comment Feed')
@@ -39,28 +40,28 @@ block body
                     include list_pages
         if current_contests
             div.blog-sidebox
-                h3 Ongoing contests
+                h3 {% trans "Ongoing contests" %}
                     i.fa.fa-trophy
                 each contest in current_contests
                     .contest
                         .name
                             a(href='{% url "contest_view" contest.key %}')= contest.name
-                        .time Ends in
+                        .time {% trans "Ends in" %}
                             = ' '
                             span.time-remaining #{contest.time_before_end|timedelta:"simple"}
         if future_contests
             div.blog-sidebox
-                h3 Upcoming contests
+                h3 {% trans "Upcoming contests" %}
                     i.fa.fa-trophy
                 each contest in future_contests
                     .contest
                         .name
                             a(href='{% url "contest_view" contest.key %}')= contest.name
-                        .time Starts in
+                        .time {% trans "Starts in"}
                             = ' '
                             span.time-remaining #{contest.time_before_start|timedelta:"simple"}
         div.blog-sidebox
-            h3 Comment stream
+            h3 {% trans "Comment stream" %}
                 i.fa.fa-comments
             ul
                 for comment in comments
