@@ -1,28 +1,29 @@
 - load list_processor
 - load filesize
 - load counter
+- load i18n
 
 if submission.status != 'IE'
     if submission.status == 'QU'
-        h4 We are waiting for a suitable judge to process your submission...
+        h4 {% trans "We are waiting for a suitable judge to process your submission..." %}
     elif submission.status == 'P'
-        h4 Your submission is being processed...
+        h4 {% trans "Your submission is being processed..." %}
     elif submission.status == 'CE'
-        h4 Compilation Error
+        h4 {% trans "Compilation Error" %}
         pre #{submission.error|safe}
     else
-        h3 Execution Results
+        h3 {% trans "Execution Results" %}
         br
         if submission.error
-            h4 Compilation Warnings
+            h4 {% trans "Compilation Warnings" %}
             pre #{submission.error|safe}
             br
         - regroup test_cases by batch as batches
         - get_counter test_case_id
         each batch in batches
             if batch.grouper
-                b Batch ##{test_case_id}
-                |  (#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} points)
+                b {% trans "Batch " %}##{test_case_id}
+                |  (#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} {% trans "points)" %}
                 br
                 | <div class="batch-cases">
             table
@@ -32,12 +33,12 @@ if submission.status != 'IE'
                             if case.status != 'AC' and case.output
                                 span.fa.fa-chevron-right.fa-fw
                             if batch.grouper
-                                b Case ##{forloop.counter}:
+                                b {% trans "Case" %} ##{forloop.counter}:
                             else
                                 if not case.total
-                                    b Pretest ##{test_case_id}:
+                                    b {% trans "Pretest" %} ##{test_case_id}:
                                 else
-                                    b Test case ##{test_case_id}:
+                                    b {% trans "Test case" %} ##{test_case_id}:
                         td
                             span(class='case-{{ case.status }}', title=case.long_status)
                                 if case.status == 'SC'
@@ -63,7 +64,7 @@ if submission.status != 'IE'
                         tr(id=case.id, style='display:none').toggled
                             td(colspan='5')
                                 .case-info
-                                    strong Your output (clipped)
+                                    strong {% trans "Your output (clipped)" %}
                                     .case-output #{case.output|linebreaksbr}
             if batch.grouper
                 | </div>
@@ -71,21 +72,21 @@ if submission.status != 'IE'
         if submission.is_graded
             br
             if submission.result != "AB"
-                b Final score:
+                b {% trans "Final score:" %}
                 |  #{submission.case_points|floatformat:"0"}/#{submission.case_total|floatformat:"0"}
                 if IN_CONTEST and submission.contest_or_none
                     - with contest=submission.contest_or_none
-                        | (#{contest.points|floatformat:"1"}/#{contest.problem.points} points)
+                        | (#{contest.points|floatformat:"1"}/#{contest.problem.points} {% trans "points)" %}
                 else
-                    | (#{submission.points|floatformat:"1"}/#{submission.problem.points|floatformat:"-1"} points)
+                    | (#{submission.points|floatformat:"1"}/#{submission.problem.points|floatformat:"-1"} {% trans "points)" %}
             else
-                b Submission aborted!
+                b {% trans "Submission aborted!" %}
             br
 else
     h3(style='color:red;font-weight:bold') 
         if request.user == submission.user.user
-            | An internal error occurred while grading, and the #{SITE_NAME} administrators have been notified.
+            | {% blocktrans with site_n = SITE_NAME %}An internal error occurred while grading, and the {{site_n}} administrators have been notified.{% endblocktrans %}
             br
-            | In the meantime, try resubmitting in a few seconds.
+            | {% trans "In the meantime, try resubmitting in a few seconds." %}
         else
-            | An internal error occurred while grading.
+            | {% trans "An internal error occurred while grading." %}

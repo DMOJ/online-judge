@@ -2,6 +2,7 @@ extends submission/info_base
 
 - load static from staticfiles
 - load strings
+- load i18n
 
 block media
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
@@ -54,10 +55,10 @@ block media
 
 block body
     br
-    a(href='{% url "submission_status" submission.id %}') View status
+    a(href='{% url "submission_status" submission.id %}') {% trans "View status" %}
     br
     if request.user == submission.user.user or perms.judge.resubmit_other
-        a(href='{% url "problem_submit" submission.problem.code submission.id %}') Resubmit
+        a(href='{% url "problem_submit" submission.problem.code submission.id %}') {% trans "Resubmit" %}
         br
     hr(style='float:left;width:30%')
     br

@@ -5,6 +5,7 @@ extends common-content
 - load smart_math
 - load filesize
 - load camo_proxy
+- load i18n
 
 block content_media
     include comments/media
@@ -21,34 +22,34 @@ block title_row
                 span(style='position: relative; display: inline-block; font-size: 1.5em')
                     span.fa.fa-file-pdf-o(style='color: #d40e13')
                     span(style='height: 0.2em; display: block; position: absolute; top: 0.3em; background: #d40e13; width: 0.6em; margin-left: -0.15em')
-                = ' View as PDF'
+                = ' {% trans "View as PDF" %}'
 
 block info_float
-    a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') Submit solution
+    a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
     hr
     if request.user.is_authenticated and has_submissions
         a(href='{% url "user_submissions" problem.code request.user.username %}')
-            | My submissions
+            | {% trans "My submissions" %}
         br
     a(href='{% url "chronological_submissions" problem.code %}')
-        | All submissions
+        | {% trans "All submissions" %}
     br
     a(href='{% url "ranked_submissions" problem.code %}')
-        | Best submissions
+        | {% trans "Best submissions" %}
 
     if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids or perms.judge.edit_public_problem and problem.is_public
         hr
         a(href='{% url "admin:judge_problem_change" problem.id %}')
-            | Edit problem
+            | {% trans "Edit problem" %}
         br
     if perms.judge.clone_problem
         a(href='{% url "problem_clone" problem.code %}')
-            | Clone problem
+            | {% trans "Clone problem" %}
         br
     hr
     br
     i.fa.fa-check.fa-fw
-    b Points:
+    b {% trans "Points:" %}
     if contest_problem
         |  #{contest_problem.points}
         if contest_problem.partial
@@ -59,11 +60,11 @@ block info_float
             | (partial)
     br
     i.fa.fa-clock-o.fa-fw
-    b Time limit:
+    b {% trans "Time limit:" %}
     |  #{problem.time_limit}s
     br
     i.fa.fa-database.fa-fw
-    b Memory limit:
+    b {% trans "Memory limit:" %}
     |  #{problem.memory_limit|kbsimpleformat}
     br
     - cache 86400 problem_authors problem.id
@@ -71,9 +72,9 @@ block info_float
             if authors
                 i.fa.fa-pencil-square.fa-fw
                 if authors|length > 1
-                    b Authors:
+                    b {% trans "Authors:" %}
                 else
-                    b Author:
+                    b {% trans "Author:" %}
                 = ' '
                 for author in authors
                     span(class=author.display_rank)
@@ -85,21 +86,21 @@ block info_float
     div#problem-types
         div.toggle.closed.unselectable
             span.fa.fa-chevron-right.fa-fw
-            | Problem type(s)
+            | {% trans "Problem type(s)" %}
         div.toggled(style="display:none") #{problem.types_list|join:", "}
     br
     if show_languages
         div#allowed-langs
             div.toggle.open.unselectable
                 span.fa.fa-chevron-right.fa-fw
-                | Allowed languages
+                | {% trans "Allowed languages" %}
             div.toggled(style="margin-bottom:-1em")
                 - with usable=problem.usable_common_names langs=problem.languages_list
                     each lang in langs
                         if lang in usable
                             = lang
                         else
-                            del(title='No {{ lang }} judge online')= lang
+                            del(title='{% blocktrans with lang %}No {{ lang }} judge online{% endblocktrans %}')= lang
                         if not forloop.last
                             = ', '
         br
@@ -117,7 +118,7 @@ block comments
     .comment-area
         h2
             i.fa.fa-comments(style='padding-right: 0.2em')
-            | Comments
+            | {% trans "Comments" %}
         include comments/list
 
 block bodyend

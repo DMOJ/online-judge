@@ -1,6 +1,7 @@
 extends base
 - load staticfiles
 - load cache
+- load i18n
 
 block js_media
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
@@ -37,20 +38,20 @@ block body
         if not IN_CONTEST
             form#filter-form(name='form', action='', method='get')
                 if has_search
-                    input#search(type='text', name='search', value=search_query, placeholder='Search problems...')
-                a.button(onclick='form.submit()') Go
-                a.button(href='{% url "problem_random" %}') Random
+                    input#search(type='text', name='search', value=search_query, placeholder='{% trans "Search problems..." %}')
+                a.button(onclick='form.submit()') {% trans "Go" %}
+                a.button(href='{% url "problem_random" %}') {% trans "Random" %}
                 if request.user.is_authenticated
                     input#hide_solved(onclick='form.submit()', type='checkbox', name='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
-                    label(for='hide_solved') Hide solved problems
+                    label(for='hide_solved') {% trans "Hide solved problems" %}
                 input#show_types(onclick='form.submit()', type='checkbox', name='show_types', checked=('checked' if show_types else undefined), value='1')
-                label(for='show_types') Show problem tags
-                label(for='category') Category
+                label(for='show_types') {% trans "Show problem tags" %}
+                label(for='category') {% trans "Category" %}
                 select#category(name='category', onchange='form.submit()')
                     if category
-                        option(value='', selected) All
+                        option(value='', selected) {% trans "All" %}
                     else
-                        option(value='') All
+                        option(value='') {% trans "All" %}
                     option(disabled) ---
                     each group in categories
                         if group.id == category
@@ -64,13 +65,13 @@ block body
                 if request.user.is_authenticated
                     th.solved
                         i.fa.fa-check
-                th.problem Problem
-                th.category Category
-                th.code Code
+                th.problem {% trans "Problem" %}
+                th.category {% trans "Category" %}
+                th.code {% trans "Code" %}
                 if show_types
-                    th Types
-                th.points Points
-                th.users Users
+                    th {% trans "Types" %}
+                th.points {% trans "Points" %}
+                th.users {% trans "Users" %}
         tbody
             each problem in problems
                 tr

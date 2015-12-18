@@ -1,6 +1,7 @@
 - load markdown_trois_tags
 - load smart_math
 - load filesize
+- load i18n
 
 doctype 5
 
@@ -46,40 +47,40 @@ html
         table.table#info-table
             tbody
                 tr
-                    td.key Points:
+                    td.key {% trans "Points:" %}
                     td.value
                         if contest_problem
                             |  #{contest_problem.points}
                             if contest_problem.partial
-                                | (partial)
+                                | {% trans "(partial)" %}
                         else
                             |  #{problem.points|floatformat}
                             if problem.partial
-                                | (partial)
+                                | {% trans "(partial)" %}
                     td.key
                         if problem.types_list|length > 1
-                            | Problem types:
+                            | {% trans "Problem types:" %}
                         else
-                            | Problem type:
+                            | {% trans "Problem type:" %}
                     td.value #{problem.types_list|join:", "}
                 tr
-                    td.key Time limit:
+                    td.key {% trans "Time limit:" %}
                     td.value #{problem.time_limit}s
-                    td.key Allowed languages:
+                    td.key {% trans "Allowed languages:" %}
                     td.value
                         if show_languages
                             | #{problem.languages_list|join:", "}
                         else
-                            | All
+                            | {% trans "All" %}
                 tr
-                    td.key Memory limit:
+                    td.key {% trans "Memory limit:" %}
                     td.value #{problem.memory_limit|kbsimpleformat}
                     if authors
                         td.key
                             if authors|length > 1
-                                | Authors:
+                                | {% trans "Authors:" %}
                             else
-                                | Author:
+                                | {% trans "Author:" %}
                         td.value #{authors|join:", "}
         hr(style='border-bottom: 1px dashed;')
 
