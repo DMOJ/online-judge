@@ -1,4 +1,5 @@
 extends base
+- load i18n
 
 block media
     style.
@@ -7,19 +8,19 @@ block media
 block body
     table
         tr
-            th User:
+            th {% trans "User:" %}
             - with user=object.user
                 td(class=user.display_rank)
                     a(href='{% url "user_page" user.user.username %}')= user.long_display_name
         tr
-            th Organization:
+            th {% trans "Organization:" %}
             td
                 - with org=object.organization
                     a(href='{% url "organization_home" org.key %}')= org.name
         tr
-            th Time:
+            th {% trans "Time:" %}
             td #{object.time|date:"N j, o, g:i a"}
         tr
-            th(colspan=2) Reason:
+            th(colspan=2) {% trans "Reason:" %}
         tr
             td(colspan=2, style='padding-left: 2em') #{object.reason}

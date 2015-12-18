@@ -1,6 +1,7 @@
 extends base
 - load cache
 - load staticfiles
+- load i18n
 
 block js_media
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
@@ -14,9 +15,9 @@ block body
     table.table#organization-table
         thead
             tr
-                th ID
-                th(style='width:85%') Name
-                th Members
+                th {% trans "ID" %}
+                th(style='width:85%') {% trans "Name" %}
+                th {% trans "Members" %}
         tbody
             each org in organizations
                 tr

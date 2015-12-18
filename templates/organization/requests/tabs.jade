@@ -1,9 +1,11 @@
+- load i18n
+
 ul.tabs
     li(class=('active' if tab == 'pending' else ''))
-        a(href='{% url "organization_requests_pending" object.key %}') Pending
+        a(href='{% url "organization_requests_pending" object.key %}') {% trans "Pending" %}
     li(class=('active' if tab == 'log' else ''))
-        a(href='{% url "organization_requests_log" object.key %}') Log
+        a(href='{% url "organization_requests_log" object.key %}') {% trans "Log" %}
     li(class=('active' if tab == 'approved' else ''))
-        a(href='{% url "organization_requests_approved" object.key %}') Approved
+        a(href='{% url "organization_requests_approved" object.key %}') {% trans "Approved" %}
     li(class=('active' if tab == 'rejected' else ''))
-        a(href='{% url "organization_requests_rejected" object.key %}') Rejected
+        a(href='{% url "organization_requests_rejected" object.key %}') {% trans "Rejected" %}

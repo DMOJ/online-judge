@@ -1,5 +1,6 @@
 extends base
 - load staticfiles
+- load i18n
 
 block js_media
     | #{form.media.js}
@@ -25,4 +26,4 @@ block body
     form.form-area(action='', method='post')
         - csrf_token
         table(border=0, style='text-align:left') #{form.as_table}
-        button(type='submit') Update
+        button(type='submit') {% trans "Update" %}

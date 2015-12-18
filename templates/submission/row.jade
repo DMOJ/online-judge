@@ -1,5 +1,6 @@
 - load static from staticfiles
 - load tz
+- load i18n
 
 if profile_id
     - var can_view = profile_id == submission.user_id or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids and submission.problem.is_public
@@ -42,7 +43,7 @@ td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status
 if submission.status == 'G'
     td.sub-testcase
         if submission.current_testcase > 0
-            | Case ##{submission.current_testcase}
+            | {% trans "Case " %}##{submission.current_testcase}
         else
             | ...
 
@@ -50,17 +51,17 @@ if can_view
     td.sub-prop
         a(href='{% url "submission_status" submission.id %}')
             i.fa.fa-eye.fa-fw
-            span.label view
+            span.label {% trans "view" %}
         if perms.judge.rejudge_submission
             = ' · '
             a(href='javascript:rejudge_submission({{ submission.id }})')
                 i.fa.fa-refresh.fa-fw
-                span.label rejudge
+                span.label {% trans "rejudge" %}
         if perms.judge.change_submission
             = ' · '
             a(href='{% url "admin:judge_submission_change" submission.id %}')
                 i.fa.fa-cog.fa-fw
-                span.label admin
+                span.label {% trans "admin" %}
 
 td.sub-usage
     if submission.status in 'QUPGCEIEAB'

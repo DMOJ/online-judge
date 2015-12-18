@@ -1,10 +1,11 @@
 extends base
+- load i18n
 
 block body
     form.form-area(action='', method='post')
         - csrf_token
         p
             label(for='{{ form.reason.id_for_label }}')
-                b Your reason for joining:
+                b {% trans "Your reason for joining:" %}
         p #{form.reason}
-        button(type='submit') Request
+        button(type='submit') {% trans "Request" %}

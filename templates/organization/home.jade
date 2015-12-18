@@ -1,31 +1,32 @@
 extends common-content
--load staticfiles
--load markdown_trois_tags
--load cache
--load smart_math
+- load staticfiles
+- load markdown_trois_tags
+- load cache
+- load smart_math
+- load i18n
 
 block info_float
     if request.user.is_authenticated
         - with profile=request.user.profile
             if profile in organization
                 a.unselectable.button.full(href='{% url "leave_organization" organization.key %}')
-                    | Leave organization
+                    | {% trans "Leave organization" %}
                 hr
             elif organization.is_open
                 a.unselectable.button.full(href='{% url "join_organization" organization.key %}')
-                    | Join organization
+                    | {% trans "Join organization" %}
                 hr
             else
                 a.unselectable.button.full(href='{% url "request_organization" organization.key %}')
-                    | Request membership
+                    | {% trans "Request membership" %}
                 hr
     if can_edit
-        a(href='{% url "edit_organization" organization.key %}') Edit organization
+        a(href='{% url "edit_organization" organization.key %}') {% trans "Edit organization" %}
         br
         if not organization.is_open
-            a(href='{% url "organization_requests_pending" organization.key %}') View requests
+            a(href='{% url "organization_requests_pending" organization.key %}') {% trans "View requests" %}
             br
-    a(href='{% url "organization_users" organization.key %}') View members
+    a(href='{% url "organization_users" organization.key %}') {% trans "View members" %}
         
 block description
     -cache 3600 organization_html organization.id

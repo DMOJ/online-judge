@@ -1,9 +1,10 @@
 extends base
+- load i18n
 
 block content_title
-    = 'Submission of '
+    = {% trans "Submission of " %}
     a(href='{% url "problem_detail" submission.problem.code %}')= submission.problem.name
-    = ' by '
+    = {% trans " by " %}
     a(href='{% url "user_page" submission.user.user.username %}')= submission.user.user.username
 
 block header
@@ -15,5 +16,5 @@ block header
             = ' '
             if perms.judge.change_submission
                 | [
-                a(href='{% url "admin:judge_submission_change" submission.id %}') Admin
+                a(href='{% url "admin:judge_submission_change" submission.id %}') {% trans "Admin" %}
                 | ]
