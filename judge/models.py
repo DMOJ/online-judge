@@ -147,6 +147,8 @@ class Profile(models.Model):
     mute = models.BooleanField(verbose_name='Comment mute', help_text='Some users are at their best when silent.',
                                default=False)
     rating = models.IntegerField(null=True, default=None)
+    user_script = models.TextField(verbose_name='User script', help_text='User-defined JavaScript for site customization.',
+                               default='',  max_length=65536)
 
     @cached_property
     def organization(self):
