@@ -752,7 +752,7 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
         ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
-        ('Details', {'fields': ('description', 'is_external')}),
+        ('Details', {'fields': ('description', 'og_image', 'is_external')}),
         ('Rating', {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
         ('Organization', {'fields': ('is_private', 'organizations')}),
     )
@@ -945,7 +945,7 @@ class OrganizationAdmin(Select2SuitMixin, VersionAdmin):
 class BlogPostAdmin(VersionAdmin):
     fieldsets = (
         (None, {'fields': ('title', 'slug', 'visible', 'sticky', 'publish_on')}),
-        ('Content', {'fields': ('content',)}),
+        ('Content', {'fields': ('content', 'og_image',)}),
         ('Summary', {'classes': ('collapse',), 'fields': ('summary',)}),
     )
     prepopulated_fields = {'slug': ('title',)}
