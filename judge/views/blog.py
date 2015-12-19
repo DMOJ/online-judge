@@ -57,7 +57,7 @@ class PostView(TitleMixin, CommentedDetailView):
         return 'b:%s' % self.object.id
         
     def get_context_data(self, **kwargs):
-        context = super(PostList, self).get_context_data(**kwargs)
+        context = super(PostView, self).get_context_data(**kwargs)
         if self.object.og_image:
             context['og_image'] = self.object.og_image
         return context
