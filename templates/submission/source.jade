@@ -61,6 +61,7 @@ block body
         br
     if perms.judge.rejudge_submission
         form(action='{% url "submission_rejudge_inline" %}', method='post')
+            -csrf_token
             a(href='#', onclick='parentNode.submit();') Rejudge
             input(type='hidden', name='id', value=submission.id)
         br
