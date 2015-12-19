@@ -18,7 +18,11 @@ html(lang='en')
         if misc_config.meta_keywords
             meta(name='keywords', content=misc_config['meta_keywords'])
         meta#viewport(name='viewport', content='initial-scale=1')
-        meta(property='og:image', content='//{{ site.domain }}/logo.png')
+        
+        if og_image:
+            meta(property='og:image', content=og_image)
+        else:
+            meta(property='og:image', content='//{{ site.domain }}/logo.png')
         meta(property='og:title', content='{{ title }} - {{ SITE_LONG_NAME }}')
         meta(property='og:site_name', content='{{ SITE_LONG_NAME }}')
 
