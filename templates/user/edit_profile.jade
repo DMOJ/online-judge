@@ -24,8 +24,8 @@ block js_media
     include timezone/js_media
     | #{form.media.js}
     script(type='text/javascript').
-        $(function() {
-            window.ace_user_script.getSession().setMode("ace/mode/javascript");
+        $('#ace_user_script').on('ace_load', function (e, editor) {
+                editor.getSession().setMode("ace/mode/javascript");
         });
                 
 
