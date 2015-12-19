@@ -5,7 +5,7 @@ import urllib2
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ImproperlyConfigured
-from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
+from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404, HttpResponseRedirect
 from django.views.generic import View
 
 from judge.models import Submission
