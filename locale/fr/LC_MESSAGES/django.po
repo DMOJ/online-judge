@@ -1,200 +1,196 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: Don Mills Online Judge\n"
+"Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 15:57-0500\n"
-"PO-Revision-Date: 2015-12-19 16:03-0500\n"
+"POT-Creation-Date: 2015-12-19 16:07-0500\n"
+"PO-Revision-Date: 2015-12-19 16:20-0500\n"
+"Last-Translator: Icyene <vulcainus@gmail.com>\n"
+"Language-Team: French\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: fr\n"
+"X-Generator: crowdin.com\n"
+"X-Crowdin-Project: dmoj\n"
+"X-Crowdin-Language: fr\n"
+"X-Crowdin-File: django.po\n"
+"Language: fr_FR\n"
 
 #: .\templates\base.jade:76
 msgid "MENU"
-msgstr ""
+msgstr "MENU"
 
 #: .\templates\base.jade:91
 #, python-format
 msgid "Hello, <b>%(username)s</b>."
-msgstr ""
+msgstr "Bonjour, <b>%(username)s</b>."
 
 #: .\templates\base.jade:93 .\templates\submission\info_base.jade.py:2
 #: .\templates\user\user_tabs.jade:11
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: .\templates\base.jade:95 .\templates\user\user_tabs.jade.py:9
 msgid "Edit profile"
-msgstr ""
+msgstr "Modifier le profile"
 
 #: .\templates\base.jade:97
 msgid "Log out"
-msgstr ""
+msgstr "Se déconnecter"
 
 #: .\templates\base.jade:101
 msgid "Login"
-msgstr ""
+msgstr "Se connecter"
 
 #: .\templates\base.jade:101
 msgid "Register"
-msgstr ""
+msgstr "S'inscrire"
 
 #: .\templates\base.jade:107
 msgid "This site works best with JavaScript enabled."
-msgstr ""
+msgstr "Ce site fonctionne mieux avec JavaScript activé."
 
 #: .\templates\blog\content.jade:2 .\templates\judge.jade.py:16
 #: .\templates\language.jade:16
 msgid "Edit"
-msgstr ""
+msgstr "Modifier"
 
 #: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:27
 #: .\templates\problem\problem.jade:28
 msgid "Comments"
-msgstr ""
+msgstr "Commentaires"
 
 #: .\templates\blog\list.jade:26
 msgid "Ongoing contests"
-msgstr ""
+msgstr "Concours en cours"
 
 #: .\templates\blog\list.jade:31
 msgid "Ends in"
-msgstr ""
+msgstr "Se termine dans"
 
 #: .\templates\blog\list.jade:36
 msgid "Upcoming contests"
-msgstr ""
+msgstr "Concours à venir"
 
 #: .\templates\blog\list.jade:41
 msgid "Starts in"
-msgstr ""
+msgstr "Démarre dans"
 
 #: .\templates\blog\list.jade:46
 msgid "Comment stream"
-msgstr ""
+msgstr "Flux de commentaire"
 
 #: .\templates\comments\list.jade:19
 msgid "There are no comments at the moment."
-msgstr ""
+msgstr "Il n'y a aucun commentaire pour le moment."
 
 #: .\templates\comments\list.jade:22
 msgid "New comment"
-msgstr ""
+msgstr "Commenter"
 
 #: .\templates\comments\list.jade:27
 msgid "Invalid comment title."
-msgstr ""
+msgstr "Titre du commentaire non valide."
 
 #: .\templates\comments\list.jade:27
 msgid "Invalid comment body."
-msgstr ""
+msgstr "Corps de commentaire non valide."
 
 #: .\templates\contest\calendar.jade:11
 msgid "Sunday"
-msgstr ""
+msgstr "Dimanche"
 
 #: .\templates\contest\calendar.jade:12
 msgid "Monday"
-msgstr ""
+msgstr "Lundi"
 
 #: .\templates\contest\calendar.jade:13
 msgid "Tuesday"
-msgstr ""
+msgstr "Mardi"
 
 #: .\templates\contest\calendar.jade:14
 msgid "Wednesday"
-msgstr ""
+msgstr "Mercredi"
 
 #: .\templates\contest\calendar.jade:15
 msgid "Thursday"
-msgstr ""
+msgstr "Jeudi"
 
 #: .\templates\contest\calendar.jade:16
 msgid "Friday"
-msgstr ""
+msgstr "Vendredi"
 
 #: .\templates\contest\calendar.jade:17
 msgid "Saturday"
-msgstr ""
+msgstr "Samedi"
 
 #: .\templates\contest\contest.jade:8
 msgid "Leave contest"
-msgstr ""
+msgstr "Quitter le concours"
 
 #: .\templates\contest\contest.jade:8
 msgid "Join contest"
-msgstr ""
+msgstr "Joindre les concours"
 
 #: .\templates\contest\contest.jade:9
 msgid "View rankings"
-msgstr ""
+msgstr "Voir classements"
 
 #: .\templates\contest\contest.jade:11
 msgid "Edit contest"
-msgstr ""
+msgstr "Modifier le concours"
 
 #: .\templates\contest\contest.jade:12
 msgid "Time is up!"
-msgstr ""
+msgstr "Le temps est écoulé!"
 
 #: .\templates\contest\contest.jade:12 .\templates\contest\contest.jade:13
 msgid "Time remaining:"
-msgstr ""
+msgstr "Temps restant:"
 
 #: .\templates\contest\contest.jade:13
 msgid "Contest is over."
-msgstr ""
+msgstr "Concours est terminé."
 
 #: .\templates\contest\contest.jade:16
 msgid "Starting in "
-msgstr ""
+msgstr "Commencera dans "
 
 #: .\templates\contest\contest.jade:17
 #, python-format
-msgid ""
-"<b>%(time_limit)s</b> window from <b>%(start_time)s</b> to <b>%(end_time)s</"
-"b>"
+msgid "<b>%(time_limit)s</b> window from <b>%(start_time)s</b> to <b>%(end_time)s</b>"
 msgstr ""
 
 #: .\templates\contest\contest.jade:18
 #, python-format
-msgid ""
-"<b>%(length)s</b> long starting on \n"
+msgid "<b>%(length)s</b> long starting on \n"
 "%(start_time)s\n"
 msgstr ""
 
 #: .\templates\contest\list.jade:10
 msgid "Calendar view"
-msgstr ""
+msgstr "Vue calendaire"
 
 #: .\templates\contest\list.jade:12
 msgid "Ongoing Contests"
-msgstr ""
+msgstr "Concours en cours"
 
 #: .\templates\contest\list.jade:16 .\templates\contest\list.jade.py:46
 #: .\templates\contest\list.jade:70 .\templates\user\user_about.jade.py:81
 msgid "Contest"
-msgstr ""
+msgstr "Concours"
 
 #: .\templates\contest\list.jade:17 .\templates\contest\list.jade.py:71
 msgid "Rankings"
-msgstr ""
+msgstr "Classements"
 
 #: .\templates\contest\list.jade:24
 msgid "Ending in"
-msgstr ""
+msgstr "Terminera dans"
 
 #: .\templates\contest\list.jade:24
 msgid "Started at"
-msgstr ""
+msgstr "Commencé à"
 
 #: .\templates\contest\list.jade:26 .\templates\contest\list.jade.py:54
 #: .\templates\contest\list.jade:80
@@ -215,29 +211,30 @@ msgstr ""
 
 #: .\templates\contest\list.jade:36
 msgid "Join"
-msgstr ""
+msgstr "Joindre"
 
 #: .\templates\contest\list.jade:42
 msgid "Upcoming Contests"
-msgstr ""
+msgstr "Concours à venir"
 
 #: .\templates\contest\list.jade:52
 msgid "Starting in"
-msgstr ""
+msgstr "Commencera dans"
 
 #: .\templates\contest\list.jade:64
 msgid "There are no scheduled contests at this time."
-msgstr ""
+msgstr "Il n'y a aucun concours au futur à ce moment."
 
 #: .\templates\contest\list.jade:66
 msgid "Past Contests"
-msgstr ""
+msgstr "Concours de la passé"
 
 #: .\templates\contest\private.jade:2
 msgid "Only the following organizations may access this contest:"
 msgstr ""
 
-#: .\templates\contest\ranking_table.jade:2 .\templates\user\user_about.jade:83
+#: .\templates\contest\ranking_table.jade:2
+#: .\templates\user\user_about.jade:83
 msgid "Rating"
 msgstr ""
 
@@ -342,10 +339,7 @@ msgid "Newsletter unsubscribe"
 msgstr ""
 
 #: .\templates\newsletter\subscription_unsubscribe_email_sent.html:10
-msgid ""
-"Your unsubscription request has successfully been received. An email has "
-"been sent to you with a link you need to follow in order to confirm your "
-"unsubscription."
+msgid "Your unsubscription request has successfully been received. An email has been sent to you with a link you need to follow in order to confirm your unsubscription."
 msgstr ""
 
 #: .\templates\newsletter\subscription_unsubscribe_user.html:20
@@ -364,9 +358,7 @@ msgid "Newsletter update"
 msgstr ""
 
 #: .\templates\newsletter\subscription_update.html:11
-msgid ""
-"Due to a technical error we were not able to submit your confirmation email. "
-"This could be because your email address is invalid."
+msgid "Due to a technical error we were not able to submit your confirmation email. This could be because your email address is invalid."
 msgstr ""
 
 #: .\templates\newsletter\subscription_update.html:23
@@ -378,10 +370,7 @@ msgid "Your subscription has successfully been updated."
 msgstr ""
 
 #: .\templates\newsletter\subscription_update_email_sent.html:10
-msgid ""
-"Your update request was successfully received and an activation email has "
-"been sent to you. In that email you will find a link which you need to "
-"follow in order to update your subscription."
+msgid "Your update request was successfully received and an activation email has been sent to you. In that email you will find a link which you need to follow in order to update your subscription."
 msgstr ""
 
 #: .\templates\organization\edit.jade:20
@@ -440,7 +429,7 @@ msgstr ""
 #: .\templates\organization\requests\log.jade:4
 #: .\templates\organization\requests\pending.jade:9
 msgid "User"
-msgstr ""
+msgstr "Utilisateur"
 
 #: .\templates\organization\requests\log.jade:5
 #: .\templates\organization\requests\pending.jade:10
@@ -686,19 +675,14 @@ msgid "Reset Password"
 msgstr ""
 
 #: .\templates\registration\password_reset_done.jade:1
-msgid ""
-"\n"
-"<p>We've emailed you instructions for setting your password. You should be "
-"receiving them shortly.</p>\n"
-"<p>If you don't receive an email, please make sure you've entered the "
-"address you registered with, and check your spam folder.</p>"
+msgid "\n"
+"<p>We've emailed you instructions for setting your password. You should be receiving them shortly.</p>\n"
+"<p>If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.</p>"
 msgstr ""
 
 #: .\templates\registration\password_reset_email.txt:2
 #, python-format
-msgid ""
-"You're receiving this email because you requested a password reset for your "
-"user account at %(site_name)s."
+msgid "You're receiving this email because you requested a password reset for your user account at %(site_name)s."
 msgstr ""
 
 #: .\templates\registration\password_reset_email.txt:4
@@ -729,9 +713,7 @@ msgid "Continue >"
 msgstr ""
 
 #: .\templates\registration\registration_complete.jade:2
-msgid ""
-"You have successfully been registered. An email has been sent to the email "
-"address you provided to confirm your registration."
+msgid "You have successfully been registered. An email has been sent to the email address you provided to confirm your registration."
 msgstr ""
 
 #: .\templates\registration\registration_form.jade:21
@@ -806,9 +788,7 @@ msgstr ""
 
 #: .\templates\submission\info_base.jade:1
 #, python-format
-msgid ""
-"Submission of <a href=\"%(problem_url)s\">%(problem_name)s</a> by <a href="
-"\"%(user_url)s\">%(user_name)s</a>"
+msgid "Submission of <a href=\"%(problem_url)s\">%(problem_name)s</a> by <a href=\"%(user_url)s\">%(user_name)s</a>"
 msgstr ""
 
 #: .\templates\submission\row.jade:18
@@ -831,7 +811,8 @@ msgstr ""
 msgid "View status"
 msgstr ""
 
-#: .\templates\submission\source.jade:49 .\templates\submission\status.jade:126
+#: .\templates\submission\source.jade:49
+#: .\templates\submission\status.jade:126
 msgid "Resubmit"
 msgstr ""
 
@@ -903,17 +884,15 @@ msgstr ""
 
 #: .\templates\submission\status_testcases.jade:34
 #, python-format
-msgid ""
-"An internal error occurred while grading, and the %(SITE_NAME)s "
-"administrators have been notified.<br/>In the meantime, try resubmitting in "
-"a few seconds."
+msgid "An internal error occurred while grading, and the %(SITE_NAME)s administrators have been notified.<br/>In the meantime, try resubmitting in a few seconds."
 msgstr ""
 
 #: .\templates\submission\status_testcases.jade:35
 msgid "An internal error occurred while grading."
 msgstr ""
 
-#: .\templates\user\base_users_table.jade:4 .\templates\user\user_about.jade:82
+#: .\templates\user\base_users_table.jade:4
+#: .\templates\user\user_about.jade:82
 msgid "Rank"
 msgstr ""
 
@@ -1040,3 +1019,4 @@ msgstr ""
 #: .\templates\widgets\select_all.jade:8
 msgid "Check all"
 msgstr ""
+
