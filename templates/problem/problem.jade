@@ -105,7 +105,7 @@ block info_float
                         if lang in usable
                             = lang
                         else
-                            del(title='{% blocktrans with lang %}No {{ lang }} judge online{% endblocktrans %}')= lang
+                            del(title='{% blocktrans %}No {{ lang }} judge online{% endblocktrans %}')= lang
                         if not forloop.last
                             = ', '
         br
