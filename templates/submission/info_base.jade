@@ -2,9 +2,9 @@ extends base
 - load i18n
 
 block content_title
-    = {% trans "Submission of " %}
+    | {% trans "Submission of " %}
     a(href='{% url "problem_detail" submission.problem.code %}')= submission.problem.name
-    = {% trans " by " %}
+    | {% trans " by " %}
     a(href='{% url "user_page" submission.user.user.username %}')= submission.user.user.username
 
 block header
