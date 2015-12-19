@@ -59,6 +59,12 @@ block body
     if request.user == submission.user.user or perms.judge.resubmit_other
         a(href='{% url "problem_submit" submission.problem.code submission.id %}') Resubmit
         br
+    if perms.judge.rejudge_submission
+        form(action='{% url "submission_rejudge_inline" %}', method='post')
+            a(href='#', onclick='form.submit();') Rejudge
+            input(type='hidden', name='id', value='{{ submission.id }}')
+        br
+
     hr(style='float:left;width:30%')
     br
     .source-wrap
