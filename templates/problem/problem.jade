@@ -46,6 +46,11 @@ block info_float
             | Clone problem
         br
     hr
+    
+    if editorial:
+        a(href='{% url "solution" editorial.url %}') Editorial
+        hr
+    
     br
     i.fa.fa-check.fa-fw
     b Points:
