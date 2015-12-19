@@ -23,6 +23,11 @@ block user_media
 block js_media
     include timezone/js_media
     | #{form.media.js}
+    script(type='text/javascript').
+        $(function() {
+            window.ace_source.getSession().setMode("ace/mode/javascript");
+        });
+                
 
 block title_ruler
 
