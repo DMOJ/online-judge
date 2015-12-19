@@ -11,9 +11,10 @@ from django.views.generic import View
 from judge.models import Submission
 
 
-__all__ = ['rejudge_submission', 'rejudge_submission_with_redirect', 'DetectTimezone']
+__all__ = ['rejudge_submission', 'DetectTimezone']
 
-def do_rejudge_submission(request, redirect=None):
+@login_required
+def rejudge_submission(request):
     if request.method != 'POST' or not request.user.has_perm('judge.rejudge_submission') or \
             not request.user.has_perm('judge.edit_own_problem'):
         return HttpResponseForbidden()
@@ -31,17 +32,10 @@ def do_rejudge_submission(request, redirect=None):
         return HttpResponseForbidden()
 
     submission.judge()
+    
+    redirect = request.POST.get('path', None)
+    
     return HttpResponseRedirect(redirect) if redirect else HttpResponse('success', content_type='text/plain')
-
-@login_required
-def rejudge_submission(request):
-    return do_rejudge_submission(request)
-
-@login_required
-def rejudge_submission_with_redirect(request):
-    if 'path' not in request.POST:
-        return HttpResponseBadRequest()
-    return do_rejudge_submission(request, redirect=request.POST['path'])
 
 class DetectTimezone(View):
     def askgeo(self, lat, long):
