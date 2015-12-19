@@ -138,7 +138,7 @@ block body
         a(href='{% url "problem_submit" submission.problem.code submission.id %}') Resubmit
         br
     if perms.judge.rejudge_submission
-        form(action='{% url "submission_rejudge_inline" %}', method='post')
+        form(action='{% url "submission_rejudge" %}', method='post')
             -csrf_token
             a(href='#', onclick='parentNode.submit();') Rejudge
             input(type='hidden', name='id', value=submission.id)
