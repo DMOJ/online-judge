@@ -75,7 +75,8 @@ block body
                         b {% trans "Timezone:" %}
                     td
                         | #{form.timezone}
-                        = ' {% trans "or" %} '
+                        |  {% trans "or" %}
+                        = ' '
                         a#open-map(href='#', data-featherlight='.map-wrap')
                             | {% trans "pick from map" %}
                 tr
