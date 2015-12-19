@@ -615,7 +615,7 @@ class Contest(models.Model):
     is_private = models.BooleanField(verbose_name='Private to organizations', default=False)
     organizations = models.ManyToManyField(Organization, blank=True,
                                            help_text='If private, only these organizations may see the contest')
-    og_image = models.CharField(verbose_name='OpenGraph image', default='', max_length=150, required=False)
+    og_image = models.CharField(verbose_name='OpenGraph image', default='', max_length=150, blank=True)
 
     def clean(self):
         if self.start_time >= self.end_time:
@@ -763,7 +763,7 @@ class BlogPost(models.Model):
     publish_on = models.DateTimeField(verbose_name='Publish after')
     content = models.TextField(verbose_name='Post content')
     summary = models.TextField(verbose_name='Post summary', blank=True)
-    og_image = models.CharField(verbose_name='OpenGraph image', default='', max_length=150, required=False)
+    og_image = models.CharField(verbose_name='OpenGraph image', default='', max_length=150, blank=True)
 
     def __unicode__(self):
         return self.title
