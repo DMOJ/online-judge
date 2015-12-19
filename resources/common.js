@@ -118,6 +118,7 @@ $(function () {
         $('html').click(function () {
             $nav_list.hide();
         });
+        $('#nav-list li ul').css('left', $('#nav-list').width());
     });
 });
 
