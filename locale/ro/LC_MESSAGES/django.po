@@ -1,0 +1,1043 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Don Mills Online Judge\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-19 16:00-0500\n"
+"PO-Revision-Date: 2015-12-19 16:03-0500\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
+"2:1));\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ro\n"
+
+#: .\templates\base.jade:76
+msgid "MENU"
+msgstr ""
+
+#: .\templates\base.jade:91
+#, python-format
+msgid "Hello, <b>%(username)s</b>."
+msgstr ""
+
+#: .\templates\base.jade:93 .\templates\submission\info_base.jade.py:2
+#: .\templates\user\user_tabs.jade:11
+msgid "Admin"
+msgstr ""
+
+#: .\templates\base.jade:95 .\templates\user\user_tabs.jade.py:9
+msgid "Edit profile"
+msgstr ""
+
+#: .\templates\base.jade:97
+msgid "Log out"
+msgstr ""
+
+#: .\templates\base.jade:101
+msgid "Login"
+msgstr ""
+
+#: .\templates\base.jade:101
+msgid "Register"
+msgstr ""
+
+#: .\templates\base.jade:107
+msgid "This site works best with JavaScript enabled."
+msgstr ""
+
+#: .\templates\blog\content.jade:2 .\templates\judge.jade.py:16
+#: .\templates\language.jade:16
+msgid "Edit"
+msgstr ""
+
+#: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:27
+#: .\templates\problem\problem.jade:28
+msgid "Comments"
+msgstr ""
+
+#: .\templates\blog\list.jade:26
+msgid "Ongoing contests"
+msgstr ""
+
+#: .\templates\blog\list.jade:31
+msgid "Ends in"
+msgstr ""
+
+#: .\templates\blog\list.jade:36
+msgid "Upcoming contests"
+msgstr ""
+
+#: .\templates\blog\list.jade:41
+msgid "Starts in"
+msgstr ""
+
+#: .\templates\blog\list.jade:46
+msgid "Comment stream"
+msgstr ""
+
+#: .\templates\comments\list.jade:19
+msgid "There are no comments at the moment."
+msgstr ""
+
+#: .\templates\comments\list.jade:22
+msgid "New comment"
+msgstr ""
+
+#: .\templates\comments\list.jade:27
+msgid "Invalid comment title."
+msgstr ""
+
+#: .\templates\comments\list.jade:27
+msgid "Invalid comment body."
+msgstr ""
+
+#: .\templates\contest\calendar.jade:11
+msgid "Sunday"
+msgstr ""
+
+#: .\templates\contest\calendar.jade:12
+msgid "Monday"
+msgstr ""
+
+#: .\templates\contest\calendar.jade:13
+msgid "Tuesday"
+msgstr ""
+
+#: .\templates\contest\calendar.jade:14
+msgid "Wednesday"
+msgstr ""
+
+#: .\templates\contest\calendar.jade:15
+msgid "Thursday"
+msgstr ""
+
+#: .\templates\contest\calendar.jade:16
+msgid "Friday"
+msgstr ""
+
+#: .\templates\contest\calendar.jade:17
+msgid "Saturday"
+msgstr ""
+
+#: .\templates\contest\contest.jade:8
+msgid "Leave contest"
+msgstr ""
+
+#: .\templates\contest\contest.jade:8
+msgid "Join contest"
+msgstr ""
+
+#: .\templates\contest\contest.jade:9
+msgid "View rankings"
+msgstr ""
+
+#: .\templates\contest\contest.jade:11
+msgid "Edit contest"
+msgstr ""
+
+#: .\templates\contest\contest.jade:12
+msgid "Time is up!"
+msgstr ""
+
+#: .\templates\contest\contest.jade:12 .\templates\contest\contest.jade:13
+msgid "Time remaining:"
+msgstr ""
+
+#: .\templates\contest\contest.jade:13
+msgid "Contest is over."
+msgstr ""
+
+#: .\templates\contest\contest.jade:16
+msgid "Starting in "
+msgstr ""
+
+#: .\templates\contest\contest.jade:17
+#, python-format
+msgid ""
+"<b>%(time_limit)s</b> window from <b>%(start_time)s</b> to <b>%(end_time)s</"
+"b>"
+msgstr ""
+
+#: .\templates\contest\contest.jade:18
+#, python-format
+msgid ""
+"<b>%(length)s</b> long starting on \n"
+"%(start_time)s\n"
+msgstr ""
+
+#: .\templates\contest\list.jade:10
+msgid "Calendar view"
+msgstr ""
+
+#: .\templates\contest\list.jade:12
+msgid "Ongoing Contests"
+msgstr ""
+
+#: .\templates\contest\list.jade:16 .\templates\contest\list.jade.py:46
+#: .\templates\contest\list.jade:70 .\templates\user\user_about.jade.py:81
+msgid "Contest"
+msgstr ""
+
+#: .\templates\contest\list.jade:17 .\templates\contest\list.jade.py:71
+msgid "Rankings"
+msgstr ""
+
+#: .\templates\contest\list.jade:24
+msgid "Ending in"
+msgstr ""
+
+#: .\templates\contest\list.jade:24
+msgid "Started at"
+msgstr ""
+
+#: .\templates\contest\list.jade:26 .\templates\contest\list.jade.py:54
+#: .\templates\contest\list.jade:80
+#, python-format
+msgid "%(time_limit)s window"
+msgstr ""
+
+#: .\templates\contest\list.jade:27 .\templates\contest\list.jade.py:55
+#: .\templates\contest\list.jade:81
+#, python-format
+msgid "%(window_length)s long"
+msgstr ""
+
+#: .\templates\contest\list.jade:30 .\templates\contest\list.jade.py:58
+#: .\templates\contest\list.jade:78
+msgid "External contest"
+msgstr ""
+
+#: .\templates\contest\list.jade:36
+msgid "Join"
+msgstr ""
+
+#: .\templates\contest\list.jade:42
+msgid "Upcoming Contests"
+msgstr ""
+
+#: .\templates\contest\list.jade:52
+msgid "Starting in"
+msgstr ""
+
+#: .\templates\contest\list.jade:64
+msgid "There are no scheduled contests at this time."
+msgstr ""
+
+#: .\templates\contest\list.jade:66
+msgid "Past Contests"
+msgstr ""
+
+#: .\templates\contest\private.jade:2
+msgid "Only the following organizations may access this contest:"
+msgstr ""
+
+#: .\templates\contest\ranking_table.jade:2 .\templates\user\user_about.jade:83
+msgid "Rating"
+msgstr ""
+
+#: .\templates\judge.jade:21
+msgid "All Judges"
+msgstr ""
+
+#: .\templates\judge_status.jade:16
+#, python-format
+msgid "This page shows the live status of %(name)s's judging servers."
+msgstr ""
+
+#: .\templates\judge_status.jade:18
+msgid "Judges"
+msgstr ""
+
+#: .\templates\judge_status_table.jade:3 .\templates\language_list.jade:19
+#: .\templates\organization\list.jade:12
+msgid "Name"
+msgstr ""
+
+#: .\templates\judge_status_table.jade:4
+msgid "Online"
+msgstr ""
+
+#: .\templates\judge_status_table.jade:5
+msgid "Uptime"
+msgstr ""
+
+#: .\templates\judge_status_table.jade:6
+msgid "Ping"
+msgstr ""
+
+#: .\templates\judge_status_table.jade:7
+msgid "Load"
+msgstr ""
+
+#: .\templates\judge_status_table.jade:8
+msgid "Runtimes"
+msgstr ""
+
+#: .\templates\judge_status_table.jade:29
+msgid "There are no judges available for this language."
+msgstr ""
+
+#: .\templates\language.jade:20
+msgid "Short name:"
+msgstr ""
+
+#: .\templates\language.jade:22
+msgid "Category:"
+msgstr ""
+
+#: .\templates\language.jade:24
+msgid "Basic Runtime Info:"
+msgstr ""
+
+#: .\templates\language_list.jade:18 .\templates\organization\list.jade:11
+msgid "ID"
+msgstr ""
+
+#: .\templates\language_list.jade:20
+msgid "Runtime Info"
+msgstr ""
+
+#: .\templates\license.jade:2
+msgid "Source:"
+msgstr ""
+
+#: .\templates\messages\new.jade:5
+msgid "To:"
+msgstr ""
+
+#: .\templates\messages\new.jade:10
+msgid "Send!"
+msgstr ""
+
+#: .\templates\newsletter\common.html:7
+#: .\templates\newsletter\subscription_unsubscribe_activated.html:5
+#: .\templates\newsletter\subscription_unsubscribe_activated.html:8
+#: .\templates\newsletter\subscription_update_activated.html:5
+#: .\templates\newsletter\subscription_update_activated.html:8
+msgid "Newsletter"
+msgstr ""
+
+#: .\templates\newsletter\subscription_unsubscribe_activated.html:5
+#: .\templates\newsletter\subscription_unsubscribe_activated.html:8
+#: .\templates\newsletter\subscription_update_activated.html:5
+#: .\templates\newsletter\subscription_update_activated.html:8
+msgid "activate"
+msgstr ""
+
+#: .\templates\newsletter\subscription_unsubscribe_activated.html:10
+msgid "You have successfully been unsubscribed."
+msgstr ""
+
+#: .\templates\newsletter\subscription_unsubscribe_email_sent.html:5
+#: .\templates\newsletter\subscription_unsubscribe_email_sent.html:8
+#: .\templates\newsletter\subscription_unsubscribe_user.html:5
+#: .\templates\newsletter\subscription_unsubscribe_user.html:8
+msgid "Newsletter unsubscribe"
+msgstr ""
+
+#: .\templates\newsletter\subscription_unsubscribe_email_sent.html:10
+msgid ""
+"Your unsubscription request has successfully been received. An email has "
+"been sent to you with a link you need to follow in order to confirm your "
+"unsubscription."
+msgstr ""
+
+#: .\templates\newsletter\subscription_unsubscribe_user.html:20
+msgid "Do you want to unsubscribe from this newsletter?"
+msgstr ""
+
+#: .\templates\newsletter\subscription_unsubscribe_user.html:23
+msgid "Unsubscribe"
+msgstr ""
+
+#: .\templates\newsletter\subscription_update.html:5
+#: .\templates\newsletter\subscription_update.html:8
+#: .\templates\newsletter\subscription_update_email_sent.html:5
+#: .\templates\newsletter\subscription_update_email_sent.html:8
+msgid "Newsletter update"
+msgstr ""
+
+#: .\templates\newsletter\subscription_update.html:11
+msgid ""
+"Due to a technical error we were not able to submit your confirmation email. "
+"This could be because your email address is invalid."
+msgstr ""
+
+#: .\templates\newsletter\subscription_update.html:23
+msgid "Update subscription"
+msgstr ""
+
+#: .\templates\newsletter\subscription_update_activated.html:10
+msgid "Your subscription has successfully been updated."
+msgstr ""
+
+#: .\templates\newsletter\subscription_update_email_sent.html:10
+msgid ""
+"Your update request was successfully received and an activation email has "
+"been sent to you. In that email you will find a link which you need to "
+"follow in order to update your subscription."
+msgstr ""
+
+#: .\templates\organization\edit.jade:20
+#: .\templates\organization\requests\pending.jade:24
+msgid "Update"
+msgstr ""
+
+#: .\templates\organization\home.jade:1
+msgid "Leave organization"
+msgstr ""
+
+#: .\templates\organization\home.jade:3
+msgid "Join organization"
+msgstr ""
+
+#: .\templates\organization\home.jade:5
+msgid "Request membership"
+msgstr ""
+
+#: .\templates\organization\home.jade:7
+msgid "Edit organization"
+msgstr ""
+
+#: .\templates\organization\home.jade:7
+msgid "View requests"
+msgstr ""
+
+#: .\templates\organization\home.jade:7
+msgid "View members"
+msgstr ""
+
+#: .\templates\organization\list.jade:13
+msgid "Members"
+msgstr ""
+
+#: .\templates\organization\new.jade:6
+msgid "Create"
+msgstr ""
+
+#: .\templates\organization\requests\detail.jade:8
+msgid "User:"
+msgstr ""
+
+#: .\templates\organization\requests\detail.jade:13
+msgid "Organization:"
+msgstr ""
+
+#: .\templates\organization\requests\detail.jade:18
+msgid "Time:"
+msgstr ""
+
+#: .\templates\organization\requests\detail.jade:22
+msgid "Reason:"
+msgstr ""
+
+#: .\templates\organization\requests\log.jade:4
+#: .\templates\organization\requests\pending.jade:9
+msgid "User"
+msgstr ""
+
+#: .\templates\organization\requests\log.jade:5
+#: .\templates\organization\requests\pending.jade:10
+msgid "Time"
+msgstr ""
+
+#: .\templates\organization\requests\log.jade:6
+#: .\templates\organization\requests\pending.jade:11
+msgid "State"
+msgstr ""
+
+#: .\templates\organization\requests\log.jade:7
+#: .\templates\organization\requests\pending.jade:12
+msgid "Reason"
+msgstr ""
+
+#: .\templates\organization\requests\log.jade:17
+#: .\templates\organization\requests\pending.jade:26
+msgid "There are no requests to approve."
+msgstr ""
+
+#: .\templates\organization\requests\pending.jade:13
+msgid "Delete?"
+msgstr ""
+
+#: .\templates\organization\requests\request.jade:4
+msgid "Your reason for joining:"
+msgstr ""
+
+#: .\templates\organization\requests\request.jade:8
+msgid "Request"
+msgstr ""
+
+#: .\templates\organization\requests\tabs.jade:3
+msgid "Pending"
+msgstr ""
+
+#: .\templates\organization\requests\tabs.jade:5
+msgid "Log"
+msgstr ""
+
+#: .\templates\organization\requests\tabs.jade:7
+msgid "Approved"
+msgstr ""
+
+#: .\templates\organization\requests\tabs.jade:9
+msgid "Rejected"
+msgstr ""
+
+#: .\templates\problem\list.jade:31
+msgid "Search problems..."
+msgstr ""
+
+#: .\templates\problem\list.jade:31
+msgid "Go"
+msgstr ""
+
+#: .\templates\problem\list.jade:31
+msgid "Random"
+msgstr ""
+
+#: .\templates\problem\list.jade:33
+msgid "Hide solved problems"
+msgstr ""
+
+#: .\templates\problem\list.jade:35
+msgid "Show problem tags"
+msgstr ""
+
+#: .\templates\problem\list.jade:36 .\templates\problem\list.jade.py:51
+msgid "Category"
+msgstr ""
+
+#: .\templates\problem\list.jade:38 .\templates\problem\list.jade.py:39
+#: .\templates\problem\raw.jade:60
+msgid "All"
+msgstr ""
+
+#: .\templates\problem\list.jade:50
+msgid "Problem"
+msgstr ""
+
+#: .\templates\problem\list.jade:52
+msgid "Code"
+msgstr ""
+
+#: .\templates\problem\list.jade:53
+msgid "Types"
+msgstr ""
+
+#: .\templates\problem\list.jade:54 .\templates\user\base_users_table.jade:6
+msgid "Points"
+msgstr ""
+
+#: .\templates\problem\list.jade:55
+msgid "Users"
+msgstr ""
+
+#: .\templates\problem\own_list.jade:1
+msgid "Add problem"
+msgstr ""
+
+#: .\templates\problem\problem.jade:3
+msgid "View as PDF"
+msgstr ""
+
+#: .\templates\problem\problem.jade:5
+msgid "Submit solution"
+msgstr ""
+
+#: .\templates\problem\problem.jade:6
+msgid "My submissions"
+msgstr ""
+
+#: .\templates\problem\problem.jade:6
+msgid "All submissions"
+msgstr ""
+
+#: .\templates\problem\problem.jade:6
+msgid "Best submissions"
+msgstr ""
+
+#: .\templates\problem\problem.jade:9
+msgid "Edit problem"
+msgstr ""
+
+#: .\templates\problem\problem.jade:9
+msgid "Clone problem"
+msgstr ""
+
+#: .\templates\problem\problem.jade:10 .\templates\problem\raw.jade.py:44
+msgid "Points:"
+msgstr ""
+
+#: .\templates\problem\problem.jade:13 .\templates\problem\raw.jade.py:56
+msgid "Time limit:"
+msgstr ""
+
+#: .\templates\problem\problem.jade:13 .\templates\problem\raw.jade.py:64
+msgid "Memory limit:"
+msgstr ""
+
+#: .\templates\problem\problem.jade:13 .\templates\problem\raw.jade.py:66
+msgid "Authors:"
+msgstr ""
+
+#: .\templates\problem\problem.jade:13 .\templates\problem\raw.jade.py:67
+msgid "Author:"
+msgstr ""
+
+#: .\templates\problem\problem.jade:15
+msgid "Problem type(s)"
+msgstr ""
+
+#: .\templates\problem\problem.jade:20
+msgid "Allowed languages"
+msgstr ""
+
+#: .\templates\problem\problem.jade:23
+#, python-format
+msgid "No %(lang)s judge online"
+msgstr ""
+
+#: .\templates\problem\raw.jade:46 .\templates\problem\raw.jade.py:48
+msgid "(partial)"
+msgstr ""
+
+#: .\templates\problem\raw.jade:50
+msgid "Problem types:"
+msgstr ""
+
+#: .\templates\problem\raw.jade:51
+msgid "Problem type:"
+msgstr ""
+
+#: .\templates\problem\raw.jade:58
+msgid "Allowed languages:"
+msgstr ""
+
+#: .\templates\problem\statistics_table.jade:2
+msgid "Statistics"
+msgstr ""
+
+#: .\templates\problem\submit.jade:190
+msgid "No judge is available for this problem."
+msgstr ""
+
+#: .\templates\problem\submit.jade:191
+msgid "Submit!"
+msgstr ""
+
+#: .\templates\registration\activate.jade:2
+#, python-format
+msgid "%(key)s is an invalid activation key."
+msgstr ""
+
+#: .\templates\registration\activation_complete.jade:2
+msgid "Your account has been successfully activated."
+msgstr ""
+
+#: .\templates\registration\login.jade:33
+msgid "Invalid username or password."
+msgstr ""
+
+#: .\templates\registration\login.jade:50
+msgid "Login!"
+msgstr ""
+
+#: .\templates\registration\login.jade:52
+msgid "Forgot your password?"
+msgstr ""
+
+#: .\templates\registration\login.jade:53
+msgid "Or log in with..."
+msgstr ""
+
+#: .\templates\registration\logout.jade:2
+msgid "See you later!"
+msgstr ""
+
+#: .\templates\registration\password_change_done.jade:2
+msgid "Your password was sucessfully changed."
+msgstr ""
+
+#: .\templates\registration\password_change_form.jade:5
+msgid "Change Password"
+msgstr ""
+
+#: .\templates\registration\password_reset.jade:5
+msgid "Send Reset Email"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.jade:2
+msgid "Your password has been set.  You may go ahead and log in now"
+msgstr ""
+
+#: .\templates\registration\password_reset_complete.jade:2
+msgid "Log in"
+msgstr ""
+
+#: .\templates\registration\password_reset_confirm.jade:5
+msgid "Reset Password"
+msgstr ""
+
+#: .\templates\registration\password_reset_done.jade:1
+msgid ""
+"\n"
+"<p>We've emailed you instructions for setting your password. You should be "
+"receiving them shortly.</p>\n"
+"<p>If you don't receive an email, please make sure you've entered the "
+"address you registered with, and check your spam folder.</p>"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.txt:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: .\templates\registration\password_reset_email.txt:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.txt:8
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.txt:10
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: .\templates\registration\password_reset_email.txt:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: .\templates\registration\password_reset_subject.txt:2
+#, python-format
+msgid "Password reset on %(site_name)s"
+msgstr ""
+
+#: .\templates\registration\profile_creation.jade:16
+#: .\templates\registration\username_select.jade:4
+msgid "Continue >"
+msgstr ""
+
+#: .\templates\registration\registration_complete.jade:2
+msgid ""
+"You have successfully been registered. An email has been sent to the email "
+"address you provided to confirm your registration."
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:21
+msgid "Your chosen username is already taken."
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:22
+msgid "Please enter a valid email."
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:25
+msgid "Invalid display name."
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:26
+msgid "Invalid timezone."
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:27
+msgid "Invalid organizations specified."
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:28
+msgid "Invalid language specified."
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:34
+msgid "Username:"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:40
+msgid "Email:"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:46
+msgid "Password:"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:52
+msgid "Password (again):"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:58
+msgid "Display name:"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:64
+msgid "Timezone:"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:67
+#: .\templates\user\edit_profile.jade:44
+msgid "or"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:68
+#: .\templates\user\edit_profile.jade:45
+msgid "pick from map"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:72
+msgid "Organizations:"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:78
+msgid "Language:"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:85
+msgid "Register!"
+msgstr ""
+
+#: .\templates\submission\info_base.jade:1
+#, python-format
+msgid ""
+"Submission of <a href=\"%(problem_url)s\">%(problem_name)s</a> by <a href="
+"\"%(user_url)s\">%(user_name)s</a>"
+msgstr ""
+
+#: .\templates\submission\row.jade:18
+msgid "Case "
+msgstr ""
+
+#: .\templates\submission\row.jade:22
+msgid "view"
+msgstr ""
+
+#: .\templates\submission\row.jade:22
+msgid "rejudge"
+msgstr ""
+
+#: .\templates\submission\row.jade:22
+msgid "admin"
+msgstr ""
+
+#: .\templates\submission\source.jade:49
+msgid "View status"
+msgstr ""
+
+#: .\templates\submission\source.jade:49 .\templates\submission\status.jade:126
+msgid "Resubmit"
+msgstr ""
+
+#: .\templates\submission\status.jade:126
+msgid "View source"
+msgstr ""
+
+#: .\templates\submission\status.jade:137
+msgid "Abort"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:2
+msgid "We are waiting for a suitable judge to process your submission..."
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:3
+msgid "Your submission is being processed..."
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:4
+msgid "Compilation Error"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:6
+msgid "Execution Results"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:7
+msgid "Compilation Warnings"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:8
+msgid "Batch "
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:8
+msgid "points)"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:11
+msgid "Case"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:11
+msgid "Pretest"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:11
+msgid "Test case"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:25
+msgid "Your output (clipped)"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:30
+msgid "Final score:"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:31
+#: .\templates\submission\status_testcases.jade:32
+#, python-format
+msgid "(%(points)s/%(total)s points)"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:33
+msgid "Submission aborted!"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:34
+#, python-format
+msgid ""
+"An internal error occurred while grading, and the %(SITE_NAME)s "
+"administrators have been notified.<br/>In the meantime, try resubmitting in "
+"a few seconds."
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:35
+msgid "An internal error occurred while grading."
+msgstr ""
+
+#: .\templates\user\base_users_table.jade:4 .\templates\user\user_about.jade:82
+msgid "Rank"
+msgstr ""
+
+#: .\templates\user\base_users_table.jade:5
+msgid "Username"
+msgstr ""
+
+#: .\templates\user\edit_profile.jade:27
+msgid "Display name"
+msgstr ""
+
+#: .\templates\user\edit_profile.jade:32
+msgid "Self-description"
+msgstr ""
+
+#: .\templates\user\edit_profile.jade:37
+msgid "Organizations"
+msgstr ""
+
+#: .\templates\user\edit_profile.jade:42
+msgid "Location"
+msgstr ""
+
+#: .\templates\user\edit_profile.jade:49
+msgid "Preferred language"
+msgstr ""
+
+#: .\templates\user\edit_profile.jade:54
+msgid "Ace theme"
+msgstr ""
+
+#: .\templates\user\edit_profile.jade:59
+msgid "User-script"
+msgstr ""
+
+#: .\templates\user\edit_profile.jade:63
+msgid "Change your avatar"
+msgstr ""
+
+#: .\templates\user\edit_profile.jade:64
+msgid "Change your password"
+msgstr ""
+
+#: .\templates\user\edit_profile.jade:66
+msgid "Update profile"
+msgstr ""
+
+#: .\templates\user\user_about.jade:70
+msgid "From"
+msgstr ""
+
+#: .\templates\user\user_about.jade:72 .\templates\user\user_tabs.jade.py:5
+msgid "About"
+msgstr ""
+
+#: .\templates\user\user_about.jade:73
+msgid "You have not shared any information."
+msgstr ""
+
+#: .\templates\user\user_about.jade:74
+msgid "This user has not shared any information."
+msgstr ""
+
+#: .\templates\user\user_about.jade:78
+msgid "Contest History"
+msgstr ""
+
+#: .\templates\user\user_about.jade:78
+msgid "Rank by rating:"
+msgstr ""
+
+#: .\templates\user\user_about.jade:78
+msgid "Rating:"
+msgstr ""
+
+#: .\templates\user\user_about.jade:78
+msgid "Volatility:"
+msgstr ""
+
+#: .\templates\user\user_about.jade:78
+msgid "Minimum rating:"
+msgstr ""
+
+#: .\templates\user\user_about.jade:78
+msgid "Maximum rating:"
+msgstr ""
+
+#: .\templates\user\user_about.jade:78
+msgid "Competitions:"
+msgstr ""
+
+#: .\templates\user\user_base.jade:42
+msgid "Rank by points:"
+msgstr ""
+
+#: .\templates\user\user_base.jade:42
+msgid "Total points:"
+msgstr ""
+
+#: .\templates\user\user_base.jade:42
+msgid "View submissions"
+msgstr ""
+
+#: .\templates\user\user_problems.jade:71
+msgid "Authored Problems"
+msgstr ""
+
+#: .\templates\user\user_problems.jade:82
+msgid "Hide problems I've solved"
+msgstr ""
+
+#: .\templates\user\user_problems.jade:88
+msgid "points"
+msgstr ""
+
+#: .\templates\user\user_tabs.jade:7 .\templates\user\users_table.jade.py:5
+msgid "Problems"
+msgstr ""
+
+#: .\templates\widgets\select_all.jade:5
+msgid "Nothing here."
+msgstr ""
+
+#: .\templates\widgets\select_all.jade:8
+msgid "Check all"
+msgstr ""
