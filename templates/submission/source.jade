@@ -64,6 +64,7 @@ block body
             -csrf_token
             a(href='#', onclick='parentNode.submit();') Rejudge
             input(type='hidden', name='id', value=submission.id)
+            input(type='hidden', name='path', value='{% url "submission_status" submission.id %}')
         br
 
     hr(style='float:left;width:30%')
