@@ -2,10 +2,10 @@ extends base
 - load i18n
 
 block content_title
-    | {% trans "Submission of " %}
-    a(href='{% url "problem_detail" submission.problem.code %}')= submission.problem.name
-    | {% trans " by " %}
-    a(href='{% url "user_page" submission.user.user.username %}')= submission.user.user.username
+    - url "problem_detail" submission.problem.code as problem_url
+    - url "user_page" submission.user.user.username as user_url
+    - blocktrans with problem_name=submission.problem.name user_name=submission.user.user.username
+        | Submission of #[a(href='{{ problem_url }}') {{ problem_name }}] by #[a(href='{{ user_url }}') {{ user_name }}]
 
 block header
     span.submission-info
