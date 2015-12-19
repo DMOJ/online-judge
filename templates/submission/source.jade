@@ -61,8 +61,8 @@ block body
         br
     if perms.judge.rejudge_submission
         form(action='{% url "submission_rejudge_inline" %}', method='post')
-            a(href='#', onclick='form.submit();') Rejudge
-            input(type='hidden', name='id', value='{{ submission.id }}')
+            a(href='#', onclick='parentNode.submit();') Rejudge
+            input(type='hidden', name='id', value=submission.id)
         br
 
     hr(style='float:left;width:30%')
