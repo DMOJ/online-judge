@@ -68,7 +68,7 @@ block description
                 #time(style='text-align: center; display: block; color: rgb(85, 85, 85); font-size: 14px')
                     if contest.time_limit
                         - blocktrans with start_time=contest.start_time|date:"F j, Y, G:i T" end_time=contest.end_time|date:"F j, Y, G:i T" time_limit=contest.time_limit|timedelta:"simple-no-seconds"
-                        | #[b {{ time_limit }}] window from #[b {{ start_time }}] to #[b {{ end_time }}]
+                            | #[b {{ time_limit }}] window from #[b {{ start_time }}] to #[b {{ end_time }}]
                     else
                         - blocktrans with length=contest.contest_window_length|timedelta:"simple-no-seconds" start_time=contest.start_time|date:"F j, Y, G:i T"
                             | #[b {{ length }}] long starting on #[{{ start_time }}]
