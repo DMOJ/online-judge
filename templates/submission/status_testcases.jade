@@ -76,9 +76,11 @@ if submission.status != 'IE'
                 |  #{submission.case_points|floatformat:"0"}/#{submission.case_total|floatformat:"0"}
                 if IN_CONTEST and submission.contest_or_none
                     - with contest=submission.contest_or_none
-                        | (#{contest.points|floatformat:"1"}/#{contest.problem.points} {% trans "points)" %}
+                        - blocktrans with points=contest.points|floatformat:"1" total=contest.problem.points
+                            | ({{ points }}/{{ total }} points)
                 else
-                    | (#{submission.points|floatformat:"1"}/#{submission.problem.points|floatformat:"-1"} {% trans "points)" %}
+                    - blocktrans with points=submission.points|floatformat:"1" total=submission.problem.points|floatformat:"-1"
+                        | ({{ points }}/{{ total }} points)
             else
                 b {% trans "Submission aborted!" %}
             br
