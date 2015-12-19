@@ -22,7 +22,7 @@ import itertools
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm, ProblemEditForm
-from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile, ProblemGroup
+from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile, ProblemGroup, Solution
 from judge.pdf_problems import make_latex, format_markdown, latex_document, LatexPdfMaker, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
@@ -101,6 +101,10 @@ class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         context['wkhtmltopdf_installed'] = getattr(settings, 'WEBKIT_PDF', False)
+        try:
+            context['editorial'] = Solution.objects.get(problem=self.object)
+        except ObjectDoesNotExist:
+            pass
         return context
 
 
