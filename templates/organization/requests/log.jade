@@ -1,4 +1,5 @@
 extends base
+- load i18n
 
 block body
     include organization/requests/tabs
@@ -6,10 +7,10 @@ block body
     if requests
         table
             tr
-                th User
-                th Time
-                th State
-                th Reason
+                th {% trans "User" %}
+                th {% trans "Time" %}
+                th {% trans "State" %}
+                th {% trans "Reason" %}
             for r in requests
                 tr(id='request-{{ r.id }}')
                     - with user=r.user
@@ -19,4 +20,4 @@ block body
                     td #{r.state}
                     td #{r.reason|truncatechars:50}
     else
-        p There are no requests to approve.
+        p {% trans "There are no requests to approve." %}

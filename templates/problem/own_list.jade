@@ -1,4 +1,5 @@
 extends problem/list
+- load i18n
 
 block before_table
-    a(href='{% url "problem_add" %}') Add problem
+    a(href='{% url "problem_add" %}') {% trans "Add problem" %}

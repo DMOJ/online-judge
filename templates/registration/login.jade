@@ -1,4 +1,5 @@
 extends base
+- load i18n
 
 block media
     style.
@@ -35,7 +36,7 @@ block body
             
             if form.errors
                 #form-errors
-                    p.error Invalid username or password.
+                    p.error {% trans "Invalid username or password." %}
             table(border=0, style='text-align:left')
                 tr
                     th
@@ -48,11 +49,11 @@ block body
                     td
                         | #{form.password}
             hr
-            button(style="float:right;", type='submit') Login!
+            button(style="float:right;", type='submit') {% trans "Login!" %}
             input(type='hidden', name='next', value=next)
         br
-        a(href='{% url "password_reset" %}') Forgot your password?
-        h4 Or log in with...
+        a(href='{% url "password_reset" %}') {% trans "Forgot your password?" %}
+        h4 {% trans "Or log in with..." %}
         a.social.google-icon(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}')
             i.fa.fa-google-plus-square
         = ' '

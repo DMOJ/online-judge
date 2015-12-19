@@ -4,6 +4,7 @@ extends base
 - load list_processor
 - load markdown_trois_tags
 - load rating
+- load i18n
 
 block media
     block user_media
@@ -49,14 +50,15 @@ block body
                 .user-gravatar
                     img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar', width="135px", height="135px")
                 br
+                // Transblock
                 h4 #{user.solved_problems} problems solved.
-                b Rank by points:
+                b {% trans "Rank by points:" %}
                 |  #{rank} of #{users}
                 br
-                b Total points:
+                b {% trans "Total points:" %}
                 |  #{user.points}
                 br
-                a(href='{% url "all_user_submissions" user.user.username %}') View submissions
+                a(href='{% url "all_user_submissions" user.user.username %}') {% trans "View submissions" %}
 
             td.user-content
                 block user_content

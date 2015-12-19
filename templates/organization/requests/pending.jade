@@ -1,4 +1,5 @@
 extends base
+- load i18n
 
 block body
     if messages
@@ -14,12 +15,12 @@ block body
             #{formset.management_form}
             table
                 tr
-                    th User
-                    th Time
-                    th State
-                    th Reason
+                    th {% trans "User" %}
+                    th {% trans "Time" %}
+                    th {% trans "State" %}
+                    th {% trans "Reason" %}
                     if formset.can_delete
-                        th Delete?
+                        th {% trans "Delete?" %}
                 each form in formset
                     tr(id='request-{{ form.instance.id }}')
                         - with user=form.instance.user
@@ -30,6 +31,6 @@ block body
                         td #{form.instance.reason|truncatechars:50}
                         if formset.can_delete
                             td #{form.DELETE}
-            button(type='submit') Update
+            button(type='submit') {% trans "Update" %}
     else
-        p There are no requests to approve.
+        p {% trans "There are no requests to approve." %}

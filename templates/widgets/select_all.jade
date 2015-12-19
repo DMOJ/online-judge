@@ -1,13 +1,15 @@
+- load i18n
+
 div(style='border:none', id=select_all_name)
     div.original-checkboxes(style='-moz-columns: 15em 5; -webkit-columns: 15em 5; columns: 15em 5')
         | {{ original_widget }}
     if empty
-        | Nothing here.
+        | {% trans "Nothing here." %}
     else
         label(for=select_all_id)
             input.checkall(id=select_all_id, name=select_all_name, checked=all_selected, type='checkbox')
             = ' '
-            | Check all
+            | {% trans "Check all" %}
 
 style.
     div.original-checkboxes ul {

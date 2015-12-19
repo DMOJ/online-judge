@@ -1,5 +1,6 @@
 extends submission/info_base
--load staticfiles
+- load staticfiles
+- load i18n
 
 block js_media
     script(type='text/javascript', src='{% static "event.js" %}')
@@ -132,10 +133,10 @@ block media
 
 block body
     br
-    a(href='{% url "submission_source" submission.id %}') View source
+    a(href='{% url "submission_source" submission.id %}') {% trans "View source" %}
     br
     if request.user == submission.user.user or perms.judge.resubmit_other
-        a(href='{% url "problem_submit" submission.problem.code submission.id %}') Resubmit
+        a(href='{% url "problem_submit" submission.problem.code submission.id %}') {% trans "Resubmit" %}
         br
     if perms.judge.rejudge_submission
         form(action='{% url "submission_rejudge" %}', method='post')
@@ -159,7 +160,7 @@ block body
                 br
                 form(action='{% url "submission_abort" submission.id %}', method='post')
                     -csrf_token
-                    input.button(style='float:left', type='submit', value='Abort')
+                    input.button(style='float:left', type='submit', value='{% trans "Abort" %}')
                     br
                     br
             

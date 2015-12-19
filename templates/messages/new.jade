@@ -1,16 +1,17 @@
 extends base
 - load staticfiles
+- load i18n
 block media
     link(rel='stylesheet', href='{% static "admin/css/widgets.css" %}', type='text/css')
     | #{form.media}
     link(rel='stylesheet', href='{% static "admin/css/pagedown.css" %}', type='text/css')
     link(rel='stylesheet', href='{% static "problem_edit.css" %}', type='text/css')
 block body
-    b To:
+    b {% trans "To:" %}
     | #{target}
     hr
     form.form-area(action='', method='post')
         - csrf_token
         table(border=0, style='text-align:left') #{form.as_table}
         hr
-        input(type='submit', style="float:right;", value='Send!')
+        input(type='submit', style="float:right;", value='{% trans "Send!" %}')

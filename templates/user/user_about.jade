@@ -6,6 +6,7 @@ extends user/user_base
 - load rating
 - load camo_proxy
 - load cache
+- load i18n
 
 block user_media
     style.
@@ -80,29 +81,29 @@ block user_media
 block title_ruler
 
 block title_row
-    - var user_tab = 'about'
+    - var user_tab = '{% trans "about" %}'
     include user/user_tabs
 
 block user_content
     - with orgs=user.organizations.all
         if orgs
             p(style='margin-top: 0px;')
-                b From
+                b {% trans "From" %}
                 = ' '
                 each org in orgs
                     a(href='{% url "organization_home" org.key %}')= org.name
                     if not forloop.last
                         = ', '
     if user.about
-        h4 About
+        h4 {% trans "About" %}
         - cache 86400 user_about user.id
             | #{user.about|markdown:"self-description"|proxy_images}
     else
         i
             if user.user == request.user
-                | You have not shared any information.
+                | {% trans "You have not shared any information." %}
             else
-                | This user has not shared any information.
+                | {% trans "This user has not shared any information." %}
         br
     if rating
         br
@@ -110,41 +111,41 @@ block user_content
         br
         // TODO: if on mobile, show a "Can't show chart on this display" box instead
         #rating-chart(style='height: 400px; margin: 0 auto')
-        h4 Contest History
-        b Rank by rating:
+        h4 {% trans "Contest History" %}
+        b {% trans "Rank by rating:" %}
         |  #{rating_rank} of #{rated_users}
         br
-        b Rating:
+        b {% trans "Rating:" %}
         = ' '
         span.rate-group
             span.rate-box(class='{{ rating.rating|rating_class }}')
                 span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
             span.rating(class='{{ rating.rating|rating_class }}') #{rating.rating}
         br
-        b Volatility:
+        b {% trans "Volatility:" %}
         |  #{rating.volatility}
         br
-        b Minimum rating:
+        b {% trans "Minimum rating:" %}
         = ' '
         span.rate-group
             span.rate-box(class='{{ min_rating|rating_class }}')
                 span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
             span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
         br
-        b Maximum rating:
+        b {% trans "Maximum rating:" %}
         = ' '
         span.rate-group
             span.rate-box(class='{{ max_rating|rating_class }}')
                 span(style='height: {{ max_rating|rating_progress|floatformat:3 }}em')
             span.rating(class='{{ max_rating|rating_class }}') #{max_rating}
         br
-        b Competitions:
+        b {% trans "Competitions:" %}
         |  #{contests}
         table.table
             tr
-                th Contest
-                th Rank
-                th Rating
+                th {% trans "Contest" %}
+                th {% trans "Rank" %}
+                th {% trans "Rating" %}
             each rating in ratings
                 tr
                     td
