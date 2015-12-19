@@ -177,7 +177,7 @@ html(lang='en')
                 if perms.judge.test_site
                     form(action='{% url "set_language" %}', method='post', style='display: inline')
                         - csrf_token
-                        input(name='next', type='hidden', value=request.get_full_path)
+                        input(name='next', type='hidden', value=request.get_full_path())
                         select(name='language', onchange='form.submit()', style='height: 1.5em')
                             - get_current_language as current_lang
                             - get_available_languages as LANGUAGES
