@@ -182,5 +182,5 @@ html(lang='en')
                             - get_available_languages as LANGUAGES
                             - get_language_info_list for LANGUAGES as languages
                             each language in languages
-                                option(value=language['code'], selected=('' if language.code == LANGUAGE_CODE else None))
+                                option(value=language['code'], selected=('' if language['code'] == current_lang else None))
                                     | #{language.name_local} (#{language.code})
