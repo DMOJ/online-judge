@@ -86,6 +86,9 @@ html(lang='en')
 
         if misc_config.analytics
             | #{misc_config.analytics|safe}
+        
+        if request.user.profile.user_script
+            script(type='text/javascript')=request.user.profile.user_script
 
         noscript
             style.
