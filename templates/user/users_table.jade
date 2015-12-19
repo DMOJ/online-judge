@@ -1,5 +1,6 @@
 extends user/base_users_table
 - load rating
+- load i18n
 
 block after_rank_head
     th
@@ -13,7 +14,7 @@ block after_rank
                 span.rating(class='{{ user.rating|rating_class }}') #{user.rating}
 
 block after_point_head
-    th.problems Problems
+    th.problems {% trans "Problems" %}
 
 block after_point
     td #{user.problems}

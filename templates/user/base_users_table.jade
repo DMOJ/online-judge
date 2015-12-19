@@ -1,12 +1,13 @@
 - load cache
+- load i18n
 
 thead
     tr
-        th.header.rank Rank
+        th.header.rank {% trans "Rank" %}
         block after_rank_head
-        th.header.username Username
+        th.header.username {% trans "Username" %}
         block before_point_head
-        th.header.points Points
+        th.header.points {% trans "Points" %}
         block after_point_head
     tbody
         for rank, user in users

@@ -4,6 +4,7 @@ extends user/user_base
 - load list_processor
 - load markdown_trois_tags
 - load rating
+- load i18n
 block user_media
     style.
         a.edit-profile {
@@ -84,7 +85,7 @@ block user_content
         div.user-problem-group
             h3.unselectable.toggle.open
                 span.fa.fa-chevron-right.fa-fw
-                | Authored Problems (#{authored | length})
+                | {% trans "Authored Problems" %} (#{authored | length})
             ul.toggled
                 each problem in authored
                     li
@@ -97,7 +98,7 @@ block user_content
             span
                 form(name='form', action='', method='get')
                     input#hide_solved(style='vertical-align:middle', onclick="form.submit()", type='checkbox', name='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
-                    label(style='vertical-align:middle', for='hide_solved') Hide problems I've solved
+                    label(style='vertical-align:middle', for='hide_solved') {% trans "Hide problems I've solved" %}
     else
         hr
     - regroup best_submissions by group as problems
@@ -106,7 +107,7 @@ block user_content
             h3.unselectable.toggle.open
                 span.fa.fa-chevron-right.fa-fw
                 | #{group.grouper}
-                | (#{group.list | list_getitem:"points"|sum_list|floatformat:1} points)
+                | (#{group.list | list_getitem:"points"|sum_list|floatformat:1} {% trans "points" %})
             ul.toggled
                 each entry in group.list
                     li
