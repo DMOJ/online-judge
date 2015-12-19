@@ -1,14 +1,16 @@
+- load i18n
+
 div.page-title
     ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
         h2(style='color:#393630; display: inline-block')= title
         span.spacer
         li(class=('active' if user_tab == 'about' else ''))
-            a(href='{% url "user_page" user.user.username %}') About
+            a(href='{% url "user_page" user.user.username %}') {% trans "About" %}
         li(class=('active' if user_tab == 'problems' else ''))
-            a(href='{% url "user_problems" user.user.username %}') Problems
+            a(href='{% url "user_problems" user.user.username %}') {% trans "Problems" %}
         if user.user == request.user
             li(class=('active' if user_tab == 'edit' else ''))
-                a(href='{% url "user_edit_profile" %}') Edit profile
+                a(href='{% url "user_edit_profile" %}') {% trans "Edit profile" %}
         elif perms.judge.change_user
             li
-                a(href='{% url "admin:auth_user_change" user.user.id %}') Admin
+                a(href='{% url "admin:auth_user_change" user.user.id %}') {% trans "Admin" %}
