@@ -22,7 +22,7 @@ block title_row
                 span(style='position: relative; display: inline-block; font-size: 1.5em')
                     span.fa.fa-file-pdf-o(style='color: #d40e13')
                     span(style='height: 0.2em; display: block; position: absolute; top: 0.3em; background: #d40e13; width: 0.6em; margin-left: -0.15em')
-                = ' {% trans "View as PDF" %}'
+                |  {% trans "View as PDF" %}
 
 block info_float
     a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
