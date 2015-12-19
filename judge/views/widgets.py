@@ -13,7 +13,7 @@ from judge.models import Submission
 
 __all__ = ['rejudge_submission', 'rejudge_submission_with_redirect', 'DetectTimezone']
 
-def do_rejudge_submission(request, redirect=False):
+def do_rejudge_submission(request, redirect=None):
     if request.method != 'POST' or not request.user.has_perm('judge.rejudge_submission') or \
             not request.user.has_perm('judge.edit_own_problem'):
         return HttpResponseForbidden()
@@ -31,7 +31,7 @@ def do_rejudge_submission(request, redirect=False):
         return HttpResponseForbidden()
 
     submission.judge()
-    return HttpResponseRedirect(request.path) if redirect else HttpResponse('success', content_type='text/plain')
+    return HttpResponseRedirect(redirect) if redirect else HttpResponse('success', content_type='text/plain')
 
 @login_required
 def rejudge_submission(request):
@@ -39,7 +39,9 @@ def rejudge_submission(request):
 
 @login_required
 def rejudge_submission_with_redirect(request):
-    return do_rejudge_submission(request, redirect=True)
+    if 'path' not in request.POST:
+        return HttpResponseBadRequest()
+    return do_rejudge_submission(request, redirect=request.POST['path'])
 
 class DetectTimezone(View):
     def askgeo(self, lat, long):
