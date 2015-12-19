@@ -24,10 +24,11 @@ block js_media
     include timezone/js_media
     | #{form.media.js}
     script(type='text/javascript').
-        $('#ace_user_script').on('ace_load', function (e, editor) {
-                editor.getSession().setMode("ace/mode/javascript");
+        $(function() {
+            $('#ace_user_script').on('ace_load', function (e, editor) {
+                    editor.getSession().setMode("ace/mode/javascript");
+            });
         });
-                
 
 block title_ruler
 
