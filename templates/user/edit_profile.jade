@@ -57,6 +57,9 @@ block body
             tr
                 th: b {% trans "Ace theme" %}:
                 td #{form.ace_theme}
+            tr
+                th: b {% trans "User-script" %}:
+                td #{form.user_script}
         a(href='http://www.gravatar.com/', title='{% trans "Change your avatar" %}', target='_blank')
             - trans "Change your avatar"
         br
