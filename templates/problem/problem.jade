@@ -36,6 +36,10 @@ block info_float
     a(href='{% url "ranked_submissions" problem.code %}')
         | Best submissions
 
+    if editorial
+        hr
+        a(href='{% url "solution" editorial.url %}') Read editorial
+
     if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids or perms.judge.edit_public_problem and problem.is_public
         hr
         a(href='{% url "admin:judge_problem_change" problem.id %}')
@@ -46,10 +50,6 @@ block info_float
             | Clone problem
         br
     hr
-    
-    if editorial
-        a(href='{% url "solution" editorial.url %}') Editorial
-        hr
     
     br
     i.fa.fa-check.fa-fw
