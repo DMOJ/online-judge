@@ -59,7 +59,8 @@ def general_info(request):
     return {
         'nav_tab': FixedSimpleLazyObject(partial(__nav_tab, request.path)),
         'nav_bar': NavigationBar.objects.all(),
-        'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path
+        'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path,
+        'DMOJ_LOCALES': settings.DMOJ_LOCALES,
     }
 
 

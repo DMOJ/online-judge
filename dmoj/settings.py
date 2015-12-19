@@ -208,6 +208,8 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]
 
+DMOJ_LOCALES = ('en', 'de', 'fr', 'ro', 'ru', 'zh-hans')
+
 
 # Markdown Trois
 from markdown_trois.conf.settings import MARKDOWN_TROIS_DEFAULT_STYLE
