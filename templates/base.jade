@@ -88,7 +88,7 @@ html(lang='en')
             | #{misc_config.analytics|safe}
         
         if request.user.profile.user_script
-            script(type='text/javascript')=request.user.profile.user_script
+            script(type='text/javascript') #{request.user.profile.user_script|safe}
 
         noscript
             style.
