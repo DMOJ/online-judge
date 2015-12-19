@@ -35,11 +35,11 @@ def do_rejudge_submission(request, redirect=False):
 
 @login_required
 def rejudge_submission(request):
-    do_rejudge_submission(request)
+    return do_rejudge_submission(request)
 
 @login_required
 def rejudge_submission_with_redirect(request):
-    do_rejudge_submission(request, redirect=True)
+    return do_rejudge_submission(request, redirect=True)
 
 class DetectTimezone(View):
     def askgeo(self, lat, long):
