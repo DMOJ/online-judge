@@ -137,6 +137,14 @@ block body
     if request.user == submission.user.user or perms.judge.resubmit_other
         a(href='{% url "problem_submit" submission.problem.code submission.id %}') Resubmit
         br
+    if perms.judge.rejudge_submission
+        form(action='{% url "submission_rejudge_inline" %}', method='post')
+            -csrf_token
+            a(href='#', onclick='parentNode.submit();') Rejudge
+            input(type='hidden', name='id', value=submission.id)
+            input(type='hidden', name='path', value='{% url "submission_status" submission.id %}')
+        br
+
     hr(style='float:left;width:30%')
     br
 
