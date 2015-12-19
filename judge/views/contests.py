@@ -156,6 +156,7 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
             context['participation'] = None
             context['in_contest'] = False
         context['now'] = timezone.now()
+        context['og_image'] = self.object.og_image
         return context
 
 
