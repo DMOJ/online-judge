@@ -55,6 +55,12 @@ class PostView(TitleMixin, CommentedDetailView):
 
     def get_comment_page(self):
         return 'b:%s' % self.object.id
+        
+    def get_context_data(self, **kwargs):
+        context = super(PostList, self).get_context_data(**kwargs)
+        if self.object.og_image:
+            context['og_image'] = self.object.og_image
+        return context
 
     def get_object(self, queryset=None):
         post = super(PostView, self).get_object(queryset)
