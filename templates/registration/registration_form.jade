@@ -1,4 +1,5 @@
 extends base
+- load i18n
 
 block media
     include timezone/media
@@ -29,67 +30,67 @@ block body
                 p.error
                     | #{form.non_field_errors}
                     if form.username.errors
-                        | Your chosen username is already taken.
+                        | {% trans "Your chosen username is already taken." %}
                     if form.email.errors
-                        | Please enter a valid email.
+                        | {% trans "Please enter a valid email." %}
                     | #{form.password1.errors|striptags}
                     | #{form.password2.errors|striptags}
                     if form.display_name.errors
-                        | Invalid display name.
+                        | {% trans "Invalid display name." %}
                     if form.timezone.errors
-                        | Invalid timezone.
+                        | {% trans "Invalid timezone." %}
                     if form.organizations.errors
-                        | Invalid organizations specified.
+                        | {% trans "Invalid organizations specified." %}
                     if form.language.errors
-                        | Invalid language specified.
+                        | {% trans "Invalid language specified." %}
         .reg-post-wrapper
             table(border=0, style='text-align:left')
                 tr
                     th
-                        b Username:
+                        b {% trans "Username:" %}
                     td
                         | #{form.username}
                 tr
                     th
-                        b Email:
+                        b {% trans "Email:" %}
                     td
                         | #{form.email}
                 tr
                     th
-                        b Password:
+                        b {% trans "Password:" %}
                     td
                         | #{form.password1}
                 tr
                     th
-                        b Password (again):
+                        b {% trans "Password (again):" %}
                     td
                         | #{form.password2}
                 tr
                     th
-                        b Display name:
+                        b {% trans "Display name:" %}
                     td
                         | #{form.display_name}
                 tr
                     th
-                        b Timezone:
+                        b {% trans "Timezone:" %}
                     td
                         | #{form.timezone}
-                        = ' or '
+                        = ' {% trans "or" %} '
                         a#open-map(href='#', data-featherlight='.map-wrap')
-                            | pick from map
+                            | {% trans "pick from map" %}
                 tr
                     th
-                        b Organizations:
+                        b {% trans "Organizations:" %}
                     td
                         | #{form.organizations}
                 tr
                     th
-                        b Language:
+                        b {% trans "Language:" %}
                     td
                         | #{form.language}
             
             hr
-            button(style="float:right;", type='submit') Register!
+            button(style="float:right;", type='submit') {% trans "Register!" %}
             input(type='hidden', name='next', value=next)
     div.map-wrap
         div.map-inset
