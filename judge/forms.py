@@ -22,8 +22,9 @@ use_select2 = Select2Widget is not None and 'django_select2' in settings.INSTALL
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['name', 'about', 'organizations', 'timezone', 'language', 'ace_theme']
-        widgets = {'name': TextInput(attrs={'style': 'width: 100%; box-sizing: border-box'})}
+        fields = ['name', 'about', 'organizations', 'timezone', 'language', 'ace_theme', 'user_script']
+        widgets = {'name': TextInput(attrs={'style': 'width: 100%; box-sizing: border-box'}),
+                   'user_script': AceWidget(theme='github')}
         if Select2Widget is not None:
             widgets['timezone'] = Select2Widget(attrs={'style': 'width: 200px'})
             widgets['language'] = Select2Widget(attrs={'style': 'width: 300px'})
