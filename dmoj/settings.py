@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 import re
 
+from django.utils.translation import ugettext_lazy as _
+from markdown_trois.conf.settings import MARKDOWN_TROIS_DEFAULT_STYLE
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
@@ -209,9 +212,6 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]
 
-
-from django.utils.translation import ugettext_lazy as _
-
 LANGUAGES = [
     ('de', _('German')),
     ('en', _('English')),
@@ -221,10 +221,7 @@ LANGUAGES = [
     ('zh-hans', _('Simplified Chinese')),
 ]
 
-
 # Markdown Trois
-from markdown_trois.conf.settings import MARKDOWN_TROIS_DEFAULT_STYLE
-
 markdown_admin_editable_style = {
     'extras': {
         'pyshell': None,
