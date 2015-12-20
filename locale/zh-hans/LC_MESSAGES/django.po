@@ -1,319 +1,339 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: Don Mills Online Judge\n"
+"Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 15:58-0500\n"
-"PO-Revision-Date: 2015-12-19 16:02-0500\n"
+"POT-Creation-Date: 2015-12-19 20:06-0500\n"
+"PO-Revision-Date: 2015-12-19 20:16-0500\n"
+"Last-Translator: Icyene <vulcainus@gmail.com>\n"
+"Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: zh-hans\n"
+"X-Generator: crowdin.com\n"
+"X-Crowdin-Project: dmoj\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: django.po\n"
+"Language: zh_CN\n"
+
+#: .\dmoj\settings.py:216
+msgid "German"
+msgstr "德语"
+
+#: .\dmoj\settings.py:217
+msgid "English"
+msgstr "英语"
+
+#: .\dmoj\settings.py:218
+msgid "French"
+msgstr "法语"
+
+#: .\dmoj\settings.py:219
+msgid "Romanian"
+msgstr "罗马尼亚语"
+
+#: .\dmoj\settings.py:220
+msgid "Russian"
+msgstr "俄语"
+
+#: .\dmoj\settings.py:221
+msgid "Simplified Chinese"
+msgstr "简体中文"
 
 #: .\templates\base.jade:76
 msgid "MENU"
-msgstr ""
+msgstr "菜单"
 
 #: .\templates\base.jade:91
 #, python-format
 msgid "Hello, <b>%(username)s</b>."
-msgstr ""
+msgstr "你好，<b>%(username)s</b>。"
 
 #: .\templates\base.jade:93 .\templates\submission\info_base.jade.py:2
 #: .\templates\user\user_tabs.jade:11
 msgid "Admin"
-msgstr ""
+msgstr "管理"
 
 #: .\templates\base.jade:95 .\templates\user\user_tabs.jade.py:9
 msgid "Edit profile"
-msgstr ""
+msgstr "编辑个人资料"
 
 #: .\templates\base.jade:97
 msgid "Log out"
-msgstr ""
+msgstr "登出"
 
 #: .\templates\base.jade:101
 msgid "Login"
-msgstr ""
+msgstr "登录"
 
 #: .\templates\base.jade:101
 msgid "Register"
-msgstr ""
+msgstr "注册"
 
 #: .\templates\base.jade:107
 msgid "This site works best with JavaScript enabled."
-msgstr ""
+msgstr "本网站启用 JavaScript 效果最好。"
 
 #: .\templates\blog\content.jade:2 .\templates\judge.jade.py:16
 #: .\templates\language.jade:16
 msgid "Edit"
-msgstr ""
+msgstr "编辑"
 
-#: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:27
+#: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:25
 #: .\templates\problem\problem.jade:28
 msgid "Comments"
-msgstr ""
+msgstr "评论"
 
 #: .\templates\blog\list.jade:26
 msgid "Ongoing contests"
-msgstr ""
+msgstr "进行中的竞赛"
 
 #: .\templates\blog\list.jade:31
 msgid "Ends in"
-msgstr ""
+msgstr "结束于"
 
 #: .\templates\blog\list.jade:36
 msgid "Upcoming contests"
-msgstr ""
+msgstr "未来的竞赛"
 
 #: .\templates\blog\list.jade:41
 msgid "Starts in"
-msgstr ""
+msgstr "开始于"
 
 #: .\templates\blog\list.jade:46
 msgid "Comment stream"
-msgstr ""
+msgstr "评论流"
 
 #: .\templates\comments\list.jade:19
 msgid "There are no comments at the moment."
-msgstr ""
+msgstr "目前没有评论。"
 
 #: .\templates\comments\list.jade:22
 msgid "New comment"
-msgstr ""
+msgstr "新评论"
 
 #: .\templates\comments\list.jade:27
 msgid "Invalid comment title."
-msgstr ""
+msgstr "无效的评论标题。"
 
 #: .\templates\comments\list.jade:27
 msgid "Invalid comment body."
-msgstr ""
+msgstr "无效的评论内容。"
 
 #: .\templates\contest\calendar.jade:11
 msgid "Sunday"
-msgstr ""
+msgstr "星期日"
 
 #: .\templates\contest\calendar.jade:12
 msgid "Monday"
-msgstr ""
+msgstr "星期一"
 
 #: .\templates\contest\calendar.jade:13
 msgid "Tuesday"
-msgstr ""
+msgstr "星期二"
 
 #: .\templates\contest\calendar.jade:14
 msgid "Wednesday"
-msgstr ""
+msgstr "星期三"
 
 #: .\templates\contest\calendar.jade:15
 msgid "Thursday"
-msgstr ""
+msgstr "星期四"
 
 #: .\templates\contest\calendar.jade:16
 msgid "Friday"
-msgstr ""
+msgstr "星期五"
 
 #: .\templates\contest\calendar.jade:17
 msgid "Saturday"
-msgstr ""
+msgstr "星期六"
 
 #: .\templates\contest\contest.jade:8
 msgid "Leave contest"
-msgstr ""
+msgstr "离开竞赛"
 
 #: .\templates\contest\contest.jade:8
 msgid "Join contest"
-msgstr ""
+msgstr "参加竞赛"
 
 #: .\templates\contest\contest.jade:9
 msgid "View rankings"
-msgstr ""
+msgstr "查看排行榜"
 
 #: .\templates\contest\contest.jade:11
 msgid "Edit contest"
-msgstr ""
+msgstr "编辑竞赛"
 
 #: .\templates\contest\contest.jade:12
 msgid "Time is up!"
-msgstr ""
+msgstr "竞赛结束了！"
 
 #: .\templates\contest\contest.jade:12 .\templates\contest\contest.jade:13
 msgid "Time remaining:"
-msgstr ""
+msgstr "剩余时间："
 
 #: .\templates\contest\contest.jade:13
 msgid "Contest is over."
-msgstr ""
+msgstr "竞赛已结束。"
 
 #: .\templates\contest\contest.jade:16
 msgid "Starting in "
-msgstr ""
+msgstr "开始于 "
 
 #: .\templates\contest\contest.jade:17
 #, python-format
-msgid ""
-"<b>%(time_limit)s</b> window from <b>%(start_time)s</b> to <b>%(end_time)s</"
-"b>"
-msgstr ""
+msgid "<b>%(time_limit)s</b> window from <b>%(start_time)s</b> to <b>%(end_time)s</b>"
+msgstr "<b>%(start_time)s</b>到<b>%(end_time)s</b>中的<b>%(time_limit)s</b>小时窗口"
 
 #: .\templates\contest\contest.jade:18
 #, python-format
-msgid ""
-"<b>%(length)s</b> long starting on \n"
-"%(start_time)s\n"
-msgstr ""
+msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
+msgstr "从<b>%(start_time)s</b>开始的<b>%(length)s</b>小时"
 
 #: .\templates\contest\list.jade:10
 msgid "Calendar view"
-msgstr ""
+msgstr "日历视图"
 
 #: .\templates\contest\list.jade:12
 msgid "Ongoing Contests"
-msgstr ""
+msgstr "进行中的竞赛"
 
 #: .\templates\contest\list.jade:16 .\templates\contest\list.jade.py:46
 #: .\templates\contest\list.jade:70 .\templates\user\user_about.jade.py:81
 msgid "Contest"
-msgstr ""
+msgstr "竞赛"
 
 #: .\templates\contest\list.jade:17 .\templates\contest\list.jade.py:71
 msgid "Rankings"
-msgstr ""
+msgstr "排行榜"
 
 #: .\templates\contest\list.jade:24
 msgid "Ending in"
-msgstr ""
+msgstr "结束在"
 
 #: .\templates\contest\list.jade:24
 msgid "Started at"
-msgstr ""
+msgstr "开始于"
 
 #: .\templates\contest\list.jade:26 .\templates\contest\list.jade.py:54
 #: .\templates\contest\list.jade:80
 #, python-format
 msgid "%(time_limit)s window"
-msgstr ""
+msgstr "%(time_limit)s窗口"
 
 #: .\templates\contest\list.jade:27 .\templates\contest\list.jade.py:55
 #: .\templates\contest\list.jade:81
 #, python-format
 msgid "%(window_length)s long"
-msgstr ""
+msgstr "%(window_length)s"
 
 #: .\templates\contest\list.jade:30 .\templates\contest\list.jade.py:58
 #: .\templates\contest\list.jade:78
 msgid "External contest"
-msgstr ""
+msgstr "外来竞赛"
 
 #: .\templates\contest\list.jade:36
 msgid "Join"
-msgstr ""
+msgstr "加入!"
 
 #: .\templates\contest\list.jade:42
 msgid "Upcoming Contests"
-msgstr ""
+msgstr "未来的竞赛"
 
 #: .\templates\contest\list.jade:52
 msgid "Starting in"
-msgstr ""
+msgstr "开始于"
 
 #: .\templates\contest\list.jade:64
 msgid "There are no scheduled contests at this time."
-msgstr ""
+msgstr "现在没有预定的竞赛。"
 
 #: .\templates\contest\list.jade:66
 msgid "Past Contests"
-msgstr ""
+msgstr "过去的竞赛"
 
 #: .\templates\contest\private.jade:2
 msgid "Only the following organizations may access this contest:"
-msgstr ""
+msgstr "只有下列组织可能访问此竞赛："
 
-#: .\templates\contest\ranking_table.jade:2 .\templates\user\user_about.jade:83
+#: .\templates\contest\ranking_table.jade:2
+#: .\templates\user\user_about.jade:83
 msgid "Rating"
-msgstr ""
+msgstr "评分"
 
 #: .\templates\judge.jade:21
 msgid "All Judges"
-msgstr ""
+msgstr "所有裁判服务器"
 
 #: .\templates\judge_status.jade:16
 #, python-format
 msgid "This page shows the live status of %(name)s's judging servers."
-msgstr ""
+msgstr "此页显示 %(name)s 的评分服务器实时状态。"
 
 #: .\templates\judge_status.jade:18
 msgid "Judges"
-msgstr ""
+msgstr "裁判服务器"
 
 #: .\templates\judge_status_table.jade:3 .\templates\language_list.jade:19
 #: .\templates\organization\list.jade:12
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: .\templates\judge_status_table.jade:4
 msgid "Online"
-msgstr ""
+msgstr "在线"
 
 #: .\templates\judge_status_table.jade:5
 msgid "Uptime"
-msgstr ""
+msgstr "启动时间"
 
 #: .\templates\judge_status_table.jade:6
 msgid "Ping"
-msgstr ""
+msgstr "延迟"
 
 #: .\templates\judge_status_table.jade:7
 msgid "Load"
-msgstr ""
+msgstr "负载"
 
 #: .\templates\judge_status_table.jade:8
 msgid "Runtimes"
-msgstr ""
+msgstr "语言"
 
 #: .\templates\judge_status_table.jade:29
 msgid "There are no judges available for this language."
-msgstr ""
+msgstr "这种语言没有可用的裁判服务器。"
 
 #: .\templates\language.jade:20
 msgid "Short name:"
-msgstr ""
+msgstr "短名称："
 
 #: .\templates\language.jade:22
 msgid "Category:"
-msgstr ""
+msgstr "分类："
 
 #: .\templates\language.jade:24
 msgid "Basic Runtime Info:"
-msgstr ""
+msgstr "基本软件信息："
 
 #: .\templates\language_list.jade:18 .\templates\organization\list.jade:11
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: .\templates\language_list.jade:20
 msgid "Runtime Info"
-msgstr ""
+msgstr "软件信息"
 
 #: .\templates\license.jade:2
 msgid "Source:"
-msgstr ""
+msgstr "来源："
 
 #: .\templates\messages\new.jade:5
 msgid "To:"
-msgstr ""
+msgstr "收件人："
 
 #: .\templates\messages\new.jade:10
 msgid "Send!"
-msgstr ""
+msgstr "发送！"
 
 #: .\templates\newsletter\common.html:7
 #: .\templates\newsletter\subscription_unsubscribe_activated.html:5
@@ -321,722 +341,700 @@ msgstr ""
 #: .\templates\newsletter\subscription_update_activated.html:5
 #: .\templates\newsletter\subscription_update_activated.html:8
 msgid "Newsletter"
-msgstr ""
+msgstr "电子简报"
 
 #: .\templates\newsletter\subscription_unsubscribe_activated.html:5
 #: .\templates\newsletter\subscription_unsubscribe_activated.html:8
 #: .\templates\newsletter\subscription_update_activated.html:5
 #: .\templates\newsletter\subscription_update_activated.html:8
 msgid "activate"
-msgstr ""
+msgstr "激活"
 
 #: .\templates\newsletter\subscription_unsubscribe_activated.html:10
 msgid "You have successfully been unsubscribed."
-msgstr ""
+msgstr "您已成功取消订阅。"
 
 #: .\templates\newsletter\subscription_unsubscribe_email_sent.html:5
 #: .\templates\newsletter\subscription_unsubscribe_email_sent.html:8
 #: .\templates\newsletter\subscription_unsubscribe_user.html:5
 #: .\templates\newsletter\subscription_unsubscribe_user.html:8
 msgid "Newsletter unsubscribe"
-msgstr ""
+msgstr "退订"
 
 #: .\templates\newsletter\subscription_unsubscribe_email_sent.html:10
-msgid ""
-"Your unsubscription request has successfully been received. An email has "
-"been sent to you with a link you need to follow in order to confirm your "
-"unsubscription."
-msgstr ""
+msgid "Your unsubscription request has successfully been received. An email has been sent to you with a link you need to follow in order to confirm your unsubscription."
+msgstr "您的退订请求已被收到。一份包含确认链接的邮件已被发送。"
 
 #: .\templates\newsletter\subscription_unsubscribe_user.html:20
 msgid "Do you want to unsubscribe from this newsletter?"
-msgstr ""
+msgstr "您真的想要取消订阅该电子简报吗?"
 
 #: .\templates\newsletter\subscription_unsubscribe_user.html:23
 msgid "Unsubscribe"
-msgstr ""
+msgstr "取消订阅"
 
 #: .\templates\newsletter\subscription_update.html:5
 #: .\templates\newsletter\subscription_update.html:8
 #: .\templates\newsletter\subscription_update_email_sent.html:5
 #: .\templates\newsletter\subscription_update_email_sent.html:8
 msgid "Newsletter update"
-msgstr ""
+msgstr "电子简报更新"
 
 #: .\templates\newsletter\subscription_update.html:11
-msgid ""
-"Due to a technical error we were not able to submit your confirmation email. "
-"This could be because your email address is invalid."
-msgstr ""
+msgid "Due to a technical error we were not able to submit your confirmation email. This could be because your email address is invalid."
+msgstr "由于技术原因我们无法发送您的确认电子邮件。这可能是因为您的电子邮件地址无效。"
 
 #: .\templates\newsletter\subscription_update.html:23
 msgid "Update subscription"
-msgstr ""
+msgstr "更新订阅"
 
 #: .\templates\newsletter\subscription_update_activated.html:10
 msgid "Your subscription has successfully been updated."
-msgstr ""
+msgstr "您的订阅已成功更新。"
 
 #: .\templates\newsletter\subscription_update_email_sent.html:10
-msgid ""
-"Your update request was successfully received and an activation email has "
-"been sent to you. In that email you will find a link which you need to "
-"follow in order to update your subscription."
-msgstr ""
+msgid "Your update request was successfully received and an activation email has been sent to you. In that email you will find a link which you need to follow in order to update your subscription."
+msgstr "您的更新请求成功已被成功接收。我们已经发送了激活电子邮件。该电子邮件中包含了更新您的订阅的链接。"
 
 #: .\templates\organization\edit.jade:20
 #: .\templates\organization\requests\pending.jade:24
 msgid "Update"
-msgstr ""
+msgstr "升级"
 
 #: .\templates\organization\home.jade:1
 msgid "Leave organization"
-msgstr ""
+msgstr "离开组织"
 
 #: .\templates\organization\home.jade:3
 msgid "Join organization"
-msgstr ""
+msgstr "加入组织"
 
 #: .\templates\organization\home.jade:5
 msgid "Request membership"
-msgstr ""
+msgstr "申请加入"
 
 #: .\templates\organization\home.jade:7
 msgid "Edit organization"
-msgstr ""
+msgstr "编辑组织"
 
 #: .\templates\organization\home.jade:7
 msgid "View requests"
-msgstr ""
+msgstr "查看请求"
 
 #: .\templates\organization\home.jade:7
 msgid "View members"
-msgstr ""
+msgstr "查看成员"
 
 #: .\templates\organization\list.jade:13
 msgid "Members"
-msgstr ""
+msgstr "成员"
 
 #: .\templates\organization\new.jade:6
 msgid "Create"
-msgstr ""
+msgstr "创建"
 
 #: .\templates\organization\requests\detail.jade:8
 msgid "User:"
-msgstr ""
+msgstr "用户："
 
 #: .\templates\organization\requests\detail.jade:13
 msgid "Organization:"
-msgstr ""
+msgstr "组织:"
 
 #: .\templates\organization\requests\detail.jade:18
 msgid "Time:"
-msgstr ""
+msgstr "时间："
 
 #: .\templates\organization\requests\detail.jade:22
 msgid "Reason:"
-msgstr ""
+msgstr "理由："
 
 #: .\templates\organization\requests\log.jade:4
 #: .\templates\organization\requests\pending.jade:9
 msgid "User"
-msgstr ""
+msgstr "用戶"
 
 #: .\templates\organization\requests\log.jade:5
 #: .\templates\organization\requests\pending.jade:10
 msgid "Time"
-msgstr ""
+msgstr "时间"
 
 #: .\templates\organization\requests\log.jade:6
 #: .\templates\organization\requests\pending.jade:11
 msgid "State"
-msgstr ""
+msgstr "状态"
 
 #: .\templates\organization\requests\log.jade:7
 #: .\templates\organization\requests\pending.jade:12
 msgid "Reason"
-msgstr ""
+msgstr "理由"
 
 #: .\templates\organization\requests\log.jade:17
 #: .\templates\organization\requests\pending.jade:26
 msgid "There are no requests to approve."
-msgstr ""
+msgstr "没有请求批准。"
 
 #: .\templates\organization\requests\pending.jade:13
 msgid "Delete?"
-msgstr ""
+msgstr "删除？"
 
 #: .\templates\organization\requests\request.jade:4
 msgid "Your reason for joining:"
-msgstr ""
+msgstr "你加入的理由:"
 
 #: .\templates\organization\requests\request.jade:8
 msgid "Request"
-msgstr ""
+msgstr "请求"
 
 #: .\templates\organization\requests\tabs.jade:3
 msgid "Pending"
-msgstr ""
+msgstr "待确认"
 
 #: .\templates\organization\requests\tabs.jade:5
 msgid "Log"
-msgstr ""
+msgstr "日志"
 
 #: .\templates\organization\requests\tabs.jade:7
 msgid "Approved"
-msgstr ""
+msgstr "已批准"
 
 #: .\templates\organization\requests\tabs.jade:9
 msgid "Rejected"
-msgstr ""
+msgstr "已拒绝"
 
 #: .\templates\problem\list.jade:31
 msgid "Search problems..."
-msgstr ""
+msgstr "搜索题目…"
 
 #: .\templates\problem\list.jade:31
 msgid "Go"
-msgstr ""
+msgstr "搜索"
 
 #: .\templates\problem\list.jade:31
 msgid "Random"
-msgstr ""
+msgstr "随机"
 
 #: .\templates\problem\list.jade:33
 msgid "Hide solved problems"
-msgstr ""
+msgstr "隐藏解决的题目"
 
 #: .\templates\problem\list.jade:35
 msgid "Show problem tags"
-msgstr ""
+msgstr "显示题目标签"
 
 #: .\templates\problem\list.jade:36 .\templates\problem\list.jade.py:51
 msgid "Category"
-msgstr ""
+msgstr "分类"
 
 #: .\templates\problem\list.jade:38 .\templates\problem\list.jade.py:39
 #: .\templates\problem\raw.jade:60
 msgid "All"
-msgstr ""
+msgstr "所有"
 
 #: .\templates\problem\list.jade:50
 msgid "Problem"
-msgstr ""
+msgstr "题目"
 
 #: .\templates\problem\list.jade:52
 msgid "Code"
-msgstr ""
+msgstr "代码"
 
 #: .\templates\problem\list.jade:53
 msgid "Types"
-msgstr ""
+msgstr "类型"
 
 #: .\templates\problem\list.jade:54 .\templates\user\base_users_table.jade:6
 msgid "Points"
-msgstr ""
+msgstr "分数"
 
 #: .\templates\problem\list.jade:55
 msgid "Users"
-msgstr ""
+msgstr "用户"
 
 #: .\templates\problem\own_list.jade:1
 msgid "Add problem"
-msgstr ""
+msgstr "添加题目"
 
 #: .\templates\problem\problem.jade:3
 msgid "View as PDF"
-msgstr ""
+msgstr "PDF 视图"
 
 #: .\templates\problem\problem.jade:5
 msgid "Submit solution"
-msgstr ""
+msgstr "提交程序"
 
 #: .\templates\problem\problem.jade:6
 msgid "My submissions"
-msgstr ""
+msgstr "我的提交历史"
 
 #: .\templates\problem\problem.jade:6
 msgid "All submissions"
-msgstr ""
+msgstr "所有提交历史"
 
 #: .\templates\problem\problem.jade:6
 msgid "Best submissions"
-msgstr ""
+msgstr "提交排行"
 
 #: .\templates\problem\problem.jade:9
 msgid "Edit problem"
-msgstr ""
+msgstr "编辑题目"
 
 #: .\templates\problem\problem.jade:9
 msgid "Clone problem"
-msgstr ""
+msgstr "复制题目"
 
 #: .\templates\problem\problem.jade:10 .\templates\problem\raw.jade.py:44
 msgid "Points:"
-msgstr ""
+msgstr "分数："
 
 #: .\templates\problem\problem.jade:13 .\templates\problem\raw.jade.py:56
 msgid "Time limit:"
-msgstr ""
+msgstr "时间限制："
 
 #: .\templates\problem\problem.jade:13 .\templates\problem\raw.jade.py:64
 msgid "Memory limit:"
-msgstr ""
+msgstr "内存限制："
 
 #: .\templates\problem\problem.jade:13 .\templates\problem\raw.jade.py:66
 msgid "Authors:"
-msgstr ""
+msgstr "作者："
 
 #: .\templates\problem\problem.jade:13 .\templates\problem\raw.jade.py:67
 msgid "Author:"
-msgstr ""
+msgstr "作者："
 
 #: .\templates\problem\problem.jade:15
 msgid "Problem type(s)"
-msgstr ""
+msgstr "问题类型："
 
 #: .\templates\problem\problem.jade:20
 msgid "Allowed languages"
-msgstr ""
+msgstr "允许的语言"
 
 #: .\templates\problem\problem.jade:23
 #, python-format
 msgid "No %(lang)s judge online"
-msgstr ""
+msgstr "没有 %(lang)s 可用的裁判服务器。"
 
 #: .\templates\problem\raw.jade:46 .\templates\problem\raw.jade.py:48
 msgid "(partial)"
-msgstr ""
+msgstr "（部分）"
 
 #: .\templates\problem\raw.jade:50
 msgid "Problem types:"
-msgstr ""
+msgstr "题目类型："
 
 #: .\templates\problem\raw.jade:51
 msgid "Problem type:"
-msgstr ""
+msgstr "题目类型："
 
 #: .\templates\problem\raw.jade:58
 msgid "Allowed languages:"
-msgstr ""
+msgstr "允许的语言："
 
 #: .\templates\problem\statistics_table.jade:2
 msgid "Statistics"
-msgstr ""
+msgstr "统计数据："
 
 #: .\templates\problem\submit.jade:190
 msgid "No judge is available for this problem."
-msgstr ""
+msgstr "此问题没有可用的裁判服务器。"
 
 #: .\templates\problem\submit.jade:191
 msgid "Submit!"
-msgstr ""
+msgstr "提交！"
 
 #: .\templates\registration\activate.jade:2
 #, python-format
 msgid "%(key)s is an invalid activation key."
-msgstr ""
+msgstr "%(key)s 是一个无效的激活密钥。"
 
 #: .\templates\registration\activation_complete.jade:2
 msgid "Your account has been successfully activated."
-msgstr ""
+msgstr "已成功激活您的帐户。"
 
 #: .\templates\registration\login.jade:33
 msgid "Invalid username or password."
-msgstr ""
+msgstr "无效的用户名或密码！"
 
 #: .\templates\registration\login.jade:50
 msgid "Login!"
-msgstr ""
+msgstr "登录！"
 
 #: .\templates\registration\login.jade:52
 msgid "Forgot your password?"
-msgstr ""
+msgstr "忘记密码？"
 
 #: .\templates\registration\login.jade:53
 msgid "Or log in with..."
-msgstr ""
+msgstr "或使用…"
 
 #: .\templates\registration\logout.jade:2
 msgid "See you later!"
-msgstr ""
+msgstr "再见！"
 
 #: .\templates\registration\password_change_done.jade:2
 msgid "Your password was sucessfully changed."
-msgstr ""
+msgstr "您的密码已成功更改。"
 
 #: .\templates\registration\password_change_form.jade:5
 msgid "Change Password"
-msgstr ""
+msgstr "更换密码"
 
 #: .\templates\registration\password_reset.jade:5
 msgid "Send Reset Email"
-msgstr ""
+msgstr "发送密码重置电子邮件"
 
 #: .\templates\registration\password_reset_complete.jade:2
 msgid "Your password has been set.  You may go ahead and log in now"
-msgstr ""
+msgstr "您的密码已设置。您可以现在登录。"
 
 #: .\templates\registration\password_reset_complete.jade:2
 msgid "Log in"
-msgstr ""
+msgstr "登录"
 
 #: .\templates\registration\password_reset_confirm.jade:5
 msgid "Reset Password"
-msgstr ""
+msgstr "重置密码"
 
 #: .\templates\registration\password_reset_done.jade:1
-msgid ""
-"\n"
-"<p>We've emailed you instructions for setting your password. You should be "
-"receiving them shortly.</p>\n"
-"<p>If you don't receive an email, please make sure you've entered the "
-"address you registered with, and check your spam folder.</p>"
-msgstr ""
+msgid "<p>We've emailed you instructions for setting your password. You should be receiving them shortly.</p> <p>If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.</p>"
+msgstr "<p>我们已经通过发送了重置密码的链接，您很快就会收到。</p><p>如果您没有收到一封电子邮件，请确保您输入了您的注册邮箱，并检查您的垃圾邮件文件夹。</p>"
 
 #: .\templates\registration\password_reset_email.txt:2
 #, python-format
-msgid ""
-"You're receiving this email because you requested a password reset for your "
-"user account at %(site_name)s."
-msgstr ""
+msgid "You're receiving this email because you requested a password reset for your user account at %(site_name)s."
+msgstr "因为您要求您的用户帐户在 %(site_name)s 重置密码，所以您收到这封电子邮件。"
 
 #: .\templates\registration\password_reset_email.txt:4
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "请转到以下页面以设置新密码："
 
 #: .\templates\registration\password_reset_email.txt:8
 msgid "Your username, in case you've forgotten:"
-msgstr ""
+msgstr "您的用户名："
 
 #: .\templates\registration\password_reset_email.txt:10
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "感谢您使用我们的网站！"
 
 #: .\templates\registration\password_reset_email.txt:12
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "%(site_name)s 团队"
 
 #: .\templates\registration\password_reset_subject.txt:2
 #, python-format
 msgid "Password reset on %(site_name)s"
-msgstr ""
+msgstr "在 %(site_name)s 上重置密码"
 
 #: .\templates\registration\profile_creation.jade:16
 #: .\templates\registration\username_select.jade:4
 msgid "Continue >"
-msgstr ""
+msgstr "继续 >"
 
 #: .\templates\registration\registration_complete.jade:2
-msgid ""
-"You have successfully been registered. An email has been sent to the email "
-"address you provided to confirm your registration."
-msgstr ""
+msgid "You have successfully been registered. An email has been sent to the email address you provided to confirm your registration."
+msgstr "您已成功注册。一封电子邮件已被发送到的您的电子邮件地址以确认您的注册。"
 
 #: .\templates\registration\registration_form.jade:21
 msgid "Your chosen username is already taken."
-msgstr ""
+msgstr "您的用户名已被使用。"
 
 #: .\templates\registration\registration_form.jade:22
 msgid "Please enter a valid email."
-msgstr ""
+msgstr "请输入一个有效的电子邮件地址。"
 
 #: .\templates\registration\registration_form.jade:25
 msgid "Invalid display name."
-msgstr ""
+msgstr "无效的显示名。"
 
 #: .\templates\registration\registration_form.jade:26
 msgid "Invalid timezone."
-msgstr ""
+msgstr "无效的时区。"
 
 #: .\templates\registration\registration_form.jade:27
 msgid "Invalid organizations specified."
-msgstr ""
+msgstr "选定了无效的组织。"
 
 #: .\templates\registration\registration_form.jade:28
 msgid "Invalid language specified."
-msgstr ""
+msgstr "选定了无效的语言。"
 
 #: .\templates\registration\registration_form.jade:34
 msgid "Username:"
-msgstr ""
+msgstr "用户名："
 
 #: .\templates\registration\registration_form.jade:40
 msgid "Email:"
-msgstr ""
+msgstr "电子邮件："
 
 #: .\templates\registration\registration_form.jade:46
 msgid "Password:"
-msgstr ""
+msgstr "密码："
 
 #: .\templates\registration\registration_form.jade:52
 msgid "Password (again):"
-msgstr ""
+msgstr "再输入密码："
 
 #: .\templates\registration\registration_form.jade:58
 msgid "Display name:"
-msgstr ""
+msgstr "显示名："
 
 #: .\templates\registration\registration_form.jade:64
 msgid "Timezone:"
-msgstr ""
+msgstr "时区："
 
 #: .\templates\registration\registration_form.jade:67
 #: .\templates\user\edit_profile.jade:44
 msgid "or"
-msgstr ""
+msgstr "或"
 
 #: .\templates\registration\registration_form.jade:68
 #: .\templates\user\edit_profile.jade:45
 msgid "pick from map"
-msgstr ""
+msgstr "从地图中选"
 
 #: .\templates\registration\registration_form.jade:72
 msgid "Organizations:"
-msgstr ""
+msgstr "组织："
 
 #: .\templates\registration\registration_form.jade:78
 msgid "Language:"
-msgstr ""
+msgstr "默认语言："
 
 #: .\templates\registration\registration_form.jade:85
 msgid "Register!"
-msgstr ""
+msgstr "注册！"
 
 #: .\templates\submission\info_base.jade:1
 #, python-format
-msgid ""
-"Submission of <a href=\"%(problem_url)s\">%(problem_name)s</a> by <a href="
-"\"%(user_url)s\">%(user_name)s</a>"
-msgstr ""
+msgid "Submission of <a href=\"%(problem_url)s\">%(problem_name)s</a> by <a href=\"%(user_url)s\">%(user_name)s</a>"
+msgstr "<a href=\"%(user_url)s\">%(user_name)s</a>在<a href=\"%(problem_url)s\">%(problem_name)s</a>的提交历史"
 
 #: .\templates\submission\row.jade:18
 msgid "Case "
-msgstr ""
+msgstr "测试"
 
 #: .\templates\submission\row.jade:22
 msgid "view"
-msgstr ""
+msgstr "查看"
 
 #: .\templates\submission\row.jade:22
 msgid "rejudge"
-msgstr ""
+msgstr "重新评分"
 
 #: .\templates\submission\row.jade:22
 msgid "admin"
-msgstr ""
+msgstr "管理"
 
 #: .\templates\submission\source.jade:49
 msgid "View status"
-msgstr ""
+msgstr "查看状态"
 
-#: .\templates\submission\source.jade:49 .\templates\submission\status.jade:126
+#: .\templates\submission\source.jade:49
+#: .\templates\submission\status.jade:126
 msgid "Resubmit"
-msgstr ""
+msgstr "重新提交"
 
 #: .\templates\submission\status.jade:126
 msgid "View source"
-msgstr ""
+msgstr "查看源代码"
 
 #: .\templates\submission\status.jade:137
 msgid "Abort"
-msgstr ""
+msgstr "停止"
 
 #: .\templates\submission\status_testcases.jade:2
 msgid "We are waiting for a suitable judge to process your submission..."
-msgstr ""
+msgstr "我们正在等待合适的裁判服务端来处理您的提交程序…"
 
 #: .\templates\submission\status_testcases.jade:3
 msgid "Your submission is being processed..."
-msgstr ""
+msgstr "正在处理您的提交的程序…"
 
 #: .\templates\submission\status_testcases.jade:4
 msgid "Compilation Error"
-msgstr ""
+msgstr "编译错误"
 
 #: .\templates\submission\status_testcases.jade:6
 msgid "Execution Results"
-msgstr ""
+msgstr "执行结果"
 
 #: .\templates\submission\status_testcases.jade:7
 msgid "Compilation Warnings"
-msgstr ""
+msgstr "编译警告"
 
 #: .\templates\submission\status_testcases.jade:8
 msgid "Batch "
-msgstr ""
+msgstr "批"
 
 #: .\templates\submission\status_testcases.jade:8
-msgid "points)"
-msgstr ""
-
-#: .\templates\submission\status_testcases.jade:11
-msgid "Case"
-msgstr ""
-
-#: .\templates\submission\status_testcases.jade:11
-msgid "Pretest"
-msgstr ""
-
-#: .\templates\submission\status_testcases.jade:11
-msgid "Test case"
-msgstr ""
-
-#: .\templates\submission\status_testcases.jade:25
-msgid "Your output (clipped)"
-msgstr ""
-
-#: .\templates\submission\status_testcases.jade:30
-msgid "Final score:"
-msgstr ""
-
 #: .\templates\submission\status_testcases.jade:31
 #: .\templates\submission\status_testcases.jade:32
 #, python-format
 msgid "(%(points)s/%(total)s points)"
-msgstr ""
+msgstr "（%(points)s/%(total)s 分）"
+
+#: .\templates\submission\status_testcases.jade:11
+msgid "Case"
+msgstr "测试"
+
+#: .\templates\submission\status_testcases.jade:11
+msgid "Pretest"
+msgstr "预测试"
+
+#: .\templates\submission\status_testcases.jade:11
+msgid "Test case"
+msgstr "测试"
+
+#: .\templates\submission\status_testcases.jade:25
+msgid "Your output (clipped)"
+msgstr "您的输出（部分）"
+
+#: .\templates\submission\status_testcases.jade:30
+msgid "Final score:"
+msgstr "最终得分："
 
 #: .\templates\submission\status_testcases.jade:33
 msgid "Submission aborted!"
-msgstr ""
+msgstr "评分终止！"
 
 #: .\templates\submission\status_testcases.jade:34
 #, python-format
-msgid ""
-"An internal error occurred while grading, and the %(SITE_NAME)s "
-"administrators have been notified.<br/>In the meantime, try resubmitting in "
-"a few seconds."
-msgstr ""
+msgid "An internal error occurred while grading, and the %(SITE_NAME)s administrators have been notified.<br/>In the meantime, try resubmitting in a few seconds."
+msgstr "评分时裁判服务端发生了内部错误。%(SITE_NAME)s 管理员已被通知。<br/>您可以尝试过一会再提交一次。"
 
 #: .\templates\submission\status_testcases.jade:35
 msgid "An internal error occurred while grading."
-msgstr ""
+msgstr "评分时裁判服务端发生了内部错误。"
 
-#: .\templates\user\base_users_table.jade:4 .\templates\user\user_about.jade:82
+#: .\templates\user\base_users_table.jade:4
+#: .\templates\user\user_about.jade:82
 msgid "Rank"
-msgstr ""
+msgstr "排名"
 
 #: .\templates\user\base_users_table.jade:5
 msgid "Username"
-msgstr ""
+msgstr "用户名"
 
 #: .\templates\user\edit_profile.jade:27
 msgid "Display name"
-msgstr ""
+msgstr "显示名"
 
 #: .\templates\user\edit_profile.jade:32
 msgid "Self-description"
-msgstr ""
+msgstr "自我描述"
 
 #: .\templates\user\edit_profile.jade:37
 msgid "Organizations"
-msgstr ""
+msgstr "组织"
 
 #: .\templates\user\edit_profile.jade:42
 msgid "Location"
-msgstr ""
+msgstr "位置"
 
 #: .\templates\user\edit_profile.jade:49
 msgid "Preferred language"
-msgstr ""
+msgstr "首选语言"
 
 #: .\templates\user\edit_profile.jade:54
 msgid "Ace theme"
-msgstr ""
+msgstr "Ace主题"
 
 #: .\templates\user\edit_profile.jade:59
 msgid "User-script"
-msgstr ""
+msgstr "用户脚本"
 
 #: .\templates\user\edit_profile.jade:63
 msgid "Change your avatar"
-msgstr ""
+msgstr "修改头像"
 
 #: .\templates\user\edit_profile.jade:64
 msgid "Change your password"
-msgstr ""
+msgstr "更改密码"
 
 #: .\templates\user\edit_profile.jade:66
 msgid "Update profile"
-msgstr ""
+msgstr "更新资料"
 
 #: .\templates\user\user_about.jade:70
 msgid "From"
-msgstr ""
+msgstr "组织"
 
 #: .\templates\user\user_about.jade:72 .\templates\user\user_tabs.jade.py:5
 msgid "About"
-msgstr ""
+msgstr "自我介绍"
 
 #: .\templates\user\user_about.jade:73
 msgid "You have not shared any information."
-msgstr ""
+msgstr "您还没有共享的任何信息。"
 
 #: .\templates\user\user_about.jade:74
 msgid "This user has not shared any information."
-msgstr ""
+msgstr "此用户没有共享的任何信息。"
 
 #: .\templates\user\user_about.jade:78
 msgid "Contest History"
-msgstr ""
+msgstr "竞赛历史"
 
 #: .\templates\user\user_about.jade:78
 msgid "Rank by rating:"
-msgstr ""
+msgstr "竞赛评分排名："
 
 #: .\templates\user\user_about.jade:78
 msgid "Rating:"
-msgstr ""
+msgstr "竞赛评分："
 
 #: .\templates\user\user_about.jade:78
 msgid "Volatility:"
-msgstr ""
+msgstr "波动性："
 
 #: .\templates\user\user_about.jade:78
 msgid "Minimum rating:"
-msgstr ""
+msgstr "最低评分："
 
 #: .\templates\user\user_about.jade:78
 msgid "Maximum rating:"
-msgstr ""
+msgstr "最高评分："
 
 #: .\templates\user\user_about.jade:78
 msgid "Competitions:"
-msgstr ""
+msgstr "竞赛数量："
 
 #: .\templates\user\user_base.jade:42
 msgid "Rank by points:"
-msgstr ""
+msgstr "得分排名："
 
 #: .\templates\user\user_base.jade:42
 msgid "Total points:"
-msgstr ""
+msgstr "总得分："
 
 #: .\templates\user\user_base.jade:42
 msgid "View submissions"
-msgstr ""
+msgstr "查看提交历史"
 
 #: .\templates\user\user_problems.jade:71
 msgid "Authored Problems"
-msgstr ""
+msgstr "创作的题目"
 
 #: .\templates\user\user_problems.jade:82
 msgid "Hide problems I've solved"
-msgstr ""
+msgstr "隐藏我已经解决的题目"
 
 #: .\templates\user\user_problems.jade:88
 msgid "points"
-msgstr ""
+msgstr "分"
 
 #: .\templates\user\user_tabs.jade:7 .\templates\user\users_table.jade.py:5
 msgid "Problems"
-msgstr ""
+msgstr "题目"
 
 #: .\templates\widgets\select_all.jade:5
 msgid "Nothing here."
-msgstr ""
+msgstr "暂无内容！"
 
 #: .\templates\widgets\select_all.jade:8
 msgid "Check all"
-msgstr ""
+msgstr "全选"
+

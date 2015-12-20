@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 16:07-0500\n"
-"PO-Revision-Date: 2015-12-19 16:20-0500\n"
+"POT-Creation-Date: 2015-12-19 20:06-0500\n"
+"PO-Revision-Date: 2015-12-19 20:16-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -16,6 +16,30 @@ msgstr ""
 "X-Crowdin-File: django.po\n"
 "Language: ro_RO\n"
 
+#: .\dmoj\settings.py:216
+msgid "German"
+msgstr ""
+
+#: .\dmoj\settings.py:217
+msgid "English"
+msgstr ""
+
+#: .\dmoj\settings.py:218
+msgid "French"
+msgstr ""
+
+#: .\dmoj\settings.py:219
+msgid "Romanian"
+msgstr ""
+
+#: .\dmoj\settings.py:220
+msgid "Russian"
+msgstr ""
+
+#: .\dmoj\settings.py:221
+msgid "Simplified Chinese"
+msgstr ""
+
 #: .\templates\base.jade:76
 msgid "MENU"
 msgstr "MENIU"
@@ -23,122 +47,122 @@ msgstr "MENIU"
 #: .\templates\base.jade:91
 #, python-format
 msgid "Hello, <b>%(username)s</b>."
-msgstr ""
+msgstr "Bună ziua, <b>%(username)s</b>."
 
 #: .\templates\base.jade:93 .\templates\submission\info_base.jade.py:2
 #: .\templates\user\user_tabs.jade:11
 msgid "Admin"
-msgstr ""
+msgstr "Administrare"
 
 #: .\templates\base.jade:95 .\templates\user\user_tabs.jade.py:9
 msgid "Edit profile"
-msgstr ""
+msgstr "Editează-ți profilul"
 
 #: .\templates\base.jade:97
 msgid "Log out"
-msgstr ""
+msgstr "Log out"
 
 #: .\templates\base.jade:101
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: .\templates\base.jade:101
 msgid "Register"
-msgstr ""
+msgstr "Register"
 
 #: .\templates\base.jade:107
 msgid "This site works best with JavaScript enabled."
-msgstr ""
+msgstr "Acest site funcționează cel mai bine cu JavaScript activat."
 
 #: .\templates\blog\content.jade:2 .\templates\judge.jade.py:16
 #: .\templates\language.jade:16
 msgid "Edit"
-msgstr ""
+msgstr "Modifică"
 
-#: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:27
+#: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:25
 #: .\templates\problem\problem.jade:28
 msgid "Comments"
-msgstr ""
+msgstr "Comentarii"
 
 #: .\templates\blog\list.jade:26
 msgid "Ongoing contests"
-msgstr ""
+msgstr "Concursuri in desfășurare"
 
 #: .\templates\blog\list.jade:31
 msgid "Ends in"
-msgstr ""
+msgstr "Se termină în"
 
 #: .\templates\blog\list.jade:36
 msgid "Upcoming contests"
-msgstr ""
+msgstr "Concursuri programate"
 
 #: .\templates\blog\list.jade:41
 msgid "Starts in"
-msgstr ""
+msgstr "Începe în"
 
 #: .\templates\blog\list.jade:46
 msgid "Comment stream"
-msgstr ""
+msgstr "Comentarii"
 
 #: .\templates\comments\list.jade:19
 msgid "There are no comments at the moment."
-msgstr ""
+msgstr "Nu sunt comentarii în acest moment."
 
 #: .\templates\comments\list.jade:22
 msgid "New comment"
-msgstr ""
+msgstr "Comentariu nou"
 
 #: .\templates\comments\list.jade:27
 msgid "Invalid comment title."
-msgstr ""
+msgstr "Invalid comment title."
 
 #: .\templates\comments\list.jade:27
 msgid "Invalid comment body."
-msgstr ""
+msgstr "Invalid comment body."
 
 #: .\templates\contest\calendar.jade:11
 msgid "Sunday"
-msgstr ""
+msgstr "Duminică"
 
 #: .\templates\contest\calendar.jade:12
 msgid "Monday"
-msgstr ""
+msgstr "Luni"
 
 #: .\templates\contest\calendar.jade:13
 msgid "Tuesday"
-msgstr ""
+msgstr "Marți"
 
 #: .\templates\contest\calendar.jade:14
 msgid "Wednesday"
-msgstr ""
+msgstr "Miercuri"
 
 #: .\templates\contest\calendar.jade:15
 msgid "Thursday"
-msgstr ""
+msgstr "Joi"
 
 #: .\templates\contest\calendar.jade:16
 msgid "Friday"
-msgstr ""
+msgstr "Vineri"
 
 #: .\templates\contest\calendar.jade:17
 msgid "Saturday"
-msgstr ""
+msgstr "Sâmbătă"
 
 #: .\templates\contest\contest.jade:8
 msgid "Leave contest"
-msgstr ""
+msgstr "Părăsiți concursul"
 
 #: .\templates\contest\contest.jade:8
 msgid "Join contest"
-msgstr ""
+msgstr "Intră în concurs"
 
 #: .\templates\contest\contest.jade:9
 msgid "View rankings"
-msgstr ""
+msgstr "Vezi clasament"
 
 #: .\templates\contest\contest.jade:11
 msgid "Edit contest"
-msgstr ""
+msgstr "Edit contest"
 
 #: .\templates\contest\contest.jade:12
 msgid "Time is up!"
@@ -146,15 +170,15 @@ msgstr ""
 
 #: .\templates\contest\contest.jade:12 .\templates\contest\contest.jade:13
 msgid "Time remaining:"
-msgstr ""
+msgstr "Timp rămas:"
 
 #: .\templates\contest\contest.jade:13
 msgid "Contest is over."
-msgstr ""
+msgstr "Concursul s-a terminat."
 
 #: .\templates\contest\contest.jade:16
 msgid "Starting in "
-msgstr ""
+msgstr "Începe în "
 
 #: .\templates\contest\contest.jade:17
 #, python-format
@@ -163,34 +187,33 @@ msgstr ""
 
 #: .\templates\contest\contest.jade:18
 #, python-format
-msgid "<b>%(length)s</b> long starting on \n"
-"%(start_time)s\n"
+msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
 msgstr ""
 
 #: .\templates\contest\list.jade:10
 msgid "Calendar view"
-msgstr ""
+msgstr "Vizualizare calendar"
 
 #: .\templates\contest\list.jade:12
 msgid "Ongoing Contests"
-msgstr ""
+msgstr "Concursuri in desfășurare"
 
 #: .\templates\contest\list.jade:16 .\templates\contest\list.jade.py:46
 #: .\templates\contest\list.jade:70 .\templates\user\user_about.jade.py:81
 msgid "Contest"
-msgstr ""
+msgstr "Concurs"
 
 #: .\templates\contest\list.jade:17 .\templates\contest\list.jade.py:71
 msgid "Rankings"
-msgstr ""
+msgstr "Clasamente"
 
 #: .\templates\contest\list.jade:24
 msgid "Ending in"
-msgstr ""
+msgstr "Se încheie în"
 
 #: .\templates\contest\list.jade:24
 msgid "Started at"
-msgstr ""
+msgstr "A început la"
 
 #: .\templates\contest\list.jade:26 .\templates\contest\list.jade.py:54
 #: .\templates\contest\list.jade:80
@@ -207,36 +230,36 @@ msgstr ""
 #: .\templates\contest\list.jade:30 .\templates\contest\list.jade.py:58
 #: .\templates\contest\list.jade:78
 msgid "External contest"
-msgstr ""
+msgstr "Concurs extern"
 
 #: .\templates\contest\list.jade:36
 msgid "Join"
-msgstr ""
+msgstr "Intră"
 
 #: .\templates\contest\list.jade:42
 msgid "Upcoming Contests"
-msgstr ""
+msgstr "Concursuri programate"
 
 #: .\templates\contest\list.jade:52
 msgid "Starting in"
-msgstr ""
+msgstr "Începe în"
 
 #: .\templates\contest\list.jade:64
 msgid "There are no scheduled contests at this time."
-msgstr ""
+msgstr "Nu există concursuri programate în acest moment."
 
 #: .\templates\contest\list.jade:66
 msgid "Past Contests"
-msgstr ""
+msgstr "Concursuri terminate"
 
 #: .\templates\contest\private.jade:2
 msgid "Only the following organizations may access this contest:"
-msgstr ""
+msgstr "Numai următoarele organizații pot accesa acest concurs:"
 
 #: .\templates\contest\ranking_table.jade:2
 #: .\templates\user\user_about.jade:83
 msgid "Rating"
-msgstr ""
+msgstr "Rating"
 
 #: .\templates\judge.jade:21
 msgid "All Judges"
@@ -675,9 +698,7 @@ msgid "Reset Password"
 msgstr ""
 
 #: .\templates\registration\password_reset_done.jade:1
-msgid "\n"
-"<p>We've emailed you instructions for setting your password. You should be receiving them shortly.</p>\n"
-"<p>If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.</p>"
+msgid "<p>We've emailed you instructions for setting your password. You should be receiving them shortly.</p> <p>If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.</p>"
 msgstr ""
 
 #: .\templates\registration\password_reset_email.txt:2
@@ -849,7 +870,10 @@ msgid "Batch "
 msgstr ""
 
 #: .\templates\submission\status_testcases.jade:8
-msgid "points)"
+#: .\templates\submission\status_testcases.jade:31
+#: .\templates\submission\status_testcases.jade:32
+#, python-format
+msgid "(%(points)s/%(total)s points)"
 msgstr ""
 
 #: .\templates\submission\status_testcases.jade:11
@@ -870,12 +894,6 @@ msgstr ""
 
 #: .\templates\submission\status_testcases.jade:30
 msgid "Final score:"
-msgstr ""
-
-#: .\templates\submission\status_testcases.jade:31
-#: .\templates\submission\status_testcases.jade:32
-#, python-format
-msgid "(%(points)s/%(total)s points)"
 msgstr ""
 
 #: .\templates\submission\status_testcases.jade:33

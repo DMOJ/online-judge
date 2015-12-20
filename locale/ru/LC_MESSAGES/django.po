@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 16:07-0500\n"
-"PO-Revision-Date: 2015-12-19 16:20-0500\n"
+"POT-Creation-Date: 2015-12-19 20:06-0500\n"
+"PO-Revision-Date: 2015-12-19 20:16-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -15,6 +15,30 @@ msgstr ""
 "X-Crowdin-Language: ru\n"
 "X-Crowdin-File: django.po\n"
 "Language: ru_RU\n"
+
+#: .\dmoj\settings.py:216
+msgid "German"
+msgstr ""
+
+#: .\dmoj\settings.py:217
+msgid "English"
+msgstr ""
+
+#: .\dmoj\settings.py:218
+msgid "French"
+msgstr ""
+
+#: .\dmoj\settings.py:219
+msgid "Romanian"
+msgstr ""
+
+#: .\dmoj\settings.py:220
+msgid "Russian"
+msgstr ""
+
+#: .\dmoj\settings.py:221
+msgid "Simplified Chinese"
+msgstr ""
 
 #: .\templates\base.jade:76
 msgid "MENU"
@@ -55,7 +79,7 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:27
+#: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:25
 #: .\templates\problem\problem.jade:28
 msgid "Comments"
 msgstr ""
@@ -163,8 +187,7 @@ msgstr ""
 
 #: .\templates\contest\contest.jade:18
 #, python-format
-msgid "<b>%(length)s</b> long starting on \n"
-"%(start_time)s\n"
+msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
 msgstr ""
 
 #: .\templates\contest\list.jade:10
@@ -675,9 +698,7 @@ msgid "Reset Password"
 msgstr ""
 
 #: .\templates\registration\password_reset_done.jade:1
-msgid "\n"
-"<p>We've emailed you instructions for setting your password. You should be receiving them shortly.</p>\n"
-"<p>If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.</p>"
+msgid "<p>We've emailed you instructions for setting your password. You should be receiving them shortly.</p> <p>If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.</p>"
 msgstr ""
 
 #: .\templates\registration\password_reset_email.txt:2
@@ -849,7 +870,10 @@ msgid "Batch "
 msgstr ""
 
 #: .\templates\submission\status_testcases.jade:8
-msgid "points)"
+#: .\templates\submission\status_testcases.jade:31
+#: .\templates\submission\status_testcases.jade:32
+#, python-format
+msgid "(%(points)s/%(total)s points)"
 msgstr ""
 
 #: .\templates\submission\status_testcases.jade:11
@@ -870,12 +894,6 @@ msgstr ""
 
 #: .\templates\submission\status_testcases.jade:30
 msgid "Final score:"
-msgstr ""
-
-#: .\templates\submission\status_testcases.jade:31
-#: .\templates\submission\status_testcases.jade:32
-#, python-format
-msgid "(%(points)s/%(total)s points)"
 msgstr ""
 
 #: .\templates\submission\status_testcases.jade:33
