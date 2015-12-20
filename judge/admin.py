@@ -731,7 +731,7 @@ class ContestProblemInline(SortableTabularInline):
     model = ContestProblem
     verbose_name = 'Problem'
     verbose_name_plural = 'Problems'
-    fields = ('problem', 'points', 'partial')
+    fields = ('problem', 'points', 'partial', 'output_prefix_override')
     form = ContestProblemInlineForm
     sortable = 'order'
     if SortableTabularInline is admin.TabularInline:
