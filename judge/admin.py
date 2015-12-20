@@ -977,9 +977,13 @@ class SolutionForm(ModelForm):
 
 class SolutionAdmin(VersionAdmin):
     fields = ('url', 'title', 'is_public', 'publish_on', 'problem', 'content')
-    list_display = ('title', 'url', 'problem_link', 'link')
+    list_display = ('title', 'url', 'problem_link', 'link', 'show_public')
     search_fields = ('url', 'title')
     form = SolutionForm
+
+    def show_public(self, obj):
+         return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
+    show_public.short_description = ''
 
     def problem_link(self, obj):
         if obj.problem is None:
