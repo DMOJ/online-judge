@@ -572,7 +572,7 @@ class LanguageAdmin(Select2SuitMixin, VersionAdmin):
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': MathJaxAdminPagedownWidget(load_math=False)},
+            TextField: {'widget': AdminPagedownWidget()},
         }
 
     def save_model(self, request, obj, form, change):
@@ -713,9 +713,9 @@ class JudgeAdmin(VersionAdmin):
             return not obj.online
         return result
 
-    if MathJaxAdminPagedownWidget is not None:
+    if AdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': MathJaxAdminPagedownWidget(load_math=False)},
+            TextField: {'widget': AdminPagedownWidget()},
         }
 
 
@@ -961,9 +961,9 @@ class BlogPostAdmin(VersionAdmin):
     list_display_links = ('id', 'title')
     ordering = ('-publish_on',)
 
-    if MathJaxAdminPagedownWidget is not None:
+    if AdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': MathJaxAdminPagedownWidget(load_math=False)},
+            TextField: {'widget': AdminPagedownWidget},
         }
 
 
