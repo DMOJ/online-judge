@@ -16,7 +16,7 @@ block body
                     - with user=r.user
                         td(class=user.display_rank) #{form.id}
                             a(href='{% url "user_page" user.user.username %}', target='_blank')= user.long_display_name
-                    td #{r.time|date:_("N j, Y, h:i")}
+                    td #{r.time|date:_("N j, Y, H:i")}
                     td #{r.state}
                     td #{r.reason|truncatechars:50}
     else

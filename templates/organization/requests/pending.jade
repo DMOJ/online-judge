@@ -26,7 +26,7 @@ block body
                         - with user=form.instance.user
                             td(class=user.display_rank) #{form.id}
                                 a(href='{% url "user_page" user.user.username %}', target='_blank')= user.long_display_name
-                        td #{form.instance.time|date:_("N j, Y, h:i")}
+                        td #{form.instance.time|date:_("N j, Y, H:i")}
                         td #{form.state}
                         td #{form.instance.reason|truncatechars:50}
                         if formset.can_delete
