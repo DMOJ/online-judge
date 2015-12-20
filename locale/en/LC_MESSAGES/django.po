@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 20:06-0500\n"
+"POT-Creation-Date: 2015-12-19 20:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,6 +79,11 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
+#: .\templates\blog\content.jade:6 .\templates\blog\list.jade.py:16
+#: .\templates\contest\list.jade:24
+msgid "N j, Y, G:i"
+msgstr ""
+
 #: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:25
 #: .\templates\problem\problem.jade:28
 msgid "Comments"
@@ -104,6 +109,13 @@ msgstr ""
 msgid "Comment stream"
 msgstr ""
 
+#: .\templates\comments\history_ajax.jade:7 .\templates\comments\list.jade:10
+#: .\templates\organization\requests\detail.jade:19
+#: .\templates\submission\info_base.jade:2 .\templates\submission\row.jade:14
+#: .\templates\submission\row.jade.py:15
+msgid "N j, Y, g:i a"
+msgstr ""
+
 #: .\templates\comments\list.jade:19
 msgid "There are no comments at the moment."
 msgstr ""
@@ -118,6 +130,10 @@ msgstr ""
 
 #: .\templates\comments\list.jade:27
 msgid "Invalid comment body."
+msgstr ""
+
+#: .\templates\contest\calendar.jade:1 .\templates\contest\calendar.jade:4
+msgid "F Y"
 msgstr ""
 
 #: .\templates\contest\calendar.jade:11
@@ -180,6 +196,10 @@ msgstr ""
 msgid "Starting in "
 msgstr ""
 
+#: .\templates\contest\contest.jade:17 .\templates\contest\contest.jade:18
+msgid "F j, Y, G:i T"
+msgstr ""
+
 #: .\templates\contest\contest.jade:17
 #, python-format
 msgid ""
@@ -215,6 +235,12 @@ msgstr ""
 
 #: .\templates\contest\list.jade:24
 msgid "Started at"
+msgstr ""
+
+#: .\templates\contest\list.jade:25 .\templates\contest\list.jade.py:26
+#: .\templates\contest\list.jade:53 .\templates\contest\list.jade.py:54
+#: .\templates\contest\list.jade:79 .\templates\contest\list.jade.py:80
+msgid "M j, Y, G:i"
 msgstr ""
 
 #: .\templates\contest\list.jade:26 .\templates\contest\list.jade.py:54
@@ -477,6 +503,11 @@ msgstr ""
 #: .\templates\organization\requests\log.jade:7
 #: .\templates\organization\requests\pending.jade:12
 msgid "Reason"
+msgstr ""
+
+#: .\templates\organization\requests\log.jade:12
+#: .\templates\organization\requests\pending.jade:18
+msgid "N j, Y, H:i"
 msgstr ""
 
 #: .\templates\organization\requests\log.jade:17

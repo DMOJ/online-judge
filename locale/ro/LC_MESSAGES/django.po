@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 20:06-0500\n"
-"PO-Revision-Date: 2015-12-19 20:16-0500\n"
+"POT-Creation-Date: 2015-12-19 20:40-0500\n"
+"PO-Revision-Date: 2015-12-19 20:40-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -79,6 +79,11 @@ msgstr "Acest site funcționează cel mai bine cu JavaScript activat."
 msgid "Edit"
 msgstr "Modifică"
 
+#: .\templates\blog\content.jade:6 .\templates\blog\list.jade.py:16
+#: .\templates\contest\list.jade:24
+msgid "N j, Y, G:i"
+msgstr ""
+
 #: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:25
 #: .\templates\problem\problem.jade:28
 msgid "Comments"
@@ -104,6 +109,13 @@ msgstr "Începe în"
 msgid "Comment stream"
 msgstr "Comentarii"
 
+#: .\templates\comments\history_ajax.jade:7 .\templates\comments\list.jade:10
+#: .\templates\organization\requests\detail.jade:19
+#: .\templates\submission\info_base.jade:2 .\templates\submission\row.jade:14
+#: .\templates\submission\row.jade.py:15
+msgid "N j, Y, g:i a"
+msgstr ""
+
 #: .\templates\comments\list.jade:19
 msgid "There are no comments at the moment."
 msgstr "Nu sunt comentarii în acest moment."
@@ -119,6 +131,10 @@ msgstr "Invalid comment title."
 #: .\templates\comments\list.jade:27
 msgid "Invalid comment body."
 msgstr "Invalid comment body."
+
+#: .\templates\contest\calendar.jade:1 .\templates\contest\calendar.jade:4
+msgid "F Y"
+msgstr ""
 
 #: .\templates\contest\calendar.jade:11
 msgid "Sunday"
@@ -180,6 +196,10 @@ msgstr "Concursul s-a terminat."
 msgid "Starting in "
 msgstr "Începe în "
 
+#: .\templates\contest\contest.jade:17 .\templates\contest\contest.jade:18
+msgid "F j, Y, G:i T"
+msgstr ""
+
 #: .\templates\contest\contest.jade:17
 #, python-format
 msgid "<b>%(time_limit)s</b> window from <b>%(start_time)s</b> to <b>%(end_time)s</b>"
@@ -214,6 +234,12 @@ msgstr "Se încheie în"
 #: .\templates\contest\list.jade:24
 msgid "Started at"
 msgstr "A început la"
+
+#: .\templates\contest\list.jade:25 .\templates\contest\list.jade.py:26
+#: .\templates\contest\list.jade:53 .\templates\contest\list.jade.py:54
+#: .\templates\contest\list.jade:79 .\templates\contest\list.jade.py:80
+msgid "M j, Y, G:i"
+msgstr ""
 
 #: .\templates\contest\list.jade:26 .\templates\contest\list.jade.py:54
 #: .\templates\contest\list.jade:80
@@ -467,6 +493,11 @@ msgstr ""
 #: .\templates\organization\requests\log.jade:7
 #: .\templates\organization\requests\pending.jade:12
 msgid "Reason"
+msgstr ""
+
+#: .\templates\organization\requests\log.jade:12
+#: .\templates\organization\requests\pending.jade:18
+msgid "N j, Y, H:i"
 msgstr ""
 
 #: .\templates\organization\requests\log.jade:17
