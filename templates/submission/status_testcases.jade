@@ -23,7 +23,9 @@ if submission.status != 'IE'
         each batch in batches
             if batch.grouper
                 b {% trans "Batch " %}##{test_case_id}
-                |  (#{batch.list|list_getattr:"points"|min_list|floatformat:"0"}/#{batch.list|list_getattr:"total"|max_list|floatformat:"0"} {% trans "points)" %}
+                = ' '
+                - blocktrans with points=batch.list|list_getattr:"points"|min_list|floatformat:"0" total=batch.list|list_getattr:"total"|max_list|floatformat:"0"
+                    | ({{ points }}/{{ total }} points)
                 br
                 | <div class="batch-cases">
             table
