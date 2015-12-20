@@ -114,7 +114,7 @@ class ProfileAdmin(Select2SuitMixin, VersionAdmin):
     form = ProfileForm
     
     def show_public(self, obj):
-         return format_html('<a href="{0}">View on site</a>', obj.get_absolute_url())
+         return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
     show_public.short_description = ''
 
     def admin_user_admin(self, obj):
