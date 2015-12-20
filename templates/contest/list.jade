@@ -43,13 +43,13 @@ block body
                                         span.time {% trans "Ending in" %}&nbsp;
                                         span.time.time-remaining #{contest.time_before_end|timedelta:"simple"}
                                     elif contest.free_start and contest.start_time
-                                        span.time {% trans "Started at" %} #{contest.start_time|date:"N j, o, G:i"}
+                                        span.time {% trans "Started at" %} #{contest.start_time|date:_("N j, o, G:i")}
                                     .time.floating-time(style='text-align:right')
                                         span(style='text-align:right;color:#777;')
                                         if contest.time_limit
-                                            | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
+                                            | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
                                         else
-                                            | #{contest.start_time|date:"M j, Y, G:i"}
+                                            | #{contest.start_time|date:_("M j, Y, G:i")}
                                         br
                                         if contest.time_limit
                                             - blocktrans with time_limit=contest.time_limit|timedelta:"simple-no-seconds"
@@ -92,9 +92,9 @@ block body
                                     .time.floating-time(style='text-align:right')
                                         span(style='text-align:right;color:#777;')
                                         if contest.time_limit
-                                            | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
+                                            | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
                                         else
-                                            | #{contest.start_time|date:"M j, Y, G:i"}
+                                            | #{contest.start_time|date:_("M j, Y, G:i")}
                                         br
                                         if contest.time_limit
                                             - blocktrans with time_limit=contest.time_limit|timedelta:"simple-no-seconds"
@@ -131,9 +131,9 @@ block body
                                     a(href='/about#external-contests') {% trans "External contest" %}
                             span.floating-time-right(style='text-align:right;color:#777;')
                                 if contest.time_limit
-                                    | #{contest.start_time|date:"M j, Y, G:i"} - #{contest.end_time|date:"M j, Y, G:i"}
+                                    | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
                                 else
-                                    | #{contest.start_time|date:"M j, Y, G:i"}
+                                    | #{contest.start_time|date:_("M j, Y, G:i")}
                                 br
                                 if contest.time_limit
                                     - blocktrans with time_limit=contest.time_limit|timedelta:"simple-no-seconds"

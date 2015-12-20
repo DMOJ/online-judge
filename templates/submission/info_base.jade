@@ -10,7 +10,7 @@ block content_title
 block header
     span.submission-info
         span.submission-date
-            | #{submission.date|date:"N j, o, g:i a"}
+            | #{submission.date|date:_("N j, o, g:i a")}
             br
             a(href='{% url "runtime_info" submission.language.key %}')= submission.language
             = ' '

@@ -21,7 +21,7 @@ block header
 
 block body
     div.post-full
-        div.time #{post.publish_on|date:"N j, o, G:i"}
+        div.time #{post.publish_on|date:_("N j, o, G:i")}
         div.body
             - cache 86400 post_content post.id
                 | #{post.content|markdown:"blog"|proxy_images}
