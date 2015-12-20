@@ -38,21 +38,32 @@ class CheckboxSelectMultipleWithSelectAll(forms.CheckboxSelectMultiple):
         return original
 
 try:
-    from pagedown.widgets import PagedownWidget, AdminPagedownWidget
+    from pagedown.widgets import PagedownWidget as OldPagedownWidget
 except ImportError:
     PagedownWidget = None
     AdminPagedownWidget = None
     MathJaxPagedownWidget = None
     MathJaxAdminPagedownWidget = None
 else:
-    class MathJaxPagedownWidget(PagedownWidget):
+    class PagedownWidget(OldPagedownWidget):
         def __init__(self, *args, **kwargs):
             kwargs.setdefault('css', (staticfiles_storage.url('pagedown_widget.css'),))
-            self._load_math = kwargs.pop('load_math', True)
-            super(MathJaxPagedownWidget, self).__init__(*args, **kwargs)
+            super(PagedownWidget, self).__init__(*args, **kwargs)
 
+    class AdminPagedownWidget(PagedownWidget, admin_widgets.AdminTextareaWidget):
         def _media(self):
-            media = super(MathJaxPagedownWidget, self)._media()
+            media = super(AdminPagedownWidget, self)._media()
+            media.add_css({'all': [
+                staticfiles_storage.url('content-description.css'),
+                staticfiles_storage.url('admin/css/pagedown.css'),
+            ]})
+            media.add_js([staticfiles_storage.url('admin/js/pagedown.js')])
+            return media
+        media = property(_media)
+
+    class MathJaxPagedownWidget(PagedownWidget):
+        def _media(self):
+            media = super(PagedownWidget, self)._media()
             if self._load_math:
                 media.add_js([
                     staticfiles_storage.url('mathjax_config.js'),
@@ -62,13 +73,5 @@ else:
             return media
         media = property(_media)
 
-    class MathJaxAdminPagedownWidget(MathJaxPagedownWidget, admin_widgets.AdminTextareaWidget):
-        def _media(self):
-            media = super(MathJaxAdminPagedownWidget, self)._media()
-            media.add_css({'all': [
-                staticfiles_storage.url('content-description.css'),
-                staticfiles_storage.url('admin/css/pagedown.css'),
-            ]})
-            media.add_js([staticfiles_storage.url('admin/js/pagedown.js')])
-            return media
-        media = property(_media)
+    class MathJaxAdminPagedownWidget(MathJaxPagedownWidget, AdminPagedownWidget):
+        pass
