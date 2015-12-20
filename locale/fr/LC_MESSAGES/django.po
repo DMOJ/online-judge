@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-19 20:57-0500\n"
-"PO-Revision-Date: 2015-12-19 21:12-0500\n"
+"PO-Revision-Date: 2015-12-19 22:13-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: .\dmoj\settings.py:217
 msgid "English"
-msgstr ""
+msgstr "Anglais"
 
 #: .\dmoj\settings.py:218
 msgid "French"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-19 20:57-0500\n"
-"PO-Revision-Date: 2015-12-19 21:12-0500\n"
+"PO-Revision-Date: 2015-12-19 22:13-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1231,7 +1231,7 @@ msgstr "允许的语言："
 
 #: .\templates\problem\statistics_table.jade:2
 msgid "Statistics"
-msgstr "统计数据："
+msgstr "统计数据"
 
 #: .\templates\problem\submit.jade:190
 msgid "No judge is available for this problem."

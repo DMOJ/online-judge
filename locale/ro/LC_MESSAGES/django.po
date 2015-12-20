@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-19 20:57-0500\n"
-"PO-Revision-Date: 2015-12-19 21:12-0500\n"
+"PO-Revision-Date: 2015-12-19 22:13-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -18,482 +18,482 @@ msgstr ""
 
 #: .\dmoj\settings.py:216
 msgid "German"
-msgstr ""
+msgstr "Germană"
 
 #: .\dmoj\settings.py:217
 msgid "English"
-msgstr ""
+msgstr "Engleză"
 
 #: .\dmoj\settings.py:218
 msgid "French"
-msgstr ""
+msgstr "Franceză"
 
 #: .\dmoj\settings.py:219
 msgid "Romanian"
-msgstr ""
+msgstr "Română"
 
 #: .\dmoj\settings.py:220
 msgid "Russian"
-msgstr ""
+msgstr "Rusă"
 
 #: .\dmoj\settings.py:221
 msgid "Simplified Chinese"
-msgstr ""
+msgstr "Chineză simplificată"
 
 #: .\judge\models.py:54
 msgid "Short identifier"
-msgstr ""
+msgstr "Identificator scurt"
 
 #: .\judge\models.py:55
 msgid "Long name"
-msgstr ""
+msgstr "Nume complet"
 
 #: .\judge\models.py:56 .\judge\models.py:96 .\judge\models.py:246
 msgid "Short name"
-msgstr ""
+msgstr "Nume scurt"
 
 #: .\judge\models.py:57
 msgid "Common name"
-msgstr ""
+msgstr "Familie"
 
 #: .\judge\models.py:58
 msgid "ACE mode name"
-msgstr ""
+msgstr "Mod ACE"
 
 #: .\judge\models.py:59
 msgid "Pygments Name"
-msgstr ""
+msgstr "Mod Pygments"
 
 #: .\judge\models.py:60
 msgid "Basic runtime info"
-msgstr ""
+msgstr "Informaţii de bază pentru runtime"
 
 #: .\judge\models.py:61
 msgid "Description for model"
-msgstr ""
+msgstr "Descriere model"
 
 #: .\judge\models.py:62
 msgid "Extension"
-msgstr ""
+msgstr "Extensie"
 
 #: .\judge\models.py:91
 msgid "Organization title"
-msgstr ""
+msgstr "Titlul organizației"
 
 #: .\judge\models.py:92 .\judge\models.py:547
 msgid "Identifier"
-msgstr ""
+msgstr "Identificator"
 
 #: .\judge\models.py:93
 msgid "Organization name shows in URL"
-msgstr ""
+msgstr "Numele organizației așa cum apare in URL"
 
 #: .\judge\models.py:97
 msgid "Displayed beside user name during contests"
-msgstr ""
+msgstr "Afişat lângă numele de utilizator în timpul concursurilor"
 
 #: .\judge\models.py:98
 msgid "Organization description"
-msgstr ""
+msgstr "Descrierea organizației"
 
 #: .\judge\models.py:99
 msgid "Registrant"
-msgstr ""
+msgstr "Registrantul"
 
 #: .\judge\models.py:101
 msgid "User who registered this organization"
-msgstr ""
+msgstr "Utilizatorul care a înregistrat această organizaţie"
 
 #: .\judge\models.py:102
 msgid "Administrators"
-msgstr ""
+msgstr "Administratori"
 
 #: .\judge\models.py:103
 msgid "Those who can edit this organization"
-msgstr ""
+msgstr "Cei care pot edita această organizaţie"
 
 #: .\judge\models.py:104
 msgid "Creation date"
-msgstr ""
+msgstr "Data creării"
 
 #: .\judge\models.py:105
 msgid "Allow joining organization"
-msgstr ""
+msgstr "Permite aderarea la organizaţie"
 
 #: .\judge\models.py:134
 msgid "User associated"
-msgstr ""
+msgstr "Utilizator asociat"
 
 #: .\judge\models.py:135 .\templates\user\edit_profile.jade.py:27
 msgid "Display name"
-msgstr ""
+msgstr "Nume afişat"
 
 #: .\judge\models.py:136 .\templates\user\edit_profile.jade.py:32
 msgid "Self-description"
-msgstr ""
+msgstr "Auto-descriere"
 
 #: .\judge\models.py:137 .\templates\user\edit_profile.jade.py:42
 msgid "Location"
-msgstr ""
+msgstr "Locaţie"
 
 #: .\judge\models.py:139 .\templates\user\edit_profile.jade.py:49
 msgid "Preferred language"
-msgstr ""
+msgstr "Limba preferată"
 
 #: .\judge\models.py:142
 msgid "Last access time"
-msgstr ""
+msgstr "Ultima dată de acces"
 
 #: .\judge\models.py:143
 msgid "Last IP"
-msgstr ""
+msgstr "Ultimul IP"
 
 #: .\judge\models.py:144 .\judge\models.py:209
 msgid "Organization"
-msgstr ""
+msgstr "Organizație"
 
 #: .\judge\models.py:146
 msgid "Display rank"
-msgstr ""
+msgstr "Rang de afişare"
 
 #: .\judge\models.py:148
 msgid "Comment mute"
-msgstr ""
+msgstr "Blocare commentarii"
 
 #: .\judge\models.py:148
 msgid "Some users are at their best when silent."
-msgstr ""
+msgstr "Pe unii utilizatori e preferabil sa nu ȋi auzi."
 
 #: .\judge\models.py:151
 msgid "User script"
-msgstr ""
+msgstr "Script de utilizator"
 
 #: .\judge\models.py:151
 msgid "User-defined JavaScript for site customization."
-msgstr ""
+msgstr "JavaScript definit de utilizator pentru personalizarea site-ului."
 
 #: .\judge\models.py:208 .\judge\models.py:668 .\judge\models.py:721
 #: .\judge\models.py:751 .\templates\organization\requests\log.jade.py:4
 #: .\templates\organization\requests\pending.jade:9
 msgid "User"
-msgstr ""
+msgstr "Utilizator"
 
 #: .\judge\models.py:210
 msgid "Request time"
-msgstr ""
+msgstr "Momentul cererii"
 
 #: .\judge\models.py:211 .\templates\organization\requests\log.jade.py:6
 #: .\templates\organization\requests\pending.jade:11
 msgid "State"
-msgstr ""
+msgstr "Stare"
 
 #: .\judge\models.py:216 .\templates\organization\requests\log.jade.py:7
 #: .\templates\organization\requests\pending.jade:12
 msgid "Reason"
-msgstr ""
+msgstr "Motiv"
 
 #: .\judge\models.py:220
 msgid "Problem category ID"
-msgstr ""
+msgstr "Identificatorul categoriei de probleme"
 
 #: .\judge\models.py:221
 msgid "Problem category name"
-msgstr ""
+msgstr "Numele categoriei de probleme"
 
 #: .\judge\models.py:231
 msgid "Problem group ID"
-msgstr ""
+msgstr "Identificatorul grupului de probleme"
 
 #: .\judge\models.py:232
 msgid "Problem group name"
-msgstr ""
+msgstr "Numele grupului de probleme"
 
 #: .\judge\models.py:242
 msgid "Key"
-msgstr ""
+msgstr "Cheie"
 
 #: .\judge\models.py:244
 msgid "Link"
-msgstr ""
+msgstr "Hyperlink"
 
 #: .\judge\models.py:245
 msgid "Full name"
-msgstr ""
+msgstr "Numele licenței"
 
 #: .\judge\models.py:247
 msgid "Displayed on pages under this license"
-msgstr ""
+msgstr "Afişat pe paginile sub această licenţă"
 
 #: .\judge\models.py:248
 msgid "Icon"
-msgstr ""
+msgstr "Icon"
 
 #: .\judge\models.py:248
 msgid "URL to the icon"
-msgstr ""
+msgstr "Hyperlink către icon"
 
 #: .\judge\models.py:249
 msgid "License text"
-msgstr ""
+msgstr "Textul licenței"
 
 #: .\judge\models.py:259
 msgid "Problem code"
-msgstr ""
+msgstr "Codul problemei"
 
 #: .\judge\models.py:260
 msgid "Problem code must be ^[a-z0-9]+$"
-msgstr ""
+msgstr "Codul problemei trebuie să fie ^[a-z0-9]+$"
 
 #: .\judge\models.py:261
 msgid "Problem name"
-msgstr ""
+msgstr "Numele problemei"
 
 #: .\judge\models.py:262
 msgid "Problem body"
-msgstr ""
+msgstr "Corpul problemei"
 
 #: .\judge\models.py:263
 msgid "Creators"
-msgstr ""
+msgstr "Autori"
 
 #: .\judge\models.py:264
 msgid "Problem types"
-msgstr ""
+msgstr "Tipuri de probleme"
 
 #: .\judge\models.py:265
 msgid "Problem group"
-msgstr ""
+msgstr "Grupul problemei"
 
 #: .\judge\models.py:266 .\judge\models.py:318 .\judge\models.py:610
 msgid "Time limit"
-msgstr ""
+msgstr "Limita de timp"
 
 #: .\judge\models.py:267 .\judge\models.py:319
 msgid "Memory limit"
-msgstr ""
+msgstr "Limita de memorie"
 
 #: .\judge\models.py:269 .\judge\models.py:733 .\judge\models.py:747
 #: .\templates\problem\list.jade:54 .\templates\user\base_users_table.jade:6
 msgid "Points"
-msgstr ""
+msgstr "Puncte"
 
 #: .\judge\models.py:270
 msgid "Allows partial points"
-msgstr ""
+msgstr "Se accordă puncte parţiale"
 
 #: .\judge\models.py:271 .\templates\problem\problem.jade.py:20
 msgid "Allowed languages"
-msgstr ""
+msgstr "Limbajele acceptate"
 
 #: .\judge\models.py:272 .\judge\models.py:611
 msgid "Publicly visible"
-msgstr ""
+msgstr "Vizibil publicului"
 
 #: .\judge\models.py:273
 msgid "Date of publishing"
-msgstr ""
+msgstr "Data de publicare"
 
 #: .\judge\models.py:275
 msgid "Personae non gratae"
-msgstr ""
+msgstr "Persoane non-grata"
 
 #: .\judge\models.py:276
 msgid "Bans the selected users from submitting to this problem"
-msgstr ""
+msgstr "Interzice utilizatorilor selectați sa trimită soluții la această problemă"
 
 #: .\judge\models.py:316 .\judge\models.py:731 .\judge\models.py:743
 #: .\templates\problem\list.jade:50
 msgid "Problem"
-msgstr ""
+msgstr "Problemă"
 
 #: .\judge\models.py:317
 msgid "Language"
-msgstr ""
+msgstr "Limbaj"
 
 #: .\judge\models.py:371
 msgid "Submission time"
-msgstr ""
+msgstr "Timpul de submitere"
 
 #: .\judge\models.py:372 .\judge\models.py:442
 msgid "Execution time"
-msgstr ""
+msgstr "Durata de execuție"
 
 #: .\judge\models.py:373 .\judge\models.py:443
 msgid "Memory usage"
-msgstr ""
+msgstr "Memorie utilizată"
 
 #: .\judge\models.py:374 .\judge\models.py:444
 msgid "Points granted"
-msgstr ""
+msgstr "Puncte acordate"
 
 #: .\judge\models.py:375
 msgid "Submission language"
-msgstr ""
+msgstr "Limajul soluției"
 
 #: .\judge\models.py:376
 msgid "Source code"
-msgstr ""
+msgstr "Cod sursă"
 
 #: .\judge\models.py:380
 msgid "Compile Errors"
-msgstr ""
+msgstr "Erori de compilare"
 
 #: .\judge\models.py:382
 msgid "Batched cases"
-msgstr ""
+msgstr "Cazuri in batch"
 
 #: .\judge\models.py:383
 msgid "Test case points"
-msgstr ""
+msgstr "Puncte pentru cazul de test"
 
 #: .\judge\models.py:384
 msgid "Test case total points"
-msgstr ""
+msgstr "Total de puncte pentru cazul de test"
 
 #: .\judge\models.py:439
 msgid "Associated submission"
-msgstr ""
+msgstr "Submiterea associată"
 
 #: .\judge\models.py:440
 msgid "Test case ID"
-msgstr ""
+msgstr "Identificator cazului de test"
 
 #: .\judge\models.py:441
 msgid "Status flag"
-msgstr ""
+msgstr "Status flag"
 
 #: .\judge\models.py:445
 msgid "Points possible"
-msgstr ""
+msgstr "Total de puncte posibile"
 
 #: .\judge\models.py:446
 msgid "Batch number"
-msgstr ""
+msgstr "Numarul batch-ului"
 
 #: .\judge\models.py:447
 msgid "Judging feedback"
-msgstr ""
+msgstr "Feedback de la judge"
 
 #: .\judge\models.py:448
 msgid "Program output"
-msgstr ""
+msgstr "Output-ul programului"
 
 #: .\judge\models.py:456
 msgid "Commenter"
-msgstr ""
+msgstr "Autorul comentariului"
 
 #: .\judge\models.py:457
 msgid "Posted time"
-msgstr ""
+msgstr "Data postării"
 
 #: .\judge\models.py:458
 msgid "Associated Page"
-msgstr ""
+msgstr "Pagină associată"
 
 #: .\judge\models.py:460
 msgid "Page code must be ^[pc]:[a-z0-9]+$|^b:\\d+$"
-msgstr ""
+msgstr "Codul paginii trebuie să fie ^[pc]:[a-z0-9]+$|^b:\\d+$"
 
 #: .\judge\models.py:461
 msgid "Votes"
-msgstr ""
+msgstr "Voturi"
 
 #: .\judge\models.py:462
 msgid "Title of comment"
-msgstr ""
+msgstr "Titlul comentariului"
 
 #: .\judge\models.py:463
 msgid "Body of comment"
-msgstr ""
+msgstr "Corpul comentariului"
 
 #: .\judge\models.py:464
 msgid "Hide the comment"
-msgstr ""
+msgstr "Ascunde comentariul"
 
 #: .\judge\models.py:465
 msgid "Parent"
-msgstr ""
+msgstr "Părinte"
 
 #: .\judge\models.py:546 .\judge\models.py:735
 msgid "Order"
-msgstr ""
+msgstr "Ordine"
 
 #: .\judge\models.py:548
 msgid "Label"
-msgstr ""
+msgstr "Etichetă"
 
 #: .\judge\models.py:549
 msgid "Link path"
-msgstr ""
+msgstr "Hyperlink"
 
 #: .\judge\models.py:550
 msgid "Highlight regex"
-msgstr ""
+msgstr "Highlight regex"
 
 #: .\judge\models.py:551
 msgid "Parent item"
-msgstr ""
+msgstr "Elementul părinte"
 
 #: .\judge\models.py:568
 msgid "Server name, hostname-style"
-msgstr ""
+msgstr "Numele server-ului, in stil de hostname"
 
 #: .\judge\models.py:569
 msgid "Time of creation"
-msgstr ""
+msgstr "Data creării"
 
 #: .\judge\models.py:570
 msgid "A key to authenticated this judge"
-msgstr ""
+msgstr "O cheie de autentificare pentru acest judge"
 
 #: .\judge\models.py:571
 msgid "Authentication key"
-msgstr ""
+msgstr "Cheie de autentificare"
 
 #: .\judge\models.py:573
 msgid "Last connection time"
-msgstr ""
+msgstr "Ultima dată de conectare"
 
 #: .\judge\models.py:574
 msgid "Response time"
-msgstr ""
+msgstr "Timp de răspuns"
 
 #: .\judge\models.py:575
 msgid "System load"
-msgstr ""
+msgstr "Încărcarea sistemului"
 
 #: .\judge\models.py:576
 msgid "Load for the last minute, divided by processors to be fair."
-msgstr ""
+msgstr "Încărcarea in ultimul minut, împărţită la numarul de procesoare."
 
 #: .\judge\models.py:577
 msgid "Description"
-msgstr ""
+msgstr "Descriere"
 
 #: .\judge\models.py:578 .\judge\models.py:607
 #: .\templates\user\user_tabs.jade:7 .\templates\user\users_table.jade.py:5
 msgid "Problems"
-msgstr ""
+msgstr "Probleme"
 
 #: .\judge\models.py:579 .\templates\judge_status.jade.py:18
 msgid "Judges"
-msgstr ""
+msgstr "Judges"
 
 #: .\judge\models.py:601
 msgid "Contest id"
-msgstr ""
+msgstr "Identificator de concurs"
 
 #: .\judge\models.py:602
 msgid "Contest id must be ^[a-z0-9]+$"
-msgstr ""
+msgstr "Identificatorul de concurs trebuie să fie ^[a-z0-9]+$"
 
 #: .\judge\models.py:603
 msgid "Contest name"
-msgstr ""
+msgstr "Numele concursului"
 
 #: .\judge\models.py:604
 msgid "These people will be able to edit the contest."
-msgstr ""
+msgstr "Aceste persoane vor putea să editeze concursul."
 
 #: .\judge\models.py:612 .\templates\contest\list.jade.py:30
 #: .\templates\contest\list.jade:58 .\templates\contest\list.jade.py:78
@@ -502,59 +502,59 @@ msgstr "Concurs extern"
 
 #: .\judge\models.py:613
 msgid "Contest rated"
-msgstr ""
+msgstr "Acest concurs este evaluat"
 
 #: .\judge\models.py:613
 msgid "Whether this contest can be rated."
-msgstr ""
+msgstr "Dacă acest concurs poate fi evaluat."
 
 #: .\judge\models.py:615
 msgid "Rate all"
-msgstr ""
+msgstr "Evaluează toate"
 
 #: .\judge\models.py:615
 msgid "Rate all users who joined."
-msgstr ""
+msgstr "Evaluează toţi utilizatorii care s-au inscris."
 
 #: .\judge\models.py:616
 msgid "Exclude from ratings"
-msgstr ""
+msgstr "Exclude din evaluare"
 
 #: .\judge\models.py:618
 msgid "Private to organizations"
-msgstr ""
+msgstr "Privat pentru organizaţii"
 
 #: .\judge\models.py:619 .\templates\user\edit_profile.jade.py:37
 msgid "Organizations"
-msgstr ""
+msgstr "Organizaţii"
 
 #: .\judge\models.py:620
 msgid "If private, only these organizations may see the contest"
-msgstr ""
+msgstr "Dacă e privat, doar aceste organizaţii pot vedea acest concurs"
 
 #: .\judge\models.py:621 .\judge\models.py:771
 msgid "OpenGraph image"
-msgstr ""
+msgstr "Imagine OpenGraph"
 
 #: .\judge\models.py:667
 msgid "Associated contest"
-msgstr ""
+msgstr "Concurs asociat"
 
 #: .\judge\models.py:669
 msgid "Start time"
-msgstr ""
+msgstr "Ora începerii"
 
 #: .\judge\models.py:670
 msgid "score"
-msgstr ""
+msgstr "scor"
 
 #: .\judge\models.py:671
 msgid "Cumulative time"
-msgstr ""
+msgstr "Timpul cumulat"
 
 #: .\judge\models.py:723
 msgid "Current contest"
-msgstr ""
+msgstr "Concursul curent"
 
 #: .\judge\models.py:732 .\judge\models.py:752
 #: .\templates\contest\list.jade:16 .\templates\contest\list.jade.py:46
@@ -564,7 +564,7 @@ msgstr "Concurs"
 
 #: .\judge\models.py:734
 msgid "Partial"
-msgstr ""
+msgstr "Parţial"
 
 #: .\judge\models.py:742
 msgid "Submission"
