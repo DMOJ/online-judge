@@ -71,7 +71,7 @@ block description
                             | #[b {{ time_limit }}] window from #[b {{ start_time }}] to #[b {{ end_time }}]
                     else
                         - blocktrans with length=contest.contest_window_length|timedelta:"simple-no-seconds" start_time=contest.start_time|date:"F j, Y, G:i T"
-                            | #[b {{ length }}] long starting on #[{{ start_time }}]
+                            | #[b {{ length }}] long starting on #[b {{ start_time }}]
 
     - cache 3600 contest_html contest.id
         | #{contest.description|markdown:"contest"|smart_math|proxy_images}
