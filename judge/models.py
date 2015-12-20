@@ -3,6 +3,7 @@ from collections import defaultdict
 from operator import itemgetter, attrgetter
 
 import pytz
+from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
@@ -570,8 +571,8 @@ class Judge(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('Time of creation'))
     auth_key = models.CharField(max_length=100, help_text=_('A key to authenticated this judge'),
                                 verbose_name=_('Authentication key'))
-    online = models.BooleanField(default=False)
-    last_connect = models.DateTimeField(verbose_name=_('Last connection time'), null=True)
+    start_time = models.DateTimeField(verbose_name=_('Judge start time'), null=True)
+    last_ping = models.DateTimeField(verbose_name=_('Last ping time'), null=True)
     ping = models.FloatField(verbose_name=_('Response time'), null=True)
     load = models.FloatField(verbose_name=_('System load'), null=True,
                              help_text=_('Load for the last minute, divided by processors to be fair.'))
@@ -584,7 +585,13 @@ class Judge(models.Model):
 
     @property
     def uptime(self):
-        return timezone.now() - self.last_connect if self.online else 'N/A'
+        return timezone.now() - self.start_time if self.online else 'N/A'
+
+    @property
+    def online(self):
+        if self.last_ping is None:
+            return False
+        return timezone.now() - self.last_ping < timedelta(seconds=30)
 
     @property
     def ping_ms(self):
@@ -595,7 +602,7 @@ class Judge(models.Model):
         return map(attrgetter('name'), self.runtimes.all())
 
     class Meta:
-        ordering = ['-online', 'load']
+        ordering = ['-last_ping']
 
 
 class Contest(models.Model):

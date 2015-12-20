@@ -695,15 +695,20 @@ class JudgeAdminForm(ModelForm):
 
 class JudgeAdmin(VersionAdmin):
     form = JudgeAdminForm
-    readonly_fields = ('created', 'online', 'last_connect', 'ping', 'load', 'runtimes', 'problems')
+    readonly_fields = ('created', 'online', 'start_time', 'last_ping', 'ping', 'load', 'runtimes', 'problems')
     fieldsets = (
         (None, {'fields': ('name', 'auth_key')}),
         ('Description', {'fields': ('description',)}),
-        ('Information', {'fields': ('created', 'online', 'last_connect', 'ping', 'load')}),
+        ('Information', {'fields': ('created', 'online', 'start_time', 'last_ping', 'ping', 'load')}),
         ('Capabilities', {'fields': ('runtimes', 'problems')}),
     )
-    list_display = ('name', 'online', 'last_connect', 'ping', 'load')
+    list_display = ('name', 'is_online', 'start_time', 'ping', 'load')
     ordering = ['name']
+
+    def is_online(self, obj):
+        return obj.online
+    is_online.short_description = 'Online'
+    is_online.boolean = True
 
     def get_readonly_fields(self, request, obj=None):
         if obj is not None and obj.online:

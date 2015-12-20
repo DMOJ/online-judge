@@ -64,6 +64,7 @@ class AMQPResponseDaemon(object):
             chan.basic_ack(delivery_tag=method.delivery_tag)
         except Exception:
             logger.exception('Error in AMQP judge ping handling')
+            chan.basic_nack(delivery_tag=method.delivery_tag)
 
     def on_acknowledged(self, packet):
         logger.info('Submission acknowledged: %d', packet['id'])
