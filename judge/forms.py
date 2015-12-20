@@ -29,6 +29,8 @@ class ProfileForm(ModelForm):
             widgets['timezone'] = Select2Widget(attrs={'style': 'width: 200px'})
             widgets['language'] = Select2Widget(attrs={'style': 'width: 300px'})
             widgets['ace_theme'] = Select2Widget(attrs={'style': 'width: 300px'})
+        if PagedownWidget is not None:
+            widgets['about'] = PagedownWidget()
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
