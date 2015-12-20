@@ -913,10 +913,14 @@ class OrganizationForm(ModelForm):
 class OrganizationAdmin(Select2SuitMixin, VersionAdmin):
     readonly_fields = ('creation_date',)
     fields = ('name', 'key', 'short_name', 'is_open', 'about', 'registrant', 'creation_date', 'admins')
-    list_display = ('name', 'key', 'short_name', 'is_open', 'registrant', 'creation_date')
+    list_display = ('name', 'key', 'short_name', 'is_open', 'registrant', 'creation_date', 'show_public')
     actions_on_top = True
     actions_on_bottom = True
     form = OrganizationForm
+    
+    def show_public(self, obj):
+         return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
+    show_public.short_description = ''
 
     def get_readonly_fields(self, request, obj=None):
         if request.user.has_perm('judge.organization_admin'):
