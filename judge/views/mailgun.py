@@ -44,11 +44,11 @@ class MailgunActivationView(View):
             except RegistrationProfile.DoesNotExist:
                 logger.info('Rejected sender without RegistrationProfile: %s: %s', sender, params.get('from'))
                 return HttpResponse(status=406)
-            key = registration.activation_key
-            if key == RegistrationProfile.ACTIVATED:
+            if registration.activated:
                 logger.info('Rejected activated sender: %s: %s', sender, params.get('from'))
                 return HttpResponse(status=406)
 
+            key = registration.activation_key
             if key in params.get('body-plain', '') or key in params.get('body-html', ''):
                 if RegistrationProfile.objects.activate_user(key):
                     logger.info('Activated sender: %s: %s', sender, params.get('from'))
