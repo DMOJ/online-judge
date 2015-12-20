@@ -19,7 +19,7 @@ block body
                     a(href='{% url "organization_home" org.key %}')= org.name
         tr
             th {% trans "Time:" %}
-            td #{object.time|date:_("N j, o, g:i a")}
+            td #{object.time|date:_("N j, Y, g:i a")}
         tr
             th(colspan=2) {% trans "Reason:" %}
         tr

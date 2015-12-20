@@ -12,7 +12,7 @@ each version in revisions
     table.comment-revision.content-description(id='revision-{{ forloop.counter }}')
         tr
             th Date:
-            td.revision-date #{version.revision.date_created|date:_("N j, o, g:i a")}
+            td.revision-date #{version.revision.date_created|date:_("N j, Y, g:i a")}
         tr
             td.revision-text(colspan=2) #{version.field_dict.body|markdown:"comment"}
     if not forloop.last

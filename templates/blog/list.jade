@@ -30,7 +30,7 @@ block body
                     div.time
                         if post.sticky
                             i.fa.fa-star.fa-fw(title='Sticky')
-                        | #{post.publish_on|date:_("N j, o, G:i")}
+                        | #{post.publish_on|date:_("N j, Y, G:i")}
                     div.summary
                         - cache 86400 post_summary post.id
                             | #{post.summary|default:post.content|markdown:"blog"|lazy_load}
