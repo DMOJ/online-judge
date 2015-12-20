@@ -1,6 +1,8 @@
 import json
 import logging
 
+from os import getpid
+
 from . import connection
 
 logger = logging.getLogger('judge.handler')
@@ -24,26 +26,40 @@ class AMQPResponseDaemon(object):
             'problem-update': self.on_problem_update,
             'executor-update': self.on_executor_update,
         }
+        self._submission_tags = {}
 
     def run(self):
-        self.chan.basic_consume(self._handle_judge_response, queue='judge-response')
+        self.chan.basic_consume(self._take_new_submission, queue='submission-id')
         self.chan.basic_consume(self._handle_ping, queue='judge-ping')
         self.chan.start_consuming()
 
     def stop(self):
         self.chan.stop_consuming()
 
+    def _take_new_submission(self, chan, method, properties, body):
+        chan.basic_ack(delivery_tag=method.delivery_tag)
+        if not body.isdigit():
+            return
+        tag = self.chan.basic_consume(self._handle_judge_response, queue='sub-' + body, no_ack=True)
+        self._submission_tags[int(body)] = tag
+        logger.info('Declare responsibility for: %d: pid %d', int(body), getpid())
+
+    def _finish_submission(self, id):
+        self.chan.basic_cancel(self._submission_tags[id])
+        self.chan.queue_delete('sub-%d' % id)
+        del self._submission_tags[id]
+        logger.info('Finished responsibility for: %d: pid %d', id, getpid())
+
     def _handle_judge_response(self, chan, method, properties, body):
         try:
-            packet = json.loads(body)
+            packet = json.loads(body.decode('zlib'))
             self._judge_response_handlers.get(packet['name'], self.on_malformed)(packet)
-            chan.basic_ack(delivery_tag=method.delivery_tag)
         except Exception:
             logger.exception('Error in AMQP judge response handling')
 
     def _handle_ping(self, chan, method, properties, body):
         try:
-            packet = json.loads(body)
+            packet = json.loads(body.decode('zlib'))
             self._ping_handlers.get(packet['name'], self.on_malformed)(packet)
             chan.basic_ack(delivery_tag=method.delivery_tag)
         except Exception:
@@ -57,9 +73,11 @@ class AMQPResponseDaemon(object):
 
     def on_grading_end(self, packet):
         logger.info('Grading has ended on: %s', packet['id'])
+        self._finish_submission(packet['id'])
 
     def on_compile_error(self, packet):
         logger.info('Submission failed to compile: %s', packet['id'])
+        self._finish_submission(packet['id'])
 
     def on_compile_message(self, packet):
         logger.info('Submission generated compiler messages: %s', packet['id'])
@@ -72,9 +90,13 @@ class AMQPResponseDaemon(object):
 
     def on_aborted(self, packet):
         logger.info('Submission aborted: %s', packet['id'])
+        self._finish_submission(packet['id'])
 
     def on_test_case(self, packet):
-        logger.info('Test case completed on: %s, batch #%d', packet['id'], packet['batch'])
+        if packet['batch']:
+            logger.info('Test case completed on: %s, batch #%d, case #%d', packet['id'], packet['batch'], packet['position'])
+        else:
+            logger.info('Test case completed on: %s, case #%d', packet['id'], packet['position'])
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)

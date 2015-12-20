@@ -23,7 +23,6 @@ from sortedm2m.fields import SortedManyToManyField
 from timedelta.fields import TimedeltaField
 
 from judge.fulltext import SearchManager
-from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
 
 
@@ -396,9 +395,11 @@ class Submission(models.Model):
         return Submission.USER_DISPLAY_CODES.get(self.short_status, '')
 
     def judge(self):
+        from judge.rabbitmq.dispatch import judge_submission
         return judge_submission(self)
 
     def abort(self):
+        from judge.rabbitmq.dispatch import abort_submission
         return abort_submission(self)
 
     def is_graded(self):

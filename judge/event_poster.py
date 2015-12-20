@@ -7,7 +7,7 @@ if not getattr(settings, 'EVENT_DAEMON_USE', False):
         return 0
 
     def last():
-        return 1
+        return 0
 elif hasattr(settings, 'EVENT_DAEMON_AMQP'):
     from .event_poster_amqp import last, post
 else:
