@@ -78,12 +78,15 @@ class ContestProfileInline(admin.StackedInline):
 
 class ProfileForm(ModelForm):
     class Meta:
+        widgets = {}
         if use_select2:
-            widgets = {
+            widgets.update({
                 'timezone': Select2Widget,
                 'language': Select2Widget,
                 'ace_theme': Select2Widget,
-            }
+            })
+        if AdminPagedownWidget is not None:
+            widgets['about'] = AdminPagedownWidget
 
 
 class TimezoneFilter(admin.SimpleListFilter):
