@@ -103,7 +103,7 @@ class ProfileAdmin(Select2SuitMixin, VersionAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
               'last_access', 'ip', 'mute', 'user_script')
     readonly_fields = ('user',)
-    list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip')
+    list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
     search_fields = ('user__username', 'name', 'ip', 'user__email')
     list_filter = ('language', TimezoneFilter)
@@ -112,6 +112,9 @@ class ProfileAdmin(Select2SuitMixin, VersionAdmin):
     actions_on_top = True
     actions_on_bottom = True
     form = ProfileForm
+    
+    def show_public(self, obj):
+         return format_html('<a href="{0}">View on site</a>', obj.get_absolute_url())
 
     def admin_user_admin(self, obj):
         return obj.long_display_name
