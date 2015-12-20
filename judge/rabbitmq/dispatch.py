@@ -41,7 +41,7 @@ def judge_submission(submission):
 
 
 def abort_submission(submission):
-    channel().basic_publish(exchange='broadcast', body=json.dumps({
+    channel().basic_publish(exchange='broadcast', routing_key='', body=json.dumps({
         'action': 'abort-submission',
         'id': submission.id,
-    }).decode('zlib'))
+    }).encode('zlib'))
