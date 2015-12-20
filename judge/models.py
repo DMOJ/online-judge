@@ -149,7 +149,7 @@ class Profile(models.Model):
                                default=False)
     rating = models.IntegerField(null=True, default=None)
     user_script = models.TextField(verbose_name=_('User script'), help_text=_('User-defined JavaScript for site customization.'),
-                               default='',  max_length=65536)
+                               default='',  blank=True, max_length=65536)
 
     @cached_property
     def organization(self):
