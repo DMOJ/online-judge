@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, Lookup
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -300,7 +300,8 @@ class Problem(models.Model):
 
     @cached_property
     def usable_languages(self):
-        return self.allowed_languages.filter(judges__in=self.judges.filter(online=True)).distinct()
+        return self.allowed_languages.filter(judges__in=self.judges.filter(
+                last_ping__within=Judge.OFFLINE_SECONDS)).distinct()
 
     class Meta:
         permissions = (
@@ -566,7 +567,23 @@ class NavigationBar(MPTTModel):
             return pattern
 
 
+@models.DateTimeField.register_lookup
+class WithinTimeLookup(Lookup):
+    lookup_name = 'within'
+
+    def get_prep_lookup(self):
+        return self.rhs
+
+    def as_sql(self, compiler, connection):
+        lhs, lhs_params = self.process_lhs(compiler, connection)
+        rhs, rhs_params = self.process_rhs(compiler, connection)
+        return '(NOW() - %s) <= %s' % (lhs, rhs), lhs_params + rhs_params
+
+
 class Judge(models.Model):
+    OFFLINE_SECONDS = 30
+    OFFLINE_DURATION = timedelta(seconds=OFFLINE_SECONDS)
+
     name = models.CharField(max_length=50, help_text=_('Server name, hostname-style'), unique=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('Time of creation'))
     auth_key = models.CharField(max_length=100, help_text=_('A key to authenticated this judge'),
@@ -583,21 +600,21 @@ class Judge(models.Model):
     def __unicode__(self):
         return self.name
 
-    @property
+    @cached_property
     def uptime(self):
         return timezone.now() - self.start_time if self.online else 'N/A'
 
-    @property
+    @cached_property
     def online(self):
         if self.last_ping is None:
             return False
-        return timezone.now() - self.last_ping < timedelta(seconds=30)
+        return timezone.now() - self.last_ping <= self.OFFLINE_DURATION
 
-    @property
+    @cached_property
     def ping_ms(self):
         return self.ping * 1000
 
-    @property
+    @cached_property
     def runtime_list(self):
         return map(attrgetter('name'), self.runtimes.all())
 
