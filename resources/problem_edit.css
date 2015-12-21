@@ -74,27 +74,6 @@
     overflow: hidden;
 }
 
-.selector-add {
-    background: url(admin/img/selector-icons.gif) 0 -161px no-repeat;
-    cursor: default;
-    margin-bottom: 2px;
-}
-
-.active.selector-add {
-    background: url(admin/img/selector-icons.gif) 0 -187px no-repeat;
-    cursor: pointer;
-}
-
-.selector-remove {
-    background: url(admin/img/selector-icons.gif) 0 -109px no-repeat;
-    cursor: default;
-}
-
-.active.selector-remove {
-    background: url(admin/img/selector-icons.gif) 0 -135px no-repeat;
-    cursor: pointer;
-}
-
 a.selector-chooseall, a.selector-clearall {
     display: inline-block;
     text-align: left;
@@ -114,26 +93,6 @@ a.selector-clearall {
 
 a.active.selector-chooseall:hover, a.active.selector-clearall:hover {
     color: #036;
-}
-
-a.selector-chooseall {
-    background: url(admin/img/selector-icons.gif) right -263px no-repeat;
-    cursor: default;
-}
-
-a.active.selector-chooseall {
-    background: url(admin/img/selector-icons.gif) right -289px no-repeat;
-    cursor: pointer;
-}
-
-a.selector-clearall {
-    background: url(admin/img/selector-icons.gif) left -211px no-repeat;
-    cursor: default;
-}
-
-a.active.selector-clearall {
-    background: url(admin/img/selector-icons.gif) left -237px no-repeat;
-    cursor: pointer;
 }
 
 .selector h2 {
