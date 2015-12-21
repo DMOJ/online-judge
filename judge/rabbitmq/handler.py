@@ -266,7 +266,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
     def on_executor_update(self, packet):
         super(AMQPJudgeResponseDaemon, self).on_executor_update(packet)
         judge = Judge.objects.get(name=packet['judge'])
-        judge.runtimes = Language.objects.filter(code__in=packet['executors'])
+        judge.runtimes = Language.objects.filter(key__in=packet['executors'])
         judge.save()
 
     def on_problem_update(self, packet):
