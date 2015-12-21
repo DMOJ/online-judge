@@ -3,6 +3,8 @@ import logging
 
 from os import getpid
 
+import time
+
 from . import connection
 
 logger = logging.getLogger('judge.handler')
@@ -32,6 +34,7 @@ class AMQPResponseDaemon(object):
     def run(self):
         self.chan.basic_consume(self._take_new_submission, queue='submission-id')
         self.chan.basic_consume(self._handle_ping, queue='judge-ping', no_ack=True)
+        self.chan.basic_consume(self._handle_latency, queue='latency', no_ack=True)
         self.chan.start_consuming()
 
     def stop(self):
@@ -68,6 +71,18 @@ class AMQPResponseDaemon(object):
         try:
             packet = json.loads(body.decode('zlib'))
             self._ping_handlers.get(packet['name'], self.on_malformed)(packet)
+        except Exception:
+            logger.exception('Error in AMQP judge ping handling')
+            chan.basic_nack(delivery_tag=method.delivery_tag)
+
+    def _handle_latency(self, chan, method, properties, body):
+        try:
+            packet = json.loads(body.decode('zlib'))
+            print 'Latency:', packet
+            if 'queue' in packet and 'time' in packet:
+                self.chan.basic_publish(exchange='', routing_key=packet['queue'], body=json.dumps({
+                    'client': packet['time'], 'server': time.time(),
+                }).encode('zlib'))
         except Exception:
             logger.exception('Error in AMQP judge ping handling')
             chan.basic_nack(delivery_tag=method.delivery_tag)
