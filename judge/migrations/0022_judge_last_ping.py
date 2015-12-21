@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='judge',
-            options={'ordering': ['load']},
+            options={'ordering': ['name']},
         ),
         migrations.RemoveField(
             model_name='judge',

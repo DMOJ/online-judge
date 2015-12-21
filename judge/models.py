@@ -632,7 +632,7 @@ class Judge(models.Model):
         return map(attrgetter('name'), self.runtimes.all())
 
     class Meta:
-        ordering = ['-last_ping']
+        ordering = ['name']
 
 
 class Contest(models.Model):

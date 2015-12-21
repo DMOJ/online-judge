@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.http import Http404
 from django.shortcuts import render
 from django.views.generic import DetailView
@@ -9,16 +11,28 @@ from judge.models import Judge
 __all__ = ['status_all', 'status_table']
 
 
+def get_judges(request):
+    if request.user.is_superuser or request.user.is_staff:
+        return True, list(chain(Judge.objects.filter(last_ping__within=Judge.OFFLINE_SECONDS),
+                                Judge.objects.exclude(last_ping__within=Judge.OFFLINE_SECONDS)))
+    else:
+        return False, Judge.objects.filter(last_ping__within=Judge.OFFLINE_SECONDS)
+
+
 def status_all(request):
+    see_all, judges = get_judges(request)
     return render(request, 'judge_status.jade', {
-        'judges': Judge.objects.all(),
         'title': 'Status',
+        'judges': judges,
+        'see_all_judges': see_all,
     })
 
 
 def status_table(request):
+    see_all, judges = get_judges(request)
     return render(request, 'judge_status_table.jade', {
-        'judges': Judge.objects.all(),
+        'judges': judges,
+        'see_all_judges': see_all,
     })
 
 
@@ -42,5 +56,5 @@ class JudgeDetail(TitleMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(JudgeDetail, self).get_context_data(**kwargs)
-        context['judges'] = Judge.objects.all()
+        context['see_all_judges'], context['judges'] = get_judges(self.request)
         return context
