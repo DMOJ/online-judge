@@ -87,21 +87,21 @@ class AMQPResponseDaemon(object):
             chan.basic_nack(delivery_tag=method.delivery_tag)
 
     def on_acknowledged(self, packet):
-        logger.info('Submission acknowledged: %d', packet['id'])
+        logger.info('%s: Submission acknowledged: %d', packet['judge'], packet['id'])
 
     def on_grading_begin(self, packet):
-        logger.info('Grading has begun on: %s', packet['id'])
+        logger.info('%s: Grading has begun on: %s', packet['judge'], packet['id'])
 
     def on_grading_end(self, packet):
-        logger.info('Grading has ended on: %s', packet['id'])
+        logger.info('%s: Grading has ended on: %s', packet['judge'], packet['id'])
         self._finish_submission(packet['id'])
 
     def on_compile_error(self, packet):
-        logger.info('Submission failed to compile: %s', packet['id'])
+        logger.info('%s: Submission failed to compile: %s', packet['judge'], packet['id'])
         self._finish_submission(packet['id'])
 
     def on_compile_message(self, packet):
-        logger.info('Submission generated compiler messages: %s', packet['id'])
+        logger.info('%s: Submission generated compiler messages: %s', packet['judge'], packet['id'])
 
     def on_internal_error(self, packet):
         try:
@@ -110,14 +110,16 @@ class AMQPResponseDaemon(object):
             logger.exception('Judge %s failed while handling submission %s', packet['judge'], packet['id'])
 
     def on_aborted(self, packet):
-        logger.info('Submission aborted: %s', packet['id'])
+        logger.info('%s: Submission aborted: %s', packet['judge'], packet['id'])
         self._finish_submission(packet['id'])
 
     def on_test_case(self, packet):
         if packet['batch']:
-            logger.info('Test case completed on: %s, batch #%d, case #%d', packet['id'], packet['batch'], packet['position'])
+            logger.info('%s: Test case completed on: %s, batch #%d, case #%d',
+                        packet['judge'], packet['id'], packet['batch'], packet['position'])
         else:
-            logger.info('Test case completed on: %s, case #%d', packet['id'], packet['position'])
+            logger.info('%s: Test case completed on: %s, case #%d',
+                        packet['judge'], packet['id'], packet['position'])
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)
