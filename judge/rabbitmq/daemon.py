@@ -27,6 +27,7 @@ class AMQPResponseDaemon(object):
             'executor-update': self.on_executor_update,
         }
         self._submission_tags = {}
+        self._submission_ack = {}
 
     def run(self):
         self.chan.basic_consume(self._take_new_submission, queue='submission-id')
@@ -37,23 +38,29 @@ class AMQPResponseDaemon(object):
         self.chan.stop_consuming()
 
     def _take_new_submission(self, chan, method, properties, body):
-        chan.basic_ack(delivery_tag=method.delivery_tag)
-        if not body.isdigit():
+        try:
+            id = int(body)
+        except ValueError:
+            chan.basic_ack(delivery_tag=method.delivery_tag)
             return
-        tag = self.chan.basic_consume(self._handle_judge_response, queue='sub-' + body, no_ack=True)
-        self._submission_tags[int(body)] = tag
-        logger.info('Declare responsibility for: %d: pid %d', int(body), getpid())
+        tag = self.chan.basic_consume(self._handle_judge_response, queue='sub-%d' % id)
+        self._submission_ack[id] = method.delivery_tag
+        self._submission_tags[id] = tag
+        logger.info('Declare responsibility for: %d: pid %d', id, getpid())
 
     def _finish_submission(self, id):
+        self.chan.basic_ack(delivery_tag=self._submission_ack[id])
         self.chan.basic_cancel(self._submission_tags[id])
         self.chan.queue_delete('sub-%d' % id)
         del self._submission_tags[id]
+        del self._submission_ack[id]
         logger.info('Finished responsibility for: %d: pid %d', id, getpid())
 
     def _handle_judge_response(self, chan, method, properties, body):
         try:
             packet = json.loads(body.decode('zlib'))
             self._judge_response_handlers.get(packet['name'], self.on_malformed)(packet)
+            chan.basic_ack(delivery_tag=method.delivery_tag)
         except Exception:
             logger.exception('Error in AMQP judge response handling')
 
