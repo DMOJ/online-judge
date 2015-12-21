@@ -78,7 +78,6 @@ class AMQPResponseDaemon(object):
     def _handle_latency(self, chan, method, properties, body):
         try:
             packet = json.loads(body.decode('zlib'))
-            print 'Latency:', packet
             if 'queue' in packet and 'time' in packet:
                 self.chan.basic_publish(exchange='', routing_key=packet['queue'], body=json.dumps({
                     'client': packet['time'], 'server': time.time(),
