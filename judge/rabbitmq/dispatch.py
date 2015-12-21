@@ -38,10 +38,13 @@ def judge_submission(submission):
         'memory-limit': memory,
         'short-circuit': problem.short_circuit,
     }).encode('zlib'))
+    chan.close()
 
 
 def abort_submission(submission):
-    channel().basic_publish(exchange='broadcast', routing_key='', body=json.dumps({
+    chan = channel()
+    chan.basic_publish(exchange='broadcast', routing_key='', body=json.dumps({
         'action': 'abort-submission',
         'id': submission.id,
     }).encode('zlib'))
+    chan.close()
