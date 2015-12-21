@@ -424,7 +424,6 @@ class SubmissionAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
             self.message_user(request, 'You do not have the permission to rejudge submissions.', level=messages.ERROR)
             return
-        successful = 0
         queryset = queryset.order_by('id')
         if queryset.count() > 10 and not request.user.has_perm('judge.rejudge_submission_lot'):
             self.message_user(request, 'You do not have the permission to rejudge THAT many submissions.',
@@ -432,10 +431,11 @@ class SubmissionAdmin(admin.ModelAdmin):
             return
         if not request.user.has_perm('judge.edit_all_problem'):
             queryset = queryset.filter(problem__authors__id=request.user.profile.id)
+        judged = len(queryset)
         for model in queryset:
-            successful += model.judge()
+            model.judge()
         self.message_user(request, '%d submission%s were successfully scheduled for rejudging.' %
-                          (successful, 's'[successful == 1:]))
+                          (judged, 's'[judged == 1:]))
     judge.short_description = 'Rejudge the selected submissions'
 
     def execution_time(self, obj):
