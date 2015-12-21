@@ -30,25 +30,6 @@ html(lang='en')
         | <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         | <script>window.bad_browser = true</script>
         | <![endif]-->
-        if IN_CONTEST
-            style.
-                #contest-info {
-                    height: 1.4em;
-                    font-size: 1.25em;
-                    border-bottom: 1px solid #2980B9;
-                    margin-bottom: 2px;
-                }
-
-                #contest-info a {
-                    height: 1.4em;
-                    padding: 0;
-                    margin: 0;
-                    color: white;
-                }
-
-                #contest-time-remaining {
-                    display: inline-block;
-                }
         block meta
         if INLINE_FONTAWESOME
             - compress css
@@ -120,11 +101,6 @@ html(lang='en')
                     - endrecursetree
                 span#user-links(style='height: 100%')
                     if request.user.is_authenticated
-                        if IN_CONTEST
-                            #contest-info
-                                a(href='{% url "contest_view" CONTEST.contest.key %}', style='vertical-align: middle;')
-                                    | #{CONTEST.contest.name} -
-                                    #contest-time-remaining #{CONTEST.time_remaining|timedelta:"simple"}
                         ul(style='display: block; margin: 0')
                             li(style='display: block; height: 100%')
                                 a(href='{% url "user_page" %}', style='display: block; padding: 0px; height: 100%')
@@ -145,6 +121,11 @@ html(lang='en')
                             | &nbsp;|&nbsp;
                             a(href='/accounts/register/') {% trans "Register" %}
             #nav-shadow
+        if IN_CONTEST
+            #contest-info
+                a(href='{% url "contest_view" CONTEST.contest.key %}', style='vertical-align: middle;')
+                    | #{CONTEST.contest.name} -
+                    #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
         #page-container
             noscript: #noscript
                 - trans "This site works best with JavaScript enabled."
