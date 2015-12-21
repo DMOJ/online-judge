@@ -1,18 +1,7 @@
 import json
-import threading
 
 from judge.models import LanguageLimit
 from judge.rabbitmq import connection
-
-
-_local = threading.local()
-
-
-def channel():
-    if hasattr(_local, 'chan'):
-        return _local.chan
-    chan = _local.chan = connection.connect().channel()
-    return chan
 
 
 def judge_submission(submission):
@@ -25,7 +14,7 @@ def judge_submission(submission):
     else:
         time, memory = limit.time_limit, limit.memory_limit
 
-    chan = channel()
+    chan = connection.connect().channel()
     result = chan.queue_declare(queue='sub-%d' % submission.id)
     if not result.method.consumer_count:
         chan.basic_publish(exchange='', routing_key='submission-id', body=str(submission.id))
@@ -42,7 +31,7 @@ def judge_submission(submission):
 
 
 def abort_submission(submission):
-    chan = channel()
+    chan = connection.connect().channel()
     chan.basic_publish(exchange='broadcast', routing_key='', body=json.dumps({
         'action': 'abort-submission',
         'id': submission.id,
