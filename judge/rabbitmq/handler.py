@@ -1,15 +1,14 @@
 import logging
-
 from datetime import datetime
 
 import pytz
 from django import db
 from django.utils import timezone
 
-from .daemon import AMQPResponseDaemon
+from judge import event_poster as event
 from judge.caching import finished_submission
 from judge.models import Submission, SubmissionTestCase, Judge, Problem, Language
-from judge import event_poster as event
+from .daemon import AMQPResponseDaemon
 
 logger = logging.getLogger('judge.handler')
 
@@ -279,6 +278,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
     def on_ping(self, packet):
         super(AMQPJudgeResponseDaemon, self).on_ping(packet)
         Judge.objects.filter(name=packet['judge']).update(
-                ping=packet['latency'], load=packet['load'], last_ping=timezone.now(),
+                ping=packet.get('latency'), load=packet.get('load'), last_ping=timezone.now(),
                 start_time=timezone.make_aware(datetime.utcfromtimestamp(packet['start']), pytz.utc)
+                if 'start' in packet else timezone.now()
         )
