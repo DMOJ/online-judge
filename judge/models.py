@@ -25,6 +25,7 @@ from timedelta.fields import TimedeltaField
 
 from judge.fulltext import SearchManager
 from judge.model_choices import ACE_THEMES
+from judge import event_poster as event
 
 
 def make_timezones():
@@ -398,11 +399,23 @@ class Submission(models.Model):
 
     def judge(self):
         from judge.rabbitmq.dispatch import judge_submission
-        return judge_submission(self)
+        self.time = None
+        self.memory = None
+        self.points = None
+        self.status = 'QU'
+        self.result = None
+        self.error = None
+        self.save()
+        SubmissionTestCase.objects.filter(submission=self).delete()
+        judge_submission(self)
+        if self.problem.is_public:
+            event.post('submissions', {'type': 'update-submission', 'id': self.id,
+                                       'contest': self.contest_key,
+                                       'user': self.user_id, 'problem': self.problem_id})
 
     def abort(self):
         from judge.rabbitmq.dispatch import abort_submission
-        return abort_submission(self)
+        abort_submission(self)
 
     def is_graded(self):
         return self.status not in ('QU', 'P', 'G')
