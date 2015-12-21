@@ -298,7 +298,7 @@ class Problem(models.Model):
     def usable_common_names(self):
         return set(self.usable_languages.values_list('common_name', flat=True))
 
-    @cached_property
+    @property
     def usable_languages(self):
         return self.allowed_languages.filter(judges__in=self.judges.filter(
                 last_ping__within=Judge.OFFLINE_SECONDS)).distinct()
