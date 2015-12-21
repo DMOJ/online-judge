@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='user_script',
-            field=models.TextField(default=b'', help_text=b'User-defined JavaScript for site customization.', max_length=65536, verbose_name=b'User script'),
+            field=models.TextField(blank=True, default=b'', help_text='User-defined JavaScript for site customization.', max_length=65536, verbose_name='User script'),
         ),
     ]
