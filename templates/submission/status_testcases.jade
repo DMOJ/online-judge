@@ -72,7 +72,7 @@ if submission.status != 'IE'
                         tr(id=case.id, style='display:none').toggled
                             td(colspan='5'): .case-info
                                 strong {% trans "Your output (clipped)" %}
-                                if prefix_length is None
+                                if prefix_length == None
                                     .case-output #{case.output|linebreaksbr}
                                 else
                                     .case-output #{case.output|cutoff:prefix_length|linebreaksbr}
