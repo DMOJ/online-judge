@@ -31,7 +31,7 @@ class AMQPResponseDaemon(object):
 
     def run(self):
         self.chan.basic_consume(self._take_new_submission, queue='submission-id')
-        self.chan.basic_consume(self._handle_ping, queue='judge-ping')
+        self.chan.basic_consume(self._handle_ping, queue='judge-ping', no_ack=True)
         self.chan.start_consuming()
 
     def stop(self):
@@ -68,7 +68,6 @@ class AMQPResponseDaemon(object):
         try:
             packet = json.loads(body.decode('zlib'))
             self._ping_handlers.get(packet['name'], self.on_malformed)(packet)
-            chan.basic_ack(delivery_tag=method.delivery_tag)
         except Exception:
             logger.exception('Error in AMQP judge ping handling')
             chan.basic_nack(delivery_tag=method.delivery_tag)
