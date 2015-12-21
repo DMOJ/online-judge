@@ -2,6 +2,12 @@
 - load filesize
 - load counter
 - load i18n
+- load strings
+
+if IN_CONTEST and submission.contest_or_none and CONTEST.id == submission.contest_or_none.participation_id
+    - var prefix_length = submission.contest_or_none.problem.output_prefix_override
+else
+    - var prefix_length = None
 
 if submission.status != 'IE'
     if submission.status == 'QU'
@@ -64,10 +70,12 @@ if submission.status != 'IE'
                             td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
                     if case.status != 'AC' and case.output
                         tr(id=case.id, style='display:none').toggled
-                            td(colspan='5')
-                                .case-info
-                                    strong {% trans "Your output (clipped)" %}
+                            td(colspan='5'): .case-info
+                                strong {% trans "Your output (clipped)" %}
+                                if prefix_length is None
                                     .case-output #{case.output|linebreaksbr}
+                                else
+                                    .case-output #{case.output|cutoff:prefix_length|linebreaksbr}
             if batch.grouper
                 | </div>
             br

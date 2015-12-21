@@ -9,6 +9,11 @@ def split(value):
     return value.split('\n')
 
 
+@register.filter(name='cutoff')
+def cutoff(value, length):
+    return value[:int(length)]
+
+
 def do_startswith(parser, token, negate):
     try:
         # split_contents() knows not to split quoted strings.
