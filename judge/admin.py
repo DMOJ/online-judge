@@ -424,7 +424,6 @@ class SubmissionAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
             self.message_user(request, 'You do not have the permission to rejudge submissions.', level=messages.ERROR)
             return
-        successful = 0
         queryset = queryset.order_by('id')
         if queryset.count() > 10 and not request.user.has_perm('judge.rejudge_submission_lot'):
             self.message_user(request, 'You do not have the permission to rejudge THAT many submissions.',
@@ -432,10 +431,11 @@ class SubmissionAdmin(admin.ModelAdmin):
             return
         if not request.user.has_perm('judge.edit_all_problem'):
             queryset = queryset.filter(problem__authors__id=request.user.profile.id)
+        judged = len(queryset)
         for model in queryset:
-            successful += model.judge()
+            model.judge()
         self.message_user(request, '%d submission%s were successfully scheduled for rejudging.' %
-                          (successful, 's'[successful == 1:]))
+                          (judged, 's'[judged == 1:]))
     judge.short_description = 'Rejudge the selected submissions'
 
     def execution_time(self, obj):
@@ -695,15 +695,20 @@ class JudgeAdminForm(ModelForm):
 
 class JudgeAdmin(VersionAdmin):
     form = JudgeAdminForm
-    readonly_fields = ('created', 'online', 'last_connect', 'ping', 'load', 'runtimes', 'problems')
+    readonly_fields = ('created', 'online', 'start_time', 'last_ping', 'ping', 'load', 'runtimes', 'problems')
     fieldsets = (
         (None, {'fields': ('name', 'auth_key')}),
         ('Description', {'fields': ('description',)}),
-        ('Information', {'fields': ('created', 'online', 'last_connect', 'ping', 'load')}),
+        ('Information', {'fields': ('created', 'online', 'start_time', 'last_ping', 'ping', 'load')}),
         ('Capabilities', {'fields': ('runtimes', 'problems')}),
     )
-    list_display = ('name', 'online', 'last_connect', 'ping', 'load')
+    list_display = ('name', 'is_online', 'start_time', 'ping', 'load')
     ordering = ['name']
+
+    def is_online(self, obj):
+        return obj.online
+    is_online.short_description = 'Online'
+    is_online.boolean = True
 
     def get_readonly_fields(self, request, obj=None):
         if obj is not None and obj.online:

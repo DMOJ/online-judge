@@ -1,4 +1,5 @@
 import pika
+from pika.exceptions import ConnectionClosed
 from django.conf import settings
 
 URL = settings.JUDGE_AMQP_PATH
@@ -7,17 +8,24 @@ vhost = params.virtual_host
 conn = None
 
 
+def initialize(chan):
+    chan.queue_declare(queue='submission', durable=True)
+    chan.queue_declare(queue='submission-id', durable=True)
+    chan.queue_declare(queue='judge-ping', durable=True)
+    chan.queue_declare(queue='latency', durable=True)
+    chan.exchange_declare(exchange='broadcast', exchange_type='fanout', durable=True)
+    chan.close()
+
+
 def connect():
     global conn
-    if conn is None:
-        conn = pika.BlockingConnection(params)
-        chan = conn.channel()
-        chan.queue_declare(queue='submission', durable=True)
-        chan.queue_declare(queue='judge-response', durable=True)
-        chan.queue_declare(queue='judge-ping', durable=True)
-        chan.exchange_declare(exchange='broadcast', exchange_type='fanout', durable=True)
-        chan.exchange_declare(exchange='submission-response', exchange_type='fanout', durable=True)
-        chan.exchange_declare(exchange='ping', exchange_type='fanout', durable=True)
-        chan.queue_bind(queue='judge-response', exchange='submission-response')
-        chan.queue_bind(queue='judge-ping', exchange='ping')
+    if conn is not None:
+        try:
+            conn.process_data_events()
+        except ConnectionClosed:
+            pass
+        else:
+            return conn
+    conn = pika.BlockingConnection(params)
+    initialize(conn.channel())
     return conn

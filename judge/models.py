@@ -3,6 +3,7 @@ from collections import defaultdict
 from operator import itemgetter, attrgetter
 
 import pytz
+from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
@@ -11,7 +12,7 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, Lookup
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -23,8 +24,8 @@ from sortedm2m.fields import SortedManyToManyField
 from timedelta.fields import TimedeltaField
 
 from judge.fulltext import SearchManager
-from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
+from judge import event_poster as event
 
 
 def make_timezones():
@@ -298,9 +299,10 @@ class Problem(models.Model):
     def usable_common_names(self):
         return set(self.usable_languages.values_list('common_name', flat=True))
 
-    @cached_property
+    @property
     def usable_languages(self):
-        return self.allowed_languages.filter(judges__in=self.judges.filter(online=True)).distinct()
+        return self.allowed_languages.filter(judges__in=self.judges.filter(
+                last_ping__within=Judge.OFFLINE_SECONDS)).distinct()
 
     class Meta:
         permissions = (
@@ -396,10 +398,24 @@ class Submission(models.Model):
         return Submission.USER_DISPLAY_CODES.get(self.short_status, '')
 
     def judge(self):
-        return judge_submission(self)
+        from judge.rabbitmq.dispatch import judge_submission
+        self.time = None
+        self.memory = None
+        self.points = None
+        self.status = 'QU'
+        self.result = None
+        self.error = None
+        self.save()
+        SubmissionTestCase.objects.filter(submission=self).delete()
+        judge_submission(self)
+        if self.problem.is_public:
+            event.post('submissions', {'type': 'update-submission', 'id': self.id,
+                                       'contest': self.contest_key,
+                                       'user': self.user_id, 'problem': self.problem_id})
 
     def abort(self):
-        return abort_submission(self)
+        from judge.rabbitmq.dispatch import abort_submission
+        abort_submission(self)
 
     def is_graded(self):
         return self.status not in ('QU', 'P', 'G')
@@ -564,13 +580,29 @@ class NavigationBar(MPTTModel):
             return pattern
 
 
+@models.DateTimeField.register_lookup
+class WithinTimeLookup(Lookup):
+    lookup_name = 'within'
+
+    def get_prep_lookup(self):
+        return self.rhs
+
+    def as_sql(self, compiler, connection):
+        lhs, lhs_params = self.process_lhs(compiler, connection)
+        rhs, rhs_params = self.process_rhs(compiler, connection)
+        return '(NOW() - %s) <= %s' % (lhs, rhs), lhs_params + rhs_params
+
+
 class Judge(models.Model):
+    OFFLINE_SECONDS = 30
+    OFFLINE_DURATION = timedelta(seconds=OFFLINE_SECONDS)
+
     name = models.CharField(max_length=50, help_text=_('Server name, hostname-style'), unique=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('Time of creation'))
     auth_key = models.CharField(max_length=100, help_text=_('A key to authenticated this judge'),
                                 verbose_name=_('Authentication key'))
-    online = models.BooleanField(default=False)
-    last_connect = models.DateTimeField(verbose_name=_('Last connection time'), null=True)
+    start_time = models.DateTimeField(verbose_name=_('Judge start time'), null=True)
+    last_ping = models.DateTimeField(verbose_name=_('Last ping time'), null=True)
     ping = models.FloatField(verbose_name=_('Response time'), null=True)
     load = models.FloatField(verbose_name=_('System load'), null=True,
                              help_text=_('Load for the last minute, divided by processors to be fair.'))
@@ -581,20 +613,26 @@ class Judge(models.Model):
     def __unicode__(self):
         return self.name
 
-    @property
+    @cached_property
     def uptime(self):
-        return timezone.now() - self.last_connect if self.online else 'N/A'
+        return timezone.now() - self.start_time if self.online else 'N/A'
 
-    @property
+    @cached_property
+    def online(self):
+        if self.last_ping is None:
+            return False
+        return timezone.now() - self.last_ping <= self.OFFLINE_DURATION
+
+    @cached_property
     def ping_ms(self):
         return self.ping * 1000
 
-    @property
+    @cached_property
     def runtime_list(self):
         return map(attrgetter('name'), self.runtimes.all())
 
     class Meta:
-        ordering = ['-online', 'load']
+        ordering = ['-last_ping']
 
 
 class Contest(models.Model):

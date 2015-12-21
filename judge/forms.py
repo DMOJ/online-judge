@@ -1,14 +1,16 @@
 from operator import attrgetter
 
+from datetime import timedelta
 from django import forms
 from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from django.forms import ModelForm, CharField, TextInput
+from django.utils import timezone
 
 from django_ace import AceWidget
-from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode, Language
+from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode, Language, Judge
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 try:
@@ -53,7 +55,8 @@ class ProblemSubmitForm(ModelForm):
         self.fields['problem'].widget = forms.HiddenInput()
         self.fields['language'].empty_label = None
         self.fields['language'].label_from_instance = attrgetter('display_name')
-        self.fields['language'].queryset = Language.objects.filter(judges__online=True).distinct()
+        self.fields['language'].queryset = Language.objects.filter(
+                judges__last_ping__within=Judge.OFFLINE_SECONDS).distinct()
 
     class Meta:
         model = Submission

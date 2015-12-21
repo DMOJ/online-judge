@@ -1,11 +1,14 @@
 import logging
+from datetime import datetime
 
+import pytz
 from django import db
+from django.utils import timezone
 
-from .daemon import AMQPResponseDaemon
+from judge import event_poster as event
 from judge.caching import finished_submission
 from judge.models import Submission, SubmissionTestCase, Judge, Problem, Language
-from judge import event_poster as event
+from .daemon import AMQPResponseDaemon
 
 logger = logging.getLogger('judge.handler')
 
@@ -37,6 +40,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
                                    'user': submission.user_id, 'problem': submission.problem_id})
 
     def on_grading_begin(self, packet):
+        super(AMQPJudgeResponseDaemon, self).on_grading_begin(packet)
         try:
             submission = Submission.objects.get(id=packet['id'])
         except Submission.DoesNotExist:
@@ -57,9 +61,9 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
     def on_aborted(self, packet):
         super(AMQPJudgeResponseDaemon, self).on_aborted(packet)
         try:
-            submission = Submission.objects.get(id=packet['submission-id'])
+            submission = Submission.objects.get(id=packet['id'])
         except Submission.DoesNotExist:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+            logger.warning('Unknown submission: %d', packet['id'])
             return
         submission.status = submission.result = 'AB'
         submission.save()
@@ -73,10 +77,11 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
                                    'user': submission.user_id, 'problem': submission.problem_id})
 
     def on_internal_error(self, packet):
+        super(AMQPJudgeResponseDaemon, self).on_internal_error(packet)
         try:
-            submission = Submission.objects.get(id=packet['submission-id'])
+            submission = Submission.objects.get(id=packet['id'])
         except Submission.DoesNotExist:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+            logger.warning('Unknown submission: %d', packet['id'])
             return
         submission.status = submission.result = 'IE'
         submission.save()
@@ -92,9 +97,9 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
     def on_compile_error(self, packet):
         super(AMQPJudgeResponseDaemon, self).on_compile_error(packet)
         try:
-            submission = Submission.objects.get(id=packet['submission-id'])
+            submission = Submission.objects.get(id=packet['id'])
         except Submission.DoesNotExist:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+            logger.warning('Unknown submission: %d', packet['id'])
             return
         submission.status = submission.result = 'CE'
         submission.error = packet['log']
@@ -112,9 +117,9 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
     def on_compile_message(self, packet):
         super(AMQPJudgeResponseDaemon, self).on_compile_message(packet)
         try:
-            submission = Submission.objects.get(id=packet['submission-id'])
+            submission = Submission.objects.get(id=packet['id'])
         except Submission.DoesNotExist:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+            logger.warning('Unknown submission: %d', packet['id'])
             return
         submission.error = packet['log']
         submission.save()
@@ -125,9 +130,9 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
     def on_test_case(self, packet):
         super(AMQPJudgeResponseDaemon, self).on_test_case(packet)
         try:
-            submission = Submission.objects.get(id=packet['submission-id'])
+            submission = Submission.objects.get(id=packet['id'])
         except Submission.DoesNotExist:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+            logger.warning('Unknown submission: %d', packet['id'])
             return
         test_case = SubmissionTestCase(submission=submission, case=packet['position'])
         status = packet['status']
@@ -174,10 +179,11 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
                                    'user': submission.user_id, 'problem': submission.problem_id})
 
     def on_grading_end(self, packet):
+        super(AMQPJudgeResponseDaemon, self).on_grading_end(packet)
         try:
-            submission = Submission.objects.get(id=packet['submission-id'])
+            submission = Submission.objects.get(id=packet['id'])
         except Submission.DoesNotExist:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+            logger.warning('Unknown submission: %d', packet['id'])
             return
 
         time = 0
@@ -260,7 +266,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
     def on_executor_update(self, packet):
         super(AMQPJudgeResponseDaemon, self).on_executor_update(packet)
         judge = Judge.objects.get(name=packet['judge'])
-        judge.runtimes = Language.objects.filter(code__in=packet['executors'])
+        judge.runtimes = Language.objects.filter(key__in=packet['executors'])
         judge.save()
 
     def on_problem_update(self, packet):
@@ -271,4 +277,8 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
 
     def on_ping(self, packet):
         super(AMQPJudgeResponseDaemon, self).on_ping(packet)
-        Judge.objects.filter(name=packet['judge']).update(ping=packet['latency'], load=packet['load'])
+        Judge.objects.filter(name=packet['judge']).update(
+                ping=packet.get('latency'), load=packet.get('load'), last_ping=timezone.now(),
+                start_time=timezone.make_aware(datetime.utcfromtimestamp(packet['start']), pytz.utc)
+                if 'start' in packet else timezone.now()
+        )

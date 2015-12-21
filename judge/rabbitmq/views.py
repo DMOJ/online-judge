@@ -16,8 +16,7 @@ def auth_vhost(request):
 
 EXCHANGE_PERMS = {
     'broadcast': {'read'},
-    'submission-response': {'write'},
-    'ping': {'write'}
+    'amq.default': {'write'},
 }
 
 
@@ -31,8 +30,12 @@ def auth_resource(request):
     if type == 'queue':
         if name.startswith('amq.gen'):
             return HttpResponse(['deny', 'allow'][permission in {'read', 'write', 'configure'}])
+        elif name.startswith('latency'):
+            return HttpResponse(['deny', 'allow'][permission in {'read', 'write'}])
         elif name.startswith('submission'):
             return HttpResponse(['deny', 'allow'][permission == 'read'])
+        elif name.startswith('sub-'):
+            return HttpResponse(['deny', 'allow'][permission in {'read', 'write', 'configure'}])
         else:
             return HttpResponse('deny')
     elif type == 'exchange':
