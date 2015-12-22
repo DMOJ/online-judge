@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.utils.html import format_html
+from django.utils.translation import ugettext as _
 
 from judge.models import Submission
 from judge.views.submission import ProblemSubmissions, ForceContestMixin
@@ -46,10 +47,10 @@ class RankedSubmissions(ProblemSubmissions):
             params=(self.problem.id, self.contest.id) * 3 if self.in_contest else (self.problem.id,) * 3)
 
     def get_title(self):
-        return 'Best solutions for %s' % self.problem.name
+        return _('Best solutions for %s') % self.problem.name
 
     def get_content_title(self):
-        return format_html(u'Best solutions for <a href="{1}">{0}</a>', self.problem.name,
+        return format_html(_(u'Best solutions for <a href="{1}">{0}</a>'), self.problem.name,
                            reverse('problem_detail', args=[self.problem.code]))
 
     def get_result_table(self):
@@ -58,10 +59,10 @@ class RankedSubmissions(ProblemSubmissions):
 
 class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
     def get_title(self):
-        return 'Best solutions for %s in %s' % (self.problem.name, self.contest.name)
+        return _('Best solutions for %s in %s') % (self.problem.name, self.contest.name)
 
     def get_content_title(self):
-        return format_html(u'Best solutions for <a href="{1}">{0}</a> in <a href="{3}">{2}</a>',
+        return format_html(_(u'Best solutions for <a href="{1}">{0}</a> in <a href="{3}">{2}</a>'),
                            self.problem.name, reverse('problem_detail', args=[self.problem.code]),
                            self.contest.name, reverse('contest_view', args=[self.contest.key]))
 

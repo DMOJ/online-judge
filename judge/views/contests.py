@@ -17,6 +17,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.utils.html import escape
 from django.utils.timezone import make_aware
+from django.utils.translation import ugettext as _, ugettext_lazy as __
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView
 
@@ -37,8 +38,8 @@ def _find_contest(request, key, private_check=True):
         if private_check and not contest.is_public and not request.user.has_perm('judge.see_private_contest'):
             raise ObjectDoesNotExist()
     except ObjectDoesNotExist:
-        return generic_message(request, 'No such contest',
-                               'Could not find a contest with the key "%s".' % key, status=404), False
+        return generic_message(request, _('No such contest'),
+                               _('Could not find a contest with the key "%s".') % key, status=404), False
     return contest, True
 
 
@@ -58,7 +59,7 @@ class ContestListMixin(object):
 class ContestList(TitleMixin, ContestListMixin, ListView):
     model = Contest
     template_name = 'contest/list.jade'
-    title = 'Contests'
+    title = __('Contests')
 
     def get_queryset(self):
         return super(ContestList, self).get_queryset().annotate(participation_count=Count('users')) \
@@ -119,14 +120,14 @@ class ContestMixin(object):
         except Http404:
             key = kwargs.get(self.slug_url_kwarg, None)
             if key:
-                return generic_message(request, 'No such contest',
-                                       'Could not find a contest with the key "%s".' % key)
+                return generic_message(request, _('No such contest'),
+                                       _('Could not find a contest with the key "%s".') % key)
             else:
-                return generic_message(request, 'No such contest',
-                                       'Could not find such contest.')
+                return generic_message(request, _('No such contest'),
+                                       _('Could not find such contest.'))
         except PrivateContestError as e:
             return render(request, 'contest/private.jade', {
-                'orgs': e.orgs, 'title': 'Access to contest "%s" denied' % escape(e.name)
+                'orgs': e.orgs, 'title': _('Access to contest "%s" denied') % escape(e.name)
             }, status=403)
 
 
@@ -164,13 +165,13 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def get(self, request, *args, **kwargs):
         contest = self.get_object()
         if not contest.can_join:
-            return generic_message(request, 'Contest not ongoing',
-                                   '"%s" is not currently ongoing.' % contest.name)
+            return generic_message(request, _('Contest not ongoing'),
+                                   _('"%s" is not currently ongoing.') % contest.name)
 
         contest_profile = request.user.profile.contest
         if contest_profile.current is not None:
-            return generic_message(request, 'Already in contest',
-                                   'You are already in a contest: "%s".' % contest_profile.current.contest.name)
+            return generic_message(request, _('Already in contest'),
+                                   _('You are already in a contest: "%s".') % contest_profile.current.contest.name)
 
         participation, created = ContestParticipation.objects.get_or_create(
             contest=contest, profile=contest_profile, defaults={
@@ -179,8 +180,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
         )
 
         if not created and participation.ended:
-            return generic_message(request, 'Time limit exceeded',
-                                   'Too late! You already used up your time limit for "%s".' % contest.name)
+            return generic_message(request, _('Time limit exceeded'),
+                                   _('Too late! You already used up your time limit for "%s".') % contest.name)
 
         contest_profile.current = participation
         contest_profile.save()
@@ -193,8 +194,8 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
 
         contest_profile = request.user.profile.contest
         if contest_profile.current is None or contest_profile.current.contest != contest:
-            return generic_message(request, 'No such contest',
-                                   'You are not in contest "%s".' % contest.key, 404)
+            return generic_message(request, _('No such contest'),
+                                   _('You are not in contest "%s".') % contest.key, 404)
         contest_profile.current = None
         contest_profile.save()
         return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
@@ -213,7 +214,7 @@ class ContestCalendar(ContestListMixin, TemplateView):
             self.year = int(kwargs['year'])
             self.month = int(kwargs['month'])
         except (KeyError, ValueError):
-            raise ImproperlyConfigured('ContestCalender requires integer year and month')
+            raise ImproperlyConfigured(_('ContestCalender requires integer year and month'))
         return self.render()
 
     def render(self):

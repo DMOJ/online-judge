@@ -6,12 +6,13 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404, HttpResponseRedirect
+from django.utils.translation import ugettext as _
 from django.views.generic import View
 
 from judge.models import Submission
 
-
 __all__ = ['rejudge_submission', 'DetectTimezone']
+
 
 @login_required
 def rejudge_submission(request):
@@ -37,6 +38,7 @@ def rejudge_submission(request):
     
     return HttpResponseRedirect(redirect) if redirect else HttpResponse('success', content_type='text/plain')
 
+
 class DetectTimezone(View):
     def askgeo(self, lat, long):
         if not hasattr(settings, 'ASKGEO_ACCOUNT_ID') or not hasattr(settings, 'ASKGEO_ACCOUNT_API_KEY'):
@@ -47,7 +49,7 @@ class DetectTimezone(View):
             try:
                 return HttpResponse(data['data'][0]['TimeZone']['TimeZoneId'], content_type='text/plain')
             except (IndexError, KeyError):
-                return HttpResponse('Invalid upstream data: %s' % data, content_type='text/plain', status=500)
+                return HttpResponse(_('Invalid upstream data: %s') % data, content_type='text/plain', status=500)
 
     def geonames(self, lat, long):
         if not hasattr(settings, 'GEONAMES_USERNAME'):
@@ -58,7 +60,7 @@ class DetectTimezone(View):
             try:
                 return HttpResponse(data['timezoneId'], content_type='text/plain')
             except KeyError:
-                return HttpResponse('Invalid upstream data: %s' % data, content_type='text/plain', status=500)
+                return HttpResponse(_('Invalid upstream data: %s') % data, content_type='text/plain', status=500)
 
     def default(self, lat, long):
         raise Http404()
@@ -68,7 +70,7 @@ class DetectTimezone(View):
         try:
             lat, long = float(request.GET['lat']), float(request.GET['long'])
         except (ValueError, KeyError):
-            return HttpResponse('Bad latitude or longitude', content_type='text/plain', status=404)
+            return HttpResponse(_('Bad latitude or longitude'), content_type='text/plain', status=404)
         return {
             'askgeo': self.askgeo,
             'geonames': self.geonames,

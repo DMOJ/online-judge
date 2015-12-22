@@ -11,6 +11,7 @@ from django.db import transaction
 from django.db.models import Count, Max
 from django.forms import Form, modelformset_factory
 from django.http import HttpResponseRedirect, Http404
+from django.utils.translation import ugettext as _, ugettext_lazy as __
 from django.views.generic import DetailView, ListView, View, UpdateView, FormView
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 from reversion import revisions
@@ -37,11 +38,11 @@ class OrganizationMixin(object):
         except Http404:
             key = kwargs.get(self.slug_url_kwarg, None)
             if key:
-                return generic_message(request, 'No such organization',
-                                       'Could not find an organization with the key "%s".' % key)
+                return generic_message(request, _('No such organization'),
+                                       _('Could not find an organization with the key "%s".') % key)
             else:
-                return generic_message(request, 'No such organization',
-                                       'Could not find such organization.')
+                return generic_message(request, _('No such organization'),
+                                       _('Could not find such organization.'))
 
     def can_edit_organization(self, org=None):
         if org is None:
@@ -56,7 +57,7 @@ class OrganizationList(TitleMixin, ListView):
     model = Organization
     context_object_name = 'organizations'
     template_name = 'organization/list.jade'
-    title = 'Organizations'
+    title = __('Organizations')
 
 
 class OrganizationHome(OrganizationMixin, DetailView):
@@ -74,7 +75,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
-        context['title'] = '%s Members' % self.object.name
+        context['title'] = _('%s Members') % self.object.name
         context['users'] = ranker(chain(*[
             i.select_related('user__username').defer('about') for i in (
                 self.object.members.filter(submission__points__gt=0).order_by('-points')
@@ -102,9 +103,9 @@ class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, Single
 class JoinOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
         if profile.organizations.filter(id=org.id).exists():
-            return generic_message(request, 'Joining organization', 'You are already in the organization.')
+            return generic_message(request, _('Joining organization'), _('You are already in the organization.'))
         if not org.is_open:
-            return generic_message(request, 'Joining organization', 'This organization is not open.')
+            return generic_message(request, _('Joining organization'), _('This organization is not open.'))
         profile.organizations.add(org)
         profile.save()
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
@@ -113,7 +114,7 @@ class JoinOrganization(OrganizationMembershipChange):
 class LeaveOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
         if not profile.organizations.filter(id=org.id).exists():
-            return generic_message(request, 'Leaving organization', 'You are not in "%s".' % org.key)
+            return generic_message(request, _('Leaving organization'), _('You are not in "%s".') % org.key)
         profile.organizations.remove(org)
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
@@ -137,7 +138,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
         context = super(RequestJoinOrganization, self).get_context_data(**kwargs)
         if self.object.is_open:
             raise Http404()
-        context['title'] = 'Request to join %s' % self.object.name
+        context['title'] = _('Request to join %s') % self.object.name
         return context
 
     def form_valid(self, form):
@@ -153,7 +154,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
 class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
     model = OrganizationRequest
     template_name = 'organization/requests/detail.jade'
-    title = 'Join request detail'
+    title = __('Join request detail')
 
     def get_object(self, queryset=None):
         object = super(OrganizationRequestDetail, self).get_object(queryset)
@@ -181,7 +182,7 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationRequestBaseView, self).get_context_data(**kwargs)
-        context['title'] = 'Managing join requests for %s' % self.object.name
+        context['title'] = _('Managing join requests for %s') % self.object.name
         context['tab'] = self.tab
         return context
 
@@ -214,7 +215,7 @@ class OrganizationRequestView(OrganizationRequestBaseView):
                     approved += 1
                 elif obj.state == 'R':
                     rejected += 1
-            messages.success(request, 'Approved %d user%s and rejected %d user%s in %s.' % (
+            messages.success(request, _('Approved %d user%s and rejected %d user%s in %s.') % (
                              approved, 's'[approved == 1:], rejected, 's'[rejected == 1:],
                              organization.name))
             return HttpResponseRedirect(request.get_full_path())
@@ -246,7 +247,7 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
     form_class = EditOrganizationForm
 
     def get_title(self):
-        return 'Editing %s' % self.object.name
+        return _('Editing %s') % self.object.name
 
     def get_object(self, queryset=None):
         object = super(EditOrganization, self).get_object()
@@ -256,7 +257,7 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
 
     def form_valid(self, form):
         with transaction.atomic(), revisions.create_revision():
-            revisions.set_comment('Edited from site')
+            revisions.set_comment(_('Edited from site'))
             revisions.set_user(self.request.user)
             return super(EditOrganization, self).form_valid(form)
 
@@ -264,5 +265,5 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
         try:
             return super(EditOrganization, self).dispatch(request, *args, **kwargs)
         except PermissionDenied:
-            return generic_message(request, "Can't edit organization",
-                                   'You are not allowed to edit this organization.')
+            return generic_message(request, _("Can't edit organization"),
+                                   _('You are not allowed to edit this organization.'), status=403)

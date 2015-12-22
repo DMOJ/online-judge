@@ -7,16 +7,17 @@ from django.db.models import Max, Count, Min
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template import RequestContext, Context
-from django.views.generic import DetailView
 from django.utils.functional import cached_property
+from django.utils.translation import ugettext as _
+from django.views.generic import DetailView
 from reversion import revisions
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Submission, Rating
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
-from .contests import contest_ranking_view
 from judge.utils.views import TitleMixin, generic_message
+from .contests import contest_ranking_view
 
 __all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile']
 
@@ -53,11 +54,12 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         try:
             return super(UserPage, self).dispatch(request, *args, **kwargs)
         except Http404:
-            return generic_message(request, 'No such user', 'No user handle "%s".' %
+            return generic_message(request, _('No such user'), _('No user handle "%s".') %
                                    self.kwargs.get(self.slug_url_kwarg, None))
 
     def get_title(self):
-        return 'My Account' if self.request.user == self.object.user else 'User %s' % self.object.long_display_name
+        return (_('My Account') if self.request.user == self.object.user else
+                _('User %s') % self.object.long_display_name)
 
     # TODO: the same code exists in problem.py, maybe move to problems.py?
     @cached_property
@@ -143,13 +145,13 @@ def edit_profile(request):
             with transaction.atomic(), revisions.create_revision():
                 form.save()
                 revisions.set_user(request.user)
-                revisions.set_comment('Updated on site')
+                revisions.set_comment(_('Updated on site'))
             return HttpResponseRedirect(request.path)
     else:
         form = ProfileForm(instance=profile, user=request.user)
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
     return render(request, 'user/edit_profile.jade', {
-        'form': form, 'title': 'Edit profile',
+        'form': form, 'title': _('Edit profile'),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD'),
     })
@@ -163,5 +165,5 @@ def users(request):
                         .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
                         .select_related('user__username')
                         .only('display_rank', 'user__username', 'name', 'points', 'rating')),
-        'title': 'Users'
+        'title': _('Users')
     })

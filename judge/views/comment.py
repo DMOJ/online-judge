@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError, transaction
 from django.forms.models import ModelForm
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
+from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, UpdateView
 from reversion import revisions
 
@@ -17,7 +18,7 @@ __all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentE
 @login_required
 def vote_comment(request, delta):
     if abs(delta) != 1:
-        return HttpResponseBadRequest('Messing around, are we?', content_type='text/plain')
+        return HttpResponseBadRequest(_('Messing around, are we?'), content_type='text/plain')
 
     if request.method != 'POST':
         return HttpResponseForbidden()
@@ -41,7 +42,7 @@ def vote_comment(request, delta):
             comment.save()
             vote.delete()
         else:
-            return HttpResponseBadRequest('You already voted.', content_type='text/plain')
+            return HttpResponseBadRequest(_('You already voted.'), content_type='text/plain')
     else:
         comment.score += delta
         comment.save()
@@ -78,7 +79,7 @@ class CommentHistory(TitleMixin, CommentHistoryAjax):
     template_name = 'comments/history.jade'
 
     def get_title(self):
-        return 'Revisions for %s' % self.object.title
+        return _('Revisions for %s') % self.object.title
 
 
 class CommentEditForm(ModelForm):
@@ -98,7 +99,7 @@ class CommentEditAjax(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         with transaction.atomic(), revisions.create_revision():
-            revisions.set_comment('Edited from site')
+            revisions.set_comment(_('Edited from site'))
             revisions.set_user(self.request.user)
             return super(CommentEditAjax, self).form_valid(form)
 
@@ -119,7 +120,7 @@ class CommentEdit(TitleMixin, CommentEditAjax):
     template_name = 'comments/edit.jade'
 
     def get_title(self):
-        return 'Editing %s' % self.object.title
+        return _('Editing %s') % self.object.title
 
 
 class CommentContent(DetailView):

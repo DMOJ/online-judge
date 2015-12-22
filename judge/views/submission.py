@@ -7,6 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import format_html
+from django.utils.translation import ugettext as _, ugettext_lazy as __
 from django.views.generic import ListView, DetailView
 
 from judge import event_poster as event
@@ -46,7 +47,7 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
 
     def get_title(self):
         submission = self.object
-        return 'Submission of %s by %s' % (submission.problem.name, submission.user.user.username)
+        return _('Submission of %s by %s') % (submission.problem.name, submission.user.user.username)
 
 
 class SubmissionSource(SubmissionDetailBase):
@@ -103,7 +104,7 @@ class SubmissionsListBase(TitleMixin, ListView):
     model = Submission
     paginate_by = 50
     show_problem = True
-    title = 'All submissions'
+    title = __('All submissions')
     template_name = 'submission/list.jade'
     context_object_name = 'submissions'
     first_page_href = None
@@ -176,7 +177,7 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
         return super(AllUserSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
     def get_title(self):
-        return 'All submissions by %s' % self.username
+        return _('All submissions by %s') % self.username
 
     def get_content_title(self):
         return format_html(u'All submissions by <a href="{1}">{0}</a>', self.username,
@@ -198,7 +199,7 @@ class ProblemSubmissions(SubmissionsListBase):
         return super(ProblemSubmissions, self)._get_queryset().filter(problem__code=self.problem.code)
 
     def get_title(self):
-        return 'All submissions for %s' % self.problem.name
+        return _('All submissions for %s') % self.problem.name
 
     def get_content_title(self):
         return format_html(u'All submissions for <a href="{1}">{0}</a>', self.problem.name,
@@ -217,7 +218,7 @@ class ProblemSubmissions(SubmissionsListBase):
 
     def get(self, request, *args, **kwargs):
         if 'problem' not in kwargs:
-            raise ImproperlyConfigured('Must pass a problem')
+            raise ImproperlyConfigured(_('Must pass a problem'))
         try:
             self.problem = Problem.objects.get(code=kwargs['problem'])
         except Problem.DoesNotExist:
@@ -238,7 +239,7 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
         return super(UserProblemSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
     def get_title(self):
-        return "%s's submissions for %s" % (self.username, self.problem.name)
+        return _("%s's submissions for %s") % (self.username, self.problem.name)
 
     def get_content_title(self):
         return format_html(u'''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
@@ -300,7 +301,7 @@ class ForceContestMixin(object):
 
     def get(self, request, *args, **kwargs):
         if 'contest' not in kwargs:
-            raise ImproperlyConfigured('Must pass a contest')
+            raise ImproperlyConfigured(_('Must pass a contest'))
         try:
             self._contest = Contest.objects.get(key=kwargs['contest'])
         except Contest.DoesNotExist:
@@ -313,7 +314,8 @@ class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
         return "%s's submissions for %s in %s" % (self.username, self.problem.name, self.contest.name)
 
     def get_content_title(self):
-        return format_html(u'<a href="{1}">{0}</a>\'s submissions for <a href="{3}">{2}</a> in <a href="{5}">{4}</a>',
+        return format_html(_(u'<a href="{1}">{0}</a>\'s submissions for '
+                             u'<a href="{3}">{2}</a> in <a href="{5}">{4}</a>'),
                            self.username, reverse('user_page', args=[self.username]),
                            self.problem.name, reverse('problem_detail', args=[self.problem.code]),
                            self.contest.name, reverse('contest_view', args=[self.contest.key]))

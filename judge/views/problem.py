@@ -1,6 +1,7 @@
+import itertools
 import logging
-from operator import attrgetter
 import os
+from operator import attrgetter
 from random import randrange
 
 from django.conf import settings
@@ -9,20 +10,19 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Count, Q, F
-from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.template import RequestContext, Context
+from django.template import Context
 from django.template.loader import get_template
-from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
-from django.views.generic import ListView, View, UpdateView, CreateView
+from django.utils.translation import ugettext as _, ugettext_lazy as __
+from django.views.generic import ListView, View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
-import itertools
 
 from judge.comments import CommentedDetailView
-from judge.forms import ProblemSubmitForm, ProblemEditForm
-from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ContestProfile, ProblemGroup, Solution
+from judge.forms import ProblemSubmitForm
+from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemGroup, Solution
 from judge.pdf_problems import make_latex, format_markdown, latex_document, LatexPdfMaker, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
@@ -60,8 +60,8 @@ class ProblemMixin(object):
             return super(ProblemMixin, self).get(request, *args, **kwargs)
         except Http404:
             code = kwargs.get(self.slug_url_kwarg, None)
-            return generic_message(request, 'No such problem',
-                                   'Could not find a problem with the code "%s".' % code, status=404)
+            return generic_message(request, _('No such problem'),
+                                   _('Could not find a problem with the code "%s".') % code, status=404)
 
 
 class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
@@ -188,7 +188,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
 
 class ProblemList(TitleMixin, ListView):
     model = Problem
-    title = 'Problems'
+    title = __('Problems')
     context_object_name = 'problems'
     template_name = 'problem/list.jade'
 
@@ -300,9 +300,9 @@ def problem_submit(request, problem=None, submission=None):
                     id=form.cleaned_data['language'].id).exists():
                 raise PermissionDenied()
             if not request.user.is_superuser and form.cleaned_data['problem'].banned_users.filter(id=profile.id).exists():
-                return generic_message(request, 'Banned from Submitting',
-                                       'You have been declared persona non grata for this problem. '
-                                       'You are permanently barred from submitting this problem.')
+                return generic_message(request, _('Banned from Submitting'),
+                                       _('You have been declared persona non grata for this problem. '
+                                         'You are permanently barred from submitting this problem.'))
             model = form.save()
 
             cp = profile.contest
@@ -343,7 +343,7 @@ def problem_submit(request, problem=None, submission=None):
     form.fields['source'].widget.theme = profile.ace_theme
     return render(request, 'problem/submit.jade', {
         'form': form,
-        'title': 'Submit',
+        'title': _('Submit'),
         'langs': Language.objects.all(),
         'no_judges': not form.fields['language'].queryset
     })
