@@ -140,8 +140,8 @@ block body
         br
     if perms.judge.rejudge_submission
         form(action='{% url "submission_rejudge" %}', method='post')
-            -csrf_token
-            a(href='#', onclick='parentNode.submit();') Rejudge
+            - csrf_token
+            a(href='#', onclick='parentNode.submit();') {% trans "Rejudge" %}
             input(type='hidden', name='id', value=submission.id)
             input(type='hidden', name='path', value='{% url "submission_status" submission.id %}')
         br

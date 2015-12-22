@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-22 13:14-0500\n"
-"PO-Revision-Date: 2015-12-22 13:17-0500\n"
+"POT-Creation-Date: 2015-12-22 13:43-0500\n"
+"PO-Revision-Date: 2015-12-22 13:44-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1836,6 +1836,10 @@ msgstr "重新提交"
 #: .\templates\submission\status.jade:126
 msgid "View source"
 msgstr "查看源代码"
+
+#: .\templates\submission\status.jade:127
+msgid "Rejudge"
+msgstr "重新评分"
 
 #: .\templates\submission\status.jade:137
 msgid "Abort"

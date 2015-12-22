@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-22 13:14-0500\n"
-"PO-Revision-Date: 2015-12-22 13:17-0500\n"
+"POT-Creation-Date: 2015-12-22 13:43-0500\n"
+"PO-Revision-Date: 2015-12-22 13:44-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -1840,6 +1840,10 @@ msgstr ""
 #: .\templates\submission\status.jade:126
 msgid "View source"
 msgstr "Vezi sursa"
+
+#: .\templates\submission\status.jade:127
+msgid "Rejudge"
+msgstr ""
 
 #: .\templates\submission\status.jade:137
 msgid "Abort"
