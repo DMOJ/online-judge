@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-22 01:38-0500\n"
-"PO-Revision-Date: 2015-12-22 01:39-0500\n"
+"PO-Revision-Date: 2015-12-22 02:29-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -730,229 +730,229 @@ msgstr "关联的题目"
 
 #: .\judge\utils\problems.py:36
 msgid "Can't pass both queryset and keyword filters"
-msgstr ""
+msgstr "无法同时使用 queryset 和关键字筛选"
 
 #: .\judge\utils\problems.py:47
 msgid "Total"
-msgstr ""
+msgstr "总数"
 
 #: .\judge\views\blog.py:31
 #, python-format
 msgid "Page %d of Posts"
-msgstr ""
+msgstr "帖子第%d页"
 
 #: .\judge\views\comment.py:21
 msgid "Messing around, are we?"
-msgstr ""
+msgstr "请别捣乱。"
 
 #: .\judge\views\comment.py:45
 msgid "You already voted."
-msgstr ""
+msgstr "你已经投了票。"
 
 #: .\judge\views\comment.py:82
 #, python-format
 msgid "Revisions for %s"
-msgstr ""
+msgstr "%s 的过去版本"
 
 #: .\judge\views\comment.py:102 .\judge\views\organization.py:260
 msgid "Edited from site"
-msgstr ""
+msgstr "从网站中被编辑"
 
 #: .\judge\views\comment.py:123 .\judge\views\organization.py:250
 #, python-format
 msgid "Editing %s"
-msgstr ""
+msgstr "编辑 %s"
 
 #: .\judge\views\contests.py:41 .\judge\views\contests.py:123
 #: .\judge\views\contests.py:126 .\judge\views\contests.py:197
 msgid "No such contest"
-msgstr ""
+msgstr "该竞赛不存在"
 
 #: .\judge\views\contests.py:42 .\judge\views\contests.py:124
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
-msgstr ""
+msgstr "找不到标识符为“%s“的竞赛。"
 
 #: .\judge\views\contests.py:127
 msgid "Could not find such contest."
-msgstr ""
+msgstr "找不到该竞赛。"
 
 #: .\judge\views\contests.py:130
 #, python-format
 msgid "Access to contest \"%s\" denied"
-msgstr ""
+msgstr "对竞赛”%s“的访问被拒绝"
 
 #: .\judge\views\contests.py:168
 msgid "Contest not ongoing"
-msgstr ""
+msgstr "竞赛不在进行"
 
 #: .\judge\views\contests.py:169
 #, python-format
 msgid "\"%s\" is not currently ongoing."
-msgstr ""
+msgstr "“%s“不在进行。"
 
 #: .\judge\views\contests.py:173
 msgid "Already in contest"
-msgstr ""
+msgstr "已在竞赛"
 
 #: .\judge\views\contests.py:174
 #, python-format
 msgid "You are already in a contest: \"%s\"."
-msgstr ""
+msgstr "您已经参与了竞赛：”%s“。"
 
 #: .\judge\views\contests.py:183
 msgid "Time limit exceeded"
-msgstr ""
+msgstr "超出时间限制"
 
 #: .\judge\views\contests.py:184
 #, python-format
 msgid "Too late! You already used up your time limit for \"%s\"."
-msgstr ""
+msgstr "太晚了！你已经超出了\"%s\"的时间限制。"
 
 #: .\judge\views\contests.py:198
 #, python-format
 msgid "You are not in contest \"%s\"."
-msgstr ""
+msgstr "你不是在竞赛\"%s\"中。"
 
 #: .\judge\views\contests.py:217
 msgid "ContestCalender requires integer year and month"
-msgstr ""
+msgstr "ContestCalender 需要整数年份和月份"
 
 #: .\judge\views\error.py:14
 msgid "404 error"
-msgstr ""
+msgstr "404 错误"
 
 #: .\judge\views\error.py:15
 #, python-format
 msgid "Could not find page \"%s\""
-msgstr ""
+msgstr "找不到网页\"%s\"。"
 
 #: .\judge\views\error.py:21
 #, python-format
 msgid "no permission for %s"
-msgstr ""
+msgstr "无权访问 %s"
 
 #: .\judge\views\error.py:27
 #, python-format
 msgid "corrupt page %s"
-msgstr ""
+msgstr "页面错误 %s"
 
 #: .\judge\views\language.py:22
 msgid "No such language"
-msgstr ""
+msgstr "无该语言"
 
 #: .\judge\views\language.py:23
 #, python-format
 msgid "Could not find a language with the key \"%s\"."
-msgstr ""
+msgstr "找不到标识符为“%s“的语言。"
 
 #: .\judge\views\organization.py:41 .\judge\views\organization.py:44
 msgid "No such organization"
-msgstr ""
+msgstr "无该组织"
 
 #: .\judge\views\organization.py:42
 #, python-format
 msgid "Could not find an organization with the key \"%s\"."
-msgstr ""
+msgstr "找不到标识符为”%s“的组织。"
 
 #: .\judge\views\organization.py:45
 msgid "Could not find such organization."
-msgstr ""
+msgstr "找不到该组织。"
 
 #: .\judge\views\organization.py:78
 #, python-format
 msgid "%s Members"
-msgstr ""
+msgstr "%s 成员"
 
 #: .\judge\views\organization.py:106 .\judge\views\organization.py:108
 msgid "Joining organization"
-msgstr ""
+msgstr "加入组织"
 
 #: .\judge\views\organization.py:106
 msgid "You are already in the organization."
-msgstr ""
+msgstr "你已经是该组织的成员。"
 
 #: .\judge\views\organization.py:108
 msgid "This organization is not open."
-msgstr ""
+msgstr "该组织不开放。"
 
 #: .\judge\views\organization.py:117
 msgid "Leaving organization"
-msgstr ""
+msgstr "离开组织"
 
 #: .\judge\views\organization.py:117
 #, python-format
 msgid "You are not in \"%s\"."
-msgstr ""
+msgstr "你不是是“%s”的成员。"
 
 #: .\judge\views\organization.py:141
 #, python-format
 msgid "Request to join %s"
-msgstr ""
+msgstr "请求加入 %s"
 
 #: .\judge\views\organization.py:185
 #, python-format
 msgid "Managing join requests for %s"
-msgstr ""
+msgstr "管理 %s 的加入请求"
 
 #: .\judge\views\organization.py:219
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
-msgstr[0] ""
+msgstr[0] "批准了%d个用户。"
 
 #: .\judge\views\organization.py:220
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
-msgstr[0] ""
+msgstr[0] "拒绝了%d个用户。"
 
 #: .\judge\views\organization.py:268
 msgid "Can't edit organization"
-msgstr ""
+msgstr "无法编辑组织"
 
 #: .\judge\views\organization.py:269
 msgid "You are not allowed to edit this organization."
-msgstr ""
+msgstr "你不允许编辑该组织。"
 
 #: .\judge\views\problem.py:63
 msgid "No such problem"
-msgstr ""
+msgstr "无该题目"
 
 #: .\judge\views\problem.py:64
 #, python-format
 msgid "Could not find a problem with the code \"%s\"."
-msgstr ""
+msgstr "找不到代码为“%s”的题目。"
 
 #: .\judge\views\problem.py:303
 msgid "Banned from Submitting"
-msgstr ""
+msgstr "禁止提交"
 
 #: .\judge\views\problem.py:304
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
-msgstr ""
+msgstr "您在该题目不受欢迎。您被永久禁止为该题目提交解决程序。"
 
 #: .\judge\views\problem.py:346
 msgid "Submit"
-msgstr ""
+msgstr "提交！"
 
 #: .\judge\views\ranked_submission.py:50
 #, python-format
 msgid "Best solutions for %s"
-msgstr ""
+msgstr "%s 排行榜"
 
 #: .\judge\views\ranked_submission.py:53
 msgid "Best solutions for <a href=\"{1}\">{0}</a>"
-msgstr ""
+msgstr "<a href=\"{1}\">{0}</a> 排行榜"
 
 #: .\judge\views\ranked_submission.py:62
 #, python-format
 msgid "Best solutions for %(problem)s in %(contest)s"
-msgstr ""
+msgstr "竞赛 %(contest)s 中 %(problem)s 排行榜"
 
 #: .\judge\views\ranked_submission.py:66
 msgid "Best solutions for <a href=\"{1}\">{0}</a> in <a href=\"{3}\">{2}</a>"
-msgstr ""
+msgstr "竞赛 <a href=\"{3}\">{2}</a> 中 <a href=\"{1}\">{0}</a> 排行榜"
 
 #: .\judge\views\register.py:21 .\templates\user\base_users_table.jade.py:5
 msgid "Username"
@@ -960,82 +960,82 @@ msgstr "用户名"
 
 #: .\judge\views\register.py:22
 msgid "A username must contain letters, numbers, or underscores"
-msgstr ""
+msgstr "用户名只能包含字母、 数字或下划线。"
 
 #: .\judge\views\register.py:24
 msgid "Real name (optional)"
-msgstr ""
+msgstr "真实姓名 (可选)"
 
 #: .\judge\views\register.py:42 .\judge\views\register.py:76
 msgid "Registration"
-msgstr ""
+msgstr "注册"
 
 #: .\judge\views\status.py:26
 msgid "Status"
-msgstr ""
+msgstr "状态"
 
 #: .\judge\views\status.py:52
 msgid "No such judge"
-msgstr ""
+msgstr "没有这种裁判服务器"
 
 #: .\judge\views\status.py:53
 #, python-format
 msgid "Could not find a judge with the name \"%s\"."
-msgstr ""
+msgstr "找不到名为“%s”的裁判服务器。"
 
 #: .\judge\views\submission.py:50
 #, python-format
 msgid "Submission of %(problem)s by %(user)s"
-msgstr ""
+msgstr "%(user)s 在 %(problem)s 的提交结果"
 
 #: .\judge\views\submission.py:181
 #, python-format
 msgid "All submissions by %s"
-msgstr ""
+msgstr "%s 的提交历史"
 
 #: .\judge\views\submission.py:203
 #, python-format
 msgid "All submissions for %s"
-msgstr ""
+msgstr "%s 的提交历史"
 
 #: .\judge\views\submission.py:222
 msgid "Must pass a problem"
-msgstr ""
+msgstr "必须给予题目"
 
 #: .\judge\views\submission.py:243
 #, python-format
 msgid "%(user)s's submissions for %(problem)s"
-msgstr ""
+msgstr "%(user)s 在 %(problem)s 的提交历史"
 
 #: .\judge\views\submission.py:305
 msgid "Must pass a contest"
-msgstr ""
+msgstr "必须给予竞赛"
 
 #: .\judge\views\submission.py:318
 msgid "<a href=\"{1}\">{0}</a>'s submissions for <a href=\"{3}\">{2}</a> in <a href=\"{5}\">{4}</a>"
-msgstr ""
+msgstr "<a href=\"{5}\">{4}</a> 中 <a href=\"{1}\">{0}</a> 在 <a href=\"{3}\">{2}</a> 的提交历史"
 
 #: .\judge\views\user.py:57
 msgid "No such user"
-msgstr ""
+msgstr "无该用户"
 
 #: .\judge\views\user.py:57
 #, python-format
 msgid "No user handle \"%s\"."
-msgstr ""
+msgstr "无名为“%s“的用户"
 
 #: .\judge\views\user.py:61
 msgid "My Account"
-msgstr ""
+msgstr "我的帐户"
 
 #: .\judge\views\user.py:62
 #, python-format
 msgid "User %s"
-msgstr ""
+msgstr "用户 %s"
 
 #: .\judge\views\user.py:148
 msgid "Updated on site"
-msgstr ""
+msgstr "在网站上更新"
 
 #: .\judge\views\user.py:154 .\templates\base.jade.py:73
 #: .\templates\user\user_tabs.jade:9
@@ -1049,11 +1049,11 @@ msgstr "用户"
 #: .\judge\views\widgets.py:52 .\judge\views\widgets.py:63
 #, python-format
 msgid "Invalid upstream data: %s"
-msgstr ""
+msgstr "无效的上游数据： %s"
 
 #: .\judge\views\widgets.py:73
 msgid "Bad latitude or longitude"
-msgstr ""
+msgstr "无效的纬度或经度"
 
 #: .\templates\base.jade:57
 msgid "MENU"
@@ -1802,7 +1802,7 @@ msgstr "注册！"
 #: .\templates\submission\info_base.jade:1
 #, python-format
 msgid "Submission of <a href=\"%(problem_url)s\">%(problem_name)s</a> by <a href=\"%(user_url)s\">%(user_name)s</a>"
-msgstr "<a href=\"%(user_url)s\">%(user_name)s</a>在<a href=\"%(problem_url)s\">%(problem_name)s</a>的提交结果"
+msgstr "<a href=\"%(user_url)s\">%(user_name)s</a> 在 <a href=\"%(problem_url)s\">%(problem_name)s</a> 的提交结果"
 
 #: .\templates\submission\row.jade:18
 msgid "Case "
