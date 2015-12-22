@@ -26,7 +26,7 @@ block js_media
 
     - compress js
         script(type='text/javascript', src='{% static "event.js" %}')
-        script(type='text/javascript', src='{% static "moment.min.js" %}')
+        script(type='text/javascript', src='{% static "moment.js" %}')
         if request.user.is_authenticated and perms.judge.rejudge_submission
             script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
             script(type='text/javascript').
@@ -144,6 +144,9 @@ block js_media
                             }
                     );
                 });
+    - get_current_language as LANGUAGE_CODE
+    script(type='text/javascript').
+        moment.locale('#{LANGUAGE_CODE}');
 
 block media
     if perms.judge.change_submission and perms.judge.rejudge_submission
