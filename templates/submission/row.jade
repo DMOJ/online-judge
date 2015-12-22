@@ -37,8 +37,10 @@ td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status
         span.moment(style='display: none') #{submission.date|utc|date:"c"}
         = ' '
         span.time
-            .relative on #{submission.date|date:_("N j, Y, g:i a")}
-            .absolute on #{submission.date|date:_("N j, Y, g:i a")}
+            - blocktrans with time=submission.date|date:_("N j, Y, g:i a") asvar str_time
+                | on {{ time }}
+            .relative #{str_time}
+            .absolute #{str_time}
 
 if submission.status == 'G'
     td.sub-testcase
