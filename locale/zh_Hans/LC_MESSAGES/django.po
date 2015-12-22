@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-22 01:38-0500\n"
-"PO-Revision-Date: 2015-12-22 02:29-0500\n"
+"POT-Creation-Date: 2015-12-22 13:14-0500\n"
+"PO-Revision-Date: 2015-12-22 13:17-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1122,8 +1122,7 @@ msgstr "评论流"
 
 #: .\templates\comments\history_ajax.jade:7 .\templates\comments\list.jade:10
 #: .\templates\organization\requests\detail.jade:19
-#: .\templates\submission\info_base.jade:2 .\templates\submission\row.jade:14
-#: .\templates\submission\row.jade.py:15
+#: .\templates\submission\info_base.jade:2 .\templates\submission\row.jade:13
 msgid "N j, Y, g:i a"
 msgstr "Y年n月j日 G:i"
 
@@ -1803,6 +1802,11 @@ msgstr "注册！"
 #, python-format
 msgid "Submission of <a href=\"%(problem_url)s\">%(problem_name)s</a> by <a href=\"%(user_url)s\">%(user_name)s</a>"
 msgstr "<a href=\"%(user_url)s\">%(user_name)s</a> 在 <a href=\"%(problem_url)s\">%(problem_name)s</a> 的提交结果"
+
+#: .\templates\submission\row.jade:13
+#, python-format
+msgid "on %(time)s"
+msgstr "在 %(time)s 提交"
 
 #: .\templates\submission\row.jade:18
 msgid "Case "
