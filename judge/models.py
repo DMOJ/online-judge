@@ -25,6 +25,7 @@ from timedelta.fields import TimedeltaField
 
 from judge.fulltext import SearchManager
 from judge.model_choices import ACE_THEMES
+from judge.user_translations import ugettext as user_ugettext
 from judge import event_poster as event
 
 
@@ -280,7 +281,7 @@ class Problem(models.Model):
     objects = SearchManager(('code', 'name', 'description'))
 
     def types_list(self):
-        return map(attrgetter('full_name'), self.types.all())
+        return map(user_ugettext, map(attrgetter('full_name'), self.types.all()))
 
     def languages_list(self):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
