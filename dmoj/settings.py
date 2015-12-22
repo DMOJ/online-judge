@@ -170,6 +170,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SILENCED_SYSTEM_CHECKS = ['urls.W002']
+
 ROOT_URLCONF = 'dmoj.urls'
 LOGIN_REDIRECT_URL = '/user'
 WSGI_APPLICATION = 'dmoj.wsgi.application'
