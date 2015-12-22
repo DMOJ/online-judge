@@ -47,7 +47,8 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
 
     def get_title(self):
         submission = self.object
-        return _('Submission of %s by %s') % (submission.problem.name, submission.user.user.username)
+        return _('Submission of %(problem)s by %(user)s') % {'problem': submission.problem.name,
+                                                             'user': submission.user.user.username}
 
 
 class SubmissionSource(SubmissionDetailBase):
@@ -239,7 +240,7 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
         return super(UserProblemSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
     def get_title(self):
-        return _("%s's submissions for %s") % (self.username, self.problem.name)
+        return _("%(user)s's submissions for %(problem)s") % {'user': self.username, 'problem': self.problem.name}
 
     def get_content_title(self):
         return format_html(u'''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',

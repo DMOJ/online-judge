@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-22 00:33-0500\n"
-"PO-Revision-Date: 2015-12-22 00:37-0500\n"
+"POT-Creation-Date: 2015-12-22 01:38-0500\n"
+"PO-Revision-Date: 2015-12-22 01:39-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -16,27 +16,27 @@ msgstr ""
 "X-Crowdin-File: django.po\n"
 "Language: ru_RU\n"
 
-#: .\dmoj\settings.py:216
+#: .\dmoj\settings.py:218
 msgid "German"
 msgstr ""
 
-#: .\dmoj\settings.py:217
+#: .\dmoj\settings.py:219
 msgid "English"
 msgstr ""
 
-#: .\dmoj\settings.py:218
+#: .\dmoj\settings.py:220
 msgid "French"
 msgstr ""
 
-#: .\dmoj\settings.py:219
+#: .\dmoj\settings.py:221
 msgid "Romanian"
 msgstr ""
 
-#: .\dmoj\settings.py:220
+#: .\dmoj\settings.py:222
 msgid "Russian"
 msgstr ""
 
-#: .\dmoj\settings.py:221
+#: .\dmoj\settings.py:223
 msgid "Simplified Chinese"
 msgstr ""
 
@@ -132,11 +132,13 @@ msgstr ""
 msgid "Self-description"
 msgstr ""
 
-#: .\judge\models.py:138 .\templates\user\edit_profile.jade.py:42
+#: .\judge\models.py:138 .\judge\views\register.py:25
+#: .\templates\user\edit_profile.jade:42
 msgid "Location"
 msgstr ""
 
-#: .\judge\models.py:140 .\templates\user\edit_profile.jade.py:49
+#: .\judge\models.py:140 .\judge\views\register.py:28
+#: .\templates\user\edit_profile.jade:49
 msgid "Preferred language"
 msgstr ""
 
@@ -310,19 +312,19 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: .\judge\models.py:328 .\judge\models.py:354
+#: .\judge\models.py:328 .\judge\models.py:354 .\judge\utils\problems.py:41
 msgid "Accepted"
 msgstr ""
 
-#: .\judge\models.py:329 .\judge\models.py:355
+#: .\judge\models.py:329 .\judge\models.py:355 .\judge\utils\problems.py:42
 msgid "Wrong Answer"
 msgstr ""
 
-#: .\judge\models.py:330 .\judge\models.py:357
+#: .\judge\models.py:330 .\judge\models.py:357 .\judge\utils\problems.py:44
 msgid "Time Limit Exceeded"
 msgstr ""
 
-#: .\judge\models.py:331 .\judge\models.py:358
+#: .\judge\models.py:331 .\judge\models.py:358 .\judge\utils\problems.py:45
 msgid "Memory Limit Exceeded"
 msgstr ""
 
@@ -330,7 +332,7 @@ msgstr ""
 msgid "Output Limit Exceeded"
 msgstr ""
 
-#: .\judge\models.py:333 .\judge\models.py:360
+#: .\judge\models.py:333 .\judge\models.py:360 .\judge\utils\problems.py:46
 msgid "Invalid Return"
 msgstr ""
 
@@ -339,6 +341,7 @@ msgid "Runtime Error"
 msgstr ""
 
 #: .\judge\models.py:335 .\judge\models.py:349 .\judge\models.py:362
+#: .\judge\utils\problems.py:43
 msgid "Compile Error"
 msgstr ""
 
@@ -592,7 +595,8 @@ msgstr ""
 msgid "Private to organizations"
 msgstr ""
 
-#: .\judge\models.py:657 .\templates\user\edit_profile.jade.py:37
+#: .\judge\models.py:657 .\judge\views\register.py:27
+#: .\templates\user\edit_profile.jade:37
 msgid "Organizations"
 msgstr ""
 
@@ -724,6 +728,337 @@ msgstr ""
 msgid "Associated problem"
 msgstr ""
 
+#: .\judge\utils\problems.py:36
+msgid "Can't pass both queryset and keyword filters"
+msgstr ""
+
+#: .\judge\utils\problems.py:47
+msgid "Total"
+msgstr ""
+
+#: .\judge\views\blog.py:31
+#, python-format
+msgid "Page %d of Posts"
+msgstr ""
+
+#: .\judge\views\comment.py:21
+msgid "Messing around, are we?"
+msgstr ""
+
+#: .\judge\views\comment.py:45
+msgid "You already voted."
+msgstr ""
+
+#: .\judge\views\comment.py:82
+#, python-format
+msgid "Revisions for %s"
+msgstr ""
+
+#: .\judge\views\comment.py:102 .\judge\views\organization.py:260
+msgid "Edited from site"
+msgstr ""
+
+#: .\judge\views\comment.py:123 .\judge\views\organization.py:250
+#, python-format
+msgid "Editing %s"
+msgstr ""
+
+#: .\judge\views\contests.py:41 .\judge\views\contests.py:123
+#: .\judge\views\contests.py:126 .\judge\views\contests.py:197
+msgid "No such contest"
+msgstr ""
+
+#: .\judge\views\contests.py:42 .\judge\views\contests.py:124
+#, python-format
+msgid "Could not find a contest with the key \"%s\"."
+msgstr ""
+
+#: .\judge\views\contests.py:127
+msgid "Could not find such contest."
+msgstr ""
+
+#: .\judge\views\contests.py:130
+#, python-format
+msgid "Access to contest \"%s\" denied"
+msgstr ""
+
+#: .\judge\views\contests.py:168
+msgid "Contest not ongoing"
+msgstr ""
+
+#: .\judge\views\contests.py:169
+#, python-format
+msgid "\"%s\" is not currently ongoing."
+msgstr ""
+
+#: .\judge\views\contests.py:173
+msgid "Already in contest"
+msgstr ""
+
+#: .\judge\views\contests.py:174
+#, python-format
+msgid "You are already in a contest: \"%s\"."
+msgstr ""
+
+#: .\judge\views\contests.py:183
+msgid "Time limit exceeded"
+msgstr ""
+
+#: .\judge\views\contests.py:184
+#, python-format
+msgid "Too late! You already used up your time limit for \"%s\"."
+msgstr ""
+
+#: .\judge\views\contests.py:198
+#, python-format
+msgid "You are not in contest \"%s\"."
+msgstr ""
+
+#: .\judge\views\contests.py:217
+msgid "ContestCalender requires integer year and month"
+msgstr ""
+
+#: .\judge\views\error.py:14
+msgid "404 error"
+msgstr ""
+
+#: .\judge\views\error.py:15
+#, python-format
+msgid "Could not find page \"%s\""
+msgstr ""
+
+#: .\judge\views\error.py:21
+#, python-format
+msgid "no permission for %s"
+msgstr ""
+
+#: .\judge\views\error.py:27
+#, python-format
+msgid "corrupt page %s"
+msgstr ""
+
+#: .\judge\views\language.py:22
+msgid "No such language"
+msgstr ""
+
+#: .\judge\views\language.py:23
+#, python-format
+msgid "Could not find a language with the key \"%s\"."
+msgstr ""
+
+#: .\judge\views\organization.py:41 .\judge\views\organization.py:44
+msgid "No such organization"
+msgstr ""
+
+#: .\judge\views\organization.py:42
+#, python-format
+msgid "Could not find an organization with the key \"%s\"."
+msgstr ""
+
+#: .\judge\views\organization.py:45
+msgid "Could not find such organization."
+msgstr ""
+
+#: .\judge\views\organization.py:78
+#, python-format
+msgid "%s Members"
+msgstr ""
+
+#: .\judge\views\organization.py:106 .\judge\views\organization.py:108
+msgid "Joining organization"
+msgstr ""
+
+#: .\judge\views\organization.py:106
+msgid "You are already in the organization."
+msgstr ""
+
+#: .\judge\views\organization.py:108
+msgid "This organization is not open."
+msgstr ""
+
+#: .\judge\views\organization.py:117
+msgid "Leaving organization"
+msgstr ""
+
+#: .\judge\views\organization.py:117
+#, python-format
+msgid "You are not in \"%s\"."
+msgstr ""
+
+#: .\judge\views\organization.py:141
+#, python-format
+msgid "Request to join %s"
+msgstr ""
+
+#: .\judge\views\organization.py:185
+#, python-format
+msgid "Managing join requests for %s"
+msgstr ""
+
+#: .\judge\views\organization.py:219
+#, python-format
+msgid "Approved %d user."
+msgid_plural "Approved %d users."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: .\judge\views\organization.py:220
+#, python-format
+msgid "Rejected %d user."
+msgid_plural "Rejected %d users."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: .\judge\views\organization.py:268
+msgid "Can't edit organization"
+msgstr ""
+
+#: .\judge\views\organization.py:269
+msgid "You are not allowed to edit this organization."
+msgstr ""
+
+#: .\judge\views\problem.py:63
+msgid "No such problem"
+msgstr ""
+
+#: .\judge\views\problem.py:64
+#, python-format
+msgid "Could not find a problem with the code \"%s\"."
+msgstr ""
+
+#: .\judge\views\problem.py:303
+msgid "Banned from Submitting"
+msgstr ""
+
+#: .\judge\views\problem.py:304
+msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
+msgstr ""
+
+#: .\judge\views\problem.py:346
+msgid "Submit"
+msgstr ""
+
+#: .\judge\views\ranked_submission.py:50
+#, python-format
+msgid "Best solutions for %s"
+msgstr ""
+
+#: .\judge\views\ranked_submission.py:53
+msgid "Best solutions for <a href=\"{1}\">{0}</a>"
+msgstr ""
+
+#: .\judge\views\ranked_submission.py:62
+#, python-format
+msgid "Best solutions for %(problem)s in %(contest)s"
+msgstr ""
+
+#: .\judge\views\ranked_submission.py:66
+msgid "Best solutions for <a href=\"{1}\">{0}</a> in <a href=\"{3}\">{2}</a>"
+msgstr ""
+
+#: .\judge\views\register.py:21 .\templates\user\base_users_table.jade.py:5
+msgid "Username"
+msgstr ""
+
+#: .\judge\views\register.py:22
+msgid "A username must contain letters, numbers, or underscores"
+msgstr ""
+
+#: .\judge\views\register.py:24
+msgid "Real name (optional)"
+msgstr ""
+
+#: .\judge\views\register.py:42 .\judge\views\register.py:76
+msgid "Registration"
+msgstr ""
+
+#: .\judge\views\status.py:26
+msgid "Status"
+msgstr ""
+
+#: .\judge\views\status.py:52
+msgid "No such judge"
+msgstr ""
+
+#: .\judge\views\status.py:53
+#, python-format
+msgid "Could not find a judge with the name \"%s\"."
+msgstr ""
+
+#: .\judge\views\submission.py:50
+#, python-format
+msgid "Submission of %(problem)s by %(user)s"
+msgstr ""
+
+#: .\judge\views\submission.py:181
+#, python-format
+msgid "All submissions by %s"
+msgstr ""
+
+#: .\judge\views\submission.py:203
+#, python-format
+msgid "All submissions for %s"
+msgstr ""
+
+#: .\judge\views\submission.py:222
+msgid "Must pass a problem"
+msgstr ""
+
+#: .\judge\views\submission.py:243
+#, python-format
+msgid "%(user)s's submissions for %(problem)s"
+msgstr ""
+
+#: .\judge\views\submission.py:305
+msgid "Must pass a contest"
+msgstr ""
+
+#: .\judge\views\submission.py:318
+msgid "<a href=\"{1}\">{0}</a>'s submissions for <a href=\"{3}\">{2}</a> in <a href=\"{5}\">{4}</a>"
+msgstr ""
+
+#: .\judge\views\user.py:57
+msgid "No such user"
+msgstr ""
+
+#: .\judge\views\user.py:57
+#, python-format
+msgid "No user handle \"%s\"."
+msgstr ""
+
+#: .\judge\views\user.py:61
+msgid "My Account"
+msgstr ""
+
+#: .\judge\views\user.py:62
+#, python-format
+msgid "User %s"
+msgstr ""
+
+#: .\judge\views\user.py:148
+msgid "Updated on site"
+msgstr ""
+
+#: .\judge\views\user.py:154 .\templates\base.jade.py:73
+#: .\templates\user\user_tabs.jade:9
+msgid "Edit profile"
+msgstr ""
+
+#: .\judge\views\user.py:168 .\templates\problem\list.jade.py:55
+msgid "Users"
+msgstr ""
+
+#: .\judge\views\widgets.py:52 .\judge\views\widgets.py:63
+#, python-format
+msgid "Invalid upstream data: %s"
+msgstr ""
+
+#: .\judge\views\widgets.py:73
+msgid "Bad latitude or longitude"
+msgstr ""
+
 #: .\templates\base.jade:57
 msgid "MENU"
 msgstr ""
@@ -736,10 +1071,6 @@ msgstr ""
 #: .\templates\base.jade:71 .\templates\submission\info_base.jade.py:2
 #: .\templates\user\user_tabs.jade:11
 msgid "Admin"
-msgstr ""
-
-#: .\templates\base.jade:73 .\templates\user\user_tabs.jade.py:9
-msgid "Edit profile"
 msgstr ""
 
 #: .\templates\base.jade:75
@@ -1220,10 +1551,6 @@ msgstr ""
 msgid "Types"
 msgstr ""
 
-#: .\templates\problem\list.jade:55
-msgid "Users"
-msgstr ""
-
 #: .\templates\problem\own_list.jade:1
 msgid "Add problem"
 msgstr ""
@@ -1576,10 +1903,6 @@ msgstr ""
 
 #: .\templates\submission\status_testcases.jade:36
 msgid "An internal error occurred while grading."
-msgstr ""
-
-#: .\templates\user\base_users_table.jade:5
-msgid "Username"
 msgstr ""
 
 #: .\templates\user\edit_profile.jade:54

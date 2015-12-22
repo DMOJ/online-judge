@@ -11,7 +11,7 @@ from django.db import transaction
 from django.db.models import Count, Max
 from django.forms import Form, modelformset_factory
 from django.http import HttpResponseRedirect, Http404
-from django.utils.translation import ugettext as _, ugettext_lazy as __
+from django.utils.translation import ugettext as _, ugettext_lazy as __, ungettext
 from django.views.generic import DetailView, ListView, View, UpdateView, FormView
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 from reversion import revisions
@@ -205,7 +205,7 @@ class OrganizationRequestView(OrganizationRequestBaseView):
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-        self.object = organization = self.get_object()
+        self.object = self.get_object()
         self.formset = formset = OrganizationRequestFormSet(request.POST, request.FILES)
         if formset.is_valid():
             approved, rejected = 0, 0
@@ -215,9 +215,9 @@ class OrganizationRequestView(OrganizationRequestBaseView):
                     approved += 1
                 elif obj.state == 'R':
                     rejected += 1
-            messages.success(request, _('Approved %d user%s and rejected %d user%s in %s.') % (
-                             approved, 's'[approved == 1:], rejected, 's'[rejected == 1:],
-                             organization.name))
+            messages.success(request,
+                             ungettext('Approved %d user.', 'Approved %d users.', approved) % approved + '\n' +
+                             ungettext('Rejected %d user.', 'Rejected %d users.', rejected) % rejected)
             return HttpResponseRedirect(request.get_full_path())
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)

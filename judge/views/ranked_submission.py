@@ -59,7 +59,8 @@ class RankedSubmissions(ProblemSubmissions):
 
 class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
     def get_title(self):
-        return _('Best solutions for %s in %s') % (self.problem.name, self.contest.name)
+        return _('Best solutions for %(problem)s in %(contest)s') % {'problem': self.problem.name,
+                                                                     'contest': self.contest.name}
 
     def get_content_title(self):
         return format_html(_(u'Best solutions for <a href="{1}">{0}</a> in <a href="{3}">{2}</a>'),
