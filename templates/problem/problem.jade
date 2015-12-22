@@ -58,11 +58,11 @@ block info_float
     if contest_problem
         |  #{contest_problem.points}
         if contest_problem.partial
-            | (partial)
+            - trans "(partial)"
     else
         |  #{problem.points|floatformat}
         if problem.partial
-            | (partial)
+            - trans "(partial)"
     br
     i.fa.fa-clock-o.fa-fw
     b {% trans "Time limit:" %}
