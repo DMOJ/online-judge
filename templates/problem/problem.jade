@@ -89,10 +89,14 @@ block info_float
                 br
     br
     div#problem-types
-        div.toggle.closed.unselectable
-            span.fa.fa-chevron-right.fa-fw
-            | {% trans "Problem type(s)" %}
-        div.toggled(style="display:none") #{problem.types_list|join:", "}
+        - with types=problem.types_list
+            div.toggle.closed.unselectable
+                span.fa.fa-chevron-right.fa-fw
+                - blocktrans count counter=problem.types_list|length
+                    | Problem type
+                    - plural
+                    | Problem types
+            div.toggled(style="display:none") #{problem.types_list|join:", "}
     br
     if show_languages
         div#allowed-langs
