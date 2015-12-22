@@ -8,6 +8,7 @@ doctype 5
 - load compress
 - load gravatar
 - load i18n
+- load dmoj_user_i18n
 
 html(lang='en')
     head
@@ -95,7 +96,7 @@ html(lang='en')
                         span(style='width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);')
                     - recursetree nav_bar
                         li
-                            a(href=node.path, class='nav-{{ node.key }} {% if node.key in nav_tab %}active{% endif %}')= node.label
+                            a(href=node.path, class='nav-{{ node.key }} {% if node.key in nav_tab %}active{% endif %}') #{node.label|user_trans}
                             if not node.is_leaf_node
                                 ul {{ children }}
                     - endrecursetree
