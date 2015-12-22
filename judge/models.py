@@ -303,7 +303,7 @@ class Problem(models.Model):
     @property
     def usable_languages(self):
         return self.allowed_languages.filter(judges__in=self.judges.filter(
-                last_ping__within=Judge.OFFLINE_SECONDS)).distinct()
+                last_ping__gte=Judge.last_online_time())).distinct()
 
     class Meta:
         permissions = (
@@ -581,19 +581,6 @@ class NavigationBar(MPTTModel):
             return pattern
 
 
-@models.DateTimeField.register_lookup
-class WithinTimeLookup(Lookup):
-    lookup_name = 'within'
-
-    def get_prep_lookup(self):
-        return self.rhs
-
-    def as_sql(self, compiler, connection):
-        lhs, lhs_params = self.process_lhs(compiler, connection)
-        rhs, rhs_params = self.process_rhs(compiler, connection)
-        return '(NOW() - %s) <= %s' % (lhs, rhs), lhs_params + rhs_params
-
-
 class Judge(models.Model):
     OFFLINE_SECONDS = 30
     OFFLINE_DURATION = timedelta(seconds=OFFLINE_SECONDS)
@@ -613,6 +600,10 @@ class Judge(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @classmethod
+    def last_online_time(cls):
+        return timezone.now() - cls.OFFLINE_DURATION
 
     @cached_property
     def uptime(self):

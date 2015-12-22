@@ -27,7 +27,7 @@ class LanguageDetail(TitleMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(LanguageDetail, self).get_context_data(**kwargs)
-        context['judges'] = self.object.judges.filter(last_ping__within=Judge.OFFLINE_SECONDS).order_by('load')
+        context['judges'] = self.object.judges.filter(last_ping__gte=Judge.last_online_time()).order_by('load')
         return context
 
 
@@ -50,5 +50,5 @@ class LanguageJudgesAjaxList(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LanguageJudgesAjaxList, self).get_context_data(**kwargs)
         context['judges'] = Judge.objects.filter(runtimes__key=self.lang,
-                                                 last_ping__within=Judge.OFFLINE_SECONDS).order_by('load')
+                                                 last_ping__gte=Judge.last_online_time()).order_by('load')
         return context
