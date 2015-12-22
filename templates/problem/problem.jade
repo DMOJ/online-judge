@@ -78,7 +78,7 @@ block info_float
             if authors
                 i.fa.fa-pencil-square.fa-fw
                 b
-                    - blocktrans count counter=authors|length
+                    - blocktrans trimmed count counter=authors|length
                         | Author:
                         - plural
                         | Authors:
@@ -94,7 +94,7 @@ block info_float
         - with types=problem.types_list
             div.toggle.closed.unselectable
                 span.fa.fa-chevron-right.fa-fw
-                - blocktrans count counter=problem.types_list|length
+                - blocktrans trimmed count counter=problem.types_list|length
                     | Problem type
                     - plural
                     | Problem types
