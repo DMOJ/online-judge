@@ -41,7 +41,7 @@ def get_result_table(*args, **kwargs):
     return [(_('Accepted'), 'AC', results['AC']),
             (_('Wrong Answer'), 'WA', results['WA']),
             (_('Compile Error'), 'CE', results['CE']),
-            (_('Time Limit Exceed'), 'TLE', results['TLE']),
-            (_('Memory Limit Exceed'), 'MLE', results['MLE']),
+            (_('Time Limit Exceeded'), 'TLE', results['TLE']),
+            (_('Memory Limit Exceeded'), 'MLE', results['MLE']),
             (_('Invalid Return'), 'IR', results['IR']),
             (_('Total'), 'TOT', sum(results.values()))]
