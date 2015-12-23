@@ -87,6 +87,8 @@ class Language(models.Model):
 
     class Meta:
         ordering = ['key']
+        verbose_name = _('language')
+        verbose_name_plural = _('languages')
 
 
 class Organization(models.Model):
@@ -130,6 +132,8 @@ class Organization(models.Model):
             ('organization_admin', 'Administer organizations'),
             ('edit_all_organization', 'Edit all organizations'),
         )
+        verbose_name = _('organization')
+        verbose_name_plural = _('organizations')
 
 
 class Profile(models.Model):
@@ -204,6 +208,8 @@ class Profile(models.Model):
         permissions = (
             ('test_site', 'Shows in-progress development stuff'),
         )
+        verbose_name = _('user profile')
+        verbose_name_plural = _('user profiles')
 
 
 class OrganizationRequest(models.Model):
@@ -217,6 +223,10 @@ class OrganizationRequest(models.Model):
     ))
     reason = models.TextField(verbose_name=_('Reason'))
 
+    class Meta:
+        verbose_name = _('organization join request')
+        verbose_name_plural = _('organization join requests')
+
 
 class ProblemType(models.Model):
     name = models.CharField(max_length=20, verbose_name=_('Problem category ID'), unique=True)
@@ -227,6 +237,8 @@ class ProblemType(models.Model):
 
     class Meta:
         ordering = ['full_name']
+        verbose_name = _('problem type')
+        verbose_name_plural = _('problem types')
 
 
 class ProblemGroup(models.Model):
@@ -238,6 +250,8 @@ class ProblemGroup(models.Model):
 
     class Meta:
         ordering = ['full_name']
+        verbose_name = _('problem group')
+        verbose_name_plural = _('problem groups')
 
 
 class License(models.Model):
@@ -255,6 +269,10 @@ class License(models.Model):
 
     def get_absolute_url(self):
         return reverse('license', args=(self.key,))
+
+    class Meta:
+        verbose_name = _('license')
+        verbose_name_plural = _('licenses')
 
 
 class Problem(models.Model):
@@ -313,6 +331,8 @@ class Problem(models.Model):
             ('edit_public_problem', 'Edit all public problems'),
             ('clone_problem', 'Clone problem'),
         )
+        verbose_name = _('problem')
+        verbose_name_plural = _('problems')
 
 
 class LanguageLimit(models.Model):
@@ -323,6 +343,8 @@ class LanguageLimit(models.Model):
 
     class Meta:
         unique_together = ('problem', 'language')
+        verbose_name = _('language-specific resource limit')
+        verbose_name_plural = _('language-specific resource limits')
 
 
 SUBMISSION_RESULT = (
@@ -448,6 +470,8 @@ class Submission(models.Model):
             ('view_all_submission', 'View all submission'),
             ('resubmit_other', "Resubmit others' submission"),
         )
+        verbose_name = _('submission')
+        verbose_name_plural = _('submissions')
 
 
 class SubmissionTestCase(models.Model):
@@ -468,6 +492,10 @@ class SubmissionTestCase(models.Model):
     def long_status(self):
         return Submission.USER_DISPLAY_CODES.get(self.status, '')
 
+    class Meta:
+        verbose_name = _('submission test case')
+        verbose_name_plural = _('submission test cases')
+
 
 class Comment(MPTTModel):
     author = models.ForeignKey(Profile, verbose_name=_('Commenter'))
@@ -481,6 +509,10 @@ class Comment(MPTTModel):
     hidden = models.BooleanField(verbose_name=_('Hide the comment'), default=0)
     parent = TreeForeignKey('self', verbose_name=_('Parent'), null=True, blank=True, related_name='replies')
     versions = GenericRelation(Version, object_id_field='object_id_int')
+
+    class Meta:
+        verbose_name = _('comment')
+        verbose_name_plural = _('comments')
 
     class MPTTMeta:
         order_insertion_by = ['-time']
@@ -529,12 +561,14 @@ class Comment(MPTTModel):
 
 
 class CommentVote(models.Model):
-    class Meta:
-        unique_together = ['voter', 'comment']
-
     voter = models.ForeignKey(Profile)
     comment = models.ForeignKey(Comment)
     score = models.IntegerField()
+
+    class Meta:
+        unique_together = ['voter', 'comment']
+        verbose_name = _('comment vote')
+        verbose_name_plural = _('comment votes')
 
 
 class MiscConfig(models.Model):
@@ -543,6 +577,10 @@ class MiscConfig(models.Model):
 
     def __unicode__(self):
         return self.key
+
+    class Meta:
+        verbose_name = _('configuration item')
+        verbose_name_plural = _('miscellaneous configuration')
 
 
 def validate_regex(regex):
@@ -554,8 +592,8 @@ def validate_regex(regex):
 
 class NavigationBar(MPTTModel):
     class Meta:
-        verbose_name = 'navigation item'
-        verbose_name_plural = 'navigation bar'
+        verbose_name = _('navigation item')
+        verbose_name_plural = _('navigation bar')
 
     class MPTTMeta:
         order_insertion_by = ['order']
@@ -625,6 +663,8 @@ class Judge(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name = _('judge')
+        verbose_name_plural = _('judges')
 
 
 class Contest(models.Model):
@@ -691,6 +731,8 @@ class Contest(models.Model):
             ('edit_all_contest', 'Edit all contests'),
             ('contest_rating', 'Rate contests'),
         )
+        verbose_name = _('contest')
+        verbose_name_plural = _('contests')
 
 
 class ContestParticipation(models.Model):
@@ -746,6 +788,10 @@ class ContestParticipation(models.Model):
     def __unicode__(self):
         return '%s in %s' % (self.profile.user.long_display_name, self.contest.name)
 
+    class Meta:
+        verbose_name = _('contest participation')
+        verbose_name_plural = _('contest participations')
+
 
 class ContestProfile(models.Model):
     user = models.OneToOneField(Profile, verbose_name=_('User'), related_name='contest_profile',
@@ -755,6 +801,10 @@ class ContestProfile(models.Model):
 
     def __unicode__(self):
         return 'Contest: %s' % self.user.long_display_name
+
+    class Meta:
+        verbose_name = _('contest profile')
+        verbose_name_plural = _('contest profiles')
 
 
 class ContestProblem(models.Model):
@@ -767,6 +817,8 @@ class ContestProblem(models.Model):
 
     class Meta:
         unique_together = ('problem', 'contest')
+        verbose_name = _('contest problem')
+        verbose_name_plural = _('contest problems')
 
 
 class ContestSubmission(models.Model):
@@ -776,6 +828,10 @@ class ContestSubmission(models.Model):
     participation = models.ForeignKey(ContestParticipation, verbose_name=_('Participation'),
                                       related_name='submissions', related_query_name='submission')
     points = models.FloatField(default=0.0, verbose_name=_('Points'))
+
+    class Meta:
+        verbose_name = _('contest submission')
+        verbose_name_plural = _('contest submissions')
 
 
 class Rating(models.Model):
@@ -789,6 +845,8 @@ class Rating(models.Model):
 
     class Meta:
         unique_together = ('user', 'contest')
+        verbose_name = _('contest rating')
+        verbose_name_plural = _('contest ratings')
 
 
 class BlogPost(models.Model):
@@ -811,6 +869,8 @@ class BlogPost(models.Model):
         permissions = (
             ('see_hidden_post', 'See hidden posts'),
         )
+        verbose_name = _('blog post')
+        verbose_name_plural = _('blog posts')
 
 
 class PrivateMessage(models.Model):
@@ -846,6 +906,8 @@ class Solution(models.Model):
         permissions = (
             ('see_private_solution', 'See hidden solutions'),
         )
+        verbose_name = _('solution')
+        verbose_name_plural = _('solutions')
 
 
 revisions.register(Profile, exclude=['points', 'last_access', 'ip', 'rating'])
