@@ -702,7 +702,7 @@ class JudgeAdmin(VersionAdmin):
         ('Information', {'fields': ('created', 'online', 'start_time', 'last_ping', 'ping', 'load')}),
         ('Capabilities', {'fields': ('runtimes', 'problems')}),
     )
-    list_display = ('name', 'is_online', 'start_time', 'ping', 'load')
+    list_display = ('name', 'is_online', 'start_time', 'last_ping', 'ping', 'load')
     ordering = ['name']
 
     def is_online(self, obj):
