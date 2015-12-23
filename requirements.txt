@@ -14,6 +14,6 @@ django-timedeltafield
 lxml
 markdown2
 Pygments
--e git://github.com/syrusakbary/pyjade.git#egg=pyjade
+-e git://github.com/DMOJ/pyjade.git#egg=pyjade
 python-social-auth
 pytz
