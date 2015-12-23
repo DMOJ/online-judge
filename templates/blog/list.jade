@@ -81,7 +81,7 @@ block body
                 = '/ '
                 a(href='{% url "comment_atom" %}') Atom
         div.blog-sidebox
-            h3 New problems
+            h3 {% trans "New problems" %}
                 i.fa.fa-puzzle-piece
             ul
                 for problem in problems
