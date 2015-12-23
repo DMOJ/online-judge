@@ -1,17 +1,20 @@
 extends base
 - load i18n
 
+- blocktrans with month=month|date:_("F Y") asvar title
+    | Contests in {{ month }}
+
 block title
-    | Contests in #{month|date:_("F Y")}
+    | #{title}
 
 block title_row
     div(style='display: flex')
-        h2 Contests in #{month|date:_("F Y")}
+        h2 #{title}
         div(style='flex: 1')
         div(style='font-size: 1.6em; margin-top: 0.3em')
-            a(href='{% url "contest_calendar" prev_month.year prev_month.month %}') &laquo; Prev
+            a(href='{% url "contest_calendar" prev_month.year prev_month.month %}') &laquo; {% trans "Prev" %}
             = ' '
-            a(href='{% url "contest_calendar" next_month.year next_month.month %}') Next &raquo;
+            a(href='{% url "contest_calendar" next_month.year next_month.month %}') {% trans "Next" %} &raquo;
 
 block body
     table#contest-calendar
