@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-22 20:18-0500\n"
-"PO-Revision-Date: 2015-12-22 20:25-0500\n"
+"POT-Creation-Date: 2015-12-22 22:26-0500\n"
+"PO-Revision-Date: 2015-12-22 22:29-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1312,6 +1312,10 @@ msgstr "开始于"
 msgid "Comment stream"
 msgstr "评论流"
 
+#: .\templates\blog\list.jade:58
+msgid "New problems"
+msgstr "新题目"
+
 #: .\templates\comments\history_ajax.jade:7 .\templates\comments\list.jade:10
 #: .\templates\organization\requests\detail.jade:19
 #: .\templates\submission\info_base.jade:2 .\templates\submission\row.jade:13
@@ -1338,31 +1342,44 @@ msgstr "无效的评论内容。"
 msgid "F Y"
 msgstr "Y年n月"
 
-#: .\templates\contest\calendar.jade:11
+#: .\templates\contest\calendar.jade:1 .\templates\contest\calendar.jade:4
+#, python-format
+msgid "Contests in %(month)s"
+msgstr "%(month)s 的竞赛"
+
+#: .\templates\contest\calendar.jade:7
+msgid "Prev"
+msgstr "上个月"
+
+#: .\templates\contest\calendar.jade:7
+msgid "Next"
+msgstr "下个月"
+
+#: .\templates\contest\calendar.jade:12
 msgid "Sunday"
 msgstr "星期日"
 
-#: .\templates\contest\calendar.jade:12
+#: .\templates\contest\calendar.jade:13
 msgid "Monday"
 msgstr "星期一"
 
-#: .\templates\contest\calendar.jade:13
+#: .\templates\contest\calendar.jade:14
 msgid "Tuesday"
 msgstr "星期二"
 
-#: .\templates\contest\calendar.jade:14
+#: .\templates\contest\calendar.jade:15
 msgid "Wednesday"
 msgstr "星期三"
 
-#: .\templates\contest\calendar.jade:15
+#: .\templates\contest\calendar.jade:16
 msgid "Thursday"
 msgstr "星期四"
 
-#: .\templates\contest\calendar.jade:16
+#: .\templates\contest\calendar.jade:17
 msgid "Friday"
 msgstr "星期五"
 
-#: .\templates\contest\calendar.jade:17
+#: .\templates\contest\calendar.jade:18
 msgid "Saturday"
 msgstr "星期六"
 

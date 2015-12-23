@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-22 20:18-0500\n"
+"POT-Creation-Date: 2015-12-22 22:26-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1318,6 +1318,10 @@ msgstr ""
 msgid "Comment stream"
 msgstr ""
 
+#: .\templates\blog\list.jade:58
+msgid "New problems"
+msgstr ""
+
 #: .\templates\comments\history_ajax.jade:7 .\templates\comments\list.jade:10
 #: .\templates\organization\requests\detail.jade:19
 #: .\templates\submission\info_base.jade:2 .\templates\submission\row.jade:13
@@ -1344,31 +1348,44 @@ msgstr ""
 msgid "F Y"
 msgstr ""
 
-#: .\templates\contest\calendar.jade:11
-msgid "Sunday"
+#: .\templates\contest\calendar.jade:1 .\templates\contest\calendar.jade:4
+#, python-format
+msgid "Contests in %(month)s"
+msgstr ""
+
+#: .\templates\contest\calendar.jade:7
+msgid "Prev"
+msgstr ""
+
+#: .\templates\contest\calendar.jade:7
+msgid "Next"
 msgstr ""
 
 #: .\templates\contest\calendar.jade:12
-msgid "Monday"
+msgid "Sunday"
 msgstr ""
 
 #: .\templates\contest\calendar.jade:13
-msgid "Tuesday"
+msgid "Monday"
 msgstr ""
 
 #: .\templates\contest\calendar.jade:14
-msgid "Wednesday"
+msgid "Tuesday"
 msgstr ""
 
 #: .\templates\contest\calendar.jade:15
-msgid "Thursday"
+msgid "Wednesday"
 msgstr ""
 
 #: .\templates\contest\calendar.jade:16
-msgid "Friday"
+msgid "Thursday"
 msgstr ""
 
 #: .\templates\contest\calendar.jade:17
+msgid "Friday"
+msgstr ""
+
+#: .\templates\contest\calendar.jade:18
 msgid "Saturday"
 msgstr ""
 
