@@ -3,13 +3,13 @@ extends base
 
 
 block title
-    - blocktrans with month=month|date:_("F Y") asvar title
+    - blocktrans with month=month|date:_("F Y")
         | Contests in {{ month }}
-    | #{title}
 
 block title_row
     div(style='display: flex')
-        h2 #{title}
+        - blocktrans with month=month|date:_("F Y")
+            | Contests in {{ month }}
         div(style='flex: 1')
         div(style='font-size: 1.6em; margin-top: 0.3em')
             a(href='{% url "contest_calendar" prev_month.year prev_month.month %}') &laquo; {% trans "Prev" %}
