@@ -6,6 +6,7 @@ from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
@@ -15,6 +16,7 @@ from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, Http404
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 from mptt.admin import MPTTModelAdmin
 from reversion.admin import VersionAdmin
 from reversion_compare.admin import CompareVersionAdmin
@@ -27,7 +29,9 @@ from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
 try:
-    from django_select2.forms import HeavySelect2Widget, HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
+    from django_select2.forms import HeavySelect2Widget, HeavySelect2MultipleWidget, Select2Widget, \
+        Select2MultipleWidget
+
 
     class HeavySelect2Widget(HeavySelect2Widget):
         @property
@@ -39,9 +43,9 @@ except ImportError:
     Select2Widget = None
     Select2MultipleWidget = None
 
-#try:
+# try:
 #    from suit.admin import SortableModelAdmin, SortableTabularInline
-#except ImportError:
+# except ImportError:
 SortableModelAdmin = object
 SortableTabularInline = admin.TabularInline
 
@@ -74,6 +78,28 @@ class ContestProfileInline(admin.StackedInline):
     model = ContestProfile
     form = ContestProfileInlineForm
     can_delete = False
+
+
+class UserInlineForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserInlineForm, self).__init__(*args, **kwargs)
+        self.fields['password'].help_text = _(
+                "Raw passwords are not stored, so there is no way to see "
+                "this user's password, but you can change the password "
+                "using <a href=\"%s\">this form</a>.") % reverse('admin:auth_user_password_change',
+                                                                 self.instance.user_id)
+
+
+class UserInline(admin.StackedInline):
+    model = User
+    can_delete = False
+    fieldsets = (
+        (None, {'fields': ('username', 'password', 'email')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+                                       'groups', 'user_permissions')}),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    form = UserInlineForm
 
 
 class ProfileForm(ModelForm):
@@ -111,22 +137,25 @@ class ProfileAdmin(Select2SuitMixin, VersionAdmin):
     search_fields = ('user__username', 'name', 'ip', 'user__email')
     list_filter = ('language', TimezoneFilter)
     actions = ('recalculate_points',)
-    inlines = [ContestProfileInline]
+    inlines = [UserInline, ContestProfileInline]
     actions_on_top = True
     actions_on_bottom = True
     form = ProfileForm
-    
+
     def show_public(self, obj):
-         return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
+        return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
+
     show_public.short_description = ''
 
     def admin_user_admin(self, obj):
         return obj.long_display_name
+
     admin_user_admin.admin_order_field = 'user__username'
     admin_user_admin.short_description = 'User'
 
     def email(self, obj):
         return obj.user.email
+
     email.admin_order_field = 'user__email'
     email.short_description = 'Email'
 
@@ -169,7 +198,7 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
     title = parameter_name = 'creator'
 
     def lookups(self, request, model_admin):
-        return [(name, '%s (%s)' % (name, display) if display else name)for name, display in
+        return [(name, '%s (%s)' % (name, display) if display else name) for name, display in
                 Profile.objects.exclude(authored_problems=None).values_list('user__username', 'name')]
 
     def queryset(self, request, queryset):
@@ -225,10 +254,12 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
 
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
+
     show_authors.short_description = 'Authors'
 
     def show_public(self, obj):
         return format_html('<a href="{0}">View on site</a>', obj.get_absolute_url())
+
     show_public.short_description = ''
 
     def _update_points(self, problem_id, sign):
@@ -263,12 +294,14 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         count = queryset.update(is_public=True)
         self._update_points_many(queryset.values_list('id', flat=True), '+')
         self.message_user(request, "%d problem%s successfully marked as public." % (count, 's'[count == 1:]))
+
     make_public.short_description = 'Mark problems as public'
 
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
         self._update_points_many(queryset.values_list('id', flat=True), '-')
         self.message_user(request, "%d problem%s successfully marked as private." % (count, 's'[count == 1:]))
+
     make_private.short_description = 'Mark problems as private'
 
     def get_queryset(self, request):
@@ -369,11 +402,11 @@ class ContestSubmissionInline(admin.StackedInline):
             if db_field.name == 'participation':
                 kwargs['queryset'] = ContestParticipation.objects.filter(profile__user=submission.user,
                                                                          contest__problems=submission.problem) \
-                                                         .only('id', 'contest__name')
+                    .only('id', 'contest__name')
                 label = lambda obj: obj.contest.name
             elif db_field.name == 'problem':
                 kwargs['queryset'] = ContestProblem.objects.filter(problem=submission.problem) \
-                                                   .only('id', 'problem__name', 'contest__name')
+                    .only('id', 'problem__name', 'contest__name')
                 label = lambda obj: '%s in %s' % (obj.problem.name, obj.contest.name)
         field = super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, **kwargs)
         if label is not None:
@@ -398,13 +431,14 @@ class SubmissionAdmin(admin.ModelAdmin):
         return format_html(u'<span title="{display}">{username}</span>',
                            username=obj.user.user.username,
                            display=obj.user.name)
+
     user_column.admin_order_field = 'user__user__username'
     user_column.short_description = 'User'
 
     def get_queryset(self, request):
         queryset = Submission.objects.only(
-            'problem__code', 'problem__name', 'user__user__username', 'user__name', 'language__name',
-            'time', 'memory', 'points', 'status', 'result'
+                'problem__code', 'problem__name', 'user__user__username', 'user__name', 'language__name',
+                'time', 'memory', 'points', 'status', 'result'
         )
         if not request.user.has_perm('judge.edit_all_problem'):
             queryset = queryset.filter(problem__authors__id=request.user.profile.id)
@@ -436,10 +470,12 @@ class SubmissionAdmin(admin.ModelAdmin):
             model.judge()
         self.message_user(request, '%d submission%s were successfully scheduled for rejudging.' %
                           (judged, 's'[judged == 1:]))
+
     judge.short_description = 'Rejudge the selected submissions'
 
     def execution_time(self, obj):
         return round(obj.time, 2) if obj.time is not None else 'None'
+
     execution_time.admin_order_field = 'time'
 
     def pretty_memory(self, obj):
@@ -450,6 +486,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             return '%d KB' % memory
         else:
             return '%.2f MB' % (memory / 1024.)
+
     pretty_memory.admin_order_field = 'memory'
     pretty_memory.short_description = 'Memory Usage'
 
@@ -472,14 +509,17 @@ class SubmissionAdmin(admin.ModelAdmin):
 
         self.message_user(request, '%d submission%s were successfully rescored.' %
                           (len(submissions), 's'[len(submissions) == 1:]))
+
     recalculate_score.short_description = 'Rescore the selected submissions'
 
     def problem_code(self, obj):
         return obj.problem.code
+
     problem_code.admin_order_field = 'problem__code'
 
     def problem_name(self, obj):
         return obj.problem.name
+
     problem_name.admin_order_field = 'problem__name'
 
     def get_urls(self):
@@ -531,11 +571,13 @@ class CommentAdmin(Select2SuitMixin, VersionAdmin):
     def hide_comment(self, request, queryset):
         count = queryset.update(hidden=True)
         self.message_user(request, "%d comment%s successfully hidden." % (count, 's'[count == 1:]))
+
     hide_comment.short_description = 'Hide comments'
 
     def unhide_comment(self, request, queryset):
         count = queryset.update(hidden=False)
         self.message_user(request, "%d comment%s successfully unhidden." % (count, 's'[count == 1:]))
+
     unhide_comment.short_description = 'Unhide comments'
 
     def get_queryset(self, request):
@@ -548,6 +590,7 @@ class CommentAdmin(Select2SuitMixin, VersionAdmin):
             return format_html('<a href="{0}">{1}</a>', link, obj.page)
         else:
             return format_html('{0}', obj.page)
+
     linked_page.short_description = 'Associated page'
     linked_page.allow_tags = True
     linked_page.admin_order_field = 'page'
@@ -560,12 +603,12 @@ class CommentAdmin(Select2SuitMixin, VersionAdmin):
 
 class LanguageForm(ModelForm):
     problems = ModelMultipleChoiceField(
-        label='Disallowed problems',
-        queryset=Problem.objects.all(),
-        required=False,
-        help_text='These problems are NOT allowed to be submitted in this language',
-        widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
-               FilteredSelectMultiple('problems', False))
+            label='Disallowed problems',
+            queryset=Problem.objects.all(),
+            required=False,
+            help_text='These problems are NOT allowed to be submitted in this language',
+            widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
+            FilteredSelectMultiple('problems', False))
 
 
 class LanguageAdmin(Select2SuitMixin, VersionAdmin):
@@ -590,12 +633,12 @@ class LanguageAdmin(Select2SuitMixin, VersionAdmin):
 
 class ProblemGroupForm(ModelForm):
     problems = ModelMultipleChoiceField(
-        label='Included problems',
-        queryset=Problem.objects.all(),
-        required=False,
-        help_text='These problems are included in this group of problems',
-        widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
-               FilteredSelectMultiple('problems', False))
+            label='Included problems',
+            queryset=Problem.objects.all(),
+            required=False,
+            help_text='These problems are included in this group of problems',
+            widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
+            FilteredSelectMultiple('problems', False))
 
 
 class ProblemGroupAdmin(Select2SuitMixin, admin.ModelAdmin):
@@ -614,12 +657,12 @@ class ProblemGroupAdmin(Select2SuitMixin, admin.ModelAdmin):
 
 class ProblemTypeForm(ModelForm):
     problems = ModelMultipleChoiceField(
-        label='Included problems',
-        queryset=Problem.objects.all(),
-        required=False,
-        help_text='These problems are included in this type of problems',
-        widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
-               FilteredSelectMultiple('problems', False))
+            label='Included problems',
+            queryset=Problem.objects.all(),
+            required=False,
+            help_text='These problems are included in this type of problems',
+            widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
+            FilteredSelectMultiple('problems', False))
 
 
 class ProblemTypeAdmin(Select2SuitMixin, admin.ModelAdmin):
@@ -666,24 +709,24 @@ class GenerateKeyTextInput(TextInput):
     def render(self, name, value, attrs=None):
         text = super(TextInput, self).render(name, value, attrs)
         return mark_safe(text + format_html(
-            '''\
-<a href="#" onclick="return false;" class="button" id="id_{0}_regen">Regenerate</a>
-<script type="text/javascript">
-(function ($) {{
-    $(document).ready(function () {{
-        $('#id_{0}_regen').click(function () {{
-            var length = 100,
-                charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{{}};:,<>./?",
-                key = "";
-            for (var i = 0, n = charset.length; i < length; ++i) {{
-                key += charset.charAt(Math.floor(Math.random() * n));
-            }}
-            $('#id_{0}').val(key);
+                '''\
+    <a href="#" onclick="return false;" class="button" id="id_{0}_regen">Regenerate</a>
+    <script type="text/javascript">
+    (function ($) {{
+        $(document).ready(function () {{
+            $('#id_{0}_regen').click(function () {{
+                var length = 100,
+                    charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{{}};:,<>./?",
+                    key = "";
+                for (var i = 0, n = charset.length; i < length; ++i) {{
+                    key += charset.charAt(Math.floor(Math.random() * n));
+                }}
+                $('#id_{0}').val(key);
+            }});
         }});
-    }});
-}})(django.jQuery);
-</script>
-''', name))
+    }})(django.jQuery);
+    </script>
+    ''', name))
 
 
 class JudgeAdminForm(ModelForm):
@@ -707,6 +750,7 @@ class JudgeAdmin(VersionAdmin):
 
     def is_online(self, obj):
         return obj.online
+
     is_online.short_description = 'Online'
     is_online.boolean = True
 
@@ -768,7 +812,8 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
         ('Rating', {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
         ('Organization', {'fields': ('is_private', 'organizations')}),
     )
-    list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
+    list_display = (
+        'key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
     actions_on_top = True
@@ -787,16 +832,19 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
 
     def user_count(self, obj):
         return obj.user_count
+
     user_count.admin_order_field = 'user_count'
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self.message_user(request, "%d contest%s successfully marked as public." % (count, 's'[count == 1:]))
+
     make_public.short_description = 'Mark contests as public'
 
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
         self.message_user(request, "%d contest%s successfully marked as private." % (count, 's'[count == 1:]))
+
     make_private.short_description = 'Mark contests as private'
 
     def get_queryset(self, request):
@@ -858,9 +906,9 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
         form = super(ContestAdmin, self).get_form(*args, **kwargs)
         perms = ('edit_own_contest', 'edit_all_contest')
         form.base_fields['organizers'].queryset = Profile.objects.filter(
-            Q(user__is_superuser=True) |
-            Q(user__groups__permissions__codename__in=perms) |
-            Q(user__user_permissions__codename__in=perms)
+                Q(user__is_superuser=True) |
+                Q(user__groups__permissions__codename__in=perms) |
+                Q(user__user_permissions__codename__in=perms)
         ).distinct()
         return form
 
@@ -884,12 +932,13 @@ class ContestParticipationAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super(ContestParticipationAdmin, self).get_queryset(request).only(
-            'contest__name', 'profile__user__user__username', 'profile__user__name',
-            'real_start', 'score', 'cumtime'
+                'contest__name', 'profile__user__user__username', 'profile__user__name',
+                'real_start', 'score', 'cumtime'
         )
 
     def username(self, obj):
         return obj.profile.user.long_display_name
+
     username.admin_order_field = 'profile__user__user__username'
 
     def recalculate_points(self, request, queryset):
@@ -898,6 +947,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
             participation.recalculate_score()
             count += 1
         self.message_user(request, "%d participation%s have scores recalculated." % (count, 's'[count == 1:]))
+
     recalculate_points.short_description = 'Recalculate scores'
 
     def recalculate_cumtime(self, request, queryset):
@@ -906,6 +956,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
             participation.update_cumtime()
             count += 1
         self.message_user(request, "%d participation%s have times recalculated." % (count, 's'[count == 1:]))
+
     recalculate_cumtime.short_description = 'Recalculate cumulative time'
 
 
@@ -925,9 +976,10 @@ class OrganizationAdmin(Select2SuitMixin, VersionAdmin):
     actions_on_top = True
     actions_on_bottom = True
     form = OrganizationForm
-    
+
     def show_public(self, obj):
-         return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
+        return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
+
     show_public.short_description = ''
 
     def get_readonly_fields(self, request, obj=None):
@@ -990,7 +1042,8 @@ class SolutionAdmin(VersionAdmin):
     form = SolutionForm
 
     def show_public(self, obj):
-         return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
+        return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
+
     show_public.short_description = ''
 
     def problem_link(self, obj):
@@ -998,6 +1051,7 @@ class SolutionAdmin(VersionAdmin):
             return 'N/A'
         return format_html('<a href="{}">{}</a>', reverse('admin:judge_problem_change', args=[obj.problem_id]),
                            obj.problem.name)
+
     problem_link.admin_order_field = 'problem__name'
 
     if MathJaxAdminPagedownWidget is not None:
@@ -1022,6 +1076,7 @@ class OrganizationRequestAdmin(admin.ModelAdmin):
 
     def username(self, obj):
         return obj.user.long_display_name
+
     username.admin_order_field = 'user__user__username'
 
 
