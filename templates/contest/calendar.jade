@@ -1,10 +1,10 @@
 extends base
 - load i18n
 
-- blocktrans with month=month|date:_("F Y") asvar title
-    | Contests in {{ month }}
 
 block title
+    - blocktrans with month=month|date:_("F Y") asvar title
+        | Contests in {{ month }}
     | #{title}
 
 block title_row
