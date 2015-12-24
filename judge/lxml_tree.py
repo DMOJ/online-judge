@@ -12,7 +12,7 @@ class HTMLTreeString(object):
         try:
             self._tree = html.fromstring(str, parser=html.HTMLParser(recover=True))
         except (XMLSyntaxError, ParserError) as e:
-            if str and (not ininstance(ParserError) or i.args[0] != 'Document is empty'):
+            if str and (not isinstance(e, ParserError) or e.args[0] != 'Document is empty'):
                 logger.exception('Failed to parse HTML string')
             self._tree = html.Element('div')
 
