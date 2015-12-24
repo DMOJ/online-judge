@@ -73,5 +73,5 @@ else:
             return media
         media = property(_media)
 
-    class MathJaxAdminPagedownWidget(MathJaxPagedownWidget, AdminPagedownWidget):
+    class MathJaxAdminPagedownWidget(AdminPagedownWidget, MathJaxPagedownWidget):
         pass
