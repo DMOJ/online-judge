@@ -1,10 +1,13 @@
+from textwrap import dedent
+
 from django import forms
 from django.contrib.admin import widgets as admin_widgets
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.template import Context
+from django.core.exceptions import FieldError
+from django.template import Context, Template
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
-from django.core.exceptions import FieldError
+from lxml import html
 
 
 class CheckboxSelectMultipleWithSelectAll(forms.CheckboxSelectMultiple):
@@ -37,6 +40,41 @@ class CheckboxSelectMultipleWithSelectAll(forms.CheckboxSelectMultiple):
             self._all_selected = False
         return original
 
+
+class CompressorWidgetMixin(object):
+    template_css = dedent('''\
+        {% compress css %}
+            {{ media.css }}
+        {% endcompress %}
+    ''')
+
+    template_js = dedent('''\
+        {% compress js %}
+            {{ media.js }}
+        {% endcompress %}
+    ''')
+
+    template = {
+        (False, False): Template(''),
+        (True, False): Template('{% load compress %}' + template_css),
+        (False, True): Template('{% load compress %}' + template_js),
+        (True, True): Template('{% load compress %}' + template_js + template_css),
+    }
+
+    compress_css = False
+    compress_js = False
+
+    def _media(self):
+        media = super(CompressorWidgetMixin, self)._media()
+        result = html.fromstring(self.template[self.compress_css, self.compress_js].render(Context({'media': media})))
+        return forms.Media(
+                css={'all': [result.find('.//link').get('href')]} if self.compress_css else media._css,
+                js=[result.find('.//script').get('src')] if self.compress_js else media._js
+        )
+
+    media = property(_media)
+
+
 try:
     from pagedown.widgets import PagedownWidget as OldPagedownWidget
 except ImportError:
@@ -45,10 +83,13 @@ except ImportError:
     MathJaxPagedownWidget = None
     MathJaxAdminPagedownWidget = None
 else:
-    class PagedownWidget(OldPagedownWidget):
+    class PagedownWidget(CompressorWidgetMixin, OldPagedownWidget):
+        compress_js = True
+
         def __init__(self, *args, **kwargs):
             kwargs.setdefault('css', (staticfiles_storage.url('pagedown_widget.css'),))
             super(PagedownWidget, self).__init__(*args, **kwargs)
+
 
     class AdminPagedownWidget(PagedownWidget, admin_widgets.AdminTextareaWidget):
         def _media(self):
@@ -59,7 +100,9 @@ else:
             ]})
             media.add_js([staticfiles_storage.url('admin/js/pagedown.js')])
             return media
+
         media = property(_media)
+
 
     class MathJaxPagedownWidget(PagedownWidget):
         def _media(self):
@@ -70,7 +113,9 @@ else:
                 staticfiles_storage.url('pagedown_math.js'),
             ])
             return media
+
         media = property(_media)
+
 
     class MathJaxAdminPagedownWidget(AdminPagedownWidget, MathJaxPagedownWidget):
         pass
