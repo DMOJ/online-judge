@@ -74,4 +74,6 @@ else:
         media = property(_media)
 
     class MathJaxAdminPagedownWidget(AdminPagedownWidget, MathJaxPagedownWidget):
-        pass
+        def _media(self):
+            return super(MathJaxAdminPagedownWidget, self)._media()
+        media = property(_media)
