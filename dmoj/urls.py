@@ -169,10 +169,12 @@ urlpatterns = [
         url(r'^/edit$', organization.EditOrganization.as_view(), name='edit_organization'),
         url(r'^/request$', organization.RequestJoinOrganization.as_view(), name='request_organization'),
         url(r'^/request/(?P<pk>\d+)$', organization.OrganizationRequestDetail.as_view(), name='request_organization_detail'),
-        url(r'^/requests/pending$', organization.OrganizationRequestView.as_view(), name='organization_requests_pending'),
-        url(r'^/requests/log$', organization.OrganizationRequestLog.as_view(), name='organization_requests_log'),
-        url(r'^/requests/approved$', organization.OrganizationRequestLog.as_view(states=('A',), tab='approved'), name='organization_requests_approved'),
-        url(r'^/requests/rejected$', organization.OrganizationRequestLog.as_view(states=('R',), tab='rejected'), name='organization_requests_rejected'),
+        url(r'^/requests/', include([
+            url(r'^pending$', organization.OrganizationRequestView.as_view(), name='organization_requests_pending'),
+            url(r'^log$', organization.OrganizationRequestLog.as_view(), name='organization_requests_log'),
+            url(r'^approved$', organization.OrganizationRequestLog.as_view(states=('A',), tab='approved'), name='organization_requests_approved'),
+            url(r'^rejected$', organization.OrganizationRequestLog.as_view(states=('R',), tab='rejected'), name='organization_requests_rejected'),
+        ])),
     ])),
 
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
