@@ -64,12 +64,11 @@ else:
     class MathJaxPagedownWidget(PagedownWidget):
         def _media(self):
             media = super(MathJaxPagedownWidget, self)._media()
-            if self._load_math:
-                media.add_js([
-                    staticfiles_storage.url('mathjax_config.js'),
-                    '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
-                    staticfiles_storage.url('pagedown_math.js'),
-                ])
+            media.add_js([
+                staticfiles_storage.url('mathjax_config.js'),
+                '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
+                staticfiles_storage.url('pagedown_math.js'),
+            ])
             return media
         media = property(_media)
 
