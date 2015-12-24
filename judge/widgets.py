@@ -63,7 +63,7 @@ else:
 
     class MathJaxPagedownWidget(PagedownWidget):
         def _media(self):
-            media = super(PagedownWidget, self)._media()
+            media = super(MathJaxPagedownWidget, self)._media()
             if self._load_math:
                 media.add_js([
                     staticfiles_storage.url('mathjax_config.js'),
