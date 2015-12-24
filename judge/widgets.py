@@ -42,23 +42,23 @@ class CheckboxSelectMultipleWithSelectAll(forms.CheckboxSelectMultiple):
 
 
 class CompressorWidgetMixin(object):
-    template_css = dedent('''\
+    __template_css = dedent('''\
         {% compress css %}
             {{ media.css }}
         {% endcompress %}
     ''')
 
-    template_js = dedent('''\
+    __template_js = dedent('''\
         {% compress js %}
             {{ media.js }}
         {% endcompress %}
     ''')
 
-    template = {
+    __templates = {
         (False, False): Template(''),
-        (True, False): Template('{% load compress %}' + template_css),
-        (False, True): Template('{% load compress %}' + template_js),
-        (True, True): Template('{% load compress %}' + template_js + template_css),
+        (True, False): Template('{% load compress %}' + __template_css),
+        (False, True): Template('{% load compress %}' + __template_js),
+        (True, True): Template('{% load compress %}' + __template_js + __template_css),
     }
 
     compress_css = False
@@ -66,7 +66,8 @@ class CompressorWidgetMixin(object):
 
     def _media(self):
         media = super(CompressorWidgetMixin, self)._media()
-        result = html.fromstring(self.template[self.compress_css, self.compress_js].render(Context({'media': media})))
+        template = self.__templates[self.compress_css, self.compress_js]
+        result = html.fromstring(template.render(Context({'media': media})))
         return forms.Media(
                 css={'all': [result.find('.//link').get('href')]} if self.compress_css else media._css,
                 js=[result.find('.//script').get('src')] if self.compress_js else media._js
