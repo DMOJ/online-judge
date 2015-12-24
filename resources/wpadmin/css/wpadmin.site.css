@@ -10,6 +10,10 @@
     margin-left: 0;
 }
 
+.wmd-input {
+  width: 100% !important;
+}
+
 #content .content-description h1,
 #content .content-description h2,
 #content .content-description h3,
