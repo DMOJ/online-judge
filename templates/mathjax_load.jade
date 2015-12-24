@@ -1,11 +1,5 @@
-| <script type='text/x-mathjax-config'>
-|   MathJax.Hub.Config({
-|     messageStyle: 'none',
-|     tex2jax: {
-|       inlineMath: [['~', '~'], ['\\(', '\\)'], ['$', '$']]
-|     }
-|   });
-| </script>
+- load staticfiles
+script(type='text/javascript', src='{% static "mathjax_config.js" %}')
 script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
 script(type='text/javascript').
     MathJax.Hub.queue.Push(function () {
