@@ -1,0 +1,19 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}{{ block.super }}
+    <script>
+        django.jQuery(function ($) {
+            $('.userlink').appendTo('div#bottombar').show();
+        });
+    </script>
+{% endblock extrahead %}
+
+{% block after_field_sets %}{{ block.super }}
+    {% if original %}
+        <a style="display: none" title="Edit user" href="{% url 'admin:auth_user_change' original.user.pk %}"
+           class="button userlink">
+            <i class="fa fa-lg fa-user"></i>
+            <span class="text">Edit user</span>
+        </a>
+    {% endif %}
+{% endblock %}
