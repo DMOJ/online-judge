@@ -1,4 +1,5 @@
 {% extends "admin/change_form.html" %}
+{% load i18n %}
 
 {% block extrahead %}{{ block.super }}
     <script>
@@ -10,10 +11,10 @@
 
 {% block after_field_sets %}{{ block.super }}
     {% if original %}
-        <a style="display: none" title="Edit profile" href="{% url 'admin:judge_profile_change' original.profile.pk %}"
+        <a style="display: none" title="{% trans "Edit profile" %}" href="{% url 'admin:judge_profile_change' original.profile.pk %}"
            class="button profilelink">
             <i class="fa fa-lg fa-user-plus"></i>
-            <span class="text">Edit profile</span>
+            <span class="text">{% trans "Edit profile" %}</span>
         </a>
     {% endif %}
 {% endblock %}
