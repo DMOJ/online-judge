@@ -253,7 +253,7 @@ class ContestCalendar(ContestListMixin, TemplateView):
         except ValueError:
             raise Http404()
 
-        dates = Contest.objects.aggregate(min=Min('start_date'), max=Max('end_date'))
+        dates = Contest.objects.aggregate(min=Min('start_time'), max=Max('end_time'))
         min_month = dates['min'].year, dates['min'].month
         max_month = dates['max'].year, dates['max'].month
 
