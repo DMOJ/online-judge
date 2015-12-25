@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-24 19:21-0500\n"
-"PO-Revision-Date: 2015-12-24 19:23-0500\n"
+"PO-Revision-Date: 2015-12-24 19:25-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -929,7 +929,6 @@ msgid "Total"
 msgstr ""
 
 #: .\judge\views\blog.py:31
-#, python-format
 msgid "Page %d of Posts"
 msgstr ""
 
@@ -942,7 +941,6 @@ msgid "You already voted."
 msgstr ""
 
 #: .\judge\views\comment.py:82
-#, python-format
 msgid "Revisions for %s"
 msgstr ""
 
@@ -951,7 +949,6 @@ msgid "Edited from site"
 msgstr ""
 
 #: .\judge\views\comment.py:123 .\judge\views\organization.py:250
-#, python-format
 msgid "Editing %s"
 msgstr ""
 
@@ -961,7 +958,6 @@ msgid "No such contest"
 msgstr ""
 
 #: .\judge\views\contests.py:40 .\judge\views\contests.py:122
-#, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr ""
 
@@ -974,7 +970,6 @@ msgid "Could not find such contest."
 msgstr ""
 
 #: .\judge\views\contests.py:128
-#, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr ""
 
@@ -983,7 +978,6 @@ msgid "Contest not ongoing"
 msgstr ""
 
 #: .\judge\views\contests.py:168
-#, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr ""
 
@@ -992,7 +986,6 @@ msgid "Already in contest"
 msgstr ""
 
 #: .\judge\views\contests.py:173
-#, python-format
 msgid "You are already in a contest: \"%s\"."
 msgstr ""
 
@@ -1001,12 +994,10 @@ msgid "Time limit exceeded"
 msgstr ""
 
 #: .\judge\views\contests.py:183
-#, python-format
 msgid "Too late! You already used up your time limit for \"%s\"."
 msgstr ""
 
 #: .\judge\views\contests.py:197
-#, python-format
 msgid "You are not in contest \"%s\"."
 msgstr ""
 
@@ -1019,17 +1010,14 @@ msgid "404 error"
 msgstr ""
 
 #: .\judge\views\error.py:15
-#, python-format
 msgid "Could not find page \"%s\""
 msgstr ""
 
 #: .\judge\views\error.py:21
-#, python-format
 msgid "no permission for %s"
 msgstr ""
 
 #: .\judge\views\error.py:27
-#, python-format
 msgid "corrupt page %s"
 msgstr ""
 
@@ -1038,7 +1026,6 @@ msgid "No such language"
 msgstr ""
 
 #: .\judge\views\language.py:23
-#, python-format
 msgid "Could not find a language with the key \"%s\"."
 msgstr ""
 
@@ -1047,7 +1034,6 @@ msgid "No such organization"
 msgstr ""
 
 #: .\judge\views\organization.py:42
-#, python-format
 msgid "Could not find an organization with the key \"%s\"."
 msgstr ""
 
@@ -1056,7 +1042,6 @@ msgid "Could not find such organization."
 msgstr ""
 
 #: .\judge\views\organization.py:78
-#, python-format
 msgid "%s Members"
 msgstr ""
 
@@ -1077,22 +1062,18 @@ msgid "Leaving organization"
 msgstr ""
 
 #: .\judge\views\organization.py:117
-#, python-format
 msgid "You are not in \"%s\"."
 msgstr ""
 
 #: .\judge\views\organization.py:141
-#, python-format
 msgid "Request to join %s"
 msgstr ""
 
 #: .\judge\views\organization.py:185
-#, python-format
 msgid "Managing join requests for %s"
 msgstr ""
 
 #: .\judge\views\organization.py:219
-#, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
 msgstr[0] ""
@@ -1100,7 +1081,6 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: .\judge\views\organization.py:220
-#, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] ""
@@ -1120,7 +1100,6 @@ msgid "No such problem"
 msgstr ""
 
 #: .\judge\views\problem.py:64
-#, python-format
 msgid "Could not find a problem with the code \"%s\"."
 msgstr ""
 
@@ -1137,7 +1116,6 @@ msgid "Submit"
 msgstr ""
 
 #: .\judge\views\ranked_submission.py:50
-#, python-format
 msgid "Best solutions for %s"
 msgstr ""
 
@@ -1146,7 +1124,6 @@ msgid "Best solutions for <a href=\"{1}\">{0}</a>"
 msgstr ""
 
 #: .\judge\views\ranked_submission.py:62
-#, python-format
 msgid "Best solutions for %(problem)s in %(contest)s"
 msgstr ""
 
@@ -1179,22 +1156,18 @@ msgid "No such judge"
 msgstr ""
 
 #: .\judge\views\status.py:54
-#, python-format
 msgid "Could not find a judge with the name \"%s\"."
 msgstr ""
 
 #: .\judge\views\submission.py:50
-#, python-format
 msgid "Submission of %(problem)s by %(user)s"
 msgstr ""
 
 #: .\judge\views\submission.py:181
-#, python-format
 msgid "All submissions by %s"
 msgstr ""
 
 #: .\judge\views\submission.py:203
-#, python-format
 msgid "All submissions for %s"
 msgstr ""
 
@@ -1203,7 +1176,6 @@ msgid "Must pass a problem"
 msgstr ""
 
 #: .\judge\views\submission.py:243
-#, python-format
 msgid "%(user)s's submissions for %(problem)s"
 msgstr ""
 
@@ -1220,7 +1192,6 @@ msgid "No such user"
 msgstr ""
 
 #: .\judge\views\user.py:57
-#, python-format
 msgid "No user handle \"%s\"."
 msgstr ""
 
@@ -1229,7 +1200,6 @@ msgid "My Account"
 msgstr ""
 
 #: .\judge\views\user.py:62
-#, python-format
 msgid "User %s"
 msgstr ""
 
@@ -1247,7 +1217,6 @@ msgid "Users"
 msgstr ""
 
 #: .\judge\views\widgets.py:52 .\judge\views\widgets.py:63
-#, python-format
 msgid "Invalid upstream data: %s"
 msgstr ""
 
@@ -1260,7 +1229,6 @@ msgid "MENU"
 msgstr ""
 
 #: .\templates\base.jade:69
-#, python-format
 msgid "Hello, <b>%(username)s</b>."
 msgstr ""
 
@@ -1351,7 +1319,6 @@ msgid "F Y"
 msgstr ""
 
 #: .\templates\contest\calendar.jade:1 .\templates\contest\calendar.jade:4
-#, python-format
 msgid "Contests in %(month)s"
 msgstr ""
 
@@ -1428,12 +1395,10 @@ msgid "F j, Y, G:i T"
 msgstr ""
 
 #: .\templates\contest\contest.jade:17
-#, python-format
 msgid "<b>%(time_limit)s</b> window from <b>%(start_time)s</b> to <b>%(end_time)s</b>"
 msgstr ""
 
 #: .\templates\contest\contest.jade:18
-#, python-format
 msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
 msgstr ""
 
@@ -1465,13 +1430,11 @@ msgstr ""
 
 #: .\templates\contest\list.jade:26 .\templates\contest\list.jade.py:54
 #: .\templates\contest\list.jade:80
-#, python-format
 msgid "%(time_limit)s window"
 msgstr ""
 
 #: .\templates\contest\list.jade:27 .\templates\contest\list.jade.py:55
 #: .\templates\contest\list.jade:81
-#, python-format
 msgid "%(window_length)s long"
 msgstr ""
 
@@ -1504,7 +1467,6 @@ msgid "All Judges"
 msgstr ""
 
 #: .\templates\judge_status.jade:16
-#, python-format
 msgid "This page shows the live status of %(name)s's judging servers."
 msgstr ""
 
@@ -1827,7 +1789,6 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: .\templates\problem\problem.jade:25
-#, python-format
 msgid "No %(lang)s judge online"
 msgstr ""
 
@@ -1860,7 +1821,6 @@ msgid "Submit!"
 msgstr ""
 
 #: .\templates\registration\activate.jade:2
-#, python-format
 msgid "%(key)s is an invalid activation key."
 msgstr ""
 
@@ -1917,7 +1877,6 @@ msgid "<p>We've emailed you instructions for setting your password. You should b
 msgstr ""
 
 #: .\templates\registration\password_reset_email.txt:2
-#, python-format
 msgid "You're receiving this email because you requested a password reset for your user account at %(site_name)s."
 msgstr ""
 
@@ -1934,12 +1893,10 @@ msgid "Thanks for using our site!"
 msgstr ""
 
 #: .\templates\registration\password_reset_email.txt:12
-#, python-format
 msgid "The %(site_name)s team"
 msgstr ""
 
 #: .\templates\registration\password_reset_subject.txt:2
-#, python-format
 msgid "Password reset on %(site_name)s"
 msgstr ""
 
@@ -2023,12 +1980,10 @@ msgid "Register!"
 msgstr ""
 
 #: .\templates\submission\info_base.jade:1
-#, python-format
 msgid "Submission of <a href=\"%(problem_url)s\">%(problem_name)s</a> by <a href=\"%(user_url)s\">%(user_name)s</a>"
 msgstr ""
 
 #: .\templates\submission\row.jade:13
-#, python-format
 msgid "on %(time)s"
 msgstr ""
 
@@ -2096,7 +2051,6 @@ msgstr ""
 #: .\templates\submission\status_testcases.jade:8
 #: .\templates\submission\status_testcases.jade:32
 #: .\templates\submission\status_testcases.jade:33
-#, python-format
 msgid "(%(points)s/%(total)s points)"
 msgstr ""
 
@@ -2125,7 +2079,6 @@ msgid "Submission aborted!"
 msgstr ""
 
 #: .\templates\submission\status_testcases.jade:35
-#, python-format
 msgid "An internal error occurred while grading, and the %(SITE_NAME)s administrators have been notified.<br/>In the meantime, try resubmitting in a few seconds."
 msgstr ""
 
