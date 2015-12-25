@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-25 15:17-0500\n"
-"PO-Revision-Date: 2015-12-25 15:19-0500\n"
+"POT-Creation-Date: 2015-12-25 15:22-0500\n"
+"PO-Revision-Date: 2015-12-25 15:22-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -39,6 +39,10 @@ msgstr "Rusă"
 #: .\dmoj\settings.py:223
 msgid "Simplified Chinese"
 msgstr "Chineză simplificată"
+
+#: .\judge\apps.py:7
+msgid "Online Judge"
+msgstr ""
 
 #: .\judge\models.py:56
 msgid "Short identifier"
