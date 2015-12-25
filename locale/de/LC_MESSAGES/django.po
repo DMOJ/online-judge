@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-22 22:26-0500\n"
-"PO-Revision-Date: 2015-12-22 22:29-0500\n"
+"POT-Creation-Date: 2015-12-24 19:21-0500\n"
+"PO-Revision-Date: 2015-12-24 19:24-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -955,58 +955,62 @@ msgstr ""
 msgid "Editing %s"
 msgstr ""
 
-#: .\judge\views\contests.py:41 .\judge\views\contests.py:123
-#: .\judge\views\contests.py:126 .\judge\views\contests.py:197
+#: .\judge\views\contests.py:39 .\judge\views\contests.py:121
+#: .\judge\views\contests.py:124 .\judge\views\contests.py:196
 msgid "No such contest"
 msgstr ""
 
-#: .\judge\views\contests.py:42 .\judge\views\contests.py:124
+#: .\judge\views\contests.py:40 .\judge\views\contests.py:122
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr ""
 
-#: .\judge\views\contests.py:127
+#: .\judge\views\contests.py:60
+msgid "Contests"
+msgstr ""
+
+#: .\judge\views\contests.py:125
 msgid "Could not find such contest."
 msgstr ""
 
-#: .\judge\views\contests.py:130
+#: .\judge\views\contests.py:128
 #, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr ""
 
-#: .\judge\views\contests.py:168
+#: .\judge\views\contests.py:167
 msgid "Contest not ongoing"
 msgstr ""
 
-#: .\judge\views\contests.py:169
+#: .\judge\views\contests.py:168
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr ""
 
-#: .\judge\views\contests.py:173
+#: .\judge\views\contests.py:172
 msgid "Already in contest"
 msgstr ""
 
-#: .\judge\views\contests.py:174
+#: .\judge\views\contests.py:173
 #, python-format
 msgid "You are already in a contest: \"%s\"."
 msgstr ""
 
-#: .\judge\views\contests.py:183
+#: .\judge\views\contests.py:182
 msgid "Time limit exceeded"
 msgstr ""
 
-#: .\judge\views\contests.py:184
+#: .\judge\views\contests.py:183
 #, python-format
 msgid "Too late! You already used up your time limit for \"%s\"."
 msgstr ""
 
-#: .\judge\views\contests.py:198
+#: .\judge\views\contests.py:197
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr ""
 
-#: .\judge\views\contests.py:217
+#: .\judge\views\contests.py:216
 msgid "ContestCalender requires integer year and month"
 msgstr ""
 
