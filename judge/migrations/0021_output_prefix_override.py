@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contestproblem',
             name='output_prefix_override',
-            field=models.IntegerField(help_text='', null=True, verbose_name='Output prefix length override'),
+            field=models.IntegerField(help_text='', null=True, blank=True, verbose_name='Output prefix length override'),
         ),
         migrations.AlterField(
             model_name='blogpost',

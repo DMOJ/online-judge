@@ -813,7 +813,7 @@ class ContestProblem(models.Model):
     points = models.IntegerField(verbose_name=_('Points'))
     partial = models.BooleanField(default=True, verbose_name=_('Partial'))
     order = models.PositiveIntegerField(db_index=True, verbose_name=_('Order'))
-    output_prefix_override = models.IntegerField(verbose_name=_('Output prefix length override'), null=True)
+    output_prefix_override = models.IntegerField(verbose_name=_('Output prefix length override'), null=True, blank=True)
 
     class Meta:
         unique_together = ('problem', 'contest')
