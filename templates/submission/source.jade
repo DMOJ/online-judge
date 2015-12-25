@@ -11,7 +11,7 @@ block media
             text-align: right;
             float: right;
         }
-    
+
         .submission-info .submission-date {
             color: gray;
         }
@@ -31,7 +31,7 @@ block media
         .source-ln a:hover {
             text-decoration: underline;
         }
-        
+
         .source-ln a::before {
             display: block;
             content: " ";
@@ -70,14 +70,9 @@ block body
 
     hr(style='float:left;width:30%')
     br
-    .source-wrap
-        table
-            tr
-                td.source-ln
-                    div
-                        for line in raw_source|split
-                            a(href='#line-{{ forloop.counter }}', name='line-{{ forloop.counter }}')
-                                pre #{forloop.counter}
-                td.source-code #{highlighted_source}
-    .submission-info
-        
+    .source-wrap: table: tr
+        td.source-ln: div
+            for line in raw_source|split
+                a(href='#line-{{ forloop.counter }}', name='line-{{ forloop.counter }}')
+                    pre #{forloop.counter}
+        td.source-code #{highlighted_source}
