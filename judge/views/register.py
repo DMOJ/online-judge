@@ -5,14 +5,13 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.forms import CharField, ChoiceField, ModelChoiceField
 from django.shortcuts import render
-from django.utils.translation import ugettext as __,  ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _
 from registration.backends.default.views import (RegistrationView as OldRegistrationView,
                                                  ActivationView as OldActivationView)
 from registration.forms import RegistrationForm
 from sortedm2m.forms import SortedMultipleChoiceField
 
 from judge.models import Profile, Language, Organization, TIMEZONE
-
 
 valid_id = re.compile(r'^\w+$')
 
@@ -29,12 +28,12 @@ class CustomRegistrationForm(RegistrationForm):
 
     def clean_email(self):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
-            raise forms.ValidationError(__(u'The email address "%s" is already taken. Only one registration '
-                                           u'is allowed per address.') % self.cleaned_data['email'])
+            raise forms.ValidationError(ugettext(u'The email address "%s" is already taken. Only one registration '
+                                                 u'is allowed per address.') % self.cleaned_data['email'])
         if '@' in self.cleaned_data['email'] and \
-                  self.cleaned_data['email'].split('@')[-1] in getattr(settings, 'BAD_MAIL_PROVIDERS', set()):
-            raise forms.ValidationError(__(u'Your email provider is not allowed due to history of abuse. '
-                                           u'Please use a reputable email provider.'))
+                        self.cleaned_data['email'].split('@')[-1] in getattr(settings, 'BAD_MAIL_PROVIDERS', set()):
+            raise forms.ValidationError(ugettext(u'Your email provider is not allowed due to history of abuse. '
+                                                 u'Please use a reputable email provider.'))
         return self.cleaned_data['email']
 
 
@@ -84,6 +83,6 @@ class ActivationView(OldActivationView):
 
 def social_auth_error(request):
     return render(request, 'generic_message.jade', {
-        'title': __('Authentication failure'),
+        'title': ugettext('Authentication failure'),
         'message': request.GET.get('message')
     })

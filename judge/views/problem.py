@@ -15,7 +15,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template import Context
 from django.template.loader import get_template
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext as _, ugettext_lazy as __
+from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.generic import ListView, View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
@@ -188,7 +188,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
 
 class ProblemList(TitleMixin, ListView):
     model = Problem
-    title = __('Problems')
+    title = ugettext_lazy('Problems')
     context_object_name = 'problems'
     template_name = 'problem/list.jade'
 

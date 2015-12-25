@@ -11,7 +11,7 @@ from django.db import transaction
 from django.db.models import Count, Max
 from django.forms import Form, modelformset_factory
 from django.http import HttpResponseRedirect, Http404
-from django.utils.translation import ugettext as _, ugettext_lazy as __, ungettext
+from django.utils.translation import ugettext as _, ugettext_lazy, ungettext
 from django.views.generic import DetailView, ListView, View, UpdateView, FormView
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 from reversion import revisions
@@ -57,7 +57,7 @@ class OrganizationList(TitleMixin, ListView):
     model = Organization
     context_object_name = 'organizations'
     template_name = 'organization/list.jade'
-    title = __('Organizations')
+    title = ugettext_lazy('Organizations')
 
 
 class OrganizationHome(OrganizationMixin, DetailView):
@@ -154,7 +154,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
 class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
     model = OrganizationRequest
     template_name = 'organization/requests/detail.jade'
-    title = __('Join request detail')
+    title = ugettext_lazy('Join request detail')
 
     def get_object(self, queryset=None):
         object = super(OrganizationRequestDetail, self).get_object(queryset)

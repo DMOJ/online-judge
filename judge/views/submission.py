@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import format_html
-from django.utils.translation import ugettext as _, ugettext_lazy as __
+from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.generic import ListView, DetailView
 
 from judge import event_poster as event
@@ -105,7 +105,7 @@ class SubmissionsListBase(TitleMixin, ListView):
     model = Submission
     paginate_by = 50
     show_problem = True
-    title = __('All submissions')
+    title = ugettext_lazy('All submissions')
     template_name = 'submission/list.jade'
     context_object_name = 'submissions'
     first_page_href = None
