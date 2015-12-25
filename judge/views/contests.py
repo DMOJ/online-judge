@@ -1,17 +1,16 @@
 from calendar import Calendar, SUNDAY
 from collections import namedtuple, defaultdict
-from operator import attrgetter
 from datetime import timedelta, date, datetime, time
+from operator import attrgetter
 
 import pytz
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
-
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import connection
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Min, Max
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
@@ -21,12 +20,11 @@ from django.utils.translation import ugettext as _, ugettext_lazy as __
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView
 
+from judge import event_poster as event
 from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
-from judge import event_poster as event
-
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax']
@@ -63,7 +61,7 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
 
     def get_queryset(self):
         return super(ContestList, self).get_queryset().annotate(participation_count=Count('users')) \
-                                       .order_by('-start_time', 'key')
+            .order_by('-start_time', 'key')
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
@@ -110,7 +108,7 @@ class ContestMixin(object):
 
         if contest.is_private:
             if profile is None or (not user.has_perm('judge.edit_all_contest') and
-                                   not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
+                                       not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
                 raise PrivateContestError(contest.name, contest.organizations.all())
         return contest
 
@@ -151,7 +149,8 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
                 context['participation'] = None
             else:
                 context['participating'] = True
-            context['in_contest'] = contest_profile.current is not None and contest_profile.current.contest == self.object
+            context[
+                'in_contest'] = contest_profile.current is not None and contest_profile.current.contest == self.object
         else:
             context['participating'] = False
             context['participation'] = None
@@ -174,9 +173,9 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                    _('You are already in a contest: "%s".') % contest_profile.current.contest.name)
 
         participation, created = ContestParticipation.objects.get_or_create(
-            contest=contest, profile=contest_profile, defaults={
-                'real_start': timezone.now()
-            }
+                contest=contest, profile=contest_profile, defaults={
+                    'real_start': timezone.now()
+                }
         )
 
         if not created and participation.ended:
@@ -242,8 +241,8 @@ class ContestCalendar(ContestListMixin, TemplateView):
         starts, ends, oneday = self.get_contest_data(timezone.make_aware(datetime.combine(calendar[0][0], time.min)),
                                                      timezone.make_aware(datetime.combine(calendar[-1][-1], time.min)))
         return [[ContestDay(
-            date=date, weekday=self.weekday_classes[weekday], is_pad=date.month != self.month,
-            is_today=date == today, starts=starts[date], ends=ends[date], oneday=oneday[date],
+                date=date, weekday=self.weekday_classes[weekday], is_pad=date.month != self.month,
+                is_today=date == today, starts=starts[date], ends=ends[date], oneday=oneday[date],
         ) for weekday, date in enumerate(week)] for week in calendar]
 
     def get_context_data(self, **kwargs):
@@ -254,9 +253,26 @@ class ContestCalendar(ContestListMixin, TemplateView):
         except ValueError:
             raise Http404()
 
+        dates = Contest.objects.aggregate(min=Min('start_date'), max=Max('end_date'))
+        min_month = dates['min'].year, dates['min'].month
+        max_month = dates['max'].year, dates['max'].month
+
+        month = (self.year, self.month)
+        if month < min_month or month > max_month:
+            # 404 is valid because it merely declares the lack of existence, without any reason
+            raise Http404()
+
         context['calendar'] = self.get_table()
-        context['prev_month'] = date(self.year - (self.month == 1), 12 if self.month == 1 else self.month - 1, 1)
-        context['next_month'] = date(self.year + (self.month == 12), 1 if self.month == 12 else self.month + 1, 1)
+
+        if month > min_month:
+            context['prev_month'] = date(self.year - (self.month == 1), 12 if self.month == 1 else self.month - 1, 1)
+        else:
+            context['prev_month'] = None
+
+        if month < max_month:
+            context['next_month'] = date(self.year + (self.month == 12), 1 if self.month == 12 else self.month + 1, 1)
+        else:
+            context['next_month'] = None
         return context
 
 
@@ -288,7 +304,8 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
         WHERE cp.contest_id = %s AND part.contest_id = %s
         GROUP BY cp.id, part.id
     ''', (contest.id, contest.id))
-    data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in cursor.fetchall()}
+    data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in
+            cursor.fetchall()}
     problems = map(attrgetter('id', 'points'), problems)
     cursor.close()
 
@@ -297,27 +314,27 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
         user = contest_profile.user
         part = participation.id
         return ContestRankingProfile(
-            id=contest_profile.user_id,
-            user=user.user,
-            display_rank=user.display_rank,
-            long_display_name=user.long_display_name,
-            points=participation.score,
-            cumtime=participation.cumtime,
-            organization=user.organization,
-            rating=participation.rating.rating if hasattr(participation, 'rating') else None,
-            problems=[BestSolutionData(
-                code=data[part, prob][0], points=data[part, prob][1],
-                time=data[part, prob][2] - participation.start,
-                state='failed-score' if not data[part, prob][1] else
-                      ('full-score' if data[part, prob][1] == points else 'partial-score'),
-            ) if data[part, prob][1] is not None else None for prob, points in problems]
+                id=contest_profile.user_id,
+                user=user.user,
+                display_rank=user.display_rank,
+                long_display_name=user.long_display_name,
+                points=participation.score,
+                cumtime=participation.cumtime,
+                organization=user.organization,
+                rating=participation.rating.rating if hasattr(participation, 'rating') else None,
+                problems=[BestSolutionData(
+                        code=data[part, prob][0], points=data[part, prob][1],
+                        time=data[part, prob][2] - participation.start,
+                        state='failed-score' if not data[part, prob][1] else
+                        ('full-score' if data[part, prob][1] == points else 'partial-score'),
+                ) if data[part, prob][1] is not None else None for prob, points in problems]
         )
 
     return map(make_ranking_profile,
                contest.users.select_related('profile__user__user', 'rating')
-                      .prefetch_related('profile__user__organizations')
-                      .defer('profile__user__about', 'profile__user__organizations__about')
-                      .order_by('-score', 'cumtime'))
+               .prefetch_related('profile__user__organizations')
+               .defer('profile__user__about', 'profile__user__organizations__about')
+               .order_by('-score', 'cumtime'))
 
 
 def contest_ranking_ajax(request, contest):
