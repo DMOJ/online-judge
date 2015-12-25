@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-24 19:29-0500\n"
+"POT-Creation-Date: 2015-12-25 15:17-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1268,8 +1268,9 @@ msgstr ""
 msgid "Updated on site"
 msgstr ""
 
-#: .\judge\views\user.py:154 .\templates\base.jade.py:73
-#: .\templates\user\user_tabs.jade:9
+#: .\judge\views\user.py:154 .\templates\admin\auth\user\change_form.html:14
+#: .\templates\admin\auth\user\change_form.html:17 .\templates\base.jade:73
+#: .\templates\user\user_tabs.jade.py:9
 msgid "Edit profile"
 msgstr ""
 
@@ -1284,6 +1285,27 @@ msgstr ""
 
 #: .\judge\views\widgets.py:73
 msgid "Bad latitude or longitude"
+msgstr ""
+
+#: .\templates\admin\judge\contest\change_form.html:14
+#: .\templates\admin\judge\contest\change_form.html:17
+msgid "Rate"
+msgstr ""
+
+#: .\templates\admin\judge\contest\change_list.html:9
+msgid "Rate all ratable contests"
+msgstr ""
+
+#: .\templates\admin\judge\profile\change_form.html:14
+#: .\templates\admin\judge\profile\change_form.html:17
+msgid "Edit user"
+msgstr ""
+
+#: .\templates\admin\judge\submission\change_form.html:14
+#: .\templates\admin\judge\submission\change_form.html:17
+#: .\templates\submission\source.jade:50
+#: .\templates\submission\status.jade:127
+msgid "Rejudge"
 msgstr ""
 
 #: .\templates\base.jade:57
@@ -2100,10 +2122,6 @@ msgstr ""
 
 #: .\templates\submission\status.jade:126
 msgid "View source"
-msgstr ""
-
-#: .\templates\submission\status.jade:127
-msgid "Rejudge"
 msgstr ""
 
 #: .\templates\submission\status.jade:137

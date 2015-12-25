@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-24 19:29-0500\n"
-"PO-Revision-Date: 2015-12-24 19:30-0500\n"
+"POT-Creation-Date: 2015-12-25 15:17-0500\n"
+"PO-Revision-Date: 2015-12-25 15:19-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1092,7 +1092,7 @@ msgstr "请求加入 %s"
 
 #: .\judge\views\organization.py:157
 msgid "Join request detail"
-msgstr ""
+msgstr "组织加入请求详细信息"
 
 #: .\judge\views\organization.py:185
 #, python-format
@@ -1173,11 +1173,11 @@ msgstr "真实姓名 (可选)"
 #: .\judge\views\register.py:31
 #, python-format
 msgid "The email address \"%s\" is already taken. Only one registration is allowed per address."
-msgstr ""
+msgstr "电子邮件地址“%s“已被使用。每个电子邮件地址只允许一个账户。"
 
 #: .\judge\views\register.py:35
 msgid "Your email provider is not allowed due to history of abuse. Please use a reputable email provider."
-msgstr ""
+msgstr "由于滥用历史，我们不允许您的电子邮件提供商。请使用有信誉的电子邮件提供商。"
 
 #: .\judge\views\register.py:41 .\judge\views\register.py:75
 msgid "Registration"
@@ -1185,7 +1185,7 @@ msgstr "注册"
 
 #: .\judge\views\register.py:86
 msgid "Authentication failure"
-msgstr ""
+msgstr "身份验证失败"
 
 #: .\judge\views\status.py:27
 msgid "Status"
@@ -1258,8 +1258,9 @@ msgstr "用户 %s"
 msgid "Updated on site"
 msgstr "在网站上更新"
 
-#: .\judge\views\user.py:154 .\templates\base.jade.py:73
-#: .\templates\user\user_tabs.jade:9
+#: .\judge\views\user.py:154 .\templates\admin\auth\user\change_form.html:14
+#: .\templates\admin\auth\user\change_form.html:17 .\templates\base.jade:73
+#: .\templates\user\user_tabs.jade.py:9
 msgid "Edit profile"
 msgstr "编辑个人资料"
 
@@ -1275,6 +1276,27 @@ msgstr "无效的上游数据： %s"
 #: .\judge\views\widgets.py:73
 msgid "Bad latitude or longitude"
 msgstr "无效的纬度或经度"
+
+#: .\templates\admin\judge\contest\change_form.html:14
+#: .\templates\admin\judge\contest\change_form.html:17
+msgid "Rate"
+msgstr "评分"
+
+#: .\templates\admin\judge\contest\change_list.html:9
+msgid "Rate all ratable contests"
+msgstr "评分所有可评分竞赛"
+
+#: .\templates\admin\judge\profile\change_form.html:14
+#: .\templates\admin\judge\profile\change_form.html:17
+msgid "Edit user"
+msgstr "编辑用户"
+
+#: .\templates\admin\judge\submission\change_form.html:14
+#: .\templates\admin\judge\submission\change_form.html:17
+#: .\templates\submission\source.jade:50
+#: .\templates\submission\status.jade:127
+msgid "Rejudge"
+msgstr "重新评分"
 
 #: .\templates\base.jade:57
 msgid "MENU"
@@ -2069,10 +2091,6 @@ msgstr "重新提交"
 #: .\templates\submission\status.jade:126
 msgid "View source"
 msgstr "查看源代码"
-
-#: .\templates\submission\status.jade:127
-msgid "Rejudge"
-msgstr "重新评分"
 
 #: .\templates\submission\status.jade:137
 msgid "Abort"
