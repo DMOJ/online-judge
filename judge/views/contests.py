@@ -16,7 +16,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.utils.html import escape
 from django.utils.timezone import make_aware
-from django.utils.translation import ugettext as _, ugettext_lazy as __
+from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView
 
@@ -57,7 +57,7 @@ class ContestListMixin(object):
 class ContestList(TitleMixin, ContestListMixin, ListView):
     model = Contest
     template_name = 'contest/list.jade'
-    title = __('Contests')
+    title = ugettext_lazy('Contests')
 
     def get_queryset(self):
         return super(ContestList, self).get_queryset().annotate(participation_count=Count('users')) \
