@@ -1,5 +1,5 @@
 from itertools import repeat, chain
-from operator import attrgetter
+from operator import itemgetter
 
 from django.db.models import Count, Sum, Case, When, IntegerField, Value, FloatField
 from django.db.models.expressions import CombinedExpression
@@ -57,14 +57,14 @@ def ac_rate(request):
     data = Language.objects.annotate(total=Count('submission'), ac_rate=rate) \
                    .values('key', 'name', 'short_name', 'ac_rate').order_by('-total')
     return JsonResponse({
-        'labels': map(attrgetter('name'), data),
+        'labels': map(itemgetter('name'), data),
         'datasets': [
             {
                 'fillColor': 'rgba(151,187,205,0.5)',
                 'strokeColor': 'rgba(151,187,205,0.8)',
                 'highlightFill': 'rgba(151,187,205,0.75)',
                 'highlightStroke': 'rgba(151,187,205,1)',
-                'data': map(attrgetter('ac_rate'), data),
+                'data': map(itemgetter('ac_rate'), data),
             }
         ]
     })
