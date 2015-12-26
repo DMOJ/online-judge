@@ -1,11 +1,11 @@
 from itertools import repeat, chain
 
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Case, When, IntegerField, Value
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
-from judge.models import Language, CountIf
+from judge.models import Language
 
 chart_colors = [0x3366CC, 0xDC3912, 0xFF9900, 0x109618, 0x990099, 0x3B3EAC, 0x0099C6, 0xDD4477, 0x66AA00, 0xB82E2E,
                 0x316395, 0x994499, 0x22AA99, 0xAAAA11, 0x6633CC, 0xE67300, 0x8B0707, 0x329262, 0x5574A6, 0x3B3EAC]
@@ -45,9 +45,9 @@ def language_data(request, language_count=Language.objects.annotate(count=Count(
 
 
 def ac_language_data(request):
-    return language_data(request, Language.objects.annotate(count=CountIf('submission', condition={
-        'submission__result': 'AC'
-    })))
+    return language_data(request, Language.objects.annotate(count=Count(Case(
+        When(submission__result='AC', then=Value(1)), output_field=IntegerField()
+    ))))
 
 
 def language(request):
