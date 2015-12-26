@@ -140,30 +140,37 @@
   display: block
   text-align: center
 
-#common-content
-  display: flex
-  flex-direction: row-reverse
+@media (min-width: 400px)
+  #common-content
+    display: flex
+    flex-direction: row-reverse
 
-#content-left
-  flex: 86%
-  width: 100%
-
-  .content-description
+  #content-left
+    flex: 86%
     width: 100%
 
-#content-right
-  flex: 14%
-  max-width: 12.5em
-  min-width: 8em
-  padding-left: 3em
-  padding-top: 1em
+    .content-description
+      width: 100%
 
+  #content-right
+    flex: 14%
+    max-width: 12.5em
+    min-width: 8em
+    padding-left: 3em
+    padding-top: 1em
+
+    .info-float
+      float: none
+      padding: 10px 0 0
+      position: sticky
+      top: 60px
+      width: 100%
+
+@media (max-width: 399px)
   .info-float
     float: none
-    padding: 10px 0 0
-    position: sticky
-    top: 60px
     width: 100%
+    box-sizing: border-box
 
 a.view-pdf
   padding-top: 0.6em
