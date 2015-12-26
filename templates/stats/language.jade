@@ -1,3 +1,21 @@
 extends stats/base
 
+- load i18n
+
 block chart_body
+    h3 {% trans "Submissions by Language" %}
+    canvas#by-lang(width=400, height=400)
+
+block bodyend
+    <script type="text/javascript>
+        | var language_data = [
+            each language in languages
+                | { value: #{language.count}, label: "#{language.name}" },
+            | { value: #{other}, label: "Other" }
+        | ];
+    </script>
+    script(type='text/javascript').
+        $(function () {
+            var ctx = $('canvas#by-lang').get(0).getContext('2d');
+            var chart = new Chart(ctx).Pie(data);
+        });
