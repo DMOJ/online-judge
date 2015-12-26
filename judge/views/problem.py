@@ -229,7 +229,7 @@ class ProblemList(TitleMixin, ListView):
             filter |= Q(authors=self.profile)
         queryset = Problem.objects.filter(filter) \
             .annotate(number_of_users=Count(Case(
-                When(submission__result='AC', then=F('submission__user')),
+                When(submission__points__gt=0, then=F('submission__user')),
                 output_field=IntegerField()
             ), distinct=True)) \
             .select_related('group').defer('description').order_by('code')
