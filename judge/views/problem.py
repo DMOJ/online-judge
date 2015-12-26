@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.db.models import Count, Q, F
+from django.db.models import Count, Q, F, Case, IntegerField, When
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.template import Context
@@ -228,7 +228,10 @@ class ProblemList(TitleMixin, ListView):
                                       .values('id').distinct())
             filter |= Q(authors=self.profile)
         queryset = Problem.objects.filter(filter) \
-            .annotate(number_of_users=Count('submission__user', distinct=True)) \
+            .annotate(number_of_users=Count(Case(
+                When(submission__result='AC', then=F('submission__user')),
+                output_field=IntegerField()
+            ), distinct=True)) \
             .select_related('group').defer('description').order_by('code')
         if self.profile is not None and self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
