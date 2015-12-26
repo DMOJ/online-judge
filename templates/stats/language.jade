@@ -7,7 +7,7 @@ block chart_body
     canvas#by-lang(width=400, height=400)
 
 block bodyend
-    <script type="text/javascript>
+    <script type="text/javascript">
     | var language_data = [
     each language in languages
         | { value: #{language.count}, label: "#{language.name}" },
