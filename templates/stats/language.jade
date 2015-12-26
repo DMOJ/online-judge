@@ -11,7 +11,7 @@ block bodyend
     | var language_data = [
     each language in languages
         | { value: #{language.count}, label: "#{language.name}",
-        |   color: "#{language.color}", highlight: #{language.highlight} },
+        |   color: "#{language.color}", highlight: "#{language.highlight}" },
     |     { value: #{other}, label: "Other", color: "#FDB45C", highlight: "#FFC870" }
     | ];
     </script>
