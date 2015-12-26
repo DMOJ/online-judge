@@ -51,6 +51,8 @@ block chart_body
     div.chart#lang-ac
         canvas(width=300, height=300)
         ul.legend
+    h3 {% trans "Language AC Rate" %}
+    canvas#ac-rate(width=350, height=700)
 
 block bodyend
     script(type='text/javascript').
@@ -71,4 +73,8 @@ block bodyend
             }
             draw_pie_chart('{% url "language_stats_data_all" %}', $('#lang-all'));
             draw_pie_chart('{% url "language_stats_data_ac" %}', $('#lang-ac'));
+
+            $.getJSON('{% url "language_stats_data_ac_rate" %}', function (data) {
+                new Chart($('canvas#ac-rate').get(0).getContext('2d')).HorizontalBar(data);
+            });
         });

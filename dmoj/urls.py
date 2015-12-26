@@ -236,7 +236,7 @@ urlpatterns = [
             url('^$', stats.language, name='language_stats'),
             url('^data/all/$', stats.language_data, name='language_stats_data_all'),
             url('^data/ac/$', stats.ac_language_data, name='language_stats_data_ac'),
-            url('^data/ac_rate/$', stats.ac_rate, name='language_stats_data_ac'),
+            url('^data/ac_rate/$', stats.ac_rate, name='language_stats_data_ac_rate'),
         ])),
     ])),
 
