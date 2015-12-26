@@ -55,7 +55,7 @@ def ac_language_data(request):
 def ac_rate(request):
     rate = CombinedExpression(ac_count / Count('submission'), '*', Value(100.0), output_field=FloatField())
     data = Language.objects.annotate(total=Count('submission'), ac_rate=rate).filter(total__gt=0) \
-                   .values('key', 'name', 'short_name', 'ac_rate').order_by('-total')
+                   .values('key', 'name', 'short_name', 'ac_rate').order_by('total')
     return JsonResponse({
         'labels': map(itemgetter('name'), data),
         'datasets': [
