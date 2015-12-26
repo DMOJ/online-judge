@@ -1,0 +1,12 @@
+extends base
+
+- load staticfiles
+
+block js_media
+    script(type='text/javascript', src='{% static "chart.js" %}')
+
+block body
+    ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
+        li(class=('active' if tab == 'language' else ''))
+            a(href='{% url "language_stats" %}') {% trans "Language" %}
+    block chart_body

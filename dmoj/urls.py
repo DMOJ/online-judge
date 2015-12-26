@@ -12,7 +12,8 @@ from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitem
     BlogPostSitemap, SolutionSitemap
 from judge.views.register import RegistrationView, ActivationView
 from judge.views import TitledTemplateView
-from judge.views import organization, language, status, blog, problem, solution, mailgun, license, register, user, submission, widgets, comment, contests, api, ranked_submission
+from judge.views import organization, language, status, blog, problem, solution, mailgun, license, register, user, \
+    submission, widgets, comment, contests, api, ranked_submission, stats
 from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
         ContestProfileSelect2View
 
@@ -221,6 +222,10 @@ urlpatterns = [
         url(r'^comment/atom/$', AtomCommentFeed(), name='comment_atom'),
         url(r'^blog/rss/$', BlogFeed()),
         url(r'^blog/atom/$', AtomBlogFeed()),
+    ])),
+
+    url(r'^stats/', include([
+        url('^language/$', stats.language, name='language_stats'),
     ])),
 
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {
