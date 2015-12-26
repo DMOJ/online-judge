@@ -2,9 +2,13 @@ extends base
 
 - load i18n
 - load staticfiles
+- load compess
 
 block js_media
-    script(type='text/javascript', src='{% static "chart.js" %}')
+    - compress js
+        script(type='text/javascript', src='{% static "chart.js/Chart.Core.js" %}')
+        script(type='text/javascript', src='{% static "chart.js/Chart.Doughnut.js" %}')
+        script(type='text/javascript', src='{% static "chart.js/Chart.HorizontalBar.js" %}')
 
 block content_title
     | {% trans "Statistics" %}
