@@ -4,10 +4,32 @@ extends stats/base
 
 block media
     style.
+        ul.legend {
+            list-style-type: none;
+            padding: 0;
+        }
+
         .legend .square {
             display: inline-block;
             width: 1em;
             height: 1em;
+            margin-right: .3em;
+        }
+
+        @media (max-width: 600px) {
+            ul.legend {
+                -moz-columns: 5 7em;
+            }
+        }
+
+        @media (min-width: 601px) {
+            .chart {
+                display: flex;
+            }
+
+            ul.legend {
+                margin-left: 20px;
+            }
         }
 
 
