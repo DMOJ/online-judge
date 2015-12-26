@@ -6,7 +6,7 @@ from judge.models import Language
 
 
 def language(request):
-    language_count = Language.objects.annotate(count=Count('submission_set'))
+    language_count = Language.objects.annotate(count=Count('submission'))
     return render(request, 'stats/language.jade', {
         'title': _('Language statistics'), 'tab': 'language',
         'languages': language_count.filter(count__gte=1000).values('key', 'name', 'short_name', 'count'),
