@@ -9,9 +9,9 @@ block chart_body
 block bodyend
     <script type="text/javascript>
     | var language_data = [
-        each language in languages
-            | { value: #{language.count}, label: "#{language.name}" },
-        | { value: #{other}, label: "Other" }
+    each language in languages
+        | { value: #{language.count}, label: "#{language.name}" },
+    |     { value: #{other}, label: "Other" }
     | ];
     </script>
     script(type='text/javascript').
