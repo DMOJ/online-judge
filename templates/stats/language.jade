@@ -83,13 +83,7 @@ block bodyend
                 var ctx = $('canvas#ac-rate').get(0).getContext('2d');
                 ctx.canvas.height = 20 * data.labels.length;
                 new Chart(ctx).HorizontalBar(data, {
-                    customTooltips: function (tooltip) {
-                        if (!tooltip)
-                            return;
-                        var groups = /^(.*): ([\d.]+)$/.exec(tooltip.text);
-                        tooltip.text = groups[1] + ': ' + Math.round(groups[2] * 100) / 100 + '%';
-                        return tooltip;
-                    }
+                    tooltipTemplate: '<%=label%>: <%= Math.round(value * 100) / 100 %>%'
                 });
             });
         });
