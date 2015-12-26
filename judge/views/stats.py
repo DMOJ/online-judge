@@ -16,7 +16,7 @@ def language_data(request):
         hash = md5(language['key']).hexdigest()[:6]
         r, g, b = int(hash[:2], 16), int(hash[2:4], 16), int(hash[4:6], 16),
         data.append({
-            'value': languages['count'], 'label': languages['name'],
+            'value': language['count'], 'label': language['name'],
             'color': '#%02X%02X%02X' % (r, g, b),
             'highlight': '#%02X%02X%02X' % (min(int(r * 1.2), 255),
                                             min(int(g * 1.2), 255),
