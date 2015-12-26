@@ -1,6 +1,8 @@
 from itertools import repeat, chain
+from operator import attrgetter
 
-from django.db.models import Count, Sum, Case, When, IntegerField, Value
+from django.db.models import Count, Sum, Case, When, IntegerField, Value, FloatField
+from django.db.models.expressions import CombinedExpression
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
@@ -19,10 +21,12 @@ def _highlight_colors():
                                                    min(int(g * 1.2), 255),
                                                    min(int(b * 1.2), 255)))
 
+
 _highlight_colors()
 del _highlight_colors
 
 chart_colors = map('#%06X'.__mod__, chart_colors)
+ac_count = Count(Case(When(submission__result='AC', then=Value(1)), output_field=IntegerField()))
 
 
 def repeat_chain(iterable):
@@ -45,9 +49,25 @@ def language_data(request, language_count=Language.objects.annotate(count=Count(
 
 
 def ac_language_data(request):
-    return language_data(request, Language.objects.annotate(count=Count(Case(
-        When(submission__result='AC', then=Value(1)), output_field=IntegerField()
-    ))))
+    return language_data(request, Language.objects.annotate(count=ac_count))
+
+
+def ac_rate(request):
+    rate = CombinedExpression(ac_count / Count('submission'), '*', Value(100.0), output_field=FloatField())
+    data = Language.objects.annotate(total=Count('submission'), ac_rate=rate) \
+                   .values('key', 'name', 'short_name', 'ac_rate').order_by('-total')
+    return JsonResponse({
+        'labels': map(attrgetter('name'), data),
+        'datasets': [
+            {
+                'fillColor': 'rgba(151,187,205,0.5)',
+                'strokeColor': 'rgba(151,187,205,0.8)',
+                'highlightFill': 'rgba(151,187,205,0.75)',
+                'highlightStroke': 'rgba(151,187,205,1)',
+                'data': map(attrgetter('ac_rate'), data),
+            }
+        ]
+    })
 
 
 def language(request):
