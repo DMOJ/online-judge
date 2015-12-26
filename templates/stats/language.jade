@@ -44,24 +44,31 @@ block media
 
 block chart_body
     h3 {% trans "Submissions by Language" %}
-    div.chart#by-lang
+    div.chart#lang-all
+        canvas(width=300, height=300)
+        ul.legend
+    h3 {% trans "AC Submissions by Language" %}
+    div.chart#lang-ac
         canvas(width=300, height=300)
         ul.legend
 
 block bodyend
     script(type='text/javascript').
         $(function () {
-            $.getJSON('{% url "language_stats_data" %}', function (data) {
-                var $lang = $('#by-lang');
-                var ctx = $lang.find('canvas').get(0).getContext('2d');
-                var chart = new Chart(ctx).Pie(data);
+            function draw_pie_chart(url, $chart) {
+                $.getJSON(url, function (data) {
+                    var ctx = $chart.find('canvas').get(0).getContext('2d');
+                    var chart = new Chart(ctx).Pie(data);
 
-                var $legend = $lang.find('.legend');
-                for (var i = 0; i < data.length; ++i) {
-                    $legend.append($('<li>')
-                            .append($('<span>').addClass('square').css('background-color', data[i].color))
-                            .append($('<span>').text(data[i].label))
-                    );
-                }
-            });
+                    var $legend = $chart.find('.legend');
+                    for (var i = 0; i < data.length; ++i) {
+                        $legend.append($('<li>')
+                                .append($('<span>').addClass('square').css('background-color', data[i].color))
+                                .append($('<span>').text(data[i].label))
+                        );
+                    }
+                });
+            }
+            draw_pie_chart('{% url "language_stats_data_all" %}', $('#lang-all'));
+            draw_pie_chart('{% url "language_stats_data_ac" %}', $('#lang-ac'));
         });

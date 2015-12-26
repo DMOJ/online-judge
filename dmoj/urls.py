@@ -10,12 +10,12 @@ from judge.forms import CustomAuthenticationForm
 from judge.rabbitmq import views as rabbitmq_views
 from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap, \
     BlogPostSitemap, SolutionSitemap
-from judge.views.register import RegistrationView, ActivationView
 from judge.views import TitledTemplateView
 from judge.views import organization, language, status, blog, problem, solution, mailgun, license, register, user, \
     submission, widgets, comment, contests, api, ranked_submission, stats
+from judge.views.register import RegistrationView, ActivationView
 from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
-        ContestProfileSelect2View
+    ContestProfileSelect2View
 
 admin.autodiscover()
 
@@ -48,7 +48,8 @@ register_patterns = [
         name='auth_login'),
     url(r'^logout/$',
         auth_views.logout,
-        {'template_name': 'registration/logout.jade', 'extra_context': {'title': 'You have been successfully logged out.'}},
+        {'template_name': 'registration/logout.jade',
+         'extra_context': {'title': 'You have been successfully logged out.'}},
         name='auth_logout'),
     url(r'^password/change/$',
         auth_views.password_change,
@@ -66,15 +67,18 @@ register_patterns = [
         name='password_reset'),
     url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
         auth_views.password_reset_confirm,
-        {'template_name': 'registration/password_reset_confirm.jade', 'extra_context': {'title': 'Confirm Reset Password'}},
+        {'template_name': 'registration/password_reset_confirm.jade',
+         'extra_context': {'title': 'Confirm Reset Password'}},
         name='password_reset_confirm'),
     url(r'^password/reset/complete/$',
         auth_views.password_reset_complete,
-        {'template_name': 'registration/password_reset_complete.jade', 'extra_context': {'title': 'Password Reset Complete'}},
+        {'template_name': 'registration/password_reset_complete.jade',
+         'extra_context': {'title': 'Password Reset Complete'}},
         name='password_reset_complete'),
     url(r'^password/reset/done/$',
         auth_views.password_reset_done,
-        {'template_name': 'registration/password_reset_done.jade', 'extra_context': {'title': 'Password Reset Successful'}},
+        {'template_name': 'registration/password_reset_done.jade',
+         'extra_context': {'title': 'Password Reset Successful'}},
         name='password_reset_done'),
     url(r'^social/error/$', register.social_auth_error, name='social_auth_error'),
 ]
@@ -169,12 +173,15 @@ urlpatterns = [
         url(r'^/leave$', organization.LeaveOrganization.as_view(), name='leave_organization'),
         url(r'^/edit$', organization.EditOrganization.as_view(), name='edit_organization'),
         url(r'^/request$', organization.RequestJoinOrganization.as_view(), name='request_organization'),
-        url(r'^/request/(?P<pk>\d+)$', organization.OrganizationRequestDetail.as_view(), name='request_organization_detail'),
+        url(r'^/request/(?P<pk>\d+)$', organization.OrganizationRequestDetail.as_view(),
+            name='request_organization_detail'),
         url(r'^/requests/', include([
             url(r'^pending$', organization.OrganizationRequestView.as_view(), name='organization_requests_pending'),
             url(r'^log$', organization.OrganizationRequestLog.as_view(), name='organization_requests_log'),
-            url(r'^approved$', organization.OrganizationRequestLog.as_view(states=('A',), tab='approved'), name='organization_requests_approved'),
-            url(r'^rejected$', organization.OrganizationRequestLog.as_view(states=('R',), tab='rejected'), name='organization_requests_rejected'),
+            url(r'^approved$', organization.OrganizationRequestLog.as_view(states=('A',), tab='approved'),
+                name='organization_requests_approved'),
+            url(r'^rejected$', organization.OrganizationRequestLog.as_view(states=('R',), tab='rejected'),
+                name='organization_requests_rejected'),
         ])),
     ])),
 
@@ -225,8 +232,11 @@ urlpatterns = [
     ])),
 
     url(r'^stats/', include([
-        url('^language/$', stats.language, name='language_stats'),
-        url('^language/data/$', stats.language_data, name='language_stats_data'),
+        url('^language/', include([
+            url('^$', stats.language, name='language_stats'),
+            url('^data/all/$', stats.language_data, name='language_stats_data_all'),
+            url('^data/ac/$', stats.ac_language_data, name='language_stats_data_ac'),
+        ])),
     ])),
 
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {

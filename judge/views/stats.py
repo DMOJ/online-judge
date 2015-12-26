@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
-from judge.models import Language
+from judge.models import Language, CountIf
 
 chart_colors = [0x3366CC, 0xDC3912, 0xFF9900, 0x109618, 0x990099, 0x3B3EAC, 0x0099C6, 0xDD4477, 0x66AA00, 0xB82E2E,
                 0x316395, 0x994499, 0x22AA99, 0xAAAA11, 0x6633CC, 0xE67300, 0x8B0707, 0x329262, 0x5574A6, 0x3B3EAC]
@@ -29,8 +29,7 @@ def repeat_chain(iterable):
     return chain.from_iterable(repeat(iterable))
 
 
-def language_data(request):
-    language_count = Language.objects.annotate(count=Count('submission'))
+def language_data(request, language_count=Language.objects.annotate(count=Count('submission'))):
     languages = language_count.filter(count__gte=1000).values('key', 'name', 'short_name', 'count').order_by('-count')
     data = []
     for language, color, highlight in zip(languages, chart_colors, highlight_colors):
@@ -43,6 +42,12 @@ def language_data(request):
         'label': 'Other', 'color': '#FDB45C', 'highlight': '#FFC870',
     })
     return JsonResponse(data, safe=False)
+
+
+def ac_language_data(request):
+    return language_data(request, Language.objects.annotate(count=CountIf('submission', condition={
+        'submission__result': 'AC'
+    })))
 
 
 def language(request):
