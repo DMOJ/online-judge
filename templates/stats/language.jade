@@ -57,6 +57,11 @@ block chart_body
 block bodyend
     script(type='text/javascript').
         $(function () {
+            Chart.defaults.global.scaleFontFamily =
+            Chart.defaults.global.tooltipFontFamily =
+            Chart.defaults.global.tooltipTitleFontFamily =
+                    $('body').css('font-family');
+
             function draw_pie_chart(url, $chart) {
                 $.getJSON(url, function (data) {
                     var ctx = $chart.find('canvas').get(0).getContext('2d');
