@@ -2,15 +2,35 @@ extends stats/base
 
 - load i18n
 
+block media
+    style.
+        .legend .square {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+        }
+
+
 block chart_body
     h3 {% trans "Submissions by Language" %}
-    canvas#by-lang(width=400, height=400)
+    div.chart#by-lang
+        canvas(width=400, height=400)
+        div.legend
 
 block bodyend
     script(type='text/javascript').
         $(function () {
             $.getJSON('{% url "language_stats_data" %}', function (data) {
-                var ctx = $('canvas#by-lang').get(0).getContext('2d');
+                var $lang = $('#by-lang');
+                var ctx = $lang.find('canvas').get(0).getContext('2d');
                 var chart = new Chart(ctx).Pie(data);
+
+                var $legend = $lang.find('.legend');
+                for (var i = 0; i < data.length; ++i) {
+                    $legend.append($('<span>')
+                            .append($('<span>').addClass('square').css('background-color', data[i].color))
+                            .append($('<span>').text(data.name))
+                    );
+                }
             });
         });
