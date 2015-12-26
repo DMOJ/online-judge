@@ -20,13 +20,13 @@ block media
             margin-right: .3em;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 500px) {
             ul.legend {
                 -moz-columns: 5 7em;
             }
         }
 
-        @media (min-width: 601px) {
+        @media (min-width: 501px) {
             .chart {
                 display: flex;
             }
@@ -40,7 +40,7 @@ block media
 block chart_body
     h3 {% trans "Submissions by Language" %}
     div.chart#by-lang
-        canvas(width=400, height=400)
+        canvas(width=300, height=300)
         ul.legend
 
 block bodyend
