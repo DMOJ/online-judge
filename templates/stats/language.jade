@@ -10,8 +10,9 @@ block bodyend
     <script type="text/javascript">
     | var language_data = [
     each language in languages
-        | { value: #{language.count}, label: "#{language.name}" },
-    |     { value: #{other}, label: "Other" }
+        | { value: #{language.count}, label: "#{language.name}",
+        |   color: "#{language.color}", highlight: #{language.highlight} },
+    |     { value: #{other}, label: "Other", color: "#FDB45C", highlight: "#FFC870" }
     | ];
     </script>
     script(type='text/javascript').
