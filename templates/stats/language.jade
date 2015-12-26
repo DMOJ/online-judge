@@ -15,7 +15,7 @@ block chart_body
     h3 {% trans "Submissions by Language" %}
     div.chart#by-lang
         canvas(width=400, height=400)
-        div.legend
+        ul.legend
 
 block bodyend
     script(type='text/javascript').
@@ -27,7 +27,7 @@ block bodyend
 
                 var $legend = $lang.find('.legend');
                 for (var i = 0; i < data.length; ++i) {
-                    $legend.append($('<span>').addClass('item')
+                    $legend.append($('<li>')
                             .append($('<span>').addClass('square').css('background-color', data[i].color))
                             .append($('<span>').text(data[i].label))
                     );
