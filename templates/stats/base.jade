@@ -1,9 +1,13 @@
 extends base
+
 - load i18n
 - load staticfiles
 
 block js_media
     script(type='text/javascript', src='{% static "chart.js" %}')
+
+block content_title
+    | {% trans "Statistics" %}
 
 block body
     ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
