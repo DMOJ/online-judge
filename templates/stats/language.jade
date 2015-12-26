@@ -9,10 +9,8 @@ block chart_body
 block bodyend
     script(type='text/javascript').
         $(function () {
-            $.getJSON('{% url "language_stats_data" %}', {
-                complete: function (data) {
-                    var ctx = $('canvas#by-lang').get(0).getContext('2d');
-                    var chart = new Chart(ctx).Pie(data);
-                }
+            $.getJSON('{% url "language_stats_data" %}', function (data) {
+                var ctx = $('canvas#by-lang').get(0).getContext('2d');
+                var chart = new Chart(ctx).Pie(data);
             });
         });
