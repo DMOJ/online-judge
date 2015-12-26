@@ -26,7 +26,7 @@ def language_data(request):
         'value': language_count.filter(count__lt=1000).aggregate(total=Sum('count'))['total'],
         'label': 'Other', 'color': '#FDB45C', 'highlight': '#FFC870',
     })
-    return JsonResponse(data)
+    return JsonResponse(data, safe=False)
 
 
 def language(request):
