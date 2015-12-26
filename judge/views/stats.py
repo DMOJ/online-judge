@@ -15,9 +15,9 @@ def language(request):
         hash = md5(language['key']).hexdigest()[:6]
         r, g, b = int(hash[:2], 16), int(hash[2:4], 16), int(hash[4:6], 16),
         language['color'] = '#%02X%02X%02X' % (r, g, b)
-        language['highlight'] = '#%02X%02X%02X' % (max(int(r * 1.2), 255),
-                                                   max(int(g * 1.2), 255),
-                                                   max(int(b * 1.2), 255))
+        language['highlight'] = '#%02X%02X%02X' % (min(int(r * 1.2), 255),
+                                                   min(int(g * 1.2), 255),
+                                                   min(int(b * 1.2), 255))
     return render(request, 'stats/language.jade', {
         'title': _('Language statistics'), 'tab': 'language',
         'languages': languages,
