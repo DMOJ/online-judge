@@ -7,16 +7,12 @@ block chart_body
     canvas#by-lang(width=400, height=400)
 
 block bodyend
-    <script type="text/javascript">
-    | var language_data = [
-    each language in languages
-        | { value: #{language.count}, label: "#{language.name}",
-        |   color: "#{language.color}", highlight: "#{language.highlight}" },
-    |     { value: #{other}, label: "Other", color: "#FDB45C", highlight: "#FFC870" }
-    | ];
-    </script>
     script(type='text/javascript').
         $(function () {
-            var ctx = $('canvas#by-lang').get(0).getContext('2d');
-            var chart = new Chart(ctx).Pie(language_data);
+            $.getJSON('{$ url "language_stats_data" %}', {
+                complete: function (data) {
+                    var ctx = $('canvas#by-lang').get(0).getContext('2d');
+                    var chart = new Chart(ctx).Pie(data);
+                }
+            });
         });

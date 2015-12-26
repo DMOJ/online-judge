@@ -226,6 +226,7 @@ urlpatterns = [
 
     url(r'^stats/', include([
         url('^language/$', stats.language, name='language_stats'),
+        url('^language/data/$', stats.language_data, name='language_stats_data'),
     ])),
 
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {
