@@ -17,5 +17,5 @@ block bodyend
     script(type='text/javascript').
         $(function () {
             var ctx = $('canvas#by-lang').get(0).getContext('2d');
-            var chart = new Chart(ctx).Pie(data);
+            var chart = new Chart(ctx).Pie(language_data);
         });
