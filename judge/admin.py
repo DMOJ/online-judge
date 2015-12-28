@@ -15,6 +15,7 @@ from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, Http404
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _, ugettext, ungettext, pgettext
 from mptt.admin import MPTTModelAdmin
 from reversion.admin import VersionAdmin
 from reversion_compare.admin import CompareVersionAdmin
@@ -90,7 +91,7 @@ class ProfileForm(ModelForm):
 
 
 class TimezoneFilter(admin.SimpleListFilter):
-    title = 'Location'
+    title = _('Location')
     parameter_name = 'timezone'
 
     def lookups(self, request, model_admin):
@@ -123,27 +124,28 @@ class ProfileAdmin(Select2SuitMixin, VersionAdmin):
     def admin_user_admin(self, obj):
         return obj.long_display_name
     admin_user_admin.admin_order_field = 'user__username'
-    admin_user_admin.short_description = 'User'
+    admin_user_admin.short_description = _('User')
 
     def email(self, obj):
         return obj.user.email
     email.admin_order_field = 'user__email'
-    email.short_description = 'Email'
+    email.short_description = _('Email')
 
     def timezone_full(self, obj):
         return obj.timezone
 
     timezone_full.admin_order_field = 'timezone'
-    timezone_full.short_description = 'Timezone'
+    timezone_full.short_description = _('Timezone')
 
     def recalculate_points(self, request, queryset):
         count = 0
         for profile in queryset:
             profile.calculate_points()
             count += 1
-        self.message_user(request, "%d user%s have scores recalculated." % (count, 's'[count == 1:]))
-
-    recalculate_points.short_description = 'Recalculate scores'
+        self.message_user(request, ungettext('%d user have scores recalculated.',
+                                             '%d users have scores recalculated.',
+                                             count) % count)
+    recalculate_points.short_description = _('Recalculate scores')
 
 
 class ProblemForm(ModelForm):
@@ -153,7 +155,9 @@ class ProblemForm(ModelForm):
         super(ProblemForm, self).__init__(*args, **kwargs)
         self.fields['authors'].widget.can_add_related = False
         self.fields['banned_users'].widget.can_add_related = False
-        self.fields['change_message'].widget.attrs.update({'placeholder': 'Describe the changes you made (optional)'})
+        self.fields['change_message'].widget.attrs.update({
+            'placeholder': ugettext('Describe the changes you made (optional)')
+        })
 
     class Meta:
         if use_select2:
@@ -169,7 +173,8 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
     title = parameter_name = 'creator'
 
     def lookups(self, request, model_admin):
-        return [(name, '%s (%s)' % (name, display) if display else name)for name, display in
+        template = pgettext('user display name', '%(username)s (%(display)s)')
+        return [(name, template % {'username': name, 'display': display} if display else name) for name, display in
                 Profile.objects.exclude(authored_problems=None).values_list('user__username', 'name')]
 
     def queryset(self, request, queryset):
@@ -197,12 +202,12 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
         (None, {
             'fields': ('code', 'name', 'is_public', 'date', 'authors', 'description', 'license')
         }),
-        ('Taxonomy', {'fields': ('types', 'group')}),
-        ('Points', {'fields': (('points', 'partial'), 'short_circuit')}),
-        ('Limits', {'fields': ('time_limit', 'memory_limit')}),
-        ('Language', {'fields': ('allowed_languages',)}),
-        ('Justice', {'fields': ('banned_users',)}),
-        ('History', {'fields': ('change_message',)})
+        (_('Taxonomy'), {'fields': ('types', 'group')}),
+        (_('Points'), {'fields': (('points', 'partial'), 'short_circuit')}),
+        (_('Limits'), {'fields': ('time_limit', 'memory_limit')}),
+        (_('Language'), {'fields': ('allowed_languages',)}),
+        (_('Justice'), {'fields': ('banned_users',)}),
+        (_('History'), {'fields': ('change_message',)})
     )
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'show_public']
     ordering = ['code']
@@ -225,7 +230,7 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
 
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
-    show_authors.short_description = 'Authors'
+    show_authors.short_description = _('Authors')
 
     def show_public(self, obj):
         return format_html('<a href="{0}">View on site</a>', obj.get_absolute_url())
@@ -262,14 +267,18 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self._update_points_many(queryset.values_list('id', flat=True), '+')
-        self.message_user(request, "%d problem%s successfully marked as public." % (count, 's'[count == 1:]))
-    make_public.short_description = 'Mark problems as public'
+        self.message_user(request, ungettext('%d problem successfully marked as public.',
+                                             '%d problems successfully marked as public.',
+                                             count) % count)
+    make_public.short_description = _('Mark problems as public')
 
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
         self._update_points_many(queryset.values_list('id', flat=True), '-')
-        self.message_user(request, "%d problem%s successfully marked as private." % (count, 's'[count == 1:]))
-    make_private.short_description = 'Mark problems as private'
+        self.message_user(request, ungettext('%d problem successfully marked as private.',
+                                             '%d problems successfully marked as private.',
+                                             count) % count)
+    make_private.short_description = _('Mark problems as private')
 
     def get_queryset(self, request):
         queryset = Problem.objects.prefetch_related('authors__user')
@@ -312,7 +321,7 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
     parameter_name = title = 'status'
-    __lookups = (('None', 'None'), ('NotDone', 'Not done'), ('EX', 'Exceptional')) + Submission.STATUS
+    __lookups = (('None', _('None')), ('NotDone', _('Not done')), ('EX', _('Exceptional'))) + Submission.STATUS
     __handles = set(map(itemgetter(0), Submission.STATUS))
 
     def lookups(self, request, model_admin):
@@ -331,7 +340,7 @@ class SubmissionStatusFilter(admin.SimpleListFilter):
 
 class SubmissionResultFilter(admin.SimpleListFilter):
     parameter_name = title = 'result'
-    __lookups = (('None', 'None'), ('BAD', 'Unaccepted')) + Submission.RESULT
+    __lookups = (('None', _('None')), ('BAD', _('Unaccepted'))) + Submission.RESULT
     __handles = set(map(itemgetter(0), Submission.RESULT))
 
     def lookups(self, request, model_admin):
@@ -374,7 +383,9 @@ class ContestSubmissionInline(admin.StackedInline):
             elif db_field.name == 'problem':
                 kwargs['queryset'] = ContestProblem.objects.filter(problem=submission.problem) \
                                                    .only('id', 'problem__name', 'contest__name')
-                label = lambda obj: '%s in %s' % (obj.problem.name, obj.contest.name)
+                label = lambda obj: pgettext('contest problem', '%(problem)s in %(contest)s') % {
+                    'problem': obj.problem.name, 'contest': obj.contest.name
+                }
         field = super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, **kwargs)
         if label is not None:
             field.label_from_instance = label
@@ -399,7 +410,7 @@ class SubmissionAdmin(admin.ModelAdmin):
                            username=obj.user.user.username,
                            display=obj.user.name)
     user_column.admin_order_field = 'user__user__username'
-    user_column.short_description = 'User'
+    user_column.short_description = _('User')
 
     def get_queryset(self, request):
         queryset = Submission.objects.only(
@@ -422,11 +433,12 @@ class SubmissionAdmin(admin.ModelAdmin):
 
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
-            self.message_user(request, 'You do not have the permission to rejudge submissions.', level=messages.ERROR)
+            self.message_user(request, ugettext('You do not have the permission to rejudge submissions.'),
+                              level=messages.ERROR)
             return
         queryset = queryset.order_by('id')
         if queryset.count() > 10 and not request.user.has_perm('judge.rejudge_submission_lot'):
-            self.message_user(request, 'You do not have the permission to rejudge THAT many submissions.',
+            self.message_user(request, ugettext('You do not have the permission to rejudge THAT many submissions.'),
                               level=messages.ERROR)
             return
         if not request.user.has_perm('judge.edit_all_problem'):
@@ -434,9 +446,10 @@ class SubmissionAdmin(admin.ModelAdmin):
         judged = len(queryset)
         for model in queryset:
             model.judge()
-        self.message_user(request, '%d submission%s were successfully scheduled for rejudging.' %
-                          (judged, 's'[judged == 1:]))
-    judge.short_description = 'Rejudge the selected submissions'
+        self.message_user(request, ungettext('%d submission were successfully scheduled for rejudging.',
+                                             '%d submissions were successfully scheduled for rejudging.',
+                                             judged) % judged)
+    judge.short_description = _('Rejudge the selected submissions')
 
     def execution_time(self, obj):
         return round(obj.time, 2) if obj.time is not None else 'None'
@@ -445,17 +458,18 @@ class SubmissionAdmin(admin.ModelAdmin):
     def pretty_memory(self, obj):
         memory = obj.memory
         if memory is None:
-            return 'None'
+            return ugettext('None')
         if memory < 1000:
-            return '%d KB' % memory
+            return ugettext('%d KB') % memory
         else:
-            return '%.2f MB' % (memory / 1024.)
+            return ugettext('%.2f MB') % (memory / 1024.)
     pretty_memory.admin_order_field = 'memory'
-    pretty_memory.short_description = 'Memory Usage'
+    pretty_memory.short_description = _('Memory Usage')
 
     def recalculate_score(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission'):
-            self.message_user(request, 'You do not have the permission to rejudge submissions.', level=messages.ERROR)
+            self.message_user(request, ugettext('You do not have the permission to rejudge submissions.'),
+                              level=messages.ERROR)
             return
         submissions = list(queryset.select_related('problem').only('points', 'case_points', 'case_total',
                                                                    'problem__partial', 'problem__points'))
@@ -470,9 +484,10 @@ class SubmissionAdmin(admin.ModelAdmin):
             profile.calculate_points()
             cache.delete('user_complete:%d' % profile.id)
 
-        self.message_user(request, '%d submission%s were successfully rescored.' %
-                          (len(submissions), 's'[len(submissions) == 1:]))
-    recalculate_score.short_description = 'Rescore the selected submissions'
+        self.message_user(request, ungettext('%d submission were successfully rescored.',
+                                             '%d submissions were successfully rescored.',
+                                             len(submissions)) % len(submissions))
+    recalculate_score.short_description = _('Rescore the selected submissions')
 
     def problem_code(self, obj):
         return obj.problem.code
@@ -530,13 +545,17 @@ class CommentAdmin(Select2SuitMixin, VersionAdmin):
 
     def hide_comment(self, request, queryset):
         count = queryset.update(hidden=True)
-        self.message_user(request, "%d comment%s successfully hidden." % (count, 's'[count == 1:]))
-    hide_comment.short_description = 'Hide comments'
+        self.message_user(request, ungettext('%d comment successfully hidden.',
+                                             '%d comments successfully hidden.',
+                                             count) % count)
+    hide_comment.short_description = _('Hide comments')
 
     def unhide_comment(self, request, queryset):
         count = queryset.update(hidden=False)
-        self.message_user(request, "%d comment%s successfully unhidden." % (count, 's'[count == 1:]))
-    unhide_comment.short_description = 'Unhide comments'
+        self.message_user(request, ungettext('%d comment successfully unhidden.',
+                                             '%d comments successfully unhidden.',
+                                             count) % count)
+    unhide_comment.short_description = _('Unhide comments')
 
     def get_queryset(self, request):
         return Comment.objects.order_by('-time')
@@ -548,7 +567,7 @@ class CommentAdmin(Select2SuitMixin, VersionAdmin):
             return format_html('<a href="{0}">{1}</a>', link, obj.page)
         else:
             return format_html('{0}', obj.page)
-    linked_page.short_description = 'Associated page'
+    linked_page.short_description = _('Associated page')
     linked_page.allow_tags = True
     linked_page.admin_order_field = 'page'
 
@@ -560,10 +579,10 @@ class CommentAdmin(Select2SuitMixin, VersionAdmin):
 
 class LanguageForm(ModelForm):
     problems = ModelMultipleChoiceField(
-        label='Disallowed problems',
+        label=_('Disallowed problems'),
         queryset=Problem.objects.all(),
         required=False,
-        help_text='These problems are NOT allowed to be submitted in this language',
+        help_text=_('These problems are NOT allowed to be submitted in this language'),
         widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
                FilteredSelectMultiple('problems', False))
 
@@ -590,10 +609,10 @@ class LanguageAdmin(Select2SuitMixin, VersionAdmin):
 
 class ProblemGroupForm(ModelForm):
     problems = ModelMultipleChoiceField(
-        label='Included problems',
+        label=_('Included problems'),
         queryset=Problem.objects.all(),
         required=False,
-        help_text='These problems are included in this group of problems',
+        help_text=_('These problems are included in this group of problems'),
         widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
                FilteredSelectMultiple('problems', False))
 
@@ -614,10 +633,10 @@ class ProblemGroupAdmin(Select2SuitMixin, admin.ModelAdmin):
 
 class ProblemTypeForm(ModelForm):
     problems = ModelMultipleChoiceField(
-        label='Included problems',
+        label=_('Included problems'),
         queryset=Problem.objects.all(),
         required=False,
-        help_text='These problems are included in this type of problems',
+        help_text=_('These problems are included in this type of problems'),
         widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
                FilteredSelectMultiple('problems', False))
 
@@ -698,16 +717,16 @@ class JudgeAdmin(VersionAdmin):
     readonly_fields = ('created', 'online', 'start_time', 'last_ping', 'ping', 'load', 'runtimes', 'problems')
     fieldsets = (
         (None, {'fields': ('name', 'auth_key')}),
-        ('Description', {'fields': ('description',)}),
-        ('Information', {'fields': ('created', 'online', 'start_time', 'last_ping', 'ping', 'load')}),
-        ('Capabilities', {'fields': ('runtimes', 'problems')}),
+        (_('Description'), {'fields': ('description',)}),
+        (_('Information'), {'fields': ('created', 'online', 'start_time', 'last_ping', 'ping', 'load')}),
+        (_('Capabilities'), {'fields': ('runtimes', 'problems')}),
     )
     list_display = ('name', 'is_online', 'start_time', 'last_ping', 'ping', 'load')
     ordering = ['name']
 
     def is_online(self, obj):
         return obj.online
-    is_online.short_description = 'Online'
+    is_online.short_description = _('Online')
     is_online.boolean = True
 
     def get_readonly_fields(self, request, obj=None):
@@ -737,7 +756,7 @@ class ContestProblemInlineForm(ModelForm):
 
 class ContestProblemInline(SortableTabularInline):
     model = ContestProblem
-    verbose_name = 'Problem'
+    verbose_name = _('Problem')
     verbose_name_plural = 'Problems'
     fields = ('problem', 'points', 'partial', 'output_prefix_override')
     form = ContestProblemInlineForm
@@ -763,12 +782,13 @@ class ContestForm(ModelForm):
 class ContestAdmin(Select2SuitMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
-        ('Scheduling', {'fields': ('start_time', 'end_time', 'time_limit')}),
-        ('Details', {'fields': ('description', 'og_image', 'is_external')}),
-        ('Rating', {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
-        ('Organization', {'fields': ('is_private', 'organizations')}),
+        (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
+        (_('Details'), {'fields': ('description', 'og_image', 'is_external')}),
+        (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
+        (_('Organization'), {'fields': ('is_private', 'organizations')}),
     )
-    list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
+    list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time',
+                    'end_time', 'time_limit', 'user_count')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
     actions_on_top = True
@@ -791,13 +811,17 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
-        self.message_user(request, "%d contest%s successfully marked as public." % (count, 's'[count == 1:]))
-    make_public.short_description = 'Mark contests as public'
+        self.message_user(request, ungettext('%d contest successfully marked as public.',
+                                             '%d contests successfully marked as public.',
+                                             count) % count)
+    make_public.short_description = _('Mark contests as public')
 
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
-        self.message_user(request, "%d contest%s successfully marked as private." % (count, 's'[count == 1:]))
-    make_private.short_description = 'Mark contests as private'
+        self.message_user(request, ungettext('%d contest successfully marked as private.',
+                                             '%d contests successfully marked as private.',
+                                             count) % count)
+    make_private.short_description = _('Mark contests as private')
 
     def get_queryset(self, request):
         queryset = Contest.objects.annotate(user_count=Count('users'))
@@ -820,9 +844,9 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
 
     def get_urls(self):
         return [
-                   url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
-                   url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate')
-               ] + super(ContestAdmin, self).get_urls()
+            url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
+            url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate')
+        ] + super(ContestAdmin, self).get_urls()
 
     def rate_all_view(self, request):
         if not request.user.has_perm('judge.contest_rating'):
@@ -897,16 +921,20 @@ class ContestParticipationAdmin(admin.ModelAdmin):
         for participation in queryset:
             participation.recalculate_score()
             count += 1
-        self.message_user(request, "%d participation%s have scores recalculated." % (count, 's'[count == 1:]))
-    recalculate_points.short_description = 'Recalculate scores'
+        self.message_user(request, ungettext('%d participation have scores recalculated.',
+                                             '%d participations have scores recalculated.',
+                                             count) % count)
+    recalculate_points.short_description = _('Recalculate scores')
 
     def recalculate_cumtime(self, request, queryset):
         count = 0
         for participation in queryset:
             participation.update_cumtime()
             count += 1
-        self.message_user(request, "%d participation%s have times recalculated." % (count, 's'[count == 1:]))
-    recalculate_cumtime.short_description = 'Recalculate cumulative time'
+        self.message_user(request, ungettext('%d participation have times recalculated.',
+                                             '%d participations have times recalculated.',
+                                             count) % count)
+    recalculate_cumtime.short_description = _('Recalculate cumulative time')
 
 
 class OrganizationForm(ModelForm):
@@ -927,7 +955,8 @@ class OrganizationAdmin(Select2SuitMixin, VersionAdmin):
     form = OrganizationForm
     
     def show_public(self, obj):
-         return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
+        format = '<a href="{0}" style="white-space:nowrap;">%s</a>' % ugettext('View on site')
+        return format_html(format, obj.get_absolute_url())
     show_public.short_description = ''
 
     def get_readonly_fields(self, request, obj=None):
@@ -961,8 +990,8 @@ class OrganizationAdmin(Select2SuitMixin, VersionAdmin):
 class BlogPostAdmin(VersionAdmin):
     fieldsets = (
         (None, {'fields': ('title', 'slug', 'visible', 'sticky', 'publish_on')}),
-        ('Content', {'fields': ('content', 'og_image',)}),
-        ('Summary', {'classes': ('collapse',), 'fields': ('summary',)}),
+        (_('Content'), {'fields': ('content', 'og_image',)}),
+        (_('Summary'), {'classes': ('collapse',), 'fields': ('summary',)}),
     )
     prepopulated_fields = {'slug': ('title',)}
     list_display = ('id', 'title', 'visible', 'sticky', 'publish_on')
@@ -990,7 +1019,8 @@ class SolutionAdmin(VersionAdmin):
     form = SolutionForm
 
     def show_public(self, obj):
-         return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
+        format = '<a href="{0}" style="white-space:nowrap;">%s</a>' % ugettext('View on site')
+        return format_html(format, obj.get_absolute_url())
     show_public.short_description = ''
 
     def problem_link(self, obj):

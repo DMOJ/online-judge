@@ -15,7 +15,7 @@ from django.db import models
 from django.db.models import Max, Lookup
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, pgettext
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from reversion import revisions
@@ -182,7 +182,9 @@ class Profile(models.Model):
     @cached_property
     def long_display_name(self):
         if self.name:
-            return u'%s (%s)' % (self.user.username, self.name)
+            return pgettext('user display name', '%(username)s (%(display)s)') % {
+                'username': self.user.username, 'display': self.name
+            }
         return self.user.username
 
     @cached_property
