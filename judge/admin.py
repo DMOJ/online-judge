@@ -118,7 +118,8 @@ class ProfileAdmin(Select2SuitMixin, VersionAdmin):
     form = ProfileForm
     
     def show_public(self, obj):
-         return format_html('<a href="{0}" style="white-space:nowrap;">View on site</a>', obj.get_absolute_url())
+        format = '<a href="{0}" style="white-space:nowrap;">%s</a>' % ugettext('View on site')
+        return format_html(format, obj.get_absolute_url())
     show_public.short_description = ''
 
     def admin_user_admin(self, obj):
@@ -233,7 +234,7 @@ class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
     show_authors.short_description = _('Authors')
 
     def show_public(self, obj):
-        return format_html('<a href="{0}">View on site</a>', obj.get_absolute_url())
+        return format_html('<a href="{0}">%s</a>' % ugettext('View on site'), obj.get_absolute_url())
     show_public.short_description = ''
 
     def _update_points(self, problem_id, sign):
