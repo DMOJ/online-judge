@@ -17,3 +17,4 @@ Pygments
 -e git://github.com/DMOJ/pyjade.git#egg=pyjade
 python-social-auth
 pytz
+rjsmin

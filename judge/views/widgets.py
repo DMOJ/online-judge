@@ -3,11 +3,16 @@ import json
 import urllib2
 
 from django.conf import settings
+from django.views.decorators.cache import cache_page
+from rjsmin import jsmin
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404, HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from django.views.generic import View
+from django.views.i18n import javascript_catalog
 
 from judge.models import Submission
 
@@ -75,3 +80,14 @@ class DetectTimezone(View):
             'askgeo': self.askgeo,
             'geonames': self.geonames,
         }.get(backend, self.default)(lat, long)
+
+
+def js_catalog(request):
+    resp = javascript_catalog(request)
+    resp.content = jsmin(resp.content)
+    return resp
+
+if 'jsi18n' in settings.CACHES:
+    js_catalog = cache_page(86400, cache='jsi18n')(js_catalog)
+else:
+    js_catalog = cache_page(300)(js_catalog)

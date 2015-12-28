@@ -3,7 +3,6 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
-from django.views.i18n import javascript_catalog
 from social.apps.django_app.urls import urlpatterns as social_auth_patterns
 
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
@@ -101,7 +100,7 @@ urlpatterns = [
     url(r'^500/$', exception),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
-    url(r'^jsi18n/$', javascript_catalog),
+    url(r'^jsi18n/$', widgets.js_catalog),
     url(r'^accounts/', include(register_patterns)),
     url(r'^', include(social_auth_patterns, namespace='social')),
 
