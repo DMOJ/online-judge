@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-27 19:37-0500\n"
-"PO-Revision-Date: 2015-12-27 19:39-0500\n"
+"PO-Revision-Date: 2015-12-28 01:57-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -54,35 +54,35 @@ msgstr "用户"
 
 #: .\judge\admin.py:132
 msgid "Email"
-msgstr ""
+msgstr "电子邮件"
 
 #: .\judge\admin.py:138
 msgid "Timezone"
-msgstr ""
+msgstr "时区"
 
 #: .\judge\admin.py:145
 #, python-format
 msgid "%d user have scores recalculated."
 msgid_plural "%d users have scores recalculated."
-msgstr[0] ""
+msgstr[0] "%d 个用户的总分被重新计算。"
 
 #: .\judge\admin.py:148 .\judge\admin.py:927
 msgid "Recalculate scores"
-msgstr ""
+msgstr "重新计算总分"
 
 #: .\judge\admin.py:159
 msgid "Describe the changes you made (optional)"
-msgstr ""
+msgstr "描述所做的更改 (可选)"
 
 #: .\judge\admin.py:176 .\judge\models.py:185
 #, python-format
 msgctxt "user display name"
 msgid "%(username)s (%(display)s)"
-msgstr ""
+msgstr "%(username)s (%(display)s)"
 
 #: .\judge\admin.py:205
 msgid "Taxonomy"
-msgstr ""
+msgstr "分类"
 
 #: .\judge\admin.py:206 .\judge\models.py:291 .\judge\models.py:815
 #: .\judge\models.py:832 .\templates\problem\list.jade.py:73
@@ -92,7 +92,7 @@ msgstr "分数"
 
 #: .\judge\admin.py:207
 msgid "Limits"
-msgstr ""
+msgstr "限制"
 
 #: .\judge\admin.py:208 .\judge\models.py:342 .\templates\stats\base.jade.py:7
 msgid "Language"
@@ -100,143 +100,143 @@ msgstr "语言"
 
 #: .\judge\admin.py:209
 msgid "Justice"
-msgstr ""
+msgstr "司法"
 
 #: .\judge\admin.py:210
 msgid "History"
-msgstr ""
+msgstr "历史"
 
 #: .\judge\admin.py:233
 msgid "Authors"
-msgstr ""
+msgstr "作者"
 
 #: .\judge\admin.py:270
 #, python-format
 msgid "%d problem successfully marked as public."
 msgid_plural "%d problems successfully marked as public."
-msgstr[0] ""
+msgstr[0] "%d 个题目成功地公开。"
 
 #: .\judge\admin.py:273
 msgid "Mark problems as public"
-msgstr ""
+msgstr "公开题目"
 
 #: .\judge\admin.py:278
 #, python-format
 msgid "%d problem successfully marked as private."
 msgid_plural "%d problems successfully marked as private."
-msgstr[0] ""
+msgstr[0] "%d 个题目成功地隐藏。"
 
 #: .\judge\admin.py:281
 msgid "Mark problems as private"
-msgstr ""
+msgstr "隐藏题目"
 
 #: .\judge\admin.py:324 .\judge\admin.py:343 .\judge\admin.py:461
 msgid "None"
-msgstr ""
+msgstr "无"
 
 #: .\judge\admin.py:324
 msgid "Not done"
-msgstr ""
+msgstr "未完成"
 
 #: .\judge\admin.py:324
 msgid "Exceptional"
-msgstr ""
+msgstr "错误"
 
 #: .\judge\admin.py:343
 msgid "Unaccepted"
-msgstr ""
+msgstr "未被接受"
 
 #: .\judge\admin.py:386
 #, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
-msgstr ""
+msgstr "%(contest)s 之的 %(problem)s"
 
 #: .\judge\admin.py:436 .\judge\admin.py:471
 msgid "You do not have the permission to rejudge submissions."
-msgstr ""
+msgstr "您没有为提交的程序重新评分的权利。"
 
 #: .\judge\admin.py:441
 msgid "You do not have the permission to rejudge THAT many submissions."
-msgstr ""
+msgstr "您没有为这么多提交的程序重新评分的权利。"
 
 #: .\judge\admin.py:449
 #, python-format
 msgid "%d submission were successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
-msgstr[0] ""
+msgstr[0] "%d个程序提交被计划重新评分。"
 
 #: .\judge\admin.py:452
 msgid "Rejudge the selected submissions"
-msgstr ""
+msgstr "重新评分选定的程序提交"
 
 #: .\judge\admin.py:463
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d KB"
 
 #: .\judge\admin.py:465
 #, python-format
 msgid "%.2f MB"
-msgstr ""
+msgstr "%.2f MB"
 
 #: .\judge\admin.py:467
 msgid "Memory Usage"
-msgstr ""
+msgstr "内存使用"
 
 #: .\judge\admin.py:487
 #, python-format
 msgid "%d submission were successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
-msgstr[0] ""
+msgstr[0] "%d个程序提交的分数已被重新计算。"
 
 #: .\judge\admin.py:490
 msgid "Rescore the selected submissions"
-msgstr ""
+msgstr "重新计算程序提交的分数"
 
 #: .\judge\admin.py:548
 #, python-format
 msgid "%d comment successfully hidden."
 msgid_plural "%d comments successfully hidden."
-msgstr[0] ""
+msgstr[0] "%d个评论成功隐藏。"
 
 #: .\judge\admin.py:551
 msgid "Hide comments"
-msgstr ""
+msgstr "隐藏评论"
 
 #: .\judge\admin.py:555
 #, python-format
 msgid "%d comment successfully unhidden."
 msgid_plural "%d comments successfully unhidden."
-msgstr[0] ""
+msgstr[0] "%d个评论成功取消隐藏。"
 
 #: .\judge\admin.py:558
 msgid "Unhide comments"
-msgstr ""
+msgstr "取消隐藏评论"
 
 #: .\judge\admin.py:570
 msgid "Associated page"
-msgstr ""
+msgstr "关联页"
 
 #: .\judge\admin.py:582
 msgid "Disallowed problems"
-msgstr ""
+msgstr "排除题目"
 
 #: .\judge\admin.py:585
 msgid "These problems are NOT allowed to be submitted in this language"
-msgstr ""
+msgstr "这些题目不允许使用该语言解决"
 
 #: .\judge\admin.py:612 .\judge\admin.py:636
 msgid "Included problems"
-msgstr ""
+msgstr "包括题目"
 
 #: .\judge\admin.py:615
 msgid "These problems are included in this group of problems"
-msgstr ""
+msgstr "这些题目包含于该题目组"
 
 #: .\judge\admin.py:639
 msgid "These problems are included in this type of problems"
-msgstr ""
+msgstr "这些题目包含于该题目类型"
 
 #: .\judge\admin.py:720 .\judge\models.py:637
 msgid "Description"
@@ -244,11 +244,11 @@ msgstr "描述"
 
 #: .\judge\admin.py:721
 msgid "Information"
-msgstr ""
+msgstr "信息"
 
 #: .\judge\admin.py:722
 msgid "Capabilities"
-msgstr ""
+msgstr "能力"
 
 #: .\judge\admin.py:729 .\templates\judge_status_table.jade.py:4
 msgid "Online"
@@ -261,11 +261,11 @@ msgstr "题目"
 
 #: .\judge\admin.py:785
 msgid "Scheduling"
-msgstr ""
+msgstr "时间计划"
 
 #: .\judge\admin.py:786
 msgid "Details"
-msgstr ""
+msgstr "详细信息"
 
 #: .\judge\admin.py:787 .\judge\models.py:844
 #: .\templates\contest\ranking_table.jade:2
@@ -281,49 +281,49 @@ msgstr "组织"
 #, python-format
 msgid "%d contest successfully marked as public."
 msgid_plural "%d contests successfully marked as public."
-msgstr[0] ""
+msgstr[0] "%d个竞赛已成功公开。"
 
 #: .\judge\admin.py:817
 msgid "Mark contests as public"
-msgstr ""
+msgstr "公开选定竞赛"
 
 #: .\judge\admin.py:821
 #, python-format
 msgid "%d contest successfully marked as private."
 msgid_plural "%d contests successfully marked as private."
-msgstr[0] ""
+msgstr[0] "%d个竞赛已成功隐藏。"
 
 #: .\judge\admin.py:824
 msgid "Mark contests as private"
-msgstr ""
+msgstr "隐藏选定竞赛"
 
 #: .\judge\admin.py:924
 #, python-format
 msgid "%d participation have scores recalculated."
 msgid_plural "%d participations have scores recalculated."
-msgstr[0] ""
+msgstr[0] "%d个竞赛参与者的得分已经成功地计算了。"
 
 #: .\judge\admin.py:934
 #, python-format
 msgid "%d participation have times recalculated."
 msgid_plural "%d participations have times recalculated."
-msgstr[0] ""
+msgstr[0] "%d个竞赛参与者的累计时间已经成功地计算了。"
 
 #: .\judge\admin.py:937
 msgid "Recalculate cumulative time"
-msgstr ""
+msgstr "重新计算累计时间"
 
 #: .\judge\admin.py:958 .\judge\admin.py:1022
 msgid "View on site"
-msgstr ""
+msgstr "查看"
 
 #: .\judge\admin.py:993
 msgid "Content"
-msgstr ""
+msgstr "内容"
 
 #: .\judge\admin.py:994
 msgid "Summary"
-msgstr ""
+msgstr "概览"
 
 #: .\judge\apps.py:7
 msgid "Online Judge"
@@ -1440,7 +1440,7 @@ msgstr "身份验证失败"
 
 #: .\judge\views\stats.py:75
 msgid "Language statistics"
-msgstr ""
+msgstr "语言统计信息"
 
 #: .\judge\views\status.py:27
 msgid "Status"
@@ -2306,15 +2306,15 @@ msgstr "注册！"
 
 #: .\templates\stats\language.jade:40
 msgid "Submissions by Language"
-msgstr ""
+msgstr "按语言的提交数量"
 
 #: .\templates\stats\language.jade:45
 msgid "AC Submissions by Language"
-msgstr ""
+msgstr "按语言的接受提交数量"
 
 #: .\templates\stats\language.jade:50
 msgid "Language AC Rate"
-msgstr ""
+msgstr "语言提交接受率"
 
 #: .\templates\submission\info_base.jade:1
 #, python-format
