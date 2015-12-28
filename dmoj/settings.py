@@ -134,6 +134,7 @@ INSTALLED_APPS += (
     'pagedown',
     'sortedm2m',
     'pyjade.ext.django',
+    'statici18n',
 )
 
 MIDDLEWARE_CLASSES = (
