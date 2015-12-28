@@ -100,7 +100,6 @@ urlpatterns = [
     url(r'^500/$', exception),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
-    url(r'^jsi18n/$', widgets.js_catalog, name='jsi18n'),
     url(r'^accounts/', include(register_patterns)),
     url(r'^', include(social_auth_patterns, namespace='social')),
 
