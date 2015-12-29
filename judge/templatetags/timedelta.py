@@ -50,10 +50,11 @@ def nice_repr(timedelta, display='long', sep=', '):
         days += weeks * 7
         if days:
             return npgettext('time format with day', '%d day %h:%m:%s', '%d days %h:%m:%s', days) \
-                .replace('%d', days).replace('%h', hours).replace('%m', minutes).replace('%s', seconds)
+                .replace('%d', str(days)).replace('%h', str(hours)).replace('%m', str(minutes)) \
+                .replace('%s', str(seconds))
         else:
             return pgettext('time format without day', '%h:%m:%s') \
-                .replace('%h', hours).replace('%m', minutes).replace('%s', seconds)
+                .replace('%h', str(hours)).replace('%m', str(minutes)).replace('%s', str(seconds))
     elif display == 'concise':
         days += weeks * 7
         if days:
