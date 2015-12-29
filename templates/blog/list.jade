@@ -48,7 +48,7 @@ block body
                             a(href='{% url "contest_view" contest.key %}')= contest.name
                         .time {% trans "Ends in" %}
                             = ' '
-                            span.time-remaining(data-secs='#{contest.time_before_end|seconds}')
+                            span.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
                                 #{contest.time_before_end|timedelta:"localized"}
         if future_contests
             div.blog-sidebox
@@ -60,7 +60,7 @@ block body
                             a(href='{% url "contest_view" contest.key %}')= contest.name
                         .time {% trans "Starts in" %}
                             = ' '
-                            span.time-remaining(data-secs='#{contest.time_before_start|seconds}')
+                            span.time-remaining(data-secs='{{ contest.time_before_start|seconds }}')
                                 #{contest.time_before_start|timedelta:"localized"}
         div.blog-sidebox
             h3 {% trans "Comment stream" %}
