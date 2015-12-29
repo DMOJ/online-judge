@@ -35,7 +35,7 @@ class PostList(ListView):
         context['problems'] = Problem.objects.filter(is_public=True).order_by('-date', '-id')[:7]
         now = timezone.now()
 
-        visible_contests = Contest.objects.filter(is_public=True)
+        visible_contests = Contest.objects.filter(is_public=True).order_by('start_time')
         q = Q(is_private=False)
         if self.request.user.is_authenticated():
             q |= Q(organizations__in=self.request.user.profile.organizations.all())
