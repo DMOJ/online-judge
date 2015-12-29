@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-27 19:37-0500\n"
-"PO-Revision-Date: 2015-12-27 19:39-0500\n"
+"POT-Creation-Date: 2015-12-28 19:49-0500\n"
+"PO-Revision-Date: 2015-12-28 19:51-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -16,27 +16,27 @@ msgstr ""
 "X-Crowdin-File: django.po\n"
 "Language: ru_RU\n"
 
-#: .\dmoj\settings.py:218
+#: .\dmoj\settings.py:220
 msgid "German"
 msgstr "немецкий"
 
-#: .\dmoj\settings.py:219
+#: .\dmoj\settings.py:221
 msgid "English"
 msgstr "английский"
 
-#: .\dmoj\settings.py:220
+#: .\dmoj\settings.py:222
 msgid "French"
 msgstr "французский"
 
-#: .\dmoj\settings.py:221
+#: .\dmoj\settings.py:223
 msgid "Romanian"
 msgstr "Румынский"
 
-#: .\dmoj\settings.py:222
+#: .\dmoj\settings.py:224
 msgid "Russian"
 msgstr "русский"
 
-#: .\dmoj\settings.py:223
+#: .\dmoj\settings.py:225
 msgid "Simplified Chinese"
 msgstr "Упрощенный китайский"
 
@@ -45,22 +45,27 @@ msgstr "Упрощенный китайский"
 msgid "Location"
 msgstr ""
 
-#: .\judge\admin.py:127 .\judge\admin.py:413 .\judge\models.py:218
+#: .\judge\admin.py:121 .\judge\admin.py:237 .\judge\admin.py:959
+#: .\judge\admin.py:1023
+msgid "View on site"
+msgstr ""
+
+#: .\judge\admin.py:128 .\judge\admin.py:414 .\judge\models.py:218
 #: .\judge\models.py:742 .\judge\models.py:799 .\judge\models.py:840
 #: .\templates\organization\requests\log.jade:4
 #: .\templates\organization\requests\pending.jade:9
 msgid "User"
 msgstr ""
 
-#: .\judge\admin.py:132
+#: .\judge\admin.py:133
 msgid "Email"
 msgstr ""
 
-#: .\judge\admin.py:138
+#: .\judge\admin.py:139
 msgid "Timezone"
 msgstr ""
 
-#: .\judge\admin.py:145
+#: .\judge\admin.py:146
 #, python-format
 msgid "%d user have scores recalculated."
 msgid_plural "%d users have scores recalculated."
@@ -68,51 +73,51 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: .\judge\admin.py:148 .\judge\admin.py:927
+#: .\judge\admin.py:149 .\judge\admin.py:928
 msgid "Recalculate scores"
 msgstr ""
 
-#: .\judge\admin.py:159
+#: .\judge\admin.py:160
 msgid "Describe the changes you made (optional)"
 msgstr ""
 
-#: .\judge\admin.py:176 .\judge\models.py:185
+#: .\judge\admin.py:177 .\judge\models.py:185
 #, python-format
 msgctxt "user display name"
 msgid "%(username)s (%(display)s)"
 msgstr ""
 
-#: .\judge\admin.py:205
+#: .\judge\admin.py:206
 msgid "Taxonomy"
 msgstr ""
 
-#: .\judge\admin.py:206 .\judge\models.py:291 .\judge\models.py:815
+#: .\judge\admin.py:207 .\judge\models.py:291 .\judge\models.py:815
 #: .\judge\models.py:832 .\templates\problem\list.jade.py:73
 #: .\templates\user\base_users_table.jade:6
 msgid "Points"
 msgstr ""
 
-#: .\judge\admin.py:207
+#: .\judge\admin.py:208
 msgid "Limits"
 msgstr ""
 
-#: .\judge\admin.py:208 .\judge\models.py:342 .\templates\stats\base.jade.py:7
+#: .\judge\admin.py:209 .\judge\models.py:342 .\templates\stats\base.jade.py:7
 msgid "Language"
 msgstr ""
 
-#: .\judge\admin.py:209
+#: .\judge\admin.py:210
 msgid "Justice"
 msgstr ""
 
-#: .\judge\admin.py:210
+#: .\judge\admin.py:211
 msgid "History"
 msgstr ""
 
-#: .\judge\admin.py:233
+#: .\judge\admin.py:234
 msgid "Authors"
 msgstr ""
 
-#: .\judge\admin.py:270
+#: .\judge\admin.py:271
 #, python-format
 msgid "%d problem successfully marked as public."
 msgid_plural "%d problems successfully marked as public."
@@ -120,11 +125,11 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: .\judge\admin.py:273
+#: .\judge\admin.py:274
 msgid "Mark problems as public"
 msgstr ""
 
-#: .\judge\admin.py:278
+#: .\judge\admin.py:279
 #, python-format
 msgid "%d problem successfully marked as private."
 msgid_plural "%d problems successfully marked as private."
@@ -132,41 +137,41 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: .\judge\admin.py:281
+#: .\judge\admin.py:282
 msgid "Mark problems as private"
 msgstr ""
 
-#: .\judge\admin.py:324 .\judge\admin.py:343 .\judge\admin.py:461
+#: .\judge\admin.py:325 .\judge\admin.py:344 .\judge\admin.py:462
 msgid "None"
 msgstr ""
 
-#: .\judge\admin.py:324
+#: .\judge\admin.py:325
 msgid "Not done"
 msgstr ""
 
-#: .\judge\admin.py:324
+#: .\judge\admin.py:325
 msgid "Exceptional"
 msgstr ""
 
-#: .\judge\admin.py:343
+#: .\judge\admin.py:344
 msgid "Unaccepted"
 msgstr ""
 
-#: .\judge\admin.py:386
+#: .\judge\admin.py:387
 #, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
 msgstr ""
 
-#: .\judge\admin.py:436 .\judge\admin.py:471
+#: .\judge\admin.py:437 .\judge\admin.py:472
 msgid "You do not have the permission to rejudge submissions."
 msgstr ""
 
-#: .\judge\admin.py:441
+#: .\judge\admin.py:442
 msgid "You do not have the permission to rejudge THAT many submissions."
 msgstr ""
 
-#: .\judge\admin.py:449
+#: .\judge\admin.py:450
 #, python-format
 msgid "%d submission were successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
@@ -174,25 +179,25 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: .\judge\admin.py:452
+#: .\judge\admin.py:453
 msgid "Rejudge the selected submissions"
 msgstr ""
 
-#: .\judge\admin.py:463
+#: .\judge\admin.py:464
 #, python-format
 msgid "%d KB"
 msgstr ""
 
-#: .\judge\admin.py:465
+#: .\judge\admin.py:466
 #, python-format
 msgid "%.2f MB"
 msgstr ""
 
-#: .\judge\admin.py:467
+#: .\judge\admin.py:468
 msgid "Memory Usage"
 msgstr ""
 
-#: .\judge\admin.py:487
+#: .\judge\admin.py:488
 #, python-format
 msgid "%d submission were successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
@@ -200,11 +205,11 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: .\judge\admin.py:490
+#: .\judge\admin.py:491
 msgid "Rescore the selected submissions"
 msgstr ""
 
-#: .\judge\admin.py:548
+#: .\judge\admin.py:549
 #, python-format
 msgid "%d comment successfully hidden."
 msgid_plural "%d comments successfully hidden."
@@ -212,11 +217,11 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: .\judge\admin.py:551
+#: .\judge\admin.py:552
 msgid "Hide comments"
 msgstr ""
 
-#: .\judge\admin.py:555
+#: .\judge\admin.py:556
 #, python-format
 msgid "%d comment successfully unhidden."
 msgid_plural "%d comments successfully unhidden."
@@ -224,74 +229,74 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: .\judge\admin.py:558
+#: .\judge\admin.py:559
 msgid "Unhide comments"
 msgstr ""
 
-#: .\judge\admin.py:570
+#: .\judge\admin.py:571
 msgid "Associated page"
 msgstr ""
 
-#: .\judge\admin.py:582
+#: .\judge\admin.py:583
 msgid "Disallowed problems"
 msgstr ""
 
-#: .\judge\admin.py:585
+#: .\judge\admin.py:586
 msgid "These problems are NOT allowed to be submitted in this language"
 msgstr ""
 
-#: .\judge\admin.py:612 .\judge\admin.py:636
+#: .\judge\admin.py:613 .\judge\admin.py:637
 msgid "Included problems"
 msgstr ""
 
-#: .\judge\admin.py:615
+#: .\judge\admin.py:616
 msgid "These problems are included in this group of problems"
 msgstr ""
 
-#: .\judge\admin.py:639
+#: .\judge\admin.py:640
 msgid "These problems are included in this type of problems"
 msgstr ""
 
-#: .\judge\admin.py:720 .\judge\models.py:637
+#: .\judge\admin.py:721 .\judge\models.py:637
 msgid "Description"
 msgstr ""
 
-#: .\judge\admin.py:721
+#: .\judge\admin.py:722
 msgid "Information"
 msgstr ""
 
-#: .\judge\admin.py:722
+#: .\judge\admin.py:723
 msgid "Capabilities"
 msgstr ""
 
-#: .\judge\admin.py:729 .\templates\judge_status_table.jade.py:4
+#: .\judge\admin.py:730 .\templates\judge_status_table.jade.py:4
 msgid "Online"
 msgstr ""
 
-#: .\judge\admin.py:759 .\judge\models.py:341 .\judge\models.py:813
+#: .\judge\admin.py:760 .\judge\models.py:341 .\judge\models.py:813
 #: .\judge\models.py:828 .\templates\problem\list.jade.py:69
 msgid "Problem"
 msgstr ""
 
-#: .\judge\admin.py:785
+#: .\judge\admin.py:786
 msgid "Scheduling"
 msgstr ""
 
-#: .\judge\admin.py:786
+#: .\judge\admin.py:787
 msgid "Details"
 msgstr ""
 
-#: .\judge\admin.py:787 .\judge\models.py:844
+#: .\judge\admin.py:788 .\judge\models.py:844
 #: .\templates\contest\ranking_table.jade:2
 #: .\templates\user\user_about.jade:83
 msgid "Rating"
 msgstr ""
 
-#: .\judge\admin.py:788 .\judge\models.py:150 .\judge\models.py:219
+#: .\judge\admin.py:789 .\judge\models.py:150 .\judge\models.py:219
 msgid "Organization"
 msgstr ""
 
-#: .\judge\admin.py:814
+#: .\judge\admin.py:815
 #, python-format
 msgid "%d contest successfully marked as public."
 msgid_plural "%d contests successfully marked as public."
@@ -299,11 +304,11 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: .\judge\admin.py:817
+#: .\judge\admin.py:818
 msgid "Mark contests as public"
 msgstr ""
 
-#: .\judge\admin.py:821
+#: .\judge\admin.py:822
 #, python-format
 msgid "%d contest successfully marked as private."
 msgid_plural "%d contests successfully marked as private."
@@ -311,11 +316,11 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: .\judge\admin.py:824
+#: .\judge\admin.py:825
 msgid "Mark contests as private"
 msgstr ""
 
-#: .\judge\admin.py:924
+#: .\judge\admin.py:925
 #, python-format
 msgid "%d participation have scores recalculated."
 msgid_plural "%d participations have scores recalculated."
@@ -323,7 +328,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: .\judge\admin.py:934
+#: .\judge\admin.py:935
 #, python-format
 msgid "%d participation have times recalculated."
 msgid_plural "%d participations have times recalculated."
@@ -331,19 +336,15 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: .\judge\admin.py:937
+#: .\judge\admin.py:938
 msgid "Recalculate cumulative time"
 msgstr ""
 
-#: .\judge\admin.py:958 .\judge\admin.py:1022
-msgid "View on site"
-msgstr ""
-
-#: .\judge\admin.py:993
+#: .\judge\admin.py:994
 msgid "Content"
 msgstr ""
 
-#: .\judge\admin.py:994
+#: .\judge\admin.py:995
 msgid "Summary"
 msgstr ""
 
@@ -972,8 +973,8 @@ msgstr ""
 msgid "These people will be able to edit the contest."
 msgstr ""
 
-#: .\judge\models.py:684 .\templates\contest\list.jade.py:30
-#: .\templates\contest\list.jade:58 .\templates\contest\list.jade.py:78
+#: .\judge\models.py:684 .\templates\contest\list.jade.py:31
+#: .\templates\contest\list.jade:60 .\templates\contest\list.jade.py:80
 msgid "External contest"
 msgstr ""
 
@@ -1059,8 +1060,8 @@ msgid "contest profiles"
 msgstr ""
 
 #: .\judge\models.py:814 .\judge\models.py:841
-#: .\templates\contest\list.jade:16 .\templates\contest\list.jade.py:46
-#: .\templates\contest\list.jade:70 .\templates\user\user_about.jade.py:81
+#: .\templates\contest\list.jade:16 .\templates\contest\list.jade.py:47
+#: .\templates\contest\list.jade:72 .\templates\user\user_about.jade.py:81
 msgid "Contest"
 msgstr ""
 
@@ -1191,6 +1192,19 @@ msgstr ""
 
 #: .\judge\models.py:912
 msgid "solutions"
+msgstr ""
+
+#: .\judge\templatetags\timedelta.py:52
+msgctxt "time format with day"
+msgid "%d day %h:%m:%s"
+msgid_plural "%d days %h:%m:%s"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: .\judge\templatetags\timedelta.py:56
+msgctxt "time format without day"
+msgid "%h:%m:%s"
 msgstr ""
 
 #: .\judge\utils\problems.py:36
@@ -1540,7 +1554,7 @@ msgid "Updated on site"
 msgstr ""
 
 #: .\judge\views\user.py:154 .\templates\admin\auth\user\change_form.html:14
-#: .\templates\admin\auth\user\change_form.html:17 .\templates\base.jade:73
+#: .\templates\admin\auth\user\change_form.html:17 .\templates\base.jade:77
 #: .\templates\user\user_tabs.jade.py:9
 msgid "Edit profile"
 msgstr ""
@@ -1579,33 +1593,33 @@ msgstr ""
 msgid "Rejudge"
 msgstr ""
 
-#: .\templates\base.jade:57
+#: .\templates\base.jade:61
 msgid "MENU"
 msgstr ""
 
-#: .\templates\base.jade:69
+#: .\templates\base.jade:73
 #, python-format
 msgid "Hello, <b>%(username)s</b>."
 msgstr ""
 
-#: .\templates\base.jade:71 .\templates\submission\info_base.jade.py:2
+#: .\templates\base.jade:75 .\templates\submission\info_base.jade.py:2
 #: .\templates\user\user_tabs.jade:11
 msgid "Admin"
 msgstr ""
 
-#: .\templates\base.jade:75
+#: .\templates\base.jade:79
 msgid "Log out"
 msgstr ""
 
-#: .\templates\base.jade:79
+#: .\templates\base.jade:83
 msgid "Login"
 msgstr ""
 
-#: .\templates\base.jade:79
+#: .\templates\base.jade:83
 msgid "Register"
 msgstr ""
 
-#: .\templates\base.jade:88
+#: .\templates\base.jade:94
 msgid "This site works best with JavaScript enabled."
 msgstr ""
 
@@ -1615,11 +1629,11 @@ msgid "Edit"
 msgstr ""
 
 #: .\templates\blog\content.jade:6 .\templates\blog\list.jade.py:16
-#: .\templates\contest\list.jade:24
+#: .\templates\contest\list.jade:25
 msgid "N j, Y, G:i"
 msgstr ""
 
-#: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:25
+#: .\templates\blog\content.jade:12 .\templates\contest\contest.jade.py:30
 #: .\templates\problem\problem.jade:30
 msgid "Comments"
 msgstr ""
@@ -1632,19 +1646,19 @@ msgstr ""
 msgid "Ends in"
 msgstr ""
 
-#: .\templates\blog\list.jade:36
+#: .\templates\blog\list.jade:37
 msgid "Upcoming contests"
 msgstr ""
 
-#: .\templates\blog\list.jade:41
+#: .\templates\blog\list.jade:42
 msgid "Starts in"
 msgstr ""
 
-#: .\templates\blog\list.jade:46
+#: .\templates\blog\list.jade:48
 msgid "Comment stream"
 msgstr ""
 
-#: .\templates\blog\list.jade:58
+#: .\templates\blog\list.jade:60
 msgid "New problems"
 msgstr ""
 
@@ -1735,28 +1749,28 @@ msgstr ""
 msgid "Time is up!"
 msgstr ""
 
-#: .\templates\contest\contest.jade:12 .\templates\contest\contest.jade:13
+#: .\templates\contest\contest.jade:12 .\templates\contest\contest.jade:15
 msgid "Time remaining:"
 msgstr ""
 
-#: .\templates\contest\contest.jade:13
+#: .\templates\contest\contest.jade:15
 msgid "Contest is over."
 msgstr ""
 
-#: .\templates\contest\contest.jade:16
+#: .\templates\contest\contest.jade:20
 msgid "Starting in "
 msgstr ""
 
-#: .\templates\contest\contest.jade:17 .\templates\contest\contest.jade:18
+#: .\templates\contest\contest.jade:22 .\templates\contest\contest.jade:23
 msgid "F j, Y, G:i T"
 msgstr ""
 
-#: .\templates\contest\contest.jade:17
+#: .\templates\contest\contest.jade:22
 #, python-format
 msgid "<b>%(time_limit)s</b> window from <b>%(start_time)s</b> to <b>%(end_time)s</b>"
 msgstr ""
 
-#: .\templates\contest\contest.jade:18
+#: .\templates\contest\contest.jade:23
 #, python-format
 msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
 msgstr ""
@@ -1769,7 +1783,7 @@ msgstr ""
 msgid "Ongoing Contests"
 msgstr ""
 
-#: .\templates\contest\list.jade:17 .\templates\contest\list.jade.py:71
+#: .\templates\contest\list.jade:17 .\templates\contest\list.jade.py:73
 msgid "Rankings"
 msgstr ""
 
@@ -1777,45 +1791,45 @@ msgstr ""
 msgid "Ending in"
 msgstr ""
 
-#: .\templates\contest\list.jade:24
+#: .\templates\contest\list.jade:25
 msgid "Started at"
 msgstr ""
 
-#: .\templates\contest\list.jade:25 .\templates\contest\list.jade.py:26
-#: .\templates\contest\list.jade:53 .\templates\contest\list.jade.py:54
-#: .\templates\contest\list.jade:79 .\templates\contest\list.jade.py:80
+#: .\templates\contest\list.jade:26 .\templates\contest\list.jade.py:27
+#: .\templates\contest\list.jade:55 .\templates\contest\list.jade.py:56
+#: .\templates\contest\list.jade:81 .\templates\contest\list.jade.py:82
 msgid "M j, Y, G:i"
 msgstr ""
 
-#: .\templates\contest\list.jade:26 .\templates\contest\list.jade.py:54
-#: .\templates\contest\list.jade:80
+#: .\templates\contest\list.jade:27 .\templates\contest\list.jade.py:56
+#: .\templates\contest\list.jade:82
 #, python-format
 msgid "%(time_limit)s window"
 msgstr ""
 
-#: .\templates\contest\list.jade:27 .\templates\contest\list.jade.py:55
-#: .\templates\contest\list.jade:81
+#: .\templates\contest\list.jade:28 .\templates\contest\list.jade.py:57
+#: .\templates\contest\list.jade:83
 #, python-format
 msgid "%(window_length)s long"
 msgstr ""
 
-#: .\templates\contest\list.jade:36
+#: .\templates\contest\list.jade:37
 msgid "Join"
 msgstr ""
 
-#: .\templates\contest\list.jade:42
+#: .\templates\contest\list.jade:43
 msgid "Upcoming Contests"
 msgstr ""
 
-#: .\templates\contest\list.jade:52
+#: .\templates\contest\list.jade:53
 msgid "Starting in"
 msgstr ""
 
-#: .\templates\contest\list.jade:64
+#: .\templates\contest\list.jade:66
 msgid "There are no scheduled contests at this time."
 msgstr ""
 
-#: .\templates\contest\list.jade:66
+#: .\templates\contest\list.jade:68
 msgid "Past Contests"
 msgstr ""
 
