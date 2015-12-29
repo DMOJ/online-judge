@@ -9,6 +9,7 @@ doctype 5
 - load gravatar
 - load i18n
 - load dmoj_user_i18n
+- load statici18n
 
 html(lang='en')
     head
@@ -48,12 +49,14 @@ html(lang='en')
         block media
         if INLINE_JQUERY
             - compress js
+                script(src='{% statici18n LANGUAGE_CODE %}')
                 script(src='{% static "libs/jquery-1.11.2.min.js" %}')
                 script(src='{% static "common.js" %}')
                 script(src='{% static "jquery.unveil.js" %}')
                 script.
                     $(function () { $('img.unveil').unveil(200); });
         else
+            script(src='{% statici18n LANGUAGE_CODE %}')
             script(src=JQUERY_JS)
             script(src='{% static "common.js" %}')
             script(src='{% static "jquery.unveil.js" %}')
