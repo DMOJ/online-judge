@@ -147,9 +147,9 @@ function count_down(label) {
         var s = time % 60;
         if (d > 0)
             label.text(npgettext('time format with day', '%d day %h:%m:%s', '%d days %h:%m:%s', d)
-                .replace('%d', d).replace('%h', h).replace('%m', m).replace('%s', s));
+                .replace('%d', d).replace('%h', format(h)).replace('%m', format(m)).replace('%s', format(s)));
         else
             label.text(pgettext('time format without day', '%h:%m:%s')
-                .replace('%h', h).replace('%m', m).replace('%s', s));
+                .replace('%h', format(h)).replace('%m', format(m)).replace('%s', format(s)));
     }, 1000);
 }
