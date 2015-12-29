@@ -9,6 +9,22 @@ extends base
 block media
     link(rel='alternate', type='application/atom+xml', href='{% url "comment_atom" %}', title='Atom Comment Feed')
     link(rel='alternate', type='application/rss+xml', href='{% url "comment_rss" %}', title='RSS Comment Feed')
+    style.
+        @media not all and (min-width: 500px) {
+            .blog-content {
+                display: block;
+            }
+        }
+
+        @media (min-width: 500px) {
+            .blog-content, .blog-sidebar {
+                display: block !important;
+            }
+
+            ul#mobile.tabs {
+                display: none;
+            }
+        }
 
 block js_media
     script(type='text/javascript').
@@ -16,11 +32,28 @@ block js_media
             $('.time-remaining').each(function () {
                 count_down($(this));
             });
+
+            $('.blog-sidebar').hide();
+            $('#blog-tab').click(function () {
+                $('#blog-tab').addClass('active');
+                $('#event-tab').removeClass('active');
+                $('.blog-content').show();
+                $('.blog-sidebar').hide();
+            });
+            $('#event-tab').click(function () {
+                $('#event-tab').addClass('active');
+                $('#blog-tab').removeClass('active');
+                $('.blog-content').hide();
+                $('.blog-sidebar').show();
+            });
         });
 
 block body
     block before_posts
 
+    ul#mobile.tabs
+        li#blog-tab.active Blog
+        li#event-tab Events
     #blog-container
         .blog-content
             each post in posts
