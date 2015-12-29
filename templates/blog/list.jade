@@ -22,80 +22,81 @@ block body
     block before_posts
 
     #blog-container
-        div.blog-content
+        .blog-content
             each post in posts
                 div(class=('sticky post' if post.sticky else 'post'))
                     h2.title
                         a(href='{% url "blog_post" post.id post.slug %}')= post.title
-                    div.time
+                    .time
                         if post.sticky
                             i.fa.fa-star.fa-fw(title='Sticky')
                         | #{post.publish_on|date:_("N j, Y, G:i")}
-                    div.summary
+                    .summary
                         - cache 86400 post_summary post.id
                             | #{post.summary|default:post.content|markdown:"blog"|lazy_load}
 
             if page_obj.num_pages > 1
                 div(style='margin-bottom:10px;margin-top:10px')
                     include list_pages
-        if current_contests
-            div.blog-sidebox
-                h3 {% trans "Ongoing contests" %}
-                    i.fa.fa-trophy
-                each contest in current_contests
-                    .contest
-                        .name
-                            a(href='{% url "contest_view" contest.key %}')= contest.name
-                        .time {% trans "Ends in" %}
-                            = ' '
-                            span.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
-                                #{contest.time_before_end|timedelta:"localized"}
-        if future_contests
-            div.blog-sidebox
-                h3 {% trans "Upcoming contests" %}
-                    i.fa.fa-trophy
-                each contest in future_contests
-                    .contest
-                        .name
-                            a(href='{% url "contest_view" contest.key %}')= contest.name
-                        .time {% trans "Starts in" %}
-                            = ' '
-                            span.time-remaining(data-secs='{{ contest.time_before_start|seconds }}')
-                                #{contest.time_before_start|timedelta:"localized"}
-        div.blog-sidebox
-            h3 {% trans "Comment stream" %}
-                i.fa.fa-comments
-            ul
-                for comment in comments
-                    li
-                        div(style='font-size:1.1em;font-style:italic')
-                            a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.title}
-                        span.poster(class=comment.author.display_rank, style='padding-left:0.25em')
-                            a(href='{% url "user_page" comment.author.user.username %}') #{comment.author.user.username}
-                        | &nbsp;&rarr;&nbsp;
-                        a(href='{{comment.link}}') #{comment.page_title}
-            div.dashed
-            span.rssatom
-                a(href='{% url "comment_rss" %}')
-                    span
-                        i.fa.fa-rss
-                    | RSS
-                = '/ '
-                a(href='{% url "comment_atom" %}') Atom
-        div.blog-sidebox
-            h3 {% trans "New problems" %}
-                i.fa.fa-puzzle-piece
-            ul
-                for problem in problems
-                    li
-                        a(href='{% url "problem_detail" problem.code %}')= problem.name
-            div.dashed
-            span.rssatom
-                a(href='{% url "problem_rss" %}')
-                    span
-                        i.fa.fa-rss
-                    | RSS
-                = '/ '
-                a(href='{% url "problem_atom" %}') Atom
+        .blog-sidebar
+            if current_contests
+                .blog-sidebox
+                    h3 {% trans "Ongoing contests" %}
+                        i.fa.fa-trophy
+                    each contest in current_contests
+                        .contest
+                            .name
+                                a(href='{% url "contest_view" contest.key %}')= contest.name
+                            .time {% trans "Ends in" %}
+                                = ' '
+                                span.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
+                                    #{contest.time_before_end|timedelta:"localized"}
+            if future_contests
+                .blog-sidebox
+                    h3 {% trans "Upcoming contests" %}
+                        i.fa.fa-trophy
+                    each contest in future_contests
+                        .contest
+                            .name
+                                a(href='{% url "contest_view" contest.key %}')= contest.name
+                            .time {% trans "Starts in" %}
+                                = ' '
+                                span.time-remaining(data-secs='{{ contest.time_before_start|seconds }}')
+                                    #{contest.time_before_start|timedelta:"localized"}
+            .blog-sidebox
+                h3 {% trans "Comment stream" %}
+                    i.fa.fa-comments
+                ul
+                    for comment in comments
+                        li
+                            div(style='font-size:1.1em;font-style:italic')
+                                a(href='{{comment.link}}#comment-{{comment.id}}') #{comment.title}
+                            span.poster(class=comment.author.display_rank, style='padding-left:0.25em')
+                                a(href='{% url "user_page" comment.author.user.username %}') #{comment.author.user.username}
+                            | &nbsp;&rarr;&nbsp;
+                            a(href='{{comment.link}}') #{comment.page_title}
+                .dashed
+                span.rssatom
+                    a(href='{% url "comment_rss" %}')
+                        span
+                            i.fa.fa-rss
+                        | RSS
+                    = '/ '
+                    a(href='{% url "comment_atom" %}') Atom
+            .blog-sidebox
+                h3 {% trans "New problems" %}
+                    i.fa.fa-puzzle-piece
+                ul
+                    for problem in problems
+                        li
+                            a(href='{% url "problem_detail" problem.code %}')= problem.name
+                .dashed
+                span.rssatom
+                    a(href='{% url "problem_rss" %}')
+                        span
+                            i.fa.fa-rss
+                        | RSS
+                    = '/ '
+                    a(href='{% url "problem_atom" %}') Atom
 
     block after_posts
