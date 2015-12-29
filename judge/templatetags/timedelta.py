@@ -1,6 +1,7 @@
 import datetime
 
 from django import template
+from django.utils.translation import npgettext, pgettext
 
 register = template.Library()
 
@@ -36,7 +37,7 @@ def nice_repr(timedelta, display='long', sep=', '):
             return '%d day%s' % (days, 's'[days == 1:])
         else:
             return '%d:%02d' % (hours, minutes)
-    if display == 'sql':
+    elif display == 'sql':
         days += weeks * 7
         return '%d %02d:%02d:%02d' % (days, hours, minutes, seconds)
     elif display == 'simple':
@@ -45,6 +46,14 @@ def nice_repr(timedelta, display='long', sep=', '):
             return '%d day%s %02d:%02d:%02d' % (days, 's'[days == 1:], hours, minutes, seconds)
         else:
             return '%02d:%02d:%02d' % (hours, minutes, seconds)
+    elif display == 'localized':
+        days += weeks * 7
+        if days:
+            return npgettext('time format with day', '%d day %h:%m:%s', '%d days %h:%m:%s', days) \
+                .replace('%d', days).replace('%h', hours).replace('%m', minutes).replace('%s', seconds)
+        else:
+            return pgettext('time format without day', '%h:%m:%s') \
+                .replace('%h', hours).replace('%m', minutes).replace('%s', seconds)
     elif display == 'concise':
         days += weeks * 7
         if days:
@@ -79,3 +88,8 @@ def timedelta(value, display='long'):
     if value is None:
         return value
     return nice_repr(value, display)
+
+
+@register.filter(name='seconds')
+def seconds(timedelta):
+    return timedelta.total_seconds()

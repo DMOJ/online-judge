@@ -131,7 +131,8 @@ html(lang='en')
             #contest-info
                 a(href='{% url "contest_view" CONTEST.contest.key %}', style='vertical-align: middle;')
                     | #{CONTEST.contest.name} -
-                    #contest-time-remaining #{CONTEST.time_remaining | timedelta:"simple"}
+                    #contest-time-remaining(data-secs='#{CONTEST.time_remaining|seconds}')
+                        #{CONTEST.time_remaining|timedelta:"localized"}
         #page-container
             noscript: #noscript
                 - trans "This site works best with JavaScript enabled."

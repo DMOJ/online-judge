@@ -129,10 +129,7 @@ if (!Date.now) {
 }
 
 function count_down(label) {
-    var match = /(?:(\d+)\s+days?\s+)?(\d+):(\d+):(\d+)/.exec(label.text());
-    var initial = parseInt(match[2]) * 3600 + parseInt(match[3]) * 60 + parseInt(match[4]);
-    if (typeof match[1] != 'undefined')
-        initial += parseInt(match[1]) * 86400;
+    var initial = parseInt(label.attr('data-secs'));
     var start = Date.now();
 
     function format(num) {
@@ -148,7 +145,11 @@ function count_down(label) {
         var h = Math.floor(time % 86400 / 3600);
         var m = Math.floor(time % 3600 / 60);
         var s = time % 60;
-        var days = d > 0 ? d + ' day' + 's '.substr(d == 1) : '';
-        label.text(days + format(h) + ":" + format(m) + ":" + format(s));
+        if (d > 0)
+            label.text(npgettext('time format with day', '%d day %h:%m:%s', '%d days %h:%m:%s', d)
+                .replace('%d', d).replace('%h', h).replace('%m', m).replace('%s', s));
+        else
+            label.text(pgettext('time format without day', '%h:%m:%s')
+                .replace('%h', h).replace('%m', m).replace('%s', s));
     }, 1000);
 }
