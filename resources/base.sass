@@ -414,8 +414,8 @@ noscript #noscript
   #page-container
     border-left: none
     border-right: none
-    border-bottom-left-radius: 0px
-    border-bottom-right-radius: 0px
+    border-bottom-left-radius: 0
+    border-bottom-right-radius: 0
 
 @media (max-width: 760px)
   #navigation
@@ -474,6 +474,9 @@ noscript #noscript
     width: auto
     padding: 0 5px
 
-@media (min-width: 761px)
+@media not all and (max-width: 760px)
   #nav-list
     display: block !important
+
+    li.home-menu-item
+      display: none
