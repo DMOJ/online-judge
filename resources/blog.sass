@@ -56,8 +56,15 @@
     .name
       font-size: 1.5em
 
-#blog-container
-  display: flex
+@media (min-width: 500px)
+  .blog-content, .blog-sidebar
+    display: block !important
+
+  ul#mobile.tabs
+    display: none
+
+  #blog-container
+    display: flex
 
 .rssatom
   text-align: right
