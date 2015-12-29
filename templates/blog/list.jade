@@ -34,13 +34,15 @@ block js_media
             });
 
             $('.blog-sidebar').hide();
-            $('#blog-tab').click(function () {
+            $('#blog-tab').find('a').click(function (e) {
+                e.preventDefault();
                 $('#blog-tab').addClass('active');
                 $('#event-tab').removeClass('active');
                 $('.blog-content').show();
                 $('.blog-sidebar').hide();
             });
-            $('#event-tab').click(function () {
+            $('#event-tab').find('a').click(function (e) {
+                e.preventDefault();
                 $('#event-tab').addClass('active');
                 $('#blog-tab').removeClass('active');
                 $('.blog-content').hide();
@@ -52,8 +54,8 @@ block body
     block before_posts
 
     ul#mobile.tabs
-        li#blog-tab.active Blog
-        li#event-tab Events
+        li#blog-tab.active: a(href='#') Blog
+        li#event-tab: a(href='#') Events
     #blog-container
         .blog-content
             each post in posts
