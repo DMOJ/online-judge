@@ -54,7 +54,7 @@ class JudgeDetail(TitleMixin, DetailView):
                                    _('Could not find a judge with the name "%s".') % key)
 
     def get_title(self):
-        return 'Judge %s' % self.object.name
+        return _('Judge %s') % self.object.name
 
     def get_context_data(self, **kwargs):
         context = super(JudgeDetail, self).get_context_data(**kwargs)
