@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-28 19:49-0500\n"
-"PO-Revision-Date: 2015-12-28 19:51-0500\n"
+"PO-Revision-Date: 2015-12-31 17:36-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1745,7 +1745,7 @@ msgstr "<b>%(start_time)s</b>到<b>%(end_time)s</b>中的<b>%(time_limit)s</b>�
 #: .\templates\contest\contest.jade:23
 #, python-format
 msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
-msgstr "从<b>%(start_time)s</b>开始的<b>%(length)s</b>小时"
+msgstr "从 <b>%(start_time)s</b> 开始的 <b>%(length)s</b> 时间段"
 
 #: .\templates\contest\list.jade:10
 msgid "Calendar view"
