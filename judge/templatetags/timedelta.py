@@ -1,7 +1,7 @@
 import datetime
 
 from django import template
-from django.utils.translation import npgettext, pgettext
+from django.utils.translation import npgettext, pgettext, ungettext
 
 register = template.Library()
 
@@ -55,6 +55,15 @@ def nice_repr(timedelta, display='long', sep=', '):
         else:
             return pgettext('time format without day', '%h:%m:%s') \
                 .replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes).replace('%s', '%02d' % seconds)
+    elif display == 'localized-no-seconds':
+        days += weeks * 7
+        if days:
+            if hours or minutes:
+                return npgettext('time format no seconds with day', '%d day %h:%m', '%d days %h:%m', days) \
+                    .replace('%d', str(days)).replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes)
+            return ungettext('%d day', '%d days', days) % days
+        else:
+            return pgettext('hours and minutes', '%h:%m').replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes)
     elif display == 'concise':
         days += weeks * 7
         if days:

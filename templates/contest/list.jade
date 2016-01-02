@@ -53,10 +53,10 @@ block body
                                             | #{contest.start_time|date:_("M j, Y, G:i")}
                                         br
                                         if contest.time_limit
-                                            - blocktrans with time_limit=contest.time_limit|timedelta:"simple-no-seconds"
+                                            - blocktrans with time_limit=contest.time_limit|timedelta:"localized-no-seconds"
                                                 | {{ time_limit }} window
                                         else
-                                            - blocktrans with window_length=contest.contest_window_length|timedelta:"simple-no-seconds"
+                                            - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
                                                 | {{ window_length }} long
                                     if contest.is_external
                                         .external-notice
@@ -99,10 +99,10 @@ block body
                                             | #{contest.start_time|date:_("M j, Y, G:i")}
                                         br
                                         if contest.time_limit
-                                            - blocktrans with time_limit=contest.time_limit|timedelta:"simple-no-seconds"
+                                            - blocktrans with time_limit=contest.time_limit|timedelta:"localized-no-seconds"
                                                 | {{ time_limit }} window
                                         else
-                                            - blocktrans with window_length=contest.contest_window_length|timedelta:"simple-no-seconds"
+                                            - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
                                                 | {{ window_length }} long
                                     if contest.is_external
                                         .external-notice
@@ -138,10 +138,10 @@ block body
                                     | #{contest.start_time|date:_("M j, Y, G:i")}
                                 br
                                 if contest.time_limit
-                                    - blocktrans with time_limit=contest.time_limit|timedelta:"simple-no-seconds"
+                                    - blocktrans with time_limit=contest.time_limit|timedelta:"localized-no-seconds"
                                         | {{ time_limit }} window
                                 else
-                                    - blocktrans with window_length=contest.contest_window_length|timedelta:"simple-no-seconds"
+                                    - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
                                         | {{ window_length }} long
                     td
                         a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
