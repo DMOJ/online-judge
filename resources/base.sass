@@ -20,10 +20,14 @@ table.sortable thead
   cursor: default
 
 th
-  &.headerSortDown:after
+  &.tablesorter-headerAsc:after
     content: " ▾"
-  &.headerSortUp:after
+  &.tablesorter-headerDesc:after
     content: " ▴"
+
+div
+  &.tablesorter-header-inner
+	  display:inline;
 
 pre
   white-space: pre-wrap
