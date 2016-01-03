@@ -11,7 +11,7 @@ if settings.USE_I18N:
 
     class UserTranslation(DjangoTranslation):
         def __init__(self, *args, **kwargs):
-            super(UserTranslation, self).__init__(*args, **kwargs)
+            DjangoTranslation.__init__(self, *args, **kwargs)
             self._catalog = {}
 
         def _new_gnu_trans(self, localedir, use_null_fallback=True):
