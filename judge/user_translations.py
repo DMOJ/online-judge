@@ -10,9 +10,9 @@ if settings.USE_I18N:
 
 
     class UserTranslation(DjangoTranslation):
-        def __init__(self, *args, **kwargs):
-            DjangoTranslation.__init__(self, *args, **kwargs)
+        def _init_translation_catalog(self, *args, **kwargs):
             self._catalog = {}
+            DjangoTranslation._init_translation_catalog(self, *args, **kwargs)
 
         def _new_gnu_trans(self, localedir, use_null_fallback=True):
             translation = gettext_module.translation(
