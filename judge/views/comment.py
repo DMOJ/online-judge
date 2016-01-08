@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError, transaction
 from django.forms.models import ModelForm
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, UpdateView
 from reversion import revisions
@@ -26,7 +27,7 @@ def vote_comment(request, delta):
     if 'id' not in request.POST:
         return HttpResponseBadRequest()
 
-    comment = Comment.objects.get(id=request.POST['id'])
+    comment = get_object_or_404(Comment, id=request.POST['id'])
 
     vote = CommentVote()
     vote.comment = comment
