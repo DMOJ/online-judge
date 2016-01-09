@@ -166,10 +166,12 @@
       top: 60px
       width: 100%
 
-#content-right .info-float
-  float: none
-  width: 100%
-  box-sizing: border-box
+@media not all and (min-width: 400px)
+  #content-right .info-float
+    float: none
+    width: 100% !important
+    position: static !important
+    box-sizing: border-box
 
 a.view-pdf
   padding-top: 0.6em
