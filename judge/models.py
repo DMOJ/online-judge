@@ -451,7 +451,7 @@ class Submission(models.Model):
             return self.contest.participation.contest.key
 
     def __unicode__(self):
-        return u'Submission %d of %s by %s' % (self.id, self.problem, self.user)
+        return u'Submission %d of %s by %s' % (self.id, self.problem, self.user.user.username)
 
     def get_absolute_url(self):
         return reverse('submission_status', args=(self.id,))
