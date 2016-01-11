@@ -62,7 +62,7 @@ if submission.status != 'IE'
                                     span #{time_limit|floatformat:"3"}s,
                                 else
                                     | [
-                                    span #{case.time|floatformat:"3"}s,
+                                    span(title='{{ case.time }}s') #{case.time|floatformat:"3"}s,
                         td
                             if case.status != 'SC'
                                 | #{case.memory|kbdetailformat}]
