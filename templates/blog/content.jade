@@ -33,3 +33,7 @@ block body
     .comment-area
         h2 {% trans "Comments" %}
         include comments/list
+
+block bodyend
+    | #{block.super}
+    include comments/math
