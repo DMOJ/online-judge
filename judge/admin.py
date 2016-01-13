@@ -481,9 +481,20 @@ class SubmissionAdmin(admin.ModelAdmin):
                 submission.points = 0
             submission.save()
 
+            if hasattr(submission, 'contest'):
+                contest = submission.contest
+                contest.points = round(submission.case_points / submission.case_total * contest.problem.points
+                                       if submission.case_total > 0 else 0, 1)
+                if not contest.problem.partial and contest.points < contest.problem.points:
+                    contest.points = 0
+                contest.save()
+
         for profile in Profile.objects.filter(id__in=queryset.values_list('user_id', flat=True).distinct()):
             profile.calculate_points()
             cache.delete('user_complete:%d' % profile.id)
+        
+        for participation in ContestParticipation.objects.filter(id__in=queryset.values_list('contest__participation_id')):
+            participation.recalculate_score()
 
         self.message_user(request, ungettext('%d submission were successfully rescored.',
                                              '%d submissions were successfully rescored.',
