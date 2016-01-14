@@ -669,6 +669,17 @@ class Judge(models.Model):
         verbose_name_plural = _('judges')
 
 
+class ContestTag(models.Model):
+    name = models.CharField(max_length=20, verbose_name=_('tag name'), unique=True)
+    color = models.CharField(max_length=7, verbose_name=_('tag colour'),
+                             validators=[RegexValidator('^#(?:[A-Fa-f0-9]{3}){1,2}$', _('Invalid colour.'))])
+    description = models.TextField(verbose_name=_('tag description'), blank=True)
+
+    class Meta:
+        verbose_name = _('contest tag')
+        verbose_name_plural = _('contest tags')
+
+
 class Contest(models.Model):
     key = models.CharField(max_length=20, verbose_name=_('Contest id'), unique=True,
                            validators=[RegexValidator('^[a-z0-9]+$', _('Contest id must be ^[a-z0-9]+$'))])
@@ -691,6 +702,7 @@ class Contest(models.Model):
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('Organizations'),
                                            help_text=_('If private, only these organizations may see the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
+    tags = models.ManyToManyField(ContestTag, verbose_name=_('contest tags'), blank=True)
 
     def clean(self):
         if self.start_time >= self.end_time:
