@@ -23,7 +23,8 @@ from reversion_compare.admin import CompareVersionAdmin
 from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
-    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit, OrganizationRequest
+    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit, OrganizationRequest, \
+    ContestTag
 from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
@@ -659,9 +660,8 @@ class ProblemTypeAdmin(Select2SuitMixin, admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super(ProblemTypeAdmin, self).save_model(request, obj, form, change)
-        obj.problem_set.clear()
-        for problem in form.cleaned_data['problems']:
-            obj.problem_set.add(problem)
+        obj.problem_set = form.cleaned_data['problems']
+        obj.save()
 
     def get_form(self, request, obj=None, **kwargs):
         self.form.base_fields['problems'].initial = [o.pk for o in obj.problem_set.all()] if obj else []
@@ -756,6 +756,23 @@ class JudgeAdmin(VersionAdmin):
         formfield_overrides = {
             TextField: {'widget': AdminPagedownWidget()},
         }
+
+
+class ContestTagForm(ModelForm):
+    contests = ModelMultipleChoiceField(
+        label=_('included contests'),
+        queryset=Contest.objects.all(),
+        required=False,
+        widget=HeavySelect2MultipleWidget(data_view='contest_select2') if use_select2 else
+               FilteredSelectMultiple('contests', False))
+
+
+class ContestTagAdmin(admin.ModelAdmin):
+    fields = ('name', 'color', 'description', 'contests')
+    list_display = ('name', 'color')
+    actions_on_top = True
+    actions_on_bottom = True
+    form = ContestTagForm
 
 
 class ContestProblemInlineForm(ModelForm):
@@ -1072,12 +1089,13 @@ admin.site.register(Comment, CommentAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(ProblemGroup, ProblemGroupAdmin)
-admin.site.register(ProblemType, ProblemGroupAdmin)
+admin.site.register(ProblemType, ProblemTypeAdmin)
 admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(MiscConfig)
 admin.site.register(NavigationBar, NavigationBarAdmin)
 admin.site.register(Judge, JudgeAdmin)
 admin.site.register(Contest, ContestAdmin)
+admin.site.register(ContestTag, ContestTagAdmin)
 admin.site.register(ContestParticipation, ContestParticipationAdmin)
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(BlogPost, BlogPostAdmin)

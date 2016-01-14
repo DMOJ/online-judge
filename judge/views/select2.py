@@ -51,6 +51,19 @@ class ProblemSelect2View(Select2View):
         return queryset
 
 
+class ContestSelect2View(Select2View):
+    def get_queryset(self):
+        queryset = Organization.objects.filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
+        if not self.request.user.has_perm('judge.see_private_contest'):
+            queryset = queryset.filter(is_public=True)
+        if not self.request.user.has_perm('judge.edit_all_contest'):
+            q = Q(is_private=False)
+            if self.request.user.is_authenticated():
+                q |= Q(organizations__in=self.request.user.profile.organizations.all())
+            queryset = queryset.filter(q)
+        return queryset
+
+
 class CommentSelect2View(Select2View):
     def get_queryset(self):
         return Comment.objects.filter(Q(title__icontains=self.term) | Q(page__icontains=self.term))
