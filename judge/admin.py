@@ -760,7 +760,7 @@ class JudgeAdmin(VersionAdmin):
 
 class ContestTagForm(ModelForm):
     contests = ModelMultipleChoiceField(
-        label=_('included contests'),
+        label=_('Included contests'),
         queryset=Contest.objects.all(),
         required=False,
         widget=HeavySelect2MultipleWidget(data_view='contest_select2') if use_select2 else

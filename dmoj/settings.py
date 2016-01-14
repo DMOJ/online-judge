@@ -76,6 +76,7 @@ else:
                     'icon': 'fa-bar-chart',
                     'children': [
                         'judge.ContestParticipation',
+                        'judge.ContestTag'
                     ],
                 },
                 {
