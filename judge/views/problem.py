@@ -16,6 +16,7 @@ from django.template import Context
 from django.template.loader import get_template
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _, ugettext_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView, View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
@@ -352,11 +353,13 @@ def problem_submit(request, problem=None, submission=None):
     })
 
 
+@require_POST
 @login_required
 @permission_required('judge.clone_problem')
 def clone_problem(request, problem):
     problem = get_object_or_404(Problem, code=problem)
     languages = problem.allowed_languages.all()
+    types = problem.types
     problem.pk = None
     problem.is_public = False
     problem.code += '_clone'
@@ -374,6 +377,7 @@ def clone_problem(request, problem):
                 break
     problem.authors.add(request.user.profile)
     problem.allowed_languages = languages
+    problem.types = types
     return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
 
 

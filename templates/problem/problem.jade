@@ -12,6 +12,14 @@ block content_media
 
 block content_js_media
     include comments/js_media
+    script.
+        $(function () {
+            $('a#clone-link').click(function (event) {
+                event.preventDefault();
+                if (confirm('Are you sure you want to clone?'))
+                    this.form.submit();
+            })
+        });
 
 block title_row
     div.problem-title
@@ -47,8 +55,8 @@ block info_float
             | {% trans "Edit problem" %}
         br
     if perms.judge.clone_problem
-        a(href='{% url "problem_clone" problem.code %}')
-            | {% trans "Clone problem" %}
+        form(action='{% url "problem_clone" problem.code %}', method='post')
+            a#clone-link(href='#') {% trans "Clone problem" %}
         br
     hr
     
