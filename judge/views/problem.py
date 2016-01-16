@@ -359,7 +359,7 @@ def problem_submit(request, problem=None, submission=None):
 def clone_problem(request, problem):
     problem = get_object_or_404(Problem, code=problem)
     languages = problem.allowed_languages.all()
-    types = problem.types
+    types = problem.types.all()
     problem.pk = None
     problem.is_public = False
     problem.code += '_clone'
