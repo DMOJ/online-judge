@@ -6,6 +6,7 @@ from django.db.models import Count
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext as _
 from django.views.generic import View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
@@ -30,12 +31,12 @@ class CommentForm(ModelForm):
     def __init__(self, request, *args, **kwargs):
         self.request = request
         super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs.update({'placeholder': 'Comment title'})
-        self.fields['body'].widget.attrs.update({'placeholder': 'Comment body'})
+        self.fields['title'].widget.attrs.update({'placeholder': _('Comment title')})
+        self.fields['body'].widget.attrs.update({'placeholder': _('Comment body')})
 
     def clean(self):
         if self.request is not None and self.request.user.is_authenticated() and self.request.user.profile.mute:
-            raise ValidationError('You are not allowed to comment...')
+            raise ValidationError(_('You are not allowed to comment...'))
         return super(CommentForm, self).clean()
 
 
@@ -60,7 +61,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
                 comment.page = page
                 with revisions.create_revision():
                     revisions.set_user(request.user)
-                    revisions.set_comment('Posted comment')
+                    revisions.set_comment(_('Posted comment'))
                     comment.save()
                 return HttpResponseRedirect(request.path)
 

@@ -105,4 +105,4 @@ if request.user.is_authenticated and comment_form
                 #comment-form-body
                     | #{comment_form.body}
             hr
-            input.button(style='float:right', type='submit', value='Post!')
+            input.button(style='float:right', type='submit', value='{% trans "Post!" %}')
