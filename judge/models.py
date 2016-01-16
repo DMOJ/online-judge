@@ -409,8 +409,8 @@ class Submission(models.Model):
     batch = models.BooleanField(verbose_name=_('Batched cases'), default=False)
     case_points = models.FloatField(verbose_name=_('Test case points'), default=0)
     case_total = models.FloatField(verbose_name=_('Test case total points'), default=0)
-    judge = models.ForeignKey('Judge', verbose_name=_('Judge'), null=True, blank=True,
-                              on_delete=models.SET_NULL)
+    judge_on = models.ForeignKey('Judge', verbose_name=_('Judge on'), null=True, blank=True,
+                                 on_delete=models.SET_NULL)
 
     @property
     def memory_bytes(self):

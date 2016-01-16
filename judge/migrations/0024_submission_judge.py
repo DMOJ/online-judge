@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='submission',
-            name='judge',
-            field=models.ForeignKey('Judge', verbose_name='Judge', null=True, blank=True, on_delete=models.SET_NULL),
+            name='judge_on',
+            field=models.ForeignKey('Judge', verbose_name='Judge on', null=True, blank=True, on_delete=models.SET_NULL),
         ),
     ]
