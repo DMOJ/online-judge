@@ -56,6 +56,7 @@ block info_float
         br
     if perms.judge.clone_problem
         form(action='{% url "problem_clone" problem.code %}', method='post')
+            - csrf_token
             a#clone-link(href='#') {% trans "Clone problem" %}
         br
     hr
