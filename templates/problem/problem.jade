@@ -58,7 +58,6 @@ block info_float
         form(action='{% url "problem_clone" problem.code %}', method='post')
             - csrf_token
             a#clone-link(href='#') {% trans "Clone problem" %}
-        br
     hr
     
     br
