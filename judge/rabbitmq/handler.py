@@ -31,6 +31,13 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
             logger.warning('Unknown submission: %d', packet['id'])
             return
         submission.status = 'P'
+
+        try:
+            submission.judged_on = Judge.objects.get(name=packet['judge'])
+        except Judge.DoesNotExist:
+            # Just in case. Is not necessary feature and is not worth the crash.
+            pass
+
         submission.save()
         event.post('sub_%d' % submission.id, {'type': 'processing'})
         if not submission.problem.is_public:
