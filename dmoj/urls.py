@@ -254,12 +254,12 @@ urlpatterns = [
     }}),
 
     url(r'^judge-select2/', include([
-        url(r'^profile/', UserSelect2View.as_view(), name='profile_select2'),
-        url(r'^organization/', OrganizationSelect2View.as_view(), name='organization_select2'),
-        url(r'^problem/', ProblemSelect2View.as_view(), name='problem_select2'),
-        url(r'^contest/', ContestSelect2View.as_view(), name='contest_select2'),
-        url(r'^comment/', CommentSelect2View.as_view(), name='comment_select2'),
-        url(r'^contest_profile/', ContestProfileSelect2View.as_view(), name='contest_profile_select2'),
+        url(r'^profile/$', UserSelect2View.as_view(), name='profile_select2'),
+        url(r'^organization/$', OrganizationSelect2View.as_view(), name='organization_select2'),
+        url(r'^problem/$', ProblemSelect2View.as_view(), name='problem_select2'),
+        url(r'^contest/$', ContestSelect2View.as_view(), name='contest_select2'),
+        url(r'^comment/$', CommentSelect2View.as_view(), name='comment_select2'),
+        url(r'^contest_profile/$', ContestProfileSelect2View.as_view(), name='contest_profile_select2'),
     ])),
 ]
 
