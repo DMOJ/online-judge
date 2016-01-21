@@ -1,10 +1,12 @@
 from django.core.urlresolvers import reverse
+from django.db.models import IntegerField
+from django.db.models.expressions import RawSQL
 from django.utils.html import format_html
 from django.utils.translation import ugettext as _
 
 from judge.models import Submission
-from judge.views.submission import ProblemSubmissions, ForceContestMixin
 from judge.utils.problems import get_result_table
+from judge.views.submission import ProblemSubmissions, ForceContestMixin
 
 __all__ = ['RankedSubmissions']
 
@@ -22,29 +24,29 @@ class RankedSubmissions(ProblemSubmissions):
             contest_join = ''
             points = 'sub.points'
             constraint = ''
-        queryset = super(RankedSubmissions, self).get_queryset().extra(where=['''
-            judge_submission.id IN (
-                SELECT sub.id
-                FROM (
-                    SELECT sub.user_id AS uid, MAX(sub.points) AS points
-                    FROM judge_submission AS sub INNER JOIN
-                         judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
+        queryset = super(RankedSubmissions, self).get_queryset().filter(id__in=RawSQL(
+                '''
+                    SELECT sub.id
+                    FROM (
+                        SELECT sub.user_id AS uid, MAX(sub.points) AS points
+                        FROM judge_submission AS sub INNER JOIN
+                             judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
+                        WHERE sub.problem_id = %s AND {points} > 0 {constraint}
+                        GROUP BY sub.user_id
+                    ) AS highscore INNER JOIN (
+                        SELECT sub.user_id AS uid, sub.points, MIN(sub.time) as time
+                        FROM judge_submission AS sub INNER JOIN
+                             judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
+                        WHERE sub.problem_id = %s AND {points} > 0 {constraint}
+                        GROUP BY sub.user_id, {points}
+                    ) AS fastest ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
+                        INNER JOIN judge_submission AS sub
+                            ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
                     WHERE sub.problem_id = %s AND {points} > 0 {constraint}
-                    GROUP BY sub.user_id
-                ) AS highscore INNER JOIN (
-                    SELECT sub.user_id AS uid, sub.points, MIN(sub.time) as time
-                    FROM judge_submission AS sub INNER JOIN
-                         judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
-                    WHERE sub.problem_id = %s AND {points} > 0 {constraint}
-                    GROUP BY sub.user_id, {points}
-                ) AS fastest ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
-                    INNER JOIN judge_submission AS sub
-                        ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
-                WHERE sub.problem_id = %s AND {points} > 0 {constraint}
-                GROUP BY fastest.uid
-            )
-        '''.format(points=points, contest_join=contest_join, constraint=constraint)],
-            params=(self.problem.id, self.contest.id) * 3 if self.in_contest else (self.problem.id,) * 3)
+                    GROUP BY fastest.uid
+                '''.format(points=points, contest_join=contest_join, constraint=constraint),
+                (self.problem.id, self.contest.id) * 3 if self.in_contest else (self.problem.id,) * 3,
+                output_field=IntegerField()))
 
         if self.in_contest:
             return queryset.order_by('-contest__points', 'time')
@@ -74,4 +76,4 @@ class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
 
     def get_result_table(self):
         return get_result_table(Submission.objects.filter(
-            problem_id=self.problem.id, contest__participation__contest_id=self.contest.id))
+                problem_id=self.problem.id, contest__participation__contest_id=self.contest.id))
