@@ -47,6 +47,7 @@ class RankedSubmissions(ProblemSubmissions):
                 '''.format(points=points, contest_join=contest_join, constraint=constraint),
                 (self.problem.id, self.contest.id) * 3 if self.in_contest else (self.problem.id,) * 3,
                 output_field=IntegerField()))
+        queryset.query.group_by = ['%s.%s' % (Submission._meta.db_table, Submission._meta.get_field('user').column)]
 
         if self.in_contest:
             return queryset.order_by('-contest__points', 'time')
