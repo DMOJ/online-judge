@@ -22,7 +22,7 @@ class RankedSubmissions(ProblemSubmissions):
             contest_join = ''
             points = 'sub.points'
             constraint = ''
-        return super(RankedSubmissions, self).get_queryset().order_by('-points', 'time').extra(where=['''
+        queryset = super(RankedSubmissions, self).get_queryset().extra(where=['''
             judge_submission.id IN (
                 SELECT sub.id
                 FROM (
@@ -45,6 +45,11 @@ class RankedSubmissions(ProblemSubmissions):
             )
         '''.format(points=points, contest_join=contest_join, constraint=constraint)],
             params=(self.problem.id, self.contest.id) * 3 if self.in_contest else (self.problem.id,) * 3)
+
+        if self.in_contest:
+            return queryset.order_by('-contest__points', 'time')
+        else:
+            return queryset.order_by('-points', 'time')
 
     def get_title(self):
         return _('Best solutions for %s') % self.problem.name
