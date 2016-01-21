@@ -316,6 +316,11 @@ class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
     def get_title(self):
         return "%s's submissions for %s in %s" % (self.username, self.problem.name, self.contest.name)
 
+    def access_check(self, request):
+        super(UserContestSubmissions, self).access_check(request)
+        if not self.contest.users.filter(profile__user_id=self.profile.id).exists():
+            raise Http404()
+
     def get_content_title(self):
         return format_html(_(u'<a href="{1}">{0}</a>\'s submissions for '
                              u'<a href="{3}">{2}</a> in <a href="{5}">{4}</a>'),
