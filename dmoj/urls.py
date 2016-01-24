@@ -196,7 +196,7 @@ urlpatterns = [
         url(r'^contest/list$', api.api_contest_list),
         url(r'^problem/list$', api.api_problem_list),
         url(r'^problem/info/(\w+)', api.api_problem_info),
-        url(r'^user/list', api.api_user_list),
+        url(r'^user/list$', api.api_user_list),
         url(r'^user/info/(\w+)', api.api_user_info),
         url(r'^user/submissions/(\w+)', api.api_user_submissions),
         url(r'^judge/auth/rabbitmq/', include([
