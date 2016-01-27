@@ -1,9 +1,9 @@
+import json
 import socket
 import threading
-import json
 
 from django.conf import settings
-from websocket import create_connection, WebSocketConnectionClosedException, WebSocketException
+from websocket import create_connection, WebSocketException
 
 __all__ = ['EventPostingError', 'EventPoster', 'post', 'last']
 _local = threading.local()
