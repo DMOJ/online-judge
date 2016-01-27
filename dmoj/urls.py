@@ -198,7 +198,7 @@ urlpatterns = [
         url(r'^problem/info/(\w+)$', api.api_problem_info),
         url(r'^user/list$', api.api_user_list),
         url(r'^user/info/(\w+)$', api.api_user_info),
-        url(r'^user/submissions/(\w+)', api.api_user_submissions),
+        url(r'^user/submissions/(\w+)$', api.api_user_submissions),
         url(r'^judge/auth/rabbitmq/', include([
             url(r'^user$', rabbitmq_views.auth_user),
             url(r'^vhost$', rabbitmq_views.auth_vhost),
