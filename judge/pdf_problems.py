@@ -1,20 +1,19 @@
-import os
-import uuid
 import errno
-import urllib2
-import urllib
+import io
 import json
+import os
+import re
 import shutil
 import subprocess
 import tempfile
-import re
+import urllib
+import urllib2
+import uuid
 
 from django.conf import settings
-import io
+
 from judge.math_parser import MathHTMLParser
-
 from markdown_trois import markdown as markdown_trois
-
 
 refilename = re.compile(r'\\includegraphics{(.*?)}')
 PROLOGUE = r'''\documentclass[a4paper]{article}
