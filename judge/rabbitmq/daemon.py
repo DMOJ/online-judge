@@ -1,9 +1,7 @@
 import json
 import logging
-
-from os import getpid
-
 import time
+from os import getpid
 
 from . import connection
 
