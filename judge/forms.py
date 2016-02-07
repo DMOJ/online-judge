@@ -1,13 +1,11 @@
 from operator import attrgetter
 
-from datetime import timedelta
 from django import forms
 from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from django.forms import ModelForm, CharField, TextInput
-from django.utils import timezone
 
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode, Language, Judge
