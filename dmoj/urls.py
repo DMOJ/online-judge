@@ -3,6 +3,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
+from django.utils.translation import ugettext_lazy as _
 from social.apps.django_app.urls import urlpatterns as social_auth_patterns
 
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
@@ -96,7 +97,7 @@ def paged_list_view(view, name):
 
 
 urlpatterns = [
-    url(r'^$', blog.PostList.as_view(template_name='home.jade', title='Home'), kwargs={'page': 1}, name='home'),
+    url(r'^$', blog.PostList.as_view(template_name='home.jade', title=_('Home')), kwargs={'page': 1}, name='home'),
     url(r'^500/$', exception),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
