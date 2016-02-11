@@ -3,6 +3,7 @@
 - load counter
 - load i18n
 - load strings
+- load code_highlight
 
 if IN_CONTEST and submission.contest_or_none and CONTEST.id == submission.contest_or_none.participation_id
     - var prefix_length = submission.contest_or_none.problem.output_prefix_override
@@ -103,3 +104,8 @@ else
                 | In the meantime, try resubmitting in a few seconds.
         else
             | {% trans "An internal error occurred while grading." %}
+    if submission.error
+        h4
+            if request.user.is_authenticated and request.user.profile.id in submission.problem.author_ids
+                | {% trans "Bonus information" %}
+        pre: code #{|highlight:"pytb"}
