@@ -90,6 +90,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
         except Submission.DoesNotExist:
             logger.warning('Unknown submission: %d', packet['id'])
             return
+        submission.error = packet['message']
         submission.status = submission.result = 'IE'
         submission.save()
         event.post('sub_%d' % submission.id, {
