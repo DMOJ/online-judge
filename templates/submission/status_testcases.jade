@@ -108,4 +108,4 @@ else
         h4
             if request.user.is_authenticated and request.user.profile.id in submission.problem.author_ids
                 | {% trans "Bonus information" %}
-        pre: code #{|highlight:"pytb"}
+        pre: code #{submission.error|highlight:"pytb"}
