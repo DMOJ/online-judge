@@ -397,7 +397,7 @@ class ContestSubmissionInline(admin.StackedInline):
 class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date')
     fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result',
-              'case_points', 'case_total', 'judged_on')
+              'case_points', 'case_total', 'judged_on', 'error')
     actions = ('judge', 'recalculate_score')
     list_display = ('id', 'problem_code', 'problem_name', 'user_column', 'execution_time', 'pretty_memory',
                     'points', 'language', 'status', 'result', 'judge_column')
