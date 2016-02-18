@@ -218,8 +218,8 @@ block bodyend
 
                             var position = $canvas.offset();
                             $tooltip.css({
-                                left: position.left + offset.x,
-                                top: position.top + offset.y,
+                                left: position.left + offset.x + 'px',
+                                top: position.top + offset.y + 'px',
                                 fontFamily: this.options.tooltipFontFamily,
                                 fontSize: this.options.tooltipFontSize,
                                 fontStyle: this.options.tooltipFontStyle
