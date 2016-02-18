@@ -217,9 +217,10 @@ block bodyend
                             $tooltip.addClass(offset.y < $tooltip.height() ? 'below' : 'above');
 
                             var position = $canvas.offset();
+                            var container = $('#page-container').offset();
                             $tooltip.css({
-                                left: position.left + offset.x + 'px',
-                                top: position.top + offset.y + 'px',
+                                left: position.left - container.left + offset.x,
+                                top: position.top - container.top + offset.y,
                                 fontFamily: this.options.tooltipFontFamily,
                                 fontSize: this.options.tooltipFontSize,
                                 fontStyle: this.options.tooltipFontStyle
