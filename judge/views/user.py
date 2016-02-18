@@ -128,7 +128,7 @@ class UserAboutPage(UserPage):
 
         context['rating_data'] = json.dumps([
             {'label': rating.contest.name, 'rating': rating.rating,
-             'timestamp': (rating.contest.end_Time - EPOCH).total_seconds() * 1000}
+             'timestamp': (rating.contest.end_time - EPOCH).total_seconds() * 1000}
             for rating in ratings
         ])
 
