@@ -76,6 +76,11 @@ block user_media
             margin-right: 5px;
         }
 
+        #rating-chart {
+            width: 100%;
+            height: 400px;
+        }
+
         #rating-tooltip {
             position: absolute;
             background: rgba(0, 0, 0, .7);
@@ -124,7 +129,7 @@ block user_content
         hr
         br
         h4 Rating History
-        canvas#rating-chart(height=400, style='width: 100%')
+        canvas#rating-chart
         #rating-tooltip
             .contest
             .date
