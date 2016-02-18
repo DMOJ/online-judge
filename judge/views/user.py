@@ -12,6 +12,7 @@ from django.shortcuts import render
 from django.template import RequestContext, Context
 from django.utils import timezone
 from django.utils.functional import cached_property
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
 from reversion import revisions
@@ -126,11 +127,11 @@ class UserAboutPage(UserPage):
         ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
             .defer('contest__description')
 
-        context['rating_data'] = json.dumps([
+        context['rating_data'] = mark_safe(json.dumps([
             {'label': rating.contest.name, 'rating': rating.rating,
              'timestamp': (rating.contest.end_time - EPOCH).total_seconds() * 1000}
             for rating in ratings
-        ])
+        ]))
 
         if ratings:
             user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
