@@ -129,7 +129,7 @@ block user_content
         hr
         br
         h4 Rating History
-        canvas#rating-chart
+        #rating-chart: canvas
         #rating-tooltip
             .contest
             .date
@@ -196,7 +196,7 @@ block bodyend
             });
 
             $(function () {
-                var ctx = $('canvas#rating-chart').get(0).getContext('2d');
+                var ctx = $('#rating-chart').find('canvas').get(0).getContext('2d');
 
                 Chart.types.Scatter.extend({
                     name: 'RatingScatter',
