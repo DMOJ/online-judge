@@ -197,7 +197,8 @@ block bodyend
             });
 
             $(function () {
-                var ctx = $('#rating-chart').find('canvas').get(0).getContext('2d');
+                var $canvas = $('#rating-chart').find('canvas');
+                var ctx = $canvas.get(0).getContext('2d');
 
                 Chart.types.Scatter.extend({
                     name: 'RatingScatter',
@@ -215,9 +216,10 @@ block bodyend
                             $tooltip.removeClass('above below');
                             $tooltip.addClass(offset.y < $tooltip.height() ? 'below' : 'above');
 
+                            var position = $canvas.offset();
                             $tooltip.css({
-                                left: this.chart.canvas.offsetLeft + offset.x + 'px',
-                                top: this.chart.canvas.offsetTop + offset.y + 'px',
+                                left: position.left + offset.x,
+                                top: position.top + offset.y,
                                 fontFamily: this.options.tooltipFontFamily,
                                 fontSize: this.options.tooltipFontSize,
                                 fontStyle: this.options.tooltipFontStyle
