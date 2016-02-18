@@ -1,4 +1,7 @@
+import json
+
 import django
+from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
@@ -7,6 +10,7 @@ from django.db.models import Max, Count, Min
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template import RequestContext, Context
+from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
@@ -111,13 +115,23 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         return super(UserPage, self).get(request, *args, **kwargs)
 
 
+EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
+
+
 class UserAboutPage(UserPage):
     template_name = 'user/user_about.jade'
 
     def get_context_data(self, **kwargs):
         context = super(UserAboutPage, self).get_context_data(**kwargs)
-        ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
+        ratings = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
             .defer('contest__description')
+
+        context['rating_data'] = json.dumps([
+            {'label': rating.contest.name, 'rating': rating.rating,
+             'timestamp': (rating.contest.end_Time - EPOCH).total_seconds() * 1000}
+            for rating in ratings
+        ])
+
         if ratings:
             user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
             global_data = Rating.objects.aggregate(Min('rating'), Max('rating'))

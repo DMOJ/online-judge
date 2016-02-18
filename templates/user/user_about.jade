@@ -76,6 +76,20 @@ block user_media
             margin-right: 5px;
         }
 
+        #rating-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, .7);
+            color: white;
+            padding: 3px;
+            border-radius: 3px;
+            -webkit-transition: all .1s ease;
+            transition: all .1s ease;
+            pointer-events: none;
+            -webkit-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
+        }
+
+
     link(rel='stylesheet', href='{% static "pygment-github.css" %}', type='text/css')
 
 block title_ruler
@@ -109,8 +123,13 @@ block user_content
         br
         hr
         br
-        // TODO: if on mobile, show a "Can't show chart on this display" box instead
-        #rating-chart(style='height: 400px; margin: 0 auto')
+        h4 Rating History
+        canvas#rating-chart(height=400, style='width: 100%')
+        #rating-tooltip
+            .contest
+            .date
+            .rating
+
         h4 {% trans "Contest History" %}
         b {% trans "Rank by rating:" %}
         |  #{rating_rank} of #{rated_users}
@@ -156,55 +175,70 @@ block user_content
                             span.rate-box(class='{{ rating.rating|rating_class }}')
                                 span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
                             span.rating(class='{{ rating.rating|rating_class }}')= rating.rating
+
 block bodyend
     if ratings
-        script(src='//code.highcharts.com/highcharts.js')
-
-        | <script type="text/javascript">
-        |     var rating_history = [
-        each rating in ratings
-            | {
-            |     name: '#{rating.contest.name|escapejs}',
-            |     x: new Date('#{rating.contest.end_time|date:"c"}'),
-            |     y: #{rating.rating},
-            | },
-        |    ];
-        | </script>
-
+        script(type='text/javascript', src='{% static "chart.js/Chart.Core.js" %}')
+        script(type='text/javascript', src='{% static "chart.js/Chart.Scatter.js" %}')
         script(type='text/javascript').
+            var rating_history = #{rating_data};
+            var contest_name = {};
+
+            $.each(rating_history, function (index, item) {
+                contest_name[item.timestamp.toString() + ',' + item.rating.toString()] = item.label;
+                item.x = new Date(item.timestamp);
+                item.y = item.rating;
+            });
+
             $(function () {
-                $('#rating-chart').highcharts({
-                    title: {
-                        text: 'Rating History'
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    chart: {
-                        zoomType: 'x'
-                    },
-                    xAxis: {
-                        type: 'datetime'
-                    },
-                    yAxis: {
-                        endOnTick: false,
-                        min: #{min_graph},
-                        max: #{max_graph},
-                        title: {
-                            text: 'Rating'
-                        },
-                        plotLines: [{
-                            value: 0,
-                            width: 1,
-                            color: '#808080'
-                        }]
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    series: [{
-                        name: 'Rating',
+                var ctx = $('canvas#rating-chart').get(0).getContext('2d');
+
+                Chart.types.Scatter.extend({
+                    name: 'RatingScatter',
+                    showTooltip: function (elements) {
+                        var $tooltip = $('#rating-tooltip');
+
+                        this.draw();
+                        if (elements.length > 0) {
+                            var item = elements[0];
+                            var offset = item.tooltipPosition();
+
+                            $tooltip.find('.contest').text(contest_name[item.arg.toString() + ',' + item.value.toString()]);
+                            $tooltip.find('.rating').text(item.valueLabel);
+
+                            $tooltip.removeClass('above below');
+                            $tooltip.addClass(offset.y < $tooltip.height() ? 'below' : 'above');
+
+                            $tooltip.css({
+                                left: this.chart.canvas.offsetLeft + offset.x + 'px',
+                                top: this.chart.canvas.offsetTop + offset.y + 'px',
+                                fontFamily: this.options.tooltipFontFamily,
+                                fontSize: this.options.tooltipFontSize,
+                                fontStyle: this.options.tooltipFontStyle
+                            }).show();
+                        } else
+                            $tooltip.hide();
+
+                        return this;
+                    }
+                });
+
+                new Chart(ctx).RatingScatter([
+                    {
+                        label: 'rating',
+                        strokeColor: '#A31515',
+                        fillColor: '#A31515',
                         data: rating_history
-                    }]
+                    }
+                ], {
+                    bezierCurve: false,
+                    showTooltips: true,
+                    scaleShowHorizontalLines: true,
+                    scaleShowLabels: true,
+                    scaleType: 'date',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    pointDotRadius: 6,
+                    pointHitDetectionRadius: 20
                 });
             });
