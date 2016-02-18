@@ -82,6 +82,7 @@ block user_media
         }
 
         #rating-tooltip {
+            display: none;
             position: absolute;
             background: rgba(0, 0, 0, .7);
             color: white;
@@ -228,7 +229,7 @@ block bodyend
                     }
                 });
 
-                new Chart(ctx).RatingScatter([
+                window.rating_chart = new Chart(ctx).RatingScatter([
                     {
                         label: 'rating',
                         strokeColor: '#A31515',
