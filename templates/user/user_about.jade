@@ -188,10 +188,10 @@ block bodyend
         script(type='text/javascript', src='{% static "chart.js/Chart.Scatter.js" %}')
         script(type='text/javascript').
             var rating_history = #{rating_data};
-            var contest_name = {};
+            var data_index = {};
 
             $.each(rating_history, function (index, item) {
-                contest_name[item.timestamp.toString() + ',' + item.rating.toString()] = item.label;
+                data_index[item.timestamp.toString() + ',' + item.rating.toString()] = index;
                 item.x = new Date(item.timestamp);
                 item.y = item.rating;
             });
@@ -207,11 +207,12 @@ block bodyend
 
                         this.draw();
                         if (elements.length > 0) {
-                            var item = elements[0];
-                            var offset = item.tooltipPosition();
+                            var item = rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
+                            var offset = elements[0].tooltipPosition();
 
-                            $tooltip.find('.contest').text(contest_name[item.arg.toString() + ',' + item.value.toString()]);
-                            $tooltip.find('.rating').text(item.valueLabel);
+                            $tooltip.find('.contest').text(item.label);
+                            $tooltip.find('.date').text(item.date);
+                            $tooltip.find('.rating').text(item.rating);
 
                             $tooltip.removeClass('above below');
                             $tooltip.addClass(offset.y < $tooltip.height() ? 'below' : 'above');
