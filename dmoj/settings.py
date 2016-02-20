@@ -330,7 +330,7 @@ BRIDGED_DJANGO_HOST = 'localhost'
 BRIDGED_DJANGO_PORT = 9998
 
 # Event Server configuration
-EVENT_DAEMON_USE = True
+EVENT_DAEMON_USE = False
 EVENT_DAEMON_POST = 'ws://localhost:9997/'
 EVENT_DAEMON_GET = 'ws://localhost:9996/'
 EVENT_DAEMON_POLL = '/channels/'
