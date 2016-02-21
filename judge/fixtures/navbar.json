@@ -1,0 +1,115 @@
+[
+    {
+        "fields": {
+            "key": "problems",
+            "label": "Problems",
+            "level": 0,
+            "lft": 1,
+            "order": 1,
+            "parent": null,
+            "path": "/problems/",
+            "regex": "^/problem",
+            "rght": 2,
+            "tree_id": 1
+        },
+        "model": "judge.navigationbar",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "key": "submit",
+            "label": "Submissions",
+            "level": 0,
+            "lft": 1,
+            "order": 2,
+            "parent": null,
+            "path": "/submissions/",
+            "regex": "^/submi|^/src/",
+            "rght": 2,
+            "tree_id": 2
+        },
+        "model": "judge.navigationbar",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "key": "user",
+            "label": "Users",
+            "level": 0,
+            "lft": 1,
+            "order": 3,
+            "parent": null,
+            "path": "/users/",
+            "regex": "^/user",
+            "rght": 4,
+            "tree_id": 3
+        },
+        "model": "judge.navigationbar",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "key": "org",
+            "label": "Organizations",
+            "level": 1,
+            "lft": 2,
+            "order": 4,
+            "parent": 3,
+            "path": "/organizations/",
+            "regex": "^/organization",
+            "rght": 3,
+            "tree_id": 3
+        },
+        "model": "judge.navigationbar",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "key": "contest",
+            "label": "Contests",
+            "level": 0,
+            "lft": 1,
+            "order": 5,
+            "parent": null,
+            "path": "/contests/",
+            "regex": "^/contest",
+            "rght": 2,
+            "tree_id": 4
+        },
+        "model": "judge.navigationbar",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "key": "about",
+            "label": "About",
+            "level": 0,
+            "lft": 1,
+            "order": 6,
+            "parent": null,
+            "path": "/about/",
+            "regex": "^/about/$",
+            "rght": 4,
+            "tree_id": 5
+        },
+        "model": "judge.navigationbar",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "key": "status",
+            "label": "Status",
+            "level": 1,
+            "lft": 2,
+            "order": 7,
+            "parent": 6,
+            "path": "/status/",
+            "regex": "^/status/$|^/judge/",
+            "rght": 3,
+            "tree_id": 5
+        },
+        "model": "judge.navigationbar",
+        "pk": 7
+    }
+]
+
