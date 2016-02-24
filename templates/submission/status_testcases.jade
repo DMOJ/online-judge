@@ -104,10 +104,8 @@ else
                 | In the meantime, try resubmitting in a few seconds.
         else
             | {% trans "An internal error occurred while grading." %}
-    if submission.error
+    if submission.error and request.user.is_authenticated and request.user.profile.id in submission.problem.author_ids
         hr(style='float:left;width:30%')
         br
-        h4
-            if request.user.is_authenticated and request.user.profile.id in submission.problem.author_ids
-                | {% trans "Bonus information" %}
+        h4 {% trans "Bonus information" %}
         pre: code #{submission.error|highlight:"pytb"}
