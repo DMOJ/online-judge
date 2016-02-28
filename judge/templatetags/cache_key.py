@@ -25,8 +25,8 @@ def get_cache_version(parser, token):
         # Splitting by None == splitting by spaces.
         tag_name, arg = token.contents.split(None, 1)
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires arguments" % token.contents.split()[0]
+        raise template.TemplateSyntaxError('%r tag requires arguments' % token.contents.split()[0])
     m = re.search(r'(.*?) as (\w+)', arg)
     if not m:
-        raise template.TemplateSyntaxError, "%r tag had invalid arguments" % tag_name
+        raise template.TemplateSyntaxError('%r tag had invalid arguments' % tag_name)
     return CacheVersionNode(m.group(2), *m.group(1).split())
