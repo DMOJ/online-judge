@@ -20,4 +20,4 @@ def get_counter(parser, token):
     try:
         return GetCounterNode(*token.contents.split()[1:])
     except ValueError:
-        raise template.TemplateSyntaxError, '%r tag requires arguments' % token.contents.split()[0]
+        raise template.TemplateSyntaxError('%r tag requires arguments' % token.contents.split()[0])
