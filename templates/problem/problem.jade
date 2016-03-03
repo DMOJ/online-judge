@@ -45,7 +45,7 @@ block info_float
     a(href='{% url "ranked_submissions" problem.code %}')
         | {% trans "Best submissions" %}
 
-    if editorial
+    if editorial and editorial.is_public
         hr
         a(href='{% url "solution" editorial.url %}') Read editorial
 
