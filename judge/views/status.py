@@ -9,7 +9,7 @@ from judge.models import Judge
 from judge.utils.views import TitleMixin, generic_message
 
 
-__all__ = ['status_all', 'status_table']
+__all__ = ['status_all', 'status_table', 'JudgeDetail']
 
 
 def get_judges(request):
