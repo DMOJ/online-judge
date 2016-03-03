@@ -34,7 +34,7 @@ def _find_contest(request, key, private_check=True):
     try:
         contest = Contest.objects.get(key=key)
         if private_check and not contest.is_public and not request.user.has_perm('judge.see_private_contest') and (
-                not request.user.is_authenticated() or
+                not request.user.has_perm('judge.edit_own_contest') or
                 not contest.organizers.filter(id=request.user.profile.id).exists()):
             raise ObjectDoesNotExist()
     except ObjectDoesNotExist:
