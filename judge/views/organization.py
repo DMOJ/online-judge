@@ -21,9 +21,9 @@ from judge.models import Organization, OrganizationRequest
 from judge.utils.ranker import ranker
 from judge.utils.views import generic_message, TitleMixin
 
-__all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'JoinOrganization',
-           'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization', 'OrganizationRequestDetail',
-           'OrganizationRequestView', 'OrganizationRequestLog']
+__all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'OrganizationMembershipChange',
+           'JoinOrganization', 'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization',
+           'OrganizationRequestDetail', 'OrganizationRequestView', 'OrganizationRequestLog']
 
 
 class OrganizationMixin(object):
