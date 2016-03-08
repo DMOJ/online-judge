@@ -158,7 +158,8 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
 
     def get_object(self, queryset=None):
         object = super(OrganizationRequestDetail, self).get_object(queryset)
-        if object.user != self.request.user.profile:
+        profile = self.request.user.profile
+        if object.user_id != profile.id and not object.organization.admins.filter(id=profile.id).exists():
             raise PermissionDenied()
         return object
 
