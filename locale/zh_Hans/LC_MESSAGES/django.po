@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-16 00:28-0500\n"
-"PO-Revision-Date: 2016-01-16 01:43-0500\n"
+"PO-Revision-Date: 2016-03-09 17:47-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -635,7 +635,7 @@ msgstr "允许的语言"
 
 #: .\judge\models.py:294 .\judge\models.py:696
 msgid "Publicly visible"
-msgstr "公共可见"
+msgstr "公开可见"
 
 #: .\judge\models.py:295
 msgid "Date of publishing"
@@ -997,7 +997,7 @@ msgstr "竞赛名称"
 
 #: .\judge\models.py:689
 msgid "These people will be able to edit the contest."
-msgstr "这些人将可见编辑竞赛。"
+msgstr "这些人将可以编辑竞赛。"
 
 #: .\judge\models.py:697 .\templates\contest\list.jade.py:31
 #: .\templates\contest\list.jade:60 .\templates\contest\list.jade.py:80
@@ -1154,7 +1154,7 @@ msgstr "网址标识"
 
 #: .\judge\models.py:871
 msgid "Public visibility"
-msgstr "公共可见性"
+msgstr "公开"
 
 #: .\judge\models.py:872
 msgid "Sticky"
@@ -1276,7 +1276,7 @@ msgstr "%s 的过去版本"
 
 #: .\judge\views\comment.py:103 .\judge\views\organization.py:260
 msgid "Edited from site"
-msgstr "从网站中被编辑"
+msgstr "从网站中上编辑"
 
 #: .\judge\views\comment.py:124 .\judge\views\organization.py:250
 #, python-format
@@ -1317,7 +1317,7 @@ msgstr "“%s“不在进行。"
 
 #: .\judge\views\contests.py:172
 msgid "Already in contest"
-msgstr "已在竞赛"
+msgstr "已经参与了竞赛"
 
 #: .\judge\views\contests.py:173
 #, python-format
@@ -1390,7 +1390,7 @@ msgstr "找不到该组织。"
 #: .\judge\views\organization.py:78
 #, python-format
 msgid "%s Members"
-msgstr "%s 成员"
+msgstr "%s 成员列表"
 
 #: .\judge\views\organization.py:106 .\judge\views\organization.py:108
 msgid "Joining organization"
@@ -1445,7 +1445,7 @@ msgstr "无法编辑组织"
 
 #: .\judge\views\organization.py:269
 msgid "You are not allowed to edit this organization."
-msgstr "你不允许编辑该组织。"
+msgstr "您没有编辑该组织的权利。"
 
 #: .\judge\views\problem.py:64
 msgid "No such problem"
