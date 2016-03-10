@@ -1,7 +1,7 @@
 - load i18n
 
 div(style='border:none', id=select_all_name)
-    div.original-checkboxes(style='-moz-columns: 15em 5; -webkit-columns: 15em 5; columns: 15em 5')
+    div.original-checkboxes
         | {{ original_widget }}
     if empty
         | {% trans "Nothing here." %}
@@ -16,6 +16,9 @@ style.
         margin: 0 0 0 2em;
         padding: 0;
         list-style-type: none;
+        -moz-columns: 15em 5;
+        -webkit-columns: 15em 5;
+        columns: 15em 5
     }
 
     div.original-checkboxes ul li {
