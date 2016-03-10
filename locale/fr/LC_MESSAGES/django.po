@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-01-16 00:28-0500\n"
-"PO-Revision-Date: 2016-01-16 00:33-0500\n"
+"PO-Revision-Date: 2016-03-10 18:03-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -191,7 +191,7 @@ msgstr "%.2f Mo"
 
 #: .\judge\admin.py:469
 msgid "Memory Usage"
-msgstr ""
+msgstr "Utilisation de la mémoire"
 
 #: .\judge\admin.py:500
 #, python-format
@@ -213,7 +213,7 @@ msgstr[1] ""
 
 #: .\judge\admin.py:564
 msgid "Hide comments"
-msgstr ""
+msgstr "Masquer les commentaires"
 
 #: .\judge\admin.py:568
 #, python-format
@@ -335,7 +335,7 @@ msgstr ""
 
 #: .\judge\admin.py:1022
 msgid "Content"
-msgstr ""
+msgstr "Contenu"
 
 #: .\judge\admin.py:1023
 msgid "Summary"
@@ -678,11 +678,11 @@ msgstr ""
 
 #: .\judge\models.py:353 .\judge\models.py:379 .\judge\utils\problems.py:41
 msgid "Accepted"
-msgstr ""
+msgstr "Accepté"
 
 #: .\judge\models.py:354 .\judge\models.py:380 .\judge\utils\problems.py:42
 msgid "Wrong Answer"
-msgstr ""
+msgstr "Mauvaise réponse"
 
 #: .\judge\models.py:355 .\judge\models.py:382 .\judge\utils\problems.py:44
 msgid "Time Limit Exceeded"
@@ -698,16 +698,16 @@ msgstr ""
 
 #: .\judge\models.py:358 .\judge\models.py:385 .\judge\utils\problems.py:46
 msgid "Invalid Return"
-msgstr ""
+msgstr "Retour invalide"
 
 #: .\judge\models.py:359 .\judge\models.py:386
 msgid "Runtime Error"
-msgstr ""
+msgstr "Erreur d'exécution"
 
 #: .\judge\models.py:360 .\judge\models.py:374 .\judge\models.py:387
 #: .\judge\utils\problems.py:43
 msgid "Compile Error"
-msgstr ""
+msgstr "Erreur de compilation"
 
 #: .\judge\models.py:361 .\judge\models.py:373
 msgid "Internal Error"
@@ -847,11 +847,11 @@ msgstr ""
 
 #: .\judge\models.py:510
 msgid "Votes"
-msgstr ""
+msgstr "Votes"
 
 #: .\judge\models.py:511
 msgid "Title of comment"
-msgstr ""
+msgstr "Titre du commentaire"
 
 #: .\judge\models.py:512
 msgid "Body of comment"
@@ -859,7 +859,7 @@ msgstr ""
 
 #: .\judge\models.py:513
 msgid "Hide the comment"
-msgstr ""
+msgstr "Cacher le commentaire"
 
 #: .\judge\models.py:514
 msgid "Parent"
@@ -956,7 +956,7 @@ msgstr ""
 #: .\judge\models.py:640 .\judge\models.py:692 .\judge\views\problem.py:192
 #: .\templates\user\user_tabs.jade:7 .\templates\user\users_table.jade.py:5
 msgid "Problems"
-msgstr ""
+msgstr "Problèmes"
 
 #: .\judge\models.py:641 .\templates\judge_status.jade.py:18
 msgid "Judges"
@@ -1070,7 +1070,7 @@ msgstr ""
 
 #: .\judge\models.py:758
 msgid "score"
-msgstr ""
+msgstr "score"
 
 #: .\judge\models.py:759
 msgid "Cumulative time"
@@ -1482,7 +1482,7 @@ msgstr ""
 
 #: .\judge\views\problem.py:350
 msgid "Submit"
-msgstr ""
+msgstr "Soumettre"
 
 #: .\judge\views\ranked_submission.py:50
 #, python-format
@@ -1600,7 +1600,7 @@ msgstr ""
 
 #: .\judge\views\user.py:61
 msgid "My Account"
-msgstr ""
+msgstr "Mon Compte"
 
 #: .\judge\views\user.py:62
 #, python-format
@@ -1657,7 +1657,7 @@ msgstr "MENU"
 
 #: .\templates\base.jade:68
 msgid "Home"
-msgstr ""
+msgstr "Accueil"
 
 #: .\templates\base.jade:75
 #, python-format
@@ -1702,7 +1702,7 @@ msgstr "Commentaires"
 
 #: .\templates\blog\list.jade:28
 msgid "Blog"
-msgstr ""
+msgstr "Blog"
 
 #: .\templates\blog\list.jade:30
 msgid "Events"
@@ -1730,7 +1730,7 @@ msgstr "Flux de commentaire"
 
 #: .\templates\blog\list.jade:83
 msgid "New problems"
-msgstr ""
+msgstr "Nouveaux problèmes"
 
 #: .\templates\comments\history_ajax.jade:7 .\templates\comments\list.jade:10
 #: .\templates\organization\requests\detail.jade:19
@@ -1971,7 +1971,7 @@ msgstr ""
 
 #: .\templates\messages\new.jade:10
 msgid "Send!"
-msgstr ""
+msgstr "Envoyer!"
 
 #: .\templates\newsletter\common.html:7
 #: .\templates\newsletter\subscription_unsubscribe_activated.html:5
