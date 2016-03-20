@@ -341,14 +341,14 @@ def problem_submit(request, problem=None, submission=None):
         form = ProblemSubmitForm(initial=initial)
         form_data = initial
     if 'problem' in form_data:
-        form.fields['language'].queryset = form_data['problem'].usable_languages
+        form.fields['language'].queryset = form_data['problem'].usable_languages.order_by('common_name', 'key')
     if 'language' in form_data:
         form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = profile.ace_theme
     return render(request, 'problem/submit.jade', {
         'form': form,
         'title': _('Submit'),
-        'langs': Language.objects.order_by('common_name', 'key'),
+        'langs': Language.objects.all(),
         'no_judges': not form.fields['language'].queryset
     })
 
