@@ -348,7 +348,7 @@ def problem_submit(request, problem=None, submission=None):
     return render(request, 'problem/submit.jade', {
         'form': form,
         'title': _('Submit'),
-        'langs': Language.objects.all().order_by('common_name', 'key'),
+        'langs': Language.objects.order_by('common_name', 'key'),
         'no_judges': not form.fields['language'].queryset
     })
 
