@@ -44,7 +44,7 @@ class ProblemMixin(object):
     def get_object(self, queryset=None):
         problem = super(ProblemMixin, self).get_object(queryset)
         if not problem.is_accessible_by(self.request.user):
-            return Http404()
+            raise Http404()
         return problem
 
     def get(self, request, *args, **kwargs):
