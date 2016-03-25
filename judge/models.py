@@ -321,9 +321,7 @@ class Problem(models.Model):
 
         # If the user is in a contest containing that problem
         if user.is_authenticated():
-            cp = user.profile.contest
-            if not Problem.objects.filter(id=self.id, contest__users__profile=cp).exists():
-                return False
+            return Problem.objects.filter(id=self.id, contest__users__profile=user.profile.contest).exists()
         else:
             return False
 
