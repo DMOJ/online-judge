@@ -291,6 +291,9 @@ def problem_submit(request, problem=None, submission=None):
             raise PermissionDenied()
     except Submission.DoesNotExist:
         raise Http404()
+        
+    if not problem.is_accessible_by(request.user):
+        raise Http404()
 
     profile = request.user.profile
     if request.method == 'POST':
