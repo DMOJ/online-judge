@@ -43,17 +43,8 @@ class ProblemMixin(object):
 
     def get_object(self, queryset=None):
         problem = super(ProblemMixin, self).get_object(queryset)
-        if not problem.is_public and not self.request.user.has_perm('judge.see_private_problem'):
-            if self.request.user.has_perm('judge.edit_own_problem') and \
-                    problem.authors.filter(id=self.request.user.profile.id).exists():
-                return problem
-
-            if self.request.user.is_authenticated():
-                cp = self.request.user.profile.contest
-                if not Problem.objects.filter(id=problem.id, contest__users__profile=cp).exists():
-                    raise Http404()
-            else:
-                raise Http404()
+        if not problem.is_accessible_by(self.request.user):
+            return Http404()
         return problem
 
     def get(self, request, *args, **kwargs):
