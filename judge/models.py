@@ -306,6 +306,27 @@ class Problem(models.Model):
     def languages_list(self):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
+    def is_accessible_by(self, user):
+        # All users can see public problems
+        if self.is_public:
+            return True
+            
+        # If the user can view all problems
+        if user.has_perm('judge.see_private_problem'):
+            return True
+        
+        # If the user authored the problem
+        if user.has_perm('judge.edit_own_problem') and self.authors.filter(id=user.profile.id).exists():
+            return True
+
+        # If the user is in a contest containing that problem
+        if user.is_authenticated():
+            cp = user.profile.contest
+            if not Problem.objects.filter(id=self.id, contest__users__profile=cp).exists():
+                return False
+        else:
+            return False
+
     def __unicode__(self):
         return self.name
 
