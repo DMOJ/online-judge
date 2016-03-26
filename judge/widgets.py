@@ -64,16 +64,21 @@ class CompressorWidgetMixin(object):
     compress_css = False
     compress_js = False
 
-    def _media(self):
-        media = super(CompressorWidgetMixin, self)._media()
-        template = self.__templates[self.compress_css, self.compress_js]
-        result = html.fromstring(template.render(Context({'media': media})))
-        return forms.Media(
-                css={'all': [result.find('.//link').get('href')]} if self.compress_css else media._css,
-                js=[result.find('.//script').get('src')] if self.compress_js else media._js
-        )
-
-    media = property(_media)
+    try:
+        import compressor
+    except ImportError:
+        pass
+    else:
+        def _media(self):
+            media = super(CompressorWidgetMixin, self)._media()
+            template = self.__templates[self.compress_css, self.compress_js]
+            result = html.fromstring(template.render(Context({'media': media})))
+            return forms.Media(
+                    css={'all': [result.find('.//link').get('href')]} if self.compress_css else media._css,
+                    js=[result.find('.//script').get('src')] if self.compress_js else media._js
+            )
+    
+        media = property(_media)
 
 
 try:
