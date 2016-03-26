@@ -1,6 +1,7 @@
 from textwrap import dedent
 
 from django import forms
+from django.conf import settings
 from django.contrib.admin import widgets as admin_widgets
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.exceptions import FieldError
@@ -69,16 +70,17 @@ class CompressorWidgetMixin(object):
     except ImportError:
         pass
     else:
-        def _media(self):
-            media = super(CompressorWidgetMixin, self)._media()
-            template = self.__templates[self.compress_css, self.compress_js]
-            result = html.fromstring(template.render(Context({'media': media})))
-            return forms.Media(
-                    css={'all': [result.find('.//link').get('href')]} if self.compress_css else media._css,
-                    js=[result.find('.//script').get('src')] if self.compress_js else media._js
-            )
-    
-        media = property(_media)
+        if getattr(settings, 'COMPRESS_ENABLED', not getattr(settings, 'DEBUG', False)):
+            def _media(self):
+                media = super(CompressorWidgetMixin, self)._media()
+                template = self.__templates[self.compress_css, self.compress_js]
+                result = html.fromstring(template.render(Context({'media': media})))
+                return forms.Media(
+                        css={'all': [result.find('.//link').get('href')]} if self.compress_css else media._css,
+                        js=[result.find('.//script').get('src')] if self.compress_js else media._js
+                )
+        
+            media = property(_media)
 
 
 try:
