@@ -296,6 +296,7 @@ MARKDOWN_TROIS_STYLES = {
     'license': markdown_admin_editable_style,
     'judge': markdown_admin_editable_style,
     'blog': markdown_admin_editable_style,
+    'solution': markdown_admin_editable_style,
     'organization-about': {
         'extras': {
             'code-friendly': None,
