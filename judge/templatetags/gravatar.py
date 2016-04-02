@@ -44,4 +44,4 @@ def gravatar_url(parser, token):
     try:
         return GravatarUrlNode(*token.split_contents()[1:])
     except ValueError:
-        raise template.TemplateSyntaxError, '%r tag requires an email and an optional size' % token.contents.split()[0]
+        raise template.TemplateSyntaxError('%r tag requires an email and an optional size' % token.contents.split()[0])
