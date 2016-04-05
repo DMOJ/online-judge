@@ -53,15 +53,20 @@ block body
             input(type='hidden', name='next', value=next)
         br
         a(href='{% url "password_reset" %}') {% trans "Forgot your password?" %}
-        h4 {% trans "Or log in with..." %}
-        a.social.google-icon(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}')
-            i.fa.fa-google-plus-square
-        = ' '
-        a.social.facebook-icon(href='{% url "social:begin" "facebook" %}?next={{ next }}')
-            i.fa.fa-facebook-square
-        = ' '
-        a.social.github-icon(href='{% url "social:begin" "github-secure" %}?next={{ next }}')
-            i.fa.fa-github-square
-        = ' '
-        a.social.dropbox-icon(href='{% url "social:begin" "dropbox-oauth2" %}?next={{ next }}')
-            i.fa.fa-dropbox
+        if has_google_auth or has_facebook_auth or has_github_auth or has_dropbox_auth
+            h4 {% trans "Or log in with..." %}
+            if has_google_auth
+                a.social.google-icon(href='{% url "social:begin" "google-oauth2" %}?next={{ next }}')
+                    i.fa.fa-google-plus-square
+                = ' '
+            if has_facebook_auth
+                a.social.facebook-icon(href='{% url "social:begin" "facebook" %}?next={{ next }}')
+                    i.fa.fa-facebook-square
+                = ' '
+            if has_github_auth
+                a.social.github-icon(href='{% url "social:begin" "github-secure" %}?next={{ next }}')
+                    i.fa.fa-github-square
+                = ' '
+            if has_dropbox_auth
+                a.social.dropbox-icon(href='{% url "social:begin" "dropbox-oauth2" %}?next={{ next }}')
+                    i.fa.fa-dropbox
