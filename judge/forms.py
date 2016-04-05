@@ -117,4 +117,4 @@ class CustomAuthenticationForm(AuthenticationForm):
       kwargs['has_github_auth'] = getattr(settings, 'SOCIAL_AUTH_GITHUB_SECURE_KEY', None) and getattr(settings, 'SOCIAL_AUTH_GITHUB_SECURE_SECRET', None)
       kwargs['has_dropbox_auth'] = getattr(settings, 'SOCIAL_AUTH_DROPBOX_OAUTH2_KEY', None) and getattr(settings, 'SOCIAL_AUTH_DROPBOX_OAUTH2_SECRET', None)
 
-      return super(CustomRegistrationForm, self).get_context_data(**kwargs)
+      return super(CustomAuthenticationForm, self).get_context_data(**kwargs)
