@@ -31,7 +31,7 @@ class PostList(ListView):
         context['title'] = self.title or _('Page %d of Posts') % context['page_obj'].number
         context['first_page_href'] = reverse('home')
         context['page_prefix'] = reverse('blog_post_list')
-        context['comments'] = Comment.objects.filter(hidden=False).select_related('author__user').defer('author__about').order_by('-id')[:10]
+        context['comments'] = Comment.most_recent(self.request.user, 10)
         context['problems'] = Problem.objects.filter(is_public=True).order_by('-date', '-id')[:7]
         now = timezone.now()
 

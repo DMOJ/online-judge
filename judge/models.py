@@ -1,9 +1,10 @@
+import itertools
 import re
 from collections import defaultdict
+from datetime import timedelta
 from operator import itemgetter, attrgetter
 
 import pytz
-from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
@@ -12,7 +13,7 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Max, Lookup
+from django.db.models import Max
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _, pgettext
@@ -23,10 +24,10 @@ from reversion.models import Version
 from sortedm2m.fields import SortedManyToManyField
 from timedelta.fields import TimedeltaField
 
+from judge import event_poster as event
 from judge.fulltext import SearchManager
 from judge.model_choices import ACE_THEMES
 from judge.user_translations import ugettext as user_ugettext
-from judge import event_poster as event
 
 
 def make_timezones():
@@ -539,6 +540,29 @@ class Comment(MPTTModel):
 
     class MPTTMeta:
         order_insertion_by = ['-time']
+
+    @classmethod
+    def most_recent(cls, user, n, batch=None):
+        queryset = cls.objects.filter(hidden=False).select_related('author__user') \
+            .defer('author__about', 'body').order_by('-id')
+        if user.is_superuser:
+            return queryset[:n]
+        if batch is None:
+            batch = 2 * n
+        output = []
+        for i in itertools.count(0):
+            slice = queryset[i*batch:i*batch+batch]
+            if not slice:
+                break
+            for comment in slice:
+                if comment.page.startswith('p:'):
+                    if Problem.objects.get(code=comment.page[2:]).is_accessible_by(user):
+                        output.append(comment)
+                else:
+                    output.append(comment)
+                if len(output) >= n:
+                    return output
+        return output
 
     @cached_property
     def link(self):
