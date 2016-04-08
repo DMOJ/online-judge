@@ -338,7 +338,7 @@ EVENT_DAEMON_POLL = '/channels/'
 EVENT_DAEMON_KEY = None
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.6/topics/i18n/
+# https://docs.djangoproject.com/en/1.7/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
