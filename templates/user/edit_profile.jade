@@ -41,6 +41,17 @@ block user_media
             display: block;
             overflow: hidden;
         }
+        
+        #edit-form {
+            border: unset;
+            background: unset;
+        }
+        
+        #center-float {
+            position: relative;
+            margin: 0em auto auto -27em;
+            left: 50%;
+        }
 
 block js_media
     include timezone/js_media
@@ -60,11 +71,10 @@ block title_row
     include user/user_tabs
 
 block body
-    form.form-area(action='', method='post')
+    #center-float: form.form-area#edit-form(action='', method='post')
         - csrf_token
-
         div(style='padding-top:0.5em')
-            label.inline-header {% trans "Display name" %}:
+            label.inline-header.grayed {% trans "Display name" %}:
             span.fullwidth #{form.name}
         div.block-header(style='padding-top:1em') {% trans "Self-description" %}:
         | #{form.about}
