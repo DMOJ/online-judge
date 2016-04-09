@@ -607,7 +607,7 @@ class LanguageAdmin(Select2SuitMixin, VersionAdmin):
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget()},
+            TextField: {'widget': AdminPagedownWidget},
         }
 
     def save_model(self, request, obj, form, change):
@@ -754,7 +754,7 @@ class JudgeAdmin(VersionAdmin):
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget()},
+            TextField: {'widget': AdminPagedownWidget},
         }
 
 
