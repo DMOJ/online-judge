@@ -20,6 +20,27 @@ block user_media
             max-height: 200px;
             height:70px
         }
+        
+        .grayed {
+            color: #666;
+        }
+        
+        .inline-header {
+            float: left;
+            font-size: 1.1em;
+            padding: 4px 8px;
+            padding-left: 0;
+        }
+        
+        .block-header {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .fullwidth {
+            display: block;
+            overflow: hidden;
+        }
 
 block js_media
     include timezone/js_media
@@ -43,37 +64,34 @@ block body
         - csrf_token
 
         div(style='padding-top:0.5em')
-            label(style='color:#666;float:left;font-size:1.1em;padding:4px 8px;padding-left:0') {%trans "Display name" %}:
-            span(style='display:block;overflow:hidden') #{form.name}
-        div(style='padding-top:1em')
-            div(style='color:#666;font-size:1.1em') {%trans "Self-description" %}:
-            | #{form.about}
+            label.inline-header {% trans "Display name" %}:
+            span.fullwidth #{form.name}
+        div.block-header(style='padding-top:1em') {% trans "Self-description" %}:
+        | #{form.about}
         hr
         table(border=0)
             tr
                 td(style='vertical-align:top;padding-top:2em'): table(style='padding-right:0.5em')
                     tr
-                        td: label(style='color:#666;float:left;font-size:1.1em;padding:4px 8px;padding-left:0') {%trans "Location" %}:
-                        td: span(style='display:block;overflow:hidden') #{form.timezone}
+                        td: label.inline-header.grayed {% trans "Location" %}:
+                        td: span.fullwidth #{form.timezone}
                     tr
-                        td: label(style='color:#666;float:left;font-size:1.1em;padding:4px 8px;padding-left:0') {%trans "Preferred language" %}:
-                        td: span(style='display:block;overflow:hidden') #{form.language}
+                        td: label.inline-header.grayed {% trans "Preferred language" %}:
+                        td: span.fullwidth #{form.language}
                     tr
-                        td: label(style='color:#666;float:left;font-size:1.1em;padding:4px 8px;padding-left:0') {%trans "Editor theme" %}:
-                        td: span(style='display:block;overflow:hidden') #{form.ace_theme}
-                    tr
-                        td(colspan=2)
-                            a(href='http://www.gravatar.com/', title='{% trans "Change your avatar" %}', target='_blank', style='padding:4px 8px;padding-left:0;float:left;font-size:1.1em')
-                                - trans "Change your avatar"
+                        td: label.inline-header.grayed {% trans "Editor theme" %}:
+                        td: span.fullwidth #{form.ace_theme}
                     tr: td(colspan=2)
-                        a(href='{% url "password_change" %}', style='padding:4px 8px;padding-left:0;float:left;font-size:1.1em')
+                        a.inline-header(href='http://www.gravatar.com/', title='{% trans "Change your avatar" %}', target='_blank')
+                            - trans "Change your avatar"
+                    tr: td(colspan=2)
+                        a.inline-header(href='{% url "password_change" %}')
                             - trans "Change your password"
                 td
-                    div(style='padding-top:1em')
-                        div(style='color:#666;font-size:1.1em;padding-bottom:0.4em') {%trans "Affiliated organizations" %}:
-                        | #{form.organizations}
+                    div.block-header(style='padding-bottom:0.4em') {% trans "Affiliated organizations" %}:
+                    | #{form.organizations}
         hr
-        div(style='color:#666;font-size:1.1em') {%trans "User-script" %}:
+        div.block-header {% trans "User-script" %}:
         | #{form.user_script}
         hr
         input(type='submit', style='float:right', value='{% trans "Update profile" %}')
