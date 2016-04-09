@@ -11,9 +11,15 @@ from registration.backends.default.views import (RegistrationView as OldRegistra
 from registration.forms import RegistrationForm
 from sortedm2m.forms import SortedMultipleChoiceField
 
+try:
+    from newsletter.models import Subscription
+except ImportError:
+    Subscription = None
+
 from judge.models import Profile, Language, Organization, TIMEZONE
 
 valid_id = re.compile(r'^\w+$')
+newsletter_id = None if Subscription is None else getattr(settings, 'NEWSLETTER_ID_ON_REGISTER', None)
 
 
 class CustomRegistrationForm(RegistrationForm):
@@ -25,6 +31,9 @@ class CustomRegistrationForm(RegistrationForm):
     organizations = SortedMultipleChoiceField(queryset=Organization.objects.filter(is_open=True),
                                               label=_('Organizations'), required=False)
     language = ModelChoiceField(queryset=Language.objects.all(), label=_('Preferred language'), empty_label=None)
+
+    if newsletter_id is not None:
+        newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=False)
 
     def clean_email(self):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
@@ -62,6 +71,9 @@ class RegistrationView(OldRegistrationView):
         profile.language = cleaned_data['language']
         profile.organizations.add(*cleaned_data['organizations'])
         profile.save()
+
+        if newsletter_id is not None and cleaned_data['newsletter']:
+            Subscription(user=user, newsletter_id=newsletter_id, subscribed=True).save()
         return user
 
     def get_initial(self, *args, **kwargs):
