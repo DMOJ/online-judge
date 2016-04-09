@@ -461,6 +461,7 @@ class Submission(models.Model):
             event.post('submissions', {'type': 'update-submission', 'id': self.id,
                                        'contest': self.contest_key,
                                        'user': self.user_id, 'problem': self.problem_id})
+    judge.alters_data = True
 
     def abort(self):
         from judge.rabbitmq.dispatch import abort_submission
