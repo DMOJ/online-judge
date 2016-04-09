@@ -19,6 +19,7 @@
 
 .wmd-preview {
     background: none;
+    word-wrap: break-word;
 }
 
 .wmd-button-row {
