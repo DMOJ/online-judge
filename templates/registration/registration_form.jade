@@ -89,6 +89,9 @@ block body
                         b {% trans "Language:" %}
                     td
                         | #{form.language}
+                tr
+                    th: b Subscribe to newsletter?
+                    td #{form.subscribe}
             
             hr
             button(style="float:right;", type='submit') {% trans "Register!" %}
