@@ -6,4 +6,5 @@
 .wmd-preview {
     margin-top: 15px;
     padding: 15px;
+    word-wrap: break-word;
 }
