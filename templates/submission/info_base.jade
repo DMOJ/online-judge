@@ -11,6 +11,9 @@ block header
     span.submission-info
         span.submission-date
             | #{submission.date|date:_("N j, Y, g:i a")}
+            if submission.judge
+                = ' on '
+                a(href='{% url "judge_info" submission.judge.name %}')=submission.judge.name
             br
             a(href='{% url "runtime_info" submission.language.key %}')= submission.language
             = ' '
