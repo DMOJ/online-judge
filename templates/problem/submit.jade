@@ -64,8 +64,12 @@ block js_media
                         editor.getSession().setValue(code);
                     }
                 }
+                editor.getSession().setUseWrapMode(true);
+                editor.setFontSize(14);
+                editor.setPrintMarginColumn(100);
+                editor.focus();
             });
-            
+
             $(window).resize(function () {
                 $('#ace_source').height(Math.max($(window).height() - 353, 100));
             }).resize();
