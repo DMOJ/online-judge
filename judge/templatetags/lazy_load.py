@@ -6,13 +6,12 @@ from lxml import html
 
 from judge import lxml_tree
 
-blank = static('blank.gif')
-
 register = template.Library()
 
 
 @register.filter(is_safe=True)
 def lazy_load(text):
+    blank = static('blank.gif')
     tree = lxml_tree.fromstring(text)
     for img in tree.xpath('.//img'):
         src = img.get('src')
