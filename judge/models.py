@@ -352,7 +352,7 @@ class Problem(models.Model):
             ('edit_all_problem', 'Edit all problems'),
             ('edit_public_problem', 'Edit all public problems'),
             ('clone_problem', 'Clone problem'),
-            ('change_public_visibility', 'Change is_public field)
+            ('change_public_visibility', 'Change is_public field'),
         )
         verbose_name = _('problem')
         verbose_name_plural = _('problems')
