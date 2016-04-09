@@ -313,7 +313,7 @@ MARKDOWN_TROIS_STYLES = {
 }
 
 # Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -338,7 +338,7 @@ EVENT_DAEMON_POLL = '/channels/'
 EVENT_DAEMON_KEY = None
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.6/topics/i18n/
+# https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
