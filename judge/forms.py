@@ -23,12 +23,12 @@ class ProfileForm(ModelForm):
     class Meta:
         model = Profile
         fields = ['name', 'about', 'organizations', 'timezone', 'language', 'ace_theme', 'user_script']
-        widgets = {'name': TextInput(attrs={'style': 'width: 100%; box-sizing: border-box'}),
+        widgets = {'name': TextInput(attrs={'style': 'width:100%;box-sizing:border-box'}),
                    'user_script': AceWidget(theme='github')}
         if Select2Widget is not None:
-            widgets['timezone'] = Select2Widget(attrs={'style': 'width: 200px'})
-            widgets['language'] = Select2Widget(attrs={'style': 'width: 300px'})
-            widgets['ace_theme'] = Select2Widget(attrs={'style': 'width: 300px'})
+            widgets['timezone'] = Select2Widget(attrs={'style': 'width:200px'})
+            widgets['language'] = Select2Widget(attrs={'style': 'width:200px'})
+            widgets['ace_theme'] = Select2Widget(attrs={'style': 'width:200px'})
         if PagedownWidget is not None:
             widgets['about'] = PagedownWidget()
 

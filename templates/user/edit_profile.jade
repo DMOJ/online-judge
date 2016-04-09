@@ -16,8 +16,9 @@ block user_media
 
         ul.sortedm2m {
             width: 284px;
-            min-height: 100px;
+            min-height: 70px;
             max-height: 200px;
+            height:70px
         }
 
 block js_media
@@ -40,38 +41,40 @@ block title_row
 block body
     form.form-area(action='', method='post')
         - csrf_token
-        table(border=0, style='text-align:left')
-            tr
-                th: b {% trans "Display name" %}:
-                td #{form.name}
-            tr
-                th: b {% trans "Self-description" %}:
-                td #{form.about}
-            tr
-                th: b {% trans "Organizations" %}:
-                td #{form.organizations}
-            tr
-                th: b {% trans "Location" %}:
-                td #{form.timezone}
-                    |  {% trans "or" %}
-                    = ' '
-                    a#open-map(href='#', data-featherlight='.map-wrap')
-                        - trans "pick from map"
-            tr
-                th: b {% trans "Preferred language" %}:
-                td #{form.language}
-            tr
-                th: b {% trans "Ace theme" %}:
-                td #{form.ace_theme}
-            tr
-                th: b {% trans "User-script" %}:
-                td #{form.user_script}
-        a(href='http://www.gravatar.com/', title='{% trans "Change your avatar" %}', target='_blank')
-            - trans "Change your avatar"
-        br
+
+        div(style='padding-top:0.5em')
+            label(style='color:#666;float:left;font-size:1.1em;padding:4px 8px;padding-left:0') {%trans "Display name" %}:
+            span(style='display:block;overflow:hidden') #{form.name}
+        div(style='padding-top:1em')
+            div(style='color:#666;font-size:1.1em') {%trans "Self-description" %}:
+            | #{form.about}
         hr
-        a(href='{% url "password_change" %}')
-            - trans "Change your password"
+        table(border=0)
+            tr
+                td(style='vertical-align:top;padding-top:2em'): table(style='padding-right:0.5em')
+                    tr
+                        td: label(style='color:#666;float:left;font-size:1.1em;padding:4px 8px;padding-left:0') {%trans "Location" %}:
+                        td: span(style='display:block;overflow:hidden') #{form.timezone}
+                    tr
+                        td: label(style='color:#666;float:left;font-size:1.1em;padding:4px 8px;padding-left:0') {%trans "Preferred language" %}:
+                        td: span(style='display:block;overflow:hidden') #{form.language}
+                    tr
+                        td: label(style='color:#666;float:left;font-size:1.1em;padding:4px 8px;padding-left:0') {%trans "Editor theme" %}:
+                        td: span(style='display:block;overflow:hidden') #{form.ace_theme}
+                    tr
+                        td(colspan=2)
+                            a(href='http://www.gravatar.com/', title='{% trans "Change your avatar" %}', target='_blank', style='padding:4px 8px;padding-left:0;float:left;font-size:1.1em')
+                                - trans "Change your avatar"
+                    tr: td(colspan=2)
+                        a(href='{% url "password_change" %}', style='padding:4px 8px;padding-left:0;float:left;font-size:1.1em')
+                            - trans "Change your password"
+                td
+                    div(style='padding-top:1em')
+                        div(style='color:#666;font-size:1.1em;padding-bottom:0.4em') {%trans "Affiliated organizations" %}:
+                        | #{form.organizations}
+        hr
+        div(style='color:#666;font-size:1.1em') {%trans "User-script" %}:
+        | #{form.user_script}
         hr
         input(type='submit', style='float:right', value='{% trans "Update profile" %}')
     div.map-wrap
