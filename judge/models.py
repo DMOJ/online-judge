@@ -431,6 +431,7 @@ class Submission(models.Model):
     case_total = models.FloatField(verbose_name=_('Test case total points'), default=0)
     judged_on = models.ForeignKey('Judge', verbose_name=_('Judged on'), null=True, blank=True,
                                   on_delete=models.SET_NULL)
+    is_being_rejudged = models.BooleanField(verbose_name=_('Is being rejudged by admin'), default=False)
 
     @property
     def memory_bytes(self):
