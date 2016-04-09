@@ -447,6 +447,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             queryset = queryset.filter(problem__authors__id=request.user.profile.id)
         judged = len(queryset)
         for model in queryset:
+            model.is_being_rejudged = True
             model.judge()
         self.message_user(request, ungettext('%d submission were successfully scheduled for rejudging.',
                                              '%d submissions were successfully scheduled for rejudging.',
