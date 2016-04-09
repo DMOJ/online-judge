@@ -89,9 +89,10 @@ block body
                         b {% trans "Language:" %}
                     td
                         | #{form.language}
-                tr
-                    th: b Notify me about upcoming contests
-                    td #{form.newsletter}
+                if form.newsletter
+                    tr
+                        th: b Notify me about upcoming contests
+                        td #{form.newsletter}
             
             hr
             button(style="float:right;", type='submit') {% trans "Register!" %}
