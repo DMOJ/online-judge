@@ -73,6 +73,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
             logger.warning('Unknown submission: %d', packet['id'])
             return
         submission.status = submission.result = 'AB'
+        submission.is_being_rejudged = False
         submission.save()
         if not submission.problem.is_public:
             return
@@ -92,6 +93,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
             return
         submission.error = packet['message']
         submission.status = submission.result = 'IE'
+        submission.is_being_rejudged = False
         submission.save()
         event.post('sub_%d' % submission.id, {
             'type': 'internal-error'
@@ -111,6 +113,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
             return
         submission.status = submission.result = 'CE'
         submission.error = packet['log']
+        submission.is_being_rejudged = False
         submission.save()
         event.post('sub_%d' % submission.id, {
             'type': 'compile-error',
@@ -236,6 +239,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
         submission.memory = memory
         submission.points = sub_points
         submission.result = status_codes[status]
+        submission.is_being_rejudged = False
         submission.save()
 
         submission.user.calculate_points()
