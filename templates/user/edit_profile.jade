@@ -45,11 +45,12 @@ block user_media
         #edit-form {
             border: unset;
             background: unset;
+            max-width: 700px;
         }
         
         #center-float {
             position: relative;
-            margin: 0em auto auto -27em;
+            margin: 0em auto auto -28.5em;
             left: 50%;
         }
 
@@ -105,7 +106,3 @@ block body
         | #{form.user_script}
         hr
         input(type='submit', style='float:right', value='{% trans "Update profile" %}')
-    div.map-wrap
-        div.map-inset
-            div.map-axis-x
-            div.map-axis-y
