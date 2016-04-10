@@ -164,23 +164,6 @@ block user_content
                 span(style='height: {{ max_rating|rating_progress|floatformat:3 }}em')
             span.rating(class='{{ max_rating|rating_class }}') #{max_rating}
         br
-        b {% trans "Competitions:" %}
-        |  #{contests}
-        table.table
-            tr
-                th {% trans "Contest" %}
-                th {% trans "Rank" %}
-                th {% trans "Rating" %}
-            each rating in ratings
-                tr
-                    td
-                        a(href='{% url "contest_ranking" rating.contest.key %}')= rating.contest.name
-                    td= rating.rank
-                    td
-                        .rate-group(title='{{ rating.rating|rating_name }}')
-                            span.rate-box(class='{{ rating.rating|rating_class }}')
-                                span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
-                            span.rating(class='{{ rating.rating|rating_class }}')= rating.rating
 
 block bodyend
     if ratings
