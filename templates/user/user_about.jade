@@ -132,7 +132,7 @@ block user_content
         h4 Rating History
         #rating-chart: canvas
         #rating-tooltip
-            a.contest
+            .contest
             .date
             .rating
 
@@ -210,9 +210,7 @@ block bodyend
                             var item = rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
                             var offset = elements[0].tooltipPosition();
 
-                            var contest = $tooltip.find('.contest');
-                            contest.attr("href", item.link);
-                            contest.text(item.label);
+                            $tooltip.find('.contest').text(item.label);
                             $tooltip.find('.date').text(item.date);
                             $tooltip.find('.rating').text(item.rating);
 
@@ -252,5 +250,13 @@ block bodyend
                     maintainAspectRatio: false,
                     pointDotRadius: 6,
                     pointHitDetectionRadius: 8
+                });
+                
+                $canvas.click(function(evt) {
+                    var activePoints = window.rating_chart.getPointsAtEvent(evt);
+                    if (activePoints.length > 0) {
+                        var item = rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
+                        window.location.href = item.link;
+                    }
                 });
             });
