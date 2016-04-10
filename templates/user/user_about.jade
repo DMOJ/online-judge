@@ -253,8 +253,8 @@ block bodyend
                 });
                 
                 $canvas.click(function(evt) {
-                    var activePoints = window.rating_chart.getPointsAtEvent(evt);
-                    if (activePoints.length > 0) {
+                    var elements = window.rating_chart.getPointsAtEvent(evt);
+                    if (elements.length > 0) {
                         var item = rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
                         window.location.href = item.link;
                     }
