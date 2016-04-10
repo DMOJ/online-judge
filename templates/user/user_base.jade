@@ -53,7 +53,7 @@ block body
                 // Transblock
                 h4 #{user.solved_problems} problems solved.
                 b {% trans "Rank by points:" %}
-                |  #{rank} of #{users}
+                |  ##{rank}
                 br
                 b {% trans "Total points:" %}
                 |  #{user.points}
@@ -61,9 +61,10 @@ block body
                 a(href='{% url "all_user_submissions" user.user.username %}') {% trans "View submissions" %}
                 
                 br
-                h4 {% trans "Contest History" %}
+                br: br
+                h4 #{ratings|length} contests written.
                 b {% trans "Rank by rating:" %}
-                |  #{rating_rank} of #{rated_users}
+                |  ##{rating_rank}
                 br
                 b {% trans "Rating:" %}
                 = ' '
@@ -75,14 +76,14 @@ block body
                 b {% trans "Volatility:" %}
                 |  #{rating.volatility}
                 br
-                b {% trans "Minimum rating:" %}
+                b {% trans "Min. rating:" %}
                 = ' '
                 span.rate-group
                     span.rate-box(class='{{ min_rating|rating_class }}')
                         span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
                     span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
                 br
-                b {% trans "Maximum rating:" %}
+                b {% trans "Max rating:" %}
                 = ' '
                 span.rate-group
                     span.rate-box(class='{{ max_rating|rating_class }}')
