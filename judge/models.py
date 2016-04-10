@@ -198,7 +198,8 @@ class Profile(models.Model):
 
     @cached_property
     def solved_problems(self):
-        return Submission.objects.filter(user_id=self.id, points__gt=0).values('problem').distinct().count()
+        return Submission.objects.filter(user_id=self.id, points__gt=0, problem__is_public=True) \
+            .values('problem').distinct().count()
 
     def get_absolute_url(self):
         return reverse('user_page', args=(self.user.username,))
