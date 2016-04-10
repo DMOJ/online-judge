@@ -132,7 +132,7 @@ block user_content
         h4 Rating History
         #rating-chart: canvas
         #rating-tooltip
-            .contest
+            a.contest
             .date
             .rating
 
@@ -210,7 +210,9 @@ block bodyend
                             var item = rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
                             var offset = elements[0].tooltipPosition();
 
-                            $tooltip.find('.contest').text(item.label);
+                            var contest = $tooltip.find('.contest');
+                            contest.href = item.link;
+                            contest.text(item.label);
                             $tooltip.find('.date').text(item.date);
                             $tooltip.find('.rating').text(item.rating);
 
