@@ -199,6 +199,10 @@ block bodyend
             $(function () {
                 var $canvas = $('#rating-chart').find('canvas');
                 var ctx = $canvas.get(0).getContext('2d');
+                
+                var getItem = function(elements) {
+                    return rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
+                };
 
                 Chart.types.Scatter.extend({
                     name: 'RatingScatter',
@@ -207,7 +211,7 @@ block bodyend
 
                         this.draw();
                         if (elements.length > 0) {
-                            var item = rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
+                            var item = getItem(elements);
                             var offset = elements[0].tooltipPosition();
 
                             $tooltip.find('.contest').text(item.label);
@@ -255,8 +259,17 @@ block bodyend
                 $canvas.click(function(evt) {
                     var elements = window.rating_chart.getPointsAtEvent(evt);
                     if (elements.length > 0) {
-                        var item = rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
+                        var item = getItem(elements);
                         window.location.href = item.link;
+                    }
+                });
+                
+                $canvas.hover(function(evt) {
+                    var elements = window.rating_chart.getPointsAtEvent(evt);
+                    if (elements.length > 0) {
+                        $canvas.css('cursor', 'pointer');
+                    } else {
+                        $canvas.css('cursor', '');
                     }
                 });
             });
