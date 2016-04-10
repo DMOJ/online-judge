@@ -10,6 +10,7 @@ from django.db.models import Max, Count, Min
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template import RequestContext, Context
+from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
@@ -130,6 +131,7 @@ class UserAboutPage(UserPage):
 
         context['rating_data'] = mark_safe(json.dumps([
             {'label': rating.contest.name, 'rating': rating.rating,
+             'link': reverse('contest_view', args=(rating.contest.key,)),
              'timestamp': (rating.contest.end_time - EPOCH).total_seconds() * 1000,
              'date': date_format(rating.contest.end_time, _('M j, Y, G:i'))}
             for rating in ratings
