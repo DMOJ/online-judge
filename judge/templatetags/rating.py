@@ -7,14 +7,14 @@ register = template.Library()
 
 @register.filter(name='rating_class')
 def get_class(rating):
-    return 'rate-none' if rating is None else rating_class(int(rating))
+    return rating_class(int(rating)) if rating else 'rate-none'
 
 
 @register.filter(name='rating_name')
 def get_name(rating):
-    return 'Unrated' if rating is None else rating_name(int(rating))
+    return rating_name(int(rating)) if rating else 'Unrated'
 
 
 @register.filter(name='rating_progress')
 def get_progress(rating):
-    return 0.0 if rating is None else rating_progress(int(rating))
+    return rating_progress(int(rating)) if rating else 0.0
