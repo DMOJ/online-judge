@@ -199,7 +199,7 @@ block bodyend
 
                             $tooltip.find('.contest').text(item.label);
                             $tooltip.find('.date').text(item.date);
-                            $tooltip.find('.rating').text(item.rating);
+                            $tooltip.find('.rating').text(item.rating + ', #' + item.ranking);
 
                             $tooltip.removeClass('above below');
                             $tooltip.addClass(offset.y < $tooltip.height() ? 'below' : 'above');
