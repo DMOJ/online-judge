@@ -135,7 +135,7 @@ class UserAboutPage(UserPage):
              'link': reverse('contest_ranking', args=(rating.contest.key,)),
              'timestamp': (rating.contest.end_time - EPOCH).total_seconds() * 1000,
              'date': date_format(rating.contest.end_time, _('M j, Y, G:i')),
-             'class': rating_class(rating.rating), 'height': rating_progress(rating.rating)}
+             'class': rating_class(rating.rating), 'height': '%.3fem' % rating_progress(rating.rating)}
             for rating in ratings
         ]))
 
