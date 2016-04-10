@@ -207,8 +207,8 @@ block bodyend
                             var position = $canvas.offset();
                             var container = $('#page-container').offset();
                             $tooltip.css({
-                                left: position.left - container.left + offset.x,
-                                top: position.top - container.top + offset.y,
+                                left: position.left - container.left + offset.x + $tooltip.width() / 2,
+                                top: position.top - container.top + offset.y - $tooltip.height() - 13,
                                 fontFamily: this.options.tooltipFontFamily,
                                 fontSize: this.options.tooltipFontSize,
                                 fontStyle: this.options.tooltipFontStyle
@@ -236,7 +236,7 @@ block bodyend
                     responsive: true,
                     maintainAspectRatio: false,
                     pointDotRadius: 6,
-                    pointHitDetectionRadius: 8
+                    pointHitDetectionRadius: 6
                 });
                 
                 $canvas.click(function(evt) {
