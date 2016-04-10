@@ -211,7 +211,7 @@ block bodyend
                             var offset = elements[0].tooltipPosition();
 
                             var contest = $tooltip.find('.contest');
-                            contest.href = item.link;
+                            contest.attr("href", item.link);
                             contest.text(item.label);
                             $tooltip.find('.date').text(item.date);
                             $tooltip.find('.rating').text(item.rating);
