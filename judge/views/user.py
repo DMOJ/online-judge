@@ -21,6 +21,7 @@ from reversion import revisions
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Submission, Rating
+from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
@@ -133,7 +134,8 @@ class UserAboutPage(UserPage):
             {'label': rating.contest.name, 'rating': rating.rating, 'ranking': rating.rank,
              'link': reverse('contest_ranking', args=(rating.contest.key,)),
              'timestamp': (rating.contest.end_time - EPOCH).total_seconds() * 1000,
-             'date': date_format(rating.contest.end_time, _('M j, Y, G:i'))}
+             'date': date_format(rating.contest.end_time, _('M j, Y, G:i')),
+             'class': rating_class(rating.rating), 'height': rating_progress(rating.rating)}
             for rating in ratings
         ]))
 

@@ -134,7 +134,12 @@ block user_content
         #rating-tooltip
             .contest
             .date
-            .rating
+            .rate-group
+                span.rate-box
+                    span
+                span.rating
+                | , #
+                span.rank
 
         h4 {% trans "Contest History" %}
         b {% trans "Rank by rating:" %}
@@ -199,7 +204,9 @@ block bodyend
 
                             $tooltip.find('.contest').text(item.label);
                             $tooltip.find('.date').text(item.date);
-                            $tooltip.find('.rating').text(item.rating + ', #' + item.ranking);
+                            $tooltip.find('.rate-box').attr('class', 'rate-box ' + item.class).css('height', item.height);
+                            $tooltip.find('.rating').text(item.rating).attr('class', 'rating ' + item.class);
+                            $tooltip.find('.rank').text(item.ranking);
 
                             $tooltip.removeClass('above below');
                             $tooltip.addClass(offset.y < $tooltip.height() ? 'below' : 'above');
