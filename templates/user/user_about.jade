@@ -204,7 +204,8 @@ block bodyend
 
                             $tooltip.find('.contest').text(item.label);
                             $tooltip.find('.date').text(item.date);
-                            $tooltip.find('.rate-box').attr('class', 'rate-box ' + item.class).css('height', item.height);
+                            $tooltip.find('.rate-box').attr('class', 'rate-box ' + item.class)
+                                    .find('span').css('height', item.height);
                             $tooltip.find('.rating').text(item.rating).attr('class', 'rating ' + item.class);
                             $tooltip.find('.rank').text(item.ranking);
 
