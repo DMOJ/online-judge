@@ -131,7 +131,7 @@ class UserAboutPage(UserPage):
 
         context['rating_data'] = mark_safe(json.dumps([
             {'label': rating.contest.name, 'rating': rating.rating,
-             'link': reverse('contest_view', args=(rating.contest.key,)),
+             'link': reverse('contest_ranking', args=(rating.contest.key,)),
              'timestamp': (rating.contest.end_time - EPOCH).total_seconds() * 1000,
              'date': date_format(rating.contest.end_time, _('M j, Y, G:i'))}
             for rating in ratings
