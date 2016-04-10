@@ -264,7 +264,7 @@ block bodyend
                     }
                 });
                 
-                $canvas.hover(function(evt) {
+                $canvas.mousemove(function(evt) {
                     var elements = window.rating_chart.getPointsAtEvent(evt);
                     if (elements.length > 0) {
                         $canvas.css('cursor', 'pointer');
