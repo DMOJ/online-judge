@@ -59,6 +59,36 @@ block body
                 |  #{user.points}
                 br
                 a(href='{% url "all_user_submissions" user.user.username %}') {% trans "View submissions" %}
+                
+                br
+                h4 {% trans "Contest History" %}
+                b {% trans "Rank by rating:" %}
+                |  #{rating_rank} of #{rated_users}
+                br
+                b {% trans "Rating:" %}
+                = ' '
+                span.rate-group
+                    span.rate-box(class='{{ rating.rating|rating_class }}')
+                        span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
+                    span.rating(class='{{ rating.rating|rating_class }}') #{rating.rating}
+                br
+                b {% trans "Volatility:" %}
+                |  #{rating.volatility}
+                br
+                b {% trans "Minimum rating:" %}
+                = ' '
+                span.rate-group
+                    span.rate-box(class='{{ min_rating|rating_class }}')
+                        span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
+                    span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
+                br
+                b {% trans "Maximum rating:" %}
+                = ' '
+                span.rate-group
+                    span.rate-box(class='{{ max_rating|rating_class }}')
+                        span(style='height: {{ max_rating|rating_progress|floatformat:3 }}em')
+                    span.rating(class='{{ max_rating|rating_class }}') #{max_rating}
+                br
 
             td.user-content
                 block user_content
