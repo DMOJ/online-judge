@@ -16,7 +16,7 @@ block content_title
 
 block body
     .content-description
-        | #{flatpage.content|markdown:"solution"|smart_math|camo_proxy|lazy_load}
+        | #{flatpage.content|markdown:"solution"|smart_math|proxy_images|lazy_load}
 
 block bodyend
     include mathjax_load
