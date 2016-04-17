@@ -27,6 +27,7 @@ def _ensure_connection():
 class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
 
     def __init__(self):
+        super(AMQPJudgeResponseDaemon, self).__init__()
         # each value is (updates, last reset)
         self.update_counter = {}
     
