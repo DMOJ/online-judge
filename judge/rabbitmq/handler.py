@@ -10,8 +10,12 @@ from judge.caching import finished_submission
 from judge.models import Submission, SubmissionTestCase, Judge, Problem, Language
 from .daemon import AMQPResponseDaemon
 
+import time
+
 logger = logging.getLogger('judge.handler')
 
+UPDATE_RATE_LIMIT = 5
+UPDATE_RATE_TIME = 0.5
 
 def _ensure_connection():
     try:
@@ -21,6 +25,11 @@ def _ensure_connection():
 
 
 class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
+
+    def __init__(self):
+        # each value is (updates, last reset)
+        self.update_counter = {}
+    
     def on_acknowledged(self, packet):
         super(AMQPJudgeResponseDaemon, self).on_acknowledged(packet)
         _ensure_connection()
@@ -173,17 +182,30 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
         submission.current_testcase = packet['position'] + 1
         submission.save()
         test_case.save()
-        event.post('sub_%d' % submission.id, {
-            'type': 'test-case',
-            'id': packet['position'],
-            'status': test_case.status,
-            'time': "%.3f" % round(float(packet['time']), 3),
-            'memory': packet['memory'],
-            'points': float(test_case.points),
-            'total': float(test_case.total),
-            'output': packet['output']
-        })
-        if not submission.problem.is_public:
+        
+        do_post = True
+        
+        if submission.id in self.update_counter:
+            cnt, reset = self.update_counter[submission.id]
+            if time.time() - reset > UPDATE_RATE_TIME:
+                self.update_counter.pop(submission.id)
+            if cnt > UPDATE_RATE_LIMIT:
+                do_post = True
+        else:
+            self.update_counter[submission.id] = (1, time.time())
+        
+        if do_post:
+            event.post('sub_%d' % submission.id, {
+                'type': 'test-case',
+                'id': packet['position'],
+                'status': test_case.status,
+                'time': "%.3f" % round(float(packet['time']), 3),
+                'memory': packet['memory'],
+                'points': float(test_case.points),
+                'total': float(test_case.total),
+                'output': packet['output']
+            })
+        if not submission.problem.is_public or not do_post:
             return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'test-case', 'contest': submission.contest_key,
