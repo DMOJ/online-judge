@@ -198,7 +198,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
                 self.update_counter[submission.id] = (cnt, reset)
                 if cnt > UPDATE_RATE_LIMIT:
                     do_post = False
-        if submission.id not in c:
+        if submission.id not in self.update_counter:
             self.update_counter[submission.id] = (1, time.time())
         
         if do_post:
