@@ -3,6 +3,8 @@ extends common-content
 - load markdown_trois_tags
 - load cache
 - load smart_math
+- load lazy_load
+- load camo_proxy
 - load i18n
 
 block info_float
@@ -30,4 +32,4 @@ block info_float
         
 block description
     -cache 3600 organization_html organization.id
-        | #{organization.about|markdown:"organization-about"|smart_math}
+        | #{organization.about|markdown:"organization-about"|smart_math|proxy_images|lazy_load}
