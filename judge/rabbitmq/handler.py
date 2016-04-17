@@ -89,6 +89,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
         event.post('sub_%d' % submission.id, {
             'type': 'aborted-submission'
         })
+        self.update_counter.pop(submission.id, None)
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'terminated', 'contest': submission.contest_key,
                                    'user': submission.user_id, 'problem': submission.problem_id})
@@ -107,6 +108,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
         event.post('sub_%d' % submission.id, {
             'type': 'internal-error'
         })
+        self.update_counter.pop(submission.id, None)
         if not submission.problem.is_public:
             return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
@@ -128,6 +130,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
             'type': 'compile-error',
             'log': packet['log']
         })
+        self.update_counter.pop(submission.id, None)
         if not submission.problem.is_public:
             return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
@@ -276,6 +279,7 @@ class AMQPJudgeResponseDaemon(AMQPResponseDaemon):
             submission.contest.participation.update_cumtime()
 
         finished_submission(submission)
+        self.update_counter.pop(submission.id, None)
 
         event.post('sub_%d' % submission.id, {
             'type': 'grading-end',
