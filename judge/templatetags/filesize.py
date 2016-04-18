@@ -31,6 +31,7 @@ def _format_size(bytes, callback):
 def kbdetailformat(bytes):
     return avoid_wrapping(_format_size(bytes * 1024, lambda x, y: ['%d %sB', '%.2f %sB'][bool(x)] % (y, x)))
 
+
 @register.filter(is_safe=True)
 def kbsimpleformat(kb):
     return _format_size(kb * 1024, lambda x, y: '%.0f%s' % (y, x or 'B'))
