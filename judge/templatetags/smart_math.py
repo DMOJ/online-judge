@@ -49,12 +49,14 @@ class MathJaxTexOnlyMath(MathHTMLParser):
     def display_math(self, math):
         return '$$%s$$' % escape(math)
 
+
 @register.filter(name='smart_math', is_safe=True)
 def math(page, style='fallback'):
     if style == 'tex':
         return MathJaxTexOnlyMath.convert(page)
     else:
         return MathJaxTexFallbackMath.convert(page)
+
 
 @register.filter(name='smart_svg_math', is_safe=True)
 def math(page, use_svg):
