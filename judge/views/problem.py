@@ -204,14 +204,14 @@ class ProblemList(TitleMixin, ListView):
             .annotate(number_of_users=Count('submission__participation', distinct=True)) \
             .order_by('order')
         return [{
-                    'id': p.problem.id,
-                    'code': p.problem.code,
-                    'name': p.problem.name,
-                    'group': p.problem.group,
-                    'points': p.points,
-                    'partial': p.partial,
-                    'number_of_users': p.number_of_users
-                } for p in queryset]
+            'id': p.problem.id,
+            'code': p.problem.code,
+            'name': p.problem.name,
+            'group': p.problem.group,
+            'points': p.points,
+            'partial': p.partial,
+            'number_of_users': p.number_of_users
+        } for p in queryset]
 
     def get_normal_queryset(self):
         filter = Q(is_public=True)
