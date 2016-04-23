@@ -7,6 +7,9 @@ class JudgeAppConfig(AppConfig):
     verbose_name = ugettext_lazy('Online Judge')
 
     def ready(self):
+        # WARNING: AS THIS IS NOT A FUNCTIONAL PROGRAMMING LANGUAGE,
+        #          OPERATIONS MAY HAVE SIDE EFFECTS.
+        #          DO NOT REMOVE THINKING THE IMPORT IS UNUSED.
         from . import signals
 
         from django.contrib.flatpages.models import FlatPage
