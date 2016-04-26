@@ -1,7 +1,6 @@
 import logging
 from operator import attrgetter
 from threading import RLock
-import traceback
 
 logger = logging.getLogger('judge.bridge')
 
