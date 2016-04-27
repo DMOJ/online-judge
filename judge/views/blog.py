@@ -64,7 +64,7 @@ class PostView(TitleMixin, CommentedDetailView):
 
     def get_object(self, queryset=None):
         post = super(PostView, self).get_object(queryset)
-        if (not post.visible or post.publish_on > timezone.now())\
+        if (not post.visible or post.publish_on > timezone.now()) \
                 and not self.request.user.has_perm('judge.see_hidden_post'):
             raise Http404()
         return post
