@@ -36,12 +36,12 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
         submission = super(SubmissionDetailBase, self).get_object(queryset)
         profile = self.request.user.profile
 
-        if not self.request.user.has_perm('judge.view_all_submission') and submission.user_id != profile.id and \
-                not submission.problem.authors.filter(id=profile.id).exists() and \
+        if (not self.request.user.has_perm('judge.view_all_submission') and submission.user_id != profile.id and
+                not submission.problem.authors.filter(id=profile.id).exists() and
                 not (submission.problem.is_public and
                      Submission.objects.filter(user_id=profile.id, result='AC',
                                                problem__code=submission.problem.code,
-                                               points=F('problem__points')).exists()):
+                                               points=F('problem__points')).exists())):
             raise PermissionDenied()
         return submission
 
