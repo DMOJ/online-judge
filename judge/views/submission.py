@@ -94,8 +94,8 @@ def abort_submission(request, submission):
     if request.method != 'POST':
         raise Http404()
     submission = get_object_or_404(Submission, id=int(submission))
-    if not request.user.is_authenticated() or \
-            request.user.profile != submission.user and not request.user.has_perm('abort_any_submission'):
+    if (not request.user.is_authenticated() or
+            request.user.profile != submission.user and not request.user.has_perm('abort_any_submission')):
         raise PermissionDenied()
     submission.abort()
     return HttpResponseRedirect(reverse('submission_status', args=(submission.id,)))
