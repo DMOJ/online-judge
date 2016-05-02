@@ -115,4 +115,3 @@ class CustomAuthenticationForm(AuthenticationForm):
         self.has_facebook_auth = getattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY', None) and getattr(settings, 'SOCIAL_AUTH_FACEBOOK_SECRET', None)
         self.has_github_auth = getattr(settings, 'SOCIAL_AUTH_GITHUB_SECURE_KEY', None) and getattr(settings, 'SOCIAL_AUTH_GITHUB_SECURE_SECRET', None)
         self.has_dropbox_auth = getattr(settings, 'SOCIAL_AUTH_DROPBOX_OAUTH2_KEY', None) and getattr(settings, 'SOCIAL_AUTH_DROPBOX_OAUTH2_SECRET', None)
-
