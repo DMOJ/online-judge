@@ -13,12 +13,13 @@ def sane_time_repr(delta):
 
 def api_contest_list(request):
     contests = {}
-    for c in Contest.objects.filter(is_public=True, is_private=False, is_external=False):
+    for c in Contest.objects.filter(is_public=True, is_private=False):
         contests[c.key] = {
             'name': c.name,
             'start_time': c.start_time.isoformat(),
             'end_time':  c.end_time.isoformat(),
             'time_limit': c.time_limit and sane_time_repr(c.time_limit),
+            'external': c.is_external,
         }
     return JsonResponse(contests)
 
