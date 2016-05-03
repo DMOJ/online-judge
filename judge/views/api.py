@@ -19,7 +19,7 @@ def api_contest_list(request):
             'start_time': c.start_time.isoformat(),
             'end_time':  c.end_time.isoformat(),
             'time_limit': c.time_limit and sane_time_repr(c.time_limit),
-            'external': c.is_external,
+            'labels': ['external'] if c.is_external else [],
         }
     return JsonResponse(contests)
 
