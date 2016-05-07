@@ -241,6 +241,7 @@ class DjangoJudgeHandler(JudgeHandler):
             logger.warning('Unknown submission: %d', packet['submission-id'])
             return
         submission.status = submission.result = 'IE'
+        submission.error = packet['message']
         submission.save()
         event.post('sub_%d' % submission.id, {
             'type': 'internal-error'
