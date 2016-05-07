@@ -53,8 +53,7 @@ class ProblemSubmitForm(ModelForm):
         self.fields['problem'].widget = forms.HiddenInput()
         self.fields['language'].empty_label = None
         self.fields['language'].label_from_instance = attrgetter('display_name')
-        self.fields['language'].queryset = Language.objects.filter(
-                judges__last_ping__gte=Judge.last_online_time()).distinct()
+        self.fields['language'].queryset = Language.objects.filter(judges__online=True).distinct()
 
     class Meta:
         model = Submission

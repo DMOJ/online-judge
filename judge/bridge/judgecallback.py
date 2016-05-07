@@ -59,7 +59,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def _connected(self):
         judge = Judge.objects.get(name=self.name)
-        judge.last_connect = timezone.now()
+        judge.start_time = timezone.now()
         judge.online = True
         judge.problems = Problem.objects.filter(code__in=self.problems.keys())
         judge.runtimes = Language.objects.filter(key__in=self.executors)

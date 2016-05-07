@@ -343,8 +343,7 @@ class Problem(models.Model):
 
     @property
     def usable_languages(self):
-        return self.allowed_languages.filter(judges__in=self.judges.filter(
-                last_ping__gte=Judge.last_online_time())).distinct()
+        return self.allowed_languages.filter(judges__in=self.judges.filter(online=True)).distinct()
 
     class Meta:
         permissions = (
@@ -671,15 +670,12 @@ class NavigationBar(MPTTModel):
 
 
 class Judge(models.Model):
-    OFFLINE_SECONDS = 30
-    OFFLINE_DURATION = timedelta(seconds=OFFLINE_SECONDS)
-
     name = models.CharField(max_length=50, help_text=_('Server name, hostname-style'), unique=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('Time of creation'))
     auth_key = models.CharField(max_length=100, help_text=_('A key to authenticated this judge'),
                                 verbose_name=_('Authentication key'))
+    online = models.BooleanField(verbose_name=_('Judge online status'), default=False)
     start_time = models.DateTimeField(verbose_name=_('Judge start time'), null=True)
-    last_ping = models.DateTimeField(verbose_name=_('Last ping time'), null=True)
     ping = models.FloatField(verbose_name=_('Response time'), null=True)
     load = models.FloatField(verbose_name=_('System load'), null=True,
                              help_text=_('Load for the last minute, divided by processors to be fair.'))
@@ -690,19 +686,9 @@ class Judge(models.Model):
     def __unicode__(self):
         return self.name
 
-    @classmethod
-    def last_online_time(cls):
-        return timezone.now() - cls.OFFLINE_DURATION
-
     @cached_property
     def uptime(self):
         return timezone.now() - self.start_time if self.online else 'N/A'
-
-    @cached_property
-    def online(self):
-        if self.last_ping is None:
-            return False
-        return timezone.now() - self.last_ping <= self.OFFLINE_DURATION
 
     @cached_property
     def ping_ms(self):

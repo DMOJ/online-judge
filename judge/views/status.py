@@ -13,12 +13,10 @@ __all__ = ['status_all', 'status_table', 'JudgeDetail']
 
 
 def get_judges(request):
-    last_online_time = Judge.last_online_time()
     if request.user.is_superuser or request.user.is_staff:
-        return True, list(chain(Judge.objects.filter(last_ping__gte=last_online_time),
-                                Judge.objects.exclude(last_ping__gte=last_online_time)))
+        return True, Judge.objects.order_by('-online')
     else:
-        return False, Judge.objects.filter(last_ping__gte=last_online_time)
+        return False, Judge.objects.filter(online=True)
 
 
 def status_all(request):
