@@ -14,7 +14,7 @@ __all__ = ['status_all', 'status_table', 'JudgeDetail']
 
 def get_judges(request):
     if request.user.is_superuser or request.user.is_staff:
-        return True, Judge.objects.order_by('-online')
+        return True, Judge.objects.order_by('-online', 'name')
     else:
         return False, Judge.objects.filter(online=True)
 
