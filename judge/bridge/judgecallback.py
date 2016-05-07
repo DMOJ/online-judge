@@ -82,6 +82,13 @@ class DjangoJudgeHandler(JudgeHandler):
         except Submission.DoesNotExist:
             logger.warning('Unknown submission: %d', packet['submission-id'])
             return
+
+        try:
+            submission.judged_on = Judge.objects.get(name=self.name)
+        except Judge.DoesNotExist:
+            # Just in case. Is not necessary feature and is not worth the crash.
+            pass
+
         submission.status = 'P'
         submission.save()
         event.post('sub_%d' % submission.id, {'type': 'processing'})
