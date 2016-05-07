@@ -1,7 +1,6 @@
 import itertools
 import re
 from collections import defaultdict
-from datetime import timedelta
 from operator import itemgetter, attrgetter
 
 import pytz
@@ -24,8 +23,8 @@ from reversion.models import Version
 from sortedm2m.fields import SortedManyToManyField
 from timedelta.fields import TimedeltaField
 
-from judge import event_poster as event
 from judge.fulltext import SearchManager
+from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
 from judge.user_translations import ugettext as user_ugettext
 
@@ -447,25 +446,12 @@ class Submission(models.Model):
         return Submission.USER_DISPLAY_CODES.get(self.short_status, '')
 
     def judge(self):
-        from judge.rabbitmq.dispatch import judge_submission
-        self.time = None
-        self.memory = None
-        self.points = None
-        self.status = 'QU'
-        self.result = None
-        self.error = None
-        self.save()
-        SubmissionTestCase.objects.filter(submission=self).delete()
         judge_submission(self)
-        if self.problem.is_public:
-            event.post('submissions', {'type': 'update-submission', 'id': self.id,
-                                       'contest': self.contest_key,
-                                       'user': self.user_id, 'problem': self.problem_id})
     judge.alters_data = True
 
     def abort(self):
-        from judge.rabbitmq.dispatch import abort_submission
         abort_submission(self)
+    abort.alters_data = True
 
     def is_graded(self):
         return self.status not in ('QU', 'P', 'G')
