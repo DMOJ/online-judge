@@ -1,13 +1,20 @@
 import logging
+import os
+import time
+
 from django import db
 from django.utils import timezone
-from judge.caching import finished_submission
 
-from .judgehandler import JudgeHandler
-from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit
 from judge import event_poster as event
+from judge.caching import finished_submission
+from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit
+from .judgehandler import JudgeHandler
 
 logger = logging.getLogger('judge.bridge')
+
+UPDATE_RATE_LIMIT = 5
+UPDATE_RATE_TIME = 0.5
+TIMER = [time.time, time.clock][os.name == 'nt']
 
 
 def _ensure_connection():
@@ -18,6 +25,12 @@ def _ensure_connection():
 
 
 class DjangoJudgeHandler(JudgeHandler):
+    def __init__(self, server, socket):
+        super(DjangoJudgeHandler, self).__init__(server, socket)
+
+        # each value is (updates, last reset)
+        self.update_counter = {}
+
     def on_close(self):
         super(DjangoJudgeHandler, self).on_close()
         if self._working:
@@ -61,7 +74,7 @@ class DjangoJudgeHandler(JudgeHandler):
         except Exception as e:
             # What can I do? I don't want to tie this to MySQL.
             if e.__class__.__name__ == 'OperationalError' and e.__module__ == '_mysql_exceptions' and e.args[0] == 2006:
-                db.close_connection()
+                db.connection.close()
 
     def on_submission_processing(self, packet):
         try:
@@ -291,21 +304,37 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.current_testcase = packet['position'] + 1
         submission.save()
         test_case.save()
-        event.post('sub_%d' % submission.id, {
-            'type': 'test-case',
-            'id': packet['position'],
-            'status': test_case.status,
-            'time': "%.3f" % round(float(packet['time']), 3),
-            'memory': packet['memory'],
-            'points': float(test_case.points),
-            'total': float(test_case.total),
-            'output': packet['output']
-        })
-        if not submission.problem.is_public:
-            return
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
-                                   'state': 'test-case', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id})
+
+        do_post = True
+
+        if submission.id in self.update_counter:
+            cnt, reset = self.update_counter[submission.id]
+            cnt += 1
+            if TIMER() - reset > UPDATE_RATE_TIME:
+                del self.update_counter[submission.id]
+            else:
+                self.update_counter[submission.id] = (cnt, reset)
+                if cnt > UPDATE_RATE_LIMIT:
+                    do_post = False
+        if submission.id not in self.update_counter:
+            self.update_counter[submission.id] = (1, TIMER())
+
+        if do_post:
+            event.post('sub_%d' % submission.id, {
+                'type': 'test-case',
+                'id': packet['position'],
+                'status': test_case.status,
+                'time': "%.3f" % round(float(packet['time']), 3),
+                'memory': packet['memory'],
+                'points': float(test_case.points),
+                'total': float(test_case.total),
+                'output': packet['output']
+            })
+            if not submission.problem.is_public:
+                return
+            event.post('submissions', {'type': 'update-submission', 'id': submission.id,
+                                       'state': 'test-case', 'contest': submission.contest_key,
+                                       'user': submission.user_id, 'problem': submission.problem_id})
 
     def on_supported_problems(self, packet):
         super(DjangoJudgeHandler, self).on_supported_problems(packet)
