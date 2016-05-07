@@ -233,8 +233,8 @@ class DjangoJudgeHandler(JudgeHandler):
             'type': 'compile-message'
         })
 
-    def on_bad_problem(self, packet):
-        super(DjangoJudgeHandler, self).on_bad_problem(packet)
+    def on_internal_error(self, packet):
+        super(DjangoJudgeHandler, self).on_internal_error(packet)
         try:
             submission = Submission.objects.get(id=packet['submission-id'])
         except Submission.DoesNotExist:

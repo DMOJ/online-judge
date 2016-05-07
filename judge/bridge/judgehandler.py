@@ -23,7 +23,7 @@ class JudgeHandler(ZlibPacketHandler):
             'batch-begin': self.on_batch_begin,
             'batch-end': self.on_batch_end,
             'test-case-status': self.on_test_case,
-            'internal-error': self.on_bad_problem,
+            'internal-error': self.on_internal_error,
             'submission-terminated': self.on_submission_terminated,
             'submission-acknowledged': self.on_submission_acknowledged,
             'ping-response': self.on_ping_response,
@@ -197,7 +197,7 @@ class JudgeHandler(ZlibPacketHandler):
     def on_compile_message(self, packet):
         logger.info('%s: Submission generated compiler messages: %s', self.name, packet['submission-id'])
 
-    def on_bad_problem(self, packet):
+    def on_internal_error(self, packet):
         try:
             raise ValueError('\n\n' + packet['message'])
         except ValueError:
