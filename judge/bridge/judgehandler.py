@@ -97,7 +97,7 @@ class JudgeHandler(ZlibPacketHandler):
         self.name = packet['id']
 
         self.send({'name': 'handshake-success'})
-        logger.info('Judge authenticated: %s', self.client_address)
+        logger.info('Judge authenticated: %s (%s)', self.client_address, packet['id'])
         self.server.judges.register(self)
         self._connected()
 
@@ -175,27 +175,27 @@ class JudgeHandler(ZlibPacketHandler):
         pass
 
     def on_supported_problems(self, packet):
-        logger.info('Updated problem list')
+        logger.info('%s: Updated problem list', self.name)
         self._problems = packet['problems']
         self.problems = dict(self._problems)
         if not self.working:
             self.server.judges.update_problems(self)
 
     def on_grading_begin(self, packet):
-        logger.info('Grading has begun on: %s', packet['submission-id'])
+        logger.info('%s: Grading has begun on: %s', self.name, packet['submission-id'])
         self.batch_id = None
 
     def on_grading_end(self, packet):
-        logger.info('Grading has ended on: %s', packet['submission-id'])
+        logger.info('%s: Grading has ended on: %s', self.name, packet['submission-id'])
         self._free_self(packet)
         self.batch_id = None
 
     def on_compile_error(self, packet):
-        logger.info('Submission failed to compile: %s', packet['submission-id'])
+        logger.info('%s: Submission failed to compile: %s', self.name, packet['submission-id'])
         self._free_self(packet)
 
     def on_compile_message(self, packet):
-        logger.info('Submission generated compiler messages: %s', packet['submission-id'])
+        logger.info('%s: Submission generated compiler messages: %s', self.name, packet['submission-id'])
 
     def on_bad_problem(self, packet):
         try:
@@ -205,11 +205,11 @@ class JudgeHandler(ZlibPacketHandler):
         self._free_self(packet)
 
     def on_submission_terminated(self, packet):
-        logger.info('Submission aborted: %s', packet['submission-id'])
+        logger.info('%s: Submission aborted: %s', self.name, packet['submission-id'])
         self._free_self(packet)
 
     def on_batch_begin(self, packet):
-        logger.info('Batch began on: %s', packet['submission-id'])
+        logger.info('%s: Batch began on: %s', self.name, packet['submission-id'])
         self.in_batch = True
         if self.batch_id is None:
             self.batch_id = 0
@@ -218,13 +218,13 @@ class JudgeHandler(ZlibPacketHandler):
 
     def on_batch_end(self, packet):
         self.in_batch = False
-        logger.info('Batch ended on: %s', packet['submission-id'])
+        logger.info('%s: Batch ended on: %s', self.name, packet['submission-id'])
 
     def on_test_case(self, packet):
-        logger.info('Test case completed on: %s', packet['submission-id'])
+        logger.info('%s: Test case completed on: %s', self.name, packet['submission-id'])
 
     def on_malformed(self, packet):
-        logger.error('Malformed packet: %s', packet)
+        logger.error('%s: Malformed packet: %s', self.name, packet)
 
     def on_ping_response(self, packet):
         end = time.time()
