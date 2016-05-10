@@ -162,13 +162,12 @@ html(lang='en')
                     | #{misc_config.footer|safe}
                     if perms.judge.test_site
                         = ' | '
-                if perms.judge.test_site
-                    form(action='{% url "set_language" %}', method='post', style='display: inline')
-                        - csrf_token
-                        input(name='next', type='hidden', value=request.get_full_path())
-                        select(name='language', onchange='form.submit()', style='height: 1.5em')
-                            - get_available_languages as LANGUAGES
-                            - get_language_info_list for LANGUAGES as languages
-                            each language in languages
-                                option(value=language['code'], selected=('' if language['code'] == LANGUAGE_CODE else None))
-                                    | #{language.name_local} (#{language.code})
+                form(action='{% url "set_language" %}', method='post', style='display: inline')
+                    - csrf_token
+                    input(name='next', type='hidden', value=request.get_full_path())
+                    select(name='language', onchange='form.submit()', style='height: 1.5em')
+                        - get_available_languages as LANGUAGES
+                        - get_language_info_list for LANGUAGES as languages
+                        each language in languages
+                            option(value=language['code'], selected=('' if language['code'] == LANGUAGE_CODE else None))
+                                | #{language.name_local} (#{language.code})
