@@ -170,6 +170,8 @@ urlpatterns = [
 
         url(r'^/submissions/(?P<user>\w+)/(?P<problem>\w+)/',
             paged_list_view(submission.UserContestSubmissions, 'contest_user_submissions')),
+
+        url(r'^/$', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))), 
     ])),
 
     url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
