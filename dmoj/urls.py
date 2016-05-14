@@ -192,6 +192,8 @@ urlpatterns = [
             url(r'^rejected$', organization.OrganizationRequestLog.as_view(states=('R',), tab='rejected'),
                 name='organization_requests_rejected'),
         ])),
+
+        url(r'^/$', lambda _, key: HttpResponsePermanentRedirect(reverse('organization_home', args=[key]))), 
     ])),
 
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
