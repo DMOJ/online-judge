@@ -33,7 +33,7 @@ class CustomRegistrationForm(RegistrationForm):
     language = ModelChoiceField(queryset=Language.objects.all(), label=_('Preferred language'), empty_label=None)
 
     if newsletter_id is not None:
-        newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=False)
+        newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=False, required=False)
 
     def clean_email(self):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
