@@ -20,6 +20,9 @@ html(lang='en')
             meta(name='keywords', content=misc_config['meta_keywords'])
         meta#viewport(name='viewport', content='initial-scale=1')
         
+        // Icon
+        link(rel='icon', type='image/png', href='{{ DMOJ_SCHEME }}://{{ site.domain }}/icon.png')
+        
         if og_image
             meta(property='og:image', content=og_image)
         else
