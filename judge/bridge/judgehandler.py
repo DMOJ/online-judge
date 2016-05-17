@@ -113,6 +113,7 @@ class JudgeHandler(ZlibPacketHandler):
 
     def submit(self, id, problem, language, source):
         time, memory, short = self.problem_data(problem, language)
+        self._working = id
         self.send({
             'name': 'submission-request',
             'submission-id': id,
@@ -123,7 +124,6 @@ class JudgeHandler(ZlibPacketHandler):
             'memory-limit': memory,
             'short-circuit': short,
         })
-        self._working = id
         self._no_response_job = self.server.schedule(20, self._kill_if_no_response)
         self._received.clear()
 
