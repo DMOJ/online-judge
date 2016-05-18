@@ -2,7 +2,6 @@ from __future__ import division
 
 import logging
 import json
-import threading
 import time
 
 from collections import deque
@@ -32,7 +31,6 @@ class JudgeHandler(ZlibPacketHandler):
         }
         self._to_kill = True
         self._working = False
-        self._received = threading.Event()
         self._no_response_job = None
         self._problems = []
         self.executors = []
@@ -114,6 +112,7 @@ class JudgeHandler(ZlibPacketHandler):
     def submit(self, id, problem, language, source):
         time, memory, short = self.problem_data(problem, language)
         self._working = id
+        self._no_response_job = self.server.schedule(20, self._kill_if_no_response)
         self.send({
             'name': 'submission-request',
             'submission-id': id,
@@ -124,8 +123,6 @@ class JudgeHandler(ZlibPacketHandler):
             'memory-limit': memory,
             'short-circuit': short,
         })
-        self._no_response_job = self.server.schedule(20, self._kill_if_no_response)
-        self._received.clear()
 
     def _kill_if_no_response(self):
         logger.error('Judge seems dead: %s: %s', self.name, self._working)
@@ -142,7 +139,6 @@ class JudgeHandler(ZlibPacketHandler):
         logger.info('Submission acknowledged: %d', self._working)
         if self._no_response_job:
             self.server.unschedule(self._no_response_job)
-            self._received.set()
             self._no_response_job = None
         self.on_submission_processing(packet)
 
