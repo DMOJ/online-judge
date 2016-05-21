@@ -56,7 +56,7 @@ if can_view
             span.label {% trans "view" %}
         if perms.judge.rejudge_submission
             = ' · '
-            a(href='javascript:rejudge_submission({{ submission.id }})')
+            a(href='#', onclick='rejudge_submission({{ submission.id }}, event);return false')
                 i.fa.fa-refresh.fa-fw
                 span.label {% trans "rejudge" %}
         if perms.judge.change_submission

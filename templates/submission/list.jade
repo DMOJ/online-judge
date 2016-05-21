@@ -31,8 +31,9 @@ block js_media
         if request.user.is_authenticated and perms.judge.rejudge_submission
             script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
             script(type='text/javascript').
-                window.rejudge_submission = function(id) {
-                    if (confirm('Are you sure you want to rejudge?')) {
+                window.rejudge_submission = function(id, e) {
+                    if ((typeof e !== 'undefined' && e.ctrlKey) ||
+                            confirm('Are you sure you want to rejudge?')) {
                         $.ajax({
                             url: '{% url "submission_rejudge" %}',
                             type: "POST",
