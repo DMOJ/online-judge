@@ -1,7 +1,7 @@
-Django>=1.9,<=1.10
+Django>=1.9,<1.10
 django-compressor
--e git://github.com/django-mptt/django-mptt.git#egg=django-mptt
--e git://github.com/dokterbob/django-newsletter.git#egg=django-newsletter
+django-mptt>=0.8.4,<0.9
+django-newsletter>=0.6,<0.7
 django-pagedown
 -e git://github.com/macropin/django-registration.git@8db08e909283b9b82d9f900eaa25c6032fd86b88#egg=django_registration_redux
 django-reversion
