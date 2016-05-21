@@ -3,7 +3,7 @@ django-compressor
 django-mptt>=0.8.4,<0.9
 django-newsletter>=0.6,<0.7
 django-pagedown
--e git://github.com/macropin/django-registration.git@8db08e909283b9b82d9f900eaa25c6032fd86b88#egg=django_registration_redux
+django-registration-redux>=1.4,<1.5
 django-reversion
 django-reversion-compare
 -e git://github.com/DMOJ/django-select2.git#egg=django-select2
