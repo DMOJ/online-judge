@@ -110,7 +110,11 @@ class CustomAuthenticationForm(AuthenticationForm):
         self.fields['username'].widget.attrs.update({'placeholder': 'Username'})
         self.fields['password'].widget.attrs.update({'placeholder': 'Password'})
 
-        self.has_google_auth = getattr(settings, 'SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', None) and getattr(settings, 'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', None)
-        self.has_facebook_auth = getattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY', None) and getattr(settings, 'SOCIAL_AUTH_FACEBOOK_SECRET', None)
-        self.has_github_auth = getattr(settings, 'SOCIAL_AUTH_GITHUB_SECURE_KEY', None) and getattr(settings, 'SOCIAL_AUTH_GITHUB_SECURE_SECRET', None)
-        self.has_dropbox_auth = getattr(settings, 'SOCIAL_AUTH_DROPBOX_OAUTH2_KEY', None) and getattr(settings, 'SOCIAL_AUTH_DROPBOX_OAUTH2_SECRET', None)
+        self.has_google_auth = self._has_social_auth('GOOGLE_OAUTH2')
+        self.has_facebook_auth = self._has_social_auth('FACEBOOK')
+        self.has_github_auth = self._has_social_auth('GITHUB_SECURE')
+        self.has_dropbox_auth = self._has_social_auth('DROPBOX_OAUTH2')
+
+    def _has_social_auth(self, key):
+        return (getattr(settings, 'SOCIAL_AUTH_%s_KEY' % key, None) and
+                getattr(settings, 'SOCIAL_AUTH_%s_SECRET' % key, None))
