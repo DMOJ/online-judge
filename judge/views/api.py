@@ -41,6 +41,8 @@ def api_problem_info(request, problem):
         p = Problem.objects.get(code=problem)
     except ObjectDoesNotExist:
         raise Http404()
+    if not p.is_accessible_by(request.user):
+        raise Http404()
     return JsonResponse({
         'name': p.name,
         'authors': list(p.authors.values_list('user__username', flat=True)),
