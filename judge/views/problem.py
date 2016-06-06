@@ -297,7 +297,7 @@ def problem_submit(request, problem=None, submission=None):
             if not form.cleaned_data['problem'].allowed_languages.filter(
                     id=form.cleaned_data['language'].id).exists():
                 raise PermissionDenied()
-            if not not form.cleaned_data['problem'].is_accessible_by(request.user):
+            if not form.cleaned_data['problem'].is_accessible_by(request.user):
                 user_logger.info('Naughty user %s wants to submit to %s without permission',
                                  request.user.username, form.cleaned_data['problem'].code)
                 return HttpResponseForbidden('<h1>Do you want me to ban you?</h1>')
