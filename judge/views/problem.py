@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Count, Q, F, Case, IntegerField, When
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.template import Context
 from django.template.loader import get_template
@@ -274,6 +274,9 @@ class ProblemList(TitleMixin, ListView):
         return super(ProblemList, self).get(request, *args, **kwargs)
 
 
+user_logger = logging.getLogger('judge.user')
+
+
 @login_required
 def problem_submit(request, problem=None, submission=None):
     try:
@@ -294,6 +297,10 @@ def problem_submit(request, problem=None, submission=None):
             if not form.cleaned_data['problem'].allowed_languages.filter(
                     id=form.cleaned_data['language'].id).exists():
                 raise PermissionDenied()
+            if not not form.cleaned_data['problem'].is_accessible_by(request.user):
+                user_logger.info('Naughty user %s wants to submit to %s without permission',
+                                 request.user.username, form.cleaned_data['problem'].code)
+                return HttpResponseForbidden('<h1>Do you want me to ban you?</h1>')
             if not request.user.is_superuser and form.cleaned_data['problem'].banned_users.filter(id=profile.id).exists():
                 return generic_message(request, _('Banned from Submitting'),
                                        _('You have been declared persona non grata for this problem. '
