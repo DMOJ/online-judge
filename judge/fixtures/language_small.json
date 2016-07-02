@@ -66,10 +66,10 @@
             "description": "Compile options: `g++ -Wall -O2 -lm -march=native -s`\r\n",
             "extension": "",
             "info": "g++ 4.9.2",
-            "key": "CPP",
-            "name": "C++",
+            "key": "CPP03",
+            "name": "C++03",
             "pygments": "cpp",
-            "short_name": "C++"
+            "short_name": "C++03"
         },
         "model": "judge.language",
         "pk": 5
