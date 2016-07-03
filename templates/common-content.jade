@@ -34,7 +34,7 @@ block js_media
                                 'title' : 'Click to copy'
                             }).text('Copy')));
 
-                    $(copyButton).mouseleave(function(){
+                    $(copyButton.get(0)).mouseleave(function(){
                         $(this).attr('class', 'btn-clipboard');
                         $(this).removeAttr('aria-label');
                     })
