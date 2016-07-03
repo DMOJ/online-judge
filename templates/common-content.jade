@@ -3,11 +3,14 @@ extends base
 - load compress
 
 block media
+    - compress css
+            link(rel='stylesheet', href='{% static "clipboard/tooltip.css" %}')
     block content_media        
 
 block js_media
     - compress js
         script(src='{% static "clipboard/clipboard.min.js" %}')
+        script(src='{% static "clipboard/tooltip.js" %}')
         script(type='text/javascript').
             $(function () {
                 var info_float = $('.info-float');
@@ -28,9 +31,25 @@ block js_media
                             .append(copyButton = $('<span/>', {
                                 'class': 'btn-clipboard',
                                 'data-clipboard-text': $(this).text(),
-                                'title' : "Copied!"
+                                'title' : 'Click to copy'
                             }).text('Copy')));
+
+                    $(copyButton).mouseleave(function(){
+                        $(this).attr('class', 'btn-clipboard');
+                        $(this).removeAttr('aria-label');
+                    })
+
                     var curClipboard = new Clipboard(copyButton.get(0));
+
+                    curClipboard.on('success', function(e) {
+                        e.clearSelection();
+                        showTooltip(e.trigger, 'Copied!');
+                    });
+
+                    curClipboard.on('error', function(e) {
+                        showTooltip(e.trigger, fallbackMessage(e.action));
+                    });
+
                 });
             });
     block content_js_media
