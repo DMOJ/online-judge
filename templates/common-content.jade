@@ -3,11 +3,11 @@ extends base
 - load compress
 
 block media
-    block content_media
+    block content_media        
 
 block js_media
     - compress js
-        script(src='{% static "zerocopy/ZeroClipboard.js" %}')
+        script(src='{% static "clipboard/clipboard.min.js" %}')
         script(type='text/javascript').
             $(function () {
                 var info_float = $('.info-float');
@@ -22,15 +22,15 @@ block js_media
                     info_float.width(container.width());
                 }
 
-                ZeroClipboard.config({swfPath: '{% static "zerocopy/ZeroClipboard.swf" %}'});
                 var copyButton;
                 $('pre code').each(function () {
                     $(this).parent().before($('<div/>', {'class': 'zero-clipboard'})
                             .append(copyButton = $('<span/>', {
                                 'class': 'btn-clipboard',
-                                'data-clipboard-text': $(this).text()
+                                'data-clipboard-text': $(this).text(),
+                                'title' : "Copied!"
                             }).text('Copy')));
-                    new ZeroClipboard(copyButton.get(0));
+                    var curClipboard = new Clipboard(copyButton.get(0));
                 });
             });
     block content_js_media
