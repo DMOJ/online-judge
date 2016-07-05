@@ -1,5 +1,5 @@
 Django>=1.9,<1.10
-django-compressor
+django_compressor
 django-mptt>=0.8.4,<0.9
 django-newsletter>=0.6,<0.7
 django-pagedown
