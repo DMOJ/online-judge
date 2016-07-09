@@ -45,7 +45,7 @@ class JudgeHandler(ZlibPacketHandler):
         self._ping_average = deque(maxlen=6)  # 1 minute average, just like load
         self._time_delta = deque(maxlen=6)
 
-        self.server.schedule(5, self._kill_if_no_auth)
+        self.server.schedule(15, self._kill_if_no_auth)
         logger.info('Judge connected from: %s', self.client_address)
 
     def _kill_if_no_auth(self):
