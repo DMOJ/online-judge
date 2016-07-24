@@ -57,7 +57,8 @@ html
                             | Problem types:
                         else
                             | Problem type:
-                    td.value #{problem.types_list|join:", "}
+                    - language 'en'
+                        td.value #{problem.types_list|join:", "}
                 tr
                     td.key Time limit:
                     td.value #{problem.time_limit}s
