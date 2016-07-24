@@ -47,40 +47,35 @@ html
         table.table#info-table
             tbody
                 tr
-                    td.key {% trans "Points:" %}
+                    td.key Points:
                     td.value
-                        if contest_problem
-                            |  #{contest_problem.points}
-                            if contest_problem.partial
-                                | {% trans "(partial)" %}
-                        else
-                            |  #{problem.points|floatformat}
-                            if problem.partial
-                                | {% trans "(partial)" %}
+                        |  #{problem.points|floatformat}
+                        if problem.partial
+                            | (partial)
                     td.key
                         if problem.types_list|length > 1
-                            | {% trans "Problem types:" %}
+                            | Problem types:
                         else
-                            | {% trans "Problem type:" %}
+                            | Problem type:
                     td.value #{problem.types_list|join:", "}
                 tr
-                    td.key {% trans "Time limit:" %}
+                    td.key Time limit:
                     td.value #{problem.time_limit}s
-                    td.key {% trans "Allowed languages:" %}
+                    td.key Allowed languages:
                     td.value
                         if show_languages
                             | #{problem.languages_list|join:", "}
                         else
-                            | {% trans "All" %}
+                            | All
                 tr
-                    td.key {% trans "Memory limit:" %}
+                    td.key Memory limit:
                     td.value #{problem.memory_limit|kbsimpleformat}
                     if authors
                         td.key
                             if authors|length > 1
-                                | {% trans "Authors:" %}
+                                | Authors:
                             else
-                                | {% trans "Author:" %}
+                                | Author:
                         td.value #{authors|join:", "}
         hr(style='border-bottom: 1px dashed;')
 
