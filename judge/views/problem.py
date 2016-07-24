@@ -1,7 +1,6 @@
 import itertools
 import logging
 import os
-from operator import attrgetter
 from random import randrange
 
 from django.conf import settings
@@ -24,7 +23,7 @@ from django.views.generic.detail import SingleObjectMixin
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemGroup, Solution
-from judge.pdf_problems import make_latex, format_markdown, latex_document, LatexPdfMaker, WebKitPdfMaker
+from judge.pdf_problems import HAS_PDF, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
 
@@ -92,7 +91,7 @@ class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
         context['contest_problem'] = (None if not authed or user.profile.contest.current is None else
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
-        context['wkhtmltopdf_installed'] = getattr(settings, 'WEBKIT_PDF', False)
+        context['has_pdf_render'] = HAS_PDF
         try:
             context['editorial'] = Solution.objects.get(problem=self.object)
         except ObjectDoesNotExist:
@@ -104,21 +103,11 @@ class LatexError(Exception):
     pass
 
 
-class ProblemLatexView(ProblemMixin, SingleObjectMixin, View):
-    def get(self, request, *args, **kwargs):
-        if not request.user.has_perm('judge.change_problem'):
-            raise Http404()
-        problem = self.get_object()
-        authors = ', '.join(map(attrgetter('user.username'), problem.authors.select_related('user')))
-        document = latex_document(problem.name, authors, make_latex(format_markdown(problem.description)))
-        return HttpResponse(document, content_type='text/plain')
-
-
 class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
     logger = logging.getLogger('judge.problem.pdf')
 
     def get(self, request, *args, **kwargs):
-        if not hasattr(settings, 'PROBLEM_PDF_CACHE'):
+        if not HAS_PDF:
             raise Http404()
 
         problem = self.get_object()
@@ -131,40 +120,19 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
 
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.pdf', problem.code)
-            if getattr(settings, 'WEBKIT_PDF', False):
-                with WebKitPdfMaker() as maker:
-                    maker.html = get_template('problem/raw.jade').render(Context({
-                        'problem': problem
-                    })).replace('"//', '"http://').replace("'//", "'http://")
-                    for file in ('style.css', 'pygment-github.css'):
-                        maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
-                    maker.make()
-                    if not maker.success:
-                        with open(error_cache, 'wb') as f:
-                            f.write(maker.log)
-                        return HttpResponse(maker.log, status=500, content_type='text/plain')
-                    os.rename(maker.pdffile, cache)
-            else:
-                try:
-                    authors = ', '.join(map(attrgetter('user.username'), problem.authors.select_related('user')))
-                    document = latex_document(problem.name, authors, make_latex(format_markdown(problem.description)))
-                    with LatexPdfMaker(document) as latex:
-                        latex.make()
-                        if not latex.success:
-                            # try:
-                            # raise LatexError(latex.log)
-                            # except LatexError:
-                            #     self.logger.exception('Latex error while rendering: %s.pdf', problem.code)
-                            if not latex.created:
-                                with open(error_cache, 'wb') as f:
-                                    f.write(latex.log)
-                                return HttpResponse(latex.log, status=500, content_type='text/plain')
-                        os.rename(latex.pdffile, cache)
-                except:
-                    self.logger.exception('Error while rendering: %s.pdf', problem.code)
-                    raise
-                else:
-                    self.logger.info('Successfully rendered: %s.pdf', problem.code)
+            with WebKitPdfMaker() as maker:
+                maker.html = get_template('problem/raw.jade').render(Context({
+                    'problem': problem
+                })).replace('"//', '"http://').replace("'//", "'http://")
+                for file in ('style.css', 'pygment-github.css'):
+                    maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
+                maker.make()
+                if not maker.success:
+                    with open(error_cache, 'wb') as f:
+                        f.write(maker.log)
+                    self.logger.error('Failed to render PDF for %s', problem.code)
+                    return HttpResponse(maker.log, status=500, content_type='text/plain')
+                os.rename(maker.pdffile, cache)
 
         response = HttpResponse()
         if hasattr(settings, 'PROBLEM_PDF_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):

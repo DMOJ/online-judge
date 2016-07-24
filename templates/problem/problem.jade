@@ -24,7 +24,7 @@ block content_js_media
 block title_row
     div.problem-title
         h2(style='color:#393630; display: inline-block')= title
-        if wkhtmltopdf_installed
+        if has_pdf_render
             span.spacer
             a.view-pdf(href='{% url "problem_pdf" problem.code %}')
                 span(style='position: relative; display: inline-block; font-size: 1.5em')
