@@ -70,7 +70,9 @@ html(lang='en')
         if INLINE_JQUERY
             - compress js
                 script
-                    - inlinei18n LANGUAGE_CODE
+                    // I find your lack of mark_safe disturbing, django-statici18n.
+                    - autoescape off
+                        - inlinei18n LANGUAGE_CODE
                 script(src='{% static "libs/jquery-1.11.2.min.js" %}')
                 script(src='{% static "common.js" %}')
                 script(src='{% static "jquery.unveil.js" %}')
@@ -78,7 +80,8 @@ html(lang='en')
                     $(function () { $('img.unveil').unveil(200); });
         else
             script
-                - inlinei18n LANGUAGE_CODE
+                - autoescape off
+                    - inlinei18n LANGUAGE_CODE
             script(src=JQUERY_JS)
             script(src='{% static "common.js" %}')
             script(src='{% static "jquery.unveil.js" %}')
