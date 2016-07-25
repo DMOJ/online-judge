@@ -96,14 +96,6 @@ else:
                 },
                 ('flatpages.FlatPage', 'fa-file-text-o'),
                 ('judge.Solution', 'fa-pencil'),
-                {
-                    'model': 'newsletter.Message',
-                    'icon': 'fa-envelope',
-                    'children': [
-                        'newsletter.Submission',
-                        'newsletter.Newsletter',
-                    ]
-                },
             ],
             'dashboard': {
                 'breadcrumbs': True,
