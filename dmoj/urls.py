@@ -10,7 +10,6 @@ from social.apps.django_app.urls import urlpatterns as social_auth_patterns
 
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
 from judge.forms import CustomAuthenticationForm
-from judge.rabbitmq import views as rabbitmq_views
 from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap, \
     BlogPostSitemap, SolutionSitemap
 from judge.views import TitledTemplateView
@@ -209,11 +208,6 @@ urlpatterns = [
         url(r'^user/list$', api.api_user_list),
         url(r'^user/info/(\w+)$', api.api_user_info),
         url(r'^user/submissions/(\w+)$', api.api_user_submissions),
-        url(r'^judge/auth/rabbitmq/', include([
-            url(r'^user$', rabbitmq_views.auth_user),
-            url(r'^vhost$', rabbitmq_views.auth_vhost),
-            url(r'^resource$', rabbitmq_views.auth_resource),
-        ])),
     ])),
 
     url(r'^blog/', paged_list_view(blog.PostList, 'blog_post_list')),
