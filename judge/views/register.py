@@ -11,9 +11,9 @@ from registration.backends.default.views import (RegistrationView as OldRegistra
 from registration.forms import RegistrationForm
 from sortedm2m.forms import SortedMultipleChoiceField
 
-try:
+if 'newsletter' in settings.INSTALLED_APPS:
     from newsletter.models import Subscription
-except ImportError:
+else:
     Subscription = None
 
 from judge.models import Profile, Language, Organization, TIMEZONE
