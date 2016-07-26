@@ -666,6 +666,7 @@ class Judge(models.Model):
     load = models.FloatField(verbose_name=_('System load'), null=True,
                              help_text=_('Load for the last minute, divided by processors to be fair.'))
     description = models.TextField(blank=True, verbose_name=_('Description'))
+    last_ip = models.GenericIPAddressField(verbose_name='Last connected IP', blank=True, null=True)
     problems = models.ManyToManyField(Problem, verbose_name=_('Problems'), related_name='judges')
     runtimes = models.ManyToManyField(Language, verbose_name=_('Judges'), related_name='judges')
 
