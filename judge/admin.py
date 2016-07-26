@@ -735,7 +735,7 @@ class JudgeAdmin(VersionAdmin):
         (_('Capabilities'), {'fields': ('runtimes', 'problems')}),
     )
     list_display = ('name', 'online', 'start_time', 'ping', 'load', 'last_ip')
-    ordering = ['name']
+    ordering = ['-online', 'name']
 
     def get_readonly_fields(self, request, obj=None):
         if obj is not None and obj.online:
