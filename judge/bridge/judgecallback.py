@@ -63,6 +63,7 @@ class DjangoJudgeHandler(JudgeHandler):
         judge.online = True
         judge.problems = Problem.objects.filter(code__in=self.problems.keys())
         judge.runtimes = Language.objects.filter(key__in=self.executors)
+        judge.last_ip = self.client_address[0]
         judge.save()
 
     def _disconnected(self):
