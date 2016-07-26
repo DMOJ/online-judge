@@ -727,14 +727,14 @@ class JudgeAdminForm(ModelForm):
 
 class JudgeAdmin(VersionAdmin):
     form = JudgeAdminForm
-    readonly_fields = ('created', 'online', 'start_time', 'ping', 'load', 'runtimes', 'problems')
+    readonly_fields = ('created', 'online', 'start_time', 'ping', 'load', 'last_ip', 'runtimes', 'problems')
     fieldsets = (
         (None, {'fields': ('name', 'auth_key')}),
         (_('Description'), {'fields': ('description',)}),
-        (_('Information'), {'fields': ('created', 'online', 'start_time', 'ping', 'load')}),
+        (_('Information'), {'fields': ('created', 'online', 'last_ip', 'start_time', 'ping', 'load')}),
         (_('Capabilities'), {'fields': ('runtimes', 'problems')}),
     )
-    list_display = ('name', 'online', 'start_time', 'ping', 'load')
+    list_display = ('name', 'online', 'start_time', 'ping', 'load', 'last_ip')
     ordering = ['name']
 
     def get_readonly_fields(self, request, obj=None):
