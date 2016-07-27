@@ -5,10 +5,10 @@
  * Licensed MIT © Zeno Rocha
  */
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Clipboard = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var matches = require('matches-selector')
+var matches = require('matches-selector');
 
 module.exports = function (element, selector, checkYoSelf) {
-  var parent = checkYoSelf ? element : element.parentNode
+  var parent = checkYoSelf ? element : element.parentNode;
 
   while (parent && parent !== document) {
     if (matches(parent, selector)) return parent;
@@ -369,7 +369,7 @@ module.exports = E;
 
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
-            default_: obj
+            'default': obj
         };
     }
 
@@ -470,7 +470,7 @@ module.exports = E;
 
             document.body.appendChild(this.fakeElem);
 
-            this.selectedText = (0, _select2.default_)(this.fakeElem);
+            this.selectedText = (0, _select2['default'])(this.fakeElem);
             this.copyText();
         };
 
@@ -488,7 +488,7 @@ module.exports = E;
         };
 
         ClipboardAction.prototype.selectTarget = function selectTarget() {
-            this.selectedText = (0, _select2.default_)(this.target);
+            this.selectedText = (0, _select2['default'])(this.target);
             this.copyText();
         };
 
@@ -601,7 +601,7 @@ module.exports = E;
 
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
-            default_: obj
+            'default': obj
         };
     }
 
@@ -671,7 +671,7 @@ module.exports = E;
         Clipboard.prototype.listenClick = function listenClick(trigger) {
             var _this2 = this;
 
-            this.listener = (0, _goodListener2.default_)(trigger, 'click', function (e) {
+            this.listener = (0, _goodListener2['default'])(trigger, 'click', function (e) {
                 return _this2.onClick(e);
             });
         };
@@ -683,7 +683,7 @@ module.exports = E;
                 this.clipboardAction = null;
             }
 
-            this.clipboardAction = new _clipboardAction2.default_({
+            this.clipboardAction = new _clipboardAction2['default']({
                 action: this.action(trigger),
                 target: this.target(trigger),
                 text: this.text(trigger),
@@ -718,7 +718,7 @@ module.exports = E;
         };
 
         return Clipboard;
-    }(_tinyEmitter2.default_);
+    }(_tinyEmitter2['default']);
 
     /**
      * Helper function to retrieve attribute value.
