@@ -120,6 +120,13 @@ $(function () {
         });
         $('#nav-list li ul').css('left', $('#nav-list').width());
     });
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!(/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) && !this.crossDomain)
+                xhr.setRequestHeader('X-CSRFToken', $.cookie('csrftoken'));
+        }
+    });
 });
 
 if (!Date.now) {

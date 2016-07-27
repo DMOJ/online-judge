@@ -29,7 +29,6 @@ block js_media
         script(type='text/javascript', src='{% static "event.js" %}')
         script(type='text/javascript', src='{% static "moment.js" %}')
         if request.user.is_authenticated and perms.judge.rejudge_submission
-            script(type='text/javascript', src='{% static "jquery-cookie.js" %}')
             script(type='text/javascript').
                 window.rejudge_submission = function(id, e) {
                     if ((typeof e !== 'undefined' && e.ctrlKey) ||
@@ -38,8 +37,7 @@ block js_media
                             url: '{% url "submission_rejudge" %}',
                             type: "POST",
                             data: {
-                                id: id,
-                                csrfmiddlewaretoken: $.cookie('csrftoken')
+                                id: id
                             }
                         });
                     }
