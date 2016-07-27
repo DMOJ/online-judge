@@ -58,16 +58,11 @@ block js_media
                     info_float.width(container.width());
                 }
 
-                var time_cache = {};
                 window.update_relative_time = function (row) {
-                    var id = row.attr('id');
-                    if (!(id in time_cache))
-                        time_cache[id] = row.find('span.time .absolute').text();
-                    // TODO: only if within the last X hours
-                    var when = moment(row.find('span.moment').text());
-                    if(Math.abs(moment().diff(when, 'days')) < 1)
-                        row.find('span.time .relative').text(when.fromNow());
-                    row.find('span.time .absolute').text(time_cache[id]);
+                    var $time = row.find('span.time');
+                    var when = moment($time.attr('data-unix'));
+                    if (Math.abs(moment().diff(when, 'days')) < 1)
+                        $time.find('.relative').text(when.fromNow());
                 };
 
                 function update_all_time() {
