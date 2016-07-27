@@ -218,6 +218,7 @@ class ContestCalendar(ContestListMixin, TemplateView):
             self.month = int(kwargs['month'])
         except (KeyError, ValueError):
             raise ImproperlyConfigured(_('ContestCalender requires integer year and month'))
+        self.today = timezone.now().date()
         return self.render()
 
     def render(self):
@@ -241,12 +242,11 @@ class ContestCalendar(ContestListMixin, TemplateView):
 
     def get_table(self):
         calendar = Calendar(self.firstweekday).monthdatescalendar(self.year, self.month)
-        today = timezone.now().date()
         starts, ends, oneday = self.get_contest_data(timezone.make_aware(datetime.combine(calendar[0][0], time.min)),
                                                      timezone.make_aware(datetime.combine(calendar[-1][-1], time.min)))
         return [[ContestDay(
                 date=date, weekday=self.weekday_classes[weekday], is_pad=date.month != self.month,
-                is_today=date == today, starts=starts[date], ends=ends[date], oneday=oneday[date],
+                is_today=date == self.today, starts=starts[date], ends=ends[date], oneday=oneday[date],
         ) for weekday, date in enumerate(week)] for week in calendar]
 
     def get_context_data(self, **kwargs):
@@ -259,7 +259,7 @@ class ContestCalendar(ContestListMixin, TemplateView):
 
         dates = Contest.objects.aggregate(min=Min('start_time'), max=Max('end_time'))
         min_month = dates['min'].year, dates['min'].month
-        max_month = dates['max'].year, dates['max'].month
+        max_month = max((dates['max'].year, dates['max'].month), (self.today.year, self.today.month))
 
         month = (self.year, self.month)
         if month < min_month or month > max_month:
