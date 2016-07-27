@@ -14,10 +14,7 @@ block media
 
 block header
     if perms.judge.change_blogpost
-        .title-line-action
-            | [
-            a(href='{% url "admin:judge_blogpost_change" post.id %}') {% trans "Edit" %}
-            | ]
+        .title-line-action [#[a(href='{% url "admin:judge_blogpost_change" post.id %}') {% trans "Edit" %}]]
 
 block body
     div.post-full
