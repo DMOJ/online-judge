@@ -3,8 +3,7 @@ extends base
 - load compress
 
 block media
-    - compress css
-            link(rel='stylesheet', href='{% static "clipboard/tooltip.css" %}')
+    link(rel='stylesheet', href='{% static "clipboard/tooltip.css" %}')
     block content_media        
 
 block js_media
