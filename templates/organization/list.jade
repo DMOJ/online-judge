@@ -13,17 +13,14 @@ block js_media
 block body
     br
     table.table#organization-table
-        thead
+        thead: tr
+            th {% trans "ID" %}
+            th(style='width:85%') {% trans "Name" %}
+            th {% trans "Members" %}
+        tbody: each org in organizations
             tr
-                th {% trans "ID" %}
-                th(style='width:85%') {% trans "Name" %}
-                th {% trans "Members" %}
-        tbody
-            each org in organizations
-                tr
-                    td= org.key
-                    td
-                        a(href='{% url "organization_home" org.key %}')= org.name
-                    td
-                        - cache 86400 org_member_count org.id
-                            a(href='{% url "organization_users" org.key %}')= org.member_count
+                td= org.key
+                td: a(href='{% url "organization_home" org.key %}')= org.name
+                td
+                    - cache 86400 org_member_count org.id
+                        a(href='{% url "organization_users" org.key %}')= org.member_count
