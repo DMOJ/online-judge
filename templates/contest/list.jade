@@ -25,113 +25,25 @@ block body
         h3 {% trans "Ongoing Contests" %}
         br
         table.contest-list.table.striped
-            thead
-                tr
-                    th(style='width:90%') {% trans "Contest" %}
-                    th {% trans "Rankings" %}
-                    if not IN_CONTEST
-                        th(style='width:15%')
-            tbody
-                each contest in current_contests
-                    tr
-                        td
-                            div(style='position:relative')
-                                a(href='{% url "contest_view" contest.key %}')= contest.name
-                                if contest.start_time
-                                    br
-                                    if contest.time_before_end
-                                        span.time {% trans "Ending in" %}&nbsp;
-                                        span.time.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
-                                            #{contest.time_before_end|timedelta:"localized"}
-                                    elif contest.free_start and contest.start_time
-                                        span.time {% trans "Started at" %} #{contest.start_time|date:_("N j, Y, G:i")}
-                                    .time.floating-time(style='text-align:right')
-                                        span(style='text-align:right;color:#777;')
-                                        if contest.time_limit
-                                            | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
-                                        else
-                                            | #{contest.start_time|date:_("M j, Y, G:i")}
-                                        br
-                                        if contest.time_limit
-                                            - blocktrans with time_limit=contest.time_limit|timedelta:"localized-no-seconds"
-                                                | {{ time_limit }} window
-                                        else
-                                            - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
-                                                | {{ window_length }} long
-                                    if contest.is_external
-                                        .external-notice
-                                            a(href='/about#external-contests') {% trans "External contest" %}
-                        td
-                            a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
-                        if not IN_CONTEST
-                            td
-                                a.unselectable.button.full(href='{% url "contest_join" contest.key %}', style='display:inline;padding-left:30%;padding-right:30%')
-                                    | {% trans "Join" %}
-        br
-        .dashed
-        
-    br
-    h3 {% trans "Upcoming Contests" %}
-    br
-    if future_contests
-        table.contest-list.table.striped
-            thead
-                tr
-                    th {% trans "Contest" %}
-            tbody
-                each contest in future_contests
-                    tr
-                        td
-                            div(style='position:relative')
-                                a(href='{% url "contest_view" contest.key %}')= contest.name
-                                if contest.start_time
-                                    br
-                                    if contest.time_before_start
-                                        span.time {% trans "Starting in" %}&nbsp;
-                                        span.time.time-remaining(data-secs='{{ contest.time_before_start|seconds }}')
-                                            #{contest.time_before_start|timedelta:"localized"}
-                                    
-                                    .time.floating-time(style='text-align:right')
-                                        span(style='text-align:right;color:#777;')
-                                        if contest.time_limit
-                                            | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
-                                        else
-                                            | #{contest.start_time|date:_("M j, Y, G:i")}
-                                        br
-                                        if contest.time_limit
-                                            - blocktrans with time_limit=contest.time_limit|timedelta:"localized-no-seconds"
-                                                | {{ time_limit }} window
-                                        else
-                                            - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
-                                                | {{ window_length }} long
-                                    if contest.is_external
-                                        .external-notice
-                                            a(href='/about#external-contests') {% trans "External contest" %}
-    else
-        i {% trans "There are no scheduled contests at this time." %}
-
-
-
-    br
-    hr.dashed
-    br
-    h3 {% trans "Past Contests" %}
-    br
-    table.contest-list.table.striped
-        thead
-            tr
-                th(style='width:95%') {% trans "Contest" %}
+            thead: tr
+                th(style='width:90%') {% trans "Contest" %}
                 th {% trans "Rankings" %}
-        tbody
-            each contest in past_contests
+                if not IN_CONTEST
+                    th(style='width:15%')
+            tbody: each contest in current_contests
                 tr
-                    td
-                        div(style='position:relative')
-                            a(href='{% url "contest_view" contest.key %}')= contest.name
-                            if contest.is_external
-                                .external-notice
-                                    a(href='/about#external-contests') {% trans "External contest" %}
-                            span.floating-time-right(style='text-align:right;color:#777;')
+                    td: div(style='position:relative')
+                        a(href='{% url "contest_view" contest.key %}')= contest.name
+                        if contest.start_time
+                            br
+                            if contest.time_before_end
+                                span.time {% trans "Ending in" %}&nbsp;
+                                span.time.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
+                                    #{contest.time_before_end|timedelta:"localized"}
+                            elif contest.free_start and contest.start_time
+                                span.time {% trans "Started at" %} #{contest.start_time|date:_("N j, Y, G:i")}
+                            .time.floating-time(style='text-align:right')
+                                span(style='text-align:right;color:#777;')
                                 if contest.time_limit
                                     | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
                                 else
@@ -143,5 +55,79 @@ block body
                                 else
                                     - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
                                         | {{ window_length }} long
-                    td
-                        a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
+                            if contest.is_external
+                                .external-notice
+                                    a(href='/about#external-contests') {% trans "External contest" %}
+                    td: a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
+                    if not IN_CONTEST
+                        td: a.unselectable.button.full(href='{% url "contest_join" contest.key %}', style='display:inline;padding-left:30%;padding-right:30%')
+                            | {% trans "Join" %}
+        br
+        .dashed
+        
+    br
+    h3 {% trans "Upcoming Contests" %}
+    br
+    if future_contests
+        table.contest-list.table.striped
+            thead: tr: th {% trans "Contest" %}
+            tbody: each contest in future_contests
+                tr: td: div(style='position:relative')
+                    a(href='{% url "contest_view" contest.key %}')= contest.name
+                    if contest.start_time
+                        br
+                        if contest.time_before_start
+                            span.time {% trans "Starting in" %}&nbsp;
+                            span.time.time-remaining(data-secs='{{ contest.time_before_start|seconds }}')
+                                #{contest.time_before_start|timedelta:"localized"}
+
+                        .time.floating-time(style='text-align:right')
+                            span(style='text-align:right;color:#777;')
+                            if contest.time_limit
+                                | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
+                            else
+                                | #{contest.start_time|date:_("M j, Y, G:i")}
+                            br
+                            if contest.time_limit
+                                - blocktrans with time_limit=contest.time_limit|timedelta:"localized-no-seconds"
+                                    | {{ time_limit }} window
+                            else
+                                - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
+                                    | {{ window_length }} long
+                        if contest.is_external
+                            .external-notice
+                                a(href='/about#external-contests') {% trans "External contest" %}
+    else
+        i {% trans "There are no scheduled contests at this time." %}
+
+
+
+    br
+    hr.dashed
+    br
+    h3 {% trans "Past Contests" %}
+    br
+    table.contest-list.table.striped
+        thead: tr
+            th(style='width:95%') {% trans "Contest" %}
+            th {% trans "Rankings" %}
+        tbody: each contest in past_contests
+            tr
+                td: div(style='position:relative')
+                    a(href='{% url "contest_view" contest.key %}')= contest.name
+                    if contest.is_external
+                        .external-notice
+                            a(href='/about#external-contests') {% trans "External contest" %}
+                    span.floating-time-right(style='text-align:right;color:#777;')
+                        if contest.time_limit
+                            | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
+                        else
+                            | #{contest.start_time|date:_("M j, Y, G:i")}
+                        br
+                        if contest.time_limit
+                            - blocktrans with time_limit=contest.time_limit|timedelta:"localized-no-seconds"
+                                | {{ time_limit }} window
+                        else
+                            - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
+                                | {{ window_length }} long
+                td: a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
