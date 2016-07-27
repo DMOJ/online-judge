@@ -18,6 +18,13 @@ block js_media
             }, 10000);
         });
 
+block header
+    if perms.judge.change_judge
+        div(style='float: right; margin-top: 1.2em')
+            | [
+            a(href='{% url "admin:judge_judge_changelist" %}') {% trans "Admin" %}
+            | ]
+
 block body
     p
         - blocktrans with name=SITE_NAME
