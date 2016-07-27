@@ -30,12 +30,9 @@ html
         pre
             | #{description}
             | site: fatal signal: Segmentation fault
-            | site died (signal
-            b &nbsp;#{code}
-            | , exit -11)
+            | site died (signal #[b #{code}], exit -11)
             br
             br
-            | panic:&nbsp;
-            a(href='javascript:history.back()') go back
+            | panic: #[a(href='javascript:history.back()') go back]
         if request.user.is_superuser and traceback
             pre #{traceback}
