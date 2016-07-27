@@ -7,7 +7,4 @@ block site_title
 block content_title
     | #{flatpage.title}
     if perms.judge.change_solution
-        div(style='float:right')
-            | [
-            a(href='{% url "admin:judge_solution_change" flatpage.id %}') Edit
-            | ]
+        div.title-line-action [#[a(href='{% url "admin:judge_solution_change" flatpage.id %}') Edit]]
