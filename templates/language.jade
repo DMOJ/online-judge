@@ -22,9 +22,7 @@ block js_media
 block header
     .title-line-action
         if perms.judge.change_language
-            | [
-            a(href='{% url "admin:judge_language_change" language.id %}') {% trans "Edit" %}
-            | ]
+            | [#[a(href='{% url "admin:judge_language_change" language.id %}') {% trans "Edit" %}]]
 
 block body
     ul
