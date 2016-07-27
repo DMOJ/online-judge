@@ -21,10 +21,7 @@ block js_media
 
 block header
     if perms.judge.change_judge
-        .title-line-action
-            | [
-            a(href='{% url "admin:judge_judge_change" judge.id %}') {% trans "Edit" %}
-            | ]
+        .title-line-action [#[a(href='{% url "admin:judge_judge_change" judge.id %}') {% trans "Edit" %}]]
 
 block body
     .content-description
