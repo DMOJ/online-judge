@@ -331,7 +331,7 @@ EVENT_DAEMON_KEY = None
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 TIME_ZONE = 'UTC'
 DEFAULT_USER_TIME_ZONE = 'America/Toronto'
 USE_I18N = True
