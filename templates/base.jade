@@ -124,7 +124,7 @@ html(lang=LANGUAGE_CODE)
                     li.home-menu-item: a.nav-home(href='/') {% trans "Home" %}
                     - recursetree nav_bar
                         li
-                            a(href=node.path, class='nav-{{ node.key }} {% if node.key in nav_tab %}active{% endif %}') #{node.label|user_trans}
+                            a(href=node.path, class='nav-{{ node.key }}{% if node.key in nav_tab %} active{% endif %}') #{node.label|user_trans}
                             if not node.is_leaf_node
                                 ul {{ children }}
                     - endrecursetree
