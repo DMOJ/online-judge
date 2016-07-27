@@ -13,8 +13,8 @@ block media
     include comments/media
 
 block header
-    div(style='float: right; margin-top: 1.2em')
-        if perms.judge.change_blogpost
+    if perms.judge.change_blogpost
+        .title-line-action
             | [
             a(href='{% url "admin:judge_blogpost_change" post.id %}') {% trans "Edit" %}
             | ]
