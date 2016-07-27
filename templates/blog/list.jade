@@ -41,12 +41,12 @@ block body
     ul#mobile.tabs
         li#blog-tab.active: a(href='#') {% trans "Blog" %}
         li#event-tab: a(href='#') {% trans "Events" %}
+
     #blog-container
         .blog-content
             each post in posts
                 div(class=('sticky post' if post.sticky else 'post'))
-                    h2.title
-                        a(href='{% url "blog_post" post.id post.slug %}')= post.title
+                    h2.title: a(href='{% url "blog_post" post.id post.slug %}')= post.title
                     .time
                         if post.sticky
                             i.fa.fa-star.fa-fw(title='Sticky')
@@ -61,8 +61,7 @@ block body
         .blog-sidebar
             if current_contests
                 .blog-sidebox
-                    h3 {% trans "Ongoing contests" %}
-                        i.fa.fa-trophy
+                    h3 {% trans "Ongoing contests" %} #[i.fa.fa-trophy]
                     each contest in current_contests
                         .contest
                             .name: a(href='{% url "contest_view" contest.key %}')= contest.name
@@ -72,8 +71,7 @@ block body
                                     #{contest.time_before_end|timedelta:"localized"}
             if future_contests
                 .blog-sidebox
-                    h3 {% trans "Upcoming contests" %}
-                        i.fa.fa-trophy
+                    h3 {% trans "Upcoming contests" %} #[i.fa.fa-trophy]
                     each contest in future_contests
                         .contest
                             .name: a(href='{% url "contest_view" contest.key %}')= contest.name
