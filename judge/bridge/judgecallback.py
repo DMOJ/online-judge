@@ -201,9 +201,6 @@ class DjangoJudgeHandler(JudgeHandler):
             event.post('contest_%d' % participation.contest_id, {'type': 'update'})
         if not submission.problem.is_public:
             return
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
-                                   'state': 'grading-end', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id})
         event.post('submissions', {'type': 'done-submission', 'id': submission.id,
                                    'contest': submission.contest_key,
                                    'user': submission.user_id, 'problem': submission.problem_id})

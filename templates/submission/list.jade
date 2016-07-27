@@ -123,8 +123,6 @@ block js_media
                                     dynamic_problem_id && message.problem != dynamic_problem_id)
                                     return;
                                 if (message.type == 'update-submission') {
-                                    if (message.state == 'grading-end')
-                                        return;
                                     if (message.state == 'test-case' && $body.hasClass('window-hidden'))
                                         return;
                                     update_submission(message.id);
