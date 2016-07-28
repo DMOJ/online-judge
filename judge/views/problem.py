@@ -20,6 +20,7 @@ from django.views.generic import ListView, View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 
+from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemGroup, Solution
@@ -317,7 +318,8 @@ def problem_submit(request, problem=None, submission=None):
         'form': form,
         'title': _('Submit'),
         'langs': Language.objects.all(),
-        'no_judges': not form.fields['language'].queryset
+        'no_judges': not form.fields['language'].queryset,
+        'ACE_URL': ACE_URL
     })
 
 

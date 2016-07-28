@@ -20,20 +20,20 @@ ACE_URL = getattr(settings, 'ACE_URL', '//cdnjs.cloudflare.com/ajax/libs/ace/1.1
 
 
 class AceWidget(forms.Textarea):
-    def __init__(self, mode=None, theme=None, wordwrap=False, width='100%', height='300px', *args, **kwargs):
+    def __init__(self, mode=None, theme=None, wordwrap=False, width='100%', height='300px',
+                 no_ace_media=False, *args, **kwargs):
         self.mode = mode
         self.theme = theme
         self.wordwrap = wordwrap
         self.width = width
         self.height = height
+        self.ace_media = not no_ace_media
         super(AceWidget, self).__init__(*args, **kwargs)
 
     @property
     def media(self):
-        js = [
-            urljoin(ACE_URL, 'ace.js'),
-            'django_ace/widget.js',
-        ]
+        js = [urljoin(ACE_URL, 'ace.js')] if self.ace_media else []
+        js.append('django_ace/widget.js')
         css = {
             'screen': ['django_ace/widget.css'],
         }
