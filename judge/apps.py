@@ -10,6 +10,7 @@ class JudgeAppConfig(AppConfig):
         # WARNING: AS THIS IS NOT A FUNCTIONAL PROGRAMMING LANGUAGE,
         #          OPERATIONS MAY HAVE SIDE EFFECTS.
         #          DO NOT REMOVE THINKING THE IMPORT IS UNUSED.
+        # noinspection PyUnresolvedReferences
         from . import signals
 
         from django.contrib.flatpages.models import FlatPage
