@@ -7,12 +7,13 @@ from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import transaction, connection
 from django.db.models import TextField, Q, Count
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import get_object_or_404
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ugettext, ungettext, pgettext
@@ -518,10 +519,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     def judge_view(self, request, id):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
             raise PermissionDenied()
-        try:
-            submission = Submission.objects.get(id=id)
-        except ObjectDoesNotExist:
-            raise Http404()
+        submission = get_object_or_404(Submission, id=id)
         if not request.user.has_perm('judge.edit_all_problem') and \
                 not submission.problem.authors.filter(id=request.user.profile.id).exists():
             raise PermissionDenied()
@@ -891,10 +889,7 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
     def rate_view(self, request, id):
         if not request.user.has_perm('judge.contest_rating'):
             raise PermissionDenied()
-        try:
-            contest = Contest.objects.get(id=id)
-        except ObjectDoesNotExist:
-            raise Http404()
+        contest = get_object_or_404(Contest, id=id)
         if not contest.is_rated:
             raise Http404()
         with transaction.atomic():

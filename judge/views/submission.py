@@ -164,12 +164,8 @@ class UserMixin(object):
     def get(self, request, *args, **kwargs):
         if 'user' not in kwargs:
             raise ImproperlyConfigured('Must pass a user')
-        try:
-            self.profile = Profile.objects.get(user__username=kwargs['user'])
-        except Profile.DoesNotExist:
-            raise Http404()
-        else:
-            self.username = kwargs['user']
+        self.profile = get_object_or_404(Profile, user__username=kwargs['user'])
+        self.username = kwargs['user']
         return super(UserMixin, self).get(request, *args, **kwargs)
 
 
@@ -222,10 +218,7 @@ class ProblemSubmissions(SubmissionsListBase):
     def get(self, request, *args, **kwargs):
         if 'problem' not in kwargs:
             raise ImproperlyConfigured(_('Must pass a problem'))
-        try:
-            self.problem = Problem.objects.get(code=kwargs['problem'])
-        except Problem.DoesNotExist:
-            raise Http404()
+        self.problem = get_object_or_404(Problem, code=kwargs['problem'])
         return super(ProblemSubmissions, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -256,16 +249,13 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissions):
 
 
 def single_submission(request, submission, show_problem=True):
-    try:
-        authenticated = request.user.is_authenticated()
-        return render(request, 'submission/row.jade', {
-            'submission': get_object_or_404(submission_related(Submission.objects.all()), id=int(submission)),
-            'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
-            'show_problem': show_problem,
-            'profile_id': request.user.profile.id if authenticated else 0,
-        })
-    except ObjectDoesNotExist:
-        raise Http404()
+    authenticated = request.user.is_authenticated()
+    return render(request, 'submission/row.jade', {
+        'submission': get_object_or_404(submission_related(Submission.objects.all()), id=int(submission)),
+        'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
+        'show_problem': show_problem,
+        'profile_id': request.user.profile.id if authenticated else 0,
+    })
 
 
 def single_submission_query(request):
@@ -275,7 +265,7 @@ def single_submission_query(request):
         show_problem = int(request.GET.get('show_problem', '1'))
     except ValueError:
         return HttpResponseBadRequest()
-    return single_submission(request, int(request.GET['id']), show_problem)
+    return single_submission(request, int(request.GET['id']), bool(show_problem))
 
 
 class AllSubmissions(SubmissionsListBase):
@@ -305,10 +295,7 @@ class ForceContestMixin(object):
     def get(self, request, *args, **kwargs):
         if 'contest' not in kwargs:
             raise ImproperlyConfigured(_('Must pass a contest'))
-        try:
-            self._contest = Contest.objects.get(key=kwargs['contest'])
-        except Contest.DoesNotExist:
-            raise Http404()
+        self._contest = get_object_or_404(Contest, key=kwargs['contest'])
         return super(ForceContestMixin, self).get(request, *args, **kwargs)
 
 

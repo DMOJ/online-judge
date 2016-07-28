@@ -1,5 +1,5 @@
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, Http404
+from django.shortcuts import get_object_or_404
 
 from judge.models import Contest, Problem, Profile, Submission
 
@@ -37,10 +37,7 @@ def api_problem_list(request):
 
 
 def api_problem_info(request, problem):
-    try:
-        p = Problem.objects.get(code=problem)
-    except ObjectDoesNotExist:
-        raise Http404()
+    p = get_object_or_404(Problem, code=problem)
     if not p.is_accessible_by(request.user):
         raise Http404()
     return JsonResponse({
@@ -68,10 +65,7 @@ def api_user_list(request):
 
 
 def api_user_info(request, user):
-    try:
-        p = Profile.objects.get(user__username=user)
-    except ObjectDoesNotExist:
-        raise Http404()
+    p = get_object_or_404(Profile, user__username=user)
     return JsonResponse({
         'display_name': p.name,
         'points': p.points,
@@ -81,10 +75,7 @@ def api_user_info(request, user):
 
 
 def api_user_submissions(request, user):
-    try:
-        p = Profile.objects.get(user__username=user)
-    except ObjectDoesNotExist:
-        raise Http404()
+    p = get_object_or_404(Profile, user__username=user)
 
     subs = Submission.objects.filter(user=p, problem__is_public=True).select_related('problem', 'language') \
         .only('id', 'problem__code', 'time', 'memory', 'points', 'language__key', 'status', 'result')

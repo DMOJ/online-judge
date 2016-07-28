@@ -248,12 +248,9 @@ user_logger = logging.getLogger('judge.user')
 
 @login_required
 def problem_submit(request, problem=None, submission=None):
-    try:
-        if submission is not None and not request.user.has_perm('judge.resubmit_other') and \
-                Submission.objects.get(id=int(submission)).user.user != request.user:
-            raise PermissionDenied()
-    except Submission.DoesNotExist:
-        raise Http404()
+    if submission is not None and not request.user.has_perm('judge.resubmit_other') and \
+            get_object_or_404(Submission, id=int(submission)).user.user != request.user:
+        raise PermissionDenied()
 
     profile = request.user.profile
     if request.method == 'POST':
@@ -294,18 +291,15 @@ def problem_submit(request, problem=None, submission=None):
     else:
         initial = {'language': profile.language}
         if problem is not None:
-            try:
-                initial['problem'] = Problem.objects.get(code=problem)
-            except ObjectDoesNotExist:
-                raise Http404()
+            initial['problem'] = get_object_or_404(Problem, code=problem)
             if not initial['problem'].is_accessible_by(request.user):
                 raise Http404()
         if submission is not None:
             try:
-                sub = Submission.objects.get(id=int(submission))
+                sub = get_object_or_404(Submission, id=int(submission))
                 initial['source'] = sub.source
                 initial['language'] = sub.language
-            except (ObjectDoesNotExist, ValueError):
+            except ValueError:
                 raise Http404()
         form = ProblemSubmitForm(initial=initial)
         form_data = initial
