@@ -11,6 +11,9 @@ block title
 block content_title
     | #{flatpage.title}
 
+block header
+    include flatpages/admin_link
+
 block body
     .content-description
         | #{flatpage.content|markdown:"solution"}

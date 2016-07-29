@@ -7,5 +7,8 @@ block title
 block content_title
     | #{flatpage.title}
 
+block header
+    include flatpages/admin_link
+
 block body
     | {% evaluate flatpage.content %}
