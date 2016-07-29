@@ -141,6 +141,9 @@ class SubmissionsListBase(TitleMixin, ListView):
             queryset = queryset.filter(problem__is_public=True)
         return queryset
 
+    def get_my_submissions_page(self):
+        return None
+
     def get_context_data(self, **kwargs):
         context = super(SubmissionsListBase, self).get_context_data(**kwargs)
         context['dynamic_update'] = False
@@ -149,6 +152,7 @@ class SubmissionsListBase(TitleMixin, ListView):
                                             if self.request.user.is_authenticated() else [])
         context['results'] = self.get_result_table()
         context['first_page_href'] = self.first_page_href or '.'
+        context['my_submissions'] = self.get_my_submissions_page()
         return context
 
     def get(self, request, *args, **kwargs):
@@ -203,6 +207,11 @@ class ProblemSubmissions(SubmissionsListBase):
     def get_content_title(self):
         return format_html(u'All submissions for <a href="{1}">{0}</a>', self.problem.name,
                            reverse('problem_detail', args=[self.problem.code]))
+
+    def get_my_submissions_page(self):
+        if self.request.user.is_authenticated():
+            return reverse('user_submissions', kwargs={'problem': self.problem.code,
+                                                       'user': self.request.user.username})
 
     def access_check(self, request):
         if not self.problem.is_public:
@@ -269,6 +278,10 @@ def single_submission_query(request):
 
 
 class AllSubmissions(SubmissionsListBase):
+    def get_my_submissions_page(self):
+        if self.request.user.is_authenticated():
+            return reverse('all_user_submissions', kwargs={'user': self.request.user.username})
+
     def get_context_data(self, **kwargs):
         context = super(AllSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
