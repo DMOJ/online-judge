@@ -141,6 +141,10 @@ block js_media
     script(type='text/javascript').
         moment.locale('#{LANGUAGE_CODE}');
 
+block header
+    if my_submissions
+        .title-line-action: a(href=my_submissions) {% trans "My submissions" %}
+
 block media
     if perms.judge.change_submission and perms.judge.rejudge_submission
         style.
