@@ -12,7 +12,7 @@ block js_media
                     "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                     ['sub_{{ submission.id }}'], {{ last_msg }}, function (message) {
                         var list = $('#test-cases');
-                        switch (message.type) {   
+                        switch (message.type) {
                             case 'internal-error':
                             case 'grading-end':                                                                           
                             case 'compile-error':
@@ -25,8 +25,7 @@ block js_media
                                     url: '{% url "submission_testcases_query" %}',
                                     data: {id: '{{ submission.id }}'}
                                 }).done(function (data) {
-                                    list.html(data);
-                                    list.find('.toggle').each(function () {
+                                    list.empty().html(data).find('.toggle').each(function () {
                                         register_toggle($(this));
                                     });
                                 }).fail(function (data) {
