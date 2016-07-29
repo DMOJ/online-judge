@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import format_html
 from django.utils.translation import ugettext as _, ugettext_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView
 
 from judge import event_poster as event
@@ -90,9 +91,8 @@ class SubmissionTestCaseQuery(SubmissionStatus):
         return super(SubmissionTestCaseQuery, self).get(request, *args, **kwargs)
 
 
+@require_POST
 def abort_submission(request, submission):
-    if request.method != 'POST':
-        raise Http404()
     submission = get_object_or_404(Submission, id=int(submission))
     if (not request.user.is_authenticated() or
             request.user.profile != submission.user and not request.user.has_perm('abort_any_submission')):
