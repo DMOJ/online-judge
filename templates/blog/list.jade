@@ -6,6 +6,7 @@ extends base
 - load lazy_load
 - load camo_proxy
 - load i18n
+- load nofollow
 
 block media
     link(rel='alternate', type='application/atom+xml', href='{% url "comment_atom" %}', title='Atom Comment Feed')
@@ -53,7 +54,7 @@ block body
                         | #{post.publish_on|date:_("N j, Y, G:i")}
                     .summary
                         - cache 86400 post_summary post.id
-                            | #{post.summary|default:post.content|markdown:"blog"|proxy_images|lazy_load}
+                            | #{post.summary|default:post.content|markdown:"blog"|proxy_images|nofollowexternal|lazy_load}
 
             if page_obj.num_pages > 1
                 div(style='margin-bottom:10px;margin-top:10px')
