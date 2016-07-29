@@ -192,14 +192,14 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
         return context
 
 
-class ProblemSubmissions(SubmissionsListBase):
+class ProblemSubmissionsBase(SubmissionsListBase):
     show_problem = False
     dynamic_update = True
 
     def get_queryset(self):
         if self.in_contest and not self.contest.contest_problems.filter(problem_id=self.problem.id).exists():
             raise Http404()
-        return super(ProblemSubmissions, self)._get_queryset().filter(problem__code=self.problem.code)
+        return super(ProblemSubmissionsBase, self)._get_queryset().filter(problem__code=self.problem.code)
 
     def get_title(self):
         return _('All submissions for %s') % self.problem.name
@@ -207,11 +207,6 @@ class ProblemSubmissions(SubmissionsListBase):
     def get_content_title(self):
         return format_html(u'All submissions for <a href="{1}">{0}</a>', self.problem.name,
                            reverse('problem_detail', args=[self.problem.code]))
-
-    def get_my_submissions_page(self):
-        if self.request.user.is_authenticated():
-            return reverse('user_submissions', kwargs={'problem': self.problem.code,
-                                                       'user': self.request.user.username})
 
     def access_check(self, request):
         if not self.problem.is_public:
@@ -228,10 +223,10 @@ class ProblemSubmissions(SubmissionsListBase):
         if 'problem' not in kwargs:
             raise ImproperlyConfigured(_('Must pass a problem'))
         self.problem = get_object_or_404(Problem, code=kwargs['problem'])
-        return super(ProblemSubmissions, self).get(request, *args, **kwargs)
+        return super(ProblemSubmissionsBase, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(ProblemSubmissions, self).get_context_data(**kwargs)
+        context = super(ProblemSubmissionsBase, self).get_context_data(**kwargs)
         if self.dynamic_update:
             context['dynamic_update'] = context['page_obj'].number == 1
             context['dynamic_problem_id'] = self.problem.id
@@ -239,7 +234,14 @@ class ProblemSubmissions(SubmissionsListBase):
         return context
 
 
-class UserProblemSubmissions(UserMixin, ProblemSubmissions):
+class ProblemSubmissions(ProblemSubmissionsBase):
+    def get_my_submissions_page(self):
+        if self.request.user.is_authenticated():
+            return reverse('user_submissions', kwargs={'problem': self.problem.code,
+                                                       'user': self.request.user.username})
+
+
+class UserProblemSubmissions(UserMixin, ProblemSubmissionsBase):
     def get_queryset(self):
         return super(UserProblemSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
