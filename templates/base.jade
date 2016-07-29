@@ -185,8 +185,7 @@ html(lang=LANGUAGE_CODE)
             footer: span#footer-content
                 if misc_config.footer
                     | #{misc_config.footer|safe}
-                    if perms.judge.test_site
-                        = ' | '
+                    = ' | '
                 form(action='{% url "set_language" %}', method='post', style='display: inline')
                     - csrf_token
                     input(name='next', type='hidden', value=request.get_full_path())
