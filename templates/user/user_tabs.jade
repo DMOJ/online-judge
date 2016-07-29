@@ -11,6 +11,8 @@ div.page-title
         if user.user == request.user
             li(class=('active' if user_tab == 'edit' else ''))
                 a(href='{% url "user_edit_profile" %}') {% trans "Edit profile" %}
-        elif perms.judge.change_user
-            li
-                a(href='{% url "admin:auth_user_change" user.user.id %}') {% trans "Admin" %}
+        else
+            if perms.auth.change_user
+                li: a(href='{% url "admin:auth_user_change" user.user.id %}') {% trans "Admin User" %}
+            if perms.judge.change_profile
+                li: a(href='{% url "admin:judge_profile_change" user.id %}') {% trans "Admin Profile" %}
