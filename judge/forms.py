@@ -6,9 +6,11 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from django.forms import ModelForm, CharField, TextInput
+from django.utils.translation import ugettext_lazy as _
 
 from django_ace import AceWidget
-from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode, Language, Judge
+from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode, Language
+from judge.utils.subscription import Subscription, newsletter_id
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 try:
@@ -20,6 +22,9 @@ use_select2 = Select2Widget is not None and 'django_select2' in settings.INSTALL
 
 
 class ProfileForm(ModelForm):
+    if newsletter_id is not None:
+        newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=False, required=False)
+
     class Meta:
         model = Profile
         fields = ['name', 'about', 'organizations', 'timezone', 'language', 'ace_theme', 'user_script']

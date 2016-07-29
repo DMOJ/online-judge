@@ -19,7 +19,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
 from reversion import revisions
 
-from judge.forms import ProfileForm
+from judge.forms import ProfileForm, Subscription, newsletter_id
 from judge.models import Profile, Submission, Rating
 from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
@@ -167,9 +167,28 @@ def edit_profile(request):
                 form.save()
                 revisions.set_user(request.user)
                 revisions.set_comment(_('Updated on site'))
+
+            if Subscription is not None:
+                try:
+                    subscription = Subscription.objects.get(user=request.user, newsletter_id=newsletter_id)
+                except Subscription.DoesNotExist:
+                    if form.cleaned_data['newsletter']:
+                        Subscription(user=request.user, newsletter_id=newsletter_id, subscribed=True).save()
+                else:
+                    if subscription.subscribed != form.cleaned_data['newsletter']:
+                        subscription.update(('unsubscribe', 'subscribe')[form.cleaned_data['newsletter']])
+
             return HttpResponseRedirect(request.path)
     else:
         form = ProfileForm(instance=profile, user=request.user)
+        if Subscription is not None:
+            try:
+                subscription = Subscription.objects.get(user=request.user, newsletter_id=newsletter_id)
+            except Subscription.DoesNotExist:
+                form.fields['newsletter'].initial = False
+            else:
+                form.fields['newsletter'].initial = subscription.subscribed
+
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
     return render(request, 'user/edit_profile.jade', {
         'form': form, 'title': _('Edit profile'),
