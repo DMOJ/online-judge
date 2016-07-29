@@ -52,6 +52,10 @@ block js_media
             });
         });
 
+block header
+    if perms.judge.change_problem
+        .title-line-action [#[a(href='{% url "admin:judge_problem_changelist" %}') {% trans "Admin" %}]]
+
 block body
     br
     block before_table
