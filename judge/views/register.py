@@ -11,15 +11,10 @@ from registration.backends.default.views import (RegistrationView as OldRegistra
 from registration.forms import RegistrationForm
 from sortedm2m.forms import SortedMultipleChoiceField
 
-if 'newsletter' in settings.INSTALLED_APPS:
-    from newsletter.models import Subscription
-else:
-    Subscription = None
-
 from judge.models import Profile, Language, Organization, TIMEZONE
+from judge.utils.subscription import Subscription, newsletter_id
 
 valid_id = re.compile(r'^\w+$')
-newsletter_id = None if Subscription is None else getattr(settings, 'NEWSLETTER_ID_ON_REGISTER', None)
 
 
 class CustomRegistrationForm(RegistrationForm):
