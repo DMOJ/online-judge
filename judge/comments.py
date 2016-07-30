@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.db.models import Count
+from django.db.models import Count, Prefetch, Value, BooleanField
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
@@ -14,7 +14,7 @@ from reversion import revisions
 from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
-from judge.models import Comment, Profile
+from judge.models import Comment, Profile, CommentVote
 from judge.widgets import PagedownWidget
 
 
@@ -79,6 +79,13 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         context = super(CommentedDetailView, self).get_context_data(**kwargs)
         queryset = Comment.objects.filter(page=self.get_comment_page())
         context['has_comments'] = queryset.exists()
-        context['comment_list'] = queryset.select_related('author__user').defer('author__about') \
-                                          .annotate(revisions=Count('versions'))
+        queryset = queryset.select_related('author__user').defer('author__about').annotate(revisions=Count('versions'))
+
+        # This version uses public Django interface, but it requires support on the model.
+        if self.request.user.is_authenticated():
+            votes = CommentVote.objects.filter(voter=self.request.user.profile)
+        else:
+            votes = CommentVote.objects.none()
+        context['comment_list'] = queryset.prefetch_related(Prefetch('votes', queryset=votes))
+
         return context
