@@ -127,6 +127,7 @@ script(type='text/javascript', src='{% static "moment.js" %}')
 
             $('img.unveil').unveil(200);
 
+            moment.locale('#{LANGUAGE_CODE}');
             register_update_relative(function () {
                 return $('.comment-time');
             }, function (when) {
