@@ -36,7 +36,7 @@
             }
 
             var get_$votes = function (id) {
-                var $comment = $('.comment-' + id);
+                var $comment = $('#comment-' + id);
                 return {
                     upvote: $comment.find('.upvote-link').first(),
                     downvote: $comment.find('.downvote-link').first()
