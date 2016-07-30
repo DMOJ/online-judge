@@ -62,7 +62,7 @@ block js_media
 
         if dynamic_update and last_msg
             script(type='text/javascript').
-                $(function () {
+                function load_dynamic_update(last_msg) {
                     var table = $('#submissions-table');
                     var statistics = $("#statistics-table");
                     var doing_ajax = false;
@@ -100,9 +100,10 @@ block js_media
                     };
 
                     var $body = $(document.body);
-                    var receiver = new EventReceiver(
+
+                    return new EventReceiver(
                             "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
-                            ['submissions'], #{last_msg}, function (message) {
+                            ['submissions'], last_msg, function (message) {
                                 if (current_contest && message.contest != current_contest)
                                     return;
                                 if (dynamic_user_id && message.user != dynamic_user_id ||
@@ -126,8 +127,10 @@ block js_media
                             }
                     );
                 });
-    script(type='text/javascript').
-        moment.locale('#{LANGUAGE_CODE}');
+    script(type='text/javascript')
+        | moment.locale('#{LANGUAGE_CODE}');
+        if dynamic_update and last_msg
+            | load_dynamic_update(#{last_msg});
 
 block header
     if my_submissions
