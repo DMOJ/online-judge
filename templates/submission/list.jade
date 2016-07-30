@@ -24,10 +24,9 @@ block js_media
                 | window.show_problem = 1;
             else
                 | window.show_problem = 0;
-
+    script(type='text/javascript', src='{% static "moment.js" %}')
     - compress js
         script(type='text/javascript', src='{% static "event.js" %}')
-        script(type='text/javascript', src='{% static "moment.js" %}')
         if request.user.is_authenticated and perms.judge.rejudge_submission
             script(type='text/javascript').
                 window.rejudge_submission = function(id, e) {
@@ -61,10 +60,12 @@ block js_media
                     var when = moment($time.attr('data-unix'));
                     if (Math.abs(moment().diff(when, 'days')) < 1)
                         $time.find('.relative').text(when.fromNow());
+                    else
+                        row.addClass('too-long-ago');
                 };
 
                 function update_all_time() {
-                    $('#submissions-table').find('tr').each(function () {
+                    $('#submissions-table').find('tr:not(.too-long-ago)').each(function () {
                         update_relative_time($(this));
                     });
                 }
