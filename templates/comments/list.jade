@@ -41,7 +41,7 @@ ul.comments.top-level-comments
                                     span(class=node.author.display_rank)
                                         a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
                                 = ' '
-                                span.comment-time
+                                span.comment-time(data-unix='{{ node.time|utc|date:"c" }}')
                                     - blocktrans with time=node.time|date:_("N j, Y, g:i a") asvar str_time
                                         | on {{ time }}
                                     span.relative= str_time
