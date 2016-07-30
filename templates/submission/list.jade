@@ -130,7 +130,7 @@ block js_media
     script(type='text/javascript')
         | moment.locale('#{LANGUAGE_CODE}');
         if dynamic_update and last_msg
-            | load_dynamic_update(#{last_msg});
+            | $(function () { load_dynamic_update(#{last_msg}); });
 
 block header
     if my_submissions
