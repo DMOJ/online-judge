@@ -599,12 +599,13 @@ class Comment(MPTTModel):
     # .prefetch_related(Prefetch('votes', queryset=CommentVote.objects.filter(voter_id=profile_id)))
     # It's rather stupid to put a query specific property on the model, but the alternative requires
     # digging Django internals, and could not be guaranteed to work forever.
-    @property
-    def vote_score(self):
-        queryset = self.votes.all()
-        if not queryset:
-            return 0
-        return queryset[0].score
+    # Hence it is left here for when the alternative breaks.
+    #@property
+    #def vote_score(self):
+    #    queryset = self.votes.all()
+    #    if not queryset:
+    #        return 0
+    #    return queryset[0].score
 
 
 class CommentVote(models.Model):
