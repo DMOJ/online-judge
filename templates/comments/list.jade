@@ -40,10 +40,12 @@ ul.comments.top-level-comments
                                     img.unveil(src='{% static "blank.gif" %}', data-src=gravatar, width='24', height='24')
                                     span(class=node.author.display_rank)
                                         a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
-                                = ' on '
-                                span.comment-time: - with time=node.time|date:_("N j, Y, g:i a")
-                                    span.relative= time
-                                    span.absolute= time
+                                = ' '
+                                span.comment-time
+                                    - blocktrans with time=node.time|date:_("N j, Y, g:i a") asvar str_time
+                                        | on {{ time }}
+                                    span.relative= str_time
+                                    span.absolute= str_time
                                 = ' '
                                 span.comment-title #{node.title}
                             span.comment-spacer
