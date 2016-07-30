@@ -26,7 +26,7 @@ ul.comments.top-level-comments
                             .comment-score #{node.score}
                             if request.user.is_authenticated
                                 a.downvote-link.fa.fa-chevron-down.fa-fw(
-                                    class=('voted' if node.vote_score == 1 else None),
+                                    class=('voted' if node.vote_score == -1 else None),
                                     href='javascript:comment_downvote({{ node.id }})')
                             else
                                 a.downvote-link.fa.fa-chevron-down.fa-fw(href='javascript:void(0)', title='Please login to vote')
