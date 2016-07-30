@@ -55,22 +55,9 @@ block js_media
                     info_float.width(container.width());
                 }
 
-                window.update_relative_time = function (row) {
-                    var $time = row.find('span.time');
-                    var when = moment($time.attr('data-unix'));
-                    if (Math.abs(moment().diff(when, 'days')) < 1)
-                        $time.find('.relative').text(when.fromNow());
-                    else
-                        row.addClass('too-long-ago');
-                };
-
-                function update_all_time() {
-                    $('#submissions-table').find('tr:not(.too-long-ago)').each(function () {
-                        update_relative_time($(this));
-                    });
-                }
-                setInterval(update_all_time, 60000);
-                update_all_time();
+                window.update_relative_time = register_update_relative(function () {
+                    return $('#submissions-table').find('span.time');
+                });
             });
 
         if dynamic_update and last_msg
@@ -101,7 +88,7 @@ block js_media
                             }).done(function (data) {
                                 var was_shown = row.is(':visible');
                                 row.html(data);
-                                update_relative_time(row);
+                                update_relative_time(row.find('span.time'));
                                 if (!was_shown)
                                     row.show('slow');
                                 if (!force) doing_ajax = false;
