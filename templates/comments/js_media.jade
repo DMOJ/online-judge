@@ -16,7 +16,7 @@
                 }, 500);
             };
 
-            function ajax_vote(url, id, delta) {
+            function ajax_vote(url, id, delta, on_success) {
                 return $.ajax({
                     url: url,
                     type: 'POST',
@@ -26,6 +26,8 @@
                     success: function (data, textStatus, jqXHR) {
                         var score = $('#comment-' + id + ' .comment-score').first();
                         score.text(parseInt(score.text()) + delta);
+                        if (typeof on_success !== 'undefined')
+                            on_success();
                     },
                     error: function (data, textStatus, jqXHR) {
                         alert('Could not vote: ' + data.responseText);
@@ -33,12 +35,32 @@
                 });
             }
 
+            var get_$votes = function (id) {
+                var $comment = $('.comment-' + id);
+                return {
+                    upvote: $comment.find('.upvote-link').first(),
+                    downvote: $comment.find('.downvote-link').first()
+                };
+            }
+
             window.comment_upvote = function (id) {
-                ajax_vote('{% url "comment_upvote" %}', id, 1);
+                ajax_vote('{% url "comment_upvote" %}', id, 1, function () {
+                    var $votes = get_$votes(id);
+                    if ($votes.downvote.hasClass('voted'))
+                        $votes.downvote.removeClass('voted');
+                    else
+                        $votes.upvote.addClass('voted');
+                });
             };
 
             window.comment_downvote = function (id) {
-                ajax_vote('{% url "comment_downvote" %}', id, -1);
+                ajax_vote('{% url "comment_downvote" %}', id, -1, function () {
+                    var $votes = get_$votes(id);
+                    if ($votes.upvote.hasClass('voted'))
+                        $votes.upvote.removeClass('voted');
+                    else
+                        $votes.downvote.addClass('voted');
+                });
             };
 
             $('.comments').find('a.edit-link').featherlight({
