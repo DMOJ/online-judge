@@ -41,9 +41,9 @@ ul.comments.top-level-comments
                                     span(class=node.author.display_rank)
                                         a(href='{% url "user_page" node.author.user.username %}') #{node.author.user.username}
                                 = ' on '
-                                span.comment-time
-                                    .relative
-                                    .absolute #{node.time|date:_("N j, Y, g:i a")}
+                                span.comment-time: - with time=node.time|date:_("N j, Y, g:i a")
+                                    span.relative= time
+                                    span.absolute= time
                                 = ' '
                                 span.comment-title #{node.title}
                             span.comment-spacer

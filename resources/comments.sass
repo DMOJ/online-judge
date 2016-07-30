@@ -6,6 +6,9 @@ a
   &.upvote-link, &.downvote-link
     color: black
 
+  &.voted
+    text-shadow: 0 0 4px black, 0 0 9px blue
+
 .comment-area
   margin-top: 40px
 
@@ -65,7 +68,7 @@ a
   list-style: none none
   border-radius: 4px
   margin: -50px 0 10px -40px
-  padding-top:  50px
+  padding-top: 50px
 
   &:target > .comment-box
     border-left: 10px solid #2980B9
@@ -80,3 +83,32 @@ a
 
 .comment-title
   font-weight: bold
+
+.comment-author img
+  width: 1.25em
+  height: 1.25em
+  border-radius: 0.2em
+  vertical-align: bottom
+  margin-right: 0.3em
+  margin-bottom: 1em
+
+.comment-time
+  .absolute
+    display: none
+
+  .relative
+    display: inline
+
+  &:hover >
+    .relative
+      display: none
+
+    .absolute
+      display: inline
+
+  &.too-long-ago
+    .relative
+      display: none !important
+
+    .absolute
+      display: inline !important
