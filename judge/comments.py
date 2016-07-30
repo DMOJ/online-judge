@@ -96,7 +96,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
             queryset = queryset.annotate(vote_score=Coalesce(RawSQL('%s.%s' % (
                     CommentVote._meta.db_table, CommentVote._meta.get_field('score').get_attname_column()[1]), ()),
                 Value(0)))
-            unique_together_left_join(queryset, CommentVote, 'comment', 'profile', self.request.user.profile.id)
+            unique_together_left_join(queryset, CommentVote, 'comment', 'voter', self.request.user.profile.id)
         context['comment_list'] = queryset
 
         return context
