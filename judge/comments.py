@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Count
-from django.db.models.expressions import RawSQL, Value
+from django.db.models.expressions import Value
 from django.db.models.functions import Coalesce
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
@@ -17,7 +17,7 @@ from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
 from judge.models import Comment, Profile, CommentVote
-from judge.utils.raw_sql import unique_together_left_join
+from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
 from judge.widgets import PagedownWidget
 
 
@@ -93,9 +93,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
 
         # This version digs into django internals.
         if self.request.user.is_authenticated():
-            queryset = queryset.annotate(vote_score=Coalesce(RawSQL('%s.%s' % (
-                    CommentVote._meta.db_table, CommentVote._meta.get_field('score').get_attname_column()[1]), ()),
-                Value(0)))
+            queryset = queryset.annotate(vote_score=Coalesce(RawSQLColumn(CommentVote, 'score'), Value(0)))
             unique_together_left_join(queryset, CommentVote, 'comment', 'voter', self.request.user.profile.id)
         context['comment_list'] = queryset
 
