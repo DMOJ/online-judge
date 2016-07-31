@@ -372,7 +372,7 @@ class ContestSubmissionInline(admin.StackedInline):
         label = None
         if submission:
             if db_field.name == 'participation':
-                kwargs['queryset'] = ContestParticipation.objects.filter(profile__user=submission.user,
+                kwargs['queryset'] = ContestParticipation.objects.filter(user=submission.user,
                                                                          contest__problems=submission.problem) \
                                                          .only('id', 'contest__name')
                 label = lambda obj: obj.contest.name
@@ -916,18 +916,17 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     list_display = ('contest', 'username', 'real_start', 'score', 'cumtime')
     actions = ['recalculate_points', 'recalculate_cumtime']
     actions_on_bottom = actions_on_top = True
-    search_fields = ('contest__key', 'contest__name', 'profile__user__user__username', 'profile__user__name')
+    search_fields = ('contest__key', 'contest__name', 'user__user__username', 'user__name')
     form = ContestParticipationForm
 
     def get_queryset(self, request):
         return super(ContestParticipationAdmin, self).get_queryset(request).only(
-            'contest__name', 'profile__user__user__username', 'profile__user__name',
-            'real_start', 'score', 'cumtime'
+            'contest__name', 'user__user__username', 'user__name', 'real_start', 'score', 'cumtime'
         )
 
     def username(self, obj):
         return obj.profile.user.long_display_name
-    username.admin_order_field = 'profile__user__user__username'
+    username.admin_order_field = 'user__user__username'
 
     def recalculate_points(self, request, queryset):
         count = 0
