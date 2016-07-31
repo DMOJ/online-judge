@@ -23,7 +23,7 @@ block js_media
                 function update_info(from, to) {
                     var runtimes = [];
                     from.find('.runtime-info').forEach(function (runtime) {
-                        var name = runtime.attr('data-id');
+                        var name = runtime.attr('data-runtime-id');
                         var min_ver = runtime.attr('data-min-version');
                         var max_ver = runtime.attr('data-max-version');
 
@@ -221,11 +221,11 @@ block body
                                 li(data-id=lang.id, data-info=lang.info, data-ace=lang.ace)= lang.name
                                     each name, versions in lang.runtime_versions
                                         if versions
-                                            .runtime-info(data-id=runtime.name,
+                                            .runtime-info(data-runtime-id=runtime.name,
                                                           data-max-version=versions[-1],
                                                           data-min-version=versions[0])
                                         else
-                                            .runtime-info(data-id=runtime.name)
+                                            .runtime-info(data-runtime-id=runtime.name)
         hr
         if no_judges
             span(style='color: red') {% trans "No judge is available for this problem." %}
