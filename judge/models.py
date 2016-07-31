@@ -369,6 +369,18 @@ class LanguageLimit(models.Model):
         verbose_name_plural = _('language-specific resource limits')
 
 
+class ProblemTranslation(models.Model):
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='translations')
+    language = models.CharField(verbose_name=_('language'), max_length=7, choices=settings.LANGUAGES)
+    name = models.CharField(verbose_name=_('translated name'), max_length=50, db_index=True)
+    description = models.TextField(verbose_name=_('translated description'))
+
+    class Meta:
+        unique_together = ('problem', 'language')
+        verbose_name = _('problem translation')
+        verbose_name_plural = _('problem translations')
+
+
 SUBMISSION_RESULT = (
     ('AC', _('Accepted')),
     ('WA', _('Wrong Answer')),
