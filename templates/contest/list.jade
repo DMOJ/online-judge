@@ -15,6 +15,13 @@ block js_media
             });
         });
 
+block media
+    style.
+        .contest-tags {
+            position: absolute;
+            bottom: 0;
+        }
+
 block header
     div(style='float: right; margin-top: 0.9em; font-size: 1.3em;')
         a(href='{% url "contest_calendar" now.year now.month %}') {% trans "Calendar view" %}
@@ -115,9 +122,8 @@ block body
             tr
                 td: div(style='position:relative')
                     a(href='{% url "contest_view" contest.key %}')= contest.name
-                    if contest.is_external
-                        .external-notice
-                            a(href='/about#external-contests') {% trans "External contest" %}
+                    .contest-tags: each tag in contest.tags.all
+                        a.contest-tag(href='#', style='background-color: {{ tag.color }}')= tag.name
                     span.floating-time-right(style='text-align:right;color:#777;')
                         if contest.time_limit
                             | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}

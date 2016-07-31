@@ -63,7 +63,7 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
 
     def get_queryset(self):
         return super(ContestList, self).get_queryset().annotate(participation_count=Count('users')) \
-            .order_by('-start_time', 'key')
+            .order_by('-start_time', 'key').prefetch_related('tags')
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
