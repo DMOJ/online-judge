@@ -907,12 +907,12 @@ class ContestParticipationForm(ModelForm):
         if use_select2:
             widgets = {
                 'contest': Select2Widget(),
-                'profile': HeavySelect2Widget(data_view='contest_profile_select2'),
+                'user': HeavySelect2Widget(data_view='profile_select2'),
             }
 
 
 class ContestParticipationAdmin(admin.ModelAdmin):
-    fields = ('contest', 'profile', 'real_start')
+    fields = ('contest', 'user', 'real_start')
     list_display = ('contest', 'username', 'real_start', 'score', 'cumtime')
     actions = ['recalculate_points', 'recalculate_cumtime']
     actions_on_bottom = actions_on_top = True
