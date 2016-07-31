@@ -1,6 +1,6 @@
 import itertools
 import re
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 from operator import itemgetter, attrgetter
 
 import pytz
@@ -54,6 +54,13 @@ def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
     return string + (sum(k in unsafe for k in string) - string.count(u'\u202c')) * u'\u202c'
 
 
+class RuntimeVersion(models.Model):
+    language = models.ForeignKey(Language, verbose_name=_('language to which this runtime belongs'))
+    judge = models.ForeignKey(Judge, verbose_name=_('judge on which this runtime exists'))
+    name = models.CharField(max_length=64, verbose_name=_('runtime name'))
+    version = models.CharField(max_length=64, verbose_name=_('runtime version'), blank=True)
+
+
 class Language(models.Model):
     key = models.CharField(max_length=6, verbose_name=_('Short identifier'), unique=True)
     name = models.CharField(max_length=20, verbose_name=_('Long name'))
@@ -64,6 +71,31 @@ class Language(models.Model):
     info = models.CharField(max_length=50, verbose_name=_('Basic runtime info'), blank=True)
     description = models.TextField(verbose_name=_('Description for model'), blank=True)
     extension = models.CharField(max_length=10, verbose_name=_('Extension'))
+
+    @cached_property
+    def runtime_versions(self):
+        runtimes = OrderedDict()
+        for runtime in RuntimeVersion.objects.filter(language=self):
+            id = runtime.name
+            if id not in runtimes:
+                runtimes[id] = set()
+            if not runtime.version:  # empty str == error determining version on judge side
+                continue
+            runtimes[id].add(runtime.version)
+
+        def sort_versions(a, b):
+            a = tuple(map(int, a.split('.')))
+            b = tuple(map(int, b.split('.')))
+            if a > b:
+                return 1
+            elif a < b:
+                return -1
+            return 0
+
+        lang_versions = []
+        for id, version_list in runtimes.iteritems():
+            lang_versions.append((id, list(sorted(version_list, cmp=sort_versions))))
+        return lang_versions
 
     @cached_property
     def short_display_name(self):

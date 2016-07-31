@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from judge import event_poster as event
 from judge.caching import finished_submission
-from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit
+from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit, RuntimeVersion
 from .judgehandler import JudgeHandler
 
 logger = logging.getLogger('judge.bridge')
@@ -62,12 +62,20 @@ class DjangoJudgeHandler(JudgeHandler):
         judge.start_time = timezone.now()
         judge.online = True
         judge.problems = Problem.objects.filter(code__in=self.problems.keys())
-        judge.runtimes = Language.objects.filter(key__in=self.executors)
+        judge.runtimes = Language.objects.filter(key__in=self.executors.keys())
+        for lang in judge.runtimes:
+            for name, version in self.executors[lang.key]:
+                runtime = RuntimeVersion()
+                runtime.language = lang
+                runtime.name = name
+                runtime.version = '.'.join(map(str, version))
+                runtime.save()
         judge.last_ip = self.client_address[0]
         judge.save()
 
     def _disconnected(self):
         Judge.objects.filter(name=self.name).update(online=False)
+        RuntimeVersion.objects.filter(judge__name=self.name).delete()
 
     def _update_ping(self):
         try:

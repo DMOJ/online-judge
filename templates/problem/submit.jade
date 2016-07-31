@@ -20,16 +20,33 @@ block js_media
                 }).appendTo(container);
                 var info = $('#language-details');
 
+                function update_info(from, to) {
+                    var runtimes = [];
+                    from.find('.runtime-info').forEach(function (runtime) {
+                        var name = runtime.attr('data-id');
+                        var min_ver = runtime.attr('data-min-version');
+                        var max_ver = runtime.attr('data-max-version');
+
+                        if (!min_ver || !max_ver) {
+                            runtimes.push(name);
+                        } else {
+                            var version_display = min_ver == max_ver ? max_ver : (min_ver + '&mdash' + max_ver);
+                            runtimes.push(name + ' ' + version_display);
+                        }
+                    });
+                    to.text(runtimes.join(', '));
+                }
+
                 function update_selected() {
                     $('#language-current').find('.name').text(selected.text());
-                    $('#language-current').find('.info').text(selected.attr('data-info'));
+                    update_info(selected, $('#language-current').find('.info'));
                 }
                 select.remove();
                 select = $('#language-select').show();
                 select.find('li').mouseenter(function () {
-                    info.text($(this).attr('data-info'));
+                    update_info($(this), info);
                 }).mouseout(function() {
-                    info.text(selected.attr('data-info'));
+                    update_info($(this), info);
                 }).click(function () {
                     selected.removeClass('selected');
                     window.ace_source.getSession().setMode("ace/mode/" + selected.attr('data-ace'));
@@ -38,7 +55,6 @@ block js_media
                 });
                 var selected = select.find('[data-id=' + current + ']').addClass('selected');
                 update_selected(selected);
-                info.text(selected.attr('data-info'));
 
                 $('#language-current').click(function() {
                     var $expand = $('#language-expand');
@@ -174,6 +190,8 @@ block media
             #language-current .language-drop:before { content: "\f078" }
             #language-current.expanded .language-drop:before { content: "\f077" }
 
+            .runtime-info { display: none }
+
 block body
     br
     form#problem_submit.form-area(style='width:100%;box-sizing:border-box', action='', method='post')
@@ -201,6 +219,13 @@ block body
                             hr
                             ul: each lang in form.fields.language.queryset
                                 li(data-id=lang.id, data-info=lang.info, data-ace=lang.ace)= lang.name
+                                    each name, versions in lang.runtime_versions
+                                        if versions
+                                            .runtime-info(data-id=runtime.name,
+                                                          data-max-version=versions[-1],
+                                                          data-min-version=versions[0])
+                                        else
+                                            .runtime-info(data-id=runtime.name)
         hr
         if no_judges
             span(style='color: red') {% trans "No judge is available for this problem." %}
