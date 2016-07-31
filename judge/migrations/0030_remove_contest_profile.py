@@ -9,7 +9,7 @@ import django.db.models.deletion
 def move_current_contest_to_profile(apps, schema_editor):
     ContestProfile = apps.get_model('judge', 'ContestProfile')
     db_alias = schema_editor.connection.alias
-    for cp in ContestProfile.objects.using(db_alias).filter(current__is_null=False).select_related('user'):
+    for cp in ContestProfile.objects.using(db_alias).exclude(current=None).select_related('user'):
         cp.user.current_contest_id = cp.current_id
         cp.user.save()
 
@@ -18,8 +18,8 @@ def move_current_contest_to_contest_profile(apps, schema_editor):
     ContestProfile = apps.get_model('judge', 'ContestProfile')
     Profile = apps.get_model('judge', 'Profile')
     db_alias = schema_editor.connection.alias
-    for profile in Profile.objects.using(db_alias).filter(current_contest__is_null=None):
-        cp = ContestProfile.objects.get_or_create(user=profile)
+    for profile in Profile.objects.using(db_alias).exclude(current_contest=None):
+        cp = ContestProfile.objects.get_or_create(user=profile)[0]
         cp.current_id = profile.current_contest_id
         cp.save()
 
@@ -37,7 +37,7 @@ def contest_participation_to_contest_profile(apps, schema_editor):
     ContestProfile = apps.get_model('judge', 'ContestProfile')
     db_alias = schema_editor.connection.alias
     for cp in ContestParticipation.objects.using(db_alias).select_related('profile'):
-        cp.profile = ContestProfile.objects.get_or_create(user_id=cp.user_id)
+        cp.profile = ContestProfile.objects.get_or_create(user_id=cp.user_id)[0]
         cp.save()
 
 
@@ -59,6 +59,11 @@ class Migration(migrations.Migration):
             name='user',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='contest_history', to='judge.Profile', verbose_name='user'),
             preserve_default=False,
+        ),
+        migrations.AlterField(
+            model_name='contestparticipation',
+            name='profile',
+            field=models.ForeignKey(to='judge.ContestProfile', verbose_name='User', related_name='contest_history', null=True, on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.RunPython(contest_participation_to_profile, contest_participation_to_contest_profile),
         migrations.RemoveField(
