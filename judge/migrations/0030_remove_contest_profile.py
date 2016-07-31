@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contestparticipation',
             name='user',
-            field=models.ForeignKey(null=True, db_index=True, on_delete=django.db.models.deletion.CASCADE,
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE,
                                     related_name='contest_history', to='judge.Profile', verbose_name='user'),
             preserve_default=False,
         ),

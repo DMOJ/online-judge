@@ -833,7 +833,7 @@ class Contest(models.Model):
 
 class ContestParticipation(models.Model):
     contest = models.ForeignKey(Contest, verbose_name=_('Associated contest'), related_name='users')
-    user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='contest_history', db_index=True)
+    user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='contest_history')
     real_start = models.DateTimeField(verbose_name=_('Start time'), default=timezone.now, db_column='start')
     score = models.IntegerField(verbose_name=_('score'), default=0, db_index=True)
     cumtime = models.PositiveIntegerField(verbose_name=_('Cumulative time'), default=0)
