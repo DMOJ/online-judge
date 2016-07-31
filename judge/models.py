@@ -288,6 +288,7 @@ class TranslatedProblemQuerySet(SearchQuerySet):
         queryset = self.annotate(i18n_name=Coalesce(RawSQLColumn(ProblemTranslation, 'name'), F('name'),
                                                     output_field=models.CharField()))
         unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language)
+        return queryset
 
 
 class TranslatedProblemForeignKeyQuerySet(QuerySet):
@@ -297,6 +298,7 @@ class TranslatedProblemForeignKeyQuerySet(QuerySet):
                                 output_field=models.CharField())}
         queryset = self.annotate(**kwargs)
         unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language, parent_model=Problem)
+        return queryset
 
 
 class Problem(models.Model):
