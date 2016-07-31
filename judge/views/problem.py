@@ -8,8 +8,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.db.models import Count, Q, F, Case, IntegerField, When, CharField
-from django.db.models.functions import Coalesce
+from django.db.models import Count, Q, F, Case, IntegerField, When
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.template import Context
@@ -25,7 +24,7 @@ from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemGroup, Solution, \
-    ProblemTranslation
+    ProblemTranslation, TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import HAS_PDF, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
@@ -33,7 +32,7 @@ from judge.utils.views import TitleMixin, generic_message
 
 def get_contest_problem(problem, profile):
     try:
-        return problem.contests.get(contest=profile.contest.current.contest)
+        return problem.contests.get(contest_id=profile.current_contest.contest_id)
     except ObjectDoesNotExist:
         return None
 
@@ -88,7 +87,7 @@ class ProblemDetail(ProblemMixin, CommentedDetailView):
         user = self.request.user
         authed = user.is_authenticated()
         context['has_submissions'] = authed and Submission.objects.filter(user=user.profile).exists()
-        context['contest_problem'] = (None if not authed or user.profile.contest.current is None else
+        context['contest_problem'] = (None if not authed or user.profile.current_contest is None else
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         context['has_pdf_render'] = HAS_PDF
@@ -171,22 +170,22 @@ class ProblemList(TitleMixin, ListView):
         return self.request.user.profile
 
     @cached_property
-    def contest_profile(self):
-        return self.profile and self.profile.contest
-
-    @cached_property
     def in_contest(self):
-        return self.contest_profile is not None and self.contest_profile.current is not None
+        return self.profile is not None and self.profile.current_contest is not None
 
     def get_contest_queryset(self):
-        queryset = self.contest_profile.current.contest.contest_problems.select_related('problem__group') \
+        queryset = self.profile.current_contest.contest.contest_problems.select_related('problem__group') \
             .defer('problem__description').order_by('problem__code') \
             .annotate(number_of_users=Count('submission__participation', distinct=True)) \
             .order_by('order')
+        queryset = TranslatedProblemForeignKeyQuerySet.add_problem_i18n_name.im_func(queryset, 'problem_name',
+                                                                                     self.request.LANGUAGE_CODE,
+                                                                                     'problem__name')
         return [{
             'id': p.problem.id,
             'code': p.problem.code,
             'name': p.problem.name,
+            'i18n_name': p.problem_name,
             'group': p.problem.group,
             'points': p.points,
             'partial': p.partial,
@@ -196,8 +195,7 @@ class ProblemList(TitleMixin, ListView):
     def get_normal_queryset(self):
         filter = Q(is_public=True)
         if self.profile is not None:
-            filter |= Q(id__in=Problem.objects.filter(contest__users__profile=self.profile.contest)
-                                      .values('id').distinct())
+            filter |= Q(id__in=Problem.objects.filter(contest__users__user=self.profile).values('id').distinct())
             filter |= Q(authors=self.profile)
         queryset = Problem.objects.filter(filter) \
             .annotate(number_of_users=Count(Case(
@@ -226,7 +224,7 @@ class ProblemList(TitleMixin, ListView):
 
     def get_completed_problems(self):
         if self.in_contest:
-            return contest_completed_ids(self.contest_profile.current)
+            return contest_completed_ids(self.profile.current_contest)
         else:
             return user_completed_ids(self.profile) if self.profile is not None else ()
 
@@ -284,15 +282,14 @@ def problem_submit(request, problem=None, submission=None):
                                          'You are permanently barred from submitting this problem.'))
             model = form.save()
 
-            cp = profile.contest
-            if cp.current is not None:
+            if profile.current_contest is not None:
                 try:
-                    contest_problem = model.problem.contests.get(contest=cp.current.contest)
+                    contest_problem = model.problem.contests.get(contest=profile.current_contest.contest)
                 except ContestProblem.DoesNotExist:
                     pass
                 else:
                     contest = ContestSubmission(submission=model, problem=contest_problem,
-                                                participation=cp.current)
+                                                participation=profile.current_contest)
                     contest.save()
 
             model.judge()

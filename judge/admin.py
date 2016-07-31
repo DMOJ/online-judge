@@ -24,7 +24,7 @@ from reversion_compare.admin import CompareVersionAdmin
 from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
-    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit, OrganizationRequest, \
+    SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit, OrganizationRequest, \
     ContestTag, ProblemTranslation
 from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
@@ -59,27 +59,13 @@ class Select2SuitMixin(object):
             }
 
 
-class ContestProfileInlineForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ContestProfileInlineForm, self).__init__(*args, **kwargs)
-        self.fields['current'].queryset = self.instance.history.select_related('contest').select_related('contest')
-        self.fields['current'].label_from_instance = lambda obj: obj.contest.name
-
-    class Meta:
-        if use_select2:
-            widgets = {
-                'current': Select2Widget,
-            }
-
-
-class ContestProfileInline(admin.StackedInline):
-    fields = ('current',)
-    model = ContestProfile
-    form = ContestProfileInlineForm
-    can_delete = False
-
-
 class ProfileForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        self.fields['current_contest'].queryset = self.instance.contest_history.select_related('contest') \
+                                                      .only('contest__name', 'user_id')
+        self.fields['current_contest'].label_from_instance = lambda obj: obj.contest.name
+
     class Meta:
         widgets = {}
         if use_select2:
@@ -87,6 +73,7 @@ class ProfileForm(ModelForm):
                 'timezone': Select2Widget,
                 'language': Select2Widget,
                 'ace_theme': Select2Widget,
+                'current_contest': Select2Widget,
             })
         if AdminPagedownWidget is not None:
             widgets['about'] = AdminPagedownWidget
@@ -107,14 +94,13 @@ class TimezoneFilter(admin.SimpleListFilter):
 
 class ProfileAdmin(Select2SuitMixin, VersionAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
-              'last_access', 'ip', 'mute', 'user_script')
+              'last_access', 'ip', 'mute', 'user_script', 'current_contest')
     readonly_fields = ('user',)
     list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
     search_fields = ('user__username', 'name', 'ip', 'user__email')
     list_filter = ('language', TimezoneFilter)
     actions = ('recalculate_points',)
-    inlines = [ContestProfileInline]
     actions_on_top = True
     actions_on_bottom = True
     form = ProfileForm
@@ -393,7 +379,7 @@ class ContestSubmissionInline(admin.StackedInline):
         label = None
         if submission:
             if db_field.name == 'participation':
-                kwargs['queryset'] = ContestParticipation.objects.filter(profile__user=submission.user,
+                kwargs['queryset'] = ContestParticipation.objects.filter(user=submission.user,
                                                                          contest__problems=submission.problem) \
                                                          .only('id', 'contest__name')
                 label = lambda obj: obj.contest.name
@@ -782,6 +768,15 @@ class ContestTagAdmin(admin.ModelAdmin):
     actions_on_bottom = True
     form = ContestTagForm
 
+    def save_model(self, request, obj, form, change):
+        super(ContestTagAdmin, self).save_model(request, obj, form, change)
+        obj.contests = form.cleaned_data['contests']
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ContestTagAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['contests'].initial = obj.contests.all()
+        return form
+
 
 class ContestProblemInlineForm(ModelForm):
     class Meta:
@@ -806,7 +801,7 @@ class ContestForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ContestForm, self).__init__(*args, **kwargs)
         if 'rate_exclude' in self.fields:
-            self.fields['rate_exclude'].queryset = Profile.objects.filter(contest__history__contest=self.instance)
+            self.fields['rate_exclude'].queryset = Profile.objects.filter(contest_history__contest=self.instance)
 
     class Meta:
         if use_select2:
@@ -928,27 +923,26 @@ class ContestParticipationForm(ModelForm):
         if use_select2:
             widgets = {
                 'contest': Select2Widget(),
-                'profile': HeavySelect2Widget(data_view='contest_profile_select2'),
+                'user': HeavySelect2Widget(data_view='profile_select2'),
             }
 
 
 class ContestParticipationAdmin(admin.ModelAdmin):
-    fields = ('contest', 'profile', 'real_start')
+    fields = ('contest', 'user', 'real_start')
     list_display = ('contest', 'username', 'real_start', 'score', 'cumtime')
     actions = ['recalculate_points', 'recalculate_cumtime']
     actions_on_bottom = actions_on_top = True
-    search_fields = ('contest__key', 'contest__name', 'profile__user__user__username', 'profile__user__name')
+    search_fields = ('contest__key', 'contest__name', 'user__user__username', 'user__name')
     form = ContestParticipationForm
 
     def get_queryset(self, request):
         return super(ContestParticipationAdmin, self).get_queryset(request).only(
-            'contest__name', 'profile__user__user__username', 'profile__user__name',
-            'real_start', 'score', 'cumtime'
+            'contest__name', 'user__user__username', 'user__name', 'real_start', 'score', 'cumtime'
         )
 
     def username(self, obj):
-        return obj.profile.user.long_display_name
-    username.admin_order_field = 'profile__user__user__username'
+        return obj.user.long_display_name
+    username.admin_order_field = 'user__user__username'
 
     def recalculate_points(self, request, queryset):
         count = 0

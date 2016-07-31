@@ -209,6 +209,8 @@ class Profile(models.Model):
     rating = models.IntegerField(null=True, default=None)
     user_script = models.TextField(verbose_name=_('User script'), default='',  blank=True, max_length=65536,
                                    help_text=_('User-defined JavaScript for site customization.'))
+    current_contest = models.OneToOneField('ContestParticipation', verbose_name=_('Current contest'),
+                                           null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
 
     @cached_property
     def organization(self):
@@ -241,17 +243,15 @@ class Profile(models.Model):
         return self.user.username
 
     @cached_property
-    def contest(self):
-        cp, created = ContestProfile.objects.get_or_create(user=self)
-        if cp.current is not None and cp.current.ended:
-            cp.current = None
-            cp.save()
-        return cp
-
-    @cached_property
     def solved_problems(self):
         return Submission.objects.filter(user_id=self.id, points__gt=0, problem__is_public=True) \
             .values('problem').distinct().count()
+
+    def update_contest(self):
+        contest = self.current_contest
+        if contest is not None and contest.ended:
+            self.current_contest = None
+            self.save()
 
     def get_absolute_url(self):
         return reverse('user_page', args=(self.user.username,))
@@ -376,6 +376,10 @@ class Problem(models.Model):
 
     objects = TranslatedProblemQuerySet.as_manager()
 
+    def __init__(self, *args, **kwargs):
+        super(Problem, self).__init__(*args, **kwargs)
+        self._translated_name_cache = {}
+
     @cached_property
     def types_list(self):
         return map(user_ugettext, map(attrgetter('full_name'), self.types.all()))
@@ -398,7 +402,7 @@ class Problem(models.Model):
 
         # If the user is in a contest containing that problem
         if user.is_authenticated():
-            return Problem.objects.filter(id=self.id, contest__users__profile=user.profile.contest).exists()
+            return Problem.objects.filter(id=self.id, contest__users__user=user.profile).exists()
         else:
             return False
 
@@ -421,11 +425,15 @@ class Problem(models.Model):
         return self.allowed_languages.filter(judges__in=self.judges.filter(online=True)).distinct()
 
     def translated_name(self, language):
+        if language in self._translated_name_cache:
+            return self._translated_name_cache[language]
         # Hits database despite prefetch_related.
         try:
-            return self.translations.get(language=language).name
-        except ProblemTranslation.DoesNotExist:
-            return self.name
+            name = self.translations.filter(language=language).values_list('name', flat=True)[0]
+        except IndexError:
+            name = self.name
+        self._translated_name_cache[language] = name
+        return name
 
     class Meta:
         permissions = (
@@ -801,10 +809,28 @@ class Judge(models.Model):
 
 
 class ContestTag(models.Model):
-    name = models.CharField(max_length=20, verbose_name=_('tag name'), unique=True)
-    color = models.CharField(max_length=7, verbose_name=_('tag colour'),
-                             validators=[RegexValidator('^#(?:[A-Fa-f0-9]{3}){1,2}$', _('Invalid colour.'))])
+    color_validator = RegexValidator('^#(?:[A-Fa-f0-9]{3}){1,2}$', _('Invalid colour.'))
+
+    name = models.CharField(max_length=20, verbose_name=_('tag name'), unique=True,
+                            validators=[RegexValidator(r'^[a-z-]+$', message=_('Lowercase letters and hyphens only.'))])
+    color = models.CharField(max_length=7, verbose_name=_('tag colour'), validators=[color_validator])
     description = models.TextField(verbose_name=_('tag description'), blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('contest_tag', args=[self.name])
+
+    @property
+    def text_color(self, cache={}):
+        if self.color not in cache:
+            if len(self.color) == 4:
+                r, g, b = [ord((i*2).decode('hex')) for i in self.color[1:]]
+            else:
+                r, g, b = [ord(i.decode('hex')) for i in self.color[1:].decode('hex')]
+            cache[self.color] = '#000' if 299 * r + 587 * g + 144 * b > 140000 else '#fff'
+        return cache[self.color]
 
     class Meta:
         verbose_name = _('contest tag')
@@ -833,7 +859,7 @@ class Contest(models.Model):
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('Organizations'),
                                            help_text=_('If private, only these organizations may see the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
-    tags = models.ManyToManyField(ContestTag, verbose_name=_('contest tags'), blank=True)
+    tags = models.ManyToManyField(ContestTag, verbose_name=_('contest tags'), blank=True, related_name='contests')
 
     def clean(self):
         if self.start_time >= self.end_time:
@@ -882,7 +908,7 @@ class Contest(models.Model):
 
 class ContestParticipation(models.Model):
     contest = models.ForeignKey(Contest, verbose_name=_('Associated contest'), related_name='users')
-    profile = models.ForeignKey('ContestProfile', verbose_name=_('User'), related_name='history')
+    user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='contest_history')
     real_start = models.DateTimeField(verbose_name=_('Start time'), default=timezone.now, db_column='start')
     score = models.IntegerField(verbose_name=_('score'), default=0, db_index=True)
     cumtime = models.PositiveIntegerField(verbose_name=_('Cumulative time'), default=0)
@@ -919,9 +945,8 @@ class ContestParticipation(models.Model):
 
     def update_cumtime(self):
         cumtime = 0
-        profile_id = self.profile.user_id
         for problem in self.contest.contest_problems.all():
-            solution = problem.submissions.filter(submission__user_id=profile_id, points__gt=0) \
+            solution = problem.submissions.filter(submission__user_id=self.user_id, points__gt=0) \
                 .values('submission__user_id').annotate(time=Max('submission__date'))
             if not solution:
                 continue
@@ -931,25 +956,11 @@ class ContestParticipation(models.Model):
         self.save()
 
     def __unicode__(self):
-        return '%s in %s' % (self.profile.user.long_display_name, self.contest.name)
+        return '%s in %s' % (self.user.long_display_name, self.contest.name)
 
     class Meta:
         verbose_name = _('contest participation')
         verbose_name_plural = _('contest participations')
-
-
-class ContestProfile(models.Model):
-    user = models.OneToOneField(Profile, verbose_name=_('User'), related_name='contest_profile',
-                                related_query_name='contest')
-    current = models.OneToOneField(ContestParticipation, verbose_name=_('Current contest'),
-                                   null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
-
-    def __unicode__(self):
-        return 'Contest: %s' % self.user.long_display_name
-
-    class Meta:
-        verbose_name = _('contest profile')
-        verbose_name_plural = _('contest profiles')
 
 
 class ContestProblem(models.Model):

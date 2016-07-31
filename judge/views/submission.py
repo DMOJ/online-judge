@@ -2,12 +2,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db.models import F, CharField, Value
-from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.html import format_html
+from django.utils.html import format_html, escape
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView
@@ -53,6 +53,17 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
             'problem': submission.problem.translated_name(self.request.LANGUAGE_CODE),
             'user': submission.user.user.username
         }
+
+    def get_content_title(self):
+        submission = self.object
+        return mark_safe(escape(_('Submission of %(problem)s by %(user)s')) % {
+            'problem': format_html(u'<a href="{0}">{1}</a>',
+                                   reverse('problem_detail', args=[submission.problem.code]),
+                                   submission.problem.translated_name(self.request.LANGUAGE_CODE)),
+            'user': format_html(u'<a href="{0}">{1}</a>',
+                                reverse('user_page', args=[submission.user.user.username]),
+                                submission.user.user.username),
+        })
 
 
 class SubmissionSource(SubmissionDetailBase):
@@ -136,11 +147,11 @@ class SubmissionsListBase(TitleMixin, ListView):
 
     @cached_property
     def in_contest(self):
-        return self.request.user.is_authenticated() and self.request.user.profile.contest.current is not None
+        return self.request.user.is_authenticated() and self.request.user.profile.current_contest is not None
 
     @cached_property
     def contest(self):
-        return self.request.user.profile.contest.current.contest
+        return self.request.user.profile.current_contest.contest
 
     def _get_queryset(self):
         queryset = submission_related(Submission.objects.order_by('-id'))
@@ -273,9 +284,9 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissionsBase):
         return context
 
 
-def single_submission(request, submission, show_problem=True):
+def single_submission(request, submission_id, show_problem=True):
     authenticated = request.user.is_authenticated()
-    submission = get_object_or_404(submission_related(Submission.objects.all()), id=int(submission))
+    submission = get_object_or_404(submission_related(Submission.objects.all()), id=int(submission_id))
     return render(request, 'submission/row.jade', {
         'submission': submission,
         'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
@@ -336,7 +347,7 @@ class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
 
     def access_check(self, request):
         super(UserContestSubmissions, self).access_check(request)
-        if not self.contest.users.filter(profile__user_id=self.profile.id).exists():
+        if not self.contest.users.filter(user_id=self.profile.id).exists():
             raise Http404()
 
     def get_content_title(self):

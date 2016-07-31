@@ -15,6 +15,20 @@ block js_media
             });
         });
 
+block media
+    style.
+        .contest-tags {
+            position: absolute;
+            bottom: 0;
+        }
+
+        .contest-tag {
+            box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
 block header
     div(style='float: right; margin-top: 0.9em; font-size: 1.3em;')
         a(href='{% url "contest_calendar" now.year now.month %}') {% trans "Calendar view" %}
@@ -115,9 +129,9 @@ block body
             tr
                 td: div(style='position:relative')
                     a(href='{% url "contest_view" contest.key %}')= contest.name
-                    if contest.is_external
-                        .external-notice
-                            a(href='/about#external-contests') {% trans "External contest" %}
+                    .contest-tags: each tag in contest.tags.all
+                        span.contest-tag(style='background-color: {{ tag.color }}')
+                            a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}')= tag.name
                     span.floating-time-right(style='text-align:right;color:#777;')
                         if contest.time_limit
                             | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}

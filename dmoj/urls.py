@@ -17,7 +17,7 @@ from judge.views import organization, language, status, blog, problem, solution,
     submission, widgets, comment, contests, api, ranked_submission, stats
 from judge.views.register import RegistrationView, ActivationView
 from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
-    ContestProfileSelect2View, ContestSelect2View
+    ContestSelect2View
 
 admin.autodiscover()
 
@@ -155,6 +155,7 @@ urlpatterns = [
 
     url(r'^contests/$', contests.ContestList.as_view(), name='contest_list'),
     url(r'^contests/(?P<year>\d+)/(?P<month>\d+)/$', contests.ContestCalendar.as_view(), name='contest_calendar'),
+    url(r'^contests/tag/(?P<name>[a-z-]+)$', contests.ContestTagDetail.as_view(), name='contest_tag'),
 
     url(r'^contest/(?P<contest>\w+)', include([
         url(r'^$', contests.ContestDetail.as_view(), name='contest_view'),
@@ -263,7 +264,6 @@ urlpatterns = [
         url(r'^problem/$', ProblemSelect2View.as_view(), name='problem_select2'),
         url(r'^contest/$', ContestSelect2View.as_view(), name='contest_select2'),
         url(r'^comment/$', CommentSelect2View.as_view(), name='comment_select2'),
-        url(r'^contest_profile/$', ContestProfileSelect2View.as_view(), name='contest_profile_select2'),
     ])),
 ]
 

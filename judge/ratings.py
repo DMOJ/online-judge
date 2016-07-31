@@ -102,11 +102,10 @@ def rate_contest(contest):
             SELECT judge_rating.user_id AS id, MAX(judge_contest.end_time) AS last_time,
                    COUNT(judge_rating.user_id) AS times
             FROM judge_contestparticipation INNER JOIN
-                 judge_contestprofile ON (judge_contestparticipation.profile_id = judge_contestprofile.id) INNER JOIN
-                 judge_rating ON (judge_rating.user_id = judge_contestprofile.user_id) INNER JOIN
+                 judge_rating ON (judge_rating.user_id = judge_contestparticipation.user_id) INNER JOIN
                  judge_contest ON (judge_contest.id = judge_rating.contest_id)
             WHERE judge_contestparticipation.contest_id = %s AND judge_contest.end_time < %s AND
-                  judge_contestprofile.user_id NOT IN (
+                  judge_contestparticipation.user_id NOT IN (
                       SELECT profile_id FROM judge_contest_rate_exclude WHERE contest_id = %s
                   )
             GROUP BY judge_rating.user_id
@@ -117,8 +116,7 @@ def rate_contest(contest):
     cursor.close()
 
     users = contest.users.order_by('-score', 'cumtime').annotate(submissions=Count('submission')) \
-                   .exclude(profile__user_id__in=contest.rate_exclude.all()) \
-                   .values_list('id', 'profile__user_id', 'score', 'cumtime')
+                   .exclude(user_id__in=contest.rate_exclude.all()).values_list('id', 'user_id', 'score', 'cumtime')
     if not contest.rate_all:
         users = users.filter(submissions__gt=0)
     users = list(tie_ranker(users, key=itemgetter(2, 3)))
