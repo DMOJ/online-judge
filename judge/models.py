@@ -369,12 +369,15 @@ class Problem(models.Model):
     def usable_languages(self):
         return self.allowed_languages.filter(judges__in=self.judges.filter(online=True)).distinct()
 
-    def translated_name(self, language):
-        # Hits database despite prefetch_related.
-        try:
-            return self.translations.get(language=language).name
-        except ProblemTranslation.DoesNotExist:
-            return self.name
+    @cached_property
+    def translated_name(self):
+        def get_translated_name(language):
+            # Hits database despite prefetch_related.
+            try:
+                return self.translations.get(language=language).name
+            except ProblemTranslation.DoesNotExist:
+                return self.name
+        return defaultdict(get_translated_name)
 
     class Meta:
         permissions = (
