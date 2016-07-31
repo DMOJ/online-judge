@@ -151,7 +151,7 @@ class SubmissionsListBase(TitleMixin, ListView):
 
     @cached_property
     def contest(self):
-        return self.request.user.profile.current_contest
+        return self.request.user.profile.current_contest.contest
 
     def _get_queryset(self):
         queryset = submission_related(Submission.objects.order_by('-id'))
