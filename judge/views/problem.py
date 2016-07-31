@@ -77,15 +77,12 @@ class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMi
         ))
 
 
-class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
+class ProblemDetail(ProblemMixin, CommentedDetailView):
     context_object_name = 'problem'
     template_name = 'problem/problem.jade'
 
     def get_comment_page(self):
         return 'p:%s' % self.object.code
-
-    def get_title(self):
-        return self.object.name
 
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
@@ -100,6 +97,18 @@ class ProblemDetail(ProblemMixin, TitleMixin, CommentedDetailView):
             context['editorial'] = Solution.objects.get(problem=self.object)
         except ObjectDoesNotExist:
             pass
+        try:
+            translation = self.object.translations.get(language=self.request.LANGUAGE_CODE)
+        except ProblemTranslation.DoesNotExist:
+            context['title'] = self.object.name
+            context['language'] = settings.LANGUAGE_CODE
+            context['description'] = self.object.description
+            context['translated'] = False
+        else:
+            context['title'] = translation.name
+            context['language'] = self.request.LANGUAGE_CODE
+            context['description'] = translation.description
+            context['translated'] = True
         return context
 
 
