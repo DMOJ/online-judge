@@ -121,6 +121,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contest',
             name='tags',
-            field=models.ManyToManyField(blank=True, to='judge.ContestTag', verbose_name='contest tags'),
+            field=models.ManyToManyField(blank=True, to='judge.ContestTag', verbose_name='contest tags', related_name='contests'),
         ),
     ]
