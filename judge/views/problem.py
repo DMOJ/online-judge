@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.db.models import Count, Q, F, Case, IntegerField, When
+from django.db.models import Count, Q, F, Case, IntegerField, When, CharField
 from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
@@ -208,7 +208,8 @@ class ProblemList(TitleMixin, ListView):
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
                 queryset = queryset.search(query)
-        queryset = queryset.annotate(i18n_name=Coalesce(RawSQLColumn(ProblemTranslation, 'name'), F('name')))
+        queryset = queryset.annotate(i18n_name=Coalesce(RawSQLColumn(ProblemTranslation, 'name'), F('name'),
+                                                        output_field=CharField()))
         unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', self.request.LANGUAGE_CODE)
         return queryset
 
