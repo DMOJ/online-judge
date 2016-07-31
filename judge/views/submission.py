@@ -143,11 +143,7 @@ class SubmissionsListBase(TitleMixin, ListView):
         queryset = self._get_queryset()
         if not self.in_contest and not self.request.user.has_perm('judge.see_private_problem'):
             queryset = queryset.filter(problem__is_public=True)
-        queryset = queryset.annotate(problem_name=Coalesce(RawSQLColumn(ProblemTranslation, 'name'),
-                                                           F('problem__name'), output_field=CharField()))
-        unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', self.request.LANGUAGE_CODE,
-                                  parent_model=Problem)
-        return queryset
+        return queryset.add_problem_i18n_name('problem_name', self.request.LANGUAGE_CODE)
 
     def get_my_submissions_page(self):
         return None

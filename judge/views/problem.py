@@ -28,7 +28,6 @@ from judge.models import Problem, Submission, ContestSubmission, ContestProblem,
     ProblemTranslation
 from judge.pdf_problems import HAS_PDF, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
-from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 from judge.utils.views import TitleMixin, generic_message
 
 
@@ -217,10 +216,7 @@ class ProblemList(TitleMixin, ListView):
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
                 queryset = queryset.search(query)
-        queryset = queryset.annotate(i18n_name=Coalesce(RawSQLColumn(ProblemTranslation, 'name'), F('name'),
-                                                        output_field=CharField()))
-        unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', self.request.LANGUAGE_CODE)
-        return queryset
+        return queryset.add_i18n_name(self.request.LANGUAGE_CODE)
 
     def get_queryset(self):
         if self.in_contest:

@@ -12,7 +12,8 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, F, QuerySet
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _, pgettext
@@ -23,10 +24,11 @@ from reversion.models import Version
 from sortedm2m.fields import SortedManyToManyField
 from timedelta.fields import TimedeltaField
 
-from judge.fulltext import SearchManager
+from judge.fulltext import SearchManager, SearchQuerySet
 from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
 from judge.user_translations import ugettext as user_ugettext
+from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 
 
 def make_timezones():
@@ -278,6 +280,25 @@ class License(models.Model):
         verbose_name_plural = _('licenses')
 
 
+class TranslatedProblemQuerySet(SearchQuerySet):
+    def __init__(self, **kwargs):
+        super(TranslatedProblemQuerySet, self).__init__(('code', 'name', 'description'), **kwargs)
+
+    def add_i18n_name(self, language):
+        queryset = self.annotate(i18n_name=Coalesce(RawSQLColumn(ProblemTranslation, 'name'), F('name'),
+                                                    output_field=models.CharField()))
+        unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language)
+
+
+class TranslatedProblemForeignKeyQuerySet(QuerySet):
+    def add_problem_i18n_name(self, key, language):
+        kwargs = {key: Coalesce(RawSQLColumn(ProblemTranslation, 'name'),
+                                RawSQLColumn(Problem, 'name'),
+                                output_field=models.CharField())}
+        queryset = self.annotate(**kwargs)
+        unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language, parent_model=Problem)
+
+
 class Problem(models.Model):
     code = models.CharField(max_length=20, verbose_name=_('Problem code'), unique=True,
                             validators=[RegexValidator('^[a-z0-9]+$', _('Problem code must be ^[a-z0-9]+$'))])
@@ -299,7 +320,7 @@ class Problem(models.Model):
                                           help_text=_('Bans the selected users from submitting to this problem'))
     license = models.ForeignKey(License, null=True, blank=True, on_delete=models.SET_NULL)
 
-    objects = SearchManager(('code', 'name', 'description'))
+    objects = TranslatedProblemQuerySet.as_manager()
 
     def types_list(self):
         return map(user_ugettext, map(attrgetter('full_name'), self.types.all()))
@@ -451,6 +472,8 @@ class Submission(models.Model):
     judged_on = models.ForeignKey('Judge', verbose_name=_('Judged on'), null=True, blank=True,
                                   on_delete=models.SET_NULL)
     is_being_rejudged = models.BooleanField(verbose_name=_('Is being rejudged by admin'), default=False)
+
+    objects = TranslatedProblemForeignKeyQuerySet.as_manager()
 
     @property
     def memory_bytes(self):
