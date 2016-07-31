@@ -25,7 +25,7 @@ from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
     ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit, OrganizationRequest, \
-    ContestTag
+    ContestTag, ProblemTranslation
 from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
 
@@ -198,6 +198,21 @@ class LanguageLimitInline(admin.TabularInline):
     model = LanguageLimit
     fields = ('language', 'time_limit', 'memory_limit')
     form = LanguageLimitInlineForm
+
+
+class ProblemTranslationForm(ModelForm):
+    class Meta:
+        widgets = {}
+        if use_select2:
+            widgets['language'] = Select2Widget
+        if MathJaxAdminPagedownWidget is not None:
+            widgets['description'] = MathJaxAdminPagedownWidget
+
+
+class ProblemTranslationInline(admin.StackedInline):
+    model = ProblemTranslation
+    fields = ('language', 'name', 'description')
+    form = ProblemTranslationForm
 
 
 class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
