@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.utils.encoding import smart_text
 from django.views.generic.list import BaseListView
 
-from judge.models import Profile, Organization, Problem, Comment
+from judge.models import Profile, Organization, Problem, Comment, Contest
 
 
 class Select2View(BaseListView):
@@ -52,7 +52,7 @@ class ProblemSelect2View(Select2View):
 
 class ContestSelect2View(Select2View):
     def get_queryset(self):
-        queryset = Organization.objects.filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
+        queryset = Contest.objects.filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
         if not self.request.user.has_perm('judge.see_private_contest'):
             queryset = queryset.filter(is_public=True)
         if not self.request.user.has_perm('judge.edit_all_contest'):
