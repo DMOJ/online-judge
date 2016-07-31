@@ -64,7 +64,8 @@ class DjangoJudgeHandler(JudgeHandler):
         judge.problems = Problem.objects.filter(code__in=self.problems.keys())
         judge.runtimes = Language.objects.filter(key__in=self.executors.keys())
         for lang in judge.runtimes:
-            for name, version in self.executors[lang.key]:
+            for idx, data in enumerate(self.executors[lang.key]):
+                name, version = data
                 runtime = RuntimeVersion()
                 runtime.language = lang
                 runtime.name = name

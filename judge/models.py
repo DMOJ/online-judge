@@ -59,6 +59,7 @@ class RuntimeVersion(models.Model):
     judge = models.ForeignKey(Judge, verbose_name=_('judge on which this runtime exists'))
     name = models.CharField(max_length=64, verbose_name=_('runtime name'))
     version = models.CharField(max_length=64, verbose_name=_('runtime version'), blank=True)
+    priority = models.IntegerField(verbose_name=_('order in which to display this runtime'), default=0)
 
 
 class Language(models.Model):
@@ -92,7 +93,8 @@ class Language(models.Model):
     @cached_property
     def runtime_versions(self):
         runtimes = OrderedDict()
-        for runtime in RuntimeVersion.objects.filter(language=self):
+        # There be dragons here if two judges specify different priorities
+        for runtime in RuntimeVersion.objects.filter(language=self).order_by('priority'):
             id = runtime.name
             if id not in runtimes:
                 runtimes[id] = set()
