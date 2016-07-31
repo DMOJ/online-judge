@@ -767,6 +767,16 @@ class ContestTag(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def text_color(self, cache={}):
+        if self.color not in cache:
+            if len(self.color) == 4:
+                r, g, b = [ord((i*2).decode('hex')) for i in self.color[1:]]
+            else:
+                r, g, b = [ord(i.decode('hex')) for i in self.color[1:].decode('hex')]
+            cache[self.color] = '#000' if 299 * r + 587 * g + 144 * b > 140000 else '#fff'
+        return cache[self.color]
+
     class Meta:
         verbose_name = _('contest tag')
         verbose_name_plural = _('contest tags')
