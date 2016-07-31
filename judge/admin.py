@@ -213,6 +213,7 @@ class ProblemTranslationInline(admin.StackedInline):
     model = ProblemTranslation
     fields = ('language', 'name', 'description')
     form = ProblemTranslationForm
+    extra = 0
 
 
 class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
