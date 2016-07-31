@@ -55,10 +55,10 @@ class RankedSubmissions(ProblemSubmissionsBase):
             return queryset.order_by('-points', 'time')
 
     def get_title(self):
-        return _('Best solutions for %s') % self.problem.name
+        return _('Best solutions for %s') % self.problem_name
 
     def get_content_title(self):
-        return format_html(_(u'Best solutions for <a href="{1}">{0}</a>'), self.problem.name,
+        return format_html(_(u'Best solutions for <a href="{1}">{0}</a>'), self.problem_name,
                            reverse('problem_detail', args=[self.problem.code]))
 
     def get_result_table(self):
@@ -67,12 +67,12 @@ class RankedSubmissions(ProblemSubmissionsBase):
 
 class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
     def get_title(self):
-        return _('Best solutions for %(problem)s in %(contest)s') % {'problem': self.problem.name,
+        return _('Best solutions for %(problem)s in %(contest)s') % {'problem': self.problem_name,
                                                                      'contest': self.contest.name}
 
     def get_content_title(self):
         return format_html(_(u'Best solutions for <a href="{1}">{0}</a> in <a href="{3}">{2}</a>'),
-                           self.problem.name, reverse('problem_detail', args=[self.problem.code]),
+                           self.problem_name, reverse('problem_detail', args=[self.problem.code]),
                            self.contest.name, reverse('contest_view', args=[self.contest.key]))
 
     def get_result_table(self):

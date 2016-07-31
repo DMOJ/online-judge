@@ -211,10 +211,10 @@ class ProblemSubmissionsBase(SubmissionsListBase):
             .annotate(problem_name=Value('', output_field=CharField()))
 
     def get_title(self):
-        return _('All submissions for %s') % self.problem.name
+        return _('All submissions for %s') % self.problem_name
 
     def get_content_title(self):
-        return format_html(u'All submissions for <a href="{1}">{0}</a>', self.problem.name,
+        return format_html(u'All submissions for <a href="{1}">{0}</a>', self.problem_name,
                            reverse('problem_detail', args=[self.problem.code]))
 
     def access_check(self, request):
@@ -232,6 +232,7 @@ class ProblemSubmissionsBase(SubmissionsListBase):
         if 'problem' not in kwargs:
             raise ImproperlyConfigured(_('Must pass a problem'))
         self.problem = get_object_or_404(Problem, code=kwargs['problem'])
+        self.problem_name = self.problem.translated_name(self.request.LANGUAGE_CODE)
         return super(ProblemSubmissionsBase, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -255,12 +256,12 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissionsBase):
         return super(UserProblemSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
     def get_title(self):
-        return _("%(user)s's submissions for %(problem)s") % {'user': self.username, 'problem': self.problem.name}
+        return _("%(user)s's submissions for %(problem)s") % {'user': self.username, 'problem': self.problem_name}
 
     def get_content_title(self):
         return format_html(u'''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
                            self.username, reverse('user_page', args=[self.username]),
-                           self.problem.name, reverse('problem_detail', args=[self.problem.code]))
+                           self.problem_name, reverse('problem_detail', args=[self.problem.code]))
 
     def get_context_data(self, **kwargs):
         context = super(UserProblemSubmissions, self).get_context_data(**kwargs)
@@ -327,7 +328,7 @@ class ForceContestMixin(object):
 
 class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
     def get_title(self):
-        return "%s's submissions for %s in %s" % (self.username, self.problem.name, self.contest.name)
+        return "%s's submissions for %s in %s" % (self.username, self.problem_name, self.contest.name)
 
     def access_check(self, request):
         super(UserContestSubmissions, self).access_check(request)
@@ -338,5 +339,5 @@ class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
         return format_html(_(u'<a href="{1}">{0}</a>\'s submissions for '
                              u'<a href="{3}">{2}</a> in <a href="{5}">{4}</a>'),
                            self.username, reverse('user_page', args=[self.username]),
-                           self.problem.name, reverse('problem_detail', args=[self.problem.code]),
+                           self.problem_name, reverse('problem_detail', args=[self.problem.code]),
                            self.contest.name, reverse('contest_view', args=[self.contest.key]))
