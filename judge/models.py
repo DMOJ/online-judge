@@ -158,6 +158,8 @@ class Profile(models.Model):
     rating = models.IntegerField(null=True, default=None)
     user_script = models.TextField(verbose_name=_('User script'), default='',  blank=True, max_length=65536,
                                    help_text=_('User-defined JavaScript for site customization.'))
+    current_contest = models.OneToOneField('ContestParticipation', verbose_name=_('Current contest'),
+                                           null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
 
     @cached_property
     def organization(self):
@@ -188,14 +190,6 @@ class Profile(models.Model):
                 'username': self.user.username, 'display': self.name
             }
         return self.user.username
-
-    @cached_property
-    def contest(self):
-        cp, created = ContestProfile.objects.get_or_create(user=self)
-        if cp.current is not None and cp.current.ended:
-            cp.current = None
-            cp.save()
-        return cp
 
     @cached_property
     def solved_problems(self):
@@ -839,7 +833,7 @@ class Contest(models.Model):
 
 class ContestParticipation(models.Model):
     contest = models.ForeignKey(Contest, verbose_name=_('Associated contest'), related_name='users')
-    profile = models.ForeignKey('ContestProfile', verbose_name=_('User'), related_name='history')
+    user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='contest_history')
     real_start = models.DateTimeField(verbose_name=_('Start time'), default=timezone.now, db_column='start')
     score = models.IntegerField(verbose_name=_('score'), default=0, db_index=True)
     cumtime = models.PositiveIntegerField(verbose_name=_('Cumulative time'), default=0)
