@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.db.models import F, CharField
+from django.db.models import F, CharField, Value
 from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
@@ -143,10 +143,6 @@ class SubmissionsListBase(TitleMixin, ListView):
         queryset = self._get_queryset()
         if not self.in_contest and not self.request.user.has_perm('judge.see_private_problem'):
             queryset = queryset.filter(problem__is_public=True)
-        queryset = self.translate_problem(queryset)
-        return queryset
-
-    def translate_problem(self, queryset):
         queryset = queryset.annotate(problem_name=Coalesce(RawSQLColumn(ProblemTranslation, 'name'),
                                                            F('problem__name'), output_field=CharField()))
         unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', self.request.LANGUAGE_CODE,
@@ -211,8 +207,8 @@ class ProblemSubmissionsBase(SubmissionsListBase):
     def get_queryset(self):
         if self.in_contest and not self.contest.contest_problems.filter(problem_id=self.problem.id).exists():
             raise Http404()
-        return self.translate_problem(
-            super(ProblemSubmissionsBase, self)._get_queryset().filter(problem__code=self.problem.code))
+        return super(ProblemSubmissionsBase, self)._get_queryset().filter(problem__code=self.problem.code) \
+            .annotate(problem_name=Value(''))
 
     def get_title(self):
         return _('All submissions for %s') % self.problem.name
