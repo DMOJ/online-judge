@@ -378,8 +378,8 @@ class Problem(models.Model):
             return self._translated_name_cache[language]
         # Hits database despite prefetch_related.
         try:
-            name = self.translations.get(language=language).name
-        except ProblemTranslation.DoesNotExist:
+            name = self.translations.filter(language=language).values_list('name', flat=True)[0]
+        except IndexError:
             name = self.name
         self._translated_name_cache[language] = name
         return name
