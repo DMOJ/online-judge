@@ -182,8 +182,8 @@ class ProblemList(TitleMixin, ListView):
             .defer('problem__description').order_by('problem__code') \
             .annotate(number_of_users=Count('submission__participation', distinct=True)) \
             .order_by('order')
-        queryset = TranslatedProblemForeignKeyQuerySet.add_problem_i18n_name(queryset, 'problem_name',
-                                                                             self.request.LANGUAGE_CODE)
+        queryset = TranslatedProblemForeignKeyQuerySet.add_problem_i18n_name.im_func(queryset, 'problem_name',
+                                                                                     self.request.LANGUAGE_CODE)
         return [{
             'id': p.problem.id,
             'code': p.problem.code,
