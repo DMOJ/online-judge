@@ -768,6 +768,15 @@ class ContestTagAdmin(admin.ModelAdmin):
     actions_on_bottom = True
     form = ContestTagForm
 
+    def save_model(self, request, obj, form, change):
+        super(ContestTagAdmin, self).save_model(request, obj, form, change)
+        obj.contests = form.cleaned_data['contests']
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ContestTagAdmin, self).get_form(request, obj, **kwargs)
+        form.fields['contests'].initial = obj.contests.all()
+        return form
+
 
 class ContestProblemInlineForm(ModelForm):
     class Meta:
