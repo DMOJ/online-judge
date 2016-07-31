@@ -925,7 +925,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
         )
 
     def username(self, obj):
-        return obj.profile.user.long_display_name
+        return obj.user.long_display_name
     username.admin_order_field = 'user__user__username'
 
     def recalculate_points(self, request, queryset):

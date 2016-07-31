@@ -876,9 +876,8 @@ class ContestParticipation(models.Model):
 
     def update_cumtime(self):
         cumtime = 0
-        profile_id = self.profile.user_id
         for problem in self.contest.contest_problems.all():
-            solution = problem.submissions.filter(submission__user_id=profile_id, points__gt=0) \
+            solution = problem.submissions.filter(submission__user_id=self.user_id, points__gt=0) \
                 .values('submission__user_id').annotate(time=Max('submission__date'))
             if not solution:
                 continue
@@ -888,7 +887,7 @@ class ContestParticipation(models.Model):
         self.save()
 
     def __unicode__(self):
-        return '%s in %s' % (self.profile.user.long_display_name, self.contest.name)
+        return '%s in %s' % (self.user.long_display_name, self.contest.name)
 
     class Meta:
         verbose_name = _('contest participation')
