@@ -50,7 +50,7 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
     def get_title(self):
         submission = self.object
         return _('Submission of %(problem)s by %(user)s') % {
-            'problem': submission.problem.translated_name[self.request.LANGUAGE_CODE],
+            'problem': submission.problem.translated_name(self.request.LANGUAGE_CODE),
             'user': submission.user.user.username
         }
 
@@ -59,7 +59,7 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
         return mark_safe(escape(_('Submission of %(problem)s by %(user)s')) % {
             'problem': format_html(u'<a href="{0}">{1}</a>',
                                    reverse('problem_detail', args=[submission.problem.code]),
-                                   submission.problem.translated_name[self.request.LANGUAGE_CODE]),
+                                   submission.problem.translated_name(self.request.LANGUAGE_CODE)),
             'user': format_html(u'<a href="{0}">{1}</a>',
                                 reverse('user_page', args=[submission.user.user.username]),
                                 submission.user.user.username),
@@ -247,7 +247,7 @@ class ProblemSubmissionsBase(SubmissionsListBase):
         if 'problem' not in kwargs:
             raise ImproperlyConfigured(_('Must pass a problem'))
         self.problem = get_object_or_404(Problem, code=kwargs['problem'])
-        self.problem_name = self.problem.translated_name[self.request.LANGUAGE_CODE]
+        self.problem_name = self.problem.translated_name(self.request.LANGUAGE_CODE)
         return super(ProblemSubmissionsBase, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -291,7 +291,7 @@ def single_submission(request, submission_id, show_problem=True):
         'submission': submission,
         'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
         'show_problem': show_problem,
-        'problem_name': show_problem and submission.problem.translated_name[request.LANGUAGE_CODE],
+        'problem_name': show_problem and submission.problem.translated_name(request.LANGUAGE_CODE),
         'profile_id': request.user.profile.id if authenticated else 0,
     })
 

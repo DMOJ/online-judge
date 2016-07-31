@@ -325,6 +325,10 @@ class Problem(models.Model):
 
     objects = TranslatedProblemQuerySet.as_manager()
 
+    def __init__(self, *args, **kwargs):
+        super(Problem, self).__init__(*args, **kwargs)
+        self._translated_name_cache = {}
+
     @cached_property
     def types_list(self):
         return map(user_ugettext, map(attrgetter('full_name'), self.types.all()))
@@ -369,15 +373,16 @@ class Problem(models.Model):
     def usable_languages(self):
         return self.allowed_languages.filter(judges__in=self.judges.filter(online=True)).distinct()
 
-    @cached_property
-    def translated_name(self):
-        def get_translated_name(language):
-            # Hits database despite prefetch_related.
-            try:
-                return self.translations.get(language=language).name
-            except ProblemTranslation.DoesNotExist:
-                return self.name
-        return defaultdict(get_translated_name)
+    def translated_name(self, language):
+        if language in self._translated_name_cache:
+            return self._translated_name_cache[language]
+        # Hits database despite prefetch_related.
+        try:
+            name = self.translations.get(language=language).name
+        except ProblemTranslation.DoesNotExist:
+            name = self.name
+        self._translated_name_cache[language] = name
+        return name
 
     class Meta:
         permissions = (
