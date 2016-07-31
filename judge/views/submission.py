@@ -2,12 +2,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db.models import F, CharField, Value
-from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.html import format_html
+from django.utils.html import format_html, escape
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView
@@ -53,6 +53,17 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
             'problem': submission.problem.translated_name(self.request.LANGUAGE_CODE),
             'user': submission.user.user.username
         }
+
+    def get_content_title(self):
+        submission = self.object
+        return mark_safe(escape(_('Submission of %(problem)s by %(user)s')) % {
+            'problem': format_html(u'<a href="{0}">{1}</a>',
+                                   reverse('problem_detail', args=[submission.problem.code]),
+                                   submission.problem.translated_name(self.request.LANGUAGE_CODE)),
+            'user': format_html(u'<a href="{0}">{1}</a>',
+                                reverse('user_page', args=[submission.user.user.username]),
+                                submission.user.user.username),
+        })
 
 
 class SubmissionSource(SubmissionDetailBase):
