@@ -188,7 +188,8 @@ class ProblemList(TitleMixin, ListView):
         return [{
             'id': p.problem.id,
             'code': p.problem.code,
-            'name': p.problem_name,
+            'name': p.problem.name,
+            'i18n_name': p.problem_name,
             'group': p.problem.group,
             'points': p.points,
             'partial': p.partial,
