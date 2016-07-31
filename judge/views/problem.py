@@ -185,7 +185,6 @@ class ProblemList(TitleMixin, ListView):
             'number_of_users': p.number_of_users
         } for p in queryset]
 
-    @property
     def get_normal_queryset(self):
         filter = Q(is_public=True)
         if self.profile is not None:
