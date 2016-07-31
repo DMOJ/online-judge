@@ -55,8 +55,8 @@ def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
 
 
 class RuntimeVersion(models.Model):
-    language = models.ForeignKey(Language, verbose_name=_('language to which this runtime belongs'))
-    judge = models.ForeignKey(Judge, verbose_name=_('judge on which this runtime exists'))
+    language = models.ForeignKey('Language', verbose_name=_('language to which this runtime belongs'))
+    judge = models.ForeignKey('Judge', verbose_name=_('judge on which this runtime exists'))
     name = models.CharField(max_length=64, verbose_name=_('runtime name'))
     version = models.CharField(max_length=64, verbose_name=_('runtime version'), blank=True)
     priority = models.IntegerField(verbose_name=_('order in which to display this runtime'), default=0)
