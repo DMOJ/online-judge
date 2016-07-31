@@ -44,7 +44,7 @@ class ExPaginator(Paginator):
     def page(self, number, softlimit=False):
         try:
             return super(ExPaginator, self).page(number)
-        except InvalidPage, e:
+        except InvalidPage as e:
             number = self._ensure_int(number, e)
             if number > self.num_pages and softlimit:
                 return self.page(self.num_pages, softlimit=False)

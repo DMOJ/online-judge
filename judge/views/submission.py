@@ -115,8 +115,18 @@ class SubmissionsListBase(TitleMixin, ListView):
 
     def get_paginator(self, queryset, per_page, orphans=0,
                       allow_empty_first_page=True, **kwargs):
-        return DiggPaginator(queryset, per_page, body=6, padding=2,
-                             orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
+        paginator = DiggPaginator(queryset, per_page, body=6, padding=2,
+                                  orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
+        # Get the number of pages and then add in this magic.
+        # noinspection PyStatementEffect
+        paginator.num_pages
+
+        if self.show_problem:
+            paginator.object_list = queryset.add_problem_i18n_name('problem_name', self.request.LANGUAGE_CODE,
+                                                                   'problem__name')
+        else:
+            paginator.object_list = queryset.annotate(problem_name=Value('', output_field=CharField()))
+        return paginator
 
     def get_result_table(self):
         return get_result_table(self.get_queryset().order_by())
@@ -142,7 +152,7 @@ class SubmissionsListBase(TitleMixin, ListView):
         queryset = self._get_queryset()
         if not self.in_contest and not self.request.user.has_perm('judge.see_private_problem'):
             queryset = queryset.filter(problem__is_public=True)
-        return queryset.add_problem_i18n_name('problem_name', self.request.LANGUAGE_CODE, 'problem__name')
+        return queryset
 
     def get_my_submissions_page(self):
         return None
@@ -202,8 +212,7 @@ class ProblemSubmissionsBase(SubmissionsListBase):
     def get_queryset(self):
         if self.in_contest and not self.contest.contest_problems.filter(problem_id=self.problem.id).exists():
             raise Http404()
-        return super(ProblemSubmissionsBase, self)._get_queryset().filter(problem__code=self.problem.code) \
-            .annotate(problem_name=Value('', output_field=CharField()))
+        return super(ProblemSubmissionsBase, self)._get_queryset().filter(problem__code=self.problem.code)
 
     def get_title(self):
         return _('All submissions for %s') % self.problem_name
