@@ -768,6 +768,9 @@ class ContestTag(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('contest_tag', args=[self.name])
+
     @property
     def text_color(self, cache={}):
         if self.color not in cache:

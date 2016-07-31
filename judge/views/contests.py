@@ -389,4 +389,4 @@ class ContestTagDetail(TitleMixin, DetailView):
     template_name = 'contest/tag.jade'
 
     def get_title(self):
-        return _('Contest tag %s') % self.object.name
+        return _('Contest tag: %s') % self.object.name
