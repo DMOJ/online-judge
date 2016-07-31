@@ -77,16 +77,12 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         return self.request.user.profile
 
     @cached_property
-    def contest_profile(self):
-        return self.profile and self.profile.contest
-
-    @cached_property
     def in_contest(self):
-        return self.contest_profile is not None and self.contest_profile.current is not None
+        return self.profile is not None and self.profile.current_contest is not None
 
     def get_completed_problems(self):
         if self.in_contest:
-            return contest_completed_ids(self.contest_profile.current)
+            return contest_completed_ids(self.profile.current_contest)
         else:
             return user_completed_ids(self.profile) if self.profile is not None else ()
 
@@ -198,8 +194,8 @@ def edit_profile(request):
 
 
 def users(request):
-    if request.user.is_authenticated() and request.user.profile.contest.current is not None:
-        return contest_ranking_view(request, request.user.profile.contest.current.contest)
+    if request.user.is_authenticated() and request.user.profile.current_contest is not None:
+        return contest_ranking_view(request, request.user.profile.current_contest.contest)
     return render(request, 'user/list.jade', {
         'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
                         .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')

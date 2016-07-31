@@ -87,9 +87,10 @@ def misc_config(request):
 
 def contest(request):
     if request.user.is_authenticated():
-        contest_profile = request.user.profile.contest
-        in_contest = contest_profile.current is not None
-        participation = contest_profile.current
+        profile = request.user.profile
+        profile.update_contest()
+        participation = profile.current_contest
+        in_contest = participation is not None
     else:
         in_contest = False
         participation = None

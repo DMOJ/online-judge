@@ -24,7 +24,7 @@ from reversion_compare.admin import CompareVersionAdmin
 from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, ContestProblem, Organization, BlogPost, \
-    ContestProfile, SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit, OrganizationRequest, \
+    SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit, OrganizationRequest, \
     ContestTag, ProblemTranslation
 from judge.ratings import rate_contest
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
@@ -59,26 +59,6 @@ class Select2SuitMixin(object):
             }
 
 
-class ContestProfileInlineForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ContestProfileInlineForm, self).__init__(*args, **kwargs)
-        self.fields['current'].queryset = self.instance.history.select_related('contest').select_related('contest')
-        self.fields['current'].label_from_instance = lambda obj: obj.contest.name
-
-    class Meta:
-        if use_select2:
-            widgets = {
-                'current': Select2Widget,
-            }
-
-
-class ContestProfileInline(admin.StackedInline):
-    fields = ('current',)
-    model = ContestProfile
-    form = ContestProfileInlineForm
-    can_delete = False
-
-
 class ProfileForm(ModelForm):
     class Meta:
         widgets = {}
@@ -107,14 +87,13 @@ class TimezoneFilter(admin.SimpleListFilter):
 
 class ProfileAdmin(Select2SuitMixin, VersionAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
-              'last_access', 'ip', 'mute', 'user_script')
+              'last_access', 'ip', 'mute', 'user_script', 'current_contest')
     readonly_fields = ('user',)
     list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
     search_fields = ('user__username', 'name', 'ip', 'user__email')
     list_filter = ('language', TimezoneFilter)
     actions = ('recalculate_points',)
-    inlines = [ContestProfileInline]
     actions_on_top = True
     actions_on_bottom = True
     form = ProfileForm

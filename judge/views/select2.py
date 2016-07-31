@@ -1,10 +1,9 @@
-from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import JsonResponse
 from django.utils.encoding import smart_text
 from django.views.generic.list import BaseListView
 
-from judge.models import Profile, Organization, Problem, Comment, ContestProfile
+from judge.models import Profile, Organization, Problem, Comment
 
 
 class Select2View(BaseListView):
@@ -67,12 +66,3 @@ class ContestSelect2View(Select2View):
 class CommentSelect2View(Select2View):
     def get_queryset(self):
         return Comment.objects.filter(Q(title__icontains=self.term) | Q(page__icontains=self.term))
-
-
-class ContestProfileSelect2View(Select2View):
-    def get_queryset(self):
-        if not self.request.user.has_perm('judge.change_contestparticipation'):
-            raise PermissionDenied()
-        return ContestProfile.objects.filter(
-            Q(user__user__username__icontains=self.term) | Q(user__name__icontains=self.term)) \
-            .select_related('user__user')

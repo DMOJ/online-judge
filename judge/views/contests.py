@@ -102,7 +102,7 @@ class ContestMixin(object):
         profile = self.request.user.profile if user.is_authenticated() else None
 
         if (profile is not None and
-                ContestParticipation.objects.filter(id=profile.contest.current_id, contest_id=contest.id).exists()):
+                ContestParticipation.objects.filter(id=profile.current_contest_id, contest_id=contest.id).exists()):
             return contest
 
         if not contest.is_public and not user.has_perm('judge.see_private_contest') and (
@@ -112,7 +112,7 @@ class ContestMixin(object):
 
         if contest.is_private:
             if profile is None or (not user.has_perm('judge.edit_all_contest') and
-                                       not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
+                                   not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
                 raise PrivateContestError(contest.name, contest.organizations.all())
         return contest
 
@@ -145,16 +145,16 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
     def get_context_data(self, **kwargs):
         context = super(ContestDetail, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated():
-            contest_profile = self.request.user.profile.contest
+            profile = self.request.user.profile
             try:
-                context['participation'] = contest_profile.history.get(contest=self.object)
+                context['participation'] = profile.contest_history.get(contest=self.object)
             except ContestParticipation.DoesNotExist:
                 context['participating'] = False
                 context['participation'] = None
             else:
                 context['participating'] = True
-            context[
-                'in_contest'] = contest_profile.current is not None and contest_profile.current.contest == self.object
+            context['in_contest'] = (profile.current_contest is not None and
+                                     profile.current_contest.contest == self.object)
         else:
             context['participating'] = False
             context['participation'] = None
@@ -171,13 +171,13 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('Contest not ongoing'),
                                    _('"%s" is not currently ongoing.') % contest.name)
 
-        contest_profile = request.user.profile.contest
-        if contest_profile.current is not None:
+        profile = request.user.profile
+        if profile.current_contest is not None:
             return generic_message(request, _('Already in contest'),
-                                   _('You are already in a contest: "%s".') % contest_profile.current.contest.name)
+                                   _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
 
         participation, created = ContestParticipation.objects.get_or_create(
-                contest=contest, profile=contest_profile, defaults={
+                contest=contest, user=profile, defaults={
                     'real_start': timezone.now()
                 }
         )
@@ -186,8 +186,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('Time limit exceeded'),
                                    _('Too late! You already used up your time limit for "%s".') % contest.name)
 
-        contest_profile.current = participation
-        contest_profile.save()
+        profile.current_contest = participation
+        profile.save()
         return HttpResponseRedirect(reverse('problem_list'))
 
 
@@ -195,12 +195,12 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def get(self, request, *args, **kwargs):
         contest = self.get_object()
 
-        contest_profile = request.user.profile.contest
-        if contest_profile.current is None or contest_profile.current.contest != contest:
+        profile = request.user.profile
+        if profile.current_contest is None or profile.current_contest.contest_id != contest.id:
             return generic_message(request, _('No such contest'),
                                    _('You are not in contest "%s".') % contest.key, 404)
-        contest_profile.current = None
-        contest_profile.save()
+        profile.current_contest = None
+        profile.save()
         return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
 
 
@@ -314,11 +314,10 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
     cursor.close()
 
     def make_ranking_profile(participation):
-        contest_profile = participation.profile
-        user = contest_profile.user
+        user = participation.user
         part = participation.id
         return ContestRankingProfile(
-                id=contest_profile.user_id,
+                id=user.id,
                 user=user.user,
                 display_rank=user.display_rank,
                 long_display_name=user.long_display_name,
@@ -335,9 +334,9 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
         )
 
     return map(make_ranking_profile,
-               contest.users.select_related('profile__user__user', 'rating')
-               .prefetch_related('profile__user__organizations')
-               .defer('profile__user__about', 'profile__user__organizations__about')
+               contest.users.select_related('user__user', 'rating')
+               .prefetch_related('user__organizations')
+               .defer('user__about', 'user__organizations__about')
                .order_by('-score', 'cumtime'))
 
 

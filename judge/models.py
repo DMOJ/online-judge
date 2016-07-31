@@ -196,6 +196,12 @@ class Profile(models.Model):
         return Submission.objects.filter(user_id=self.id, points__gt=0, problem__is_public=True) \
             .values('problem').distinct().count()
 
+    def update_contest(self):
+        contest = self.current_contest
+        if contest is not None and contest.ended:
+            self.current_contest = None
+            self.save()
+
     def get_absolute_url(self):
         return reverse('user_page', args=(self.user.username,))
 
@@ -345,7 +351,7 @@ class Problem(models.Model):
 
         # If the user is in a contest containing that problem
         if user.is_authenticated():
-            return Problem.objects.filter(id=self.id, contest__users__profile=user.profile.contest).exists()
+            return Problem.objects.filter(id=self.id, contest__users__user=user.profile).exists()
         else:
             return False
 
@@ -887,20 +893,6 @@ class ContestParticipation(models.Model):
     class Meta:
         verbose_name = _('contest participation')
         verbose_name_plural = _('contest participations')
-
-
-class ContestProfile(models.Model):
-    user = models.OneToOneField(Profile, verbose_name=_('User'), related_name='contest_profile',
-                                related_query_name='contest')
-    current = models.OneToOneField(ContestParticipation, verbose_name=_('Current contest'),
-                                   null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
-
-    def __unicode__(self):
-        return 'Contest: %s' % self.user.long_display_name
-
-    class Meta:
-        verbose_name = _('contest profile')
-        verbose_name_plural = _('contest profiles')
 
 
 class ContestProblem(models.Model):
