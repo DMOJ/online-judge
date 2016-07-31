@@ -18,11 +18,11 @@ from django.utils.html import escape
 from django.utils.timezone import make_aware
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.generic import ListView, TemplateView
-from django.views.generic.detail import BaseDetailView
+from django.views.generic.detail import BaseDetailView, DetailView
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
-from judge.models import Contest, ContestParticipation
+from judge.models import Contest, ContestParticipation, ContestTag
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
 
@@ -380,3 +380,13 @@ def contest_ranking(request, contest):
     if not exists:
         return contest
     return contest_ranking_view(request, contest)
+
+
+class ContestTagDetail(TitleMixin, DetailView):
+    model = ContestTag
+    slug_field = slug_url_kwarg = 'name'
+    context_object_name = 'tag'
+    template_name = 'contest/tag.jade'
+
+    def get_title(self):
+        return _('Contest tag %s') % self.object.name

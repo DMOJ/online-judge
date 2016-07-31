@@ -760,7 +760,8 @@ class Judge(models.Model):
 class ContestTag(models.Model):
     color_validator = RegexValidator('^#(?:[A-Fa-f0-9]{3}){1,2}$', _('Invalid colour.'))
 
-    name = models.CharField(max_length=20, verbose_name=_('tag name'), unique=True)
+    name = models.CharField(max_length=20, verbose_name=_('tag name'), unique=True,
+                            validators=[RegexValidator(r'^[a-z-]+$', message=_('Lowercase letters and hyphens only.'))])
     color = models.CharField(max_length=7, verbose_name=_('tag colour'), validators=[color_validator])
     description = models.TextField(verbose_name=_('tag description'), blank=True)
 
