@@ -123,7 +123,8 @@ block body
                 td: div(style='position:relative')
                     a(href='{% url "contest_view" contest.key %}')= contest.name
                     .contest-tags: each tag in contest.tags.all
-                        a.contest-tag(href='#', style='background-color: {{ tag.color }}')= tag.name
+                        span.contest-tag(style='background-color: {{ tag.color }}')
+                            a(href='#')= tag.name
                     span.floating-time-right(style='text-align:right;color:#777;')
                         if contest.time_limit
                             | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
