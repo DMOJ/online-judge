@@ -147,7 +147,7 @@ class SubmissionsListBase(TitleMixin, ListView):
 
     @cached_property
     def in_contest(self):
-        return self.request.user.is_authenticated() and self.contest is not None
+        return self.request.user.is_authenticated() and self.request.user.profile.current_contest is not None
 
     @cached_property
     def contest(self):
