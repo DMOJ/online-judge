@@ -24,7 +24,7 @@ from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemGroup, Solution, \
-    ProblemTranslation
+    ProblemTranslation, TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import HAS_PDF, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
@@ -182,10 +182,12 @@ class ProblemList(TitleMixin, ListView):
             .defer('problem__description').order_by('problem__code') \
             .annotate(number_of_users=Count('submission__participation', distinct=True)) \
             .order_by('order')
+        queryset = TranslatedProblemForeignKeyQuerySet.add_problem_i18n_name(queryset, 'problem_name',
+                                                                             self.request.LANGUAGE_CODE)
         return [{
             'id': p.problem.id,
             'code': p.problem.code,
-            'name': p.problem.name,
+            'name': p.problem_name,
             'group': p.problem.group,
             'points': p.points,
             'partial': p.partial,
