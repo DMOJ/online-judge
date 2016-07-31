@@ -325,6 +325,7 @@ class Problem(models.Model):
 
     objects = TranslatedProblemQuerySet.as_manager()
 
+    @cached_property
     def types_list(self):
         return map(user_ugettext, map(attrgetter('full_name'), self.types.all()))
 
