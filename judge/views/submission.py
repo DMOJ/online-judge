@@ -208,7 +208,7 @@ class ProblemSubmissionsBase(SubmissionsListBase):
         if self.in_contest and not self.contest.contest_problems.filter(problem_id=self.problem.id).exists():
             raise Http404()
         return super(ProblemSubmissionsBase, self)._get_queryset().filter(problem__code=self.problem.code) \
-            .annotate(problem_name=Value(''))
+            .annotate(problem_name=Value('', output_field=CharField()))
 
     def get_title(self):
         return _('All submissions for %s') % self.problem.name
