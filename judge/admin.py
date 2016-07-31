@@ -63,7 +63,7 @@ class ProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         self.fields['current_contest'].queryset = self.instance.contest_history.select_related('contest') \
-                                                      .only('contest__name')
+                                                      .only('contest__name', 'user_id')
         self.fields['current_contest'].label_from_instance = lambda obj: obj.contest.name
 
     class Meta:
