@@ -34,7 +34,7 @@ block js_media
                             runtimes.push(name + ' ' + version_display);
                         }
                     });
-                    to.text(runtimes.join(', '));
+                    to.html(runtimes.join(', '));
                 }
 
                 function update_selected() {
