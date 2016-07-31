@@ -68,8 +68,8 @@ class Language(models.Model):
     name = models.CharField(max_length=20, verbose_name=_('long name'),
                             help_text=_('Longer name for the language, e.g. "Python 2" or "C++11".'))
     short_name = models.CharField(max_length=10, verbose_name=_('short name'),
-                                  help_text=_('More readable, but short, name to display publicly; e.g. "C++11" in '
-                                              'place of "CPP11". If left blank, it will default to the '
+                                  help_text=_('More readable, but short, name to display publicly; e.g. "PY2" or '
+                                              '"C++11". If left blank, it will default to the '
                                               'short identifier.'),
                                   null=True, blank=True)
     common_name = models.CharField(max_length=10, verbose_name=_('common name'),
@@ -77,7 +77,7 @@ class Language(models.Model):
                                                'C++11, and C++14 would be "C++"'))
     ace = models.CharField(max_length=20, verbose_name=_('ace mode name'),
                            help_text=_('Language ID for Ace.js editor highlighting, appended to "mode-" to determine '
-                                       'the Ace JavaScript file to use.'))
+                                       'the Ace JavaScript file to use, e.g., "python".'))
     pygments = models.CharField(max_length=20, verbose_name=_('pygments name'),
                                 help_text=_('Language ID for Pygments highlighting in source windows.'))
     info = models.CharField(max_length=50, verbose_name=_('runtime info override'), blank=True,
@@ -87,7 +87,7 @@ class Language(models.Model):
                                    help_text=_('Use field this to inform users of quirks with your environment, '
                                                'additional restrictions, etc.'), blank=True)
     extension = models.CharField(max_length=10, verbose_name=_('extension'),
-                                 help_text=_('The extension of source files, e.g., "cpp" or "java".'))
+                                 help_text=_('The extension of source files, e.g., "py" or "cpp".'))
 
     @cached_property
     def runtime_versions(self):
