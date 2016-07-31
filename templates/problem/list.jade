@@ -103,7 +103,7 @@ block body
                     else
                         td(solved='0'): i.fa.fa-minus-circle(style='color:#DE2121')
                 td.problem
-                    a(href='{% url "problem_detail" problem.code %}')= problem.name
+                    a(href='{% url "problem_detail" problem.code %}')= problem.i18n_name
                 td.category= problem.group.full_name
                 td.code= problem.code
                 if show_types

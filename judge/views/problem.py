@@ -9,6 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Count, Q, F, Case, IntegerField, When
+from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.template import Context
@@ -23,9 +24,11 @@ from django.views.generic.detail import SingleObjectMixin
 from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
-from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemGroup, Solution
+from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemGroup, Solution, \
+    ProblemTranslation
 from judge.pdf_problems import HAS_PDF, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
+from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 from judge.utils.views import TitleMixin, generic_message
 
 
@@ -182,6 +185,7 @@ class ProblemList(TitleMixin, ListView):
             'number_of_users': p.number_of_users
         } for p in queryset]
 
+    @property
     def get_normal_queryset(self):
         filter = Q(is_public=True)
         if self.profile is not None:
@@ -205,6 +209,8 @@ class ProblemList(TitleMixin, ListView):
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
                 queryset = queryset.search(query)
+        queryset = queryset.annotate(i18n_name=Coalesce(RawSQLColumn(ProblemTranslation, 'name'), F('name')))
+        unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', self.request.LANGUAGE_CODE)
         return queryset
 
     def get_queryset(self):
