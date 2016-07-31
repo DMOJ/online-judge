@@ -292,9 +292,10 @@ class TranslatedProblemQuerySet(SearchQuerySet):
 
 
 class TranslatedProblemForeignKeyQuerySet(QuerySet):
-    def add_problem_i18n_name(self, key, language):
+    def add_problem_i18n_name(self, key, language, name_field=None):
+        # You must specify name_field if Problem is not yet joined into the QuerySet.
         kwargs = {key: Coalesce(RawSQLColumn(ProblemTranslation, 'name'),
-                                RawSQLColumn(Problem, 'name'),
+                                F(name_field) if name_field else RawSQLColumn(Problem, 'name'),
                                 output_field=models.CharField())}
         queryset = self.annotate(**kwargs)
         unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language, parent_model=Problem)

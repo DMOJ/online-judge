@@ -14,10 +14,9 @@ from django.views.generic import ListView, DetailView
 
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
-from judge.models import Problem, Submission, Profile, Contest, ProblemTranslation
+from judge.models import Problem, Submission, Profile, Contest
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import user_completed_ids, get_result_table
-from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 from judge.utils.views import TitleMixin
 
 
@@ -143,7 +142,7 @@ class SubmissionsListBase(TitleMixin, ListView):
         queryset = self._get_queryset()
         if not self.in_contest and not self.request.user.has_perm('judge.see_private_problem'):
             queryset = queryset.filter(problem__is_public=True)
-        return queryset.add_problem_i18n_name('problem_name', self.request.LANGUAGE_CODE)
+        return queryset.add_problem_i18n_name('problem_name', self.request.LANGUAGE_CODE, 'problem__name')
 
     def get_my_submissions_page(self):
         return None
