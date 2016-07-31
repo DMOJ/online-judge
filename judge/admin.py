@@ -203,8 +203,6 @@ class LanguageLimitInline(admin.TabularInline):
 class ProblemTranslationForm(ModelForm):
     class Meta:
         widgets = {}
-        if use_select2:
-            widgets['language'] = Select2Widget
         if MathJaxAdminPagedownWidget is not None:
             widgets['description'] = MathJaxAdminPagedownWidget
 
