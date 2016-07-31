@@ -344,6 +344,13 @@ class Problem(models.Model):
     def usable_languages(self):
         return self.allowed_languages.filter(judges__in=self.judges.filter(online=True)).distinct()
 
+    def translated_name(self, language):
+        # Hits database despite prefetch_related.
+        try:
+            return self.translations.get(language=language).name
+        except ProblemTranslation.DoesNotExist:
+            return self.name
+
     class Meta:
         permissions = (
             ('see_private_problem', 'See hidden problems'),
