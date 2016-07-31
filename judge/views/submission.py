@@ -1,7 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.db.models import F
+from django.db.models import F, CharField
+from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
@@ -13,9 +14,10 @@ from django.views.generic import ListView, DetailView
 
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
-from judge.models import Problem, Submission, Profile, Contest
+from judge.models import Problem, Submission, Profile, Contest, ProblemTranslation
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import user_completed_ids, get_result_table
+from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 from judge.utils.views import TitleMixin
 
 
@@ -139,6 +141,10 @@ class SubmissionsListBase(TitleMixin, ListView):
         queryset = self._get_queryset()
         if not self.in_contest and not self.request.user.has_perm('judge.see_private_problem'):
             queryset = queryset.filter(problem__is_public=True)
+        queryset = queryset.annotate(problem_name=Coalesce(RawSQLColumn(ProblemTranslation, 'name'),
+                                                           F('problem__name'), output_field=CharField()))
+        unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', self.request.LANGUAGE_CODE,
+                                  parent_model=Problem)
         return queryset
 
     def get_my_submissions_page(self):
@@ -261,10 +267,12 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissionsBase):
 
 def single_submission(request, submission, show_problem=True):
     authenticated = request.user.is_authenticated()
+    submission = get_object_or_404(submission_related(Submission.objects.all()), id=int(submission))
     return render(request, 'submission/row.jade', {
-        'submission': get_object_or_404(submission_related(Submission.objects.all()), id=int(submission)),
+        'submission': submission,
         'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
         'show_problem': show_problem,
+        'problem_name': show_problem and submission.problem.translated_name(request.LANGUAGE_CODE),
         'profile_id': request.user.profile.id if authenticated else 0,
     })
 

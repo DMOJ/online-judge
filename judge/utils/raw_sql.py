@@ -7,7 +7,7 @@ from django.db.models.sql.datastructures import Join
 from django.utils import six
 
 
-def unique_together_left_join(queryset, model, link_field_name, filter_field_name, filter_value):
+def unique_together_left_join(queryset, model, link_field_name, filter_field_name, filter_value, parent_model=None):
     link_field = copy(model._meta.get_field(link_field_name).rel)
     filter_field = model._meta.get_field(filter_field_name)
 
@@ -17,7 +17,12 @@ def unique_together_left_join(queryset, model, link_field_name, filter_field_nam
         return cond
 
     link_field.get_extra_restriction = restrictions
-    queryset.query.join(Join(model._meta.db_table, queryset.query.get_initial_alias(), None, LOUTER, link_field, True))
+
+    if parent_model is not None:
+        parent_alias = parent_model._meta.db_table
+    else:
+        parent_alias = queryset.query.get_initial_alias()
+    queryset.query.join(Join(model._meta.db_table, parent_alias, None, LOUTER, link_field, True))
 
 
 def RawSQLColumn(model, field=None):

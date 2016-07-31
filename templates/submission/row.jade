@@ -29,8 +29,7 @@ td.sub-result(class=(submission.status if submission.status in 'IECE' else (('AC
 td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status == 'G' else 'sub-info'))
     if show_problem
         .name
-            - with problem=submission.problem
-                a(href='{% url "problem_detail" problem.code %}') #{problem.name}
+            a(href='{% url "problem_detail" submission.problem.code %}') #{problem_name}
     div
         span(class=submission.user.display_rank)
             a(href='{% url "user_page" submission.user.user.username %}') #{submission.user.user.username}
