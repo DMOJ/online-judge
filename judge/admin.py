@@ -60,6 +60,12 @@ class Select2SuitMixin(object):
 
 
 class ProfileForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        self.fields['current_contest'].queryset = self.instance.contest_history.select_related('contest') \
+                                                      .only('contest__name')
+        self.fields['current_contest'].label_from_instance = lambda obj: obj.contest.name
+
     class Meta:
         widgets = {}
         if use_select2:
@@ -67,6 +73,7 @@ class ProfileForm(ModelForm):
                 'timezone': Select2Widget,
                 'language': Select2Widget,
                 'ace_theme': Select2Widget,
+                'current_contest': Select2Widget,
             })
         if AdminPagedownWidget is not None:
             widgets['about'] = AdminPagedownWidget
