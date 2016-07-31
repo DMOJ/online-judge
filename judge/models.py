@@ -372,7 +372,7 @@ class LanguageLimit(models.Model):
 class ProblemTranslation(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='translations')
     language = models.CharField(verbose_name=_('language'), max_length=7, choices=settings.LANGUAGES)
-    name = models.CharField(verbose_name=_('translated name'), max_length=50, db_index=True)
+    name = models.CharField(verbose_name=_('translated name'), max_length=100, db_index=True)
     description = models.TextField(verbose_name=_('translated description'))
 
     class Meta:

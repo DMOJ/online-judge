@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('language', models.CharField(choices=[(b'de', 'German'), (b'en', 'English'), (b'fr', 'French'), (b'ro', 'Romanian'), (b'ru', 'Russian'), (b'zh-hans', 'Simplified Chinese')], max_length=7, verbose_name='language')),
-                ('name', models.CharField(db_index=True, max_length=50, verbose_name='translated name')),
+                ('name', models.CharField(db_index=True, max_length=100, verbose_name='translated name')),
                 ('description', models.TextField(verbose_name='translated description')),
                 ('problem', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='judge.Problem', verbose_name='problem')),
             ],
