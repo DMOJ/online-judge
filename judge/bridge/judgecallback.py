@@ -71,6 +71,7 @@ class DjangoJudgeHandler(JudgeHandler):
                 runtime.name = name
                 runtime.version = '.'.join(map(str, version))
                 runtime.priority = idx
+                runtime.judge = judge
                 runtime.save()
         judge.last_ip = self.client_address[0]
         judge.save()
