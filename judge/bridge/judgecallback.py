@@ -70,6 +70,7 @@ class DjangoJudgeHandler(JudgeHandler):
                 runtime.language = lang
                 runtime.name = name
                 runtime.version = '.'.join(map(str, version))
+                runtime.priority = idx
                 runtime.save()
         judge.last_ip = self.client_address[0]
         judge.save()
