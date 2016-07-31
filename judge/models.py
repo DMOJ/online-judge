@@ -62,15 +62,32 @@ class RuntimeVersion(models.Model):
 
 
 class Language(models.Model):
-    key = models.CharField(max_length=6, verbose_name=_('Short identifier'), unique=True)
-    name = models.CharField(max_length=20, verbose_name=_('Long name'))
-    short_name = models.CharField(max_length=10, verbose_name=_('Short name'), null=True, blank=True)
-    common_name = models.CharField(max_length=10, verbose_name=_('Common name'))
-    ace = models.CharField(max_length=20, verbose_name=_('ACE mode name'))
-    pygments = models.CharField(max_length=20, verbose_name=_('Pygments Name'))
-    info = models.CharField(max_length=50, verbose_name=_('Basic runtime info'), blank=True)
-    description = models.TextField(verbose_name=_('Description for model'), blank=True)
-    extension = models.CharField(max_length=10, verbose_name=_('Extension'))
+    key = models.CharField(max_length=6, verbose_name=_('short identifier'),
+                           help_text=_('The identifier for this language; the same as its executor id for judges.'),
+                           unique=True)
+    name = models.CharField(max_length=20, verbose_name=_('long name'),
+                            help_text=_('Longer name for the language, e.g. "Python 2" or "C++11".'))
+    short_name = models.CharField(max_length=10, verbose_name=_('short name'),
+                                  help_text=_('More readable, but short, name to display publicly; e.g. "C++11" in '
+                                              'place of "CPP11". If left blank, it will default to the '
+                                              'short identifier.'),
+                                  null=True, blank=True)
+    common_name = models.CharField(max_length=10, verbose_name=_('common name'),
+                                   help_text=_('Common name for the language. For example, the common name for C++03, '
+                                               'C++11, and C++14 would be "C++"'))
+    ace = models.CharField(max_length=20, verbose_name=_('ace mode name'),
+                           help_text=_('Language ID for Ace.js editor highlighting, appended to "mode-" to determine '
+                                       'the Ace JavaScript file to use.'))
+    pygments = models.CharField(max_length=20, verbose_name=_('pygments name'),
+                                help_text=_('Language ID for Pygments highlighting in source windows.'))
+    info = models.CharField(max_length=50, verbose_name=_('runtime info override'), blank=True,
+                            help_text=_("Do not set this unless you know what you're doing! It will override the "
+                                        "usually more specific, judge-provided runtime info!"))
+    description = models.TextField(verbose_name=_('language description'),
+                                   help_text=_('Use field this to inform users of quirks with your environment, '
+                                               'additional restrictions, etc.'), blank=True)
+    extension = models.CharField(max_length=10, verbose_name=_('extension'),
+                                 help_text=_('The extension of source files, e.g., "cpp" or "java".'))
 
     @cached_property
     def runtime_versions(self):
