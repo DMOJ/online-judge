@@ -854,7 +854,10 @@ class Contest(models.Model):
     start_time = models.DateTimeField(db_index=True)
     end_time = models.DateTimeField(db_index=True)
     time_limit = TimedeltaField(verbose_name=_('Time limit'), blank=True, null=True)
-    is_public = models.BooleanField(verbose_name=_('Publicly visible'), default=False)
+    is_public = models.BooleanField(verbose_name=_('Publicly visible'), default=False,
+                                    help_text=_('Should be set even for organization-private contests, where it '
+                                                'determines whether the contest is visible to members of the '
+                                                'specified organizations.'))
     is_external = models.BooleanField(verbose_name=_('External contest'), default=False)
     is_rated = models.BooleanField(verbose_name=_('Contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
