@@ -767,7 +767,7 @@ class NavigationBar(MPTTModel):
 class JudgeQuerySet(QuerySet):
     def load_runtime_versions(self):
         return self.prefetch_related(Prefetch('runtimeversion_set', to_attr='_runtime_versions',
-            queryset=RuntimeVersion.objects.order_by('language__key', 'priority').only('version', 'name')
+            queryset=RuntimeVersion.objects.order_by('language__key', 'priority').only('version', 'name', 'judge_id')
                                    .annotate(language_key=F('language__key'), language_name=F('language__name'))))
 
 
