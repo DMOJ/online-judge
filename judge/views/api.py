@@ -1,7 +1,10 @@
+from operator import attrgetter
+
+from django.db.models import Prefetch
 from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
 
-from judge.models import Contest, Problem, Profile, Submission
+from judge.models import Contest, Problem, Profile, Submission, ContestTag
 
 
 def sane_time_repr(delta):
@@ -13,13 +16,14 @@ def sane_time_repr(delta):
 
 def api_contest_list(request):
     contests = {}
-    for c in Contest.objects.filter(is_public=True, is_private=False):
+    for c in Contest.objects.filter(is_public=True, is_private=False).prefetch_related(
+            Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')):
         contests[c.key] = {
             'name': c.name,
             'start_time': c.start_time.isoformat(),
             'end_time':  c.end_time.isoformat(),
             'time_limit': c.time_limit and sane_time_repr(c.time_limit),
-            'labels': ['external'] if c.is_external else [],
+            'labels': map(attrgetter('name'), c.tag_list),
         }
     return JsonResponse(contests)
 
