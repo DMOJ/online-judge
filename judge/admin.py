@@ -768,6 +768,11 @@ class ContestTagAdmin(admin.ModelAdmin):
     actions_on_bottom = True
     form = ContestTagForm
 
+    if AdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': AdminPagedownWidget},
+        }
+
     def save_model(self, request, obj, form, change):
         super(ContestTagAdmin, self).save_model(request, obj, form, change)
         obj.contests = form.cleaned_data['contests']
