@@ -1,4 +1,5 @@
 - load staticfiles
 link(rel='stylesheet', href='{% static "clipboard/tooltip.css" %}')
 style.
-    .runtime-label { position: relative }
+    .runtime-label { position: relative; white-space: nowrap }
+    .tooltipped:after { text-align: left }
