@@ -64,15 +64,12 @@ class DjangoJudgeHandler(JudgeHandler):
         judge.problems = Problem.objects.filter(code__in=self.problems.keys())
         judge.runtimes = Language.objects.filter(key__in=self.executors.keys())
         for lang in judge.runtimes.all():
+            runtimes = []
             for idx, data in enumerate(self.executors[lang.key]):
                 name, version = data
-                runtime = RuntimeVersion()
-                runtime.language = lang
-                runtime.name = name
-                runtime.version = '.'.join(map(str, version))
-                runtime.priority = idx
-                runtime.judge = judge
-                runtime.save()
+                runtimes.append(RuntimeVersion(language=lang, name=name, version='.'.join(map(str, version)),
+                                               priority=idx, judge=judge))
+            RuntimeVersion.objects.bulk_create(runtimes)
         judge.last_ip = self.client_address[0]
         judge.save()
 
