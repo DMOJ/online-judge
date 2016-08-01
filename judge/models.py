@@ -782,7 +782,19 @@ class Judge(models.Model):
 
     @cached_property
     def runtime_versions(self):
-        return RuntimeVersion.objects.filter(judge=self).order_by('language__key', 'priority')
+        qs = RuntimeVersion.objects.filter(judge__name='Lemuria')\
+            .values('language__key', 'language__name', 'version', 'name', 'priority')\
+            .order_by('language__key', 'priority')
+
+        ret = OrderedDict()
+
+        for data in qs:
+            key = data['language__key']
+            if key not in ret:
+                ret[key] = {'name': data['language__name'], 'runtime': []}
+            ret[key]['runtime'].append((data['name'], data['version']))
+
+        return ret
 
     @cached_property
     def uptime(self):

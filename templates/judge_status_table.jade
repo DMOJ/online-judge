@@ -37,13 +37,11 @@ for judge in judges
                 | N/A
         td
             if judge.online
-                - regroup judge.runtime_versions by language as runtimes
-                each group in runtimes
-                    - var lang = group.grouper
-                    - var runtime_versions = group.list
-                    a.runtime-label(href='{% url "runtime_info" lang.key %}',
-                                    data-judge=judge.id, data-lang=lang.id,
-                                    data-runtime-info='{% include "runtime_version_fragment.jade" %}')= lang.name
+                for key, info in judge.runtime_versions
+                    - var runtime_versions = info.runtime
+                    a.runtime-label(href='{% url "runtime_info" key %}',
+                                    data-judge=judge.id, data-lang=key,
+                                    data-runtime-info='{% include "runtime_version_fragment.jade" %}')= info.name
                     if not forloop.last
                         = ', '
             else
