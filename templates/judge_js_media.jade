@@ -4,21 +4,27 @@ script(type='text/javascript').
     $(document).ready(function () {
         var table = $("#judge-status");
         table.tablesorter();
+
+        function install_tooltips() {
+            $('.runtime-label').each(function () {
+                var link = $(this);
+                link.mouseenter(function (e) {
+                    console.log($(e.target));
+                    $(e.target).addClass('tooltipped tooltipped-w').attr('aria-label', link.attr('data-runtime-info'));
+                }).mouseleave(function (e) {
+                    $(e.target).removeClass('tooltipped tooltipped-w').removeAttr('aria-label');
+                });
+            });
+        }
+
         setInterval(function () {
             $.ajax({
                 url: '{% url "status_table" %}'
             }).done(function (data) {
                 table.html(data);
+                install_tooltips();
             });
         }, 10000);
 
-        $('.runtime-label').each(function () {
-            var link = $(this);
-            link.mouseenter(function (e) {
-                console.log($(e.target));
-                $(e.target).addClass('tooltipped tooltipped-w').attr('aria-label', link.attr('data-runtime-info'));
-            }).mouseleave(function (e) {
-                $(e.target).removeClass('tooltipped tooltipped-w').removeAttr('aria-label');
-            });
-        });
+        install_tooltips();
     });
