@@ -807,7 +807,8 @@ class ContestForm(ModelForm):
         if use_select2:
             widgets = {
                 'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
-                'organizations': HeavySelect2MultipleWidget(data_view='organization_select2')
+                'organizations': HeavySelect2MultipleWidget(data_view='organization_select2'),
+                'tags': Select2Widget
             }
 
 
@@ -815,12 +816,11 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
-        (_('Details'), {'fields': ('description', 'og_image', 'is_external')}),
+        (_('Details'), {'fields': ('description', 'og_image', 'tags')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
         (_('Organization'), {'fields': ('is_private', 'organizations')}),
     )
-    list_display = ('key', 'name', 'is_public', 'is_external', 'is_rated', 'start_time',
-                    'end_time', 'time_limit', 'user_count')
+    list_display = ('key', 'name', 'is_public', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
     actions_on_top = True
