@@ -46,7 +46,7 @@ if submission.status != 'IE'
                             if batch.grouper
                                 b {% trans "Case" %} ##{forloop.counter}:
                             else
-                                if not case.total
+                                if is_pretest
                                     b {% trans "Pretest" %} ##{test_case_id}:
                                 else
                                     b {% trans "Test case" %} ##{test_case_id}:
