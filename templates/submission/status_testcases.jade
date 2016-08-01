@@ -98,6 +98,7 @@ if submission.status != 'IE'
                     - blocktrans with points=submission.points|floatformat:"1" total=submission.problem.points|floatformat:"-1"
                         | ({{ points }}/{{ total }} points)
                 if is_pretest and submission.result == "AC"
+                    br
                     i {% trans "Passing pretests does not guarantee a full score on system tests." %}
             else
                 b {% trans "Submission aborted!" %}
