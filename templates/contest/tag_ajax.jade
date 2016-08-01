@@ -1,4 +1,6 @@
+- load markdown_trois_tags
+
 if not title
     include contest/tag_title
     hr
-| #{tag.description|linebreaks}
+| #{tag.description|markdown:"contest_tag"}
