@@ -98,16 +98,17 @@ block info_float
                         = ', '
                 br
     br
-    div#problem-types
-        - with types=problem.types_list
-            div.toggle.closed.unselectable
-                span.fa.fa-chevron-right.fa-fw
-                - blocktrans trimmed count counter=problem.types_list|length
-                    | Problem type
-                    - plural
-                    | Problem types
-            div.toggled(style="display:none") #{problem.types_list|join:", "}
-    br
+    if not contest_problem or not contest_problem.contest.hide_problem_tags
+        div#problem-types
+            - with types=problem.types_list
+                div.toggle.closed.unselectable
+                    span.fa.fa-chevron-right.fa-fw
+                    - blocktrans trimmed count counter=problem.types_list|length
+                        | Problem type
+                        - plural
+                        | Problem types
+                div.toggled(style="display:none") #{problem.types_list|join:", "}
+        br
     if show_languages
         div#allowed-langs
             div.toggle.open.unselectable
