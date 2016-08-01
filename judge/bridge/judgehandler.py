@@ -109,7 +109,7 @@ class JudgeHandler(ZlibPacketHandler):
     def problem_data(self, problem, language):
         return 2, 16384, False
 
-    def submit(self, id, problem, language, source):
+    def submit(self, id, problem, language, source, pretests_only):
         time, memory, short = self.problem_data(problem, language)
         self._working = id
         self._no_response_job = self.server.schedule(20, self._kill_if_no_response)
@@ -122,6 +122,7 @@ class JudgeHandler(ZlibPacketHandler):
             'time-limit': time,
             'memory-limit': memory,
             'short-circuit': short,
+            'pretests-only': pretests_only,
         })
 
     def _kill_if_no_response(self):

@@ -15,12 +15,12 @@ class JudgeList(object):
     def _handle_free_judge(self, judge):
         with self.lock:
             for i, elem in enumerate(self.queue):
-                id, problem, language, source = elem
+                id, problem, language, source, pretests_only = elem
                 if judge.can_judge(problem, language):
                     self.submission_map[id] = judge
                     logger.info('Dispatched queued submission %d: %s', id, judge.name)
                     try:
-                        judge.submit(id, problem, language, source)
+                        judge.submit(id, problem, language, source, pretests_only)
                     except Exception:
                         logger.exception('Failed to dispatch %d (%s, %s) to %s', id, problem, language, judge.name)
                         self.judges.remove(judge)
@@ -61,7 +61,7 @@ class JudgeList(object):
             logger.info('Abort request: %d', submission)
             self.submission_map[submission].abort()
 
-    def judge(self, id, problem, language, source):
+    def judge(self, id, problem, language, source, pretests_only):
         with self.lock:
             if id in self.submission_map:
                 logger.warning('Already judging? %d', id)
@@ -74,11 +74,11 @@ class JudgeList(object):
                 logger.info('Dispatched submission %d to: %s', id, judge.name)
                 self.submission_map[id] = judge
                 try:
-                    judge.submit(id, problem, language, source)
+                    judge.submit(id, problem, language, source, pretests_only)
                 except Exception:
                     logger.exception('Failed to dispatch %d (%s, %s) to %s', id, problem, language, judge.name)
                     self.judges.discard(judge)
-                    return self.judge(id, problem, language, source)
+                    return self.judge(id, problem, language, source, pretests_only)
             else:
-                self.queue.append((id, problem, language, source))
+                self.queue.append((id, problem, language, source, pretests_only))
                 logger.info('Queued submission: %d', id)

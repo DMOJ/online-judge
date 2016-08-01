@@ -45,7 +45,8 @@ class DjangoHandler(ZlibPacketHandler):
         problem = data['problem-id']
         language = data['language']
         source = data['source']
-        self.server.judges.judge(id, problem, language, source)
+        pretests_only = data['pretests-only']
+        self.server.judges.judge(id, problem, language, source, pretests_only)
         return {'name': 'submission-received', 'submission-id': id}
 
     def on_termination(self, data):
