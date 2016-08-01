@@ -808,7 +808,7 @@ class ContestForm(ModelForm):
             widgets = {
                 'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
                 'organizations': HeavySelect2MultipleWidget(data_view='organization_select2'),
-                'tags': Select2Widget
+                'tags': Select2MultipleWidget
             }
 
 
