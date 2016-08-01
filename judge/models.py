@@ -792,7 +792,7 @@ class Judge(models.Model):
             key = data['language__key']
             if key not in ret:
                 ret[key] = {'name': data['language__name'], 'runtime': []}
-            ret[key]['runtime'].append((data['name'], data['version']))
+            ret[key]['runtime'].append((data['name'], (data['version'],)))
 
         return ret.items()
 
