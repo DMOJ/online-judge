@@ -774,7 +774,8 @@ class ContestTagAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ContestTagAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['contests'].initial = obj.contests.all()
+        if obj is not None:
+            form.base_fields['contests'].initial = obj.contests.all()
         return form
 
 
