@@ -16,6 +16,17 @@ block js_media
                     table.html(data);
                 });
             }, 10000);
+
+            $('.runtime-label').each(function() {
+                var link = $(this);
+                link.mouseenter(function(e) {
+                    link.trigger.addClass('tooltipped tooltipped-s');
+                    link.attr('aria-label', link.attr('data-runtime-info'));
+                }).mouseleave(function(e) {
+                    link.removeClass('tooltipped tooltipped-s');
+                    link.removeAttr('aria-label');
+                });
+            })
         });
 
 block header

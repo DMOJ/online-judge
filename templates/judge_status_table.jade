@@ -38,8 +38,8 @@ for judge in judges
         td
             if judge.online
                 each lang in judge.runtimes.all
-                    a(href='{% url "runtime_info" lang.key %}',
-                      data-runtime-info='{% include "runtime_version_fragment.jade" %}')= lang.name
+                    a.runtime-label(href='{% url "runtime_info" lang.key %}',
+                                    data-runtime-info='{% include "runtime_version_fragment.jade" %}')= lang.name
                     if not forloop.last
                         = ', '
             else
