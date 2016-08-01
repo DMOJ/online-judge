@@ -213,7 +213,7 @@ block body
                             ul: each lang in form.fields.language.queryset
                                 li(data-id=lang.id, data-info=lang.info, data-ace=lang.ace)= lang.name
                                     .runtime-info
-                                        include runtime_version_fragement
+                                        include runtime_version_fragment
         hr
         if no_judges
             span(style='color: red') {% trans "No judge is available for this problem." %}
