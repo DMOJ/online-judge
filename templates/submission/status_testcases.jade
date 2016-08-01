@@ -10,6 +10,8 @@ if IN_CONTEST and submission.contest_or_none and CONTEST.id == submission.contes
 else
     - var prefix_length = None
 
+- var is_pretest = submission.is_pretested
+
 if submission.status != 'IE'
     if submission.status == 'QU'
         h4 {% trans "We are waiting for a suitable judge to process your submission..." %}
@@ -83,7 +85,10 @@ if submission.status != 'IE'
         if submission.is_graded
             br
             if submission.result != "AB"
-                b {% trans "Final score:" %}
+                if is_pretest
+                    b {% trans "Final pretest score:" %}
+                else
+                    b {% trans "Final score:" %}
                 |  #{submission.case_points|floatformat:"0"}/#{submission.case_total|floatformat:"0"}
                 if IN_CONTEST and submission.contest_or_none
                     - with contest=submission.contest_or_none
@@ -92,6 +97,8 @@ if submission.status != 'IE'
                 else
                     - blocktrans with points=submission.points|floatformat:"1" total=submission.problem.points|floatformat:"-1"
                         | ({{ points }}/{{ total }} points)
+                if is_pretest and submission.result == "AC"
+                    i {% trans "Passing pretests does not guarantee a full score on system tests." %}
             else
                 b {% trans "Submission aborted!" %}
             br
