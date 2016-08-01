@@ -1,8 +1,9 @@
 - load compress
 - load staticfiles
 
+link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
+
 - compress css
-    link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
     | #{comment_form.media.css}
     style(media='all').
         .featherlight {
