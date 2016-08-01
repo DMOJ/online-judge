@@ -45,6 +45,8 @@ block js_media
 
                 function update_selected() {
                     $('#language-current').find('.name').text(selected.text());
+                    update_info(selected, $('#language-current').find('.info'));
+                    update_info(selected, info);
                 }
                 select.remove();
                 select = $('#language-select').show();
@@ -60,7 +62,6 @@ block js_media
                 });
                 var selected = select.find('[data-id=' + current + ']').addClass('selected');
                 update_selected(selected);
-                update_info(selected, info);
 
                 $('#language-current').click(function() {
                     var $expand = $('#language-expand');
