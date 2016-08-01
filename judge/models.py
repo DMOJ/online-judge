@@ -517,7 +517,7 @@ class Submission(models.Model):
     status = models.CharField(max_length=2, choices=STATUS, default='QU', db_index=True)
     result = models.CharField(max_length=3, choices=SUBMISSION_RESULT, default=None, null=True,
                               blank=True, db_index=True)
-    error = models.TextField(verbose_name=_('compile Errors'), null=True, blank=True)
+    error = models.TextField(verbose_name=_('compile errors'), null=True, blank=True)
     current_testcase = models.IntegerField(default=0)
     batch = models.BooleanField(verbose_name=_('batched cases'), default=False)
     case_points = models.FloatField(verbose_name=_('test case points'), default=0)
@@ -525,16 +525,9 @@ class Submission(models.Model):
     judged_on = models.ForeignKey('Judge', verbose_name=_('judged on'), null=True, blank=True,
                                   on_delete=models.SET_NULL)
     is_being_rejudged = models.BooleanField(verbose_name=_('is being rejudged by admin'), default=False)
+    is_pretested = models.BooleanField(verbose_name=_('was ran on pretests only'), default=False)
 
     objects = TranslatedProblemForeignKeyQuerySet.as_manager()
-
-    @property
-    def is_pretested(self):
-        try:
-            return ContestSubmission.objects.filter(submission=self) \
-                .values_list('problem__contest__run_pretests_only', flat=True)[0]
-        except IndexError:
-            return False
 
     @property
     def memory_bytes(self):

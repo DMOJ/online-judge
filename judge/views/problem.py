@@ -292,6 +292,7 @@ def problem_submit(request, problem=None, submission=None):
                                                 participation=profile.current_contest)
                     contest.save()
 
+            model.is_pretested = profile.current_contest.run_pretests_only
             model.judge()
             return HttpResponseRedirect(reverse('submission_status', args=[str(model.id)]))
         else:
