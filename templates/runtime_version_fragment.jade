@@ -1,9 +1,9 @@
 each name, versions in lang.runtime_versions
     if versions
-        if versions[0] == versions[-1]
-            | #{versions[0]} - #{versions[-1]}
+        if versions.0 != versions|last
+            | #{name} #{versions.0} - #{versions|last}
         else
-            | #{versions[0]}
+            | #{name} #{versions.0}
     else
         = name
     if not forloop.last
