@@ -21,7 +21,13 @@ block js_media
                 var info = $('#language-details');
 
                 function update_info(from, to) {
+                    var data_info = from.attr('data-info');
+                    if (data_info) {
+                        to.html(data_info);
+                        return;
+                    }
                     var runtimes = [];
+
                     from.find('.runtime-info').each(function() {
                         var name = $(this).attr('data-runtime-id');
                         var min_ver = $(this).attr('data-min-version');
