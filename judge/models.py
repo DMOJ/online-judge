@@ -867,9 +867,12 @@ class Contest(models.Model):
     rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
                                           related_name='rate_exclude+')
     is_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
+    hide_problem_tags = models.BooleanField(verbose_name=_('hide problem tags'),
+                                            help_text=_('Whether problem tags should be hidden by default.'),
+                                            default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may see the contest'))
-    og_image = models.CharField(verbose_name=_('openGraph image'), default='', max_length=150, blank=True)
+    og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
     tags = models.ManyToManyField(ContestTag, verbose_name=_('contest tags'), blank=True, related_name='contests')
 
     def clean(self):
