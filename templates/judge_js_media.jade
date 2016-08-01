@@ -5,14 +5,18 @@ script(type='text/javascript').
         var table = $("#judge-status");
         table.tablesorter();
 
+        var reinstalling = false;
+
         function install_tooltips() {
+            reinstalling = false;
             $('.runtime-label').each(function () {
                 var link = $(this);
                 link.mouseenter(function (e) {
                     console.log($(e.target));
                     $(e.target).addClass('tooltipped tooltipped-w').attr('aria-label', link.attr('data-runtime-info'));
                 }).mouseleave(function (e) {
-                    $(e.target).removeClass('tooltipped tooltipped-w').removeAttr('aria-label');
+                    if (!reinstalling)
+                        $(e.target).removeClass('tooltipped tooltipped-w').removeAttr('aria-label');
                 });
             });
         }
@@ -21,6 +25,7 @@ script(type='text/javascript').
             $.ajax({
                 url: '{% url "status_table" %}'
             }).done(function (data) {
+                reinstalling = true;
                 table.html(data);
                 install_tooltips();
             });
