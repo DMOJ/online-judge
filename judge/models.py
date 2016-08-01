@@ -782,7 +782,7 @@ class Judge(models.Model):
 
     @cached_property
     def runtime_versions(self):
-        return RuntimeVersion.objects.filter(judge=self)
+        return RuntimeVersion.objects.filter(judge=self).order_by('language__key', 'priority')
 
     @cached_property
     def uptime(self):
