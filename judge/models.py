@@ -529,6 +529,14 @@ class Submission(models.Model):
     objects = TranslatedProblemForeignKeyQuerySet.as_manager()
 
     @property
+    def is_pretested(self):
+        try:
+            return ContestSubmission.objects.filter(submission=self) \
+                .values_list('problem__contest__run_pretests_only', flat=True)[0]
+        except IndexError:
+            return False
+
+    @property
     def memory_bytes(self):
         return self.memory * 1024 if self.memory is not None else 0
 

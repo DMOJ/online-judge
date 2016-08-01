@@ -40,15 +40,13 @@ class DjangoJudgeHandler(JudgeHandler):
             submission.status = 'IE'
             submission.save()
 
-    def get_related_submission_data(self, submission, problem, language):
+    def get_related_submission_data(self, submission):
         _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
-        try:
-            run_pretests_only = ContestSubmission.objects.filter(submission=submission) \
-                .values_list('problem__contest__run_pretests_only', flat=True)[0]
-        except ObjectDoesNotExist:
-            run_pretests_only = False
 
-        problem = Problem.objects.get(code=problem)
+        submission = Submission.objects.get(id=submission)
+
+        problem = submission.problem
+        language = submission.language
         time, memory = problem.time_limit, problem.memory_limit
         try:
             limit = LanguageLimit.objects.get(problem=problem, language__key=language)
@@ -56,7 +54,7 @@ class DjangoJudgeHandler(JudgeHandler):
             pass
         else:
             time, memory = limit.time_limit, limit.memory_limit
-        return time, memory, problem.short_circuit, run_pretests_only
+        return time, memory, problem.short_circuit, submission.is_pretested
 
     def _authenticate(self, id, key):
         try:
