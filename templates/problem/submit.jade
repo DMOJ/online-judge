@@ -26,21 +26,7 @@ block js_media
                         to.html(data_info);
                         return;
                     }
-                    var runtimes = [];
-
-                    from.find('.runtime-info').each(function() {
-                        var name = $(this).attr('data-runtime-id');
-                        var min_ver = $(this).attr('data-min-version');
-                        var max_ver = $(this).attr('data-max-version');
-
-                        if (!min_ver || !max_ver) {
-                            runtimes.push(name);
-                        } else {
-                            var version_display = min_ver == max_ver ? max_ver : (min_ver + ' - ' + max_ver);
-                            runtimes.push(name + ' ' + version_display);
-                        }
-                    });
-                    to.html(runtimes.join(', '));
+                    to.html(from.find('.runtime-info').text());
                 }
 
                 function update_selected() {
@@ -226,13 +212,8 @@ block body
                             hr
                             ul: each lang in form.fields.language.queryset
                                 li(data-id=lang.id, data-info=lang.info, data-ace=lang.ace)= lang.name
-                                    each name, versions in lang.runtime_versions
-                                        if versions
-                                            .runtime-info(data-runtime-id=name,
-                                                          data-max-version=versions[-1],
-                                                          data-min-version=versions[0])
-                                        else
-                                            .runtime-info(data-runtime-id=name)
+                                    .runtime-info
+                                        include runtime_version_fragement
         hr
         if no_judges
             span(style='color: red') {% trans "No judge is available for this problem." %}
