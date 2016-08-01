@@ -4,10 +4,12 @@ import time
 
 from django import db
 from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 
 from judge import event_poster as event
 from judge.caching import finished_submission
-from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit, RuntimeVersion
+from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit, RuntimeVersion, \
+    ContestSubmission
 from .judgehandler import JudgeHandler
 
 logger = logging.getLogger('judge.bridge')
@@ -38,8 +40,14 @@ class DjangoJudgeHandler(JudgeHandler):
             submission.status = 'IE'
             submission.save()
 
-    def problem_data(self, problem, language):
+    def get_related_submission_data(self, submission, problem, language):
         _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
+        try:
+            run_pretests_only = ContestSubmission.objects.filter(submission=submission) \
+                .values_list('problem__contest__run_pretests_only', flat=True)[0]
+        except ObjectDoesNotExist:
+            run_pretests_only = False
+
         problem = Problem.objects.get(code=problem)
         time, memory = problem.time_limit, problem.memory_limit
         try:
@@ -48,7 +56,7 @@ class DjangoJudgeHandler(JudgeHandler):
             pass
         else:
             time, memory = limit.time_limit, limit.memory_limit
-        return time, memory, problem.short_circuit
+        return time, memory, problem.short_circuit, run_pretests_only
 
     def _authenticate(self, id, key):
         try:

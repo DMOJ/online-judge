@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 
 import socket
 import struct
@@ -41,7 +40,7 @@ def judge_request(packet, reply=True):
 
 
 def judge_submission(submission):
-    from .models import SubmissionTestCase, ContestSubmission
+    from .models import SubmissionTestCase
     submission.time = None
     submission.memory = None
     submission.points = None
@@ -51,19 +50,12 @@ def judge_submission(submission):
     SubmissionTestCase.objects.filter(submission=submission).delete()
 
     try:
-        run_pretests_only = ContestSubmission.objects.filter(submission=submission)\
-            .values_list('problem__contest__run_pretests_only', flat=True)[0]
-    except ObjectDoesNotExist:
-        run_pretests_only = False
-
-    try:
         response = judge_request({
             'name': 'submission-request',
             'submission-id': submission.id,
             'problem-id': submission.problem.code,
             'language': submission.language.key,
             'source': submission.source,
-            'pretests-only': run_pretests_only,
         })
     except BaseException:
         logger.exception('Failed to send request to judge')

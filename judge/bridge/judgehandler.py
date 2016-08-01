@@ -106,11 +106,11 @@ class JudgeHandler(ZlibPacketHandler):
     def working(self):
         return bool(self._working)
 
-    def problem_data(self, problem, language):
-        return 2, 16384, False
+    def get_related_submission_data(self, submission, problem, language):
+        return 2, 16384, False, False
 
-    def submit(self, id, problem, language, source, pretests_only):
-        time, memory, short = self.problem_data(problem, language)
+    def submit(self, id, problem, language, source):
+        time, memory, short, pretests_only = self.get_related_submission_data(id, problem, language)
         self._working = id
         self._no_response_job = self.server.schedule(20, self._kill_if_no_response)
         self.send({
