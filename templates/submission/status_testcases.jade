@@ -21,7 +21,10 @@ if submission.status != 'IE'
         h4 {% trans "Compilation Error" %}
         pre #{submission.error|safe}
     else
-        h3 {% trans "Execution Results" %}
+        if is_pretest
+            h3 {% trans "Pretest Execution Results" %}
+        else
+            h3 {% trans "Execution Results" %}
         br
         if submission.error
             h4 {% trans "Compilation Warnings" %}
