@@ -12,7 +12,7 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Max, F, QuerySet, Prefetch, Manager
+from django.db.models import Max, F, QuerySet
 from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -764,16 +764,6 @@ class NavigationBar(MPTTModel):
             return pattern
 
 
-class JudgeQuerySet(QuerySet):
-    def load_runtime_versions(self):
-        return self.prefetch_related(Prefetch('runtimeversion_set', to_attr='_runtime_versions',
-            queryset=RuntimeVersion.objects.order_by('language__key', 'priority').only('version', 'name', 'judge_id')
-                                   .annotate(language_key=F('language__key'), language_name=F('language__name'))))
-
-
-class JudgeManager(Manager.from_queryset(JudgeQuerySet)):
-    use_for_related_fields = True
-
 
 class Judge(models.Model):
     name = models.CharField(max_length=50, help_text=_('Server name, hostname-style'), unique=True)
@@ -790,20 +780,21 @@ class Judge(models.Model):
     problems = models.ManyToManyField(Problem, verbose_name=_('problems'), related_name='judges')
     runtimes = models.ManyToManyField(Language, verbose_name=_('judges'), related_name='judges')
 
-    objects = JudgeManager()
-
     def __unicode__(self):
         return self.name
 
     @cached_property
     def runtime_versions(self):
+        qs = (self.runtimeversion_set.values('language__key', 'language__name', 'version', 'name')
+                  .order_by('language__key', 'priority'))
+
         ret = OrderedDict()
 
-        for data in self._runtime_versions:
-            key = data.language_key
+        for data in qs:
+            key = data['language__key']
             if key not in ret:
-                ret[key] = {'name': data.language_name, 'runtime': []}
-            ret[key]['runtime'].append((data.name, (data.version,)))
+                ret[key] = {'name': data['language__name'], 'runtime': []}
+            ret[key]['runtime'].append((data['name'], (data['version'],)))
 
         return ret.items()
 

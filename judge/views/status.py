@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.http import Http404
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
@@ -6,14 +8,15 @@ from django.views.generic import DetailView
 from judge.models import Judge
 from judge.utils.views import TitleMixin, generic_message
 
+
 __all__ = ['status_all', 'status_table', 'JudgeDetail']
 
 
 def get_judges(request):
     if request.user.is_superuser or request.user.is_staff:
-        return True, Judge.objects.order_by('-online', 'name').load_runtime_versions()
+        return True, Judge.objects.order_by('-online', 'name')
     else:
-        return False, Judge.objects.filter(online=True).load_runtime_versions()
+        return False, Judge.objects.filter(online=True)
 
 
 def status_all(request):
