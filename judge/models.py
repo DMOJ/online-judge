@@ -629,8 +629,8 @@ class Comment(MPTTModel):
 
     @classmethod
     def most_recent(cls, user, n, batch=None):
-        queryset = cls.objects.filter(hidden=False).select_related('author__user').defer('author__about',
-                                                                                         'body').order_by('-id')
+        queryset = cls.objects.filter(hidden=False).select_related('author__user')\
+            .defer('author__about', 'body').order_by('-id')
         if user.is_superuser:
             return queryset[:n]
         if batch is None:
@@ -937,8 +937,8 @@ class ContestParticipation(models.Model):
     @cached_property
     def end_time(self):
         contest = self.contest
-        return contest.end_time if contest.time_limit is None else             min(self.real_start + contest.time_limit,
-                                                                                   contest.end_time)
+        return contest.end_time if contest.time_limit is None else \
+            min(self.real_start + contest.time_limit, contest.end_time)
 
     @property
     def ended(self):
@@ -956,8 +956,8 @@ class ContestParticipation(models.Model):
     def update_cumtime(self):
         cumtime = 0
         for problem in self.contest.contest_problems.all():
-            solution = problem.submissions.filter(submission__user_id=self.user_id, points__gt=0).values(
-                'submission__user_id').annotate(time=Max('submission__date'))
+            solution = problem.submissions.filter(submission__user_id=self.user_id, points__gt=0)\
+                .values('submission__user_id').annotate(time=Max('submission__date'))
             if not solution:
                 continue
             dt = solution[0]['time'] - self.start
