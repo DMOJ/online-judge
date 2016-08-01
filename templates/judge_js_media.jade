@@ -22,7 +22,7 @@ script(type='text/javascript').
                     display_tooltip(link);
                 }).mouseleave(function (e) {
                     active_judge = active_lang = null;
-                    $(e.target).removeClass(tooltip_classes).removeAttr('aria-label');
+                    link.removeClass(tooltip_classes).removeAttr('aria-label');
                 });
             });
         }
@@ -31,15 +31,16 @@ script(type='text/javascript').
             $.ajax({
                 url: '{% url "status_table" %}'
             }).done(function (data) {
-                table.html(data);
-
+                // Readd the tooltip classes to minimize flicker on update
                 var new_node = $(data);
 
                 if (active_lang && active_judge) {
-                    var selected = new_node.find('[data-judge=' + active_judge + '][data-lang=' + active_lang + ']').get(0);
-                    if (selected)
+                    var selected = new_node.find('[data-judge=' + active_judge + '][data-lang=' + active_lang + ']');
+                    if (selected) // Might have been removed, when a judge disconnected
                         display_tooltip(selected);
                 }
+
+                table.html(new_node);
                 install_tooltips();
             });
         }, 10000);
