@@ -47,8 +47,9 @@ ul.comments.top-level-comments
                                         | on {{ time }}
                                     span.relative= str_time
                                     span.absolute= str_time
-                                = ' '
-                                span.comment-title #{node.title}
+                                if not node.is_leaf_node
+                                    = ' '
+                                    span.comment-title #{node.title}
                             span.comment-spacer
                             span.comment-operation
                                 if node.revisions > 2
