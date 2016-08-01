@@ -211,6 +211,7 @@ block body
                             #language-details
                             hr
                             ul: each lang in form.fields.language.queryset
+                                - var runtime_versions = lang.runtime_versions
                                 li(data-id=lang.id, data-name=lang.name, data-info=lang.info,
                                    data-judge-info='{% include "runtime_version_fragment.jade" %}',
                                    data-ace=lang.ace)= lang.name

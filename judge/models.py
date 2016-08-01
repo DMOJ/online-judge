@@ -781,6 +781,10 @@ class Judge(models.Model):
         return self.name
 
     @cached_property
+    def runtime_versions(self):
+        return RuntimeVersion.objects.filter(judge=self)
+
+    @cached_property
     def uptime(self):
         return timezone.now() - self.start_time if self.online else 'N/A'
 
