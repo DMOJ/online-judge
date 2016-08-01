@@ -5,18 +5,24 @@ script(type='text/javascript').
         var table = $("#judge-status");
         table.tablesorter();
 
-        var reinstalling = false;
+        var tooltip_classes = 'tooltipped tooltipped-w';
+        var active_judge = null;
+        var active_lang = null;
+
+        function display_tooltip(where) {
+            where.addClass(tooltip_classes).attr('aria-label', where.attr('data-runtime-info'));
+        }
 
         function install_tooltips() {
             $('.runtime-label').each(function () {
                 var link = $(this);
                 link.mouseenter(function (e) {
-                    reinstalling = false;
-                    console.log($(e.target));
-                    $(e.target).addClass('tooltipped tooltipped-w').attr('aria-label', link.attr('data-runtime-info'));
+                    active_judge = link.attr('data-judge');
+                    active_lang = link.attr('data-lang');
+                    display_tooltip(link);
                 }).mouseleave(function (e) {
-                    if (!reinstalling)
-                        $(e.target).removeClass('tooltipped tooltipped-w').removeAttr('aria-label');
+                    active_judge = active_lang = null;
+                    $(e.target).removeClass(tooltip_classes).removeAttr('aria-label');
                 });
             });
         }
@@ -25,8 +31,15 @@ script(type='text/javascript').
             $.ajax({
                 url: '{% url "status_table" %}'
             }).done(function (data) {
-                reinstalling = true;
                 table.html(data);
+
+                var new_node = $(data);
+
+                if (active_lang && active_judge) {
+                    var selected = new_node.find('[data-judge=' + active_judge + '][data-lang=' + active_lang + ']').get(0);
+                    if (selected)
+                        display_tooltip(selected);
+                }
                 install_tooltips();
             });
         }, 10000);
