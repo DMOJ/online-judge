@@ -93,7 +93,7 @@ class Language(models.Model):
     def runtime_versions(self):
         runtimes = OrderedDict()
         # There be dragons here if two judges specify different priorities
-        for runtime in RuntimeVersion.objects.filter(language=self).order_by('priority'):
+        for runtime in self.runtimeversion_set.all():
             id = runtime.name
             if id not in runtimes:
                 runtimes[id] = set()

@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.db.models import Count, Q, F, Case, IntegerField, When
+from django.db.models import Count, Q, F, Case, IntegerField, When, Prefetch
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.template import Context
@@ -24,7 +24,7 @@ from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemGroup, Solution, \
-    ProblemTranslation, TranslatedProblemForeignKeyQuerySet
+    ProblemTranslation, TranslatedProblemForeignKeyQuerySet, RuntimeVersion
 from judge.pdf_problems import HAS_PDF, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
@@ -312,7 +312,8 @@ def problem_submit(request, problem=None, submission=None):
         form = ProblemSubmitForm(initial=initial)
         form_data = initial
     if 'problem' in form_data:
-        form.fields['language'].queryset = form_data['problem'].usable_languages.order_by('name', 'key')
+        form.fields['language'].queryset = (form_data['problem'].usable_languages.order_by('name', 'key')
+            .prefetch_related(Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority'))))
     if 'language' in form_data:
         form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = profile.ace_theme
