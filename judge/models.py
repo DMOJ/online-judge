@@ -870,6 +870,11 @@ class Contest(models.Model):
     hide_problem_tags = models.BooleanField(verbose_name=_('hide problem tags'),
                                             help_text=_('Whether problem tags should be hidden by default.'),
                                             default=False)
+    run_pretests_only = models.BooleanField(verbose_name=_('run pretests only'),
+                                            help_text=_('Whether judges should grade pretests only, versus all '
+                                                        'testcases. Commonly set during a contest, then unset '
+                                                        'prior to rejudging user submissions when the contest ends.'),
+                                            default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may see the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
@@ -998,6 +1003,9 @@ class ContestSubmission(models.Model):
     participation = models.ForeignKey(ContestParticipation, verbose_name=_('participation'),
                                       related_name='submissions', related_query_name='submission')
     points = models.FloatField(default=0.0, verbose_name=_('points'))
+    is_pretest = models.BooleanField(verbose_name=_('is pretested'),
+                                     help_text=_('Whether this submission was ran only on pretests.'),
+                                     default=False)
 
     class Meta:
         verbose_name = _('contest submission')
