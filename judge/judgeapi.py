@@ -51,7 +51,8 @@ def judge_submission(submission):
     SubmissionTestCase.objects.filter(submission=submission).delete()
 
     try:
-        run_pretests_only = ContestSubmission.objects.get(submission=submission).problem.contest.run_pretests_only
+        run_pretests_only = ContestSubmission.objects.filter(submission=submission)\
+            .values_list('problem__contest__run_pretests_only', flat=True)[0]
     except ObjectDoesNotExist:
         run_pretests_only = False
 
