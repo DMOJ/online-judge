@@ -820,7 +820,7 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(Select2SuitMixin, VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'organizers', 'is_public')}),
+        (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'hide_problem_tags')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'tags')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
