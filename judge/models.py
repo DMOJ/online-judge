@@ -90,7 +90,6 @@ class Language(models.Model):
     extension = models.CharField(max_length=10, verbose_name=_('extension'),
                                  help_text=_('The extension of source files, e.g., "py" or "cpp".'))
 
-    @cached_property
     def runtime_versions(self):
         runtimes = OrderedDict()
         # There be dragons here if two judges specify different priorities
