@@ -135,20 +135,20 @@ class Language(models.Model):
 
 
 class Organization(models.Model):
-    name = models.CharField(max_length=50, verbose_name=_('Organization title'))
-    key = models.CharField(max_length=6, verbose_name=_('Identifier'), unique=True,
+    name = models.CharField(max_length=50, verbose_name=_('organization title'))
+    key = models.CharField(max_length=6, verbose_name=_('identifier'), unique=True,
                            help_text=_('Organization name shows in URL'),
                            validators=[RegexValidator('^[A-Za-z0-9]+$',
                                                       'Identifier must contain letters and numbers only')])
-    short_name = models.CharField(max_length=20, verbose_name=_('Short name'),
+    short_name = models.CharField(max_length=20, verbose_name=_('short name'),
                                   help_text=_('Displayed beside user name during contests'))
-    about = models.TextField(verbose_name=_('Organization description'))
-    registrant = models.ForeignKey('Profile', verbose_name=_('Registrant'),
+    about = models.TextField(verbose_name=_('organization description'))
+    registrant = models.ForeignKey('Profile', verbose_name=_('registrant'),
                                    related_name='registrant+',
                                    help_text=_('User who registered this organization'))
-    admins = models.ManyToManyField('Profile', verbose_name=_('Administrators'), related_name='+',
+    admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='+',
                                     help_text=_('Those who can edit this organization'))
-    creation_date = models.DateTimeField(verbose_name=_('Creation date'), auto_now_add=True)
+    creation_date = models.DateTimeField(verbose_name=_('creation date'), auto_now_add=True)
     is_open = models.BooleanField(help_text=_('Allow joining organization'), default=True)
 
     def __contains__(self, item):
@@ -180,26 +180,26 @@ class Organization(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, verbose_name=_('User associated'))
-    name = models.CharField(max_length=50, verbose_name=_('Display name'), null=True, blank=True)
-    about = models.TextField(verbose_name=_('Self-description'), null=True, blank=True)
-    timezone = models.CharField(max_length=50, verbose_name=_('Location'), choices=TIMEZONE,
+    user = models.OneToOneField(User, verbose_name=_('user associated'))
+    name = models.CharField(max_length=50, verbose_name=_('display name'), null=True, blank=True)
+    about = models.TextField(verbose_name=_('self-description'), null=True, blank=True)
+    timezone = models.CharField(max_length=50, verbose_name=_('location'), choices=TIMEZONE,
                                 default=getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto'))
-    language = models.ForeignKey(Language, verbose_name=_('Preferred language'))
+    language = models.ForeignKey(Language, verbose_name=_('preferred language'))
     points = models.FloatField(default=0, db_index=True)
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
-    last_access = models.DateTimeField(verbose_name=_('Last access time'), default=now)
-    ip = models.GenericIPAddressField(verbose_name=_('Last IP'), blank=True, null=True)
-    organizations = SortedManyToManyField(Organization, verbose_name=_('Organization'), blank=True,
+    last_access = models.DateTimeField(verbose_name=_('last access time'), default=now)
+    ip = models.GenericIPAddressField(verbose_name=_('last IP'), blank=True, null=True)
+    organizations = SortedManyToManyField(Organization, verbose_name=_('organization'), blank=True,
                                           related_name='members', related_query_name='member')
-    display_rank = models.CharField(max_length=10, default='user', verbose_name=_('Display rank'),
+    display_rank = models.CharField(max_length=10, default='user', verbose_name=_('display rank'),
                                     choices=(('user', 'Normal User'), ('setter', 'Problem Setter'), ('admin', 'Admin')))
-    mute = models.BooleanField(verbose_name=_('Comment mute'), help_text=_('Some users are at their best when silent.'),
+    mute = models.BooleanField(verbose_name=_('comment mute'), help_text=_('Some users are at their best when silent.'),
                                default=False)
     rating = models.IntegerField(null=True, default=None)
-    user_script = models.TextField(verbose_name=_('User script'), default='',  blank=True, max_length=65536,
+    user_script = models.TextField(verbose_name=_('user script'), default='', blank=True, max_length=65536,
                                    help_text=_('User-defined JavaScript for site customization.'))
-    current_contest = models.OneToOneField('ContestParticipation', verbose_name=_('Current contest'),
+    current_contest = models.OneToOneField('ContestParticipation', verbose_name=_('current contest'),
                                            null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
 
     @cached_property
@@ -234,8 +234,8 @@ class Profile(models.Model):
 
     @cached_property
     def solved_problems(self):
-        return Submission.objects.filter(user_id=self.id, points__gt=0, problem__is_public=True) \
-            .values('problem').distinct().count()
+        return Submission.objects.filter(user_id=self.id, points__gt=0, problem__is_public=True).values(
+            'problem').distinct().count()
 
     def update_contest(self):
         contest = self.current_contest
@@ -259,15 +259,15 @@ class Profile(models.Model):
 
 
 class OrganizationRequest(models.Model):
-    user = models.ForeignKey(Profile, verbose_name=_('User'), related_name='requests')
-    organization = models.ForeignKey(Organization, verbose_name=_('Organization'), related_name='requests')
-    time = models.DateTimeField(verbose_name=_('Request time'), auto_now_add=True)
-    state = models.CharField(max_length=1, verbose_name=_('State'), choices=(
+    user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='requests')
+    organization = models.ForeignKey(Organization, verbose_name=_('organization'), related_name='requests')
+    time = models.DateTimeField(verbose_name=_('request time'), auto_now_add=True)
+    state = models.CharField(max_length=1, verbose_name=_('state'), choices=(
         ('P', 'Pending'),
         ('A', 'Approved'),
         ('R', 'Rejected'),
     ))
-    reason = models.TextField(verbose_name=_('Reason'))
+    reason = models.TextField(verbose_name=_('reason'))
 
     class Meta:
         verbose_name = _('organization join request')
@@ -275,8 +275,8 @@ class OrganizationRequest(models.Model):
 
 
 class ProblemType(models.Model):
-    name = models.CharField(max_length=20, verbose_name=_('Problem category ID'), unique=True)
-    full_name = models.CharField(max_length=100, verbose_name=_('Problem category name'))
+    name = models.CharField(max_length=20, verbose_name=_('problem category ID'), unique=True)
+    full_name = models.CharField(max_length=100, verbose_name=_('problem category name'))
 
     def __unicode__(self):
         return self.full_name
@@ -288,8 +288,8 @@ class ProblemType(models.Model):
 
 
 class ProblemGroup(models.Model):
-    name = models.CharField(max_length=20, verbose_name=_('Problem group ID'), unique=True)
-    full_name = models.CharField(max_length=100, verbose_name=_('Problem group name'))
+    name = models.CharField(max_length=20, verbose_name=_('problem group ID'), unique=True)
+    full_name = models.CharField(max_length=100, verbose_name=_('problem group name'))
 
     def __unicode__(self):
         return self.full_name
@@ -301,14 +301,14 @@ class ProblemGroup(models.Model):
 
 
 class License(models.Model):
-    key = models.CharField(max_length=20, unique=True, verbose_name=_('Key'),
+    key = models.CharField(max_length=20, unique=True, verbose_name=_('key'),
                            validators=[RegexValidator(r'^[-\w.]+$', r'License key must be ^[-\w.]+$')])
-    link = models.CharField(max_length=256, verbose_name=_('Link'))
-    name = models.CharField(max_length=256, verbose_name=_('Full name'))
-    display = models.CharField(max_length=256, blank=True, verbose_name=_('Short name'),
+    link = models.CharField(max_length=256, verbose_name=_('link'))
+    name = models.CharField(max_length=256, verbose_name=_('full name'))
+    display = models.CharField(max_length=256, blank=True, verbose_name=_('short name'),
                                help_text=_('Displayed on pages under this license'))
-    icon = models.CharField(max_length=256, blank=True, verbose_name=_('Icon'), help_text=_('URL to the icon'))
-    text = models.TextField(verbose_name=_('License text'))
+    icon = models.CharField(max_length=256, blank=True, verbose_name=_('icon'), help_text=_('URL to the icon'))
+    text = models.TextField(verbose_name=_('license text'))
 
     def __unicode__(self):
         return self.name
@@ -344,23 +344,23 @@ class TranslatedProblemForeignKeyQuerySet(QuerySet):
 
 
 class Problem(models.Model):
-    code = models.CharField(max_length=20, verbose_name=_('Problem code'), unique=True,
+    code = models.CharField(max_length=20, verbose_name=_('problem code'), unique=True,
                             validators=[RegexValidator('^[a-z0-9]+$', _('Problem code must be ^[a-z0-9]+$'))])
-    name = models.CharField(max_length=100, verbose_name=_('Problem name'), db_index=True)
-    description = models.TextField(verbose_name=_('Problem body'))
-    authors = models.ManyToManyField(Profile, verbose_name=_('Creators'), blank=True, related_name='authored_problems')
-    types = models.ManyToManyField(ProblemType, verbose_name=_('Problem types'))
-    group = models.ForeignKey(ProblemGroup, verbose_name=_('Problem group'))
-    time_limit = models.FloatField(verbose_name=_('Time limit'))
-    memory_limit = models.IntegerField(verbose_name=_('Memory limit'))
+    name = models.CharField(max_length=100, verbose_name=_('problem name'), db_index=True)
+    description = models.TextField(verbose_name=_('problem body'))
+    authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems')
+    types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'))
+    group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'))
+    time_limit = models.FloatField(verbose_name=_('time limit'))
+    memory_limit = models.IntegerField(verbose_name=_('memory limit'))
     short_circuit = models.BooleanField(default=False)
-    points = models.FloatField(verbose_name=_('Points'))
-    partial = models.BooleanField(verbose_name=_('Allows partial points'), default=False)
-    allowed_languages = models.ManyToManyField(Language, verbose_name=_('Allowed languages'))
-    is_public = models.BooleanField(verbose_name=_('Publicly visible'), db_index=True, default=False)
-    date = models.DateTimeField(verbose_name=_('Date of publishing'), null=True, blank=True, db_index=True,
+    points = models.FloatField(verbose_name=_('points'))
+    partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
+    allowed_languages = models.ManyToManyField(Language, verbose_name=_('allowed languages'))
+    is_public = models.BooleanField(verbose_name=_('publicly visible'), db_index=True, default=False)
+    date = models.DateTimeField(verbose_name=_('date of publishing'), null=True, blank=True, db_index=True,
                                 help_text="Doesn't have magic ability to auto-publish due to backward compatibility")
-    banned_users = models.ManyToManyField(Profile, verbose_name=_('Personae non gratae'), blank=True,
+    banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
                                           help_text=_('Bans the selected users from submitting to this problem'))
     license = models.ForeignKey(License, null=True, blank=True, on_delete=models.SET_NULL)
 
@@ -381,11 +381,11 @@ class Problem(models.Model):
         # All users can see public problems
         if self.is_public:
             return True
-            
+
         # If the user can view all problems
         if user.has_perm('judge.see_private_problem'):
             return True
-        
+
         # If the user authored the problem
         if user.has_perm('judge.edit_own_problem') and self.authors.filter(id=user.profile.id).exists():
             return True
@@ -439,10 +439,10 @@ class Problem(models.Model):
 
 
 class LanguageLimit(models.Model):
-    problem = models.ForeignKey(Problem, verbose_name=_('Problem'), related_name='language_limits')
-    language = models.ForeignKey(Language, verbose_name=_('Language'))
-    time_limit = models.FloatField(verbose_name=_('Time limit'))
-    memory_limit = models.IntegerField(verbose_name=_('Memory limit'))
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='language_limits')
+    language = models.ForeignKey(Language, verbose_name=_('language'))
+    time_limit = models.FloatField(verbose_name=_('time limit'))
+    memory_limit = models.IntegerField(verbose_name=_('memory limit'))
 
     class Meta:
         unique_together = ('problem', 'language')
@@ -508,23 +508,23 @@ class Submission(models.Model):
 
     user = models.ForeignKey(Profile)
     problem = models.ForeignKey(Problem)
-    date = models.DateTimeField(verbose_name=_('Submission time'), auto_now_add=True)
-    time = models.FloatField(verbose_name=_('Execution time'), null=True, db_index=True)
-    memory = models.FloatField(verbose_name=_('Memory usage'), null=True)
-    points = models.FloatField(verbose_name=_('Points granted'), null=True, db_index=True)
-    language = models.ForeignKey(Language, verbose_name=_('Submission language'))
-    source = models.TextField(verbose_name=_('Source code'), max_length=65536)
+    date = models.DateTimeField(verbose_name=_('submission time'), auto_now_add=True)
+    time = models.FloatField(verbose_name=_('execution time'), null=True, db_index=True)
+    memory = models.FloatField(verbose_name=_('memory usage'), null=True)
+    points = models.FloatField(verbose_name=_('points granted'), null=True, db_index=True)
+    language = models.ForeignKey(Language, verbose_name=_('submission language'))
+    source = models.TextField(verbose_name=_('source code'), max_length=65536)
     status = models.CharField(max_length=2, choices=STATUS, default='QU', db_index=True)
     result = models.CharField(max_length=3, choices=SUBMISSION_RESULT, default=None, null=True,
                               blank=True, db_index=True)
-    error = models.TextField(verbose_name=_('Compile Errors'), null=True, blank=True)
+    error = models.TextField(verbose_name=_('compile Errors'), null=True, blank=True)
     current_testcase = models.IntegerField(default=0)
-    batch = models.BooleanField(verbose_name=_('Batched cases'), default=False)
-    case_points = models.FloatField(verbose_name=_('Test case points'), default=0)
-    case_total = models.FloatField(verbose_name=_('Test case total points'), default=0)
-    judged_on = models.ForeignKey('Judge', verbose_name=_('Judged on'), null=True, blank=True,
+    batch = models.BooleanField(verbose_name=_('batched cases'), default=False)
+    case_points = models.FloatField(verbose_name=_('test case points'), default=0)
+    case_total = models.FloatField(verbose_name=_('test case total points'), default=0)
+    judged_on = models.ForeignKey('Judge', verbose_name=_('judged on'), null=True, blank=True,
                                   on_delete=models.SET_NULL)
-    is_being_rejudged = models.BooleanField(verbose_name=_('Is being rejudged by admin'), default=False)
+    is_being_rejudged = models.BooleanField(verbose_name=_('is being rejudged by admin'), default=False)
 
     objects = TranslatedProblemForeignKeyQuerySet.as_manager()
 
@@ -542,10 +542,12 @@ class Submission(models.Model):
 
     def judge(self):
         judge_submission(self)
+
     judge.alters_data = True
 
     def abort(self):
         abort_submission(self)
+
     abort.alters_data = True
 
     def is_graded(self):
@@ -585,16 +587,16 @@ class Submission(models.Model):
 class SubmissionTestCase(models.Model):
     RESULT = SUBMISSION_RESULT
 
-    submission = models.ForeignKey(Submission, verbose_name=_('Associated submission'), related_name='test_cases')
-    case = models.IntegerField(verbose_name=_('Test case ID'))
-    status = models.CharField(max_length=3, verbose_name=_('Status flag'), choices=SUBMISSION_RESULT)
-    time = models.FloatField(verbose_name=_('Execution time'), null=True)
-    memory = models.FloatField(verbose_name=_('Memory usage'), null=True)
-    points = models.FloatField(verbose_name=_('Points granted'), null=True)
-    total = models.FloatField(verbose_name=_('Points possible'), null=True)
-    batch = models.IntegerField(verbose_name=_('Batch number'), null=True)
-    feedback = models.CharField(max_length=50, verbose_name=_('Judging feedback'), blank=True)
-    output = models.TextField(verbose_name=_('Program output'), blank=True)
+    submission = models.ForeignKey(Submission, verbose_name=_('associated submission'), related_name='test_cases')
+    case = models.IntegerField(verbose_name=_('test case ID'))
+    status = models.CharField(max_length=3, verbose_name=_('status flag'), choices=SUBMISSION_RESULT)
+    time = models.FloatField(verbose_name=_('execution time'), null=True)
+    memory = models.FloatField(verbose_name=_('memory usage'), null=True)
+    points = models.FloatField(verbose_name=_('points granted'), null=True)
+    total = models.FloatField(verbose_name=_('points possible'), null=True)
+    batch = models.IntegerField(verbose_name=_('batch number'), null=True)
+    feedback = models.CharField(max_length=50, verbose_name=_('judging feedback'), blank=True)
+    output = models.TextField(verbose_name=_('program output'), blank=True)
 
     @property
     def long_status(self):
@@ -606,16 +608,16 @@ class SubmissionTestCase(models.Model):
 
 
 class Comment(MPTTModel):
-    author = models.ForeignKey(Profile, verbose_name=_('Commenter'))
-    time = models.DateTimeField(verbose_name=_('Posted time'), auto_now_add=True)
-    page = models.CharField(max_length=30, verbose_name=_('Associated Page'), db_index=True,
+    author = models.ForeignKey(Profile, verbose_name=_('commenter'))
+    time = models.DateTimeField(verbose_name=_('posted time'), auto_now_add=True)
+    page = models.CharField(max_length=30, verbose_name=_('associated Page'), db_index=True,
                             validators=[RegexValidator('^[pc]:[a-z0-9]+$|^b:\d+$|^s:',
                                                        _('Page code must be ^[pc]:[a-z0-9]+$|^b:\d+$'))])
-    score = models.IntegerField(verbose_name=_('Votes'), default=0)
-    title = models.CharField(max_length=200, verbose_name=_('Title of comment'))
-    body = models.TextField(verbose_name=_('Body of comment'))
-    hidden = models.BooleanField(verbose_name=_('Hide the comment'), default=0)
-    parent = TreeForeignKey('self', verbose_name=_('Parent'), null=True, blank=True, related_name='replies')
+    score = models.IntegerField(verbose_name=_('votes'), default=0)
+    title = models.CharField(max_length=200, verbose_name=_('title of comment'))
+    body = models.TextField(verbose_name=_('body of comment'))
+    hidden = models.BooleanField(verbose_name=_('hide the comment'), default=0)
+    parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies')
     versions = GenericRelation(Version, object_id_field='object_id_int')
 
     class Meta:
@@ -627,15 +629,15 @@ class Comment(MPTTModel):
 
     @classmethod
     def most_recent(cls, user, n, batch=None):
-        queryset = cls.objects.filter(hidden=False).select_related('author__user') \
-            .defer('author__about', 'body').order_by('-id')
+        queryset = cls.objects.filter(hidden=False).select_related('author__user').defer('author__about',
+                                                                                         'body').order_by('-id')
         if user.is_superuser:
             return queryset[:n]
         if batch is None:
             batch = 2 * n
         output = []
         for i in itertools.count(0):
-            slice = queryset[i*batch:i*batch+batch]
+            slice = queryset[i * batch:i * batch + batch]
             if not slice:
                 break
             for comment in slice:
@@ -690,17 +692,17 @@ class Comment(MPTTModel):
     def __unicode__(self):
         return self.title
 
-    # Only use this when queried with
-    # .prefetch_related(Prefetch('votes', queryset=CommentVote.objects.filter(voter_id=profile_id)))
-    # It's rather stupid to put a query specific property on the model, but the alternative requires
-    # digging Django internals, and could not be guaranteed to work forever.
-    # Hence it is left here for when the alternative breaks.
-    #@property
-    #def vote_score(self):
-    #    queryset = self.votes.all()
-    #    if not queryset:
-    #        return 0
-    #    return queryset[0].score
+        # Only use this when queried with
+        # .prefetch_related(Prefetch('votes', queryset=CommentVote.objects.filter(voter_id=profile_id)))
+        # It's rather stupid to put a query specific property on the model, but the alternative requires
+        # digging Django internals, and could not be guaranteed to work forever.
+        # Hence it is left here for when the alternative breaks.
+        # @property
+        # def vote_score(self):
+        #    queryset = self.votes.all()
+        #    if not queryset:
+        #        return 0
+        #    return queryset[0].score
 
 
 class CommentVote(models.Model):
@@ -741,12 +743,12 @@ class NavigationBar(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['order']
 
-    order = models.PositiveIntegerField(db_index=True, verbose_name=_('Order'))
-    key = models.CharField(max_length=10, unique=True, verbose_name=_('Identifier'))
-    label = models.CharField(max_length=20, verbose_name=_('Label'))
-    path = models.CharField(max_length=255, verbose_name=_('Link path'))
-    regex = models.TextField(verbose_name=_('Highlight regex'), validators=[validate_regex])
-    parent = TreeForeignKey('self', verbose_name=_('Parent item'), null=True, blank=True, related_name='children')
+    order = models.PositiveIntegerField(db_index=True, verbose_name=_('order'))
+    key = models.CharField(max_length=10, unique=True, verbose_name=_('identifier'))
+    label = models.CharField(max_length=20, verbose_name=_('label'))
+    path = models.CharField(max_length=255, verbose_name=_('link path'))
+    regex = models.TextField(verbose_name=_('highlight regex'), validators=[validate_regex])
+    parent = TreeForeignKey('self', verbose_name=_('parent item'), null=True, blank=True, related_name='children')
 
     def __unicode__(self):
         return self.label
@@ -764,27 +766,26 @@ class NavigationBar(MPTTModel):
 
 class Judge(models.Model):
     name = models.CharField(max_length=50, help_text=_('Server name, hostname-style'), unique=True)
-    created = models.DateTimeField(auto_now_add=True, verbose_name=_('Time of creation'))
+    created = models.DateTimeField(auto_now_add=True, verbose_name=_('time of creation'))
     auth_key = models.CharField(max_length=100, help_text=_('A key to authenticated this judge'),
-                                verbose_name=_('Authentication key'))
-    online = models.BooleanField(verbose_name=_('Judge online status'), default=False)
-    start_time = models.DateTimeField(verbose_name=_('Judge start time'), null=True)
-    ping = models.FloatField(verbose_name=_('Response time'), null=True)
-    load = models.FloatField(verbose_name=_('System load'), null=True,
+                                verbose_name=_('authentication key'))
+    online = models.BooleanField(verbose_name=_('judge online status'), default=False)
+    start_time = models.DateTimeField(verbose_name=_('judge start time'), null=True)
+    ping = models.FloatField(verbose_name=_('response time'), null=True)
+    load = models.FloatField(verbose_name=_('system load'), null=True,
                              help_text=_('Load for the last minute, divided by processors to be fair.'))
-    description = models.TextField(blank=True, verbose_name=_('Description'))
+    description = models.TextField(blank=True, verbose_name=_('description'))
     last_ip = models.GenericIPAddressField(verbose_name='Last connected IP', blank=True, null=True)
-    problems = models.ManyToManyField(Problem, verbose_name=_('Problems'), related_name='judges')
-    runtimes = models.ManyToManyField(Language, verbose_name=_('Judges'), related_name='judges')
+    problems = models.ManyToManyField(Problem, verbose_name=_('problems'), related_name='judges')
+    runtimes = models.ManyToManyField(Language, verbose_name=_('judges'), related_name='judges')
 
     def __unicode__(self):
         return self.name
 
     @cached_property
     def runtime_versions(self):
-        qs = RuntimeVersion.objects.filter(judge=self)\
-            .values('language__key', 'language__name', 'version', 'name', 'priority')\
-            .order_by('language__key', 'priority')
+        qs = RuntimeVersion.objects.filter(judge=self).values('language__key', 'language__name', 'version', 'name',
+                                                              'priority').order_by('language__key', 'priority')
 
         ret = OrderedDict()
 
@@ -832,7 +833,7 @@ class ContestTag(models.Model):
     def text_color(self, cache={}):
         if self.color not in cache:
             if len(self.color) == 4:
-                r, g, b = [ord((i*2).decode('hex')) for i in self.color[1:]]
+                r, g, b = [ord((i * 2).decode('hex')) for i in self.color[1:]]
             else:
                 r, g, b = [ord(i) for i in self.color[1:].decode('hex')]
             cache[self.color] = '#000' if 299 * r + 587 * g + 144 * b > 140000 else '#fff'
@@ -844,30 +845,30 @@ class ContestTag(models.Model):
 
 
 class Contest(models.Model):
-    key = models.CharField(max_length=20, verbose_name=_('Contest id'), unique=True,
+    key = models.CharField(max_length=20, verbose_name=_('contest id'), unique=True,
                            validators=[RegexValidator('^[a-z0-9]+$', _('Contest id must be ^[a-z0-9]+$'))])
-    name = models.CharField(max_length=100, verbose_name=_('Contest name'), db_index=True)
+    name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
     organizers = models.ManyToManyField(Profile, help_text=_('These people will be able to edit the contest.'),
                                         related_name='organizers+')
     description = models.TextField(blank=True)
-    problems = models.ManyToManyField(Problem, verbose_name=_('Problems'), through='ContestProblem')
+    problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
     start_time = models.DateTimeField(db_index=True)
     end_time = models.DateTimeField(db_index=True)
-    time_limit = TimedeltaField(verbose_name=_('Time limit'), blank=True, null=True)
-    is_public = models.BooleanField(verbose_name=_('Publicly visible'), default=False,
+    time_limit = TimedeltaField(verbose_name=_('time limit'), blank=True, null=True)
+    is_public = models.BooleanField(verbose_name=_('publicly visible'), default=False,
                                     help_text=_('Should be set even for organization-private contests, where it '
                                                 'determines whether the contest is visible to members of the '
                                                 'specified organizations.'))
-    is_external = models.BooleanField(verbose_name=_('External contest'), default=False)
-    is_rated = models.BooleanField(verbose_name=_('Contest rated'), help_text=_('Whether this contest can be rated.'),
+    is_external = models.BooleanField(verbose_name=_('external contest'), default=False)
+    is_rated = models.BooleanField(verbose_name=_('contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
-    rate_all = models.BooleanField(verbose_name=_('Rate all'), help_text=_('Rate all users who joined.'), default=False)
-    rate_exclude = models.ManyToManyField(Profile, verbose_name=_('Exclude from ratings'), blank=True,
+    rate_all = models.BooleanField(verbose_name=_('rate all'), help_text=_('Rate all users who joined.'), default=False)
+    rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
                                           related_name='rate_exclude+')
-    is_private = models.BooleanField(verbose_name=_('Private to organizations'), default=False)
-    organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('Organizations'),
+    is_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
+    organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may see the contest'))
-    og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
+    og_image = models.CharField(verbose_name=_('openGraph image'), default='', max_length=150, blank=True)
     tags = models.ManyToManyField(ContestTag, verbose_name=_('contest tags'), blank=True, related_name='contests')
 
     def clean(self):
@@ -916,11 +917,11 @@ class Contest(models.Model):
 
 
 class ContestParticipation(models.Model):
-    contest = models.ForeignKey(Contest, verbose_name=_('Associated contest'), related_name='users')
+    contest = models.ForeignKey(Contest, verbose_name=_('associated contest'), related_name='users')
     user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='contest_history')
-    real_start = models.DateTimeField(verbose_name=_('Start time'), default=timezone.now, db_column='start')
+    real_start = models.DateTimeField(verbose_name=_('start time'), default=timezone.now, db_column='start')
     score = models.IntegerField(verbose_name=_('score'), default=0, db_index=True)
-    cumtime = models.PositiveIntegerField(verbose_name=_('Cumulative time'), default=0)
+    cumtime = models.PositiveIntegerField(verbose_name=_('cumulative time'), default=0)
 
     def recalculate_score(self):
         self.score = sum(map(itemgetter('points'),
@@ -936,8 +937,8 @@ class ContestParticipation(models.Model):
     @cached_property
     def end_time(self):
         contest = self.contest
-        return contest.end_time if contest.time_limit is None else \
-            min(self.real_start + contest.time_limit, contest.end_time)
+        return contest.end_time if contest.time_limit is None else             min(self.real_start + contest.time_limit,
+                                                                                   contest.end_time)
 
     @property
     def ended(self):
@@ -955,8 +956,8 @@ class ContestParticipation(models.Model):
     def update_cumtime(self):
         cumtime = 0
         for problem in self.contest.contest_problems.all():
-            solution = problem.submissions.filter(submission__user_id=self.user_id, points__gt=0) \
-                .values('submission__user_id').annotate(time=Max('submission__date'))
+            solution = problem.submissions.filter(submission__user_id=self.user_id, points__gt=0).values(
+                'submission__user_id').annotate(time=Max('submission__date'))
             if not solution:
                 continue
             dt = solution[0]['time'] - self.start
@@ -973,12 +974,12 @@ class ContestParticipation(models.Model):
 
 
 class ContestProblem(models.Model):
-    problem = models.ForeignKey(Problem, verbose_name=_('Problem'), related_name='contests')
-    contest = models.ForeignKey(Contest, verbose_name=_('Contest'), related_name='contest_problems')
-    points = models.IntegerField(verbose_name=_('Points'))
-    partial = models.BooleanField(default=True, verbose_name=_('Partial'))
-    order = models.PositiveIntegerField(db_index=True, verbose_name=_('Order'))
-    output_prefix_override = models.IntegerField(verbose_name=_('Output prefix length override'), null=True, blank=True)
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='contests')
+    contest = models.ForeignKey(Contest, verbose_name=_('contest'), related_name='contest_problems')
+    points = models.IntegerField(verbose_name=_('points'))
+    partial = models.BooleanField(default=True, verbose_name=_('partial'))
+    order = models.PositiveIntegerField(db_index=True, verbose_name=_('order'))
+    output_prefix_override = models.IntegerField(verbose_name=_('output prefix length override'), null=True, blank=True)
 
     class Meta:
         unique_together = ('problem', 'contest')
@@ -987,12 +988,12 @@ class ContestProblem(models.Model):
 
 
 class ContestSubmission(models.Model):
-    submission = models.OneToOneField(Submission, verbose_name=_('Submission'), related_name='contest')
-    problem = models.ForeignKey(ContestProblem, verbose_name=_('Problem'),
+    submission = models.OneToOneField(Submission, verbose_name=_('submission'), related_name='contest')
+    problem = models.ForeignKey(ContestProblem, verbose_name=_('problem'),
                                 related_name='submissions', related_query_name='submission')
-    participation = models.ForeignKey(ContestParticipation, verbose_name=_('Participation'),
+    participation = models.ForeignKey(ContestParticipation, verbose_name=_('participation'),
                                       related_name='submissions', related_query_name='submission')
-    points = models.FloatField(default=0.0, verbose_name=_('Points'))
+    points = models.FloatField(default=0.0, verbose_name=_('points'))
 
     class Meta:
         verbose_name = _('contest submission')
@@ -1000,13 +1001,13 @@ class ContestSubmission(models.Model):
 
 
 class Rating(models.Model):
-    user = models.ForeignKey(Profile, verbose_name=_('User'), related_name='ratings')
-    contest = models.ForeignKey(Contest, verbose_name=_('Contest'), related_name='ratings')
-    participation = models.OneToOneField(ContestParticipation, verbose_name=_('Participation'), related_name='rating')
-    rank = models.IntegerField(verbose_name=_('Rank'))
-    rating = models.IntegerField(verbose_name=_('Rating'))
-    volatility = models.IntegerField(verbose_name=_('Volatility'))
-    last_rated = models.DateTimeField(db_index=True, verbose_name=_('Last rated'))
+    user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='ratings')
+    contest = models.ForeignKey(Contest, verbose_name=_('contest'), related_name='ratings')
+    participation = models.OneToOneField(ContestParticipation, verbose_name=_('participation'), related_name='rating')
+    rank = models.IntegerField(verbose_name=_('rank'))
+    rating = models.IntegerField(verbose_name=_('rating'))
+    volatility = models.IntegerField(verbose_name=_('volatility'))
+    last_rated = models.DateTimeField(db_index=True, verbose_name=_('last rated'))
 
     class Meta:
         unique_together = ('user', 'contest')
@@ -1015,14 +1016,14 @@ class Rating(models.Model):
 
 
 class BlogPost(models.Model):
-    title = models.CharField(verbose_name=_('Post title'), max_length=100)
-    slug = models.SlugField(verbose_name=_('Slug'))
-    visible = models.BooleanField(verbose_name=_('Public visibility'), default=False)
-    sticky = models.BooleanField(verbose_name=_('Sticky'), default=False)
-    publish_on = models.DateTimeField(verbose_name=_('Publish after'))
-    content = models.TextField(verbose_name=_('Post content'))
-    summary = models.TextField(verbose_name=_('Post summary'), blank=True)
-    og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
+    title = models.CharField(verbose_name=_('post title'), max_length=100)
+    slug = models.SlugField(verbose_name=_('slug'))
+    visible = models.BooleanField(verbose_name=_('public visibility'), default=False)
+    sticky = models.BooleanField(verbose_name=_('sticky'), default=False)
+    publish_on = models.DateTimeField(verbose_name=_('publish after'))
+    content = models.TextField(verbose_name=_('post content'))
+    summary = models.TextField(verbose_name=_('post summary'), blank=True)
+    og_image = models.CharField(verbose_name=_('openGraph image'), default='', max_length=150, blank=True)
 
     def __unicode__(self):
         return self.title
@@ -1039,16 +1040,16 @@ class BlogPost(models.Model):
 
 
 class PrivateMessage(models.Model):
-    title = models.CharField(verbose_name=_('Message title'), max_length=50)
-    content = models.TextField(verbose_name=_('Message body'))
-    sender = models.ForeignKey(Profile, verbose_name=_('Sender'), related_name='sent_messages')
-    target = models.ForeignKey(Profile, verbose_name=_('Target'), related_name='received_messages')
-    timestamp = models.DateTimeField(verbose_name=_('Message timestamp'), auto_now_add=True)
-    read = models.BooleanField(verbose_name=_('Read'), default=False)
+    title = models.CharField(verbose_name=_('message title'), max_length=50)
+    content = models.TextField(verbose_name=_('message body'))
+    sender = models.ForeignKey(Profile, verbose_name=_('sender'), related_name='sent_messages')
+    target = models.ForeignKey(Profile, verbose_name=_('target'), related_name='received_messages')
+    timestamp = models.DateTimeField(verbose_name=_('message timestamp'), auto_now_add=True)
+    read = models.BooleanField(verbose_name=_('read'), default=False)
 
 
 class PrivateMessageThread(models.Model):
-    messages = models.ManyToManyField(PrivateMessage, verbose_name=_('Messages in the thread'))
+    messages = models.ManyToManyField(PrivateMessage, verbose_name=_('messages in the thread'))
 
 
 class Solution(models.Model):
@@ -1058,7 +1059,7 @@ class Solution(models.Model):
     publish_on = models.DateTimeField()
     content = models.TextField()
     authors = models.ManyToManyField(Profile, blank=True)
-    problem = models.ForeignKey(Problem, on_delete=models.SET_NULL, verbose_name=_('Associated problem'),
+    problem = models.ForeignKey(Problem, on_delete=models.SET_NULL, verbose_name=_('associated problem'),
                                 null=True, blank=True)
 
     def get_absolute_url(self):
