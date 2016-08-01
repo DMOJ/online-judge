@@ -47,7 +47,7 @@ ul.comments.top-level-comments
                                         | on {{ time }}
                                     span.relative= str_time
                                     span.absolute= str_time
-                                if not node.is_leaf_node
+                                if node.is_root_node
                                     = ' '
                                     span.comment-title #{node.title}
                             span.comment-spacer
