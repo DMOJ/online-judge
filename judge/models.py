@@ -102,18 +102,9 @@ class Language(models.Model):
                 continue
             runtimes[id].add(runtime.version)
 
-        def sort_versions(a, b):
-            a = tuple(map(int, a.split('.')))
-            b = tuple(map(int, b.split('.')))
-            if a > b:
-                return 1
-            elif a < b:
-                return -1
-            return 0
-
         lang_versions = []
         for id, version_list in runtimes.iteritems():
-            lang_versions.append((id, list(sorted(version_list, cmp=sort_versions))))
+            lang_versions.append((id, list(sorted(version_list, key=lambda a: tuple(map(int, a.split('.')))))))
         return lang_versions
 
     @cached_property
