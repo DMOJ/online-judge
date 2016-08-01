@@ -22,15 +22,15 @@ block js_media
 
                 function update_info(from, to) {
                     var runtimes = [];
-                    from.find('.runtime-info').forEach(function (runtime) {
-                        var name = runtime.attr('data-runtime-id');
-                        var min_ver = runtime.attr('data-min-version');
-                        var max_ver = runtime.attr('data-max-version');
+                    from.find('.runtime-info').each(function() {
+                        var name = $(this).attr('data-runtime-id');
+                        var min_ver = $(this).attr('data-min-version');
+                        var max_ver = $(this).attr('data-max-version');
 
                         if (!min_ver || !max_ver) {
                             runtimes.push(name);
                         } else {
-                            var version_display = min_ver == max_ver ? max_ver : (min_ver + '&mdash;' + max_ver);
+                            var version_display = min_ver == max_ver ? max_ver : (min_ver + ' - ' + max_ver);
                             runtimes.push(name + ' ' + version_display);
                         }
                     });
