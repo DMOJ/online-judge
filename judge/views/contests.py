@@ -382,10 +382,14 @@ def contest_ranking(request, contest):
     return contest_ranking_view(request, contest)
 
 
-class ContestTagDetail(TitleMixin, DetailView):
+class ContestTagDetailAjax(TitleMixin, DetailView):
     model = ContestTag
     slug_field = slug_url_kwarg = 'name'
     context_object_name = 'tag'
+    template_name = 'contest/tag_ajax.jade'
+
+
+class ContestTagDetail(ContestTagDetailAjax):
     template_name = 'contest/tag.jade'
 
     def get_title(self):

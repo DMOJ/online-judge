@@ -8,11 +8,14 @@ block meta
     meta(name='description', content="The {{ SITE_NAME }}'s contest list - past, present, and future.")
 
 block js_media
+    script(src='{% static "featherlight.min.js" %}', type='text/javascript')
     script(type='text/javascript').
         $(document).ready(function () {
             $('.time-remaining').each(function () {
                 count_down($(this));
             });
+
+            $('.contest-tag').find('a').featherlight();
         });
 
 block media
@@ -131,7 +134,8 @@ block body
                     a(href='{% url "contest_view" contest.key %}')= contest.name
                     .contest-tags: each tag in contest.tags.all
                         span.contest-tag(style='background-color: {{ tag.color }}')
-                            a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}')= tag.name
+                            a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
+                              data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
                     span.floating-time-right(style='text-align:right;color:#777;')
                         if contest.time_limit
                             | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
