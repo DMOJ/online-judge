@@ -27,13 +27,13 @@ block info_float
         if not participating or not participation.ended
             if in_contest
                 a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
-                    if request.user.profile in contest.organizers
+                    if request.user.profile in contest.organizers.all
                         | {% trans "Unspectate contest" %}
                     else
                         | {% trans "Leave contest" %}
             else
                 a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
-                    if request.user.profile in contest.organizers
+                    if request.user.profile in contest.organizers.all
                         | {% trans "Spectate contest" %}
                     else
                         | {% trans "Join contest" %}
