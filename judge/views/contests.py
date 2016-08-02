@@ -147,7 +147,8 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         if self.request.user.is_authenticated():
             profile = self.request.user.profile
             try:
-                context['participation'] = profile.contest_history.get(contest=self.object)
+                context['participation'] = profile.contest_history\
+                    .get(contest=self.object, spectate=self.request.user.profile in self.object.organizers.all())
             except ContestParticipation.DoesNotExist:
                 context['participating'] = False
                 context['participation'] = None
