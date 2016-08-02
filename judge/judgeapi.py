@@ -40,12 +40,14 @@ def judge_request(packet, reply=True):
 
 
 def judge_submission(submission):
-    from .models import SubmissionTestCase
+    from .models import SubmissionTestCase, ContestSubmission
     submission.time = None
     submission.memory = None
     submission.points = None
     submission.result = None
     submission.error = None
+    submission.is_pretested = ContestSubmission.objects.filter(submission=submission) \
+        .values_list('problem__contest__run_pretests_only', flat=True)[0]
     submission.save()
     SubmissionTestCase.objects.filter(submission=submission).delete()
 
