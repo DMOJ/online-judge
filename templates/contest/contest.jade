@@ -28,7 +28,7 @@ block info_float
             if in_contest
                 a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
                     if request.user.profile in contest.organizers.all
-                        | {% trans "Unspectate contest" %}
+                        | {% trans "Stop spectating" %}
                     else
                         | {% trans "Leave contest" %}
             else
