@@ -183,6 +183,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 }
         )
         participation.spectate = profile in contest.organizers.all()
+        participation.save()
 
         if not created and participation.ended:
             return generic_message(request, _('Time limit exceeded'),
