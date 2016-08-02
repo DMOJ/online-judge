@@ -147,8 +147,7 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         if self.request.user.is_authenticated():
             profile = self.request.user.profile
             try:
-                context['participation'] = profile.contest_history\
-                    .get(contest=self.object, spectate=self.request.user.profile in self.object.organizers.all())
+                context['participation'] = profile.contest_history.get(contest=self.object)
             except ContestParticipation.DoesNotExist:
                 context['participating'] = False
                 context['participation'] = None
@@ -178,11 +177,12 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                    _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
 
         participation, created = ContestParticipation.objects.get_or_create(
-                contest=contest, user=profile, spectate=profile in contest.organizers.all(),
+                contest=contest, user=profile,
                 defaults={
                     'real_start': timezone.now()
                 }
         )
+        participation.spectate = profile in contest.organizers.all()
 
         if not created and participation.ended:
             return generic_message(request, _('Time limit exceeded'),
