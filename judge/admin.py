@@ -19,7 +19,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ugettext, ungettext, pgettext
 from mptt.admin import MPTTModelAdmin
 from reversion.admin import VersionAdmin
-from reversion_compare.admin import CompareVersionAdmin
 
 from judge.dblock import LockModel
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
@@ -200,7 +199,7 @@ class ProblemTranslationInline(admin.StackedInline):
     extra = 0
 
 
-class ProblemAdmin(Select2SuitMixin, CompareVersionAdmin):
+class ProblemAdmin(Select2SuitMixin, VersionAdmin):
     fieldsets = (
         (None, {
             'fields': ('code', 'name', 'is_public', 'date', 'authors', 'description', 'license')

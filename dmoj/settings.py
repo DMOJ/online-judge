@@ -118,7 +118,6 @@ INSTALLED_APPS += (
     'markdown_trois',
     'mptt',
     'reversion',
-    'reversion_compare',
     'django_social_share',
     'social.apps.django_app.default',
     'compressor',
