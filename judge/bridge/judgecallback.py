@@ -43,18 +43,17 @@ class DjangoJudgeHandler(JudgeHandler):
     def get_related_submission_data(self, submission):
         _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
 
-        submission = Submission.objects.get(id=submission)
+        pid, time, memory, short_circuit, lid, is_pretested = Submission.objects.filter(id=submission).\
+            values_list('problem__id', 'problem__time_limit', 'problem__memory_limit',
+                        'problem__short_circuit', 'language__id', 'is_pretested')
 
-        problem = submission.problem
-        language = submission.language
-        time, memory = problem.time_limit, problem.memory_limit
         try:
-            limit = LanguageLimit.objects.get(problem=problem, language__key=language)
+            limit = LanguageLimit.objects.get(problem__id=pid, language__id=lid)
         except LanguageLimit.DoesNotExist:
             pass
         else:
             time, memory = limit.time_limit, limit.memory_limit
-        return time, memory, problem.short_circuit, submission.is_pretested
+        return time, memory, short_circuit, is_pretested
 
     def _authenticate(self, id, key):
         try:
