@@ -45,7 +45,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
         pid, time, memory, short_circuit, lid, is_pretested = Submission.objects.filter(id=submission).\
             values_list('problem__id', 'problem__time_limit', 'problem__memory_limit',
-                        'problem__short_circuit', 'language__id', 'is_pretested')
+                        'problem__short_circuit', 'language__id', 'is_pretested')[0]
 
         try:
             limit = LanguageLimit.objects.get(problem__id=pid, language__id=lid)
