@@ -26,9 +26,17 @@ block info_float
     if contest.can_join or participating
         if not participating or not participation.ended
             if in_contest
-                a.unselectable.button.full(href='{% url "contest_leave" contest.key %}') {% trans "Leave contest" %}
+                a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
+                    if request.user.profile in contest.organizers
+                        | {% trans "Unspectate contest" %}
+                    else
+                        | {% trans "Leave contest" %}
             else
-                a.unselectable.button.full(href='{% url "contest_join" contest.key %}') {% trans "Join contest" %}
+                a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
+                    if request.user.profile in contest.organizers
+                        | {% trans "Spectate contest" %}
+                    else
+                        | {% trans "Join contest" %}
             hr
 
     if contest.start_time <= now or perms.judge.see_private_contest

@@ -177,7 +177,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                    _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
 
         participation, created = ContestParticipation.objects.get_or_create(
-                contest=contest, user=profile, defaults={
+                contest=contest, user=profile, spectate=profile in contest.organizers,
+                defaults={
                     'real_start': timezone.now()
                 }
         )

@@ -932,6 +932,8 @@ class ContestParticipation(models.Model):
     real_start = models.DateTimeField(verbose_name=_('start time'), default=timezone.now, db_column='start')
     score = models.IntegerField(verbose_name=_('score'), default=0, db_index=True)
     cumtime = models.PositiveIntegerField(verbose_name=_('cumulative time'), default=0)
+    spectate = models.BooleanField(verbose_name=_('whether the user is spectating the contest'),
+                                   default=False)
 
     def recalculate_score(self):
         self.score = sum(map(itemgetter('points'),
@@ -947,6 +949,8 @@ class ContestParticipation(models.Model):
     @cached_property
     def end_time(self):
         contest = self.contest
+        if self.spectate:
+            return contest.end_time
         return contest.end_time if contest.time_limit is None else \
             min(self.real_start + contest.time_limit, contest.end_time)
 
