@@ -46,8 +46,11 @@ def judge_submission(submission):
     submission.points = None
     submission.result = None
     submission.error = None
-    submission.is_pretested = ContestSubmission.objects.filter(submission=submission) \
-        .values_list('problem__contest__run_pretests_only', flat=True)[0]
+    try:
+        submission.is_pretested = ContestSubmission.objects.filter(submission=submission) \
+            .values_list('problem__contest__run_pretests_only', flat=True)[0]
+    except IndexError:
+        pass
     submission.save()
     SubmissionTestCase.objects.filter(submission=submission).delete()
 
