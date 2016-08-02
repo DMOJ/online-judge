@@ -336,7 +336,7 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
         )
 
     return map(make_ranking_profile,
-               contest.users.select_related('user__user', 'rating')
+               contest.users.filter(spectate=False).select_related('user__user', 'rating')
                .prefetch_related('user__organizations')
                .defer('user__about', 'user__organizations__about')
                .order_by('-score', 'cumtime'))
