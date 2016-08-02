@@ -986,6 +986,8 @@ class ContestParticipation(models.Model):
         verbose_name = _('contest participation')
         verbose_name_plural = _('contest participations')
 
+        unique_together = ('contest', 'user')
+
 
 class ContestProblem(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='contests')
