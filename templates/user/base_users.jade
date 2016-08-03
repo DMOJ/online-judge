@@ -55,11 +55,12 @@ block media
 
 block body
     #common-content
-        #content-right.users .info-float
+        #content-right.users: .info-float
             h3 {% trans "Search user" %}
+            hr
             input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
 
-        #content-left.users .info-float
+        #content-left.users: .info-float
             br
             table#users-table.table
                 block users_table
