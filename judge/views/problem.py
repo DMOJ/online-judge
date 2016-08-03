@@ -261,11 +261,12 @@ class ProblemList(TitleMixin, ListView):
         query = self.request.GET.copy()
         query.setlist('page', [])
         query = query.urlencode()
-        context['first_page_href'] = '%s?%s' % (self.request.path, query)
         if query:
             context['page_prefix'] = '%s?%s&page=' % (self.request.path, query)
+            context['first_page_href'] = '%s?%s' % (self.request.path, query)
         else:
             context['page_prefix'] = '%s?page=' % self.request.path
+            context['first_page_href'] = self.request.path
         return context
 
     def get(self, request, *args, **kwargs):
