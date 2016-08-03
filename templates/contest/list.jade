@@ -33,7 +33,7 @@ block body
         table.contest-list.table.striped
             thead: tr
                 th(style='width:90%') {% trans "Contest" %}
-                th {% trans "Rankings" %}
+                th {% trans "#" %}
                 if not IN_CONTEST
                     th(style='width:15%')
             tbody: each contest in current_contests
@@ -121,7 +121,7 @@ block body
     table.contest-list.table.striped
         thead: tr
             th(style='width:95%') {% trans "Contest" %}
-            th {% trans "Rankings" %}
+            th {% trans "#" %}
         tbody: each contest in past_contests
             tr
                 td: div(style='position:relative')
