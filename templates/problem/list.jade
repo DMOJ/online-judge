@@ -87,7 +87,6 @@ block body
                                     option(value=group.id, selected)= group.full_name
                                 else
                                     option(value=group.id)= group.full_name
-                    br
                     hr
                     a.button(onclick='form.submit()') {% trans "Go" %}
                     a.button(href='{% url "problem_random" %}') {% trans "Random" %}
