@@ -167,8 +167,13 @@ class ProblemList(TitleMixin, ListView):
 
     def get_paginator(self, queryset, per_page, orphans=0,
                       allow_empty_first_page=True, **kwargs):
-        return DiggPaginator(queryset, per_page, body=6, padding=2,
-                             orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
+        paginator = DiggPaginator(queryset, per_page, body=6, padding=2, orphans=orphans,
+                                  allow_empty_first_page=allow_empty_first_page, **kwargs)
+        # Get the number of pages and then add in this magic.
+        # noinspection PyStatementEffect
+        paginator.num_pages
+        paginator.object_list = queryset.add_i18n_name(self.request.LANGUAGE_CODE)
+        return paginator
 
     @cached_property
     def profile(self):
@@ -223,7 +228,7 @@ class ProblemList(TitleMixin, ListView):
                     queryset = queryset.filter(
                         Q(code__icontains=query) | Q(name__icontains=query) |
                         Q(translations__name__icontains=query, translations__language=self.request.LANGUAGE_CODE))
-        return queryset.add_i18n_name(self.request.LANGUAGE_CODE).distinct()
+        return queryset.distinct()
 
     def get_queryset(self):
         if self.in_contest:
