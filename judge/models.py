@@ -431,7 +431,7 @@ class Problem(models.Model):
     def update_stats(self):
         self.user_count = self.submission_set.filter(points__gt=0).values('user').distinct().count()
         submissions = self.submission_set.count()
-        self.ac_rate = 1.0 * self.submission_set.filter(result='AC').count() / submissions if submissions else 0
+        self.ac_rate = 100.0 * self.submission_set.filter(result='AC').count() / submissions if submissions else 0
         self.save()
 
     class Meta:
