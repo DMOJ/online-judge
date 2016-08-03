@@ -164,9 +164,14 @@ block body
                     - var profile_id = request.user.profile.id
                 else
                     - var profile_id = 0
-                each submission in submissions
-                    tr(id=submission.id)
-                        - include "submission/row.jade" with problem_name=submission.problem.i18n_name
+                if show_problem
+                    each submission in submissions
+                        tr(id=submission.id)
+                            - include "submission/row.jade" with problem_name=submission.problem.i18n_name
+                else
+                    each submission in submissions
+                        tr(id=submission.id)
+                            include submission/row
 
             if page_obj.num_pages > 1
                 div(style='margin-top:10px;')
