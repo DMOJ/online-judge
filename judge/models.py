@@ -363,6 +363,9 @@ class Problem(models.Model):
     banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
                                           help_text=_('Bans the selected users from submitting to this problem'))
     license = models.ForeignKey(License, null=True, blank=True, on_delete=models.SET_NULL)
+    user_count = models.IntegerField(verbose_name=_('amount of users'), default=0,
+                                     help_text=_('The amount of users on the best solutions page.'))
+    ac_rate = models.FloatField(verbose_name=_('rate of AC submissions'), default=0)
 
     objects = TranslatedProblemQuerySet.as_manager()
 
@@ -424,6 +427,11 @@ class Problem(models.Model):
             name = self.name
         self._translated_name_cache[language] = name
         return name
+
+    def update_stats(self):
+        self.user_count = self.submission_set.filter(points__gt=0).values('user').distinct().count()
+        self.ac_rate = self.submission_set.filter(result='AC').count() / self.submission_set.count()
+        self.save()
 
     class Meta:
         permissions = (
