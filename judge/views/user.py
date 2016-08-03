@@ -208,9 +208,9 @@ class UserList(LoadSelect2Mixin, TitleMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(UserList, self).get_context_data(**kwargs)
         context['users'] = ranker(Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
-                                 .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
-                                 .select_related('user__username')
-                                 .only('display_rank', 'user__username', 'name', 'points', 'rating'))
+                                  .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
+                                  .select_related('user__username')
+                                  .only('display_rank', 'user__username', 'name', 'points', 'rating'))
         return context
 
 
