@@ -166,7 +166,7 @@ block body
                     - var profile_id = 0
                 each submission in submissions
                     tr(id=submission.id)
-                        - include submission/row.jade with problem_name=submission.problem.i18n_name
+                        - include "submission/row.jade" with problem_name=submission.problem.i18n_name
 
             if page_obj.num_pages > 1
                 div(style='margin-top:10px;')
