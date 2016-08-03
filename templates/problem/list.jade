@@ -29,16 +29,7 @@ block js_media
     if has_select2
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script.
-            $(function() {
-                $('#search').select2({
-                    ajax: '/api/problem/list',
-                    delay: 250,
-                    data: function(query) {
-                        return {search: query.term};
-                    }
-                });
-            });
-
+            $('#category').select2();
 
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
     script(type='text/javascript').
