@@ -220,7 +220,7 @@ class ProblemList(TitleMixin, ListView):
                 if settings.ENABLE_FTS and self.full_text:
                     queryset = queryset.search(query, queryset.BOOLEAN).extra(order_by=['-relevance'])
                 else:
-                    queryset = queryset.filter(Q(code__contains=query) | Q(name__contains=query))
+                    queryset = queryset.filter(Q(code__icontains=query) | Q(name__icontains=query))
         return queryset.add_i18n_name(self.request.LANGUAGE_CODE).distinct()
 
     def get_queryset(self):
