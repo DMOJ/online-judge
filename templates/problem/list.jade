@@ -5,7 +5,7 @@ extends common-content
 
 block media
     if has_select2
-        link(href="{{ SELECT2_CSS_URL }}" type="text/css" media="screen" rel="stylesheet")
+        link(href="{{ SELECT2_CSS_URL }}", type="text/css", media="screen", rel="stylesheet")
     style.
         @media (max-width: 550px) {
             #problem-table tr :nth-child(6) {
