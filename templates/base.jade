@@ -149,7 +149,7 @@ html(lang=LANGUAGE_CODE)
                             a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
                                 b {% trans "Login" %}
                             | &nbsp;|&nbsp;
-                            a(href='/accounts/register/') {% trans "Register" %}
+                            a(href='{% url "registration_register" %}') {% trans "Register" %}
             #nav-shadow
         if IN_CONTEST
             #contest-info
