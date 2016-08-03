@@ -67,6 +67,9 @@ class DjangoJudgeHandler(JudgeHandler):
         judge.online = True
         judge.problems = Problem.objects.filter(code__in=self.problems.keys())
         judge.runtimes = Language.objects.filter(key__in=self.executors.keys())
+
+        # Delete now in case we somehow crashed and left some over from the last connection
+        RuntimeVersion.objects.filter(judge=judge).delete()
         for lang in judge.runtimes.all():
             runtimes = []
             for idx, data in enumerate(self.executors[lang.key]):
