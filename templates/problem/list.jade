@@ -108,6 +108,19 @@ block body
                                     option(value=group.id, selected)= group.full_name
                                 else
                                     option(value=group.id)= group.full_name
+                    if show_types
+                        br
+                        .filter-form-group
+                            label(for='type'): i {% trans "Problem types" %}
+                            // form.submit() may or may not be a good idea; only time will tell
+                            select#types(name='type', onchange='form.submit()')
+                            option(value='') {% trans "All" %}
+                            option(disabled) ---
+                            each type in problem_types
+                                if type.id in selected_types
+                                    option(value=type.id, selected)= type.full_name
+                                else
+                                    option(value=type.id)= type.full_name
                     hr
                     a.button(onclick='form.submit()') {% trans "Go" %}
                     a.button(href='{% url "problem_random" %}') {% trans "Random" %}

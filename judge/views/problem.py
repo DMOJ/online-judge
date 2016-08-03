@@ -24,7 +24,7 @@ from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemGroup, Solution, \
-    ProblemTranslation, TranslatedProblemForeignKeyQuerySet, RuntimeVersion
+    ProblemTranslation, TranslatedProblemForeignKeyQuerySet, RuntimeVersion, ProblemType
 from judge.pdf_problems import HAS_PDF, WebKitPdfMaker
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
@@ -234,6 +234,9 @@ class ProblemList(TitleMixin, ListView):
         context['show_types'] = int(self.show_types)
         context['category'] = self.category
         context['categories'] = ProblemGroup.objects.all()
+        if self.show_types:
+            context['selected_types'] = self.selected_types
+            context['problem_types'] = ProblemType.objects.all()
         context['has_search'] = settings.ENABLE_FTS
         context['search_query'] = self.search_query
         context['completed_problem_ids'] = self.get_completed_problems()
@@ -255,6 +258,11 @@ class ProblemList(TitleMixin, ListView):
         if 'category' in request.GET:
             try:
                 self.category = int(request.GET.get('category'))
+            except ValueError:
+                pass
+        if 'type' in request.GET:
+            try:
+                self.selected_types = map(int, request.GET.getlist('type'))
             except ValueError:
                 pass
         return super(ProblemList, self).get(request, *args, **kwargs)
