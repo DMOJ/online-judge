@@ -255,6 +255,7 @@ class ProblemList(TitleMixin, ListView):
         self.show_types = request.GET.get('show_types') == '1' if 'show_types' in request.GET else False
         self.search_query = None
         self.category = None
+        self.selected_types = []
         if 'category' in request.GET:
             try:
                 self.category = int(request.GET.get('category'))
