@@ -271,7 +271,7 @@ class ProblemList(TitleMixin, ListView):
     def get(self, request, *args, **kwargs):
         self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
         self.show_types = request.GET.get('show_types') == '1' if 'show_types' in request.GET else False
-        self.full_text = request.GET.get('show_types') == '1' if 'show_types' in request.GET else False
+        self.full_text = request.GET.get('full_text') == '1' if 'full_text' in request.GET else False
         self.search_query = None
         self.category = None
         self.selected_types = []
