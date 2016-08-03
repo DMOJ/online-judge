@@ -31,6 +31,7 @@ block js_media
         script.
             $(function() {
                 $('#category').select2();
+                $('#types').select2({multiple: 1});
             });
 
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
