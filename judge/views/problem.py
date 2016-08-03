@@ -28,7 +28,7 @@ from judge.models import Problem, Submission, ContestSubmission, ContestProblem,
 from judge.pdf_problems import HAS_PDF, WebKitPdfMaker
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import contest_completed_ids, user_completed_ids
-from judge.utils.views import TitleMixin, generic_message
+from judge.utils.views import LoadSelect2Mixin, TitleMixin, generic_message
 
 
 def get_contest_problem(problem, profile):
@@ -158,7 +158,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         return response
 
 
-class ProblemList(TitleMixin, ListView):
+class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
     model = Problem
     title = ugettext_lazy('Problems')
     context_object_name = 'problems'
@@ -256,14 +256,6 @@ class ProblemList(TitleMixin, ListView):
         context['has_fts'] = settings.ENABLE_FTS
         context['search_query'] = self.search_query
         context['completed_problem_ids'] = self.get_completed_problems()
-
-        select2_css = getattr(settings, 'SELECT2_CSS_URL', None)
-        select2_js = getattr(settings, 'SELECT2_JS_URL', None)
-        has_select2 = select2_css is not None and select2_js is not None
-        context['has_select2'] = has_select2
-        if has_select2:
-            context['SELECT2_CSS_URL'] = select2_css
-            context['SELECT2_JS_URL'] = select2_js
 
         query = self.request.GET.copy()
         query.setlist('page', [])
