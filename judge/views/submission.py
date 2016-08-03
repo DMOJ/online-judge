@@ -154,7 +154,7 @@ class SubmissionsListBase(TitleMixin, ListView):
         return self.request.user.profile.current_contest.contest
 
     def _get_queryset(self):
-        queryset = submission_related(Submission.objects.order_by('-id'))
+        queryset = submission_related(Submission.objects.order_by('-id').straight_join())
         if self.in_contest:
             return queryset.filter(contest__participation__contest_id=self.contest.id)
         return queryset

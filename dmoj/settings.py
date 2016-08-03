@@ -126,6 +126,7 @@ INSTALLED_APPS += (
     'sortedm2m',
     'pyjade.ext.django',
     'statici18n',
+    'django_mysql'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -312,6 +313,8 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+DJANGO_MYSQL_REWRITE_QUERIES = True
 
 ENABLE_FTS = False
 
