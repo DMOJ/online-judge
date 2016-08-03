@@ -1,8 +1,9 @@
 from copy import copy
 
+from django.db import connections
 from django.db.models import Field
 from django.db.models.expressions import RawSQL
-from django.db.models.sql.constants import LOUTER
+from django.db.models.sql.constants import LOUTER, INNER
 from django.db.models.sql.datastructures import Join
 from django.utils import six
 
@@ -32,3 +33,18 @@ def RawSQLColumn(model, field=None):
     if isinstance(field, six.string_types):
         field = model._meta.get_field(field)
     return RawSQL('%s.%s' % (model._meta.db_table, field.get_attname_column()[1]), ())
+
+
+def use_straight_join(queryset):
+    if connections[queryset.db].vendor != 'mysql':
+        return
+    original_join = queryset.query.join
+
+    def hacked_join(join, reuse=None):
+        alias = original_join(join, reuse)
+        join = queryset.query.alias_map[alias]
+        if join.join_type == INNER:
+            join.join_type = 'STRAIGHT_JOIN'
+        return alias
+
+    queryset.query.join = hacked_join

@@ -17,6 +17,7 @@ from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, Profile, Contest
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import user_completed_ids, get_result_table
+from judge.utils.raw_sql import use_straight_join
 from judge.utils.views import TitleMixin
 
 
@@ -154,7 +155,9 @@ class SubmissionsListBase(TitleMixin, ListView):
         return self.request.user.profile.current_contest.contest
 
     def _get_queryset(self):
-        queryset = submission_related(Submission.objects.order_by('-id'))
+        queryset = Submission.objects.all()
+        use_straight_join(queryset)
+        queryset = submission_related(queryset.order_by('-id'))
         if self.in_contest:
             return queryset.filter(contest__participation__contest_id=self.contest.id)
         return queryset
