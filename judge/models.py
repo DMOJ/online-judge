@@ -24,7 +24,12 @@ from reversion.models import Version
 from sortedm2m.fields import SortedManyToManyField
 from timedelta.fields import TimedeltaField
 
-from judge.fulltext import SearchManager, SearchQuerySet
+try:
+    from django_mysql.models import QuerySet as FancyQuerySet
+except ImportError:
+    FancyQuerySet = QuerySet
+
+from judge.fulltext import SearchQuerySet
 from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
 from judge.user_translations import ugettext as user_ugettext
@@ -332,7 +337,7 @@ class TranslatedProblemQuerySet(SearchQuerySet):
         return queryset
 
 
-class TranslatedProblemForeignKeyQuerySet(QuerySet):
+class TranslatedProblemForeignKeyQuerySet(FancyQuerySet):
     def add_problem_i18n_name(self, key, language, name_field=None):
         # You must specify name_field if Problem is not yet joined into the QuerySet.
         kwargs = {key: Coalesce(RawSQLColumn(ProblemTranslation, 'name'),
