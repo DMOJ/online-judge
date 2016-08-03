@@ -76,7 +76,7 @@ block info_float
     b {% trans "Time limit:" %}
     |  #{problem.time_limit}s
     br
-    i.fa.fa-database.fa-fw
+    i.fa.fa-server.fa-fw
     b {% trans "Memory limit:" %}
     |  #{problem.memory_limit|kbsimpleformat}
     br
@@ -84,7 +84,7 @@ block info_float
     - cache 86400 problem_authors problem.id LANGUAGE_CODE
         - with authors=problem.authors.all
             if authors
-                i.fa.fa-pencil-square.fa-fw
+                i.fa.fa-pencil-square-o.fa-fw
                 b
                     - blocktrans trimmed count counter=authors|length
                         | Author:
