@@ -169,10 +169,11 @@ class ProblemList(TitleMixin, ListView):
                       allow_empty_first_page=True, **kwargs):
         paginator = DiggPaginator(queryset, per_page, body=6, padding=2, orphans=orphans,
                                   allow_empty_first_page=allow_empty_first_page, **kwargs)
-        # Get the number of pages and then add in this magic.
-        # noinspection PyStatementEffect
-        paginator.num_pages
-        paginator.object_list = queryset.add_i18n_name(self.request.LANGUAGE_CODE)
+        if not self.in_contest:
+            # Get the number of pages and then add in this magic.
+            # noinspection PyStatementEffect
+            paginator.num_pages
+            paginator.object_list = queryset.add_i18n_name(self.request.LANGUAGE_CODE)
         return paginator
 
     @cached_property
