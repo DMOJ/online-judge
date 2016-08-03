@@ -5,6 +5,6 @@ div.page-title
         h2(style='color:#393630; display: inline-block') {% trans title %}
         span.spacer
         li(class=('active' if tab == 'list' else ''))
-            a(href='{% url "user_list" %}') {% trans "User" %}
+            a(href='{% url "user_list" %}') {% trans "Users" %}
         li(class=('active' if tab == 'organizations' else ''))
             a(href='{% url "organization_list" %}') {% trans "Organizations" %}
