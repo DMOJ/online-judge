@@ -32,6 +32,11 @@ block js_media
             $(function() {
                 $('#category').select2();
                 $('#types').select2({multiple: 1, placeholder: '{% trans "Filter by type..." %}'});
+                // This is incredibly nasty to do but it's needed because otherwise the select2 steals the focus
+                $('#search').keypress(function (e) {
+                    if (e.keyCode == 13)
+                        $('#go').click();
+                });
             });
 
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
@@ -122,7 +127,7 @@ block body
                                     else
                                         option(value=type.id)= type.full_name
                     hr
-                    a.button(onclick='form.submit()') {% trans "Go" %}
+                    a#go.button(onclick='form.submit()') {% trans "Go" %}
                     a.button(href='{% url "problem_random" %}') {% trans "Random" %}
         #content-left.problems
             if page_obj.num_pages > 1
