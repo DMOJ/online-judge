@@ -126,7 +126,6 @@ INSTALLED_APPS += (
     'sortedm2m',
     'pyjade.ext.django',
     'statici18n',
-    'django_mysql'
 )
 
 MIDDLEWARE_CLASSES = (

@@ -18,5 +18,3 @@ python-social-auth
 pytz
 django-statici18n
 pika
-mysqlclient
-django-mysql

@@ -28,6 +28,9 @@ try:
     from django_mysql.models import QuerySet as FancyQuerySet
 except ImportError:
     FancyQuerySet = QuerySet
+else:
+    if 'django_mysql' not in settings.INSTALLED_APPS:
+        FancyQuerySet = QuerySet
 
 from judge.fulltext import SearchQuerySet
 from judge.judgeapi import judge_submission, abort_submission
