@@ -8,7 +8,8 @@ block js_media
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script.
             $(function () {
-                $('#search').select2();
+                $('#search').replaceWith($('<select/>').attr({id: 'search'}));
+                $('#search').select2({placeholder: '{% trans "Search by handle..." %}'});
             });
     script.
         $(function() {
@@ -29,6 +30,8 @@ block media
     if has_select2
         link(href="{{ SELECT2_CSS_URL }}", type="text/css", media="screen", rel="stylesheet")
     style.
+        .select2-selection__arrow { display: none; }
+
         #users-table .rank, .points, .problems, .username {
             white-space: nowrap;
         }
