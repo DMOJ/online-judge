@@ -4,6 +4,7 @@ from django.db.models import Prefetch
 from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
 
+from dmoj import settings
 from judge.models import Contest, Problem, Profile, Submission, ContestTag
 
 
@@ -29,8 +30,14 @@ def api_contest_list(request):
 
 
 def api_problem_list(request):
+    qs = Problem.objects.filter(is_public=True)
+    if settings.ENABLE_FTS and 'search' in request.GET:
+        query = ' '.join(request.GET.getlist('search')).strip()
+        if query:
+            qs = qs.search(query)
+
     problems = {}
-    for p in Problem.objects.filter(is_public=True):
+    for p in qs:
         problems[p.code] = {
             'points': p.points,
             'partial': p.partial,
