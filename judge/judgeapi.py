@@ -47,6 +47,8 @@ def judge_submission(submission):
     submission.result = None
     submission.error = None
     try:
+        # This is set proactively; it might get unset in judgecallback's on_grading_begin if the problem doesn't
+        # actually have pretests stored on the judge.
         submission.is_pretested = ContestSubmission.objects.filter(submission=submission) \
             .values_list('problem__contest__run_pretests_only', flat=True)[0]
     except IndexError:

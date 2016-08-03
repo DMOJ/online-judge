@@ -8,8 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from judge import event_poster as event
 from judge.caching import finished_submission
-from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit, RuntimeVersion, \
-    ContestSubmission
+from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit, RuntimeVersion
 from .judgehandler import JudgeHandler
 
 logger = logging.getLogger('judge.bridge')
@@ -120,6 +119,9 @@ class DjangoJudgeHandler(JudgeHandler):
             logger.warning('Unknown submission: %d', packet['submission-id'])
             return
         submission.status = 'G'
+
+        # Update pretest state now that we know for sure whether the problem has pretest data
+        submission.is_pretested = packet['pretested']
         submission.current_testcase = 1
         submission.batch = False
         submission.save()
