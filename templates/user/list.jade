@@ -2,6 +2,7 @@ extends user/base_users
 
 - load staticfiles
 - load cache
+- load i18n
 
 block users_js_media
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
@@ -19,6 +20,7 @@ block users_media
 
 block title_row
     - var tab = 'list'
+    - var title = '{% trans "Users" %}'
     include user/user_list_tabs
 
 block users_table
