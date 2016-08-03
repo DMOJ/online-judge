@@ -43,7 +43,7 @@ block body
                             span.contest-tag(style='background-color: {{ tag.color }}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                 data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
-                        a(href='{% url "contest_view" contest.key %}')= contest.name
+                        a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                         if contest.start_time
                             br
                             if contest.time_before_end
@@ -87,7 +87,7 @@ block body
                         span.contest-tag(style='background-color: {{ tag.color }}')
                             a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                             data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
-                    a(href='{% url "contest_view" contest.key %}')= contest.name
+                    a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                     if contest.start_time
                         br
                         if contest.time_before_start
@@ -127,7 +127,7 @@ block body
         tbody: each contest in past_contests
             tr
                 td: div(style='position:relative')
-                    a(href='{% url "contest_view" contest.key %}')= contest.name
+                    a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                     .contest-tags: each tag in contest.tags.all
                         span.contest-tag(style='background-color: {{ tag.color }}')
                             a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
