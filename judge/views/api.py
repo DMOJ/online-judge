@@ -18,7 +18,7 @@ def sane_time_repr(delta):
 def api_contest_list(request):
     contests = {}
     for c in Contest.objects.filter(is_public=True, is_private=False).prefetch_related(
-            Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')):
+            Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description'):
         contests[c.key] = {
             'name': c.name,
             'start_time': c.start_time.isoformat(),
@@ -37,12 +37,12 @@ def api_problem_list(request):
             qs = qs.search(query)
 
     problems = {}
-    for p in qs:
-        problems[p.code] = {
-            'points': p.points,
-            'partial': p.partial,
-            'name': p.name,
-            'group': p.group.full_name
+    for code, points, partial, name, group in qs.values_list('code', 'points', 'partial', 'name', 'group__full_name'):
+        problems[code] = {
+            'points': points,
+            'partial': partial,
+            'name': name,
+            'group': group
         }
     return JsonResponse(problems)
 
@@ -66,11 +66,11 @@ def api_problem_info(request, problem):
 
 def api_user_list(request):
     users = {}
-    for p in Profile.objects.select_related('user').only('user__username', 'name', 'points', 'display_rank'):
-        users[p.user.username] = {
-            'display_name': p.name,
-            'points': p.points,
-            'rank': p.display_rank
+    for username, name, points, rank in Profile.objects.values_list('user__username', 'name', 'points', 'display_rank'):
+        users[username] = {
+            'display_name': name,
+            'points': points,
+            'rank': rank
         }
     return JsonResponse(users)
 
@@ -88,18 +88,17 @@ def api_user_info(request, user):
 def api_user_submissions(request, user):
     p = get_object_or_404(Profile, user__username=user)
 
-    subs = Submission.objects.filter(user=p, problem__is_public=True).select_related('problem', 'language') \
-        .only('id', 'problem__code', 'time', 'memory', 'points', 'language__key', 'status', 'result')
+    subs = Submission.objects.filter(user=p, problem__is_public=True)
     data = {}
 
-    for s in subs:
-        data[s.id] = {
-            'problem': s.problem.code,
-            'time': s.time,
-            'memory': s.memory,
-            'points': s.points,
-            'language': s.language.key,
-            'status': s.status,
-            'result': s.result
+    for s in subs.values('id', 'problem__code', 'time', 'memory', 'points', 'language__key', 'status', 'result'):
+        data[s['id']] = {
+            'problem': s['problem__code'],
+            'time': s['time'],
+            'memory': s['memory'],
+            'points': s['points'],
+            'language': s['language__key'],
+            'status': s['status'],
+            'result': s['result'],
         }
     return JsonResponse(data)
