@@ -97,7 +97,7 @@ block body
                     label(for='show_types') {% trans "Show problem tags" %}
                     br
                     .filter-form-group
-                        label(for='category'): i {% trans "Category:" %}
+                        label(for='category'): i {% trans "Category" %}
                         select#category(name='category', onchange='form.submit()')
                             if category
                                 option(value='', selected) {% trans "All" %}
