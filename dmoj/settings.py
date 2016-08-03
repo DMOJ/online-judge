@@ -313,8 +313,6 @@ DATABASES = {
     }
 }
 
-DJANGO_MYSQL_REWRITE_QUERIES = True
-
 ENABLE_FTS = False
 
 # Bridged configuration

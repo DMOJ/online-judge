@@ -38,13 +38,13 @@ def RawSQLColumn(model, field=None):
 def use_straight_join(queryset):
     if connections[queryset.db].vendor != 'mysql':
         return
-    original_join = queryset.query.join
 
-    def hacked_join(join, reuse=None):
-        alias = original_join(join, reuse)
-        join = queryset.query.alias_map[alias]
-        if join.join_type == INNER:
-            join.join_type = 'STRAIGHT_JOIN'
-        return alias
+    class Query(type(queryset.query)):
+        def join(self, join, reuse=None):
+            alias = super(Query, self).join(join, reuse)
+            join = self.alias_map[alias]
+            if join.join_type == INNER:
+                join.join_type = 'STRAIGHT_JOIN'
+            return alias
 
-    queryset.query.join = hacked_join
+    queryset.query = queryset.query.clone(Query)
