@@ -217,7 +217,7 @@ class ProblemList(TitleMixin, ListView):
         if settings.ENABLE_FTS and 'search' in self.request.GET:
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
-                queryset = queryset.search(query).order_by('relavence')
+                queryset = queryset.search(query)
         return queryset.add_i18n_name(self.request.LANGUAGE_CODE)
 
     def get_queryset(self):
