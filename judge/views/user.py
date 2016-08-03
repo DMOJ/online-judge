@@ -16,7 +16,8 @@ from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
+from django.utils.translation import ugettext as _, ugettext_lazy
 from reversion import revisions
 
 from judge.forms import ProfileForm, Subscription, newsletter_id
@@ -24,7 +25,7 @@ from judge.models import Profile, Submission, Rating
 from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
-from judge.utils.views import TitleMixin, generic_message
+from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin
 from .contests import contest_ranking_view
 
 __all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile']
@@ -127,13 +128,18 @@ class UserAboutPage(UserPage):
             .defer('contest__description')
 
         context['rating_data'] = mark_safe(json.dumps([
-            {'label': rating.contest.name, 'rating': rating.rating, 'ranking': rating.rank,
-             'link': reverse('contest_ranking', args=(rating.contest.key,)),
-             'timestamp': (rating.contest.end_time - EPOCH).total_seconds() * 1000,
-             'date': date_format(rating.contest.end_time, _('M j, Y, G:i')),
-             'class': rating_class(rating.rating), 'height': '%.3fem' % rating_progress(rating.rating)}
-            for rating in ratings
-        ]))
+                                                          {'label': rating.contest.name, 'rating': rating.rating,
+                                                           'ranking': rating.rank,
+                                                           'link': reverse('contest_ranking',
+                                                                           args=(rating.contest.key,)),
+                                                           'timestamp': (
+                                                                            rating.contest.end_time - EPOCH).total_seconds() * 1000,
+                                                           'date': date_format(rating.contest.end_time,
+                                                                               _('M j, Y, G:i')),
+                                                           'class': rating_class(rating.rating),
+                                                           'height': '%.3fem' % rating_progress(rating.rating)}
+                                                          for rating in ratings
+                                                          ]))
 
         if ratings:
             user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
@@ -193,13 +199,25 @@ def edit_profile(request):
     })
 
 
+class UserList(LoadSelect2Mixin, TitleMixin, ListView):
+    model = Profile
+    title = ugettext_lazy('Users')
+    context_object_name = 'users'
+    template_name = 'user/list.jade'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserList, self).get_context_data(**kwargs)
+        context['user'] = ranker(Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
+                                 .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
+                                 .select_related('user__username')
+                                 .only('display_rank', 'user__username', 'name', 'points', 'rating'))
+        return context
+
+
+user_list_view = UserList.as_view()
+
+
 def users(request):
     if request.user.is_authenticated() and request.user.profile.current_contest is not None:
         return contest_ranking_view(request, request.user.profile.current_contest.contest)
-    return render(request, 'user/list.jade', {
-        'users': ranker(Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
-                        .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
-                        .select_related('user__username')
-                        .only('display_rank', 'user__username', 'name', 'points', 'rating')),
-        'title': _('Users')
-    })
+    return user_list_view(request)
