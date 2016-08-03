@@ -86,9 +86,11 @@ block body
                 h3 {% trans "Problem search" %}
                 hr
                 form#filter-form(name='form', action='', method='get')
-                    if has_search
-                        input#search(type='text', name='search', value=search_query, placeholder='{% trans "Search problems..." %}')
-                        br
+                    input#search(type='text', name='search', value=search_query, placeholder='{% trans "Search problems..." %}')
+                    br
+                    if has_fts
+                        input#show_types(onclick='form.submit()', type='checkbox', name='show_types', checked=('checked' if full_text else undefined), value='1')
+                        label(for='show_types') {% trans "Full text search" %}
                     if request.user.is_authenticated
                         input#hide_solved(onclick='form.submit()', type='checkbox', name='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
                         label(for='hide_solved') {% trans "Hide solved problems" %}

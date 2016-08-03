@@ -214,10 +214,13 @@ class ProblemList(TitleMixin, ListView):
             queryset = queryset.filter(group__id=self.category)
         if self.selected_types:
             queryset = queryset.filter(types__in=self.selected_types)
-        if settings.ENABLE_FTS and 'search' in self.request.GET:
+        if 'search' in self.request.GET:
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
-                queryset = queryset.search(query, queryset.BOOLEAN).extra(order_by=['-relevance'])
+                if settings.ENABLE_FTS and self.full_text:
+                    queryset = queryset.search(query, queryset.BOOLEAN).extra(order_by=['-relevance'])
+                else:
+                    queryset = queryset.filter(Q(code__contains=query) | Q(name__contains=query))
         return queryset.add_i18n_name(self.request.LANGUAGE_CODE).distinct()
 
     def get_queryset(self):
@@ -236,12 +239,13 @@ class ProblemList(TitleMixin, ListView):
         context = super(ProblemList, self).get_context_data(**kwargs)
         context['hide_solved'] = int(self.hide_solved)
         context['show_types'] = int(self.show_types)
+        context['full_text'] = int(self.full_text)
         context['category'] = self.category
         context['categories'] = ProblemGroup.objects.all()
         if self.show_types:
             context['selected_types'] = self.selected_types
             context['problem_types'] = ProblemType.objects.all()
-        context['has_search'] = settings.ENABLE_FTS
+        context['has_fts'] = settings.ENABLE_FTS
         context['search_query'] = self.search_query
         context['completed_problem_ids'] = self.get_completed_problems()
 
@@ -267,6 +271,7 @@ class ProblemList(TitleMixin, ListView):
     def get(self, request, *args, **kwargs):
         self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
         self.show_types = request.GET.get('show_types') == '1' if 'show_types' in request.GET else False
+        self.full_text = request.GET.get('show_types') == '1' if 'show_types' in request.GET else False
         self.search_query = None
         self.category = None
         self.selected_types = []
