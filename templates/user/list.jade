@@ -17,5 +17,9 @@ block users_media
             text-align: left;
         }
 
+block title_row
+    - var tab = 'list'
+    include user/user_list_tabs
+
 block users_table
     include user/users_table

@@ -10,6 +10,10 @@ block js_media
             $("#organization-table").tablesorter();
         });
 
+block title_row
+    - var tab = 'organizations'
+    include user/user_list_tabs
+
 block body
     br
     table.table#organization-table
