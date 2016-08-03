@@ -29,7 +29,9 @@ block js_media
     if has_select2
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script.
-            $('#category').select2();
+            $(function() {
+                $('#category').select2();
+            });
 
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
     script(type='text/javascript').
