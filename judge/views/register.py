@@ -14,6 +14,11 @@ from sortedm2m.forms import SortedMultipleChoiceField
 from judge.models import Profile, Language, Organization, TIMEZONE
 from judge.utils.subscription import Subscription, newsletter_id
 
+try:
+    from django_select2.forms import Select2Widget
+except ImportError:
+    from django.forms import Select as Select2Widget
+
 valid_id = re.compile(r'^\w+$')
 
 
@@ -22,10 +27,12 @@ class CustomRegistrationForm(RegistrationForm):
                                 error_messages={'invalid': _('A username must contain letters, '
                                                              'numbers, or underscores')})
     display_name = CharField(max_length=50, required=False, label=_('Real name (optional)'))
-    timezone = ChoiceField(label=_('Location'), choices=TIMEZONE)
+    timezone = ChoiceField(label=_('Location'), choices=TIMEZONE,
+                           widget=Select2Widget(attrs={'style': 'width:200px'}))
+    language = ModelChoiceField(queryset=Language.objects.all(), label=_('Preferred language'), empty_label=None,
+                                widget=Select2Widget(attrs={'style': 'width:200px'}))
     organizations = SortedMultipleChoiceField(queryset=Organization.objects.filter(is_open=True),
                                               label=_('Organizations'), required=False)
-    language = ModelChoiceField(queryset=Language.objects.all(), label=_('Preferred language'), empty_label=None)
 
     if newsletter_id is not None:
         newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=False, required=False)
