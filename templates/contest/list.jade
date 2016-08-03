@@ -120,8 +120,10 @@ block body
     br
     table.contest-list.table.striped
         thead: tr
-            th(style='width:95%') {% trans "Contest" %}
+            th(style='width:90%') {% trans "Contest" %}
             th {% trans "#" %}
+            if not IN_CONTEST
+                th(style='width:15%')
         tbody: each contest in past_contests
             tr
                 td: div(style='position:relative')
@@ -145,5 +147,4 @@ block body
                 td: a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
                 if not IN_CONTEST
                     td: a.unselectable.button.full.participate-button(href='#')
-                        if request.user.profile in contest.organizers.all
-                            | {% trans "Virtual join" %}
+                        | {% trans "Virtual join" %}
