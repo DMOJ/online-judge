@@ -4,6 +4,8 @@ extends common-content
 - load i18n
 
 block media
+    if has_select2
+        link(href="{{ SELECT2_CSS_URL }}" type="text/css" media="screen" rel="stylesheet")
     style.
         @media (max-width: 550px) {
             #problem-table tr :nth-child(6) {
@@ -24,6 +26,20 @@ block media
         }
 
 block js_media
+    if has_select2
+        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
+        script.
+            $(function() {
+                $('#search').select2({
+                    ajax: '/api/problem/list',
+                    delay: 250,
+                    data: function(query) {
+                        return {search: query.term};
+                    }
+                });
+            });
+
+
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
     script(type='text/javascript').
         $(document).ready(function() {

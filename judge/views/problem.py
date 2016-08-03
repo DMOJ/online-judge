@@ -237,6 +237,14 @@ class ProblemList(TitleMixin, ListView):
         context['has_search'] = settings.ENABLE_FTS
         context['search_query'] = self.search_query
         context['completed_problem_ids'] = self.get_completed_problems()
+
+        select2_css = getattr(settings, 'SELECT2_CSS_URL', None)
+        select2_js = getattr(settings, 'SELECT2_JS_URL', None)
+        has_select2 = select2_css is not None and select2_js is not None
+        context['has_select2'] = has_select2
+        if has_select2:
+            context['SELECT2_CSS_URL'] = select2_css
+            context['SELECT2_JS_URL'] = select2_js
         return context
 
     def get(self, request, *args, **kwargs):
