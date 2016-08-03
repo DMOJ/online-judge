@@ -122,7 +122,6 @@ block body
                     a.button(onclick='form.submit()') {% trans "Go" %}
                     a.button(href='{% url "problem_random" %}') {% trans "Random" %}
         #content-left.problems
-            br
             if page_obj.num_pages > 1
                 div(style='margin-bottom: 7px; margin-top: 5px;')
                     include list_pages
