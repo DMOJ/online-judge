@@ -26,6 +26,7 @@ from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemGroup, Solution, \
     ProblemTranslation, TranslatedProblemForeignKeyQuerySet, RuntimeVersion, ProblemType
 from judge.pdf_problems import HAS_PDF, WebKitPdfMaker
+from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import TitleMixin, generic_message
 
@@ -162,6 +163,12 @@ class ProblemList(TitleMixin, ListView):
     title = ugettext_lazy('Problems')
     context_object_name = 'problems'
     template_name = 'problem/list.jade'
+    paginate_by = 50
+
+    def get_paginator(self, queryset, per_page, orphans=0,
+                      allow_empty_first_page=True, **kwargs):
+        return DiggPaginator(queryset, per_page, body=6, padding=2,
+                             orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
 
     @cached_property
     def profile(self):
@@ -250,6 +257,15 @@ class ProblemList(TitleMixin, ListView):
         if has_select2:
             context['SELECT2_CSS_URL'] = select2_css
             context['SELECT2_JS_URL'] = select2_js
+
+        query = self.request.GET.copy()
+        query.setlist('page', [])
+        query = query.urlencode()
+        context['first_page_href'] = '%s?%s' % (self.request.path, query)
+        if query:
+            context['page_prefix'] = '%s?%s&page=' % (self.request.path, query)
+        else:
+            context['page_prefix'] = '%s?page=' % self.request.path
         return context
 
     def get(self, request, *args, **kwargs):

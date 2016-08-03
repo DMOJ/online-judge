@@ -123,6 +123,10 @@ block body
                     a.button(href='{% url "problem_random" %}') {% trans "Random" %}
         #content-left.problems
             br
+            if page_obj.num_pages > 1
+                div(style='margin-bottom:10px;')
+                    include list_pages
+
             table#problem-table.table.striped
                 thead: tr
                     if request.user.is_authenticated
@@ -153,6 +157,7 @@ block body
                                 | p
                         td.users
                             a(href='{% url "ranked_submissions" problem.code %}')= problem.number_of_users
+            if page_obj.num_pages > 1
+                div(style='margin-top:10px;')
+                    include list_pages
     br
-
-
