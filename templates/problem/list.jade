@@ -155,7 +155,7 @@ block body
                             if problem.partial
                                 | p
                         td.users
-                            a(href='{% url "ranked_submissions" problem.code %}')= problem.number_of_users
+                            a(href='{% url "ranked_submissions" problem.code %}')= problem.user_count
             if page_obj.num_pages > 1
                 div(style='margin-top:10px;')
                     include list_pages

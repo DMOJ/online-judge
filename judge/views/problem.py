@@ -204,12 +204,7 @@ class ProblemList(TitleMixin, ListView):
         if self.profile is not None:
             filter |= Q(id__in=Problem.objects.filter(contest__users__user=self.profile).values('id').distinct())
             filter |= Q(authors=self.profile)
-        queryset = Problem.objects.filter(filter) \
-            .annotate(number_of_users=Count(Case(
-                When(submission__points__gt=0, then=F('submission__user')),
-                output_field=IntegerField()
-            ), distinct=True)) \
-            .select_related('group').defer('description').order_by('code')
+        queryset = Problem.objects.filter(filter).select_related('group').defer('description').order_by('code')
         if self.profile is not None and self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
                                         .values_list('problem__id', flat=True))
