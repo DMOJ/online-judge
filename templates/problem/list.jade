@@ -89,8 +89,9 @@ block body
                     input#search(type='text', name='search', value=search_query, placeholder='{% trans "Search problems..." %}')
                     br
                     if has_fts
-                        input#show_types(type='checkbox', name='full_text', checked=('checked' if full_text else undefined), value='1')
+                        input#full_text(type='checkbox', name='full_text', checked=('checked' if full_text else undefined), value='1')
                         label(for='full_text') {% trans "Full text search" %}
+                        br
                     if request.user.is_authenticated
                         input#hide_solved(onclick='form.submit()', type='checkbox', name='hide_solved', checked=('checked' if hide_solved else undefined), value='1')
                         label(for='hide_solved') {% trans "Hide solved problems" %}
