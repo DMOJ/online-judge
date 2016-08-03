@@ -133,10 +133,10 @@ block body
                             i.fa.fa-check
                     th.problem {% trans "Problem" %}
                     th.category {% trans "Category" %}
-                    th.code {% trans "Code" %}
                     if show_types
                         th {% trans "Types" %}
                     th.points {% trans "Points" %}
+                    th.ac-rate {% trans "AC %" %}
                     th.users {% trans "Users" %}
                 tbody: each problem in problems
                     tr
@@ -148,12 +148,12 @@ block body
                         td.problem
                             a(href='{% url "problem_detail" problem.code %}')= problem.i18n_name
                         td.category= problem.group.full_name
-                        td.code= problem.code
                         if show_types
                             td.types #{problem.types_list | join:", "}
                         td.p #{problem.points | floatformat}
                             if problem.partial
                                 | p
+                        td.ac-rate #{problem.ac_rate|floatformat:"1"}%
                         td.users
                             a(href='{% url "ranked_submissions" problem.code %}')= problem.user_count
             if page_obj.num_pages > 1
