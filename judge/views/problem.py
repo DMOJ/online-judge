@@ -218,7 +218,7 @@ class ProblemList(TitleMixin, ListView):
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
                 queryset = queryset.search(query)
-        return queryset.add_i18n_name(self.request.LANGUAGE_CODE)
+        return queryset.add_i18n_name(self.request.LANGUAGE_CODE).distinct()
 
     def get_queryset(self):
         if self.in_contest:
