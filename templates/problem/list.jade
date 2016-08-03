@@ -31,7 +31,7 @@ block js_media
         script.
             $(function() {
                 $('#category').select2();
-                $('#types').select2({multiple: 1});
+                $('#types').select2({multiple: 1, placeholder: '{% trans "Filter by type..." %}'});
             });
 
     script(src='{% static "tablesorter.js" %}', type='text/javascript')
@@ -113,8 +113,6 @@ block body
                         .filter-form-group
                             label(for='type'): i {% trans "Problem types" %}
                             select#types(name='type')
-                                option(value='') {% trans "All" %}
-                                option(disabled) ---
                                 each type in problem_types
                                     if type.id in selected_types
                                         option(value=type.id, selected)= type.full_name
