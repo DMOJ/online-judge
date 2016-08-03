@@ -166,7 +166,7 @@ block body
                     - var profile_id = 0
                 each submission in submissions
                     tr(id=submission.id)
-                        - var problem_name = submission.problem_name
+                        - var problem_name = submission.problem.i18n_name
                         include submission/row
 
             if page_obj.num_pages > 1

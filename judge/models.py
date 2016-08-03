@@ -372,6 +372,7 @@ class Problem(models.Model):
     def __init__(self, *args, **kwargs):
         super(Problem, self).__init__(*args, **kwargs)
         self._translated_name_cache = {}
+        self._i18n_name = None
 
     @cached_property
     def types_list(self):
@@ -427,6 +428,16 @@ class Problem(models.Model):
             name = self.name
         self._translated_name_cache[language] = name
         return name
+
+    @property
+    def i18n_name(self):
+        if self._i18n_name is None:
+            self._i18n_name = self._trans[0].name if self._trans else self.name
+        return self._i18n_name
+
+    @i18n_name.setter
+    def i18n_name(self, value):
+        self._i18n_name = value
 
     def update_stats(self):
         self.user_count = self.submission_set.filter(points__gt=0).values('user').distinct().count()
