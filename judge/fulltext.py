@@ -5,6 +5,11 @@ from django.db.models.query import QuerySet
 
 
 class SearchQuerySet(QuerySet):
+    DEFAULT = ''
+    BOOLEAN = ' IN BOOLEAN MODE'
+    NATURAL_LANGUAGE = ' IN NATURAL LANGUAGE MODE'
+    QUERY_EXPANSION = ' WITH QUERY EXPANSION'
+
     def __init__(self, fields=None, **kwargs):
         super(SearchQuerySet, self).__init__(**kwargs)
         self._search_fields = fields
@@ -14,7 +19,7 @@ class SearchQuerySet(QuerySet):
         queryset._search_fields = self._search_fields
         return queryset
 
-    def search(self, query, natural_language=False):
+    def search(self, query, mode=DEFAULT):
         meta = self.model._meta
 
         # Get the table name and column names from the model
@@ -27,8 +32,7 @@ class SearchQuerySet(QuerySet):
 
         # Create the MATCH...AGAINST expressions
         fulltext_columns = ', '.join(full_names)
-        match_expr = ('MATCH(%s) AGAINST (%%s%s)' % (
-            fulltext_columns, ' IN NATURAL LANGUAGE MODE' if natural_language else ''))
+        match_expr = ('MATCH(%s) AGAINST (%%s%s)' % (fulltext_columns, mode))
 
         # Add the extra SELECT and WHERE options
         return self.extra(select={'relevance': match_expr},
