@@ -14,7 +14,7 @@ class SearchQuerySet(QuerySet):
         queryset._search_fields = self._search_fields
         return queryset
 
-    def search(self, query):
+    def search(self, query, natural_language=False):
         meta = self.model._meta
 
         # Get the table name and column names from the model
@@ -27,7 +27,8 @@ class SearchQuerySet(QuerySet):
 
         # Create the MATCH...AGAINST expressions
         fulltext_columns = ', '.join(full_names)
-        match_expr = ('MATCH(%s) AGAINST (%%s)' % fulltext_columns)
+        match_expr = ('MATCH(%s) AGAINST (%%s%s)' % (
+            fulltext_columns, 'IN NATURAL LANGUAGE MODE' if natural_language else ''))
 
         # Add the extra SELECT and WHERE options
         return self.extra(select={'relevance': match_expr},
