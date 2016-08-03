@@ -9,6 +9,18 @@ block js_media
         script.
             $(function () {
                 $('#search').select2();
+
+                var info_float = $('.info-float');
+                var container = $('#content-right');
+                if (window.bad_browser) {
+                    container.css('float', 'right');
+                } else if (!featureTest('position', 'sticky')) {
+                    fix_div(info_float, 55);
+                    $(window).resize(function () {
+                        info_float.width(container.width());
+                    });
+                    info_float.width(container.width());
+                }
             });
 
 block media
@@ -56,7 +68,7 @@ block media
 block body
     #common-content
         #content-right.users: .info-float
-            h3 {% trans "Search user" %}
+            h3 {% trans "Search for user" %}
             hr
             input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
 
