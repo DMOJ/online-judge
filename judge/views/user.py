@@ -237,4 +237,4 @@ def user_ranking_redirect(request):
     rank = Profile.objects.filter(points__gt=user.points).count()
     rank += Profile.objects.filter(points__exact=user.points, id__lt=user.id).count()
     page = rank // UserList.paginate_by
-    return HttpResponseRedirect('%s#user-%s' % (reverse('user_list', args=[page + 1] if page else []), username))
+    return HttpResponseRedirect('%s#!%s' % (reverse('user_list', args=[page + 1] if page else []), username))

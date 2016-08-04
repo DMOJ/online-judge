@@ -24,12 +24,13 @@ block js_media
                         return '<span class="' + data.display_rank + '">' + data.text + "</span>";
                     }
                 });
-                setTimeout(function () {
-                    var target = $(':target(tr)');
-                    if (target) {
-                        $('html, body').scrollTop(target.offset().top - $('#navigation').height() - 32);
-                    }
-                }, 0);
+
+                var hash = window.location.hash;
+                if (hash.startsWith('!')) {
+                    var $user = $('#user-' + hash.substring(1)).css('background', '#fff897');
+                    if ($user)
+                        $(document).scrollTop($user.top() - 50);
+                }
             });
     script.
         $(function() {
