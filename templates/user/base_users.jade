@@ -82,8 +82,8 @@ block body
         #content-right.users: .info-float
             h3 {% trans "Search for user" %}
             hr
-            input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}',
-                         onchange='form.submit()')
+            form#search-form(name='form', action='', method='get')
+                input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}', onchange='form.submit()')
 
         #content-left.users
             br
