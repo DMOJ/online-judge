@@ -83,6 +83,13 @@ block header
     if perms.judge.change_problem
         .title-line-action [#[a(href='{% url "admin:judge_problem_changelist" %}') {% trans "Admin" %}]]
 
+block title_ruler
+
+block title_row
+    - var tab = 'list'
+    - var title = 'Problems'
+    include problem/problem_list_tabs
+
 block body
     #common-content
         block before_table
