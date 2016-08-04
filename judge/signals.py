@@ -14,6 +14,9 @@ from .caching import finished_submission
 
 @receiver(post_save, sender=Problem)
 def problem_update(sender, instance, **kwargs):
+    if hasattr(instance, '_updating_stats_only'):
+        return
+
     cache.delete_many([
         make_template_fragment_key('submission_problem', (instance.id,)),
         make_template_fragment_key('problem_feed', (instance.id,))

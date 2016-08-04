@@ -194,6 +194,7 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.save()
 
         submission.user.calculate_points()
+        submission.problem._updating_stats_only = True
         submission.problem.update_stats()
 
         if hasattr(submission, 'contest'):
