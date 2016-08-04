@@ -5,8 +5,8 @@ div.page-title
         h2(style='color:#393630; display: inline-block') {% trans title %}
         span.spacer
         li(class=('active' if tab == 'list' else ''))
-            a(href='{% url "user_list" %}') {% trans "Problems" %}
+            a(href='{% url "problem_list" %}') {% trans "Problems" %}
         li(class=('active' if tab == 'editorials' else ''))
-            a(href='{% url "problem_list" %}') {% trans "Editorials" %}
+            a(href='{% url "solution" "" %}') {% trans "Editorials" %}
         if perms.judge.change_problem
             li: a(href='{% url "admin:judge_problem_changelist" %}') {% trans "Admin" %}
