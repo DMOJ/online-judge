@@ -25,7 +25,7 @@ for judge in judges
                 | #{judge.uptime|timedelta:"simple"}
             else
                 | N/A
-        td
+        td.ping
             if judge.online
                 | #{judge.ping_ms|floatformat:3} ms
             else
