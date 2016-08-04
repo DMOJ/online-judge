@@ -204,7 +204,7 @@ class UserList(LoadSelect2Mixin, DiggPaginatorMixin, TitleMixin, ListView):
     title = ugettext_lazy('Users')
     context_object_name = 'users'
     template_name = 'user/list.jade'
-    paginate_by = 50
+    paginate_by = 100
 
     def get_queryset(self):
         return (Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
