@@ -7,6 +7,6 @@ div.page-title
         li(class=('active' if tab == 'list' else ''))
             a(href='{% url "user_list" %}') {% trans "Problems" %}
         li(class=('active' if tab == 'editorials' else ''))
-            a(href='{% url "solution" %}') {% trans "Editorials" %}
+            a(href='{% url "problem_list" %}') {% trans "Editorials" %}
         if perms.judge.change_problem
             li: a(href='{% url "admin:judge_problem_changelist" %}') {% trans "Admin" %}
