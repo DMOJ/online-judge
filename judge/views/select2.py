@@ -78,18 +78,18 @@ class UserSearchSelect2View(BaseListView):
         self.gravatar_size = request.GET.get('gravatar_size', 128)
         self.gravatar_default = request.GET.get('gravatar_default', None)
 
-        self.object_list = Profile.objects.filter(Q(user__username__icontains=(self.term)) |
-                                                  Q(name__icontains=(self.term))).select_related('user')
+        self.object_list = (Profile.objects.filter(Q(user__username__icontains=(self.term)) |
+                                                   Q(name__icontains=(self.term)))
+                                   .values_list('pk', 'user__username', 'user__email'))
 
         context = self.get_context_data()
 
         return JsonResponse({
             'results': [
                 {
-                    'text': obj.user.username,
-                    'gravatar_url': get_gravatar_url(obj.user.email, self.gravatar_size, self.gravatar_default),
-                    'id': obj.pk,
-                } for obj in context['object_list']],
+                    'text': username, 'id': pk,
+                    'gravatar_url': get_gravatar_url(email, self.gravatar_size, self.gravatar_default),
+                } for pk, username, email in context['object_list']],
             'more': context['page_obj'].has_next(),
         })
 
