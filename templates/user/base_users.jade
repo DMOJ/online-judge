@@ -27,7 +27,7 @@ block js_media
 
                 var hash = window.location.hash;
                 if (hash.startsWith('!')) {
-                    var $user = $('#user-' + hash.substring(1)).css('background', '#fff897');
+                    var $user = $('#user-' + hash.substring(2)).css('background', '#fff897');
                     if ($user)
                         $(document).scrollTop($user.top() - 50);
                 }
