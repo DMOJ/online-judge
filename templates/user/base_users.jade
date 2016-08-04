@@ -10,6 +10,7 @@ block js_media
             $(function () {
                 $('#search').replaceWith($('<select/>').attr({
                     id: 'search',
+                    name: 'handle',
                     onchange: 'form.submit()'
                 }));
                 $('#search').select2({
