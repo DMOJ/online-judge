@@ -1,23 +1,22 @@
 import json
+from datetime import datetime
 
 import django
-from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
+from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count, Min
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, Context
-from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _
-from django.views.generic import DetailView, ListView
 from django.utils.translation import ugettext as _, ugettext_lazy
+from django.views.generic import DetailView, ListView
 from reversion import revisions
 
 from judge.forms import ProfileForm, Subscription, newsletter_id
@@ -208,8 +207,8 @@ class UserList(LoadSelect2Mixin, DiggPaginatorMixin, TitleMixin, ListView):
 
     def get_queryset(self):
         return (Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
-                               .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
-                               .select_related('user__username')
+                               .annotate(problems=Count('submission__problem', distinct=True))
+                               .order_by('-points', 'id').select_related('user__username')
                                .only('display_rank', 'user__username', 'name', 'points', 'rating'))
 
     def get_context_data(self, **kwargs):
@@ -226,3 +225,15 @@ def users(request):
     if request.user.is_authenticated() and request.user.profile.current_contest is not None:
         return contest_ranking_view(request, request.user.profile.current_contest.contest)
     return user_list_view(request)
+
+
+def user_ranking_redirect(request):
+    try:
+        username = request.GET['handle']
+    except KeyError:
+        raise Http404()
+    user = get_object_or_404(Profile, user__username=username)
+    rank = Profile.objects.filter(points__gt=user.points).count()
+    rank += Profile.objects.filter(points__exact=user.points, id__lt=user.id).count()
+    page = rank // UserList.paginate_by
+    return HttpResponseRedirect('%s#user-%s' % (reverse('user_list', args=[page+1] if page else []), username))

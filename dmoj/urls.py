@@ -132,8 +132,11 @@ urlpatterns = [
         url(r'^/html$', submission.single_submission),
     ])),
 
-    url(r'^users/$', user.users, name='user_list'),
-    url(r'^users/(?P<page>\d+)$', user.user_list_view, name='user_list'),
+    url(r'^users/', include([
+        url(r'^$', user.users, name='user_list'),
+        url(r'^(?P<page>\d+)$', user.user_list_view, name='user_list'),
+        url(r'^find$', user.user_ranking_redirect, name='user_ranking_redirect'),
+    ])),
 
     url(r'^user$', user.UserAboutPage.as_view(), name='user_page'),
     url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
