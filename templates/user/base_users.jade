@@ -12,8 +12,9 @@ block js_media
                 $('#search').select2({
                     placeholder: '{% trans "Search by handle..." %}',
                     ajax: {
-                        url: '{% url "user_search_select2_ajax" %}',
-                    }
+                        url: '{% url "user_search_select2_ajax" %}'
+                    },
+                    minimumInputLength: 1,
                 });
             });
     script.
