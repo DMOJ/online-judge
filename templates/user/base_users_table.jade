@@ -11,6 +11,8 @@ thead
         block after_point_head
     tbody
         for rank, user in users
+            if searched_user and user.id == searched_user
+                a(href="#scroll")
             tr(class=('highlighted-user' if searched_user and user.id == searched_user else undefined))
                 td= rank
                 block after_rank
