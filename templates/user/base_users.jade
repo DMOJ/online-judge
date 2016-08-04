@@ -24,15 +24,13 @@ block js_media
                         return '<span class="' + data.display_rank + '">' + data.text + "</span>";
                     }
                 });
-                $(window).on('load hashchange', function() {
-                    setTimeout(function() {
-                        var target = $(':target');
-                        if (target) {
-                            $('html, body').animate({
-                                scrollTop: target.offset().top - $('#navigation').height() - 32
-                            }, 0);
-                        }
-                    }, 0);
+                $(document).ready(function () {
+                    var target = $(':target()');
+                    if (target) {
+                        $('html, body').animate({
+                            scrollTop: target.offset().top - $('#navigation').height() - 32
+                        }, 0);
+                    }
                 });
             });
     script.
