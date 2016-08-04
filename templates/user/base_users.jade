@@ -20,7 +20,7 @@ block js_media
                     },
                     minimumInputLength: 1,
                     escapeMarkup: function (markup) { return markup; },
-                    templateSelection: function (data, container) {
+                    templateResult: function (data, container) {
                         return '<span class="' + data.display_rank + ">" + data.text + "</span>";
                     }
                 });
