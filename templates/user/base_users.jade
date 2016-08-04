@@ -104,15 +104,22 @@ block media
     block users_media
 
 block body
-    if has_select2
-        #common-content
+    #common-content
+        if has_select2
             #content-right.users: .info-float
                 h3 {% trans "Search for user" %}
                 hr
                 form#search-form(name='form', action='{% url "user_ranking_redirect" %}', method='get')
                     input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
 
-            #content-left.users
-                include user/user_table_searchless_fragment
-    else
-        include user/user_table_searchless_fragment
+        #content-left.users
+            if page_obj.num_pages > 1
+                div(style='margin-bottom: 7px; margin-top: 5px;')
+                    include list_pages
+
+            table#users-table.table
+                block users_table
+
+            if page_obj.num_pages > 1
+                div(style='margin-top:10px;')
+                    include list_pages
