@@ -103,18 +103,6 @@ block media
 
     block users_media
 
-block user_table_nosearch
-    if page_obj.num_pages > 1
-        div(style='margin-bottom: 7px; margin-top: 5px;')
-            include list_pages
-
-    table#users-table.table
-        block users_table
-
-    if page_obj.num_pages > 1
-        div(style='margin-top:10px;')
-            include list_pages
-
 block body
     if has_select2
         #common-content
@@ -125,6 +113,6 @@ block body
                     input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
 
             #content-left.users
-                block user_table_nosearch
+                include user/user_table_searchless_fragment
     else
-        block user_table_nosearch
+        include user/user_table_searchless_fragment
