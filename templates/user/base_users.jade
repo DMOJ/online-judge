@@ -19,6 +19,10 @@ block js_media
                         url: '{% url "user_search_select2_ajax" %}'
                     },
                     minimumInputLength: 1,
+                    escapeMarkup: function (markup) { return markup; },
+                    templateSelection: function (data, container) {
+                        return '<span class="' + data.display_rank + ">" + data.text + "</span>";
+                    }
                 });
             });
     script.
