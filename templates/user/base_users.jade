@@ -24,14 +24,12 @@ block js_media
                         return '<span class="' + data.display_rank + '">' + data.text + "</span>";
                     }
                 });
-                $(document).ready(function () {
+                setTimeout(function () {
                     var target = $(':target()');
                     if (target) {
-                        $('html, body').animate({
-                            scrollTop: target.offset().top - $('#navigation').height() - 32
-                        }, 0);
+                        $('html, body').scrollTop(target.offset().top - $('#navigation').height() - 32);
                     }
-                });
+                }, 0);
             });
     script.
         $(function() {
