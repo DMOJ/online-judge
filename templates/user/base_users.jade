@@ -56,11 +56,11 @@ block js_media
 block media
     if has_select2
         link(href="{{ SELECT2_CSS_URL }}", type="text/css", media="screen", rel="stylesheet")
+        style.
+            .select2-selection__arrow { display: none; }
+            .select2-selection__rendered { cursor: text; }
+            .select2-results__option--highlighted { background-color: #DEDEDE !important; }
     style.
-        .select2-selection__arrow { display: none; }
-        .select2-selection__rendered { cursor: text; }
-        .select2-results__option--highlighted { background-color: #DEDEDE !important; }
-
         #users-table .rank, .points, .problems, .username {
             white-space: nowrap;
         }
@@ -103,22 +103,28 @@ block media
 
     block users_media
 
+block user_table_nosearch
+    if page_obj.num_pages > 1
+        div(style='margin-bottom: 7px; margin-top: 5px;')
+            include list_pages
+
+    table#users-table.table
+        block users_table
+
+    if page_obj.num_pages > 1
+        div(style='margin-top:10px;')
+            include list_pages
+
 block body
-    #common-content
-        #content-right.users: .info-float
-            h3 {% trans "Search for user" %}
-            hr
-            form#search-form(name='form', action='{% url "user_ranking_redirect" %}', method='get')
-                input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
+    if has_select2
+        #common-content
+            #content-right.users: .info-float
+                h3 {% trans "Search for user" %}
+                hr
+                form#search-form(name='form', action='{% url "user_ranking_redirect" %}', method='get')
+                    input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
 
-        #content-left.users
-            if page_obj.num_pages > 1
-                div(style='margin-bottom: 7px; margin-top: 5px;')
-                    include list_pages
-
-            table#users-table.table
-                block users_table
-
-            if page_obj.num_pages > 1
-                div(style='margin-top:10px;')
-                    include list_pages
+            #content-left.users
+                block user_table_nosearch
+    else
+        block user_table_nosearch
