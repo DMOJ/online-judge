@@ -91,7 +91,7 @@ block body
         #content-right.users: .info-float
             h3 {% trans "Search for user" %}
             hr
-            form#search-form(name='form', action='', method='get')
+            form#search-form(name='form', action='{% url "user_ranking_redirect" %}', method='get')
                 input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
 
         #content-left.users
