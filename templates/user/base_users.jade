@@ -25,12 +25,18 @@ block js_media
                     }
                 });
 
-                var hash = window.location.hash;
-                if (hash.startsWith('#!')) {
-                    var $user = $('#user-' + hash.substring(2)).css('background', '#fff897');
-                    if ($user)
-                        $(document).scrollTop($user.position().top - 50);
-                }
+                var $last = null;
+                $(window).on('hashchange', function() {
+                    var hash = window.location.hash;
+                    if (hash.startsWith('#!')) {
+                        var $user = $('#user-' + hash.substring(2)).addClass('highlight');
+                        if ($user) {
+                            $(document).scrollTop($user.position().top - 50);
+                            if ($last !== null) $last.removeClass('highlight');
+                            $last = $user;
+                        }
+                    }
+                }).trigger('hashchange');
             });
     script.
         $(function() {
@@ -76,6 +82,10 @@ block media
 
         #users-table tr:hover {
             background: #EAEAEA;
+        }
+
+        #users-table tr.highlight {
+            background: #fff897;
         }
 
     if show_organization
