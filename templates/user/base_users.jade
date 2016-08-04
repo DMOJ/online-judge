@@ -25,7 +25,7 @@ block js_media
                     }
                 });
                 setTimeout(function () {
-                    var target = $(':target()');
+                    var target = $(':target(tr)');
                     if (target) {
                         $('html, body').scrollTop(target.offset().top - $('#navigation').height() - 32);
                     }
