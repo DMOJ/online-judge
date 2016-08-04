@@ -6,6 +6,15 @@ from django import template
 register = template.Library()
 
 
+def get_gravatar_url(email, size, default):
+    gravatar_url = '//www.gravatar.com/avatar/' + hashlib.md5(email.strip().lower()).hexdigest() + '?'
+    args = {'d': 'identicon', 's': str(size)}
+    if default:
+        args['f'] = 'y'
+    gravatar_url += urllib.urlencode(args)
+    return gravatar_url
+
+
 class GravatarUrlNode(template.Node):
     def __init__(self, email, size='80', default='""', as_=None, variable=None):
         self.email = template.Variable(email)
@@ -27,11 +36,7 @@ class GravatarUrlNode(template.Node):
         except template.VariableDoesNotExist:
             default = False
 
-        gravatar_url = '//www.gravatar.com/avatar/' + hashlib.md5(email.strip().lower()).hexdigest() + '?'
-        args = {'d': 'identicon', 's': str(size)}
-        if default:
-            args['f'] = 'y'
-        gravatar_url += urllib.urlencode(args)
+        gravatar_url = get_gravatar_url(email, size, default)
 
         if self.variable is not None:
             context[self.variable] = gravatar_url
