@@ -201,7 +201,7 @@ def edit_profile(request):
 
 class UserList(LoadSelect2Mixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
-    title = ugettext_lazy('Users')
+    title = ugettext_lazy('Leaderboard')
     context_object_name = 'users'
     template_name = 'user/list.jade'
     paginate_by = 100
