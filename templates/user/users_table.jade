@@ -3,7 +3,10 @@ extends user/base_users_table
 - load i18n
 
 block after_rank_head
-    th
+    th.header.rank
+        span.rate-group
+            span.rate-box(style='color: white')
+                span(style='height: 0.3em')
 
 block after_rank
     td
