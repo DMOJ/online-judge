@@ -216,6 +216,8 @@ class UserList(LoadSelect2Mixin, DiggPaginatorMixin, TitleMixin, ListView):
         context['users'] = ranker(context['users'], rank=self.paginate_by * (context['page_obj'].number - 1))
         context['first_page_href'] = '.'
 
+        return context
+
 
 user_list_view = UserList.as_view()
 
