@@ -214,7 +214,7 @@ class UserList(LoadSelect2Mixin, DiggPaginatorMixin, TitleMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(UserList, self).get_context_data(**kwargs)
-        context['users'] = ranker(context['users'])
+        context['users'] = ranker(context['users'], rank=self.paginate_by * (context['page_obj'].number - 1))
         context['first_page_href'] = '.'
         return context
 
