@@ -25,7 +25,7 @@ from judge.models import Profile, Submission, Rating
 from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
-from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin
+from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin, DiggPaginatorMixin
 from .contests import contest_ranking_view
 
 __all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile']
@@ -199,18 +199,23 @@ def edit_profile(request):
     })
 
 
-class UserList(LoadSelect2Mixin, TitleMixin, ListView):
+class UserList(LoadSelect2Mixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
     title = ugettext_lazy('Users')
     context_object_name = 'users'
     template_name = 'user/list.jade'
+    paginate_by = 50
+
+    def get_queryset(self):
+        return (Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
+                               .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
+                               .select_related('user__username')
+                               .only('display_rank', 'user__username', 'name', 'points', 'rating'))
 
     def get_context_data(self, **kwargs):
         context = super(UserList, self).get_context_data(**kwargs)
-        context['users'] = ranker(Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
-                                  .annotate(problems=Count('submission__problem', distinct=True)).order_by('-points')
-                                  .select_related('user__username')
-                                  .only('display_rank', 'user__username', 'name', 'points', 'rating'))
+        context['users'] = ranker(context['users'])
+        context['first_page_href'] = '.'
         return context
 
 

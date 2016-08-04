@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from dmoj import settings
+from judge.utils.diggpaginator import DiggPaginator
 
 
 def generic_message(request, title, message, status=None):
@@ -23,6 +24,7 @@ class LoadSelect2Mixin(object):
             context['SELECT2_JS_URL'] = select2_js
         return context
 
+
 class TitleMixin(object):
     title = '(untitled)'
     content_title = None
@@ -40,3 +42,10 @@ class TitleMixin(object):
 
     def get_title(self):
         return self.title
+
+
+class DiggPaginatorMixin(object):
+    def get_paginator(self, queryset, per_page, orphans=0,
+                      allow_empty_first_page=True, **kwargs):
+        return DiggPaginator(queryset, per_page, body=6, padding=2,
+                             orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)

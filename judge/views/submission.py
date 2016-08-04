@@ -18,7 +18,7 @@ from judge.models import Problem, Submission, Profile, Contest, ProblemTranslati
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import user_completed_ids, get_result_table
 from judge.utils.raw_sql import use_straight_join
-from judge.utils.views import TitleMixin
+from judge.utils.views import TitleMixin, DiggPaginatorMixin
 
 
 def submission_related(queryset):
@@ -116,7 +116,7 @@ def abort_submission(request, submission):
     return HttpResponseRedirect(reverse('submission_status', args=(submission.id,)))
 
 
-class SubmissionsListBase(TitleMixin, ListView):
+class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     model = Submission
     paginate_by = 50
     show_problem = True
@@ -124,11 +124,6 @@ class SubmissionsListBase(TitleMixin, ListView):
     template_name = 'submission/list.jade'
     context_object_name = 'submissions'
     first_page_href = None
-
-    def get_paginator(self, queryset, per_page, orphans=0,
-                      allow_empty_first_page=True, **kwargs):
-        return DiggPaginator(queryset, per_page, body=6, padding=2,
-                             orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
 
     def get_result_table(self):
         return get_result_table(self.get_queryset().order_by())
