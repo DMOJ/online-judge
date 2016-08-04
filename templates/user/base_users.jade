@@ -21,7 +21,7 @@ block js_media
                     minimumInputLength: 1,
                     escapeMarkup: function (markup) { return markup; },
                     templateResult: function (data, container) {
-                        return '<span class="' + data.display_rank + ">" + data.text + "</span>";
+                        return '<span class="' + data.display_rank + '">' + data.text + "</span>";
                     }
                 });
             });
@@ -46,6 +46,7 @@ block media
     style.
         .select2-selection__arrow { display: none; }
         .select2-selection__rendered { cursor: text; }
+        .select2-results__option--highlighted { background: #EAEAEA }
 
         #users-table .rank, .points, .problems, .username {
             white-space: nowrap;
