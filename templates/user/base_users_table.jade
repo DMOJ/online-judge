@@ -11,7 +11,7 @@ thead
         block after_point_head
     tbody
         for rank, user in users
-            tr(id=user.user.username)
+            tr(id='user-{{ user.user.username }}')
                 td= rank
                 block after_rank
                 if show_organization
