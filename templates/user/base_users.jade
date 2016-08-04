@@ -25,12 +25,14 @@ block js_media
                     }
                 });
                 $(window).on('load hashchange', function() {
-                    var target = $(':target');
-                    if (target) {
-                        $('html, body').animate({
-                            scrollTop: target.offset().top - $('#navigation').height() - 32
-                        }, 0);
-                    }
+                    setTimeout(function() {
+                        var target = $(':target');
+                        if (target) {
+                            $('html, body').animate({
+                                scrollTop: target.offset().top - $('#navigation').height() - 32
+                            }, 0);
+                        }
+                    }, 0);
                 });
             });
     script.
