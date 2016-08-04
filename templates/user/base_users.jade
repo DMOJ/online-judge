@@ -29,7 +29,7 @@ block js_media
                 if (hash.startsWith('#!')) {
                     var $user = $('#user-' + hash.substring(2)).css('background', '#fff897');
                     if ($user)
-                        $(document).scrollTop($user.top() - 50);
+                        $(document).scrollTop($user.position().top - 50);
                 }
             });
     script.
