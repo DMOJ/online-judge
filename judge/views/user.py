@@ -207,25 +207,14 @@ class UserList(LoadSelect2Mixin, DiggPaginatorMixin, TitleMixin, ListView):
 
     def get_queryset(self):
         return (Profile.objects.filter(points__gt=0, user__is_active=True, submission__points__gt=0)
-                               .annotate(problems=Count('submission__problem', distinct=True))
-                               .order_by('-points', 'id').select_related('user__username')
-                               .only('display_rank', 'user__username', 'name', 'points', 'rating'))
+                .annotate(problems=Count('submission__problem', distinct=True))
+                .order_by('-points', 'id').select_related('user__username')
+                .only('display_rank', 'user__username', 'name', 'points', 'rating'))
 
     def get_context_data(self, **kwargs):
         context = super(UserList, self).get_context_data(**kwargs)
         context['users'] = ranker(context['users'], rank=self.paginate_by * (context['page_obj'].number - 1))
         context['first_page_href'] = '.'
-        if self.searched_handle:
-            try:
-                context['searched_user'] = Profile.objects.get(user__username=self.searched_handle).id
-            except:
-                pass
-
-        return context
-
-    def get(self, request, *args, **kwargs):
-        self.searched_handle = request.GET.get('handle', None)
-        return super(UserList, self).get(request, *args, **kwargs)
 
 
 user_list_view = UserList.as_view()
@@ -246,4 +235,4 @@ def user_ranking_redirect(request):
     rank = Profile.objects.filter(points__gt=user.points).count()
     rank += Profile.objects.filter(points__exact=user.points, id__lt=user.id).count()
     page = rank // UserList.paginate_by
-    return HttpResponseRedirect('%s?handle=%s#scroll' % (reverse('user_list', args=[page+1] if page else []), username))
+    return HttpResponseRedirect('%s#%s' % (reverse('user_list', args=[page + 1] if page else []), username))

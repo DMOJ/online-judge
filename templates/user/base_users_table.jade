@@ -11,11 +11,8 @@ thead
         block after_point_head
     tbody
         for rank, user in users
-            tr(class=('highlighted-user' if searched_user and user.id == searched_user else undefined))
-                td
-                    if searched_user and user.id == searched_user
-                        a(name="scroll")
-                    =rank
+            tr(id=user.user.username)
+                td= rank
                 block after_rank
                 if show_organization
                     td(class=user.display_rank)
