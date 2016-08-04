@@ -87,7 +87,8 @@ class UserSearchSelect2View(BaseListView):
         return JsonResponse({
             'results': [
                 {
-                    'text': username, 'id': pk,
+                    'text': username,
+                    'id': username,
                     'gravatar_url': get_gravatar_url(email, self.gravatar_size, self.gravatar_default),
                 } for pk, username, email in context['object_list']],
             'more': context['page_obj'].has_next(),
