@@ -157,7 +157,11 @@ block body
                             a(href='{% url "problem_detail" problem.code %}')= problem.i18n_name
                         td.category= problem.group.full_name
                         if show_types
-                            td.types #{problem.types_list | join:", "}
+                            td.types
+                                each type in problem.types_list
+                                    span.type-tag= type
+                                    if not forloop.last
+                                        = ', '
                         td.p #{problem.points | floatformat}
                             if problem.partial
                                 | p
