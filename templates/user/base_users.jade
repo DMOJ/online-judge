@@ -9,7 +9,12 @@ block js_media
         script.
             $(function () {
                 $('#search').replaceWith($('<select/>').attr({id: 'search'}));
-                $('#search').select2({placeholder: '{% trans "Search by handle..." %}'});
+                $('#search').select2({
+                    placeholder: '{% trans "Search by handle..." %}',
+                    ajax: {
+                        url: '{% url "user_search_select2_ajax" %}',
+                    }
+                });
             });
     script.
         $(function() {
