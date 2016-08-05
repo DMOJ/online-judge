@@ -33,7 +33,7 @@ block body
         table.contest-list.table.striped
             thead: tr
                 th(style='width:90%') {% trans "Contest" %}
-                th {% trans "#" %}
+                th {% trans "Users" %}
                 if not IN_CONTEST
                     th(style='width:15%')
             tbody: each contest in current_contests
@@ -65,7 +65,7 @@ block body
                                 else
                                     - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
                                         | {{ window_length }} long
-                    td: a(href='{% url "contest_ranking" contest.key %}') x#{contest.participation_count}
+                    td: a(href='{% url "contest_ranking" contest.key %}') #{contest.participation_count}
                     if not IN_CONTEST
                         td: a.unselectable.button.full.participate-button(href='{% url "contest_join" contest.key %}')
                             if request.user.profile in contest.organizers.all
@@ -121,7 +121,7 @@ block body
     table.contest-list.table.striped
         thead: tr
             th(style='width:90%') {% trans "Contest" %}
-            th {% trans "#" %}
+            th {% trans "Users" %}
             if not IN_CONTEST
                 th(style='width:15%')
         tbody: each contest in past_contests
