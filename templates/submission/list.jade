@@ -70,13 +70,22 @@ block js_media
 
         if dynamic_update and last_msg
             script(type='text/javascript').
+                var language_filter = $('select#language option[selected]').attr('value');
+                var status_filter = $('select#status option[selected]').attr('value');
+
                 function load_dynamic_update(last_msg) {
                     var table = $('#submissions-table');
                     var statistics = $("#statistics-table");
                     var doing_ajax = false;
                     var first = parseInt(table.find('tr:first-child').attr('id'));
 
-                    var update_submission = function (id, force) {
+                    var update_submission = function (message, force) {
+                        if (language_filter && 'language' in message && language_filter.indexOf(message.language) == -1)
+                            return;
+                        if (status_filter && 'status' in message && status_filter.indexOf(message.language) == -1)
+                            return;
+
+                        var id = message.id;
                         var row = table.find('tr#' + id);
                         if (row.length < 1) {
                             if (id < first)
@@ -120,9 +129,9 @@ block js_media
                                 if (message.type == 'update-submission') {
                                     if (message.state == 'test-case' && $body.hasClass('window-hidden'))
                                         return;
-                                    update_submission(message.id);
+                                    update_submission(message);
                                 } else if (message.type == 'done-submission') {
-                                    update_submission(message.id, true);
+                                    update_submission(message, true);
 
                                     $.ajax({
                                         url: '?results'
