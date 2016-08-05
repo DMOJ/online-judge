@@ -304,7 +304,9 @@ class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
 
     def get_queryset(self):
         qs = super(AllSubmissions, self).get_queryset()
-        return qs.filter(language__key__in=self.selected_languages)
+        if self.selected_languages:
+            return qs.filter(language__key__in=self.selected_languages)
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super(AllSubmissions, self).get_context_data(**kwargs)
