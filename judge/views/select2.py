@@ -78,9 +78,8 @@ class UserSearchSelect2View(BaseListView):
         self.gravatar_size = request.GET.get('gravatar_size', 128)
         self.gravatar_default = request.GET.get('gravatar_default', None)
 
-        self.object_list = (Profile.objects.filter(Q(user__username__icontains=(self.term)) |
-                                                   Q(name__icontains=(self.term)))
-                                   .values_list('pk', 'user__username', 'user__email', 'display_rank'))
+        self.object_list = Profile.objects.filter(Q(user__username__icontains=(self.term))) \
+            .values_list('pk', 'user__username', 'user__email', 'display_rank')
 
         context = self.get_context_data()
 
