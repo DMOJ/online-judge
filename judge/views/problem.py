@@ -300,7 +300,12 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
         if not ((not order.startswith('-') or order.count('-') == 1) and (order.lstrip('-') in self.all_sorts)):
             order = 'code'
         self.order = order
-        return super(ProblemList, self).get(request, *args, **kwargs)
+        try:
+            return super(ProblemList, self).get(request, *args, **kwargs)
+        except Exception as e:
+            if e.__module__ != '_mysql_exceptions' or e.__class__.__name__ != 'ProgrammingError':
+                raise
+            return generic_message(request, 'FTS syntax error', e.args[1], status=400)
 
 
 user_logger = logging.getLogger('judge.user')
