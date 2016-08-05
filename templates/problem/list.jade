@@ -103,15 +103,14 @@ block body
             table#problem-table.table.striped
                 thead: tr
                     if request.user.is_authenticated
-                        th.solved
-                            i.fa.fa-check
-                    th.problem {% trans "Problem" %}
-                    th.category {% trans "Category" %}
+                        th.solved: a(href=sort_links['solved']) #[i.fa.fa-check]#{sort_order.solved}
+                    th.problem: a(href=sort_links['name']) {% trans "Problem" %}#{sort_order.name}
+                    th.category: a(href=sort_links['group']) {% trans "Category" %}#{sort_order.group}
                     if show_types
-                        th {% trans "Types" %}
-                    th.points {% trans "Points" %}
-                    th.ac-rate {% trans "AC %" %}
-                    th.users {% trans "Users" %}
+                        th: a(href=sort_links['type']) {% trans "Types" %}#{sort_order.type}
+                    th.points: a(href=sort_links['points']) {% trans "Points" %}#{sort_order.points}
+                    th.ac-rate: a(href=sort_links['ac_rate']) {% trans "AC %" %}#{sort_order.ac_rate}
+                    th.users: a(href=sort_links['user_count']) {% trans "Users" %}#{sort_order.user_count}
                 tbody: each problem in problems
                     tr
                         if request.user.is_authenticated
