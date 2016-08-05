@@ -91,9 +91,9 @@ block body
         block before_table
         if not IN_CONTEST
             #content-right.problems: .info-float
-                include search_form
+                include problem/search_form
                 br
-                include recent_problems
+                include problem/recent_problems
 
         #content-left.problems
             if page_obj.num_pages > 1
