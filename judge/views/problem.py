@@ -166,7 +166,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
     template_name = 'problem/list.jade'
     paginate_by = 50
     sql_sort = {'name', 'points', 'ac_rate', 'user_count', 'code'}
-    manual_sort = {'group', 'solved'}
+    manual_sort = {'group', 'solved', 'type'}
     all_sorts = sql_sort | manual_sort
 
     def get_paginator(self, queryset, per_page, orphans=0,
@@ -189,6 +189,9 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
                     solved = user_completed_ids(self.request.user.profile)
                     queryset = list(queryset)
                     queryset.sort(key=lambda problem: problem.id in solved, reverse=self.order.startswith('-'))
+            elif sort_key == 'type':
+                queryset = list(queryset)
+                queryset.sort(key=lambda problem: problem.types_list[0].name, reverse=self.order.startswith('-'))
             paginator.object_list = queryset
         return paginator
 
