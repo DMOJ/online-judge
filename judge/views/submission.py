@@ -310,6 +310,12 @@ class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
             qs = qs.filter(result__in=self.selected_statuses)
         return qs
 
+    def get_searchable_status_codes(self):
+        hidden_codes = ['SC']
+        if not self.request.user.is_superuser and not self.request.user.is_staff:
+            hidden_codes += ['IE']
+        return [(key, value) for key, value in Submission.RESULT if key not in hidden_codes]
+
     def get_context_data(self, **kwargs):
         context = super(AllSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
@@ -318,7 +324,7 @@ class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
         context['all_languages'] = Language.objects.all().values_list('key', 'name')
         context['selected_languages'] = self.selected_languages
 
-        context['all_statuses'] = [(key, value) for key, value in Submission.RESULT if key not in ['IE', 'SC']]
+        context['all_statuses'] = self.get_searchable_status_codes()
         context['selected_statuses'] = self.selected_statuses
         return context
 
