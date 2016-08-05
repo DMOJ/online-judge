@@ -163,9 +163,11 @@ block body
                         .filter-form-group
                             label(for='status'): i {% trans "Status" %}
                             select#status(name='status', onchange='form.submit()', multiple)
+                            br
                         .filter-form-group
                             label(for='language'): i {% trans "Language" %}
                             select#language(name='language', onchange='form.submit()', multiple)
+                            br
                 else
                     #statistics-table
                         include problem/statistics_table
