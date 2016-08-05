@@ -302,14 +302,23 @@ class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
         if self.request.user.is_authenticated():
             return reverse('all_user_submissions', kwargs={'user': self.request.user.username})
 
+    def get_queryset(self):
+        qs = super(AllSubmissions, self).get_queryset()
+        qs.filter(language__key__in=self.selected_languages)
+        return qs
+
     def get_context_data(self, **kwargs):
         context = super(AllSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
         context['last_msg'] = event.last()
         context['all_languages'] = Language.objects.all().values_list('key', 'name')
-        context['selected_languages'] = set()
+        context['selected_languages'] = self.selected_languages
         return context
 
+    def get(self, request, *args, **kwargs):
+        self.selected_languages = set(request.GET.getlist('language'))
+
+        return super(AllSubmissions, self).get(request, *args, **kwargs)
 
 class ForceContestMixin(object):
     @property
