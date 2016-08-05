@@ -81,9 +81,11 @@ block js_media
                     var first = parseInt(table.find('tr:first-child').attr('id'));
 
                     var update_submission = function (message, force) {
-                        if (language_filter && 'language' in message && language_filter.indexOf(message.language) == -1)
+                        if (language_filter.length && 'language' in message &&
+                                language_filter.indexOf(message.language) == -1)
                             return;
-                        if (status_filter && 'status' in message && status_filter.indexOf(message.language) == -1)
+                        if (status_filter.length && 'status' in message &&
+                                status_filter.indexOf(message.language) == -1)
                             return;
 
                         var id = message.id;
