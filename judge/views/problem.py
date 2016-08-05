@@ -301,7 +301,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
             context['sort_links'] = {key: sort_prefix + ('-' + key if self.order == key else key)
                                      for key in self.all_sorts}
             context['sort_order'] = {key: '' for key in self.all_sorts}
-            context['sort_order'][self.order.lstrip('-')] = u' \u25B4' if self.order.startswith('-') else u' \u25BE'
+            context['sort_order'][self.order.lstrip('-')] = u' \u25BE' if self.order.startswith('-') else u' \u25B4'
         return context
 
     def get(self, request, *args, **kwargs):
