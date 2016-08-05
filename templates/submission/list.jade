@@ -85,7 +85,7 @@ block js_media
                                 language_filter.indexOf(message.language) == -1)
                             return;
                         if (status_filter.length && 'status' in message &&
-                                status_filter.indexOf(message.language) == -1)
+                                status_filter.indexOf(message.status) == -1)
                             return;
 
                         var id = message.id;
