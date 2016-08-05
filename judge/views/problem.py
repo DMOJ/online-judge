@@ -292,7 +292,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
             context['page_prefix'] = '%s?page=' % self.request.path
             context['first_page_href'] = self.request.path
 
-        query = self.request.GET.copoy()
+        query = self.request.GET.copy()
         query.setlist('order', [])
         query = query.urlencode()
         sort_prefix = '%s?%s&order=' % (self.request.path, query) if query else '%s?order=' % self.request.path
