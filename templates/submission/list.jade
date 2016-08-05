@@ -25,6 +25,14 @@ block js_media
             else
                 | window.show_problem = 0;
     script(type='text/javascript', src='{% static "moment.js" %}')
+    if has_select2
+        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
+        script.
+            $(function () {
+                $('#status').select2({multiple: 1, placeholder: '{% trans "Filter by status..." %}'});
+                $('#language').select2({multiple: 1, placeholder: '{% trans "Filter by language..." %}'});
+            });
+
     - compress js
         script(type='text/javascript', src='{% static "event.js" %}')
         if request.user.is_authenticated and perms.judge.rejudge_submission
@@ -137,6 +145,8 @@ block header
         .title-line-action: a(href=my_submissions) {% trans "My submissions" %}
 
 block media
+    if has_select2
+        link(href="{{ SELECT2_CSS_URL }}", type="text/css", media="screen", rel="stylesheet")
     if perms.judge.change_submission and perms.judge.rejudge_submission
         style.
             td.sub-prop, col.sub-prop { width: 22% }
@@ -146,8 +156,19 @@ block body
     #common-content
         #content-right.submission
             .info-float
-                #statistics-table
-                    include problem/statistics_table
+                if has_select2
+                    h3 {% trans "Filter submissions" %}
+                    hr
+                    form#filter-form(name='form', action='', method='get')
+                        .filter-form-group
+                            label(for='status'): i {% trans "Status" %}
+                            select#status(name='status', onchange='form.submit()', multiple)
+                        .filter-form-group
+                            label(for='language'): i {% trans "Language" %}
+                            select#language(name='language', onchange='form.submit()', multiple)
+                else
+                    #statistics-table
+                        include problem/statistics_table
         #content-left.submission
             if page_obj.num_pages > 1
                 div(style='margin-bottom:6px;margin-top:3px')
