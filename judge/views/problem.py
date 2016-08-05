@@ -257,6 +257,8 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
         context['search_query'] = self.search_query
         context['completed_problem_ids'] = self.get_completed_problems()
 
+        context['new_problems'] = Problem.objects.filter(is_public=True).order_by('-date', '-id')[:7]
+
         query = self.request.GET.copy()
         query.setlist('page', [])
         query = query.urlencode()
