@@ -314,9 +314,11 @@ class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
         context = super(AllSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
         context['last_msg'] = event.last()
+
         context['all_languages'] = Language.objects.all().values_list('key', 'name')
         context['selected_languages'] = self.selected_languages
-        context['all_statuses'] = Submission.RESULT
+
+        context['all_statuses'] = [(key, value) for key, value in Submission.RESULT if key not in ['IE', 'SC']]
         context['selected_statuses'] = self.selected_statuses
         return context
 
