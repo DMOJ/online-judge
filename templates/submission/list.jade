@@ -176,7 +176,7 @@ block body
                     form#filter-form(name='form', action='', method='get')
                         .filter-form-group
                             label(for='status'): i {% trans "Status" %}
-                            select#status(name='status', onchange='form.submit()', multiple)
+                            select#status(name='status', multiple)
                                 each id, name in all_statuses
                                     if id in selected_statuses
                                         option(value=id, selected)= name
@@ -185,13 +185,15 @@ block body
                             br
                         .filter-form-group
                             label(for='language'): i {% trans "Language" %}
-                            select#language(name='language', onchange='form.submit()', multiple)
+                            select#language(name='language', multiple)
                                 each code, name in all_languages
                                     if code in selected_languages
                                         option(value=code, selected)= name
                                     else
                                         option(value=code)= name
                             br
+                        hr
+                        a#go.button(onclick='form.submit()') {% trans "Go" %}
                 else
                     #statistics-table
                         include problem/statistics_table
