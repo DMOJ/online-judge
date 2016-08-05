@@ -1,0 +1,4 @@
+h3 {% trans "New problems" %}
+br
+ul.new-problems: for problem in new_problems
+    li: a(href='{% url "problem_detail" problem.code %}')= problem.name
