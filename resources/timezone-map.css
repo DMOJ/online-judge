@@ -31,7 +31,6 @@
     bottom: 0;
     border-left: 1px solid rgba(78, 124, 173, 0.5);
     width: 0;
-    -webkit-transition: left 100ms ease-out;
     transition: left 100ms ease-out;
 }
 
@@ -41,6 +40,5 @@
     right: 0;
     border-top: 1px solid rgba(78, 124, 173, 0.5);
     height: 0;
-    -webkit-transition: top 100ms ease-out;
     transition: top 100ms ease-out;
 }
