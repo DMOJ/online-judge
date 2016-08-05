@@ -18,7 +18,7 @@ from judge.models import Problem, Submission, Profile, Contest, ProblemTranslati
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import user_completed_ids, get_result_table
 from judge.utils.raw_sql import use_straight_join
-from judge.utils.views import TitleMixin, DiggPaginatorMixin
+from judge.utils.views import TitleMixin, DiggPaginatorMixin, LoadSelect2Mixin
 
 
 def submission_related(queryset):
@@ -297,7 +297,7 @@ def single_submission_query(request):
     return single_submission(request, int(request.GET['id']), bool(show_problem))
 
 
-class AllSubmissions(SubmissionsListBase):
+class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
     def get_my_submissions_page(self):
         if self.request.user.is_authenticated():
             return reverse('all_user_submissions', kwargs={'user': self.request.user.username})
