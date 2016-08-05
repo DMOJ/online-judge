@@ -14,7 +14,7 @@ from django.views.generic import ListView, DetailView
 
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
-from judge.models import Problem, Submission, Profile, Contest, ProblemTranslation
+from judge.models import Problem, Submission, Profile, Contest, ProblemTranslation, Language
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import user_completed_ids, get_result_table
 from judge.utils.raw_sql import use_straight_join
@@ -306,6 +306,8 @@ class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
         context = super(AllSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
         context['last_msg'] = event.last()
+        context['all_languages'] = Language.objects.all().values_list('key', 'name')
+        context['selected_languages'] = set()
         return context
 
 

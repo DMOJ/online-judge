@@ -167,6 +167,11 @@ block body
                         .filter-form-group
                             label(for='language'): i {% trans "Language" %}
                             select#language(name='language', onchange='form.submit()', multiple)
+                                each code, name in all_languages
+                                    if code in selected_languages
+                                        option(value=code, selected)= name
+                                    else
+                                        option(value=code)= name
                             br
                 else
                     #statistics-table
