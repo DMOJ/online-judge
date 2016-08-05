@@ -112,7 +112,8 @@ class DjangoJudgeHandler(JudgeHandler):
             return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'processing', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id})
+                                   'user': submission.user_id, 'problem': submission.problem_id,
+                                   'status': submission.result, 'language': submission.language.key})
 
     def on_grading_begin(self, packet):
         super(DjangoJudgeHandler, self).on_grading_begin(packet)
@@ -134,7 +135,8 @@ class DjangoJudgeHandler(JudgeHandler):
             return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'grading-begin', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id})
+                                   'user': submission.user_id, 'problem': submission.problem_id,
+                                   'status': submission.result, 'language': submission.language.key})
 
     def _submission_is_batch(self, id):
         submission = Submission.objects.get(id=id)
@@ -224,7 +226,7 @@ class DjangoJudgeHandler(JudgeHandler):
         event.post('submissions', {'type': 'done-submission', 'id': submission.id,
                                    'contest': submission.contest_key,
                                    'user': submission.user_id, 'problem': submission.problem_id,
-                                   'result': submission.result})
+                                   'status': submission.result, 'language': submission.language.key})
 
     def on_compile_error(self, packet):
         super(DjangoJudgeHandler, self).on_compile_error(packet)
@@ -244,7 +246,8 @@ class DjangoJudgeHandler(JudgeHandler):
             return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'compile-error', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id})
+                                   'user': submission.user_id, 'problem': submission.problem_id,
+                                   'status': submission.result, 'language': submission.language.key})
 
     def on_compile_message(self, packet):
         super(DjangoJudgeHandler, self).on_compile_message(packet)
@@ -276,7 +279,8 @@ class DjangoJudgeHandler(JudgeHandler):
             return
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'internal-error', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id})
+                                   'user': submission.user_id, 'problem': submission.problem_id,
+                                   'status': submission.result, 'language': submission.language.key})
 
     def on_submission_terminated(self, packet):
         super(DjangoJudgeHandler, self).on_submission_terminated(packet)
@@ -294,7 +298,8 @@ class DjangoJudgeHandler(JudgeHandler):
         })
         event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                    'state': 'terminated', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id})
+                                   'user': submission.user_id, 'problem': submission.problem_id,
+                                   'status': submission.result, 'language': submission.language.key})
 
     def on_test_case(self, packet):
         super(DjangoJudgeHandler, self).on_test_case(packet)
@@ -361,7 +366,8 @@ class DjangoJudgeHandler(JudgeHandler):
                 return
             event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                        'state': 'test-case', 'contest': submission.contest_key,
-                                       'user': submission.user_id, 'problem': submission.problem_id})
+                                       'user': submission.user_id, 'problem': submission.problem_id,
+                                       'status': submission.result, 'language': submission.language.key})
 
     def on_supported_problems(self, packet):
         super(DjangoJudgeHandler, self).on_supported_problems(packet)
