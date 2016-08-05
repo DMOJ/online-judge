@@ -74,7 +74,8 @@ def judge_submission(submission):
         if submission.problem.is_public:
             event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                        'contest': submission.contest_key,
-                                       'user': submission.user_id, 'problem': submission.problem_id})
+                                       'user': submission.user_id, 'problem': submission.problem_id,
+                                       'status': submission.status, 'language': submission.language.key})
         success = True
     submission.save()
     return success
