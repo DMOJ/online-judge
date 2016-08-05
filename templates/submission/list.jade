@@ -70,8 +70,9 @@ block js_media
 
         if dynamic_update and last_msg
             script(type='text/javascript').
-                var language_filter = $('select#language option[selected]').attr('value');
-                var status_filter = $('select#status option[selected]').attr('value');
+                var _collect = function (e) { return e.value; }
+                var language_filter = $.map($('select#language option[selected]'), _collect)
+                var status_filter = $.map($('select#status option[selected]'), _collect);
 
                 function load_dynamic_update(last_msg) {
                     var table = $('#submissions-table');
