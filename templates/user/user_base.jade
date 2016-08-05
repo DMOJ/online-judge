@@ -43,7 +43,7 @@ block body
                     img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar', width="135px", height="135px")
                 br
                 // Transblock
-                h4 #{user.solved_problems} problems solved.
+                h4 #{user.problem_count} problems solved.
                 b {% trans "Rank by points:" %}
                 |  ##{rank}
                 br

@@ -212,10 +212,12 @@ class Profile(models.Model):
     def calculate_points(self):
         points = sum(map(itemgetter('points'),
                          Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
-                         .values('problem_id').distinct()
-                         .annotate(points=Max('points'))))
-        if self.points != points:
+                         .values('problem_id').distinct().annotate(points=Max('points'))))
+        problems = (self.submission_set.filter(points__gt=0, problem__is_public=True)
+                        .values('problem').distinct().count())
+        if self.points != points or problems != self.problem_count:
             self.points = points
+            self.problem_count = problems
             self.save()
         return points
     calculate_points.alters_data = True
@@ -233,11 +235,6 @@ class Profile(models.Model):
                 'username': self.user.username, 'display': self.name
             }
         return self.user.username
-
-    @cached_property
-    def solved_problems(self):
-        return Submission.objects.filter(user_id=self.id, points__gt=0, problem__is_public=True).values(
-            'problem').distinct().count()
 
     def update_contest(self):
         contest = self.current_contest
