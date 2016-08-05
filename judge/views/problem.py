@@ -212,21 +212,22 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
     def get_contest_queryset(self):
         queryset = self.profile.current_contest.contest.contest_problems.select_related('problem__group') \
             .defer('problem__description').order_by('problem__code') \
-            .annotate(number_of_users=Count('submission__participation', distinct=True)) \
+            .annotate(user_count=Count('submission__participation', distinct=True)) \
             .order_by('order')
-        queryset = TranslatedProblemForeignKeyQuerySet.add_problem_i18n_name.im_func(queryset, 'problem_name',
+        queryset = TranslatedProblemForeignKeyQuerySet.add_problem_i18n_name.im_func(queryset, 'i18n_name',
                                                                                      self.request.LANGUAGE_CODE,
                                                                                      'problem__name')
         return [{
-            'id': p.problem.id,
-            'code': p.problem.code,
-            'name': p.problem.name,
-            'i18n_name': p.problem_name,
-            'group': p.problem.group,
-            'points': p.points,
-            'partial': p.partial,
-            'number_of_users': p.number_of_users
-        } for p in queryset]
+            'id': p['problem_id'],
+            'code': p['problem__code'],
+            'name': p['problem__name'],
+            'i18n_name': p['i18n_name'],
+            'group': {'full_name': p['problem__group__full_name']},
+            'points': p['points'],
+            'partial': p['partial'],
+            'user_count': p['user_count']
+        } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
+                                   'problem__group__full_name', 'points', 'partial', 'user_count')]
 
     def get_normal_queryset(self):
         filter = Q(is_public=True)
