@@ -123,7 +123,6 @@ block body
                         if show_types
                             th {% trans "Types" %}
                         th.points {% trans "Points" %}
-                        th.ac-rate {% trans "AC %" %}
                         th.users {% trans "Users" %}
                     else
                         if request.user.is_authenticated
@@ -154,7 +153,8 @@ block body
                         td.p #{problem.points | floatformat}
                             if problem.partial
                                 | p
-                        td.ac-rate #{problem.ac_rate|floatformat:"1"}%
+                        if not use_tablesorter
+                            td.ac-rate #{problem.ac_rate|floatformat:"1"}%
                         td.users
                             a(href='{% url "ranked_submissions" problem.code %}')= problem.user_count
             if page_obj.num_pages > 1
