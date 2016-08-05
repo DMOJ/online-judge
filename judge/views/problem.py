@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.db.models import Count, Q, F, Case, IntegerField, When, Prefetch
+from django.db.models import Count, Q, F, Prefetch
+from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.template import Context
@@ -302,9 +303,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
         self.order = order
         try:
             return super(ProblemList, self).get(request, *args, **kwargs)
-        except Exception as e:
-            if e.__module__ != '_mysql_exceptions' or e.__class__.__name__ != 'ProgrammingError':
-                raise
+        except ProgrammingError as e:
             return generic_message(request, 'FTS syntax error', e.args[1], status=400)
 
 
