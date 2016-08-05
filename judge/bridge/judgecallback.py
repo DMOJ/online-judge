@@ -223,7 +223,8 @@ class DjangoJudgeHandler(JudgeHandler):
             return
         event.post('submissions', {'type': 'done-submission', 'id': submission.id,
                                    'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id})
+                                   'user': submission.user_id, 'problem': submission.problem_id,
+                                   'result': submission.result})
 
     def on_compile_error(self, packet):
         super(DjangoJudgeHandler, self).on_compile_error(packet)
