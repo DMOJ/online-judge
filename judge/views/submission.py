@@ -305,7 +305,9 @@ class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
     def get_queryset(self):
         qs = super(AllSubmissions, self).get_queryset()
         if self.selected_languages:
-            return qs.filter(language__key__in=self.selected_languages)
+            qs = qs.filter(language__key__in=self.selected_languages)
+        if self.selected_statuses:
+            qs = qs.filter(result__in=self.selected_statuses)
         return qs
 
     def get_context_data(self, **kwargs):
@@ -314,10 +316,13 @@ class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
         context['last_msg'] = event.last()
         context['all_languages'] = Language.objects.all().values_list('key', 'name')
         context['selected_languages'] = self.selected_languages
+        context['all_statuses'] = Submission.RESULT
+        context['selected_statuses'] = self.selected_statuses
         return context
 
     def get(self, request, *args, **kwargs):
         self.selected_languages = set(request.GET.getlist('language'))
+        self.selected_statuses = set(request.GET.getlist('status'))
         return super(AllSubmissions, self).get(request, *args, **kwargs)
 
 class ForceContestMixin(object):

@@ -163,6 +163,11 @@ block body
                         .filter-form-group
                             label(for='status'): i {% trans "Status" %}
                             select#status(name='status', onchange='form.submit()', multiple)
+                                each id, name in all_statuses
+                                    if id in selected_statuses
+                                        option(value=id, selected)= name
+                                    else
+                                        option(value=id)= name
                             br
                         .filter-form-group
                             label(for='language'): i {% trans "Language" %}
