@@ -27,7 +27,12 @@ block media
 
         #problem-table th a {
             color: inherit;
+            display: block;
+            padding: 4px 10px;
         }
+
+    if not use_tablesorter
+        style #problem-table th { padding: 0; }
 
 block js_media
     if has_select2
