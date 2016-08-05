@@ -25,7 +25,12 @@ block media
             }
         }
 
-block js_media
+        #problem-table th a {
+            color: inherit;
+        }
+
+
+}block js_media
     if has_select2
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script.
