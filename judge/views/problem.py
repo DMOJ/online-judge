@@ -190,9 +190,10 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
                     queryset = list(queryset)
                     queryset.sort(key=lambda problem: problem.id in solved, reverse=self.order.startswith('-'))
             elif sort_key == 'type':
-                queryset = list(queryset)
-                queryset.sort(key=lambda problem: problem.types_list[0] if problem.types_list else '',
-                              reverse=self.order.startswith('-'))
+                if self.show_types:
+                    queryset = list(queryset)
+                    queryset.sort(key=lambda problem: problem.types_list[0] if problem.types_list else '',
+                                  reverse=self.order.startswith('-'))
             paginator.object_list = queryset
         return paginator
 
