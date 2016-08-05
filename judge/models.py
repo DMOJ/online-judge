@@ -217,6 +217,7 @@ class Profile(models.Model):
             self.points = points
             self.save()
         return points
+    calculate_points.alters_data = True
 
     @cached_property
     def display_name(self):
@@ -242,6 +243,7 @@ class Profile(models.Model):
         if contest is not None and contest.ended:
             self.current_contest = None
             self.save()
+    update_contest.alters_data = True
 
     def get_absolute_url(self):
         return reverse('user_page', args=(self.user.username,))
@@ -444,6 +446,7 @@ class Problem(models.Model):
         submissions = self.submission_set.count()
         self.ac_rate = 100.0 * self.submission_set.filter(result='AC').count() / submissions if submissions else 0
         self.save()
+    update_stats.alters_data = True
 
     class Meta:
         permissions = (
@@ -574,12 +577,10 @@ class Submission(models.Model):
 
     def judge(self):
         judge_submission(self)
-
     judge.alters_data = True
 
     def abort(self):
         abort_submission(self)
-
     abort.alters_data = True
 
     def is_graded(self):
@@ -796,7 +797,6 @@ class NavigationBar(MPTTModel):
             return pattern
 
 
-
 class Judge(models.Model):
     name = models.CharField(max_length=50, help_text=_('Server name, hostname-style'), unique=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('time of creation'))
@@ -1009,6 +1009,7 @@ class ContestParticipation(models.Model):
             cumtime += dt.days * 86400 + dt.seconds
         self.cumtime = cumtime
         self.save()
+    update_cumtime.alters_data = True
 
     def __unicode__(self):
         return '%s in %s' % (self.user.long_display_name, self.contest.name)
