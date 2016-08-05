@@ -164,6 +164,9 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
     context_object_name = 'problems'
     template_name = 'problem/list.jade'
     paginate_by = 50
+    sql_sort = {'name', 'points', 'ac_rate', 'user_count', 'code'}
+    manual_sort = {'category'}
+    all_sorts = sql_sort | manual_sort
 
     def get_paginator(self, queryset, per_page, orphans=0,
                       allow_empty_first_page=True, **kwargs):
@@ -173,7 +176,12 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
             # Get the number of pages and then add in this magic.
             # noinspection PyStatementEffect
             paginator.num_pages
-            paginator.object_list = queryset.add_i18n_name(self.request.LANGUAGE_CODE)
+
+            queryset = queryset.add_i18n_name(self.request.LANGUAGE_CODE)
+            sort_key = self.order.lstrip('-')
+            if sort_key in self.sql_sort:
+                queryset = queryset.order_by(self.order)
+            paginator.object_list = queryset
         return paginator
 
     @cached_property
@@ -210,7 +218,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
         if self.profile is not None:
             filter |= Q(id__in=Problem.objects.filter(contest__users__user=self.profile).values('id').distinct())
             filter |= Q(authors=self.profile)
-        queryset = Problem.objects.filter(filter).select_related('group').defer('description').order_by('code')
+        queryset = Problem.objects.filter(filter).select_related('group').defer('description')
         if self.profile is not None and self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
                                         .values_list('problem__id', flat=True))
@@ -287,6 +295,11 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
                 self.selected_types = map(int, request.GET.getlist('type'))
             except ValueError:
                 pass
+
+        order = request.GET.get('order', '')
+        if not ((not order.startswith('-') or order.count('-') == 1) and (order.lstrip('-') in self.all_sorts)):
+            order = 'code'
+        self.order = order
         return super(ProblemList, self).get(request, *args, **kwargs)
 
 
