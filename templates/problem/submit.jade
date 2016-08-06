@@ -44,8 +44,8 @@ block js_media
                     update_info($(this), info);
                 }).click(function () {
                     selected.removeClass('selected');
-                    window.ace_source.getSession().setMode("ace/mode/" + selected.attr('data-ace'));
                     field.attr('value', (selected = $(this).addClass('selected')).attr('data-id'));
+                    window.ace_source.getSession().setMode("ace/mode/" + selected.attr('data-ace'));
                     update_selected();
                 });
                 var selected = select.find('[data-id=' + current + ']').addClass('selected');
