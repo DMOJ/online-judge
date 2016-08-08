@@ -1,6 +1,6 @@
 from operator import attrgetter
 
-from django.db.models import Prefetch
+from django.db.models import Prefetch, F
 from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
 
@@ -22,7 +22,7 @@ def api_contest_list(request):
         contests[c.key] = {
             'name': c.name,
             'start_time': c.start_time.isoformat(),
-            'end_time':  c.end_time.isoformat(),
+            'end_time': c.end_time.isoformat(),
             'time_limit': c.time_limit and sane_time_repr(c.time_limit),
             'labels': map(attrgetter('name'), c.tag_list),
         }
@@ -77,11 +77,13 @@ def api_user_list(request):
 
 def api_user_info(request, user):
     p = get_object_or_404(Profile, user__username=user)
+    submissions = (Submission.objects.filter(case_points=F('case_total'), user=p, problem__is_public=True)
+                   .values('problem').distinct().values_list('problem__code', flat=True))
     return JsonResponse({
         'display_name': p.name,
         'points': p.points,
         'rank': p.display_rank,
-        'solved_problems': [],  # TODO
+        'solved_problems': submissions,
     })
 
 
