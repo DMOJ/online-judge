@@ -77,8 +77,8 @@ def api_user_list(request):
 
 def api_user_info(request, user):
     p = get_object_or_404(Profile, user__username=user)
-    submissions = (Submission.objects.filter(case_points=F('case_total'), user=p, problem__is_public=True)
-                   .values('problem').distinct().values_list('problem__code', flat=True))
+    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=p, problem__is_public=True)
+                       .values('problem').distinct().values_list('problem__code', flat=True))
     return JsonResponse({
         'display_name': p.name,
         'points': p.points,
