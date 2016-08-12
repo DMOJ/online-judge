@@ -58,7 +58,7 @@ html(lang=LANGUAGE_CODE)
                 link(rel='stylesheet', href='{% static "style.css" %}')
                 if PYGMENT_THEME
                     link(rel='stylesheet', href='{% static PYGMENT_THEME %}')
-                link(rel='stylesheet', href='{% static "libs/font-awesome.css" %}')
+                link(rel='stylesheet', href='{% static "libs/libs/fontawesome/font-awesome.css" %}')
         else
             - compress css
                 link(rel='stylesheet', href='{% static "style.css" %}')
@@ -73,9 +73,9 @@ html(lang=LANGUAGE_CODE)
                     - autoescape off
                         - inlinei18n LANGUAGE_CODE
                 script(src='{% static "libs/jquery-1.11.2.min.js" %}')
-                script(src='{% static "jquery-cookie.js" %}')
+                script(src='{% static "libs/jquery-cookie.js" %}')
                 script(src='{% static "common.js" %}')
-                script(src='{% static "jquery.unveil.js" %}')
+                script(src='{% static "libs/jquery.unveil.js" %}')
                 script.
                     $(function () { $('img.unveil').unveil(200); });
         else
@@ -83,9 +83,9 @@ html(lang=LANGUAGE_CODE)
                 - autoescape off
                     - inlinei18n LANGUAGE_CODE
             script(src=JQUERY_JS)
-            script(src='{% static "jquery-cookie.js" %}')
+            script(src='{% static "libs/jquery-cookie.js" %}')
             script(src='{% static "common.js" %}')
-            script(src='{% static "jquery.unveil.js" %}')
+            script(src='{% static "libs/jquery.unveil.js" %}')
             script.
                 $(function () { $('img.unveil').unveil(200); });
         block js_media

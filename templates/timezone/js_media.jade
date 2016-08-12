@@ -1,13 +1,13 @@
 - load compress
 - load staticfiles
 - compress js
-    script(src='{% static "featherlight.min.js" %}', type='text/javascript', charset='utf-8')
-    script(type='text/javascript', src='{% static "timezone-picker.js" %}')
+    script(src='{% static "featherlight/libs/featherlight/featherlight.min.js" %}', type='text/javascript', charset='utf-8')
+    script(type='text/javascript', src='{% static "libs/timezone-map/timezone-picker.js" %}')
     script(type='text/javascript').
         $(function () {
             $('#open-map').featherlight({
                 afterOpen: function () {
-                    timezone_picker($('.featherlight-inner .map-inset'), $('#id_timezone'), '{% static "timezone-picker.json" %}');
+                    timezone_picker($('.featherlight-inner .map-inset'), $('#id_timezone'), '{% static "libs/timezone-map/libs/timezone-map/timezone-picker.json" %}');
                 }
             });
         });

@@ -8,7 +8,7 @@ block meta
     meta(name='description', content="The {{ SITE_NAME }}'s contest list - past, present, and future.")
 
 block js_media
-    script(src='{% static "featherlight.min.js" %}', type='text/javascript')
+    script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/javascript')
     script(type='text/javascript').
         $(document).ready(function () {
             $('.time-remaining').each(function () {
@@ -19,7 +19,7 @@ block js_media
         });
 
 block media
-    link(href='{% static "featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
+    link(href='{% static "libs/featherlight/featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
 
 block header
     div(style='float: right; margin-top: 0.9em; font-size: 1.3em;')

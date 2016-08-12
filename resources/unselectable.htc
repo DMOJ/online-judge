@@ -1,4 +1,3 @@
-<!-- save this file as unselectable.htc and remember where you put it -->
 <public:component lightweight="true">
     <public:attach event="ondocumentready" onevent="unselectable()"/>
     <script type="text/javascript">

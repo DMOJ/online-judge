@@ -1,11 +1,10 @@
 - load compress
 - load staticfiles
 
-script(type='text/javascript', src='{% static "moment.js" %}')
-script(src='{% static "featherlight.min.js" %}', type='text/javascript')
+script(type='text/javascript', src='{% static "libs/moment.js" %}')
+script(src='{% static "featherlight/libs/featherlight/featherlight.min.js" %}', type='text/javascript')
 
 - compress js
-    script(src='{% static "placeholder-compat.js" %}', type='text/javascript')
     | #{comment_form.media.js}
 
     script(type='text/javascript').
