@@ -3,13 +3,13 @@ extends base
 - load compress
 
 block media
-    link(rel='stylesheet', href='{% static "clipboard/tooltip.css" %}')
+    link(rel='stylesheet', href='{% static "libs/clipboard/tooltip.css" %}')
     block content_media        
 
 block js_media
     - compress js
-        script(src='{% static "clipboard/clipboard.js" %}')
-        script(src='{% static "clipboard/tooltip.js" %}')
+        script(src='{% static "libs/clipboard/clipboard.js" %}')
+        script(src='{% static "libs/clipboard/tooltip.js" %}')
         script(type='text/javascript').
             $(function () {
                 var info_float = $('.info-float');
