@@ -13,10 +13,10 @@ block meta
         {
           "@context": "https://schema.org",
           "@type": "WebSite",
-          "url": "//{{ site.domain }}/",
+          "url": "{{ DMOJ_SCHEME }}://{{ site.domain }}/",
           "potentialAction": {
             "@type": "SearchAction",
-            "target": "//{{ site.domain }}/problems/?search={search_term_string}",
+            "target": "{{ DMOJ_SCHEME }}://{{ site.domain }}/problems/?search={search_term_string}",
             "query-input": "required name=search_term_string"
           }
         }
