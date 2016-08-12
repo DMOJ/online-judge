@@ -143,8 +143,8 @@ block user_content
 
 block bodyend
     if ratings
-        script(type='text/javascript', src='{% static "chart.js/Chart.Core.js" %}')
-        script(type='text/javascript', src='{% static "chart.js/Chart.Scatter.js" %}')
+        script(type='text/javascript', src='{% static "libs/chart.js/Chart.Core.js" %}')
+        script(type='text/javascript', src='{% static "libs/chart.js/Chart.Scatter.js" %}')
         script(type='text/javascript').
             var rating_history = #{rating_data};
             var data_index = {};
