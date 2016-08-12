@@ -1,6 +1,8 @@
 User-agent: *
 Disallow: /admin/
 Disallow: /accounts/
+Disallow: /problem/*/pdf
+Disallow: /problem/*/raw
 Disallow: /problem/*/submit
 Disallow: /problem/*/resubmit/
 Disallow: /problem/*/submissions/
