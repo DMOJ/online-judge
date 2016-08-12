@@ -33,7 +33,7 @@ block bodyend
         $(function () {
             $('#open-map').featherlight({
                 afterOpen: function () {
-                    timezone_picker($('.featherlight-inner .map-inset'), $('#id_timezone'), '{% static "libs/timezone-map/libs/timezone-map/timezone-picker.json" %}');
+                    timezone_picker($('.featherlight-inner .map-inset'), $('#id_timezone'), '{% static "libs/timezone-map/timezone-picker.json" %}');
                 }
             });
         });
