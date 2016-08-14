@@ -1,6 +1,7 @@
 import errno
 import hashlib
 import json
+import logging
 import os
 import urllib2
 from contextlib import closing
@@ -12,6 +13,8 @@ from django.core.cache import caches
 from django.utils.html import format_html
 
 from judge.math_parser import MathHTMLParser
+
+logger = logging.getLogger('judge.mathoid')
 
 
 class MathoidMathParser(MathHTMLParser):
@@ -47,10 +50,17 @@ class MathoidMathParser(MathHTMLParser):
             if e.errno != errno.EEXIST:
                 raise
         with closing(urllib2.urlopen(self.mathoid_url, 'q=' + quote(formula))) as f:
-            data = json.load(f)
+            data = f.read()
+            try:
+                data = json.loads(data)
+            except ValueError:
+                logger.exception('Invalid mathoid response: %s', data)
+                return
         result = {}
         if not data['success'] or 'mathoidStyle' not in result:
+            logger.error('Mathoid failure: %s', data)
             return
+
         css = result['css'] = data['mathoidStyle']
         if 'png' in self.mathid_types and 'png' in data:
             result['png'] = self.cache_data(hash, 'png', bytearray(data['png']['data']))
@@ -97,7 +107,7 @@ class MathoidMathParser(MathHTMLParser):
         else:
             result = self.query_mathoid(formula, hash)
 
-        if not result.get(self.type):
+        if not result or not result.get(self.type):
             return None
 
         return {
