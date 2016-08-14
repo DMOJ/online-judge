@@ -2,6 +2,10 @@
     list-style-type: inherit;
 }
 
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  line-height: unset !important;
+}
+
 .wmd-wrapper {
     padding-top: 2em;
 }
