@@ -1,9 +1,11 @@
+from django.conf import settings
 from django.template import Library, Node, TemplateSyntaxError
 from django.utils.html import escape
 from django.utils.http import urlquote
 
 from judge.math_parser import MathHTMLParser, INLINE_MATH_PNG, INLINE_MATH_SVG, \
     DISPLAY_MATH_PNG, DISPLAY_MATH_SVG, SVG_MATH_LEVEL
+from judge.utils.mathoid import MathoidMathParser
 
 register = Library()
 
@@ -54,6 +56,8 @@ class MathJaxTexOnlyMath(MathHTMLParser):
 def math(page, style='fallback'):
     if style == 'tex':
         return MathJaxTexOnlyMath.convert(page)
+    elif hasattr(settings, 'MATHOID_URL'):
+        return MathoidMathParser.convert(page)
     else:
         return MathJaxTexFallbackMath.convert(page)
 
