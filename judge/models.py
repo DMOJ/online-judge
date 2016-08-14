@@ -329,7 +329,7 @@ class TranslatedProblemQuerySet(SearchQuerySet):
     def add_i18n_name(self, language):
         queryset = self._clone()
         alias = unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language)
-        return queryset.annotate(i18n_name=Coalesce(RawSQL('%s.name' % alias), F('name'),
+        return queryset.annotate(i18n_name=Coalesce(RawSQL('%s.name' % alias, ()), F('name'),
                                                     output_field=models.CharField()))
 
 
@@ -339,7 +339,7 @@ class TranslatedProblemForeignKeyQuerySet(QuerySet):
         alias = unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language,
                                           parent_model=Problem)
         # You must specify name_field if Problem is not yet joined into the QuerySet.
-        kwargs = {key: Coalesce(RawSQL('%s.name' % alias),
+        kwargs = {key: Coalesce(RawSQL('%s.name' % alias, ()),
                                 F(name_field) if name_field else RawSQLColumn(Problem, 'name'),
                                 output_field=models.CharField())}
         return queryset.annotate(**kwargs)
