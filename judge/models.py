@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Max, F, QuerySet
+from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -328,7 +329,7 @@ class TranslatedProblemQuerySet(SearchQuerySet):
     def add_i18n_name(self, language):
         queryset = self._clone()
         alias = unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language)
-        return queryset.annotate(i18n_name=Coalesce('%s.name' % alias, F('name'),
+        return queryset.annotate(i18n_name=Coalesce(RawSQL('%s.name' % alias), F('name'),
                                                     output_field=models.CharField()))
 
 
@@ -338,7 +339,8 @@ class TranslatedProblemForeignKeyQuerySet(QuerySet):
         alias = unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language,
                                           parent_model=Problem)
         # You must specify name_field if Problem is not yet joined into the QuerySet.
-        kwargs = {key: Coalesce('%s.name' % alias, F(name_field) if name_field else RawSQLColumn(Problem, 'name'),
+        kwargs = {key: Coalesce(RawSQL('%s.name' % alias),
+                                F(name_field) if name_field else RawSQLColumn(Problem, 'name'),
                                 output_field=models.CharField())}
         return queryset.annotate(**kwargs)
 
