@@ -335,7 +335,7 @@ class TranslatedProblemQuerySet(SearchQuerySet):
 
 class TranslatedProblemForeignKeyQuerySet(QuerySet):
     def add_problem_i18n_name(self, key, language, name_field=None):
-        queryset = self._clone()
+        queryset = self._clone() if name_field is None else self.annotate(_name=F(name_field))
         alias = unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language,
                                           parent_model=Problem)
         # You must specify name_field if Problem is not yet joined into the QuerySet.
