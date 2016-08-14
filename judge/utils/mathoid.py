@@ -72,7 +72,7 @@ class MathoidMathParser(MathHTMLParser):
         else:
             result['png'] = None
         if 'svg' in self.mathid_types and 'svg' in data:
-            result['svg'] = self.cache_data(hash, 'png', data['svg'].encode('utf-8'))
+            result['svg'] = self.cache_data(hash, 'svg', data['svg'].encode('utf-8'))
         else:
             result['svg'] = None
         if 'mml' in self.mathid_types and 'mml' in data:
