@@ -86,7 +86,7 @@ class MathoidMathParser(MathHTMLParser):
     def query_cache(self, hash, type):
         result = {}
         if type in ('svg', 'png'):
-            result[type] = urljoin(self.cache_url, hash, type)
+            result[type] = urljoin(self.cache_url, '%s/%s' % (hash, type))
 
             key = 'mathoid:css:' + hash
             css = result['css'] = self.css_cache.get(key)
