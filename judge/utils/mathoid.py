@@ -16,10 +16,10 @@ from judge.math_parser import MathHTMLParser
 
 class MathoidMathParser(MathHTMLParser):
     def __init__(self, type=None):
-        assert type in ('svg', 'mml', 'tex', 'png')
         MathHTMLParser.__init__(self)
 
         self.type = type or getattr(settings, 'MATHOID_DEFAULT_TYPE', 'svg')
+        assert self.type in ('svg', 'mml', 'tex', 'png')
         self.mathoid_url = settings.MATHOID_URL
         self.cache_dir = settings.MATHOID_CACHE_ROOT
         self.cache_url = settings.MATHOID_CACHE_URL
