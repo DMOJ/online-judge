@@ -125,7 +125,7 @@ class MathoidMathParser(MathHTMLParser):
         return result['mml']
 
     def output_image(self, result, type):
-        return format_html('<img src="{0}" style="{1}>', result[type], result['css'])
+        return format_html('<img src="{0}" style="{1}">', result[type], result['css'])
 
     def output_svg(self, result):
         return self.output_image(result, 'svg')
