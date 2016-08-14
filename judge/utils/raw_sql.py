@@ -23,7 +23,7 @@ def unique_together_left_join(queryset, model, link_field_name, filter_field_nam
         parent_alias = parent_model._meta.db_table
     else:
         parent_alias = queryset.query.get_initial_alias()
-    queryset.query.join(Join(model._meta.db_table, parent_alias, None, LOUTER, link_field, True))
+    return queryset.query.join(Join(model._meta.db_table, parent_alias, None, LOUTER, link_field, True))
 
 
 def RawSQLColumn(model, field=None):

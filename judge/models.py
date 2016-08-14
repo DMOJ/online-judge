@@ -326,21 +326,21 @@ class TranslatedProblemQuerySet(SearchQuerySet):
         super(TranslatedProblemQuerySet, self).__init__(('code', 'name', 'description'), **kwargs)
 
     def add_i18n_name(self, language):
-        queryset = self.annotate(i18n_name=Coalesce(RawSQLColumn(ProblemTranslation, 'name'), F('name'),
+        queryset = self._clone()
+        alias = unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language)
+        return queryset.annotate(i18n_name=Coalesce('%s.name' % alias, F('name'),
                                                     output_field=models.CharField()))
-        unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language)
-        return queryset
 
 
 class TranslatedProblemForeignKeyQuerySet(QuerySet):
     def add_problem_i18n_name(self, key, language, name_field=None):
+        queryset = self._clone()
+        alias = unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language,
+                                          parent_model=Problem)
         # You must specify name_field if Problem is not yet joined into the QuerySet.
-        kwargs = {key: Coalesce(RawSQLColumn(ProblemTranslation, 'name'),
-                                F(name_field) if name_field else RawSQLColumn(Problem, 'name'),
+        kwargs = {key: Coalesce('%s.name' % alias, F(name_field) if name_field else RawSQLColumn(Problem, 'name'),
                                 output_field=models.CharField())}
-        queryset = self.annotate(**kwargs)
-        unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language, parent_model=Problem)
-        return queryset
+        return queryset.annotate(**kwargs)
 
 
 class Problem(models.Model):
