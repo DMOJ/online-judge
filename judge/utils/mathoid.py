@@ -72,15 +72,15 @@ class MathoidMathParser(MathHTMLParser):
         else:
             result['png'] = None
         if 'svg' in self.mathid_types and 'svg' in data:
-            result['svg'] = self.cache_data(hash, 'png', data['svg'])
+            result['svg'] = self.cache_data(hash, 'png', data['svg'].encode('utf-8'))
         else:
             result['svg'] = None
         if 'mml' in self.mathid_types and 'mml' in data:
             result['mml'] = data['mml']
-            self.cache_data(hash, 'mml', data['mml'], url=False)
+            self.cache_data(hash, 'mml', data['mml'].encode('utf-8'), url=False)
         else:
             result['mml'] = data['mml']
-        self.cache_data(hash, 'css', css, url=False)
+        self.cache_data(hash, 'css', css.encode('utf-8'), url=False)
         return result
 
     def query_cache(self, hash, type):
@@ -91,16 +91,16 @@ class MathoidMathParser(MathHTMLParser):
             key = 'mathoid:css:' + hash
             css = result['css'] = self.css_cache.get(key)
             if css is None:
-                with open(os.path.join(self.cache_dir, hash, 'css')) as f:
-                    css = result['css'] = f.read()
+                with open(os.path.join(self.cache_dir, hash, 'css'), 'rb') as f:
+                    css = result['css'] = f.read().decode('utf-8')
                     self.css_cache.set(key, css, self.mml_cache_ttl)
         elif type == 'mml':
             mml = None
             if self.mml_cache:
                 mml = result['mml'] = self.mml_cache.get('mathoid:mml:' + hash)
             if mml is None:
-                with open(os.path.join(self.cache_dir, hash, 'mml')) as f:
-                    mml = result['mml'] = f.read()
+                with open(os.path.join(self.cache_dir, hash, 'mml'), 'rb') as f:
+                    mml = result['mml'] = f.read().decode('utf-8')
                 if self.mml_cache:
                     self.mml_cache.set('mathoid:mml:' + hash, mml, self.mml_cache_ttl)
         return result
