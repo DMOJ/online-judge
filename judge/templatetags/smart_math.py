@@ -56,15 +56,16 @@ class MathJaxTexOnlyMath(MathHTMLParser):
 def math(page, style='fallback'):
     if style == 'tex':
         return MathJaxTexOnlyMath.convert(page)
-    elif hasattr(settings, 'MATHOID_URL'):
-        return MathoidMathParser.convert(page)
     else:
         return MathJaxTexFallbackMath.convert(page)
 
 
 @register.filter(name='smart_svg_math', is_safe=True)
 def math(page, use_svg):
-    return MathJaxSmartSVGFallbackMath.convert(page, use_svg)
+    if hasattr(settings, 'MATHOID_URL'):
+        return MathoidMathParser.convert(page)
+    else:
+        return MathJaxSmartSVGFallbackMath.convert(page, use_svg)
 
 
 class DetectSVGTag(Node):
