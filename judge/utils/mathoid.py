@@ -93,7 +93,7 @@ class MathoidMathParser(MathHTMLParser):
             if css is None:
                 with open(os.path.join(self.cache_dir, hash, 'css')) as f:
                     css = result['css'] = f.read()
-                    self.mml_cache.set(key, css, self.mml_cache_ttl)
+                    self.css_cache.set(key, css, self.mml_cache_ttl)
         elif type == 'mml':
             mml = None
             if self.mml_cache:
