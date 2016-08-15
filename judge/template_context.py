@@ -104,5 +104,8 @@ def site_name(request):
 
 
 def math_setting(request):
-    engine = request.user.profile.math_engine
+    if request.user.is_authenticated():
+        engine = request.user.profile.math_engine
+    else:
+        engine = getattr(settings, 'MATHOID_DEFAULT_TYPE', 'svg+')
     return {'MATH_ENGINE': engine, 'REQUIRE_JAX': engine.endswith('+')}
