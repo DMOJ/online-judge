@@ -27,7 +27,6 @@ class Command(BaseCommand):
             print 'Bad problem code'
             return
 
-        problem = self.get_object()
         try:
             trans = problem.translations.get(language=options['language'])
         except ProblemTranslation.DoesNotExist:
