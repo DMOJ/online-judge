@@ -91,7 +91,7 @@ class MathoidMathParser(MathHTMLParser):
     def query_cache(self, hash):
         result = {
             'svg': urljoin(self.cache_url, '%s/svg' % hash),
-            'png': urljoin(self.cache_url, '%s/svg' % hash),
+            'png': urljoin(self.cache_url, '%s/png' % hash),
         }
 
         key = 'mathoid:css:' + hash
@@ -137,7 +137,7 @@ class MathoidMathParser(MathHTMLParser):
         return format_html(u'<span class="{5}-math">'
                            u'<span class="mwe-math-mathml-{5} mwe-math-mathml-a11y"'
                            u' style="display: none;">{0}</span>'
-                           u'<img src="{1}" class="mwe-math-fallback-image-{5}" onerror="this.src=\'{2}\''
+                           u'<img src="{1}" class="mwe-math-fallback-image-{5}" onerror="this.src=\'{2}\'"'
                            u' aria-hidden="true" style="{3}" alt="{4}"></span>',
                            mark_safe(result['mml']), result['svg'], result['png'], result['css'], result['tex'],
                            ['inline', 'display'][result['display']])
