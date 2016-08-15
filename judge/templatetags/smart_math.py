@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.template import Library, Node, TemplateSyntaxError
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 from django.utils.http import urlquote
 
 from judge.math_parser import MathHTMLParser, INLINE_MATH_PNG, INLINE_MATH_SVG, \
@@ -11,51 +11,31 @@ register = Library()
 
 
 class SmartSVGMath(MathHTMLParser):
-    def __init__(self, svg):
-        MathHTMLParser.__init__(self)
-        self.use_svg = svg
-
     def inline_math(self, math):
-        return (r'<img class="inline-math" src="%s?\textstyle %s" alt="%s"/>' %
-                ((INLINE_MATH_PNG, INLINE_MATH_SVG)[self.use_svg], urlquote(math), math))
+        return format_html(r'<img class="inline-math" src="{0}?\textstyle {2}"'
+                           r'''onerror="this.src=\'{1}?\textstyle {2}\' alt="{3}"/>''',
+                           INLINE_MATH_SVG, INLINE_MATH_PNG, urlquote(math), math)
 
     def display_math(self, math):
-        return (r'<img class="display-math" src="%s?\displaystyle %s" alt="%s"/>' %
-                ((DISPLAY_MATH_PNG, DISPLAY_MATH_SVG)[self.use_svg], urlquote(math), math))
-
-
-class MathJaxTexFallbackMath(MathHTMLParser):
-    def inline_math(self, math):
-        return ('<span class="inline-math">'
-                    r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>'
-                    r'<span class="tex-text" style="display:none">~%s~</span>'
-                '</span>') % (INLINE_MATH_PNG, urlquote(math), math, escape(math))
-
-    def display_math(self, math):
-        return ('<span class="display-math">'
-                   r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>'
-                   r'<span class="tex-text" style="display:none">$$%s$$</span>'
-                '</span>') % (DISPLAY_MATH_PNG, urlquote(math), math, escape(math))
+        return format_html(r'<img class="display-math" src="{0}?\displaystyle {2}"'
+                           r'''onerror="this.src=\'{1}?\displaystyle {2}\' alt="{3}"/>''',
+                           INLINE_MATH_SVG, INLINE_MATH_PNG, urlquote(math), math)
 
 
 class MathJaxSmartSVGFallbackMath(MathHTMLParser):
-    def __init__(self, svg):
-        MathHTMLParser.__init__(self)
-        self.use_svg = svg
-
     def inline_math(self, math):
-        return ('<span class="inline-math">'
-                    r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>'
-                    r'<span class="tex-text" style="display:none">~%s~</span>'
-                '</span>') % ((INLINE_MATH_PNG, INLINE_MATH_SVG)[self.use_svg],
-                              urlquote(math), math, escape(math))
+        return format_html('<span class="inline-math">'
+                           r'<img class="tex-image" src="{0}?\textstyle {2}"'
+                           r'''onerror="this.src=\'{1}?\textstyle {2}\' alt="{3}"/>'''
+                           r'<span class="tex-text" style="display:none">~{3}~</span>'
+                           '</span>', INLINE_MATH_SVG, INLINE_MATH_PNG, urlquote(math), math)
 
     def display_math(self, math):
-        return ('<span class="display-math">'
-                   r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>'
-                   r'<span class="tex-text" style="display:none">$$%s$$</span>'
-                '</span>') % ((DISPLAY_MATH_PNG, DISPLAY_MATH_SVG)[self.use_svg],
-                              urlquote(math), math, escape(math))
+        return format_html('<span class="display-math">'
+                           r'<img class="tex-image" src="{0}?\displaystyle {2}"'
+                           r'''onerror="this.src=\'{1}?\displaystyle {2}\' alt="{3}"/>'''
+                           r'<span class="tex-text" style="display:none">$${3}$$</span>'
+                           '</span>', DISPLAY_MATH_SVG, DISPLAY_MATH_PNG, urlquote(math), math)
 
 
 class MathJaxTexOnlyMath(MathHTMLParser):
@@ -71,12 +51,10 @@ def math(page, engine):
     if hasattr(settings, 'MATHOID_URL'):
         return MathoidMathParser.convert(page, engine)
     else:
-        if engine.endswith('+'):
-            return MathJaxSmartSVGFallbackMath.convert(page, engine.startswith('svg'))
-        elif engine == 'tex':
-            return MathJaxTexOnlyMath.convert(page)
-        else:
-            return SmartSVGMath.convert(page, engine == 'svg')
+        return {'jax': MathJaxSmartSVGFallbackMath,
+                'mml': MathJaxSmartSVGFallbackMath,
+                'tex': MathJaxTexOnlyMath,
+                'svg': SmartSVGMath}[engine].convert(page)
 
 
 class DetectSVGTag(Node):

@@ -11,6 +11,7 @@ from urlparse import urljoin
 from django.conf import settings
 from django.core.cache import caches
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 from judge.math_parser import MathHTMLParser
 
@@ -22,14 +23,14 @@ class MathoidMathParser(MathHTMLParser):
         MathHTMLParser.__init__(self)
 
         type = type or getattr(settings, 'MATHOID_DEFAULT_TYPE', 'svg+')
-        assert type in ('svg', 'mml', 'tex', 'png', 'tex+', 'svg+')
+        assert type in ('svg', 'mml', 'tex', 'jax')
         self.type = type.rstrip('+')
         self.use_jax = type.endswith('+')
 
         self.mathoid_url = settings.MATHOID_URL
         self.cache_dir = settings.MATHOID_CACHE_ROOT
         self.cache_url = settings.MATHOID_CACHE_URL
-        self.mathid_types = getattr(settings, 'MATHOID_TYPES', ('png', 'svg', 'mml'))
+        self.gzip_cache = getattr(settings, 'MATHOID_GZIP', False)
 
         mml_cache = getattr(settings, 'MATHOID_MML_CACHE', None)
         self.mml_cache = mml_cache and caches[mml_cache]
@@ -40,7 +41,7 @@ class MathoidMathParser(MathHTMLParser):
     def cache_complete(self, hash):
         return os.path.isfile(os.path.join(self.cache_dir, hash, 'css'))
 
-    def cache_data(self, hash, file, data, url=True):
+    def cache_data(self, hash, file, data, url=True, gz=False):
         with open(os.path.join(self.cache_dir, hash, file), 'wb') as f:
             f.write(data)
         if url:
@@ -64,52 +65,50 @@ class MathoidMathParser(MathHTMLParser):
             except ValueError:
                 logger.exception('Invalid mathoid response: %s', data)
                 return
-        result = {}
-        if not data['success'] or 'mathoidStyle' not in data:
-            logger.error('Mathoid failure: %s', data)
+
+        if not data['success']:
+            logger.error('Mathoid failure:\n%s', data)
             return
 
-        css = result['css'] = data['mathoidStyle']
-        if 'png' in self.mathid_types and 'png' in data:
-            result['png'] = self.cache_data(hash, 'png', bytearray(data['png']['data']))
-        else:
-            result['png'] = None
-        if 'svg' in self.mathid_types and 'svg' in data:
-            result['svg'] = self.cache_data(hash, 'svg', data['svg'].encode('utf-8'))
-        else:
-            result['svg'] = None
-        if 'mml' in self.mathid_types and 'mml' in data:
-            mml = data['mml']
-            if not formula.startswith('\displaystyle'):
-                mml = mml.replace('<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">',
-                                  '<math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">')
-            result['mml'] = mml
-            self.cache_data(hash, 'mml', mml.encode('utf-8'), url=False)
-        else:
-            result['mml'] = None
+        if any(i not in data for i in ('mml', 'png', 'svg', 'mathoidStyle')):
+            logger.error('Mathoid did not return required information (mml, png, svg, mathoidStyle needed):\n%s', data)
+            return
+
+        css = data['mathoidStyle']
+        mml = data['mml']
+        if not formula.startswith('\displaystyle'):
+            mml = mml.replace('<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">',
+                              '<math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">')
+        result = {
+            'css': css, 'mml': mml,
+            'png': self.cache_data(hash, 'png', bytearray(data['png']['data'])),
+            'svg': self.cache_data(hash, 'svg', data['svg'].encode('utf-8')),
+        }
+        self.cache_data(hash, 'mml', mml.encode('utf-8'), url=False)
         self.cache_data(hash, 'css', css.encode('utf-8'), url=False)
         return result
 
-    def query_cache(self, hash, type):
-        result = {}
-        if type in ('svg', 'png'):
-            result[type] = urljoin(self.cache_url, '%s/%s' % (hash, type))
+    def query_cache(self, hash):
+        result = {
+            'svg': urljoin(self.cache_url, '%s/svg' % hash),
+            'png': urljoin(self.cache_url, '%s/svg' % hash),
+        }
 
-            key = 'mathoid:css:' + hash
-            css = result['css'] = self.css_cache.get(key)
-            if css is None:
-                with open(os.path.join(self.cache_dir, hash, 'css'), 'rb') as f:
-                    css = result['css'] = f.read().decode('utf-8')
-                    self.css_cache.set(key, css, self.mml_cache_ttl)
-        elif type == 'mml':
-            mml = None
+        key = 'mathoid:css:' + hash
+        css = result['css'] = self.css_cache.get(key)
+        if css is None:
+            with open(os.path.join(self.cache_dir, hash, 'css'), 'rb') as f:
+                css = result['css'] = f.read().decode('utf-8')
+                self.css_cache.set(key, css, self.mml_cache_ttl)
+
+        mml = None
+        if self.mml_cache:
+            mml = result['mml'] = self.mml_cache.get('mathoid:mml:' + hash)
+        if mml is None:
+            with open(os.path.join(self.cache_dir, hash, 'mml'), 'rb') as f:
+                mml = result['mml'] = f.read().decode('utf-8')
             if self.mml_cache:
-                mml = result['mml'] = self.mml_cache.get('mathoid:mml:' + hash)
-            if mml is None:
-                with open(os.path.join(self.cache_dir, hash, 'mml'), 'rb') as f:
-                    mml = result['mml'] = f.read().decode('utf-8')
-                if self.mml_cache:
-                    self.mml_cache.set('mathoid:mml:' + hash, mml, self.mml_cache_ttl)
+                self.mml_cache.set('mathoid:mml:' + hash, mml, self.mml_cache_ttl)
         return result
 
     def get_result(self, formula):
@@ -118,7 +117,7 @@ class MathoidMathParser(MathHTMLParser):
 
         hash = hashlib.sha1(formula).hexdigest()
         if self.cache_complete(hash):
-            result = self.query_cache(hash, self.type)
+            result = self.query_cache(hash)
         else:
             result = self.query_mathoid(formula, hash)
 
@@ -126,33 +125,35 @@ class MathoidMathParser(MathHTMLParser):
             return None
 
         result['tex'] = formula
+        result['display'] = formula.startswith('\displaystyle')
         return {
             'mml': self.output_mml,
             'svg': self.output_svg,
-            'png': self.output_png,
+            'jax': self.output_jax,
         }[self.type](result)
 
     def output_mml(self, result):
-        return result['mml']
+        # 100% MediaWiki compatibility.
+        return format_html('<span class="{5}-math">'
+                           '<span class="mwe-math-mathml-{5} mwe-math-mathml-a11y"'
+                           ' style="display: none;">{0}</span>'
+                           '<img src="{1}" class="mwe-math-fallback-image-{5}" onerror="this.src=\'{2}\''
+                           ' aria-hidden="true" style="{3}" alt="{4}"></span>',
+                           mark_safe(result['mml']), result['svg'], result['png'], result['css'], result['tex'],
+                           ['inline', 'display'][result['display']])
 
-    def output_image(self, result, type):
-        display_style = result['tex'].startswith('\displaystyle')
-        if self.use_jax:
-            return format_html('<span class="{3}">'
-                               '<img class="tex-image" src="{0}" style="{1}" alt="{2}">'
-                               '<span class="tex-text" style="display:none">{4}{2}{4}</span>'
-                               '</span>',
-                               result[type], result['css'], result['tex'],
-                               ['inline-math', 'display-math'][display_style], ['~', '$$'][display_style])
-        else:
-            return format_html('<img class="{3}" src="{0}" style="{1}" alt="{2}">', result[type], result['css'],
-                               result['tex'], ['inline-math', 'display-math'][display_style])
+    def output_jax(self, result):
+        return format_html('<span class="{4}">'
+                           '''<img class="tex-image" src="{0}" style="{2}" alt="{3}" onerror="this.src='{1}'">'''
+                           '''<span class="tex-text" style="display:none">{5}{3}{5}</span>'''
+                           '</span>',
+                           result['svg'], result['png'], result['css'], result['tex'],
+                           ['inline-math', 'display-math'][result['display']], ['~', '$$'][result['display']])
 
     def output_svg(self, result):
-        return self.output_image(result, 'svg')
-
-    def output_png(self, result):
-        return self.output_image(result, 'png')
+        return format_html('''<img class="{4}" src="{0}" style="{2}" alt="{3}" onerror="this.src='{1}'">''',
+                           result['svg'], result['png'], result['css'], result['tex'],
+                           ['inline-math', 'display-math'][result['display']])
 
     def display_math(self, math):
         return self.get_result('\displaystyle ' + math) or '$$%s$$' % math
