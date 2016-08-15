@@ -44,7 +44,7 @@ class MathoidMathParser(MathHTMLParser):
         with open(os.path.join(self.cache_dir, hash, file), 'wb') as f:
             f.write(data)
         if url:
-            return urljoin(self.cache_url, hash, file)
+            return urljoin(self.cache_url, '%s/%s' % (hash, file))
 
     def query_mathoid(self, formula, hash):
         try:
