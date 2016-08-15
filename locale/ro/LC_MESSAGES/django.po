@@ -69,7 +69,6 @@ msgid "Timezone"
 msgstr "Fus orar"
 
 #: .\judge\admin.py:133
-#, python-format
 msgid "%d user have scores recalculated."
 msgid_plural "%d users have scores recalculated."
 msgstr[0] "%d utilizator au scoruri recalculate."
@@ -85,7 +84,6 @@ msgid "Describe the changes you made (optional)"
 msgstr "Descrie modificările făcute (opţional)"
 
 #: .\judge\admin.py:164 .\judge\models.py:249
-#, python-format
 msgctxt "user display name"
 msgid "%(username)s (%(display)s)"
 msgstr "%(username)s (%(display)s)"
@@ -121,7 +119,6 @@ msgid "Authors"
 msgstr "Autori"
 
 #: .\judge\admin.py:272
-#, python-format
 msgid "%d problem successfully marked as public."
 msgid_plural "%d problems successfully marked as public."
 msgstr[0] "%d problemă marcată ca publică cu succes."
@@ -133,7 +130,6 @@ msgid "Mark problems as public"
 msgstr "Marchează probleme ca publice"
 
 #: .\judge\admin.py:280
-#, python-format
 msgid "%d problem successfully marked as private."
 msgid_plural "%d problems successfully marked as private."
 msgstr[0] "%d problemă marcată ca privată cu succes."
@@ -161,7 +157,6 @@ msgid "Unaccepted"
 msgstr "Neacceptate"
 
 #: .\judge\admin.py:388
-#, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
 msgstr "%(problem)s în %(contest)s"
@@ -175,7 +170,6 @@ msgid "You do not have the permission to rejudge THAT many submissions."
 msgstr "Nu aveţi permisiunea de a rejuriza ATÂT de multe submisii."
 
 #: .\judge\admin.py:452
-#, python-format
 msgid "%d submission were successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
 msgstr[0] "%d submisie a fost programată pentru rejurizare cu succes."
@@ -187,12 +181,10 @@ msgid "Rejudge the selected submissions"
 msgstr "Rejurizează submisiile selectate"
 
 #: .\judge\admin.py:466
-#, python-format
 msgid "%d KB"
 msgstr "%d KB"
 
 #: .\judge\admin.py:468
-#, python-format
 msgid "%.2f MB"
 msgstr "%.2f MB"
 
@@ -201,7 +193,6 @@ msgid "Memory Usage"
 msgstr "Memorie utilizată"
 
 #: .\judge\admin.py:501
-#, python-format
 msgid "%d submission were successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
 msgstr[0] "%d submisie a fost repunctată cu succes."
@@ -213,7 +204,6 @@ msgid "Rescore the selected submissions"
 msgstr "Repunctează submisiile selectate"
 
 #: .\judge\admin.py:559
-#, python-format
 msgid "%d comment successfully hidden."
 msgid_plural "%d comments successfully hidden."
 msgstr[0] "%d comentarii ascunse cu succes."
@@ -225,7 +215,6 @@ msgid "Hide comments"
 msgstr "Ascunde comentarii"
 
 #: .\judge\admin.py:566
-#, python-format
 msgid "%d comment successfully unhidden."
 msgid_plural "%d comments successfully unhidden."
 msgstr[0] "%d comentariu ascuns cu succes."
@@ -298,7 +287,6 @@ msgid "Organization"
 msgstr "Organizație"
 
 #: .\judge\admin.py:851
-#, python-format
 msgid "%d contest successfully marked as public."
 msgid_plural "%d contests successfully marked as public."
 msgstr[0] "%d concurs a fost marcat ca public cu succes."
@@ -310,7 +298,6 @@ msgid "Mark contests as public"
 msgstr "Marcheaza concursuri ca publice"
 
 #: .\judge\admin.py:858
-#, python-format
 msgid "%d contest successfully marked as private."
 msgid_plural "%d contests successfully marked as private."
 msgstr[0] "%d concurs a fost marcat ca privat cu succes."
@@ -322,7 +309,6 @@ msgid "Mark contests as private"
 msgstr "Marchează concursuri ca private"
 
 #: .\judge\admin.py:957
-#, python-format
 msgid "%d participation have scores recalculated."
 msgid_plural "%d participations have scores recalculated."
 msgstr[0] "%d participare a fost marcată ca publică cu succes."
@@ -330,7 +316,6 @@ msgstr[1] "%d participare a fost marcată ca publică cu succes."
 msgstr[2] "%d participări au fost marcate ca publice cu succes."
 
 #: .\judge\admin.py:967
-#, python-format
 msgid "%d participation have times recalculated."
 msgid_plural "%d participations have times recalculated."
 msgstr[0] "%d participare are timpul rămas recalculat."
@@ -1402,7 +1387,6 @@ msgstr[1] "%d zile % h:%m"
 msgstr[2] "%d zile %h:%m"
 
 #: .\judge\templatetags\timedelta.py:64
-#, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d zi"
@@ -1423,7 +1407,6 @@ msgid "Total"
 msgstr "Total"
 
 #: .\judge\views\blog.py:31
-#, python-format
 msgid "Page %d of Posts"
 msgstr "Pagina %d din Posturi"
 
@@ -1436,7 +1419,6 @@ msgid "You already voted."
 msgstr "Ai votat deja."
 
 #: .\judge\views\comment.py:83
-#, python-format
 msgid "Revisions for %s"
 msgstr "Revizii pentru %s"
 
@@ -1445,7 +1427,6 @@ msgid "Edited from site"
 msgstr "Editat de pe site"
 
 #: .\judge\views\comment.py:124 .\judge\views\organization.py:251
-#, python-format
 msgid "Editing %s"
 msgstr "Editare %s"
 
@@ -1455,7 +1436,6 @@ msgid "No such contest"
 msgstr "Niciun concurs de acest fel"
 
 #: .\judge\views\contests.py:42 .\judge\views\contests.py:126
-#, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr "Niciun concurs găsit cu cheia \"%s\"."
 
@@ -1468,7 +1448,6 @@ msgid "Could not find such contest."
 msgstr "Nu am putut găsi un concurs de acest fel."
 
 #: .\judge\views\contests.py:132
-#, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr "Nu aveți acces la concursul \"%s\""
 
@@ -1477,7 +1456,6 @@ msgid "Contest not ongoing"
 msgstr "Concursul nu este în curs de desfăşurare"
 
 #: .\judge\views\contests.py:172
-#, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "Momentan, \"%s\" nu este în curs de desfăşurare."
 
@@ -1486,7 +1464,6 @@ msgid "Already in contest"
 msgstr "Deja în concurs"
 
 #: .\judge\views\contests.py:177
-#, python-format
 msgid "You are already in a contest: \"%s\"."
 msgstr "Sunteţi deja într-un concurs: \"%s\"."
 
@@ -1495,12 +1472,10 @@ msgid "Time limit exceeded"
 msgstr "Timpul limită depăşit"
 
 #: .\judge\views\contests.py:190
-#, python-format
 msgid "Too late! You already used up your time limit for \"%s\"."
 msgstr "Prea târziu! V-ați folosit deja limita de timp pentru \"%s\"."
 
 #: .\judge\views\contests.py:204
-#, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "Nu sunteţi în concursul \"%s\"."
 
@@ -1509,7 +1484,6 @@ msgid "ContestCalender requires integer year and month"
 msgstr "Calendarul concursului necesită număr întreg pentru an și lună"
 
 #: .\judge\views\contests.py:399
-#, python-format
 msgid "Contest tag: %s"
 msgstr ""
 
@@ -1518,17 +1492,14 @@ msgid "404 error"
 msgstr "eroare 404"
 
 #: .\judge\views\error.py:15
-#, python-format
 msgid "Could not find page \"%s\""
 msgstr "Nu am putut găsi pagina \"%s\""
 
 #: .\judge\views\error.py:21
-#, python-format
 msgid "no permission for %s"
 msgstr "nicio permisiune pentru %s"
 
 #: .\judge\views\error.py:27
-#, python-format
 msgid "corrupt page %s"
 msgstr "pagina corupta %s"
 
@@ -1537,7 +1508,6 @@ msgid "No such language"
 msgstr "Nicio limbă de acest fel"
 
 #: .\judge\views\language.py:23
-#, python-format
 msgid "Could not find a language with the key \"%s\"."
 msgstr "Nicio limbă găsită cu cheia \"%s\"."
 
@@ -1550,7 +1520,6 @@ msgid "No such organization"
 msgstr "Nicio organizaţie de acest fel"
 
 #: .\judge\views\organization.py:42
-#, python-format
 msgid "Could not find an organization with the key \"%s\"."
 msgstr "Nicio organizaţie găsită cu cheia \"%s\"."
 
@@ -1564,7 +1533,6 @@ msgid "Organizations"
 msgstr "Organizaţii"
 
 #: .\judge\views\organization.py:78
-#, python-format
 msgid "%s Members"
 msgstr "%s Membri"
 
@@ -1585,12 +1553,10 @@ msgid "Leaving organization"
 msgstr "Părăsire organizaţie"
 
 #: .\judge\views\organization.py:117
-#, python-format
 msgid "You are not in \"%s\"."
 msgstr "Nu sunteţi în \"%s\"."
 
 #: .\judge\views\organization.py:141
-#, python-format
 msgid "Request to join %s"
 msgstr "Cerere de adăugare la %s"
 
@@ -1599,12 +1565,10 @@ msgid "Join request detail"
 msgstr "Detalii despre cererea de adăugare"
 
 #: .\judge\views\organization.py:186
-#, python-format
 msgid "Managing join requests for %s"
 msgstr "Gestionarea cererilor de asociere cu %s"
 
 #: .\judge\views\organization.py:220
-#, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
 msgstr[0] "Aprobat %d utilizator."
@@ -1612,7 +1576,6 @@ msgstr[1] "Aprobat %d utilizatori."
 msgstr[2] "Aprobat %d utilizatori."
 
 #: .\judge\views\organization.py:221
-#, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] "Respins %d utilizator."
@@ -1632,7 +1595,6 @@ msgid "No such problem"
 msgstr "Nicio problemă de acest fel"
 
 #: .\judge\views\problem.py:61
-#, python-format
 msgid "Could not find a problem with the code \"%s\"."
 msgstr "Imposibil de găsit probleme cu codul \"%s\"."
 
@@ -1654,7 +1616,6 @@ msgid "Submit"
 msgstr "Trimiteți"
 
 #: .\judge\views\ranked_submission.py:58
-#, python-format
 msgid "Best solutions for %s"
 msgstr "Cele mai bune soluţii pentru %s"
 
@@ -1664,7 +1625,6 @@ msgid "Best solutions for <a href=\"{1}\">{0}</a>"
 msgstr "Cele mai bune soluţii pentru <a href=\"{1}\">{0}</a>"
 
 #: .\judge\views\ranked_submission.py:70
-#, python-format
 msgid "Best solutions for %(problem)s in %(contest)s"
 msgstr "Cele mai bune soluţii pentru %(problem)s în %(contest)s"
 
@@ -1690,7 +1650,6 @@ msgid "Preferred language"
 msgstr "Limba preferată"
 
 #: .\judge\views\register.py:42
-#, python-format
 msgid "The email address \"%s\" is already taken. Only one registration is allowed per address."
 msgstr "Adresa de email \"%s\" a fost deja folosită. O singură înregistrare este permisă pe fiecare adresă."
 
@@ -1719,17 +1678,14 @@ msgid "No such judge"
 msgstr "Niciun astfel de critic"
 
 #: .\judge\views\status.py:52
-#, python-format
 msgid "Could not find a judge with the name \"%s\"."
 msgstr "Nu am putut găsi un critic cu numele \"%s\"."
 
 #: .\judge\views\status.py:55
-#, python-format
 msgid "Judge %s"
 msgstr "Critic %s"
 
 #: .\judge\views\submission.py:53 .\judge\views\submission.py:60
-#, python-format
 msgid "Submission of %(problem)s by %(user)s"
 msgstr "Soluţia problemei %(problem)s de %(user)s"
 
@@ -1738,12 +1694,10 @@ msgid "All submissions"
 msgstr "Toate soluţile"
 
 #: .\judge\views\submission.py:196
-#, python-format
 msgid "All submissions by %s"
 msgstr "Toate soluţiile submise de %s"
 
 #: .\judge\views\submission.py:220
-#, python-format
 msgid "All submissions for %s"
 msgstr "Toate soluţiile pentru %s"
 
@@ -1752,7 +1706,6 @@ msgid "Must pass a problem"
 msgstr "Trebuie să rezolvaţi o problemă"
 
 #: .\judge\views\submission.py:265
-#, python-format
 msgid "%(user)s's submissions for %(problem)s"
 msgstr "Soluţiile lui %(user)s pentru %(problem)s"
 
@@ -1770,7 +1723,6 @@ msgid "No such user"
 msgstr "Niciun astfel de utilizator"
 
 #: .\judge\views\user.py:66
-#, python-format
 msgid "No user handle \"%s\"."
 msgstr "Porecla de utilizator \"%s\" nu există."
 
@@ -1779,7 +1731,6 @@ msgid "My Account"
 msgstr "Contul meu"
 
 #: .\judge\views\user.py:71
-#, python-format
 msgid "User %s"
 msgstr "Utilizatorul %s"
 
@@ -1805,7 +1756,6 @@ msgid "Leaderboard"
 msgstr ""
 
 #: .\judge\views\widgets.py:53 .\judge\views\widgets.py:64
-#, python-format
 msgid "Invalid upstream data: %s"
 msgstr "Informațiile trimise sunt invalide: %s"
 
@@ -1834,7 +1784,6 @@ msgid "Rejudge"
 msgstr "Rejurizeză"
 
 #: .\templates\base.jade:96
-#, python-format
 msgid "Hello, <b>%(username)s</b>."
 msgstr "Bună ziua, <b>%(username)s</b>."
 
@@ -1911,7 +1860,6 @@ msgid "N j, Y, g:i a"
 msgstr "N j, Y, g:i a"
 
 #: .\templates\comments\list.jade:10 .\templates\submission\row.jade:13
-#, python-format
 msgid "on %(time)s"
 msgstr "pe %(time)s"
 
@@ -1940,7 +1888,6 @@ msgid "F Y"
 msgstr "F Y"
 
 #: .\templates\contest\calendar.jade:1 .\templates\contest\calendar.jade:4
-#, python-format
 msgid "Contests in %(month)s"
 msgstr "Concursuri în %(month)s"
 
@@ -2025,12 +1972,10 @@ msgid "F j, Y, G:i T"
 msgstr "F j, Y, G:i T"
 
 #: .\templates\contest\contest.jade:26
-#, python-format
 msgid "<b>%(time_limit)s</b> window from <b>%(start_time)s</b> to <b>%(end_time)s</b>"
 msgstr "Fereastra de <b>%(time_limit)s</b> de la <b>%(start_time)s</b> la <b>%(end_time)s</b>"
 
 #: .\templates\contest\contest.jade:27
-#, python-format
 msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
 msgstr "<b>%(length)s</b> lung începând la <b>%(start_time)s</b>"
 
@@ -2062,13 +2007,11 @@ msgstr "A început la"
 
 #: .\templates\contest\list.jade:33 .\templates\contest\list.jade:61
 #: .\templates\contest\list.jade:86
-#, python-format
 msgid "%(time_limit)s window"
 msgstr "Fereastra de %(time_limit)s"
 
 #: .\templates\contest\list.jade:34 .\templates\contest\list.jade:62
 #: .\templates\contest\list.jade:87
-#, python-format
 msgid "%(window_length)s long"
 msgstr "%(window_length)s lung"
 
@@ -2113,7 +2056,6 @@ msgid "All Judges"
 msgstr "Toate Jurizatoarele"
 
 #: .\templates\judge_status.jade:5
-#, python-format
 msgid "This page shows the live status of %(name)s's judging servers."
 msgstr "Această pagină arata starea jurizatoarelor %(name)s."
 
@@ -2359,7 +2301,6 @@ msgid "Types"
 msgstr "Tipuri"
 
 #: .\templates\problem\list.jade:111
-#, python-format
 msgid "AC %%"
 msgstr ""
 
@@ -2422,7 +2363,6 @@ msgid "Allowed languages"
 msgstr "Limbajele acceptate"
 
 #: .\templates\problem\problem.jade:36
-#, python-format
 msgid "No %(lang)s judge online"
 msgstr "Nici un judge pentru %(lang)s e online"
 
@@ -2484,7 +2424,6 @@ msgid "Submit!"
 msgstr "Trimiteți!"
 
 #: .\templates\registration\activate.jade:2
-#, python-format
 msgid "%(key)s is an invalid activation key."
 msgstr "%(key)s este o cheie de activare invalidă."
 
@@ -2541,7 +2480,6 @@ msgid "<p>We've emailed you instructions for setting your password. You should b
 msgstr "<p>Un email cu instrucțiuni pentru setarea parolei a fost trimis către dumneavoastră. Ar trebui să îl primiți curând.</p><p>Daca nu primiți email-ul, asiguraţi-vă că aţi introdus adresa de email cu care v-ați înregistrat. Nu uitați să verificați folder-ul dumneavoastră de spam.</p>"
 
 #: .\templates\registration\password_reset_email.txt:2
-#, python-format
 msgid "You're receiving this email because you requested a password reset for your user account at %(site_name)s."
 msgstr "Ați primit acest email pentru că aţi solicitat resetarea parolei pentru contul dumneavoastră de utilizator pe %(site_name)s."
 
@@ -2558,12 +2496,10 @@ msgid "Thanks for using our site!"
 msgstr "Vă mulţumim pentru utilizarea site-ului nostru!"
 
 #: .\templates\registration\password_reset_email.txt:12
-#, python-format
 msgid "The %(site_name)s team"
 msgstr "Echipa %(site_name)s"
 
 #: .\templates\registration\password_reset_subject.txt:2
-#, python-format
 msgid "Password reset on %(site_name)s"
 msgstr "Parola resetată pe %(site_name)s"
 
@@ -2657,7 +2593,6 @@ msgid "Language AC Rate"
 msgstr "Procent soluții corecte (AC) după limbă"
 
 #: .\templates\submission\internal_error_message.jade:2
-#, python-format
 msgid "An internal error occurred while grading, and the %(SITE_NAME)s administrators have been notified.<br/>In the meantime, try resubmitting in a few seconds."
 msgstr "O eroare internă a apărut în timpul notării. Administratorii de pe %(SITE_NAME)s au fost notificați. <br/> Între timp, încercaţi să submiteți din nou peste câteva secunde."
 
@@ -2744,7 +2679,6 @@ msgstr "Lot "
 #: .\templates\submission\status_testcases.jade:9
 #: .\templates\submission\status_testcases.jade:33
 #: .\templates\submission\status_testcases.jade:34
-#, python-format
 msgid "(%(points)s/%(total)s points)"
 msgstr "(%(points)s/%(total)s puncte)"
 
