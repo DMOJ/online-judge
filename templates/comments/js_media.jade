@@ -7,7 +7,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
 - compress js
     | #{comment_form.media.js}
 
-    if not REQUIRES_JAX
+    if not REQUIRE_JAX
         script(type='text/javascript').
             $(function() {
                 $('#id_body').keypress(function() {
