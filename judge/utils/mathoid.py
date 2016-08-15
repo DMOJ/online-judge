@@ -121,7 +121,7 @@ class MathoidMathParser(MathHTMLParser):
         else:
             result = self.query_mathoid(formula, hash)
 
-        if not result or not result.get(self.type):
+        if not result:
             return None
 
         result['tex'] = formula
