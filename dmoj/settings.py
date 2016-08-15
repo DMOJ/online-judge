@@ -229,6 +229,7 @@ markdown_admin_editable_style = {
         'header-ids': None,
         'demote-headers': 2,
         'tables': None,
+        'code-friendly': None,
     },
     'safe_mode': False,
 }
