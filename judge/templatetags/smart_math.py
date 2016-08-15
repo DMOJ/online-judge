@@ -13,12 +13,12 @@ register = Library()
 class SmartSVGMath(MathHTMLParser):
     def inline_math(self, math):
         return format_html(ur'<img class="inline-math" src="{0}?\textstyle {2}" '
-                           ur'''onerror="this.src=\'{1}?\textstyle {2}\'" alt="{3}"/>''',
+                           ur'''onerror="this.src=\'{1}?\textstyle {2}\';this.onerror=null" alt="{3}"/>''',
                            INLINE_MATH_SVG, INLINE_MATH_PNG, urlquote(math), math)
 
     def display_math(self, math):
         return format_html(ur'<img class="display-math" src="{0}?\displaystyle {2}" '
-                           ur'''onerror="this.src=\'{1}?\displaystyle {2}\'" alt="{3}"/>''',
+                           ur'''onerror="this.src=\'{1}?\displaystyle {2}\';this.onerror=null\" alt="{3}"/>''',
                            INLINE_MATH_SVG, INLINE_MATH_PNG, urlquote(math), math)
 
 
@@ -26,14 +26,14 @@ class MathJaxSmartSVGFallbackMath(MathHTMLParser):
     def inline_math(self, math):
         return format_html(u'<span class="inline-math">'
                            ur'<img class="tex-image" src="{0}?\textstyle {2}" '
-                           ur'''onerror="this.src=\'{1}?\textstyle {2}\'" alt="{3}"/>'''
+                           ur'''onerror="this.src=\'{1}?\textstyle {2}\';this.onerror=null" alt="{3}"/>'''
                            ur'<span class="tex-text" style="display:none">~{3}~</span>'
                            u'</span>', INLINE_MATH_SVG, INLINE_MATH_PNG, urlquote(math), math)
 
     def display_math(self, math):
         return format_html(u'<span class="display-math">'
                            ur'<img class="tex-image" src="{0}?\displaystyle {2}" '
-                           ur'''onerror="this.src=\'{1}?\displaystyle {2}\'" alt="{3}"/>'''
+                           ur'''onerror="this.src=\'{1}?\displaystyle {2}\';this.onerror=null" alt="{3}"/>'''
                            ur'<span class="tex-text" style="display:none">$${3}$$</span>'
                            u'</span>', DISPLAY_MATH_SVG, DISPLAY_MATH_PNG, urlquote(math), math)
 
