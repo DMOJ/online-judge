@@ -48,17 +48,17 @@ html
         table.table#info-table
             tbody
                 tr
-                    td.key Points:
-                    td.value
-                        |  #{problem.points|floatformat}
-                        if problem.partial
-                            | (partial)
-                    td.key
-                        if problem.types_list|length > 1
-                            | Problem types:
-                        else
-                            | Problem type:
                     - language 'en'
+                        td.key Points:
+                        td.value
+                            |  #{problem.points|floatformat}
+                            if problem.partial
+                                | (partial)
+                        td.key
+                            if problem.types_list|length > 1
+                                | Problem types:
+                            else
+                                | Problem type:
                         td.value #{problem.types_list|join:", "}
                     - endlanguage
                 tr
