@@ -133,11 +133,15 @@ class MathoidMathParser(MathHTMLParser):
         result['display'] = formula.startswith('\displaystyle')
         return {
             'mml': self.output_mml,
+            'msp': self.output_msp,
             'svg': self.output_svg,
             'jax': self.output_jax,
         }[self.type](result)
 
     def output_mml(self, result):
+        return result['mml']
+
+    def output_msp(self, result):
         # 100% MediaWiki compatibility.
         return format_html(u'<span class="{5}-math">'
                            u'<span class="mwe-math-mathml-{5} mwe-math-mathml-a11y"'
