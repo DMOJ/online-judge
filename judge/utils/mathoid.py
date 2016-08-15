@@ -1,12 +1,9 @@
-import errno
 import hashlib
 import json
 import logging
-import os
 import urllib2
 from contextlib import closing
 from urllib import urlencode
-from urlparse import urljoin
 
 from django.conf import settings
 from django.core.cache import caches
@@ -14,6 +11,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from judge.math_parser import MathHTMLParser
+from judge.utils.file_cache import HashFileCache
 
 logger = logging.getLogger('judge.mathoid')
 
@@ -27,9 +25,9 @@ class MathoidMathParser(MathHTMLParser):
         self.use_jax = type.endswith('+')
 
         self.mathoid_url = settings.MATHOID_URL
-        self.cache_dir = settings.MATHOID_CACHE_ROOT
-        self.cache_url = settings.MATHOID_CACHE_URL
-        self.gzip_cache = getattr(settings, 'MATHOID_GZIP', False)
+        self.cache = HashFileCache(settings.MATHOID_CACHE_ROOT,
+                                   settings.MATHOID_CACHE_URL,
+                                   getattr(settings, 'MATHOID_GZIP', False))
 
         mml_cache = getattr(settings, 'MATHOID_MML_CACHE', None)
         self.mml_cache = mml_cache and caches[mml_cache]
@@ -37,21 +35,8 @@ class MathoidMathParser(MathHTMLParser):
 
         self.mml_cache_ttl = getattr(settings, 'MATHOID_MML_CACHE_TTL', 86400)
 
-    def cache_complete(self, hash):
-        return os.path.isfile(os.path.join(self.cache_dir, hash, 'css'))
-
-    def cache_data(self, hash, file, data, url=True, gz=False):
-        with open(os.path.join(self.cache_dir, hash, file), 'wb') as f:
-            f.write(data)
-        if url:
-            return urljoin(self.cache_url, '%s/%s' % (hash, file))
-
     def query_mathoid(self, formula, hash):
-        try:
-            os.makedirs(os.path.join(self.cache_dir, hash))
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
+        self.cache.create(hash)
 
         try:
             request = urllib2.urlopen(self.mathoid_url, urlencode({
@@ -60,11 +45,13 @@ class MathoidMathParser(MathHTMLParser):
         except urllib2.HTTPError as e:
             if e.code == 400:
                 logger.error('Mathoid failed to render: %s\n%s', formula, e.read())
-            logger.exception('Failed to connect to mathoid for: %s' % formula)
+            else:
+                logger.exception('Failed to connect to mathoid for: %s' % formula)
             return
         except Exception:
             logger.exception('Failed to connect to mathoid for: %s' % formula)
             return
+
         with closing(request) as f:
             data = f.read()
             try:
@@ -85,32 +72,30 @@ class MathoidMathParser(MathHTMLParser):
         mml = data['mml']
         result = {
             'css': css, 'mml': mml,
-            'png': self.cache_data(hash, 'png', bytearray(data['png']['data'])),
-            'svg': self.cache_data(hash, 'svg', data['svg'].encode('utf-8')),
+            'png': self.cache.cache_data(hash, 'png', bytearray(data['png']['data'])),
+            'svg': self.cache.cache_data(hash, 'svg', data['svg'].encode('utf-8')),
         }
-        self.cache_data(hash, 'mml', mml.encode('utf-8'), url=False)
-        self.cache_data(hash, 'css', css.encode('utf-8'), url=False)
+        self.cache.cache_data(hash, 'mml', mml.encode('utf-8'), url=False, gzip=False)
+        self.cache.cache_data(hash, 'css', css.encode('utf-8'), url=False, gzip=False)
         return result
 
     def query_cache(self, hash):
         result = {
-            'svg': urljoin(self.cache_url, '%s/svg' % hash),
-            'png': urljoin(self.cache_url, '%s/png' % hash),
+            'svg': self.cache.get_path(hash, 'svg'),
+            'png': self.cache.get_path(hash, 'png'),
         }
 
         key = 'mathoid:css:' + hash
         css = result['css'] = self.css_cache.get(key)
         if css is None:
-            with open(os.path.join(self.cache_dir, hash, 'css'), 'rb') as f:
-                css = result['css'] = f.read().decode('utf-8')
-                self.css_cache.set(key, css, self.mml_cache_ttl)
+            css = result['css'] = self.cache.read_data(hash, 'css').decode('utf-8')
+            self.css_cache.set(key, css, self.mml_cache_ttl)
 
         mml = None
         if self.mml_cache:
             mml = result['mml'] = self.mml_cache.get('mathoid:mml:' + hash)
         if mml is None:
-            with open(os.path.join(self.cache_dir, hash, 'mml'), 'rb') as f:
-                mml = result['mml'] = f.read().decode('utf-8')
+            mml = result['mml'] = self.cache.read_data(hash, 'mml').decode('utf-8')
             if self.mml_cache:
                 self.mml_cache.set('mathoid:mml:' + hash, mml, self.mml_cache_ttl)
         return result
@@ -120,7 +105,7 @@ class MathoidMathParser(MathHTMLParser):
             return
 
         hash = hashlib.sha1(formula).hexdigest()
-        if self.cache_complete(hash):
+        if self.cache.has_file(hash, 'css'):
             result = self.query_cache(hash)
         else:
             result = self.query_mathoid(formula, hash)

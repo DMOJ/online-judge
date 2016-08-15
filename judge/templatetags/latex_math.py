@@ -2,17 +2,21 @@ from django import template
 from lxml import html
 
 from judge import lxml_tree
-from judge.utils.texoid import get_result
+from judge.utils.texoid import TexoidRenderer, TEXOID_ENABLED
 
 register = template.Library()
 
 
 @register.filter(is_safe=True)
 def latex_math(text):
-    tree = lxml_tree.fromstring(text)
-    for latex in tree.xpath('.//latex'):
+    if not TEXOID_ENABLED:
+        return text
 
-        result = get_result(latex.text)
+    tree = lxml_tree.fromstring(text)
+    texoid = TexoidRenderer()
+
+    for latex in tree.xpath('.//latex'):
+        result = texoid.get_result(latex.text)
         if 'error' not in result:
             img = html.Element('img')
             img.set('src', result['svg'])
