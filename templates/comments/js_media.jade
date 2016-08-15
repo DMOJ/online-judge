@@ -17,14 +17,14 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                                 '{% static "mathjax_config.js" %}'
                         ];
                         console.log('loading');
-                        for(mathjax_script in scripts) {
+                        scripts.each(function(mathjax_script) {
                             $.ajax({
                                 type: "GET",
                                 url: mathjax_script,
                                 dataType: "script",
                                 cache: true
                             });
-                        }
+                        });
                         window.mathjax_pagedown($);
                     }
                 });
