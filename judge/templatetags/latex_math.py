@@ -13,12 +13,12 @@ def latex_math(text):
     for latex in tree.xpath('.//latex'):
 
         result = get_result(latex.text)
-        if result:
+        if 'error' not in result:
             img = html.Element('img')
             img.set('src', result['svg'])
             img.set('onerror', "this.src='%s'" % result['png'])
         else:
-            img = html.Element('em')
-            img.text = 'Texoid rendering error, check logs.'
+            img = html.Element('pre')
+            img.text = result['error']
         latex.getparent().replace(latex, img)
     return tree

@@ -49,7 +49,7 @@ def query_mathoid(formula, hash):
 
     if not data['success']:
         logger.error('Texoid failure for: %s\n%s', formula, data)
-        return
+        return {'error': data['error']}
 
     result = {
         'png': cache_data(hash, 'png', data['png'].decode('base64')),
@@ -76,8 +76,5 @@ def get_result(formula):
         result = query_cache(hash)
     else:
         result = query_mathoid(formula, hash)
-
-    if not result:
-        return None
 
     return result
