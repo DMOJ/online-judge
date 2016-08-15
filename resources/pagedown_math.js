@@ -1,4 +1,4 @@
-(function ($) {
+function mathjax_pagedown($) {
     if ('MathJax' in window) {
         $(window).load(function () {
             $.each(window.editors, function (id, editor) {
@@ -10,4 +10,8 @@
             });
         });
     }
-})('$' in window ? $ : django.jQuery);
+};
+
+window.mathjax_pagedown = mathjax_pagedown;
+
+(mathjax_pagedown)('$' in window ? $ : django.jQuery);

@@ -16,6 +16,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                                 '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
                                 '{% static "mathjax_config.js" %}'
                         ];
+                        console.log('loading');
                         for(mathjax_script in scripts) {
                             $.ajax({
                                 type: "GET",
@@ -24,6 +25,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                                 cache: true
                             });
                         }
+                        window.mathjax_pagedown($);
                     }
                 });
             });
