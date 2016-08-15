@@ -17,6 +17,11 @@ def latex_math(text):
             img = html.Element('img')
             img.set('src', result['svg'])
             img.set('onerror', "this.src='%s'" % result['png'])
+            if 'inline' in latex.attrib:
+                tag = html.Element('div')
+                tag.set('style', 'text-align: center')
+                tag.append(img)
+                img = tag
         else:
             img = html.Element('pre')
             img.text = result['error']
