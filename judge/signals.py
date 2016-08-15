@@ -9,7 +9,7 @@ from django.dispatch import receiver
 
 from .caching import finished_submission
 from .models import Problem, Contest, Submission, Organization, Profile, MiscConfig, Language, Judge, \
-    BlogPost, ContestSubmission, Comment, License
+    BlogPost, ContestSubmission, Comment, License, MATH_ENGINES
 
 
 @receiver(post_save, sender=Problem)
@@ -23,7 +23,7 @@ def problem_update(sender, instance, **kwargs):
     ])
     cache.delete_many([
         make_template_fragment_key('problem_html', (instance.id, engine, lang))
-        for lang, _ in settings.LANGUAGES for engine in [True, False]
+        for lang, _ in settings.LANGUAGES for engine in MATH_ENGINES
     ])
     cache.delete_many([
         make_template_fragment_key('problem_authors', (instance.id, lang))
@@ -53,7 +53,8 @@ def profile_update(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Contest)
 def contest_update(sender, instance, **kwargs):
-    cache.delete(make_template_fragment_key('contest_html', (instance.id,)))
+    cache.delete_many([make_template_fragment_key('contest_html', (instance.id, engine))
+                       for engine in MATH_ENGINES])
 
 
 @receiver(post_save, sender=License)
@@ -100,7 +101,8 @@ def contest_submission_delete(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Organization)
 def organization_update(sender, instance, **kwargs):
-    cache.delete(make_template_fragment_key('organization_html', (instance.id,)))
+    cache.delete_many([make_template_fragment_key('organization_html', (instance.id, engine))
+                       for engine in MATH_ENGINES])
 
 
 @receiver(post_save, sender=MiscConfig)
