@@ -5,7 +5,7 @@ import logging
 import os
 import urllib2
 from contextlib import closing
-from urllib import quote
+from urllib import urlencode
 from urlparse import urljoin
 
 from django.conf import settings
@@ -53,8 +53,16 @@ class MathoidMathParser(MathHTMLParser):
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
+
         try:
-            request = urllib2.urlopen(self.mathoid_url, 'q=' + quote(formula))
+            request = urllib2.urlopen(self.mathoid_url, urlencode({
+                'q': formula, 'type': 'tex' if formula.startswith('\displaystyle') else 'inline-tex'
+            }))
+        except urllib2.HTTPError as e:
+            if e.code == 400:
+                logger.error('Mathoid failed to render: %s\n%s', formula, e.read())
+            logger.exception('Failed to connect to mathoid for: %s' % formula)
+            return
         except Exception:
             logger.exception('Failed to connect to mathoid for: %s' % formula)
             return
@@ -76,9 +84,6 @@ class MathoidMathParser(MathHTMLParser):
 
         css = data['mathoidStyle']
         mml = data['mml']
-        if not formula.startswith('\displaystyle'):
-            mml = mml.replace('<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">',
-                              '<math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">')
         result = {
             'css': css, 'mml': mml,
             'png': self.cache_data(hash, 'png', bytearray(data['png']['data'])),
