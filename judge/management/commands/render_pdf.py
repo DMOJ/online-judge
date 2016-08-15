@@ -3,7 +3,6 @@ import sys
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from django.template import Context
 from django.template.loader import get_template
 from django.utils import translation
 
@@ -35,11 +34,11 @@ class Command(BaseCommand):
         directory = options['directory']
         with WebKitPdfMaker(directory, clean_up=directory is None) as maker, \
                 translation.override(options['language']):
-            maker.html = get_template('problem/raw.jade').render(Context({
+            maker.html = get_template('problem/raw.jade').render({
                 'problem': problem,
                 'problem_name': problem.name if trans is None else trans.name,
                 'description': problem.description if trans is None else trans.description,
-            })).replace('"//', '"http://').replace("'//", "'http://")
+            }).replace('"//', '"http://').replace("'//", "'http://")
             for file in ('style.css', 'pygment-github.css'):
                 maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
             maker.make(debug=True)
