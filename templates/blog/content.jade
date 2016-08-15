@@ -3,6 +3,7 @@ extends base
 - load cache
 - load markdown_trois_tags
 - load social_share
+- load latex_math
 - load camo_proxy
 - load i18n
 - load nofollow
@@ -22,7 +23,7 @@ block body
         div.time #{post.publish_on|date:_("N j, Y, G:i")}
         div.body
             - cache 86400 post_content post.id
-                | #{post.content|markdown:"blog"|proxy_images|nofollowexternal}
+                | #{post.content|markdown:"blog"|latex_math|proxy_images|nofollowexternal}
     hr
     span.social
        - post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>"

@@ -2,6 +2,7 @@ extends base
 - load markdown_trois_tags
 - load staticfiles
 - load smart_math
+- load latex_math
 
 block js_media
     include comments/js_media
@@ -27,7 +28,7 @@ block content_title
 
 block body
     .content-description
-        | #{solution.content|markdown:"solution"|smart_math:MATH_ENGINE}
+        | #{solution.content|markdown:"solution"|latex_math|smart_math:MATH_ENGINE}
 
     include comments/list
 

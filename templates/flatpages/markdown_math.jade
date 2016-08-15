@@ -2,6 +2,7 @@ extends base
 - load markdown_trois_tags
 - load staticfiles
 - load smart_math
+- load latex_math
 - load lazy_load
 - load camo_proxy
 
@@ -19,7 +20,7 @@ block header
 
 block body
     .content-description
-        | #{flatpage.content|markdown:"solution"|smart_math:MATH_ENGINE|proxy_images|lazy_load}
+        | #{flatpage.content|markdown:"solution"|latex_math|smart_math:MATH_ENGINE|proxy_images|lazy_load}
 
 block bodyend
     if REQUIRE_JAX

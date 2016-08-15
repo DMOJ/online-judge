@@ -3,6 +3,7 @@ extends base
 - load cache
 - load markdown_trois_tags
 - load timedelta
+- load latex_math
 - load lazy_load
 - load camo_proxy
 - load i18n
@@ -54,7 +55,7 @@ block body
                         | #{post.publish_on|date:_("N j, Y, G:i")}
                     .summary
                         - cache 86400 post_summary post.id
-                            | #{post.summary|default:post.content|markdown:"blog"|proxy_images|nofollowexternal|lazy_load}
+                            | #{post.summary|default:post.content|markdown:"blog"|latex_math|proxy_images|nofollowexternal|lazy_load}
 
             if page_obj.num_pages > 1
                 div(style='margin-bottom:10px;margin-top:10px')
