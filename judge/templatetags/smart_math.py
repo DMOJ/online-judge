@@ -54,7 +54,8 @@ def math(page, engine):
         return {'jax': MathJaxSmartSVGFallbackMath,
                 'mml': MathJaxSmartSVGFallbackMath,
                 'tex': MathJaxTexOnlyMath,
-                'svg': SmartSVGMath}[engine].convert(page)
+                'svg': SmartSVGMath,
+                'msp': SmartSVGMath}[engine].convert(page)
 
 
 class DetectSVGTag(Node):

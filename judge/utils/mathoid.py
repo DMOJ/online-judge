@@ -23,7 +23,7 @@ class MathoidMathParser(MathHTMLParser):
         MathHTMLParser.__init__(self)
 
         type = type or getattr(settings, 'MATHOID_DEFAULT_TYPE', 'jax')
-        assert type in ('svg', 'mml', 'tex', 'jax')
+        assert type in ('svg', 'mml', 'tex', 'jax', 'msp')
         self.type = type.rstrip('+')
         self.use_jax = type.endswith('+')
 
