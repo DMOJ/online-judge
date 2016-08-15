@@ -1,6 +1,7 @@
 import itertools
 import logging
 import os
+from operator import itemgetter
 from random import randrange
 
 from django.conf import settings
@@ -14,6 +15,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRespons
 from django.shortcuts import render, get_object_or_404
 from django.template import Context
 from django.template.loader import get_template
+from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.decorators.http import require_POST
@@ -118,14 +120,24 @@ class LatexError(Exception):
 
 class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
     logger = logging.getLogger('judge.problem.pdf')
+    languages = set(map(itemgetter(0), settings.LANGUAGES))
 
     def get(self, request, *args, **kwargs):
         if not HAS_PDF:
             raise Http404()
 
+        language = kwargs.get('language', self.request.LANGUAGE_CODE)
+        if language not in self.languages:
+            raise Http404()
+
         problem = self.get_object()
-        error_cache = os.path.join(settings.PROBLEM_PDF_CACHE, '%s.log' % problem.code)
-        cache = os.path.join(settings.PROBLEM_PDF_CACHE, '%s.pdf' % problem.code)
+        try:
+            trans = problem.translations.get(language=language)
+        except ProblemTranslation.DoesNotExist:
+            trans = None
+
+        error_cache = os.path.join(settings.PROBLEM_PDF_CACHE, '%s.%s.log' % (problem.code, language))
+        cache = os.path.join(settings.PROBLEM_PDF_CACHE, '%s.%s.pdf' % (problem.code, language))
 
         if os.path.exists(error_cache):
             with open(error_cache) as f:
@@ -133,10 +145,13 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
 
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.pdf', problem.code)
-            with WebKitPdfMaker() as maker:
+            with WebKitPdfMaker() as maker, translation.override(language):
                 maker.html = get_template('problem/raw.jade').render(Context({
-                    'problem': problem
+                    'problem': problem,
+                    'problem_name': problem.name if trans is None else trans.name,
+                    'description': problem.description if trans is None else trans.description,
                 })).replace('"//', '"http://').replace("'//", "'http://")
+
                 for file in ('style.css', 'pygment-github.css'):
                     maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
                 maker.make()
@@ -149,13 +164,13 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
 
         response = HttpResponse()
         if hasattr(settings, 'PROBLEM_PDF_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
-            response['X-Accel-Redirect'] = '%s/%s.pdf' % (settings.PROBLEM_PDF_INTERNAL, problem.code)
+            response['X-Accel-Redirect'] = '%s/%s.%s.pdf' % (settings.PROBLEM_PDF_INTERNAL, problem.code, language)
         else:
             with open(cache, 'rb') as f:
                 response.content = f.read()
 
         response['Content-Type'] = 'application/pdf'
-        response['Content-Disposition'] = 'inline; filename=%s.pdf' % problem.code
+        response['Content-Disposition'] = 'inline; filename=%s.%s.pdf' % (problem.code, language)
         return response
 
 

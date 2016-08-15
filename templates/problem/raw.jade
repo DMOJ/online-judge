@@ -42,47 +42,45 @@ html
                 font-weight: bold;
             }
     body
-        h2(style='color:#393630; display: inline-block')= problem.name
+        h2(style='color:#393630; display: inline-block')= problem_name
         hr
 
         table.table#info-table
             tbody
                 tr
-                    - language 'en'
-                        td.key Points:
-                        td.value
-                            |  #{problem.points|floatformat}
-                            if problem.partial
-                                | (partial)
-                        td.key
-                            if problem.types_list|length > 1
-                                | Problem types:
-                            else
-                                | Problem type:
-                        td.value #{problem.types_list|join:", "}
-                    - endlanguage
+                    td.key {% trans "Points:" %}
+                    td.value
+                        |  #{problem.points|floatformat}
+                        if problem.partial
+                            | (partial)
+                    td.key
+                        - blocktrans trimmed count counter=problem.types_list|length
+                            | Problem type
+                            - plural
+                            | Problem types
+                    td.value #{problem.types_list|join:", "}
                 tr
-                    td.key Time limit:
+                    td.key {% trans "Time limit:" %}
                     td.value #{problem.time_limit}s
-                    td.key Allowed languages:
+                    td.key {% trans "Allowed languages" %}
                     td.value
                         if show_languages
                             | #{problem.languages_list|join:", "}
                         else
                             | All
                 tr
-                    td.key Memory limit:
+                    td.key {% trans "Memory limit:" %}
                     td.value #{problem.memory_limit|kbsimpleformat}
                     if authors
                         td.key
-                            if authors|length > 1
-                                | Authors:
-                            else
+                            - blocktrans trimmed count counter=authors|length
                                 | Author:
+                                - plural
+                                | Authors:
                         td.value #{authors|join:", "}
         hr(style='border-bottom: 1px dashed;')
 
         .content-description.printing
-            | #{problem.description|markdown:"problem"|latex_math|smart_math:"tex"}
+            | #{description|markdown:"problem"|latex_math|smart_math:"tex"}
 
         include mathjax_load
