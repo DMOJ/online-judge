@@ -132,7 +132,17 @@ class MathoidMathParser(MathHTMLParser):
         return result['mml']
 
     def output_image(self, result, type):
-        return format_html('<img src="{0}" style="{1}" alt="{2}">', result[type], result['css'], result['tex'])
+        display_style = result['tex'].startswith('\displaystyle')
+        if self.use_jax:
+            return format_html('<span class="{3}">'
+                               '<img class="tex-image" src="{0}" style="{1}" alt="{2}">'
+                               '<span class="tex-text" style="display:none">{4}{2}{4}</span>'
+                               '</span>',
+                               result[type], result['css'], result['tex'],
+                               ['inline-math', 'display-math'][display_style], ['~', '$$'][display_style])
+        else:
+            return format_html('<img class="{3}" src="{0}" style="{1}" alt="{2}">', result[type], result['css'],
+                               result['tex'], ['inline-math', 'display-math'][display_style])
 
     def output_svg(self, result):
         return self.output_image(result, 'svg')
