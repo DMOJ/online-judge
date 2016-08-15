@@ -7,6 +7,7 @@ import tempfile
 import uuid
 
 from django.conf import settings
+from django.utils.translation import ugettext
 
 HAS_PDF = (os.path.isdir(getattr(settings, 'PROBLEM_PDF_CACHE', '')) and
            os.access(getattr(settings, 'WKHTMLTOPDF', ''), os.X_OK))
@@ -24,7 +25,7 @@ class WebKitPdfMaker(object):
     def make(self, debug=False):
         command = [
             getattr(settings, 'WKHTMLTOPDF', 'wkhtmltopdf'), '--enable-javascript', '--javascript-delay', '5000',
-            '--footer-center', 'Page [page] of [topage]', '--footer-font-name', 'Segoe UI',
+            '--footer-center', ugettext('Page [page] of [topage]').encode('utf-8'), '--footer-font-name', 'Segoe UI',
             '--footer-font-size', '10', '--encoding', 'utf-8',
             'input.html', 'output.pdf'
         ]
