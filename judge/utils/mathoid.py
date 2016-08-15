@@ -79,10 +79,14 @@ class MathoidMathParser(MathHTMLParser):
         else:
             result['svg'] = None
         if 'mml' in self.mathid_types and 'mml' in data:
-            result['mml'] = data['mml']
-            self.cache_data(hash, 'mml', data['mml'].encode('utf-8'), url=False)
+            mml = data['mml']
+            if not formula.startswith('\displaystyle'):
+                mml = mml.replace('<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">',
+                                  '<math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">')
+            result['mml'] = mml
+            self.cache_data(hash, 'mml', mml.encode('utf-8'), url=False)
         else:
-            result['mml'] = data['mml']
+            result['mml'] = None
         self.cache_data(hash, 'css', css.encode('utf-8'), url=False)
         return result
 
