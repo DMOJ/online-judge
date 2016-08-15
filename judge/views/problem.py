@@ -13,7 +13,6 @@ from django.db.models import Count, Q, F, Prefetch
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
-from django.template import Context
 from django.template.loader import get_template
 from django.utils import translation
 from django.utils.functional import cached_property
@@ -149,11 +148,11 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.pdf', problem.code)
             with WebKitPdfMaker() as maker, translation.override(language):
-                maker.html = get_template('problem/raw.jade').render(Context({
+                maker.html = get_template('problem/raw.jade').render({
                     'problem': problem,
                     'problem_name': problem.name if trans is None else trans.name,
                     'description': problem.description if trans is None else trans.description,
-                })).replace('"//', '"http://').replace("'//", "'http://")
+                }).replace('"//', '"http://').replace("'//", "'http://")
 
                 for file in ('style.css', 'pygment-github.css'):
                     maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
