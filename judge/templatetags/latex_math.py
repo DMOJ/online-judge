@@ -20,5 +20,5 @@ def latex_math(text):
         else:
             img = html.Element('em')
             img.text = 'Texoid rendering error, check logs.'
-        latex.getParent().replace(latex, img)
+        latex.getparent().replace(latex, img)
     return tree
