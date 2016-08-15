@@ -12,20 +12,22 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
             $(function() {
                 $('#id_body').keypress(function() {
                     if(!("MathJax" in window)) {
-                        var scripts = [
-                                '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
-                                '{% static "mathjax_config.js" %}'
-                        ];
-                        scripts.forEach(function(mathjax_script, id) {
-                            $.ajax({
-                                type: "GET",
-                                url: mathjax_script,
-                                dataType: "script",
-                                cache: true,
-                                success: function () {
-                                    if (id) window.mathjax_pagedown($);
-                                }
-                            });
+                        $.ajax({
+                            type: "GET",
+                            url: '{% static "mathjax_config.js" %}',
+                            dataType: "script",
+                            cache: true,
+                            success: function () {
+                                $.ajax({
+                                    type: "GET",
+                                    url: '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
+                                    dataType: "script",
+                                    cache: true,
+                                    success: function () {
+                                        mathjax_pagedown($);
+                                    }
+                                });
+                            }
                         });
                     }
                 });
