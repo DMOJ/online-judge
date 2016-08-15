@@ -12,6 +12,8 @@ def latex_math(text):
     tree = lxml_tree.fromstring(text)
     for latex in tree.xpath('.//latex'):
         img = html.Element('img')
-        img.set('src', get_texoid_url(latex.text))
+        svg, png = get_texoid_url(latex.text)
+        img.set('src', svg)
+        img.set('onerror', "this.src='%s'" % png)
         latex.getParent().replace(latex, img)
     return tree
