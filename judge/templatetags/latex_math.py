@@ -20,7 +20,7 @@ def latex_math(text):
         if 'error' not in result:
             img = html.Element('img')
             img.set('src', result['svg'])
-            img.set('onerror', "this.src='%s'" % result['png'])
+            img.set('onerror', "this.src='%s';this.onerror=null" % result['png'])
             if 'inline' not in latex.attrib:
                 tag = html.Element('div')
                 tag.set('style', 'text-align: center')
