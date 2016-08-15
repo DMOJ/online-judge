@@ -1,13 +1,13 @@
 import logging
 
-from django.utils.safestring import mark_safe
+from django.utils.safestring import mark_safe, SafeData
 from lxml import html
 from lxml.etree import ParserError, XMLSyntaxError
 
 logger = logging.getLogger('judge.html')
 
 
-class HTMLTreeString(object):
+class HTMLTreeString(SafeData):
     def __init__(self, str):
         try:
             self._tree = html.fromstring(str, parser=html.HTMLParser(recover=True))
