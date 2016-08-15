@@ -36,7 +36,7 @@ class MathJaxSmartSVGFallbackMath(MathHTMLParser):
                            ur'''onerror="this.src=\'{1}?\displaystyle {2}\' alt="{3}"/>'''
                            ur'<span class="tex-text" style="display:none">$${3}$$</span>'
                            u'</span>', DISPLAY_MATH_SVG, DISPLAY_MATH_PNG, urlquote(math), math)
-u
+
 
 class MathJaxTexOnlyMath(MathHTMLParser):
     def inline_math(self, math):
