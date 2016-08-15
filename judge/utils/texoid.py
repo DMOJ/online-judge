@@ -1,5 +1,6 @@
 import hashlib
 import json
+import logging
 import os
 import urllib2
 from contextlib import closing
@@ -9,7 +10,8 @@ from urlparse import urljoin
 import errno
 
 from dmoj import settings
-from judge.judgeapi import logger
+
+logger = logging.getLogger('judge.texoid')
 
 
 def cache_data(hash, file, data, url=True):
