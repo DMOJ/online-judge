@@ -19,11 +19,12 @@ from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.generic import DetailView, ListView
 from reversion import revisions
 
-from judge.forms import ProfileForm, Subscription, newsletter_id
+from judge.forms import ProfileForm, newsletter_id
 from judge.models import Profile, Submission, Rating
 from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
+from judge.utils.subscription import Subscription
 from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin, DiggPaginatorMixin
 from .contests import contest_ranking_view
 
