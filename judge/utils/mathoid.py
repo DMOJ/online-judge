@@ -56,18 +56,18 @@ class MathoidMathParser(MathHTMLParser):
         try:
             request = urllib2.urlopen(self.mathoid_url, 'q=' + quote(formula))
         except Exception:
-            logger.exception('Failed to connect to mathoid')
+            logger.exception('Failed to connect to mathoid for: %s' % formula)
             return
         with closing(request) as f:
             data = f.read()
             try:
                 data = json.loads(data)
             except ValueError:
-                logger.exception('Invalid mathoid response: %s', data)
+                logger.exception('Invalid mathoid response for: %s\n%s', formula, data)
                 return
 
         if not data['success']:
-            logger.error('Mathoid failure:\n%s', data)
+            logger.error('Mathoid failure for: %s\n%s', formula, data)
             return
 
         if any(i not in data for i in ('mml', 'png', 'svg', 'mathoidStyle')):
