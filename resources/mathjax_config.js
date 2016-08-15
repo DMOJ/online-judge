@@ -5,5 +5,6 @@ window.MathJax = {
             ['~', '~'],
             ['\\(', '\\)']
         ]
-    }
+    },
+    showMathMenu: false
 };
