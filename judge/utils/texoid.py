@@ -13,7 +13,7 @@ from judge.judgeapi import logger
 
 
 def cache_data(hash, file, data, url=True):
-    with open(os.path.join(settings.TEXOID_CACHE_DIR, hash, file), 'wb') as f:
+    with open(os.path.join(settings.TEXOID_CACHE_ROOT, hash, file), 'wb') as f:
         f.write(data)
     if url:
         return urljoin(settings.TEXOID_CACHE_URL, '%s/%s' % (hash, file))
@@ -21,7 +21,7 @@ def cache_data(hash, file, data, url=True):
 
 def query_mathoid(formula, hash):
     try:
-        os.makedirs(os.path.join(settings.TEXOID_CACHE_DIR, hash))
+        os.makedirs(os.path.join(settings.TEXOID_CACHE_ROOT, hash))
     except OSError as e:
         if e.errno != errno.EEXIST:
             raise
@@ -58,7 +58,7 @@ def query_mathoid(formula, hash):
 
 
 def cache_complete(hash):
-    return os.path.isfile(os.path.join(settings.TEXOID_CACHE_DIR, hash, 'css'))
+    return os.path.isfile(os.path.join(settings.TEXOID_CACHE_ROOT, hash, 'css'))
 
 
 def query_cache(hash):
