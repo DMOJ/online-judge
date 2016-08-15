@@ -33,7 +33,7 @@ class HashFileCache(object):
         with self.read_file(hash, file) as f:
             return f.read()
 
-    def cache_data(self, hash, file, data, url=True, gzip=False):
+    def cache_data(self, hash, file, data, url=True, gzip=True):
         if gzip and self.gzip:
             with gzip_open(self.get_path(hash, file + '.gz'), 'wb') as f:
                 f.write(data)
