@@ -1,8 +1,7 @@
-from HTMLParser import HTMLParser
 import re
+from HTMLParser import HTMLParser
 
 from django.conf import settings
-
 
 INLINE_MATH_PNG = getattr(settings, 'INLINE_MATH_PNG', 'http://www.forkosh.com/mathtex.cgi')
 DISPLAY_MATH_PNG = getattr(settings, 'DISPLAY_MATH_PNG', INLINE_MATH_PNG)
@@ -21,8 +20,9 @@ REPLACES = [
     (u'\u2212', '-'),
     ('&le;', r'\le'),
     ('&le;', r'\ge'),
-    ('&lt;', r'<'),
-    ('&gt;', r'>'),
+    ('&lt;', '<'),
+    ('&gt;', '>'),
+    ('&amp;', '&'),
     (r'\lt', '<'),
     (r'\gt', '>'),
 ]
