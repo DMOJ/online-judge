@@ -3,6 +3,7 @@ extends common-content
 - load markdown_trois_tags
 - load cache
 - load smart_math
+- load latex_math
 - load filesize
 - load camo_proxy
 - load i18n
@@ -127,7 +128,7 @@ block info_float
 
 block description
     - cache 86400 problem_html problem.id MATH_ENGINE LANGUAGE_CODE
-        | #{description|markdown:"problem"|smart_math:MATH_ENGINE|proxy_images}
+        | #{description|markdown:"problem"|latex_math|smart_math:MATH_ENGINE|proxy_images}
     - with license=problem.license
         if license
             span(style='float: left; font-size: 0.85em')
