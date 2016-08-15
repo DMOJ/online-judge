@@ -181,10 +181,10 @@ class Organization(models.Model):
 
 
 MATH_ENGINES_CHOICES = (
-    ('svg', _('SVG with PNG fallback')),
-    ('mml', _('MathML with SVG/PNG fallback')),
     ('tex', _('Leave as LaTeX')),
-    ('jax', _('MathJax with SVG/PNG fallback')),
+    ('svg', _('SVG with PNG fallback')),
+    ('mml', _('MathML with SVG or PNG fallback')),
+    ('jax', _('MathJax with SVG or PNG fallback')),
 )
 
 MATH_ENGINES = ('svg', 'mml', 'tex', 'jax')

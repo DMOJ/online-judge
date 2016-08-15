@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='math_engine',
-            field=models.CharField(choices=[(b'svg', 'SVG with PNG fallback'), (b'mml', 'MathML with SVG/PNG fallback'), (b'tex', 'Leave as LaTeX'), (b'jax', 'MathJax with SVG/PNG fallback')], default=b'jax', help_text='the rendering engine used to render math', max_length=3, verbose_name='math engine'),
+            field=models.CharField(choices=[(b'tex', 'Leave as LaTeX'), (b'svg', 'SVG with PNG fallback'), (b'mml', 'MathML with SVG or PNG fallback'), (b'jax', 'MathJax with SVG or PNG fallback')], default=b'jax', help_text='the rendering engine used to render math', max_length=3, verbose_name='math engine'),
         ),
     ]

@@ -98,7 +98,7 @@ block body
                         td: span.fullwidth #{form.math_engine}
                     if form.newsletter
                         tr: td(colspan=2) #{form.newsletter}
-                            label(for='id_newsletter') Notify me about upcoming contests
+                            label.inline-header.grayed(for='id_newsletter', style='float: unset;') Notify me about upcoming contests
                     tr: td(colspan=2)
                         a.inline-header(href='http://www.gravatar.com/', title='{% trans "Change your avatar" %}', target='_blank')
                             - trans "Change your avatar"
@@ -106,7 +106,7 @@ block body
                         a.inline-header(href='{% url "password_change" %}')
                             - trans "Change your password"
                 td
-                    div.block-header(style='padding-bottom:0.4em') {% trans "Affiliated organizations" %}:
+                    div.block-header(style='padding-bottom:0.4em;margin-top:-2em;') {% trans "Affiliated organizations" %}:
                     | #{form.organizations}
         hr
         div.block-header {% trans "User-script" %}:
