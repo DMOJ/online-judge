@@ -4,4 +4,5 @@ block body
     include comments/history_ajax
 
 block bodyend
-    include mathjax_load
+    if REQUIRE_JAX
+        include mathjax_load

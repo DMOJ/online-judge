@@ -32,5 +32,6 @@ block body
     include comments/list
 
 block bodyend
-    include mathjax_load
+    if REQUIRE_JAX
+        include mathjax_load
     include comments/math

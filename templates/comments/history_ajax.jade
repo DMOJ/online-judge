@@ -1,4 +1,5 @@
 - load markdown_trois_tags
+- load smart_math
 
 if not title
     h2 Revisions for {{ comment.title }}
@@ -14,6 +15,6 @@ each version in revisions
             th Date:
             td.revision-date #{version.revision.date_created|date:_("N j, Y, g:i a")}
         tr
-            td.revision-text(colspan=2) #{version.field_dict.body|markdown:"comment"}
+            td.revision-text(colspan=2) #{version.field_dict.body|markdown:"comment"|smart_math:MATH_ENGINE}
     if not forloop.last
         hr

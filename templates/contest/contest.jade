@@ -84,8 +84,8 @@ block description
                         - blocktrans with length=contest.contest_window_length|timedelta:"localized-no-seconds" start_time=contest.start_time|date:_("F j, Y, G:i T")
                             | #[b {{ length }}] long starting on #[b {{ start_time }}]
 
-    - cache 3600 contest_html contest.id
-        | #{contest.description|markdown:"contest"|smart_math:"svg"|proxy_images}
+    - cache 3600 contest_html contest.id MATH_ENGINE
+        | #{contest.description|markdown:"contest"|smart_math:MATH_ENGINE|proxy_images}
 
 block comments
     span.social

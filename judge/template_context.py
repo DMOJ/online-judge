@@ -108,4 +108,4 @@ def math_setting(request):
         engine = request.user.profile.math_engine
     else:
         engine = getattr(settings, 'MATHOID_DEFAULT_TYPE', 'jax')
-    return {'MATH_ENGINE': engine, 'REQUIRE_JAX': engine.endswith('+')}
+    return {'MATH_ENGINE': engine, 'REQUIRE_JAX': engine == 'jax'}

@@ -31,5 +31,5 @@ block info_float
     a(href='{% url "organization_users" organization.key %}') {% trans "View members" %}
         
 block description
-    - cache 3600 organization_html organization.id
-        | #{organization.about|markdown:"organization-about"|smart_math:"svg"|proxy_images|lazy_load}
+    - cache 3600 organization_html organization.id MATH_ENGINE
+        | #{organization.about|markdown:"organization-about"|smart_math:MATH_ENGINE|proxy_images|lazy_load}

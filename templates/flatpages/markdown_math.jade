@@ -22,4 +22,5 @@ block body
         | #{flatpage.content|markdown:"solution"|smart_math:MATH_ENGINE|proxy_images|lazy_load}
 
 block bodyend
-    include mathjax_load
+    if REQUIRE_JAX
+        include mathjax_load
