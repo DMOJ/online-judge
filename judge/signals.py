@@ -1,15 +1,15 @@
-import os
 import errno
+import os
 
 from django.conf import settings
+from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.core.cache import cache
 
+from .caching import finished_submission
 from .models import Problem, Contest, Submission, Organization, Profile, MiscConfig, Language, Judge, \
     BlogPost, ContestSubmission, Comment, License
-from .caching import finished_submission
 
 
 @receiver(post_save, sender=Problem)
@@ -22,8 +22,8 @@ def problem_update(sender, instance, **kwargs):
         make_template_fragment_key('problem_feed', (instance.id,))
     ])
     cache.delete_many([
-        make_template_fragment_key('problem_html', (instance.id, use_svg, lang))
-        for lang, _ in settings.LANGUAGES for use_svg in [True, False]
+        make_template_fragment_key('problem_html', (instance.id, engine, lang))
+        for lang, _ in settings.LANGUAGES for engine in [True, False]
     ])
     cache.delete_many([
         make_template_fragment_key('problem_authors', (instance.id, lang))

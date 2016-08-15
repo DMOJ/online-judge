@@ -27,7 +27,7 @@ block content_title
 
 block body
     .content-description
-        | #{solution.content|markdown:"solution"|smart_math}
+        | #{solution.content|markdown:"solution"|smart_math:MATH_ENGINE}
 
     include comments/list
 

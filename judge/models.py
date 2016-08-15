@@ -180,7 +180,7 @@ class Organization(models.Model):
         verbose_name_plural = _('organizations')
 
 
-MATH_ENGINES = (
+MATH_ENGINES_CHOICES = (
     ('svg', _('SVG')),
     ('png', _('PNG')),
     ('tex', _('LaTeX')),
@@ -188,6 +188,8 @@ MATH_ENGINES = (
     ('tex+', _('MathJax')),
     ('svg+', _('MathJax with SVG fallback')),
 )
+
+MATH_ENGINES = ('svg', 'png', 'tex', 'mml', 'tex+', 'svg+')
 
 
 class Profile(models.Model):
@@ -213,7 +215,7 @@ class Profile(models.Model):
                                    help_text=_('User-defined JavaScript for site customization.'))
     current_contest = models.OneToOneField('ContestParticipation', verbose_name=_('current contest'),
                                            null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
-    math_engine = models.CharField(verbose_name=_('math engine'), choices=MATH_ENGINES, max_length=4,
+    math_engine = models.CharField(verbose_name=_('math engine'), choices=MATH_ENGINES_CHOICES, max_length=4,
                                    default=getattr(settings, 'MATHOID_DEFAULT_TYPE', 'svg+'),
                                    help_text=_('the rendering engine used to render math'))
 

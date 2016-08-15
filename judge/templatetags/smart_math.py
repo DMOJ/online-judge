@@ -10,6 +10,20 @@ from judge.utils.mathoid import MathoidMathParser
 register = Library()
 
 
+class SmartSVGMath(MathHTMLParser):
+    def __init__(self, svg):
+        MathHTMLParser.__init__(self)
+        self.use_svg = svg
+
+    def inline_math(self, math):
+        return (r'<img class="inline-math" src="%s?\textstyle %s" alt="%s"/>' %
+                ((INLINE_MATH_PNG, INLINE_MATH_SVG)[self.use_svg], urlquote(math), math))
+
+    def display_math(self, math):
+        return (r'<img class="display-math" src="%s?\displaystyle %s" alt="%s"/>' %
+                ((DISPLAY_MATH_PNG, DISPLAY_MATH_SVG)[self.use_svg], urlquote(math), math))
+
+
 class MathJaxTexFallbackMath(MathHTMLParser):
     def inline_math(self, math):
         return ('<span class="inline-math">'
@@ -53,19 +67,16 @@ class MathJaxTexOnlyMath(MathHTMLParser):
 
 
 @register.filter(name='smart_math', is_safe=True)
-def math(page, style='fallback'):
-    if style == 'tex':
-        return MathJaxTexOnlyMath.convert(page)
-    else:
-        return MathJaxTexFallbackMath.convert(page)
-
-
-@register.filter(name='smart_svg_math', is_safe=True)
-def math(page, use_svg):
+def math(page, engine):
     if hasattr(settings, 'MATHOID_URL'):
-        return MathoidMathParser.convert(page)
+        return MathoidMathParser.convert(page, engine)
     else:
-        return MathJaxSmartSVGFallbackMath.convert(page, use_svg)
+        if engine.endswith('+'):
+            return MathJaxSmartSVGFallbackMath.convert(page, engine.startswith('svg'))
+        elif engine == 'tex':
+            return MathJaxTexOnlyMath.convert(page)
+        else:
+            return SmartSVGMath.convert(page)
 
 
 class DetectSVGTag(Node):

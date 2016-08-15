@@ -19,7 +19,7 @@ block header
 
 block body
     .content-description
-        | #{flatpage.content|markdown:"solution"|smart_math|proxy_images|lazy_load}
+        | #{flatpage.content|markdown:"solution"|smart_math:MATH_ENGINE|proxy_images|lazy_load}
 
 block bodyend
     include mathjax_load

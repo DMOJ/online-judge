@@ -101,3 +101,8 @@ def site_name(request):
     return {'SITE_NAME': getattr(settings, 'SITE_NAME', 'DMOJ'),
             'SITE_LONG_NAME': getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ')),
             'SITE_ADMIN_EMAIL': getattr(settings, 'SITE_ADMIN_EMAIL', False)}
+
+
+def math_setting(request):
+    engine = request.user.profile.math_engine
+    return {'MATH_ENGINE': engine, 'REQUIRE_JAX': engine.endswith('+')}

@@ -85,7 +85,7 @@ block description
                             | #[b {{ length }}] long starting on #[b {{ start_time }}]
 
     - cache 3600 contest_html contest.id
-        | #{contest.description|markdown:"contest"|smart_math|proxy_images}
+        | #{contest.description|markdown:"contest"|smart_math:"svg"|proxy_images}
 
 block comments
     span.social

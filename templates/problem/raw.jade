@@ -82,6 +82,6 @@ html
         hr(style='border-bottom: 1px dashed;')
 
         .content-description.printing
-            | #{problem.description | markdown:"problem"|smart_math:"tex"}
+            | #{problem.description|markdown:"problem"|smart_math:"tex"}
 
         include mathjax_load

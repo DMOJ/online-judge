@@ -21,8 +21,11 @@ class MathoidMathParser(MathHTMLParser):
     def __init__(self, type=None):
         MathHTMLParser.__init__(self)
 
-        self.type = type or getattr(settings, 'MATHOID_DEFAULT_TYPE', 'svg')
-        assert self.type in ('svg', 'mml', 'tex', 'png')
+        type = type or getattr(settings, 'MATHOID_DEFAULT_TYPE', 'svg+')
+        assert type in ('svg', 'mml', 'tex', 'png', 'tex+', 'svg+')
+        self.type = type.rstrip('+')
+        self.use_jax = type.endswith('+')
+
         self.mathoid_url = settings.MATHOID_URL
         self.cache_dir = settings.MATHOID_CACHE_ROOT
         self.cache_url = settings.MATHOID_CACHE_URL
@@ -106,6 +109,9 @@ class MathoidMathParser(MathHTMLParser):
         return result
 
     def get_result(self, formula):
+        if self.type == 'tex':
+            return
+
         hash = hashlib.sha1(formula).hexdigest()
         if self.cache_complete(hash):
             result = self.query_cache(hash, self.type)
@@ -115,6 +121,7 @@ class MathoidMathParser(MathHTMLParser):
         if not result or not result.get(self.type):
             return None
 
+        result['tex'] = formula
         return {
             'mml': self.output_mml,
             'svg': self.output_svg,
@@ -125,7 +132,7 @@ class MathoidMathParser(MathHTMLParser):
         return result['mml']
 
     def output_image(self, result, type):
-        return format_html('<img src="{0}" style="{1}">', result[type], result['css'])
+        return format_html('<img src="{0}" style="{1}" alt="{2}">', result[type], result['css'], result['tex'])
 
     def output_svg(self, result):
         return self.output_image(result, 'svg')

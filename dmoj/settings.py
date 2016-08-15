@@ -13,6 +13,7 @@ import os
 import re
 
 from django.utils.translation import ugettext_lazy as _
+
 from markdown_trois.conf.settings import MARKDOWN_TROIS_DEFAULT_STYLE
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -189,6 +190,7 @@ TEMPLATES = [
                 'judge.template_context.site_name',
                 'judge.template_context.misc_config',
                 'judge.template_context.contest',
+                'judge.template_context.math_setting',
                 'social.apps.django_app.context_processors.backends',
                 'social.apps.django_app.context_processors.login_redirect',
             ],
