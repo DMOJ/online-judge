@@ -11,9 +11,14 @@ register = template.Library()
 def latex_math(text):
     tree = lxml_tree.fromstring(text)
     for latex in tree.xpath('.//latex'):
-        img = html.Element('img')
+
         result = get_result(latex.text)
-        img.set('src', result['svg'])
-        img.set('onerror', "this.src='%s'" % result['png'])
+        if result:
+            img = html.Element('img')
+            img.set('src', result['svg'])
+            img.set('onerror', "this.src='%s'" % result['png'])
+        else:
+            img = html.Element('em')
+            img.text = 'Texoid rendering error, check logs.'
         latex.getParent().replace(latex, img)
     return tree
