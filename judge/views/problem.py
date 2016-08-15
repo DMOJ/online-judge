@@ -66,17 +66,20 @@ class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMi
     template_name = 'problem/raw.jade'
 
     def get_title(self):
-        return self.get_object().name
+        return self.object.name
 
     def get_context_data(self, **kwargs):
         context = super(ProblemRaw, self).get_context_data(**kwargs)
+        context['problem_name'] = self.object.name
+        context['description'] = self.object.description
         return context
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return self.render_to_response(self.get_context_data(
-            object=self.object,
-        ))
+        with translation.override(settings.LANGUAGE_CODE):
+            return self.render_to_response(self.get_context_data(
+                object=self.object,
+            ))
 
 
 class ProblemDetail(ProblemMixin, CommentedDetailView):
