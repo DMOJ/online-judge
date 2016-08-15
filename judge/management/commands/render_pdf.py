@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.template import Context
 from django.template.loader import get_template
+from django.utils import translation
 
 from judge.models import Problem
 from judge.pdf_problems import WebKitPdfMaker
@@ -16,6 +17,8 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('code', help='code of problem to render')
         parser.add_argument('directory', nargs='?', help='directory to store temporaries')
+        parser.add_argument('-l', '--language', default=settings.LANGUAGE_CODE,
+                            help='language to render PDF in')
 
     def handle(self, *args, **options):
         try:
@@ -25,7 +28,8 @@ class Command(BaseCommand):
             return
 
         directory = options['directory']
-        with WebKitPdfMaker(directory, clean_up=directory is None) as maker:
+        with WebKitPdfMaker(directory, clean_up=directory is None) as maker, \
+                translation.override(options['language']):
             maker.html = get_template('problem/raw.jade').render(Context({
                 'problem': problem
             })).replace('"//', '"http://').replace("'//", "'http://")
