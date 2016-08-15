@@ -1,3 +1,4 @@
+import errno
 import hashlib
 import json
 import logging
@@ -7,9 +8,7 @@ from contextlib import closing
 from urllib import urlencode
 from urlparse import urljoin
 
-import errno
-
-from dmoj import settings
+from django.conf import settings
 
 logger = logging.getLogger('judge.texoid')
 
