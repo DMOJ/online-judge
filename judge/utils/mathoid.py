@@ -134,24 +134,24 @@ class MathoidMathParser(MathHTMLParser):
 
     def output_mml(self, result):
         # 100% MediaWiki compatibility.
-        return format_html('<span class="{5}-math">'
-                           '<span class="mwe-math-mathml-{5} mwe-math-mathml-a11y"'
-                           ' style="display: none;">{0}</span>'
-                           '<img src="{1}" class="mwe-math-fallback-image-{5}" onerror="this.src=\'{2}\''
-                           ' aria-hidden="true" style="{3}" alt="{4}"></span>',
+        return format_html(u'<span class="{5}-math">'
+                           u'<span class="mwe-math-mathml-{5} mwe-math-mathml-a11y"'
+                           u' style="display: none;">{0}</span>'
+                           u'<img src="{1}" class="mwe-math-fallback-image-{5}" onerror="this.src=\'{2}\''
+                           u' aria-hidden="true" style="{3}" alt="{4}"></span>',
                            mark_safe(result['mml']), result['svg'], result['png'], result['css'], result['tex'],
                            ['inline', 'display'][result['display']])
 
     def output_jax(self, result):
-        return format_html('<span class="{4}">'
-                           '''<img class="tex-image" src="{0}" style="{2}" alt="{3}" onerror="this.src='{1}'">'''
-                           '''<span class="tex-text" style="display:none">{5}{3}{5}</span>'''
-                           '</span>',
+        return format_html(u'<span class="{4}">'
+                           u'''<img class="tex-image" src="{0}" style="{2}" alt="{3}" onerror="this.src='{1}'">'''
+                           u'''<span class="tex-text" style="display:none">{5}{3}{5}</span>'''
+                           u'</span>',
                            result['svg'], result['png'], result['css'], result['tex'],
                            ['inline-math', 'display-math'][result['display']], ['~', '$$'][result['display']])
 
     def output_svg(self, result):
-        return format_html('''<img class="{4}" src="{0}" style="{2}" alt="{3}" onerror="this.src='{1}'">''',
+        return format_html(u'''<img class="{4}" src="{0}" style="{2}" alt="{3}" onerror="this.src='{1}'">''',
                            result['svg'], result['png'], result['css'], result['tex'],
                            ['inline-math', 'display-math'][result['display']])
 
