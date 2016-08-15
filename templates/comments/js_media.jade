@@ -7,7 +7,28 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
 - compress js
     | #{comment_form.media.js}
 
-    script(type='text/javascript').
+    if not REQUIRES_JAX
+        script(type='text/javascript').
+            $(function() {
+                $('#id_body').keypress(function() {
+                    if(!("MathJax" in window)) {
+                        var scripts = [
+                                '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
+                                '{% static "mathjax_config.js" %}'
+                        ];
+                        for(mathjax_script in scripts) {
+                            $j.ajax({
+                                type: "GET",
+                                url: mathjax_script,
+                                dataType: "script",
+                                cache: true
+                            });
+                        }
+                    }
+                });
+            });
+
+}script(type='text/javascript').
         $(document).ready(function () {
             window.comment_set_parent = function (parent) {
                 $('form#comment-submit input#id_parent').val(parent);
