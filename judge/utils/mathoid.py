@@ -81,8 +81,8 @@ class MathoidMathParser(MathHTMLParser):
 
     def query_cache(self, hash):
         result = {
-            'svg': self.cache.get_path(hash, 'svg'),
-            'png': self.cache.get_path(hash, 'png'),
+            'svg': self.cache.get_url(hash, 'svg'),
+            'png': self.cache.get_url(hash, 'png'),
         }
 
         key = 'mathoid:css:' + hash
