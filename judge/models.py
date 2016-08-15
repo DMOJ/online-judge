@@ -180,6 +180,16 @@ class Organization(models.Model):
         verbose_name_plural = _('organizations')
 
 
+MATH_ENGINES = (
+    ('svg', _('SVG')),
+    ('png', _('PNG')),
+    ('tex', _('LaTeX')),
+    ('mml', _('MathML')),
+    ('tex+', _('MathJax')),
+    ('svg+', _('MathJax with SVG fallback')),
+)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user associated'))
     name = models.CharField(max_length=50, verbose_name=_('display name'), null=True, blank=True)
@@ -203,6 +213,9 @@ class Profile(models.Model):
                                    help_text=_('User-defined JavaScript for site customization.'))
     current_contest = models.OneToOneField('ContestParticipation', verbose_name=_('current contest'),
                                            null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
+    math_engine = models.CharField(verbose_name=_('math engine'), choices=MATH_ENGINES, max_length=4,
+                                   default=getattr(settings, 'MATHOID_DEFAULT_TYPE', 'svg+'),
+                                   help_text=_('the rendering engine used to render math'))
 
     @cached_property
     def organization(self):
