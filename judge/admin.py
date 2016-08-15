@@ -93,7 +93,7 @@ class TimezoneFilter(admin.SimpleListFilter):
 
 class ProfileAdmin(Select2SuitMixin, VersionAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
-              'last_access', 'ip', 'mute', 'user_script', 'current_contest')
+              'math_engine', 'last_access', 'ip', 'mute', 'user_script', 'current_contest')
     readonly_fields = ('user',)
     list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)

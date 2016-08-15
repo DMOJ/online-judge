@@ -93,6 +93,9 @@ block body
                     tr
                         td: label.inline-header.grayed {% trans "Editor theme" %}:
                         td: span.fullwidth #{form.ace_theme}
+                    tr
+                        td: label.inline-header.grayed {% trans "Math engine" %}:
+                        td: span.fullwidth #{form.math_engine}
                     if form.newsletter
                         tr: td(colspan=2) #{form.newsletter}
                             label(for='id_newsletter') Notify me about upcoming contests

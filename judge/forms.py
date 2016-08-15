@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode, Language
-from judge.utils.subscription import Subscription, newsletter_id
+from judge.utils.subscription import newsletter_id
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget
 
 try:
@@ -27,13 +27,14 @@ class ProfileForm(ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['name', 'about', 'organizations', 'timezone', 'language', 'ace_theme', 'user_script']
+        fields = ['name', 'about', 'organizations', 'timezone', 'language', 'ace_theme', 'user_script', 'math_engine']
         widgets = {'name': TextInput(attrs={'style': 'width:100%;box-sizing:border-box'}),
                    'user_script': AceWidget(theme='github')}
         if Select2Widget is not None:
             widgets['timezone'] = Select2Widget(attrs={'style': 'width:200px'})
             widgets['language'] = Select2Widget(attrs={'style': 'width:200px'})
             widgets['ace_theme'] = Select2Widget(attrs={'style': 'width:200px'})
+            widgets['math_engine'] = Select2Widget(attrs={'style': 'width:200px'})
         if PagedownWidget is not None:
             widgets['about'] = PagedownWidget(attrs={'style': 'max-width:700px;min-width:700px;width:700px'})
 
