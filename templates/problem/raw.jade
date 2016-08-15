@@ -67,7 +67,7 @@ html
                         if show_languages
                             | #{problem.languages_list|join:", "}
                         else
-                            | All
+                            - trans "All" context "languages"
                 tr
                     td.key {% trans "Memory limit:" %}
                     td.value #{problem.memory_limit|kbsimpleformat}
