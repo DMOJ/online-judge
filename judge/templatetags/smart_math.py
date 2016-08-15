@@ -76,7 +76,7 @@ def math(page, engine):
         elif engine == 'tex':
             return MathJaxTexOnlyMath.convert(page)
         else:
-            return SmartSVGMath.convert(page)
+            return SmartSVGMath.convert(page, engine == 'svg')
 
 
 class DetectSVGTag(Node):
