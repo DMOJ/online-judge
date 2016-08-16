@@ -3,7 +3,7 @@
 
 thead
     tr
-        th.header.rank {% trans "Rank" %}
+        th.header.rank #{rank_header|default:_("Rank")}
         block after_rank_head
         th.header.username {% trans "Username" %}
         block before_point_head

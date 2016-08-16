@@ -333,7 +333,8 @@ def make_contest_ranking_profile(participation, problems):
         cumtime=participation.cumtime,
         organization=user.organization,
         rating=participation.rating.rating if hasattr(participation, 'rating') else None,
-        problems=problems
+        problems=problems,
+        participation=participation,
     )
 
 
@@ -397,7 +398,7 @@ def get_participation_ranking_profile(contest, participation, problems):
 
 
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
-                             show_current_virtual=True):
+                             show_current_virtual=True, ranker=ranker):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
 
@@ -464,10 +465,10 @@ def base_participation_list(request, contest, profile, username=None):
     contest_access_check(request, contest)
 
     queryset = contest.users.filter(user=profile).order_by('-virtual')
-    users, problems = get_contest_ranking_list(request, contest, show_current_virtual=False,
-                                               ranking_list=partial(base_contest_ranking_list,
-                                                                    for_user=request.user.profile.id,
-                                                                    queryset=queryset))
+    users, problems = get_contest_ranking_list(
+        request, contest, show_current_virtual=False,
+        ranking_list=partial(base_contest_ranking_list, for_user=request.user.profile.id, queryset=queryset),
+        ranker=lambda users: ((user.participation.virtual or '-', user) for user in users))
     return render(request, 'contest/ranking.jade', {
         'users': users,
         'title': _('Your participation in %s') % contest.name if username is None else
@@ -479,6 +480,7 @@ def base_participation_list(request, contest, profile, username=None):
         'show_organization': False,
         'last_msg': event.last(),
         'has_rating': contest.ratings.exists(),
+        'rank_header': _('Virtual#')
     })
 
 
