@@ -358,7 +358,7 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None,
         GROUP BY cp.id, part.id
     '''.format(extra=('AND part.user_id = %s' if for_user is not None else
                       'AND part.virtual = 0 AND part.spectate = 0')),
-                   (contest.id, contest.id) + (for_user,) if for_user is not None else ())
+                   (contest.id, contest.id) + ((for_user,) if for_user is not None else ()))
     data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in cursor}
     cursor.close()
 
