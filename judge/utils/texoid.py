@@ -4,6 +4,7 @@ import logging
 import urllib2
 from contextlib import closing
 from urllib import urlencode
+import json
 
 from django.conf import settings
 
@@ -52,6 +53,7 @@ class TexoidRenderer(object):
         result = {
             'png': self.cache.cache_data(hash, 'png', data['png'].decode('base64')),
             'svg': self.cache.cache_data(hash, 'svg', data['svg'].encode('utf-8')),
+            'meta': self.cache.cache_data(hash, 'meta', json.dumps({'width': data['width'], 'height': data['height']}))
         }
         return result
 
@@ -59,6 +61,7 @@ class TexoidRenderer(object):
         result = {
             'svg': self.cache.get_url(hash, 'svg'),
             'png': self.cache.get_url(hash, 'png'),
+            'meta': self.cache.get_url(hash, 'meta'),
         }
         return result
 
