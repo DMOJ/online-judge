@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.db import connection, transaction, IntegrityError
+from django.db import connection, IntegrityError
 from django.db.models import Count, Q, Min, Max
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render
@@ -222,14 +222,7 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('No such contest'),
                                    _('You are not in contest "%s".') % contest.key, 404)
 
-        if profile.current_contest.virtual:
-            with transaction.atomic():
-                profile.current_contest.delete()
-                profile.current_contest = None
-                profile.save()
-        else:
-            profile.current_contest = None
-            profile.save()
+        profile.remove_contest()
         return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
 
 

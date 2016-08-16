@@ -11,7 +11,7 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Max, F, QuerySet
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
@@ -251,11 +251,22 @@ class Profile(models.Model):
             }
         return self.user.username
 
+    def remove_contest(self):
+        contest = self.current_contest
+        if contest.virtual and not contest.submissions.count():
+            with transaction.atomic():
+                contest.delete()
+                self.current_contest = None
+                self.save()
+        else:
+            self.current_contest = None
+            self.save()
+    remove_contest.alters_data = True
+
     def update_contest(self):
         contest = self.current_contest
         if contest is not None and contest.ended:
-            self.current_contest = None
-            self.save()
+            self.remove_contest()
     update_contest.alters_data = True
 
     def get_absolute_url(self):
