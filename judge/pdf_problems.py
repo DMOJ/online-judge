@@ -110,7 +110,7 @@ page.open(param.input, function (status) {
             document.documentElement.style.zoom = param.zoom;
         });
         window.setTimeout(function () {
-            page.render(output);
+            page.render(param.output);
             phantom.exit();
         }, param.timeout);
     }
