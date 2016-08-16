@@ -28,10 +28,11 @@ class TexoidRenderer(object):
                 'q': formula
             }))
         except urllib2.HTTPError as e:
-            if e.code == 400:
-                logger.error('Texoid failed to render: %s\n%s', formula, e.read())
-            else:
-                logger.exception('Failed to connect to texoid for: %s' % formula)
+            with closing(e):
+                if e.code == 400:
+                    logger.error('Texoid failed to render: %s\n%s', formula, e.read())
+                else:
+                    logger.exception('Failed to connect to texoid for: %s' % formula)
             return
         except Exception:
             logger.exception('Failed to connect to texoid for: %s' % formula)
