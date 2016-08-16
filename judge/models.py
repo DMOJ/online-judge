@@ -1048,6 +1048,8 @@ class ContestParticipation(models.Model):
     update_cumtime.alters_data = True
 
     def __unicode__(self):
+        if self.virtual:
+            return '%s in %s, v%d' % (self.user.long_display_name, self.contest.name, self.virtual)
         return '%s in %s' % (self.user.long_display_name, self.contest.name)
 
     class Meta:
