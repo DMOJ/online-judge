@@ -170,7 +170,7 @@ def edit_profile(request):
                 revisions.set_user(request.user)
                 revisions.set_comment(_('Updated on site'))
 
-            if Subscription is not None:
+            if newsletter_id is not None:
                 try:
                     subscription = Subscription.objects.get(user=request.user, newsletter_id=newsletter_id)
                 except Subscription.DoesNotExist:
@@ -183,7 +183,7 @@ def edit_profile(request):
             return HttpResponseRedirect(request.path)
     else:
         form = ProfileForm(instance=profile, user=request.user)
-        if Subscription is not None:
+        if newsletter_id is not None:
             try:
                 subscription = Subscription.objects.get(user=request.user, newsletter_id=newsletter_id)
             except Subscription.DoesNotExist:
