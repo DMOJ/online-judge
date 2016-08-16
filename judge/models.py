@@ -953,6 +953,10 @@ class Contest(models.Model):
         else:
             return None
 
+    @property
+    def ended(self):
+        return self.end_time < now
+
     def __unicode__(self):
         return self.name
 
@@ -978,6 +982,8 @@ class ContestParticipation(models.Model):
     cumtime = models.PositiveIntegerField(verbose_name=_('cumulative time'), default=0)
     spectate = models.BooleanField(verbose_name=_('whether the user is spectating the contest'),
                                    default=False)
+    virtual = models.IntegerField(verbose_name=_('virtual participation id'), default=0,
+                                  help_text=_('0 means non-virtual, otherwise the n-th virtual participation'))
 
     def recalculate_score(self):
         self.score = sum(map(itemgetter('points'),
@@ -1000,6 +1006,9 @@ class ContestParticipation(models.Model):
 
     @property
     def ended(self):
+        # Virtual contests are unending, until you leave.
+        if self.virtual:
+            return False
         return self.end_time < timezone.now()
 
     @property
@@ -1031,7 +1040,7 @@ class ContestParticipation(models.Model):
         verbose_name = _('contest participation')
         verbose_name_plural = _('contest participations')
 
-        unique_together = ('contest', 'user')
+        unique_together = ('contest', 'user', 'virtual')
 
 
 class ContestProblem(models.Model):

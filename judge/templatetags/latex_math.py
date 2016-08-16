@@ -17,7 +17,10 @@ def latex_math(text):
 
     for latex in tree.xpath('.//latex'):
         result = texoid.get_result(latex.text)
-        if 'error' not in result:
+        if not result:
+            img = html.Element('pre')
+            img.text = 'LaTeX rendering error\n' + latex.text
+        elif 'error' not in result:
             img = html.Element('img')
             img.set('src', result['svg'])
             img.set('onerror', "this.src='%s';this.onerror=null" % result['png'])
