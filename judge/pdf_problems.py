@@ -89,7 +89,7 @@ page.paperSize = {
         height: '1cm',
         contents: phantom.callback(function(num, pages) {
             return ('<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">'
-                  + param.footer + '</center>'.replace('[page]', num).replace('[topage]', pages));
+                  + param.footer.replace('[page]', num).replace('[topage]', pages) + '</center>');
         })
     }
 };
@@ -106,9 +106,9 @@ page.open(param.input, function (status) {
         console.log('Unable to load the address!');
         phantom.exit(1);
     } else {
-        page.evaluate(function () {
-            document.documentElement.style.zoom = param.zoom;
-        });
+        page.evaluate(function (zoom) {
+            document.documentElement.style.zoom = zoom;
+        }, param.zoom);
         window.setTimeout(function () {
             page.render(param.output);
             phantom.exit();
