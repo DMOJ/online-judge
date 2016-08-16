@@ -1,11 +1,11 @@
 import hashlib
-import json
 import logging
 import urllib2
 from contextlib import closing
 from urllib import urlencode
 import json
 
+from django.core.cache import caches
 from django.conf import settings
 
 from judge.utils.file_cache import HashFileCache
@@ -20,6 +20,7 @@ class TexoidRenderer(object):
         self.cache = HashFileCache(settings.TEXOID_CACHE_ROOT,
                                    settings.TEXOID_CACHE_URL,
                                    getattr(settings, 'TEXOID_GZIP', False))
+        self.meta_cache = caches[getattr(settings, 'TEXOID_META_CACHE', 'default')]
 
     def query_texoid(self, formula, hash):
         self.cache.create(hash)
@@ -51,10 +52,13 @@ class TexoidRenderer(object):
             logger.error('Texoid failure for: %s\n%s', formula, data)
             return {'error': data['error']}
 
+        meta = data['meta']
+        self.cache.cache_data(hash, 'meta', json.dumps(meta), url=False, gzip=False)
+
         result = {
             'png': self.cache.cache_data(hash, 'png', data['png'].decode('base64')),
             'svg': self.cache.cache_data(hash, 'svg', data['svg'].encode('utf-8')),
-            'meta': self.cache.cache_data(hash, 'meta', json.dumps({'width': data['width'], 'height': data['height']}))
+            'meta': meta,
         }
         return result
 
@@ -62,8 +66,15 @@ class TexoidRenderer(object):
         result = {
             'svg': self.cache.get_url(hash, 'svg'),
             'png': self.cache.get_url(hash, 'png'),
-            'meta': self.cache.get_url(hash, 'meta'),
         }
+
+        key = 'texoid:meta:' + hash
+        cached_meta = self.meta_cache.get(key)
+        if cached_meta is None:
+            cached_meta = json.loads(self.cache.read_data(hash, 'meta').decode('utf-8'))
+            self.meta_cache.set(key, cached_meta, self.meta_cache)
+        result['meta'] = cached_meta
+
         return result
 
     def get_result(self, formula):
