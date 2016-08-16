@@ -21,6 +21,7 @@ class TexoidRenderer(object):
                                    settings.TEXOID_CACHE_URL,
                                    getattr(settings, 'TEXOID_GZIP', False))
         self.meta_cache = caches[getattr(settings, 'TEXOID_META_CACHE', 'default')]
+        self.meta_cache_ttl = getattr(settings, 'TEXOID_META_CACHE_TTL', 86400)
 
     def query_texoid(self, formula, hash):
         self.cache.create(hash)
@@ -72,7 +73,7 @@ class TexoidRenderer(object):
         cached_meta = self.meta_cache.get(key)
         if cached_meta is None:
             cached_meta = json.loads(self.cache.read_data(hash, 'meta').decode('utf-8'))
-            self.meta_cache.set(key, cached_meta, self.meta_cache)
+            self.meta_cache.set(key, cached_meta, self.meta_cache_ttl)
         result['meta'] = cached_meta
 
         return result
