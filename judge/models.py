@@ -1025,7 +1025,7 @@ class ContestParticipation(models.Model):
 
     @property
     def ended(self):
-        return self.end_time is None or self.end_time < timezone.now()
+        return self.end_time is not None and self.end_time < timezone.now()
 
     @property
     def time_remaining(self):
