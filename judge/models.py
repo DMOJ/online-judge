@@ -997,7 +997,7 @@ class ContestParticipation(models.Model):
     @cached_property
     def start(self):
         contest = self.contest
-        return contest.start_time if contest.time_limit is None else self.real_start
+        return contest.start_time if contest.time_limit is None and not self.virtual else self.real_start
 
     @cached_property
     def end_time(self):
