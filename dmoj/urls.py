@@ -180,6 +180,8 @@ urlpatterns = [
         url(r'^/submissions/(?P<user>\w+)/(?P<problem>\w+)/',
             paged_list_view(submission.UserContestSubmissions, 'contest_user_submissions')),
 
+        url(r'^/participations$', contests.participation_list, name='contest_participation_own'),
+
         url(r'^/$', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))), 
     ])),
 

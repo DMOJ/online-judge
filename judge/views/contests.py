@@ -1,11 +1,13 @@
 from calendar import Calendar, SUNDAY
 from collections import namedtuple, defaultdict
 from datetime import timedelta, date, datetime, time
+from functools import partial
 from itertools import chain
 from operator import attrgetter
 
 import pytz
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
@@ -28,7 +30,7 @@ from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
-           'contest_ranking_ajax']
+           'contest_ranking_ajax', 'participation_list']
 
 
 def _find_contest(request, key, private_check=True):
@@ -343,7 +345,8 @@ def best_solution_state(points, total):
     return 'patial-score'
 
 
-def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, 'TIME_ZONE', 'UTC'))):
+def base_contest_ranking_list(contest, problems, queryset, for_user=None,
+                              tz=pytz.timezone(getattr(settings, 'TIME_ZONE', 'UTC'))):
     cursor = connection.cursor()
     cursor.execute('''
         SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, MAX(sub.date) AS `last`
@@ -351,13 +354,15 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
              judge_problem prob ON (cp.problem_id = prob.id) LEFT OUTER JOIN
              judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = part.id) LEFT OUTER JOIN
              judge_submission sub ON (sub.id = cs.submission_id)
-        WHERE cp.contest_id = %s AND part.contest_id = %s AND part.virtual = 0 AND part.spectate = 0
+        WHERE cp.contest_id = %s AND part.contest_id = %s {extra}
         GROUP BY cp.id, part.id
-    ''', (contest.id, contest.id))
-    data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in
-            cursor.fetchall()}
-    problems = map(attrgetter('id', 'points'), problems)
+    '''.format(extra=('AND part.user_id = %s' if for_user is not None else
+                      'AND part.virtual = 0 AND part.spectate = 0')),
+                   (contest.id, contest.id) + (for_user,) if for_user is not None else ())
+    data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in cursor}
     cursor.close()
+
+    problems = map(attrgetter('id', 'points'), problems)
 
     def make_ranking_profile(participation):
         part = participation.id
@@ -367,11 +372,14 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
                              state=best_solution_state(data[part, prob][1], points))
             if data[part, prob][1] is not None else None for prob, points in problems])
 
-    return map(make_ranking_profile,
-               contest.users.filter(spectate=False, virtual=0).select_related('user__user', 'rating')
-               .prefetch_related('user__organizations')
-               .defer('user__about', 'user__organizations__about')
-               .order_by('-score', 'cumtime'))
+    return map(make_ranking_profile, queryset.select_related('user__user', 'rating')
+                                             .defer('user__about', 'user__organizations__about'))
+
+
+def contest_ranking_list(contest, problems):
+    return base_contest_ranking_list(contest, problems, contest.users.filter(spectate=False, virtual=0)
+                                                               .prefetch_related('user__organizations')
+                                                               .order_by('-score', 'cumtime'))
 
 
 def get_participation_ranking_profile(contest, participation, problems):
@@ -388,15 +396,18 @@ def get_participation_ranking_profile(contest, participation, problems):
     ])
 
 
-def get_contest_ranking_list(request, contest, participation):
+def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
+                             show_current_virtual=True):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
-    users = ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
-    if participation is None and request.user.is_authenticated():
-        participation = request.user.profile.current_contest
-        if participation is None or participation.contest_id != contest.id:
-            participation = None
-    if participation is not None and participation.virtual:
-        users = chain([('-', get_participation_ranking_profile(contest, participation, problems))], users)
+    users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
+
+    if show_current_virtual:
+        if participation is None and request.user.is_authenticated():
+            participation = request.user.profile.current_contest
+            if participation is None or participation.contest_id != contest.id:
+                participation = None
+        if participation is not None and participation.virtual:
+            users = chain([('-', get_participation_ranking_profile(contest, participation, problems))], users)
     return users, problems
 
 
@@ -415,13 +426,16 @@ def contest_ranking_ajax(request, contest, participation=None):
     })
 
 
-def contest_ranking_view(request, contest, participation=None):
+def contest_access_check(request, contest):
     if not request.user.has_perm('judge.see_private_contest'):
         if not contest.is_public:
             raise Http404()
         if contest.start_time is not None and contest.start_time > timezone.now():
             raise Http404()
 
+
+def contest_ranking_view(request, contest, participation=None):
+    contest_access_check(request, contest)
     users, problems = get_contest_ranking_list(request, contest, participation)
     return render(request, 'contest/ranking.jade', {
         'users': users,
@@ -441,6 +455,32 @@ def contest_ranking(request, contest):
     if not exists:
         return contest
     return contest_ranking_view(request, contest)
+
+
+@login_required
+def participation_list(request, contest):
+    contest, exists = _find_contest(request, contest)
+    if not exists:
+        return contest
+    contest_access_check(request, contest)
+
+    profile = request.user.profile
+    queryset = contest.users.filter(user=profile).order_by('-virtual')
+    users, problems = get_contest_ranking_list(request, contest, show_current_virtual=False,
+                                               ranking_list=partial(base_contest_ranking_list,
+                                                                    for_user=request.user.profile.id,
+                                                                    queryset=queryset))
+    return render(request, 'contest/ranking.jade', {
+        'users': users,
+        'title': 'Your participation in %s' % contest.name,
+        'content_title': contest.name,
+        'subtitle': 'Your participation',
+        'problems': problems,
+        'contest': contest,
+        'show_organization': False,
+        'last_msg': event.last(),
+        'has_rating': contest.ratings.exists(),
+    })
 
 
 class ContestTagDetailAjax(DetailView):
