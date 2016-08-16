@@ -107,7 +107,7 @@ def rate_contest(contest):
             WHERE judge_contestparticipation.contest_id = %s AND judge_contest.end_time < %s AND
                   judge_contestparticipation.user_id NOT IN (
                       SELECT profile_id FROM judge_contest_rate_exclude WHERE contest_id = %s
-                  ) AND judge_contestparticipation.virtual = 0
+                  ) AND judge_contestparticipation.virtual = 0 AND judge_contestparticipation.spectate = 0
             GROUP BY judge_rating.user_id
             ORDER BY judge_contestparticipation.score DESC, judge_contestparticipation.cumtime ASC
         ) AS r ON (judge_rating.user_id = r.id AND judge_contest.end_time = r.last_time)
@@ -116,7 +116,7 @@ def rate_contest(contest):
     cursor.close()
 
     users = contest.users.order_by('-score', 'cumtime').annotate(submissions=Count('submission')) \
-                   .exclude(user_id__in=contest.rate_exclude.all()).exclude(spectate=True)\
+                   .exclude(user_id__in=contest.rate_exclude.all()).filter(virtual=0, spectate=False)\
                    .values_list('id', 'user_id', 'score', 'cumtime')
     if not contest.rate_all:
         users = users.filter(submissions__gt=0)
