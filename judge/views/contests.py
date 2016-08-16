@@ -396,7 +396,7 @@ def get_contest_ranking_list(request, contest, participation):
         if participation is None or participation.contest_id != contest.id:
             participation = None
     if participation is not None and participation.virtual:
-        users = chain(('-', get_participation_ranking_profile(contest, participation, problems)))
+        users = chain([('-', get_participation_ranking_profile(contest, participation, problems))])
     return users
 
 
