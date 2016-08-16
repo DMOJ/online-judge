@@ -1037,7 +1037,7 @@ class ContestParticipation(models.Model):
     def update_cumtime(self):
         cumtime = 0
         for problem in self.contest.contest_problems.all():
-            solution = problem.submissions.filter(submission__user_id=self.user_id, points__gt=0)\
+            solution = problem.submissions.filter(participation=self, points__gt=0)\
                 .values('submission__user_id').annotate(time=Max('submission__date'))
             if not solution:
                 continue
