@@ -379,7 +379,8 @@ def get_participation_ranking_profile(contest, participation):
         BestSolutionData(code=data['problem__code'], points=data['score'],
                          time=data['time'] - participation.start,
                          state=best_solution_state(data['score'], data['points']))
-        for data in contest.problems.annotate(score=Max('submission__points'), time=Max('submission__date'))
+        for data in contest.contest_problems.filter(submission__participation=participation)
+                           .annotate(score=Max('submission__points'), time=Max('submission__submission__date'))
                            .values('score', 'time', 'problem__code', 'points')
     ])
 
