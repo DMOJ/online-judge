@@ -154,7 +154,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                     'description': problem.description if trans is None else trans.description,
                 }).replace('"//', '"http://').replace("'//", "'http://")
 
-                for file in ('style.css', 'pygment-github.css'):
+                for file in ('style.css', 'pygment-github.css', 'mathjax_config.js'):
                     maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
                 maker.make()
                 if not maker.success:

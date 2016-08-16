@@ -83,4 +83,10 @@ html
         .content-description.printing
             | #{description|markdown:"problem"|latex_math|smart_math:"tex"}
 
-        include mathjax_load
+        script(type='text/javascript', src='mathjax_config.js')
+        script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML')
+        script(type='text/javascript').
+            MathJax.Hub.queue.Push(function () {
+                if (typeof window.callPhantom === 'function')
+                    window.callPhantom({'action': 'snapshot'});
+            });
