@@ -1002,6 +1002,11 @@ class ContestParticipation(models.Model):
     @cached_property
     def end_time(self):
         contest = self.contest
+        if self.virtual:
+            if contest.time_limit:
+                return self.real_start + contest.time_limit
+            else:
+                return
         if self.spectate:
             return contest.end_time
         return contest.end_time if contest.time_limit is None else \
@@ -1009,19 +1014,14 @@ class ContestParticipation(models.Model):
 
     @property
     def ended(self):
-        # Virtual contests are unending, until you leave.
-        if self.virtual:
-            return False
-        return self.end_time < timezone.now()
+        return self.end_time is None or self.end_time < timezone.now()
 
     @property
     def time_remaining(self):
         now = timezone.now()
         end = self.end_time
-        if end >= now:
+        if end is not None and end >= now:
             return end - now
-        else:
-            return None
 
     def update_cumtime(self):
         cumtime = 0
