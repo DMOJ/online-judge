@@ -1,6 +1,6 @@
+import math
 from bisect import bisect
 from itertools import izip
-import math
 from operator import itemgetter
 
 from django.db import connection, transaction
@@ -107,7 +107,7 @@ def rate_contest(contest):
             WHERE judge_contestparticipation.contest_id = %s AND judge_contest.end_time < %s AND
                   judge_contestparticipation.user_id NOT IN (
                       SELECT profile_id FROM judge_contest_rate_exclude WHERE contest_id = %s
-                  )
+                  ) AND judge_contestparticipation.virtual = 0
             GROUP BY judge_rating.user_id
             ORDER BY judge_contestparticipation.score DESC, judge_contestparticipation.cumtime ASC
         ) AS r ON (judge_rating.user_id = r.id AND judge_contest.end_time = r.last_time)

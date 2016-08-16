@@ -327,7 +327,7 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
              judge_problem prob ON (cp.problem_id = prob.id) LEFT OUTER JOIN
              judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = part.id) LEFT OUTER JOIN
              judge_submission sub ON (sub.id = cs.submission_id)
-        WHERE cp.contest_id = %s AND part.contest_id = %s
+        WHERE cp.contest_id = %s AND part.contest_id = %s AND cp.virtual = 0
         GROUP BY cp.id, part.id
     ''', (contest.id, contest.id))
     data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in
