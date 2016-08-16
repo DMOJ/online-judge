@@ -25,7 +25,7 @@ block content_media
 
 block info_float
     if contest.can_join or participating
-        if not participating or not participation.ended
+        if not participating or not participation.ended or contest.ended
             if in_contest
                 a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
                     if request.user.profile in contest.organizers.all
