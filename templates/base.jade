@@ -119,7 +119,8 @@ html(lang=LANGUAGE_CODE)
                     li.home-nav-element
                         a(href='{% url "home" %}')
                             img(src='{% static "icons/logo.svg" %}', alt='DMOJ', width=160, height=44,
-                                onerror='this.src=&quot;{% static "icons/logo.png" %}&quot;; this.onerror=null')
+                                onerror='this.src=&quot;{% static "icons/logo.png" %}&quot;; this.onerror=null',
+                                style='border: none')
                     // Divider
                     li.home-nav-element
                         span(style='width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);')
