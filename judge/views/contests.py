@@ -183,9 +183,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 try:
                     participation = ContestParticipation.objects.create(
                         contest=contest, user=profile, virtual=virtual_id,
-                        defaults={
-                            'real_start': timezone.now()
-                        }
+                        real_start=timezone.now()
                     )
                 # There is obviously a race condition here, so we keep trying until we win the race.
                 except IntegrityError:
