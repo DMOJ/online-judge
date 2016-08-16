@@ -951,7 +951,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     username.admin_order_field = 'user__user__username'
 
     def show_virtual(self, obj):
-        return obj.virtual or False
+        return obj.virtual or '-'
     show_virtual.admin_order_field = 'virtual'
 
     def recalculate_points(self, request, queryset):
