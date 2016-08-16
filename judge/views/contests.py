@@ -374,14 +374,17 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
                .order_by('-score', 'cumtime'))
 
 
-def get_participation_ranking_profile(contest, participation):
+def get_participation_ranking_profile(contest, participation, problems):
+    scoring = {data['id']: (data['score'], data['time']) for data in
+               contest.contest_problems.filter(submission__participation=participation)
+                      .annotate(score=Max('submission__points'), time=Max('submission__submission__date'))
+                      .values('score', 'time', 'id')}
+
     return make_contest_ranking_profile(participation, [
-        BestSolutionData(code=data['problem__code'], points=data['score'],
-                         time=data['time'] - participation.start,
-                         state=best_solution_state(data['score'], data['points']))
-        for data in contest.contest_problems.filter(submission__participation=participation)
-                           .annotate(score=Max('submission__points'), time=Max('submission__submission__date'))
-                           .values('score', 'time', 'problem__code', 'points')
+        BestSolutionData(code=problem.problem.code, points=scoring[problem.id][0],
+                         time=scoring[problem.id][1] - participation.start,
+                         state=best_solution_state(scoring[problem.id][0], problem.points))
+        if problem.id in scoring else None for problem in problems
     ])
 
 
@@ -393,7 +396,7 @@ def get_contest_ranking_list(request, contest, participation):
         if participation is None or participation.contest_id != contest.id:
             participation = None
     if participation is not None and participation.virtual:
-        users = chain(('-', get_participation_ranking_profile(contest, participation)))
+        users = chain(('-', get_participation_ranking_profile(contest, participation, problems)))
     return users
 
 
