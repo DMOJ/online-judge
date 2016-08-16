@@ -1,6 +1,7 @@
 from calendar import Calendar, SUNDAY
 from collections import namedtuple, defaultdict
 from datetime import timedelta, date, datetime, time
+from itertools import chain
 from operator import attrgetter
 
 import pytz
@@ -319,6 +320,29 @@ ContestRankingProfile = namedtuple('ContestRankingProfile',
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
 
 
+def make_contest_ranking_profile(participation, problems):
+    user = participation.user
+    return ContestRankingProfile(
+        id=user.id,
+        user=user.user,
+        display_rank=user.display_rank,
+        long_display_name=user.long_display_name,
+        points=participation.score,
+        cumtime=participation.cumtime,
+        organization=user.organization,
+        rating=participation.rating.rating if hasattr(participation, 'rating') else None,
+        problems=problems
+    )
+
+
+def best_solution_state(points, total):
+    if not points:
+        return 'failed-score'
+    if points == total:
+        return 'full-score'
+    return 'patial-score'
+
+
 def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, 'TIME_ZONE', 'UTC'))):
     cursor = connection.cursor()
     cursor.execute('''
@@ -336,24 +360,12 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
     cursor.close()
 
     def make_ranking_profile(participation):
-        user = participation.user
         part = participation.id
-        return ContestRankingProfile(
-                id=user.id,
-                user=user.user,
-                display_rank=user.display_rank,
-                long_display_name=user.long_display_name,
-                points=participation.score,
-                cumtime=participation.cumtime,
-                organization=user.organization,
-                rating=participation.rating.rating if hasattr(participation, 'rating') else None,
-                problems=[BestSolutionData(
-                        code=data[part, prob][0], points=data[part, prob][1],
-                        time=data[part, prob][2] - participation.start,
-                        state='failed-score' if not data[part, prob][1] else
-                        ('full-score' if data[part, prob][1] == points else 'partial-score'),
-                ) if data[part, prob][1] is not None else None for prob, points in problems]
-        )
+        return make_contest_ranking_profile(participation, [
+            BestSolutionData(code=data[part, prob][0], points=data[part, prob][1],
+                             time=data[part, prob][2] - participation.start,
+                             state=best_solution_state(data[part, prob][1], points))
+            if data[part, prob][1] is not None else None for prob, points in problems])
 
     return map(make_ranking_profile,
                contest.users.filter(spectate=False, virtual=0).select_related('user__user', 'rating')
@@ -362,13 +374,36 @@ def contest_ranking_list(contest, problems, tz=pytz.timezone(getattr(settings, '
                .order_by('-score', 'cumtime'))
 
 
-def contest_ranking_ajax(request, contest):
+def get_participation_ranking_profile(contest, participation):
+    return make_contest_ranking_profile(participation, [
+        BestSolutionData(code=data['problem__code'], points=data['score'],
+                         time=data['time'] - participation.start,
+                         state=best_solution_state(data['score'], data['points']))
+        for data in contest.problems.annotate(score=Max('submission__points'), time=Max('submission__date'))
+                           .values('score', 'time', 'problem__code', 'points')
+    ])
+
+
+def get_contest_ranking_list(request, contest, participation):
+    problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
+    users = ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
+    if participation is None and request.user.is_authenticated():
+        participation = request.user.profile.current_contest
+        if participation is None or participation.contest_id != contest.id:
+            participation = None
+    if participation is not None and participation.virtual:
+        users = chain(('-', get_participation_ranking_profile(contest, participation)))
+    return users
+
+
+def contest_ranking_ajax(request, contest, participation=None):
     contest, exists = _find_contest(request, contest)
     if not exists:
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
-    problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
+
+    users, problems = get_contest_ranking_list(request, contest, participation)
     return render(request, 'contest/ranking_table.jade', {
-        'users': ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')),
+        'users': users,
         'problems': problems,
         'contest': contest,
         'show_organization': True,
@@ -376,16 +411,16 @@ def contest_ranking_ajax(request, contest):
     })
 
 
-def contest_ranking_view(request, contest):
+def contest_ranking_view(request, contest, participation=None):
     if not request.user.has_perm('judge.see_private_contest'):
         if not contest.is_public:
             raise Http404()
         if contest.start_time is not None and contest.start_time > timezone.now():
             raise Http404()
 
-    problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
+    users, problems = get_contest_ranking_list(request, contest, participation)
     return render(request, 'contest/ranking.jade', {
-        'users': ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')),
+        'users': users,
         'title': '%s Rankings' % contest.name,
         'content_title': contest.name,
         'subtitle': 'Rankings',

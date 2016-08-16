@@ -223,8 +223,10 @@ user_list_view = UserList.as_view()
 
 
 def users(request):
-    if request.user.is_authenticated() and request.user.profile.current_contest is not None:
-        return contest_ranking_view(request, request.user.profile.current_contest.contest)
+    if request.user.is_authenticated():
+        participation = request.user.profile.current_contest
+        if participation is not None:
+            return contest_ranking_view(request, participation.contest, participation)
     return user_list_view(request)
 
 
