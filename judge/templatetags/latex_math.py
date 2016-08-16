@@ -27,8 +27,8 @@ def latex_math(text):
             img.set('src', result['svg'])
             img.set('onerror', "this.src='%s';this.onerror=null" % result['png'])
 
-            ident = json.loads(result['meta'])
-            img.set('style', 'width: %spx; height: %spx' % (ident['width'], ident['height']))
+            #ident = json.loads(result['meta'])
+            #img.set('style', 'width: %spx; height: %spx' % (ident['width'], ident['height']))
             if 'inline' not in latex.attrib:
                 tag = html.Element('div')
                 tag.set('style', 'text-align: center')
