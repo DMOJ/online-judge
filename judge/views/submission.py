@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db.models import F, Prefetch
-from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -15,7 +15,6 @@ from django.views.generic import ListView, DetailView
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, Profile, Contest, ProblemTranslation, Language
-from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import user_completed_ids, get_result_table
 from judge.utils.raw_sql import use_straight_join
 from judge.utils.views import TitleMixin, DiggPaginatorMixin, LoadSelect2Mixin
@@ -104,6 +103,12 @@ class SubmissionTestCaseQuery(SubmissionStatus):
             return HttpResponseBadRequest()
         self.kwargs[self.pk_url_kwarg] = kwargs[self.pk_url_kwarg] = int(request.GET['id'])
         return super(SubmissionTestCaseQuery, self).get(request, *args, **kwargs)
+
+
+class SubmissionSourceRaw(SubmissionSource):
+    def get(self, request, *args, **kwargs):
+        submission = self.get_object()
+        return HttpResponse(submission.source, content_type='text/plain')
 
 
 @require_POST

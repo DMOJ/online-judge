@@ -126,6 +126,7 @@ urlpatterns = [
 
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
     url(r'^src/(?P<submission>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
+    url(r'^src/(?P<submission>\d+)/raw$', submission.SubmissionSourceRaw.as_view(), name='sub'),
 
     url(r'^submission/(?P<submission>\d+)', include([
         url(r'^$', submission.SubmissionStatus.as_view(), name='submission_status'),
