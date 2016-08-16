@@ -62,7 +62,7 @@ class ProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         self.fields['current_contest'].queryset = self.instance.contest_history.select_related('contest') \
-                                                      .values('contest__name', 'user_id', 'virtual')
+                                                      .only('contest__name', 'user_id', 'virtual')
         self.fields['current_contest'].label_from_instance = (lambda obj: '%s v%d' % (obj.contest.name, obj.virtual)
                                                                           if obj.virtual else obj.contest.name)
 
@@ -770,7 +770,7 @@ class ContestTagAdmin(admin.ModelAdmin):
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
+            TextField: {'widfget': AdminPagedownWidget},
         }
 
     def save_model(self, request, obj, form, change):
