@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.db import connection
+from django.db import connection, transaction, IntegrityError
 from django.db.models import Count, Q, Min, Max
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render
@@ -176,18 +176,35 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('Already in contest'),
                                    _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
 
-        participation, created = ContestParticipation.objects.get_or_create(
-                contest=contest, user=profile,
-                defaults={
-                    'real_start': timezone.now()
-                }
-        )
-        participation.spectate = profile in contest.organizers.all()
-        participation.save()
+        if contest.ended:
+            while True:
+                virtual_id = (ContestParticipation.objects.filter(contest=contest, user=profile)
+                              .aggregate(virtual_id=Max('virtual'))['virtual_id'] or 0) + 1
+                try:
+                    participation = ContestParticipation.objects.create(
+                        contest=contest, user=profile, virtual=virtual_id,
+                        defaults={
+                            'real_start': timezone.now()
+                        }
+                    )
+                # There is obviously a race condition here, so we keep trying until we win the race.
+                except IntegrityError:
+                    pass
+                else:
+                    break
+        else:
+            participation, created = ContestParticipation.objects.get_or_create(
+                    contest=contest, user=profile, virtual=0,
+                    defaults={
+                        'real_start': timezone.now()
+                    }
+            )
+            participation.spectate = profile in contest.organizers.all()
+            participation.save()
 
-        if not created and participation.ended:
-            return generic_message(request, _('Time limit exceeded'),
-                                   _('Too late! You already used up your time limit for "%s".') % contest.name)
+            if not created and participation.ended:
+                return generic_message(request, _('Time limit exceeded'),
+                                       _('Too late! You already used up your time limit for "%s".') % contest.name)
 
         profile.current_contest = participation
         profile.save()
@@ -202,8 +219,15 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
         if profile.current_contest is None or profile.current_contest.contest_id != contest.id:
             return generic_message(request, _('No such contest'),
                                    _('You are not in contest "%s".') % contest.key, 404)
-        profile.current_contest = None
-        profile.save()
+
+        if profile.current_contest.virtual:
+            with transaction.atomic():
+                profile.current_contest.delete()
+                profile.current_contest = None
+                profile.save()
+        else:
+            profile.current_contest = None
+            profile.save()
         return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
 
 

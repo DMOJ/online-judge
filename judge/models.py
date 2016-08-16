@@ -953,6 +953,10 @@ class Contest(models.Model):
         else:
             return None
 
+    @property
+    def ended(self):
+        return self.end_time < now
+
     def __unicode__(self):
         return self.name
 
@@ -1002,6 +1006,9 @@ class ContestParticipation(models.Model):
 
     @property
     def ended(self):
+        # Virtual contests are unending, until you leave.
+        if self.virtual:
+            return False
         return self.end_time < timezone.now()
 
     @property
