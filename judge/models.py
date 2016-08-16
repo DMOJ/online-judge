@@ -934,28 +934,31 @@ class Contest(models.Model):
         return self.end_time - self.start_time
 
     @cached_property
+    def _now(self):
+        # This ensures that all methods talk about the same now.
+        return timezone.now()
+
+    @cached_property
     def can_join(self):
-        return self.start_time <= timezone.now() < self.end_time
+        return self.start_time <= self._now
 
     @property
     def time_before_start(self):
-        now = timezone.now()
-        if self.start_time >= now:
-            return self.start_time - now
+        if self.start_time >= self._now:
+            return self.start_time - self._now
         else:
             return None
 
     @property
     def time_before_end(self):
-        now = timezone.now()
-        if self.end_time >= now:
-            return self.end_time - now
+        if self.end_time >= self._now:
+            return self.end_time - self._now
         else:
             return None
 
-    @property
+    @cached_property
     def ended(self):
-        return self.end_time < now
+        return self.end_time < self._now
 
     def __unicode__(self):
         return self.name
