@@ -62,8 +62,9 @@ class ProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         self.fields['current_contest'].queryset = self.instance.contest_history.select_related('contest') \
-                                                      .only('contest__name', 'user_id')
-        self.fields['current_contest'].label_from_instance = lambda obj: obj.contest.name
+                                                      .values('contest__name', 'user_id', 'virtual')
+        self.fields['current_contest'].label_from_instance = (lambda obj: '%s v%d' % (obj.contest.name, obj.virtual)
+                                                                          if obj.virtual else obj.contest.name)
 
     class Meta:
         widgets = {}
@@ -933,8 +934,8 @@ class ContestParticipationForm(ModelForm):
 
 
 class ContestParticipationAdmin(admin.ModelAdmin):
-    fields = ('contest', 'user', 'real_start')
-    list_display = ('contest', 'username', 'real_start', 'score', 'cumtime')
+    fields = ('contest', 'user', 'real_start', 'virtual')
+    list_display = ('contest', 'username', 'show_virtual', 'real_start', 'score', 'cumtime')
     actions = ['recalculate_points', 'recalculate_cumtime']
     actions_on_bottom = actions_on_top = True
     search_fields = ('contest__key', 'contest__name', 'user__user__username', 'user__name')
@@ -948,6 +949,10 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     def username(self, obj):
         return obj.user.long_display_name
     username.admin_order_field = 'user__user__username'
+
+    def show_virtual(self, obj):
+        return obj.virtual or False
+    show_virtual.admin_order_field = 'virtual'
 
     def recalculate_points(self, request, queryset):
         count = 0
