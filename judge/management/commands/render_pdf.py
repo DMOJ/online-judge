@@ -7,7 +7,7 @@ from django.template.loader import get_template
 from django.utils import translation
 
 from judge.models import Problem, ProblemTranslation
-from judge.pdf_problems import WebKitPdfMaker
+from judge.pdf_problems import WebKitPdfMaker, PhantomJSPdfMaker, DefaultPdfMaker
 
 
 class Command(BaseCommand):
@@ -18,6 +18,9 @@ class Command(BaseCommand):
         parser.add_argument('directory', nargs='?', help='directory to store temporaries')
         parser.add_argument('-l', '--language', default=settings.LANGUAGE_CODE,
                             help='language to render PDF in')
+        parser.add_argument('-p', '--phantomjs', action='store_const', const=PhantomJSPdfMaker,
+                            default=DefaultPdfMaker, dest='engine')
+        parser.add_argument('-w', '--wkhtmltopdf', action='store_const', const=WebKitPdfMaker, dest='engine')
 
     def handle(self, *args, **options):
         try:
@@ -32,7 +35,7 @@ class Command(BaseCommand):
             trans = None
 
         directory = options['directory']
-        with WebKitPdfMaker(directory, clean_up=directory is None) as maker, \
+        with options['engine'](directory, clean_up=directory is None) as maker, \
                 translation.override(options['language']):
             maker.html = get_template('problem/raw.jade').render({
                 'problem': problem,
