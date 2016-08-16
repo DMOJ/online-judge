@@ -15,7 +15,7 @@ from django.core.urlresolvers import reverse
 from django.db import connection, IntegrityError
 from django.db.models import Count, Q, Min, Max
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.utils.html import escape
 from django.utils.timezone import make_aware
@@ -25,12 +25,12 @@ from django.views.generic.detail import BaseDetailView, DetailView
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
-from judge.models import Contest, ContestParticipation, ContestTag
+from judge.models import Contest, ContestParticipation, ContestTag, Profile
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
-           'contest_ranking_ajax', 'participation_list']
+           'contest_ranking_ajax', 'participation_list', 'own_participation_list']
 
 
 def _find_contest(request, key, private_check=True):
@@ -439,9 +439,9 @@ def contest_ranking_view(request, contest, participation=None):
     users, problems = get_contest_ranking_list(request, contest, participation)
     return render(request, 'contest/ranking.jade', {
         'users': users,
-        'title': '%s Rankings' % contest.name,
+        'title': _('%s Rankings') % contest.name,
         'content_title': contest.name,
-        'subtitle': 'Rankings',
+        'subtitle': _('Rankings'),
         'problems': problems,
         'contest': contest,
         'show_organization': True,
@@ -457,14 +457,12 @@ def contest_ranking(request, contest):
     return contest_ranking_view(request, contest)
 
 
-@login_required
-def participation_list(request, contest):
+def base_participation_list(request, contest, profile, username=None):
     contest, exists = _find_contest(request, contest)
     if not exists:
         return contest
     contest_access_check(request, contest)
 
-    profile = request.user.profile
     queryset = contest.users.filter(user=profile).order_by('-virtual')
     users, problems = get_contest_ranking_list(request, contest, show_current_virtual=False,
                                                ranking_list=partial(base_contest_ranking_list,
@@ -472,15 +470,25 @@ def participation_list(request, contest):
                                                                     queryset=queryset))
     return render(request, 'contest/ranking.jade', {
         'users': users,
-        'title': 'Your participation in %s' % contest.name,
+        'title': _('Your participation in %s') % contest.name if username is None else
+                 _("%s's participation in %s") % (username, contest.name),
         'content_title': contest.name,
-        'subtitle': 'Your participation',
+        'subtitle': 'Your participation' if username is None else _("%s's participation") % username,
         'problems': problems,
         'contest': contest,
         'show_organization': False,
         'last_msg': event.last(),
         'has_rating': contest.ratings.exists(),
     })
+
+
+@login_required
+def own_participation_list(request, contest):
+    return base_participation_list(request, contest, request.user.profile)
+
+
+def participation_list(request, contest, user):
+    return base_participation_list(request, contest, get_object_or_404(Profile, user__username=user), user)
 
 
 class ContestTagDetailAjax(DetailView):
