@@ -78,7 +78,7 @@ class WebKitPdfMaker(BasePdfMaker):
 
 
 class PhantomJSPdfMaker(BasePdfMaker):
-    template = '''
+    template = u'''
 "use strict";
 var page = require('webpage').create();
 var param = {params};
