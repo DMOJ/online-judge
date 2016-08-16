@@ -26,7 +26,8 @@ def latex_math(text):
             img.set('onerror', "this.src='%s';this.onerror=null" % result['png'])
 
             ident = result['meta']
-            img.set('style', 'width: %spx; height: %spx' % (ident['width'], ident['height']))
+            img.set('width', ident['width'])
+            img.set('height', ident['height'])
             if 'inline' not in latex.attrib:
                 tag = html.Element('div')
                 tag.set('style', 'text-align: center')
