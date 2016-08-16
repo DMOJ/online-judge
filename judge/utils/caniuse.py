@@ -129,19 +129,24 @@ class CanIUse(object):
 
         self._family = family
 
+    def _check_feat(self, feat):
+        if not self._family:
+            return UNKNOWN
+
+        try:
+            stats = feat[self._family]
+        except KeyError:
+            return UNKNOWN
+        else:
+            ua = self._agent['user_agent']
+            return stats.check(ua['major'], ua['minor'], ua['patch'])[0]
+
     def __getattr__(self, attr):
         try:
             feat = database[attr.replace('_', '-')]
         except KeyError:
             raise AttributeError(attr)
         else:
-            if not self._family:
-                return UNKNOWN
-
-            try:
-                stats = feat[self._family]
-            except KeyError:
-                return UNKNOWN
-            else:
-                ua = self._agent['user_agent']
-                return stats.check(ua['major'], ua['minor'], ua['patch'])[0]
+            result = self._check_feat(feat)
+            setattr(self, attr, result)
+            return result
