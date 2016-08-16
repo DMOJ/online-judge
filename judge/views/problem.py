@@ -27,7 +27,7 @@ from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import Problem, Submission, ContestSubmission, ContestProblem, Language, ProblemGroup, Solution, \
     ProblemTranslation, TranslatedProblemForeignKeyQuerySet, RuntimeVersion, ProblemType
-from judge.pdf_problems import HAS_PDF, WebKitPdfMaker
+from judge.pdf_problems import HAS_PDF, DefaultPdfMaker
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.views import LoadSelect2Mixin, TitleMixin, generic_message
@@ -147,7 +147,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
 
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.pdf', problem.code)
-            with WebKitPdfMaker() as maker, translation.override(language):
+            with DefaultPdfMaker() as maker, translation.override(language):
                 maker.html = get_template('problem/raw.jade').render({
                     'problem': problem,
                     'problem_name': problem.name if trans is None else trans.name,
