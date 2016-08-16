@@ -133,7 +133,7 @@ block media
 block body
     br
     a(href='{% url "submission_source" submission.id %}') {% trans "View source" %}
-    | (#[a(href='{% url "submission_source_raw" submission.id %}') {% trans "raw" %}])
+    |  (#[a(href='{% url "submission_source_raw" submission.id %}') {% trans "raw" %}])
     br
     if request.user == submission.user.user or perms.judge.resubmit_other
         a(href='{% url "problem_submit" submission.problem.code submission.id %}') {% trans "Resubmit" %}
