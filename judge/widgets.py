@@ -5,8 +5,11 @@ from django.conf import settings
 from django.contrib.admin import widgets as admin_widgets
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.exceptions import FieldError
+from django.forms.utils import flatatt
 from django.template import Context, Template
 from django.template.loader import get_template
+from django.utils.encoding import force_unicode
+from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from lxml import html
 
@@ -126,4 +129,40 @@ else:
 
 
     class MathJaxAdminPagedownWidget(AdminPagedownWidget, MathJaxPagedownWidget):
+        pass
+
+
+    class HeavyPreviewPageDownWidget(PagedownWidget):
+        def __init__(self, *args, **kwargs):
+            kwargs.setdefault('template', 'pagedown.jade')
+            self.preview_url = kwargs.pop('preview')
+            super(HeavyPreviewPageDownWidget, self).__init__(*args, **kwargs)
+
+        def render(self, name, value, attrs=None):
+            if value is None:
+                value = ''
+            final_attrs = self.build_attrs(attrs, name=name)
+            if 'class' not in final_attrs:
+                final_attrs['class'] = ''
+            final_attrs['class'] += ' wmd-input'
+            return get_template(self.template).render(self.get_template_context(final_attrs, value))
+
+        def get_template_context(self, attrs, value):
+            return {
+                'attrs': flatatt(attrs),
+                'body': conditional_escape(force_unicode(value)),
+                'id': attrs['id'],
+                'show_preview': self.show_preview,
+                'preview_url': self.preview_url
+            }
+
+        def _media(self):
+            media = super(HeavyPreviewPageDownWidget, self)._media()
+            media.add_css({'all': [staticfiles_storage.url('dmmd-preview.css'),]})
+            media.add_js([staticfiles_storage.url('dmmd-preview.js')])
+            return media
+
+        media = property(_media)
+
+    class HeavyPreviewAdminPageDownWidget(AdminPagedownWidget, HeavyPreviewPageDownWidget):
         pass

@@ -1,0 +1,7 @@
+.wmd-wrapper(id='{{ id|safe }}-wmd-wrapper')
+    .wmd-panel
+        div(id='{{ id|safe }}_wmd_button_bar')
+        <textarea{{ attrs|safe }}>{{ body }}</textarea>
+    if show_preview
+        .wmd-panel.wmd-preview.dmmd-preview(id='{{ id|safe }}-preview')
+            .dmmd-preview-update Update Preview

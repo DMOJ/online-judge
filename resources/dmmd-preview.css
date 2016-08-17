@@ -1,0 +1,15 @@
+div.dmmd-preview {
+    padding: 7px;
+}
+
+div.dmmd-preview-update {
+    background: rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, .8);
+    margin: -7px;
+    text-align: center;
+    cursor: pointer;
+}
+
+div.dmmd-preview.dmmd-preview-content div.dmmd-preview-update {
+    border-radius: 4px 4px 0 0;
+}
