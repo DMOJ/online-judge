@@ -1,14 +1,8 @@
 from django.http import HttpResponseBadRequest
-from django.views.generic import TemplateView
+from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
 
 
-class MarkdownPreviewView(TemplateView):
-    def get(self, request, *args, **kwargs):
-        return self.http_method_not_allowed(request, *args, **kwargs)
-
-    def _allowed_methods(self):
-        return ['POST']
-
+class MarkdownPreviewView(TemplateResponseMixin, ContextMixin, View):
     def post(self, request, *args, **kwargs):
         try:
             self.preview_data = data = request.POST['preview']
