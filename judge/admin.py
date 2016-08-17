@@ -8,7 +8,7 @@ from django.contrib import admin, messages
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import transaction, connection
 from django.db.models import TextField, Q, Count
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
@@ -26,7 +26,8 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
     SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit, OrganizationRequest, \
     ContestTag, ProblemTranslation
 from judge.ratings import rate_contest
-from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget
+from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget, \
+    HeavyPreviewAdminPageDownWidget
 
 try:
     from django_select2.forms import HeavySelect2Widget, HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
@@ -149,13 +150,17 @@ class ProblemForm(ModelForm):
         })
 
     class Meta:
+        widgets = {}
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets['description'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('problem_preview'))
+
         if use_select2:
-            widgets = {
+            widgets.update({
                 'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
                 'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
                 'types': Select2MultipleWidget,
                 'group': Select2Widget,
-            }
+            })
 
 
 class ProblemCreatorListFilter(admin.SimpleListFilter):
@@ -225,11 +230,6 @@ class ProblemAdmin(Select2SuitMixin, VersionAdmin):
 
     if not use_select2:
         filter_horizontal = ['authors', 'banned_users']
-
-    if MathJaxAdminPagedownWidget is not None:
-        formfield_overrides = {
-            TextField: {'widget': MathJaxAdminPagedownWidget},
-        }
 
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
