@@ -80,6 +80,7 @@ html(lang=LANGUAGE_CODE)
                 script(src='{% static "libs/jquery-cookie.js" %}')
                 script(src='{% static "common.js" %}')
                 script(src='{% static "libs/jquery.unveil.js" %}')
+                script(type='text/javascript', src='{% static "libs/moment.js" %}')
                 script.
                     $(function () { $('img.unveil').unveil(200); });
         else
@@ -90,6 +91,7 @@ html(lang=LANGUAGE_CODE)
             script(src='{% static "libs/jquery-cookie.js" %}')
             script(src='{% static "common.js" %}')
             script(src='{% static "libs/jquery.unveil.js" %}')
+            script(type='text/javascript', src='{% static "libs/moment.js" %}')
             script.
                 $(function () { $('img.unveil').unveil(200); });
         block js_media

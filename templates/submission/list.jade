@@ -24,7 +24,6 @@ block js_media
                 | window.show_problem = 1;
             else
                 | window.show_problem = 0;
-    script(type='text/javascript', src='{% static "libs/moment.js" %}')
     if has_select2
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script.
