@@ -61,7 +61,7 @@ block body
                             i.fa.fa-star.fa-fw(title='Sticky')
                         span.post-time(data-unix='{{ post.publish_on|utc|date:"c" }}')
                             - blocktrans with time=post.publish_on|date:_("N j, Y, g:i") asvar str_time
-                            | {{ time }}
+                                | {{ time }}
                             span.relative= str_time
                             span.absolute= str_time
                     .summary
