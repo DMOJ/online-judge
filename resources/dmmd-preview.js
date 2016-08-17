@@ -5,13 +5,19 @@ $(function () {
         var preview_url = $preview.attr('data-preview-url');
 
         $update.click(function () {
-            var $textarea = $('#' + $preview.attr('data-textarea-id'));
-            $.post(preview_url, {
-                preview: $textarea.val(),
-                csrfmiddlewaretoken: $.cookie('csrftoken')
-            }, function (result) {
-                $content.html(result);
-            });
+            var text = $('#' + $preview.attr('data-textarea-id')).val();
+            if (text) {
+                $.post(preview_url, {
+                    preview: text,
+                    csrfmiddlewaretoken: $.cookie('csrftoken')
+                }, function (result) {
+                    $content.html(result);
+                    $preview.addClass('dmmd-preview-content');
+                });
+            } else {
+                $content.empty();
+                $preview.removeClass('dmmd-preview-content');
+            }
         }).click();
     };
 

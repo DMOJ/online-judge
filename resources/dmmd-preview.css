@@ -8,6 +8,9 @@ div.dmmd-preview-update {
     margin: -7px;
     text-align: center;
     cursor: pointer;
+    border-radius: 4px;
+    height: 2em;
+    line-height: 2em;
 }
 
 div.dmmd-preview.dmmd-preview-content div.dmmd-preview-update {
