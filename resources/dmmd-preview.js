@@ -13,6 +13,28 @@ $(function () {
                 }, function (result) {
                     $content.html(result);
                     $preview.addClass('dmmd-preview-content');
+
+                    var $jax = $content.find('.require-mathjax-support');
+                    if ($jax.length) {
+                        if (!('MathJax' in window)) {
+                            $.ajax({
+                                type: 'GET',
+                                url: $jax.attr('data-config'),
+                                dataType: 'script',
+                                cache: true,
+                                success: function () {
+                                    $.ajax({
+                                        type: 'GET',
+                                        url: '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML',
+                                        dataType: 'script',
+                                        cache: true
+                                    });
+                                }
+                            });
+                        } else {
+                            MathJax.Hub.Queue(['Typeset', MathJax.Hub, $content[0]]);
+                        }
+                    }
                 });
             } else {
                 $content.empty();
