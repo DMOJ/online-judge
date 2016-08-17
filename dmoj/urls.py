@@ -14,7 +14,7 @@ from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitem
     BlogPostSitemap, SolutionSitemap
 from judge.views import TitledTemplateView
 from judge.views import organization, language, status, blog, problem, solution, mailgun, license, register, user, \
-    submission, widgets, comment, contests, api, ranked_submission, stats
+    submission, widgets, comment, contests, api, ranked_submission, stats, preview
 from judge.views.register import RegistrationView, ActivationView
 from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
     ContestSelect2View, UserSearchSelect2View
@@ -239,6 +239,10 @@ urlpatterns = [
         url(r'^detect_timezone$', widgets.DetectTimezone.as_view(), name='detect_timezone'),
         url(r'^status-table$', status.status_table, name='status_table'),
         url(r'^user_search_select2$', UserSearchSelect2View.as_view(), name='user_search_select2_ajax'),
+
+        url(r'^preview/', include([
+            url(r'^problem$', preview.ProblemMarkdownPreviewView.as_view(), name='problem_preview'),
+        ])),
     ])),
 
     url(r'^feed/', include([
