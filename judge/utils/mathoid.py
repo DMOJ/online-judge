@@ -17,12 +17,13 @@ logger = logging.getLogger('judge.mathoid')
 
 
 class MathoidMathParser(MathHTMLParser):
+    types = ('svg', 'mml', 'tex', 'jax')
+
     def __init__(self, type):
         MathHTMLParser.__init__(self)
 
-        assert type in ('svg', 'mml', 'tex', 'jax')
-        self.type = type.rstrip('+')
-        self.use_jax = type.endswith('+')
+        assert type in self.types
+        self.type = type
 
         self.mathoid_url = settings.MATHOID_URL
         self.cache = HashFileCache(settings.MATHOID_CACHE_ROOT,
@@ -120,6 +121,7 @@ class MathoidMathParser(MathHTMLParser):
             'msp': self.output_msp,
             'svg': self.output_svg,
             'jax': self.output_jax,
+            'png': self.output_png,
         }[self.type](result)
 
     def output_mml(self, result):
@@ -149,6 +151,11 @@ class MathoidMathParser(MathHTMLParser):
         return format_html(u'<img class="{4}" src="{0}" style="{2}" alt="{3}" '
                            u'''onerror="this.src='{1}';this.onerror=null">''',
                            result['svg'], result['png'], result['css'], result['tex'],
+                           ['inline-math', 'display-math'][result['display']])
+
+    def output_png(self, result):
+        return format_html(u'<img class="{3}" src="{0}" style="{1}" alt="{2}">',
+                           result['png'], result['css'], result['tex'],
                            ['inline-math', 'display-math'][result['display']])
 
     def display_math(self, math):

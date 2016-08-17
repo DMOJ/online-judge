@@ -1,16 +1,17 @@
+from django.conf import settings
 from django.contrib.syndication.views import Feed
 from django.core.cache import cache
 from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
 from django.utils.http import urlquote
-from django.conf import settings
 
 from judge.math_parser import MathHTMLParser, INLINE_MATH_PNG, DISPLAY_MATH_PNG
 from judge.models import Comment, BlogPost, Problem
+from judge.utils.mathoid import MathoidMathParser
 from markdown_trois import markdown
 
 
-class FeedMath(MathHTMLParser):
+class OldFeedMath(MathHTMLParser):
     def inline_math(self, math):
         return (r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>' %
                 (INLINE_MATH_PNG, urlquote(math), math))
@@ -18,6 +19,22 @@ class FeedMath(MathHTMLParser):
     def display_math(self, math):
         return (r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>' %
                 (DISPLAY_MATH_PNG, urlquote(math), math))
+
+
+class MathoidFeedMath(MathoidMathParser):
+    types = ('png',)
+
+    def __init__(self):
+        MathoidMathParser.__init__(self, 'png')
+
+
+class FeedMath(object):
+    @classmethod
+    def convert(cls, *args, **kwargs):
+        if hasattr(settings, 'MATHOID_URL'):
+            return MathoidFeedMath.convert(*args, **kwargs)
+        else:
+            return OldFeedMath.convert(*args, **kwargs)
 
 
 class ProblemFeed(Feed):
