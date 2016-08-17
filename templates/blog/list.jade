@@ -58,7 +58,7 @@ block body
                     .time
                         if post.sticky
                             i.fa.fa-star.fa-fw(title='Sticky')
-                        span.post-time(data-unix='{{ node.time|utc|date:"c" }}')
+                        span.post-time(data-unix='{{ post.publish_on|utc|date:"c" }}')
                             - blocktrans with time=post.publish_on|date:_("N j, Y, g:i") asvar str_time
                             | {{ time }}
                             span.relative= str_time
