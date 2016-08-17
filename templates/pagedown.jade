@@ -4,7 +4,7 @@
         <textarea{{ attrs|safe }}>{{ body }}</textarea>
     if show_preview
         .wmd-panel.wmd-preview.dmmd-preview(id='{{ id|safe }}-preview',
-                                            data-preview-url=preview_url,
-                                            data-textarea-id=id)
+                 data-preview-url=preview_url, data-textarea-id=id,
+                 data-mathjax=('{% static "mathjax_config.js" %}' if REQUIRE_JAX else None))
             .dmmd-preview-update #[i.fa.fa-refresh] Update Preview
             .dmmd-preview-content.content-description
