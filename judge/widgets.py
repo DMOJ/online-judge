@@ -169,6 +169,7 @@ else:
             media = super(AdminPagedownWidget, self)._media()
             media.add_css({'all': [
                 staticfiles_storage.url('pygment-github.css'),
+                staticfiles_storage.url('table.css'),
             ]})
             return media
 
