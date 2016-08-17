@@ -60,6 +60,7 @@ html(lang=LANGUAGE_CODE)
                     link(rel='stylesheet', href='{% static PYGMENT_THEME %}')
                 link(rel='stylesheet', href='{% static "libs/fontawesome/font-awesome.css" %}')
                 link(type='text/css', rel='stylesheet', href='{% static "libs/featherlight/featherlight.min.css" %}')
+                link(rel='stylesheet', href='{% static "libs/clipboard/tooltip.css" %}')
         else
             - compress css
                 link(rel='stylesheet', href='{% static "style.css" %}')
@@ -67,6 +68,7 @@ html(lang=LANGUAGE_CODE)
                     link(rel='stylesheet', href='{% static PYGMENT_THEME %}')
                 link(rel='stylesheet', href=FONTAWESOME_CSS)
                 link(type='text/css', rel='stylesheet', href='{% static "libs/featherlight/featherlight.min.css" %}')
+                link(rel='stylesheet', href='{% static "libs/clipboard/tooltip.css" %}')
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         block media
         if INLINE_JQUERY
