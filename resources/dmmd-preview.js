@@ -33,6 +33,10 @@ $(function () {
                             });
                         } else {
                             MathJax.Hub.Queue(['Typeset', MathJax.Hub, $content[0]]);
+                            MathJax.Hub.queue.Push(function () {
+                                $content.find('.tex-image').hide();
+                                $content.find('.tex-text').show();
+                            });
                         }
                     }
                 });
