@@ -3,6 +3,7 @@ from django.contrib.syndication.views import Feed
 from django.core.cache import cache
 from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
+from django.utils.html import format_html
 from django.utils.http import urlquote
 
 from judge.math_parser import MathHTMLParser, INLINE_MATH_PNG, DISPLAY_MATH_PNG
@@ -26,6 +27,11 @@ class MathoidFeedMath(MathoidMathParser):
 
     def __init__(self):
         MathoidMathParser.__init__(self, 'png')
+
+    def output_png(self, result):
+        return format_html(u'<img src="{0}" style="{1}{3}" alt="{2}">',
+                           result['png'], result['css'], result['tex'],
+                           ['', 'display: block; margin: 0 auto'][result['display']])
 
 
 class FeedMath(object):
