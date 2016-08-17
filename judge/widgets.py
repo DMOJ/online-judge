@@ -166,7 +166,7 @@ else:
 
     class HeavyPreviewAdminPageDownWidget(AdminPagedownWidget, HeavyPreviewPageDownWidget):
         def _media(self):
-            media = super(AdminPagedownWidget, self)._media()
+            media = super(HeavyPreviewAdminPageDownWidget, self)._media()
             media.add_css({'all': [
                 staticfiles_storage.url('pygment-github.css'),
                 staticfiles_storage.url('table.css'),
