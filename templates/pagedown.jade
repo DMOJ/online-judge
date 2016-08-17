@@ -3,5 +3,7 @@
         div(id='{{ id|safe }}_wmd_button_bar')
         <textarea{{ attrs|safe }}>{{ body }}</textarea>
     if show_preview
-        .wmd-panel.wmd-preview.dmmd-preview(id='{{ id|safe }}-preview')
+        .wmd-panel.wmd-preview.dmmd-preview(id='{{ id|safe }}-preview',
+                                            data-preview-url=preview_url,
+                                            data-textarea-id=id)
             .dmmd-preview-update Update Preview
