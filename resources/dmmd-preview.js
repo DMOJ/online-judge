@@ -24,4 +24,9 @@ $(function () {
     $('.dmmd-preview').each(function () {
         register_dmmd_preview($(this));
     });
+
+    if ('django' in window && 'jQuery' in window.django)
+        django.jQuery(document).on('formset:added', function(event, $row) {
+            register_dmmd_preview($row.find('.dmmd-preview'));
+        });
 });
