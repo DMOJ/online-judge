@@ -36,6 +36,12 @@ block js_media
                 $('.blog-sidebar').show();
             });
         });
+        moment.locale('#{LANGUAGE_CODE}');
+        register_update_relative(function () {
+            return $('.post-time');
+        }, function (when) {
+            return Math.abs(moment().diff(when, 'years')) < 1;
+        });
 
 block body
     block before_posts
@@ -52,7 +58,11 @@ block body
                     .time
                         if post.sticky
                             i.fa.fa-star.fa-fw(title='Sticky')
-                        | #{post.publish_on|date:_("N j, Y, G:i")}
+                        span.post-time(data-unix='{{ node.time|utc|date:"c" }}')
+                            - blocktrans with time=post.publish_on|date:_("N j, Y, g:i") asvar str_time
+                            | {{ time }}
+                            span.relative= str_time
+                            span.absolute= str_time
                     .summary
                         - cache 86400 post_summary post.id
                             | #{post.summary|default:post.content|markdown:"blog"|latex_math|proxy_images|nofollowexternal|lazy_load}
