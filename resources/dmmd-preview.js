@@ -27,13 +27,18 @@ $(function () {
                                         type: 'GET',
                                         url: '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML',
                                         dataType: 'script',
-                                        cache: true
+                                        cache: true,
+                                        success: function () {
+                                            MathJax.Hub.Queue(function () {
+                                                $content.find('.tex-image').hide();
+                                                $content.find('.tex-text').show();
+                                            });
+                                        }
                                     });
                                 }
                             });
                         } else {
-                            MathJax.Hub.Queue(['Typeset', MathJax.Hub, $content[0]]);
-                            MathJax.Hub.queue.Push(function () {
+                            MathJax.Hub.Queue(['Typeset', MathJax.Hub, $content[0]], function () {
                                 $content.find('.tex-image').hide();
                                 $content.find('.tex-text').show();
                             });
