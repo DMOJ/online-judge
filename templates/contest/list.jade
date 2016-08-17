@@ -18,9 +18,6 @@ block js_media
             $('.contest-tag').find('a').featherlight();
         });
 
-block media
-    link(href='{% static "libs/featherlight/featherlight.min.css" %}', type='text/css', rel='stylesheet', media='all')
-
 block header
     div(style='float: right; margin-top: 0.9em; font-size: 1.3em;')
         a(href='{% url "contest_calendar" now.year now.month %}') {% trans "Calendar view" %}
