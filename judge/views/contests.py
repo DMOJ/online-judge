@@ -27,7 +27,7 @@ from judge import event_poster as event
 from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation, ContestTag, Profile
 from judge.utils.ranker import ranker
-from judge.utils.views import TitleMixin, generic_message
+from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'participation_list', 'own_participation_list']
@@ -136,7 +136,7 @@ class ContestMixin(object):
             }, status=403)
 
 
-class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
+class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailView):
     template_name = 'contest/contest.jade'
 
     def get_comment_page(self):
