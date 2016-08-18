@@ -193,10 +193,11 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                         contest=contest, user=profile, virtual=virtual_id,
                         real_start=timezone.now()
                     )
-                    return participation
                 # There is obviously a race condition here, so we keep trying until we win the race.
                 except IntegrityError:
                     pass
+                else:
+                    break
         else:
             participation, created = ContestParticipation.objects.get_or_create(
                 contest=contest, user=profile, virtual=(-1 if profile in contest.organizers.all() else 0),
