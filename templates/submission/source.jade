@@ -55,7 +55,7 @@ block body
     br
     a(href='{% url "submission_status" submission.id %}') {% trans "View status" %}
     br
-    a(href='{% url "submission_source_raw" submission.id %}') {% trans "View raw" %}
+    a(href='{% url "submission_source_raw" submission.id %}') {% trans "View raw source" %}
     br
     if request.user == submission.user.user or perms.judge.resubmit_other
         a(href='{% url "problem_submit" submission.problem.code submission.id %}') {% trans "Resubmit" %}
