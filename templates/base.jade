@@ -122,7 +122,7 @@ html(lang=LANGUAGE_CODE)
                     // Divider
                     li.home-nav-element
                         span(style='width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);')
-                    li.home-menu-item: a.nav-home(href='/') {% trans "Home" %}
+                    li.home-menu-item: a.nav-home(href='{% url "home" %}') {% trans "Home" %}
                     - recursetree nav_bar
                         li
                             a(href=node.path, class='nav-{{ node.key }}{% if node.key in nav_tab %} active{% endif %}')
