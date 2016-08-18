@@ -1,2 +1,2 @@
 - load tz
-span.time-remaining(data-secs='{{ contest.time_before_end|seconds }}') #{contest.time_before_end | timedelta:"localized"}
+span.time-remaining(data-secs='{{ countdown|seconds }}') #{countdown | timedelta:"localized"}
