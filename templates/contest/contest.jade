@@ -99,51 +99,32 @@ block info_float
         hr
     br
 
-    if not contest.start_time > now
-        i.fa.fa-clock-o.fa-fw
-        if participating
-            if participation.ended
-                b {% trans "Time is up!" %}
-            elif participation.virtual and not participation.end_time
-                b {% trans "Particpating virtually." %}
-            else
-                b {% trans "Time remaining:" %}
-                = ' '
-                .time-remaining(data-secs='{{ participation.time_remaining|seconds }}')
-                    #{participation.time_remaining|timedelta:"localized"}
-        elif contest.end_time < now
-            b {% trans "Contest is over." %}
-        else
-            b {% trans "Time remaining:" %}
-            = ' '
-            .time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
-                #{contest.time_before_end|timedelta:"localized"}
-
 block description
         #banner(style='border-bottom: 1px solid rgba(0, 0, 0, 0.2); padding-bottom: 1em;')
             div(style='margin: 0.5em 0px;')
-                span.date(style='display: block; text-decoration: none; text-align: center; line-height: 1.3; font-size: 2.3em; padding-bottom: 0.15em;')
+                a.date(href='http://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name }}&amp;iso={{contest.start_time|utc|date:"Y-m-d\TH:i:s"}}',
+                       style='display: block; text-decoration: none; text-align: center; line-height: 1.3; font-size: 2.3em; padding-bottom: 0.15em;')
                     if participating and participation.virtual and not participation.end_time
                         | {% trans "Participating virtually." %}
                     else
                         if contest.start_time > now
                             | {% trans "Starting in " %}
-                            span.time-remaining(data-secs='{{ contest.time_before_start|seconds }}')
-                                #{contest.time_before_start|timedelta:"localized"}
+                            - include "time_remaining_fragment.jade" with countdown=contest.time_before_start
                         elif contest.end_time < now
                             | Ran sometime in the past
                         else
                             if participating
                                 if participation.ended
                                     | {% trans "Your time is up! Contest ends in " %}
+                                    - include "time_remaining_fragment.jade" with countdown=contest.time_before_end
                                 else
-                                    | {% trans "Your time remaining: " %}
+                                    | {% trans "You have " %}
+                                    - include "time_remaining_fragment.jade" with countdown=contest.time_before_end
+                                    | {% trans "remaining." %}
                             else
                                 | {% trans "Ending in " %}
-                            span.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
-                                #{contest.time_before_end | timedelta:"localized"}
-                a#time(href='http://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name }}&amp;iso={{contest.start_time|utc|date:"Y-m-d\TH:i:s"}}',
-                       style='text-align: center; display: block; color: rgb(85, 85, 85); font-size: 14px')
+                                - include "time_remaining_fragment.jade" with countdown=contest.time_before_end
+                #time(style='text-align: center; display: block; color: rgb(85, 85, 85); font-size: 14px')
                     if contest.time_limit
                         - blocktrans with start_time=contest.start_time|date:_("F j, Y, G:i T") end_time=contest.end_time|date:_("F j, Y, G:i T") time_limit=contest.time_limit|timedelta:"localized-no-seconds"
                             | #[b {{ time_limit }}] window from #[b {{ start_time }}] to #[b {{ end_time }}]
