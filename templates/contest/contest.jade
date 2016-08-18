@@ -109,7 +109,7 @@ block description
                     | {% trans "Starting in " %}
                     - include "contest/time_remaining_fragment.jade" with countdown=contest.time_before_start
                 elif contest.end_time < now
-                    | Ran sometime in the past
+                    | {% trans "Contest is over." %}
                 else
                     if participating
                         if participation.ended
