@@ -135,6 +135,7 @@ html(lang=LANGUAGE_CODE)
                         li
                             a(href=node.path, class='nav-{{ node.key }}{% if node.key in nav_tab %} active{% endif %}') #{node.label|user_trans}
                             if not node.is_leaf_node
+                                a.nav-expand(href='javascript:void(0)') >
                                 ul {{ children }}
                     - endrecursetree
                 span#user-links(style='height: 100%')

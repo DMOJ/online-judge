@@ -198,6 +198,10 @@ nav
       &.home-nav-element a
         padding: 0
         height: 44px
+        &:hover
+          border-bottom: none
+          padding-top: 0
+          padding-bottom: 0
       a
         display: inline-block
         text-decoration: none
@@ -214,6 +218,8 @@ nav
         &.active
           color: #FFF
           background: #2980b9
+        &.nav-expand
+          display: none
       ul
         padding: 0
         position: absolute
@@ -241,15 +247,6 @@ nav
         padding-top: 0
         padding-bottom: 0
         background: transparent
-
-nav
-  ul
-    li.home-nav-element
-      a
-        &:hover
-          border-bottom: none
-          padding-top: 0px
-          padding-bottom: 0px
 
 hr
   color: rgba(0, 0, 0, 0.2)
@@ -452,6 +449,9 @@ math
         margin-top: -36px
       &.home-nav-element
         display: none
+      &.nav-expand
+        display: block
+        float: right
   #user-links
     bottom: 6px
     right: 6px
