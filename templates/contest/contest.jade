@@ -123,7 +123,7 @@ block description
                         | {% trans "Contest ends in " %}
                         - include "contest/time_remaining_fragment.jade" with countdown=contest.time_before_end
 
-        #time(style='text-align: center; display: block; color: rgb(85, 85, 85); font-size: 14px')
+        #time
             if contest.time_limit
                 - blocktrans with start_time=contest.start_time|date:_("F j, Y, G:i T") end_time=contest.end_time|date:_("F j, Y, G:i T") time_limit=contest.time_limit|timedelta:"localized-no-seconds"
                     | #[b {{ time_limit }}] window from #[b {{ start_time }}] to #[b {{ end_time }}]
