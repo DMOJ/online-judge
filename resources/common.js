@@ -114,6 +114,8 @@ $(function () {
         $nav_list.toggle();
         if ($nav_list.is(':hidden'))
             $(this).blur().removeClass('hover');
+        else
+            $(this).addClass('hover');
         $('#nav-list li ul').css('left', $('#nav-list').width());
     }).hover(function () {
         $(this).addClass('hover');
