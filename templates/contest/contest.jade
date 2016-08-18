@@ -135,9 +135,9 @@ block description
                         else
                             if participating
                                 if participation.ended
-                                    | {% "Your time is up! Contest ends in " %}
+                                    | {% trans "Your time is up! Contest ends in " %}
                                 else
-                                    | {% "Your time remaining: " %}
+                                    | {% trans "Your time remaining: " %}
                             else
                                 | {% trans "Ending in " %}
                             span.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
