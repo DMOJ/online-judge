@@ -71,24 +71,16 @@ html(lang=LANGUAGE_CODE)
                 link(rel='stylesheet', href='{% static "libs/clipboard/tooltip.css" %}')
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         block media
-        if INLINE_JQUERY
-            - compress js
-                script
-                    - autoescape off
-                        - inlinei18n LANGUAGE_CODE
-                script(src='{% static "libs/jquery-1.11.2.min.js" %}')
-                script(src='{% static "libs/jquery-cookie.js" %}')
-                script(src='{% static "common.js" %}')
-                script(src='{% static "libs/jquery.unveil.js" %}')
-                script(type='text/javascript', src='{% static "libs/moment.js" %}')
-                script.
-                    $(function () { $('img.unveil').unveil(200); });
-        else
+        if not INLINE_JQUERY
+            script(src=JQUERY_JS)
+        - compress js
             script
                 - autoescape off
                     - inlinei18n LANGUAGE_CODE
-            script(src=JQUERY_JS)
+            if INLINE_JQUERY
+                script(src='{% static "libs/jquery-1.11.2.min.js" %}')
             script(src='{% static "libs/jquery-cookie.js" %}')
+            script(src='{% static "libs/jquery-taphold.js" %}')
             script(src='{% static "common.js" %}')
             script(src='{% static "libs/jquery.unveil.js" %}')
             script(type='text/javascript', src='{% static "libs/moment.js" %}')
