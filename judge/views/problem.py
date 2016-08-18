@@ -379,6 +379,7 @@ def problem_submit(request, problem=None, submission=None):
                                          'You are permanently barred from submitting this problem.'))
             model = form.save()
 
+            profile.update_contest()
             if profile.current_contest is not None:
                 try:
                     contest_problem = model.problem.contests.get(contest=profile.current_contest.contest)
