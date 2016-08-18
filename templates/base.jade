@@ -136,7 +136,7 @@ html(lang=LANGUAGE_CODE)
                             a(href=node.path, class='nav-{{ node.key }}{% if node.key in nav_tab %} active{% endif %}')
                                 | #{node.label|user_trans}
                                 if not node.is_leaf_node
-                                    span.nav-expand(href='javascript:void(0)') >
+                                    .nav-expand(href='javascript:void(0)') >
                             if not node.is_leaf_node
                                 ul {{ children }}
                     - endrecursetree
