@@ -928,6 +928,7 @@ class Contest(models.Model):
                                            help_text=_('If private, only these organizations may see the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
     tags = models.ManyToManyField(ContestTag, verbose_name=_('contest tags'), blank=True, related_name='contests')
+    user_count = models.IntegerField(verbose_name=_('the amount of live participants'), default=0)
 
     def clean(self):
         if self.start_time >= self.end_time:
