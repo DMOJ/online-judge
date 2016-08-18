@@ -129,8 +129,14 @@ $(function () {
         $(this).parent().siblings('ul').css('display', 'block');
     });
 
-    $nav_list.find('li a').on('taphold', function () {
-        $(this).find('ul').css('display', 'block');
+    $nav_list.find('li a').each(function () {
+        if (!$(this).find('ul').length)
+            return;
+        $(this).on('contextmenu', function (event) {
+            event.preventDefault();
+        }).on('taphold', function () {
+            $(this).find('ul').css('display', 'block');
+        });
     });
 
     $nav_list.click(function (event) {
