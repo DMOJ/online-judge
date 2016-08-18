@@ -18,8 +18,8 @@ def latex_math(text):
     for latex in tree.xpath('.//latex'):
         result = texoid.get_result(latex.text)
         if not result:
-            img = html.Element('pre')
-            img.text = 'LaTeX rendering error\n' + latex.text
+            tag = html.Element('pre')
+            tag.text = 'LaTeX rendering error\n' + latex.text
         elif 'error' not in result:
             img = html.Element('img')
             img.set('src', result['svg'])
@@ -28,13 +28,18 @@ def latex_math(text):
             ident = result['meta']
             img.set('width', ident['width'])
             img.set('height', ident['height'])
+            style = []
             if 'inline' not in latex.attrib:
                 tag = html.Element('div')
-                tag.set('style', 'text-align: center')
-                tag.append(img)
-                img = tag
+                style += ['text-align: center']
+            else:
+                tag = html.Element('span')
+            style += ['max-width: 100%', 'height: %s' % ident['height'],
+                      'max-height: %s' % ident['height'], 'width: %s' % ident['height']]
+            tag.set('style', ';'.join(style))
+            tag.append(img)
         else:
-            img = html.Element('pre')
-            img.text = result['error']
-        latex.getparent().replace(latex, img)
+            tag = html.Element('pre')
+            tag.text = result['error']
+        latex.getparent().replace(latex, tag)
     return tree
