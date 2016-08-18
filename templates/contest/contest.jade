@@ -129,7 +129,7 @@ block description
                             - include "contest/time_remaining_fragment.jade" with countdown=contest.time_before_end
                         else
                             | {% trans "You have " %}
-                            - include "contest/time_remaining_fragment.jade" with countdown=contest.time_before_end
+                            - include "contest/time_remaining_fragment.jade" with countdown=participation.time_remaining
                             | {% trans " remaining." %}
                     else
                         | {% trans "Contest ends in " %}
