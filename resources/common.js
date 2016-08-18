@@ -114,13 +114,19 @@ $(function () {
         $nav_list.toggle();
         if ($nav_list.is(':hidden'))
             $(this).blur().removeClass('hover');
-        else
+        else {
             $(this).addClass('hover');
-        $('#nav-list li ul').css('left', $('#nav-list').width());
+            $nav_list.find('li ul').css('left', $('#nav-list').width()).hide();
+        }
     }).hover(function () {
         $(this).addClass('hover');
     }, function () {
         $(this).removeClass('hover');
+    });
+    
+    $nav_list.find('li a .nav-expand').click(function (event) {
+        event.stopPropagation();
+        $(this).siblings('ul').show();
     });
 
     $nav_list.click(function (event) {
