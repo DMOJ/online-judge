@@ -32,6 +32,7 @@ block info_float
             else
                 a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
                     | {% trans "Virtual join" %}
+            hr
         elif not participating or not participation.ended
             if in_contest
                 a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
