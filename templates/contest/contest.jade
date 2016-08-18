@@ -25,7 +25,14 @@ block content_media
 
 block info_float
     if contest.can_join or participating
-        if not participating or not participation.ended or contest.ended
+        if contest.ended
+            if in_contest
+                a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
+                    | {% trans "Leave contest" %}
+            else
+                a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
+                    | {% trans "Virtual join" %}
+        elif not participating or not participation.ended
             if in_contest
                 a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
                     if request.user.profile in contest.organizers.all
