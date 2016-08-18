@@ -51,6 +51,8 @@ block info_float
     if contest.start_time <= now or perms.judge.see_private_contest
         a(href='{% url "contest_ranking" contest.key %}')
             | {% trans "View rankings" %}
+        a(href='{% url "contest_participation_own" %}")
+            | {% trans "My participation" %}
         hr
 
     if perms.judge.change_contest
