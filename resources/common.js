@@ -130,12 +130,12 @@ $(function () {
     });
 
     $nav_list.find('li a').each(function () {
-        if (!$(this).find('ul').length)
+        if (!$(this).siblings('ul').length)
             return;
         $(this).on('contextmenu', function (event) {
             event.preventDefault();
         }).on('taphold', function () {
-            $(this).find('ul').css('display', 'block');
+            $(this).siblings('ul').css('display', 'block');
         });
     });
 
