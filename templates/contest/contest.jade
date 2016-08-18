@@ -42,6 +42,12 @@ block content_js_media
                 }).on('change', function () {
                     window.location.href = url.replace('__username__', $(this).val());
                 });
+
+                $('.leaving-forever').click(function () {
+                    return confirm('Are you sure you want to leave?\n' +
+                            'You cannot come back to a virtual participation. ' +
+                            'You will have to start a new one.');
+                });
             });
     include comments/js_media
 
@@ -60,7 +66,7 @@ block info_float
         if contest.ended
             // They're in the contest because they're participating virtually
             if in_contest
-                a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
+                a.unselectable.button.full.leaving-forever(href='{% url "contest_leave" contest.key %}')
                     | {% trans "Leave contest" %}
             else
                 // They can virtual-join the contest
