@@ -18,6 +18,8 @@ block content_js_media
                 count_down($(this));
             });
         });
+    if has_select2
+        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
     include comments/js_media
 
 block content_media
@@ -54,6 +56,9 @@ block info_float
         br
         a(href='{% url "contest_participation_own" contest.key %}"')
             | {% trans "My participation" %}
+        if has_select2
+            br
+            input#search(type='text', placeholder='{% trans "View user participation" %}')
         hr
 
     if perms.judge.change_contest
