@@ -2,7 +2,7 @@ import re
 
 from django.conf import settings
 from lxml import html
-from lxml.etree import Element
+from lxml.etree import ElementBase
 
 from judge import lxml_tree
 
@@ -66,7 +66,7 @@ class MathHTMLParser(object):
             into_text = block.is_text
 
             for item in html.fragments_fromstring(result):
-                if isinstance(item, Element):
+                if isinstance(item, ElementBase):
                     if into_text:
                         last.insert(0, item)
                     else:
