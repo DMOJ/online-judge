@@ -129,6 +129,10 @@ $(function () {
         $(this).parent().siblings('ul').css('display', 'block');
     });
 
+    $nav_list.find('li a').on('taphold', function () {
+        $(this).find('ul').css('display', 'block');
+    });
+
     $nav_list.click(function (event) {
         event.stopPropagation();
     });
