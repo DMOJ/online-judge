@@ -105,10 +105,12 @@ block info_float
 block description
     #banner
         a.date(href='http://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name }}&amp;iso={{contest.start_time|utc|date:"Y-m-d\TH:i:s"}}')
-            if participating and participation.virtual and not participation.end_time or participation.end_time < now
+            if participating and participation.virtual
                 if participation.spectate
                     | {% trans "Spectating, contest ends in " %}
                     - include "contest/time_remaining_fragment.jade" with countdown=contest.time_before_end
+                elif participation.ended
+                    | {% trans "Virtual participation ended." %}
                 elif participation.end_time
                     | {% trans "Participating virtually, " %}
                     - include "contest/time_remaining_fragment.jade" with countdown=participation.time_remaining
