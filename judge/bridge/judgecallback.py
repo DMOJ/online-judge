@@ -4,7 +4,6 @@ import time
 
 from django import db
 from django.utils import timezone
-from django.core.exceptions import ObjectDoesNotExist
 
 from judge import event_poster as event
 from judge.caching import finished_submission
@@ -195,6 +194,7 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.result = status_codes[status]
         submission.save()
 
+        submission.user._updating_stats_only = True
         submission.user.calculate_points()
         submission.problem._updating_stats_only = True
         submission.problem.update_stats()
