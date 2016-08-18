@@ -467,7 +467,7 @@ def base_participation_list(request, contest, profile, username=None):
     queryset = contest.users.filter(user=profile).order_by('-virtual')
     users, problems = get_contest_ranking_list(
         request, contest, show_current_virtual=False,
-        ranking_list=partial(base_contest_ranking_list, for_user=request.user.profile.id, queryset=queryset),
+        ranking_list=partial(base_contest_ranking_list, for_user=profile.id, queryset=queryset),
         ranker=lambda users, key: ((user.participation.virtual or '-', user) for user in users))
     return render(request, 'contest/ranking.jade', {
         'users': users,
