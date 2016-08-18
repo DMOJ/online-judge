@@ -456,11 +456,14 @@ def contest_ranking(request, contest):
     return contest_ranking_view(request, contest)
 
 
-def base_participation_list(request, contest, profile, username=None):
+def base_participation_list(request, contest, profile):
     contest, exists = _find_contest(request, contest)
     if not exists:
         return contest
     contest_access_check(request, contest)
+
+    req_username = request.user.username if request.user.is_authenticated() else None
+    prof_username = profile.user.username
 
     queryset = contest.users.filter(user=profile, virtual__gte=0).order_by('-virtual')
     users, problems = get_contest_ranking_list(
@@ -469,10 +472,10 @@ def base_participation_list(request, contest, profile, username=None):
         ranker=lambda users, key: ((user.participation.virtual or '-', user) for user in users))
     return render(request, 'contest/ranking.jade', {
         'users': users,
-        'title': _('Your participation in %s') % contest.name if username is None else
-                 _("%s's participation in %s") % (username, contest.name),
+        'title': _('Your participation in %s') % contest.name if req_username == prof_username else
+                 _("%s's participation in %s") % (prof_username, contest.name),
         'content_title': contest.name,
-        'subtitle': 'Your participation' if username is None else _("%s's participation") % username,
+        'subtitle': _('Your participation') if req_username == prof_username else _("%s's participation") % prof_username,
         'problems': problems,
         'contest': contest,
         'show_organization': False,
@@ -488,7 +491,7 @@ def own_participation_list(request, contest):
 
 
 def participation_list(request, contest, user):
-    return base_participation_list(request, contest, get_object_or_404(Profile, user__username=user), user)
+    return base_participation_list(request, contest, get_object_or_404(Profile, user__username=user))
 
 
 class ContestTagDetailAjax(DetailView):
