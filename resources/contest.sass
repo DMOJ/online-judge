@@ -69,12 +69,23 @@
   tr td:first-child
     border-left: 1px solid #aaa
 
-#banner a.date
-  &:link, &:visited
-    color: #5B80B9
+#banner
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2)
+  padding-bottom: 1em
+  a.date
+    display: block
+    text-decoration: none
+    text-align: center
+    line-height: 1.3
+    font-size: 2.3em
+    padding-bottom: 0.15em
+    margin: 0.5em 0px
 
-  &:hover
-    color: #0645AD
+    &:link, &:visited
+      color: #5B80B9
+
+    &:hover
+      color: #0645AD
 
 .contest-list
   td
