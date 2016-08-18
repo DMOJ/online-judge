@@ -113,8 +113,12 @@ $(function () {
         event.stopPropagation();
         $nav_list.toggle();
         if ($nav_list.is(':hidden'))
-            $(this).blur();
+            $(this).blur().removeClass('hover');
         $('#nav-list li ul').css('left', $('#nav-list').width());
+    }).hover(function () {
+        $(this).addClass('hover');
+    }, function () {
+        $(this).removeClass('hover');
     });
 
     $nav_list.click(function (event) {
