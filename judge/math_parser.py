@@ -65,6 +65,11 @@ class MathHTMLParser(object):
             last = block.getparent()
             into_text = block.is_text
 
+            if into_text:
+                last.text = ''
+            else:
+                last.tail = ''
+
             for item in html.fragments_fromstring(result):
                 if isinstance(item, ElementBase):
                     if into_text:
@@ -74,9 +79,9 @@ class MathHTMLParser(object):
                     last = item
                     into_text = False
                 elif into_text:
-                    block.text = item
+                    block.text += item
                 else:
-                    block.tail = item
+                    block.tail = item + block.tail
 
         return doc
 
