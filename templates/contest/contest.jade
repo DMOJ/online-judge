@@ -131,7 +131,7 @@ block description
         #time
             if contest.time_limit
                 - blocktrans with start_time=contest.start_time|date:_("F j, Y, G:i T") end_time=contest.end_time|date:_("F j, Y, G:i T") time_limit=contest.time_limit|timedelta:"localized-no-seconds"
-                    | #[b {{ time_limit }}] window between #[b {{ start_time }}] to #[b {{ end_time }}]
+                    | #[b {{ time_limit }}] window between #[b {{ start_time }}] and #[b {{ end_time }}]
             else
                 - blocktrans with length=contest.contest_window_length|timedelta:"localized-no-seconds" start_time=contest.start_time|date:_("F j, Y, G:i T")
                     | #[b {{ length }}] long starting on #[b {{ start_time }}]
