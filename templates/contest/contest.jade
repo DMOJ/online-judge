@@ -23,6 +23,8 @@ block content_js_media
     include comments/js_media
 
 block content_media
+    if has_select2
+        link(href='{{ SELECT2_CSS_URL }}', type='text/css', media='screen', rel='stylesheet')
     include comments/media
 
 block info_float
