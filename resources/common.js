@@ -126,7 +126,7 @@ $(function () {
     
     $nav_list.find('li a .nav-expand').click(function (event) {
         event.preventDefault();
-        $(this).parent().siblings('ul').show();
+        $(this).parent().siblings('ul').css('display', 'block');
     });
 
     $nav_list.click(function (event) {
