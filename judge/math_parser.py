@@ -1,7 +1,8 @@
 import re
-from HTMLParser import HTMLParser
 
 from django.conf import settings
+
+from judge import lxml_tree
 
 INLINE_MATH_PNG = getattr(settings, 'INLINE_MATH_PNG', 'http://www.forkosh.com/mathtex.cgi')
 DISPLAY_MATH_PNG = getattr(settings, 'DISPLAY_MATH_PNG', INLINE_MATH_PNG)
@@ -37,17 +38,9 @@ def format_math(math):
     return math
 
 
-class MathHTMLParser(HTMLParser):
-    @classmethod
-    def convert(cls, html, *args, **kwargs):
-        converter = cls(*args, **kwargs)
-        converter.feed(html)
-        return converter.result
-
+class MathHTMLParser(object):
     def __init__(self):
-        HTMLParser.__init__(self)
-        self.new_page = []
-        self.data_buffer = []
+        pass
 
     def _sub_inline(self, match):
         return self.inline_math(format_math(match.group(1) or match.group(2) or ''))
@@ -61,32 +54,20 @@ class MathHTMLParser(HTMLParser):
     def display_math(self, math):
         raise NotImplementedError()
 
-    @property
-    def result(self):
-        self.purge_buffer()
-        return ''.join(self.new_page)
+    def process(self, text):
+        doc = lxml_tree.fromstring(text)
 
-    def purge_buffer(self):
-        if self.data_buffer:
-            buffer = ''.join(self.data_buffer)
-            buffer = inline_math.sub(self._sub_inline, buffer)
-            buffer = display_math.sub(self._sub_display, buffer)
-            self.new_page.append(buffer)
-            del self.data_buffer[:]
+        for block in doc.xpath('//text()'):
+            result = inline_math.sub(self._sub_inline, block)
+            result = display_math.sub(self._sub_display, result)
 
-    def handle_starttag(self, tag, attrs):
-        self.purge_buffer()
-        self.new_page.append('<%s%s>' % (tag, ' '.join([''] + ['%s="%s"' % p for p in attrs])))
+            if block.is_text:
+                block.getparent().text = result
+            else:
+                block.getparent().tail = result
 
-    def handle_endtag(self, tag):
-        self.purge_buffer()
-        self.new_page.append('</%s>' % tag)
+        return doc
 
-    def handle_data(self, data):
-        self.data_buffer.append(data)
-
-    def handle_entityref(self, name):
-        self.data_buffer.append('&%s;' % name)
-
-    def handle_charref(self, name):
-        self.data_buffer.append('&#%s;' % name)
+    @classmethod
+    def convert(cls, html, *args, **kwargs):
+        return cls(*args, **kwargs).process(html)
