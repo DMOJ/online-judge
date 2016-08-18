@@ -2,6 +2,7 @@ import re
 
 from django.conf import settings
 from lxml import html
+from lxml.etree import Element
 
 from judge import lxml_tree
 
@@ -61,14 +62,21 @@ class MathHTMLParser(object):
         for block in doc.xpath('//text()'):
             result = inline_math.sub(self._sub_inline, block)
             result = display_math.sub(self._sub_display, result)
-            result = html.fromstring(result)
+            last = block.getparent()
+            into_text = block.is_text
 
-            if block.is_text:
-                block.getparent().text = ''
-                block.getparent().insert(0, result)
-            else:
-                block.getparent().tail = ''
-                block.getparent().addnext(result)
+            for item in html.fragments_fromstring(result):
+                if isinstance(item, Element):
+                    if into_text:
+                        last.insert(0, item)
+                    else:
+                        last.addnext(item)
+                    last = item
+                    into_text = False
+                elif into_text:
+                    block.text = item
+                else:
+                    block.tail = item
 
         return doc
 
