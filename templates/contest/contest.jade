@@ -52,7 +52,7 @@ block info_float
         a(href='{% url "contest_ranking" contest.key %}')
             | {% trans "View rankings" %}
         br
-        a(href='{% url "contest_participation_own" %}"')
+        a(href='{% url "contest_participation_own" contest.key %}"')
             | {% trans "My participation" %}
         hr
 
