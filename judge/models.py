@@ -994,8 +994,6 @@ class ContestParticipation(models.Model):
     real_start = models.DateTimeField(verbose_name=_('start time'), default=timezone.now, db_column='start')
     score = models.IntegerField(verbose_name=_('score'), default=0, db_index=True)
     cumtime = models.PositiveIntegerField(verbose_name=_('cumulative time'), default=0)
-    spectate = models.BooleanField(verbose_name=_('whether the user is spectating the contest'),
-                                   default=False)
     virtual = models.IntegerField(verbose_name=_('virtual participation id'), default=0,
                                   help_text=_('0 means non-virtual, otherwise the n-th virtual participation'))
 
@@ -1004,6 +1002,10 @@ class ContestParticipation(models.Model):
                              self.submissions.values('submission__problem').annotate(points=Max('points'))))
         self.save()
         return self.score
+
+    @property
+    def spectate(self):
+        return self.virtual == -1
 
     @cached_property
     def start(self):

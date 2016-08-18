@@ -199,13 +199,11 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                     break
         else:
             participation, created = ContestParticipation.objects.get_or_create(
-                    contest=contest, user=profile, virtual=0,
-                    defaults={
-                        'real_start': timezone.now()
-                    }
+                contest=contest, user=profile, virtual=(-1 if profile in contest.organizers.all() else 0),
+                defaults={
+                    'real_start': timezone.now()
+                }
             )
-            participation.spectate = profile in contest.organizers.all()
-            participation.save()
 
             if not created and participation.ended:
                 return generic_message(request, _('Time limit exceeded'),
@@ -358,7 +356,7 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None,
         WHERE cp.contest_id = %s AND part.contest_id = %s {extra}
         GROUP BY cp.id, part.id
     '''.format(extra=('AND part.user_id = %s' if for_user is not None else
-                      'AND part.virtual = 0 AND part.spectate = 0')),
+                      'AND part.virtual = 0')),
                    (contest.id, contest.id) + ((for_user,) if for_user is not None else ()))
     data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in cursor}
     cursor.close()
@@ -378,7 +376,7 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None,
 
 
 def contest_ranking_list(contest, problems):
-    return base_contest_ranking_list(contest, problems, contest.users.filter(spectate=False, virtual=0)
+    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
                                                                .prefetch_related('user__organizations')
                                                                .order_by('-score', 'cumtime'))
 
