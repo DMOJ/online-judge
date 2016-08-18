@@ -58,27 +58,29 @@ block content_media
 block info_float
     if contest.can_join or participating
         if contest.ended
+            // They're in the contest because they're participating virtually
             if in_contest
                 a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
                     | {% trans "Leave contest" %}
             else
+                // They can virtual-join the contest
                 a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
                     | {% trans "Virtual join" %}
-            hr
-        elif not participating or not participation.ended
+        elif
+            // Allow people with ended participations to continue spectating
             if in_contest
                 a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
-                    if request.user.profile in contest.organizers.all
+                    if participating and participation.ended or request.user.profile in contest.organizers.all
                         | {% trans "Stop spectating" %}
                     else
                         | {% trans "Leave contest" %}
             else
                 a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
-                    if request.user.profile in contest.organizers.all
+                    if participating and participation.ended or request.user.profile in contest.organizers.all
                         | {% trans "Spectate contest" %}
                     else
                         | {% trans "Join contest" %}
-            hr
+        hr
 
     if contest.start_time <= now or perms.judge.see_private_contest
         a(href='{% url "contest_ranking" contest.key %}')
