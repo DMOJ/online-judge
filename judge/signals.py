@@ -55,6 +55,9 @@ def profile_update(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Contest)
 def contest_update(sender, instance, **kwargs):
+    if hasattr(instance, '_updating_stats_only'):
+        return
+
     cache.delete_many([make_template_fragment_key('contest_html', (instance.id, engine))
                        for engine in EFFECTIVE_MATH_ENGINES])
 

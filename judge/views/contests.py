@@ -13,7 +13,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import connection, IntegrityError
-from django.db.models import Count, Q, Min, Max
+from django.db.models import Q, Min, Max
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
@@ -65,7 +65,7 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
     title = ugettext_lazy('Contests')
 
     def get_queryset(self):
-        return super(ContestList, self).get_queryset().annotate(participation_count=Count('users')) \
+        return super(ContestList, self).get_queryset() \
             .order_by('-start_time', 'key').prefetch_related('tags')
 
     def get_context_data(self, **kwargs):
@@ -215,6 +215,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
 
         profile.current_contest = participation
         profile.save()
+        contest._updating_stats_only = True
+        contest.update_user_count()
         return HttpResponseRedirect(reverse('problem_list'))
 
 

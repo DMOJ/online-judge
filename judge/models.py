@@ -971,6 +971,11 @@ class Contest(models.Model):
     def get_absolute_url(self):
         return reverse('contest_view', args=(self.key,))
 
+    def update_user_count(self):
+        self.user_count = self.users.filter(virtual=0).count()
+        self.save()
+    update_user_count.alters_data = True
+
     class Meta:
         permissions = (
             ('see_private_contest', 'See private contests'),
