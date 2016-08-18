@@ -77,7 +77,7 @@ class MathHTMLParser(object):
                     else:
                         next = last.getnext()
                         if next is None:
-                            last.getparent().appennd(item)
+                            last.getparent().append(item)
                         else:
                             next.addprevious(item)
                     last = item
