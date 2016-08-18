@@ -144,7 +144,10 @@ block description
     - cache 3600 contest_html contest.id MATH_ENGINE
         | #{contest.description|markdown:"contest"|latex_math|smart_math:MATH_ENGINE|proxy_images}
 
+block description_end
+
 block comments
+    hr
     span.social
        - post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>"
        - post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>"
