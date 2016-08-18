@@ -104,7 +104,7 @@ block description
         a.date(href='http://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name }}&amp;iso={{contest.start_time|utc|date:"Y-m-d\TH:i:s"}}')
             if participating and participation.virtual
                 if participation.spectate
-                    | { % trans "Spectating, contest ends in " %}
+                    | {% trans "Spectating, contest ends in " %}
                     - include "contest/time_remaining_fragment.jade" with countdown=contest.time_before_end
                 elif participation.end_time
                     | {% trans "Participating virtually, " %}
