@@ -125,7 +125,7 @@ $(function () {
     });
     
     $nav_list.find('li a .nav-expand').click(function (event) {
-        event.stopPropagation();
+        event.preventDefault();
         $(this).siblings('ul').show();
     });
 
