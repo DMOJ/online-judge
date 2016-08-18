@@ -44,9 +44,8 @@ block content_js_media
                 });
 
                 $('.leaving-forever').click(function () {
-                    return confirm('Are you sure you want to leave?\n' +
-                            'You cannot come back to a virtual participation. ' +
-                            'You will have to start a new one.');
+                    return confirm('{% trans "Are you sure you want to leave?" %}\n' +
+                            '{% trans "You cannot come back to a virtual participation. You will have to start a new one." %}');
                 });
             });
     include comments/js_media
