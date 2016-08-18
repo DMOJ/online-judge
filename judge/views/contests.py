@@ -207,12 +207,12 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             )
 
             if not created and participation.ended:
-                participation, _ = ContestParticipation.objects.get_or_create(
+                participation = ContestParticipation.objects.get_or_create(
                     contest=contest, user=profile, virtual=-1,
                     defaults={
                         'real_start': timezone.now()
                     }
-                )
+                )[0]
 
         profile.current_contest = participation
         profile.save()
