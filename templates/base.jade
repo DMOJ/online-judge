@@ -158,7 +158,9 @@ html(lang=LANGUAGE_CODE)
             #contest-info
                 a(href='{% url "contest_view" CONTEST.contest.key %}', style='vertical-align: middle;')
                     | #{CONTEST.contest.name} -
-                    if CONTEST.end_time
+                    if CONTEST.spectate
+                        | {% trans "spectating" %}
+                    elif CONTEST.end_time
                         #contest-time-remaining(data-secs='{{ CONTEST.time_remaining|seconds }}')
                             #{CONTEST.time_remaining|timedelta:"localized"}
                     else
