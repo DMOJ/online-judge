@@ -17,7 +17,7 @@ from judge.views import organization, language, status, blog, problem, solution,
     submission, widgets, comment, contests, api, ranked_submission, stats, preview
 from judge.views.register import RegistrationView, ActivationView
 from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
-    ContestSelect2View, UserSearchSelect2View
+    ContestSelect2View, UserSearchSelect2View, ContestUserSearchSelect2View
 
 admin.autodiscover()
 
@@ -238,7 +238,12 @@ urlpatterns = [
         url(r'^submission_testcases$', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
         url(r'^detect_timezone$', widgets.DetectTimezone.as_view(), name='detect_timezone'),
         url(r'^status-table$', status.status_table, name='status_table'),
-        url(r'^user_search_select2$', UserSearchSelect2View.as_view(), name='user_search_select2_ajax'),
+
+        url(r'^select2/', include([
+            url(r'^user_search$', UserSearchSelect2View.as_view(), name='user_search_select2_ajax'),
+            url(r'^contest_users/(?P<contest>\w+)$', ContestUserSearchSelect2View.as_view(),
+                name='contest_user_search_select2_ajax'),
+        ])),
 
         url(r'^preview/', include([
             url(r'^problem$', preview.ProblemMarkdownPreviewView.as_view(), name='problem_preview'),

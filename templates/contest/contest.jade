@@ -30,7 +30,7 @@ block content_js_media
                 $('#search').select2({
                     placeholder: placeholder,
                     ajax: {
-                        url: '{% url "user_search_select2_ajax" %}'
+                        url: '{% url "contest_user_search_select2_ajax" contest.key %}'
                     },
                     minimumInputLength: 1,
                     escapeMarkup: function (markup) {

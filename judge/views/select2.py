@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.utils.encoding import smart_text
 from django.views.generic.list import BaseListView
 
@@ -72,14 +73,17 @@ class CommentSelect2View(Select2View):
 class UserSearchSelect2View(BaseListView):
     paginate_by = 20
 
+    def get_queryset(self):
+        return Profile.objects.filter(user__username__icontains=self.term)
+
     def get(self, request, *args, **kwargs):
         self.request = request
+        self.kwargs = kwargs
         self.term = kwargs.get('term', request.GET.get('term', ''))
         self.gravatar_size = request.GET.get('gravatar_size', 128)
         self.gravatar_default = request.GET.get('gravatar_default', None)
 
-        self.object_list = Profile.objects.filter(Q(user__username__icontains=(self.term))) \
-            .values_list('pk', 'user__username', 'user__email', 'display_rank')
+        self.object_list = self.get_queryset().values_list('pk', 'user__username', 'user__email', 'display_rank')
 
         context = self.get_context_data()
 
@@ -96,3 +100,10 @@ class UserSearchSelect2View(BaseListView):
 
     def get_name(self, obj):
         return unicode(obj)
+
+
+class ContestUserSearchSelect2View(UserSearchSelect2View):
+    def get_queryset(self):
+        contest = get_object_or_404(Contest, key=self.kwargs['contest'])
+        return Profile.objects.filter(contest_history__contest=contest,
+                                      user__username__icontains=self.term).distinct()
