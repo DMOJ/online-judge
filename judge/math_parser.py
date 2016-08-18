@@ -75,7 +75,11 @@ class MathHTMLParser(object):
                     if into_text:
                         last.insert(0, item)
                     else:
-                        last.addnext(item)
+                        next = last.getnext()
+                        if next is None:
+                            last.getparent().appennd(item)
+                        else:
+                            next.addprevious(item)
                     last = item
                     into_text = False
                 elif into_text:
