@@ -112,6 +112,8 @@ $(function () {
     $('#navicon').click(function (event) {
         event.stopPropagation();
         $nav_list.toggle();
+        if ($nav_list.is(':hidden'))
+            $(this).blur();
         $('#nav-list li ul').css('left', $('#nav-list').width());
     });
 
