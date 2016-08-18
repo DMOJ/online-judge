@@ -157,7 +157,7 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
             else:
                 try:
                     context['participation'] = profile.contest_history.filter(contest=self.object).order_by('-virtual')[0]
-                except ContestParticipation.DoesNotExist:
+                except IndexError:
                     context['participating'] = False
                     context['participation'] = None
                 else:
