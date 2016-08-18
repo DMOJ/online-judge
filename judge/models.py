@@ -17,7 +17,7 @@ from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _, pgettext
+from django.utils.translation import ugettext_lazy as _, pgettext, ugettext
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from reversion import revisions
@@ -253,7 +253,7 @@ class Profile(models.Model):
 
     def remove_contest(self):
         contest = self.current_contest
-        if contest.virtual and not contest.submissions.count():
+        if contest.virtual > 0 and not contest.submissions.count():
             with transaction.atomic():
                 contest.delete()
                 self.current_contest = None
@@ -1010,18 +1010,18 @@ class ContestParticipation(models.Model):
     @cached_property
     def start(self):
         contest = self.contest
-        return contest.start_time if contest.time_limit is None and not self.virtual else self.real_start
+        return contest.start_time if contest.time_limit is None and not self.virtual > 0 else self.real_start
 
     @cached_property
     def end_time(self):
         contest = self.contest
+        if self.spectate:
+            return contest.end_time
         if self.virtual:
             if contest.time_limit:
                 return self.real_start + contest.time_limit
             else:
                 return
-        if self.spectate:
-            return contest.end_time
         return contest.end_time if contest.time_limit is None else \
             min(self.real_start + contest.time_limit, contest.end_time)
 
@@ -1050,9 +1050,11 @@ class ContestParticipation(models.Model):
     update_cumtime.alters_data = True
 
     def __unicode__(self):
+        if self.spectate:
+            return ugettext('%s spectating in %s') % (self.user.long_display_name, self.contest.name)
         if self.virtual:
-            return '%s in %s, v%d' % (self.user.long_display_name, self.contest.name, self.virtual)
-        return '%s in %s' % (self.user.long_display_name, self.contest.name)
+            return ugettext('%s in %s, v%d') % (self.user.long_display_name, self.contest.name, self.virtual)
+        return ugettext('%s in %s') % (self.user.long_display_name, self.contest.name)
 
     class Meta:
         verbose_name = _('contest participation')

@@ -462,7 +462,7 @@ def base_participation_list(request, contest, profile, username=None):
         return contest
     contest_access_check(request, contest)
 
-    queryset = contest.users.filter(user=profile).order_by('-virtual')
+    queryset = contest.users.filter(user=profile, virtual__gte=0).order_by('-virtual')
     users, problems = get_contest_ranking_list(
         request, contest, show_current_virtual=False,
         ranking_list=partial(base_contest_ranking_list, for_user=profile.id, queryset=queryset),
