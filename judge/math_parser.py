@@ -79,9 +79,9 @@ class MathHTMLParser(object):
                     last = item
                     into_text = False
                 elif into_text:
-                    block.text += item
+                    last.text += item
                 else:
-                    block.tail = item + block.tail
+                    last.tail = item
 
         return doc
 
