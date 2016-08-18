@@ -83,19 +83,16 @@ block info_float
         hr
 
     if contest.start_time <= now or perms.judge.see_private_contest
-        a(href='{% url "contest_ranking" contest.key %}')
-            | {% trans "View rankings" %}
+        a(href='{% url "contest_ranking" contest.key %}') {% trans "View rankings" %}
         br
-        a(href='{% url "contest_participation_own" contest.key %}"')
-            | {% trans "My participation" %}
+        a(href='{% url "contest_participation_own" contest.key %}"') {% trans "My participation" %}
         if has_select2
             br
             input#search(type='text', placeholder='{% trans "View user participation" %}')
         hr
 
     if perms.judge.change_contest
-        a(href='{% url "admin:judge_contest_change" contest.id %}')
-            | {% trans "Edit contest" %}
+        a(href='{% url "admin:judge_contest_change" contest.id %}') {% trans "Edit contest" %}
         hr
     br
 
