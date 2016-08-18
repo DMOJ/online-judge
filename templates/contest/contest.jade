@@ -25,6 +25,10 @@ block content_js_media
 block content_media
     if has_select2
         link(href='{{ SELECT2_CSS_URL }}', type='text/css', media='screen', rel='stylesheet')
+        style.
+            .select2-selection__arrow { display: none; }
+            .select2-selection__rendered { cursor: text; overflow: initial !important }
+            .select2-results__option--highlighted { background-color: #DEDEDE !important; }
     include comments/media
 
 block info_float
