@@ -66,7 +66,7 @@ block info_float
                 // They can virtual-join the contest
                 a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
                     | {% trans "Virtual join" %}
-        elif
+        else
             // Allow people with ended participations to continue spectating
             if in_contest
                 a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
