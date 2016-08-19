@@ -322,7 +322,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
         return context
 
     def GET_with_session(self, request, key):
-        if 'manual' in request.GET:
+        if '_' in request.GET:
             if key in request.GET:
                 val = request.GET.get(key) == '1'
                 request.session[key] = val
