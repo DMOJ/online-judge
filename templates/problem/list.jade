@@ -53,6 +53,10 @@ block js_media
                     $form.attr('action', action).attr('target', '');
                     e.preventDefault();
                 });
+                $('input#full_text, input#hide_solved, input#show_types').click(function () {
+                    ($('<form>').attr('action', window.location.pathname + '?' + $('form#filter-form').serialize())
+                            .attr('method', 'POST').appendTo($('body')).submit());
+                });
             });
 
     if IN_CONTEST

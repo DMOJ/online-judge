@@ -322,12 +322,6 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
         return context
 
     def GET_with_session(self, request, key):
-        if '_' in request.GET:
-            if key in request.GET:
-                val = request.GET.get(key) == '1'
-                request.session[key] = val
-            else:
-                request.session.pop(key, None)
         if not request.GET:
             return request.session.get(key, False)
         return request.GET.get(key, None) == '1'
@@ -362,6 +356,16 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
             return super(ProblemList, self).get(request, *args, **kwargs)
         except ProgrammingError as e:
             return generic_message(request, 'FTS syntax error', e.args[1], status=400)
+
+    def post(self, request, *args, **kwargs):
+        to_update = ('hide_solved', 'show_types', 'full_text')
+        for key in to_update:
+            if key in request.GET:
+                val = request.GET.get(key) == '1'
+                request.session[key] = val
+            else:
+                request.session.pop(key, None)
+        return HttpResponseRedirect(request.get_full_path())
 
 
 class RandomProblem(ProblemList):
