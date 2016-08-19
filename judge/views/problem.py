@@ -235,16 +235,16 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
                                                                                      self.request.LANGUAGE_CODE,
                                                                                      'problem__name')
         return [{
-            'id': p['problem_id'],
-            'code': p['problem__code'],
-            'name': p['problem__name'],
-            'i18n_name': p['i18n_name'],
-            'group': {'full_name': p['problem__group__full_name']},
-            'points': p['points'],
-            'partial': p['partial'],
-            'user_count': p['user_count']
-        } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
-                                   'problem__group__full_name', 'points', 'partial', 'user_count')]
+                    'id': p['problem_id'],
+                    'code': p['problem__code'],
+                    'name': p['problem__name'],
+                    'i18n_name': p['i18n_name'],
+                    'group': {'full_name': p['problem__group__full_name']},
+                    'points': p['points'],
+                    'partial': p['partial'],
+                    'user_count': p['user_count']
+                } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
+                                           'problem__group__full_name', 'points', 'partial', 'user_count')]
 
     def get_normal_queryset(self):
         filter = Q(is_public=True)
@@ -321,10 +321,18 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
             context['sort_order'][self.order.lstrip('-')] = u' \u25BE' if self.order.startswith('-') else u' \u25B4'
         return context
 
+    def GET_with_session(self, request, key):
+        if key in request.GET:
+            val = request.GET.get(key) == '1'
+            request.session[key] = val
+            return val
+        return request.session.get(key, False)
+
     def setup(self, request):
-        self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
-        self.show_types = request.GET.get('show_types') == '1' if 'show_types' in request.GET else False
-        self.full_text = request.GET.get('full_text') == '1' if 'full_text' in request.GET else False
+        self.hide_solved = self.GET_with_session(request, 'hide_solved')
+        self.show_types = self.GET_with_session(request, 'show_types')
+        self.full_text = self.GET_with_session(request, 'full_text')
+
         self.search_query = None
         self.category = None
         self.selected_types = []
@@ -366,7 +374,7 @@ user_logger = logging.getLogger('judge.user')
 @login_required
 def problem_submit(request, problem=None, submission=None):
     if submission is not None and not request.user.has_perm('judge.resubmit_other') and \
-            get_object_or_404(Submission, id=int(submission)).user.user != request.user:
+                    get_object_or_404(Submission, id=int(submission)).user.user != request.user:
         raise PermissionDenied()
 
     profile = request.user.profile
@@ -375,7 +383,7 @@ def problem_submit(request, problem=None, submission=None):
         if form.is_valid():
             if (not request.user.has_perm('judge.spam_submission') and
                         Submission.objects.filter(user=profile, is_being_rejudged=False).exclude(
-                                status__in=['D', 'IE', 'CE', 'AB']).count() > 2):
+                            status__in=['D', 'IE', 'CE', 'AB']).count() > 2):
                 return HttpResponse('<h1>You submitted too many submissions.</h1>', status=503)
             if not form.cleaned_data['problem'].allowed_languages.filter(
                     id=form.cleaned_data['language'].id).exists():
@@ -384,7 +392,8 @@ def problem_submit(request, problem=None, submission=None):
                 user_logger.info('Naughty user %s wants to submit to %s without permission',
                                  request.user.username, form.cleaned_data['problem'].code)
                 return HttpResponseForbidden('<h1>Do you want me to ban you?</h1>')
-            if not request.user.is_superuser and form.cleaned_data['problem'].banned_users.filter(id=profile.id).exists():
+            if not request.user.is_superuser and form.cleaned_data['problem'].banned_users.filter(
+                    id=profile.id).exists():
                 return generic_message(request, _('Banned from Submitting'),
                                        _('You have been declared persona non grata for this problem. '
                                          'You are permanently barred from submitting this problem.'))
@@ -422,7 +431,8 @@ def problem_submit(request, problem=None, submission=None):
         form_data = initial
     if 'problem' in form_data:
         form.fields['language'].queryset = (form_data['problem'].usable_languages.order_by('name', 'key')
-            .prefetch_related(Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority'))))
+                                            .prefetch_related(
+            Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority'))))
     if 'language' in form_data:
         form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = profile.ace_theme
@@ -472,4 +482,4 @@ def unsolved_random_problem(request):
     if not request.user.is_authenticated():
         return random_problem(request)
     return random_problem(request, Problem.objects.filter(is_public=True)
-                                          .exclude(id__in=user_completed_ids(request.user.profile)))
+                          .exclude(id__in=user_completed_ids(request.user.profile)))
