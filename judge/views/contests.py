@@ -475,7 +475,7 @@ def base_participation_list(request, contest, profile):
     users, problems = get_contest_ranking_list(
         request, contest, show_current_virtual=False,
         ranking_list=partial(base_contest_ranking_list, for_user=profile.id, queryset=queryset),
-        ranker=lambda users, key: ((user.participation.virtual or '-', user) for user in users))
+        ranker=lambda users, key: ((user.participation.virtual or _('Live'), user) for user in users))
     return render(request, 'contest/ranking.jade', {
         'users': users,
         'title': _('Your participation in %s') % contest.name if req_username == prof_username else
