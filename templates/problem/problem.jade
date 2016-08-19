@@ -37,30 +37,23 @@ block info_float
     a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
     hr
     if request.user.is_authenticated and has_submissions
-        a(href='{% url "user_submissions" problem.code request.user.username %}')
+        div: a(href='{% url "user_submissions" problem.code request.user.username %}')
             | {% trans "My submissions" %}
-        br
-    a(href='{% url "chronological_submissions" problem.code %}')
-        | {% trans "All submissions" %}
-    br
-    a(href='{% url "ranked_submissions" problem.code %}')
-        | {% trans "Best submissions" %}
+    div: a(href='{% url "chronological_submissions" problem.code %}') {% trans "All submissions" %}
+    div: a(href='{% url "ranked_submissions" problem.code %}') {% trans "Best submissions" %}
 
     if editorial and editorial.is_public
         hr
-        a(href='{% url "solution" editorial.url %}') Read editorial
+        div: a(href='{% url "solution" editorial.url %}') Read editorial
 
     if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.author_ids or perms.judge.edit_public_problem and problem.is_public
         hr
-        a(href='{% url "admin:judge_problem_change" problem.id %}')
-            | {% trans "Edit problem" %}
-        br
+        div: a(href='{% url "admin:judge_problem_change" problem.id %}') {% trans "Edit problem" %}
     if perms.judge.clone_problem
-        form(action='{% url "problem_clone" problem.code %}', method='post')
+        div: form(action='{% url "problem_clone" problem.code %}', method='post')
             - csrf_token
             a#clone-link(href='#') {% trans "Clone problem" %}
     hr
-    
     br
     .problem-info-entry
         i.fa.fa-check.fa-fw
