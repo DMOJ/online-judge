@@ -37,7 +37,8 @@ block content_js_media
                         return markup;
                     },
                     templateResult: function (data, container) {
-                        return '<span class="' + data.display_rank + '">' + data.text + "</span>";
+                        return ('<img class="user-search-image" src="' + data.gravatar_url + '" width="24" height="24">' +
+                                '<span class="' + data.display_rank + ' user-search-name">' + data.text + '</span>');
                     }
                 }).on('change', function () {
                     window.location.href = url.replace('__username__', $(this).val());

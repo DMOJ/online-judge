@@ -23,8 +23,8 @@ block js_media
                         return markup;
                     },
                     templateResult: function (data, container) {
-                        return '<img class="search-image" src="' + data.gravatar_url + '" width="24" height="24">' +
-                                '<span class="' + data.display_rank + ' search-name">' + data.text + "</span>";
+                        return ('<img class="user-search-image" src="' + data.gravatar_url + '" width="24" height="24">' +
+                                '<span class="' + data.display_rank + ' user-search-name">' + data.text + '</span>');
                     }
                 });
 
@@ -82,14 +82,6 @@ block media
 
         #users-table .header {
             vertical-align: middle;
-        }
-
-        .search-image, .search-name {
-            vertical-align: middle;
-        }
-
-        .search-name {
-            padding-left: 0.5em;
         }
 
         #users-table tr {
