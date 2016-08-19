@@ -74,7 +74,7 @@ This is by no means a complete list, but other features in the DMOJ site include
 * arbitrary flatpages
 * editorial support
 * language-specific resource (time/memory) constraints
-* searchable submissions
+* filterable submissions
 * user rating graphs
 * front-page blog
 * registration emails
