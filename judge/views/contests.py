@@ -347,7 +347,7 @@ def best_solution_state(points, total):
         return 'failed-score'
     if points == total:
         return 'full-score'
-    return 'patial-score'
+    return 'partial-score'
 
 
 def base_contest_ranking_list(contest, problems, queryset, for_user=None,
