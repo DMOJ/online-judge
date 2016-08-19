@@ -2,10 +2,8 @@ from functools import partial
 from operator import itemgetter, attrgetter
 
 from django import forms
-from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin, messages
-from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -27,36 +25,20 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
     ContestTag, ProblemTranslation
 from judge.ratings import rate_contest
 from judge.widgets import AdminPagedownWidget, MathJaxAdminPagedownWidget, \
-    HeavyPreviewAdminPageDownWidget, CheckboxSelectMultipleWithSelectAll
+    HeavyPreviewAdminPageDownWidget, CheckboxSelectMultipleWithSelectAll, \
+    HeavySelect2Widget, HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
 
-try:
-    from django_select2.forms import HeavySelect2Widget, HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
 
-    class HeavySelect2Widget(HeavySelect2Widget):
-        @property
-        def is_hidden(self):
-            return False
-except ImportError:
-    HeavySelect2Widget = None
-    HeavySelect2MultipleWidget = None
-    Select2Widget = None
-    Select2MultipleWidget = None
+class HeavySelect2Widget(HeavySelect2Widget):
+    @property
+    def is_hidden(self):
+        return False
 
 #try:
 #    from suit.admin import SortableModelAdmin, SortableTabularInline
 #except ImportError:
 SortableModelAdmin = object
 SortableTabularInline = admin.TabularInline
-
-use_select2 = HeavySelect2MultipleWidget is not None and 'django_select2' in settings.INSTALLED_APPS
-
-
-class Select2SuitMixin(object):
-    if 'suit' in settings.INSTALLED_APPS and use_select2:
-        class Media:
-            css = {
-                'all': ('admin/css/select2bootstrap.css',)
-            }
 
 
 class ProfileForm(ModelForm):
@@ -68,14 +50,12 @@ class ProfileForm(ModelForm):
                                                                           if obj.virtual else obj.contest.name)
 
     class Meta:
-        widgets = {}
-        if use_select2:
-            widgets.update({
-                'timezone': Select2Widget,
-                'language': Select2Widget,
-                'ace_theme': Select2Widget,
-                'current_contest': Select2Widget,
-            })
+        widgets = {
+            'timezone': Select2Widget,
+            'language': Select2Widget,
+            'ace_theme': Select2Widget,
+            'current_contest': Select2Widget,
+        }
         if AdminPagedownWidget is not None:
             widgets['about'] = AdminPagedownWidget
 
@@ -93,7 +73,7 @@ class TimezoneFilter(admin.SimpleListFilter):
         return queryset.filter(timezone=self.value())
 
 
-class ProfileAdmin(Select2SuitMixin, VersionAdmin):
+class ProfileAdmin(VersionAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
               'math_engine', 'last_access', 'ip', 'mute', 'user_script', 'current_contest')
     readonly_fields = ('user',)
@@ -150,17 +130,14 @@ class ProblemForm(ModelForm):
         })
 
     class Meta:
-        widgets = {}
+        widgets = {
+            'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'types': Select2MultipleWidget,
+            'group': Select2Widget,
+        }
         if HeavyPreviewAdminPageDownWidget is not None:
             widgets['description'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('problem_preview'))
-
-        if use_select2:
-            widgets.update({
-                'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
-                'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
-                'types': Select2MultipleWidget,
-                'group': Select2Widget,
-            })
 
 
 class ProblemCreatorListFilter(admin.SimpleListFilter):
@@ -179,10 +156,9 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
 
 class LanguageLimitInlineForm(ModelForm):
     class Meta:
-        if use_select2:
-            widgets = {
-                'language': Select2Widget,
-            }
+        widgets = {
+            'language': Select2Widget,
+        }
 
 
 class LanguageLimitInline(admin.TabularInline):
@@ -204,7 +180,7 @@ class ProblemTranslationInline(admin.StackedInline):
     extra = 0
 
 
-class ProblemAdmin(Select2SuitMixin, VersionAdmin):
+class ProblemAdmin(VersionAdmin):
     fieldsets = (
         (None, {
             'fields': ('code', 'name', 'is_public', 'date', 'authors', 'description', 'license')
@@ -226,9 +202,6 @@ class ProblemAdmin(Select2SuitMixin, VersionAdmin):
     actions_on_bottom = True
     list_filter = ('is_public', ProblemCreatorListFilter)
     form = ProblemForm
-
-    if not use_select2:
-        filter_horizontal = ['authors', 'banned_users']
 
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
@@ -534,14 +507,13 @@ class SubmissionAdmin(admin.ModelAdmin):
 
 class CommentForm(ModelForm):
     class Meta:
-        if use_select2:
-            widgets = {
-                'author': HeavySelect2Widget(data_view='profile_select2'),
-                'parent': HeavySelect2Widget(data_view='comment_select2'),
-            }
+        widgets = {
+            'author': HeavySelect2Widget(data_view='profile_select2'),
+            'parent': HeavySelect2Widget(data_view='comment_select2'),
+        }
 
 
-class CommentAdmin(Select2SuitMixin, VersionAdmin):
+class CommentAdmin(VersionAdmin):
     fieldsets = (
         (None, {'fields': ('author', 'page', 'parent', 'score', 'hidden')}),
         ('Content', {'fields': ('title', 'body')}),
@@ -594,11 +566,10 @@ class LanguageForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text=_('These problems are NOT allowed to be submitted in this language'),
-        widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
-               FilteredSelectMultiple('problems', False))
+        widget=HeavySelect2MultipleWidget(data_view='problem_select2'))
 
 
-class LanguageAdmin(Select2SuitMixin, VersionAdmin):
+class LanguageAdmin(VersionAdmin):
     fields = ('key', 'name', 'short_name', 'common_name', 'ace', 'pygments', 'info', 'description', 'problems')
     list_display = ('key', 'name', 'common_name', 'info')
     form = LanguageForm
@@ -624,11 +595,10 @@ class ProblemGroupForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text=_('These problems are included in this group of problems'),
-        widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
-               FilteredSelectMultiple('problems', False))
+        widget=HeavySelect2MultipleWidget(data_view='problem_select2'))
 
 
-class ProblemGroupAdmin(Select2SuitMixin, admin.ModelAdmin):
+class ProblemGroupAdmin(admin.ModelAdmin):
     fields = ('name', 'full_name', 'problems')
     form = ProblemGroupForm
 
@@ -648,11 +618,10 @@ class ProblemTypeForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text=_('These problems are included in this type of problems'),
-        widget=HeavySelect2MultipleWidget(data_view='problem_select2') if use_select2 else
-               FilteredSelectMultiple('problems', False))
+        widget=HeavySelect2MultipleWidget(data_view='problem_select2'))
 
 
-class ProblemTypeAdmin(Select2SuitMixin, admin.ModelAdmin):
+class ProblemTypeAdmin(admin.ModelAdmin):
     fields = ('name', 'full_name', 'problems')
     form = ProblemTypeForm
 
@@ -756,8 +725,7 @@ class ContestTagForm(ModelForm):
         label=_('Included contests'),
         queryset=Contest.objects.all(),
         required=False,
-        widget=HeavySelect2MultipleWidget(data_view='contest_select2') if use_select2 else
-               FilteredSelectMultiple('contests', False))
+        widget=HeavySelect2MultipleWidget(data_view='contest_select2'))
 
 
 class ContestTagAdmin(admin.ModelAdmin):
@@ -785,10 +753,9 @@ class ContestTagAdmin(admin.ModelAdmin):
 
 class ContestProblemInlineForm(ModelForm):
     class Meta:
-        if use_select2:
-            widgets = {
-                'problem': HeavySelect2Widget(data_view='problem_select2'),
-            }
+        widgets = {
+            'problem': HeavySelect2Widget(data_view='problem_select2'),
+        }
 
 
 class ContestProblemInline(SortableTabularInline):
@@ -809,15 +776,14 @@ class ContestForm(ModelForm):
             self.fields['rate_exclude'].queryset = Profile.objects.filter(contest_history__contest=self.instance)
 
     class Meta:
-        if use_select2:
-            widgets = {
-                'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
-                'organizations': HeavySelect2MultipleWidget(data_view='organization_select2'),
-                'tags': Select2MultipleWidget
-            }
+        widgets = {
+            'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
+            'organizations': HeavySelect2MultipleWidget(data_view='organization_select2'),
+            'tags': Select2MultipleWidget
+        }
 
 
-class ContestAdmin(Select2SuitMixin, VersionAdmin):
+class ContestAdmin(VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'hide_problem_tags', 'run_pretests_only')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
@@ -833,9 +799,6 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
     form = ContestForm
     change_list_template = 'admin/judge/contest/change_list.html'
     filter_horizontal = ['rate_exclude']
-
-    if not use_select2:
-        filter_horizontal += ['organizers', 'organizations']
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
@@ -921,11 +884,10 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
 
 class ContestParticipationForm(ModelForm):
     class Meta:
-        if use_select2:
-            widgets = {
-                'contest': Select2Widget(),
-                'user': HeavySelect2Widget(data_view='profile_select2'),
-            }
+        widgets = {
+            'contest': Select2Widget(),
+            'user': HeavySelect2Widget(data_view='profile_select2'),
+        }
 
 
 class ContestParticipationAdmin(admin.ModelAdmin):
@@ -973,14 +935,13 @@ class ContestParticipationAdmin(admin.ModelAdmin):
 
 class OrganizationForm(ModelForm):
     class Meta:
-        if use_select2:
-            widgets = {
-                'admins': HeavySelect2MultipleWidget(data_view='profile_select2'),
-                'registrant': HeavySelect2Widget(data_view='profile_select2'),
-            }
+        widgets = {
+            'admins': HeavySelect2MultipleWidget(data_view='profile_select2'),
+            'registrant': HeavySelect2Widget(data_view='profile_select2'),
+        }
 
 
-class OrganizationAdmin(Select2SuitMixin, VersionAdmin):
+class OrganizationAdmin(VersionAdmin):
     readonly_fields = ('creation_date',)
     fields = ('name', 'key', 'short_name', 'is_open', 'about', 'registrant', 'creation_date', 'admins')
     list_display = ('name', 'key', 'short_name', 'is_open', 'registrant', 'show_public')
@@ -997,9 +958,6 @@ class OrganizationAdmin(Select2SuitMixin, VersionAdmin):
         if request.user.has_perm('judge.organization_admin'):
             return self.readonly_fields
         return self.readonly_fields + ('registrant', 'admins', 'is_open')
-
-    if not use_select2:
-        filter_horizontal = ('admins',)
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {
@@ -1040,10 +998,9 @@ class BlogPostAdmin(VersionAdmin):
 
 class SolutionForm(ModelForm):
     class Meta:
-        if use_select2:
-            widgets = {
-                'problem': HeavySelect2Widget(data_view='problem_select2', attrs={'style': 'width: 250px'}),
-            }
+        widgets = {
+            'problem': HeavySelect2Widget(data_view='problem_select2', attrs={'style': 'width: 250px'}),
+        }
 
 
 class SolutionAdmin(VersionAdmin):

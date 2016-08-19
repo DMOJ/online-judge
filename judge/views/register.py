@@ -13,11 +13,7 @@ from sortedm2m.forms import SortedMultipleChoiceField
 
 from judge.models import Profile, Language, Organization, TIMEZONE
 from judge.utils.subscription import Subscription, newsletter_id
-
-try:
-    from django_select2.forms import Select2Widget
-except ImportError:
-    from django.forms import Select as Select2Widget
+from judge.widgets import Select2Widget
 
 valid_id = re.compile(r'^\w+$')
 

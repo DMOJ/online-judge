@@ -311,6 +311,3 @@ handler500 = 'judge.views.error.error500'
 
 if 'newsletter' in settings.INSTALLED_APPS:
     urlpatterns.append(url(r'^newsletter/', include('newsletter.urls')))
-
-if 'django_select2' in settings.INSTALLED_APPS:
-    urlpatterns.append(url(r'^select2/', include('django_select2.urls')))
