@@ -62,6 +62,9 @@ class MathHTMLParser(object):
         for block in doc.xpath('//text()'):
             result = inline_math.sub(self._sub_inline, block)
             result = display_math.sub(self._sub_display, result)
+            if result == block:
+                continue
+
             last = block.getparent()
             into_text = block.is_text
 
