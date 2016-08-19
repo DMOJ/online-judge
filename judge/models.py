@@ -477,6 +477,46 @@ class Problem(models.Model):
         self.save()
     update_stats.alters_data = True
 
+    def _get_limits(self, key):
+        limits = {limit['language_id']: (limit['language__name'], limit[key])
+                  for limit in self.language_limits.values('language_id', 'language__name', key)}
+        limit_ids = set(limits.keys())
+        common = []
+
+        for cn, ids in Language.get_common_name_map().iteritems():
+            if ids - limit_ids:
+                continue
+            limit = set(limits[id][1] for id in ids)
+            if len(limit) == 1:
+                limit = next(iter(limit))
+                common.append((cn, limit))
+                for id in ids:
+                    del limits[id]
+
+        limits = limits.values() + common
+        limits.sort()
+        return limits
+
+    @property
+    def language_time_limit(self):
+        key = 'problem_tls:%d' % self.id
+        result = cache.get(key)
+        if result is not None:
+            return result
+        result = self._get_limits('time_limit')
+        cache.set(key, result)
+        return result
+
+    @property
+    def language_memory_limit(self):
+        key = 'problem_mls:%d' % self.id
+        result = cache.get(key)
+        if result is not None:
+            return result
+        result = self._get_limits('memory_limit')
+        cache.set(key, result)
+        return result
+
     class Meta:
         permissions = (
             ('see_private_problem', 'See hidden problems'),
