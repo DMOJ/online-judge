@@ -266,8 +266,7 @@ class Profile(models.Model):
         return reverse('user_page', args=(self.user.username,))
 
     def __unicode__(self):
-        # return u'Profile of %s in %s speaking %s' % (self.long_display_name(), self.timezone, self.language)
-        return self.long_display_name
+        return self.user.username
 
     class Meta:
         permissions = (
