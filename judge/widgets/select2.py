@@ -224,7 +224,7 @@ class HeavySelect2Mixin(Select2Mixin):
         selected_choices = {force_text(v) for v in selected_choices}
         chosen.update((k, v) for k, v in choices if force_text(k) in selected_choices)
 
-        for option_value, option_label in choices:
+        for option_value, option_label in chosen:
             output.append(self.render_option(selected_choices, option_value, option_label))
         return '\n'.join(output)
 
