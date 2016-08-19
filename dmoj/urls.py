@@ -106,8 +106,7 @@ urlpatterns = [
     url(r'^', include(social_auth_patterns, namespace='social')),
 
     url(r'^problems/$', problem.ProblemList.as_view(), name='problem_list'),
-    url(r'^problems/random/$', problem.random_problem, name='problem_random'),
-    url(r'^problems/random/unsolved/$', problem.unsolved_random_problem, name='problem_random_unsolved'),
+    url(r'^problems/random/$', problem.RandomProblem.as_view(), name='problem_random'),
 
     url(r'^problem/(?P<problem>[^/]+)', include([
         url(r'^$', problem.ProblemDetail.as_view(), name='problem_detail'),

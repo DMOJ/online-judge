@@ -40,7 +40,4 @@ form#filter-form(name='form', action='', method='get')
                         option(value=type.id)= type.full_name
     hr
     a#go.button(onclick='form.submit()') {% trans "Go" %}
-    if hide_solved
-        a.button(href='{% url "problem_random_unsolved" %}') {% trans "Random" %}
-    else
-        a.button(href='{% url "problem_random" %}') {% trans "Random" %}
+    a.button(href='{% url "problem_random" %}?{{ request.META.QUERY_STRING }}') {% trans "Random" %}

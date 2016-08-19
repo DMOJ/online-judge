@@ -321,7 +321,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
             context['sort_order'][self.order.lstrip('-')] = u' \u25BE' if self.order.startswith('-') else u' \u25B4'
         return context
 
-    def get(self, request, *args, **kwargs):
+    def setup(self, request):
         self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
         self.show_types = request.GET.get('show_types') == '1' if 'show_types' in request.GET else False
         self.full_text = request.GET.get('full_text') == '1' if 'full_text' in request.GET else False
@@ -339,6 +339,9 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
             except ValueError:
                 pass
 
+    def get(self, request, *args, **kwargs):
+        self.setup(request)
+
         order = request.GET.get('order', '')
         if not ((not order.startswith('-') or order.count('-') == 1) and (order.lstrip('-') in self.all_sorts)):
             order = 'code'
@@ -347,6 +350,14 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
             return super(ProblemList, self).get(request, *args, **kwargs)
         except ProgrammingError as e:
             return generic_message(request, 'FTS syntax error', e.args[1], status=400)
+
+
+class RandomProblem(ProblemList):
+    def get(self, request, *args, **kwargs):
+        self.setup(request)
+        if self.in_contest:
+            raise Http404()
+        return random_problem(request, self.get_normal_queryset())
 
 
 user_logger = logging.getLogger('judge.user')
