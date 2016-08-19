@@ -82,12 +82,12 @@ block js_media
                         return (node.hasClass('p') ? text.replace(/p$/, '') : text);
                     }
                 });
-                if (window.history != undefined && window.history.replaceState != undefined) {
-                    window.history.replaceState({}, document.title, window.location.search.replace('&manual=1', ''));
-                }
             });
 
     script(type='text/javascript').
+        if (window.history != undefined && window.history.replaceState != undefined) {
+            window.history.replaceState({}, document.title, window.location.search.replace('&manual=1', ''));
+        }
         $(function() {
             var info_float = $('.info-float');
             var container = $('#content-right');
