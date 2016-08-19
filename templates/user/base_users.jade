@@ -19,14 +19,17 @@ block js_media
                         url: '{% url "user_search_select2_ajax" %}'
                     },
                     minimumInputLength: 1,
-                    escapeMarkup: function (markup) { return markup; },
+                    escapeMarkup: function (markup) {
+                        return markup;
+                    },
                     templateResult: function (data, container) {
-                        return '<span class="' + data.display_rank + '">' + data.text + "</span>";
+                        return '<img class="search-image" src="' + data.gravatar_url + '" width="24" height="24">' +
+                                '<span class="' + data.display_rank + ' search-name">' + data.text + "</span>";
                     }
                 });
 
                 var $last = null;
-                $(window).on('hashchange', function() {
+                $(window).on('hashchange', function () {
                     var hash = window.location.hash;
                     if (hash.startsWith('#!')) {
                         var $user = $('#user-' + hash.substring(2)).addClass('highlight');
@@ -39,7 +42,7 @@ block js_media
                 }).trigger('hashchange');
             });
     script.
-        $(function() {
+        $(function () {
             var info_float = $('.info-float');
             var container = $('#content-right');
             if (window.bad_browser) {
@@ -57,9 +60,17 @@ block media
     if has_select2
         link(href="{{ SELECT2_CSS_URL }}", type="text/css", media="screen", rel="stylesheet")
         style.
-            .select2-selection__arrow { display: none; }
-            .select2-selection__rendered { cursor: text; }
-            .select2-results__option--highlighted { background-color: #DEDEDE !important; }
+            .select2-selection__arrow {
+                display: none;
+            }
+
+            .select2-selection__rendered {
+                cursor: text;
+            }
+
+            .select2-results__option--highlighted {
+                background-color: #DEDEDE !important;
+            }
     style.
         #users-table .rank, .points, .problems, .username {
             white-space: nowrap;
@@ -71,6 +82,14 @@ block media
 
         #users-table .header {
             vertical-align: middle;
+        }
+
+        .search-image, .search-name {
+            vertical-align: middle;
+        }
+
+        .search-name {
+            padding-left: 0.5em;
         }
 
         #users-table tr {
