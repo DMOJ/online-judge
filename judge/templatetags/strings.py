@@ -11,3 +11,8 @@ def split(value):
 @register.filter(name='cutoff')
 def cutoff(value, length):
     return value[:int(length)]
+
+
+@register.filter(name='roundfloat')
+def roundfloat(value, at):
+    return str(round(value, int(at)))
