@@ -322,10 +322,12 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
         return context
 
     def GET_with_session(self, request, key):
-        if key in request.GET:
-            val = request.GET.get(key) == '1'
-            request.session[key] = val
-            return val
+        if 'manual' in request.GET:
+            if key in request.GET:
+                val = request.GET.get(key) == '1'
+                request.session[key] = val
+            else:
+                del request.session[key]
         return request.session.get(key, False)
 
     def setup(self, request):
