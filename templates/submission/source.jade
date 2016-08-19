@@ -53,20 +53,16 @@ block media
         }
 block body
     br
-    a(href='{% url "submission_status" submission.id %}') {% trans "View status" %}
-    br
-    a(href='{% url "submission_source_raw" submission.id %}') {% trans "View raw source" %}
-    br
+    div: a(href='{% url "submission_status" submission.id %}') {% trans "View status" %}
+    div: a(href='{% url "submission_source_raw" submission.id %}') {% trans "View raw source" %}
     if request.user == submission.user.user or perms.judge.resubmit_other
-        a(href='{% url "problem_submit" submission.problem.code submission.id %}') {% trans "Resubmit" %}
-        br
+        div: a(href='{% url "problem_submit" submission.problem.code submission.id %}') {% trans "Resubmit" %}
     if perms.judge.rejudge_submission
-        form(action='{% url "submission_rejudge" %}', method='post')
+        div: form(action='{% url "submission_rejudge" %}', method='post')
             -csrf_token
             a(href='#', onclick='parentNode.submit();') {% trans "Rejudge" %}
             input(type='hidden', name='id', value=submission.id)
             input(type='hidden', name='path', value='{% url "submission_status" submission.id %}')
-        br
 
     hr(style='float:left;width:30%')
     br
