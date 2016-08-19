@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, F
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import smart_text
@@ -32,8 +32,11 @@ class Select2View(BaseListView):
 
 class UserSelect2View(Select2View):
     def get_queryset(self):
-        return Profile.objects.filter(Q(user__username__icontains=(self.term)) | Q(name__icontains=(self.term))) \
-            .select_related('user')
+        return Profile.objects.filter(user__username__icontains=self.term).annotate(username=F('user__username')) \
+                      .only('id')
+
+    def get_name(self, obj):
+        return obj.username
 
 
 class OrganizationSelect2View(Select2View):
