@@ -452,6 +452,13 @@ def clone_problem(request, problem):
     return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
 
 
-def random_problem(request):
-    count = Problem.objects.filter(is_public=True).aggregate(count=Count('id'))['count']
-    return HttpResponseRedirect(Problem.objects.filter(is_public=True)[randrange(count)].get_absolute_url())
+def random_problem(request, queryset=None):
+    queryset = queryset or Problem.objects.filter(is_public=True)
+    return HttpResponseRedirect(queryset[randrange(queryset.count())].get_absolute_url())
+
+
+def unsolved_random_problem(request):
+    if not request.user.is_authenticated():
+        return random_problem(request)
+    return random_problem(Problem.objects.filter(is_public=True)
+                                 .exclude(id__in=user_completed_ids(request.user.profile)))
