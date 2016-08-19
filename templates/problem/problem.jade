@@ -102,7 +102,7 @@ block info_float
                         | Author:
                         - plural
                         | Authors:
-                    .pi-value: for author in authors
+                    span.pi-value: for author in authors
                         span(class=author.display_rank)
                             a(href='{% url "user_page" author.user.username %}') #{author.user.username}
                         if not forloop.last
