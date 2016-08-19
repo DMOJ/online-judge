@@ -12,7 +12,7 @@ thead
     tbody
         for rank, user in users
             tr(id='user-{{ user.user.username }}')
-                td= rank
+                td #{rank}
                 block after_rank
                 if show_organization
                     td(class=user.display_rank)

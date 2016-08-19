@@ -17,7 +17,7 @@ from django.db.models import Q, Min, Max
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 from django.utils.timezone import make_aware
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.generic import ListView, TemplateView
@@ -472,10 +472,12 @@ def base_participation_list(request, contest, profile):
     prof_username = profile.user.username
 
     queryset = contest.users.filter(user=profile, virtual__gte=0).order_by('-virtual')
+    live_link = format_html('<a href="{2}#!{1}">{0}</a>', _('Live'), prof_username,
+                            reverse('contest_ranking', args=[contest.key]))
     users, problems = get_contest_ranking_list(
         request, contest, show_current_virtual=False,
         ranking_list=partial(base_contest_ranking_list, for_user=profile.id, queryset=queryset),
-        ranker=lambda users, key: ((user.participation.virtual or _('Live'), user) for user in users))
+        ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users))
     return render(request, 'contest/ranking.jade', {
         'users': users,
         'title': _('Your participation in %s') % contest.name if req_username == prof_username else
