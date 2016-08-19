@@ -46,6 +46,12 @@ class HTMLTreeString(SafeData):
             return str(self) + other
         return unicode(self) + other
 
+    def __getstate__(self):
+        return unicode(self)
+
+    def __setstate__(self, state):
+        self._tree = html.fromstring(state)
+
 
 def fromstring(str):
     if isinstance(str, HTMLTreeString):
