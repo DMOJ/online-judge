@@ -183,7 +183,7 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.case_points = points
         submission.case_total = total
 
-        sub_points = round(points / total * submission.problem.points if total > 0 else 0, 1)
+        sub_points = round(points / total * submission.problem.points if total > 0 else 0, 3)
         if not submission.problem.partial and sub_points != submission.problem.points:
             sub_points = 0
 
@@ -201,7 +201,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
         if hasattr(submission, 'contest'):
             contest = submission.contest
-            contest.points = round(points / total * contest.problem.points if total > 0 else 0, 1)
+            contest.points = round(points / total * contest.problem.points if total > 0 else 0, 3)
             if not contest.problem.partial and contest.points != contest.problem.points:
                 contest.points = 0
             contest.save()
