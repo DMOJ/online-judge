@@ -105,7 +105,10 @@ class MathoidMathParser(MathHTMLParser):
         if self.type == 'tex':
             return
 
-        hash = hashlib.sha1(formula).hexdigest()
+        if isinstance(formula, unicode):
+            hash = hashlib.sha1(formula.encode('utf-8')).hexdigest()
+        else:
+            hash = hashlib.sha1(formula).hexdigest()
         if self.cache.has_file(hash, 'css'):
             result = self.query_cache(hash)
         else:
