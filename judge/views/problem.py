@@ -460,5 +460,5 @@ def random_problem(request, queryset=None):
 def unsolved_random_problem(request):
     if not request.user.is_authenticated():
         return random_problem(request)
-    return random_problem(Problem.objects.filter(is_public=True)
-                                 .exclude(id__in=user_completed_ids(request.user.profile)))
+    return random_problem(request, Problem.objects.filter(is_public=True)
+                                          .exclude(id__in=user_completed_ids(request.user.profile)))
