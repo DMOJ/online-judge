@@ -52,6 +52,7 @@ block js_media
                     var action = $form.attr('action');
                     $form.attr('action', '{% url "problem_random" %}').attr('target', '_blank').submit();
                     $form.attr('action', action).attr('target', target);
+                    e.preventDefault();
                 });
             });
 
