@@ -46,6 +46,13 @@ block js_media
                     if (e.keyCode == 13)
                         $('#go').click();
                 });
+                $('#random').click(function (e) {
+                    var $form = $('form#filter-form');
+                    var target = $form.attr('target');
+                    var action = $form.attr('action');
+                    $form.attr('action', '{% static "problem_random" %}').attr('target', '_blank').submit();
+                    $form.attr('action', action).attr('target', target);
+                });
             });
 
     if IN_CONTEST
