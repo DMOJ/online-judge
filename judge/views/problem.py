@@ -242,7 +242,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
                     'group': {'full_name': p['problem__group__full_name']},
                     'points': p['points'],
                     'partial': p['partial'],
-                    'user_count': p['user_count']
+                    'user_count': p['user_count'],
                 } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
                                            'problem__group__full_name', 'points', 'partial', 'user_count')]
 
@@ -286,9 +286,9 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProblemList, self).get_context_data(**kwargs)
-        context['hide_solved'] = int(self.hide_solved)
-        context['show_types'] = int(self.show_types)
-        context['full_text'] = int(self.full_text)
+        context['hide_solved'] = 0 if self.in_contest else int(self.hide_solved)
+        context['show_types'] = 0 if self.in_contest else int(self.show_types)
+        context['full_text'] = 0 if self.in_contest else int(self.full_text)
         context['category'] = self.category
         context['categories'] = ProblemGroup.objects.all()
         if self.show_types:
