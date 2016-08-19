@@ -10,7 +10,7 @@ from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import transaction, connection
-from django.db.models import TextField, Q, Count
+from django.db.models import TextField, Q
 from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
@@ -842,10 +842,6 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
             TextField: {'widget': MathJaxAdminPagedownWidget},
         }
 
-    def user_count(self, obj):
-        return obj.user_count
-    user_count.admin_order_field = 'user_count'
-
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self.message_user(request, ungettext('%d contest successfully marked as public.',
@@ -861,7 +857,7 @@ class ContestAdmin(Select2SuitMixin, VersionAdmin):
     make_private.short_description = _('Mark contests as private')
 
     def get_queryset(self, request):
-        queryset = Contest.objects.annotate(user_count=Count('users'))
+        queryset = Contest.objects.all()
         if request.user.has_perm('judge.edit_all_contest'):
             return queryset
         else:
