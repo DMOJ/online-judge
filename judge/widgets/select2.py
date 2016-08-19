@@ -216,7 +216,7 @@ class HeavySelect2Mixin(Select2Mixin):
             chosen = copy(self.choices)
             chosen.queryset = chosen.queryset.filter(pk__in=[int(i) for i in selected_choices
                                                              if isinstance(i, (int, long)) or i.isdigit()])
-            chosen = set(choices)
+            chosen = set(chosen)
         else:
             choices = chain(self.choices, choices)
             chosen = set()
