@@ -44,3 +44,7 @@
 select[id^=id_contest_problems] {
   width: 20em !important;
 }
+
+select#id_organizers.django-select2 {
+  width: 20em;
+}
