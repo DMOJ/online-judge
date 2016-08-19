@@ -91,7 +91,7 @@ block info_float
         for name, limit in problem.language_memory_limit
             .lang-limit
                 span.lang-name= name
-                span.lang-ml #{limit}s
+                span.lang-ml #{limit|kbsimpleformat}
     br
     - get_current_language as LANGUAGE_CODE
     - cache 86400 problem_authors problem.id LANGUAGE_CODE
