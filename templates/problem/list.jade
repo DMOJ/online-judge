@@ -55,10 +55,9 @@ block js_media
                 });
                 $('input#full_text, input#hide_solved, input#show_types').click(function () {
                     ($('<form>').attr('action', window.location.pathname + '?' + $('form#filter-form').serialize())
-                            .attr('method', 'POST')
                             .append($('<input>').attr('type', 'hidden').attr('name', 'csrfmiddlewaretoken')
                                     .attr('value', $.cookie('csrftoken')))
-                            .appendTo($('body')).submit());
+                            .attr('method', 'POST').appendTo($('body')).submit());
                 });
             });
 
