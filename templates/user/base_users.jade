@@ -27,19 +27,6 @@ block js_media
                                 '<span class="' + data.display_rank + ' user-search-name">' + data.text + '</span>');
                     }
                 });
-
-                var $last = null;
-                $(window).on('hashchange', function () {
-                    var hash = window.location.hash;
-                    if (hash.startsWith('#!')) {
-                        var $user = $('#user-' + hash.substring(2)).addClass('highlight');
-                        if ($user) {
-                            $(document).scrollTop($user.position().top - 50);
-                            if ($last !== null) $last.removeClass('highlight');
-                            $last = $user;
-                        }
-                    }
-                }).trigger('hashchange');
             });
     script.
         $(function () {
@@ -54,6 +41,19 @@ block js_media
                 });
                 info_float.width(container.width());
             }
+
+            var $last = null;
+            $(window).on('hashchange', function () {
+                var hash = window.location.hash;
+                if (hash.startsWith('#!')) {
+                    var $user = $('#user-' + hash.substring(2)).addClass('highlight');
+                    if ($user) {
+                        $(document).scrollTop($user.position().top - 50);
+                        if ($last !== null) $last.removeClass('highlight');
+                        $last = $user;
+                    }
+                }
+            }).trigger('hashchange');
         });
 
 block media
