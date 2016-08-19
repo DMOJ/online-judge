@@ -62,24 +62,36 @@ block info_float
     hr
     
     br
-    i.fa.fa-check.fa-fw
-    b {% trans "Points:" %}
-    if contest_problem
-        |  #{contest_problem.points}
-        if contest_problem.partial
-            - trans "(partial)"
-    else
-        |  #{problem.points|floatformat}
-        if problem.partial
-            - trans "(partial)"
-    br
-    i.fa.fa-clock-o.fa-fw
-    b {% trans "Time limit:" %}
-    |  #{problem.time_limit}s
-    br
-    i.fa.fa-server.fa-fw
-    b {% trans "Memory limit:" %}
-    |  #{problem.memory_limit|kbsimpleformat}
+    .problem-info-entry
+        i.fa.fa-check.fa-fw
+        span.pi-name {% trans "Points:" %}
+        span.pi-value
+            if contest_problem
+                |  #{contest_problem.points}
+                if contest_problem.partial
+                    - trans "(partial)"
+            else
+                |  #{problem.points|floatformat}
+                if problem.partial
+                    - trans "(partial)"
+    .problem-info-entry
+        i.fa.fa-clock-o.fa-fw
+        span.pi-name {% trans "Time limit:" %}
+        span.pi-value #{problem.time_limit}s
+    .problem-lang-limits
+        for name, limit in problem.language_time_limit
+            .lang-limit
+                span.lang-name= name
+                span.lang-tl #{limit}s
+    .problem-info-entry
+        i.fa.fa-server.fa-fw
+        span.pi-name {% trans "Memory limit:" %}
+        span.pi-value #{problem.memory_limit|kbsimpleformat}
+    .problem-lang-limits
+        for name, limit in problem.language_memory_limit
+            .lang-limit
+                span.lang-name= name
+                span.lang-ml #{limit}s
     br
     - get_current_language as LANGUAGE_CODE
     - cache 86400 problem_authors problem.id LANGUAGE_CODE
