@@ -328,7 +328,9 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
                 request.session[key] = val
             else:
                 request.session.pop(key, None)
-        return request.session.get(key, False)
+        if not request.GET:
+            return request.session.get(key, False)
+        return request.GET.get(key, None) == '1'
 
     def setup(self, request):
         self.hide_solved = self.GET_with_session(request, 'hide_solved')
