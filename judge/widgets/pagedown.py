@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from django.contrib.admin import widgets as admin_widgets
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.forms.utils import flatatt
