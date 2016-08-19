@@ -488,7 +488,7 @@ def base_participation_list(request, contest, profile):
         'show_organization': False,
         'last_msg': event.last(),
         'has_rating': False,
-        'rank_header': _('Virtual#')
+        'rank_header': _('Participation')
     })
 
 
