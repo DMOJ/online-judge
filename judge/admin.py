@@ -901,7 +901,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super(ContestParticipationAdmin, self).get_queryset(request).only(
-            'contest__name', 'user__user__username', 'user__name', 'real_start', 'score', 'cumtime'
+            'contest__name', 'user__user__username', 'user__name', 'real_start', 'score', 'cumtime', 'virtual'
         )
 
     def username(self, obj):
