@@ -327,7 +327,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
                 val = request.GET.get(key) == '1'
                 request.session[key] = val
             else:
-                del request.session[key]
+                request.session.pop(key)
         return request.session.get(key, False)
 
     def setup(self, request):
