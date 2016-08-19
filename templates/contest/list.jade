@@ -143,5 +143,5 @@ block body
                                 | {{ window_length }} long
                 td: a(href='{% url "contest_ranking" contest.key %}') #{contest.user_count}
                 if not IN_CONTEST
-                    td: a.unselectable.button.full.participate-button(href='#')
+                    td: a.unselectable.button.full.participate-button(href='{% url "contest_join" contest.key %}')
                             | {% trans "Virtual join" %}
