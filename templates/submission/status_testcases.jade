@@ -95,10 +95,10 @@ if submission.status != 'IE'
                 |  #{submission.case_points|floatformat:"0"}/#{submission.case_total|floatformat:"0"}
                 if IN_CONTEST and submission.contest_or_none
                     - with contest=submission.contest_or_none
-                        - blocktrans with points=contest.points|floatformat:"-3" total=contest.problem.points
+                        - blocktrans with points=contest.points|stringformat:".4g" total=contest.problem.points
                             | ({{ points }}/{{ total }} points)
                 else
-                    - blocktrans with points=submission.points|floatformat:"-3" total=submission.problem.points|floatformat:"-1"
+                    - blocktrans with points=submission.points|stringformat:".4g" total=submission.problem.points|floatformat:"-1"
                         | ({{ points }}/{{ total }} points)
                 if is_pretest and submission.result == "AC"
                     br
