@@ -44,8 +44,21 @@ Contests feature an optional rating system, and can be configured to run in any 
 ![](https://dmoj.ml/data/_other/readme/contest-list.png)
 
 
+### Internationalized interface
+Use the site in whatever language you're most comfortable in &mdash; currently fully supporting English, Simplified Chinese, and Romanian. Problem authors can provide statements in multiple languages, and DMOJ will display the most relevant one to a reader.
+
+
+![](https://dmoj.ml/data/_other/readme/i18n.png)
+
+
+## Mobile support
+The DMOJ is usable on devices of all sizes, and improvements are constantly being made in this area.
+
+![](https://dmoj.ml/data/_other/readme/mobile-c.png)
+
+
 ### Highly featured administration interface
-There DMOJ admin interface is highly versatile, and can be efficiently used for anything from managing users to authoring problem statements.
+The DMOJ admin interface is highly versatile, and can be efficiently used for anything from managing users to authoring problem statements.
 
 
 ![](https://dmoj.ml/data/_other/readme/problem-admin.png)
@@ -56,6 +69,7 @@ There DMOJ admin interface is highly versatile, and can be efficiently used for 
 ### Miscellaneous others
 This is by no means a complete list, but other features in the DMOJ site include:
 
+* OAuth logins
 * user comments
 * arbitrary flatpages
 * editorial support
