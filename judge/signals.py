@@ -19,7 +19,8 @@ def problem_update(sender, instance, **kwargs):
 
     cache.delete_many([
         make_template_fragment_key('submission_problem', (instance.id,)),
-        make_template_fragment_key('problem_feed', (instance.id,))
+        make_template_fragment_key('problem_feed', (instance.id,)),
+        'problem_tls:%s' % instance.id, 'problem_mls:%s' % instance.id,
     ])
     cache.delete_many([
         make_template_fragment_key('problem_html', (instance.id, engine, lang))
