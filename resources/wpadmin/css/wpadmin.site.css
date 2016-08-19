@@ -3,7 +3,7 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-  line-height: unset !important;
+    line-height: unset !important;
 }
 
 .wmd-wrapper {
@@ -15,7 +15,7 @@
 }
 
 .wmd-input {
-  width: 100% !important;
+    width: 100% !important;
 }
 
 #content .content-description h1,
@@ -42,9 +42,11 @@
 }
 
 select[id^=id_contest_problems] {
-  width: 20em !important;
+    width: 20em !important;
 }
 
-select#id_organizers.django-select2 {
-  width: 20em;
+select#id_organizers.django-select2,
+select#id_organizations.django-select2,
+select#id_tags.django-select2 {
+    width: 20em;
 }
