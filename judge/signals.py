@@ -69,7 +69,8 @@ def license_update(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Language)
 def language_update(sender, instance, **kwargs):
-    cache.delete(make_template_fragment_key('language_html', (instance.id,)))
+    cache.delete_many([make_template_fragment_key('language_html', (instance.id,)),
+                       'lang:cn_map'])
 
 
 @receiver(post_save, sender=Judge)

@@ -107,6 +107,18 @@ class Language(models.Model):
             lang_versions.append((id, list(sorted(version_list, key=lambda a: tuple(map(int, a.split('.')))))))
         return lang_versions
 
+    @classmethod
+    def get_common_name_map(cls):
+        result = cache.get('lang:cn_map')
+        if result is not None:
+            return result
+        result = defaultdict(set)
+        for id, cn in Language.objects.values_list('id', 'common_name'):
+            result[cn].add(id)
+        result = {id: cns for id, cns in result.iteritems() if len(cns) > 1}
+        cache.set('lang:cn_map', result, 86400)
+        return result
+
     @cached_property
     def short_display_name(self):
         return self.short_name or self.key
