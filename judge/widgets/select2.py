@@ -214,7 +214,8 @@ class HeavySelect2Mixin(Select2Mixin):
         output = ['<option></option>' if not self.is_required else '']
         if isinstance(self.choices, ModelChoiceIterator):
             chosen = copy(self.choices)
-            chosen.queryset = chosen.queryset.filter(pk__in=[int(i) for i in selected_choices if i.isdigit()])
+            chosen.queryset = chosen.queryset.filter(pk__in=[int(i) for i in selected_choices
+                                                             if isinstance(i, (int, long)) or i.isdigit()])
             chosen = set(choices)
         else:
             choices = chain(self.choices, choices)
