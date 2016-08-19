@@ -58,9 +58,6 @@ block js_media
     if IN_CONTEST
         script(src='{% static "libs/tablesorter.js" %}', type='text/javascript')
         script(type='text/javascript').
-            if (window.history != undefined && window.history.replaceState != undefined) {
-                window.history.replaceState({}, document.title, window.location.search.replace('&manual=1', ''));
-            }
             $(function() {
                 $.tablesorter.addParser({
                     id: 'solvedsort',
@@ -85,6 +82,9 @@ block js_media
                         return (node.hasClass('p') ? text.replace(/p$/, '') : text);
                     }
                 });
+                if (window.history != undefined && window.history.replaceState != undefined) {
+                    window.history.replaceState({}, document.title, window.location.search.replace('&manual=1', ''));
+                }
             });
 
     script(type='text/javascript').
