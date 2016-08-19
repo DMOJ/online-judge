@@ -26,8 +26,8 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
     SubmissionTestCase, Solution, Rating, ContestSubmission, License, LanguageLimit, OrganizationRequest, \
     ContestTag, ProblemTranslation
 from judge.ratings import rate_contest
-from judge.widgets import CheckboxSelectMultipleWithSelectAll, AdminPagedownWidget, MathJaxAdminPagedownWidget, \
-    HeavyPreviewAdminPageDownWidget
+from judge.widgets import AdminPagedownWidget, MathJaxAdminPagedownWidget, \
+    HeavyPreviewAdminPageDownWidget, CheckboxSelectMultipleWithSelectAll
 
 try:
     from django_select2.forms import HeavySelect2Widget, HeavySelect2MultipleWidget, Select2Widget, Select2MultipleWidget
