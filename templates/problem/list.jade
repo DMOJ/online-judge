@@ -91,9 +91,6 @@ block js_media
             });
 
     script(type='text/javascript').
-        if (window.history != undefined && window.history.replaceState != undefined) {
-            window.history.replaceState({}, document.title, window.location.search.replace('&_=1', ''));
-        }
         $(function() {
             var info_float = $('.info-float');
             var container = $('#content-right');
