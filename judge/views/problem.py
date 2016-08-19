@@ -369,7 +369,8 @@ class RandomProblem(ProblemList):
         self.setup(request)
         if self.in_contest:
             raise Http404()
-        return random_problem(request, self.get_normal_queryset())
+        queryset = self.get_normal_queryset()
+        return HttpResponseRedirect(queryset[randrange(queryset.count())].get_absolute_url())
 
 
 user_logger = logging.getLogger('judge.user')
@@ -475,15 +476,3 @@ def clone_problem(request, problem):
     problem.allowed_languages = languages
     problem.types = types
     return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
-
-
-def random_problem(request, queryset=None):
-    queryset = queryset or Problem.objects.filter(is_public=True)
-    return HttpResponseRedirect(queryset[randrange(queryset.count())].get_absolute_url())
-
-
-def unsolved_random_problem(request):
-    if not request.user.is_authenticated():
-        return random_problem(request)
-    return random_problem(request, Problem.objects.filter(is_public=True)
-                          .exclude(id__in=user_completed_ids(request.user.profile)))
