@@ -89,28 +89,25 @@ block body
             label.inline-header.grayed {% trans "Password (again)" %}:
             span.fullwidth #{form.password2}
 
-        table(border=0, style='padding-top:0.7em')
+        table(style='padding-right:0.8em')
             tr
-                td(style='vertical-align:top;'): table(style='padding-right:0.8em')
-                    tr
-                        td: label.inline-header.grayed {% trans "Location" %}:
-                        td: span.fullwidth
-                                | #{form.timezone} {% trans "or" %}
-                                = ' '
-                                a#open-map(href='#', data-featherlight='.map-wrap')
-                                | {% trans "pick from map" %}
-                    tr
-                        td: label.inline-header.grayed {% trans "Preferred language" %}:
-                        td: span.fullwidth #{form.language}
-                    //tr
-                        td: label.inline-header.grayed {% trans "Editor theme" %}:
-                        td: span.fullwidth #{form.ace_theme}
-                    if form.newsletter
-                        tr: td(colspan=2) #{form.newsletter}
-                            label.inline-header.grayed(for='id_newsletter', style='float: unset;') Notify me about upcoming contests
-                td
-                    div.block-header(style='padding-bottom:0.4em;margin-top:-2em;') {% trans "Affiliated organizations" %}:
-                    | #{form.organizations}
+                td: label.inline-header.grayed {% trans "Location" %}:
+                td: span.fullwidth
+                        div #{form.timezone}
+                        | {% trans "or" %}
+                        = ' '
+                        a#open-map(href='#', data-featherlight='.map-wrap') {% trans "pick from map" %}
+            tr
+                td: label.inline-header.grayed {% trans "Preferred language" %}:
+                td: span.fullwidth #{form.language}
+            //tr
+                td: label.inline-header.grayed {% trans "Editor theme" %}:
+                td: span.fullwidth #{form.ace_theme}
+            if form.newsletter
+                tr: td(colspan=2) #{form.newsletter}
+                    label.inline-header.grayed(for='id_newsletter', style='float: unset;') Notify me about upcoming contests
+        div.block-header(style='padding-bottom:0.4em;margin-top:-2em;') {% trans "Affiliated organizations" %}:
+        | #{form.organizations}
         hr
         button(style="float:right;", type='submit') {% trans "Register!" %}
         input(type='hidden', name='next', value=next)
