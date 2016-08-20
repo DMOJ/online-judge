@@ -76,20 +76,19 @@ block js_media
 block body
     #center-float: form.form-area#edit-form(action='', method='post')
         - csrf_token
-        div.full-textfield
-            label.inline-header.grayed {% trans "Username" %}:
-            span.fullwidth #{form.username}
-        div.full-textfield
-            label.inline-header.grayed {% trans "Email" %}:
-            span.fullwidth #{form.email}
-        div.full-textfield
-            label.inline-header.grayed {% trans "Password" %}:
-            span.fullwidth #{form.password1}
-        div.full-textfield
-            label.inline-header.grayed {% trans "Password (again)" %}:
-            span.fullwidth #{form.password2}
-
         table(style='padding-right:0.8em')
+            tr
+                td: label.inline-header.grayed {% trans "Username" %}:
+                td: span.fullwidth #{form.username}
+            tr
+                td: label.inline-header.grayed {% trans "Email" %}:
+                td: span.fullwidth #{form.email}
+            tr
+                td: label.inline-header.grayed {% trans "Password" %}:
+                td: span.fullwidth #{form.password1}
+            tr
+                td: label.inline-header.grayed {% trans "Password (again)" %}:
+                td: span.fullwidth #{form.password2}
             tr
                 td: label.inline-header.grayed {% trans "Location" %}:
                 td: span.fullwidth
