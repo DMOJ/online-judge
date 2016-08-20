@@ -93,30 +93,30 @@ block body
         - csrf_token
         if form.errors
             #form-errors #{form.errors}
-        .block-header Username
+        .block-header {% trans "Username" %}
         span.fullwidth #{form.username}
-        .block-header Email
+        .block-header {% trans "Email" %}
         span.fullwidth #{form.email}
-        .block-header Password
+        .block-header {% trans "Password" %}
             small (#[a(href='#')?])
         span.fullwidth #{form.password1}
-        .block-header Password
+        .block-header {% trans "Password" %}
             sup(style='font-size: 0.7em;padding-left: 0.2em;') 2
-            small (again, for confirmation)
+            small {% trans "(again, for confirmation)" %}
         span.fullwidth #{form.password2}
-        .block-header Location
+        .block-header {% trans "Location" %}
         span.fullwidth: div #{form.timezone}
             div(style='float: right')
                 | {% trans "or" %}
                 = ' '
                 a#open-map(href='#', data-featherlight='.map-wrap') {% trans "pick from map" %}
-        .block-header Preferred language
+        .block-header {% trans "Default language" %}
         span.fullwidth #{form.language}
         div.block-header {% trans "Affiliated organizations" %}
         | #{form.organizations}
         if form.newsletter
             div(style='padding-top: 0.5em;') #{form.newsletter}
-                label.inline-header.grayed(for='id_newsletter', style='float: unset;') Notify me about upcoming contests
+                label.inline-header.grayed(for='id_newsletter', style='float: unset;') {% trans "Notify me about upcoming contests" %}
         hr
         button(style="float:right;", type='submit') {% trans "Register!" %}
         input(type='hidden', name='next', value=next)
