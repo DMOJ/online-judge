@@ -54,7 +54,7 @@ block body
     #blog-container
         .blog-content
             each post in posts
-                article(class=('sticky post' if post.sticky else 'post'))
+                section(class=('sticky post' if post.sticky else 'post'))
                     h2.title: a(href='{% url "blog_post" post.id post.slug %}')= post.title
                     .time
                         if post.sticky
