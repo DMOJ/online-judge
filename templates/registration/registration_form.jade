@@ -103,11 +103,11 @@ block body
             //tr
                 td: label.inline-header.grayed {% trans "Editor theme" %}:
                 td: span.fullwidth #{form.ace_theme}
-            if form.newsletter
-                tr: td(colspan=2) #{form.newsletter}
-                    label.inline-header.grayed(for='id_newsletter', style='float: unset;') Notify me about upcoming contests
-        div.block-header(style='padding-bottom:0.4em;margin-top:-2em;') {% trans "Affiliated organizations" %}:
+        div.block-header(style='padding-bottom:0.4em;padding-left:2px;margin-top:0.75em') {% trans "Affiliated organizations" %}:
         | #{form.organizations}
+        if form.newsletter
+            div #{form.newsletter}
+                label.inline-header.grayed(for='id_newsletter', style='float: unset;') Notify me about upcoming contests
         hr
         button(style="float:right;", type='submit') {% trans "Register!" %}
         input(type='hidden', name='next', value=next)
