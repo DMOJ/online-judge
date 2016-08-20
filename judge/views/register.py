@@ -4,7 +4,7 @@ import re
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.forms import CharField, ChoiceField, ModelChoiceField, TextInput, PasswordInput
+from django.forms import CharField, ChoiceField, ModelChoiceField
 from django.shortcuts import render
 from django.utils.translation import ugettext, ugettext_lazy as _
 from registration.backends.default.views import (RegistrationView as OldRegistrationView,
@@ -33,13 +33,6 @@ class CustomRegistrationForm(RegistrationForm):
 
     if newsletter_id is not None:
         newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=True, required=False)
-
-    def __init__(self, *args, **kwargs):
-        super(CustomRegistrationForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget = TextInput(attrs={'placeholder': _('john_doe')})
-        self.fields['email'].widget = TextInput(attrs={'placeholder': _('john.doe@company.com')})
-        self.fields['password1'].widget = PasswordInput(attrs={'placeholder': _(u'•••••••••••')})
-        self.fields['password2'].widget = PasswordInput(attrs={'placeholder': _(u'•••••••••••')})
 
     def clean_email(self):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
