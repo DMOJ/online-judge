@@ -115,7 +115,7 @@ block body
             .form-field-error #{form.email.errors}
 
         .block-header {% trans "Password" %}
-            small (#[a(href='#')?])
+            small (#[a.pass-req-link(href='#')?])
         span(class=('fullwidth-error' if form['password1'].errors else 'fullwidth')) #{form.password1}
         if form.password1.errors
             .form-field-error #{form.password1.errors}
