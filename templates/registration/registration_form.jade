@@ -63,6 +63,18 @@ block media
             width: 100%;
         }
 
+        .fullwidth-error input {
+            width: 100%;
+            border-color: red;
+        }
+
+        .form-field-error {
+            padding-left: 2px;
+            color: red;
+            padding-bottom: 0.2em;
+            float: right;
+        }
+
         small {
             font-size: 0.7em;
             padding-left: 0.6em;
@@ -91,32 +103,46 @@ block js_media
 block body
     #center-float: form.form-area#edit-form(action='', method='post')
         - csrf_token
-        if form.errors
-            #form-errors #{form.errors}
+
         .block-header {% trans "Username" %}
-        span.fullwidth #{form.username}
+        span(class=('fullwidth-error' if form.username.errors else 'fullwidth')) #{form.username}
+        if form.username.errors
+            .form-field-error= form.username.errors
+
         .block-header {% trans "Email" %}
-        span.fullwidth #{form.email}
+        span(class=('fullwidth-error' if form.email.errors else 'fullwidth')) #{form.email}
+        if form.email.errors
+            .form-field-error= form.email.errors
+
         .block-header {% trans "Password" %}
             small (#[a(href='#')?])
-        span.fullwidth #{form.password1}
+        span(class=('fullwidth-error' if form.password1.errors else 'fullwidth')) #{form.password1}
+        if form.password1.errors
+            .form-field-error= form.password1.errors
+
         .block-header {% trans "Password" %}
             sup(style='font-size: 0.7em;padding-left: 0.2em;') 2
             small {% trans "(again, for confirmation)" %}
-        span.fullwidth #{form.password2}
+        span(class=('fullwidth-error' if form.password2.errors else 'fullwidth')) #{form.password2}
+        if form.password2.errors
+            .form-field-error= form.password2.errors
+
         .block-header {% trans "Location" %}
         span.fullwidth: div #{form.timezone}
             div(style='float: right')
                 | {% trans "or" %}
                 = ' '
                 a#open-map(href='#', data-featherlight='.map-wrap') {% trans "pick from map" %}
+
         .block-header {% trans "Default language" %}
         span.fullwidth #{form.language}
+
         div.block-header {% trans "Affiliated organizations" %}
         | #{form.organizations}
         if form.newsletter
             div(style='padding-top: 0.5em;') #{form.newsletter}
                 label.inline-header.grayed(for='id_newsletter', style='float: unset;') {% trans "Notify me about upcoming contests" %}
+
         hr
         button(style="float:right;", type='submit') {% trans "Register!" %}
         input(type='hidden', name='next', value=next)
