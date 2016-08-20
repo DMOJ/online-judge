@@ -116,6 +116,9 @@ block body
 
         .block-header {% trans "Password" %}
             small (#[a.pass-req-link(href='#')?])
+        .pass-req(style='display: none'): ul
+            each validator in password_validators
+                li #{validator.get_help_text}
         span(class=('fullwidth-error' if form['password1'].errors else 'fullwidth')) #{form.password1}
         if form.password1.errors
             .form-field-error #{form.password1.errors}

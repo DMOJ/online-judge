@@ -4,6 +4,7 @@ import re
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import get_default_password_validators
 from django.forms import CharField, ChoiceField, ModelChoiceField
 from django.shortcuts import render
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -57,6 +58,7 @@ class RegistrationView(OldRegistrationView):
         tzmap = getattr(settings, 'TIMEZONE_MAP', None)
         kwargs['TIMEZONE_MAP'] = tzmap or 'http://momentjs.com/static/img/world.png'
         kwargs['TIMEZONE_BG'] = getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD')
+        kwargs['password_validators'] = get_default_password_validators()
         return super(RegistrationView, self).get_context_data(**kwargs)
 
     def register(self, form):
