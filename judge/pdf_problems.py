@@ -120,7 +120,7 @@ page.open(param.input, function (status) {
     def get_render_script(self):
         return self.template.replace('{params}', json.dumps({
             'zoom': getattr(settings, 'PHANTOMJS_PDF_ZOOM', 0.75),
-            'timeout': int(getattr(settings, 'PHANTOMJS_PDF_ZOOM', 5.0) * 1000),
+            'timeout': int(getattr(settings, 'PHANTOMJS_PDF_TIMEOUT', 5.0) * 1000),
             'input': 'input.html', 'output': 'output.pdf',
             'paper': getattr(settings, 'PHANTOMJS_PAPER_SIZE', 'Letter'),
             'footer': ugettext('Page [page] of [topage]').encode('utf-8'),
