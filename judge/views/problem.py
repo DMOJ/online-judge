@@ -374,7 +374,7 @@ class RandomProblem(ProblemList):
         if self.in_contest:
             raise Http404()
         queryset = self.get_normal_queryset()
-        return HttpResponseRedirect(queryset[randrange(queryset.count())].get_absolute_url())
+        return HttpResponseRedirect(queryset[randrange(queryset.count()+1)].get_absolute_url())
 
 
 user_logger = logging.getLogger('judge.user')
