@@ -46,8 +46,12 @@ block media
         }
 
         .block-header {
-            color: #666;
+            color: #555;
             font-size: 1.1em;
+            font-weight: 500;
+            padding-bottom: 0.4em;
+            padding-left: 2px;
+            margin-top: 0.75em
         }
 
         .fullwidth {
@@ -55,7 +59,13 @@ block media
             overflow: hidden;
         }
 
-        .fullwidth input { width: 100%; }
+        .fullwidth input {
+            width: 100%;
+        }
+
+        small {
+            font-size: 0.6em;
+        }
 
         #edit-form {
             border: unset;
@@ -70,7 +80,9 @@ block media
             width: 700px;
         }
 
-        .full-textfield { padding-top: 0.5em; }
+        .full-textfield {
+            padding-top: 0.5em;
+        }
 block js_media
     include timezone/js_media
     | #{form.media.js}
@@ -78,33 +90,28 @@ block js_media
 block body
     #center-float: form.form-area#edit-form(action='', method='post')
         - csrf_token
+        .block-header Username
+        span.fullwidth #{form.username}
+        .block-header Password
+        span.fullwidth #{form.password1}
+        .block-header Password
+            small (again, for confirmation)
+        span.fullwidth #{form.password2}
         table(style='padding-right:0.8em')
-            tr
-                td: label.inline-header.grayed {% trans "Username" %}:
-                td: span.fullwidth #{form.username}
-            tr
-                td: label.inline-header.grayed {% trans "Email" %}:
-                td: span.fullwidth #{form.email}
-            tr
-                td: label.inline-header.grayed {% trans "Password" %}:
-                td: span.fullwidth #{form.password1}
-            tr
-                td: label.inline-header.grayed {% trans "Password (again)" %}:
-                td: span.fullwidth #{form.password2}
             tr
                 td: label.inline-header.grayed {% trans "Location" %}:
                 td: span.fullwidth
-                        div #{form.timezone}
-                        | {% trans "or" %}
-                        = ' '
-                        a#open-map(href='#', data-featherlight='.map-wrap') {% trans "pick from map" %}
+                    div #{form.timezone}
+                    | {% trans "or" %}
+                    = ' '
+                    a#open-map(href='#', data-featherlight='.map-wrap') {% trans "pick from map" %}
             tr
                 td: label.inline-header.grayed {% trans "Preferred language" %}:
                 td: span.fullwidth #{form.language}
             //tr
                 td: label.inline-header.grayed {% trans "Editor theme" %}:
                 td: span.fullwidth #{form.ace_theme}
-        div.block-header(style='padding-bottom:0.4em;padding-left:2px;margin-top:0.75em') {% trans "Affiliated organizations" %}:
+        div.block-header {% trans "Affiliated organizations" %}:
         | #{form.organizations}
         if form.newsletter
             div #{form.newsletter}
