@@ -31,7 +31,7 @@ class CustomRegistrationForm(RegistrationForm):
                                               label=_('Organizations'), required=False)
 
     if newsletter_id is not None:
-        newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=False, required=False)
+        newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=True, required=False)
 
     def clean_email(self):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
