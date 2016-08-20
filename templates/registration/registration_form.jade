@@ -105,26 +105,26 @@ block body
         - csrf_token
 
         .block-header {% trans "Username" %}
-        span(class=('fullwidth-error' if form.username.errors else 'fullwidth')) #{form.username}
-        if form.username.errors
+        span(class=('fullwidth-error' if form['username'].errors else 'fullwidth')) #{form.username}
+        if form['username'].errors
             .form-field-error #{form.username.errors}
 
         .block-header {% trans "Email" %}
-        span(class=('fullwidth-error' if form.email.errors else 'fullwidth')) #{form.email}
-        if form.email.errors
+        span(class=('fullwidth-error' if form['email'].errors else 'fullwidth')) #{form.email}
+        if form['email'].errors
             .form-field-error #{form.email.errors}
 
         .block-header {% trans "Password" %}
             small (#[a(href='#')?])
-        span(class=('fullwidth-error' if form.password1.errors else 'fullwidth')) #{form.password1}
-        if form.password1.errors
+        span(class=('fullwidth-error' if form['password1'].errors else 'fullwidth')) #{form.password1}
+        if form['password1'].errors
             .form-field-error #{form.password1.errors}
 
         .block-header {% trans "Password" %}
             sup(style='font-size: 0.7em;padding-left: 0.2em;') 2
             small {% trans "(again, for confirmation)" %}
-        span(class=('fullwidth-error' if form.password2.errors else 'fullwidth')) #{form.password2}
-        if form.password2.errors
+        span(class=('fullwidth-error' if form['password2'].errors else 'fullwidth')) #{form.password2}
+        if form['password2'].errors
             .form-field-error #{form.password2.errors}
 
         .block-header {% trans "Location" %}
