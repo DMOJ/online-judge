@@ -14,7 +14,7 @@ from sortedm2m.forms import SortedMultipleChoiceField
 
 from judge.models import Profile, Language, Organization, TIMEZONE
 from judge.utils.subscription import Subscription, newsletter_id
-from judge.widgets import Select2Widget
+from judge.widgets import Select2Widget, Select2MultipleWidget
 
 valid_id = re.compile(r'^\w+$')
 
@@ -29,7 +29,8 @@ class CustomRegistrationForm(RegistrationForm):
     language = ModelChoiceField(queryset=Language.objects.all(), label=_('Preferred language'), empty_label=None,
                                 widget=Select2Widget(attrs={'style': 'width:100%'}))
     organizations = SortedMultipleChoiceField(queryset=Organization.objects.filter(is_open=True),
-                                              label=_('Organizations'), required=False)
+                                              label=_('Organizations'), required=False,
+                                              widget=Select2MultipleWidget(attrs={'style': 'width:100%'}))
 
     if newsletter_id is not None:
         newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=True, required=False)
