@@ -93,10 +93,11 @@ block info_float
             if authors
                 .problem-info-entry
                     i.fa.fa-pencil-square-o.fa-fw
-                    span.pi-name: - blocktrans trimmed count counter=authors|length
-                        | Author:
-                        - plural
-                        | Authors:
+                    span.pi-name
+                        - blocktrans trimmed count counter=authors|length
+                            | Author:
+                            - plural
+                            | Authors:
                         = ' '
                     span.pi-value: for author in authors
                         span(class=author.display_rank)
