@@ -96,6 +96,7 @@ block body
         .block-header Email
         span.fullwidth #{form.email}
         .block-header Password
+            small (#[a(href='#')?])
         span.fullwidth #{form.password1}
         .block-header Password
             sup(style='font-size: 0.7em;padding-left: 0.2em;') 2
@@ -103,9 +104,10 @@ block body
         span.fullwidth #{form.password2}
         .block-header Location
         span.fullwidth: div #{form.timezone}
-            | {% trans "or" %}
-            = ' '
-            a#open-map(href='#', data-featherlight='.map-wrap') {% trans "pick from map" %}
+            div(style='float: right')
+                | {% trans "or" %}
+                = ' '
+                a#open-map(href='#', data-featherlight='.map-wrap') {% trans "pick from map" %}
         .block-header Preferred language
         span.fullwidth #{form.language}
         div.block-header {% trans "Affiliated organizations" %}
