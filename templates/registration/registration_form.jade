@@ -99,6 +99,13 @@ block media
 block js_media
     include timezone/js_media
     | #{form.media.js}
+    script(type='text/javascript').
+        $(function () {
+            $('.pass-req-link').click(function () {
+                $('.pass-req').toggle('fast');
+                return false;
+            });
+        });
 
 block body
     #center-float: form.form-area#edit-form(action='', method='post')
