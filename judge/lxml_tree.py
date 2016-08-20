@@ -46,6 +46,9 @@ class HTMLTreeString(SafeData):
             return str(self) + other
         return unicode(self) + other
 
+    def __getitem__(self, item):
+        return unicode(self)[item]
+
     def __getstate__(self):
         return unicode(self)
 
