@@ -70,6 +70,7 @@ block info_float
     .problem-info-entry
         i.fa.fa-clock-o.fa-fw
         span.pi-name {% trans "Time limit:" %}
+        = ' '
         span.pi-value #{problem.time_limit}s
     .problem-lang-limits
         for name, limit in problem.language_time_limit
@@ -79,6 +80,7 @@ block info_float
     .problem-info-entry
         i.fa.fa-server.fa-fw
         span.pi-name {% trans "Memory limit:" %}
+        = ' '
         span.pi-value #{problem.memory_limit|kbsimpleformat}
     .problem-lang-limits
         for name, limit in problem.language_memory_limit
