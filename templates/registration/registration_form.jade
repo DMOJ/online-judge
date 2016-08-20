@@ -115,7 +115,7 @@ block body
         div.block-header {% trans "Affiliated organizations" %}
         | #{form.organizations}
         if form.newsletter
-            div #{form.newsletter}
+            div(style='padding-top: 0.5em;') #{form.newsletter}
                 label.inline-header.grayed(for='id_newsletter', style='float: unset;') Notify me about upcoming contests
         hr
         button(style="float:right;", type='submit') {% trans "Register!" %}
