@@ -18,85 +18,100 @@ block media
             min-height: 100px;
             max-height: 200px;
         }
+
+        .sortedm2m-container, .sortedm2m-container p.selector-filter {
+            width: 300px;
+        }
+
+        .sortedm2m-container p.selector-filter input {
+            width: 262px;
+        }
+
+        ul.sortedm2m {
+            width: 284px;
+            min-height: 70px;
+            max-height: 200px;
+            height: 70px
+        }
+
+        .grayed {
+            color: #666;
+        }
+
+        .inline-header {
+            float: left;
+            font-size: 1.1em;
+            padding: 4px 8px;
+            padding-left: 0;
+        }
+
+        .block-header {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .fullwidth {
+            display: block;
+            overflow: hidden;
+        }
+
+        #edit-form {
+            border: unset;
+            background: unset;
+            max-width: 700px;
+        }
+
+        #center-float {
+            position: relative;
+            margin: 0em auto auto -28.5em;
+            left: 50%;
+            width: 700px;
+        }
 block js_media
     include timezone/js_media
     | #{form.media.js}
 
 block body
-    form.form-area(action='', method='post')
+    #center-float: form.form-area#edit-form(action='', method='post')
         - csrf_token
-        if form.errors
-            #form-errors
-                p.error
-                    | #{form.non_field_errors}
-                    if form.username.errors
-                        | {% trans "Your chosen username is already taken." %}
-                    if form.email.errors
-                        | {% trans "Please enter a valid email." %}
-                    | #{form.password1.errors|striptags}
-                    | #{form.password2.errors|striptags}
-                    if form.display_name.errors
-                        | {% trans "Invalid display name." %}
-                    if form.timezone.errors
-                        | {% trans "Invalid timezone." %}
-                    if form.organizations.errors
-                        | {% trans "Invalid organizations specified." %}
-                    if form.language.errors
-                        | {% trans "Invalid language specified." %}
-        .reg-post-wrapper
-            table(border=0, style='text-align:left')
-                tr
-                    th
-                        b {% trans "Username:" %}
-                    td
-                        | #{form.username}
-                tr
-                    th
-                        b {% trans "Email:" %}
-                    td
-                        | #{form.email}
-                tr
-                    th
-                        b {% trans "Password:" %}
-                    td
-                        | #{form.password1}
-                tr
-                    th
-                        b {% trans "Password (again):" %}
-                    td
-                        | #{form.password2}
-                tr
-                    th
-                        b {% trans "Display name:" %}
-                    td
-                        | #{form.display_name}
-                tr
-                    th
-                        b {% trans "Timezone:" %}
-                    td
-                        | #{form.timezone}
-                        |  {% trans "or" %}
-                        = ' '
-                        a#open-map(href='#', data-featherlight='.map-wrap')
-                            | {% trans "pick from map" %}
-                tr
-                    th
-                        b {% trans "Organizations:" %}
-                    td
-                        | #{form.organizations}
-                tr
-                    th
-                        b {% trans "Language:" %}
-                    td
-                        | #{form.language}
-                if form.newsletter
+        div(style='padding-top:0.5em')
+            label.inline-header.grayed {% trans "Username" %}:
+            span.fullwidth #{form.username}
+        div
+            label.inline-header.grayed {% trans "Email" %}
+            span.fullwidth #{form.email}
+        div
+            label.inline-header.grayed {% trans "Password" %}
+            span.fullwidth #{form.password1}
+        div
+            label.inline-header.grayed {% trans "Password (again)" %}
+            span.fullwidth #{form.password2}
+
+        table(border=0, style='padding-top:0.7em')
+            tr
+                td(style='vertical-align:top;'): table(style='padding-right:0.8em')
                     tr
-                        th: b Notify me about upcoming contests
-                        td #{form.newsletter}
-            
-            hr
-            button(style="float:right;", type='submit') {% trans "Register!" %}
-            input(type='hidden', name='next', value=next)
+                        td: label.inline-header.grayed {% trans "Location" %}:
+                        td: span.fullwidth #{form.timezone}
+                            |  {% trans "or" %}
+                            | = ' '
+                            | a#open-map(href='#', data-featherlight='.map-wrap')
+                            |     | {% trans "pick from map" %}
+                    tr
+                        td: label.inline-header.grayed {% trans "Preferred language" %}:
+                        td: span.fullwidth #{form.language}
+                    //tr
+                        td: label.inline-header.grayed {% trans "Editor theme" %}:
+                        td: span.fullwidth #{form.ace_theme}
+                    if form.newsletter
+                        tr: td(colspan=2) #{form.newsletter}
+                            label.inline-header.grayed(for='id_newsletter', style='float: unset;') Notify me about upcoming contests
+                td
+                    div.block-header(style='padding-bottom:0.4em;margin-top:-2em;') {% trans "Affiliated organizations" %}:
+                    | #{form.organizations}
+        hr
+        button(style="float:right;", type='submit') {% trans "Register!" %}
+        input(type='hidden', name='next', value=next)
     div.map-wrap
         div.map-inset
             div.map-axis-x
