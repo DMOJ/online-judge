@@ -38,8 +38,8 @@ class CustomRegistrationForm(RegistrationForm):
         super(CustomRegistrationForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget = TextInput(attrs={'placeholder': _('john_doe')})
         self.fields['email'].widget = TextInput(attrs={'placeholder': _('john.doe@company.com')})
-        self.fields['password1'].widget = TextInput(attrs={'placeholder': _('&bull;' * 11)})
-        self.fields['password2'].widget = TextInput(attrs={'placeholder': _('&bull;' * 11)})
+        self.fields['password1'].widget = TextInput(attrs={'placeholder': _(u'•••••••••••')})
+        self.fields['password2'].widget = TextInput(attrs={'placeholder': _(u'•••••••••••')})
 
     def clean_email(self):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
