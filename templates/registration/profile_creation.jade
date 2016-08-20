@@ -10,6 +10,55 @@ block media
         .map-wrap { display: none }
         .featherlight { z-index: 1000 }
         .featherlight .featherlight-content { min-width: 80% }
+
+        .sortedm2m-container, .sortedm2m-container p.selector-filter {
+            width: 300px;
+        }
+
+        .sortedm2m-container p.selector-filter input {
+            width: 262px;
+        }
+
+        ul.sortedm2m {
+            width: 284px;
+            min-height: 70px;
+            max-height: 200px;
+            height: 70px
+        }
+
+        .grayed {
+            color: #666;
+        }
+
+        .inline-header {
+            float: left;
+            font-size: 1.1em;
+            padding: 4px 8px;
+            padding-left: 0;
+        }
+
+        .block-header {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .fullwidth {
+            display: block;
+            overflow: hidden;
+        }
+
+        #edit-form {
+            border: unset;
+            background: unset;
+            max-width: 700px;
+        }
+
+        #center-float {
+            position: relative;
+            margin: 0em auto auto -28.5em;
+            left: 50%;
+            width: 700px;
+        }
     if TIMEZONE_BG
         style.
             .map-wrap { background: #{TIMEZONE_BG} }
@@ -18,10 +67,41 @@ block js_media
     | #{form.media.js}
 
 block body
-    form.form-area(action='', method='post')
+    #center-float: form.form-area#edit-form(action='', method='post')
         - csrf_token
-        table(border=0, style='text-align:left') #{form.as_table}
-        input(type='submit', style="float:right;", value='{% trans "Continue >" %}')
+        div(style='padding-top:0.5em')
+            label.inline-header.grayed {% trans "Username" %}:
+            span.fullwidth #{form.username}
+        div
+            label.inline-header.grayed {% trans "Email" %}
+            span.fullwidth #{form.email}
+        div
+            label.inline-header.grayed {% trans "Password" %}
+            span.fullwidth #{form.password1}
+        div
+            label.inline-header.grayed {% trans "Password (again)" %}
+            span.fullwidth #{form.password2}
+
+        table(border=0, style='padding-top:0.7em')
+            tr
+                td(style='vertical-align:top;'): table(style='padding-right:0.8em')
+                    tr
+                        td: label.inline-header.grayed {% trans "Location" %}:
+                        td: span.fullwidth #{form.timezone}
+                    tr
+                        td: label.inline-header.grayed {% trans "Preferred language" %}:
+                        td: span.fullwidth #{form.language}
+                    //tr
+                        td: label.inline-header.grayed {% trans "Editor theme" %}:
+                        td: span.fullwidth #{form.ace_theme}
+                    if form.newsletter
+                        tr: td(colspan=2) #{form.newsletter}
+                            label.inline-header.grayed(for='id_newsletter', style='float: unset;') Notify me about upcoming contests
+                td
+                    div.block-header(style='padding-bottom:0.4em;margin-top:-2em;') {% trans "Affiliated organizations" %}:
+                    | #{form.organizations}
+        hr
+        input(type='submit', style='float:right', value='{% trans "Register" %}')
     div.map-wrap
         div.map-inset
             div.map-axis-x
