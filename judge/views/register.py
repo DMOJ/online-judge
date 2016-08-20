@@ -3,7 +3,7 @@ import re
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.forms import CharField, ChoiceField, ModelChoiceField
+from django.forms import CharField, ChoiceField, ModelChoiceField, TextInput
 from django.shortcuts import render
 from django.utils.translation import ugettext, ugettext_lazy as _
 from registration.backends.default.views import (RegistrationView as OldRegistrationView,
@@ -21,12 +21,13 @@ valid_id = re.compile(r'^\w+$')
 class CustomRegistrationForm(RegistrationForm):
     username = forms.RegexField(regex=r'^\w+$', max_length=30, label=_('Username'),
                                 error_messages={'invalid': _('A username must contain letters, '
-                                                             'numbers, or underscores')})
+                                                             'numbers, or underscores')},
+                                widget=TextInput(attrs={'placeholder': _('john_doe')}))
     display_name = CharField(max_length=50, required=False, label=_('Real name (optional)'))
     timezone = ChoiceField(label=_('Location'), choices=TIMEZONE,
-                           widget=Select2Widget(attrs={'style': 'width:200px'}))
+                           widget=Select2Widget(attrs={'style': 'width:100%'}))
     language = ModelChoiceField(queryset=Language.objects.all(), label=_('Preferred language'), empty_label=None,
-                                widget=Select2Widget(attrs={'style': 'width:200px'}))
+                                widget=Select2Widget(attrs={'style': 'width:100%'}))
     organizations = SortedMultipleChoiceField(queryset=Organization.objects.filter(is_open=True),
                                               label=_('Organizations'), required=False)
 
