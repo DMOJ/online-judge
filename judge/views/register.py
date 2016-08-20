@@ -1,3 +1,4 @@
+# coding=utf-8
 import re
 
 from django import forms
@@ -21,8 +22,7 @@ valid_id = re.compile(r'^\w+$')
 class CustomRegistrationForm(RegistrationForm):
     username = forms.RegexField(regex=r'^\w+$', max_length=30, label=_('Username'),
                                 error_messages={'invalid': _('A username must contain letters, '
-                                                             'numbers, or underscores')},
-                                widget=TextInput(attrs={'placeholder': _('john_doe')}))
+                                                             'numbers, or underscores')})
     display_name = CharField(max_length=50, required=False, label=_('Real name (optional)'))
     timezone = ChoiceField(label=_('Location'), choices=TIMEZONE,
                            widget=Select2Widget(attrs={'style': 'width:100%'}))
@@ -33,6 +33,13 @@ class CustomRegistrationForm(RegistrationForm):
 
     if newsletter_id is not None:
         newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=True, required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(CustomRegistrationForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget = TextInput(attrs={'placeholder': _('john_doe')})
+        self.fields['email'].widget = TextInput(attrs={'placeholder': _('john.doe@company.com')})
+        self.fields['password1'].widget = TextInput(attrs={'placeholder': _('•••••••••••')})
+        self.fields['password2'].widget = TextInput(attrs={'placeholder': _('•••••••••••')})
 
     def clean_email(self):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
