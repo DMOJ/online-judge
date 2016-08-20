@@ -91,6 +91,8 @@ block js_media
 block body
     #center-float: form.form-area#edit-form(action='', method='post')
         - csrf_token
+        if form.errors
+            #form-errors #{form.errors}
         .block-header Username
         span.fullwidth #{form.username}
         .block-header Email
