@@ -93,26 +93,21 @@ block body
         - csrf_token
         .block-header Username
         span.fullwidth #{form.username}
+        .block-header Email
+        span.fullwidth #{form.email}
         .block-header Password
         span.fullwidth #{form.password1}
         .block-header Password
             sup(style='font-size: 0.7em;padding-left: 0.2em;') 2
             small (again, for confirmation)
         span.fullwidth #{form.password2}
-        table(style='padding-right:0.8em')
-            tr
-                td: label.inline-header.grayed {% trans "Location" %}:
-                td: span.fullwidth
-                    div #{form.timezone}
-                    | {% trans "or" %}
-                    = ' '
-                    a#open-map(href='#', data-featherlight='.map-wrap') {% trans "pick from map" %}
-            tr
-                td: label.inline-header.grayed {% trans "Preferred language" %}:
-                td: span.fullwidth #{form.language}
-            //tr
-                td: label.inline-header.grayed {% trans "Editor theme" %}:
-                td: span.fullwidth #{form.ace_theme}
+        .block-header Location
+        span.fullwidth: div #{form.timezone}
+            | {% trans "or" %}
+            = ' '
+            a#open-map(href='#', data-featherlight='.map-wrap') {% trans "pick from map" %}
+        .block-header Preferred language
+        span.fullwidth #{form.language}
         div.block-header {% trans "Affiliated organizations" %}:
         | #{form.organizations}
         if form.newsletter
