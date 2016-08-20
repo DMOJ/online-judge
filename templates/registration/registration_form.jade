@@ -67,6 +67,8 @@ block media
             left: 50%;
             width: 700px;
         }
+
+        .full-textfield { padding-top: 0.5em; }
 block js_media
     include timezone/js_media
     | #{form.media.js}
@@ -74,17 +76,17 @@ block js_media
 block body
     #center-float: form.form-area#edit-form(action='', method='post')
         - csrf_token
-        div(style='padding-top:0.5em')
+        div.full-textfield
             label.inline-header.grayed {% trans "Username" %}:
             span.fullwidth #{form.username}
-        div
-            label.inline-header.grayed {% trans "Email" %}
+        div.full-textfield
+            label.inline-header.grayed {% trans "Email" %}:
             span.fullwidth #{form.email}
-        div
-            label.inline-header.grayed {% trans "Password" %}
+        div.full-textfield
+            label.inline-header.grayed {% trans "Password" %}:
             span.fullwidth #{form.password1}
-        div
-            label.inline-header.grayed {% trans "Password (again)" %}
+        div.full-textfield
+            label.inline-header.grayed {% trans "Password (again)" %}:
             span.fullwidth #{form.password2}
 
         table(border=0, style='padding-top:0.7em')
@@ -92,11 +94,11 @@ block body
                 td(style='vertical-align:top;'): table(style='padding-right:0.8em')
                     tr
                         td: label.inline-header.grayed {% trans "Location" %}:
-                        td: span.fullwidth #{form.timezone}
-                            |  {% trans "or" %}
-                            | = ' '
-                            | a#open-map(href='#', data-featherlight='.map-wrap')
-                            |     | {% trans "pick from map" %}
+                        td: span.fullwidth
+                                | #{form.timezone} {% trans "or" %}
+                                = ' '
+                                a#open-map(href='#', data-featherlight='.map-wrap')
+                                | {% trans "pick from map" %}
                     tr
                         td: label.inline-header.grayed {% trans "Preferred language" %}:
                         td: span.fullwidth #{form.language}
