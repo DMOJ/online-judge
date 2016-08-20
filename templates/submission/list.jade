@@ -173,7 +173,7 @@ block body
                     h3 {% trans "Filter submissions" %}
                     hr
                     form#filter-form(name='form', action='', method='get')
-                        .filter-form-group
+                        div.filter-form-group
                             label(for='status'): i {% trans "Status" %}
                             select#status(name='status', multiple)
                                 each id, name in all_statuses
@@ -181,8 +181,7 @@ block body
                                         option(value=id, selected)= name
                                     else
                                         option(value=id)= name
-                            br
-                        .filter-form-group
+                        div.filter-form-group
                             label(for='language'): i {% trans "Language" %}
                             select#language(name='language', multiple)
                                 each code, name in all_languages
@@ -190,7 +189,6 @@ block body
                                         option(value=code, selected)= name
                                     else
                                         option(value=code)= name
-                            br
                         hr
                         a#go.button(onclick='form.submit()') {% trans "Go" %}
                 else
