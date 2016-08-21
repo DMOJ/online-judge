@@ -59,6 +59,7 @@ class RegistrationView(OldRegistrationView):
         kwargs['TIMEZONE_MAP'] = tzmap or 'http://momentjs.com/static/img/world.png'
         kwargs['TIMEZONE_BG'] = getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD')
         kwargs['password_validators'] = get_default_password_validators()
+        kwargs['tos_url'] = getattr(settings, 'TERMS_OF_SERVICE_URL', None)
         return super(RegistrationView, self).get_context_data(**kwargs)
 
     def register(self, form):

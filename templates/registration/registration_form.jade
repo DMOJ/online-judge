@@ -90,7 +90,8 @@ block media
         #center-float {
             display: inline-block;
             text-align: initial;
-            max-width: 700px;
+            max-width: 400px;
+            width: 400px;
         }
 
         ul.errorlist {
@@ -102,6 +103,13 @@ block media
         .full-textfield {
             padding-top: 0.5em;
         }
+
+        .tos-section {
+            max-width: 14em;
+            display: inline-block;
+            padding-right: 1em;
+        }
+
 block js_media
     include timezone/js_media
     | #{form.media.js}
@@ -160,6 +168,10 @@ block body
                 label.inline-header.grayed(for='id_newsletter', style='float: unset;') {% trans "Notify me about upcoming contests" %}
 
         hr
+        if tos_url
+            span.tos-section {% trans "By registering, you agree to our " %}
+                a(href=tos_url) {% trans "Terms & Conditions" %}
+                = '.'
         button(style="float:right;", type='submit') {% trans "Register!" %}
         input(type='hidden', name='next', value=next)
     div.map-wrap
