@@ -50,3 +50,9 @@ select#id_organizations.django-select2,
 select#id_tags.django-select2 {
     width: 20em;
 }
+
+@media (max-width: 780px) {
+    #content .vLargeTextField {
+        max-width: unset;
+    }
+}
