@@ -12,6 +12,18 @@ from .models import Problem, Contest, Submission, Organization, Profile, MiscCon
     BlogPost, ContestSubmission, Comment, License, EFFECTIVE_MATH_ENGINES
 
 
+def get_pdf_path(basename):
+    return os.path.join(settings.PROBLEM_PDF_CACHE, basename)
+
+
+def unlink_if_exists(file):
+    try:
+        os.unlink(file)
+    except OSError as e:
+        if e.errno != errno.ENOENT:
+            raise
+
+
 @receiver(post_save, sender=Problem)
 def problem_update(sender, instance, **kwargs):
     if hasattr(instance, '_updating_stats_only'):
@@ -32,16 +44,9 @@ def problem_update(sender, instance, **kwargs):
     ])
 
     if hasattr(settings, 'PROBLEM_PDF_CACHE'):
-        try:
-            os.unlink(os.path.join(settings.PROBLEM_PDF_CACHE, '%s.pdf' % instance.code))
-        except OSError as e:
-            if e.errno != errno.ENOENT:
-                raise
-        try:
-            os.unlink(os.path.join(settings.PROBLEM_PDF_CACHE, '%s.log' % instance.code))
-        except OSError as e:
-            if e.errno != errno.ENOENT:
-                raise
+        for lang, _ in settings.LANGUAGES:
+            unlink_if_exists(get_pdf_path('%s.%s.pdf' % (instance.code, lang)))
+            unlink_if_exists(get_pdf_path('%s.%s.log' % (instance.code, lang)))
 
 
 @receiver(post_save, sender=Profile)

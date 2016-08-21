@@ -146,7 +146,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                 return HttpResponse(f.read(), status=500, content_type='text/plain')
 
         if not os.path.exists(cache):
-            self.logger.info('Rendering: %s.pdf', problem.code)
+            self.logger.info('Rendering: %s.%s.pdf', problem.code, language)
             with DefaultPdfMaker() as maker, translation.override(language):
                 maker.html = get_template('problem/raw.jade').render({
                     'problem': problem,
