@@ -1,3 +1,7 @@
+div.dmmd-preview {
+    padding: 0;
+}
+
 div.dmmd-preview-update {
     background: rgba(0, 0, 0, 0.2);
     color: rgba(0, 0, 0, .8);
