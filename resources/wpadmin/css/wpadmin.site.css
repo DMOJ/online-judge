@@ -56,3 +56,8 @@ select#id_tags.django-select2 {
         max-width: unset;
     }
 }
+
+.dmmd-preview-update {
+  position: sticky;
+  top: 38px;
+}

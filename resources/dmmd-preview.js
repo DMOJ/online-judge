@@ -12,7 +12,7 @@ $(function () {
                     csrfmiddlewaretoken: $.cookie('csrftoken')
                 }, function (result) {
                     $content.html(result);
-                    $preview.addClass('dmmd-preview-content');
+                    $preview.addClass('dmmd-preview-has-content');
 
                     var $jax = $content.find('.require-mathjax-support');
                     if ($jax.length) {
@@ -47,7 +47,7 @@ $(function () {
                 });
             } else {
                 $content.empty();
-                $preview.removeClass('dmmd-preview-content');
+                $preview.removeClass('dmmd-preview-has-content');
             }
         }).click();
     };
