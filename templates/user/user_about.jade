@@ -115,7 +115,7 @@ block user_content
     if user.about
         h4 {% trans "About" %}
         - cache 86400 user_about user.id
-            | #{user.about|markdown:"self-description"|proxy_images}
+            | #{user.about|markdown:"self-description"|smart_math:MATH_ENGINE|proxy_images}
     else
         i
             if user.user == request.user
@@ -140,6 +140,8 @@ block user_content
                 span.rank
 
 block bodyend
+    if REQUIRE_JAX
+         include mathjax_load
     if ratings
         script(type='text/javascript', src='{% static "libs/chart.js/Chart.Core.js" %}')
         script(type='text/javascript', src='{% static "libs/chart.js/Chart.Scatter.js" %}')
