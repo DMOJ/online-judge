@@ -301,7 +301,7 @@ class DjangoJudgeHandler(JudgeHandler):
                                    'user': submission.user_id, 'problem': submission.problem_id,
                                    'status': submission.status, 'language': submission.language.key})
 
-    def on_test_case(self, packet):
+    def on_test_case(self, packet, max_feedback=SubmissionTestCase._meta.get_field('feedback').max_length):
         super(DjangoJudgeHandler, self).on_test_case(packet)
         try:
             submission = Submission.objects.get(id=packet['submission-id'])
@@ -331,7 +331,7 @@ class DjangoJudgeHandler(JudgeHandler):
         test_case.points = packet['points']
         test_case.total = packet['total-points']
         test_case.batch = self.batch_id if self.in_batch else None
-        test_case.feedback = packet.get('feedback', None) or ''
+        test_case.feedback = (packet.get('feedback', None) or '')[:max_feedback]
         test_case.output = packet['output']
         submission.current_testcase = packet['position'] + 1
         submission.save()
