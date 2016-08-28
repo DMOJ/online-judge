@@ -144,9 +144,8 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
     title = parameter_name = 'creator'
 
     def lookups(self, request, model_admin):
-        template = pgettext('user display name', '%(username)s (%(display)s)')
-        return [(name, template % {'username': name, 'display': display} if display else name) for name, display in
-                Profile.objects.exclude(authored_problems=None).values_list('user__username', 'name')]
+        return [(name, name) for name in Profile.objects.exclude(authored_problems=None)
+                                                .values_list('user__username', flat=True)]
 
     def queryset(self, request, queryset):
         if self.value() is None:
