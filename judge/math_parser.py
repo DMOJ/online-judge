@@ -11,8 +11,8 @@ DISPLAY_MATH_PNG = getattr(settings, 'DISPLAY_MATH_PNG', INLINE_MATH_PNG)
 INLINE_MATH_SVG = getattr(settings, 'INLINE_MATH_SVG', INLINE_MATH_PNG)
 DISPLAY_MATH_SVG = getattr(settings, 'DISPLAY_MATH_SVG', DISPLAY_MATH_PNG)
 
-inline_math = re.compile(r'~(.*?)~|\\\((.*?)\\\)')
-display_math = re.compile(r'\$\$(.*?)\$\$|\\\[(.*?)\\\]')
+inline_math = re.compile(r'~(.*?)~|\\\((.*?)\\\)', re.S)
+display_math = re.compile(r'\$\$(.*?)\$\$|\\\[(.*?)\\\]', re.S)
 
 
 REPLACES = [
