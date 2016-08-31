@@ -49,7 +49,7 @@ ul.comments.top-level-comments
                                     span.relative= str_time
                                     span.absolute= str_time
                                 = ' '
-                                span.comment-title(style=('display: none' if node.is_root_node else '') #{node.title}
+                                span.comment-title(style=('display: none' if node.is_root_node else '')) #{node.title}
                             span.comment-spacer
                             span.comment-operation
                                 if node.revisions > 2
