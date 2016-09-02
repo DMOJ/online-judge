@@ -1,10 +1,10 @@
 from __future__ import division
 
-import logging
 import json
+import logging
 import time
-
 from collections import deque
+
 from event_socket_server import ZlibPacketHandler
 
 logger = logging.getLogger('judge.bridge')
@@ -128,6 +128,10 @@ class JudgeHandler(ZlibPacketHandler):
     def _kill_if_no_response(self):
         logger.error('Judge seems dead: %s: %s', self.name, self._working)
         self.close()
+
+    def malformed_packet(self, exception):
+        logger.exception('Judge sent malformed packet: %s', self.name)
+        super(JudgeHandler, self).malformed_packet(exception)
 
     def on_submission_processing(self, packet):
         pass

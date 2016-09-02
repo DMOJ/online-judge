@@ -1,7 +1,8 @@
 import struct
+import zlib
+
 from .handler import Handler
 
-__author__ = 'Quantum'
 size_pack = struct.Struct('!I')
 
 
@@ -43,4 +44,10 @@ class ZlibPacketHandler(SizedPacketHandler):
         raise NotImplementedError()
 
     def _packet(self, data):
-        self.packet(data.decode('zlib'))
+        try:
+            self.packet(data.decode('zlib'))
+        except zlib.error as e:
+            self.malformed_packet(e)
+
+    def malformed_packet(self, exception):
+        self.close()
