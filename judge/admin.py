@@ -943,8 +943,8 @@ class OrganizationForm(ModelForm):
 
 class OrganizationAdmin(VersionAdmin):
     readonly_fields = ('creation_date',)
-    fields = ('name', 'key', 'short_name', 'is_open', 'about', 'registrant', 'creation_date', 'admins')
-    list_display = ('name', 'key', 'short_name', 'is_open', 'registrant', 'show_public')
+    fields = ('name', 'key', 'short_name', 'is_open', 'about', 'slots', 'registrant', 'creation_date', 'admins')
+    list_display = ('name', 'key', 'short_name', 'is_open', 'slots', 'registrant', 'show_public')
     actions_on_top = True
     actions_on_bottom = True
     form = OrganizationForm
@@ -955,9 +955,10 @@ class OrganizationAdmin(VersionAdmin):
     show_public.short_description = ''
 
     def get_readonly_fields(self, request, obj=None):
-        if request.user.has_perm('judge.organization_admin'):
-            return self.readonly_fields
-        return self.readonly_fields + ('registrant', 'admins', 'is_open')
+        fields = self.readonly_fields
+        if not request.user.has_perm('judge.organization_admin'):
+            return fields + ('registrant', 'admins', 'is_open', 'slots')
+        return fields
 
     if MathJaxAdminPagedownWidget is not None:
         formfield_overrides = {

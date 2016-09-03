@@ -12,10 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='organization',
-            options={'ordering': ['key'], 'permissions': (('organization_admin', 'Administer organizations'), ('edit_all_organization', 'Edit all organizations'), ('edit_organization_slots', 'Edit organization slots')), 'verbose_name': 'organization', 'verbose_name_plural': 'organizations'},
-        ),
         migrations.AddField(
             model_name='organization',
             name='slots',
