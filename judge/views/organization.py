@@ -88,6 +88,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
         ]))
         context['partial'] = True
         context['is_admin'] = self.can_edit_organization()
+        context['kick_url'] = reverse('organization_user_kick', args=[self.object.key])
         return context
 
 
