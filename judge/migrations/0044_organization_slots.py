@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='organization',
             name='slots',
-            field=models.IntegerField(help_text='Maximum amount of users in this organization, only applicable to private organizations', null=True, verbose_name='maximum size'),
+            field=models.IntegerField(blank=True, help_text='Maximum amount of users in this organization, only applicable to private organizations', null=True, verbose_name='maximum size'),
         ),
     ]
