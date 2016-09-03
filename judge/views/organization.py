@@ -2,11 +2,11 @@ from itertools import chain
 
 from django import forms
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Count, Max
 from django.forms import Form, modelformset_factory
@@ -206,9 +206,18 @@ class OrganizationRequestView(OrganizationRequestBaseView):
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        self.object = organization = self.get_object()
         self.formset = formset = OrganizationRequestFormSet(request.POST, request.FILES)
         if formset.is_valid():
+            if organization.slots is not None:
+                deleted_set = set(formset.deleted_forms)
+                to_approve = sum(form.cleaned_data['state'] == 'A' for form in formset.forms if form not in deleted_set)
+                can_add = organization.slots - organization.members.count()
+                if to_approve > can_add:
+                    messages.error(request, _('Your organization can only receive %d more members. '
+                                              'You cannot approve %d users.') % (can_add, to_approve))
+                    return HttpResponseRedirect(request.get_full_path())
+
             approved, rejected = 0, 0
             for obj in formset.save():
                 if obj.state == 'A':
