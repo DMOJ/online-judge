@@ -216,7 +216,7 @@ class OrganizationRequestView(OrganizationRequestBaseView):
                 if to_approve > can_add:
                     messages.error(request, _('Your organization can only receive %d more members. '
                                               'You cannot approve %d users.') % (can_add, to_approve))
-                    return HttpResponseRedirect(request.get_full_path())
+                    return self.render_to_response(self.get_context_data(object=organization))
 
             approved, rejected = 0, 0
             for obj in formset.save():
@@ -229,7 +229,7 @@ class OrganizationRequestView(OrganizationRequestBaseView):
                              ungettext('Approved %d user.', 'Approved %d users.', approved) % approved + '\n' +
                              ungettext('Rejected %d user.', 'Rejected %d users.', rejected) % rejected)
             return HttpResponseRedirect(request.get_full_path())
-        context = self.get_context_data(object=self.object)
+        context = self.get_context_data(object=organization)
         return self.render_to_response(context)
 
     put = post
