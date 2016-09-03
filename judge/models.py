@@ -163,6 +163,9 @@ class Organization(models.Model):
                                     help_text=_('Those who can edit this organization'))
     creation_date = models.DateTimeField(verbose_name=_('creation date'), auto_now_add=True)
     is_open = models.BooleanField(help_text=_('Allow joining organization'), default=True)
+    slots = models.IntegerField(verbose_name=_('maximum size'), null=True,
+                                help_text=_('Maximum amount of users in this organization, '
+                                            'only applicable to private organizations'))
 
     def __contains__(self, item):
         if isinstance(item, (int, long)):
