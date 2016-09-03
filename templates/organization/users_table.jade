@@ -2,11 +2,11 @@ extends user/users_table
 - load i18n
 
 block before_point_head
-    if can_edit
+    if is_admin
         th.header
 
 block before_point
-    if can_edit
+    if is_admin
         td: form(action=kick_url, method='POST')
             - csrf_token
             input(type='hidden', name='user', value=user.id)
