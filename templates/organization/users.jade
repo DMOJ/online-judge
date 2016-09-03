@@ -1,15 +1,20 @@
 extends user/base_users
 
-- load staticfiles
-- load cache
-- load i18n
-
 block users_media
     style.
         #users-table td:nth-child(2), #users-table th:nth-child(2) {
             border-right: none;
             text-align: left;
         }
+
+block users_js_media
+    script(type='text/javascript').
+        $(function () {
+            $('form.kick-form').find('a.button').click(function () {
+                $(this).parent().submit();
+                return false;
+            })
+        });
 
 block users_table
     include organization/users_table

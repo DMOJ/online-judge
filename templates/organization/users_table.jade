@@ -7,7 +7,7 @@ block before_point_head
 
 block before_point
     if is_admin
-        td: form(action=kick_url, method='POST')
+        td: form.kick-form(action=kick_url, method='POST')
             - csrf_token
             input(type='hidden', name='user', value=user.id)
-            a.button(onclick='form.submit()') {% trans "Kick" %}
+            a.button(href='#') {% trans "Kick" %}
