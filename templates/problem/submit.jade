@@ -41,7 +41,7 @@ block js_media
                 select.find('li').mouseenter(function () {
                     update_info($(this), info);
                 }).mouseout(function() {
-                    update_info($(this), info);
+                    update_info(selected, info);
                 }).click(function () {
                     selected.removeClass('selected');
                     field.attr('value', (selected = $(this).addClass('selected')).attr('data-id'));
