@@ -193,6 +193,8 @@ urlpatterns = [
         url(r'^/join$', organization.JoinOrganization.as_view(), name='join_organization'),
         url(r'^/leave$', organization.LeaveOrganization.as_view(), name='leave_organization'),
         url(r'^/edit$', organization.EditOrganization.as_view(), name='edit_organization'),
+        url(r'^/kick$', organization.KickUserWidgetView.as_view(), name='organization_user_kick'),
+
         url(r'^/request$', organization.RequestJoinOrganization.as_view(), name='request_organization'),
         url(r'^/request/(?P<pk>\d+)$', organization.OrganizationRequestDetail.as_view(),
             name='request_organization_detail'),

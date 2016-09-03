@@ -11,19 +11,21 @@ from django.db import transaction
 from django.db.models import Count, Max
 from django.forms import Form, modelformset_factory
 from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _, ugettext_lazy, ungettext
 from django.views.generic import DetailView, ListView, View, UpdateView, FormView
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 from reversion import revisions
 
 from judge.forms import EditOrganizationForm
-from judge.models import Organization, OrganizationRequest
+from judge.models import Organization, OrganizationRequest, Profile
 from judge.utils.ranker import ranker
 from judge.utils.views import generic_message, TitleMixin
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'OrganizationMembershipChange',
            'JoinOrganization', 'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization',
-           'OrganizationRequestDetail', 'OrganizationRequestView', 'OrganizationRequestLog']
+           'OrganizationRequestDetail', 'OrganizationRequestView', 'OrganizationRequestLog',
+           'KickUserWidgetView']
 
 
 class OrganizationMixin(object):
@@ -277,3 +279,25 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
         except PermissionDenied:
             return generic_message(request, _("Can't edit organization"),
                                    _('You are not allowed to edit this organization.'), status=403)
+
+
+class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, View):
+    def post(self, request, *args, **kwargs):
+        organization = get_object_or_404(Organization, key=kwargs['key'])
+        if not self.can_edit_organization(organization):
+            return generic_message(request, _("Can't edit organization"),
+                                   _('You are not allowed to kick people from this organization.'), status=403)
+
+        try:
+            user = Profile.objects.get(id=request.POST.get('user', None))
+        except Profile.DoesNotExist:
+            return generic_message(request, _("Can't kick user"),
+                                   _('The user you are trying to kick does not exist!'), status=400)
+
+        if not organization.members.filter(id=user.id).exists():
+            return generic_message(request, _("Can't kick user"),
+                                   _('The user you are trying to kick is not in organization: %s.') %
+                                   organization.name, status=400)
+
+        organization.members.remove(user)
+        return HttpResponseRedirect(reverse('organization_users', args=[organization.key]))
