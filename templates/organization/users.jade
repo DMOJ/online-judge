@@ -1,0 +1,17 @@
+extends user/base_users
+
+- load staticfiles
+- load cache
+- load i18n
+
+block users_media
+    style.
+        #users-table td:nth-child(2), #users-table th:nth-child(2) {
+            border-right: none;
+            text-align: left;
+        }
+
+block title_ruler
+
+block users_table
+    include organization/users_table

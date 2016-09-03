@@ -73,7 +73,7 @@ class OrganizationHome(OrganizationMixin, DetailView):
 
 
 class OrganizationUsers(OrganizationMixin, DetailView):
-    template_name = 'user/list.jade'
+    template_name = 'organization/users.jade'
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
@@ -87,6 +87,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
             )
         ]))
         context['partial'] = True
+        context['is_admin'] = self.can_edit_organization()
         return context
 
 
