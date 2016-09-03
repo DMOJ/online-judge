@@ -190,6 +190,7 @@ class Organization(models.Model):
         permissions = (
             ('organization_admin', 'Administer organizations'),
             ('edit_all_organization', 'Edit all organizations'),
+            ('edit_organization_slots', 'Edit organization slots'),
         )
         verbose_name = _('organization')
         verbose_name_plural = _('organizations')
