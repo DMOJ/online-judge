@@ -76,7 +76,7 @@ if submission.status != 'IE'
                             td (#{case.points|floatformat:"0"}/#{case.total|floatformat:"0"})
                     if case.status != 'AC' and case.output
                         tr(id=case.id, style='display:none').toggled
-                            td(colspan='5'): .case-info
+                            td(colspan='5'): pre.case-info
                                 strong {% trans "Your output (clipped)" %}
                                 if prefix_length == None
                                     .case-output #{case.output|linebreaksbr}
