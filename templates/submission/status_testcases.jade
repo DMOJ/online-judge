@@ -18,7 +18,7 @@ if submission.status != 'IE'
     elif submission.status == 'P'
         h4 {% trans "Your submission is being processed..." %}
     elif submission.status == 'CE'
-        h4 {% trans "Compilation Error" %}
+        h3 {% trans "Compilation Error" %}
         pre #{submission.error|safe}
     else
         if submission.error
