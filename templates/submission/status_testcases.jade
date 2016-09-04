@@ -21,15 +21,17 @@ if submission.status != 'IE'
         h4 {% trans "Compilation Error" %}
         pre #{submission.error|safe}
     else
+
+        if submission.error
+            h3 {% trans "Compilation Warnings" %}
+            pre #{submission.error|safe}
+            hr.half-hr
+            br
         if is_pretest
             h3 {% trans "Pretest Execution Results" %}
         else
             h3 {% trans "Execution Results" %}
         br
-        if submission.error
-            h4 {% trans "Compilation Warnings" %}
-            pre #{submission.error|safe}
-            br
         - regroup test_cases by batch as batches
         - get_counter test_case_id
         each batch in batches

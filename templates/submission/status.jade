@@ -131,6 +131,11 @@ block media
             font-weight:normal;
         }
 
+        .half-hr {
+            float: left;
+            width: 30%;
+        }
+
 block body
     br
     div: a(href='{% url "submission_source" submission.id %}') {% trans "View source" %}
@@ -153,7 +158,7 @@ block body
         if request.user == submission.user.user or perms.judge.abort_any_submission
             #abort-button
                 br
-                hr(style='float:left;width:30%')
+                hr.half-hr
                 br
                 form(action='{% url "submission_abort" submission.id %}', method='post')
                     -csrf_token
