@@ -14,7 +14,7 @@ def _get_user_queryset(term):
         qs = qs.filter(user__username=term.strip())
     else:
         qs = qs.filter(user__username__icontains=term)
-    return
+    return qs
 
 
 class Select2View(BaseListView):
