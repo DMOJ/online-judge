@@ -31,6 +31,14 @@ block media
             padding: 4px 10px;
         }
 
+        .solved {
+            color: #44AD41
+        }
+
+        .unsolved {
+            color: #DE2121
+        }
+
     if not IN_CONTEST
         style #problem-table th { padding: 0; }
 
@@ -151,9 +159,17 @@ block body
                     tr
                         if request.user.is_authenticated
                             if problem.id in completed_problem_ids
-                                td(solved='1'): i.fa.fa-check-circle(style='color:#44AD41')
+                                td(solved='1')
+                                    if problem.is_public or IN_CONTEST
+                                        i.solved.fa.fa-check-circle
+                                    else
+                                        i.solved.fa.fa-lock
                             else
-                                td(solved='0'): i.fa.fa-minus-circle(style='color:#DE2121')
+                                td(solved='0')
+                                    if problem.is_public or IN_CONTEST
+                                        i.unsolved.fa.fa-minus-circle
+                                    else
+                                        i.unsolved.fa.fa-lock
                         td.problem
                             a(href='{% url "problem_detail" problem.code %}')= problem.i18n_name
                         td.category= problem.group.full_name
