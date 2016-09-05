@@ -18,57 +18,58 @@ col
   &.sub-prop
     text-align: right
 
-.table
-  tr
-    td
-      border-top: none
-      border-bottom: 1px solid #d4d4d4
-      &:first-child
-        border-bottom: 1px solid white
-      td
-        &.sub-result
-          min-width: 80px
-          .state
-            font-size: 0.7em
-            font-weight: bold
-            padding-top: 0.5em
+.table tr td
+    border-top: none
+    border-bottom: 1px solid #d4d4d4
 
-          .score
-            font-size: 1.3em
-            color: #000
+.table td:first-child
+    border-bottom: 1px solid white
 
-        &.sub-info
-          .name
-            font-size: 1.3em
-            font-weight: bold
+.table tr:first-child td
+  border-top: 1px solid #d4d4d4
 
-          .time
-            color: #555
+td
+  &.sub-result
+    min-width: 80px
+    .state
+      font-size: 0.7em
+      font-weight: bold
+      padding-top: 0.5em
 
-        &.sub-info-grading
-          width: auto !important
-          min-width: 58% !important
+    .score
+      font-size: 1.3em
+      color: #000
 
-        &.sub-testcase
-          color: #555
-          white-space: nowrap
-          vertical-align: middle
-          text-align: right
-          padding-right: 2%
-          border-right: none
+  &.sub-info
+    .name
+      font-size: 1.3em
+      font-weight: bold
 
-        &.sub-prop
-          text-align: right
-          a
-            white-space: nowrap
+    .time
+      color: #555
 
-        &.sub-usage
-          white-space: nowrap
-          min-width: 4em
-          .time
-            font-weight: bold
-    &:first-child td
-      border-top: 1px solid #d4d4d4
+  &.sub-info-grading
+    width: auto !important
+    min-width: 58% !important
+
+  &.sub-testcase
+    color: #555
+    white-space: nowrap
+    vertical-align: middle
+    text-align: right
+    padding-right: 2%
+    border-right: none
+
+  &.sub-prop
+    text-align: right
+    a
+      white-space: nowrap
+
+  &.sub-usage
+    white-space: nowrap
+    min-width: 4em
+    .time
+      font-weight: bold
 
 col.sub-info, td.sub-info
   width: 90%
