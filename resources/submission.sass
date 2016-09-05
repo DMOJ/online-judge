@@ -18,48 +18,57 @@ col
   &.sub-prop
     text-align: right
 
-td
-  &.sub-result
-    min-width: 80px
-    .state
-      font-size: 0.7em
-      font-weight: bold
-      padding-top: 0.5em
+.table
+  tr
+    td
+      border-top: none
+      border-bottom: 1px solid #d4d4d4
+      &:first-child
+        border-bottom: 1px solid white
+      td
+        &.sub-result
+          min-width: 80px
+          .state
+            font-size: 0.7em
+            font-weight: bold
+            padding-top: 0.5em
 
-    .score
-      font-size: 1.3em
-      color: #000
+          .score
+            font-size: 1.3em
+            color: #000
 
-  &.sub-info
-    .name
-      font-size: 1.3em
-      font-weight: bold
+        &.sub-info
+          .name
+            font-size: 1.3em
+            font-weight: bold
 
-    .time
-      color: #555
+          .time
+            color: #555
 
-  &.sub-info-grading
-    width: auto !important
-    min-width: 58% !important
+        &.sub-info-grading
+          width: auto !important
+          min-width: 58% !important
 
-  &.sub-testcase
-    color: #555
-    white-space: nowrap
-    vertical-align: middle
-    text-align: right
-    padding-right: 2%
-    border-right: none
+        &.sub-testcase
+          color: #555
+          white-space: nowrap
+          vertical-align: middle
+          text-align: right
+          padding-right: 2%
+          border-right: none
 
-  &.sub-prop
-    text-align: right
-    a
-      white-space: nowrap
+        &.sub-prop
+          text-align: right
+          a
+            white-space: nowrap
 
-  &.sub-usage
-    white-space: nowrap
-    min-width: 4em
-    .time
-      font-weight: bold
+        &.sub-usage
+          white-space: nowrap
+          min-width: 4em
+          .time
+            font-weight: bold
+    &:first-child td
+      border-top: 1px solid #d4d4d4
 
 col.sub-info, td.sub-info
   width: 90%
