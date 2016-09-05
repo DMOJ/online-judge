@@ -8,6 +8,14 @@ from judge.models import Profile, Organization, Problem, Comment, Contest
 from judge.templatetags.gravatar import get_gravatar_url
 
 
+def _get_user_queryset(term):
+    qs = Profile.objects
+    if term.endswith(' '):
+        qs = qs.filter(user__username=term.strip())
+    else:
+        qs = qs.filter(user__username__icontains=term)
+
+
 class Select2View(BaseListView):
     paginate_by = 20
 
@@ -32,8 +40,7 @@ class Select2View(BaseListView):
 
 class UserSelect2View(Select2View):
     def get_queryset(self):
-        return Profile.objects.filter(user__username__icontains=self.term).annotate(username=F('user__username')) \
-                      .only('id')
+        return _get_user_queryset(self.term).annotate(username=F('user__username')).only('id')
 
     def get_name(self, obj):
         return obj.username
@@ -77,7 +84,7 @@ class UserSearchSelect2View(BaseListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return Profile.objects.filter(user__username__icontains=self.term)
+        return _get_user_queryset(self.term)
 
     def get(self, request, *args, **kwargs):
         self.request = request
