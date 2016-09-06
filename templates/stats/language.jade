@@ -65,7 +65,9 @@ block bodyend
             function draw_pie_chart(url, $chart) {
                 $.getJSON(url, function (data) {
                     var ctx = $chart.find('canvas').get(0).getContext('2d');
-                    var chart = new Chart(ctx).Pie(data);
+                    var chart = new Chart(ctx).Pie(data, {
+                        animation: false,
+                    });
 
                     var $legend = $chart.find('.legend');
                     for (var i = 0; i < data.length; ++i) {
