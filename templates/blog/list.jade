@@ -29,6 +29,10 @@ block media
             border-bottom: 1px solid #ccc;
         }
 
+        .sidebox h3 i {
+            color: white;
+        }
+
         .sidebox {
             border: 1px solid #3b3b3b;
             border-top-left-radius: 4px;
@@ -77,6 +81,7 @@ block body
 
     #blog-container
         .blog-content.sidebox
+            h3 {% trans "News" %} #[i.fa.fa-terminal]
             each post in posts
                 section(class=('sticky post' if post.sticky else 'post'))
                     h2.title: a(href='{% url "blog_post" post.id post.slug %}')= post.title
