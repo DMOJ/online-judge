@@ -25,7 +25,8 @@ block js_media
                     templateResult: function (data, container) {
                         return ('<img class="user-search-image" src="' + data.gravatar_url + '" width="24" height="24">' +
                                 '<span class="' + data.display_rank + ' user-search-name">' + data.text + '</span>' +
-                                '<a href="/user/' + data.text + '"><i class="fa fa-mail-forward"></i></a>');
+                                '<a href="/user/' + data.text + '" class="user-redirect">' +
+                                    '<i class="fa fa-mail-forward"></i></a>');
                     }
                 });
             });
