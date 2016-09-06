@@ -65,10 +65,11 @@ def status_data(request, statuses=None):
         count = status['count']
         total_count += count
         data.append({
-            'value': count, 'label': Submission.USER_DISPLAY_CODES[res],
+            'value': count, 'label': str(Submission.USER_DISPLAY_CODES[res]),
             'color': color, 'highlight': highlight
         })
     return JsonResponse(data, safe=False)
+
 
 def ac_rate(request):
     rate = CombinedExpression(ac_count / Count('submission'), '*', Value(100.0), output_field=FloatField())
@@ -86,6 +87,7 @@ def ac_rate(request):
             }
         ]
     })
+
 
 def language(request):
     return render(request, 'stats/language.jade', {
