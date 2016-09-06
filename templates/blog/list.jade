@@ -10,9 +10,33 @@ extends base
 - load nofollow
 - load tz
 
+block title_row
+
+block title_ruler
+
 block media
     link(rel='alternate', type='application/atom+xml', href='{% url "comment_atom" %}', title='Atom Comment Feed')
     link(rel='alternate', type='application/rss+xml', href='{% url "comment_rss" %}', title='RSS Comment Feed')
+    style.
+        .sidebox h3 {
+            margin: 0 -5px !important;
+            background: #3b3b3b;
+            border-radius: 0px;
+            color: white;
+            padding-top: 2px;
+            padding-bottom: 4px;
+            padding-left: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .sidebox {
+            border: 1px solid #3b3b3b;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            margin-top: 0.5em;
+            margin-right: 1em;
+            padding: 0px 5px !important;
+        }
 
 block js_media
     script(type='text/javascript').
@@ -52,7 +76,7 @@ block body
         li#event-tab: a(href='#') {% trans "Events" %}
 
     #blog-container
-        .blog-content
+        .blog-content.sidebox
             each post in posts
                 section(class=('sticky post' if post.sticky else 'post'))
                     h2.title: a(href='{% url "blog_post" post.id post.slug %}')= post.title
@@ -75,7 +99,7 @@ block body
                     include list_pages
         .blog-sidebar
             if current_contests
-                .blog-sidebox
+                .blog-sidebox.sidebox
                     h3 {% trans "Ongoing contests" %} #[i.fa.fa-trophy]
                     each contest in current_contests
                         .contest
@@ -85,7 +109,7 @@ block body
                                 span.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
                                     #{contest.time_before_end|timedelta:"localized"}
             if future_contests
-                .blog-sidebox
+                .blog-sidebox.sidebox
                     h3 {% trans "Upcoming contests" %} #[i.fa.fa-trophy]
                     each contest in future_contests
                         .contest
@@ -94,7 +118,7 @@ block body
                                 = ' '
                                 span.time-remaining(data-secs='{{ contest.time_before_start|seconds }}')
                                     #{contest.time_before_start|timedelta:"localized"}
-            .blog-sidebox
+            .blog-sidebox.sidebox
                 h3 {% trans "Comment stream" %} #[i.fa.fa-comments]
                 ul: for comment in comments
                     li
