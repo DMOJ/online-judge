@@ -140,8 +140,7 @@ block body
                     a(href='{% url "comment_rss" %}') #[span: i.fa.fa-rss] RSS
                     | / #[a(href='{% url "comment_atom" %}') Atom]
             .blog-sidebox.sidebox
-                h3 {% trans "New problems" %}
-                hr
+                h3 {% trans "New problems" %} #[i.fa.fa-puzzle-piece]
                 ul.new-problems: for problem in new_problems
                     li: a(href='{% url "problem_detail" problem.code %}')= problem.name
                 span.rssatom
