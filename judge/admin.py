@@ -202,6 +202,11 @@ class ProblemAdmin(VersionAdmin):
     list_filter = ('is_public', ProblemCreatorListFilter)
     form = ProblemForm
 
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.has_perm('judge.change_public_visibility'):
+            return self.readonly_fields + ('public',)
+        return self.readonly_fields
+
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
     show_authors.short_description = _('Authors')
