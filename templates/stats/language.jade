@@ -43,6 +43,10 @@ block media
 
 
 block chart_body
+    h3 {% trans "Submission Statistics" %}
+    div.chart#status-counts
+        canvas(width=300, height=300)
+        ul.legend
     h3 {% trans "Submissions by Language" %}
     div.chart#lang-all
         canvas(width=300, height=300)
@@ -80,6 +84,7 @@ block bodyend
             }
             draw_pie_chart('{% url "language_stats_data_all" %}', $('#lang-all'));
             draw_pie_chart('{% url "language_stats_data_ac" %}', $('#lang-ac'));
+            draw_pie_chart('{% url "stats_data_status" %}', $('#status-counts'));
 
             $.getJSON('{% url "language_stats_data_ac_rate" %}', function (data) {
                 var ctx = $('canvas#ac-rate').get(0).getContext('2d');

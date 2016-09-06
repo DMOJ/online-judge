@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
-from judge.models import Language
+from judge.models import Language, Submission
 
 chart_colors = [0x3366CC, 0xDC3912, 0xFF9900, 0x109618, 0x990099, 0x3B3EAC, 0x0099C6, 0xDD4477, 0x66AA00, 0xB82E2E,
                 0x316395, 0x994499, 0x22AA99, 0xAAAA11, 0x6633CC, 0xE67300, 0x8B0707, 0x329262, 0x5574A6, 0x3B3EAC]
@@ -52,10 +52,28 @@ def ac_language_data(request):
     return language_data(request, Language.objects.annotate(count=ac_count))
 
 
+def status_data(request, statuses=None):
+    if not statuses:
+        statuses = (Submission.objects.values('result').annotate(count=Count('result'))
+                    .values('result', 'count').order_by('-count'))
+    data = []
+    total_count = 0
+    for status, color, highlight in zip(statuses, chart_colors, highlight_colors):
+        res = status['result']
+        if not res:
+            continue
+        count = status['count']
+        total_count += count
+        data.append({
+            'value': count, 'label': Submission.USER_DISPLAY_CODES[res],
+            'color': color, 'highlight': highlight
+        })
+    return JsonResponse(data, safe=False)
+
 def ac_rate(request):
     rate = CombinedExpression(ac_count / Count('submission'), '*', Value(100.0), output_field=FloatField())
     data = Language.objects.annotate(total=Count('submission'), ac_rate=rate).filter(total__gt=0) \
-                   .values('key', 'name', 'short_name', 'ac_rate').order_by('total')
+        .values('key', 'name', 'short_name', 'ac_rate').order_by('total')
     return JsonResponse({
         'labels': map(itemgetter('name'), data),
         'datasets': [
@@ -68,7 +86,6 @@ def ac_rate(request):
             }
         ]
     })
-
 
 def language(request):
     return render(request, 'stats/language.jade', {
