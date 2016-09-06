@@ -13,7 +13,7 @@ block js_media
                     name: 'handle',
                     onchange: 'form.submit()'
                 }));
-                $('#search').select2({
+                var searchList = $('#search').select2({
                     placeholder: '{% trans "Search by handle..." %}',
                     ajax: {
                         url: '{% url "user_search_select2_ajax" %}'
@@ -29,6 +29,21 @@ block js_media
                                     '<i class="fa fa-mail-forward"></i></a>');
                     }
                 });
+                searchList.onSelect = (function (fn) {
+                    return function (data, options) {
+                        var target;
+
+                        if (options != null) {
+                            target = $(options.target);
+                        }
+
+                        if (target && target.hasClass('user-redirect')) {
+                            console.log('clicked redirect');
+                        } else {
+                            return fn.apply(this, arguments);
+                        }
+                    }
+                })(searchList.onSelect);
             });
     script.
         $(function () {
