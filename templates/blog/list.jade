@@ -44,7 +44,12 @@ block media
             padding: 0px 5px !important;
         }
 
-block js_media
+        .post {
+            margin: 0px 0.5em;
+        }
+
+
+}block js_media
     script(type='text/javascript').
         $(document).ready(function () {
             $('.time-remaining').each(function () {
@@ -75,8 +80,6 @@ block js_media
         });
 
 block body
-    block before_posts
-
     ul#mobile.tabs
         li#blog-tab.active: a(href='#') {% trans "Blog" %}
         li#event-tab: a(href='#') {% trans "Events" %}
