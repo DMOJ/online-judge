@@ -28,7 +28,7 @@ block js_media
                                 '<a href="/user/' + data.text + '" class="user-redirect">' +
                                     '<i class="fa fa-mail-forward"></i></a>');
                     }
-                });
+                }).data('select2');
                 searchList.onSelect = (function (fn) {
                     return function (data, options) {
                         var target;
