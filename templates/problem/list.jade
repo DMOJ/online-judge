@@ -57,9 +57,9 @@ block js_media
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script.
             $(function() {
-                $('#category').css({'visibility': 'visible'}).select2();
-                $('#types').css({'visibility': 'visible'})
-                        .select2({multiple: 1, placeholder: '{% trans "Filter by type..." %}'});
+                $('#category').select2().css({'visibility': 'visible'});
+                $('#types').select2({multiple: 1, placeholder: '{% trans "Filter by type..." %}'})
+                    .css({'visibility': 'visible'});
                 // This is incredibly nasty to do but it's needed because otherwise the select2 steals the focus
                 $('#search').keypress(function (e) {
                     if (e.keyCode == 13)
