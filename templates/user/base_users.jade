@@ -24,7 +24,8 @@ block js_media
                     },
                     templateResult: function (data, container) {
                         return ('<img class="user-search-image" src="' + data.gravatar_url + '" width="24" height="24">' +
-                                '<span class="' + data.display_rank + ' user-search-name">' + data.text + '</span>');
+                                '<span class="' + data.display_rank + ' user-search-name">' + data.text + '</span>' +
+                                '<a href="/user/' + data.text + '"><i class="fa fa-mail-forward"></i></a>');
                     }
                 });
             });
@@ -59,6 +60,24 @@ block media
             .select2-results__option--highlighted {
                 background-color: #DEDEDE !important;
             }
+
+            li:hover > a.user-redirect {
+                display: inline-block;
+            }
+
+            a.user-redirect {
+                color: #2980b9;
+                vertical-align: middle;
+                font-size: 1.2em;
+                position: absolute;
+                right: 2em;
+                display: none;
+            }
+
+            a.user-redirect:hover {
+                text-shadow: 0px 0px 2px blue;
+            }
+
     style.
         #users-table .rank, .points, .problems, .username {
             white-space: nowrap;
