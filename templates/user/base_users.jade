@@ -26,7 +26,8 @@ block js_media
                         return ('<img class="user-search-image" src="' + data.gravatar_url + '" width="24" height="24">' +
                                 '<span class="' + data.display_rank + ' user-search-name">' + data.text + '</span>' +
                                 '<a href="/user/' + data.text + '" class="user-redirect">' +
-                                    '<i class="fa fa-mail-forward"></i></a>');
+                                    '<i class="fa fa-mail-forward"></i>' +
+                                '</a>');
                     }
                 }).data('select2');
                 searchList.onSelect = (function (fn) {
@@ -37,10 +38,11 @@ block js_media
                             target = $(options.target);
                         }
 
+                        console.log(target);
                         if (target && target.hasClass('user-redirect')) {
                             console.log('clicked redirect');
                         } else {
-                            return fn.apply(this, arguments);
+                        //    return fn.apply(this, arguments);
                         }
                     }
                 })(searchList.onSelect);
