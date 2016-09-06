@@ -28,8 +28,10 @@ block js_media
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script.
             $(function () {
-                $('#status').select2({multiple: 1, placeholder: '{% trans "Filter by status..." %}'});
-                $('#language').select2({multiple: 1, placeholder: '{% trans "Filter by language..." %}'});
+                $('#status').select2({multiple: 1, placeholder: '{% trans "Filter by status..." %}'})
+                    .css({'visibility': 'visible'});
+                $('#language').select2({multiple: 1, placeholder: '{% trans "Filter by language..." %}'})
+                    .css({'visibility': 'visible'});
             });
 
     - compress js
@@ -164,6 +166,7 @@ block media
         style.
             td.sub-prop, col.sub-prop { width: 22% }
             col.sub-info, td.sub-info { width: 78% }
+            select { visibility: hidden; }
 
 block body
     #common-content
