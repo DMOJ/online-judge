@@ -39,6 +39,16 @@ block media
             color: #DE2121
         }
 
+        select {
+            visibility: hidden;
+        }
+
+    noscript
+        style.
+            select {
+                visibility: visible;
+            }
+
     if not IN_CONTEST
         style #problem-table th { padding: 0; }
 
@@ -47,8 +57,9 @@ block js_media
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script.
             $(function() {
-                $('#category').select2();
-                $('#types').select2({multiple: 1, placeholder: '{% trans "Filter by type..." %}'});
+                $('#category').css({'visibility': 'visible'}).select2();
+                $('#types').css({'visibility': 'visible'})
+                        .select2({multiple: 1, placeholder: '{% trans "Filter by type..." %}'});
                 // This is incredibly nasty to do but it's needed because otherwise the select2 steals the focus
                 $('#search').keypress(function (e) {
                     if (e.keyCode == 13)
