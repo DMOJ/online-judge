@@ -39,7 +39,7 @@ for judge in judges
             if judge.online
                 for key, info in judge.runtime_versions
                     - var runtime_versions = info['runtime']
-                    a.runtime-label(href='{% url "runtime_list" %}#{{ key }}',
+                    a.runtime-label(href='#',
                                     data-judge=judge.id, data-lang=key,
                                     data-runtime-info='{% include "runtime_version_fragment.jade" %}')= info.name
                     if not forloop.last
