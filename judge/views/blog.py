@@ -6,7 +6,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 
 from judge.comments import CommentedDetailView
-from judge.models import BlogPost, Comment, Problem, Contest
+from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submission, Language
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.views import TitleMixin
 
@@ -33,6 +33,12 @@ class PostList(ListView):
         context['page_prefix'] = reverse('blog_post_list')
         context['comments'] = Comment.most_recent(self.request.user, 10)
         context['new_problems'] = Problem.objects.filter(is_public=True).order_by('-date', '-id')[:7]
+
+        context['user_count'] = Profile.objects.count()
+        context['problem_count'] = Problem.objects.count()
+        context['submission_count'] = Submission.objects.count()
+        context['language_count'] = Language.objects.count()
+
         now = timezone.now()
 
         visible_contests = Contest.objects.filter(is_public=True).order_by('start_time')
