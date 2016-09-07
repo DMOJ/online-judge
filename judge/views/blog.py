@@ -35,8 +35,8 @@ class PostList(ListView):
         context['new_problems'] = Problem.objects.filter(is_public=True).order_by('-date', '-id')[:7]
 
         context['user_count'] = Profile.objects.count()
-        context['problem_count'] = Problem.objects.count()
-        context['submission_count'] = Submission.objects.count()
+        context['problem_count'] = Problem.objects.filter(is_public=True).count()
+        context['submission_count'] = Submission.objects.filter(problem__is_public=True).count()
         context['language_count'] = Language.objects.count()
 
         now = timezone.now()
