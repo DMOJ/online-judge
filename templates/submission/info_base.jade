@@ -10,7 +10,7 @@ block header
                 = ' on '
                 a(href='{% url "judge_info" submission.judged_on.name %}')=submission.judged_on.name
             br
-            a(href='{% url "runtime_info" submission.language.key %}')= submission.language
+            a(href='{% url "runtime_list" %}#{{ submission.language.key }}')= submission.language
             = ' '
             if perms.judge.change_submission
                 | [

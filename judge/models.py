@@ -139,7 +139,7 @@ class Language(models.Model):
         return Language.objects.get_or_create(key='PY2', name='Python 2')[0]
 
     def get_absolute_url(self):
-        return reverse('runtime_info', args=(self.key,))
+        return reverse('runtime_list') + '#' + self.key
 
     class Meta:
         ordering = ['key']

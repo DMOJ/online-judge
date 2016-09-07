@@ -211,8 +211,6 @@ urlpatterns = [
     ])),
 
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
-    url(r'^runtime/(?P<key>\w+)$', language.LanguageDetail.as_view(), name='runtime_info'),
-    url(r'^runtime/(?P<key>\w+)/judges$', language.LanguageJudgesAjaxList.as_view(), name='runtime_judge_ajax'),
 
     url(r'^status/$', status.status_all, name='status_all'),
     url(r'^judge/(?P<name>[\w.]+)$', status.JudgeDetail.as_view(), name='judge_info'),
