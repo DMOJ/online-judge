@@ -26,7 +26,6 @@ block media
             padding-top: 2px;
             padding-bottom: 4px;
             padding-left: 5px;
-            border-bottom: 1px solid #ccc;
         }
 
         .sidebox h3 .fa {
@@ -36,7 +35,6 @@ block media
         }
 
         .sidebox {
-            border: 1px solid #9D9D9D;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
             margin-top: 0.5em;
@@ -44,8 +42,11 @@ block media
             padding: 0px 5px !important;
         }
 
-        .post {
-            margin: 0px 0.5em;
+        .sidebox-content {
+            border: 1px solid #9D9D9D;
+            border-top: none;
+            margin: 0 -5px;
+            padding: 0px 0.5em;
         }
 
 block js_media
@@ -86,22 +87,23 @@ block body
     #blog-container
         .blog-content.sidebox
             h3 {% trans "News" %} #[i.fa.fa-terminal]
-            each post in posts
-                section(class=('sticky post' if post.sticky else 'post'))
-                    h2.title: a(href='{% url "blog_post" post.id post.slug %}')= post.title
-                    .time
-                        if post.sticky
-                            i.fa.fa-star.fa-fw(title='Sticky')
-                        span.post-time.moment-time-toggle(data-unix='{{ post.publish_on|utc|date:"c" }}')
-                            | {% trans "posted" %}
-                            = ' '
-                            - blocktrans with time=post.publish_on|date:_("N j, Y, g:i") asvar str_time
-                                | on {{ time }}
-                            span.relative= str_time
-                            span.absolute= str_time
-                    .summary
-                        - cache 86400 post_summary post.id
-                            | #{post.summary|default:post.content|markdown:"blog"|latex_math|proxy_images|nofollowexternal|lazy_load}
+            .sidebox-content
+                each post in posts
+                    section(class=('sticky post' if post.sticky else 'post'))
+                        h2.title: a(href='{% url "blog_post" post.id post.slug %}')= post.title
+                        .time
+                            if post.sticky
+                                i.fa.fa-star.fa-fw(title='Sticky')
+                            span.post-time.moment-time-toggle(data-unix='{{ post.publish_on|utc|date:"c" }}')
+                                | {% trans "posted" %}
+                                = ' '
+                                - blocktrans with time=post.publish_on|date:_("N j, Y, g:i") asvar str_time
+                                    | on {{ time }}
+                                span.relative= str_time
+                                span.absolute= str_time
+                        .summary
+                            - cache 86400 post_summary post.id
+                                | #{post.summary|default:post.content|markdown:"blog"|latex_math|proxy_images|nofollowexternal|lazy_load}
 
             if page_obj.num_pages > 1
                 div(style='margin-bottom:10px;margin-top:10px')
@@ -110,39 +112,43 @@ block body
             if current_contests
                 .blog-sidebox.sidebox
                     h3 {% trans "Ongoing contests" %} #[i.fa.fa-trophy]
-                    each contest in current_contests
-                        .contest
-                            .name: a(href='{% url "contest_view" contest.key %}')= contest.name
-                            .time {% trans "Ends in" %}
-                                = ' '
-                                span.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
-                                    #{contest.time_before_end|timedelta:"localized"}
+                    .sidebox-content
+                        each contest in current_contests
+                            .contest
+                                .name: a(href='{% url "contest_view" contest.key %}')= contest.name
+                                .time {% trans "Ends in" %}
+                                    = ' '
+                                    span.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
+                                        #{contest.time_before_end|timedelta:"localized"}
             if future_contests
                 .blog-sidebox.sidebox
                     h3 {% trans "Upcoming contests" %} #[i.fa.fa-trophy]
-                    each contest in future_contests
-                        .contest
-                            .name: a(href='{% url "contest_view" contest.key %}')= contest.name
-                            .time {% trans "Starts in" %}
-                                = ' '
-                                span.time-remaining(data-secs='{{ contest.time_before_start|seconds }}')
-                                    #{contest.time_before_start|timedelta:"localized"}
+                    .sidebox-content
+                        each contest in future_contests
+                            .contest
+                                .name: a(href='{% url "contest_view" contest.key %}')= contest.name
+                                .time {% trans "Starts in" %}
+                                    = ' '
+                                    span.time-remaining(data-secs='{{ contest.time_before_start|seconds }}')
+                                        #{contest.time_before_start|timedelta:"localized"}
             .blog-sidebox.sidebox
                 h3 {% trans "Comment stream" %} #[i.fa.fa-comments]
-                ul: for comment in comments
-                    li
-                        div(style='font-size:1.1em;font-style:italic')
-                            a(href='{{comment.link}}#comment-{{comment.id}}')= comment.title
-                        span.poster(class=comment.author.display_rank, style='padding-left:0.25em')
-                            a(href='{% url "user_page" comment.author.user.username %}')= comment.author.user.username
-                        | &#32;&rarr; #[a(href='{{comment.link}}')= comment.page_title]
+                .sidebox-content
+                    ul: for comment in comments
+                        li
+                            div(style='font-size:1.1em;font-style:italic')
+                                a(href='{{comment.link}}#comment-{{comment.id}}')= comment.title
+                            span.poster(class=comment.author.display_rank, style='padding-left:0.25em')
+                                a(href='{% url "user_page" comment.author.user.username %}')= comment.author.user.username
+                            | &#32;&rarr; #[a(href='{{comment.link}}')= comment.page_title]
                 span.rssatom
                     a(href='{% url "comment_rss" %}') #[span: i.fa.fa-rss] RSS
                     | / #[a(href='{% url "comment_atom" %}') Atom]
             .blog-sidebox.sidebox
                 h3 {% trans "New problems" %} #[i.fa.fa-puzzle-piece]
-                ul.new-problems: for problem in new_problems
-                    li: a(href='{% url "problem_detail" problem.code %}')= problem.name
+                .sidebox-content
+                    ul.new-problems: for problem in new_problems
+                        li: a(href='{% url "problem_detail" problem.code %}')= problem.name
                 span.rssatom
                     a(href='{% url "problem_rss" %}') #[span: i.fa.fa-rss] RSS
                     | / #[a(href='{% url "problem_atom" %}') Atom]
