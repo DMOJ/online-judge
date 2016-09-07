@@ -141,15 +141,15 @@ block body
                             span.poster(class=comment.author.display_rank, style='padding-left:0.25em')
                                 a(href='{% url "user_page" comment.author.user.username %}')= comment.author.user.username
                             | &#32;&rarr; #[a(href='{{comment.link}}')= comment.page_title]
-                span.rssatom
-                    a(href='{% url "comment_rss" %}') #[span: i.fa.fa-rss] RSS
-                    | / #[a(href='{% url "comment_atom" %}') Atom]
+                    span.rssatom
+                        a(href='{% url "comment_rss" %}') #[span: i.fa.fa-rss] RSS
+                        | / #[a(href='{% url "comment_atom" %}') Atom]
             .blog-sidebox.sidebox
                 h3 {% trans "New problems" %} #[i.fa.fa-puzzle-piece]
                 .sidebox-content
                     ul.new-problems: for problem in new_problems
                         li: a(href='{% url "problem_detail" problem.code %}')= problem.name
-                span.rssatom
-                    a(href='{% url "problem_rss" %}') #[span: i.fa.fa-rss] RSS
-                    | / #[a(href='{% url "problem_atom" %}') Atom]
+                    span.rssatom
+                        a(href='{% url "problem_rss" %}') #[span: i.fa.fa-rss] RSS
+                        | / #[a(href='{% url "problem_atom" %}') Atom]
     block after_posts
