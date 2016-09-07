@@ -178,7 +178,7 @@ block body
                     form#filter-form(name='form', action='', method='get')
                         div.filter-form-group
                             label(for='status'): i {% trans "Status" %}
-                            select#status(name='status')
+                            select#status(name='status', multiple)
                                 each id, name in all_statuses
                                     if id in selected_statuses
                                         option(value=id, selected)= name
@@ -186,7 +186,7 @@ block body
                                         option(value=id)= name
                         div.filter-form-group
                             label(for='language'): i {% trans "Language" %}
-                            select#language(name='language')
+                            select#language(name='language', multiple)
                                 each code, name in all_languages
                                     if code in selected_languages
                                         option(value=code, selected)= name
