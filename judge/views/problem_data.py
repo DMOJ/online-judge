@@ -11,6 +11,7 @@ from judge.views.problem import ProblemMixin
 class ProblemDataForm(ModelForm):
     class Meta:
         model = ProblemData
+        fields = ['zipfile', 'generator', 'output_limit', 'output_prefix']
 
 
 class ProblemDataView(LoginRequiredMixin, ProblemMixin, DetailView):
@@ -21,11 +22,12 @@ class ProblemDataView(LoginRequiredMixin, ProblemMixin, DetailView):
         raise PermissionDenied()
 
     def get_data_form(self, post=False):
-        return ProblemDataForm(data=self.request.POST if post else None, prefix='problem-data')
+        return ProblemDataForm(data=self.request.POST if post else None, prefix='problem-data',
+                               instance=ProblemData.objects.get_or_create(problem=self.object)[0])
 
     def get_context_data(self, **kwargs):
         context = super(ProblemDataView, self).get_context_data(**kwargs)
-        if not 'data_form' in context:
+        if 'data_form' not in context:
             context['data_form'] = self.get_data_form()
         return context
 
