@@ -91,7 +91,7 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         data_form = self.get_data_form(post=True)
-        cases_formset = self.get_case_formset()
+        cases_formset = self.get_case_formset(post=True)
         if data_form.is_valid() and cases_formset.is_valid():
             data = data_form.save()
             for case in cases_formset.save(commit=False):
