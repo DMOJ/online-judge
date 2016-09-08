@@ -22,3 +22,11 @@ class ProblemDataStorage(FileSystemStorage):
         if len(path) != 2:
             raise ValueError('This file is not accessible via a URL.')
         return reverse('problem_data_file', args=path)
+
+    def _save(self, name, content):
+        if self.exists(name):
+            self.delete(name)
+        return super(ProblemDataStorage, self)._save(name, content)
+
+    def get_available_name(self, name):
+        return name
