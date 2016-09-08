@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
-from django.forms import ModelForm, formset_factory, BaseModelFormSet
+from django.forms import ModelForm, modelformset_factory
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
@@ -23,14 +23,9 @@ class ProblemDataForm(ModelForm):
         model = ProblemData
         fields = ['zipfile', 'generator', 'output_limit', 'output_prefix']
 
-
-class ProblemCaseForm(ModelForm):
-    class Meta:
-        model = ProblemTestCase
-        fields = ['order', 'type', 'input_file', 'output_file', 'points', 'is_pretest', 'output_limit',
-                  'output_prefix', 'generator_args']
-
-ProblemCaseFormSet = formset_factory(ProblemCaseForm, formset=BaseModelFormSet, extra=10, can_delete=True, min_num=1)
+ProblemCaseFormSet = modelformset_factory(ProblemTestCase, extra=10, can_delete=True, min_num=1,
+                                          fields=('order', 'type', 'input_file', 'output_file', 'points',
+                                                  'is_pretest', 'output_limit', 'output_prefix', 'generator_args'))
 
 
 class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
