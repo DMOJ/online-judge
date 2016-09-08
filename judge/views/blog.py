@@ -43,10 +43,11 @@ class PostList(ListView):
         now = timezone.now()
 
         # Dashboard stuff
-        user = self.request.user.profile
-        context['recently_attempted_problems'] = (Submission.objects.filter(user=user)
-                                                  .exclude(problem__id__in=user_completed_ids(user))
-                                                  .values_list('problem__code', 'problem__name').distinct()[:7])
+        if self.request.user.is_authenticated():
+            user = self.request.user.profile
+            context['recently_attempted_problems'] = (Submission.objects.filter(user=user)
+                                                      .exclude(problem__id__in=user_completed_ids(user))
+                                                      .values_list('problem__code', 'problem__name').distinct()[:7  ])
 
         visible_contests = Contest.objects.filter(is_public=True).order_by('start_time')
         q = Q(is_private=False)
