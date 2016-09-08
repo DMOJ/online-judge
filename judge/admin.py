@@ -140,6 +140,17 @@ class ProblemForm(ModelForm):
             widgets['description'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('problem_preview'))
 
 
+class BlogPostForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(BlogPostForm, self).__init__(*args, **kwargs)
+        self.fields['authors'].widget.can_add_related = False
+
+    class Meta:
+        widgets = {
+            'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+        }
+
+
 class ProblemCreatorListFilter(admin.SimpleListFilter):
     title = parameter_name = 'creator'
 
@@ -995,6 +1006,7 @@ class BlogPostAdmin(VersionAdmin):
     list_display = ('id', 'title', 'visible', 'sticky', 'publish_on')
     list_display_links = ('id', 'title')
     ordering = ('-publish_on',)
+    form = BlogPostForm
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
