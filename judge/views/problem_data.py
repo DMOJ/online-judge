@@ -5,13 +5,13 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
-from django.forms import ModelForm
+from django.forms import ModelForm, formset_factory, BaseModelFormSet
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
 
-from judge.models import ProblemData, Problem
+from judge.models import ProblemData, Problem, ProblemTestCase
 from judge.utils.views import TitleMixin
 from judge.views.problem import ProblemMixin
 
@@ -22,6 +22,15 @@ class ProblemDataForm(ModelForm):
     class Meta:
         model = ProblemData
         fields = ['zipfile', 'generator', 'output_limit', 'output_prefix']
+
+
+class ProblemCaseForm(ModelForm):
+    class Meta:
+        model = ProblemTestCase
+        fields = ['order', 'type', 'input_file', 'output_file', 'points', 'is_pretest', 'output_limit',
+                  'output_prefix', 'generator_args']
+
+ProblemCaseFormSet = formset_factory(ProblemCaseForm, formset=BaseModelFormSet, extra=10, can_delete=True, min_num=1)
 
 
 class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
@@ -41,19 +50,28 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
                                files=self.request.FILES if post else None,
                                instance=ProblemData.objects.get_or_create(problem=self.object)[0])
 
+    def get_case_formset(self, post=False):
+        return ProblemCaseFormSet(data=self.request.POST if post else None, prefix='cases')
+
     def get_context_data(self, **kwargs):
         context = super(ProblemDataView, self).get_context_data(**kwargs)
         if 'data_form' not in context:
             context['data_form'] = self.get_data_form()
+        if 'cases_formset' not in context:
+            context['cases_formset'] = self.get_case_formset()
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         data_form = self.get_data_form(post=True)
-        if data_form.is_valid():
-            data_form.save()
+        cases_formset = self.get_case_formset()
+        if data_form.is_valid() and cases_formset.is_valid():
+            data = data_form.save()
+            for case in cases_formset.save(commit=False):
+                case.dataset = data
+                case.save()
             return HttpResponseRedirect(request.get_full_path())
-        return self.render_to_response(self.get_context_data(data_form=data_form))
+        return self.render_to_response(self.get_context_data(data_form=data_form, cases_formset=cases_formset))
 
     put = post
 

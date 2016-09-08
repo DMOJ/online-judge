@@ -7,3 +7,4 @@ block body
         - csrf_token
         table.table #{data_form.as_table}
         input(class='button', type='submit', value='{% trans "Submit!" %}')
+        table.table #{cases_formset.as_table}
