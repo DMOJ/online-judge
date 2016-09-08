@@ -52,7 +52,7 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
 
     def get_case_formset(self, post=False):
         return ProblemCaseFormSet(data=self.request.POST if post else None, prefix='cases',
-                                  queryset=ProblemTestCase.objects.filter(dataset__problem_id=self.object.pk))
+                                  queryset=ProblemTestCase.objects.filter(dataset_id=self.object.pk))
 
     def get_context_data(self, **kwargs):
         context = super(ProblemDataView, self).get_context_data(**kwargs)
