@@ -110,6 +110,13 @@ block body
                         .time
                             if post.sticky
                                 i.fa.fa-star.fa-fw(title='Sticky')
+                            - with authors=post.authors.all
+                                if authors
+                                    span.post-authors: for author in authors
+                                        span(class=author.display_rank)
+                                            a(href='{% url "user_page" author.user.username %}') #{author.user.username}
+                                        if not forloop.last
+                                            = ', '
                             span.post-time.moment-time-toggle(data-unix='{{ post.publish_on|utc|date:"c" }}')
                                 | {% trans "posted" %}
                                 = ' '
