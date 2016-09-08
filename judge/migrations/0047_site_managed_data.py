@@ -9,7 +9,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0044_organization_slots'),
+        ('judge', '0046_blogpost_authors'),
     ]
 
     operations = [
