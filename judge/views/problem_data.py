@@ -1,5 +1,6 @@
 import mimetypes
 import os
+from zipfile import ZipFile, BadZipfile
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -27,11 +28,11 @@ class ProblemDataForm(ModelForm):
 
 class ProblemCaseForm(ModelForm):
     def clean_input_file(self):
-        if self.cleaned_data['input_file'] not in self.valid_files:
+        if not self.valid_files or self.cleaned_data['input_file'] not in self.valid_files:
             raise ValidationError(_('Input file is not a valid problem data file.'))
 
     def clean_output_file(self):
-        if self.cleaned_data['output_file'] not in self.valid_files:
+        if not self.valid_files or self.cleaned_data['output_file'] not in self.valid_files:
             raise ValidationError(_('Output file is not a valid problem data file.'))
 
     class Meta:
@@ -58,6 +59,10 @@ class ProblemCaseFormSet(formset_factory(ProblemCaseForm, formset=BaseModelFormS
         form.valid_files = self.valid_files
         return form
 
+    def clean(self):
+        if self.valid_files is False:
+            raise ValidationError('Your zip file is invalid.')
+
 
 class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
     template_name = 'problem/data.jade'
@@ -76,9 +81,19 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
                                files=self.request.FILES if post else None,
                                instance=ProblemData.objects.get_or_create(problem=self.object)[0])
 
-    def get_case_formset(self, post=False):
-        return ProblemCaseFormSet(data=self.request.POST if post else None, prefix='cases',
+    def get_case_formset(self, files, post=False):
+        return ProblemCaseFormSet(data=self.request.POST if post else None, prefix='cases', valid_files=files,
                                   queryset=ProblemTestCase.objects.filter(dataset_id=self.object.pk))
+
+    def get_valid_files(self, data, post=False):
+        if post and 'problem-data-zipfile' in self.request.FILES:
+            try:
+                return ZipFile(self.request.FILES['problem-data-zipfile']).namelist()
+            except BadZipfile:
+                return False
+        elif data.zipfile is not None:
+            return ZipFile(data.zipfile.path).namelist()
+        return set()
 
     def get_context_data(self, **kwargs):
         context = super(ProblemDataView, self).get_context_data(**kwargs)
@@ -91,6 +106,7 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         data_form = self.get_data_form(post=True)
+
         cases_formset = self.get_case_formset(post=True)
         if data_form.is_valid() and cases_formset.is_valid():
             data = data_form.save()
