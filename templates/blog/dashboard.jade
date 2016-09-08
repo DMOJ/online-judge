@@ -18,4 +18,8 @@
             h4 Recently attempted problems
             ul
                 each code, name, problem_points, user_points in recently_attempted_problems
-                    li: a(href='{% url "problem_detail" code %}') (#{name} #{user_points|floatformat}/#{problem_points})
+                    li
+                        a(href='{% url "problem_detail" code %}') #{name}
+                        = ' ('
+                        a(href='{% url "user_submissions" code request.user.username %}') #{user_points|floatformat}/#{problem_points})
+                        = ')'
