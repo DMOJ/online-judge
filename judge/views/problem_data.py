@@ -21,6 +21,10 @@ mimetypes.init()
 
 
 class ProblemDataForm(ModelForm):
+    def clean_zipfile(self):
+        if hasattr(self, 'zip_valid') and not self.zip_valid:
+            raise ValidationError(_('Your zip file is invalid!'))
+
     class Meta:
         model = ProblemData
         fields = ['zipfile', 'generator', 'output_limit', 'output_prefix']
@@ -59,10 +63,6 @@ class ProblemCaseFormSet(formset_factory(ProblemCaseForm, formset=BaseModelFormS
         form.valid_files = self.valid_files
         return form
 
-    def clean(self):
-        if self.valid_files is False:
-            raise ValidationError('Your zip file is invalid.')
-
 
 class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
     template_name = 'problem/data.jade'
@@ -99,14 +99,17 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
         context = super(ProblemDataView, self).get_context_data(**kwargs)
         if 'data_form' not in context:
             context['data_form'] = self.get_data_form()
-        if 'cases_formset' not in context:
-            context['cases_formset'] = self.get_case_formset(context['data_form'].instance)
+            valid_files = self.get_valid_files(context['data_form'].instance)
+            context['data_form'].zip_valid = valid_files is not False
+            context['cases_formset'] = self.get_case_formset(valid_files)
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         data_form = self.get_data_form(post=True)
-        cases_formset = self.get_case_formset(self.get_valid_files(data_form.instance), post=True)
+        valid_files = self.get_valid_files(data_form.instance)
+        data_form.zip_valid = valid_files is not False
+        cases_formset = self.get_case_formset(valid_files, post=True)
         if data_form.is_valid() and cases_formset.is_valid():
             data = data_form.save()
             for case in cases_formset.save(commit=False):
