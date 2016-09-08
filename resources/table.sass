@@ -50,5 +50,5 @@ $table_header_rounding: 6px
   // Monkey-patches for awkward table rounding
   tr:not(:first-child) th
     border-radius: 0
-  tr:last-child th
+  :not(thead) tr:last-child th
     border-bottom-left-radius: $table_header_rounding
