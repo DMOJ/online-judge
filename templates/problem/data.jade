@@ -8,8 +8,9 @@ block body
         #{cases_formset.management_form}
         table.table #{data_form.as_table}
         ul.errorlist
-            each error in cases_formset.non_field_errors
-                li.error= error
+            if cases_formset.non_field_errors
+                each error in cases_formset.non_field_errors
+                    li.error= error
         if data_form.instance.zipfile
             table.table
                 thead: tr
