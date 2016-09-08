@@ -15,6 +15,8 @@ class ProblemDataForm(ModelForm):
 
 
 class ProblemDataView(LoginRequiredMixin, ProblemMixin, DetailView):
+    template_name = 'problem/data.jade'
+
     def get_object(self, queryset=None):
         problem = super(ProblemDataView, self).get_object(queryset)
         if self.request.user.is_superuser or problem.authors.filter(id=self.request.user.profile).exists():
