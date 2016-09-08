@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
-from django.forms import ModelForm, modelformset_factory
+from django.forms import ModelForm, modelformset_factory, HiddenInput
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
@@ -25,7 +25,10 @@ class ProblemDataForm(ModelForm):
 
 ProblemCaseFormSet = modelformset_factory(ProblemTestCase, extra=10, can_delete=True, min_num=1,
                                           fields=('order', 'type', 'input_file', 'output_file', 'points',
-                                                  'is_pretest', 'output_limit', 'output_prefix', 'generator_args'))
+                                                  'is_pretest', 'output_limit', 'output_prefix', 'generator_args'),
+                                          widgets={
+                                              'generator_args': HiddenInput,
+                                          })
 
 
 class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
