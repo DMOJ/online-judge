@@ -100,14 +100,13 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
         if 'data_form' not in context:
             context['data_form'] = self.get_data_form()
         if 'cases_formset' not in context:
-            context['cases_formset'] = self.get_case_formset()
+            context['cases_formset'] = self.get_case_formset(context['data_form'].instance)
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         data_form = self.get_data_form(post=True)
-
-        cases_formset = self.get_case_formset(post=True)
+        cases_formset = self.get_case_formset(self.get_valid_files(data_form.instance), post=True)
         if data_form.is_valid() and cases_formset.is_valid():
             data = data_form.save()
             for case in cases_formset.save(commit=False):
