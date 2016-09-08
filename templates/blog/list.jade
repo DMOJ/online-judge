@@ -117,6 +117,7 @@ block body
                                             a(href='{% url "user_page" author.user.username %}') #{author.user.username}
                                         if not forloop.last
                                             = ', '
+                                    = ' '
                             span.post-time.moment-time-toggle(data-unix='{{ post.publish_on|utc|date:"c" }}')
                                 | {% trans "posted" %}
                                 = ' '
