@@ -34,9 +34,10 @@ class HeavySelect2Widget(HeavySelect2Widget):
     def is_hidden(self):
         return False
 
-#try:
+
+# try:
 #    from suit.admin import SortableModelAdmin, SortableTabularInline
-#except ImportError:
+# except ImportError:
 SortableModelAdmin = object
 SortableTabularInline = admin.TabularInline
 
@@ -45,9 +46,9 @@ class ProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         self.fields['current_contest'].queryset = self.instance.contest_history.select_related('contest') \
-                                                      .only('contest__name', 'user_id', 'virtual')
+            .only('contest__name', 'user_id', 'virtual')
         self.fields['current_contest'].label_from_instance = (lambda obj: '%s v%d' % (obj.contest.name, obj.virtual)
-                                                                          if obj.virtual else obj.contest.name)
+        if obj.virtual else obj.contest.name)
 
     class Meta:
         widgets = {
@@ -85,19 +86,22 @@ class ProfileAdmin(VersionAdmin):
     actions_on_top = True
     actions_on_bottom = True
     form = ProfileForm
-    
+
     def show_public(self, obj):
         format = '<a href="{0}" style="white-space:nowrap;">%s</a>' % ugettext('View on site')
         return format_html(format, obj.get_absolute_url())
+
     show_public.short_description = ''
 
     def admin_user_admin(self, obj):
         return obj.long_display_name
+
     admin_user_admin.admin_order_field = 'user__username'
     admin_user_admin.short_description = _('User')
 
     def email(self, obj):
         return obj.user.email
+
     email.admin_order_field = 'user__email'
     email.short_description = _('Email')
 
@@ -115,6 +119,7 @@ class ProfileAdmin(VersionAdmin):
         self.message_user(request, ungettext('%d user have scores recalculated.',
                                              '%d users have scores recalculated.',
                                              count) % count)
+
     recalculate_points.short_description = _('Recalculate scores')
 
 
@@ -156,7 +161,7 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         return [(name, name) for name in Profile.objects.exclude(authored_problems=None)
-                                                .values_list('user__username', flat=True)]
+            .values_list('user__username', flat=True)]
 
     def queryset(self, request, queryset):
         if self.value() is None:
@@ -220,10 +225,12 @@ class ProblemAdmin(VersionAdmin):
 
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
+
     show_authors.short_description = _('Authors')
 
     def show_public(self, obj):
         return format_html('<a href="{0}">%s</a>' % ugettext('View on site'), obj.get_absolute_url())
+
     show_public.short_description = ''
 
     def _update_points(self, problem_id, sign):
@@ -260,6 +267,7 @@ class ProblemAdmin(VersionAdmin):
         self.message_user(request, ungettext('%d problem successfully marked as public.',
                                              '%d problems successfully marked as public.',
                                              count) % count)
+
     make_public.short_description = _('Mark problems as public')
 
     def make_private(self, request, queryset):
@@ -268,6 +276,7 @@ class ProblemAdmin(VersionAdmin):
         self.message_user(request, ungettext('%d problem successfully marked as private.',
                                              '%d problems successfully marked as private.',
                                              count) % count)
+
     make_private.short_description = _('Mark problems as private')
 
     def get_queryset(self, request):
@@ -368,11 +377,11 @@ class ContestSubmissionInline(admin.StackedInline):
             if db_field.name == 'participation':
                 kwargs['queryset'] = ContestParticipation.objects.filter(user=submission.user,
                                                                          contest__problems=submission.problem) \
-                                                         .only('id', 'contest__name')
+                    .only('id', 'contest__name')
                 label = lambda obj: obj.contest.name
             elif db_field.name == 'problem':
                 kwargs['queryset'] = ContestProblem.objects.filter(problem=submission.problem) \
-                                                   .only('id', 'problem__name', 'contest__name')
+                    .only('id', 'problem__name', 'contest__name')
                 label = lambda obj: pgettext('contest problem', '%(problem)s in %(contest)s') % {
                     'problem': obj.problem.name, 'contest': obj.contest.name
                 }
@@ -399,6 +408,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         return format_html(u'<span title="{display}">{username}</span>',
                            username=obj.user.user.username,
                            display=obj.user.name)
+
     user_column.admin_order_field = 'user__user__username'
     user_column.short_description = _('User')
 
@@ -440,10 +450,12 @@ class SubmissionAdmin(admin.ModelAdmin):
         self.message_user(request, ungettext('%d submission were successfully scheduled for rejudging.',
                                              '%d submissions were successfully scheduled for rejudging.',
                                              judged) % judged)
+
     judge.short_description = _('Rejudge the selected submissions')
 
     def execution_time(self, obj):
         return round(obj.time, 2) if obj.time is not None else 'None'
+
     execution_time.admin_order_field = 'time'
 
     def pretty_memory(self, obj):
@@ -454,6 +466,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             return ugettext('%d KB') % memory
         else:
             return ugettext('%.2f MB') % (memory / 1024.)
+
     pretty_memory.admin_order_field = 'memory'
     pretty_memory.short_description = _('Memory Usage')
 
@@ -482,21 +495,25 @@ class SubmissionAdmin(admin.ModelAdmin):
         for profile in Profile.objects.filter(id__in=queryset.values_list('user_id', flat=True).distinct()):
             profile.calculate_points()
             cache.delete('user_complete:%d' % profile.id)
-        
-        for participation in ContestParticipation.objects.filter(id__in=queryset.values_list('contest__participation_id')):
+
+        for participation in ContestParticipation.objects.filter(
+                id__in=queryset.values_list('contest__participation_id')):
             participation.recalculate_score()
 
         self.message_user(request, ungettext('%d submission were successfully rescored.',
                                              '%d submissions were successfully rescored.',
                                              len(submissions)) % len(submissions))
+
     recalculate_score.short_description = _('Rescore the selected submissions')
 
     def problem_code(self, obj):
         return obj.problem.code
+
     problem_code.admin_order_field = 'problem__code'
 
     def problem_name(self, obj):
         return obj.problem.name
+
     problem_name.admin_order_field = 'problem__name'
 
     def get_urls(self):
@@ -546,6 +563,7 @@ class CommentAdmin(VersionAdmin):
         self.message_user(request, ungettext('%d comment successfully hidden.',
                                              '%d comments successfully hidden.',
                                              count) % count)
+
     hide_comment.short_description = _('Hide comments')
 
     def unhide_comment(self, request, queryset):
@@ -553,6 +571,7 @@ class CommentAdmin(VersionAdmin):
         self.message_user(request, ungettext('%d comment successfully unhidden.',
                                              '%d comments successfully unhidden.',
                                              count) % count)
+
     unhide_comment.short_description = _('Unhide comments')
 
     def get_queryset(self, request):
@@ -565,6 +584,7 @@ class CommentAdmin(VersionAdmin):
             return format_html('<a href="{0}">{1}</a>', link, obj.page)
         else:
             return format_html('{0}', obj.page)
+
     linked_page.short_description = _('Associated page')
     linked_page.allow_tags = True
     linked_page.admin_order_field = 'page'
@@ -826,6 +846,7 @@ class ContestAdmin(VersionAdmin):
         self.message_user(request, ungettext('%d contest successfully marked as public.',
                                              '%d contests successfully marked as public.',
                                              count) % count)
+
     make_public.short_description = _('Mark contests as public')
 
     def make_private(self, request, queryset):
@@ -833,6 +854,7 @@ class ContestAdmin(VersionAdmin):
         self.message_user(request, ungettext('%d contest successfully marked as private.',
                                              '%d contests successfully marked as private.',
                                              count) % count)
+
     make_private.short_description = _('Mark contests as private')
 
     def get_queryset(self, request):
@@ -856,9 +878,9 @@ class ContestAdmin(VersionAdmin):
 
     def get_urls(self):
         return [
-            url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
-            url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate')
-        ] + super(ContestAdmin, self).get_urls()
+                   url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
+                   url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate')
+               ] + super(ContestAdmin, self).get_urls()
 
     def rate_all_view(self, request):
         if not request.user.has_perm('judge.contest_rating'):
@@ -921,10 +943,12 @@ class ContestParticipationAdmin(admin.ModelAdmin):
 
     def username(self, obj):
         return obj.user.long_display_name
+
     username.admin_order_field = 'user__user__username'
 
     def show_virtual(self, obj):
         return obj.virtual or '-'
+
     show_virtual.short_description = _('virtual')
     show_virtual.admin_order_field = 'virtual'
 
@@ -936,6 +960,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
         self.message_user(request, ungettext('%d participation have scores recalculated.',
                                              '%d participations have scores recalculated.',
                                              count) % count)
+
     recalculate_points.short_description = _('Recalculate scores')
 
     def recalculate_cumtime(self, request, queryset):
@@ -946,6 +971,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
         self.message_user(request, ungettext('%d participation have times recalculated.',
                                              '%d participations have times recalculated.',
                                              count) % count)
+
     recalculate_cumtime.short_description = _('Recalculate cumulative time')
 
 
@@ -964,10 +990,11 @@ class OrganizationAdmin(VersionAdmin):
     actions_on_top = True
     actions_on_bottom = True
     form = OrganizationForm
-    
+
     def show_public(self, obj):
         format = '<a href="{0}" style="white-space:nowrap;">%s</a>' % ugettext('View on site')
         return format_html(format, obj.get_absolute_url())
+
     show_public.short_description = ''
 
     def get_readonly_fields(self, request, obj=None):
@@ -1013,6 +1040,10 @@ class BlogPostAdmin(VersionAdmin):
             TextField: {'widget': AdminPagedownWidget},
         }
 
+    def has_change_permission(self, request, obj=None):
+        return (request.user.is_superuser() or request.user.has_perm('judge.see_hidden_post') and
+                obj.authors.filter(id=request.user.profile.id).exists() or obj is None)
+
 
 class SolutionForm(ModelForm):
     class Meta:
@@ -1030,6 +1061,7 @@ class SolutionAdmin(VersionAdmin):
     def show_public(self, obj):
         format = '<a href="{0}" style="white-space:nowrap;">%s</a>' % ugettext('View on site')
         return format_html(format, obj.get_absolute_url())
+
     show_public.short_description = ''
 
     def problem_link(self, obj):
@@ -1037,6 +1069,7 @@ class SolutionAdmin(VersionAdmin):
             return 'N/A'
         return format_html(u'<a href="{}">{}</a>', reverse('admin:judge_problem_change', args=[obj.problem_id]),
                            obj.problem.name)
+
     problem_link.admin_order_field = 'problem__name'
 
     if MathJaxAdminPagedownWidget is not None:
@@ -1061,6 +1094,7 @@ class OrganizationRequestAdmin(admin.ModelAdmin):
 
     def username(self, obj):
         return obj.user.long_display_name
+
     username.admin_order_field = 'user__user__username'
 
 
