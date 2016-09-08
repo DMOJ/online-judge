@@ -21,5 +21,6 @@
                     li
                         a(href='{% url "problem_detail" code %}') #{name}
                         = ' ('
-                        a(href='{% url "user_submissions" code request.user.username %}') #{user_points}/#{problem_points|floatformat} on #[span.date=date]
-                        = ')'
+                        a(href='{% url "user_submissions" code request.user.username %}') #{user_points}/#{problem_points|floatformat}
+                        = ') on '
+                        span.date= date
