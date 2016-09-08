@@ -15,6 +15,7 @@ from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitem
 from judge.views import TitledTemplateView
 from judge.views import organization, language, status, blog, problem, solution, mailgun, license, register, user, \
     submission, widgets, comment, contests, api, ranked_submission, stats, preview
+from judge.views.problem_data import ProblemDataView
 from judge.views.register import RegistrationView, ActivationView
 from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
     ContestSelect2View, UserSearchSelect2View, ContestUserSearchSelect2View
@@ -121,7 +122,9 @@ urlpatterns = [
         url(r'^/submissions/', paged_list_view(submission.ProblemSubmissions, 'chronological_submissions')),
         url(r'^/submissions/(?P<user>\w+)/', paged_list_view(submission.UserProblemSubmissions, 'user_submissions')),
 
-        url(r'^/$', lambda _, problem: HttpResponsePermanentRedirect(reverse('problem_detail', args=[problem]))), 
+        url(r'^/$', lambda _, problem: HttpResponsePermanentRedirect(reverse('problem_detail', args=[problem]))),
+
+        url(r'^/test_data$', ProblemDataView.as_view(), name='problem_data'),
     ])),
 
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
