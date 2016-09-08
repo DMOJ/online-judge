@@ -7,30 +7,31 @@ block body
         - csrf_token
         #{cases_formset.management_form}
         table.table #{data_form.as_table}
-        table.table
-            thead: tr
-                th {% trans "Order" %}
-                th {% trans "Type" %}
-                th {% trans "Input file" %}
-                th {% trans "Output file" %}
-                th {% trans "Points" %}
-                th {% trans "Pretest?" %}
-                th {% trans "Output prefix" %}
-                th {% trans "Output limit" %}
-                th {% trans "Generator args" %}
-                if cases_formset.can_delete
-                    th {% trans "Delete?" %}
-            each form in cases_formset
-                tr
-                    td #{form.order}
-                    td #{form.type}
-                    td #{form.input_file}
-                    td #{form.output_file}
-                    td #{form.points}
-                    td #{form.is_pretest}
-                    td #{form.output_prefix}
-                    td #{form.output_limit}
-                    td #{form.generator_args}
+        if data_form.instance.zipfile
+            table.table
+                thead: tr
+                    th {% trans "Order" %}
+                    th {% trans "Type" %}
+                    th {% trans "Input file" %}
+                    th {% trans "Output file" %}
+                    th {% trans "Points" %}
+                    th {% trans "Pretest?" %}
+                    th {% trans "Output prefix" %}
+                    th {% trans "Output limit" %}
+                    th {% trans "Generator args" %}
                     if cases_formset.can_delete
-                        td #{form.DELETE}
+                        th {% trans "Delete?" %}
+                each form in cases_formset
+                    tr
+                        td #{form.order}
+                        td #{form.type}
+                        td #{form.input_file}
+                        td #{form.output_file}
+                        td #{form.points}
+                        td #{form.is_pretest}
+                        td #{form.output_prefix}
+                        td #{form.output_limit}
+                        td #{form.generator_args}
+                        if cases_formset.can_delete
+                            td #{form.DELETE}
         input(class='button', type='submit', value='{% trans "Submit!" %}')

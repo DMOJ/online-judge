@@ -4,8 +4,9 @@ import os
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
-from django.forms import ModelForm, modelformset_factory, HiddenInput, NumberInput
+from django.forms import ModelForm, formset_factory, HiddenInput, NumberInput, BaseModelFormSet
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
@@ -23,15 +24,39 @@ class ProblemDataForm(ModelForm):
         model = ProblemData
         fields = ['zipfile', 'generator', 'output_limit', 'output_prefix']
 
-ProblemCaseFormSet = modelformset_factory(ProblemTestCase, extra=10, can_delete=True, min_num=1,
-                                          fields=('order', 'type', 'input_file', 'output_file', 'points',
-                                                  'is_pretest', 'output_limit', 'output_prefix', 'generator_args'),
-                                          widgets={
-                                              'generator_args': HiddenInput,
-                                              'points': NumberInput(attrs={'style': 'width: 4em'}),
-                                              'output_prefix': NumberInput(attrs={'style': 'width: 4.5em'}),
-                                              'output_limit': NumberInput(attrs={'style': 'width: 6em'}),
-                                          })
+
+class ProblemCaseForm(ModelForm):
+    def clean_input_file(self):
+        if self.cleaned_data['input_file'] not in self.valid_files:
+            raise ValidationError(_('Input file is not a valid problem data file.'))
+
+    def clean_output_file(self):
+        if self.cleaned_data['output_file'] not in self.valid_files:
+            raise ValidationError(_('Output file is not a valid problem data file.'))
+
+    class Meta:
+        model = ProblemTestCase
+        fields = ('order', 'type', 'input_file', 'output_file', 'points',
+                  'is_pretest', 'output_limit', 'output_prefix', 'generator_args')
+        widgets = {
+            'generator_args': HiddenInput,
+            'points': NumberInput(attrs={'style': 'width: 4em'}),
+            'output_prefix': NumberInput(attrs={'style': 'width: 4.5em'}),
+            'output_limit': NumberInput(attrs={'style': 'width: 6em'}),
+        }
+
+
+class ProblemCaseFormSet(formset_factory(ProblemCaseForm, formset=BaseModelFormSet, extra=10, can_delete=True)):
+    model = ProblemTestCase
+
+    def __init__(self, *args, **kwargs):
+        self.valid_files = kwargs.pop('valid_files', None)
+        super(ProblemCaseFormSet, self).__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        form = super(ProblemCaseFormSet, self)._construct_form(i, **kwargs)
+        form.valid_files = self.valid_files
+        return form
 
 
 class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
