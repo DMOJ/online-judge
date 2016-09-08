@@ -1,4 +1,5 @@
 import itertools
+import os
 import re
 from collections import defaultdict, OrderedDict
 from operator import itemgetter, attrgetter
@@ -546,10 +547,16 @@ else:
     problem_data_storage = default_storage
 
 
+def problem_directory_file(data, filename):
+    return '%s/%s' % (data.problem.code, os.path.basename(filename))
+
+
 class ProblemData(models.Model):
     problem = models.OneToOneField(Problem, verbose_name=_('problem'), related_name='data_files')
-    zipfile = models.FileField(verbose_name=_('data zip file'), storage=problem_data_storage, null=True, blank=True)
-    generator = models.FileField(verbose_name=_('generator file'), storage=problem_data_storage, null=True, blank=True)
+    zipfile = models.FileField(verbose_name=_('data zip file'), storage=problem_data_storage, null=True, blank=True,
+                               upload_to=problem_directory_file)
+    generator = models.FileField(verbose_name=_('generator file'), storage=problem_data_storage, null=True, blank=True,
+                                 upload_to=problem_directory_file)
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
 

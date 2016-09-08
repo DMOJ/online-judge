@@ -25,6 +25,7 @@ class ProblemDataView(LoginRequiredMixin, ProblemMixin, DetailView):
 
     def get_data_form(self, post=False):
         return ProblemDataForm(data=self.request.POST if post else None, prefix='problem-data',
+                               files=self.request.FILES if post else None,
                                instance=ProblemData.objects.get_or_create(problem=self.object)[0])
 
     def get_context_data(self, **kwargs):
