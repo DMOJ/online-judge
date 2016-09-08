@@ -29,7 +29,7 @@ block body
                         if not forloop.last
                             = ', '
                     = ' '
-            span.post-time #{post.publish_on|date:_("N j, Y, G:i")}
+            span.post-time posted on #{post.publish_on|date:_("N j, Y, G:i")}
         .body
             - cache 86400 post_content post.id
                 | #{post.content|markdown:"blog"|latex_math|proxy_images|nofollowexternal}
