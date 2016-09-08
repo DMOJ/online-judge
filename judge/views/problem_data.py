@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
-from django.forms import ModelForm, modelformset_factory, HiddenInput
+from django.forms import ModelForm, modelformset_factory, HiddenInput, NumberInput
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
@@ -28,6 +28,9 @@ ProblemCaseFormSet = modelformset_factory(ProblemTestCase, extra=10, can_delete=
                                                   'is_pretest', 'output_limit', 'output_prefix', 'generator_args'),
                                           widgets={
                                               'generator_args': HiddenInput,
+                                              'points': NumberInput(attrs={'size': 4}),
+                                              'output_prefix': NumberInput(attrs={'size': 4}),
+                                              'output_limit': NumberInput(attrs={'size': 8}),
                                           })
 
 
