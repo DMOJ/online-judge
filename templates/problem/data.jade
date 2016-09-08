@@ -1,4 +1,6 @@
 extends base
 
 block body
-    table.table #{data_form.as_table}
+    form(action='', method='POST')
+        table.table #{data_form.as_table}
+        input(class='button', type='submit', value='{% trans "Submit!" %}')
