@@ -30,7 +30,7 @@ block body
                 tr
                     td= language.short_display_name
                     td.language
-                        a(href='{% url "runtime_list" %}#{{ language.key }}')= language.name
+                        span= language.name
                     td.info
                         if language.description
                             .content-description
