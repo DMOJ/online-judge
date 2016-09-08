@@ -7,6 +7,9 @@ block body
         - csrf_token
         #{cases_formset.management_form}
         table.table #{data_form.as_table}
+        ul.errorlist
+            each error in cases_formset.non_field_errors
+                li.error= error
         if data_form.instance.zipfile
             table.table
                 thead: tr
@@ -23,15 +26,15 @@ block body
                         th {% trans "Delete?" %}
                 each form in cases_formset
                     tr
-                        td #{form.order}
-                        td #{form.type}
-                        td #{form.input_file}
-                        td #{form.output_file}
-                        td #{form.points}
-                        td #{form.is_pretest}
-                        td #{form.output_prefix}
-                        td #{form.output_limit}
-                        td #{form.generator_args}
+                        td #{form.order.errors}#{form.order}
+                        td #{form.type.errors}#{form.type}
+                        td #{form.input_file.errors}#{form.input_file}
+                        td #{form.output_file.errors}#{form.output_file}
+                        td #{form.points.errors}#{form.points}
+                        td #{form.is_pretest.errors}#{form.is_pretest}
+                        td #{form.output_prefix.errors}#{form.output_prefix}
+                        td #{form.output_limit.errors}#{form.output_limit}
+                        td #{form.generator_args.errors}#{form.generator_args}
                         if cases_formset.can_delete
                             td #{form.DELETE}
         input(class='button', type='submit', value='{% trans "Submit!" %}')
