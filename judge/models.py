@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.files.storage import FileSystemStorage, default_storage
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
@@ -537,6 +538,49 @@ class Problem(models.Model):
         )
         verbose_name = _('problem')
         verbose_name_plural = _('problems')
+
+
+if hasattr(settings, 'PROBLEM_DATA_ROOT'):
+    problem_data_storage = FileSystemStorage(settings.PROBLEM_DATA_ROOT)
+else:
+    problem_data_storage = default_storage
+
+
+class ProblemData(models.Model):
+    problem = models.OneToOneField(Problem, verbose_name=_('problem'), related_name='data_files')
+    zipfile = models.FileField(verbose_name=_('data zip file'), storage=problem_data_storage, null=True, blank=True)
+    generator = models.FileField(verbose_name=_('generator file'), storage=problem_data_storage, null=True, blank=True)
+    output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
+    output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
+
+
+class ProblemTestCase(models.Model):
+    dataset = models.ForeignKey(Problem, verbose_name=_('problem data set'), related_name='cases')
+    order = models.IntegerField(verbose_name=_('case position'))
+    type = models.CharField(max_length=1, verbose_name=_('case type'),
+                            choices=(('C', _('Normal case')),
+                                     ('S', _('Batch start')),
+                                     ('E', _('Batch end'))))
+    input_file = models.CharField(max_length=100, verbose_name=_('input file name'), blank=True)
+    output_file = models.CharField(max_length=100, verbose_name=_('output file name'), blank=True)
+    generator_args = models.TextField(verbose_name=_('generator arguments'), blank=True)
+    points = models.IntegerField(verbose_name=_('point value'), blank=True, null=True)
+    is_pretest = models.BooleanField(verbose_name=_('case is pretest?'))
+    output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
+    output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
+
+    def clean(self):
+        if self.type == 'C' and self.dataset.generator is not None and (not self.input_file or not self.output_file):
+            raise ValidationError(_('Normal test cases must have input and output file names.'))
+        if self.type == 'S' and self.points is None:
+            raise ValidationError(_('Batch start markers must have points.'))
+        if self.type == 'E':
+            if self.points is not None:
+                raise ValidationError(_('Batch end markers cannot have points.'))
+            if self.output_prefix is not None:
+                raise ValidationError(_('Batch end markers cannot have output prefix.'))
+            if self.output_limit is not None:
+                raise ValidationError(_('Batch end markers cannot have output limit.'))
 
 
 class LanguageLimit(models.Model):
