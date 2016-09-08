@@ -1173,6 +1173,7 @@ class Rating(models.Model):
 
 class BlogPost(models.Model):
     title = models.CharField(verbose_name=_('post title'), max_length=100)
+    authors = models.ManyToManyField(Profile, verbose_name=_('authors'), blank=True)
     slug = models.SlugField(verbose_name=_('slug'))
     visible = models.BooleanField(verbose_name=_('public visibility'), default=False)
     sticky = models.BooleanField(verbose_name=_('sticky'), default=False)
