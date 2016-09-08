@@ -2,9 +2,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
+from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
 
 from judge.models import ProblemData
+from judge.utils.views import TitleMixin
 from judge.views.problem import ProblemMixin
 
 
@@ -14,8 +16,11 @@ class ProblemDataForm(ModelForm):
         fields = ['zipfile', 'generator', 'output_limit', 'output_prefix']
 
 
-class ProblemDataView(LoginRequiredMixin, ProblemMixin, DetailView):
+class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
     template_name = 'problem/data.jade'
+
+    def get_title(self):
+        return _('Editing data for %s') % self.object.name
 
     def get_object(self, queryset=None):
         problem = super(ProblemDataView, self).get_object(queryset)
