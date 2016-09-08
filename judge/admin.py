@@ -1041,7 +1041,7 @@ class BlogPostAdmin(VersionAdmin):
         }
 
     def has_change_permission(self, request, obj=None):
-        return (request.user.is_superuser() or request.user.has_perm('judge.see_hidden_post') and
+        return (request.user.is_superuser or request.user.has_perm('judge.see_hidden_post') and
                 obj.authors.filter(id=request.user.profile.id).exists() or obj is None)
 
 
