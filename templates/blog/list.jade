@@ -17,6 +17,7 @@ block title_ruler
 block media
     link(rel='alternate', type='application/atom+xml', href='{% url "comment_atom" %}', title='Atom Comment Feed')
     link(rel='alternate', type='application/rss+xml', href='{% url "comment_rss" %}', title='RSS Comment Feed')
+    include blog/dashboard_media.jade
     style.
         .sidebox h3 {
             margin: 0 -5px;
@@ -90,7 +91,10 @@ block js_media
         });
 
 block body
-    block before_posts
+    if request.user.is_superuser or perms.test_site
+        include blog/dashboard.jade
+    else
+        block before_posts
 
     ul#mobile.tabs
         li#blog-tab.active: a(href='#') {% trans "Blog" %}
