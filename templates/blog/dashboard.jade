@@ -13,4 +13,4 @@
 .sidebox
     h3 Dashboard #[i.fa.fa-dashboard]
     .sidebox-content
-        .user-gravatar: img(src='{% gravatar_url request.user.user.email 135 request.user.mute %}', alt='gravatar', width="135px", height="135px")
+        .user-gravatar: img(src='{% gravatar_url request.user.email 135 request.user.profile.mute %}', alt='gravatar', width="135px", height="135px")
