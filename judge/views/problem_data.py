@@ -86,13 +86,13 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
                                   queryset=ProblemTestCase.objects.filter(dataset_id=self.object.pk))
 
     def get_valid_files(self, data, post=False):
-        if post and 'problem-data-zipfile' in self.request.FILES:
-            try:
+        try:
+            if post and 'problem-data-zipfile' in self.request.FILES:
                 return ZipFile(self.request.FILES['problem-data-zipfile']).namelist()
-            except BadZipfile:
-                return False
-        elif data.zipfile is not None:
-            return ZipFile(data.zipfile.path).namelist()
+            elif data.zipfile is not None:
+                return ZipFile(data.zipfile.path).namelist()
+        except BadZipfile:
+            return False
         return set()
 
     def get_context_data(self, **kwargs):
