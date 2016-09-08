@@ -87,7 +87,9 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
 
     def get_valid_files(self, data, post=False):
         try:
-            if post and 'problem-data-zipfile' in self.request.FILES:
+            if post and 'problem-data-zipfile-clear' in self.request.POST:
+                return set()
+            elif post and 'problem-data-zipfile' in self.request.FILES:
                 return ZipFile(self.request.FILES['problem-data-zipfile']).namelist()
             elif data.zipfile is not None:
                 return ZipFile(data.zipfile.path).namelist()
