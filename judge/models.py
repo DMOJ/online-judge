@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.core.files.storage import FileSystemStorage, default_storage
+from django.core.files.storage import default_storage
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
@@ -31,6 +31,7 @@ from judge.fulltext import SearchQuerySet
 from judge.judgeapi import judge_submission, abort_submission
 from judge.model_choices import ACE_THEMES
 from judge.user_translations import ugettext as user_ugettext
+from judge.utils.problem_data import ProblemDataStorage
 from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 
 
@@ -542,7 +543,7 @@ class Problem(models.Model):
 
 
 if hasattr(settings, 'PROBLEM_DATA_ROOT'):
-    problem_data_storage = FileSystemStorage(settings.PROBLEM_DATA_ROOT)
+    problem_data_storage = ProblemDataStorage()
 else:
     problem_data_storage = default_storage
 
