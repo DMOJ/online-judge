@@ -548,7 +548,7 @@ else:
 
 
 def problem_directory_file(data, filename):
-    return '%s/%s' % (data.problem.code, os.path.basename(filename))
+    return os.path.join(data.problem.code, os.path.basename(filename))
 
 
 class ProblemData(models.Model):
