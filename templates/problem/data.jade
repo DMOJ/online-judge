@@ -11,35 +11,34 @@ block body
             if cases_formset.non_field_errors
                 each error in cases_formset.non_field_errors
                     li.error= error
-        if data_form.instance.zipfile
-            table.table
-                thead: tr
-                    th {% trans "Order" %}
-                    th {% trans "Type" %}
-                    th {% trans "Input file" %}
-                    th {% trans "Output file" %}
-                    th {% trans "Points" %}
-                    th {% trans "Pretest?" %}
-                    th {% trans "Output prefix" %}
-                    th {% trans "Output limit" %}
-                    th {% trans "Generator args" %}
+        table.table
+            thead: tr
+                th {% trans "Order" %}
+                th {% trans "Type" %}
+                th {% trans "Input file" %}
+                th {% trans "Output file" %}
+                th {% trans "Points" %}
+                th {% trans "Pretest?" %}
+                th {% trans "Output prefix" %}
+                th {% trans "Output limit" %}
+                th {% trans "Generator args" %}
+                if cases_formset.can_delete
+                    th {% trans "Delete?" %}
+            each form in cases_formset
+                if form.non_field_errors
+                    tr: td(colspan=(9 + cases_formset.can_delete)): ul
+                        each error in cases_formset.errors
+                            li.error= error
+                tr
+                    td #{form.order.errors}#{form.order}
+                    td #{form.type.errors}#{form.type}
+                    td #{form.input_file.errors}#{form.input_file}
+                    td #{form.output_file.errors}#{form.output_file}
+                    td #{form.points.errors}#{form.points}
+                    td #{form.is_pretest.errors}#{form.is_pretest}
+                    td #{form.output_prefix.errors}#{form.output_prefix}
+                    td #{form.output_limit.errors}#{form.output_limit}
+                    td #{form.generator_args.errors}#{form.generator_args}
                     if cases_formset.can_delete
-                        th {% trans "Delete?" %}
-                each form in cases_formset
-                    if form.non_field_errors
-                        tr: td(colspan=(9 + cases_formset.can_delete)): ul
-                            each error in cases_formset.errors
-                                li.error= error
-                    tr
-                        td #{form.order.errors}#{form.order}
-                        td #{form.type.errors}#{form.type}
-                        td #{form.input_file.errors}#{form.input_file}
-                        td #{form.output_file.errors}#{form.output_file}
-                        td #{form.points.errors}#{form.points}
-                        td #{form.is_pretest.errors}#{form.is_pretest}
-                        td #{form.output_prefix.errors}#{form.output_prefix}
-                        td #{form.output_limit.errors}#{form.output_limit}
-                        td #{form.generator_args.errors}#{form.generator_args}
-                        if cases_formset.can_delete
-                            td #{form.DELETE}
+                        td #{form.DELETE}
         input(class='button', type='submit', value='{% trans "Submit!" %}')
