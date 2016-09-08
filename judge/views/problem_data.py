@@ -36,7 +36,7 @@ class ProblemDataView(LoginRequiredMixin, ProblemMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        data_form = self.get_data_form()
+        data_form = self.get_data_form(post=True)
         if data_form.is_valid():
             data_form.save()
             return HttpResponseRedirect(request.get_full_path())
