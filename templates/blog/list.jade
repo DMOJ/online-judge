@@ -91,7 +91,7 @@ block js_media
         });
 
 block body
-    if request.user.is_authenticated and (request.user.is_superuser or perms.judge.test_site)
+    if request.user.is_authenticated and request.user.is_superuser or perms.judge.test_site
         include blog/dashboard.jade
     else
         block before_posts
