@@ -4,5 +4,6 @@ extends base
 
 block body
     form(action='', method='POST')
+        - csrf_token
         table.table #{data_form.as_table}
         input(class='button', type='submit', value='{% trans "Submit!" %}')
