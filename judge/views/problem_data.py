@@ -73,5 +73,5 @@ def problem_data_file(request, problem, path):
     else:
         return HttpResponseRedirect(default_storage.url('%s/%s' % (problem, path)))
 
-    response['Content-Type'] = mimetypes.guess_type(path)
+    response['Content-Type'] = mimetypes.guess_type(path)[0]
     return response
