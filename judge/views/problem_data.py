@@ -37,6 +37,7 @@ class ProblemDataView(LoginRequiredMixin, ProblemMixin, DetailView):
         self.object = self.get_object()
         data_form = self.get_data_form()
         if data_form.is_valid():
+            data_form.save()
             return HttpResponseRedirect(request.get_full_path())
         return self.render_to_response(self.get_context_data(data_form=data_form))
 
