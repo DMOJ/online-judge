@@ -166,6 +166,8 @@ class Organization(models.Model):
     slots = models.IntegerField(verbose_name=_('maximum size'), null=True, blank=True,
                                 help_text=_('Maximum amount of users in this organization, '
                                             'only applicable to private organizations'))
+    access_code = models.CharField(max_length=7, help_text=_('Student access code'),
+                                   verbose_name=_('access code'), null=True, blank=True)
 
     def __contains__(self, item):
         if isinstance(item, (int, long)):
@@ -244,12 +246,13 @@ class Profile(models.Model):
                          Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
                          .values('problem_id').distinct().annotate(points=Max('points'))))
         problems = (self.submission_set.filter(points__gt=0, problem__is_public=True)
-                        .values('problem').distinct().count())
+                    .values('problem').distinct().count())
         if self.points != points or problems != self.problem_count:
             self.points = points
             self.problem_count = problems
             self.save()
         return points
+
     calculate_points.alters_data = True
 
     @cached_property
@@ -269,12 +272,14 @@ class Profile(models.Model):
     def remove_contest(self):
         self.current_contest = None
         self.save()
+
     remove_contest.alters_data = True
 
     def update_contest(self):
         contest = self.current_contest
         if contest is not None and contest.ended:
             self.remove_contest()
+
     update_contest.alters_data = True
 
     def get_absolute_url(self):
@@ -478,6 +483,7 @@ class Problem(models.Model):
         submissions = self.submission_set.count()
         self.ac_rate = 100.0 * self.submission_set.filter(result='AC').count() / submissions if submissions else 0
         self.save()
+
     update_stats.alters_data = True
 
     def _get_limits(self, key):
@@ -649,10 +655,12 @@ class Submission(models.Model):
 
     def judge(self):
         judge_submission(self)
+
     judge.alters_data = True
 
     def abort(self):
         abort_submission(self)
+
     abort.alters_data = True
 
     def is_graded(self):
@@ -734,7 +742,7 @@ class Comment(MPTTModel):
 
     @classmethod
     def most_recent(cls, user, n, batch=None):
-        queryset = cls.objects.filter(hidden=False).select_related('author__user')\
+        queryset = cls.objects.filter(hidden=False).select_related('author__user') \
             .defer('author__about', 'body').order_by('-id')
         if user.is_superuser:
             return queryset[:n]
@@ -890,7 +898,7 @@ class Judge(models.Model):
     @cached_property
     def runtime_versions(self):
         qs = (self.runtimeversion_set.values('language__key', 'language__name', 'version', 'name')
-                  .order_by('language__key', 'priority'))
+              .order_by('language__key', 'priority'))
 
         ret = OrderedDict()
 
@@ -1028,6 +1036,7 @@ class Contest(models.Model):
     def update_user_count(self):
         self.user_count = self.users.filter(virtual=0).count()
         self.save()
+
     update_user_count.alters_data = True
 
     class Meta:
@@ -1092,7 +1101,7 @@ class ContestParticipation(models.Model):
     def update_cumtime(self):
         cumtime = 0
         for problem in self.contest.contest_problems.all():
-            solution = problem.submissions.filter(participation=self, points__gt=0)\
+            solution = problem.submissions.filter(participation=self, points__gt=0) \
                 .values('submission__user_id').annotate(time=Max('submission__date'))
             if not solution:
                 continue
@@ -1100,6 +1109,7 @@ class ContestParticipation(models.Model):
             cumtime += dt.days * 86400 + dt.seconds
         self.cumtime = cumtime
         self.save()
+
     update_cumtime.alters_data = True
 
     def __unicode__(self):
