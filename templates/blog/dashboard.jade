@@ -15,5 +15,5 @@
     .sidebox-content
         .user-gravatar: img(src='{% gravatar_url request.user.email 135 request.user.profile.mute %}', alt='gravatar', width="135px", height="135px")
         ul.recently-attempted
-            each code, name in recently_attempted_problems
-                li: a(href='{% url "problem_detail" code %}')= name
+            each code, name, problem_points, user_points in recently_attempted_problems
+                li: a(href='{% url "problem_detail" code %}') #{name} #{user_points|floatformat}/#{problem_points}
