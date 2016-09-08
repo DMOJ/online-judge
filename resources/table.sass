@@ -1,3 +1,5 @@
+$table_header_rounding: 6px
+
 .table
   border-spacing: 0
   width: 100%
@@ -19,9 +21,9 @@
   thead th
     vertical-align: middle
     &:first-child
-      border-top-left-radius: 6px
+      border-top-left-radius: $table_header_rounding
     &:last-child
-      border-top-right-radius: 6px
+      border-top-right-radius: $table_header_rounding
 
   th
     color: #FFF
@@ -34,9 +36,9 @@
     text-align: center
     white-space: nowrap
     &:first-child
-      border-top-left-radius: 6px
+      border-top-left-radius: $table_header_rounding
     &:last-child
-      border-top-right-radius: 6px
+      border-top-right-radius: $table_header_rounding
   td
     border-color: #d4d4d4
     border-width: 1px 1px 0 0
@@ -44,3 +46,9 @@
     padding: 7px 5px
     vertical-align: middle
     text-align: center
+
+  // Monkey-patches for awkward table rounding
+  tr:not(:first-child) th
+    border-radius: 0
+  tr:last-child th
+    border-bottom-left-radius: $table_header_rounding
