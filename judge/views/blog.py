@@ -9,6 +9,7 @@ from judge.comments import CommentedDetailView
 from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submission, Language
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.views import TitleMixin
+from judge.utils.problems import user_completed_ids
 
 
 class PostList(ListView):
@@ -41,10 +42,16 @@ class PostList(ListView):
 
         now = timezone.now()
 
+        # Dashboard stuff
+        user = self.request.user.profile
+        context['recently_attempted_problems'] = (Submission.objects.filter(user=user)
+                                                  .exclude(problem__id__in=user_completed_ids(user))
+                                                  .values_list('problem__code', 'problem__name').distinct()[:7])
+
         visible_contests = Contest.objects.filter(is_public=True).order_by('start_time')
         q = Q(is_private=False)
         if self.request.user.is_authenticated():
-            q |= Q(organizations__in=self.request.user.profile.organizations.all())
+            q |= Q(organizations__in=user.organizations.all())
         visible_contests = visible_contests.filter(q)
         context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
