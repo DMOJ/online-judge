@@ -17,10 +17,6 @@ block body
         - csrf_token
         #{cases_formset.management_form}
         table.table #{data_form.as_table}
-        if cases_formset.errors
-            ul.errorlist
-                each error in cases_formset.errors
-                    li.error= error
         table.table
             thead: tr
                 th {% trans "Order" %}
