@@ -64,19 +64,21 @@ class ProblemDataCompiler(object):
                 data = {}
                 if batch:
                     case.points = None
-                    if not self.generator:
-                        if case.input_file not in self.files:
-                            raise ProblemDataError(_('Input file for case %d does not exist: %s') %
-                                                   (i, case.input_file))
-                        if case.output_file not in self.files:
-                            raise ProblemDataError(_('Output file for case %d does not exist: %s') %
-                                                   (i, case.output_file))
                     case.is_pretest = batch['is_pretest']
                     case.save()
                 else:
                     if case.points is None:
                         raise ProblemDataError(_('Points must be defined for non-batch case #%d.') % i)
                     data['is_pretest'] = case.is_pretest
+
+                if not self.generator:
+                    if case.input_file not in self.files:
+                        raise ProblemDataError(_('Input file for case %d does not exist: %s') %
+                                               (i, case.input_file))
+                    if case.output_file not in self.files:
+                        raise ProblemDataError(_('Output file for case %d does not exist: %s') %
+                                               (i, case.output_file))
+
                 if case.input_file:
                     data['in'] = case.input_file
                 if case.output_file:
