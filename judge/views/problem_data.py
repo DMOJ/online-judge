@@ -94,7 +94,7 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
                 return set()
             elif post and 'problem-data-zipfile' in self.request.FILES:
                 return ZipFile(self.request.FILES['problem-data-zipfile']).namelist()
-            elif data.zipfile is not None:
+            elif data.zipfile:
                 return ZipFile(data.zipfile.path).namelist()
         except BadZipfile:
             return False
