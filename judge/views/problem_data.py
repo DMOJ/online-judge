@@ -1,6 +1,7 @@
 import json
 import mimetypes
 import os
+from itertools import chain
 from zipfile import ZipFile, BadZipfile
 
 from django.conf import settings
@@ -101,6 +102,7 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
             context['cases_formset'] = self.get_case_formset(valid_files)
         context['valid_files_json'] = mark_safe(json.dumps(context['valid_files']))
         context['valid_files'] = set(context['valid_files'])
+        context['all_case_forms'] = chain(context['cases_formset'], [context['cases_formset'].empty_form])
         return context
 
     def post(self, request, *args, **kwargs):
