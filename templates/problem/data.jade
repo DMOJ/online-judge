@@ -164,7 +164,7 @@ block body
                     tr: td(colspan=(9 + cases_formset.can_delete)) #{form.non_field_errors}
                 if form.prefix and '__prefix__' in form.prefix
                     </tbody><tbody class="extra-row-body" style="display: none">
-                tr
+                tr(data-type=form['type'].value())
                     td #{form.id}#{form.order.errors}#{form.order}
                     td #{form.type.errors}#{form.type}
                     td(class=(None if form.empty_permitted or form['type'].value() != 'C' or form['input_file'].value() in valid_files else 'bad-file'))
