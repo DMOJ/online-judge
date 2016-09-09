@@ -34,16 +34,6 @@ class ProblemDataForm(ModelForm):
 
 
 class ProblemCaseForm(ModelForm):
-    def clean_input_file(self):
-        if not self.valid_files or self.cleaned_data['input_file'] not in self.valid_files:
-            raise ValidationError(_('Input file is not a valid problem data file.'))
-        return self.cleaned_data['input_file']
-
-    def clean_output_file(self):
-        if not self.valid_files or self.cleaned_data['output_file'] not in self.valid_files:
-            raise ValidationError(_('Output file is not a valid problem data file.'))
-        return self.cleaned_data['output_file']
-
     class Meta:
         model = ProblemTestCase
         fields = ('order', 'type', 'input_file', 'output_file', 'points',
