@@ -589,8 +589,6 @@ class ProblemTestCase(models.Model):
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
 
     def clean(self):
-        if self.type == 'C' and self.dataset.generator is not None and (not self.input_file or not self.output_file):
-            raise ValidationError(_('Normal test cases must have input and output file names.'))
         if self.type == 'S' and self.points is None:
             raise ValidationError(_('Batch start markers must have points.'))
         if self.type == 'E':
