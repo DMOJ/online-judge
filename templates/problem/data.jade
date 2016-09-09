@@ -96,7 +96,6 @@ block js_media
                 var $tr;
                 $table.find('tbody:first').append($tr = $($table.find('.extra-row-body').html()
                         .replace(/__prefix__/g, $total.val())));
-                $tr.find('input[id$=order]').val(++order);
                 $total.val($total.val() + 1);
                 $table.trigger('add-row', [$tr]);
                 return false;
