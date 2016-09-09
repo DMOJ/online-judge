@@ -70,8 +70,8 @@ block js_media
                             $files.prop('disabled', true);
                             break;
                         default:
-                            $opts.prop('disabled', false);
-                            $files.prop('disabled', false);
+                            $opts.prop('disabled', val != 'C');
+                            $files.prop('disabled', val != 'C');
                             var $prevs = $tr.prevAll('tr[data-type=S], tr[data-type=E]');
                             disabled = $prevs.length && $prevs.get(0).getAttribute('data-type') == 'S';
                             $tr.find('input[id$=points], input[id$=pretest]').prop('disabled', disabled);
