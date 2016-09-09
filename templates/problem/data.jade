@@ -77,7 +77,8 @@ block js_media
                 $('#case-table').find('input').filter('[id$=file]').each(function () {
                     var $select, val = $(this).replaceWith($select = $('<select/>').attr({
                         id: $(this).attr('id'),
-                        name: $(this).attr('name')
+                        name: $(this).attr('name'),
+                        style: 'width: 100%'
                     })).val();
                     $select.select2({
                         data: window.valid_files,
