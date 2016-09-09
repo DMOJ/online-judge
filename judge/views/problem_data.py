@@ -123,6 +123,8 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
             for case in cases_formset.save(commit=False):
                 case.dataset_id = problem.id
                 case.save()
+            for case in cases_formset.deleted_objects:
+                case.delete()
             return HttpResponseRedirect(request.get_full_path())
         return self.render_to_response(self.get_context_data(data_form=data_form, cases_formset=cases_formset,
                                                              valid_files=valid_files))
