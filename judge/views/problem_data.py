@@ -9,9 +9,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
+from django.core.urlresolvers import reverse
 from django.forms import ModelForm, formset_factory, HiddenInput, NumberInput, BaseModelFormSet
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import get_object_or_404
+from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
@@ -66,6 +68,11 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
 
     def get_title(self):
         return _('Editing data for %s') % self.object.name
+
+    def get_content_title(self):
+        return mark_safe(escape(_('Editing data for %s')) % (
+            format_html(u'<a href="{1}">{0}</a>', self.object.name,
+                        reverse('problem_detail', args=[self.object.code]))))
 
     def get_object(self, queryset=None):
         problem = super(ProblemDataView, self).get_object(queryset)
