@@ -98,6 +98,7 @@ block js_media
                         .replace(/__prefix__/g, $total.val())));
                 $total.val(parseInt($total.val()) + 1);
                 $table.trigger('add-row', [$tr]);
+                window.scrollBy(0, $tr.height());
                 return false;
             });
         });
