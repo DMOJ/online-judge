@@ -1,3 +1,4 @@
+import json
 import mimetypes
 import os
 from zipfile import ZipFile, BadZipfile
@@ -104,9 +105,10 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
         context = super(ProblemDataView, self).get_context_data(**kwargs)
         if 'data_form' not in context:
             context['data_form'] = self.get_data_form()
-            valid_files = self.get_valid_files(context['data_form'].instance)
+            valid_files = context['valid_files'] = self.get_valid_files(context['data_form'].instance)
             context['data_form'].zip_valid = valid_files is not False
             context['cases_formset'] = self.get_case_formset(valid_files)
+        context['valid_files'] = json.dumps(context['valid_files'])
         return context
 
     def post(self, request, *args, **kwargs):
@@ -121,7 +123,8 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
                 case.dataset = data
                 case.save()
             return HttpResponseRedirect(request.get_full_path())
-        return self.render_to_response(self.get_context_data(data_form=data_form, cases_formset=cases_formset))
+        return self.render_to_response(self.get_context_data(data_form=data_form, cases_formset=cases_formset,
+                                                             valid_files=valid_files))
 
     put = post
 

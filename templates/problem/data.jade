@@ -2,6 +2,10 @@ extends base
 
 - load i18n
 
+block js_media
+    script(type='text/javascript')
+        | window.valid_files = #{valid_files};
+
 block body
     form(action='', method='POST', enctype='multipart/form-data')
         - csrf_token
