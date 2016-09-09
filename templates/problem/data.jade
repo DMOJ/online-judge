@@ -159,9 +159,9 @@ block body
                 tr
                     td #{form.id}#{form.order.errors}#{form.order}
                     td #{form.type.errors}#{form.type}
-                    td(class=(None if form.empty_permitted or form['input_file'].value() in valid_files else 'bad-file'))
+                    td(class=(None if form.empty_permitted or form['type'].value() == 'C' and form['input_file'].value() in valid_files else 'bad-file'))
                         | #{form.input_file.errors}#{form.input_file}
-                    td(class=(None if form.empty_permitted or form['output_file'].value() in valid_files else 'bad-file'))
+                    td(class=(None if form.empty_permitted or form['type'].value() == 'C' and form['output_file'].value() in valid_files else 'bad-file'))
                         | #{form.output_file.errors}#{form.output_file}
                     td #{form.points.errors}#{form.points}
                     td #{form.is_pretest.errors}#{form.is_pretest}
