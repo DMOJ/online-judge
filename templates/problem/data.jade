@@ -7,6 +7,20 @@ block js_media
         | window.valid_files = #{valid_files};
     if has_select2
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
+        script(type='text/javascript').
+            $(function () {
+                $('input').filter('[id^=id_case][id$=file]').each(function () {
+                    var $select, val = $(this).replaceWith($select = $('<select/>').attr({
+                        id: $(this).attr('id'),
+                        name: $(this).attr('name')
+                    })).val();
+                    $select.select2({
+                        data: window.valid_files,
+                        allowClear: true,
+                        placeholder: ''
+                    }).val(val).trigger('change');
+                });
+            });
 
 block media
     if has_select2
