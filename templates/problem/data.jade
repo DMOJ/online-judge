@@ -9,7 +9,9 @@ block js_media
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script(type='text/javascript').
             $(function () {
-                $('input').filter('[id^=id_case][id$=file]').each(function () {
+                var inputs = $('#case-table').find('input');
+
+                inputs.filter('[id$=file]').each(function () {
                     var $select, val = $(this).replaceWith($select = $('<select/>').attr({
                         id: $(this).attr('id'),
                         name: $(this).attr('name')
@@ -19,6 +21,29 @@ block js_media
                         allowClear: true,
                         placeholder: ''
                     }).val(val).trigger('change');
+                });
+
+                var order = 0;
+                inputs.filter('[id$=order]').each(function () {
+                    if (!$(this).val())
+                        $(this).val(++order);
+                    else
+                        order = $(this).val();
+                });
+
+                $('form').submit(function () {
+                    $('#case-table').find('tbody').find('tr').each(function ($this) {
+                        var filled = false;
+                        $(this).find('input').each(function () {
+                            var $this = $(this);
+                            if ($this.attr('type') === 'checkbox')
+                                filled |= $this.is(':checked');
+                            else if (!$this.attr('name').endsWith('order'))
+                                filled |= !!$this.val();
+                        });
+                        if (!filled)
+                            $(this).find('input[id$=order]').val('');
+                    });
                 });
             });
 
@@ -44,7 +69,7 @@ block body
                 th {% trans "Generator args" %}
                 if cases_formset.can_delete
                     th {% trans "Delete?" %}
-            each form in cases_formset
+            tbody: each form in cases_formset
                 if form.non_field_errors
                     tr: td(colspan=(9 + cases_formset.can_delete)) #{form.non_field_errors}
                 tr
