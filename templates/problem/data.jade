@@ -9,16 +9,32 @@ block js_media
         $(function () {
             var order = 0;
             var $table = $('#case-table');
-            $table.find('input').filter('[id$=order]').attr('type', 'hidden').each(function () {
-                $(this).val(++order).after($('<i>', {'class': 'fa case-move fa-chevron-down'}))
-                        .after($('<i>', {'class': 'fa case-move fa-chevron-up'}));
-            });
 
-            $table.find('tbody').find('tr').each(function () {
-                var $opts = $(this).find('input').slice(4, 8);
-                var $files = $(this).find('select').slice(1);
-                $(this).find('select[id$=type]').change(function () {
-                    switch ($(this).val()) {
+            function swap_row($a, $b) {
+                var $a_order = $a.find('input[id$=order]'), $b_order = $b.find('input[id$=order]');
+                var order = $a_order.val();
+                $a_order.val($b_order.val());
+                $b_order.val(order);
+                $b.after($a);
+            }
+
+            $table.on('add-row', function (e, $tr) {
+                $tr.find('input').filter('[id$=order]').attr('type', 'hidden').val(++order)
+                        .after($('<i>', {'class': 'fa case-move fa-chevron-down'}).click(function () {
+                            var $tr = $(this).parents('tr'), $next = $tr.next();
+                            if ($next.length)
+                                swap_row($tr, $next);
+                        }))
+                        .after($('<i>', {'class': 'fa case-move fa-chevron-up'}).click(function () {
+                            var $tr = $(this).parents('tr'), $prev = $tr.prev();
+                            if ($prev.length)
+                                swap_row($prev, $tr);
+                        }));
+
+                var $opts = $tr.find('input').slice(4, 8);
+                var $files = $tr.find('select').slice(1);
+                $tr.find('select[id$=type]').change(function () {
+                    switch ($tr.val()) {
                         case 'C':
                             $opts.prop('disabled', false);
                             $files.prop('disabled', false);
@@ -32,30 +48,12 @@ block js_media
                             $files.prop('disabled', true);
                     }
                 }).change();
-            });
-
-            function swap_row($a, $b) {
-                var $a_order = $a.find('input[id$=order]'), $b_order = $b.find('input[id$=order]');
-                var order = $a_order.val();
-                $a_order.val($b_order.val());
-                $b_order.val(order);
-                $b.after($a);
-            }
-
-            $('.case-move.fa-chevron-up').click(function () {
-                var $tr = $(this).parents('tr'), $prev = $tr.prev();
-                if ($prev.length)
-                    swap_row($prev, $tr);
-            });
-
-            $('.case-move.fa-chevron-down').click(function () {
-                var $tr = $(this).parents('tr'), $next = $tr.next();
-                if ($next.length)
-                    swap_row($tr, $next);
+            }).find('tbody').find('tr').each(function () {
+                $table.trigger('add-row', $(this));
             });
 
             $('form').submit(function () {
-                $('#case-table').find('tbody').find('tr').each(function ($this) {
+                $table.find('tbody:first').find('tr').each(function () {
                     var filled = false;
                     $(this).find('input').each(function () {
                         var $this = $(this);
@@ -67,6 +65,18 @@ block js_media
                     if (!filled)
                         $(this).find('input[id$=order]').val('');
                 });
+            });
+
+            var $total = $('#id_cases-TOTAL_FORMS');
+
+            $('a#add-case-row').click(function () {
+                var $tr;
+                $table.find('tbody:first').append($tr = $($table.find('.extra-row-body').html()
+                        .replace(/__prefix__/g, $total.val())));
+                $tr.find('input[id$=order]').val(++order);
+                $total.val($total.val() + 1);
+                $table.trigger('add-row', $tr);
+                return false;
             });
         });
 
