@@ -62,16 +62,19 @@ block js_media
                 var $files = $tr.find('select').slice(1);
                 $tr.find('select[id$=type]').change(function () {
                     var $this = $(this), val = $this.val(), disabled;
-                    if (val == 'C') {
-                        var $prevs = $tr.prevAll('tr[data-type=S], tr[data-type=E]');
-                        disabled = $prevs.length && $prevs.get(0).getAttribute('data-type') == 'S';
-                        $tr.find('input[id$=points], input[id$=pretest]').prop('disabled', disabled);
-                        $opts.prop('disabled', false);
-                        $files.prop('disabled', false);
-                    } else {
-                        disabled = val == 'S';
-                        $opts.prop('disabled', val != 'S');
-                        $files.prop('disabled', true);
+                    switch (val) {
+                        case 'S':
+                        case 'E':
+                            disabled = val == 'S';
+                            $opts.prop('disabled', val != 'S');
+                            $files.prop('disabled', true);
+                            break;
+                        default:
+                            var $prevs = $tr.prevAll('tr[data-type=S], tr[data-type=E]');
+                            disabled = $prevs.length && $prevs.get(0).getAttribute('data-type') == 'S';
+                            $tr.find('input[id$=points], input[id$=pretest]').prop('disabled', disabled);
+                            $opts.prop('disabled', false);
+                            $files.prop('disabled', false);
                     }
                     $tr.attr('data-type', val).nextUntil('tr[data-type=S], tr[data-type=E], tr[data-type=]')
                             .find('input[id$=points], input[id$=pretest]').prop('disabled', disabled);
