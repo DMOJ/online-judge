@@ -3,10 +3,17 @@ extends base
 - load i18n
 
 block js_media
+    script(type='text/javascript').
+        window.valid_files = #{valid_files_json};
     if has_select2
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script(type='text/javascript').
             $(function () {
+                function autofill_if_exists($select, file) {
+                    if (!$select.val() && ~window.valid_files.indexOf(file))
+                        $select.val(file).trigger('change');
+                }
+
                 $('#case-table').on('add-row', function (e, $tr) {
                     $tr.find('input').filter('[id$=file]').each(function () {
                         var $select, val = $(this).replaceWith($select = $('<select/>').attr({
@@ -18,14 +25,19 @@ block js_media
                             data: window.valid_files,
                             allowClear: true,
                             placeholder: ''
-                        }).val(val).trigger('change');
+                        }).val(val).trigger('change').on('change', function () {
+                            var val = $select.val();
+                            if (val) {
+                                if ($select.attr('id').endsWith('input_file'))
+                                    autofill_if_exists($tr.find('select[id$=output_file]'), val.replace(/in(?!.*?in)/, 'out'));
+                                else
+                                    autofill_if_exists($tr.find('select[id$=input_file]'), val.replace(/out(?!.*?out)/, 'in'));
+                            }
+                        });
                     });
                 });
             });
-
     script(type='text/javascript').
-        window.valid_files = #{valid_files_json};
-
         $(function () {
             var order = 0;
             var $table = $('#case-table');
