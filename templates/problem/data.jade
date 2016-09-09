@@ -36,9 +36,7 @@ block body
                     th {% trans "Delete?" %}
             each form in cases_formset
                 if form.non_field_errors
-                    tr: td(colspan=(9 + cases_formset.can_delete)): ul
-                        each error in form.non_field_errors
-                            li.error= error
+                    tr: td(colspan=(9 + cases_formset.can_delete)) #{form.non_field_errors}
                 tr
                     td #{form.order.errors}#{form.order}
                     td #{form.type.errors}#{form.type}
