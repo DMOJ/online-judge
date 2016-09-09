@@ -11,6 +11,7 @@ from django.core.files.storage import default_storage
 from django.forms import ModelForm, formset_factory, HiddenInput, NumberInput, BaseModelFormSet
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import get_object_or_404
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
 
@@ -108,7 +109,7 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
             valid_files = context['valid_files'] = self.get_valid_files(context['data_form'].instance)
             context['data_form'].zip_valid = valid_files is not False
             context['cases_formset'] = self.get_case_formset(valid_files)
-        context['valid_files'] = json.dumps(context['valid_files'])
+        context['valid_files'] = mark_safe(json.dumps(context['valid_files']))
         return context
 
     def post(self, request, *args, **kwargs):
