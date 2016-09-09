@@ -44,13 +44,17 @@ block js_media
                 var $order = $tr.find('input').filter('[id$=order]').attr('type', 'hidden').val(++order)
                         .after($('<i>', {'class': 'fa case-move fa-chevron-down'}).click(function () {
                             var $tr = $(this).parents('tr'), $next = $tr.next();
-                            if ($next.length)
+                            if ($next.length) {
                                 swap_row($tr, $next);
+                                window.scrollBy(0, $next.height());
+                            }
                         }))
                         .after($('<i>', {'class': 'fa case-move fa-chevron-up'}).click(function () {
                             var $tr = $(this).parents('tr'), $prev = $tr.prev();
-                            if ($prev.length)
+                            if ($prev.length) {
                                 swap_row($prev, $tr);
+                                window.scrollBy(0, -$prev.height());
+                            }
                         }));
                 $order.after($('<span>', {'class': 'order'}).text($order.val()));
 
