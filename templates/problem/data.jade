@@ -158,7 +158,7 @@ block body
                 if form.prefix and '__prefix__' in form.prefix
                     </tbody><tbody class="extra-row-body" style="display: none">
                 tr
-                    td #{form.id}#{form.order}
+                    td #{form.id}#{form.order.errors}#{form.order}
                     td #{form.type.errors}#{form.type}
                     td(class=(None if form.empty_permitted or form['input_file'].value() in valid_files else 'bad-file'))
                         | #{form.input_file.errors}#{form.input_file}
