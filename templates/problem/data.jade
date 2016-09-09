@@ -24,11 +24,29 @@ block js_media
                 });
 
                 var order = 0;
-                inputs.filter('[id$=order]').each(function () {
-                    if (!$(this).val())
-                        $(this).val(++order);
-                    else
-                        order = $(this).val();
+                inputs.filter('[id$=order]').attr('type', 'hidden').each(function () {
+                    $(this).val(++order).after($('<i>', {'class': 'fa case-move fa-chevron-down'}))
+                                        .after($('<i>', {'class': 'fa case-move fa-chevron-up'}));
+                });
+
+                function swap_row($a, $b) {
+                    var $a_order = $a.find('input[id$=order]'), $b_order = $b.find('input[id$=order]');
+                    var order = $a_order.val();
+                    $a_order.val($b_order.val());
+                    $b_order.val(order);
+                    $b.after($a)
+                }
+
+                $('.case-move.fa-chevron-up').click(function () {
+                    var $tr = $(this).parents('tr'), $prev = $tr.prev();
+                    if ($prev.length)
+                        swap_row($prev, $tr);
+                });
+
+                $('.case-move.fa-chevron-down').click(function () {
+                    var $tr = $(this).parents('tr'), $next = $tr.next();
+                    if ($next.length)
+                        swap_row($tr, $next);
                 });
 
                 $('form').submit(function () {
