@@ -5,6 +5,12 @@ extends base
 block js_media
     script(type='text/javascript')
         | window.valid_files = #{valid_files};
+    if has_select2
+        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
+
+block media
+    if has_select2
+        link(href='{{ SELECT2_CSS_URL }}', type='text/css', media='screen', rel='stylesheet')
 
 block body
     form(action='', method='POST', enctype='multipart/form-data')

@@ -16,7 +16,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
 
 from judge.models import ProblemData, Problem, ProblemTestCase
-from judge.utils.views import TitleMixin
+from judge.utils.views import TitleMixin, LoadSelect2Mixin
 from judge.views.problem import ProblemMixin
 
 mimetypes.init()
@@ -69,7 +69,7 @@ class ProblemCaseFormSet(formset_factory(ProblemCaseForm, formset=BaseModelFormS
         return form
 
 
-class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
+class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemMixin, DetailView):
     template_name = 'problem/data.jade'
 
     def get_title(self):
