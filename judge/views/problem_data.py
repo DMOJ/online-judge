@@ -93,14 +93,14 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
     def get_valid_files(self, data, post=False):
         try:
             if post and 'problem-data-zipfile-clear' in self.request.POST:
-                return set()
+                return []
             elif post and 'problem-data-zipfile' in self.request.FILES:
-                return set(ZipFile(self.request.FILES['problem-data-zipfile']).namelist())
+                return ZipFile(self.request.FILES['problem-data-zipfile']).namelist()
             elif data.zipfile:
-                return set(ZipFile(data.zipfile.path).namelist())
+                return ZipFile(data.zipfile.path).namelist()
         except BadZipfile:
             return False
-        return set()
+        return []
 
     def get_context_data(self, **kwargs):
         context = super(ProblemDataView, self).get_context_data(**kwargs)
@@ -110,6 +110,7 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
             context['data_form'].zip_valid = valid_files is not False
             context['cases_formset'] = self.get_case_formset(valid_files)
         context['valid_files_json'] = mark_safe(json.dumps(context['valid_files']))
+        context['valid_files'] = set(context['valid_files'])
         return context
 
     def post(self, request, *args, **kwargs):
