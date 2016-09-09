@@ -130,6 +130,11 @@ block media
         }
 
 block body
+    if data_form.instance.feedback
+        ul.errorlist: li= data_form.instance.feedback
+    else data_form.instance.has_yml
+        div: a(href='{% url "problem_data_file" problem.code "init.yml" %}') View YAML
+
     form(action='', method='POST', enctype='multipart/form-data')
         - csrf_token
         #{cases_formset.management_form}

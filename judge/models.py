@@ -573,6 +573,9 @@ class ProblemData(models.Model):
             self.__original_zipfile.delete(save=False)
         return super(ProblemData, self).save(*args, **kwargs)
 
+    def has_yml(self):
+        return problem_data_storage.exists('%s/init.yml' % self.problem.code)
+
 
 class ProblemTestCase(models.Model):
     dataset = models.ForeignKey(Problem, verbose_name=_('problem data set'), related_name='cases')
