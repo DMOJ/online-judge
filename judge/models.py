@@ -592,17 +592,6 @@ class ProblemTestCase(models.Model):
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
 
-    def clean(self):
-        if self.type == 'S' and self.points is None:
-            raise ValidationError(_('Batch start markers must have points.'))
-        if self.type == 'E':
-            if self.points is not None:
-                raise ValidationError(_('Batch end markers cannot have points.'))
-            if self.output_prefix is not None:
-                raise ValidationError(_('Batch end markers cannot have output prefix.'))
-            if self.output_limit is not None:
-                raise ValidationError(_('Batch end markers cannot have output limit.'))
-
 
 class LanguageLimit(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='language_limits')
