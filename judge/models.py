@@ -570,7 +570,7 @@ class ProblemData(models.Model):
     def save(self, *args, **kwargs):
         if self.zipfile != self.__original_zipfile:
             self.__original_zipfile.delete(save=False)
-            super(ProblemData, self).save(*args, **kwargs)
+        return super(ProblemData, self).save(*args, **kwargs)
 
 
 class ProblemTestCase(models.Model):
