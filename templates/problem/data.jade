@@ -8,7 +8,7 @@ block js_media
 
         $(function () {
             var order = 0;
-            inputs.filter('[id$=order]').attr('type', 'hidden').each(function () {
+            $('#case-table').find('input').filter('[id$=order]').attr('type', 'hidden').each(function () {
                 $(this).val(++order).after($('<i>', {'class': 'fa case-move fa-chevron-down'}))
                         .after($('<i>', {'class': 'fa case-move fa-chevron-up'}));
             });
@@ -53,9 +53,7 @@ block js_media
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script(type='text/javascript').
             $(function () {
-                var inputs = $('#case-table').find('input');
-
-                inputs.filter('[id$=file]').each(function () {
+                $('#case-table').find('input').filter('[id$=file]').each(function () {
                     var $select, val = $(this).replaceWith($select = $('<select/>').attr({
                         id: $(this).attr('id'),
                         name: $(this).attr('name')
