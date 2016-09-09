@@ -8,9 +8,30 @@ block js_media
 
         $(function () {
             var order = 0;
-            $('#case-table').find('input').filter('[id$=order]').attr('type', 'hidden').each(function () {
+            var $table = $('#case-table');
+            $table.find('input').filter('[id$=order]').attr('type', 'hidden').each(function () {
                 $(this).val(++order).after($('<i>', {'class': 'fa case-move fa-chevron-down'}))
                         .after($('<i>', {'class': 'fa case-move fa-chevron-up'}));
+            });
+
+            $table.find('tbody').find('tr').each(function () {
+                var $opts = $(this).find('input').slice(2, 6);
+                var $files = $(this).find('select').slice(1);
+                $(this).find('select[id$=type]').change(function () {
+                    switch ($(this).val()) {
+                        case 'C':
+                            $opts.prop('disabled', false);
+                            $files.prop('disabled', false);
+                            break;
+                        case 'S':
+                            $opts.prop('disabled', false);
+                            $files.prop('disabled', true);
+                            break;
+                        default:
+                            $opts.prop('disabled', true);
+                            $files.prop('disabled', true);
+                    }
+                }).change();
             });
 
             function swap_row($a, $b) {
