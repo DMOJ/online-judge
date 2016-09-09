@@ -15,7 +15,7 @@ block js_media
             });
 
             $table.find('tbody').find('tr').each(function () {
-                var $opts = $(this).find('input').slice(2, 6);
+                var $opts = $(this).find('input').slice(4, 8);
                 var $files = $(this).find('select').slice(1);
                 $(this).find('select[id$=type]').change(function () {
                     switch ($(this).val()) {
