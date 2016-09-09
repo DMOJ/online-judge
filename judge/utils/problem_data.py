@@ -3,6 +3,7 @@ import re
 
 import yaml
 from django.conf import settings
+from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
@@ -147,7 +148,7 @@ class ProblemDataCompiler(object):
         else:
             self.data.feedback = ''
             self.data.save()
-            problem_data_storage.save(yml_file, init)
+            problem_data_storage.save(yml_file, ContentFile(init))
 
     @classmethod
     def generate(cls, *args, **kwargs):
