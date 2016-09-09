@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 import django.db.models.deletion
 from django.db import migrations, models
 
+import judge.models
+
 
 class Migration(migrations.Migration):
 
@@ -17,10 +19,11 @@ class Migration(migrations.Migration):
             name='ProblemData',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('zipfile', models.FileField(blank=True, null=True, upload_to=b'', verbose_name='data zip file')),
-                ('generator', models.FileField(blank=True, null=True, upload_to=b'', verbose_name='generator file')),
+                ('zipfile', models.FileField(blank=True, null=True, upload_to=judge.models.problem_directory_file, verbose_name='data zip file')),
+                ('generator', models.FileField(blank=True, null=True, upload_to=judge.models.problem_directory_file, verbose_name='generator file')),
                 ('output_prefix', models.IntegerField(blank=True, null=True, verbose_name='output prefix length')),
                 ('output_limit', models.IntegerField(blank=True, null=True, verbose_name='output limit length')),
+                ('feedback', models.TextField(blank=True, verbose_name='init.yml generation feedback')),
                 ('problem', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='data_files', to='judge.Problem', verbose_name='problem')),
             ],
         ),

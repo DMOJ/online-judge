@@ -560,6 +560,7 @@ class ProblemData(models.Model):
                                  upload_to=problem_directory_file)
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
+    feedback = models.TextField(verbose_name=_('init.yml generation feedback'), blank=True)
 
     __original_zipfile = None
 
