@@ -18,4 +18,6 @@ pytz
 django-statici18n
 pika
 ua-parser
+pyyaml
+
 
