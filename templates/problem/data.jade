@@ -34,7 +34,7 @@ block body
                 if form.non_field_errors
                     tr: td(colspan=(9 + cases_formset.can_delete)) #{form.non_field_errors}
                 tr
-                    td #{form.id}#{form.order.errors}#{form.order}
+                    td #{form.id}#{form.ORDER}
                     td #{form.type.errors}#{form.type}
                     td #{form.input_file.errors}#{form.input_file}
                     td #{form.output_file.errors}#{form.output_file}

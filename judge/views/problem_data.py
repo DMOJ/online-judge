@@ -88,7 +88,7 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
 
     def get_case_formset(self, files, post=False):
         return ProblemCaseFormSet(data=self.request.POST if post else None, prefix='cases', valid_files=files,
-                                  queryset=ProblemTestCase.objects.filter(dataset_id=self.object.pk))
+                                  queryset=ProblemTestCase.objects.filter(dataset_id=self.object.pk).order_by('order'))
 
     def get_valid_files(self, data, post=False):
         try:
@@ -119,7 +119,7 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
         data_form.zip_valid = valid_files is not False
         cases_formset = self.get_case_formset(valid_files, post=True)
         if data_form.is_valid() and cases_formset.is_valid():
-            data = data_form.save()
+            data_form.save()
             for case in cases_formset.save(commit=False):
                 case.dataset_id = problem.id
                 case.save()
