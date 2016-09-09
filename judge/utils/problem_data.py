@@ -82,7 +82,7 @@ class ProblemDataCompiler(object):
                 if case.input_file:
                     data['in'] = case.input_file
                 if case.output_file:
-                    data['in'] = case.output_file
+                    data['out'] = case.output_file
                 if case.points is not None:
                     data['points'] = case.points
                 if case.generator_args:
