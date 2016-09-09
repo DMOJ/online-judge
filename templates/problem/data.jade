@@ -3,6 +3,26 @@ extends base
 - load i18n
 
 block js_media
+    if has_select2
+        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
+        script(type='text/javascript').
+            $(function () {
+                $('#case-table').on('add-row', function (e, $tr) {
+                    $tr.find('input').filter('[id$=file]').each(function () {
+                        var $select, val = $(this).replaceWith($select = $('<select/>').attr({
+                            id: $(this).attr('id'),
+                            name: $(this).attr('name'),
+                            style: 'width: 100%'
+                        })).val();
+                        $select.select2({
+                            data: window.valid_files,
+                            allowClear: true,
+                            placeholder: ''
+                        }).val(val).trigger('change');
+                    });
+                });
+            });
+
     script(type='text/javascript').
         window.valid_files = #{valid_files_json};
 
@@ -48,7 +68,7 @@ block js_media
                             $files.prop('disabled', true);
                     }
                 }).change();
-            }).find('tbody').find('tr').each(function () {
+            }).find('tbody:first').find('tr').each(function () {
                 $table.trigger('add-row', [$(this)]);
             });
 
@@ -79,24 +99,6 @@ block js_media
                 return false;
             });
         });
-
-    if has_select2
-        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
-        script(type='text/javascript').
-            $(function () {
-                $('#case-table').find('input').filter('[id$=file]').each(function () {
-                    var $select, val = $(this).replaceWith($select = $('<select/>').attr({
-                        id: $(this).attr('id'),
-                        name: $(this).attr('name'),
-                        style: 'width: 100%'
-                    })).val();
-                    $select.select2({
-                        data: window.valid_files,
-                        allowClear: true,
-                        placeholder: ''
-                    }).val(val).trigger('change');
-                });
-            });
 
 block media
     if has_select2
