@@ -54,7 +54,7 @@ block js_media
                 var $opts = $tr.find('input').slice(4, 8);
                 var $files = $tr.find('select').slice(1);
                 $tr.find('select[id$=type]').change(function () {
-                    switch ($tr.val()) {
+                    switch ($(this).val()) {
                         case 'C':
                             $opts.prop('disabled', false);
                             $files.prop('disabled', false);
