@@ -74,10 +74,10 @@ block js_media
                             $files.prop('disabled', val != 'C');
                             var $prevs = $tr.prevAll('tr[data-type=S], tr[data-type=E]');
                             disabled = $prevs.length && $prevs.get(0).getAttribute('data-type') == 'S';
-                            $tr.find('input[id$=points], input[id$=pretest]').prop('disabled', disabled);
+                            $tr.find('input[id$=points], input[id$=pretest]').prop('disabled', val != 'C' || disabled);
                     }
                     $tr.attr('data-type', val).nextUntil('tr[data-type=S], tr[data-type=E], tr[data-type=]')
-                            .find('input[id$=points], input[id$=pretest]').prop('disabled', val != 'C' || disabled);
+                            .find('input[id$=points], input[id$=pretest]').prop('disabled', disabled);
                 }).change();
             }).find('tbody:first').find('tr').each(function () {
                 $table.trigger('add-row', [$(this)]);
