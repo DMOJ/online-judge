@@ -36,10 +36,12 @@ block js_media
                 $a_order.val($b_order.val());
                 $b_order.val(order);
                 $b.after($a);
+                $a.find('span.order').text($a_order.val());
+                $b.find('span.order').text($b_order.val());
             }
 
             $table.on('add-row', function (e, $tr) {
-                $tr.find('input').filter('[id$=order]').attr('type', 'hidden').val(++order)
+                var $order = $tr.find('input').filter('[id$=order]').attr('type', 'hidden').val(++order)
                         .after($('<i>', {'class': 'fa case-move fa-chevron-down'}).click(function () {
                             var $tr = $(this).parents('tr'), $next = $tr.next();
                             if ($next.length)
@@ -50,6 +52,7 @@ block js_media
                             if ($prev.length)
                                 swap_row($prev, $tr);
                         }));
+                $order.after($('<span>', {'class': 'order'}).text($order.val()));
 
                 var $opts = $tr.find('input').slice(2, 6);
                 var $files = $tr.find('select').slice(1);
@@ -120,6 +123,10 @@ block media
 
         .bad-file input, .bad-file .select2-selection {
             border-color: red;
+        }
+
+        span.order {
+            padding-right: 0.5em;
         }
 
 block body
