@@ -4,7 +4,7 @@ extends base
 
 block js_media
     script(type='text/javascript').
-        window.valid_files = #{valid_files};
+        window.valid_files = #{valid_files_json};
 
         $(function () {
             var order = 0;
@@ -106,6 +106,10 @@ block media
             text-align: initial;
         }
 
+        .bad-file input, .bad-file .select2-selection {
+            border-color: red;
+        }
+
 block body
     form(action='', method='POST', enctype='multipart/form-data')
         - csrf_token
@@ -130,8 +134,10 @@ block body
                 tr
                     td #{form.id}#{form.order}
                     td #{form.type.errors}#{form.type}
-                    td #{form.input_file.errors}#{form.input_file}
-                    td #{form.output_file.errors}#{form.output_file}
+                    td(class=(None if form.empty_permitted or form.input_file.value in valid_files else 'bad-file'))
+                        | #{form.input_file.errors}#{form.input_file}
+                    td(class=(None if form.empty_permitted or form.input_file.value in valid_files else 'bad-file'))
+                        | #{form.output_file.errors}#{form.output_file}
                     td #{form.points.errors}#{form.points}
                     td #{form.is_pretest.errors}#{form.is_pretest}
                     td #{form.output_prefix.errors}#{form.output_prefix}
