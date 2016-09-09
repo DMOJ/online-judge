@@ -78,7 +78,7 @@ block js_media
             $('form').submit(function () {
                 $table.find('tbody:first').find('tr').each(function () {
                     var filled = false;
-                    $(this).find('input').each(function () {
+                    $(this).find('input, select').each(function () {
                         var $this = $(this);
                         if ($this.attr('type') === 'checkbox')
                             filled |= $this.is(':checked');
