@@ -77,7 +77,7 @@ block js_media
                             $tr.find('input[id$=points], input[id$=pretest]').prop('disabled', disabled);
                     }
                     $tr.attr('data-type', val).nextUntil('tr[data-type=S], tr[data-type=E], tr[data-type=]')
-                            .find('input[id$=points], input[id$=pretest]').prop('disabled', disabled);
+                            .find('input[id$=points], input[id$=pretest]').prop('disabled', val != 'C' || disabled);
                 }).change();
             }).find('tbody:first').find('tr').each(function () {
                 $table.trigger('add-row', [$(this)]);
