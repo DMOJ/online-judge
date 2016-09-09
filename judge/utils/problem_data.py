@@ -72,6 +72,7 @@ class ProblemDataCompiler(object):
                             raise ProblemDataError(_('Output file for case %d does not exist: %s') %
                                                    (i, case.output_file))
                     case.is_pretest = batch['is_pretest']
+                    case.save()
                 else:
                     if case.points is None:
                         raise ProblemDataError(_('Points must be defined for non-batch case #%d.') % i)
@@ -109,6 +110,7 @@ class ProblemDataCompiler(object):
                 if not batch:
                     raise ProblemDataError(_('Attempt to end batch outside of one in case #%d') % i)
                 case.is_pretest = batch['is_pretest']
+                case.save()
                 end_batch()
                 batch = None
         if batch:

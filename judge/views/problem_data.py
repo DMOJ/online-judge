@@ -2,7 +2,6 @@ import json
 import mimetypes
 import os
 from itertools import chain
-from operator import attrgetter
 from zipfile import ZipFile, BadZipfile
 
 from django.conf import settings
@@ -114,13 +113,11 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
         data_form.zip_valid = valid_files is not False
         cases_formset = self.get_case_formset(valid_files, post=True)
         if data_form.is_valid() and cases_formset.is_valid():
-            data = data_form.save(commit=False)
-            cases = cases_formset.save(commit=False)
-            cases.sort(key=attrgetter('order'))
-            ProblemDataCompiler.generate(problem, data, cases, valid_files)
-            for case in cases:
+            data = data_form.save()
+            for case in cases_formset.save(commit=False):
                 case.dataset_id = problem.id
                 case.save()
+            ProblemDataCompiler.generate(problem, data, problem.cases.order_by('order'), valid_files)
             for case in cases_formset.deleted_objects:
                 case.delete()
             return HttpResponseRedirect(request.get_full_path())
