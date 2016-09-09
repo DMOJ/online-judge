@@ -561,6 +561,17 @@ class ProblemData(models.Model):
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
 
+    __original_zipfile = None
+
+    def __init__(self, *args, **kwargs):
+        super(ProblemData, self).__init__(*args, **kwargs)
+        self.__original_zipfile = self.zipfile
+
+    def save(self, *args, **kwargs):
+        if self.zipfile != self.__original_zipfile:
+            self.__original_zipfile.delete(save=False)
+            super(ProblemData, self).save(*args, **kwargs)
+
 
 class ProblemTestCase(models.Model):
     dataset = models.ForeignKey(Problem, verbose_name=_('problem data set'), related_name='cases')
