@@ -130,7 +130,7 @@ class ProblemDataCompiler(object):
         if pretests:
             init['pretest_test_cases'] = pretests
         if cases:
-            init['test_cases'] = pretests
+            init['test_cases'] = cases
         if self.data.output_limit is not None:
             init['output_limit_length'] = self.data.output_limit
         if self.data.output_prefix is not None:
