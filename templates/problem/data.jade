@@ -74,6 +74,7 @@ block js_media
                             $opts.prop('disabled', true);
                             $files.prop('disabled', true);
                     }
+                    $tr.attr('data-type', $(this).val());
                 }).change();
             }).find('tbody:first').find('tr').each(function () {
                 $table.trigger('add-row', [$(this)]);
