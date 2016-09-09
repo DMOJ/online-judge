@@ -128,10 +128,10 @@ block body
                 th {% trans "Generator args" %}
                 if cases_formset.can_delete
                     th {% trans "Delete?" %}
-            tbody: each form in all_case_forms
+            tbody: each form in cases_formset
                 if form.non_field_errors
                     tr: td(colspan=(9 + cases_formset.can_delete)) #{form.non_field_errors}
-                tr(style=('display: none' if form.prefix and '__prefix__' in form.prefix else None))
+                tr
                     td #{form.id}#{form.order}
                     td #{form.type.errors}#{form.type}
                     td(class=(None if form.empty_permitted or form['input_file'].value() in valid_files else 'bad-file'))
