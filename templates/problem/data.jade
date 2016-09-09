@@ -49,7 +49,7 @@ block js_media
                     }
                 }).change();
             }).find('tbody').find('tr').each(function () {
-                $table.trigger('add-row', $(this));
+                $table.trigger('add-row', [$(this)]);
             });
 
             $('form').submit(function () {
@@ -75,7 +75,7 @@ block js_media
                         .replace(/__prefix__/g, $total.val())));
                 $tr.find('input[id$=order]').val(++order);
                 $total.val($total.val() + 1);
-                $table.trigger('add-row', $tr);
+                $table.trigger('add-row', [$tr]);
                 return false;
             });
         });
