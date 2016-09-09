@@ -113,7 +113,7 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
         return context
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        self.object = problem =self.get_object()
         data_form = self.get_data_form(post=True)
         valid_files = self.get_valid_files(data_form.instance, post=True)
         data_form.zip_valid = valid_files is not False
@@ -121,7 +121,7 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
         if data_form.is_valid() and cases_formset.is_valid():
             data = data_form.save()
             for case in cases_formset.save(commit=False):
-                case.dataset = data
+                case.dataset_id = problem.id
                 case.save()
             return HttpResponseRedirect(request.get_full_path())
         return self.render_to_response(self.get_context_data(data_form=data_form, cases_formset=cases_formset,
