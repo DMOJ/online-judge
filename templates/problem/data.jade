@@ -120,7 +120,7 @@ block js_media
                 }).mouseout(function () {
                     $(this).removeClass(tooltip_classes).removeAttr('aria-label');
                 }).featherlight($('.generator-args-editor'), {
-                    afterOpen: function () {
+                    beforeContent: function () {
                         var $input = this.$currentTarget.prev();
                         this.$instance.find('.generator-args-editor')
                                 .find('textarea').val($input.val()).end()
@@ -307,3 +307,7 @@ block body
                         td #{form.DELETE}
         input(class='button', type='submit', value='{% trans "Submit!" %}')
         a#add-case-row(href='#') #[i.fa.fa-plus] {% trans "Add new case" %}
+
+    .generator-args-editor(style='display: none')
+        textarea
+        a.button(style='float: right') Save
