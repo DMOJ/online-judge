@@ -294,6 +294,7 @@ block body
                 th {% trans "Pretest?" %}
                 th {% trans "Output prefix" %}
                 th {% trans "Output limit" %}
+                th {% trans "Checker" %}
                 th {% trans "Generator args" %}
                 if cases_formset.can_delete
                     th {% trans "Delete?" %}
@@ -313,6 +314,8 @@ block body
                     td #{form.is_pretest.errors}#{form.is_pretest}
                     td #{form.output_prefix.errors}#{form.output_prefix}
                     td #{form.output_limit.errors}#{form.output_limit}
+                    td #{form.checker.errors}#{form.checker}
+                        #{form.checker_args.errors}#{form.checker_args}
                     td #{form.generator_args.errors}#{form.generator_args}
                         a.edit-generator-args(href='#') {% trans "Edit" %}
                     if cases_formset.can_delete

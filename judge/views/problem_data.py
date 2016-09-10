@@ -35,19 +35,23 @@ class ProblemDataForm(ModelForm):
 
     class Meta:
         model = ProblemData
-        fields = ['zipfile', 'generator', 'output_limit', 'output_prefix']
+        fields = ['zipfile', 'generator', 'output_limit', 'output_prefix', 'checker', 'checker_args']
+        widgets = {
+            'checker_args': HiddenInput,
+        }
 
 
 class ProblemCaseForm(ModelForm):
     class Meta:
         model = ProblemTestCase
         fields = ('order', 'type', 'input_file', 'output_file', 'points',
-                  'is_pretest', 'output_limit', 'output_prefix', 'generator_args')
+                  'is_pretest', 'output_limit', 'output_prefix', 'checker', 'checker_args', 'generator_args')
         widgets = {
             'generator_args': HiddenInput,
             'points': NumberInput(attrs={'style': 'width: 4em'}),
             'output_prefix': NumberInput(attrs={'style': 'width: 4.5em'}),
             'output_limit': NumberInput(attrs={'style': 'width: 6em'}),
+            'checker_args': HiddenInput,
         }
 
 
@@ -115,7 +119,7 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
         return context
 
     def post(self, request, *args, **kwargs):
-        self.object = problem =self.get_object()
+        self.object = problem = self.get_object()
         data_form = self.get_data_form(post=True)
         valid_files = self.get_valid_files(data_form.instance, post=True)
         data_form.zip_valid = valid_files is not False
