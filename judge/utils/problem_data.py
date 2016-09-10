@@ -1,3 +1,4 @@
+import json
 import os
 import re
 
@@ -63,7 +64,7 @@ class ProblemDataCompiler(object):
             if case.checker_args:
                 return {
                     'name': case.checker,
-                    'args': case.checker_args,
+                    'args': json.loads(case.checker_args),
                 }
             return case.checker
 

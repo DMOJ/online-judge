@@ -29,6 +29,8 @@ mimetypes.add_type('application/x-yaml', '.yml')
 
 def checker_args_cleaner(self):
     data = self.cleaned_data['checker_args']
+    if not data or data.isspace():
+        return ''
     try:
         if not isinstance(json.loads(data), dict):
             raise ValidationError(_('Checker arguments must be a JSON object'))
