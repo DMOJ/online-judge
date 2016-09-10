@@ -359,7 +359,7 @@ block body
         #{cases_formset.management_form}
         table.table #{data_form.as_table}
         #column-visible(data-problem=problem.code)
-            strong {% trans "Show rows:" %}
+            strong {% trans "Show columns:" %}
             label #[input(type='checkbox', data-suffix='output_prefix')] {% trans "Output prefix" %}
             label #[input(type='checkbox', data-suffix='output_limit')] {% trans "Output limit" %}
             label #[input(type='checkbox', data-suffix='checker')] {% trans "Checker" %}
