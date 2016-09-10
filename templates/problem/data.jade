@@ -338,6 +338,12 @@ block body
         - csrf_token
         #{cases_formset.management_form}
         table.table #{data_form.as_table}
+        div
+            strong {% trans "Show rows:" %}
+            label #[input(type='checkbox', data-suffix='output_prefix')] {% trans "Output prefix" %}
+            label #[input(type='checkbox', data-suffix='output_limit')] {% trans "Output limit" %}
+            label #[input(type='checkbox', data-suffix='checker')] {% trans "Checker" %}
+            label #[input(type='checkbox', data-suffix='generator_args')] {% trans "Generator args" %}
         table.table#case-table
             thead: tr
                 th {% trans "Order" %}
@@ -346,10 +352,10 @@ block body
                 th {% trans "Output file" %}
                 th {% trans "Points" %}
                 th {% trans "Pretest?" %}
-                th {% trans "Output prefix" %}
-                th {% trans "Output limit" %}
-                th {% trans "Checker" %}
-                th {% trans "Generator args" %}
+                th.output-prefix {% trans "Output prefix" %}
+                th.output-limit {% trans "Output limit" %}
+                th.checker {% trans "Checker" %}
+                th.generator-args {% trans "Generator args" %}
                 if cases_formset.can_delete
                     th {% trans "Delete?" %}
             tbody: each form in all_case_forms
@@ -366,11 +372,11 @@ block body
                         | #{form.output_file.errors}#{form.output_file}
                     td #{form.points.errors}#{form.points}
                     td #{form.is_pretest.errors}#{form.is_pretest}
-                    td #{form.output_prefix.errors}#{form.output_prefix}
-                    td #{form.output_limit.errors}#{form.output_limit}
-                    td #{form.checker.errors}#{form.checker}
+                    td.output-prefix #{form.output_prefix.errors}#{form.output_prefix}
+                    td.output-limit #{form.output_limit.errors}#{form.output_limit}
+                    td.checker #{form.checker.errors}#{form.checker}
                         #{form.checker_args.errors}#{form.checker_args}
-                    td #{form.generator_args.errors}#{form.generator_args}
+                    td.generator-args #{form.generator_args.errors}#{form.generator_args}
                         a.edit-generator-args(href='javascript:void(0)') #[i.fa.fa-pencil] {% trans "Edit" %}
                     if cases_formset.can_delete
                         td #{form.DELETE}
