@@ -44,6 +44,22 @@ block js_media
             var order = 0;
             var $table = $('#case-table');
 
+            function handle_table_reorder() {
+                var in_batch = false;
+                $table.find('tbody:first tr').each(function () {
+                    switch ($(this).attr('data-type')) {
+                        case 'C':
+                            $(this).find('input[id$=points], input[id$=pretest]').prop('disabled', in_batch);
+                            break;
+                        case 'S':
+                            in_batch = true;
+                            break;
+                        case 'E':
+                            in_batch = false;
+                    }
+                });
+            }
+
             function swap_row($a, $b) {
                 var $a_order = $a.find('input[id$=order]'), $b_order = $b.find('input[id$=order]');
                 var order = $a_order.val();
@@ -52,6 +68,7 @@ block js_media
                 $b.after($a);
                 $a.find('span.order').text($a_order.val());
                 $b.find('span.order').text($b_order.val());
+                handle_table_reorder();
             }
 
             $table.on('add-row', function (e, $tr) {
@@ -151,6 +168,8 @@ block js_media
                         }).first().before($item).find('input[id$=order]').val());
                         $item.find('input[id$=order]').val(order - 1).siblings('span.order').text(order - 1);
                     }
+                    if (newIndex != oldIndex)
+                        handle_table_reorder();
                     _super($item, container);
                 }
             });
