@@ -92,7 +92,8 @@ block js_media
                         .after($('<i>', {'class': 'fa fa-fw fa-lg fa-ellipsis-v'}));
 
                 var $opts = $tr.find('input').slice(2, 6);
-                var $files = $tr.find('select').slice(1);
+                var $files = $tr.find('select').slice(1, 3);
+                var $checker = $files.end().last();
                 $tr.find('select[id$=type]').change(function () {
                     var $this = $(this), val = $this.val(), disabled;
                     switch (val) {
@@ -101,10 +102,12 @@ block js_media
                             disabled = val == 'S';
                             $opts.prop('disabled', val != 'S');
                             $files.prop('disabled', true);
+                            $checker.prop('disabled', val != 'S');
                             break;
                         default:
                             $opts.prop('disabled', val != 'C');
                             $files.prop('disabled', val != 'C');
+                            $checker.prop('disabled', val != 'C');
                             var $prevs = $tr.prevAll('tr[data-type=S], tr[data-type=E]');
                             disabled = $prevs.length && $prevs.get(0).getAttribute('data-type') == 'S';
                             $tr.find('input[id$=points], input[id$=pretest]').prop('disabled', val != 'C' || disabled);
