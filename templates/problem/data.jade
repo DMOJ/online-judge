@@ -118,11 +118,24 @@ block js_media
 
                 var tooltip_classes = 'tooltipped tooltipped-s';
                 $tr.find('a.edit-generator-args').mouseover(function () {
-                    var $this = $(this).addClass(tooltip_classes);
-                    $this.attr('aria-label', $this.prev().val() || '(none)');
+                    switch ($tr.attr('data-type')) {
+                        case 'C':
+                        case 'S':
+                            var $this = $(this).addClass(tooltip_classes);
+                            $this.attr('aria-label', $this.prev().val() || '(none)');
+                    }
                 }).mouseout(function () {
                     $(this).removeClass(tooltip_classes).removeAttr('aria-label');
                 }).featherlight($('.generator-args-editor'), {
+                    beforeOpen: function () {
+                        switch ($tr.attr('data-type')) {
+                            case 'C':
+                            case 'S':
+                                return true;
+                            default:
+                                return false;
+                        }
+                    },
                     afterOpen: function () {
                         var $input = this.$currentTarget.prev();
                         this.$instance.find('.generator-args-editor')
