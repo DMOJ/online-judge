@@ -39,6 +39,7 @@ block js_media
                 });
             });
     script(type='text/javascript', src='{% static "libs/jquery-sortable.js" %}')
+    script(type='text/javascript', src='{% static "libs/featherlight/featherlight.min.js" %}')
     script(type='text/javascript').
         $(function () {
             var order = 0;
@@ -111,6 +112,25 @@ block js_media
                     $tr.attr('data-type', val).nextUntil('tr[data-type=S], tr[data-type=E], tr[data-type=]')
                             .find('input[id$=points], input[id$=pretest]').prop('disabled', disabled);
                 }).change();
+
+                var tooltip_classes = 'tooltipped tooltipped-s';
+                $tr.find('a.edit-generator-args').mouseover(function () {
+                    var $this = $(this).addClass(tooltip_classes);
+                    $this.attr('aria-label', $this.prev().val() || '(none)');
+                }).mouseout(function () {
+                    $(this).removeClass(tooltip_classes).removeAttr('aria-label');
+                }).featherlight($('.generator-args-editor'), {
+                    beforeContent: function () {
+                        var $input = this.$currentTarget.prev();
+                        this.$instance.find('.generator-args-editor')
+                                .find('textarea').val($input.val()).end()
+                                .find('.button').click(function () {
+                                    $input.val($(this).prev().val());
+                                    $.featherlight.current().close();
+                                }).end()
+                                .show();
+                    }
+                })
             }).find('tbody:first').find('tr').each(function () {
                 $table.trigger('add-row', [$(this)]);
             });
@@ -234,6 +254,10 @@ block media
 
         i.fa-ellipsis-v {
             cursor: move;
+        }
+
+        .edit-generator-args {
+            position: relative;
         }
 
 block header
