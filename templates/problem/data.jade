@@ -188,6 +188,8 @@ block js_media
                     var filled = false;
                     $(this).find('input, select').each(function () {
                         var $this = $(this);
+                        if (!$this.attr(name))
+                            return;
                         if ($this.attr('type') === 'checkbox')
                             filled |= $this.is(':checked');
                         else if (!$this.attr('name').endsWith('order'))
