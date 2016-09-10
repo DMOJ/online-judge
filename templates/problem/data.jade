@@ -120,7 +120,7 @@ block js_media
                 }).mouseout(function () {
                     $(this).removeClass(tooltip_classes).removeAttr('aria-label');
                 }).featherlight($('.generator-args-editor'), {
-                    beforeContent: function () {
+                    afterOpen: function () {
                         var $input = this.$currentTarget.prev();
                         this.$instance.find('.generator-args-editor')
                                 .find('textarea').val($input.val()).end()
