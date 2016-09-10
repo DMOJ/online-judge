@@ -243,6 +243,26 @@ block js_media
                     _super($item, container);
                 }
             });
+
+            var $controls = $('#column-visible');
+            var problem = $controls.attr('data-problem');
+            $controls.find('input').change(function () {
+                var $this = $(this), suffix = $this.attr('data-suffix'), checked = $this.is(':checked');
+                $table.find('.' + suffix.replace(/_/g, '-')).toggle(checked);
+                localStorage.setItem('data-visible:' + problem + ':' + suffix, checked ? '1' : '0')
+            }).each(function () {
+                var $this = $(this), suffix = $this.attr('data-suffix'), filled = false;
+                filled = localStorage.getItem('data-visible:' + problem + ':' + suffix);
+                if (filled !== null)
+                    filled = filled == '1';
+                else {
+                    filled = false;
+                    $table.find('[id$=' + suffix + ']').each(function () {
+                        filled |= !!$(this).val();
+                    });
+                }
+                $this.prop('checked', filled).trigger('change');
+            });
         });
 
 block media
@@ -338,7 +358,7 @@ block body
         - csrf_token
         #{cases_formset.management_form}
         table.table #{data_form.as_table}
-        div
+        #column-visible(data-problem=problem.code)
             strong {% trans "Show rows:" %}
             label #[input(type='checkbox', data-suffix='output_prefix')] {% trans "Output prefix" %}
             label #[input(type='checkbox', data-suffix='output_limit')] {% trans "Output limit" %}
