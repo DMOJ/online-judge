@@ -148,7 +148,6 @@ class ProblemDataCompiler(object):
 
         init = {'archive': zippath[1]}
         pretests = [case for case in cases if case['is_pretest']]
-        cases = [case for case in cases if not case['is_pretest']]
         for case in pretests:
             del case['is_pretest']
         for case in cases:
