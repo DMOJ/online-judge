@@ -552,6 +552,17 @@ def problem_directory_file(data, filename):
     return os.path.join(data.problem.code, os.path.basename(filename))
 
 
+CHECKERS = (
+    ('standard', _('Standard')),
+    ('floats', _('Floats')),
+    ('floatsabs', _('Floats (absolute)')),
+    ('floatsrel', _('Floats (relative)')),
+    ('rstripped', _('Non-trailing spaces')),
+    ('sorted', _('Unordered')),
+    ('identical', _('Byte identical')),
+)
+
+
 class ProblemData(models.Model):
     problem = models.OneToOneField(Problem, verbose_name=_('problem'), related_name='data_files')
     zipfile = models.FileField(verbose_name=_('data zip file'), storage=problem_data_storage, null=True, blank=True,
@@ -561,6 +572,9 @@ class ProblemData(models.Model):
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
     feedback = models.TextField(verbose_name=_('init.yml generation feedback'), blank=True)
+    checker = models.CharField(max_length=10, verbose_name=_('checker'), choices=CHECKERS, blank=True)
+    checker_args = models.TextField(verbose_name=_('checker arguments'), blank=True,
+                                    help_text=_('checker arguments as a JSON object'))
 
     __original_zipfile = None
 
@@ -591,6 +605,9 @@ class ProblemTestCase(models.Model):
     is_pretest = models.BooleanField(verbose_name=_('case is pretest?'))
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
+    checker = models.CharField(max_length=10, verbose_name=_('checker'), choices=CHECKERS, blank=True)
+    checker_args = models.TextField(verbose_name=_('checker arguments'), blank=True,
+                                    help_text=_('checker arguments as a JSON object'))
 
 
 class LanguageLimit(models.Model):
