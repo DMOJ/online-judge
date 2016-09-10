@@ -37,6 +37,7 @@ block js_media
                     });
                 });
             });
+    script(type='text/javascript', src='{% static "libs/jquery-sortable.js" %}')
     script(type='text/javascript').
         $(function () {
             var order = 0;
@@ -68,7 +69,8 @@ block js_media
                                 window.scrollBy(0, -$prev.height());
                             }
                         }));
-                $order.after($('<span>', {'class': 'order'}).text($order.val()));
+                $order.after($('<span>', {'class': 'order'}).text($order.val()))
+                        .after($('<i>', {'class': 'fa fa-ellipsis-v'}));
 
                 var $opts = $tr.find('input').slice(2, 6);
                 var $files = $tr.find('select').slice(1);
@@ -120,6 +122,37 @@ block js_media
                 $table.trigger('add-row', [$tr]);
                 window.scrollBy(0, $tr.height());
                 return false;
+            });
+
+            var oldIndex;
+            $table.sortable({
+                containerSelector: 'table',
+                itemPath: '> tbody:first',
+                itemSelector: 'tr',
+                handle: 'i.fa-ellipsis-v',
+                placeholder: '<tr class="placeholder"/>',
+                onDragStart: function ($item, container, _super) {
+                    oldIndex = $item.index();
+                    _super($item, container);
+                },
+                onDrop: function ($item, container, _super) {
+                    var newIndex = $item.index();
+                    console.log(oldIndex, newIndex);
+                    if (newIndex > oldIndex) {
+                        var order = parseInt($item.parent().children().slice(oldIndex, newIndex).each(function () {
+                            var $order = $(this).find('input[id$=order]');
+                            $order.val(parseInt($order.val()) - 1).siblings('span.order').text($order.val());
+                        }).last().after($item).find('input[id$=order]').val());
+                        $item.find('input[id$=order]').val(order + 1).siblings('span.order').text(order + 1);
+                    } else if (newIndex < oldIndex) {
+                        console.log($item.parent().children().slice(newIndex + 1, oldIndex + 1));
+                        var order = parseInt($item.parent().children().slice(newIndex + 1, oldIndex + 1).each(function () {
+                            var $order = $(this).find('input[id$=order]');
+                            $order.val(parseInt($order.val()) + 1).siblings('span.order').text($order.val());
+                        }).first().before($item).find('input[id$=order]').val());
+                        $item.find('input[id$=order]').val(order - 1).siblings('span.order').text(order - 1);
+                    }
+                }
             });
         });
 
