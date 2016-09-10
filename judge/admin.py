@@ -772,7 +772,7 @@ class ContestTagAdmin(admin.ModelAdmin):
 
     if AdminPagedownWidget is not None:
         formfield_overrides = {
-            TextField: {'widfget': AdminPagedownWidget},
+            TextField: {'widget': AdminPagedownWidget},
         }
 
     def save_model(self, request, obj, form, change):
