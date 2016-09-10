@@ -166,7 +166,7 @@ def problem_init_view(request, problem):
 
     try:
         with problem_data_storage.open(os.path.join(problem.code, 'init.yml')) as f:
-            data = f.read()
+            data = f.read().rstrip('\n')
     except IOError:
         raise Http404()
 
