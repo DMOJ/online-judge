@@ -322,6 +322,10 @@ block media
             float: right;
         }
 
+        #case-table tbody td {
+            white-space: nowrap;
+        }
+
 block header
     if data_form.instance.has_yml
         .title-line-action [#[a(href='{% url "problem_data_init" problem.code %}') {% trans "View YAML" %}]]
