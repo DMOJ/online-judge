@@ -178,7 +178,7 @@ block js_media
                     }
                 });
 
-                checker_precision($tr.find('input[id$=checker]'));
+                checker_precision($tr.find('select[id$=checker]'));
             }).find('tbody:first').find('tr').each(function () {
                 $table.trigger('add-row', [$(this)]);
             });
