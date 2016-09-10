@@ -15,43 +15,6 @@ block media
             color: gray;
         }
 
-        .source-ln {
-            color: gray;
-            border-right: 1px solid gray;
-            padding-right: 5px;
-            text-align: right;
-        }
-
-        .source-ln a {
-            color: gray;
-            display: block;
-        }
-
-        .source-ln a:hover {
-            text-decoration: underline;
-        }
-
-        .source-ln a::before {
-            display: block;
-            content: " ";
-            margin-top: -50px;
-            height: 50px;
-            visibility: hidden;
-        }
-
-        .source-code pre, .source-ln pre {
-            margin: 0;
-            padding: 0;
-            white-space: pre;
-        }
-
-        .source-code {
-            padding-left: 15px;
-        }
-
-        .source-wrap {
-            overflow-x: auto;
-        }
 block body
     br
     div: a(href='{% url "submission_status" submission.id %}') {% trans "View status" %}

@@ -8,17 +8,17 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
-from django.core.files.storage import default_storage
 from django.core.urlresolvers import reverse
 from django.forms import ModelForm, formset_factory, HiddenInput, NumberInput, BaseModelFormSet
 from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
 
-from judge.models import ProblemData, Problem, ProblemTestCase
+from judge.highlight_code import highlight_code
+from judge.models import ProblemData, Problem, ProblemTestCase, problem_data_storage
 from judge.utils.problem_data import ProblemDataCompiler
 from judge.utils.views import TitleMixin, LoadSelect2Mixin
 from judge.views.problem import ProblemMixin
@@ -144,14 +144,36 @@ def problem_data_file(request, problem, path):
     response = HttpResponse()
     if hasattr(settings, 'PROBLEM_DATA_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
         response['X-Accel-Redirect'] = '%s/%s/%s' % (settings.PROBLEM_DATA_INTERNAL, problem, path)
-    elif hasattr(settings, 'PROBLEM_DATA_ROOT'):
-        with open(os.path.join(settings.PROBLEM_DATA_ROOT, problem, path), 'rb') as f:
-            response.content = f.read()
     else:
-        return HttpResponseRedirect(default_storage.url('%s/%s' % (problem, path)))
+        try:
+            with problem_data_storage.open(os.path.join(problem, path), 'rb') as f:
+                response.content = f.read()
+        except IOError:
+            raise Http404()
 
     type, encoding = mimetypes.guess_type(path)
     response['Content-Type'] = type or 'application/octet-stream'
     if encoding is not None:
         response['Content-Encoding'] = encoding
     return response
+
+
+@login_required
+def problem_init_view(request, problem):
+    problem = get_object_or_404(Problem, code=problem)
+    if not request.user.is_superuser and not problem.authors.filter(id=request.user.profile.id).exists():
+        raise Http404()
+
+    try:
+        with problem_data_storage.open(os.path.join(problem.code, 'init.yml')) as f:
+            data = f.read()
+    except IOError:
+        raise Http404()
+
+    return render(request, 'problem/yaml.jade', {
+        'raw_source': data, 'highlighted_source': highlight_code(data, 'yaml'),
+        'title': _('Generated init.yml for %s') % problem.name,
+        'content_title': mark_safe(escape(_('Generated init.yml for %s')) % (
+            format_html(u'<a href="{1}">{0}</a>', problem.name,
+                        reverse('problem_detail', args=[problem.code]))))
+    })

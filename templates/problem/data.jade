@@ -151,7 +151,7 @@ block media
 
 block header
     if data_form.instance.has_yml
-        .title-line-action [#[a(href='{% url "problem_data_file" problem.code "init.yml" %}') {% trans "View YAML" %}]]
+        .title-line-action [#[a(href='{% url "problem_data_init" problem.code %}') {% trans "View YAML" %}]]
 
 block body
     if data_form.instance.feedback

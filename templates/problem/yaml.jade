@@ -1,0 +1,9 @@
+extends base
+
+block body
+    .source-wrap: table: tr
+        td.source-ln: div
+            for line in raw_source|split
+                a(href='#line-{{ forloop.counter }}', name='line-{{ forloop.counter }}')
+                    pre #{forloop.counter}
+        td.source-code #{highlighted_source}
