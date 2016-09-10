@@ -53,22 +53,16 @@ html(lang=LANGUAGE_CODE)
         | <script>window.bad_browser = true</script>
         | <![endif]-->
         block meta
-        if INLINE_FONTAWESOME
-            - compress css
-                link(rel='stylesheet', href='{% static "style.css" %}')
-                if PYGMENT_THEME
-                    link(rel='stylesheet', href='{% static PYGMENT_THEME %}')
+        if not INLINE_FONTAWESOME
+            link(rel='stylesheet', href=FONTAWESOME_CSS)
+        - compress css
+            link(rel='stylesheet', href='{% static "style.css" %}')
+            if PYGMENT_THEME
+                link(rel='stylesheet', href='{% static PYGMENT_THEME %}')
+            if INLINE_FONTAWESOME
                 link(rel='stylesheet', href='{% static "libs/fontawesome/font-awesome.css" %}')
-                link(type='text/css', rel='stylesheet', href='{% static "libs/featherlight/featherlight.min.css" %}')
-                link(rel='stylesheet', href='{% static "libs/clipboard/tooltip.css" %}')
-        else
-            - compress css
-                link(rel='stylesheet', href='{% static "style.css" %}')
-                if PYGMENT_THEME
-                    link(rel='stylesheet', href='{% static PYGMENT_THEME %}')
-                link(rel='stylesheet', href=FONTAWESOME_CSS)
-                link(type='text/css', rel='stylesheet', href='{% static "libs/featherlight/featherlight.min.css" %}')
-                link(rel='stylesheet', href='{% static "libs/clipboard/tooltip.css" %}')
+            link(type='text/css', rel='stylesheet', href='{% static "libs/featherlight/featherlight.min.css" %}')
+            link(rel='stylesheet', href='{% static "libs/clipboard/tooltip.css" %}')
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ site.domain }}{{ request.get_full_path }}')
         block media
         if not INLINE_JQUERY
