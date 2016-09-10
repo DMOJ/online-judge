@@ -61,6 +61,34 @@ block js_media
                 });
             }
 
+            function try_parse_json(json) {
+                try {
+                    return JSON.parse(json);
+                } catch (e) {
+                    return {};
+                }
+            }
+
+            function checker_precision($checker) {
+                var $td = $checker.parent();
+                var $args = $td.find('input');
+                var $precision = $('<input>', {
+                    type: 'number',
+                    value: try_parse_json($args.val()).precision || 6,
+                    title: 'precision (decimal digits)',
+                    style: 'width: 4em'
+                }).change(function () {
+                    if ($checker.val().startsWith('floats'))
+                        $args.val(JSON.stringify({precision: parseInt($(this).val())}));
+                    else
+                        $args.val('');
+                }).appendTo($td);
+
+                $checker.change(function () {
+                    $precision.toggle($checker.val().startsWith('floats')).change();
+                }).change();
+            }
+
             function swap_row($a, $b) {
                 var $a_order = $a.find('input[id$=order]'), $b_order = $b.find('input[id$=order]');
                 var order = $a_order.val();
@@ -71,6 +99,8 @@ block js_media
                 $b.find('span.order').text($b_order.val());
                 handle_table_reorder();
             }
+
+            checker_precision($('#id_problem-data-checker'));
 
             $table.on('add-row', function (e, $tr) {
                 var $order = $tr.find('input').filter('[id$=order]').attr('type', 'hidden').val(++order)
@@ -146,7 +176,9 @@ block js_media
                                 }).end()
                                 .show();
                     }
-                })
+                });
+
+                checker_precision($tr.find('input[id$=checker]'));
             }).find('tbody:first').find('tr').each(function () {
                 $table.trigger('add-row', [$(this)]);
             });
