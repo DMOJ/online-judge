@@ -333,7 +333,7 @@ block body
                     td #{form.checker.errors}#{form.checker}
                         #{form.checker_args.errors}#{form.checker_args}
                     td #{form.generator_args.errors}#{form.generator_args}
-                        a.edit-generator-args(href='javascript:void(0)') {% trans "Edit" %}
+                        a.edit-generator-args(href='javascript:void(0)') #[i.fa.fa-pencil] {% trans "Edit" %}
                     if cases_formset.can_delete
                         td #{form.DELETE}
         input(class='button', type='submit', value='{% trans "Submit!" %}')
