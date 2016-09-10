@@ -59,13 +59,20 @@ class ProblemDataCompiler(object):
                 raise ProblemDataError(_('Empty batches not allowed.'))
             cases.append(batch)
 
+        def make_checker(case):
+            if case.checker_args:
+                return {
+                    'name': case.checker,
+                    'args': case.checker_args,
+                }
+            return case.checker
+
         for i, case in enumerate(self.cases, 1):
             if case.type == 'C':
                 data = {}
                 if batch:
                     case.points = None
                     case.is_pretest = batch['is_pretest']
-                    case.save()
                 else:
                     if case.points is None:
                         raise ProblemDataError(_('Points must be defined for non-batch case #%d.') % i)
@@ -91,6 +98,11 @@ class ProblemDataCompiler(object):
                     data['output_limit_length'] = case.output_limit
                 if case.output_prefix is not None:
                     data['output_prefix_length'] = case.output_prefix
+                if case.checker:
+                    data['checker'] = make_checker(case)
+                else:
+                    case.checker_args = ''
+                case.save(update_fields=('checker_args', 'is_pretest'))
                 (batch['batched'] if batch else cases).append(data)
             elif case.type == 'S':
                 if batch:
@@ -108,10 +120,22 @@ class ProblemDataCompiler(object):
                     batch['output_limit_length'] = case.output_limit
                 if case.output_prefix is not None:
                     batch['output_prefix_length'] = case.output_prefix
+                if case.checker:
+                    batch['checker'] = make_checker(case)
+                else:
+                    case.checker_args = ''
+                case.input_file = ''
+                case.output_file = ''
+                case.save(update_fields=('checker_args', 'input_file', 'output_file'))
             elif case.type == 'E':
                 if not batch:
                     raise ProblemDataError(_('Attempt to end batch outside of one in case #%d') % i)
                 case.is_pretest = batch['is_pretest']
+                case.input_file = ''
+                case.output_file = ''
+                case.generator_args = ''
+                case.checker = ''
+                case.checker_args = ''
                 case.save()
                 end_batch()
                 batch = None
@@ -137,6 +161,10 @@ class ProblemDataCompiler(object):
             init['output_limit_length'] = self.data.output_limit
         if self.data.output_prefix is not None:
             init['output_prefix_length'] = self.data.output_prefix
+        if self.data.checker:
+            init['checker'] = make_checker(self.data)
+        else:
+            self.data.checker_args = ''
         return init
 
     def compile(self):

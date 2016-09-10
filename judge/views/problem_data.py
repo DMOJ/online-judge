@@ -27,11 +27,23 @@ mimetypes.init()
 mimetypes.add_type('application/x-yaml', '.yml')
 
 
+def checker_args_cleaner(self):
+    data = self.cleaned_data['checker_args']
+    try:
+        if not isinstance(json.loads(data), dict):
+            raise ValidationError(_('Checker arguments must be a JSON object'))
+    except ValueError:
+        raise ValidationError(_('Checker arguments is invalid JSON'))
+    return data
+
+
 class ProblemDataForm(ModelForm):
     def clean_zipfile(self):
         if hasattr(self, 'zip_valid') and not self.zip_valid:
             raise ValidationError(_('Your zip file is invalid!'))
         return self.cleaned_data['zipfile']
+
+    clean_checker_args = checker_args_cleaner
 
     class Meta:
         model = ProblemData
@@ -42,6 +54,8 @@ class ProblemDataForm(ModelForm):
 
 
 class ProblemCaseForm(ModelForm):
+    clean_checker_args = checker_args_cleaner
+
     class Meta:
         model = ProblemTestCase
         fields = ('order', 'type', 'input_file', 'output_file', 'points',
