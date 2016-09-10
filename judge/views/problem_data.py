@@ -24,6 +24,7 @@ from judge.utils.views import TitleMixin, LoadSelect2Mixin
 from judge.views.problem import ProblemMixin
 
 mimetypes.init()
+mimetypes.add_type('application/x-yaml', '.yml')
 
 
 class ProblemDataForm(ModelForm):
