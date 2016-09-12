@@ -1,6 +1,7 @@
 import hashlib
 import json
 import logging
+import re
 import urllib2
 from contextlib import closing
 from urllib import urlencode
@@ -14,6 +15,7 @@ from judge.math_parser import MathHTMLParser
 from judge.utils.file_cache import HashFileCache
 
 logger = logging.getLogger('judge.mathoid')
+redollar = re.compile(r'(?<!\\)(?:\\{2})*\$')
 
 
 class MathoidMathParser(MathHTMLParser):
@@ -41,7 +43,8 @@ class MathoidMathParser(MathHTMLParser):
 
         try:
             request = urllib2.urlopen(self.mathoid_url, urlencode({
-                'q': formula, 'type': 'tex' if formula.startswith('\displaystyle') else 'inline-tex'
+                'q': redollar.sub('\\$', formula).encode('utf-8'),
+                'type': 'tex' if formula.startswith('\displaystyle') else 'inline-tex'
             }))
         except urllib2.HTTPError as e:
             if e.code == 400:
@@ -109,6 +112,7 @@ class MathoidMathParser(MathHTMLParser):
             hash = hashlib.sha1(formula.encode('utf-8')).hexdigest()
         else:
             hash = hashlib.sha1(formula).hexdigest()
+            formula = formula.decode('utf-8')
         if self.cache.has_file(hash, 'css'):
             result = self.query_cache(hash)
         else:
