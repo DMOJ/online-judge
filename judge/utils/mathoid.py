@@ -43,7 +43,7 @@ class MathoidMathParser(MathHTMLParser):
 
         try:
             request = urllib2.urlopen(self.mathoid_url, urlencode({
-                'q': redollar.sub('\\$', formula).encode('utf-8'),
+                'q': redollar.sub(lambda m: '\\' + m.group(0), formula).encode('utf-8'),
                 'type': 'tex' if formula.startswith('\displaystyle') else 'inline-tex'
             }))
         except urllib2.HTTPError as e:
