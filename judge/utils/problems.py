@@ -36,8 +36,8 @@ def contest_attempted_ids(profile):
         result = {id: {'achieved_points': points, 'max_points': max_points}
                   for id, max_points, points in (Submission.objects.filter(user=profile)
                                                  .values_list('problem__problem__id', 'problem__points')
-                                                 .annotate(points=Max('points')).filter(
-            points__lt=F('problem__points')))}
+                                                 .annotate(points=Max('points'))
+                                                 .filter(points__lt=F('problem__points')))}
         cache.set(key, result, 86400)
     return result
 
@@ -49,8 +49,8 @@ def user_attempted_ids(profile):
         result = {id: {'achieved_points': points, 'max_points': max_points}
                   for id, max_points, points in (Submission.objects.filter(user=profile)
                                                  .values_list('problem__id', 'problem__points')
-                                                 .annotate(points=Max('points')).filter(
-            points__lt=F('problem__points')))}
+                                                 .annotate(points=Max('points'))
+                                                 .filter(points__lt=F('problem__points')))}
         cache.set(key, result, 86400)
     return result
 
