@@ -29,12 +29,12 @@ def user_completed_ids(profile):
     return result
 
 
-def contest_attempted_ids(profile):
-    key = 'contest_attempted:%s' % profile.id
+def contest_attempted_ids(participation):
+    key = 'contest_attempted:%s' % participation.id
     result = cache.get(key)
     if result is None:
         result = {id: {'achieved_points': points, 'max_points': max_points}
-                  for id, max_points, points in (Submission.objects.filter(user=profile)
+                  for id, max_points, points in (participation.submissions
                                                  .values_list('problem__problem__id', 'problem__points')
                                                  .annotate(points=Max('points'))
                                                  .filter(points__lt=F('problem__points')))}
