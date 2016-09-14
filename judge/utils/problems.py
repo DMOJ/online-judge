@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from django.core.cache import cache
-from django.db.models import F, Count
+from django.db.models import F, Count, Max
 from django.utils.translation import ugettext as _
 
 from judge.models import Submission
@@ -14,7 +14,7 @@ def contest_completed_ids(participation):
     result = cache.get(key)
     if result is None:
         result = set(participation.submissions.filter(submission__result='AC', points=F('problem__points'))
-                                  .values_list('problem__problem__id', flat=True).distinct())
+                     .values_list('problem__problem__id', flat=True).distinct())
         cache.set(key, result, 86400)
     return result
 
@@ -24,7 +24,30 @@ def user_completed_ids(profile):
     result = cache.get(key)
     if result is None:
         result = set(Submission.objects.filter(user=profile, result='AC', points=F('problem__points'))
-                               .values_list('problem_id', flat=True).distinct())
+                     .values_list('problem_id', flat=True).distinct())
+        cache.set(key, result, 86400)
+    return result
+
+
+def contest_attempted_ids(profile):
+    key = 'contest_attempted:%s' % profile.id
+    result = cache.get(key)
+    if result is None:
+        result = {q['problem__problem__id']: {'achieved_points': q['points'], 'max_points': q['problem__points']}
+                  for q in (Submission.objects.filter(user=profile)
+                            .values_list('problem__problem__id', 'problem__points')
+                            .annotate(points=Max('points')).filter(points__lt=F('problem__points')))}
+        cache.set(key, result, 86400)
+    return result
+
+
+def user_attempted_ids(profile):
+    key = 'user_attempted:%s' % profile.id
+    result = cache.get(key)
+    if result is None:
+        result = {q['problem__id']: {'achieved_points': q['points'], 'max_points': q['problem__points']}
+                  for q in (Submission.objects.filter(user=profile).values_list('problem__id', 'problem__points')
+                            .annotate(points=Max('points')).filter(points__lt=F('problem__points')))}
         cache.set(key, result, 86400)
     return result
 

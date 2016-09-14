@@ -29,7 +29,7 @@ from judge.models import Problem, Submission, ContestSubmission, ContestProblem,
     ProblemTranslation, TranslatedProblemForeignKeyQuerySet, RuntimeVersion, ProblemType
 from judge.pdf_problems import HAS_PDF, DefaultPdfMaker
 from judge.utils.diggpaginator import DiggPaginator
-from judge.utils.problems import contest_completed_ids, user_completed_ids
+from judge.utils.problems import contest_completed_ids, user_completed_ids, contest_attempted_ids, user_attempted_ids
 from judge.utils.views import LoadSelect2Mixin, TitleMixin, generic_message
 
 
@@ -283,6 +283,12 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
             return contest_completed_ids(self.profile.current_contest)
         else:
             return user_completed_ids(self.profile) if self.profile is not None else ()
+
+    def get_attempted_ids(self):
+        if self.in_contest:
+            return contest_attempted_ids(self.profile.current_contest)
+        else:
+            return user_attempted_ids(self.profile) if self.profile is not None else ()
 
     def get_context_data(self, **kwargs):
         context = super(ProblemList, self).get_context_data(**kwargs)
