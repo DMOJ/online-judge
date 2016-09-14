@@ -33,10 +33,11 @@ def contest_attempted_ids(profile):
     key = 'contest_attempted:%s' % profile.id
     result = cache.get(key)
     if result is None:
-        result = {q['problem__problem__id']: {'achieved_points': q['points'], 'max_points': q['problem__points']}
-                  for q in (Submission.objects.filter(user=profile)
-                            .values_list('problem__problem__id', 'problem__points')
-                            .annotate(points=Max('points')).filter(points__lt=F('problem__points')))}
+        result = {id: {'achieved_points': points, 'max_points': max_points}
+                  for id, max_points, points in (Submission.objects.filter(user=profile)
+                                                 .values_list('problem__problem__id', 'problem__points')
+                                                 .annotate(points=Max('points')).filter(
+            points__lt=F('problem__points')))}
         cache.set(key, result, 86400)
     return result
 
@@ -45,9 +46,11 @@ def user_attempted_ids(profile):
     key = 'user_attempted:%s' % profile.id
     result = cache.get(key)
     if result is None:
-        result = {q['problem__id']: {'achieved_points': q['points'], 'max_points': q['problem__points']}
-                  for q in (Submission.objects.filter(user=profile).values_list('problem__id', 'problem__points')
-                            .annotate(points=Max('points')).filter(points__lt=F('problem__points')))}
+        result = {id: {'achieved_points': points, 'max_points': max_points}
+                  for id, max_points, points in (Submission.objects.filter(user=profile)
+                                                 .values_list('problem__id', 'problem__points')
+                                                 .annotate(points=Max('points')).filter(
+            points__lt=F('problem__points')))}
         cache.set(key, result, 86400)
     return result
 
