@@ -39,6 +39,10 @@ block media
             color: #DE2121
         }
 
+        .attempted {
+            color: orange
+        }
+
         select {
             visibility: hidden;
         }
@@ -175,10 +179,16 @@ block body
                                         i.solved.fa.fa-lock
                             else
                                 td(solved='0')
-                                    if problem.is_public or IN_CONTEST
-                                        i.unsolved.fa.fa-minus-circle
+                                    if problem.id in attempted_problems
+                                        if problem.is_public or IN_CONTEST
+                                            i.attempted.fa.fa-minus-circle
+                                        else
+                                            i.attempted.fa.fa-lock
                                     else
-                                        i.unsolved.fa.fa-lock
+                                        if problem.is_public or IN_CONTEST
+                                            i.unsolved.fa.fa-minus-circle
+                                        else
+                                            i.unsolved.fa.fa-lock
                         td.problem
                             a(href='{% url "problem_detail" problem.code %}')= problem.i18n_name
                         td.category= problem.group.full_name
