@@ -284,7 +284,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
         else:
             return user_completed_ids(self.profile) if self.profile is not None else ()
 
-    def get_attempted_ids(self):
+    def get_attempted_problems(self):
         if self.in_contest:
             return contest_attempted_ids(self.profile.current_contest)
         else:
@@ -303,6 +303,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
         context['has_fts'] = settings.ENABLE_FTS
         context['search_query'] = self.search_query
         context['completed_problem_ids'] = self.get_completed_problems()
+        context['attempted_problems'] = self.get_attempted_problems()
 
         query = self.request.GET.copy()
         query.setlist('page', [])
