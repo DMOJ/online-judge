@@ -91,10 +91,10 @@ block js_media
         });
 
 block body
-    //if request.user.is_authenticated and request.user.is_superuser or perms.judge.test_site
-    //    include blog/dashboard.jade
-    //else
-    block before_posts
+    if request.user.is_authenticated and request.user.is_superuser or perms.judge.test_site
+        include blog/dashboard.jade
+    else
+        block before_posts
 
     ul#mobile.tabs
         li#blog-tab.active: a(href='#') {% trans "Blog" %}
