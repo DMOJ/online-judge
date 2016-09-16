@@ -29,6 +29,9 @@ class CommentForm(ModelForm):
             'parent': forms.HiddenInput(),
         }
 
+        if PagedownWidget is not None:
+            widgets['body'] = PagedownWidget()
+
     def __init__(self, request, *args, **kwargs):
         self.request = request
         super(CommentForm, self).__init__(*args, **kwargs)
