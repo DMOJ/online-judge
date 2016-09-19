@@ -99,7 +99,7 @@ block users_js_media
                     register_update_relative(function () {
                         return $('.start-time.active');
                     }, function (when) {
-                        return Math.abs(moment().diff(when, 'years')) < 1;
+                        return true;
                     });
 
                     $('a.user-name').each(function () {
