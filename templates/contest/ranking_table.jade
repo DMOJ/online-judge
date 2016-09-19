@@ -20,9 +20,9 @@ block after_rank
                     span.rating(class='{{ user.rating|rating_class }}') #{user.rating}
 
 block user_data
-    if user.current_contest
-        .start-time.active(data-unix='{{ user.current_contest.start|utc|date:"c" }}')
-            - blocktrans with time=user.current_contest.start|date:_("N j, Y, g:i") asvar str_time
+    if user.participation
+        .start-time.active(data-unix='{{ user.participation.start|utc|date:"c" }}')
+            - blocktrans with time=user.participation.start|date:_("N j, Y, g:i") asvar str_time
                 | Started on
             span.relative= str_time
             span.absolute= str_time
