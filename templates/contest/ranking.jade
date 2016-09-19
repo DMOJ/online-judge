@@ -98,6 +98,8 @@ block users_js_media
                 function install_tooltips() {
                     register_update_relative(function () {
                         return $('.start-time.active');
+                    }, function (when) {
+                        return Math.abs(moment().diff(when, 'years')) < 1;
                     });
 
                     $('a.user-name').each(function () {
