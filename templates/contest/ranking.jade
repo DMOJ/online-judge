@@ -104,9 +104,9 @@ block users_js_media
                         var link = $(this);
                         link.mouseenter(function (e) {
                             var start_time = link.find('.start-time').text();
-                            link.addClass('tooltipped tooltipped-w').attr('aria-label', start_time);
+                            link.addClass('tooltipped tooltipped-e').attr('aria-label', start_time);
                         }).mouseleave(function (e) {
-                            link.removeClass('tooltipped tooltipped-w').removeAttr('aria-label');
+                            link.removeClass('tooltipped tooltipped-e').removeAttr('aria-label');
                         });
                     });
                 }
