@@ -96,7 +96,7 @@ block users_js_media
                         return $('.start-time.active');
                     });
 
-                    $('td.user-name a').each(function () {
+                    $('a.user-name').each(function () {
                         var link = $(this);
                         link.mouseenter(function (e) {
                             var start_time = link.find('.start-time').text();
