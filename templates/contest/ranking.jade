@@ -87,22 +87,40 @@ block users_js_media
         script(type='text/javascript', src='{% static "event.js" %}')
         script(type='text/javascript').
             $(function () {
+                function install_tooltips() {
+                    register_update_relative(function () {
+                        return $('.start-time');
+                    });
+
+                    $('td.user-name a').each(function () {
+                        var link = $(this);
+                        link.mouseenter(function (e) {
+                            var start_time = link.find('.start-time').text();
+                            link.addClass('tooltipped tooltipped-w').attr('aria-label', start_time);
+                        }).mouseleave(function (e) {
+                            link.removeClass('tooltipped tooltipped-w').removeAttr('aria-label');
+                        });
+                    });
+                }
+
                 var receiver = new EventReceiver(
-                    "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
-                    ['contest_#{contest.id}'], #{last_msg}, function (message) {
-                        var table = $('#users-table');
-                        switch (message.type) {
-                            case 'update':
-                                $.ajax({
-                                    url: '{% url "contest_ranking_ajax" contest.key %}'
-                                }).done(function (data) {
-                                    table.html(data);
-                                }).fail(function () {
-                                    console.log('Failed to update table!');
-                                });
+                        "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                        ['contest_#{contest.id}'], #{last_msg}, function (message) {
+                            var table = $('#users-table');
+                            switch (message.type) {
+                                case 'update':
+                                    $.ajax({
+                                        url: '{% url "contest_ranking_ajax" contest.key %}'
+                                    }).done(function (data) {
+                                        table.html(data);
+                                        install_tooltips();
+                                    }).fail(function () {
+                                        console.log('Failed to update table!');
+                                    });
+                            }
                         }
-                    }
                 );
+                install_tooltips();
             });
 
 block users_table
