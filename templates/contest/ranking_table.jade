@@ -21,8 +21,10 @@ block after_rank
 
 block user_data
     if user.participation and not user.participation.ended
-        .start-time.active.moment-time-toggle(data-unix='{{ user.participation.start|utc|date:"c" }}')
-            | {% trans "Started #[span.relative]." %}
+        .start-time.active.moment-time-toggle(data-unix='{{ user.participation.start|utc|date:"c" }}') {% trans "Started" %}
+            = ' '
+            span.relative
+            = '.'
     else
         .start-time {% trans "Participation ended." %}
 
