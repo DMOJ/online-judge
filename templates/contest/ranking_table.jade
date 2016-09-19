@@ -25,7 +25,7 @@ block user_data
             = ' '
             - blocktrans with time=user.participation.start|date:_("N j, Y, g:i") asvar str_time
             span.relative= str_time
-            span.relative= str_time
+            span.absolute= str_time
     else
         .start-time
             i Participation ended.
