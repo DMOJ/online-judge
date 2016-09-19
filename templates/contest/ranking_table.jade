@@ -26,8 +26,7 @@ block user_data
             span.relative= str_time
             = '.'
     else
-        .start-time
-            i Participation ended.
+        .start-time {% trans "Participation ended." %}
 
 block before_point_head
     each problem in problems
