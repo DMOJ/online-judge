@@ -20,10 +20,10 @@ block after_rank
                     span.rating(class='{{ user.rating|rating_class }}') #{user.rating}
 
 block user_data
-    if user.participation
-        .start-time.active(data-unix='{{ user.participation.start|utc|date:"c" }}') {% trans "Started" %}
-            = ' '
+    if user.participation and not user.participation.ended
+        .start-time.active(data-unix='{{ user.participation.start|utc|date:"c" }}')
             - blocktrans with time=user.participation.start|date:_("N j, Y, g:i") asvar str_time
+                | Started {{ time }}
             span.relative= str_time
             span.absolute= str_time
     else
