@@ -24,6 +24,7 @@ block user_data
         .start-time.active.moment-time-toggle(data-unix='{{ user.participation.start|utc|date:"c" }}') {% trans "Started" %}
             = ' '
             span.relative= str_time
+            = '.'
     else
         .start-time
             i Participation ended.
