@@ -22,12 +22,14 @@ from django.utils.timezone import make_aware
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView, DetailView
+from lxml import html
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation, ContestTag, Profile
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin
+from markdown_trois import markdown
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'participation_list', 'own_participation_list']
@@ -168,6 +170,15 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
             context['in_contest'] = False
         context['now'] = timezone.now()
         context['og_image'] = self.object.og_image
+
+        desc_key = 'meta-description:%d' + self.object.id
+        description = cache.get(desc_key)
+        if description is None:
+            first_p = html.fromstring(markdown(self.object.description, 'contest')).find('p')
+            description = first_p is not None and first_p.text_content()
+            cache.set(desc_key, description, 86400)
+        context['meta_description'] = description
+
         return context
 
 
