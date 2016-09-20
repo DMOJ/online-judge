@@ -179,6 +179,7 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
                 text = p.text_content().strip()
                 if text:
                     description = text
+                    break
             cache.set(desc_key, description, 86400)
         context['meta_description'] = description
 
