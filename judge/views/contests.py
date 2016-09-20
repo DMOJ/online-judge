@@ -171,7 +171,7 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
         context['now'] = timezone.now()
         context['og_image'] = self.object.og_image
 
-        desc_key = 'meta-description:%d' + self.object.id
+        desc_key = 'meta-description:%d' % self.object.id
         description = cache.get(desc_key)
         if description is None:
             first_p = html.fromstring(markdown(self.object.description, 'contest')).find('p')
