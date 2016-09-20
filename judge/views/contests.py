@@ -169,7 +169,6 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
             context['participation'] = None
             context['in_contest'] = False
         context['now'] = timezone.now()
-        context['og_image'] = self.object.og_image
 
         if not self.object.og_image or not self.object.summary:
             meta_key = 'generated-meta:%d' % self.object.id
@@ -186,7 +185,7 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
                 metadata = description, img and img.get('src')
                 cache.set(meta_key, metadata, 86400)
         context['meta_description'] = self.object.summary or metadata[0]
-        context['meta_description'] = self.object.og_image or metadata[1]
+        context['og_image'] = self.object.og_image or metadata[1]
 
         return context
 
