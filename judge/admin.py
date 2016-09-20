@@ -819,6 +819,9 @@ class ContestForm(ModelForm):
             'tags': Select2MultipleWidget
         }
 
+        if MathJaxAdminPagedownWidget is not None:
+            widgets['description'] = MathJaxAdminPagedownWidget
+
 
 class ContestAdmin(VersionAdmin):
     fieldsets = (
@@ -836,11 +839,6 @@ class ContestAdmin(VersionAdmin):
     form = ContestForm
     change_list_template = 'admin/judge/contest/change_list.html'
     filter_horizontal = ['rate_exclude']
-
-    if MathJaxAdminPagedownWidget is not None:
-        formfield_overrides = {
-            TextField: {'widget': MathJaxAdminPagedownWidget},
-        }
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
