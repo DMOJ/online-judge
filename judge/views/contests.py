@@ -181,8 +181,8 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
                     if text:
                         description = text
                         break
-                img = tree.find('img')
-                metadata = description, img and img.get('src')
+                img = tree.xpath('.//img')
+                metadata = description, img[0].get('src') if img else None
                 cache.set(meta_key, metadata, 86400)
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
