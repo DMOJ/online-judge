@@ -18,6 +18,8 @@ html(lang=LANGUAGE_CODE)
         meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
         if misc_config.meta_keywords
             meta(name='keywords', content=misc_config['meta_keywords'])
+        if meta_description
+            meta(name='description', content=meta_description)
         meta#viewport(name='viewport', content='width=device-width, initial-scale=1')
         
         // Favicons
