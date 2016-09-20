@@ -174,8 +174,11 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
         desc_key = 'meta-description:%d' % self.object.id
         description = cache.get(desc_key)
         if description is None:
-            first_p = html.fromstring(markdown(self.object.description, 'contest')).find('p')
-            description = first_p is not None and first_p.text_content()
+            description = False
+            for p in html.fromstring(markdown(self.object.description, 'contest')).iterfind('p'):
+                text = p.text_content().strip()
+                if text:
+                    description = text
             cache.set(desc_key, description, 86400)
         context['meta_description'] = description
 
