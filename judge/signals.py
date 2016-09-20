@@ -64,7 +64,7 @@ def contest_update(sender, instance, **kwargs):
     if hasattr(instance, '_updating_stats_only'):
         return
 
-    cache.delete_many(['meta-description:%d' % instance.id] +
+    cache.delete_many(['generated-meta:%d' % instance.id] +
                       [make_template_fragment_key('contest_html', (instance.id, engine))
                        for engine in EFFECTIVE_MATH_ENGINES])
 

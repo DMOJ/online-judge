@@ -171,17 +171,22 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
         context['now'] = timezone.now()
         context['og_image'] = self.object.og_image
 
-        desc_key = 'meta-description:%d' % self.object.id
-        description = cache.get(desc_key)
-        if description is None:
-            description = False
-            for p in html.fromstring(markdown(self.object.description, 'contest')).iterfind('p'):
-                text = p.text_content().strip()
-                if text:
-                    description = text
-                    break
-            cache.set(desc_key, description, 86400)
-        context['meta_description'] = description
+        if not self.object.og_image or not self.object.summary:
+            meta_key = 'generated-meta:%d' % self.object.id
+            metadata = cache.get(meta_key)
+            if metadata is None:
+                description = None
+                tree = html.fromstring(markdown(self.object.description, 'contest'))
+                for p in tree.iterfind('p'):
+                    text = p.text_content().strip()
+                    if text:
+                        description = text
+                        break
+                img = tree.find('img')
+                metadata = description, img and img.get('src')
+                cache.set(meta_key, metadata, 86400)
+        context['meta_description'] = self.object.summary or metadata[0]
+        context['meta_description'] = self.object.og_image or metadata[1]
 
         return context
 
