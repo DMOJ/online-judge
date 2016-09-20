@@ -824,7 +824,7 @@ class ContestAdmin(VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'hide_problem_tags', 'run_pretests_only')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
-        (_('Details'), {'fields': ('description', 'og_image', 'tags')}),
+        (_('Details'), {'fields': ('description', 'og_image', 'tags', 'summary')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
         (_('Organization'), {'fields': ('is_private', 'organizations')}),
     )
