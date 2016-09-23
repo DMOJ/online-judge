@@ -391,6 +391,7 @@ class Problem(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('problem name'), db_index=True)
     description = models.TextField(verbose_name=_('problem body'))
     authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems')
+    testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True)
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'))
     time_limit = models.FloatField(verbose_name=_('time limit'))
