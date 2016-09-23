@@ -198,7 +198,7 @@ class ProblemTranslationInline(admin.StackedInline):
 class ProblemAdmin(VersionAdmin):
     fieldsets = (
         (None, {
-            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'description', 'license')
+            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'testers', 'description', 'license')
         }),
         (_('Taxonomy'), {'fields': ('types', 'group')}),
         (_('Points'), {'fields': (('points', 'partial'), 'short_circuit')}),
