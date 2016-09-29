@@ -438,12 +438,10 @@ class Problem(models.Model):
         if user.has_perm('judge.edit_own_problem') and self.authors.filter(id=user.profile.id).exists():
             return True
 
-        if self.testers.filter(id=user.profile.id).exists():
-            return True
-
         # If the user is in a contest containing that problem
         if user.is_authenticated():
-            return Problem.objects.filter(id=self.id, contest__users__user=user.profile).exists()
+            return (self.testers.filter(id=user.profile.id).exists() or
+                    Problem.objects.filter(id=self.id, contest__users__user=user.profile).exists())
         else:
             return False
 
