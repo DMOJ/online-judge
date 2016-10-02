@@ -55,6 +55,10 @@ class HTMLTreeString(SafeData):
     def __setstate__(self, state):
         self._tree = html.fromstring(state)
 
+    @property
+    def tree(self):
+        return self._tree
+
 
 def fromstring(str):
     if isinstance(str, HTMLTreeString):
