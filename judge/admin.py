@@ -285,10 +285,13 @@ class ProblemAdmin(VersionAdmin):
         queryset = Problem.objects.prefetch_related('authors__user')
         if request.user.has_perm('judge.edit_all_problem'):
             return queryset
-        elif request.user.has_perm('judge.edit_public_problem'):
-            return queryset.filter(is_public=True)
-        else:
-            return queryset.filter(authors__id=request.user.profile.id)
+
+        access = Q()
+        if request.user.has_perm('judge.edit_public_problem'):
+            access |= Q(is_public=True)
+        if request.user.has_perm('judge.edit_own_problem'):
+            access |= Q(authors__id=request.user.profile.id)
+        return queryset.filter(access) if access else queryset.none()
 
     def has_change_permission(self, request, obj=None):
         if request.user.has_perm('judge.edit_all_problem') or obj is None:
