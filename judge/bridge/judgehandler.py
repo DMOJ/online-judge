@@ -41,7 +41,6 @@ class JudgeHandler(ZlibPacketHandler):
         self.name = None
         self.batch_id = None
         self.in_batch = False
-        self.client_address = socket.getpeername()
         self._ping_average = deque(maxlen=6)  # 1 minute average, just like load
         self._time_delta = deque(maxlen=6)
 

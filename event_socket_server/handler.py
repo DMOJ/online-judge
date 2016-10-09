@@ -5,7 +5,7 @@ class Handler(object):
     def __init__(self, server, socket):
         self._socket = socket
         self.server = server
-        self.name = socket.getpeername()
+        self.client_address = socket.getpeername()
 
     def fileno(self):
         return self._socket.fileno()
