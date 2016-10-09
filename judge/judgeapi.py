@@ -12,7 +12,7 @@ size_pack = struct.Struct('!I')
 
 
 def judge_request(packet, reply=True):
-    sock = socket.create_connection(settings.BRIDGED_DJANGO_HOST, settings.BRIDGED_DJANGO_PORT)
+    sock = socket.create_connection((settings.BRIDGED_DJANGO_HOST, settings.BRIDGED_DJANGO_PORT))
 
     output = json.dumps(packet, separators=(',', ':'))
     output = output.encode('zlib')
