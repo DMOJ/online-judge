@@ -5,7 +5,6 @@ import time
 from collections import defaultdict, deque
 from heapq import heappush, heappop
 
-__author__ = 'Quantum'
 logger = logging.getLogger('event_socket_server')
 
 
@@ -30,11 +29,17 @@ class ScheduledJob(object):
 
 
 class BaseServer(object):
-    def __init__(self, host, port, client):
-        self._server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self._server.setblocking(0)
-        self._server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self._server.bind((host, port))
+    def __init__(self, addresses, client):
+        self._servers = set()
+        for address, port in addresses:
+            info = socket.getaddrinfo(address, port, socket.AF_UNSPEC, socket.SOCK_STREAM)
+            for af, socktype, proto, canonname, sa in info:
+                sock = socket.socket(af, socktype, proto)
+                sock.setblocking(0)
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                sock.bind(sa)
+                self._servers.add(sock)
+
         self._stop = threading.Event()
         self._clients = set()
         self._ClientClass = client
@@ -45,8 +50,8 @@ class BaseServer(object):
     def _serve(self):
         raise NotImplementedError()
 
-    def _accept(self):
-        conn, address = self._server.accept()
+    def _accept(self, sock):
+        conn, address = sock.accept()
         conn.setblocking(0)
         client = self._ClientClass(self, conn)
         self._clients.add(client)

@@ -1,10 +1,10 @@
 import errno
-import select
 import logging
+import select
 import threading
+
 from ..base_server import BaseServer
 
-__author__ = 'Quantum'
 logger = logging.getLogger('event_socket_server')
 
 if not hasattr(select, 'poll'):
@@ -24,7 +24,7 @@ class PollServer(BaseServer):
         super(PollServer, self).__init__(*args, **kwargs)
         self._poll = self.poll()
         self._fdmap = {}
-        self._server_fd = self._server.fileno()
+        self._server_fds = {sock.fileno(): sock for sock in self._servers}
         self._close_lock = threading.RLock()
 
     def _register_write(self, client):
@@ -51,13 +51,14 @@ class PollServer(BaseServer):
             super(PollServer, self)._clean_up_client(client, finalize)
 
     def _serve(self):
-        self._server.listen(16)
-        self._poll.register(self._server_fd, self.POLLIN)
+        for fd, sock in self._server_fds.iteritems():
+            self._poll.register(fd, self.POLLIN)
+            sock.listen(16)
         try:
             while not self._stop.is_set():
                 for fd, event in self._poll.poll(self._dispatch_event()):
-                    if fd == self._server_fd:
-                        client = self._accept()
+                    if fd in self._server_fds:
+                        client = self._accept(self._server_fds[fd])
                         logger.debug('Accepting: %s', client.name)
                         fd = client.fileno()
                         self._poll.register(fd, self.READ)
@@ -89,7 +90,8 @@ class PollServer(BaseServer):
             self.on_shutdown()
             for client in self._clients:
                 self._clean_up_client(client, True)
-            self._poll.unregister(self._server_fd)
+            for fd, sock in self._server_fds.iteritems():
+                self._poll.unregister(fd)
+                sock.close()
             if self.NEED_CLOSE:
                 self._poll.close()
-            self._server.close()

@@ -1,7 +1,5 @@
-from .helpers import ZlibPacketHandler
 from .engines import engines
-
-__author__ = 'Quantum'
+from .helpers import ZlibPacketHandler
 
 
 class EchoPacketHandler(ZlibPacketHandler):
@@ -28,18 +26,18 @@ class EchoPacketHandler(ZlibPacketHandler):
 def main():
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('-l', '--host', default='localhost')
-    parser.add_argument('-p', '--port', default=9999, type=int)
+    parser.add_argument('-l', '--host', action='append')
+    parser.add_argument('-p', '--port', type=int, action='append')
     parser.add_argument('-e', '--engine', default='select', choices=sorted(engines.keys()))
     args = parser.parse_args()
 
     class TestServer(engines[args.engine]):
-        def _accept(self):
-            client = super(TestServer, self)._accept()
+        def _accept(self, sock):
+            client = super(TestServer, self)._accept(sock)
             print 'New connection:', client.socket.getpeername()
             return client
 
-    server = TestServer(args.host, args.port, EchoPacketHandler)
+    server = TestServer(zip(args.host, args.port), EchoPacketHandler)
     server.serve_forever()
 
 if __name__ == '__main__':

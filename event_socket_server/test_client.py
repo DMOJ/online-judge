@@ -3,7 +3,6 @@ import socket
 import struct
 import time
 
-__author__ = 'Quantum'
 size_pack = struct.Struct('!I')
 try:
     RtlGenRandom = ctypes.windll.advapi32.SystemFunction036
@@ -12,8 +11,7 @@ except AttributeError:
 
 
 def open_connection():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((host, port))
+    sock = socket.create_connection((host, port))
     return sock
 
 
