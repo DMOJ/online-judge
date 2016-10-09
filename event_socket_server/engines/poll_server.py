@@ -28,17 +28,17 @@ class PollServer(BaseServer):
         self._close_lock = threading.RLock()
 
     def _register_write(self, client):
-        logger.debug('On write mode: %s', client.name)
+        logger.debug('On write mode: %s', client.client_address)
         self._poll.modify(client.fileno(), self.WRITE)
 
     def _register_read(self, client):
-        logger.debug('On read mode: %s', client.name)
+        logger.debug('On read mode: %s', client.client_address)
         self._poll.modify(client.fileno(), self.READ)
 
     def _clean_up_client(self, client, finalize=False):
         logger.debug('Taking close lock: cleanup')
         with self._close_lock:
-            logger.debug('Cleaning up client: %s, finalize: %d', client.name, finalize)
+            logger.debug('Cleaning up client: %s, finalize: %d', client.client_address, finalize)
             fd = client.fileno()
             try:
                 self._poll.unregister(fd)
@@ -59,7 +59,7 @@ class PollServer(BaseServer):
                 for fd, event in self._poll.poll(self._dispatch_event()):
                     if fd in self._server_fds:
                         client = self._accept(self._server_fds[fd])
-                        logger.debug('Accepting: %s', client.name)
+                        logger.debug('Accepting: %s', client.client_address)
                         fd = client.fileno()
                         self._poll.register(fd, self.READ)
                         self._fdmap[fd] = client
@@ -75,15 +75,15 @@ class PollServer(BaseServer):
                                 pass
                             else:
                                 logger.debug('Client active: %s, read: %d, write: %d',
-                                             client.name,
+                                             client.client_address,
                                              event & self.POLLIN,
                                              event & self.POLLOUT)
                                 if event & self.POLLIN:
-                                    logger.debug('Non-blocking read on client: %s', client.name)
+                                    logger.debug('Non-blocking read on client: %s', client.client_address)
                                     self._nonblock_read(client)
                                 # Might be closed in the read handler.
                                 if event & self.POLLOUT and fd in self._fdmap:
-                                    logger.debug('Non-blocking write on client: %s', client.name)
+                                    logger.debug('Non-blocking write on client: %s', client.client_address)
                                     self._nonblock_write(client)
         finally:
             logger.info('Shutting down server')

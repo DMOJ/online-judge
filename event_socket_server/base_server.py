@@ -111,7 +111,7 @@ class BaseServer(object):
         except socket.error:
             self._clean_up_client(client)
         else:
-            logger.debug('Read from %s: %d bytes', client.name, len(data))
+            logger.debug('Read from %s: %d bytes', client.client_address, len(data))
             if not data:
                 self._clean_up_client(client)
             else:
@@ -128,11 +128,11 @@ class BaseServer(object):
             top = queue[0]
             cb = client._socket.send(top.data)
             top.data = top.data[cb:]
-            logger.debug('Send to %s: %d bytes', client.name, cb)
+            logger.debug('Send to %s: %d bytes', client.client_address, cb)
             if not top.data:
-                logger.debug('Finished sending: %s', client.name)
+                logger.debug('Finished sending: %s', client.client_address)
                 if top.callback is not None:
-                    logger.debug('Calling callback: %s: %r', client.name, top.callback)
+                    logger.debug('Calling callback: %s: %r', client.client_address, top.callback)
                     try:
                         top.callback()
                     except Exception:
@@ -147,7 +147,7 @@ class BaseServer(object):
             self._clean_up_client(client)
 
     def send(self, client, data, callback=None):
-        logger.debug('Writing %d bytes to client %s, callback: %s', len(data), client.name, callback)
+        logger.debug('Writing %d bytes to client %s, callback: %s', len(data), client.client_address, callback)
         self._send_queue[client.fileno()].append(SendMessage(data, callback))
         self._register_write(client)
 
