@@ -53,6 +53,11 @@ class DjangoJudgeHandler(JudgeHandler):
             time, memory = limit.time_limit, limit.memory_limit
         return time, memory, short_circuit, is_pretested
 
+    def reset_submission(self, submission):
+        Submission.objects.filter(id=submission).update(time=None, memory=None, points=None,
+                                                        result=None, error=None, status='QU')
+        SubmissionTestCase.objects.filter(submission_id=submission).delete()
+
     def _authenticate(self, id, key):
         try:
             judge = Judge.objects.get(name=id)

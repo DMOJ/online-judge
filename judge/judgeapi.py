@@ -39,12 +39,8 @@ def judge_request(packet, reply=True):
 
 
 def judge_submission(submission):
-    from .models import SubmissionTestCase, ContestSubmission
-    submission.time = None
-    submission.memory = None
-    submission.points = None
-    submission.result = None
-    submission.error = None
+    from .models import ContestSubmission
+
     try:
         # This is set proactively; it might get unset in judgecallback's on_grading_begin if the problem doesn't
         # actually have pretests stored on the judge.
@@ -53,7 +49,6 @@ def judge_submission(submission):
     except IndexError:
         pass
     submission.save()
-    SubmissionTestCase.objects.filter(submission=submission).delete()
 
     try:
         response = judge_request({
@@ -66,17 +61,18 @@ def judge_submission(submission):
     except BaseException:
         logger.exception('Failed to send request to judge')
         submission.status = 'IE'
+        submission.save()
         success = False
     else:
-        submission.status = 'QU' if (response['name'] == 'submission-received' and
-                                     response['submission-id'] == submission.id) else 'IE'
+        if response['name'] != 'submission-received' or response['submission-id'] != submission.id:
+            submission.status = 'IE'
+            submission.save()
         if submission.problem.is_public:
             event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                        'contest': submission.contest_key,
                                        'user': submission.user_id, 'problem': submission.problem_id,
                                        'status': submission.status, 'language': submission.language.key})
         success = True
-    submission.save()
     return success
 
 

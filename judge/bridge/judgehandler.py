@@ -109,8 +109,12 @@ class JudgeHandler(ZlibPacketHandler):
     def get_related_submission_data(self, submission):
         return 2, 16384, False, False
 
+    def reset_submission(self, submission):
+        pass
+
     def submit(self, id, problem, language, source):
         time, memory, short, pretests_only = self.get_related_submission_data(id)
+        self.reset_submission(id)
         self._working = id
         self._no_response_job = self.server.schedule(20, self._kill_if_no_response)
         self.send({
