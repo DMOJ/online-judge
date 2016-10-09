@@ -1,6 +1,7 @@
 import itertools
 import logging
 import os
+import shutil
 from operator import itemgetter
 from random import randrange
 
@@ -162,7 +163,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                         f.write(maker.log)
                     self.logger.error('Failed to render PDF for %s', problem.code)
                     return HttpResponse(maker.log, status=500, content_type='text/plain')
-                os.rename(maker.pdffile, cache)
+                shutil.move(maker.pdffile, cache)
 
         response = HttpResponse()
         if hasattr(settings, 'PROBLEM_PDF_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
