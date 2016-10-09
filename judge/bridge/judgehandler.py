@@ -5,12 +5,12 @@ import logging
 import time
 from collections import deque
 
-from event_socket_server import ZlibPacketHandler
+from event_socket_server import ZlibPacketHandler, ProxyProtocolMixin
 
 logger = logging.getLogger('judge.bridge')
 
 
-class JudgeHandler(ZlibPacketHandler):
+class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
     def __init__(self, server, socket):
         super(JudgeHandler, self).__init__(server, socket)
 

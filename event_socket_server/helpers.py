@@ -51,3 +51,56 @@ class ZlibPacketHandler(SizedPacketHandler):
 
     def malformed_packet(self, exception):
         self.close()
+
+
+class ProxyProtocolMixin(object):
+    __UNKNOWN_TYPE = 0
+    __PROXY1 = 1
+    __PROXY2 = 2
+    __DATA = 3
+
+    __HEADER2 = '\x0D\x0A\x0D\x0A\x00\x0D\x0A\x51\x55\x49\x54\x0A'
+    __HEADER2_LEN = len(__HEADER2)
+
+    def __init__(self, *args, **kwargs):
+        self.__buffer = ''
+        self.__type = self.__UNKNOWN_TYPE
+        super(ProxyProtocolMixin, self).__init__(*args, **kwargs)
+
+    def __parse_proxy1(self, data):
+        self.__buffer += data
+        index = self.__buffer.find('\r\n')
+        if 0 <= index < 106:
+            proxy = data[:index].split()
+            if len(proxy) < 2:
+                return self.close()
+            if proxy[1] == 'TCP4':
+                if len(proxy) != 6:
+                    return self.close()
+                self.client_address = (proxy[2], proxy[4])
+                self.server_address = (proxy[3], proxy[5])
+            elif proxy[1] == 'TCP6':
+                self.client_address = (proxy[2], proxy[4], 0, 0)
+                self.server_address = (proxy[3], proxy[5], 0, 0)
+            elif proxy[1] != 'UNKNOWN':
+                return self.close()
+
+            self.__type = self.__DATA
+            super(ProxyProtocolMixin, self)._recv_data(data[index+2:])
+        elif len(self.__buffer) > 107 or index > 105:
+            self.close()
+
+    def _recv_data(self, data):
+        if self.__type == self.__DATA:
+            super(ProxyProtocolMixin, self)._recv_data(data)
+        elif self.__type == self.__UNKNOWN_TYPE:
+            if len(data) >= 16 and data[:self.__HEADER2_LEN] == self.__HEADER2:
+                self.close()
+            elif len(data) >= 8 and data[:5] == 'PROXY':
+                self.__type = self.__PROXY1
+                self.__parse_proxy1(data)
+            else:
+                self.__type = self.__DATA
+                super(ProxyProtocolMixin, self)._recv_data(data)
+        else:
+            self.__parse_proxy1(data)

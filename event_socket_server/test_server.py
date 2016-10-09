@@ -1,8 +1,8 @@
 from .engines import engines
-from .helpers import ZlibPacketHandler
+from .helpers import ProxyProtocolMixin, ZlibPacketHandler
 
 
-class EchoPacketHandler(ZlibPacketHandler):
+class EchoPacketHandler(ProxyProtocolMixin, ZlibPacketHandler):
     def __init__(self, server, socket):
         super(EchoPacketHandler, self).__init__(server, socket)
         self._gotdata = False
