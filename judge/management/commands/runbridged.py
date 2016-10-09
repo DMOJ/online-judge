@@ -9,9 +9,8 @@ from judge.bridge import DjangoJudgeHandler, JudgeServer
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        judge_server = JudgeServer(settings.BRIDGED_JUDGE_HOST, settings.BRIDGED_JUDGE_PORT, DjangoJudgeHandler)
-        django_server = DjangoServer(judge_server.judges, settings.BRIDGED_DJANGO_HOST, settings.BRIDGED_DJANGO_PORT,
-                                     DjangoHandler)
+        judge_server = JudgeServer(settings.BRIDGED_JUDGE_ADDRESS, DjangoJudgeHandler)
+        django_server = DjangoServer(judge_server.judges, settings.BRIDGED_DJANGO_ADDRESS, DjangoHandler)
 
         # TODO: Merge the two servers
         threading.Thread(target=django_server.serve_forever).start()

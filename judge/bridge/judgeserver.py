@@ -1,9 +1,9 @@
 import logging
+import os
 import threading
 import time
-import os
-from event_socket_server import get_preferred_engine
 
+from event_socket_server import get_preferred_engine
 from judge.models import Judge
 from .judgelist import JudgeList
 
@@ -54,13 +54,13 @@ def main():
     parser = argparse.ArgumentParser(description='''
         Runs the bridge between DMOJ website and judges.
     ''')
-    parser.add_argument('judge_host', nargs='?', default='127.0.0.1',
+    parser.add_argument('judge_host', nargs='+', action='append',
                         help='host to listen for the judge')
-    parser.add_argument('-p', '--judge-port', type=int, default=9999,
+    parser.add_argument('-p', '--judge-port', type=int, action='append',
                         help='port to listen for the judge')
 
     args = parser.parse_args()
-    server = JudgeServer(args.judge_host, args.judge_port, JudgeHandler)
+    server = JudgeServer(zip(args.judge_host, args.judge_port), JudgeHandler)
     server.serve_forever()
 
 
