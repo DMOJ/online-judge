@@ -1,9 +1,9 @@
-from django.conf import settings
-
-import socket
-import struct
 import json
 import logging
+import socket
+import struct
+
+from django.conf import settings
 
 from judge import event_poster as event
 
@@ -12,8 +12,7 @@ size_pack = struct.Struct('!I')
 
 
 def judge_request(packet, reply=True):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((settings.BRIDGED_DJANGO_HOST, settings.BRIDGED_DJANGO_PORT))
+    sock = socket.create_connection(settings.BRIDGED_DJANGO_HOST, settings.BRIDGED_DJANGO_PORT)
 
     output = json.dumps(packet, separators=(',', ':'))
     output = output.encode('zlib')
