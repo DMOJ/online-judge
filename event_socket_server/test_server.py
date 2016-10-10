@@ -29,6 +29,12 @@ def main():
     parser.add_argument('-l', '--host', action='append')
     parser.add_argument('-p', '--port', type=int, action='append')
     parser.add_argument('-e', '--engine', default='select', choices=sorted(engines.keys()))
+    try:
+        import netaddr
+    except ImportError:
+        netaddr = None
+    else:
+        parser.add_argument('-P', '--proxy', action='append')
     args = parser.parse_args()
 
     class TestServer(engines[args.engine]):
@@ -37,7 +43,10 @@ def main():
             print 'New connection:', client.socket.getpeername()
             return client
 
-    server = TestServer(zip(args.host, args.port), EchoPacketHandler)
+    handler = EchoPacketHandler
+    if netaddr is not None and args.proxy:
+        handler = handler.with_ip_set(args.proxy)
+    server = TestServer(zip(args.host, args.port), handler)
     server.serve_forever()
 
 if __name__ == '__main__':

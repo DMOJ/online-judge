@@ -62,10 +62,28 @@ class ProxyProtocolMixin(object):
     __HEADER2 = '\x0D\x0A\x0D\x0A\x00\x0D\x0A\x51\x55\x49\x54\x0A'
     __HEADER2_LEN = len(__HEADER2)
 
-    def __init__(self, *args, **kwargs):
+    _REAL_IP_SET = None
+
+    @classmethod
+    def with_ip_set(cls, ranges):
+        from netaddr import IPSet, IPGlob
+        from itertools import chain
+
+        globs = []
+        addrs = []
+        for item in ranges:
+            if '*' in item or '-' in item:
+                globs.append(IPGlob(item))
+            else:
+                addrs.append(item)
+        ipset = IPSet(chain(chain.from_iterable(globs), addrs))
+        return type(cls.__name__, (cls,), {'_REAL_IP_SET': ipset})
+
+    def __init__(self, server, socket):
+        super(ProxyProtocolMixin, self).__init__(server, socket)
         self.__buffer = ''
-        self.__type = self.__UNKNOWN_TYPE
-        super(ProxyProtocolMixin, self).__init__(*args, **kwargs)
+        self.__type = (self.__UNKNOWN_TYPE if self._REAL_IP_SET and
+                       self.client_address[0] in self._REAL_IP_SET else self.__DATA)
 
     def __parse_proxy1(self, data):
         self.__buffer += data
