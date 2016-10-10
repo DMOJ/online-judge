@@ -65,7 +65,7 @@ class ProxyProtocolMixin(object):
     _REAL_IP_SET = None
 
     @classmethod
-    def with_ip_set(cls, ranges):
+    def with_proxy_set(cls, ranges):
         from netaddr import IPSet, IPGlob
         from itertools import chain
 

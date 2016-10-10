@@ -9,7 +9,18 @@ from judge.bridge import DjangoJudgeHandler, JudgeServer
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        judge_server = JudgeServer(settings.BRIDGED_JUDGE_ADDRESS, DjangoJudgeHandler)
+        judge_handler = DjangoJudgeHandler
+
+        try:
+            import netaddr
+        except ImportError:
+            pass
+        else:
+            proxies = getattr(settings, 'BRIDGED_JUDGE_PROXIES', None)
+            if proxies:
+                judge_handler = judge_handler.with_proxy_set(proxies)
+
+        judge_server = JudgeServer(settings.BRIDGED_JUDGE_ADDRESS, judge_handler)
         django_server = DjangoServer(judge_server.judges, settings.BRIDGED_DJANGO_ADDRESS, DjangoHandler)
 
         # TODO: Merge the two servers

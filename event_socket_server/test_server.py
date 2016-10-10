@@ -45,7 +45,7 @@ def main():
 
     handler = EchoPacketHandler
     if netaddr is not None and args.proxy:
-        handler = handler.with_ip_set(args.proxy)
+        handler = handler.with_proxy_set(args.proxy)
     server = TestServer(zip(args.host, args.port), handler)
     server.serve_forever()
 
