@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-15 18:22-0400\n"
-"PO-Revision-Date: 2016-08-15 18:25-0400\n"
+"POT-Creation-Date: 2016-10-11 12:00-0400\n"
+"PO-Revision-Date: 2016-10-11 12:01-0400\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -37,242 +37,254 @@ msgid "Russian"
 msgstr "俄语"
 
 #: .\dmoj\settings.py:218
+msgid "Serbian (Latin)"
+msgstr ""
+
+#: .\dmoj\settings.py:219
 msgid "Simplified Chinese"
 msgstr "简体中文"
 
-#: .\dmoj\urls.py:101 .\templates\base.jade:89
+#: .\dmoj\urls.py:102 .\templates\base.jade:84
 msgid "Home"
 msgstr "首页"
 
-#: .\judge\admin.py:82 .\judge\views\register.py:30
+#: .\judge\admin.py:65 .\judge\views\register.py:28
+#: .\templates\registration\registration_form.jade:133
 #: .\templates\user\edit_profile.jade:72
 msgid "Location"
 msgstr "位置"
 
-#: .\judge\admin.py:108 .\judge\admin.py:238 .\judge\admin.py:991
-#: .\judge\admin.py:1055
+#: .\judge\admin.py:91 .\judge\admin.py:234 .\judge\admin.py:999
+#: .\judge\admin.py:1066
 msgid "View on site"
 msgstr "查看"
 
-#: .\judge\admin.py:115 .\judge\admin.py:415
+#: .\judge\admin.py:100 .\judge\admin.py:418
 #: .\templates\organization\requests\log.jade:4
 #: .\templates\organization\requests\pending.jade:9
 msgid "User"
 msgstr "用户"
 
-#: .\judge\admin.py:120
+#: .\judge\admin.py:106 .\templates\registration\registration_form.jade:120
 msgid "Email"
 msgstr "电子邮箱"
 
-#: .\judge\admin.py:126
+#: .\judge\admin.py:112
 msgid "Timezone"
 msgstr "时区"
 
-#: .\judge\admin.py:133
+#: .\judge\admin.py:119
+#, python-format
 msgid "%d user have scores recalculated."
 msgid_plural "%d users have scores recalculated."
 msgstr[0] "%d 个用户的总分已被重新计算。"
 
-#: .\judge\admin.py:136 .\judge\admin.py:960
+#: .\judge\admin.py:123 .\judge\admin.py:968
 msgid "Recalculate scores"
 msgstr "重新计算总分"
 
-#: .\judge\admin.py:147
+#: .\judge\admin.py:135
 msgid "Describe the changes you made (optional)"
 msgstr "描述所你所做的更改 (可选)"
 
-#: .\judge\admin.py:164 .\judge\models.py:249
-msgctxt "user display name"
-msgid "%(username)s (%(display)s)"
-msgstr "%(username)s (%(display)s)"
-
-#: .\judge\admin.py:207
+#: .\judge\admin.py:205
 msgid "Taxonomy"
 msgstr "分类"
 
-#: .\judge\admin.py:208 .\templates\problem\list.jade:99
-#: .\templates\problem\list.jade:109 .\templates\user\base_users_table.jade:6
+#: .\judge\admin.py:206 .\templates\problem\data.jade:376
+#: .\templates\problem\list.jade:135 .\templates\problem\list.jade:145
+#: .\templates\user\base_users_table.jade:6
 msgid "Points"
 msgstr "分数"
 
-#: .\judge\admin.py:209
+#: .\judge\admin.py:207
 msgid "Limits"
 msgstr "限制"
 
-#: .\judge\admin.py:210 .\templates\stats\base.jade:7
-#: .\templates\submission\list.jade:158
+#: .\judge\admin.py:208 .\templates\stats\base.jade:7
+#: .\templates\submission\list.jade:161
 msgid "Language"
 msgstr "语言"
 
-#: .\judge\admin.py:211
+#: .\judge\admin.py:209
 msgid "Justice"
 msgstr "司法"
 
-#: .\judge\admin.py:212
+#: .\judge\admin.py:210
 msgid "History"
 msgstr "编辑历史"
 
-#: .\judge\admin.py:235
+#: .\judge\admin.py:231
 msgid "Authors"
 msgstr "作者"
 
-#: .\judge\admin.py:272
+#: .\judge\admin.py:269
+#, python-format
 msgid "%d problem successfully marked as public."
 msgid_plural "%d problems successfully marked as public."
 msgstr[0] "%d 个题目已被成功地公开。"
 
-#: .\judge\admin.py:275
+#: .\judge\admin.py:273
 msgid "Mark problems as public"
 msgstr "公开题目"
 
-#: .\judge\admin.py:280
+#: .\judge\admin.py:278
+#, python-format
 msgid "%d problem successfully marked as private."
 msgid_plural "%d problems successfully marked as private."
 msgstr[0] "%d 个题目已被成功地隐藏。"
 
-#: .\judge\admin.py:283
+#: .\judge\admin.py:282
 msgid "Mark problems as private"
 msgstr "隐藏题目"
 
-#: .\judge\admin.py:326 .\judge\admin.py:345 .\judge\admin.py:464
+#: .\judge\admin.py:328 .\judge\admin.py:347 .\judge\admin.py:469
 msgid "None"
 msgstr "无"
 
-#: .\judge\admin.py:326
+#: .\judge\admin.py:328
 msgid "Not done"
 msgstr "未完成"
 
-#: .\judge\admin.py:326
+#: .\judge\admin.py:328
 msgid "Exceptional"
 msgstr "错误"
 
-#: .\judge\admin.py:345
+#: .\judge\admin.py:347
 msgid "Unaccepted"
 msgstr "未被接受"
 
-#: .\judge\admin.py:388
+#: .\judge\admin.py:390
+#, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
 msgstr "%(contest)s 中的 %(problem)s"
 
-#: .\judge\admin.py:438 .\judge\admin.py:474
+#: .\judge\admin.py:441 .\judge\admin.py:480
 msgid "You do not have the permission to rejudge submissions."
 msgstr "您没有为程序重新评分的权利。"
 
-#: .\judge\admin.py:443
+#: .\judge\admin.py:446
 msgid "You do not have the permission to rejudge THAT many submissions."
 msgstr "您没有为这么多程序重新评分的权利。"
 
-#: .\judge\admin.py:452
+#: .\judge\admin.py:455
+#, python-format
 msgid "%d submission were successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
 msgstr[0] "%d个程序被计划重新评分。"
 
-#: .\judge\admin.py:455
+#: .\judge\admin.py:459
 msgid "Rejudge the selected submissions"
 msgstr "重新评分选定的程序"
 
-#: .\judge\admin.py:466
+#: .\judge\admin.py:471
+#, python-format
 msgid "%d KB"
 msgstr "%d KB"
 
-#: .\judge\admin.py:468
+#: .\judge\admin.py:473
+#, python-format
 msgid "%.2f MB"
 msgstr "%.2f MB"
 
-#: .\judge\admin.py:470
+#: .\judge\admin.py:476
 msgid "Memory Usage"
 msgstr "内存使用"
 
-#: .\judge\admin.py:501
+#: .\judge\admin.py:509
+#, python-format
 msgid "%d submission were successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
 msgstr[0] "%d个程序提交的分数已被重新计算。"
 
-#: .\judge\admin.py:504
+#: .\judge\admin.py:513
 msgid "Rescore the selected submissions"
 msgstr "重新计算选定程序的分数"
 
-#: .\judge\admin.py:559
+#: .\judge\admin.py:569
+#, python-format
 msgid "%d comment successfully hidden."
 msgid_plural "%d comments successfully hidden."
 msgstr[0] "%d个评论成功隐藏。"
 
-#: .\judge\admin.py:562
+#: .\judge\admin.py:573
 msgid "Hide comments"
 msgstr "隐藏选定评论"
 
-#: .\judge\admin.py:566
+#: .\judge\admin.py:577
+#, python-format
 msgid "%d comment successfully unhidden."
 msgid_plural "%d comments successfully unhidden."
 msgstr[0] "%d个评论成功取消隐藏。"
 
-#: .\judge\admin.py:569
+#: .\judge\admin.py:581
 msgid "Unhide comments"
 msgstr "取消隐藏选定评论"
 
-#: .\judge\admin.py:581
+#: .\judge\admin.py:594
 msgid "Associated page"
 msgstr "关联页"
 
-#: .\judge\admin.py:593
+#: .\judge\admin.py:606
 msgid "Disallowed problems"
 msgstr "排除题目"
 
-#: .\judge\admin.py:596
+#: .\judge\admin.py:609
 msgid "These problems are NOT allowed to be submitted in this language"
 msgstr "这些题目不允许使用该语言解决"
 
-#: .\judge\admin.py:623 .\judge\admin.py:647
+#: .\judge\admin.py:635 .\judge\admin.py:658
 msgid "Included problems"
 msgstr "包括题目"
 
-#: .\judge\admin.py:626
+#: .\judge\admin.py:638
 msgid "These problems are included in this group of problems"
 msgstr "这些题目属于该题目组"
 
-#: .\judge\admin.py:650
+#: .\judge\admin.py:661
 msgid "These problems are included in this type of problems"
 msgstr "这些题目属于该题目类型"
 
-#: .\judge\admin.py:730
+#: .\judge\admin.py:740
 msgid "Description"
 msgstr "描述"
 
-#: .\judge\admin.py:731
+#: .\judge\admin.py:741
 msgid "Information"
 msgstr "信息"
 
-#: .\judge\admin.py:732
+#: .\judge\admin.py:742
 msgid "Capabilities"
 msgstr "能力"
 
-#: .\judge\admin.py:756
+#: .\judge\admin.py:766
 msgid "Included contests"
 msgstr "带标签的竞赛"
 
-#: .\judge\admin.py:796 .\templates\problem\list.jade:96
-#: .\templates\problem\list.jade:103
+#: .\judge\admin.py:804 .\templates\problem\list.jade:132
+#: .\templates\problem\list.jade:139
 msgid "Problem"
 msgstr "题目"
 
-#: .\judge\admin.py:823
+#: .\judge\admin.py:834
 msgid "Scheduling"
 msgstr "时间计划"
 
-#: .\judge\admin.py:824
+#: .\judge\admin.py:835
 msgid "Details"
 msgstr "详细信息"
 
-#: .\judge\admin.py:825 .\templates\contest\ranking_table.jade:2
+#: .\judge\admin.py:836 .\templates\contest\ranking_table.jade:2
 msgid "Rating"
 msgstr "评分"
 
-#: .\judge\admin.py:826
+#: .\judge\admin.py:837
 msgid "Organization"
 msgstr "组织"
 
-#: .\judge\admin.py:851
+#: .\judge\admin.py:850
+#, python-format
 msgid "%d contest successfully marked as public."
 msgid_plural "%d contests successfully marked as public."
 msgstr[0] "%d个竞赛已成功公开。"
@@ -282,33 +294,40 @@ msgid "Mark contests as public"
 msgstr "公开选定竞赛"
 
 #: .\judge\admin.py:858
+#, python-format
 msgid "%d contest successfully marked as private."
 msgid_plural "%d contests successfully marked as private."
 msgstr[0] "%d个竞赛已成功隐藏。"
 
-#: .\judge\admin.py:861
+#: .\judge\admin.py:862
 msgid "Mark contests as private"
 msgstr "隐藏选定竞赛"
 
-#: .\judge\admin.py:957
+#: .\judge\admin.py:956 .\templates\base.jade:112
+msgid "virtual"
+msgstr ""
+
+#: .\judge\admin.py:964
+#, python-format
 msgid "%d participation have scores recalculated."
 msgid_plural "%d participations have scores recalculated."
 msgstr[0] "%d个竞赛参与者的得分已经成功地计算了。"
 
-#: .\judge\admin.py:967
+#: .\judge\admin.py:975
+#, python-format
 msgid "%d participation have times recalculated."
 msgid_plural "%d participations have times recalculated."
 msgstr[0] "%d个竞赛参与者的累计时间已经成功地计算了。"
 
-#: .\judge\admin.py:970
+#: .\judge\admin.py:979
 msgid "Recalculate cumulative time"
 msgstr "重新计算累计时间"
 
-#: .\judge\admin.py:1026
+#: .\judge\admin.py:1033
 msgid "Content"
 msgstr "内容"
 
-#: .\judge\admin.py:1027
+#: .\judge\admin.py:1034
 msgid "Summary"
 msgstr "概要"
 
@@ -316,1030 +335,1203 @@ msgstr "概要"
 msgid "Online Judge"
 msgstr "在线评测系统"
 
-#: .\judge\comments.py:37
+#: .\judge\comments.py:38
 msgid "Comment title"
 msgstr "评论标题"
 
-#: .\judge\comments.py:38
+#: .\judge\comments.py:39
 msgid "Comment body"
 msgstr "评论正文"
 
-#: .\judge\comments.py:42
+#: .\judge\comments.py:43
 msgid "You are not allowed to comment..."
 msgstr "您不被允许评论..."
 
-#: .\judge\comments.py:67
+#: .\judge\comments.py:68
 msgid "Posted comment"
 msgstr "发布了评论"
 
-#: .\judge\forms.py:26 .\judge\views\register.py:38
+#: .\judge\forms.py:19 .\judge\views\register.py:37
 msgid "Subscribe to newsletter?"
 msgstr "订阅简讯"
 
-#: .\judge\models.py:59
+#: .\judge\models.py:62
 msgid "language to which this runtime belongs"
 msgstr ""
 
-#: .\judge\models.py:60
+#: .\judge\models.py:63
 msgid "judge on which this runtime exists"
 msgstr ""
 
-#: .\judge\models.py:61
+#: .\judge\models.py:64
 msgid "runtime name"
 msgstr ""
 
-#: .\judge\models.py:62
+#: .\judge\models.py:65
 msgid "runtime version"
 msgstr ""
 
-#: .\judge\models.py:63
+#: .\judge\models.py:66
 msgid "order in which to display this runtime"
 msgstr ""
 
-#: .\judge\models.py:67
+#: .\judge\models.py:70
 msgid "short identifier"
 msgstr "标识符"
 
-#: .\judge\models.py:68
+#: .\judge\models.py:71
 msgid "The identifier for this language; the same as its executor id for judges."
 msgstr ""
 
-#: .\judge\models.py:70
+#: .\judge\models.py:73
 msgid "long name"
 msgstr "长名称"
 
-#: .\judge\models.py:71
+#: .\judge\models.py:74
 msgid "Longer name for the language, e.g. \"Python 2\" or \"C++11\"."
 msgstr ""
 
-#: .\judge\models.py:72 .\judge\models.py:144 .\judge\models.py:323
+#: .\judge\models.py:75 .\judge\models.py:159 .\judge\models.py:349
 msgid "short name"
 msgstr "短名称"
 
-#: .\judge\models.py:73
+#: .\judge\models.py:76
 msgid "More readable, but short, name to display publicly; e.g. \"PY2\" or \"C++11\". If left blank, it will default to the short identifier."
 msgstr ""
 
-#: .\judge\models.py:77
+#: .\judge\models.py:80
 msgid "common name"
 msgstr "通用名"
 
-#: .\judge\models.py:78
+#: .\judge\models.py:81
 msgid "Common name for the language. For example, the common name for C++03, C++11, and C++14 would be \"C++\""
 msgstr ""
 
-#: .\judge\models.py:80
+#: .\judge\models.py:83
 msgid "ace mode name"
 msgstr "ace 模式名称"
 
-#: .\judge\models.py:81
+#: .\judge\models.py:84
 msgid "Language ID for Ace.js editor highlighting, appended to \"mode-\" to determine the Ace JavaScript file to use, e.g., \"python\"."
 msgstr ""
 
-#: .\judge\models.py:83
+#: .\judge\models.py:86
 msgid "pygments name"
 msgstr "pygments 名称"
 
-#: .\judge\models.py:84
+#: .\judge\models.py:87
 msgid "Language ID for Pygments highlighting in source windows."
 msgstr ""
 
-#: .\judge\models.py:85
+#: .\judge\models.py:88
 msgid "runtime info override"
 msgstr ""
 
-#: .\judge\models.py:86
+#: .\judge\models.py:89
 msgid "Do not set this unless you know what you're doing! It will override the usually more specific, judge-provided runtime info!"
 msgstr ""
 
-#: .\judge\models.py:88
+#: .\judge\models.py:91
 msgid "language description"
 msgstr ""
 
-#: .\judge\models.py:89
+#: .\judge\models.py:92
 msgid "Use field this to inform users of quirks with your environment, additional restrictions, etc."
 msgstr ""
 
-#: .\judge\models.py:91
+#: .\judge\models.py:94
 msgid "extension"
 msgstr ""
 
-#: .\judge\models.py:92
+#: .\judge\models.py:95
 msgid "The extension of source files, e.g., \"py\" or \"cpp\"."
 msgstr ""
 
-#: .\judge\models.py:134 .\judge\models.py:480 .\judge\models.py:492
+#: .\judge\models.py:149 .\judge\models.py:618 .\judge\models.py:630
 msgid "language"
 msgstr "语言"
 
-#: .\judge\models.py:135
+#: .\judge\models.py:150
 msgid "languages"
 msgstr "语言"
 
-#: .\judge\models.py:139
+#: .\judge\models.py:154
 msgid "organization title"
 msgstr "组织名称"
 
-#: .\judge\models.py:140 .\judge\models.py:794
+#: .\judge\models.py:155 .\judge\models.py:934
 msgid "identifier"
 msgstr "标识符"
 
-#: .\judge\models.py:141
+#: .\judge\models.py:156
 msgid "Organization name shows in URL"
 msgstr "组织名称在 URL 中显示"
 
-#: .\judge\models.py:145
+#: .\judge\models.py:160
 msgid "Displayed beside user name during contests"
 msgstr "竞赛时显示在用户名旁边"
 
-#: .\judge\models.py:146
+#: .\judge\models.py:161
 msgid "organization description"
 msgstr "组织描述"
 
-#: .\judge\models.py:147
+#: .\judge\models.py:162
 msgid "registrant"
 msgstr "注册人"
 
-#: .\judge\models.py:149
+#: .\judge\models.py:164
 msgid "User who registered this organization"
 msgstr "注册此组织的用户"
 
-#: .\judge\models.py:150
+#: .\judge\models.py:165
 msgid "administrators"
 msgstr "管理员"
 
-#: .\judge\models.py:151
+#: .\judge\models.py:166
 msgid "Those who can edit this organization"
 msgstr "这些用户可以编辑此组织"
 
-#: .\judge\models.py:152
+#: .\judge\models.py:167
 msgid "creation date"
 msgstr "创建日期"
 
-#: .\judge\models.py:153
+#: .\judge\models.py:168
 msgid "Allow joining organization"
 msgstr "允许加入组织"
 
-#: .\judge\models.py:179 .\judge\models.py:206 .\judge\models.py:278
+#: .\judge\models.py:169
+msgid "maximum size"
+msgstr ""
+
+#: .\judge\models.py:170
+msgid "Maximum amount of users in this organization, only applicable to private organizations"
+msgstr ""
+
+#: .\judge\models.py:172
+msgid "Student access code"
+msgstr ""
+
+#: .\judge\models.py:173
+msgid "access code"
+msgstr ""
+
+#: .\judge\models.py:199 .\judge\models.py:226 .\judge\models.py:304
 msgid "organization"
 msgstr "组织"
 
-#: .\judge\models.py:180 .\judge\models.py:923
+#: .\judge\models.py:200 .\judge\models.py:1063
 msgid "organizations"
 msgstr "组织"
 
-#: .\judge\models.py:184
+#: .\judge\models.py:204
 msgid "Leave as LaTeX"
 msgstr ""
 
-#: .\judge\models.py:185
+#: .\judge\models.py:205
 msgid "SVG with PNG fallback"
 msgstr ""
 
-#: .\judge\models.py:186
+#: .\judge\models.py:206
 msgid "MathML only"
 msgstr ""
 
-#: .\judge\models.py:187
+#: .\judge\models.py:207
 msgid "MathJax with SVG/PNG fallback"
 msgstr ""
 
-#: .\judge\models.py:188
+#: .\judge\models.py:208
 msgid "Detect best quality"
 msgstr ""
 
-#: .\judge\models.py:195
+#: .\judge\models.py:215
 msgid "user associated"
 msgstr "关联的用户"
 
-#: .\judge\models.py:196
+#: .\judge\models.py:216
 msgid "display name"
 msgstr "显示名"
 
-#: .\judge\models.py:197
+#: .\judge\models.py:217
 msgid "self-description"
 msgstr "自我描述"
 
-#: .\judge\models.py:198
+#: .\judge\models.py:218
 msgid "location"
 msgstr "位置"
 
-#: .\judge\models.py:200
+#: .\judge\models.py:220
 msgid "preferred language"
 msgstr "首选语言"
 
-#: .\judge\models.py:204
+#: .\judge\models.py:224
 msgid "last access time"
 msgstr "上次访问时间"
 
-#: .\judge\models.py:205
+#: .\judge\models.py:225
 msgid "last IP"
 msgstr "上次访问 IP"
 
-#: .\judge\models.py:208
+#: .\judge\models.py:228
 msgid "display rank"
 msgstr "显示用户组"
 
-#: .\judge\models.py:210
+#: .\judge\models.py:230
 msgid "comment mute"
 msgstr "禁止评论"
 
-#: .\judge\models.py:210
+#: .\judge\models.py:230
 msgid "Some users are at their best when silent."
 msgstr "某些用户在沉默时表现最佳。"
 
-#: .\judge\models.py:213
+#: .\judge\models.py:233
 msgid "user script"
 msgstr "用户脚本"
 
-#: .\judge\models.py:214
+#: .\judge\models.py:234
 msgid "User-defined JavaScript for site customization."
 msgstr "用户自定义 JavaScript。"
 
-#: .\judge\models.py:215
+#: .\judge\models.py:235
 msgid "current contest"
 msgstr "当前竞赛"
 
-#: .\judge\models.py:217
+#: .\judge\models.py:237
 msgid "math engine"
 msgstr ""
 
-#: .\judge\models.py:219
+#: .\judge\models.py:239
 msgid "the rendering engine used to render math"
 msgstr ""
 
-#: .\judge\models.py:272
+#: .\judge\models.py:270
+#, python-format
+msgctxt "user display name"
+msgid "%(username)s (%(display)s)"
+msgstr "%(username)s (%(display)s)"
+
+#: .\judge\models.py:298
 msgid "user profile"
 msgstr "用户信息"
 
-#: .\judge\models.py:273
+#: .\judge\models.py:299
 msgid "user profiles"
 msgstr "用户信息"
 
-#: .\judge\models.py:277 .\judge\models.py:975 .\judge\models.py:1068
+#: .\judge\models.py:303 .\judge\models.py:1131 .\judge\models.py:1236
 msgid "user"
 msgstr "用户"
 
-#: .\judge\models.py:279
+#: .\judge\models.py:305
 msgid "request time"
 msgstr "请求时间"
 
-#: .\judge\models.py:280
+#: .\judge\models.py:306
 msgid "state"
 msgstr "状态"
 
-#: .\judge\models.py:285
+#: .\judge\models.py:311
 msgid "reason"
 msgstr "理由"
 
-#: .\judge\models.py:288
+#: .\judge\models.py:314
 msgid "organization join request"
 msgstr "组织加入请求"
 
-#: .\judge\models.py:289
+#: .\judge\models.py:315
 msgid "organization join requests"
 msgstr "组织加入请求"
 
-#: .\judge\models.py:293
+#: .\judge\models.py:319
 msgid "problem category ID"
 msgstr "题目类型标识符"
 
-#: .\judge\models.py:294
+#: .\judge\models.py:320
 msgid "problem category name"
 msgstr "题目类型名称"
 
-#: .\judge\models.py:301
+#: .\judge\models.py:327
 msgid "problem type"
 msgstr "题目类型"
 
-#: .\judge\models.py:302 .\judge\models.py:368
+#: .\judge\models.py:328 .\judge\models.py:396
 msgid "problem types"
 msgstr "题目类型"
 
-#: .\judge\models.py:306
+#: .\judge\models.py:332
 msgid "problem group ID"
 msgstr "题目组标识符"
 
-#: .\judge\models.py:307
+#: .\judge\models.py:333
 msgid "problem group name"
 msgstr "题目组名称"
 
-#: .\judge\models.py:314 .\judge\models.py:369
+#: .\judge\models.py:340 .\judge\models.py:397
 msgid "problem group"
 msgstr "题目组"
 
-#: .\judge\models.py:315
+#: .\judge\models.py:341
 msgid "problem groups"
 msgstr "题目组"
 
-#: .\judge\models.py:319
+#: .\judge\models.py:345
 msgid "key"
 msgstr ""
 
-#: .\judge\models.py:321
+#: .\judge\models.py:347
 msgid "link"
 msgstr ""
 
-#: .\judge\models.py:322
+#: .\judge\models.py:348
 msgid "full name"
 msgstr ""
 
-#: .\judge\models.py:324
+#: .\judge\models.py:350
 msgid "Displayed on pages under this license"
 msgstr "在本许可证下的页面上显示"
 
-#: .\judge\models.py:325
+#: .\judge\models.py:351
 msgid "icon"
 msgstr ""
 
-#: .\judge\models.py:325
+#: .\judge\models.py:351
 msgid "URL to the icon"
 msgstr "图标的 URL"
 
-#: .\judge\models.py:326
+#: .\judge\models.py:352
 msgid "license text"
 msgstr "许可证文本"
 
-#: .\judge\models.py:335
+#: .\judge\models.py:361
 msgid "license"
 msgstr "许可证"
 
-#: .\judge\models.py:336
+#: .\judge\models.py:362
 msgid "licenses"
 msgstr "许可证"
 
-#: .\judge\models.py:363
+#: .\judge\models.py:389
 msgid "problem code"
 msgstr "题目代码"
 
-#: .\judge\models.py:364
+#: .\judge\models.py:390
 msgid "Problem code must be ^[a-z0-9]+$"
 msgstr "题目代码必须匹配 ^[a-z0-9]+$"
 
-#: .\judge\models.py:365
+#: .\judge\models.py:391
 msgid "problem name"
 msgstr "题目名称"
 
-#: .\judge\models.py:366
+#: .\judge\models.py:392
 msgid "problem body"
 msgstr "题目正文"
 
-#: .\judge\models.py:367
+#: .\judge\models.py:393
 msgid "creators"
 msgstr "作者"
 
-#: .\judge\models.py:370 .\judge\models.py:481 .\judge\models.py:904
+#: .\judge\models.py:394
+msgid "testers"
+msgstr ""
+
+#: .\judge\models.py:395
+msgid "These users will be able to view a private problem, but not edit it."
+msgstr ""
+
+#: .\judge\models.py:398 .\judge\models.py:619 .\judge\models.py:1044
 msgid "time limit"
 msgstr "时间限制"
 
-#: .\judge\models.py:371 .\judge\models.py:482
+#: .\judge\models.py:399 .\judge\models.py:620
 msgid "memory limit"
 msgstr "内存限制"
 
-#: .\judge\models.py:373 .\judge\models.py:1040 .\judge\models.py:1057
-#: .\templates\user\user_problems.jade:88
+#: .\judge\models.py:401 .\judge\models.py:1208 .\judge\models.py:1225
+#: .\templates\user\user_problems.jade:87
 msgid "points"
 msgstr "分"
 
-#: .\judge\models.py:374
+#: .\judge\models.py:402
 msgid "allows partial points"
 msgstr "允许部分分数"
 
-#: .\judge\models.py:375
+#: .\judge\models.py:403
 msgid "allowed languages"
 msgstr "允许的语言"
 
-#: .\judge\models.py:376 .\judge\models.py:905
+#: .\judge\models.py:404 .\judge\models.py:1045
 msgid "publicly visible"
 msgstr "公开可见"
 
-#: .\judge\models.py:377
+#: .\judge\models.py:405
 msgid "date of publishing"
 msgstr "公开日期"
 
-#: .\judge\models.py:379
+#: .\judge\models.py:406
+msgid "Doesn't have magic ability to auto-publish due to backward compatibility"
+msgstr ""
+
+#: .\judge\models.py:407
 msgid "personae non gratae"
 msgstr "不受欢迎人物"
 
-#: .\judge\models.py:380
+#: .\judge\models.py:408
 msgid "Bans the selected users from submitting to this problem"
 msgstr "禁止这些用户在该题目提交答案"
 
-#: .\judge\models.py:382
+#: .\judge\models.py:410
 msgid "amount of users"
 msgstr ""
 
-#: .\judge\models.py:383
+#: .\judge\models.py:411
 msgid "The amount of users on the best solutions page."
 msgstr ""
 
-#: .\judge\models.py:384
+#: .\judge\models.py:412
 msgid "rate of AC submissions"
 msgstr ""
 
-#: .\judge\models.py:474 .\judge\models.py:479 .\judge\models.py:491
-#: .\judge\models.py:1038 .\judge\models.py:1053
+#: .\judge\models.py:544 .\judge\models.py:570 .\judge\models.py:617
+#: .\judge\models.py:629 .\judge\models.py:1206 .\judge\models.py:1221
 msgid "problem"
 msgstr "题目"
 
-#: .\judge\models.py:475 .\judge\models.py:826 .\judge\models.py:901
+#: .\judge\models.py:545 .\judge\models.py:966 .\judge\models.py:1041
 msgid "problems"
 msgstr "题目"
 
-#: .\judge\models.py:486
-msgid "language-specific resource limit"
-msgstr "语言特定资源限制"
-
-#: .\judge\models.py:487
-msgid "language-specific resource limits"
-msgstr "语言特定资源限制"
-
-#: .\judge\models.py:493
-msgid "translated name"
-msgstr "翻译题目名"
-
-#: .\judge\models.py:494
-msgid "translated description"
-msgstr "翻译题目正文"
-
-#: .\judge\models.py:498
-msgid "problem translation"
-msgstr "题目翻译"
-
-#: .\judge\models.py:499
-msgid "problem translations"
-msgstr "题目翻译"
-
-#: .\judge\models.py:503 .\judge\models.py:529 .\judge\utils\problems.py:41
-msgid "Accepted"
-msgstr "接受"
-
-#: .\judge\models.py:504 .\judge\models.py:530 .\judge\utils\problems.py:42
-msgid "Wrong Answer"
-msgstr "答案错误"
-
-#: .\judge\models.py:505 .\judge\models.py:532 .\judge\utils\problems.py:44
-msgid "Time Limit Exceeded"
-msgstr "超出时间限制"
-
-#: .\judge\models.py:506 .\judge\models.py:533 .\judge\utils\problems.py:45
-msgid "Memory Limit Exceeded"
-msgstr "超出内存限制"
-
-#: .\judge\models.py:507 .\judge\models.py:534
-msgid "Output Limit Exceeded"
-msgstr "超出输出限制"
-
-#: .\judge\models.py:508 .\judge\models.py:535 .\judge\utils\problems.py:46
-msgid "Invalid Return"
-msgstr "错误退出代码"
-
-#: .\judge\models.py:509 .\judge\models.py:536
-msgid "Runtime Error"
-msgstr "运行错误"
-
-#: .\judge\models.py:510 .\judge\models.py:524 .\judge\models.py:537
-#: .\judge\utils\problems.py:43
-msgid "Compile Error"
-msgstr "编译错误"
-
-#: .\judge\models.py:511 .\judge\models.py:523
-msgid "Internal Error"
-msgstr "内部错误"
-
-#: .\judge\models.py:512
-msgid "Short circuit"
-msgstr "跳过"
-
-#: .\judge\models.py:513 .\judge\models.py:525 .\judge\models.py:543
-msgid "Aborted"
-msgstr "中止"
-
-#: .\judge\models.py:519 .\judge\models.py:539
-msgid "Queued"
-msgstr "等待中"
-
-#: .\judge\models.py:520 .\judge\models.py:540
-msgid "Processing"
-msgstr "处理中"
-
-#: .\judge\models.py:521 .\judge\models.py:541
-msgid "Grading"
-msgstr "评分中"
-
-#: .\judge\models.py:522 .\judge\models.py:542
-msgid "Completed"
-msgstr "完成"
-
-#: .\judge\models.py:538
-msgid "Internal Error (judging server error)"
-msgstr "内部错误 (裁判服务器错误)"
-
-#: .\judge\models.py:548
-msgid "submission time"
-msgstr "提交时间"
-
-#: .\judge\models.py:549 .\judge\models.py:640
-msgid "execution time"
-msgstr "执行时间"
-
-#: .\judge\models.py:550 .\judge\models.py:641
-msgid "memory usage"
-msgstr "内存使用"
-
-#: .\judge\models.py:551 .\judge\models.py:642
-msgid "points granted"
-msgstr "获得分数"
-
-#: .\judge\models.py:552
-msgid "submission language"
-msgstr ""
-
-#: .\judge\models.py:553
-msgid "source code"
-msgstr ""
-
-#: .\judge\models.py:557
-msgid "compile errors"
-msgstr ""
-
 #: .\judge\models.py:559
-msgid "batched cases"
+msgid "Standard"
 msgstr ""
 
 #: .\judge\models.py:560
-msgid "test case points"
+msgid "Floats"
 msgstr ""
 
 #: .\judge\models.py:561
-msgid "test case total points"
+msgid "Floats (absolute)"
 msgstr ""
 
 #: .\judge\models.py:562
-msgid "judged on"
+msgid "Floats (relative)"
+msgstr ""
+
+#: .\judge\models.py:563
+msgid "Non-trailing spaces"
 msgstr ""
 
 #: .\judge\models.py:564
-msgid "is being rejudged by admin"
+msgid "Unordered"
 msgstr ""
 
 #: .\judge\models.py:565
+msgid "Byte identical"
+msgstr ""
+
+#: .\judge\models.py:571
+msgid "data zip file"
+msgstr ""
+
+#: .\judge\models.py:573
+msgid "generator file"
+msgstr ""
+
+#: .\judge\models.py:575 .\judge\models.py:609
+msgid "output prefix length"
+msgstr ""
+
+#: .\judge\models.py:576 .\judge\models.py:610
+msgid "output limit length"
+msgstr ""
+
+#: .\judge\models.py:577
+msgid "init.yml generation feedback"
+msgstr ""
+
+#: .\judge\models.py:578 .\judge\models.py:611
+msgid "checker"
+msgstr ""
+
+#: .\judge\models.py:579 .\judge\models.py:612
+msgid "checker arguments"
+msgstr ""
+
+#: .\judge\models.py:580 .\judge\models.py:613
+msgid "checker arguments as a JSON object"
+msgstr ""
+
+#: .\judge\models.py:598
+msgid "problem data set"
+msgstr ""
+
+#: .\judge\models.py:599
+msgid "case position"
+msgstr ""
+
+#: .\judge\models.py:600
+msgid "case type"
+msgstr ""
+
+#: .\judge\models.py:601
+msgid "Normal case"
+msgstr ""
+
+#: .\judge\models.py:602
+msgid "Batch start"
+msgstr ""
+
+#: .\judge\models.py:603
+msgid "Batch end"
+msgstr ""
+
+#: .\judge\models.py:604
+msgid "input file name"
+msgstr ""
+
+#: .\judge\models.py:605
+msgid "output file name"
+msgstr ""
+
+#: .\judge\models.py:606
+msgid "generator arguments"
+msgstr ""
+
+#: .\judge\models.py:607
+msgid "point value"
+msgstr ""
+
+#: .\judge\models.py:608
+msgid "case is pretest?"
+msgstr ""
+
+#: .\judge\models.py:624
+msgid "language-specific resource limit"
+msgstr "语言特定资源限制"
+
+#: .\judge\models.py:625
+msgid "language-specific resource limits"
+msgstr "语言特定资源限制"
+
+#: .\judge\models.py:631
+msgid "translated name"
+msgstr "翻译题目名"
+
+#: .\judge\models.py:632
+msgid "translated description"
+msgstr "翻译题目正文"
+
+#: .\judge\models.py:636
+msgid "problem translation"
+msgstr "题目翻译"
+
+#: .\judge\models.py:637
+msgid "problem translations"
+msgstr "题目翻译"
+
+#: .\judge\models.py:641 .\judge\models.py:667 .\judge\utils\problems.py:67
+msgid "Accepted"
+msgstr "接受"
+
+#: .\judge\models.py:642 .\judge\models.py:668 .\judge\utils\problems.py:68
+msgid "Wrong Answer"
+msgstr "答案错误"
+
+#: .\judge\models.py:643 .\judge\models.py:670 .\judge\utils\problems.py:70
+msgid "Time Limit Exceeded"
+msgstr "超出时间限制"
+
+#: .\judge\models.py:644 .\judge\models.py:671 .\judge\utils\problems.py:71
+msgid "Memory Limit Exceeded"
+msgstr "超出内存限制"
+
+#: .\judge\models.py:645 .\judge\models.py:672
+msgid "Output Limit Exceeded"
+msgstr "超出输出限制"
+
+#: .\judge\models.py:646 .\judge\models.py:673 .\judge\utils\problems.py:72
+msgid "Invalid Return"
+msgstr "错误退出代码"
+
+#: .\judge\models.py:647 .\judge\models.py:674
+msgid "Runtime Error"
+msgstr "运行错误"
+
+#: .\judge\models.py:648 .\judge\models.py:662 .\judge\models.py:675
+#: .\judge\utils\problems.py:69
+msgid "Compile Error"
+msgstr "编译错误"
+
+#: .\judge\models.py:649 .\judge\models.py:661
+msgid "Internal Error"
+msgstr "内部错误"
+
+#: .\judge\models.py:650
+msgid "Short circuit"
+msgstr "跳过"
+
+#: .\judge\models.py:651 .\judge\models.py:663 .\judge\models.py:681
+msgid "Aborted"
+msgstr "中止"
+
+#: .\judge\models.py:657 .\judge\models.py:677
+msgid "Queued"
+msgstr "等待中"
+
+#: .\judge\models.py:658 .\judge\models.py:678
+msgid "Processing"
+msgstr "处理中"
+
+#: .\judge\models.py:659 .\judge\models.py:679
+msgid "Grading"
+msgstr "评分中"
+
+#: .\judge\models.py:660 .\judge\models.py:680
+msgid "Completed"
+msgstr "完成"
+
+#: .\judge\models.py:676
+msgid "Internal Error (judging server error)"
+msgstr "内部错误 (裁判服务器错误)"
+
+#: .\judge\models.py:686
+msgid "submission time"
+msgstr "提交时间"
+
+#: .\judge\models.py:687 .\judge\models.py:780
+msgid "execution time"
+msgstr "执行时间"
+
+#: .\judge\models.py:688 .\judge\models.py:781
+msgid "memory usage"
+msgstr "内存使用"
+
+#: .\judge\models.py:689 .\judge\models.py:782
+msgid "points granted"
+msgstr "获得分数"
+
+#: .\judge\models.py:690
+msgid "submission language"
+msgstr ""
+
+#: .\judge\models.py:691
+msgid "source code"
+msgstr ""
+
+#: .\judge\models.py:695
+msgid "compile errors"
+msgstr ""
+
+#: .\judge\models.py:697
+msgid "batched cases"
+msgstr ""
+
+#: .\judge\models.py:698
+msgid "test case points"
+msgstr ""
+
+#: .\judge\models.py:699
+msgid "test case total points"
+msgstr ""
+
+#: .\judge\models.py:700
+msgid "judged on"
+msgstr ""
+
+#: .\judge\models.py:702
+msgid "is being rejudged by admin"
+msgstr ""
+
+#: .\judge\models.py:703
 msgid "was ran on pretests only"
 msgstr ""
 
-#: .\judge\models.py:630 .\judge\models.py:1052
+#: .\judge\models.py:770 .\judge\models.py:1220
 msgid "submission"
 msgstr "提交信息"
 
-#: .\judge\models.py:631
+#: .\judge\models.py:771
 msgid "submissions"
 msgstr "提交历史"
 
-#: .\judge\models.py:637
+#: .\judge\models.py:777
 msgid "associated submission"
 msgstr ""
 
-#: .\judge\models.py:638
+#: .\judge\models.py:778
 msgid "test case ID"
 msgstr ""
 
-#: .\judge\models.py:639
+#: .\judge\models.py:779
 msgid "status flag"
 msgstr ""
 
-#: .\judge\models.py:643
+#: .\judge\models.py:783
 msgid "points possible"
 msgstr ""
 
-#: .\judge\models.py:644
+#: .\judge\models.py:784
 msgid "batch number"
 msgstr ""
 
-#: .\judge\models.py:645
+#: .\judge\models.py:785
 msgid "judging feedback"
 msgstr ""
 
-#: .\judge\models.py:646
+#: .\judge\models.py:786
 msgid "program output"
 msgstr ""
 
-#: .\judge\models.py:653
+#: .\judge\models.py:793
 msgid "submission test case"
 msgstr "程序测试"
 
-#: .\judge\models.py:654
+#: .\judge\models.py:794
 msgid "submission test cases"
 msgstr "程序测试"
 
-#: .\judge\models.py:658
+#: .\judge\models.py:798
 msgid "commenter"
 msgstr ""
 
-#: .\judge\models.py:659
+#: .\judge\models.py:799
 msgid "posted time"
 msgstr ""
 
-#: .\judge\models.py:660
+#: .\judge\models.py:800
 msgid "associated Page"
 msgstr ""
 
-#: .\judge\models.py:662
+#: .\judge\models.py:802
 msgid "Page code must be ^[pc]:[a-z0-9]+$|^b:\\d+$"
 msgstr "页代码必须匹配 ^[pc]:[a-z0-9]+$|^b:\\d+$|^s:"
 
-#: .\judge\models.py:663
+#: .\judge\models.py:803
 msgid "votes"
 msgstr ""
 
-#: .\judge\models.py:664
+#: .\judge\models.py:804
 msgid "title of comment"
 msgstr ""
 
-#: .\judge\models.py:665
+#: .\judge\models.py:805
 msgid "body of comment"
 msgstr ""
 
-#: .\judge\models.py:666
+#: .\judge\models.py:806
 msgid "hide the comment"
 msgstr ""
 
-#: .\judge\models.py:667
+#: .\judge\models.py:807
 msgid "parent"
 msgstr ""
 
-#: .\judge\models.py:671
+#: .\judge\models.py:811
 msgid "comment"
 msgstr "评论"
 
-#: .\judge\models.py:672
+#: .\judge\models.py:812
 msgid "comments"
 msgstr "评论"
 
-#: .\judge\models.py:762
+#: .\judge\models.py:902
 msgid "comment vote"
 msgstr "评论投票"
 
-#: .\judge\models.py:763
+#: .\judge\models.py:903
 msgid "comment votes"
 msgstr "评论投票"
 
-#: .\judge\models.py:774
+#: .\judge\models.py:914
 msgid "configuration item"
 msgstr "配置项目"
 
-#: .\judge\models.py:775
+#: .\judge\models.py:915
 msgid "miscellaneous configuration"
 msgstr "杂项配置"
 
-#: .\judge\models.py:787
+#: .\judge\models.py:927
 msgid "navigation item"
 msgstr "导航项"
 
-#: .\judge\models.py:788
+#: .\judge\models.py:928
 msgid "navigation bar"
 msgstr "导航栏"
 
-#: .\judge\models.py:793 .\judge\models.py:1042
+#: .\judge\models.py:933 .\judge\models.py:1210
 msgid "order"
 msgstr ""
 
-#: .\judge\models.py:795
+#: .\judge\models.py:935
 msgid "label"
 msgstr ""
 
-#: .\judge\models.py:796
+#: .\judge\models.py:936
 msgid "link path"
 msgstr "链接路径"
 
-#: .\judge\models.py:797
+#: .\judge\models.py:937
 msgid "highlight regex"
 msgstr "突出显示正则表达式"
 
-#: .\judge\models.py:798
+#: .\judge\models.py:938
 msgid "parent item"
 msgstr "父项"
 
-#: .\judge\models.py:815
+#: .\judge\models.py:955
 msgid "Server name, hostname-style"
 msgstr "服务器名称"
 
-#: .\judge\models.py:816
+#: .\judge\models.py:956
 msgid "time of creation"
 msgstr "创建时间"
 
-#: .\judge\models.py:817
+#: .\judge\models.py:957
 msgid "A key to authenticated this judge"
 msgstr "裁判服务器连接密匙"
 
-#: .\judge\models.py:818
+#: .\judge\models.py:958
 msgid "authentication key"
 msgstr "连接密匙"
 
-#: .\judge\models.py:819
+#: .\judge\models.py:959
 msgid "judge online status"
 msgstr "裁判在线状态"
 
-#: .\judge\models.py:820
+#: .\judge\models.py:960
 msgid "judge start time"
 msgstr "裁判启动时间"
 
-#: .\judge\models.py:821
+#: .\judge\models.py:961
 msgid "response time"
 msgstr "响应时间"
 
-#: .\judge\models.py:822
+#: .\judge\models.py:962
 msgid "system load"
 msgstr "系统负载"
 
-#: .\judge\models.py:823
+#: .\judge\models.py:963
 msgid "Load for the last minute, divided by processors to be fair."
 msgstr "最后一分钟的系统负载（每处理器平均值）"
 
-#: .\judge\models.py:824
+#: .\judge\models.py:964
 msgid "description"
 msgstr "描述"
 
-#: .\judge\models.py:827 .\judge\models.py:862
+#: .\judge\models.py:967 .\judge\models.py:1002
 msgid "judges"
 msgstr "裁判服务器"
 
-#: .\judge\models.py:861
+#: .\judge\models.py:1001
 msgid "judge"
 msgstr "裁判服务器"
 
-#: .\judge\models.py:866
+#: .\judge\models.py:1006
 msgid "Invalid colour."
 msgstr "无效的颜色。"
 
-#: .\judge\models.py:868
+#: .\judge\models.py:1008
 msgid "tag name"
 msgstr "标签名称"
 
-#: .\judge\models.py:869
+#: .\judge\models.py:1009
 msgid "Lowercase letters and hyphens only."
 msgstr ""
 
-#: .\judge\models.py:870
+#: .\judge\models.py:1010
 msgid "tag colour"
 msgstr "标签颜色"
 
-#: .\judge\models.py:871
+#: .\judge\models.py:1011
 msgid "tag description"
 msgstr "标签说明"
 
-#: .\judge\models.py:890
+#: .\judge\models.py:1030
 msgid "contest tag"
 msgstr "竞赛标签"
 
-#: .\judge\models.py:891 .\judge\models.py:926
+#: .\judge\models.py:1031 .\judge\models.py:1066
 msgid "contest tags"
 msgstr "竞赛标签"
 
-#: .\judge\models.py:895
+#: .\judge\models.py:1035
 msgid "contest id"
 msgstr "竞赛标识"
 
-#: .\judge\models.py:896
+#: .\judge\models.py:1036
 msgid "Contest id must be ^[a-z0-9]+$"
 msgstr "竞赛标识必须匹配 ^[a-z0-9]+$"
 
-#: .\judge\models.py:897
+#: .\judge\models.py:1037
 msgid "contest name"
 msgstr "竞赛名称"
 
-#: .\judge\models.py:898
+#: .\judge\models.py:1038
 msgid "These people will be able to edit the contest."
 msgstr "这些人将可以编辑竞赛。"
 
-#: .\judge\models.py:906
+#: .\judge\models.py:1046
 msgid "Should be set even for organization-private contests, where it determines whether the contest is visible to members of the specified organizations."
 msgstr ""
 
-#: .\judge\models.py:909
+#: .\judge\models.py:1049
 msgid "contest rated"
 msgstr ""
 
-#: .\judge\models.py:909
+#: .\judge\models.py:1049
 msgid "Whether this contest can be rated."
 msgstr "竞赛是否参与用户评分"
 
-#: .\judge\models.py:911
+#: .\judge\models.py:1051
 msgid "rate all"
 msgstr ""
 
-#: .\judge\models.py:911
+#: .\judge\models.py:1051
 msgid "Rate all users who joined."
 msgstr "所有用户参与竞赛的用户，包含没有提交任何程序的用户，都将被评分。"
 
-#: .\judge\models.py:912
+#: .\judge\models.py:1052
 msgid "exclude from ratings"
 msgstr ""
 
-#: .\judge\models.py:914
+#: .\judge\models.py:1054
 msgid "private to organizations"
 msgstr ""
 
-#: .\judge\models.py:915
+#: .\judge\models.py:1055
 msgid "hide problem tags"
 msgstr ""
 
-#: .\judge\models.py:916
+#: .\judge\models.py:1056
 msgid "Whether problem tags should be hidden by default."
 msgstr ""
 
-#: .\judge\models.py:918
+#: .\judge\models.py:1058
 msgid "run pretests only"
 msgstr ""
 
-#: .\judge\models.py:919
+#: .\judge\models.py:1059
 msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
 msgstr ""
 
-#: .\judge\models.py:924
+#: .\judge\models.py:1064
 msgid "If private, only these organizations may see the contest"
 msgstr "选中时，只对选择的组织才可见"
 
-#: .\judge\models.py:925
+#: .\judge\models.py:1065
 msgid "OpenGraph image"
 msgstr "OpenGraph 图像"
 
-#: .\judge\models.py:969 .\judge\models.py:1039 .\judge\models.py:1069
+#: .\judge\models.py:1067
+msgid "the amount of live participants"
+msgstr ""
+
+#: .\judge\models.py:1068
+msgid "contest summary"
+msgstr ""
+
+#: .\judge\models.py:1069
+msgid "Plain-text, shown in meta description tag, e.g. for social media."
+msgstr ""
+
+#: .\judge\models.py:1125 .\judge\models.py:1207 .\judge\models.py:1237
 msgid "contest"
 msgstr "竞赛"
 
-#: .\judge\models.py:970
+#: .\judge\models.py:1126
 msgid "contests"
 msgstr "竞赛"
 
-#: .\judge\models.py:974
+#: .\judge\models.py:1130
 msgid "associated contest"
 msgstr ""
 
-#: .\judge\models.py:976
+#: .\judge\models.py:1132
 msgid "start time"
 msgstr ""
 
-#: .\judge\models.py:977
+#: .\judge\models.py:1133
 msgid "score"
 msgstr "得分"
 
-#: .\judge\models.py:978
+#: .\judge\models.py:1134
 msgid "cumulative time"
 msgstr ""
 
-#: .\judge\models.py:979
-msgid "whether the user is spectating the contest"
+#: .\judge\models.py:1135
+msgid "virtual participation id"
 msgstr ""
 
-#: .\judge\models.py:1031
+#: .\judge\models.py:1136
+msgid "0 means non-virtual, otherwise the n-th virtual participation"
+msgstr ""
+
+#: .\judge\models.py:1193
+#, python-format
+msgid "%s spectating in %s"
+msgstr ""
+
+#: .\judge\models.py:1195
+#, python-format
+msgid "%s in %s, v%d"
+msgstr ""
+
+#: .\judge\models.py:1196
+#, python-format
+msgid "%s in %s"
+msgstr ""
+
+#: .\judge\models.py:1199
 msgid "contest participation"
 msgstr "竞赛参与信息"
 
-#: .\judge\models.py:1032
+#: .\judge\models.py:1200
 msgid "contest participations"
 msgstr "竞赛参与信息"
 
-#: .\judge\models.py:1041
+#: .\judge\models.py:1209
 msgid "partial"
 msgstr ""
 
-#: .\judge\models.py:1043
+#: .\judge\models.py:1211
 msgid "output prefix length override"
 msgstr ""
 
-#: .\judge\models.py:1047
+#: .\judge\models.py:1215
 msgid "contest problem"
 msgstr "竞赛题目"
 
-#: .\judge\models.py:1048
+#: .\judge\models.py:1216
 msgid "contest problems"
 msgstr "竞赛题目"
 
-#: .\judge\models.py:1055 .\judge\models.py:1070
+#: .\judge\models.py:1223 .\judge\models.py:1238
 msgid "participation"
 msgstr ""
 
-#: .\judge\models.py:1058
+#: .\judge\models.py:1226
 msgid "is pretested"
 msgstr ""
 
-#: .\judge\models.py:1059
+#: .\judge\models.py:1227
 msgid "Whether this submission was ran only on pretests."
 msgstr ""
 
-#: .\judge\models.py:1063
+#: .\judge\models.py:1231
 msgid "contest submission"
 msgstr "竞赛提交信息"
 
-#: .\judge\models.py:1064
+#: .\judge\models.py:1232
 msgid "contest submissions"
 msgstr "竞赛提交历史"
 
-#: .\judge\models.py:1071
+#: .\judge\models.py:1239
 msgid "rank"
 msgstr ""
 
-#: .\judge\models.py:1072
+#: .\judge\models.py:1240
 msgid "rating"
 msgstr ""
 
-#: .\judge\models.py:1073
+#: .\judge\models.py:1241
 msgid "volatility"
 msgstr ""
 
-#: .\judge\models.py:1074
+#: .\judge\models.py:1242
 msgid "last rated"
 msgstr ""
 
-#: .\judge\models.py:1078
+#: .\judge\models.py:1246
 msgid "contest rating"
 msgstr "竞赛评分信息"
 
-#: .\judge\models.py:1079
+#: .\judge\models.py:1247
 msgid "contest ratings"
 msgstr "竞赛评分历史"
 
-#: .\judge\models.py:1083
+#: .\judge\models.py:1251
 msgid "post title"
 msgstr ""
 
-#: .\judge\models.py:1084
+#: .\judge\models.py:1252
+msgid "authors"
+msgstr ""
+
+#: .\judge\models.py:1253
 msgid "slug"
 msgstr ""
 
-#: .\judge\models.py:1085
+#: .\judge\models.py:1254
 msgid "public visibility"
 msgstr ""
 
-#: .\judge\models.py:1086
+#: .\judge\models.py:1255
 msgid "sticky"
 msgstr ""
 
-#: .\judge\models.py:1087
+#: .\judge\models.py:1256
 msgid "publish after"
 msgstr ""
 
-#: .\judge\models.py:1088
+#: .\judge\models.py:1257
 msgid "post content"
 msgstr ""
 
-#: .\judge\models.py:1089
+#: .\judge\models.py:1258
 msgid "post summary"
 msgstr ""
 
-#: .\judge\models.py:1090
+#: .\judge\models.py:1259
 msgid "openGraph image"
 msgstr ""
 
-#: .\judge\models.py:1102
+#: .\judge\models.py:1271
 msgid "blog post"
 msgstr "博客文章"
 
-#: .\judge\models.py:1103
+#: .\judge\models.py:1272
 msgid "blog posts"
 msgstr "博客文章"
 
-#: .\judge\models.py:1107
+#: .\judge\models.py:1276
 msgid "message title"
 msgstr ""
 
-#: .\judge\models.py:1108
+#: .\judge\models.py:1277
 msgid "message body"
 msgstr ""
 
-#: .\judge\models.py:1109
+#: .\judge\models.py:1278
 msgid "sender"
 msgstr ""
 
-#: .\judge\models.py:1110
+#: .\judge\models.py:1279
 msgid "target"
 msgstr ""
 
-#: .\judge\models.py:1111
+#: .\judge\models.py:1280
 msgid "message timestamp"
 msgstr ""
 
-#: .\judge\models.py:1112
+#: .\judge\models.py:1281
 msgid "read"
 msgstr ""
 
-#: .\judge\models.py:1116
+#: .\judge\models.py:1285
 msgid "messages in the thread"
 msgstr ""
 
-#: .\judge\models.py:1126
+#: .\judge\models.py:1295
 msgid "associated problem"
 msgstr ""
 
-#: .\judge\models.py:1139
+#: .\judge\models.py:1308
 msgid "solution"
 msgstr "题目讲解"
 
-#: .\judge\models.py:1140
+#: .\judge\models.py:1309
 msgid "solutions"
 msgstr "题目讲解"
 
-#: .\judge\pdf_problems.py:28
+#: .\judge\pdf_problems.py:70 .\judge\pdf_problems.py:126
 msgid "Page [page] of [topage]"
 msgstr "第[page]页，共[topage]页"
 
@@ -1361,6 +1553,7 @@ msgid_plural "%d days %h:%m"
 msgstr[0] "%d 天 %h:%m"
 
 #: .\judge\templatetags\timedelta.py:64
+#, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d 天"
@@ -1370,15 +1563,49 @@ msgctxt "hours and minutes"
 msgid "%h:%m"
 msgstr "%h:%m"
 
-#: .\judge\utils\problems.py:36
+#: .\judge\utils\problem_data.py:60
+msgid "Empty batches not allowed."
+msgstr ""
+
+#: .\judge\utils\problem_data.py:79
+#, python-format
+msgid "Points must be defined for non-batch case #%d."
+msgstr ""
+
+#: .\judge\utils\problem_data.py:84
+#, python-format
+msgid "Input file for case %d does not exist: %s"
+msgstr ""
+
+#: .\judge\utils\problem_data.py:87
+#, python-format
+msgid "Output file for case %d does not exist: %s"
+msgstr ""
+
+#: .\judge\utils\problem_data.py:112
+#, python-format
+msgid "Batch start case #%d requires points."
+msgstr ""
+
+#: .\judge\utils\problem_data.py:133
+#, python-format
+msgid "Attempt to end batch outside of one in case #%d"
+msgstr ""
+
+#: .\judge\utils\problem_data.py:148
+msgid "How did you corrupt the zip path?"
+msgstr ""
+
+#: .\judge\utils\problems.py:62
 msgid "Can't pass both queryset and keyword filters"
 msgstr "无法同时使用 queryset 和关键字筛选"
 
-#: .\judge\utils\problems.py:47
+#: .\judge\utils\problems.py:73
 msgid "Total"
 msgstr "总数"
 
-#: .\judge\views\blog.py:31
+#: .\judge\views\blog.py:32
+#, python-format
 msgid "Page %d of Posts"
 msgstr "帖子第%d页"
 
@@ -1391,71 +1618,107 @@ msgid "You already voted."
 msgstr "你已经投了票。"
 
 #: .\judge\views\comment.py:83
+#, python-format
 msgid "Revisions for %s"
 msgstr "%s 的过去版本"
 
-#: .\judge\views\comment.py:103 .\judge\views\organization.py:261
+#: .\judge\views\comment.py:103 .\judge\views\organization.py:274
 msgid "Edited from site"
 msgstr "从网站中上编辑"
 
-#: .\judge\views\comment.py:124 .\judge\views\organization.py:251
+#: .\judge\views\comment.py:124 .\judge\views\organization.py:264
+#, python-format
 msgid "Editing %s"
 msgstr "编辑 %s"
 
-#: .\judge\views\contests.py:41 .\judge\views\contests.py:125
-#: .\judge\views\contests.py:128 .\judge\views\contests.py:203
+#: .\judge\views\contests.py:46 .\judge\views\contests.py:130
+#: .\judge\views\contests.py:133 .\judge\views\contests.py:248
 msgid "No such contest"
 msgstr "该竞赛不存在"
 
-#: .\judge\views\contests.py:42 .\judge\views\contests.py:126
+#: .\judge\views\contests.py:47 .\judge\views\contests.py:131
+#, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr "找不到标识符为“%s“的竞赛。"
 
-#: .\judge\views\contests.py:62
+#: .\judge\views\contests.py:67
 msgid "Contests"
 msgstr "竞赛"
 
-#: .\judge\views\contests.py:129
+#: .\judge\views\contests.py:134
 msgid "Could not find such contest."
 msgstr "找不到该竞赛。"
 
-#: .\judge\views\contests.py:132
+#: .\judge\views\contests.py:137
+#, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr "对竞赛”%s“的访问被拒绝"
 
-#: .\judge\views\contests.py:171
+#: .\judge\views\contests.py:197
 msgid "Contest not ongoing"
 msgstr "竞赛不在进行"
 
-#: .\judge\views\contests.py:172
+#: .\judge\views\contests.py:198
+#, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "“%s“不在进行。"
 
-#: .\judge\views\contests.py:176
+#: .\judge\views\contests.py:202
 msgid "Already in contest"
 msgstr "已经参与了竞赛"
 
-#: .\judge\views\contests.py:177
+#: .\judge\views\contests.py:203
+#, python-format
 msgid "You are already in a contest: \"%s\"."
 msgstr "您已经参与了竞赛：”%s“。"
 
-#: .\judge\views\contests.py:189
-msgid "Time limit exceeded"
-msgstr "超出时间限制"
-
-#: .\judge\views\contests.py:190
-msgid "Too late! You already used up your time limit for \"%s\"."
-msgstr "太晚了！你已经超出了\"%s\"的时间限制。"
-
-#: .\judge\views\contests.py:204
+#: .\judge\views\contests.py:249
+#, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "你不是在竞赛\"%s\"中。"
 
-#: .\judge\views\contests.py:223
+#: .\judge\views\contests.py:268
 msgid "ContestCalender requires integer year and month"
 msgstr "ContestCalender 需要整数年份和月份"
 
-#: .\judge\views\contests.py:399
+#: .\judge\views\contests.py:466
+#, python-format
+msgid "%s Rankings"
+msgstr ""
+
+#: .\judge\views\contests.py:468
+msgid "Rankings"
+msgstr ""
+
+#: .\judge\views\contests.py:494
+msgid "Live"
+msgstr ""
+
+#: .\judge\views\contests.py:502
+#, python-format
+msgid "Your participation in %s"
+msgstr ""
+
+#: .\judge\views\contests.py:503
+#, python-format
+msgid "%s's participation in %s"
+msgstr ""
+
+#: .\judge\views\contests.py:505
+msgid "Your participation"
+msgstr ""
+
+#: .\judge\views\contests.py:506
+#, python-format
+msgid "%s's participation"
+msgstr ""
+
+#: .\judge\views\contests.py:512
+msgid "Participation"
+msgstr ""
+
+#: .\judge\views\contests.py:536
+#, python-format
 msgid "Contest tag: %s"
 msgstr ""
 
@@ -1464,105 +1727,130 @@ msgid "404 error"
 msgstr "404 错误"
 
 #: .\judge\views\error.py:15
+#, python-format
 msgid "Could not find page \"%s\""
 msgstr "找不到网页\"%s\"。"
 
 #: .\judge\views\error.py:21
+#, python-format
 msgid "no permission for %s"
 msgstr "无权访问 %s"
 
 #: .\judge\views\error.py:27
+#, python-format
 msgid "corrupt page %s"
 msgstr "页面错误 %s"
 
-#: .\judge\views\language.py:22
-msgid "No such language"
-msgstr "无该语言"
-
-#: .\judge\views\language.py:23
-msgid "Could not find a language with the key \"%s\"."
-msgstr "找不到标识符为“%s“的语言。"
-
-#: .\judge\views\language.py:38 .\templates\judge_status_table.jade:8
+#: .\judge\views\language.py:14 .\templates\judge_status_table.jade:8
 msgid "Runtimes"
 msgstr "语言"
 
-#: .\judge\views\organization.py:41 .\judge\views\organization.py:44
+#: .\judge\views\organization.py:43 .\judge\views\organization.py:46
 msgid "No such organization"
 msgstr "无该组织"
 
-#: .\judge\views\organization.py:42
+#: .\judge\views\organization.py:44
+#, python-format
 msgid "Could not find an organization with the key \"%s\"."
 msgstr "找不到标识符为”%s“的组织。"
 
-#: .\judge\views\organization.py:45
+#: .\judge\views\organization.py:47
 msgid "Could not find such organization."
 msgstr "找不到该组织。"
 
-#: .\judge\views\organization.py:60 .\judge\views\register.py:35
+#: .\judge\views\organization.py:62 .\judge\views\register.py:33
 #: .\templates\user\user_list_tabs.jade:7
 msgid "Organizations"
 msgstr "组织"
 
-#: .\judge\views\organization.py:78
+#: .\judge\views\organization.py:80
+#, python-format
 msgid "%s Members"
 msgstr "%s 成员列表"
 
-#: .\judge\views\organization.py:106 .\judge\views\organization.py:108
+#: .\judge\views\organization.py:110 .\judge\views\organization.py:112
 msgid "Joining organization"
 msgstr "加入组织"
 
-#: .\judge\views\organization.py:106
+#: .\judge\views\organization.py:110
 msgid "You are already in the organization."
 msgstr "你已经是该组织的成员。"
 
-#: .\judge\views\organization.py:108
+#: .\judge\views\organization.py:112
 msgid "This organization is not open."
 msgstr "该组织不开放。"
 
-#: .\judge\views\organization.py:117
+#: .\judge\views\organization.py:121
 msgid "Leaving organization"
 msgstr "离开组织"
 
-#: .\judge\views\organization.py:117
+#: .\judge\views\organization.py:121
+#, python-format
 msgid "You are not in \"%s\"."
 msgstr "你不是是“%s”的成员。"
 
-#: .\judge\views\organization.py:141
+#: .\judge\views\organization.py:145
+#, python-format
 msgid "Request to join %s"
 msgstr "请求加入 %s"
 
-#: .\judge\views\organization.py:157
+#: .\judge\views\organization.py:161
 msgid "Join request detail"
 msgstr "组织加入请求详细信息"
 
-#: .\judge\views\organization.py:186
+#: .\judge\views\organization.py:190
+#, python-format
 msgid "Managing join requests for %s"
 msgstr "管理 %s 的加入请求"
 
-#: .\judge\views\organization.py:220
+#: .\judge\views\organization.py:221
+#, python-format
+msgid "Your organization can only receive %d more members. You cannot approve %d users."
+msgstr ""
+
+#: .\judge\views\organization.py:233
+#, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
 msgstr[0] "批准了%d个用户。"
 
-#: .\judge\views\organization.py:221
+#: .\judge\views\organization.py:234
+#, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] "拒绝了%d个用户。"
 
-#: .\judge\views\organization.py:269
+#: .\judge\views\organization.py:282 .\judge\views\organization.py:290
 msgid "Can't edit organization"
 msgstr "无法编辑组织"
 
-#: .\judge\views\organization.py:270
+#: .\judge\views\organization.py:283
 msgid "You are not allowed to edit this organization."
 msgstr "您没有编辑该组织的权利。"
+
+#: .\judge\views\organization.py:291
+msgid "You are not allowed to kick people from this organization."
+msgstr ""
+
+#: .\judge\views\organization.py:296 .\judge\views\organization.py:300
+msgid "Can't kick user"
+msgstr ""
+
+#: .\judge\views\organization.py:297
+msgid "The user you are trying to kick does not exist!"
+msgstr ""
+
+#: .\judge\views\organization.py:301
+#, python-format
+msgid "The user you are trying to kick is not in organization: %s."
+msgstr ""
 
 #: .\judge\views\problem.py:60
 msgid "No such problem"
 msgstr "无该题目"
 
 #: .\judge\views\problem.py:61
+#, python-format
 msgid "Could not find a problem with the code \"%s\"."
 msgstr "找不到代码为“%s”的题目。"
 
@@ -1571,19 +1859,42 @@ msgstr "找不到代码为“%s”的题目。"
 msgid "Problems"
 msgstr "题目"
 
-#: .\judge\views\problem.py:378
+#: .\judge\views\problem.py:416
 msgid "Banned from Submitting"
 msgstr "禁止提交"
 
-#: .\judge\views\problem.py:379
+#: .\judge\views\problem.py:417
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
 msgstr "您在该题目不受欢迎。您被永久禁止为该题目提交解决程序。"
 
-#: .\judge\views\problem.py:420
+#: .\judge\views\problem.py:460
 msgid "Submit"
 msgstr "提交"
 
+#: .\judge\views\problem_data.py:36
+msgid "Checker arguments must be a JSON object"
+msgstr ""
+
+#: .\judge\views\problem_data.py:38
+msgid "Checker arguments is invalid JSON"
+msgstr ""
+
+#: .\judge\views\problem_data.py:45
+msgid "Your zip file is invalid!"
+msgstr ""
+
+#: .\judge\views\problem_data.py:91 .\judge\views\problem_data.py:94
+#, python-format
+msgid "Editing data for %s"
+msgstr ""
+
+#: .\judge\views\problem_data.py:195 .\judge\views\problem_data.py:196
+#, python-format
+msgid "Generated init.yml for %s"
+msgstr ""
+
 #: .\judge\views\ranked_submission.py:58
+#, python-format
 msgid "Best solutions for %s"
 msgstr "%s 排行榜"
 
@@ -1593,6 +1904,7 @@ msgid "Best solutions for <a href=\"{1}\">{0}</a>"
 msgstr "<a href=\"{1}\">{0}</a> 排行榜"
 
 #: .\judge\views\ranked_submission.py:70
+#, python-format
 msgid "Best solutions for %(problem)s in %(contest)s"
 msgstr "竞赛 %(contest)s 中 %(problem)s 排行榜"
 
@@ -1601,43 +1913,46 @@ msgstr "竞赛 %(contest)s 中 %(problem)s 排行榜"
 msgid "Best solutions for <a href=\"{1}\">{0}</a> in <a href=\"{3}\">{2}</a>"
 msgstr "竞赛 <a href=\"{3}\">{2}</a> 中 <a href=\"{1}\">{0}</a> 排行榜"
 
-#: .\judge\views\register.py:26 .\templates\user\base_users_table.jade:5
+#: .\judge\views\register.py:24
+#: .\templates\registration\registration_form.jade:118
+#: .\templates\user\base_users_table.jade:5
 msgid "Username"
 msgstr "用户名"
 
-#: .\judge\views\register.py:27
+#: .\judge\views\register.py:25
 msgid "A username must contain letters, numbers, or underscores"
 msgstr "用户名只能包含字母、 数字或下划线。"
 
-#: .\judge\views\register.py:29
+#: .\judge\views\register.py:27
 msgid "Real name (optional)"
 msgstr "真实姓名 (可选)"
 
-#: .\judge\views\register.py:32 .\templates\user\edit_profile.jade:79
+#: .\judge\views\register.py:30 .\templates\user\edit_profile.jade:79
 msgid "Preferred language"
 msgstr "首选语言"
 
-#: .\judge\views\register.py:42
+#: .\judge\views\register.py:41
+#, python-format
 msgid "The email address \"%s\" is already taken. Only one registration is allowed per address."
 msgstr "电子邮件地址“%s“已被使用。每个电子邮件地址只允许一个账户。"
 
-#: .\judge\views\register.py:46
+#: .\judge\views\register.py:45
 msgid "Your email provider is not allowed due to history of abuse. Please use a reputable email provider."
 msgstr "由于滥用历史，我们不允许您的电子邮件提供商。请使用有信誉的电子邮件提供商。"
 
-#: .\judge\views\register.py:52 .\judge\views\register.py:89
+#: .\judge\views\register.py:51 .\judge\views\register.py:90
 msgid "Registration"
 msgstr "注册"
 
-#: .\judge\views\register.py:100
+#: .\judge\views\register.py:101
 msgid "Authentication failure"
 msgstr "身份验证失败"
 
-#: .\judge\views\stats.py:75
+#: .\judge\views\stats.py:94
 msgid "Language statistics"
 msgstr "语言统计信息"
 
-#: .\judge\views\status.py:25 .\templates\submission\list.jade:150
+#: .\judge\views\status.py:25 .\templates\submission\list.jade:153
 msgid "Status"
 msgstr "状态"
 
@@ -1646,42 +1961,48 @@ msgid "No such judge"
 msgstr "没有这种裁判服务器"
 
 #: .\judge\views\status.py:52
+#, python-format
 msgid "Could not find a judge with the name \"%s\"."
 msgstr "找不到名为“%s”的裁判服务器。"
 
 #: .\judge\views\status.py:55
+#, python-format
 msgid "Judge %s"
 msgstr "裁判服务器 %s"
 
-#: .\judge\views\submission.py:53 .\judge\views\submission.py:60
+#: .\judge\views\submission.py:52 .\judge\views\submission.py:59
+#, python-format
 msgid "Submission of %(problem)s by %(user)s"
 msgstr "%(user)s 在 %(problem)s 的提交结果"
 
-#: .\judge\views\submission.py:123 .\templates\problem\problem.jade:15
+#: .\judge\views\submission.py:128 .\templates\problem\problem.jade:18
 msgid "All submissions"
 msgstr "所有提交历史"
 
-#: .\judge\views\submission.py:196
+#: .\judge\views\submission.py:201
+#, python-format
 msgid "All submissions by %s"
 msgstr "%s 的提交历史"
 
-#: .\judge\views\submission.py:220
+#: .\judge\views\submission.py:225
+#, python-format
 msgid "All submissions for %s"
 msgstr "%s 的提交历史"
 
-#: .\judge\views\submission.py:239
+#: .\judge\views\submission.py:244
 msgid "Must pass a problem"
 msgstr "必须给予题目"
 
-#: .\judge\views\submission.py:265
+#: .\judge\views\submission.py:270
+#, python-format
 msgid "%(user)s's submissions for %(problem)s"
 msgstr "%(user)s 在 %(problem)s 的提交历史"
 
-#: .\judge\views\submission.py:354
+#: .\judge\views\submission.py:359
 msgid "Must pass a contest"
 msgstr "必须给予竞赛"
 
-#: .\judge\views\submission.py:369
+#: .\judge\views\submission.py:374
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions for <a href=\"{3}\">{2}</a> in <a href=\"{5}\">{4}</a>"
 msgstr "<a href=\"{5}\">{4}</a> 中 <a href=\"{1}\">{0}</a> 在 <a href=\"{3}\">{2}</a> 的提交历史"
@@ -1691,6 +2012,7 @@ msgid "No such user"
 msgstr "无该用户"
 
 #: .\judge\views\user.py:66
+#, python-format
 msgid "No user handle \"%s\"."
 msgstr "无名为“%s“的用户"
 
@@ -1699,13 +2021,14 @@ msgid "My Account"
 msgstr "我的帐户"
 
 #: .\judge\views\user.py:71
+#, python-format
 msgid "User %s"
 msgstr "用户 %s"
 
-#: .\judge\views\user.py:138 .\templates\contest\list.jade:32
-#: .\templates\contest\list.jade:33 .\templates\contest\list.jade:60
-#: .\templates\contest\list.jade:61 .\templates\contest\list.jade:85
-#: .\templates\contest\list.jade:86
+#: .\judge\views\user.py:138 .\templates\contest\list.jade:31
+#: .\templates\contest\list.jade:32 .\templates\contest\list.jade:59
+#: .\templates\contest\list.jade:60 .\templates\contest\list.jade:84
+#: .\templates\contest\list.jade:85
 msgid "M j, Y, G:i"
 msgstr "Y年n月j日 G:i"
 
@@ -1714,7 +2037,7 @@ msgid "Updated on site"
 msgstr "在网站上更新"
 
 #: .\judge\views\user.py:196 .\templates\admin\auth\user\change_form.html:14
-#: .\templates\admin\auth\user\change_form.html:17 .\templates\base.jade:100
+#: .\templates\admin\auth\user\change_form.html:17 .\templates\base.jade:97
 #: .\templates\user\user_tabs.jade:9
 msgid "Edit profile"
 msgstr "编辑个人资料"
@@ -1724,6 +2047,7 @@ msgid "Leaderboard"
 msgstr ""
 
 #: .\judge\views\widgets.py:53 .\judge\views\widgets.py:64
+#, python-format
 msgid "Invalid upstream data: %s"
 msgstr "无效的上游数据： %s"
 
@@ -1747,89 +2071,111 @@ msgstr "编辑用户"
 
 #: .\templates\admin\judge\submission\change_form.html:14
 #: .\templates\admin\judge\submission\change_form.html:17
-#: .\templates\submission\source.jade:50 .\templates\submission\status.jade:126
+#: .\templates\submission\source.jade:19 .\templates\submission\status.jade:136
 msgid "Rejudge"
 msgstr "重新评分"
 
-#: .\templates\base.jade:96
+#: .\templates\base.jade:93
+#, python-format
 msgid "Hello, <b>%(username)s</b>."
 msgstr "你好，<b>%(username)s</b>。"
 
-#: .\templates\base.jade:98 .\templates\judge_status.jade:2
+#: .\templates\base.jade:95 .\templates\judge_status.jade:2
 #: .\templates\problem\problem_list_tabs.jade:9
 #: .\templates\submission\info_base.jade:2
 msgid "Admin"
 msgstr "管理"
 
-#: .\templates\base.jade:102
+#: .\templates\base.jade:99
 msgid "Log out"
 msgstr "登出"
 
-#: .\templates\base.jade:106
+#: .\templates\base.jade:103
 msgid "Login"
 msgstr "登录"
 
-#: .\templates\base.jade:106
+#: .\templates\base.jade:103
 msgid "Register"
 msgstr "注册"
 
-#: .\templates\base.jade:117
+#: .\templates\base.jade:108
+msgid "spectating"
+msgstr ""
+
+#: .\templates\base.jade:116
 msgid "This site works best with JavaScript enabled."
 msgstr "本网站启用 JavaScript 效果最好。"
 
 #: .\templates\blog\content.jade:2 .\templates\contest\tag_title.jade:4
 #: .\templates\flatpages\admin_link.jade:2 .\templates\judge.jade:2
-#: .\templates\language.jade:16
+#: .\templates\language.jade:16 .\templates\problem\data.jade:404
 msgid "Edit"
 msgstr "编辑"
 
-#: .\templates\blog\content.jade:6 .\templates\blog\list.jade:38
-#: .\templates\contest\list.jade:31
+#: .\templates\blog\content.jade:6 .\templates\contest\list.jade:30
 msgid "N j, Y, G:i"
 msgstr "Y年n月j日 G:i"
 
-#: .\templates\blog\content.jade:12 .\templates\contest\contest.jade:34
-#: .\templates\problem\problem.jade:41
+#: .\templates\blog\content.jade:13 .\templates\contest\contest.jade:80
+#: .\templates\problem\problem.jade:67
 msgid "Comments"
 msgstr "评论"
 
-#: .\templates\blog\list.jade:28
+#: .\templates\blog\dashboard.jade:11 .\templates\blog\list.jade:93
+msgid "N j, Y, g:i"
+msgstr ""
+
+#: .\templates\blog\dashboard.jade:11 .\templates\blog\list.jade:93
+#: .\templates\comments\list.jade:10 .\templates\submission\row.jade:13
+#, python-format
+msgid "on %(time)s"
+msgstr "%(time)s"
+
+#: .\templates\blog\list.jade:79
 msgid "Blog"
 msgstr "更新"
 
-#: .\templates\blog\list.jade:30
+#: .\templates\blog\list.jade:81
 msgid "Events"
 msgstr "活动"
 
-#: .\templates\blog\list.jade:49
+#: .\templates\blog\list.jade:86
+msgid "News"
+msgstr ""
+
+#: .\templates\blog\list.jade:92
+msgid "posted"
+msgstr ""
+
+#: .\templates\blog\list.jade:105
 msgid "Ongoing contests"
 msgstr "进行中的竞赛"
 
-#: .\templates\blog\list.jade:55
+#: .\templates\blog\list.jade:111
 msgid "Ends in"
 msgstr "结束于"
 
-#: .\templates\blog\list.jade:61
+#: .\templates\blog\list.jade:118
 msgid "Upcoming contests"
 msgstr "未来的竞赛"
 
-#: .\templates\blog\list.jade:67
+#: .\templates\blog\list.jade:124
 msgid "Starts in"
 msgstr "开始于"
 
-#: .\templates\blog\list.jade:73
+#: .\templates\blog\list.jade:131
 msgid "Comment stream"
 msgstr "评论流"
+
+#: .\templates\blog\list.jade:144
+msgid "New problems"
+msgstr "新题目"
 
 #: .\templates\comments\history_ajax.jade:7 .\templates\comments\list.jade:10
 #: .\templates\organization\requests\detail.jade:19
 #: .\templates\submission\info_base.jade:1 .\templates\submission\row.jade:13
 msgid "N j, Y, g:i a"
 msgstr "Y年n月j日 G:i"
-
-#: .\templates\comments\list.jade:10 .\templates\submission\row.jade:13
-msgid "on %(time)s"
-msgstr "在 %(time)s 提交"
 
 #: .\templates\comments\list.jade:19
 msgid "There are no comments at the moment."
@@ -1856,6 +2202,7 @@ msgid "F Y"
 msgstr "Y年n月"
 
 #: .\templates\contest\calendar.jade:1 .\templates\contest\calendar.jade:4
+#, python-format
 msgid "Contests in %(month)s"
 msgstr "%(month)s的竞赛"
 
@@ -1895,125 +2242,173 @@ msgstr "星期五"
 msgid "Saturday"
 msgstr "星期六"
 
-#: .\templates\contest\contest.jade:8
-msgid "Stop spectating"
+#: .\templates\contest\contest.jade:34
+msgid "Are you sure you want to leave?"
 msgstr ""
 
-#: .\templates\contest\contest.jade:9
+#: .\templates\contest\contest.jade:35
+msgid "You cannot come back to a virtual participation. You will have to start a new one."
+msgstr ""
+
+#: .\templates\contest\contest.jade:48 .\templates\contest\contest.jade:53
 msgid "Leave contest"
 msgstr "离开竞赛"
 
-#: .\templates\contest\contest.jade:10
+#: .\templates\contest\contest.jade:50 .\templates\contest\list.jade:91
+msgid "Virtual join"
+msgstr ""
+
+#: .\templates\contest\contest.jade:52
+msgid "Stop spectating"
+msgstr ""
+
+#: .\templates\contest\contest.jade:54
 msgid "Spectate contest"
 msgstr ""
 
-#: .\templates\contest\contest.jade:11
+#: .\templates\contest\contest.jade:55
 msgid "Join contest"
 msgstr "参加竞赛"
 
-#: .\templates\contest\contest.jade:13
+#: .\templates\contest\contest.jade:57
 msgid "View rankings"
 msgstr "查看排行榜"
 
-#: .\templates\contest\contest.jade:15
+#: .\templates\contest\contest.jade:57
+msgid "My participation"
+msgstr ""
+
+#: .\templates\contest\contest.jade:58
+msgid "View user participation"
+msgstr ""
+
+#: .\templates\contest\contest.jade:59
 msgid "Edit contest"
 msgstr "编辑竞赛"
 
-#: .\templates\contest\contest.jade:16
-msgid "Time is up!"
-msgstr "竞赛结束了！"
+#: .\templates\contest\contest.jade:61
+msgid "Spectating, contest ends in "
+msgstr ""
 
-#: .\templates\contest\contest.jade:16 .\templates\contest\contest.jade:19
-msgid "Time remaining:"
-msgstr "剩余时间："
+#: .\templates\contest\contest.jade:62
+msgid "Participating virtually, "
+msgstr ""
 
-#: .\templates\contest\contest.jade:19
-msgid "Contest is over."
-msgstr "竞赛已结束。"
+#: .\templates\contest\contest.jade:63 .\templates\contest\contest.jade:69
+msgid " remaining."
+msgstr ""
 
-#: .\templates\contest\contest.jade:24
+#: .\templates\contest\contest.jade:64
+msgid "Participating virtually."
+msgstr ""
+
+#: .\templates\contest\contest.jade:65
 msgid "Starting in "
 msgstr "开始于 "
 
-#: .\templates\contest\contest.jade:26 .\templates\contest\contest.jade:27
+#: .\templates\contest\contest.jade:66
+msgid "Contest is over."
+msgstr "竞赛已结束。"
+
+#: .\templates\contest\contest.jade:67
+msgid "Your time is up! Contest ends in "
+msgstr ""
+
+#: .\templates\contest\contest.jade:68
+msgid "You have "
+msgstr ""
+
+#: .\templates\contest\contest.jade:70
+msgid "Contest ends in "
+msgstr ""
+
+#: .\templates\contest\contest.jade:72 .\templates\contest\contest.jade:73
 msgid "F j, Y, G:i T"
 msgstr "Y年n月j日 G:i T"
 
-#: .\templates\contest\contest.jade:26
-msgid "<b>%(time_limit)s</b> window from <b>%(start_time)s</b> to <b>%(end_time)s</b>"
-msgstr "<b>%(start_time)s</b>到<b>%(end_time)s</b>中的<b>%(time_limit)s</b>小时窗口"
+#: .\templates\contest\contest.jade:72
+#, python-format
+msgid "<b>%(time_limit)s</b> window between <b>%(start_time)s</b> and <b>%(end_time)s</b>"
+msgstr ""
 
-#: .\templates\contest\contest.jade:27
+#: .\templates\contest\contest.jade:73
+#, python-format
 msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
 msgstr "从 <b>%(start_time)s</b> 开始的 <b>%(length)s</b> 时间段"
 
-#: .\templates\contest\list.jade:14
+#: .\templates\contest\list.jade:13
 msgid "Calendar view"
 msgstr "日历视图"
 
-#: .\templates\contest\list.jade:16
+#: .\templates\contest\list.jade:15
 msgid "Ongoing Contests"
 msgstr "进行中的竞赛"
 
-#: .\templates\contest\list.jade:20 .\templates\contest\list.jade:51
-#: .\templates\contest\list.jade:75
+#: .\templates\contest\list.jade:19 .\templates\contest\list.jade:50
+#: .\templates\contest\list.jade:74
 msgid "Contest"
 msgstr "竞赛"
 
-#: .\templates\contest\list.jade:21 .\templates\contest\list.jade:76
-#: .\templates\problem\list.jade:100 .\templates\problem\list.jade:113
+#: .\templates\contest\list.jade:20 .\templates\contest\list.jade:75
+#: .\templates\problem\list.jade:136 .\templates\problem\list.jade:149
 msgid "Users"
 msgstr "用户"
 
-#: .\templates\contest\list.jade:30
+#: .\templates\contest\list.jade:29
 msgid "Ending in"
 msgstr "结束在"
 
-#: .\templates\contest\list.jade:31
+#: .\templates\contest\list.jade:30
 msgid "Started at"
 msgstr "开始于"
 
-#: .\templates\contest\list.jade:33 .\templates\contest\list.jade:61
-#: .\templates\contest\list.jade:86
+#: .\templates\contest\list.jade:32 .\templates\contest\list.jade:60
+#: .\templates\contest\list.jade:85
+#, python-format
 msgid "%(time_limit)s window"
 msgstr "%(time_limit)s窗口"
 
-#: .\templates\contest\list.jade:34 .\templates\contest\list.jade:62
-#: .\templates\contest\list.jade:87
+#: .\templates\contest\list.jade:33 .\templates\contest\list.jade:61
+#: .\templates\contest\list.jade:86
+#, python-format
 msgid "%(window_length)s long"
 msgstr "%(window_length)s"
 
-#: .\templates\contest\list.jade:40
+#: .\templates\contest\list.jade:39
 msgid "Spectate"
 msgstr ""
 
-#: .\templates\contest\list.jade:41
+#: .\templates\contest\list.jade:40
 msgid "Join"
 msgstr "加入!"
 
-#: .\templates\contest\list.jade:47
+#: .\templates\contest\list.jade:46
 msgid "Upcoming Contests"
 msgstr "未来的竞赛"
 
-#: .\templates\contest\list.jade:59
+#: .\templates\contest\list.jade:58
 msgid "Starting in"
 msgstr "开始于"
 
-#: .\templates\contest\list.jade:69
+#: .\templates\contest\list.jade:68
 msgid "There are no scheduled contests at this time."
 msgstr "现在没有预定的竞赛。"
 
-#: .\templates\contest\list.jade:71
+#: .\templates\contest\list.jade:70
 msgid "Past Contests"
 msgstr "过去的竞赛"
-
-#: .\templates\contest\list.jade:92
-msgid "Virtual join"
-msgstr ""
 
 #: .\templates\contest\private.jade:2
 msgid "Only the following organizations may access this contest:"
 msgstr "只有下列组织可能访问此竞赛："
+
+#: .\templates\contest\ranking_table.jade:5
+msgid "Started"
+msgstr ""
+
+#: .\templates\contest\ranking_table.jade:7
+msgid "Participation ended."
+msgstr ""
 
 #: .\templates\contest\tag_title.jade:2
 msgid "Contest tag"
@@ -2024,6 +2419,7 @@ msgid "All Judges"
 msgstr "所有裁判服务器"
 
 #: .\templates\judge_status.jade:5
+#, python-format
 msgid "This page shows the live status of %(name)s's judging servers."
 msgstr "此页显示 %(name)s 的评分服务器实时状态。"
 
@@ -2053,8 +2449,8 @@ msgid "Load"
 msgstr "负载"
 
 #: .\templates\judge_status_table.jade:29
-msgid "There are no judges available for this language."
-msgstr "这种语言没有可用的裁判服务器。"
+msgid "There are no judges available at this time."
+msgstr ""
 
 #: .\templates\language.jade:20
 msgid "Short name:"
@@ -2228,6 +2624,7 @@ msgid "There are no requests to approve."
 msgstr "没有请求批准。"
 
 #: .\templates\organization\requests\pending.jade:13
+#: .\templates\problem\data.jade:382
 msgid "Delete?"
 msgstr "删除？"
 
@@ -2255,20 +2652,77 @@ msgstr "已批准"
 msgid "Rejected"
 msgstr "已拒绝"
 
-#: .\templates\problem\list.jade:32
+#: .\templates\organization\users_table.jade:5
+msgid "Kick"
+msgstr ""
+
+#: .\templates\problem\data.jade:342
+msgid "View YAML"
+msgstr ""
+
+#: .\templates\problem\data.jade:351
+msgid "Show columns:"
+msgstr ""
+
+#: .\templates\problem\data.jade:354 .\templates\problem\data.jade:378
+msgid "Output prefix"
+msgstr ""
+
+#: .\templates\problem\data.jade:358 .\templates\problem\data.jade:379
+msgid "Output limit"
+msgstr ""
+
+#: .\templates\problem\data.jade:362 .\templates\problem\data.jade:380
+msgid "Checker"
+msgstr ""
+
+#: .\templates\problem\data.jade:366 .\templates\problem\data.jade:381
+msgid "Generator args"
+msgstr ""
+
+#: .\templates\problem\data.jade:372
+msgid "Order"
+msgstr ""
+
+#: .\templates\problem\data.jade:373
+msgid "Type"
+msgstr ""
+
+#: .\templates\problem\data.jade:374
+msgid "Input file"
+msgstr ""
+
+#: .\templates\problem\data.jade:375
+msgid "Output file"
+msgstr ""
+
+#: .\templates\problem\data.jade:377
+msgid "Pretest?"
+msgstr ""
+
+#: .\templates\problem\data.jade:411 .\templates\problem\submit.jade:206
+msgid "Submit!"
+msgstr "提交！"
+
+#: .\templates\problem\data.jade:411
+msgid "Add new case"
+msgstr ""
+
+#: .\templates\problem\list.jade:54
 msgid "Filter by type..."
 msgstr ""
 
-#: .\templates\problem\list.jade:97 .\templates\problem\list.jade:105
-#: .\templates\problem\search_form.jade:13
+#: .\templates\problem\list.jade:133 .\templates\problem\list.jade:141
+#: .\templates\problem\search_form.jade:21
 msgid "Category"
 msgstr "分类"
 
-#: .\templates\problem\list.jade:98 .\templates\problem\list.jade:107
+#: .\templates\problem\list.jade:134 .\templates\problem\list.jade:143
 msgid "Types"
 msgstr "类型"
 
-#: .\templates\problem\list.jade:111
+#: .\templates\problem\list.jade:147
+#, python-format
 msgid "AC %%"
 msgstr ""
 
@@ -2280,53 +2734,54 @@ msgstr "PDF 视图"
 msgid "Submit solution"
 msgstr "提交程序"
 
-#: .\templates\problem\problem.jade:15 .\templates\submission\list.jade:136
+#: .\templates\problem\problem.jade:16 .\templates\submission\list.jade:138
 msgid "My submissions"
 msgstr "我的提交历史"
 
-#: .\templates\problem\problem.jade:15
+#: .\templates\problem\problem.jade:20
 msgid "Best submissions"
 msgstr "提交排行"
 
-#: .\templates\problem\problem.jade:18
+#: .\templates\problem\problem.jade:26
 msgid "Edit problem"
 msgstr "编辑题目"
 
-#: .\templates\problem\problem.jade:19
+#: .\templates\problem\problem.jade:29
 msgid "Clone problem"
 msgstr "复制题目"
 
-#: .\templates\problem\problem.jade:21 .\templates\problem\raw.jade:44
+#: .\templates\problem\problem.jade:33 .\templates\problem\raw.jade:45
 msgid "Points:"
 msgstr "分数："
 
-#: .\templates\problem\problem.jade:22 .\templates\problem\problem.jade:23
+#: .\templates\problem\problem.jade:34 .\templates\problem\problem.jade:35
 msgid "(partial)"
 msgstr "（部分）"
 
-#: .\templates\problem\problem.jade:23 .\templates\problem\raw.jade:54
+#: .\templates\problem\problem.jade:37 .\templates\problem\raw.jade:55
 msgid "Time limit:"
 msgstr "时间限制："
 
-#: .\templates\problem\problem.jade:23 .\templates\problem\raw.jade:62
+#: .\templates\problem\problem.jade:43 .\templates\problem\raw.jade:63
 msgid "Memory limit:"
 msgstr "内存限制："
 
-#: .\templates\problem\problem.jade:23 .\templates\problem\raw.jade:64
+#: .\templates\problem\problem.jade:49 .\templates\problem\raw.jade:65
 msgid "Author:"
 msgid_plural "Authors:"
 msgstr[0] "作者："
 
-#: .\templates\problem\problem.jade:27 .\templates\problem\raw.jade:48
+#: .\templates\problem\problem.jade:53 .\templates\problem\raw.jade:49
 msgid "Problem type"
 msgid_plural "Problem types"
 msgstr[0] "题目类型"
 
-#: .\templates\problem\problem.jade:33 .\templates\problem\raw.jade:56
+#: .\templates\problem\problem.jade:59 .\templates\problem\raw.jade:57
 msgid "Allowed languages"
 msgstr "允许的语言"
 
-#: .\templates\problem\problem.jade:36
+#: .\templates\problem\problem.jade:62
+#, python-format
 msgid "No %(lang)s judge online"
 msgstr "没有支持 %(lang)s 的裁判服务器。"
 
@@ -2334,44 +2789,45 @@ msgstr "没有支持 %(lang)s 的裁判服务器。"
 msgid "Editorials"
 msgstr ""
 
-#: .\templates\problem\recent_problems.jade:2
-msgid "New problems"
-msgstr "新题目"
+#: .\templates\problem\raw.jade:59
+msgctxt "languages"
+msgid "All"
+msgstr ""
 
 #: .\templates\problem\search_form.jade:2
 msgid "Problem search"
 msgstr ""
 
-#: .\templates\problem\search_form.jade:5
+#: .\templates\problem\search_form.jade:6
 msgid "Search problems..."
 msgstr "搜索题目…"
 
-#: .\templates\problem\search_form.jade:7
+#: .\templates\problem\search_form.jade:10
 msgid "Full text search"
 msgstr ""
 
-#: .\templates\problem\search_form.jade:9
+#: .\templates\problem\search_form.jade:14
 msgid "Hide solved problems"
 msgstr "隐藏解决的题目"
 
-#: .\templates\problem\search_form.jade:11
+#: .\templates\problem\search_form.jade:18
 msgid "Show problem types"
 msgstr ""
 
-#: .\templates\problem\search_form.jade:16
-#: .\templates\problem\search_form.jade:17
+#: .\templates\problem\search_form.jade:24
+#: .\templates\problem\search_form.jade:25
 msgid "All"
 msgstr "所有"
 
-#: .\templates\problem\search_form.jade:24
+#: .\templates\problem\search_form.jade:32
 msgid "Problem types"
 msgstr ""
 
-#: .\templates\problem\search_form.jade:31 .\templates\submission\list.jade:165
+#: .\templates\problem\search_form.jade:39 .\templates\submission\list.jade:168
 msgid "Go"
 msgstr "搜索"
 
-#: .\templates\problem\search_form.jade:31
+#: .\templates\problem\search_form.jade:39
 msgid "Random"
 msgstr "随机"
 
@@ -2383,11 +2839,8 @@ msgstr "统计数据"
 msgid "No judge is available for this problem."
 msgstr "此问题没有可用的裁判服务器。"
 
-#: .\templates\problem\submit.jade:206
-msgid "Submit!"
-msgstr "提交！"
-
 #: .\templates\registration\activate.jade:2
+#, python-format
 msgid "%(key)s is an invalid activation key."
 msgstr "%(key)s 是一个无效的激活密钥。"
 
@@ -2444,6 +2897,7 @@ msgid "<p>We've emailed you instructions for setting your password. You should b
 msgstr "<p>我们已经通过发送了重置密码的链接，您很快就会收到。</p><p>如果您没有收到一封电子邮件，请确保您输入了您的注册邮箱，并检查您的垃圾邮件文件夹。</p>"
 
 #: .\templates\registration\password_reset_email.txt:2
+#, python-format
 msgid "You're receiving this email because you requested a password reset for your user account at %(site_name)s."
 msgstr "因为您要求您的用户帐户在 %(site_name)s 重置密码，所以您收到这封电子邮件。"
 
@@ -2460,10 +2914,12 @@ msgid "Thanks for using our site!"
 msgstr "感谢您使用我们的网站！"
 
 #: .\templates\registration\password_reset_email.txt:12
+#, python-format
 msgid "The %(site_name)s team"
 msgstr "%(site_name)s 团队"
 
 #: .\templates\registration\password_reset_subject.txt:2
+#, python-format
 msgid "Password reset on %(site_name)s"
 msgstr "在 %(site_name)s 上重置密码"
 
@@ -2476,87 +2932,66 @@ msgstr "继续 >"
 msgid "You have successfully been registered. An email has been sent to the email address you provided to confirm your registration."
 msgstr "您已成功注册。一封电子邮件已被发送到的您的电子邮件地址以确认您的注册。"
 
-#: .\templates\registration\registration_form.jade:21
-msgid "Your chosen username is already taken."
-msgstr "您的用户名已被使用。"
+#: .\templates\registration\registration_form.jade:122
+#: .\templates\registration\registration_form.jade:130
+msgid "Password"
+msgstr ""
 
-#: .\templates\registration\registration_form.jade:22
-msgid "Please enter a valid email."
-msgstr "请输入一个有效的电子邮件地址。"
+#: .\templates\registration\registration_form.jade:130
+msgid "(again, for confirmation)"
+msgstr ""
 
-#: .\templates\registration\registration_form.jade:25
-msgid "Invalid display name."
-msgstr "无效的显示名。"
-
-#: .\templates\registration\registration_form.jade:26
-msgid "Invalid timezone."
-msgstr "无效的时区。"
-
-#: .\templates\registration\registration_form.jade:27
-msgid "Invalid organizations specified."
-msgstr "选定了无效的组织。"
-
-#: .\templates\registration\registration_form.jade:28
-msgid "Invalid language specified."
-msgstr "选定了无效的语言。"
-
-#: .\templates\registration\registration_form.jade:34
-msgid "Username:"
-msgstr "用户名："
-
-#: .\templates\registration\registration_form.jade:40
-msgid "Email:"
-msgstr "电子邮件："
-
-#: .\templates\registration\registration_form.jade:46
-msgid "Password:"
-msgstr "密码："
-
-#: .\templates\registration\registration_form.jade:52
-msgid "Password (again):"
-msgstr "再输入密码："
-
-#: .\templates\registration\registration_form.jade:58
-msgid "Display name:"
-msgstr "显示名："
-
-#: .\templates\registration\registration_form.jade:64
-msgid "Timezone:"
-msgstr "时区："
-
-#: .\templates\registration\registration_form.jade:67
+#: .\templates\registration\registration_form.jade:135
 msgid "or"
 msgstr "或"
 
-#: .\templates\registration\registration_form.jade:68
+#: .\templates\registration\registration_form.jade:136
 msgid "pick from map"
 msgstr "从地图中选"
 
-#: .\templates\registration\registration_form.jade:72
-msgid "Organizations:"
-msgstr "组织："
+#: .\templates\registration\registration_form.jade:139
+msgid "Default language"
+msgstr ""
 
-#: .\templates\registration\registration_form.jade:78
-msgid "Language:"
-msgstr "默认语言："
+#: .\templates\registration\registration_form.jade:140
+#: .\templates\user\edit_profile.jade:114
+msgid "Affiliated organizations"
+msgstr ""
 
-#: .\templates\registration\registration_form.jade:91
+#: .\templates\registration\registration_form.jade:143
+msgid "Notify me about upcoming contests"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:145
+msgid "By registering, you agree to our "
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:145
+msgid "Terms & Conditions"
+msgstr ""
+
+#: .\templates\registration\registration_form.jade:146
 msgid "Register!"
 msgstr "注册！"
 
 #: .\templates\stats\language.jade:40
+msgid "Submission Statistics"
+msgstr ""
+
+#: .\templates\stats\language.jade:45
 msgid "Submissions by Language"
 msgstr "按语言的提交数量"
 
-#: .\templates\stats\language.jade:45
+#: .\templates\stats\language.jade:50
 msgid "AC Submissions by Language"
 msgstr "按语言的接受提交数量"
 
-#: .\templates\stats\language.jade:50
+#: .\templates\stats\language.jade:55
 msgid "Language AC Rate"
 msgstr "语言提交接受率"
 
 #: .\templates\submission\internal_error_message.jade:2
+#, python-format
 msgid "An internal error occurred while grading, and the %(SITE_NAME)s administrators have been notified.<br/>In the meantime, try resubmitting in a few seconds."
 msgstr "评分时裁判服务端发生了内部错误。%(SITE_NAME)s 管理员已被通知。<br/>您可以尝试过一会再提交一次。"
 
@@ -2572,11 +3007,11 @@ msgstr ""
 msgid "Filter by status..."
 msgstr ""
 
-#: .\templates\submission\list.jade:15
+#: .\templates\submission\list.jade:16
 msgid "Filter by language..."
 msgstr ""
 
-#: .\templates\submission\list.jade:146
+#: .\templates\submission\list.jade:149
 msgid "Filter submissions"
 msgstr ""
 
@@ -2596,19 +3031,23 @@ msgstr "重新评分"
 msgid "admin"
 msgstr "管理"
 
-#: .\templates\submission\source.jade:49
+#: .\templates\submission\source.jade:12
 msgid "View status"
 msgstr "查看状态"
 
-#: .\templates\submission\source.jade:49 .\templates\submission\status.jade:125
+#: .\templates\submission\source.jade:14
+msgid "View raw source"
+msgstr ""
+
+#: .\templates\submission\source.jade:16 .\templates\submission\status.jade:134
 msgid "Resubmit"
 msgstr "重新提交"
 
-#: .\templates\submission\status.jade:125
+#: .\templates\submission\status.jade:132
 msgid "View source"
 msgstr "查看源代码"
 
-#: .\templates\submission\status.jade:136
+#: .\templates\submission\status.jade:146
 msgid "Abort"
 msgstr "停止"
 
@@ -2625,65 +3064,62 @@ msgid "Compilation Error"
 msgstr "编译错误"
 
 #: .\templates\submission\status_testcases.jade:6
-msgid "Pretest Execution Results"
-msgstr ""
-
-#: .\templates\submission\status_testcases.jade:7
-msgid "Execution Results"
-msgstr "执行结果"
-
-#: .\templates\submission\status_testcases.jade:8
 msgid "Compilation Warnings"
 msgstr "编译警告"
 
 #: .\templates\submission\status_testcases.jade:9
+msgid "Pretest Execution Results"
+msgstr ""
+
+#: .\templates\submission\status_testcases.jade:10
+msgid "Execution Results"
+msgstr "执行结果"
+
+#: .\templates\submission\status_testcases.jade:10
 msgid "Batch "
 msgstr "批"
 
-#: .\templates\submission\status_testcases.jade:9
-#: .\templates\submission\status_testcases.jade:33
+#: .\templates\submission\status_testcases.jade:10
 #: .\templates\submission\status_testcases.jade:34
+#: .\templates\submission\status_testcases.jade:35
+#, python-format
 msgid "(%(points)s/%(total)s points)"
 msgstr "（%(points)s/%(total)s 分）"
 
-#: .\templates\submission\status_testcases.jade:12
+#: .\templates\submission\status_testcases.jade:13
 msgid "Case"
 msgstr "测试"
 
-#: .\templates\submission\status_testcases.jade:12
+#: .\templates\submission\status_testcases.jade:13
 msgid "Pretest"
 msgstr "预测试"
 
-#: .\templates\submission\status_testcases.jade:12
+#: .\templates\submission\status_testcases.jade:13
 msgid "Test case"
 msgstr "测试情况"
 
-#: .\templates\submission\status_testcases.jade:26
+#: .\templates\submission\status_testcases.jade:27
 msgid "Your output (clipped)"
 msgstr "您的输出（部分）"
 
-#: .\templates\submission\status_testcases.jade:32
+#: .\templates\submission\status_testcases.jade:33
 msgid "Final pretest score:"
 msgstr ""
 
-#: .\templates\submission\status_testcases.jade:32
+#: .\templates\submission\status_testcases.jade:33
 msgid "Final score:"
 msgstr "最终得分："
 
-#: .\templates\submission\status_testcases.jade:35
+#: .\templates\submission\status_testcases.jade:36
 msgid "Passing pretests does not guarantee a full score on system tests."
 msgstr ""
 
-#: .\templates\submission\status_testcases.jade:35
+#: .\templates\submission\status_testcases.jade:36
 msgid "Submission aborted!"
 msgstr "评分终止！"
 
-#: .\templates\user\base_users.jade:10 .\templates\user\base_users.jade:101
+#: .\templates\user\base_users.jade:11 .\templates\user\base_users.jade:138
 msgid "Search by handle..."
-msgstr ""
-
-#: .\templates\user\base_users.jade:98
-msgid "Search for user"
 msgstr ""
 
 #: .\templates\user\base_users_table.jade:4
@@ -2714,10 +3150,6 @@ msgstr "修改头像"
 msgid "Change your password"
 msgstr "更改密码"
 
-#: .\templates\user\edit_profile.jade:114
-msgid "Affiliated organizations"
-msgstr ""
-
 #: .\templates\user\edit_profile.jade:119
 msgid "User-script"
 msgstr "用户脚本"
@@ -2726,59 +3158,59 @@ msgstr "用户脚本"
 msgid "Update profile"
 msgstr "更新资料"
 
-#: .\templates\user\user_about.jade:89
+#: .\templates\user\user_about.jade:88
 msgid "From"
 msgstr "组织"
 
-#: .\templates\user\user_about.jade:91 .\templates\user\user_tabs.jade:5
+#: .\templates\user\user_about.jade:90 .\templates\user\user_tabs.jade:5
 msgid "About"
 msgstr "自我介绍"
 
-#: .\templates\user\user_about.jade:92
+#: .\templates\user\user_about.jade:91
 msgid "You have not shared any information."
 msgstr "您还没有共享的任何信息。"
 
-#: .\templates\user\user_about.jade:93
+#: .\templates\user\user_about.jade:92
 msgid "This user has not shared any information."
 msgstr "此用户没有共享的任何信息。"
 
-#: .\templates\user\user_base.jade:34
+#: .\templates\user\user_base.jade:33
 msgid "Rank by points:"
 msgstr "得分排名："
 
-#: .\templates\user\user_base.jade:34
+#: .\templates\user\user_base.jade:33
 msgid "Total points:"
 msgstr "总得分："
 
-#: .\templates\user\user_base.jade:34
+#: .\templates\user\user_base.jade:33
 msgid "View submissions"
 msgstr "查看提交历史"
 
-#: .\templates\user\user_base.jade:35
+#: .\templates\user\user_base.jade:34
 msgid "Rank by rating:"
 msgstr "竞赛评分排名："
 
-#: .\templates\user\user_base.jade:35
+#: .\templates\user\user_base.jade:34
 msgid "Rating:"
 msgstr "竞赛评分："
 
-#: .\templates\user\user_base.jade:35
+#: .\templates\user\user_base.jade:34
 msgid "Volatility:"
 msgstr "波动性："
 
-#: .\templates\user\user_base.jade:35
+#: .\templates\user\user_base.jade:34
 msgid "Min. rating:"
 msgstr ""
 
-#: .\templates\user\user_base.jade:35
+#: .\templates\user\user_base.jade:34
 msgid "Max rating:"
 msgstr ""
 
-#: .\templates\user\user_problems.jade:71
+#: .\templates\user\user_problems.jade:70
 msgid "Authored Problems"
 msgstr "创作的题目"
 
-#: .\templates\user\user_problems.jade:82
+#: .\templates\user\user_problems.jade:81
 msgid "Hide problems I've solved"
 msgstr "隐藏我已经解决的题目"
 

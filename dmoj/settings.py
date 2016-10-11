@@ -215,6 +215,7 @@ LANGUAGES = [
     ('fr', _('French')),
     ('ro', _('Romanian')),
     ('ru', _('Russian')),
+    ('sr-latn', _('Serbian (Latin)')),
     ('zh-hans', _('Simplified Chinese')),
 ]
 
