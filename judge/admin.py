@@ -242,7 +242,7 @@ class ProblemAdmin(VersionAdmin):
     show_authors.short_description = _('Authors')
 
     def show_public(self, obj):
-        return format_html('<a href="{1}">{0}</a>', ugettext('View on site'), obj.get_absolute_url())
+        return format_html(u'<a href="{1}">{0}</a>', ugettext('View on site'), obj.get_absolute_url())
 
     show_public.short_description = ''
 
