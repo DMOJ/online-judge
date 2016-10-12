@@ -302,7 +302,7 @@ class ProblemAdmin(VersionAdmin):
             access |= Q(is_public=True)
         if request.user.has_perm('judge.edit_own_problem'):
             access |= Q(authors__id=request.user.profile.id)
-        return queryset.filter(access) if access else queryset.none()
+        return queryset.filter(access).distinct() if access else queryset.none()
 
     def has_change_permission(self, request, obj=None):
         if request.user.has_perm('judge.edit_all_problem') or obj is None:
