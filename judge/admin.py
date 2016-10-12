@@ -212,13 +212,24 @@ class ProblemAdmin(VersionAdmin):
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'show_public']
     ordering = ['code']
     search_fields = ('code', 'name')
-    actions = ['make_public', 'make_private']
     inlines = [LanguageLimitInline, ProblemTranslationInline]
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
     list_filter = ('is_public', ProblemCreatorListFilter)
     form = ProblemForm
+
+    def get_actions(self, request):
+        actions = super(ProblemAdmin, self).get_actions(request)
+
+        if request.user.has_perm('judge.change_public_visibility'):
+            func, name, desc = self.get_action('make_public')
+            actions[name] = (func, name, desc)
+
+            func, name, desc = self.get_action('make_private')
+            actions[name] = (func, name, desc)
+
+        return actions
 
     def get_readonly_fields(self, request, obj=None):
         if not request.user.has_perm('judge.change_public_visibility'):
