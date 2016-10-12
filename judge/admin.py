@@ -78,7 +78,7 @@ class ProfileAdmin(VersionAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
               'math_engine', 'last_access', 'ip', 'mute', 'user_script', 'current_contest')
     readonly_fields = ('user',)
-    list_display = ('admin_user_admin', 'email', 'timezone_full', 'language', 'last_access', 'ip', 'show_public')
+    list_display = ('admin_user_admin', 'email', 'timezone_full', 'date_joined', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
     search_fields = ('user__username', 'name', 'ip', 'user__email')
     list_filter = ('language', TimezoneFilter)
@@ -110,6 +110,12 @@ class ProfileAdmin(VersionAdmin):
 
     timezone_full.admin_order_field = 'timezone'
     timezone_full.short_description = _('Timezone')
+
+    def date_joined(self, obj):
+        return obj.user.date_joined
+
+    date_joined.admin_order_field = 'user__date_joined'
+    date_joined.short_description = _('date joined')
 
     def recalculate_points(self, request, queryset):
         count = 0
