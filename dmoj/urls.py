@@ -222,6 +222,7 @@ urlpatterns = [
 
     url(r'^api/', include([
         url(r'^contest/list$', api.api_contest_list),
+        url(r'^contest/info/(\w+)$', api.api_contest_detail),
         url(r'^problem/list$', api.api_problem_list),
         url(r'^problem/info/(\w+)$', api.api_problem_info),
         url(r'^user/list$', api.api_user_list),
