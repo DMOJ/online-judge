@@ -256,13 +256,12 @@ class ProblemAdmin(VersionAdmin):
         with connection.cursor() as c:
             c.execute('''
                 UPDATE judge_profile prof INNER JOIN (
-                    SELECT prof.id AS id, MAX(sub.points) AS delta
-                    FROM judge_profile prof INNER JOIN
-                         judge_submission sub ON (sub.user_id = prof.id)
+                    SELECT sub.user_id AS user_id, MAX(sub.points) AS delta
+                    FROM judge_submission sub
                     WHERE sub.problem_id = %s
-                    GROUP BY sub.problem_id
-                ) `data` ON (`data`.id = prof.id)
-                SET points = points {} delta
+                    GROUP BY sub.user_id
+                ) `data` ON (`data`.user_id = prof.id)
+                SET prof.points = prof.points {} `data`.delta
             '''.format(sign), (problem_id,))
 
     def _update_points_many(self, ids, sign):
@@ -270,14 +269,13 @@ class ProblemAdmin(VersionAdmin):
             c.execute('''
                 UPDATE judge_profile prof INNER JOIN (
                     SELECT deltas.id, SUM(deltas) AS delta FROM (
-                        SELECT prof.id AS id, MAX(sub.points) AS deltas
-                             FROM judge_profile prof INNER JOIN
-                                  judge_submission sub ON (sub.user_id = prof.id)
+                        SELECT sub.user_id AS id, MAX(sub.points) AS deltas
+                             FROM judge_submission sub
                              WHERE sub.problem_id IN ({})
-                             GROUP BY prof.id, sub.problem_id
+                             GROUP BY sub.user_id, sub.problem_id
                     ) deltas GROUP BY id
                 ) `data` ON (`data`.id = prof.id)
-                SET points = points {} delta
+                SET prof.points = prof.points {} `data`.delta
             '''.format(', '.join(['%s'] * len(ids)), sign), ids)
 
     def make_public(self, request, queryset):
