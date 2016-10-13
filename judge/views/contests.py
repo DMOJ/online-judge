@@ -33,7 +33,7 @@ from markdown_trois import markdown
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'participation_list', 'own_participation_list', 'get_contest_ranking_list',
-           'base_contest_ranking_list']
+           'base_contest_ranking_list', 'contest_access_check']
 
 
 def _find_contest(request, key, private_check=True):
