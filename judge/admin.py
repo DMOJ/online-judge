@@ -261,8 +261,8 @@ class ProblemAdmin(VersionAdmin):
                     WHERE sub.problem_id = %s
                     GROUP BY sub.user_id
                 ) `data` ON (`data`.user_id = prof.id)
-                WHERE `data`.delta IS NOT NULL
                 SET prof.points = prof.points {} `data`.delta
+                WHERE `data`.delta IS NOT NULL
             '''.format(sign), (problem_id,))
 
     def _update_points_many(self, ids, sign):
@@ -276,8 +276,8 @@ class ProblemAdmin(VersionAdmin):
                              GROUP BY sub.user_id, sub.problem_id
                     ) deltas GROUP BY id
                 ) `data` ON (`data`.id = prof.id)
-                WHERE `data`.delta IS NOT NULL
                 SET prof.points = prof.points {} `data`.delta
+                WHERE `data`.delta IS NOT NULL
             '''.format(', '.join(['%s'] * len(ids)), sign), ids)
 
     def make_public(self, request, queryset):
