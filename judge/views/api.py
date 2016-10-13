@@ -114,6 +114,7 @@ def api_user_info(request, user):
         'points': p.points,
         'rank': p.display_rank,
         'solved_problems': submissions,
+        'organizations': list(p.organizations.values_list('key', flat=True)),
     })
 
 
