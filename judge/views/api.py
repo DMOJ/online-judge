@@ -1,10 +1,12 @@
 from operator import attrgetter
+from collections import defaultdict
 
 from django.db.models import Prefetch, F
 from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
 
 from dmoj import settings
+from judge.views.contests import *
 from judge.models import Contest, Problem, Profile, Submission, ContestTag
 
 
@@ -28,6 +30,35 @@ def api_contest_list(request):
         }
     return JsonResponse(contests)
 
+def api_contest_detail(request, contest):
+    contest = get_object_or_404(Contest, key=contest)
+    contest_access_check(request, contest)
+
+    problems = list(contest.contest_problems.select_related('problem')
+                    .defer('problem__description').order_by('order'))
+    users = base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
+                                     .prefetch_related('user__organizations')
+                                     .order_by('-score', 'cumtime'))
+    resp = {
+        'problems': [{
+                        'points': int(problem.points),
+                        'partial': problem.partial,
+                        'name': str(problem.problem.name),
+                        'code': str(problem.problem.code)
+                    } for problem in problems],
+        'rankings': [{
+                        'user': user.user.username,
+                        'points': user.points,
+                        'cumtime': user.cumtime,
+                        'solutions': [{
+                                        'points': int(sol.points),
+                                        'time': str(sol.time),
+                                        'state': sol.state
+                                    } if sol else None for sol in user.problems]
+                    } for user in users]
+    }
+    
+    return JsonResponse(resp)
 
 def api_problem_list(request):
     qs = Problem.objects.filter(is_public=True)
