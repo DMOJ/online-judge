@@ -52,8 +52,7 @@ def api_contest_detail(request, contest):
                         'cumtime': user.cumtime,
                         'solutions': [{
                                         'points': int(sol.points),
-                                        'time': sol.time.total_seconds(),
-                                        'state': sol.state
+                                        'time': sol.time.total_seconds()
                                     } if sol else None for sol in user.problems]
                     } for user in users]
     }
