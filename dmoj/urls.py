@@ -141,7 +141,8 @@ urlpatterns = [
 
     url(r'^users/', include([
         url(r'^$', user.users, name='user_list'),
-        url(r'^(?P<page>\d+)$', user.user_list_view, name='user_list'),
+        url(r'^(?P<page>\d+)$', lambda request, page:
+            HttpResponsePermanentRedirect('%s?page=%s' % (reverse('user_list'), page))),
         url(r'^find$', user.user_ranking_redirect, name='user_ranking_redirect'),
     ])),
 
