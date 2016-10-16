@@ -28,7 +28,8 @@ script(type='text/javascript').
         }
 
         var outdated = false;
-        setTimeout(function update_table() {
+
+        function update_table() {
             if ($('body').hasClass('window-hidden'))
                 return outdated = true;
             $.ajax({
@@ -49,12 +50,13 @@ script(type='text/javascript').
                 outdated = false;
                 setTimeout(update_table, 10000);
             });
-        }, 10000);
+        }
 
         $(window).on('dmoj:window-visible', function () {
             if (outdated)
                 update_table();
         });
 
+        setTimeout(update_table, 10000);
         install_tooltips();
     });
