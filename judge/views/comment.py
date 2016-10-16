@@ -1,5 +1,5 @@
-from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db import IntegrityError, transaction
 from django.forms.models import ModelForm
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
@@ -9,7 +9,7 @@ from django.views.generic import DetailView, UpdateView
 from reversion import revisions
 
 from judge.models import Comment, CommentVote
-from judge.utils.views import TitleMixin, class_view_decorator
+from judge.utils.views import TitleMixin
 from judge.widgets import MathJaxPagedownWidget
 
 __all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentEditAjax', 'CommentContent',
@@ -128,9 +128,9 @@ class CommentContent(CommentMixin, DetailView):
     template_name = 'comments/content.jade'
 
 
-@class_view_decorator(permission_required('judge.change_commentvote'))
-class CommentVotesAjax(CommentMixin, DetailView):
+class CommentVotesAjax(PermissionRequiredMixin, CommentMixin, DetailView):
     template_name = 'comments/votes.jade'
+    permission_required = 'judge.change_commentvote'
 
     def get_context_data(self, **kwargs):
         context = super(CommentVotesAjax, self).get_context_data(**kwargs)
