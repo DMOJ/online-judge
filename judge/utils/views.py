@@ -49,3 +49,30 @@ class DiggPaginatorMixin(object):
                       allow_empty_first_page=True, **kwargs):
         return DiggPaginator(queryset, per_page, body=6, padding=2,
                              orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
+
+
+class QueryStringSortMixin(object):
+    all_sorts = None
+    default_sort = None
+
+    def get(self, request, *args, **kwargs):
+        order = request.GET.get('order', '')
+        if not ((not order.startswith('-') or order.count('-') == 1) and (order.lstrip('-') in self.all_sorts)):
+            order = self.default_sort
+        self.order = order
+
+        return super(QueryStringSortMixin, self).get(request, *args, **kwargs)
+
+    def get_sort_context(self):
+        query = self.request.GET.copy()
+        query.setlist('order', [])
+        query = query.urlencode()
+        sort_prefix = '%s?%s&order=' % (self.request.path, query) if query else '%s?order=' % self.request.path
+
+        order = {key: '' for key in self.all_sorts}
+        order[self.order.lstrip('-')] = u' \u25BE' if self.order.startswith('-') else u' \u25B4'
+        return {
+            'sort_links': {key: sort_prefix + ('-' + key if self.order == key else key)
+                                 for key in self.all_sorts},
+            'sort_order': order,
+        }

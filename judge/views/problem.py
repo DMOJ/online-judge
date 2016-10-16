@@ -31,7 +31,7 @@ from judge.models import Problem, Submission, ContestSubmission, ContestProblem,
 from judge.pdf_problems import HAS_PDF, DefaultPdfMaker
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import contest_completed_ids, user_completed_ids, contest_attempted_ids, user_attempted_ids
-from judge.utils.views import LoadSelect2Mixin, TitleMixin, generic_message
+from judge.utils.views import LoadSelect2Mixin, TitleMixin, generic_message, QueryStringSortMixin
 
 
 def get_contest_problem(problem, profile):
@@ -177,7 +177,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         return response
 
 
-class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
+class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, ListView):
     model = Problem
     title = ugettext_lazy('Problems')
     context_object_name = 'problems'
@@ -186,6 +186,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
     sql_sort = {'points', 'ac_rate', 'user_count', 'code'}
     manual_sort = {'name', 'group', 'solved', 'type'}
     all_sorts = sql_sort | manual_sort
+    default_sort = 'code'
 
     def get_paginator(self, queryset, per_page, orphans=0,
                       allow_empty_first_page=True, **kwargs):
@@ -317,14 +318,7 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
             context['first_page_href'] = self.request.path
 
         if not self.in_contest:
-            query = self.request.GET.copy()
-            query.setlist('order', [])
-            query = query.urlencode()
-            sort_prefix = '%s?%s&order=' % (self.request.path, query) if query else '%s?order=' % self.request.path
-            context['sort_links'] = {key: sort_prefix + ('-' + key if self.order == key else key)
-                                     for key in self.all_sorts}
-            context['sort_order'] = {key: '' for key in self.all_sorts}
-            context['sort_order'][self.order.lstrip('-')] = u' \u25BE' if self.order.startswith('-') else u' \u25B4'
+            context.update(self.get_sort_context())
         return context
 
     def GET_with_session(self, request, key):
@@ -354,10 +348,6 @@ class ProblemList(LoadSelect2Mixin, TitleMixin, ListView):
     def get(self, request, *args, **kwargs):
         self.setup(request)
 
-        order = request.GET.get('order', '')
-        if not ((not order.startswith('-') or order.count('-') == 1) and (order.lstrip('-') in self.all_sorts)):
-            order = 'code'
-        self.order = order
         try:
             return super(ProblemList, self).get(request, *args, **kwargs)
         except ProgrammingError as e:
@@ -379,6 +369,7 @@ class RandomProblem(ProblemList):
         self.setup(request)
         if self.in_contest:
             raise Http404()
+
         queryset = self.get_normal_queryset()
         count = queryset.count()
         if not count:
