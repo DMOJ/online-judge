@@ -308,16 +308,7 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, ListView):
         context['completed_problem_ids'] = self.get_completed_problems()
         context['attempted_problems'] = self.get_attempted_problems()
 
-        query = self.request.GET.copy()
-        query.setlist('page', [])
-        query = query.urlencode()
-        if query:
-            context['page_prefix'] = '%s?%s&page=' % (self.request.path, query)
-            context['first_page_href'] = '%s?%s' % (self.request.path, query)
-        else:
-            context['page_prefix'] = '%s?page=' % self.request.path
-            context['first_page_href'] = self.request.path
-
+        context.update(self.get_sort_paginate_context())
         if not self.in_contest:
             context.update(self.get_sort_context())
         return context

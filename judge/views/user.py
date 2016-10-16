@@ -219,6 +219,7 @@ class UserList(LoadSelect2Mixin, QueryStringSortMixin, DiggPaginatorMixin, Title
         context['users'] = ranker(context['users'], rank=self.paginate_by * (context['page_obj'].number - 1))
         context['first_page_href'] = '.'
         context.update(self.get_sort_context())
+        context.update(self.get_sort_paginate_context())
         return context
 
 

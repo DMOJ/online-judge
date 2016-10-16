@@ -77,3 +77,14 @@ class QueryStringSortMixin(object):
         order = {key: '' for key in self.all_sorts}
         order[current] = u' \u25BE' if self.order.startswith('-') else u' \u25B4'
         return {'sort_links': links, 'sort_order': order}
+
+    def get_sort_paginate_context(self):
+        query = self.request.GET.copy()
+        query.setlist('page', [])
+        query = query.urlencode()
+        if query:
+            return {'page_prefix': '%s?%s&page=' % (self.request.path, query),
+                    'first_page_href': '%s?%s' % (self.request.path, query)}
+        else:
+            return {'page_prefix': '%s?page=' % self.request.path,
+                    'first_page_href': self.request.path}
