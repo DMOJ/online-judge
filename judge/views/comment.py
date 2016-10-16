@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError, transaction
 from django.forms.models import ModelForm
@@ -9,7 +9,7 @@ from django.views.generic import DetailView, UpdateView
 from reversion import revisions
 
 from judge.models import Comment, CommentVote
-from judge.utils.views import TitleMixin
+from judge.utils.views import TitleMixin, class_view_decorator
 from judge.widgets import MathJaxPagedownWidget
 
 __all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentEditAjax', 'CommentContent',
@@ -58,10 +58,13 @@ def downvote_comment(request):
     return vote_comment(request, -1)
 
 
-class CommentHistoryAjax(DetailView):
+class CommentMixin(object):
     model = Comment
     pk_url_kwarg = 'id'
     context_object_name = 'comment'
+
+
+class CommentHistoryAjax(CommentMixin, DetailView):
     template_name = 'comments/history_ajax.jade'
 
     def get_context_data(self, **kwargs):
@@ -91,10 +94,7 @@ class CommentEditForm(ModelForm):
             widgets = {'body': MathJaxPagedownWidget(attrs={'id': 'id-edit-comment-body'})}
 
 
-class CommentEditAjax(LoginRequiredMixin, UpdateView):
-    model = Comment
-    pk_url_kwarg = 'id'
-    context_object_name = 'comment'
+class CommentEditAjax(LoginRequiredMixin, CommentMixin, UpdateView):
     template_name = 'comments/edit_ajax.jade'
     form_class = CommentEditForm
 
@@ -124,8 +124,16 @@ class CommentEdit(TitleMixin, CommentEditAjax):
         return _('Editing %s') % self.object.title
 
 
-class CommentContent(DetailView):
-    model = Comment
-    pk_url_kwarg = 'id'
-    context_object_name = 'comment'
+class CommentContent(CommentMixin, DetailView):
     template_name = 'comments/content.jade'
+
+
+@class_view_decorator(permission_required('judge.change_commentvote'))
+class CommentVotesAjax(CommentMixin, DetailView):
+    template_name = 'comments/votes.jade'
+
+    def get_context_data(self, **kwargs):
+        context = super(CommentVotesAjax, self).get_context_data(**kwargs)
+        context['votes'] = (self.object.votes.select_related('voter__user')
+                            .only('id', 'voter__display_rank', 'voter__user__username', 'score'))
+        return context
