@@ -71,8 +71,8 @@ class QueryStringSortMixin(object):
         sort_prefix = '%s?%s&order=' % (self.request.path, query) if query else '%s?order=' % self.request.path
         current = self.order.lstrip('-')
 
-        links = {key: '-' + key if key in self.default_desc else key for key in self.all_sorts}
-        links[current] = current if self.order.startswith('-') else '-' + current
+        links = {key: sort_prefix + ('-' if key in self.default_desc else '') + key for key in self.all_sorts}
+        links[current] = sort_prefix + ('' if self.order.startswith('-') else '-') + current
 
         order = {key: '' for key in self.all_sorts}
         order[current] = u' \u25BE' if self.order.startswith('-') else u' \u25B4'
