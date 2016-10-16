@@ -183,9 +183,10 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, ListView):
     context_object_name = 'problems'
     template_name = 'problem/list.jade'
     paginate_by = 50
-    sql_sort = {'points', 'ac_rate', 'user_count', 'code'}
-    manual_sort = {'name', 'group', 'solved', 'type'}
+    sql_sort = frozenset(('points', 'ac_rate', 'user_count', 'code'))
+    manual_sort = frozenset(('name', 'group', 'solved', 'type'))
     all_sorts = sql_sort | manual_sort
+    default_desc = frozenset(('points', 'ac_rate', 'user_count'))
     default_sort = 'code'
 
     def get_paginator(self, queryset, per_page, orphans=0,

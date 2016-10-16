@@ -54,6 +54,7 @@ class DiggPaginatorMixin(object):
 class QueryStringSortMixin(object):
     all_sorts = None
     default_sort = None
+    default_desc = ()
 
     def get(self, request, *args, **kwargs):
         order = request.GET.get('order', '')
@@ -68,11 +69,11 @@ class QueryStringSortMixin(object):
         query.setlist('order', [])
         query = query.urlencode()
         sort_prefix = '%s?%s&order=' % (self.request.path, query) if query else '%s?order=' % self.request.path
+        current = self.order.lstrip('-')
+
+        links = {key: '-' + key if key in self.default_desc else key for key in self.all_sorts}
+        links[current] = current if self.order.startswith('-') else '-' + current
 
         order = {key: '' for key in self.all_sorts}
-        order[self.order.lstrip('-')] = u' \u25BE' if self.order.startswith('-') else u' \u25B4'
-        return {
-            'sort_links': {key: sort_prefix + ('-' + key if self.order == key else key)
-                                 for key in self.all_sorts},
-            'sort_order': order,
-        }
+        order[current] = u' \u25BE' if self.order.startswith('-') else u' \u25B4'
+        return {'sort_links': links, 'sort_order': order}
