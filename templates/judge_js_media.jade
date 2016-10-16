@@ -27,7 +27,7 @@ script(type='text/javascript').
             });
         }
 
-        setInterval(function () {
+        setTimeout(function update_table() {
             $.ajax({
                 url: '{% url "status_table" %}'
             }).done(function (data) {
@@ -42,6 +42,8 @@ script(type='text/javascript').
 
                 table.html(new_node);
                 install_tooltips();
+            }).always(function () {
+                setTimeout(update_table, 10000);
             });
         }, 10000);
 
