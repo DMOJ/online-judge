@@ -4,9 +4,12 @@ extends user/base_users_table
 
 block after_rank_head
     th.header.rank
-        span.rate-group
-            span.rate-box(style='color: white')
-                span(style='background: white; height: 0.3em')
+        if sort_links
+            a(href=sort_links['rating'])
+                span.rate-group: span.rate-box(style='color: white'): span(style='background: white; height: 0.3em')
+                | #{sort_order.rating}
+        else
+            span.rate-group: span.rate-box(style='color: white'): span(style='background: white; height: 0.3em')
 
 block after_rank
     td
@@ -17,7 +20,10 @@ block after_rank
                 span.rating(class='{{ user.rating|rating_class }}') #{user.rating}
 
 block after_point_head
-    th.problems {% trans "Problems" %}
+    if sort_links
+        th.problems: a(href=sort_links['problem_count']) {% trans "Problems" %}#{sort_order.problem_count}
+    else
+        th.problems {% trans "Problems" %}
 
 block after_point
     td #{user.problem_count}
