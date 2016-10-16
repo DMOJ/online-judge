@@ -384,7 +384,7 @@ def problem_submit(request, problem=None, submission=None):
         form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))
         if form.is_valid():
             if (not request.user.has_perm('judge.spam_submission') and
-                        Submission.objects.filter(user=profile, is_being_rejudged=False).exclude(
+                        Submission.objects.filter(user=profile, was_rejudged=False).exclude(
                             status__in=['D', 'IE', 'CE', 'AB']).count() > 2):
                 return HttpResponse('<h1>You submitted too many submissions.</h1>', status=503)
             if not form.cleaned_data['problem'].allowed_languages.filter(

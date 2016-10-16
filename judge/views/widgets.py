@@ -32,7 +32,7 @@ def rejudge_submission(request):
             not submission.problem.authors.filter(id=request.user.profile.id).exists():
         return HttpResponseForbidden()
     
-    submission.is_being_rejudged = True
+    submission.was_rejudged = True
     submission.judge()
     
     redirect = request.POST.get('path', None)

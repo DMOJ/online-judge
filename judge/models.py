@@ -10,7 +10,6 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.core.files.storage import default_storage
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
@@ -392,7 +391,8 @@ class Problem(models.Model):
     description = models.TextField(verbose_name=_('problem body'))
     authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems')
     testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True, related_name='tested_problems',
-                                     help_text=_("These users will be able to view a private problem, but not edit it."))
+                                     help_text=_(
+                                         "These users will be able to view a private problem, but not edit it."))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'))
     time_limit = models.FloatField(verbose_name=_('time limit'))
@@ -545,10 +545,7 @@ class Problem(models.Model):
         verbose_name_plural = _('problems')
 
 
-if hasattr(settings, 'PROBLEM_DATA_ROOT'):
-    problem_data_storage = ProblemDataStorage()
-else:
-    problem_data_storage = default_storage
+problem_data_storage = ProblemDataStorage()
 
 
 def problem_directory_file(data, filename):
@@ -699,7 +696,7 @@ class Submission(models.Model):
     case_total = models.FloatField(verbose_name=_('test case total points'), default=0)
     judged_on = models.ForeignKey('Judge', verbose_name=_('judged on'), null=True, blank=True,
                                   on_delete=models.SET_NULL)
-    is_being_rejudged = models.BooleanField(verbose_name=_('is being rejudged by admin'), default=False)
+    was_rejudged = models.BooleanField(verbose_name=_('was rejudged by admin'), default=False)
     is_pretested = models.BooleanField(verbose_name=_('was ran on pretests only'), default=False)
 
     objects = TranslatedProblemForeignKeyQuerySet.as_manager()
