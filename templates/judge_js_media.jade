@@ -27,7 +27,10 @@ script(type='text/javascript').
             });
         }
 
+        var outdated = false;
         setTimeout(function update_table() {
+            if ($('body').hasClass('window-hidden'))
+                return outdated = true;
             $.ajax({
                 url: '{% url "status_table" %}'
             }).done(function (data) {
@@ -43,9 +46,15 @@ script(type='text/javascript').
                 table.html(new_node);
                 install_tooltips();
             }).always(function () {
+                outdated = false;
                 setTimeout(update_table, 10000);
             });
         }, 10000);
+
+        $(window).on('dmoj:window-visible', function () {
+            if (outdated)
+                update_table();
+        });
 
         install_tooltips();
     });
