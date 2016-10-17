@@ -75,13 +75,11 @@ def judge_submission(submission, **kwargs):
         })
     except BaseException:
         logger.exception('Failed to send request to judge')
-        submission.status = 'IE'
-        submission.save()
+        Submission.objects.filter(id=submission.id).update(status='IE')
         success = False
     else:
         if response['name'] != 'submission-received' or response['submission-id'] != submission.id:
-            submission.status = 'IE'
-            submission.save()
+            Submission.objects.filter(id=submission.id).update(status='IE')
         if submission.problem.is_public:
             event.post('submissions', {'type': 'update-submission', 'id': submission.id,
                                        'contest': submission.contest_key,
