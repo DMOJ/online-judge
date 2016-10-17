@@ -42,7 +42,7 @@ def api_contest_detail(request, contest):
         'time_limit': contest.time_limit or contest.time_limit.total_seconds(),
         'start_time': contest.start_time.isoformat(),
         'end_time': contest.end_time.isoformat(),
-        'tags': map(attrgetter('name'), contest.tag_list),
+        'tags': list(contest.tags.values_list('name', flat=True)),
         'problems': [
             {
                 'points': int(problem.points),
