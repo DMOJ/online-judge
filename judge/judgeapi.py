@@ -60,10 +60,10 @@ def judge_submission(submission, **kwargs):
     # as that would prevent people from knowing a submission is being scheduled for rejudging.
     # It is worth noting that this mechanism does not prevent a new rejudge from being scheduled
     # while already queued, but that does not lead to data corruption.
-    if not Submission.objects.filter(id=submission).exclude(status__in=('P', 'G')).update(**updates):
+    if not Submission.objects.filter(id=submission.id).exclude(status__in=('P', 'G')).update(**updates):
         return False
 
-    SubmissionTestCase.objects.filter(submission_id=submission).delete()
+    SubmissionTestCase.objects.filter(submission_id=submission.id).delete()
 
     try:
         response = judge_request({
