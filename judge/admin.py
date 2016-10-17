@@ -467,8 +467,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             queryset = queryset.filter(problem__authors__id=request.user.profile.id)
         judged = len(queryset)
         for model in queryset:
-            model.was_rejudged = True
-            model.judge()
+            model.judge(was_rejudged=True)
         self.message_user(request, ungettext('%d submission were successfully scheduled for rejudging.',
                                              '%d submissions were successfully scheduled for rejudging.',
                                              judged) % judged)
@@ -550,7 +549,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.edit_all_problem') and \
                 not submission.problem.authors.filter(id=request.user.profile.id).exists():
             raise PermissionDenied()
-        submission.judge()
+        submission.judge(was_rejudged=True)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
     def judge_column(self, obj):

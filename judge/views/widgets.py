@@ -31,12 +31,11 @@ def rejudge_submission(request):
     if not request.user.has_perm('judge.edit_all_problem') and \
             not submission.problem.authors.filter(id=request.user.profile.id).exists():
         return HttpResponseForbidden()
-    
-    submission.was_rejudged = True
-    submission.judge()
-    
+
+    submission.judge(was_rejudged=True)
+
     redirect = request.POST.get('path', None)
-    
+
     return HttpResponseRedirect(redirect) if redirect else HttpResponse('success', content_type='text/plain')
 
 
@@ -45,7 +44,8 @@ class DetectTimezone(View):
         if not hasattr(settings, 'ASKGEO_ACCOUNT_ID') or not hasattr(settings, 'ASKGEO_ACCOUNT_API_KEY'):
             raise ImproperlyConfigured()
         with closing(urllib2.urlopen('http://api.askgeo.com/v1/%s/%s/query.json?databases=TimeZone&points=%f,%f' %
-                     (settings.ASKGEO_ACCOUNT_ID, settings.ASKGEO_ACCOUNT_API_KEY, lat, long))) as f:
+                                             (settings.ASKGEO_ACCOUNT_ID, settings.ASKGEO_ACCOUNT_API_KEY, lat,
+                                              long))) as f:
             data = json.load(f)
             try:
                 return HttpResponse(data['data'][0]['TimeZone']['TimeZoneId'], content_type='text/plain')
@@ -56,7 +56,7 @@ class DetectTimezone(View):
         if not hasattr(settings, 'GEONAMES_USERNAME'):
             raise ImproperlyConfigured()
         with closing(urllib2.urlopen('http://api.geonames.org/timezoneJSON?lat=%f&lng=%f&username=%s' %
-                     (lat, long, settings.GEONAMES_USERNAME))) as f:
+                                             (lat, long, settings.GEONAMES_USERNAME))) as f:
             data = json.load(f)
             try:
                 return HttpResponse(data['timezoneId'], content_type='text/plain')

@@ -39,17 +39,31 @@ def judge_request(packet, reply=True):
         return result
 
 
-def judge_submission(submission):
-    from .models import ContestSubmission
+def judge_submission(submission, **kwargs):
+    from .models import ContestSubmission, Submission, SubmissionTestCase
 
+    updates = {'time': None, 'memory': None, 'points': None, 'result': None, 'error': None}
+    updates.update(kwargs, status='QU')
     try:
         # This is set proactively; it might get unset in judgecallback's on_grading_begin if the problem doesn't
         # actually have pretests stored on the judge.
-        submission.is_pretested = ContestSubmission.objects.filter(submission=submission) \
+        updates['is_pretested'] = ContestSubmission.objects.filter(submission=submission) \
             .values_list('problem__contest__run_pretests_only', flat=True)[0]
     except IndexError:
         pass
-    submission.save()
+
+    # This should prevent double rejudge issues by permitting only the judging of
+    # QU (which is the initial state) and D (which is the final state).
+    # Even though the bridge will not queue a submission already being judged,
+    # we will destroy the current state by deleting all SubmissionTestCase objects.
+    # However, we can't drop the old state immediately before a submission is set for judging,
+    # as that would prevent people from knowing a submission is being scheduled for rejudging.
+    # It is worth noting that this mechanism does not prevent a new rejudge from being scheduled
+    # while already queued, but that does not lead to data corruption.
+    if not Submission.objects.filter(id=submission).exclude(status__in=('P', 'G')).update(**updates):
+        return False
+
+    SubmissionTestCase.objects.filter(submission_id=submission).delete()
 
     try:
         response = judge_request({
