@@ -1043,7 +1043,8 @@ class BlogPostForm(ModelForm):
         }
 
         if HeavyPreviewAdminPageDownWidget is not None:
-            widgets['description'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('blog_preview'))
+            widgets['content'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('blog_preview'))
+            widgets['summary'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('blog_preview'))
 
 
 class BlogPostAdmin(VersionAdmin):
