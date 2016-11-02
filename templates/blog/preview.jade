@@ -1,0 +1,7 @@
+- load markdown_trois_tags
+- load smart_math
+- load latex_math
+- load camo_proxy
+- load staticfiles
+
+| #{post.content|markdown:"blog"|reference|latex_math|proxy_images|nofollowexternal}

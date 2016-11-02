@@ -255,6 +255,7 @@ urlpatterns = [
 
         url(r'^preview/', include([
             url(r'^problem$', preview.ProblemMarkdownPreviewView.as_view(), name='problem_preview'),
+            url(r'^blog', preview.BlogMarkdownPreviewView.as_view(), name='blog_preview'),
         ])),
     ])),
 

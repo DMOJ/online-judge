@@ -153,17 +153,6 @@ class ProblemForm(ModelForm):
             widgets['description'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('problem_preview'))
 
 
-class BlogPostForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(BlogPostForm, self).__init__(*args, **kwargs)
-        self.fields['authors'].widget.can_add_related = False
-
-    class Meta:
-        widgets = {
-            'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
-        }
-
-
 class ProblemCreatorListFilter(admin.SimpleListFilter):
     title = parameter_name = 'creator'
 
@@ -1043,6 +1032,20 @@ class OrganizationAdmin(VersionAdmin):
         return obj.admins.filter(id=request.user.profile.id).exists()
 
 
+class BlogPostForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(BlogPostForm, self).__init__(*args, **kwargs)
+        self.fields['authors'].widget.can_add_related = False
+
+    class Meta:
+        widgets = {
+            'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+        }
+
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets['description'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('blog_preview'))
+
+
 class BlogPostAdmin(VersionAdmin):
     fieldsets = (
         (None, {'fields': ('title', 'slug', 'authors', 'visible', 'sticky', 'publish_on')}),
@@ -1054,11 +1057,6 @@ class BlogPostAdmin(VersionAdmin):
     list_display_links = ('id', 'title')
     ordering = ('-publish_on',)
     form = BlogPostForm
-
-    if AdminPagedownWidget is not None:
-        formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
-        }
 
     def has_change_permission(self, request, obj=None):
         return request.user.is_superuser or (request.user.has_perm('judge.see_hidden_post') and

@@ -16,3 +16,7 @@ class MarkdownPreviewView(TemplateResponseMixin, ContextMixin, View):
 
 class ProblemMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'problem/preview.jade'
+
+
+class BlogMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'blog/preview.jade'
