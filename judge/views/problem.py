@@ -153,7 +153,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                     'problem': problem,
                     'problem_name': problem.name if trans is None else trans.name,
                     'description': problem.description if trans is None else trans.description,
-                    'make_absolute': request.build_absolute_uri
+                    'url': request.build_absolute_uri()
                 }).replace('"//', '"http://').replace("'//", "'http://")
 
                 for file in ('style.css', 'pygment-github.css', 'mathjax_config.js'):
