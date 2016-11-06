@@ -42,6 +42,7 @@ class Command(BaseCommand):
                 'problem': problem,
                 'problem_name': problem.name if trans is None else trans.name,
                 'description': problem.description if trans is None else trans.description,
+                'make_absolute': lambda x: x
             }).replace('"//', '"http://').replace("'//", "'http://")
             for file in ('style.css', 'pygment-github.css', 'mathjax_config.js'):
                 maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
