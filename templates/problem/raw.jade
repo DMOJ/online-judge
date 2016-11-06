@@ -3,6 +3,7 @@
 - load latex_math
 - load filesize
 - load i18n
+- load reference
 
 doctype 5
 
@@ -82,7 +83,7 @@ html
         hr(style='border-bottom: 1px dashed;')
 
         .content-description.printing
-            | #{description|markdown:"problem"|latex_math|smart_math:"tex"}
+            | #{description|markdown:"problem"|reference|latex_math|smart_math:"tex"}
 
         script(type='text/javascript', src='mathjax_config.js')
         script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML')
