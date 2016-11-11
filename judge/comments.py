@@ -40,7 +40,7 @@ class CommentForm(ModelForm):
 
     def clean(self):
         if self.request is not None and self.request.user.is_authenticated() and self.request.user.profile.mute:
-            raise ValidationError(_('You are not allowed to comment...'))
+            raise ValidationError(_('Your part is silent, little toad.'))
         return super(CommentForm, self).clean()
 
 
