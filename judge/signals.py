@@ -123,4 +123,4 @@ _misc_config_i18n.append('')
 
 @receiver(post_save, sender=MiscConfig)
 def misc_config_update(sender, instance, **kwargs):
-    cache.delete_many(['misc_config:%s:%s' % (lang, instance.key) for lang in _misc_config_i18n])
+    cache.delete_many(['misc_config:%s:%s' % (lang, instance.key.split('.')[0]) for lang in _misc_config_i18n])
