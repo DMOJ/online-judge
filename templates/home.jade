@@ -3,12 +3,12 @@ extends blog/list
 - load evaluate
 
 block before_posts
-    if misc_config.home_page_top
-        | {% evaluate misc_config.home_page_top %}
+    if i18n_config.home_page_top
+        | {% evaluate i18n_config.home_page_top %}
 
 block meta
-    if misc_config.meta_description
-        meta(name='description', content=misc_config['meta_description'])
+    if i18n_config.meta_description
+        meta(name='description', content=i18n_config['meta_description'])
     script(type='application/ld+json').
         {
           "@context": "https://schema.org",
