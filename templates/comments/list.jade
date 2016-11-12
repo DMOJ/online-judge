@@ -24,7 +24,8 @@ ul.comments.top-level-comments
                                     class=('voted' if node.vote_score == 1 else ''),
                                     href='javascript:comment_upvote({{ node.id }})')
                             else
-                                a.upvote-link.fa.fa-chevron-up.fa-fw(href='javascript:void(0)', title='Please login to vote')
+                                a.upvote-link.fa.fa-chevron-up.fa-fw(href='javascript:void(0)',
+                                    title='{% trans "Please login to vote" %}')
                             br
                             .comment-score #{node.score}
                             if request.user.is_authenticated
@@ -32,7 +33,8 @@ ul.comments.top-level-comments
                                     class=('voted' if node.vote_score == -1 else ''),
                                     href='javascript:comment_downvote({{ node.id }})')
                             else
-                                a.downvote-link.fa.fa-chevron-down.fa-fw(href='javascript:void(0)', title='Please login to vote')
+                                a.downvote-link.fa.fa-chevron-down.fa-fw(href='javascript:void(0)',
+                                    title='{% trans "Please login to vote" %}')
                             br
                         .comment-header
                             span.comment-info
@@ -64,26 +66,26 @@ ul.comments.top-level-comments
                                 a.comment-link(href='#comment-{{ node.id }}', title='Link')
                                     i.fa.fa-link.fa-fw
                                 a.history-link(data-featherlight='{% url "comment_history_ajax" node.id %}',
-                                               href='{% url "comment_history" node.id %}', title='History')
+                                               href='{% url "comment_history" node.id %}', title='{% trans "History" %}')
                                     i.fa.fa-history.fa-fw
                                 if logged_in
                                     - var can_edit = node.author.id == profile.id and not profile.mute
                                     if can_edit
                                         a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}',
-                                                    href='{% url "comment_edit" node.id %}', title='Edit')
+                                                    href='{% url "comment_edit" node.id %}', title='{% trans "Edit" %}')
                                             i.fa.fa-pencil.fa-fw
                                     else
-                                        a(href='javascript:comment_set_parent({{ node.id }})', title='Reply')
+                                        a(href='javascript:comment_set_parent({{ node.id }})', title='{% trans "Reply" %}')
                                             i.fa.fa-reply.fa-fw
                                     if perms.judge.change_comment
                                         if can_edit
-                                            a(href='javascript:comment_set_parent({{ node.id }})', title='Reply')
+                                            a(href='javascript:comment_set_parent({{ node.id }})', title='{% trans "Reply" %}')
                                                 i.fa.fa-reply.fa-fw
                                         else
                                             a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}',
-                                                        href='{% url "comment_edit" node.id %}', title='Edit')
+                                                        href='{% url "comment_edit" node.id %}', title='{% trans "Edit" %}')
                                                 i.fa.fa-pencil.fa-fw
-                                        a(href='{% url "admin:judge_comment_change" node.id %}', title='Admin')
+                                        a(href='{% url "admin:judge_comment_change" node.id %}', title='{% trans "Admin" %}')
                                             i.fa.fa-cog.fa-fw
                         .comment-body.content-description #{node.body|markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}
                         if not node.is_leaf_node 
