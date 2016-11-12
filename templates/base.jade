@@ -182,8 +182,8 @@ html(lang=LANGUAGE_CODE)
                     hr
                 div#content-body
                     block body
-            if misc_config.announcement
-                div#announcement #{misc_config.announcement|safe}
+            if i18n_config.announcement
+                div#announcement #{i18n_config.announcement|safe}
             block bodyend
             footer: span#footer-content
                 if i18n_config.footer
