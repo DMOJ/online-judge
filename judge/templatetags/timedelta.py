@@ -108,4 +108,4 @@ def seconds(timedelta):
 
 @register.filter(is_safe=True)
 def as_countdown(timedelta):
-    return get_template('contest/time_remaining_fragment.jade').render({'countdown': timedelta})
+    return get_template('time_remaining_fragment.jade').render({'countdown': timedelta})

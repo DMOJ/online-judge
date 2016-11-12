@@ -44,9 +44,9 @@ block body
                         if contest.start_time
                             br
                             if contest.time_before_end
-                                span.time {% trans "Ending in" %}&nbsp;
-                                span.time.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
-                                    | #{contest.time_before_end|timedelta:"localized"}
+                                span.time
+                                    - blocktrans with countdown=contest.time_before_end|as_countdown
+                                        | Ends in {{ countdown }}.
                             elif contest.free_start and contest.start_time
                                 span.time {% trans "Started at" %} #{contest.start_time|date:_("N j, Y, G:i")}
                             .time.floating-time(style='text-align:right')
@@ -88,9 +88,9 @@ block body
                     if contest.start_time
                         br
                         if contest.time_before_start
-                            span.time {% trans "Starting in" %}&nbsp;
-                            span.time.time-remaining(data-secs='{{ contest.time_before_start|seconds }}')
-                                | #{contest.time_before_start|timedelta:"localized"}
+                            span.time
+                                - blocktrans with countdown=contest.time_before_start|as_countdown
+                                    | Starting in {{ countdown }}.
 
                         .time.floating-time(style='text-align:right')
                             span(style='text-align:right;color:#777;')

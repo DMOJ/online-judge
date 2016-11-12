@@ -145,10 +145,9 @@ block body
                         each contest in current_contests
                             .contest
                                 .name: a(href='{% url "contest_view" contest.key %}')= contest.name
-                                .time {% trans "Ends in" %}
-                                    = ' '
-                                    span.time-remaining(data-secs='{{ contest.time_before_end|seconds }}')
-                                        #{contest.time_before_end|timedelta:"localized"}
+                                .time
+                                    - blocktrans with countdown=contest.time_before_end|as_countdown
+                                        | Ends in {{ countdown }}.
             if future_contests
                 .blog-sidebox.sidebox
                     h3 {% trans "Upcoming contests" %} #[i.fa.fa-trophy]
@@ -156,10 +155,9 @@ block body
                         each contest in future_contests
                             .contest
                                 .name: a(href='{% url "contest_view" contest.key %}')= contest.name
-                                .time {% trans "Starts in" %}
-                                    = ' '
-                                    span.time-remaining(data-secs='{{ contest.time_before_start|seconds }}')
-                                        #{contest.time_before_start|timedelta:"localized"}
+                                .time
+                                    - blocktrans with countdown=contest.time_before_start|as_countdown
+                                        | Starting in {{ countdown }}.
             .blog-sidebox.sidebox
                 h3 {% trans "Comment stream" %} #[i.fa.fa-comments]
                 .sidebox-content
