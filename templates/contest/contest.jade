@@ -119,7 +119,7 @@ block description
                     | {% trans "Participating virtually." %}
             else
                 if contest.start_time > now
-                    - blocktrans countdown=contest.time_before_start|as_countdown
+                    - blocktrans with countdown=contest.time_before_start|as_countdown
                         | Starting in {{ countdown }}.
                 elif contest.end_time < now
                     | {% trans "Contest is over." %}
