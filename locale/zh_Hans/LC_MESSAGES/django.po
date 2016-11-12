@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-12 01:20-0500\n"
-"PO-Revision-Date: 2016-11-12 01:51-0500\n"
+"POT-Creation-Date: 2016-11-12 13:06-0500\n"
+"PO-Revision-Date: 2016-11-12 13:15-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -115,7 +115,7 @@ msgstr "语言"
 msgid "Justice"
 msgstr "司法"
 
-#: .\judge\admin.py:205
+#: .\judge\admin.py:205 .\templates\comments\list.jade:11
 msgid "History"
 msgstr "编辑历史"
 
@@ -268,7 +268,7 @@ msgid "Included contests"
 msgstr "带标签的竞赛"
 
 #: .\judge\admin.py:809 .\templates\problem\list.jade:132
-#: .\templates\problem\list.jade:139
+#: .\templates\problem\list.jade:139 .\templates\solution.jade:3
 msgid "Problem"
 msgstr "题目"
 
@@ -2100,8 +2100,8 @@ msgstr "重新评分"
 msgid "Hello, <b>%(username)s</b>."
 msgstr "你好，<b>%(username)s</b>。"
 
-#: .\templates\base.jade:95 .\templates\judge_status.jade:2
-#: .\templates\problem\problem_list_tabs.jade:9
+#: .\templates\base.jade:95 .\templates\comments\list.jade:11
+#: .\templates\judge_status.jade:2 .\templates\problem\problem_list_tabs.jade:9
 #: .\templates\submission\info_base.jade:2
 msgid "Admin"
 msgstr "管理"
@@ -2126,9 +2126,11 @@ msgstr "旁观中"
 msgid "This site works best with JavaScript enabled."
 msgstr "本网站启用 JavaScript 效果最好。"
 
-#: .\templates\blog\content.jade:2 .\templates\contest\tag_title.jade:4
-#: .\templates\flatpages\admin_link.jade:2 .\templates\judge.jade:2
+#: .\templates\blog\content.jade:2 .\templates\comments\list.jade:11
+#: .\templates\contest\tag_title.jade:4 .\templates\flatpages\admin_link.jade:2
+#: .\templates\flatpages\dmsolutions.jade:3 .\templates\judge.jade:2
 #: .\templates\language.jade:16 .\templates\problem\data.jade:404
+#: .\templates\solution.jade:4
 msgid "Edit"
 msgstr "编辑"
 
@@ -2196,6 +2198,14 @@ msgstr "新题目"
 #: .\templates\submission\info_base.jade:1 .\templates\submission\row.jade:13
 msgid "N j, Y, g:i a"
 msgstr "Y年n月j日 G:i"
+
+#: .\templates\comments\list.jade:5 .\templates\comments\list.jade:6
+msgid "Please login to vote"
+msgstr "登录后才可投票"
+
+#: .\templates\comments\list.jade:11
+msgid "Reply"
+msgstr "回复"
 
 #: .\templates\comments\list.jade:19
 msgid "There are no comments at the moment."
