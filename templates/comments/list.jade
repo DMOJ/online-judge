@@ -58,8 +58,8 @@ ul.comments.top-level-comments
                                 if node.revisions > 2
                                     span.comment-edits
                                         - var edits = node.revisions - 1
-                                        - blocktrans with edits=edits
-                                            | #{edits} edits
+                                        - blocktrans
+                                            | {{ edits }} edits
                                 elif node.revisions > 1
                                     span.comment-edits {% trans "edited" %}
                                 else
