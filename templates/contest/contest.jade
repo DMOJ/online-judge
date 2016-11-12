@@ -119,8 +119,9 @@ block description
                     | {% trans "Participating virtually." %}
             else
                 if contest.start_time > now
-                    | {% trans "Starting in " %}
-                    - include "contest/time_remaining_fragment.jade" with countdown=contest.time_before_start
+                    - time_remaining_var countdown
+                    - blocktrans countdown=contest.time_before_start|as_countdown
+                        | Starting in {{ countdown }}.
                 elif contest.end_time < now
                     | {% trans "Contest is over." %}
                 else

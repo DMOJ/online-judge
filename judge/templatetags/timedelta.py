@@ -1,6 +1,7 @@
 import datetime
 
 from django import template
+from django.template.loader import get_template
 from django.utils.translation import npgettext, pgettext, ungettext
 
 register = template.Library()
@@ -103,3 +104,8 @@ def timedelta(value, display='long'):
 @register.filter(name='seconds')
 def seconds(timedelta):
     return timedelta.total_seconds()
+
+
+@register.filter(is_safe=True)
+def as_countdown(timedelta):
+    return get_template('contest/time_remaining_fragment.jade').render({'countdown': timedelta})
