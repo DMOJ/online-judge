@@ -63,7 +63,7 @@ ul.comments.top-level-comments
                                     span.comment-edits edited
                                 else
                                     span.comment-edits
-                                a.comment-link(href='#comment-{{ node.id }}', title='Link')
+                                a.comment-link(href='#comment-{{ node.id }}', title='{% trans "Link" %}')
                                     i.fa.fa-link.fa-fw
                                 a.history-link(data-featherlight='{% url "comment_history_ajax" node.id %}',
                                                href='{% url "comment_history" node.id %}', title='{% trans "History" %}')
