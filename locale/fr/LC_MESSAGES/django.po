@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-12 13:06-0500\n"
-"PO-Revision-Date: 2016-11-12 13:15-0500\n"
+"POT-Creation-Date: 2016-11-12 13:55-0500\n"
+"PO-Revision-Date: 2016-11-12 14:01-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -1565,33 +1565,33 @@ msgstr "solutions"
 msgid "Page [page] of [topage]"
 msgstr ""
 
-#: .\judge\templatetags\timedelta.py:52
+#: .\judge\templatetags\timedelta.py:53
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: .\judge\templatetags\timedelta.py:56
+#: .\judge\templatetags\timedelta.py:57
 msgctxt "time format without day"
 msgid "%h:%m:%s"
 msgstr ""
 
-#: .\judge\templatetags\timedelta.py:62
+#: .\judge\templatetags\timedelta.py:63
 msgctxt "time format no seconds with day"
 msgid "%d day %h:%m"
 msgid_plural "%d days %h:%m"
 msgstr[0] ""
 msgstr[1] ""
 
-#: .\judge\templatetags\timedelta.py:64
+#: .\judge\templatetags\timedelta.py:65
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: .\judge\templatetags\timedelta.py:66
+#: .\judge\templatetags\timedelta.py:67
 msgctxt "hours and minutes"
 msgid "%h:%m"
 msgstr ""
@@ -2154,7 +2154,7 @@ msgstr "Modifier"
 msgid "N j, Y, G:i"
 msgstr ""
 
-#: .\templates\blog\content.jade:13 .\templates\contest\contest.jade:80
+#: .\templates\blog\content.jade:13 .\templates\contest\contest.jade:77
 #: .\templates\problem\problem.jade:67
 msgid "Comments"
 msgstr "Commentaires"
@@ -2217,6 +2217,19 @@ msgstr ""
 
 #: .\templates\comments\list.jade:5 .\templates\comments\list.jade:6
 msgid "Please login to vote"
+msgstr ""
+
+#: .\templates\comments\list.jade:10
+#, python-format
+msgid "%(edits)s edits"
+msgstr ""
+
+#: .\templates\comments\list.jade:11
+msgid "edited"
+msgstr ""
+
+#: .\templates\comments\list.jade:11
+msgid "Link"
 msgstr ""
 
 #: .\templates\comments\list.jade:11
@@ -2333,51 +2346,53 @@ msgid "Edit contest"
 msgstr "Modifier le concours"
 
 #: .\templates\contest\contest.jade:61
-msgid "Spectating, contest ends in "
+#, python-format
+msgid "Spectating, contest ends in %(countdown)s."
 msgstr ""
 
 #: .\templates\contest\contest.jade:62
-msgid "Participating virtually, "
+#, python-format
+msgid "Participating virtually, %(countdown)s remaining."
 msgstr ""
 
-#: .\templates\contest\contest.jade:63 .\templates\contest\contest.jade:69
-msgid " remaining."
-msgstr ""
-
-#: .\templates\contest\contest.jade:64
+#: .\templates\contest\contest.jade:63
 msgid "Participating virtually."
 msgstr ""
 
-#: .\templates\contest\contest.jade:65
-msgid "Starting in "
-msgstr "Commencera dans "
+#: .\templates\contest\contest.jade:64
+#, python-format
+msgid "Starting in %(countdown)s."
+msgstr ""
 
-#: .\templates\contest\contest.jade:66
+#: .\templates\contest\contest.jade:65
 msgid "Contest is over."
 msgstr "Concours est terminé."
 
+#: .\templates\contest\contest.jade:66
+#, python-format
+msgid "Your time is up! Contest ends in %(countdown)s."
+msgstr ""
+
 #: .\templates\contest\contest.jade:67
-msgid "Your time is up! Contest ends in "
+#, python-format
+msgid "You have %(countdown)s remaining."
 msgstr ""
 
 #: .\templates\contest\contest.jade:68
-msgid "You have "
-msgstr "Vous avez "
-
-#: .\templates\contest\contest.jade:70
-msgid "Contest ends in "
+#, python-format
+msgid "Contest ends in %(countdown)s."
 msgstr ""
 
-#: .\templates\contest\contest.jade:72 .\templates\contest\contest.jade:73
+#: .\templates\contest\contest.jade:69 .\templates\contest\contest.jade:70
 msgid "F j, Y, G:i T"
 msgstr ""
 
-#: .\templates\contest\contest.jade:72
+#: .\templates\contest\contest.jade:69
 #, python-format
 msgid "<b>%(time_limit)s</b> window between <b>%(start_time)s</b> and <b>%(end_time)s</b>"
 msgstr ""
 
-#: .\templates\contest\contest.jade:73
+#: .\templates\contest\contest.jade:70
 #, python-format
 msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
 msgstr ""
