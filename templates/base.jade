@@ -186,8 +186,8 @@ html(lang=LANGUAGE_CODE)
                 div#announcement #{misc_config.announcement|safe}
             block bodyend
             footer: span#footer-content
-                if misc_config.footer
-                    | #{misc_config.footer|safe}
+                if i18n_config.footer
+                    | #{i18n_config.footer|safe}
                     = ' | '
                 form(action='{% url "set_language" %}', method='post', style='display: inline')
                     - csrf_token
