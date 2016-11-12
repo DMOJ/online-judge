@@ -58,9 +58,10 @@ ul.comments.top-level-comments
                                 if node.revisions > 2
                                     span.comment-edits
                                         - var edits = node.revisions - 1
-                                        | #{edits} edits
+                                        - blocktrans
+                                            | #{edits} edits
                                 elif node.revisions > 1
-                                    span.comment-edits edited
+                                    span.comment-edits {% trans "edited" %}
                                 else
                                     span.comment-edits
                                 a.comment-link(href='#comment-{{ node.id }}', title='{% trans "Link" %}')
