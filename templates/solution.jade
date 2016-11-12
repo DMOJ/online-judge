@@ -3,6 +3,7 @@ extends base
 - load staticfiles
 - load smart_math
 - load latex_math
+- load i18n
 
 block js_media
     include comments/js_media
@@ -21,9 +22,9 @@ block content_title
     | #{solution.title}
     div(style='float:right')
         if solution.problem
-            | [#[a(href='{% url "problem_detail" solution.problem.code %}') Problem]]
+            | [#[a(href='{% url "problem_detail" solution.problem.code %}') {% trans "Problem" %}]]
         if perms.judge.change_solution
-            | [#[a(href='{% url "admin:judge_solution_change" solution.id %}') Edit]]
+            | [#[a(href='{% url "admin:judge_solution_change" solution.id %}') {% trans "Edit" %}]]
 
 block body
     .content-description
