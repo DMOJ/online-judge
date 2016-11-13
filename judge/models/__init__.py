@@ -1,7 +1,4 @@
-from django.contrib.auth.models import User
-from mptt.models import MPTTModel
 from reversion import revisions
-from reversion.models import Version
 
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES, EFFECTIVE_MATH_ENGINES
 from judge.models.comment import Comment, CommentVote
@@ -27,3 +24,4 @@ revisions.register(Solution)
 revisions.register(Judge, fields=['name', 'created', 'auth_key', 'description'])
 revisions.register(Language)
 revisions.register(Comment, fields=['author', 'time', 'page', 'score', 'title', 'body', 'hidden', 'parent'])
+del revisions
