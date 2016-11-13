@@ -829,8 +829,8 @@ class ContestForm(ModelForm):
             'tags': Select2MultipleWidget
         }
 
-        if MathJaxAdminPagedownWidget is not None:
-            widgets['description'] = MathJaxAdminPagedownWidget
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets['description'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('contest_preview'))
 
 
 class ContestAdmin(VersionAdmin):

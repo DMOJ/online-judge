@@ -20,3 +20,7 @@ class ProblemMarkdownPreviewView(MarkdownPreviewView):
 
 class BlogMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'blog/preview.jade'
+
+
+class ContestMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'contest/preview.jade'
