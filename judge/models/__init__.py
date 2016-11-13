@@ -26,7 +26,8 @@ from timedelta.fields import TimedeltaField
 
 from judge.fulltext import SearchQuerySet
 from judge.judgeapi import judge_submission, abort_submission
-from judge.models.profile import *
+from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES
+from judge.models.profile import Profile, Organization
 from judge.models.runtimes import Language, RuntimeVersion
 from judge.user_translations import ugettext as user_ugettext
 from judge.utils.problem_data import ProblemDataStorage
