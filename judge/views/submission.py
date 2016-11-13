@@ -331,12 +331,15 @@ class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
 
         context['all_statuses'] = self.get_searchable_status_codes()
         context['selected_statuses'] = self.selected_statuses
+        context['page_suffix'] = suffix = '?' + self.request.GET.urlencode()
+        context['first_page_href'] += suffix
         return context
 
     def get(self, request, *args, **kwargs):
         self.selected_languages = set(request.GET.getlist('language'))
         self.selected_statuses = set(request.GET.getlist('status'))
         return super(AllSubmissions, self).get(request, *args, **kwargs)
+
 
 class ForceContestMixin(object):
     @property

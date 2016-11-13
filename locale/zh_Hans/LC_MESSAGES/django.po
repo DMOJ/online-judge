@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-12 22:43-0500\n"
-"PO-Revision-Date: 2016-11-12 22:44-0500\n"
+"PO-Revision-Date: 2016-11-13 01:14-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2831,7 +2831,7 @@ msgstr "所有"
 
 #: .\templates\problem\search_form.jade:2
 msgid "Problem search"
-msgstr "问题搜索"
+msgstr "题目搜索"
 
 #: .\templates\problem\search_form.jade:6
 msgid "Search problems..."
@@ -2843,11 +2843,11 @@ msgstr "全文搜索"
 
 #: .\templates\problem\search_form.jade:14
 msgid "Hide solved problems"
-msgstr "隐藏解决的题目"
+msgstr "隐藏已解决的题目"
 
 #: .\templates\problem\search_form.jade:18
 msgid "Show problem types"
-msgstr "显示问题类型"
+msgstr "显示题目类型"
 
 #: .\templates\problem\search_form.jade:24
 #: .\templates\problem\search_form.jade:25
@@ -2872,7 +2872,7 @@ msgstr "统计数据"
 
 #: .\templates\problem\submit.jade:205
 msgid "No judge is available for this problem."
-msgstr "此问题没有可用的裁判服务器。"
+msgstr "此题目没有可用的裁判服务器。"
 
 #: .\templates\registration\activate.jade:2
 #, python-format

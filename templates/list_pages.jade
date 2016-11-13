@@ -3,7 +3,7 @@ ul.pagination
         if page_obj.previous_page_number == 1 and first_page_href != None
             li: a(href=first_page_href) «
         else
-            li: a(href='{{ page_prefix }}{{ page_obj.previous_page_number }}') «
+            li: a(href='{{ page_prefix }}{{ page_obj.previous_page_number }}{{ page_suffix }}') «
     else
         li.disabled-page: span «
 
@@ -16,9 +16,9 @@ ul.pagination
                     a(href=first_page_href)= page
             else
                 li(class=('active-page' if page == page_obj.number else undefined))
-                    a(href='{{ page_prefix }}{{ page }}')= page
+                    a(href='{{ page_prefix }}{{ page }}{{ page_suffix }}')= page
 
     if page_obj.has_next
-        li: a(href='{{ page_prefix }}{{ page_obj.next_page_number }}') »
+        li: a(href='{{ page_prefix }}{{ page_obj.next_page_number }}{{ page_suffix }}') »
     else
         li.disabled-page: span »
