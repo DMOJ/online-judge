@@ -331,7 +331,7 @@ class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
 
         context['all_statuses'] = self.get_searchable_status_codes()
         context['selected_statuses'] = self.selected_statuses
-        context['page_suffix'] = suffix = '?' + self.request.GET.urlencode()
+        context['page_suffix'] = suffix = ('?' + self.request.GET.urlencode()) if self.request.GET else ''
         context['first_page_href'] += suffix
         return context
 
