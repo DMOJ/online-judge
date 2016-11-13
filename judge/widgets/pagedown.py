@@ -99,6 +99,7 @@ else:
             media.add_css({'all': [
                 staticfiles_storage.url('pygment-github.css'),
                 staticfiles_storage.url('table.css'),
+                staticfiles_storage.url('rank.css'),
             ]})
             return media
 
