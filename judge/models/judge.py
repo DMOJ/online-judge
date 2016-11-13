@@ -7,7 +7,6 @@ from django.db import models
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
-from judge.models import Problem
 
 __all__ = ['Language', 'RuntimeVersion', 'Judge']
 
@@ -116,7 +115,7 @@ class Judge(models.Model):
                              help_text=_('Load for the last minute, divided by processors to be fair.'))
     description = models.TextField(blank=True, verbose_name=_('description'))
     last_ip = models.GenericIPAddressField(verbose_name='Last connected IP', blank=True, null=True)
-    problems = models.ManyToManyField(Problem, verbose_name=_('problems'), related_name='judges')
+    problems = models.ManyToManyField('Problem', verbose_name=_('problems'), related_name='judges')
     runtimes = models.ManyToManyField(Language, verbose_name=_('judges'), related_name='judges')
 
     def __unicode__(self):
