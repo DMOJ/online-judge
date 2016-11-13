@@ -5,9 +5,9 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from judge.judgeapi import judge_submission, abort_submission
+from judge.models.judge import Language
 from judge.models.problem import Problem, TranslatedProblemForeignKeyQuerySet
 from judge.models.profile import Profile
-from judge.models.runtimes import Language
 
 __all__ = ['SUBMISSION_RESULT', 'Submission', 'SubmissionTestCase']
 

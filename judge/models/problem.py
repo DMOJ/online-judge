@@ -12,8 +12,8 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from judge.fulltext import SearchQuerySet
+from judge.models.judge import Language
 from judge.models.profile import Profile
-from judge.models.runtimes import Language
 from judge.user_translations import ugettext as user_ugettext
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
 

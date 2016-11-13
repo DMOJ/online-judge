@@ -1,12 +1,15 @@
 from collections import OrderedDict, defaultdict
+from operator import attrgetter
 
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+from judge.models import Problem
 
-__all__ = ['Language', 'RuntimeVersion']
+__all__ = ['Language', 'RuntimeVersion', 'Judge']
 
 
 class Language(models.Model):
@@ -99,3 +102,54 @@ class RuntimeVersion(models.Model):
     name = models.CharField(max_length=64, verbose_name=_('runtime name'))
     version = models.CharField(max_length=64, verbose_name=_('runtime version'), blank=True)
     priority = models.IntegerField(verbose_name=_('order in which to display this runtime'), default=0)
+
+
+class Judge(models.Model):
+    name = models.CharField(max_length=50, help_text=_('Server name, hostname-style'), unique=True)
+    created = models.DateTimeField(auto_now_add=True, verbose_name=_('time of creation'))
+    auth_key = models.CharField(max_length=100, help_text=_('A key to authenticated this judge'),
+                                verbose_name=_('authentication key'))
+    online = models.BooleanField(verbose_name=_('judge online status'), default=False)
+    start_time = models.DateTimeField(verbose_name=_('judge start time'), null=True)
+    ping = models.FloatField(verbose_name=_('response time'), null=True)
+    load = models.FloatField(verbose_name=_('system load'), null=True,
+                             help_text=_('Load for the last minute, divided by processors to be fair.'))
+    description = models.TextField(blank=True, verbose_name=_('description'))
+    last_ip = models.GenericIPAddressField(verbose_name='Last connected IP', blank=True, null=True)
+    problems = models.ManyToManyField(Problem, verbose_name=_('problems'), related_name='judges')
+    runtimes = models.ManyToManyField(Language, verbose_name=_('judges'), related_name='judges')
+
+    def __unicode__(self):
+        return self.name
+
+    @cached_property
+    def runtime_versions(self):
+        qs = (self.runtimeversion_set.values('language__key', 'language__name', 'version', 'name')
+              .order_by('language__key', 'priority'))
+
+        ret = OrderedDict()
+
+        for data in qs:
+            key = data['language__key']
+            if key not in ret:
+                ret[key] = {'name': data['language__name'], 'runtime': []}
+            ret[key]['runtime'].append((data['name'], (data['version'],)))
+
+        return ret.items()
+
+    @cached_property
+    def uptime(self):
+        return timezone.now() - self.start_time if self.online else 'N/A'
+
+    @cached_property
+    def ping_ms(self):
+        return self.ping * 1000
+
+    @cached_property
+    def runtime_list(self):
+        return map(attrgetter('name'), self.runtimes.all())
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = _('judge')
+        verbose_name_plural = _('judges')
