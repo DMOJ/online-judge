@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-12 13:55-0500\n"
-"PO-Revision-Date: 2016-11-12 14:00-0500\n"
+"POT-Creation-Date: 2016-11-12 22:43-0500\n"
+"PO-Revision-Date: 2016-11-12 22:44-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -356,1199 +356,1199 @@ msgstr "你已被静音……"
 msgid "Posted comment"
 msgstr "发布了评论"
 
-#: .\judge\forms.py:19 .\judge\views\register.py:38
+#: .\judge\forms.py:23 .\judge\views\register.py:38
 msgid "Subscribe to newsletter?"
 msgstr "订阅简讯"
 
-#: .\judge\models\__init__.py:61
-msgid "language to which this runtime belongs"
-msgstr "软件属于的语言"
-
-#: .\judge\models\__init__.py:62
-msgid "judge on which this runtime exists"
-msgstr "拥有次语言的裁判服务器"
-
-#: .\judge\models\__init__.py:63
-msgid "runtime name"
-msgstr "软件名称"
-
-#: .\judge\models\__init__.py:64
-msgid "runtime version"
-msgstr "软件版本"
-
-#: .\judge\models\__init__.py:65
-msgid "order in which to display this runtime"
-msgstr "软件显示顺序"
-
-#: .\judge\models\__init__.py:69
-msgid "short identifier"
-msgstr "标识符"
-
-#: .\judge\models\__init__.py:70
-msgid "The identifier for this language; the same as its executor id for judges."
-msgstr "语言标识符（和裁判服务器的执行器标识符一样）"
-
-#: .\judge\models\__init__.py:72
-msgid "long name"
-msgstr "长名称"
-
-#: .\judge\models\__init__.py:73
-msgid "Longer name for the language, e.g. \"Python 2\" or \"C++11\"."
-msgstr "语言全称，比如“Python 2”或”C++11“。"
-
-#: .\judge\models\__init__.py:74 .\judge\models\__init__.py:158
-#: .\judge\models\__init__.py:348
-msgid "short name"
-msgstr "简称"
-
-#: .\judge\models\__init__.py:75
-msgid "More readable, but short, name to display publicly; e.g. \"PY2\" or \"C++11\". If left blank, it will default to the short identifier."
-msgstr "比较好听的公开语言简称，比如“PY2”和“C++11”，如果放空则使用短标识符。"
-
-#: .\judge\models\__init__.py:79
-msgid "common name"
-msgstr "通用名"
-
-#: .\judge\models\__init__.py:80
-msgid "Common name for the language. For example, the common name for C++03, C++11, and C++14 would be \"C++\""
-msgstr "语言的通用名称，例如C++03、C++11、C++14的通用名称为“C++”。"
-
-#: .\judge\models\__init__.py:82
-msgid "ace mode name"
-msgstr "ace 模式名称"
-
-#: .\judge\models\__init__.py:83
-msgid "Language ID for Ace.js editor highlighting, appended to \"mode-\" to determine the Ace JavaScript file to use, e.g., \"python\"."
-msgstr "Ace.js编辑器高亮显示的语言标识符，加上“mode-”前缀而决定使用的JavaScript文件。"
-
-#: .\judge\models\__init__.py:85
-msgid "pygments name"
-msgstr "pygments 名称"
-
-#: .\judge\models\__init__.py:86
-msgid "Language ID for Pygments highlighting in source windows."
-msgstr "Pygments代码高亮语言标识符，在查看代码是使用。"
-
-#: .\judge\models\__init__.py:87
-msgid "runtime info override"
-msgstr "软件信息覆盖"
-
-#: .\judge\models\__init__.py:88
-msgid "Do not set this unless you know what you're doing! It will override the usually more specific, judge-provided runtime info!"
-msgstr "除非你可以确定你手动设置地软件信息能比裁判服务器自动获取地好，不要使用该设置！"
-
-#: .\judge\models\__init__.py:90
-msgid "language description"
-msgstr "语言描述"
-
-#: .\judge\models\__init__.py:91
-msgid "Use field this to inform users of quirks with your environment, additional restrictions, etc."
-msgstr "使用本空间来表达运行环境的特性、额外限制等信息。"
-
-#: .\judge\models\__init__.py:93
-msgid "extension"
-msgstr "扩展"
-
-#: .\judge\models\__init__.py:94
-msgid "The extension of source files, e.g., \"py\" or \"cpp\"."
-msgstr "源文件扩展名，例如：\"py\"或\"cpp\"。"
-
-#: .\judge\models\__init__.py:148 .\judge\models\__init__.py:615
-#: .\judge\models\__init__.py:627
-msgid "language"
-msgstr "语言"
-
-#: .\judge\models\__init__.py:149
-msgid "languages"
-msgstr "语言"
-
-#: .\judge\models\__init__.py:153
-msgid "organization title"
-msgstr "组织名称"
-
-#: .\judge\models\__init__.py:154 .\judge\models\__init__.py:931
-msgid "identifier"
-msgstr "标识符"
-
-#: .\judge\models\__init__.py:155
-msgid "Organization name shows in URL"
-msgstr "组织名称在 URL 中显示"
-
-#: .\judge\models\__init__.py:159
-msgid "Displayed beside user name during contests"
-msgstr "竞赛时显示在用户名旁边"
-
-#: .\judge\models\__init__.py:160
-msgid "organization description"
-msgstr "组织描述"
-
-#: .\judge\models\__init__.py:161
-msgid "registrant"
-msgstr "注册人"
-
-#: .\judge\models\__init__.py:163
-msgid "User who registered this organization"
-msgstr "注册此组织的用户"
-
-#: .\judge\models\__init__.py:164
-msgid "administrators"
-msgstr "管理员"
-
-#: .\judge\models\__init__.py:165
-msgid "Those who can edit this organization"
-msgstr "这些用户可以编辑此组织"
-
-#: .\judge\models\__init__.py:166
-msgid "creation date"
-msgstr "创建日期"
-
-#: .\judge\models\__init__.py:167
-msgid "Allow joining organization"
-msgstr "允许加入组织"
-
-#: .\judge\models\__init__.py:168
-msgid "maximum size"
-msgstr "最大大小"
-
-#: .\judge\models\__init__.py:169
-msgid "Maximum amount of users in this organization, only applicable to private organizations"
-msgstr "这个组织用户最大数量，只适用于私人组织"
-
-#: .\judge\models\__init__.py:171
-msgid "Student access code"
-msgstr "学生访问码"
-
-#: .\judge\models\__init__.py:172
-msgid "access code"
-msgstr "访问码"
-
-#: .\judge\models\__init__.py:198 .\judge\models\__init__.py:225
-#: .\judge\models\__init__.py:303
-msgid "organization"
-msgstr "组织"
-
-#: .\judge\models\__init__.py:199 .\judge\models\__init__.py:1060
-msgid "organizations"
-msgstr "组织"
-
-#: .\judge\models\__init__.py:203
+#: .\judge\models\choices.py:60
 msgid "Leave as LaTeX"
 msgstr "显示为LaTeX"
 
-#: .\judge\models\__init__.py:204
+#: .\judge\models\choices.py:61
 msgid "SVG with PNG fallback"
 msgstr "SVG，自动PNG切换"
 
-#: .\judge\models\__init__.py:205
+#: .\judge\models\choices.py:62
 msgid "MathML only"
 msgstr "仅使用 MathML"
 
-#: .\judge\models\__init__.py:206
+#: .\judge\models\choices.py:63
 msgid "MathJax with SVG/PNG fallback"
 msgstr "MathJax，自动SVG/PNG切换"
 
-#: .\judge\models\__init__.py:207
+#: .\judge\models\choices.py:64
 msgid "Detect best quality"
 msgstr "检测最佳质量"
 
-#: .\judge\models\__init__.py:214
+#: .\judge\models\comment.py:24
+msgid "commenter"
+msgstr "评论者"
+
+#: .\judge\models\comment.py:25
+msgid "posted time"
+msgstr "发布时间"
+
+#: .\judge\models\comment.py:26
+msgid "associated Page"
+msgstr "关联页"
+
+#: .\judge\models\comment.py:28
+msgid "Page code must be ^[pc]:[a-z0-9]+$|^b:\\d+$"
+msgstr "页代码必须匹配 ^[pc]:[a-z0-9]+$|^b:\\d+$|^s:"
+
+#: .\judge\models\comment.py:29
+msgid "votes"
+msgstr "投票"
+
+#: .\judge\models\comment.py:30
+msgid "title of comment"
+msgstr "评论标题"
+
+#: .\judge\models\comment.py:31
+msgid "body of comment"
+msgstr "评论正文"
+
+#: .\judge\models\comment.py:32
+msgid "hide the comment"
+msgstr "隐藏评论"
+
+#: .\judge\models\comment.py:33
+msgid "parent"
+msgstr "母评论"
+
+#: .\judge\models\comment.py:37
+msgid "comment"
+msgstr "评论"
+
+#: .\judge\models\comment.py:38
+msgid "comments"
+msgstr "评论"
+
+#: .\judge\models\comment.py:128
+msgid "comment vote"
+msgstr "评论投票"
+
+#: .\judge\models\comment.py:129
+msgid "comment votes"
+msgstr "评论投票"
+
+#: .\judge\models\contest.py:21
+msgid "Invalid colour."
+msgstr "无效的颜色。"
+
+#: .\judge\models\contest.py:23
+msgid "tag name"
+msgstr "标签名称"
+
+#: .\judge\models\contest.py:24
+msgid "Lowercase letters and hyphens only."
+msgstr "只允许字母和短杆。"
+
+#: .\judge\models\contest.py:25
+msgid "tag colour"
+msgstr "标签颜色"
+
+#: .\judge\models\contest.py:26
+msgid "tag description"
+msgstr "标签说明"
+
+#: .\judge\models\contest.py:45
+msgid "contest tag"
+msgstr "竞赛标签"
+
+#: .\judge\models\contest.py:46 .\judge\models\contest.py:81
+msgid "contest tags"
+msgstr "竞赛标签"
+
+#: .\judge\models\contest.py:50
+msgid "contest id"
+msgstr "竞赛标识"
+
+#: .\judge\models\contest.py:51
+msgid "Contest id must be ^[a-z0-9]+$"
+msgstr "竞赛标识必须匹配 ^[a-z0-9]+$"
+
+#: .\judge\models\contest.py:52
+msgid "contest name"
+msgstr "竞赛名称"
+
+#: .\judge\models\contest.py:53
+msgid "These people will be able to edit the contest."
+msgstr "这些人将可以编辑竞赛。"
+
+#: .\judge\models\contest.py:56 .\judge\models\problem.py:252
+#: .\judge\models\runtime.py:118
+msgid "problems"
+msgstr "题目"
+
+#: .\judge\models\contest.py:59 .\judge\models\problem.py:105
+#: .\judge\models\problem.py:270
+msgid "time limit"
+msgstr "时间限制"
+
+#: .\judge\models\contest.py:60 .\judge\models\problem.py:111
+msgid "publicly visible"
+msgstr "公开可见"
+
+#: .\judge\models\contest.py:61
+msgid "Should be set even for organization-private contests, where it determines whether the contest is visible to members of the specified organizations."
+msgstr "组织内竞赛也需公开，否则责组织成员无法查看本竞赛。"
+
+#: .\judge\models\contest.py:64
+msgid "contest rated"
+msgstr "竞赛参与评分"
+
+#: .\judge\models\contest.py:64
+msgid "Whether this contest can be rated."
+msgstr "竞赛是否参与用户评分"
+
+#: .\judge\models\contest.py:66
+msgid "rate all"
+msgstr "为所有用户参与评分"
+
+#: .\judge\models\contest.py:66
+msgid "Rate all users who joined."
+msgstr "所有用户参与竞赛的用户，包含没有提交任何程序的用户，都将被评分。"
+
+#: .\judge\models\contest.py:67
+msgid "exclude from ratings"
+msgstr "从评分中排除"
+
+#: .\judge\models\contest.py:69
+msgid "private to organizations"
+msgstr "只对组织可见"
+
+#: .\judge\models\contest.py:70
+msgid "hide problem tags"
+msgstr "隐藏题目标签"
+
+#: .\judge\models\contest.py:71
+msgid "Whether problem tags should be hidden by default."
+msgstr "设置竞赛内题目标签是否默认被隐藏。"
+
+#: .\judge\models\contest.py:73
+msgid "run pretests only"
+msgstr "只运行预测试"
+
+#: .\judge\models\contest.py:74
+msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
+msgstr "设置裁判服务器是否只运行预测试而不是所有测试。通常在竞赛进行时启动，然后在竞赛结束后重新评分前关闭。"
+
+#: .\judge\models\contest.py:78 .\judge\models\profile.py:66
+msgid "organizations"
+msgstr "组织"
+
+#: .\judge\models\contest.py:79
+msgid "If private, only these organizations may see the contest"
+msgstr "选中时，只对选择的组织才可见"
+
+#: .\judge\models\contest.py:80
+msgid "OpenGraph image"
+msgstr "OpenGraph 图像"
+
+#: .\judge\models\contest.py:82
+msgid "the amount of live participants"
+msgstr "实时参与者数"
+
+#: .\judge\models\contest.py:83
+msgid "contest summary"
+msgstr "竞赛简介"
+
+#: .\judge\models\contest.py:84
+msgid "Plain-text, shown in meta description tag, e.g. for social media."
+msgstr "在meta description标签内显示的纯文本介绍。"
+
+#: .\judge\models\contest.py:140 .\judge\models\contest.py:222
+#: .\judge\models\contest.py:252
+msgid "contest"
+msgstr "竞赛"
+
+#: .\judge\models\contest.py:141
+msgid "contests"
+msgstr "竞赛"
+
+#: .\judge\models\contest.py:145
+msgid "associated contest"
+msgstr "关联的竞赛"
+
+#: .\judge\models\contest.py:146 .\judge\models\contest.py:251
+#: .\judge\models\profile.py:159
+msgid "user"
+msgstr "用户"
+
+#: .\judge\models\contest.py:147
+msgid "start time"
+msgstr "开始时间"
+
+#: .\judge\models\contest.py:148
+msgid "score"
+msgstr "得分"
+
+#: .\judge\models\contest.py:149
+msgid "cumulative time"
+msgstr "累积时间"
+
+#: .\judge\models\contest.py:150
+msgid "virtual participation id"
+msgstr "虚拟参与信息编号"
+
+#: .\judge\models\contest.py:151
+msgid "0 means non-virtual, otherwise the n-th virtual participation"
+msgstr "0 表示正式参与，否则表示第n次虚拟参与。"
+
+#: .\judge\models\contest.py:208
+#, python-format
+msgid "%s spectating in %s"
+msgstr "%s旁观%s中"
+
+#: .\judge\models\contest.py:210
+#, python-format
+msgid "%s in %s, v%d"
+msgstr "%s于%s的第%d次虚拟参与"
+
+#: .\judge\models\contest.py:211
+#, python-format
+msgid "%s in %s"
+msgstr "%s参与%s中"
+
+#: .\judge\models\contest.py:214
+msgid "contest participation"
+msgstr "竞赛参与信息"
+
+#: .\judge\models\contest.py:215
+msgid "contest participations"
+msgstr "竞赛参与信息"
+
+#: .\judge\models\contest.py:221 .\judge\models\contest.py:236
+#: .\judge\models\problem.py:251 .\judge\models\problem.py:256
+#: .\judge\models\problem.py:268 .\judge\models\problem_data.py:29
+msgid "problem"
+msgstr "题目"
+
+#: .\judge\models\contest.py:223 .\judge\models\contest.py:240
+#: .\judge\models\problem.py:108 .\templates\user\user_problems.jade:87
+msgid "points"
+msgstr "分"
+
+#: .\judge\models\contest.py:224
+msgid "partial"
+msgstr "部分"
+
+#: .\judge\models\contest.py:225 .\judge\models\interface.py:43
+msgid "order"
+msgstr "顺序"
+
+#: .\judge\models\contest.py:226
+msgid "output prefix length override"
+msgstr "输出前缀替换"
+
+#: .\judge\models\contest.py:230
+msgid "contest problem"
+msgstr "竞赛题目"
+
+#: .\judge\models\contest.py:231
+msgid "contest problems"
+msgstr "竞赛题目"
+
+#: .\judge\models\contest.py:235 .\judge\models\submission.py:144
+msgid "submission"
+msgstr "提交信息"
+
+#: .\judge\models\contest.py:238 .\judge\models\contest.py:253
+msgid "participation"
+msgstr "参与"
+
+#: .\judge\models\contest.py:241
+msgid "is pretested"
+msgstr "仅通过预测试"
+
+#: .\judge\models\contest.py:242
+msgid "Whether this submission was ran only on pretests."
+msgstr "该程序是否只通过预测试。"
+
+#: .\judge\models\contest.py:246
+msgid "contest submission"
+msgstr "竞赛提交信息"
+
+#: .\judge\models\contest.py:247
+msgid "contest submissions"
+msgstr "竞赛提交历史"
+
+#: .\judge\models\contest.py:254
+msgid "rank"
+msgstr "排名"
+
+#: .\judge\models\contest.py:255
+msgid "rating"
+msgstr "评分"
+
+#: .\judge\models\contest.py:256
+msgid "volatility"
+msgstr "波动性"
+
+#: .\judge\models\contest.py:257
+msgid "last rated"
+msgstr "上次评分"
+
+#: .\judge\models\contest.py:261
+msgid "contest rating"
+msgstr "竞赛评分信息"
+
+#: .\judge\models\contest.py:262
+msgid "contest ratings"
+msgstr "竞赛评分历史"
+
+#: .\judge\models\interface.py:24
+msgid "configuration item"
+msgstr "配置项目"
+
+#: .\judge\models\interface.py:25
+msgid "miscellaneous configuration"
+msgstr "杂项配置"
+
+#: .\judge\models\interface.py:37
+msgid "navigation item"
+msgstr "导航项"
+
+#: .\judge\models\interface.py:38
+msgid "navigation bar"
+msgstr "导航栏"
+
+#: .\judge\models\interface.py:44 .\judge\models\profile.py:21
+msgid "identifier"
+msgstr "标识符"
+
+#: .\judge\models\interface.py:45
+msgid "label"
+msgstr "标签"
+
+#: .\judge\models\interface.py:46
+msgid "link path"
+msgstr "链接路径"
+
+#: .\judge\models\interface.py:47
+msgid "highlight regex"
+msgstr "突出显示正则表达式"
+
+#: .\judge\models\interface.py:48
+msgid "parent item"
+msgstr "父项"
+
+#: .\judge\models\interface.py:65
+msgid "post title"
+msgstr "文章标题"
+
+#: .\judge\models\interface.py:66
+msgid "authors"
+msgstr "作者"
+
+#: .\judge\models\interface.py:67
+msgid "slug"
+msgstr "网址标识"
+
+#: .\judge\models\interface.py:68
+msgid "public visibility"
+msgstr "公共可见性"
+
+#: .\judge\models\interface.py:69
+msgid "sticky"
+msgstr "置顶"
+
+#: .\judge\models\interface.py:70
+msgid "publish after"
+msgstr "发布时间"
+
+#: .\judge\models\interface.py:71
+msgid "post content"
+msgstr "发布内容"
+
+#: .\judge\models\interface.py:72
+msgid "post summary"
+msgstr "发布摘要"
+
+#: .\judge\models\interface.py:73
+msgid "openGraph image"
+msgstr "openGraph 图像"
+
+#: .\judge\models\interface.py:85
+msgid "blog post"
+msgstr "博客文章"
+
+#: .\judge\models\interface.py:86
+msgid "blog posts"
+msgstr "博客文章"
+
+#: .\judge\models\interface.py:96
+msgid "associated problem"
+msgstr "关联的题目"
+
+#: .\judge\models\interface.py:109
+msgid "solution"
+msgstr "题目讲解"
+
+#: .\judge\models\interface.py:110
+msgid "solutions"
+msgstr "题目讲解"
+
+#: .\judge\models\message.py:10
+msgid "message title"
+msgstr "消息标题"
+
+#: .\judge\models\message.py:11
+msgid "message body"
+msgstr "消息正文"
+
+#: .\judge\models\message.py:12
+msgid "sender"
+msgstr "发件人"
+
+#: .\judge\models\message.py:13
+msgid "target"
+msgstr "目标"
+
+#: .\judge\models\message.py:14
+msgid "message timestamp"
+msgstr "消息时间戳"
+
+#: .\judge\models\message.py:15
+msgid "read"
+msgstr "查看"
+
+#: .\judge\models\message.py:19
+msgid "messages in the thread"
+msgstr "话题中的消息"
+
+#: .\judge\models\problem.py:25
+msgid "problem category ID"
+msgstr "题目类型标识符"
+
+#: .\judge\models\problem.py:26
+msgid "problem category name"
+msgstr "题目类型名称"
+
+#: .\judge\models\problem.py:33
+msgid "problem type"
+msgstr "题目类型"
+
+#: .\judge\models\problem.py:34 .\judge\models\problem.py:103
+msgid "problem types"
+msgstr "题目类型"
+
+#: .\judge\models\problem.py:38
+msgid "problem group ID"
+msgstr "题目组标识符"
+
+#: .\judge\models\problem.py:39
+msgid "problem group name"
+msgstr "题目组名称"
+
+#: .\judge\models\problem.py:46 .\judge\models\problem.py:104
+msgid "problem group"
+msgstr "题目组"
+
+#: .\judge\models\problem.py:47
+msgid "problem groups"
+msgstr "题目组"
+
+#: .\judge\models\problem.py:51
+msgid "key"
+msgstr "键"
+
+#: .\judge\models\problem.py:53
+msgid "link"
+msgstr "链接"
+
+#: .\judge\models\problem.py:54
+msgid "full name"
+msgstr "全名字"
+
+#: .\judge\models\problem.py:55 .\judge\models\profile.py:25
+#: .\judge\models\runtime.py:20
+msgid "short name"
+msgstr "简称"
+
+#: .\judge\models\problem.py:56
+msgid "Displayed on pages under this license"
+msgstr "在本许可证下的页面上显示"
+
+#: .\judge\models\problem.py:57
+msgid "icon"
+msgstr "图标"
+
+#: .\judge\models\problem.py:57
+msgid "URL to the icon"
+msgstr "图标的 URL"
+
+#: .\judge\models\problem.py:58
+msgid "license text"
+msgstr "许可证文本"
+
+#: .\judge\models\problem.py:67
+msgid "license"
+msgstr "许可证"
+
+#: .\judge\models\problem.py:68
+msgid "licenses"
+msgstr "许可证"
+
+#: .\judge\models\problem.py:95
+msgid "problem code"
+msgstr "题目代码"
+
+#: .\judge\models\problem.py:96
+msgid "Problem code must be ^[a-z0-9]+$"
+msgstr "题目代码必须匹配 ^[a-z0-9]+$"
+
+#: .\judge\models\problem.py:97
+msgid "problem name"
+msgstr "题目名称"
+
+#: .\judge\models\problem.py:98
+msgid "problem body"
+msgstr "题目正文"
+
+#: .\judge\models\problem.py:99
+msgid "creators"
+msgstr "作者"
+
+#: .\judge\models\problem.py:100
+msgid "testers"
+msgstr "测试人员"
+
+#: .\judge\models\problem.py:102
+msgid "These users will be able to view a private problem, but not edit it."
+msgstr "这些用户将能查看隐藏的题目，但无法编辑。"
+
+#: .\judge\models\problem.py:106 .\judge\models\problem.py:271
+msgid "memory limit"
+msgstr "内存限制"
+
+#: .\judge\models\problem.py:109
+msgid "allows partial points"
+msgstr "允许部分分数"
+
+#: .\judge\models\problem.py:110
+msgid "allowed languages"
+msgstr "允许的语言"
+
+#: .\judge\models\problem.py:112
+msgid "date of publishing"
+msgstr "公开日期"
+
+#: .\judge\models\problem.py:113
+msgid "Doesn't have magic ability to auto-publish due to backward compatibility"
+msgstr "无法自动在时间后公开题目"
+
+#: .\judge\models\problem.py:114
+msgid "personae non gratae"
+msgstr "不受欢迎人物"
+
+#: .\judge\models\problem.py:115
+msgid "Bans the selected users from submitting to this problem"
+msgstr "禁止这些用户在该题目提交答案"
+
+#: .\judge\models\problem.py:117
+msgid "amount of users"
+msgstr "用户量"
+
+#: .\judge\models\problem.py:118
+msgid "The amount of users on the best solutions page."
+msgstr "最佳解决方案页面上的用户量。"
+
+#: .\judge\models\problem.py:119
+msgid "rate of AC submissions"
+msgstr "提交正确率"
+
+#: .\judge\models\problem.py:257 .\judge\models\problem.py:269
+#: .\judge\models\runtime.py:94
+msgid "language"
+msgstr "语言"
+
+#: .\judge\models\problem.py:258
+msgid "translated name"
+msgstr "翻译题目名"
+
+#: .\judge\models\problem.py:259
+msgid "translated description"
+msgstr "翻译题目正文"
+
+#: .\judge\models\problem.py:263
+msgid "problem translation"
+msgstr "题目翻译"
+
+#: .\judge\models\problem.py:264
+msgid "problem translations"
+msgstr "题目翻译"
+
+#: .\judge\models\problem.py:275
+msgid "language-specific resource limit"
+msgstr "语言特定资源限制"
+
+#: .\judge\models\problem.py:276
+msgid "language-specific resource limits"
+msgstr "语言特定资源限制"
+
+#: .\judge\models\problem_data.py:18
+msgid "Standard"
+msgstr "标准"
+
+#: .\judge\models\problem_data.py:19
+msgid "Floats"
+msgstr "浮点数"
+
+#: .\judge\models\problem_data.py:20
+msgid "Floats (absolute)"
+msgstr "浮点数（仅绝对值）"
+
+#: .\judge\models\problem_data.py:21
+msgid "Floats (relative)"
+msgstr "浮点数（仅相对值）"
+
+#: .\judge\models\problem_data.py:22
+msgid "Non-trailing spaces"
+msgstr "无尾随空格"
+
+#: .\judge\models\problem_data.py:23
+msgid "Unordered"
+msgstr "无序的"
+
+#: .\judge\models\problem_data.py:24
+msgid "Byte identical"
+msgstr "字节全等"
+
+#: .\judge\models\problem_data.py:30
+msgid "data zip file"
+msgstr "数据 zip压缩 文件"
+
+#: .\judge\models\problem_data.py:32
+msgid "generator file"
+msgstr "生成器文件"
+
+#: .\judge\models\problem_data.py:34 .\judge\models\problem_data.py:68
+msgid "output prefix length"
+msgstr "输出前缀长度"
+
+#: .\judge\models\problem_data.py:35 .\judge\models\problem_data.py:69
+msgid "output limit length"
+msgstr "输出限制长度"
+
+#: .\judge\models\problem_data.py:36
+msgid "init.yml generation feedback"
+msgstr "init.yml生成反馈"
+
+#: .\judge\models\problem_data.py:37 .\judge\models\problem_data.py:70
+msgid "checker"
+msgstr "检查器"
+
+#: .\judge\models\problem_data.py:38 .\judge\models\problem_data.py:71
+msgid "checker arguments"
+msgstr "检查器参数"
+
+#: .\judge\models\problem_data.py:39 .\judge\models\problem_data.py:72
+msgid "checker arguments as a JSON object"
+msgstr "检查器参数作为JSON对象"
+
+#: .\judge\models\problem_data.py:57
+msgid "problem data set"
+msgstr "题目数据集"
+
+#: .\judge\models\problem_data.py:58
+msgid "case position"
+msgstr "测试编号"
+
+#: .\judge\models\problem_data.py:59
+msgid "case type"
+msgstr "测试类型"
+
+#: .\judge\models\problem_data.py:60
+msgid "Normal case"
+msgstr "正常情况"
+
+#: .\judge\models\problem_data.py:61
+msgid "Batch start"
+msgstr "批量开始"
+
+#: .\judge\models\problem_data.py:62
+msgid "Batch end"
+msgstr "批量结束"
+
+#: .\judge\models\problem_data.py:63
+msgid "input file name"
+msgstr "输入的文件的名称"
+
+#: .\judge\models\problem_data.py:64
+msgid "output file name"
+msgstr "输出文件的名称"
+
+#: .\judge\models\problem_data.py:65
+msgid "generator arguments"
+msgstr "生成器参数"
+
+#: .\judge\models\problem_data.py:66
+msgid "point value"
+msgstr "分数"
+
+#: .\judge\models\problem_data.py:67
+msgid "case is pretest?"
+msgstr "是否为预测试?"
+
+#: .\judge\models\profile.py:20
+msgid "organization title"
+msgstr "组织名称"
+
+#: .\judge\models\profile.py:22
+msgid "Organization name shows in URL"
+msgstr "组织名称在 URL 中显示"
+
+#: .\judge\models\profile.py:26
+msgid "Displayed beside user name during contests"
+msgstr "竞赛时显示在用户名旁边"
+
+#: .\judge\models\profile.py:27
+msgid "organization description"
+msgstr "组织描述"
+
+#: .\judge\models\profile.py:28
+msgid "registrant"
+msgstr "注册人"
+
+#: .\judge\models\profile.py:30
+msgid "User who registered this organization"
+msgstr "注册此组织的用户"
+
+#: .\judge\models\profile.py:31
+msgid "administrators"
+msgstr "管理员"
+
+#: .\judge\models\profile.py:32
+msgid "Those who can edit this organization"
+msgstr "这些用户可以编辑此组织"
+
+#: .\judge\models\profile.py:33
+msgid "creation date"
+msgstr "创建日期"
+
+#: .\judge\models\profile.py:34
+msgid "Allow joining organization"
+msgstr "允许加入组织"
+
+#: .\judge\models\profile.py:35
+msgid "maximum size"
+msgstr "最大大小"
+
+#: .\judge\models\profile.py:36
+msgid "Maximum amount of users in this organization, only applicable to private organizations"
+msgstr "这个组织用户最大数量，只适用于私人组织"
+
+#: .\judge\models\profile.py:38
+msgid "Student access code"
+msgstr "学生访问码"
+
+#: .\judge\models\profile.py:39
+msgid "access code"
+msgstr "访问码"
+
+#: .\judge\models\profile.py:65 .\judge\models\profile.py:81
+#: .\judge\models\profile.py:160
+msgid "organization"
+msgstr "组织"
+
+#: .\judge\models\profile.py:70
 msgid "user associated"
 msgstr "关联的用户"
 
-#: .\judge\models\__init__.py:215
+#: .\judge\models\profile.py:71
 msgid "display name"
 msgstr "显示名"
 
-#: .\judge\models\__init__.py:216
+#: .\judge\models\profile.py:72
 msgid "self-description"
 msgstr "自我描述"
 
-#: .\judge\models\__init__.py:217
+#: .\judge\models\profile.py:73
 msgid "location"
 msgstr "位置"
 
-#: .\judge\models\__init__.py:219
+#: .\judge\models\profile.py:75
 msgid "preferred language"
 msgstr "首选语言"
 
-#: .\judge\models\__init__.py:223
+#: .\judge\models\profile.py:79
 msgid "last access time"
 msgstr "上次访问时间"
 
-#: .\judge\models\__init__.py:224
+#: .\judge\models\profile.py:80
 msgid "last IP"
 msgstr "上次访问 IP"
 
-#: .\judge\models\__init__.py:227
+#: .\judge\models\profile.py:83
 msgid "display rank"
 msgstr "显示排名"
 
-#: .\judge\models\__init__.py:229
+#: .\judge\models\profile.py:85
 msgid "comment mute"
 msgstr "禁止评论"
 
-#: .\judge\models\__init__.py:229
+#: .\judge\models\profile.py:85
 msgid "Some users are at their best when silent."
 msgstr "某些用户在沉默时表现最佳。"
 
-#: .\judge\models\__init__.py:232
+#: .\judge\models\profile.py:88
 msgid "user script"
 msgstr "用户脚本"
 
-#: .\judge\models\__init__.py:233
+#: .\judge\models\profile.py:89
 msgid "User-defined JavaScript for site customization."
 msgstr "用户自定义 JavaScript。"
 
-#: .\judge\models\__init__.py:234
+#: .\judge\models\profile.py:90
 msgid "current contest"
 msgstr "当前竞赛"
 
-#: .\judge\models\__init__.py:236
+#: .\judge\models\profile.py:92
 msgid "math engine"
 msgstr "数学引擎"
 
-#: .\judge\models\__init__.py:238
+#: .\judge\models\profile.py:94
 msgid "the rendering engine used to render math"
 msgstr "数学渲染使用的引擎"
 
-#: .\judge\models\__init__.py:269
+#: .\judge\models\profile.py:126
 #, python-format
 msgctxt "user display name"
 msgid "%(username)s (%(display)s)"
 msgstr "%(username)s (%(display)s)"
 
-#: .\judge\models\__init__.py:297
+#: .\judge\models\profile.py:154
 msgid "user profile"
 msgstr "用户信息"
 
-#: .\judge\models\__init__.py:298
+#: .\judge\models\profile.py:155
 msgid "user profiles"
 msgstr "用户信息"
 
-#: .\judge\models\__init__.py:302 .\judge\models\__init__.py:1128
-#: .\judge\models\__init__.py:1233
-msgid "user"
-msgstr "用户"
-
-#: .\judge\models\__init__.py:304
+#: .\judge\models\profile.py:161
 msgid "request time"
 msgstr "请求时间"
 
-#: .\judge\models\__init__.py:305
+#: .\judge\models\profile.py:162
 msgid "state"
 msgstr "状态"
 
-#: .\judge\models\__init__.py:310
+#: .\judge\models\profile.py:167
 msgid "reason"
 msgstr "原因"
 
-#: .\judge\models\__init__.py:313
+#: .\judge\models\profile.py:170
 msgid "organization join request"
 msgstr "组织加入请求"
 
-#: .\judge\models\__init__.py:314
+#: .\judge\models\profile.py:171
 msgid "organization join requests"
 msgstr "组织加入请求"
 
-#: .\judge\models\__init__.py:318
-msgid "problem category ID"
-msgstr "题目类型标识符"
-
-#: .\judge\models\__init__.py:319
-msgid "problem category name"
-msgstr "题目类型名称"
-
-#: .\judge\models\__init__.py:326
-msgid "problem type"
-msgstr "题目类型"
-
-#: .\judge\models\__init__.py:327 .\judge\models\__init__.py:396
-msgid "problem types"
-msgstr "题目类型"
-
-#: .\judge\models\__init__.py:331
-msgid "problem group ID"
-msgstr "题目组标识符"
-
-#: .\judge\models\__init__.py:332
-msgid "problem group name"
-msgstr "题目组名称"
-
-#: .\judge\models\__init__.py:339 .\judge\models\__init__.py:397
-msgid "problem group"
-msgstr "题目组"
-
-#: .\judge\models\__init__.py:340
-msgid "problem groups"
-msgstr "题目组"
-
-#: .\judge\models\__init__.py:344
-msgid "key"
-msgstr "键"
-
-#: .\judge\models\__init__.py:346
-msgid "link"
-msgstr "链接"
-
-#: .\judge\models\__init__.py:347
-msgid "full name"
-msgstr "全名字"
-
-#: .\judge\models\__init__.py:349
-msgid "Displayed on pages under this license"
-msgstr "在本许可证下的页面上显示"
-
-#: .\judge\models\__init__.py:350
-msgid "icon"
-msgstr "图标"
-
-#: .\judge\models\__init__.py:350
-msgid "URL to the icon"
-msgstr "图标的 URL"
-
-#: .\judge\models\__init__.py:351
-msgid "license text"
-msgstr "许可证文本"
-
-#: .\judge\models\__init__.py:360
-msgid "license"
-msgstr "许可证"
-
-#: .\judge\models\__init__.py:361
-msgid "licenses"
-msgstr "许可证"
-
-#: .\judge\models\__init__.py:388
-msgid "problem code"
-msgstr "题目代码"
-
-#: .\judge\models\__init__.py:389
-msgid "Problem code must be ^[a-z0-9]+$"
-msgstr "题目代码必须匹配 ^[a-z0-9]+$"
-
-#: .\judge\models\__init__.py:390
-msgid "problem name"
-msgstr "题目名称"
-
-#: .\judge\models\__init__.py:391
-msgid "problem body"
-msgstr "题目正文"
-
-#: .\judge\models\__init__.py:392
-msgid "creators"
-msgstr "作者"
-
-#: .\judge\models\__init__.py:393
-msgid "testers"
-msgstr "测试人员"
-
-#: .\judge\models\__init__.py:395
-msgid "These users will be able to view a private problem, but not edit it."
-msgstr "这些用户将能查看隐藏的题目，但无法编辑。"
-
-#: .\judge\models\__init__.py:398 .\judge\models\__init__.py:616
-#: .\judge\models\__init__.py:1041
-msgid "time limit"
-msgstr "时间限制"
-
-#: .\judge\models\__init__.py:399 .\judge\models\__init__.py:617
-msgid "memory limit"
-msgstr "内存限制"
-
-#: .\judge\models\__init__.py:401 .\judge\models\__init__.py:1205
-#: .\judge\models\__init__.py:1222 .\templates\user\user_problems.jade:87
-msgid "points"
-msgstr "分"
-
-#: .\judge\models\__init__.py:402
-msgid "allows partial points"
-msgstr "允许部分分数"
-
-#: .\judge\models\__init__.py:403
-msgid "allowed languages"
-msgstr "允许的语言"
-
-#: .\judge\models\__init__.py:404 .\judge\models\__init__.py:1042
-msgid "publicly visible"
-msgstr "公开可见"
-
-#: .\judge\models\__init__.py:405
-msgid "date of publishing"
-msgstr "公开日期"
-
-#: .\judge\models\__init__.py:406
-msgid "Doesn't have magic ability to auto-publish due to backward compatibility"
-msgstr "无法自动在时间后公开题目"
-
-#: .\judge\models\__init__.py:407
-msgid "personae non gratae"
-msgstr "不受欢迎人物"
-
-#: .\judge\models\__init__.py:408
-msgid "Bans the selected users from submitting to this problem"
-msgstr "禁止这些用户在该题目提交答案"
-
-#: .\judge\models\__init__.py:410
-msgid "amount of users"
-msgstr "用户量"
-
-#: .\judge\models\__init__.py:411
-msgid "The amount of users on the best solutions page."
-msgstr "最佳解决方案页面上的用户量。"
-
-#: .\judge\models\__init__.py:412
-msgid "rate of AC submissions"
-msgstr "提交正确率"
-
-#: .\judge\models\__init__.py:544 .\judge\models\__init__.py:567
-#: .\judge\models\__init__.py:614 .\judge\models\__init__.py:626
-#: .\judge\models\__init__.py:1203 .\judge\models\__init__.py:1218
-msgid "problem"
-msgstr "题目"
-
-#: .\judge\models\__init__.py:545 .\judge\models\__init__.py:963
-#: .\judge\models\__init__.py:1038
-msgid "problems"
-msgstr "题目"
-
-#: .\judge\models\__init__.py:556
-msgid "Standard"
-msgstr "标准"
-
-#: .\judge\models\__init__.py:557
-msgid "Floats"
-msgstr "浮点数"
-
-#: .\judge\models\__init__.py:558
-msgid "Floats (absolute)"
-msgstr "浮点数（仅绝对值）"
-
-#: .\judge\models\__init__.py:559
-msgid "Floats (relative)"
-msgstr "浮点数（仅相对值）"
-
-#: .\judge\models\__init__.py:560
-msgid "Non-trailing spaces"
-msgstr "无尾随空格"
-
-#: .\judge\models\__init__.py:561
-msgid "Unordered"
-msgstr "无序的"
-
-#: .\judge\models\__init__.py:562
-msgid "Byte identical"
-msgstr "字节全等"
-
-#: .\judge\models\__init__.py:568
-msgid "data zip file"
-msgstr "数据 zip压缩 文件"
-
-#: .\judge\models\__init__.py:570
-msgid "generator file"
-msgstr "生成器文件"
-
-#: .\judge\models\__init__.py:572 .\judge\models\__init__.py:606
-msgid "output prefix length"
-msgstr "输出前缀长度"
-
-#: .\judge\models\__init__.py:573 .\judge\models\__init__.py:607
-msgid "output limit length"
-msgstr "输出限制长度"
-
-#: .\judge\models\__init__.py:574
-msgid "init.yml generation feedback"
-msgstr "init.yml生成反馈"
-
-#: .\judge\models\__init__.py:575 .\judge\models\__init__.py:608
-msgid "checker"
-msgstr "检查器"
-
-#: .\judge\models\__init__.py:576 .\judge\models\__init__.py:609
-msgid "checker arguments"
-msgstr "检查器参数"
-
-#: .\judge\models\__init__.py:577 .\judge\models\__init__.py:610
-msgid "checker arguments as a JSON object"
-msgstr "检查器参数作为JSON对象"
-
-#: .\judge\models\__init__.py:595
-msgid "problem data set"
-msgstr "题目数据集"
-
-#: .\judge\models\__init__.py:596
-msgid "case position"
-msgstr "测试编号"
-
-#: .\judge\models\__init__.py:597
-msgid "case type"
-msgstr "测试类型"
-
-#: .\judge\models\__init__.py:598
-msgid "Normal case"
-msgstr "正常情况"
-
-#: .\judge\models\__init__.py:599
-msgid "Batch start"
-msgstr "批量开始"
-
-#: .\judge\models\__init__.py:600
-msgid "Batch end"
-msgstr "批量结束"
-
-#: .\judge\models\__init__.py:601
-msgid "input file name"
-msgstr "输入的文件的名称"
-
-#: .\judge\models\__init__.py:602
-msgid "output file name"
-msgstr "输出文件的名称"
-
-#: .\judge\models\__init__.py:603
-msgid "generator arguments"
-msgstr "生成器参数"
-
-#: .\judge\models\__init__.py:604
-msgid "point value"
-msgstr "分数"
-
-#: .\judge\models\__init__.py:605
-msgid "case is pretest?"
-msgstr "是否为预测试?"
-
-#: .\judge\models\__init__.py:621
-msgid "language-specific resource limit"
-msgstr "语言特定资源限制"
-
-#: .\judge\models\__init__.py:622
-msgid "language-specific resource limits"
-msgstr "语言特定资源限制"
-
-#: .\judge\models\__init__.py:628
-msgid "translated name"
-msgstr "翻译题目名"
-
-#: .\judge\models\__init__.py:629
-msgid "translated description"
-msgstr "翻译题目正文"
-
-#: .\judge\models\__init__.py:633
-msgid "problem translation"
-msgstr "题目翻译"
-
-#: .\judge\models\__init__.py:634
-msgid "problem translations"
-msgstr "题目翻译"
-
-#: .\judge\models\__init__.py:638 .\judge\models\__init__.py:664
+#: .\judge\models\runtime.py:15
+msgid "short identifier"
+msgstr "标识符"
+
+#: .\judge\models\runtime.py:16
+msgid "The identifier for this language; the same as its executor id for judges."
+msgstr "语言标识符（和裁判服务器的执行器标识符一样）"
+
+#: .\judge\models\runtime.py:18
+msgid "long name"
+msgstr "长名称"
+
+#: .\judge\models\runtime.py:19
+msgid "Longer name for the language, e.g. \"Python 2\" or \"C++11\"."
+msgstr "语言全称，比如“Python 2”或”C++11“。"
+
+#: .\judge\models\runtime.py:21
+msgid "More readable, but short, name to display publicly; e.g. \"PY2\" or \"C++11\". If left blank, it will default to the short identifier."
+msgstr "比较好听的公开语言简称，比如“PY2”和“C++11”，如果放空则使用短标识符。"
+
+#: .\judge\models\runtime.py:25
+msgid "common name"
+msgstr "通用名"
+
+#: .\judge\models\runtime.py:26
+msgid "Common name for the language. For example, the common name for C++03, C++11, and C++14 would be \"C++\""
+msgstr "语言的通用名称，例如C++03、C++11、C++14的通用名称为“C++”。"
+
+#: .\judge\models\runtime.py:28
+msgid "ace mode name"
+msgstr "ace 模式名称"
+
+#: .\judge\models\runtime.py:29
+msgid "Language ID for Ace.js editor highlighting, appended to \"mode-\" to determine the Ace JavaScript file to use, e.g., \"python\"."
+msgstr "Ace.js编辑器高亮显示的语言标识符，加上“mode-”前缀而决定使用的JavaScript文件。"
+
+#: .\judge\models\runtime.py:31
+msgid "pygments name"
+msgstr "pygments 名称"
+
+#: .\judge\models\runtime.py:32
+msgid "Language ID for Pygments highlighting in source windows."
+msgstr "Pygments代码高亮语言标识符，在查看代码是使用。"
+
+#: .\judge\models\runtime.py:33
+msgid "runtime info override"
+msgstr "软件信息覆盖"
+
+#: .\judge\models\runtime.py:34
+msgid "Do not set this unless you know what you're doing! It will override the usually more specific, judge-provided runtime info!"
+msgstr "除非你可以确定你手动设置地软件信息能比裁判服务器自动获取地好，不要使用该设置！"
+
+#: .\judge\models\runtime.py:36
+msgid "language description"
+msgstr "语言描述"
+
+#: .\judge\models\runtime.py:37
+msgid "Use field this to inform users of quirks with your environment, additional restrictions, etc."
+msgstr "使用本空间来表达运行环境的特性、额外限制等信息。"
+
+#: .\judge\models\runtime.py:39
+msgid "extension"
+msgstr "扩展"
+
+#: .\judge\models\runtime.py:40
+msgid "The extension of source files, e.g., \"py\" or \"cpp\"."
+msgstr "源文件扩展名，例如：\"py\"或\"cpp\"。"
+
+#: .\judge\models\runtime.py:95
+msgid "languages"
+msgstr "语言"
+
+#: .\judge\models\runtime.py:99
+msgid "language to which this runtime belongs"
+msgstr "软件属于的语言"
+
+#: .\judge\models\runtime.py:100
+msgid "judge on which this runtime exists"
+msgstr "拥有次语言的裁判服务器"
+
+#: .\judge\models\runtime.py:101
+msgid "runtime name"
+msgstr "软件名称"
+
+#: .\judge\models\runtime.py:102
+msgid "runtime version"
+msgstr "软件版本"
+
+#: .\judge\models\runtime.py:103
+msgid "order in which to display this runtime"
+msgstr "软件显示顺序"
+
+#: .\judge\models\runtime.py:107
+msgid "Server name, hostname-style"
+msgstr "服务器名称"
+
+#: .\judge\models\runtime.py:108
+msgid "time of creation"
+msgstr "创建时间"
+
+#: .\judge\models\runtime.py:109
+msgid "A key to authenticated this judge"
+msgstr "裁判服务器连接密匙"
+
+#: .\judge\models\runtime.py:110
+msgid "authentication key"
+msgstr "连接密匙"
+
+#: .\judge\models\runtime.py:111
+msgid "judge online status"
+msgstr "裁判在线状态"
+
+#: .\judge\models\runtime.py:112
+msgid "judge start time"
+msgstr "裁判启动时间"
+
+#: .\judge\models\runtime.py:113
+msgid "response time"
+msgstr "响应时间"
+
+#: .\judge\models\runtime.py:114
+msgid "system load"
+msgstr "系统负载"
+
+#: .\judge\models\runtime.py:115
+msgid "Load for the last minute, divided by processors to be fair."
+msgstr "最后一分钟的系统负载（每处理器平均值）"
+
+#: .\judge\models\runtime.py:116
+msgid "description"
+msgstr "描述"
+
+#: .\judge\models\runtime.py:119 .\judge\models\runtime.py:154
+msgid "judges"
+msgstr "裁判服务器"
+
+#: .\judge\models\runtime.py:153
+msgid "judge"
+msgstr "裁判服务器"
+
+#: .\judge\models\submission.py:15 .\judge\models\submission.py:41
 #: .\judge\utils\problems.py:67
 msgid "Accepted"
 msgstr "接受"
 
-#: .\judge\models\__init__.py:639 .\judge\models\__init__.py:665
+#: .\judge\models\submission.py:16 .\judge\models\submission.py:42
 #: .\judge\utils\problems.py:68
 msgid "Wrong Answer"
 msgstr "答案错误"
 
-#: .\judge\models\__init__.py:640 .\judge\models\__init__.py:667
+#: .\judge\models\submission.py:17 .\judge\models\submission.py:44
 #: .\judge\utils\problems.py:70
 msgid "Time Limit Exceeded"
 msgstr "超出时间限制"
 
-#: .\judge\models\__init__.py:641 .\judge\models\__init__.py:668
+#: .\judge\models\submission.py:18 .\judge\models\submission.py:45
 #: .\judge\utils\problems.py:71
 msgid "Memory Limit Exceeded"
 msgstr "超出内存限制"
 
-#: .\judge\models\__init__.py:642 .\judge\models\__init__.py:669
+#: .\judge\models\submission.py:19 .\judge\models\submission.py:46
 msgid "Output Limit Exceeded"
 msgstr "超出输出限制"
 
-#: .\judge\models\__init__.py:643 .\judge\models\__init__.py:670
+#: .\judge\models\submission.py:20 .\judge\models\submission.py:47
 #: .\judge\utils\problems.py:72
 msgid "Invalid Return"
 msgstr "错误退出代码"
 
-#: .\judge\models\__init__.py:644 .\judge\models\__init__.py:671
+#: .\judge\models\submission.py:21 .\judge\models\submission.py:48
 msgid "Runtime Error"
 msgstr "运行错误"
 
-#: .\judge\models\__init__.py:645 .\judge\models\__init__.py:659
-#: .\judge\models\__init__.py:672 .\judge\utils\problems.py:69
+#: .\judge\models\submission.py:22 .\judge\models\submission.py:36
+#: .\judge\models\submission.py:49 .\judge\utils\problems.py:69
 msgid "Compile Error"
 msgstr "编译错误"
 
-#: .\judge\models\__init__.py:646 .\judge\models\__init__.py:658
+#: .\judge\models\submission.py:23 .\judge\models\submission.py:35
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: .\judge\models\__init__.py:647
+#: .\judge\models\submission.py:24
 msgid "Short circuit"
 msgstr "跳过"
 
-#: .\judge\models\__init__.py:648 .\judge\models\__init__.py:660
-#: .\judge\models\__init__.py:678
+#: .\judge\models\submission.py:25 .\judge\models\submission.py:37
+#: .\judge\models\submission.py:55
 msgid "Aborted"
 msgstr "中止"
 
-#: .\judge\models\__init__.py:654 .\judge\models\__init__.py:674
+#: .\judge\models\submission.py:31 .\judge\models\submission.py:51
 msgid "Queued"
 msgstr "等待中"
 
-#: .\judge\models\__init__.py:655 .\judge\models\__init__.py:675
+#: .\judge\models\submission.py:32 .\judge\models\submission.py:52
 msgid "Processing"
 msgstr "处理中"
 
-#: .\judge\models\__init__.py:656 .\judge\models\__init__.py:676
+#: .\judge\models\submission.py:33 .\judge\models\submission.py:53
 msgid "Grading"
 msgstr "评分中"
 
-#: .\judge\models\__init__.py:657 .\judge\models\__init__.py:677
+#: .\judge\models\submission.py:34 .\judge\models\submission.py:54
 msgid "Completed"
 msgstr "完成"
 
-#: .\judge\models\__init__.py:673
+#: .\judge\models\submission.py:50
 msgid "Internal Error (judging server error)"
 msgstr "内部错误 (裁判服务器错误)"
 
-#: .\judge\models\__init__.py:683
+#: .\judge\models\submission.py:60
 msgid "submission time"
 msgstr "提交时间"
 
-#: .\judge\models\__init__.py:684 .\judge\models\__init__.py:777
+#: .\judge\models\submission.py:61 .\judge\models\submission.py:154
 msgid "execution time"
 msgstr "执行时间"
 
-#: .\judge\models\__init__.py:685 .\judge\models\__init__.py:778
+#: .\judge\models\submission.py:62 .\judge\models\submission.py:155
 msgid "memory usage"
 msgstr "内存使用"
 
-#: .\judge\models\__init__.py:686 .\judge\models\__init__.py:779
+#: .\judge\models\submission.py:63 .\judge\models\submission.py:156
 msgid "points granted"
 msgstr "获得分数"
 
-#: .\judge\models\__init__.py:687
+#: .\judge\models\submission.py:64
 msgid "submission language"
 msgstr "提交语言"
 
-#: .\judge\models\__init__.py:688
+#: .\judge\models\submission.py:65
 msgid "source code"
 msgstr "源码"
 
-#: .\judge\models\__init__.py:692
+#: .\judge\models\submission.py:69
 msgid "compile errors"
 msgstr "编译错误"
 
-#: .\judge\models\__init__.py:694
+#: .\judge\models\submission.py:71
 msgid "batched cases"
 msgstr "测试组"
 
-#: .\judge\models\__init__.py:695
+#: .\judge\models\submission.py:72
 msgid "test case points"
 msgstr "测试点分值"
 
-#: .\judge\models\__init__.py:696
+#: .\judge\models\submission.py:73
 msgid "test case total points"
 msgstr "测试用例总分"
 
-#: .\judge\models\__init__.py:697
+#: .\judge\models\submission.py:74
 msgid "judged on"
 msgstr "裁判服务器"
 
-#: .\judge\models\__init__.py:699
+#: .\judge\models\submission.py:76
 msgid "was rejudged by admin"
 msgstr "被管理员重新评分"
 
-#: .\judge\models\__init__.py:700
+#: .\judge\models\submission.py:77
 msgid "was ran on pretests only"
 msgstr "只进行过预测试"
 
-#: .\judge\models\__init__.py:767 .\judge\models\__init__.py:1217
-msgid "submission"
-msgstr "提交信息"
-
-#: .\judge\models\__init__.py:768
+#: .\judge\models\submission.py:145
 msgid "submissions"
 msgstr "提交历史"
 
-#: .\judge\models\__init__.py:774
+#: .\judge\models\submission.py:151
 msgid "associated submission"
 msgstr "相关提交"
 
-#: .\judge\models\__init__.py:775
+#: .\judge\models\submission.py:152
 msgid "test case ID"
 msgstr "测试编号"
 
-#: .\judge\models\__init__.py:776
+#: .\judge\models\submission.py:153
 msgid "status flag"
 msgstr "状态标志"
 
-#: .\judge\models\__init__.py:780
+#: .\judge\models\submission.py:157
 msgid "points possible"
 msgstr "满分"
 
-#: .\judge\models\__init__.py:781
+#: .\judge\models\submission.py:158
 msgid "batch number"
 msgstr "批号"
 
-#: .\judge\models\__init__.py:782
+#: .\judge\models\submission.py:159
 msgid "judging feedback"
 msgstr "评测反馈"
 
-#: .\judge\models\__init__.py:783
+#: .\judge\models\submission.py:160
 msgid "program output"
 msgstr "程序输出"
 
-#: .\judge\models\__init__.py:790
+#: .\judge\models\submission.py:167
 msgid "submission test case"
 msgstr "程序测试"
 
-#: .\judge\models\__init__.py:791
+#: .\judge\models\submission.py:168
 msgid "submission test cases"
 msgstr "程序测试"
-
-#: .\judge\models\__init__.py:795
-msgid "commenter"
-msgstr "评论者"
-
-#: .\judge\models\__init__.py:796
-msgid "posted time"
-msgstr "发布时间"
-
-#: .\judge\models\__init__.py:797
-msgid "associated Page"
-msgstr "关联页"
-
-#: .\judge\models\__init__.py:799
-msgid "Page code must be ^[pc]:[a-z0-9]+$|^b:\\d+$"
-msgstr "页代码必须匹配 ^[pc]:[a-z0-9]+$|^b:\\d+$|^s:"
-
-#: .\judge\models\__init__.py:800
-msgid "votes"
-msgstr "投票"
-
-#: .\judge\models\__init__.py:801
-msgid "title of comment"
-msgstr "评论标题"
-
-#: .\judge\models\__init__.py:802
-msgid "body of comment"
-msgstr "评论正文"
-
-#: .\judge\models\__init__.py:803
-msgid "hide the comment"
-msgstr "隐藏评论"
-
-#: .\judge\models\__init__.py:804
-msgid "parent"
-msgstr "母评论"
-
-#: .\judge\models\__init__.py:808
-msgid "comment"
-msgstr "评论"
-
-#: .\judge\models\__init__.py:809
-msgid "comments"
-msgstr "评论"
-
-#: .\judge\models\__init__.py:899
-msgid "comment vote"
-msgstr "评论投票"
-
-#: .\judge\models\__init__.py:900
-msgid "comment votes"
-msgstr "评论投票"
-
-#: .\judge\models\__init__.py:911
-msgid "configuration item"
-msgstr "配置项目"
-
-#: .\judge\models\__init__.py:912
-msgid "miscellaneous configuration"
-msgstr "杂项配置"
-
-#: .\judge\models\__init__.py:924
-msgid "navigation item"
-msgstr "导航项"
-
-#: .\judge\models\__init__.py:925
-msgid "navigation bar"
-msgstr "导航栏"
-
-#: .\judge\models\__init__.py:930 .\judge\models\__init__.py:1207
-msgid "order"
-msgstr "顺序"
-
-#: .\judge\models\__init__.py:932
-msgid "label"
-msgstr "标签"
-
-#: .\judge\models\__init__.py:933
-msgid "link path"
-msgstr "链接路径"
-
-#: .\judge\models\__init__.py:934
-msgid "highlight regex"
-msgstr "突出显示正则表达式"
-
-#: .\judge\models\__init__.py:935
-msgid "parent item"
-msgstr "父项"
-
-#: .\judge\models\__init__.py:952
-msgid "Server name, hostname-style"
-msgstr "服务器名称"
-
-#: .\judge\models\__init__.py:953
-msgid "time of creation"
-msgstr "创建时间"
-
-#: .\judge\models\__init__.py:954
-msgid "A key to authenticated this judge"
-msgstr "裁判服务器连接密匙"
-
-#: .\judge\models\__init__.py:955
-msgid "authentication key"
-msgstr "连接密匙"
-
-#: .\judge\models\__init__.py:956
-msgid "judge online status"
-msgstr "裁判在线状态"
-
-#: .\judge\models\__init__.py:957
-msgid "judge start time"
-msgstr "裁判启动时间"
-
-#: .\judge\models\__init__.py:958
-msgid "response time"
-msgstr "响应时间"
-
-#: .\judge\models\__init__.py:959
-msgid "system load"
-msgstr "系统负载"
-
-#: .\judge\models\__init__.py:960
-msgid "Load for the last minute, divided by processors to be fair."
-msgstr "最后一分钟的系统负载（每处理器平均值）"
-
-#: .\judge\models\__init__.py:961
-msgid "description"
-msgstr "描述"
-
-#: .\judge\models\__init__.py:964 .\judge\models\__init__.py:999
-msgid "judges"
-msgstr "裁判服务器"
-
-#: .\judge\models\__init__.py:998
-msgid "judge"
-msgstr "裁判服务器"
-
-#: .\judge\models\__init__.py:1003
-msgid "Invalid colour."
-msgstr "无效的颜色。"
-
-#: .\judge\models\__init__.py:1005
-msgid "tag name"
-msgstr "标签名称"
-
-#: .\judge\models\__init__.py:1006
-msgid "Lowercase letters and hyphens only."
-msgstr "只允许字母和短杆。"
-
-#: .\judge\models\__init__.py:1007
-msgid "tag colour"
-msgstr "标签颜色"
-
-#: .\judge\models\__init__.py:1008
-msgid "tag description"
-msgstr "标签说明"
-
-#: .\judge\models\__init__.py:1027
-msgid "contest tag"
-msgstr "竞赛标签"
-
-#: .\judge\models\__init__.py:1028 .\judge\models\__init__.py:1063
-msgid "contest tags"
-msgstr "竞赛标签"
-
-#: .\judge\models\__init__.py:1032
-msgid "contest id"
-msgstr "竞赛标识"
-
-#: .\judge\models\__init__.py:1033
-msgid "Contest id must be ^[a-z0-9]+$"
-msgstr "竞赛标识必须匹配 ^[a-z0-9]+$"
-
-#: .\judge\models\__init__.py:1034
-msgid "contest name"
-msgstr "竞赛名称"
-
-#: .\judge\models\__init__.py:1035
-msgid "These people will be able to edit the contest."
-msgstr "这些人将可以编辑竞赛。"
-
-#: .\judge\models\__init__.py:1043
-msgid "Should be set even for organization-private contests, where it determines whether the contest is visible to members of the specified organizations."
-msgstr "组织内竞赛也需公开，否则责组织成员无法查看本竞赛。"
-
-#: .\judge\models\__init__.py:1046
-msgid "contest rated"
-msgstr "竞赛参与评分"
-
-#: .\judge\models\__init__.py:1046
-msgid "Whether this contest can be rated."
-msgstr "竞赛是否参与用户评分"
-
-#: .\judge\models\__init__.py:1048
-msgid "rate all"
-msgstr "为所有用户参与评分"
-
-#: .\judge\models\__init__.py:1048
-msgid "Rate all users who joined."
-msgstr "所有用户参与竞赛的用户，包含没有提交任何程序的用户，都将被评分。"
-
-#: .\judge\models\__init__.py:1049
-msgid "exclude from ratings"
-msgstr "从评分中排除"
-
-#: .\judge\models\__init__.py:1051
-msgid "private to organizations"
-msgstr "只对组织可见"
-
-#: .\judge\models\__init__.py:1052
-msgid "hide problem tags"
-msgstr "隐藏题目标签"
-
-#: .\judge\models\__init__.py:1053
-msgid "Whether problem tags should be hidden by default."
-msgstr "设置竞赛内题目标签是否默认被隐藏。"
-
-#: .\judge\models\__init__.py:1055
-msgid "run pretests only"
-msgstr "只运行预测试"
-
-#: .\judge\models\__init__.py:1056
-msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
-msgstr "设置裁判服务器是否只运行预测试而不是所有测试。通常在竞赛进行时启动，然后在竞赛结束后重新评分前关闭。"
-
-#: .\judge\models\__init__.py:1061
-msgid "If private, only these organizations may see the contest"
-msgstr "选中时，只对选择的组织才可见"
-
-#: .\judge\models\__init__.py:1062
-msgid "OpenGraph image"
-msgstr "OpenGraph 图像"
-
-#: .\judge\models\__init__.py:1064
-msgid "the amount of live participants"
-msgstr "实时参与者数"
-
-#: .\judge\models\__init__.py:1065
-msgid "contest summary"
-msgstr "竞赛简介"
-
-#: .\judge\models\__init__.py:1066
-msgid "Plain-text, shown in meta description tag, e.g. for social media."
-msgstr "在meta description标签内显示的纯文本介绍。"
-
-#: .\judge\models\__init__.py:1122 .\judge\models\__init__.py:1204
-#: .\judge\models\__init__.py:1234
-msgid "contest"
-msgstr "竞赛"
-
-#: .\judge\models\__init__.py:1123
-msgid "contests"
-msgstr "竞赛"
-
-#: .\judge\models\__init__.py:1127
-msgid "associated contest"
-msgstr "关联的竞赛"
-
-#: .\judge\models\__init__.py:1129
-msgid "start time"
-msgstr "开始时间"
-
-#: .\judge\models\__init__.py:1130
-msgid "score"
-msgstr "得分"
-
-#: .\judge\models\__init__.py:1131
-msgid "cumulative time"
-msgstr "累积时间"
-
-#: .\judge\models\__init__.py:1132
-msgid "virtual participation id"
-msgstr "虚拟参与信息编号"
-
-#: .\judge\models\__init__.py:1133
-msgid "0 means non-virtual, otherwise the n-th virtual participation"
-msgstr "0 表示正式参与，否则表示第n次虚拟参与。"
-
-#: .\judge\models\__init__.py:1190
-#, python-format
-msgid "%s spectating in %s"
-msgstr "%s旁观%s中"
-
-#: .\judge\models\__init__.py:1192
-#, python-format
-msgid "%s in %s, v%d"
-msgstr "%s于%s的第%d次虚拟参与"
-
-#: .\judge\models\__init__.py:1193
-#, python-format
-msgid "%s in %s"
-msgstr "%s参与%s中"
-
-#: .\judge\models\__init__.py:1196
-msgid "contest participation"
-msgstr "竞赛参与信息"
-
-#: .\judge\models\__init__.py:1197
-msgid "contest participations"
-msgstr "竞赛参与信息"
-
-#: .\judge\models\__init__.py:1206
-msgid "partial"
-msgstr "部分"
-
-#: .\judge\models\__init__.py:1208
-msgid "output prefix length override"
-msgstr "输出前缀替换"
-
-#: .\judge\models\__init__.py:1212
-msgid "contest problem"
-msgstr "竞赛题目"
-
-#: .\judge\models\__init__.py:1213
-msgid "contest problems"
-msgstr "竞赛题目"
-
-#: .\judge\models\__init__.py:1220 .\judge\models\__init__.py:1235
-msgid "participation"
-msgstr "参与"
-
-#: .\judge\models\__init__.py:1223
-msgid "is pretested"
-msgstr "仅通过预测试"
-
-#: .\judge\models\__init__.py:1224
-msgid "Whether this submission was ran only on pretests."
-msgstr "该程序是否只通过预测试。"
-
-#: .\judge\models\__init__.py:1228
-msgid "contest submission"
-msgstr "竞赛提交信息"
-
-#: .\judge\models\__init__.py:1229
-msgid "contest submissions"
-msgstr "竞赛提交历史"
-
-#: .\judge\models\__init__.py:1236
-msgid "rank"
-msgstr "排名"
-
-#: .\judge\models\__init__.py:1237
-msgid "rating"
-msgstr "评分"
-
-#: .\judge\models\__init__.py:1238
-msgid "volatility"
-msgstr "波动性"
-
-#: .\judge\models\__init__.py:1239
-msgid "last rated"
-msgstr "上次评分"
-
-#: .\judge\models\__init__.py:1243
-msgid "contest rating"
-msgstr "竞赛评分信息"
-
-#: .\judge\models\__init__.py:1244
-msgid "contest ratings"
-msgstr "竞赛评分历史"
-
-#: .\judge\models\__init__.py:1248
-msgid "post title"
-msgstr "文章标题"
-
-#: .\judge\models\__init__.py:1249
-msgid "authors"
-msgstr "作者"
-
-#: .\judge\models\__init__.py:1250
-msgid "slug"
-msgstr "网址标识"
-
-#: .\judge\models\__init__.py:1251
-msgid "public visibility"
-msgstr "公共可见性"
-
-#: .\judge\models\__init__.py:1252
-msgid "sticky"
-msgstr "置顶"
-
-#: .\judge\models\__init__.py:1253
-msgid "publish after"
-msgstr "发布时间"
-
-#: .\judge\models\__init__.py:1254
-msgid "post content"
-msgstr "发布内容"
-
-#: .\judge\models\__init__.py:1255
-msgid "post summary"
-msgstr "发布摘要"
-
-#: .\judge\models\__init__.py:1256
-msgid "openGraph image"
-msgstr "openGraph 图像"
-
-#: .\judge\models\__init__.py:1268
-msgid "blog post"
-msgstr "博客文章"
-
-#: .\judge\models\__init__.py:1269
-msgid "blog posts"
-msgstr "博客文章"
-
-#: .\judge\models\__init__.py:1273
-msgid "message title"
-msgstr "消息标题"
-
-#: .\judge\models\__init__.py:1274
-msgid "message body"
-msgstr "消息正文"
-
-#: .\judge\models\__init__.py:1275
-msgid "sender"
-msgstr "发件人"
-
-#: .\judge\models\__init__.py:1276
-msgid "target"
-msgstr "目标"
-
-#: .\judge\models\__init__.py:1277
-msgid "message timestamp"
-msgstr "消息时间戳"
-
-#: .\judge\models\__init__.py:1278
-msgid "read"
-msgstr "查看"
-
-#: .\judge\models\__init__.py:1282
-msgid "messages in the thread"
-msgstr "话题中的消息"
-
-#: .\judge\models\__init__.py:1292
-msgid "associated problem"
-msgstr "关联的题目"
-
-#: .\judge\models\__init__.py:1305
-msgid "solution"
-msgstr "题目讲解"
-
-#: .\judge\models\__init__.py:1306
-msgid "solutions"
-msgstr "题目讲解"
 
 #: .\judge\pdf_problems.py:70 .\judge\pdf_problems.py:126
 msgid "Page [page] of [topage]"
@@ -2173,23 +2173,26 @@ msgstr "发布于"
 msgid "Ongoing contests"
 msgstr "进行中的竞赛"
 
-#: .\templates\blog\list.jade:111
-msgid "Ends in"
-msgstr "结束于"
+#: .\templates\blog\list.jade:111 .\templates\contest\list.jade:29
+#, python-format
+msgid "Ends in %(countdown)s."
+msgstr "在%(countdown)s后结束。"
 
 #: .\templates\blog\list.jade:118
 msgid "Upcoming contests"
 msgstr "未来的竞赛"
 
-#: .\templates\blog\list.jade:124
-msgid "Starts in"
-msgstr "开始于"
+#: .\templates\blog\list.jade:124 .\templates\contest\contest.jade:64
+#: .\templates\contest\list.jade:58
+#, python-format
+msgid "Starting in %(countdown)s."
+msgstr "%(countdown)s后开始。"
 
-#: .\templates\blog\list.jade:131
+#: .\templates\blog\list.jade:130
 msgid "Comment stream"
 msgstr "评论流"
 
-#: .\templates\blog\list.jade:144
+#: .\templates\blog\list.jade:143
 msgid "New problems"
 msgstr "新题目"
 
@@ -2343,11 +2346,6 @@ msgstr "虚拟参与中，剩余时间：%(countdown)s。"
 msgid "Participating virtually."
 msgstr "虚拟参与中。"
 
-#: .\templates\contest\contest.jade:64
-#, python-format
-msgid "Starting in %(countdown)s."
-msgstr "%(countdown)s后开始。"
-
 #: .\templates\contest\contest.jade:65
 msgid "Contest is over."
 msgstr "竞赛已结束。"
@@ -2399,10 +2397,6 @@ msgstr "竞赛"
 msgid "Users"
 msgstr "用户"
 
-#: .\templates\contest\list.jade:29
-msgid "Ending in"
-msgstr "结束在"
-
 #: .\templates\contest\list.jade:30
 msgid "Started at"
 msgstr "开始于"
@@ -2430,10 +2424,6 @@ msgstr "加入!"
 #: .\templates\contest\list.jade:46
 msgid "Upcoming Contests"
 msgstr "未来的竞赛"
-
-#: .\templates\contest\list.jade:58
-msgid "Starting in"
-msgstr "开始于"
 
 #: .\templates\contest\list.jade:68
 msgid "There are no scheduled contests at this time."
