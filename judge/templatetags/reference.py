@@ -7,10 +7,11 @@ from lxml.html import Element
 
 from judge import lxml_tree
 from judge.models import Profile
+from judge.ratings import rating_class, rating_progress
 
 register = template.Library()
 
-rereference = re.compile(r'\[(user):(\w+)\]')
+rereference = re.compile(r'\[(r?user):(\w+)\]')
 
 
 def get_user(username, rank):
@@ -26,8 +27,26 @@ def get_user_info(usernames):
     return dict(Profile.objects.filter(user__username__in=usernames).values_list('user__username', 'display_rank'))
 
 
+def get_user_rating(username, rating):
+    element = Element('a', {'href': reverse('user_page', args=[username])})
+    if rating:
+        rate_box = Element('span', {'class': 'rate-box ' + rating_class(rating)})
+        rate_box.append(Element('span', {'style': 'height: %3.fem' % rating_progress(rating)}))
+        user = Element('span', {'class': 'rating'})
+        user.text = username
+        element.append(user)
+    else:
+        element.text = username
+    return element
+
+
+def get_user_rating_info(usernames):
+    return dict(Profile.objects.filter(user__username__in=usernames).values_list('user__username', 'rating'))
+
+
 reference_map = {
     'user': (get_user, get_user_info),
+    'ruser': (get_user_rating, get_user_rating_info),
 }
 
 
