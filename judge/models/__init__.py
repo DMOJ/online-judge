@@ -1,10 +1,9 @@
 import itertools
 import os
 import re
-from collections import defaultdict, OrderedDict
+from collections import OrderedDict
 from operator import itemgetter, attrgetter
 
-import pytz
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
@@ -18,284 +17,27 @@ from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _, pgettext, ugettext
+from django.utils.translation import ugettext_lazy as _, ugettext
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from reversion import revisions
 from reversion.models import Version
-from sortedm2m.fields import SortedManyToManyField
 from timedelta.fields import TimedeltaField
 
 from judge.fulltext import SearchQuerySet
 from judge.judgeapi import judge_submission, abort_submission
-from judge.model_choices import ACE_THEMES
+from judge.models.profile import *
+from judge.models.runtimes import Language, RuntimeVersion
 from judge.user_translations import ugettext as user_ugettext
 from judge.utils.problem_data import ProblemDataStorage
 from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
-
-
-def make_timezones():
-    data = defaultdict(list)
-    for tz in pytz.all_timezones:
-        if '/' in tz:
-            area, loc = tz.split('/', 1)
-        else:
-            area, loc = 'Other', tz
-        if not loc.startswith('GMT'):
-            data[area].append((tz, loc))
-    data = data.items()
-    data.sort(key=itemgetter(0))
-    return data
-
-
-now = timezone.now
-TIMEZONE = make_timezones()
-del make_timezones
 
 
 def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
     return string + (sum(k in unsafe for k in string) - string.count(u'\u202c')) * u'\u202c'
 
 
-class RuntimeVersion(models.Model):
-    language = models.ForeignKey('Language', verbose_name=_('language to which this runtime belongs'))
-    judge = models.ForeignKey('Judge', verbose_name=_('judge on which this runtime exists'))
-    name = models.CharField(max_length=64, verbose_name=_('runtime name'))
-    version = models.CharField(max_length=64, verbose_name=_('runtime version'), blank=True)
-    priority = models.IntegerField(verbose_name=_('order in which to display this runtime'), default=0)
-
-
-class Language(models.Model):
-    key = models.CharField(max_length=6, verbose_name=_('short identifier'),
-                           help_text=_('The identifier for this language; the same as its executor id for judges.'),
-                           unique=True)
-    name = models.CharField(max_length=20, verbose_name=_('long name'),
-                            help_text=_('Longer name for the language, e.g. "Python 2" or "C++11".'))
-    short_name = models.CharField(max_length=10, verbose_name=_('short name'),
-                                  help_text=_('More readable, but short, name to display publicly; e.g. "PY2" or '
-                                              '"C++11". If left blank, it will default to the '
-                                              'short identifier.'),
-                                  null=True, blank=True)
-    common_name = models.CharField(max_length=10, verbose_name=_('common name'),
-                                   help_text=_('Common name for the language. For example, the common name for C++03, '
-                                               'C++11, and C++14 would be "C++"'))
-    ace = models.CharField(max_length=20, verbose_name=_('ace mode name'),
-                           help_text=_('Language ID for Ace.js editor highlighting, appended to "mode-" to determine '
-                                       'the Ace JavaScript file to use, e.g., "python".'))
-    pygments = models.CharField(max_length=20, verbose_name=_('pygments name'),
-                                help_text=_('Language ID for Pygments highlighting in source windows.'))
-    info = models.CharField(max_length=50, verbose_name=_('runtime info override'), blank=True,
-                            help_text=_("Do not set this unless you know what you're doing! It will override the "
-                                        "usually more specific, judge-provided runtime info!"))
-    description = models.TextField(verbose_name=_('language description'),
-                                   help_text=_('Use field this to inform users of quirks with your environment, '
-                                               'additional restrictions, etc.'), blank=True)
-    extension = models.CharField(max_length=10, verbose_name=_('extension'),
-                                 help_text=_('The extension of source files, e.g., "py" or "cpp".'))
-
-    def runtime_versions(self):
-        runtimes = OrderedDict()
-        # There be dragons here if two judges specify different priorities
-        for runtime in self.runtimeversion_set.all():
-            id = runtime.name
-            if id not in runtimes:
-                runtimes[id] = set()
-            if not runtime.version:  # empty str == error determining version on judge side
-                continue
-            runtimes[id].add(runtime.version)
-
-        lang_versions = []
-        for id, version_list in runtimes.iteritems():
-            lang_versions.append((id, list(sorted(version_list, key=lambda a: tuple(map(int, a.split('.')))))))
-        return lang_versions
-
-    @classmethod
-    def get_common_name_map(cls):
-        result = cache.get('lang:cn_map')
-        if result is not None:
-            return result
-        result = defaultdict(set)
-        for id, cn in Language.objects.values_list('id', 'common_name'):
-            result[cn].add(id)
-        result = {id: cns for id, cns in result.iteritems() if len(cns) > 1}
-        cache.set('lang:cn_map', result, 86400)
-        return result
-
-    @cached_property
-    def short_display_name(self):
-        return self.short_name or self.key
-
-    def __unicode__(self):
-        return self.name
-
-    @cached_property
-    def display_name(self):
-        if self.info:
-            return '%s (%s)' % (self.name, self.info)
-        else:
-            return self.name
-
-    @classmethod
-    def get_python2(cls):
-        # We really need a default language, and this app is in Python 2
-        return Language.objects.get_or_create(key='PY2', name='Python 2')[0]
-
-    def get_absolute_url(self):
-        return reverse('runtime_list') + '#' + self.key
-
-    class Meta:
-        ordering = ['key']
-        verbose_name = _('language')
-        verbose_name_plural = _('languages')
-
-
-class Organization(models.Model):
-    name = models.CharField(max_length=50, verbose_name=_('organization title'))
-    key = models.CharField(max_length=6, verbose_name=_('identifier'), unique=True,
-                           help_text=_('Organization name shows in URL'),
-                           validators=[RegexValidator('^[A-Za-z0-9]+$',
-                                                      'Identifier must contain letters and numbers only')])
-    short_name = models.CharField(max_length=20, verbose_name=_('short name'),
-                                  help_text=_('Displayed beside user name during contests'))
-    about = models.TextField(verbose_name=_('organization description'))
-    registrant = models.ForeignKey('Profile', verbose_name=_('registrant'),
-                                   related_name='registrant+',
-                                   help_text=_('User who registered this organization'))
-    admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='+',
-                                    help_text=_('Those who can edit this organization'))
-    creation_date = models.DateTimeField(verbose_name=_('creation date'), auto_now_add=True)
-    is_open = models.BooleanField(help_text=_('Allow joining organization'), default=True)
-    slots = models.IntegerField(verbose_name=_('maximum size'), null=True, blank=True,
-                                help_text=_('Maximum amount of users in this organization, '
-                                            'only applicable to private organizations'))
-    access_code = models.CharField(max_length=7, help_text=_('Student access code'),
-                                   verbose_name=_('access code'), null=True, blank=True)
-
-    def __contains__(self, item):
-        if isinstance(item, (int, long)):
-            return self.members.filter(id=item).exists()
-        elif isinstance(item, Profile):
-            return self.members.filter(id=item.id).exists()
-        else:
-            raise TypeError('Organization membership test must be Profile or primany key')
-
-    def __unicode__(self):
-        return self.name
-
-    @property
-    def member_count(self):
-        return self.members.count()
-
-    def get_absolute_url(self):
-        return reverse('organization_home', args=(self.key,))
-
-    class Meta:
-        ordering = ['key']
-        permissions = (
-            ('organization_admin', 'Administer organizations'),
-            ('edit_all_organization', 'Edit all organizations'),
-        )
-        verbose_name = _('organization')
-        verbose_name_plural = _('organizations')
-
-
-MATH_ENGINES_CHOICES = (
-    ('tex', _('Leave as LaTeX')),
-    ('svg', _('SVG with PNG fallback')),
-    ('mml', _('MathML only')),
-    ('jax', _('MathJax with SVG/PNG fallback')),
-    ('auto', _('Detect best quality')),
-)
-
 EFFECTIVE_MATH_ENGINES = ('svg', 'mml', 'tex', 'jax')
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, verbose_name=_('user associated'))
-    name = models.CharField(max_length=50, verbose_name=_('display name'), null=True, blank=True)
-    about = models.TextField(verbose_name=_('self-description'), null=True, blank=True)
-    timezone = models.CharField(max_length=50, verbose_name=_('location'), choices=TIMEZONE,
-                                default=getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto'))
-    language = models.ForeignKey(Language, verbose_name=_('preferred language'))
-    points = models.FloatField(default=0, db_index=True)
-    problem_count = models.IntegerField(default=0, db_index=True)
-    ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
-    last_access = models.DateTimeField(verbose_name=_('last access time'), default=now)
-    ip = models.GenericIPAddressField(verbose_name=_('last IP'), blank=True, null=True)
-    organizations = SortedManyToManyField(Organization, verbose_name=_('organization'), blank=True,
-                                          related_name='members', related_query_name='member')
-    display_rank = models.CharField(max_length=10, default='user', verbose_name=_('display rank'),
-                                    choices=(('user', 'Normal User'), ('setter', 'Problem Setter'), ('admin', 'Admin')))
-    mute = models.BooleanField(verbose_name=_('comment mute'), help_text=_('Some users are at their best when silent.'),
-                               default=False)
-    rating = models.IntegerField(null=True, default=None)
-    user_script = models.TextField(verbose_name=_('user script'), default='', blank=True, max_length=65536,
-                                   help_text=_('User-defined JavaScript for site customization.'))
-    current_contest = models.OneToOneField('ContestParticipation', verbose_name=_('current contest'),
-                                           null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
-    math_engine = models.CharField(verbose_name=_('math engine'), choices=MATH_ENGINES_CHOICES, max_length=4,
-                                   default=getattr(settings, 'MATHOID_DEFAULT_TYPE', 'auto'),
-                                   help_text=_('the rendering engine used to render math'))
-
-    @cached_property
-    def organization(self):
-        # We do this to take advantage of prefetch_related
-        orgs = self.organizations.all()
-        return orgs[0] if orgs else None
-
-    def calculate_points(self):
-        points = sum(map(itemgetter('points'),
-                         Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
-                         .values('problem_id').distinct().annotate(points=Max('points'))))
-        problems = (self.submission_set.filter(points__gt=0, problem__is_public=True)
-                    .values('problem').distinct().count())
-        if self.points != points or problems != self.problem_count:
-            self.points = points
-            self.problem_count = problems
-            self.save()
-        return points
-
-    calculate_points.alters_data = True
-
-    @cached_property
-    def display_name(self):
-        if self.name:
-            return self.name
-        return self.user.username
-
-    @cached_property
-    def long_display_name(self):
-        if self.name:
-            return pgettext('user display name', '%(username)s (%(display)s)') % {
-                'username': self.user.username, 'display': self.name
-            }
-        return self.user.username
-
-    def remove_contest(self):
-        self.current_contest = None
-        self.save()
-
-    remove_contest.alters_data = True
-
-    def update_contest(self):
-        contest = self.current_contest
-        if contest is not None and contest.ended:
-            self.remove_contest()
-
-    update_contest.alters_data = True
-
-    def get_absolute_url(self):
-        return reverse('user_page', args=(self.user.username,))
-
-    def __unicode__(self):
-        return self.user.username
-
-    class Meta:
-        permissions = (
-            ('test_site', 'Shows in-progress development stuff'),
-        )
-        verbose_name = _('user profile')
-        verbose_name_plural = _('user profiles')
 
 
 class OrganizationRequest(models.Model):
