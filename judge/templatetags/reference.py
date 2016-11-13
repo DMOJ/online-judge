@@ -30,9 +30,10 @@ def get_user_info(usernames):
 def get_user_rating(username, rating):
     element = Element('a', {'class': 'rate-group', 'href': reverse('user_page', args=[username])})
     if rating:
-        rate_box = Element('span', {'class': 'rate-box ' + rating_class(rating)})
+        rating_css = rating_class(rating)
+        rate_box = Element('span', {'class': 'rate-box ' + rating_css})
         rate_box.append(Element('span', {'style': 'height: %3.fem' % rating_progress(rating)}))
-        user = Element('span', {'class': 'rating'})
+        user = Element('span', {'class': 'rating ' + rating_css})
         user.text = username
         element.append(rate_box)
         element.append(user)
