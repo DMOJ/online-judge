@@ -9,9 +9,13 @@ from django.forms import ModelForm, CharField, TextInput
 from django.utils.translation import ugettext_lazy as _
 
 from django_ace import AceWidget
-from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, fix_unicode, Language
+from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, Language
 from judge.utils.subscription import newsletter_id
 from judge.widgets import MathJaxPagedownWidget, PagedownWidget, Select2Widget
+
+
+def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
+    return string + (sum(k in unsafe for k in string) - string.count(u'\u202c')) * u'\u202c'
 
 
 class ProfileForm(ModelForm):

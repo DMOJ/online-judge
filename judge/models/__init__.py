@@ -29,10 +29,6 @@ from judge.models.profile import Profile, Organization, OrganizationRequest
 from judge.models.runtimes import Language, RuntimeVersion
 from judge.utils.problem_data import ProblemDataStorage
 
-
-def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
-    return string + (sum(k in unsafe for k in string) - string.count(u'\u202c')) * u'\u202c'
-
 problem_data_storage = ProblemDataStorage()
 
 
