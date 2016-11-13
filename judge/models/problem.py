@@ -12,6 +12,8 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from judge.fulltext import SearchQuerySet
+from judge.models.profile import Profile
+from judge.models.runtimes import Language
 from judge.user_translations import ugettext as user_ugettext
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
 
@@ -94,8 +96,8 @@ class Problem(models.Model):
                             validators=[RegexValidator('^[a-z0-9]+$', _('Problem code must be ^[a-z0-9]+$'))])
     name = models.CharField(max_length=100, verbose_name=_('problem name'), db_index=True)
     description = models.TextField(verbose_name=_('problem body'))
-    authors = models.ManyToManyField('Profile', verbose_name=_('creators'), blank=True, related_name='authored_problems')
-    testers = models.ManyToManyField('Profile', verbose_name=_('testers'), blank=True, related_name='tested_problems',
+    authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems')
+    testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True, related_name='tested_problems',
                                      help_text=_(
                                          "These users will be able to view a private problem, but not edit it."))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'))
@@ -105,11 +107,11 @@ class Problem(models.Model):
     short_circuit = models.BooleanField(default=False)
     points = models.FloatField(verbose_name=_('points'))
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
-    allowed_languages = models.ManyToManyField('Language', verbose_name=_('allowed languages'))
+    allowed_languages = models.ManyToManyField(Language, verbose_name=_('allowed languages'))
     is_public = models.BooleanField(verbose_name=_('publicly visible'), db_index=True, default=False)
     date = models.DateTimeField(verbose_name=_('date of publishing'), null=True, blank=True, db_index=True,
                                 help_text=_("Doesn't have magic ability to auto-publish due to backward compatibility"))
-    banned_users = models.ManyToManyField('Profile', verbose_name=_('personae non gratae'), blank=True,
+    banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
                                           help_text=_('Bans the selected users from submitting to this problem'))
     license = models.ForeignKey(License, null=True, blank=True, on_delete=models.SET_NULL)
     user_count = models.IntegerField(verbose_name=_('amount of users'), default=0,
@@ -203,7 +205,6 @@ class Problem(models.Model):
         limit_ids = set(limits.keys())
         common = []
 
-        from judge.models import Language
         for cn, ids in Language.get_common_name_map().iteritems():
             if ids - limit_ids:
                 continue
@@ -265,7 +266,7 @@ class ProblemTranslation(models.Model):
 
 class LanguageLimit(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='language_limits')
-    language = models.ForeignKey('Language', verbose_name=_('language'))
+    language = models.ForeignKey(Language, verbose_name=_('language'))
     time_limit = models.FloatField(verbose_name=_('time limit'))
     memory_limit = models.IntegerField(verbose_name=_('memory limit'))
 
