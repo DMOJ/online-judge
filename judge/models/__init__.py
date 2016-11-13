@@ -19,7 +19,7 @@ from reversion import revisions
 from reversion.models import Version
 
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES, EFFECTIVE_MATH_ENGINES
-from judge.models.contest import Contest, ContestTag, ContestParticipation, ContestProblem, ContestSubmission
+from judge.models.contest import Contest, ContestTag, ContestParticipation, ContestProblem, ContestSubmission, Rating
 from judge.models.problem import ProblemGroup, ProblemType, Problem, ProblemTranslation, TranslatedProblemQuerySet, \
     TranslatedProblemForeignKeyQuerySet, License, LanguageLimit
 from judge.models.problem_data import problem_data_storage, problem_directory_file, ProblemData, ProblemTestCase, \

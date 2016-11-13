@@ -14,7 +14,7 @@ from judge.models.problem import Problem
 from judge.models.profile import Profile, Organization
 from judge.models.submission import Submission
 
-__all__ = ['Contest', 'ContestTag', 'ContestParticipation', 'ContestProblem', 'ContestSubmission']
+__all__ = ['Contest', 'ContestTag', 'ContestParticipation', 'ContestProblem', 'ContestSubmission', 'Rating']
 
 
 class ContestTag(models.Model):
