@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -11,12 +9,12 @@ from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES, EFF
 from judge.models.comment import Comment, CommentVote
 from judge.models.contest import Contest, ContestTag, ContestParticipation, ContestProblem, ContestSubmission, Rating
 from judge.models.interface import MiscConfig, validate_regex, NavigationBar, BlogPost, Solution
-from judge.models.judge import Language, RuntimeVersion, Judge
 from judge.models.problem import ProblemGroup, ProblemType, Problem, ProblemTranslation, TranslatedProblemQuerySet, \
     TranslatedProblemForeignKeyQuerySet, License, LanguageLimit
 from judge.models.problem_data import problem_data_storage, problem_directory_file, ProblemData, ProblemTestCase, \
     CHECKERS
 from judge.models.profile import Profile, Organization, OrganizationRequest
+from judge.models.runtime import Language, RuntimeVersion, Judge
 from judge.models.submission import SUBMISSION_RESULT, Submission, SubmissionTestCase
 
 
