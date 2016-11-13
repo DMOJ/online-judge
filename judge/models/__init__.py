@@ -27,7 +27,7 @@ from timedelta.fields import TimedeltaField
 from judge.fulltext import SearchQuerySet
 from judge.judgeapi import judge_submission, abort_submission
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES
-from judge.models.profile import Profile, Organization
+from judge.models.profile import Profile, Organization, OrganizationRequest
 from judge.models.runtimes import Language, RuntimeVersion
 from judge.user_translations import ugettext as user_ugettext
 from judge.utils.problem_data import ProblemDataStorage
@@ -39,22 +39,6 @@ def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
 
 
 EFFECTIVE_MATH_ENGINES = ('svg', 'mml', 'tex', 'jax')
-
-
-class OrganizationRequest(models.Model):
-    user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='requests')
-    organization = models.ForeignKey(Organization, verbose_name=_('organization'), related_name='requests')
-    time = models.DateTimeField(verbose_name=_('request time'), auto_now_add=True)
-    state = models.CharField(max_length=1, verbose_name=_('state'), choices=(
-        ('P', 'Pending'),
-        ('A', 'Approved'),
-        ('R', 'Rejected'),
-    ))
-    reason = models.TextField(verbose_name=_('reason'))
-
-    class Meta:
-        verbose_name = _('organization join request')
-        verbose_name_plural = _('organization join requests')
 
 
 class ProblemType(models.Model):

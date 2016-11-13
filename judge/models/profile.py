@@ -13,7 +13,7 @@ from sortedm2m.fields import SortedManyToManyField
 
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES
 
-__all__ = ['Organization', 'Profile']
+__all__ = ['Organization', 'Profile', 'OrganizationRequest']
 
 
 class Organization(models.Model):
@@ -153,3 +153,19 @@ class Profile(models.Model):
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')
+
+
+class OrganizationRequest(models.Model):
+    user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='requests')
+    organization = models.ForeignKey(Organization, verbose_name=_('organization'), related_name='requests')
+    time = models.DateTimeField(verbose_name=_('request time'), auto_now_add=True)
+    state = models.CharField(max_length=1, verbose_name=_('state'), choices=(
+        ('P', 'Pending'),
+        ('A', 'Approved'),
+        ('R', 'Rejected'),
+    ))
+    reason = models.TextField(verbose_name=_('reason'))
+
+    class Meta:
+        verbose_name = _('organization join request')
+        verbose_name_plural = _('organization join requests')
