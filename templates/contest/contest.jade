@@ -10,6 +10,7 @@ extends common-content
 - load camo_proxy
 - load tz
 - load i18n
+- load reference
 
 block content_js_media
     script(type='text/javascript').
@@ -143,7 +144,7 @@ block description
                     | #[b {{ length }}] long starting on #[b {{ start_time }}]
 
     - cache 3600 contest_html contest.id MATH_ENGINE
-        | #{contest.description|markdown:"contest"|latex_math|smart_math:MATH_ENGINE|proxy_images}
+        | #{contest.description|markdown:"contest"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
 
 block description_end
 
