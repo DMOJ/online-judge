@@ -261,3 +261,15 @@ class ProblemTranslation(models.Model):
         unique_together = ('problem', 'language')
         verbose_name = _('problem translation')
         verbose_name_plural = _('problem translations')
+
+
+class LanguageLimit(models.Model):
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='language_limits')
+    language = models.ForeignKey('Language', verbose_name=_('language'))
+    time_limit = models.FloatField(verbose_name=_('time limit'))
+    memory_limit = models.IntegerField(verbose_name=_('memory limit'))
+
+    class Meta:
+        unique_together = ('problem', 'language')
+        verbose_name = _('language-specific resource limit')
+        verbose_name_plural = _('language-specific resource limits')

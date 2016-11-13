@@ -23,24 +23,11 @@ from timedelta.fields import TimedeltaField
 from judge.judgeapi import judge_submission, abort_submission
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES, EFFECTIVE_MATH_ENGINES
 from judge.models.problem import ProblemGroup, ProblemType, Problem, ProblemTranslation, TranslatedProblemQuerySet, \
-    TranslatedProblemForeignKeyQuerySet, License
+    TranslatedProblemForeignKeyQuerySet, License, LanguageLimit
 from judge.models.problem_data import problem_data_storage, problem_directory_file, ProblemData, ProblemTestCase, \
     CHECKERS
 from judge.models.profile import Profile, Organization, OrganizationRequest
 from judge.models.runtimes import Language, RuntimeVersion
-
-
-class LanguageLimit(models.Model):
-    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='language_limits')
-    language = models.ForeignKey(Language, verbose_name=_('language'))
-    time_limit = models.FloatField(verbose_name=_('time limit'))
-    memory_limit = models.IntegerField(verbose_name=_('memory limit'))
-
-    class Meta:
-        unique_together = ('problem', 'language')
-        verbose_name = _('language-specific resource limit')
-        verbose_name_plural = _('language-specific resource limits')
-
 
 SUBMISSION_RESULT = (
     ('AC', _('Accepted')),
