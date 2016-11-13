@@ -327,6 +327,12 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, ListView):
         self.search_query = None
         self.category = None
         self.selected_types = []
+
+        # This actually copies into the instance dictionary...
+        self.all_sorts = set(self.all_sorts)
+        if not self.show_types:
+            self.all_sorts.discard('type')
+
         if 'category' in request.GET:
             try:
                 self.category = int(request.GET.get('category'))
