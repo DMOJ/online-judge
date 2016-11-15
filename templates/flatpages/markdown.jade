@@ -1,6 +1,7 @@
 extends base
 -load markdown_trois_tags
 -load staticfiles
+-load reference
 
 block title
     | #{flatpage.title} - #{SITE_LONG_NAME}
@@ -13,4 +14,4 @@ block header
 
 block body
     .content-description
-        | #{flatpage.content|markdown:"solution"}
+        | #{flatpage.content|markdown:"solution"|reference}
