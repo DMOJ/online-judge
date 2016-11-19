@@ -55,8 +55,11 @@ class Comment(MPTTModel):
                 break
             for comment in slice:
                 if comment.page.startswith('p:'):
-                    if Problem.objects.get(code=comment.page[2:]).is_accessible_by(user):
-                        output.append(comment)
+                    try:
+                        if Problem.objects.get(code=comment.page[2:]).is_accessible_by(user):
+                            output.append(comment)
+                    except Problem.DoesNotExist:
+                        pass
                 else:
                     output.append(comment)
                 if len(output) >= n:
