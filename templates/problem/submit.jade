@@ -72,7 +72,7 @@ block js_media
                 $('#ace_source').on('ace_load', function (e, editor) {
                     var source = $('textarea#id_source');
                     if (source.val() == '') {
-                        var problem = $('#id_problem').find('option:selected').attr('value');
+                        var problem = $('#id_problem').val();
                         var code = localStorage.getItem('submit:' + problem);
                         if (code) {
                             source.val(code);
