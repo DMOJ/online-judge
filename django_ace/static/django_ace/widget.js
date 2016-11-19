@@ -156,14 +156,6 @@
                 exec: function (editor) {
                     editor.setFontSize(12);
                 }
-            },
-            {
-                name: "save",
-                bindKey: {win: "Ctrl-S", mac: "Command-S"},
-                exec: function (arg) {
-                    var problem = $('#id_problem').find('option:selected').attr('value');
-                    localStorage.setItem('submit:' + problem, editor.getSession().getValue());
-                }
             }
         ]);
 

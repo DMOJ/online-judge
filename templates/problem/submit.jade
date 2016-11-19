@@ -72,13 +72,19 @@ block js_media
                 $('#ace_source').on('ace_load', function (e, editor) {
                     var source = $('textarea#id_source');
                     if (source.val() == '') {
-                        var problem = $('#id_problem').val();
-                        var code = localStorage.getItem('submit:' + problem);
+                        var code = localStorage.getItem('submit:' + $('#id_problem').val());
                         if (code) {
                             source.val(code);
                             editor.getSession().setValue(code);
                         }
                     }
+                    editor.commands.addCommand({
+                        name: 'save',
+                        bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
+                        exec: function () {
+                            localStorage.setItem('submit:' + $('#id_problem').val(), editor.getSession().getValue());
+                        }
+                    });
                     editor.getSession().setUseWrapMode(true);
                     editor.setFontSize(14);
                     editor.setPrintMarginColumn(100);
