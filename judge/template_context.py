@@ -30,6 +30,7 @@ def get_resource(request):
         'FONTAWESOME_CSS': getattr(settings, 'FONTAWESOME_CSS',
                                    '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'),
         'DMOJ_SCHEME': scheme,
+        'DMOJ_CANONICAL': getattr(settings, 'DMOJ_CANONICAL', ''),
     }
 
 
