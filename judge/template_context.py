@@ -1,7 +1,7 @@
 from functools import partial
 
 from django.conf import settings
-from django.contrib.sites.models import Site
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.cache import cache
 from django.utils.functional import SimpleLazyObject, new_method_proxy
 
@@ -66,7 +66,7 @@ def general_info(request):
 
 
 def site(request):
-    return {'site': Site.objects.get_current()}
+    return {'site': get_current_site(request)}
 
 
 class MiscConfigDict(dict):
