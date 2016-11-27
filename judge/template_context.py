@@ -70,7 +70,7 @@ def site(request):
 
 
 class MiscConfigDict(dict):
-    __slots__ = ('language',)
+    __slots__ = ('language', 'site')
 
     def __init__(self, language='', site=None):
         self.language = language
