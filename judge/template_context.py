@@ -72,13 +72,13 @@ def site(request):
 class MiscConfigDict(dict):
     __slots__ = ('language', 'site')
 
-    def __init__(self, language='', site=None):
+    def __init__(self, language='', domain=None):
         self.language = language
-        self.site = site
+        self.site = domain
         super(MiscConfigDict, self).__init__()
 
     def __missing__(self, key):
-        cache_key = 'misc_config:%s:%s' % (self.language, key)
+        cache_key = 'misc_config:%s:%s:%s' % (self.site, self.language, key)
         value = cache.get(cache_key)
         if value is None:
             keys = ['%s.%s' % (key, self.language), key] if self.language else [key]
@@ -97,9 +97,9 @@ class MiscConfigDict(dict):
 
 
 def misc_config(request):
-    site = get_current_site(request).domain
-    return {'misc_config': MiscConfigDict(site=site),
-            'i18n_config': MiscConfigDict(language=request.LANGUAGE_CODE, site=site)}
+    domain = get_current_site(request).domain
+    return {'misc_config': MiscConfigDict(domain=domain),
+            'i18n_config': MiscConfigDict(language=request.LANGUAGE_CODE, domain=domain)}
 
 
 def contest(request):
