@@ -97,7 +97,7 @@ class MiscConfigDict(dict):
 
 
 def misc_config(request):
-    site = get_current_site(request)
+    site = get_current_site(request).domain
     return {'misc_config': MiscConfigDict(site=site),
             'i18n_config': MiscConfigDict(language=request.LANGUAGE_CODE, site=site)}
 
