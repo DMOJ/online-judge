@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, Language
 from judge.utils.subscription import newsletter_id
-from judge.widgets import MathJaxPagedownWidget, PagedownWidget, Select2Widget
+from judge.widgets import MathJaxPagedownWidget, PagedownWidget, Select2Widget, Select2MultipleWidget
 
 
 def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
@@ -68,7 +68,8 @@ class ProblemSubmitForm(ModelForm):
 class EditOrganizationForm(ModelForm):
     class Meta:
         model = Organization
-        fields = ['about']
+        fields = ['about', 'admins']
+        widgets = {'admins': Select2MultipleWidget()}
 
 
 class NewMessageForm(ModelForm):

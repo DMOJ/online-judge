@@ -269,6 +269,11 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
             raise PermissionDenied()
         return object
 
+    def get_form(self, form_class=None):
+        form = super(EditOrganization, self).get_form(form_class)
+        form.fields['admins'].queryset = self.object.members.all()
+        return form
+
     def form_valid(self, form):
         with transaction.atomic(), revisions.create_revision():
             revisions.set_comment(_('Edited from site'))
