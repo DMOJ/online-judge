@@ -71,7 +71,7 @@ class EditOrganizationForm(ModelForm):
         fields = ['about', 'admins']
         widgets = {'admins': Select2MultipleWidget()}
         if PagedownWidget is not None:
-            widgets['content'] = MathJaxPagedownWidget()
+            widgets['about'] = MathJaxPagedownWidget()
 
 
 class NewMessageForm(ModelForm):
