@@ -15,3 +15,8 @@ def absolute_links(text, url):
         if href:
             anchor.set('href', urljoin(url, href))
     return tree
+
+
+@register.filter(name='urljoin')
+def join(first, second):
+    return urljoin(first, second)
