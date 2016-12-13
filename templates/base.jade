@@ -44,9 +44,9 @@ html(lang=LANGUAGE_CODE)
         meta(name='theme-color', content='#FFBB33')
         
         if og_image
-            meta(property='og:image', content=og_image)
+            meta(property='og:image', content=og_image|absolutify:request.build_absolute_uri)
         else
-            meta(property='og:image', content='//{{ site.domain }}/logo.png')
+            meta(property='og:image', content='{{ DMOJ_SCHEME }}://{{ site.domain }}/logo.png')
         meta(property='og:title', content='{{ title }} - {{ SITE_LONG_NAME }}')
         meta(property='og:site_name', content='{{ SITE_LONG_NAME }}')
 
