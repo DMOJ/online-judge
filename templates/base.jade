@@ -50,6 +50,9 @@ html(lang=LANGUAGE_CODE)
             meta(property='og:image', content='{{ DMOJ_SCHEME }}://{{ site.domain }}/logo.png')
         meta(property='og:title', content='{{ title }} - {{ SITE_LONG_NAME }}')
         meta(property='og:site_name', content='{{ SITE_LONG_NAME }}')
+        meta(property='og:url', content='{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default:site.domain }}{{ request.get_full_path }}')
+        if meta_description
+            meta(property='og:description', content=meta_description)
 
         | <!--[if lt IE 9]>
         | <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
