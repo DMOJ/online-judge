@@ -13,11 +13,11 @@ block after_rank_head
 block after_rank
     if has_rating
         td
-            if user.rating
+            if user.participation_rating
                 span
-                    span.rate-box(class='{{ user.rating|rating_class }}')
-                        span(style='height: {{ user.rating|rating_progress|floatformat:3 }}em')
-                    span.rating(class='{{ user.rating|rating_class }}') #{user.rating}
+                    span.rate-box(class='{{ user.participation_rating|rating_class }}')
+                        span(style='height: {{ user.participation_rating|rating_progress|floatformat:3 }}em')
+                    span.rating(class='{{ user.participation_rating|rating_class }}') #{user.rating}
 
 block user_data
     if user.participation and not user.participation.ended
