@@ -116,10 +116,11 @@ class ProblemDetail(ProblemMixin, CommentedDetailView):
             context['description'] = translation.description
             context['translated'] = True
 
-        metadata = generate_opengraph('generated-meta-problem:%s:%d' % (context['language'], self.object.id),
-                                      context['description'])
-        context['meta_description'] = metadata[0]
-        context['og_image'] = metadata[1]
+        if not self.object.og_image or not self.object.summary:
+            metadata = generate_opengraph('generated-meta-problem:%s:%d' % (context['language'], self.object.id),
+                                          context['description'])
+        context['meta_description'] = self.object.summary or metadata[0]
+        context['og_image'] = self.object.og_image or metadata[1]
         return context
 
 

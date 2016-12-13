@@ -114,6 +114,9 @@ class Problem(models.Model):
     banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
                                           help_text=_('Bans the selected users from submitting to this problem'))
     license = models.ForeignKey(License, null=True, blank=True, on_delete=models.SET_NULL)
+    og_image = models.CharField(verbose_name=_('OpenGraph image'), max_length=150, blank=True)
+    summary = models.TextField(blank=True, verbose_name=_('problem summary'),
+                               help_text=_('Plain-text, shown in meta description tag, e.g. for social media.'))
     user_count = models.IntegerField(verbose_name=_('amount of users'), default=0,
                                      help_text=_('The amount of users on the best solutions page.'))
     ac_rate = models.FloatField(verbose_name=_('rate of AC submissions'), default=0)
