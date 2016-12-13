@@ -343,7 +343,8 @@ def make_contest_ranking_profile(participation, problems):
         points=participation.score,
         cumtime=participation.cumtime,
         organization=user.organization,
-        rating=participation.rating.rating if hasattr(participation, 'rating') else None,
+        rating=user.rating,
+        participation_rating=participation.rating.rating if hasattr(participation, 'rating') else None,
         problems=problems,
         participation=participation,
     )
