@@ -114,7 +114,10 @@ block js_media
                                 update_relative_time(row.find('span.time'));
                                 if (!was_shown)
                                     row.show('slow');
-                                if (!force) doing_ajax = false;
+                                if (!force)
+                                    setTimeout(function () {
+                                        doing_ajax = false;
+                                    }, 1000);
                             }).fail(function () {
                                 console.log('Failed to update submission: ' + id);
                                 if (!force) doing_ajax = false;
