@@ -329,7 +329,8 @@ class CachedContestCalendar(ContestCalendar):
 
 
 ContestRankingProfile = namedtuple('ContestRankingProfile', 'id user display_rank long_display_name points '
-                                                            'cumtime problems rating organization participation')
+                                                            'cumtime problems rating organization participation '
+                                                            'participation_rating')
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
 
 
