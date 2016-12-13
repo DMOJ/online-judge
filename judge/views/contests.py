@@ -25,11 +25,10 @@ from django.views.generic.detail import BaseDetailView, DetailView
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
-from judge.lxml_tree import HTMLTreeString
 from judge.models import Contest, ContestParticipation, ContestTag, Profile
+from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin
-from markdown_trois import markdown
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'participation_list', 'own_participation_list', 'get_contest_ranking_list',
@@ -172,19 +171,7 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
         context['now'] = timezone.now()
 
         if not self.object.og_image or not self.object.summary:
-            meta_key = 'generated-meta:%d' % self.object.id
-            metadata = cache.get(meta_key)
-            if metadata is None:
-                description = None
-                tree = HTMLTreeString(markdown(self.object.description, 'contest')).tree
-                for p in tree.iterfind('p'):
-                    text = p.text_content().strip()
-                    if text:
-                        description = text
-                        break
-                img = tree.xpath('.//img')
-                metadata = description, img[0].get('src') if img else None
-                cache.set(meta_key, metadata, 86400)
+            metadata = generate_opengraph('generated-meta-contest:%d' % self.object.id, self.object.description)
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
 
