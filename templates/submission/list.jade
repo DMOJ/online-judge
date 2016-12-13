@@ -139,6 +139,7 @@ block js_media
                                 } else if (message.type == 'done-submission') {
                                     update_submission(message, true);
 
+                                    if (!statistics.length) return;
                                     $.ajax({
                                         url: '?results'
                                     }).done(function (data) {
