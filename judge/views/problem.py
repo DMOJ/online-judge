@@ -30,6 +30,7 @@ from judge.models import Problem, Submission, ContestSubmission, ContestProblem,
     ProblemTranslation, TranslatedProblemForeignKeyQuerySet, RuntimeVersion, ProblemType
 from judge.pdf_problems import HAS_PDF, DefaultPdfMaker
 from judge.utils.diggpaginator import DiggPaginator
+from judge.utils.opengraph import generate_opengraph
 from judge.utils.problems import contest_completed_ids, user_completed_ids, contest_attempted_ids, user_attempted_ids
 from judge.utils.views import LoadSelect2Mixin, TitleMixin, generic_message, QueryStringSortMixin
 
@@ -114,6 +115,11 @@ class ProblemDetail(ProblemMixin, CommentedDetailView):
             context['language'] = self.request.LANGUAGE_CODE
             context['description'] = translation.description
             context['translated'] = True
+
+        metadata = generate_opengraph('generated-meta-problem:%s:%d' % (context['language'], self.object.id),
+                                      context['description'])
+        context['meta_description'] = metadata[0]
+        context['og_image'] = metadata[1]
         return context
 
 

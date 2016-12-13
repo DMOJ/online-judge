@@ -42,6 +42,7 @@ def problem_update(sender, instance, **kwargs):
         make_template_fragment_key('problem_authors', (instance.id, lang))
         for lang, _ in settings.LANGUAGES
     ])
+    cache.delete_many(['generated-meta-problem:%s:%d' % (lang, instance.id) for lang, _ in settings.LANGUAGES])
 
     if hasattr(settings, 'PROBLEM_PDF_CACHE'):
         for lang, _ in settings.LANGUAGES:
@@ -64,7 +65,7 @@ def contest_update(sender, instance, **kwargs):
     if hasattr(instance, '_updating_stats_only'):
         return
 
-    cache.delete_many(['generated-meta:%d' % instance.id] +
+    cache.delete_many(['generated-meta-contest:%d' % instance.id] +
                       [make_template_fragment_key('contest_html', (instance.id, engine))
                        for engine in EFFECTIVE_MATH_ENGINES])
 
