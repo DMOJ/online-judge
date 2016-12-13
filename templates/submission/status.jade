@@ -8,10 +8,38 @@ block js_media
     if not submission.is_graded and last_msg
         script(type='text/javascript').
             $(function () {
+                var blocked = false, request = false;
+                var list = $('#test-cases');
+
+                function update() {
+                    if (blocked) {
+                        request = true;
+                        return;
+                    }
+                    request = false;
+                    $.ajax({
+                        url: '{% url "submission_testcases_query" %}',
+                        data: {id: '{{ submission.id }}'}
+                    }).done(function (data) {
+                        list.empty().html(data).find('.toggle').each(function () {
+                            register_toggle($(this));
+                        });
+                        setTimeout(function () {
+                            blocked = false;
+                            if (request)
+                                update();
+                        }, 500);
+                    }).fail(function (data) {
+                        console.log('Failed to update testcases!');
+                    });
+
+                    if ($(window).scrollTop() + $(window).height() > $(document).height() - 100)
+                        $("html, body").animate({scrollTop: $(document).height()}, 0);
+                }
+
                 var receiver = new EventReceiver(
                     "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                     ['sub_{{ submission.id }}'], {{ last_msg }}, function (message) {
-                        var list = $('#test-cases');
                         switch (message.type) {
                             case 'internal-error':
                             case 'grading-end':                                                                           
@@ -21,21 +49,7 @@ block js_media
                             case 'test-case':
                             case 'grading-begin':
                             case 'processing':
-                                $.ajax({
-                                    url: '{% url "submission_testcases_query" %}',
-                                    data: {id: '{{ submission.id }}'}
-                                }).done(function (data) {
-                                    list.empty().html(data).find('.toggle').each(function () {
-                                        register_toggle($(this));
-                                    });
-                                }).fail(function (data) {
-                                    console.log('Failed to update testcases!');
-                                });
-                                
-                                if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
-                                    $("html, body").animate({ scrollTop: $(document).height() }, 0);
-                                }
-                                
+                                update();
                         }                        
                     }
                 )
