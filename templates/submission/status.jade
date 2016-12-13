@@ -17,6 +17,7 @@ block js_media
                         return;
                     }
                     request = false;
+                    blocked = true;
                     $.ajax({
                         url: '{% url "submission_testcases_query" %}',
                         data: {id: '{{ submission.id }}'}
