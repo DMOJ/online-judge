@@ -1,4 +1,5 @@
 from django.core.cache import cache
+from django.template.defaultfilters import truncatewords
 
 from judge.lxml_tree import HTMLTreeString
 from markdown_trois import markdown
@@ -15,6 +16,6 @@ def generate_opengraph(cache_key, data):
                 description = text
                 break
         img = tree.xpath('.//img')
-        metadata = description, img[0].get('src') if img else None
+        metadata = truncatewords(description, 60), img[0].get('src') if img else None
         cache.set(cache_key, metadata, 86400)
     return metadata
