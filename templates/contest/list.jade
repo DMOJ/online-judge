@@ -16,6 +16,11 @@ block js_media
             });
 
             $('.contest-tag').find('a').featherlight();
+
+            $('.join-warning').click(function () {
+                return confirm('{% trans "Are you sure you want to join?" %}\n' +
+                        '{% trans "Joining a contest for the first time starts your timer, after which it becomes unstoppable." %}');
+            });
         });
 
 block header
@@ -64,11 +69,13 @@ block body
                                         | {{ window_length }} long
                     td: a(href='{% url "contest_ranking" contest.key %}') #{contest.user_count}
                     if not IN_CONTEST
-                        td: a.unselectable.button.full.participate-button(href='{% url "contest_join" contest.key %}')
+                        td
                             if request.user.profile in contest.organizers.all
-                                | {% trans "Spectate" %}
+                                a.unselectable.button.full.participate-button(href='{% url "contest_join" contest.key %}')
+                                    | {% trans "Spectate" %}
                             else
-                                | {% trans "Join" %}
+                                a.unselectable.button.full.participate-button.join-warning(href='{% url "contest_join" contest.key %}')
+                                    | {% trans "Join" %}
         br
         .dashed
         
