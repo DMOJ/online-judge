@@ -49,6 +49,11 @@ block content_js_media
                     return confirm('{% trans "Are you sure you want to leave?" %}\n' +
                             '{% trans "You cannot come back to a virtual participation. You will have to start a new one." %}');
                 });
+
+                $('.first-join').click(function () {
+                    return confirm('{% trans "Are you sure you want to join?" %}\n' +
+                            '{% trans "Joining a contest starts your timer, after which it becomes unstoppable." %}');
+                });
             });
     include comments/js_media
 
@@ -83,12 +88,15 @@ block info_float
                             | {% trans "Stop spectating" %}
                         else
                             | {% trans "Leave contest" %}
-                else
+                elif participating and participation.ended or request.user.profile in contest.organizers.all
                     a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
-                        if participating and participation.ended or request.user.profile in contest.organizers.all
-                            | {% trans "Spectate contest" %}
-                        else
-                            | {% trans "Join contest" %}
+                        | {% trans "Spectate contest" %}
+                elif participating
+                    a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
+                        | {% trans "Join contest" %}
+                else
+                    a.unselectable.button.full.first-join(href='{% url "contest_join" contest.key %}')
+                        | {% trans "Join contest" %}
             hr
 
         if contest.start_time <= now or perms.judge.see_private_contest
