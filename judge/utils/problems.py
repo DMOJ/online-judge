@@ -6,8 +6,11 @@ from django.utils.translation import ugettext as _
 
 from judge.models import Submission
 
-__all__ = ['contest_completed_ids', 'user_completed_ids']
+__all__ = ['contest_completed_ids', 'user_completed_ids', 'user_authored_ids']
 
+def user_authored_ids(profile):
+    result = set(Problem.objects.filter(authors=profile).values_list('id', flat=True))
+    return result
 
 def contest_completed_ids(participation):
     key = 'contest_complete:%d' % participation.id
