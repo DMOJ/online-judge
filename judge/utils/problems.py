@@ -4,7 +4,7 @@ from django.core.cache import cache
 from django.db.models import F, Count, Max
 from django.utils.translation import ugettext as _
 
-from judge.models import Submission
+from judge.models import Submission, Problem
 
 __all__ = ['contest_completed_ids', 'user_completed_ids', 'user_authored_ids']
 
