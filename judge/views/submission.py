@@ -15,7 +15,7 @@ from django.views.generic import ListView, DetailView
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, Profile, Contest, ProblemTranslation, Language
-from judge.utils.problems import user_completed_ids, get_result_table
+from judge.utils.problems import user_completed_ids, user_authored_ids, get_result_table
 from judge.utils.raw_sql import use_straight_join
 from judge.utils.views import TitleMixin, DiggPaginatorMixin, LoadSelect2Mixin
 
@@ -285,6 +285,7 @@ def single_submission(request, submission_id, show_problem=True):
     submission = get_object_or_404(submission_related(Submission.objects.all()), id=int(submission_id))
     return render(request, 'submission/row.jade', {
         'submission': submission,
+        'authored_problem_ids': user_authored_ids(request.user.profile) if authenticated else [],
         'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
         'show_problem': show_problem,
         'problem_name': show_problem and submission.problem.translated_name(request.LANGUAGE_CODE),
