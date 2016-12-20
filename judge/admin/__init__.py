@@ -1,17 +1,18 @@
 from django.contrib import admin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import TextField
-from django.forms import ModelForm, TextInput
+from django.forms import ModelForm
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ugettext
 from mptt.admin import MPTTModelAdmin
 from reversion.admin import VersionAdmin
 
 from judge.admin.comments import CommentAdmin
 from judge.admin.contest import ContestTagAdmin, ContestAdmin, ContestParticipationAdmin
+from judge.admin.organization import OrganizationAdmin, OrganizationRequestAdmin
 from judge.admin.problem import ProblemAdmin
 from judge.admin.profile import ProfileAdmin
+from judge.admin.runtime import JudgeAdmin
 from judge.admin.submission import SubmissionAdmin
 from judge.admin.taxon import LanguageAdmin, ProblemGroupAdmin, ProblemTypeAdmin
 from judge.dblock import LockModel
@@ -19,7 +20,7 @@ from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, 
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, Organization, BlogPost, \
     Solution, License, OrganizationRequest, \
     ContestTag
-from judge.widgets import AdminPagedownWidget, MathJaxAdminPagedownWidget, \
+from judge.widgets import MathJaxAdminPagedownWidget, \
     HeavyPreviewAdminPageDownWidget, HeavySelect2Widget, HeavySelect2MultipleWidget
 
 # try:
@@ -52,114 +53,6 @@ class NavigationBarAdmin(MPTTModelAdmin, SortableModelAdmin):
             with LockModel(write=(NavigationBar,)):
                 NavigationBar.objects.rebuild()
         return result
-
-
-class GenerateKeyTextInput(TextInput):
-    def render(self, name, value, attrs=None):
-        text = super(TextInput, self).render(name, value, attrs)
-        return mark_safe(text + format_html(
-            '''\
-<a href="#" onclick="return false;" class="button" id="id_{0}_regen">Regenerate</a>
-<script type="text/javascript">
-(function ($) {{
-    $(document).ready(function () {{
-        $('#id_{0}_regen').click(function () {{
-            var length = 100,
-                charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{{}};:,<>./?",
-                key = "";
-            for (var i = 0, n = charset.length; i < length; ++i) {{
-                key += charset.charAt(Math.floor(Math.random() * n));
-            }}
-            $('#id_{0}').val(key);
-        }});
-    }});
-}})(django.jQuery);
-</script>
-''', name))
-
-
-class JudgeAdminForm(ModelForm):
-    class Meta:
-        widgets = {
-            'auth_key': GenerateKeyTextInput(),
-        }
-
-
-class JudgeAdmin(VersionAdmin):
-    form = JudgeAdminForm
-    readonly_fields = ('created', 'online', 'start_time', 'ping', 'load', 'last_ip', 'runtimes', 'problems')
-    fieldsets = (
-        (None, {'fields': ('name', 'auth_key')}),
-        (_('Description'), {'fields': ('description',)}),
-        (_('Information'), {'fields': ('created', 'online', 'last_ip', 'start_time', 'ping', 'load')}),
-        (_('Capabilities'), {'fields': ('runtimes', 'problems')}),
-    )
-    list_display = ('name', 'online', 'start_time', 'ping', 'load', 'last_ip')
-    ordering = ['-online', 'name']
-
-    def get_readonly_fields(self, request, obj=None):
-        if obj is not None and obj.online:
-            return self.readonly_fields + ('name',)
-        return self.readonly_fields
-
-    def has_delete_permission(self, request, obj=None):
-        result = super(JudgeAdmin, self).has_delete_permission(request, obj)
-        if result and obj is not None:
-            return not obj.online
-        return result
-
-    if AdminPagedownWidget is not None:
-        formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
-        }
-
-
-class OrganizationForm(ModelForm):
-    class Meta:
-        widgets = {
-            'admins': HeavySelect2MultipleWidget(data_view='profile_select2'),
-            'registrant': HeavySelect2Widget(data_view='profile_select2'),
-        }
-
-
-class OrganizationAdmin(VersionAdmin):
-    readonly_fields = ('creation_date',)
-    fields = ('name', 'key', 'short_name', 'is_open', 'about', 'slots', 'registrant', 'creation_date', 'admins')
-    list_display = ('name', 'key', 'short_name', 'is_open', 'slots', 'registrant', 'show_public')
-    actions_on_top = True
-    actions_on_bottom = True
-    form = OrganizationForm
-
-    def show_public(self, obj):
-        format = '<a href="{0}" style="white-space:nowrap;">%s</a>' % ugettext('View on site')
-        return format_html(format, obj.get_absolute_url())
-
-    show_public.short_description = ''
-
-    def get_readonly_fields(self, request, obj=None):
-        fields = self.readonly_fields
-        if not request.user.has_perm('judge.organization_admin'):
-            return fields + ('registrant', 'admins', 'is_open', 'slots')
-        return fields
-
-    if MathJaxAdminPagedownWidget is not None:
-        formfield_overrides = {
-            TextField: {'widget': MathJaxAdminPagedownWidget},
-        }
-
-    def get_queryset(self, request):
-        queryset = Organization.objects.all()
-        if request.user.has_perm('judge.edit_all_organization'):
-            return queryset
-        else:
-            return queryset.filter(admins=request.user.profile.id)
-
-    def has_change_permission(self, request, obj=None):
-        if not request.user.has_perm('judge.change_organization'):
-            return False
-        if request.user.has_perm('judge.edit_all_organization') or obj is None:
-            return True
-        return obj.admins.filter(id=request.user.profile.id).exists()
 
 
 class BlogPostForm(ModelForm):
@@ -235,16 +128,6 @@ class LicenseAdmin(admin.ModelAdmin):
         formfield_overrides = {
             TextField: {'widget': MathJaxAdminPagedownWidget},
         }
-
-
-class OrganizationRequestAdmin(admin.ModelAdmin):
-    list_display = ('username', 'organization', 'state', 'time')
-    readonly_fields = ('user', 'organization')
-
-    def username(self, obj):
-        return obj.user.long_display_name
-
-    username.admin_order_field = 'user__user__username'
 
 
 admin.site.register(Language, LanguageAdmin)
