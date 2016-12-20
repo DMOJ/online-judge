@@ -84,10 +84,12 @@ def api_v1_problem_info(request, problem):
     if not p.is_accessible_by(request.user):
         raise Http404()
 
+    can_show_types = request.user.is_authenticated() and not Problem.objects.filter(id=p.id, contest__users__user=request.user.profile, contest__hide_problem_tags=True).exists()
+
     return JsonResponse({
         'name': p.name,
         'authors': list(p.authors.values_list('user__username', flat=True)),
-        'types': list(p.types.values_list('full_name', flat=True)),
+        'types': list(p.types.values_list('full_name', flat=True)) if can_show_types else [],
         'group': p.group.full_name,
         'time_limit': p.time_limit,
         'memory_limit': p.memory_limit,
