@@ -20,13 +20,14 @@ block after_rank
                     span.rating(class='{{ user.participation_rating|rating_class }}') #{user.rating}
 
 block user_data
-    if user.participation and not user.participation.ended
-        .start-time.active.moment-time-toggle(data-unix='{{ user.participation.start|utc|date:"c" }}') {% trans "Started" %}
-            = ' '
-            span.relative
-            = '.'
-    else
-        .start-time {% trans "Participation ended." %}
+    if not contest.ended
+        if user.participation and not user.participation.ended
+            .start-time.active.moment-time-toggle(data-unix='{{ user.participation.start|utc|date:"c" }}') {% trans "Started" %}
+                = ' '
+                span.relative
+                = '.'
+        else
+            .start-time {% trans "Participation ended." %}
 
 block before_point_head
     each problem in problems
