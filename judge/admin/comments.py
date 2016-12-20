@@ -12,8 +12,9 @@ class CommentForm(ModelForm):
         widgets = {
             'author': HeavySelect2Widget(data_view='profile_select2'),
             'parent': HeavySelect2Widget(data_view='comment_select2'),
-            'body': MathJaxAdminPagedownWidget,
         }
+        if MathJaxAdminPagedownWidget is not None:
+            widgets['body'] = MathJaxAdminPagedownWidget
 
 
 class CommentAdmin(VersionAdmin):
