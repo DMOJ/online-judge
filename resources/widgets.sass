@@ -58,6 +58,9 @@ input
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s
     box-sizing: border-box
+    // Need this explicitly because UA stylesheet for Chrome on 4k makes
+    // everything look bad otherwise (forces it to 9.3px)
+    font-size: 14px
 
   &[type=number]
     padding: 2px 0 2px 5px
