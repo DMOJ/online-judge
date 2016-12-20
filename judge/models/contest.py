@@ -51,10 +51,10 @@ class Contest(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
     organizers = models.ManyToManyField(Profile, help_text=_('These people will be able to edit the contest.'),
                                         related_name='organizers+')
-    description = models.TextField(blank=True)
+    description = models.TextField(verbose_name=_('description'), blank=True)
     problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
-    start_time = models.DateTimeField(db_index=True)
-    end_time = models.DateTimeField(db_index=True)
+    start_time = models.DateTimeField(verbose_name=_('start time'), db_index=True)
+    end_time = models.DateTimeField(verbose_name=_('end time'), db_index=True)
     time_limit = models.DurationField(verbose_name=_('time limit'), blank=True, null=True)
     is_public = models.BooleanField(verbose_name=_('publicly visible'), default=False,
                                     help_text=_('Should be set even for organization-private contests, where it '
