@@ -85,7 +85,7 @@ def api_v2_user_info(request):
                 'end_time': contest.end_time.isoformat(),
             },
             'rank': rank,
-            'rating': rank.participation_rating,
+            'rating': result.participation_rating,
         })
 
     resp['contest_history'] = contest_history
