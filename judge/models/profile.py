@@ -74,6 +74,7 @@ class Profile(models.Model):
                                 default=getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto'))
     language = models.ForeignKey('Language', verbose_name=_('preferred language'))
     points = models.FloatField(default=0, db_index=True)
+    pp = models.FloatField(default=0, db_index=True)
     problem_count = models.IntegerField(default=0, db_index=True)
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
     last_access = models.DateTimeField(verbose_name=_('last access time'), default=now)
@@ -101,14 +102,23 @@ class Profile(models.Model):
 
     def calculate_points(self):
         from judge.models import Submission
-        points = sum(map(itemgetter('points'),
+        qdata = sorted(map(itemgetter('points'),
                          Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
-                         .values('problem_id').distinct().annotate(points=Max('points'))))
+                         .values('problem_id').distinct().annotate(points=Max('points'))), reverse=True)
+        print qdata
+        points = sum(qdata)
         problems = (self.submission_set.filter(points__gt=0, problem__is_public=True)
                     .values('problem').distinct().count())
-        if self.points != points or problems != self.problem_count:
+        nr = 0
+        pp = 0.0
+        for x in qdata:
+            pp += (0.95**nr) * x
+            nr += 1
+        print pp
+        if self.points != points or problems != self.problem_count or self.pp != pp:
             self.points = points
             self.problem_count = problems
+            self.pp = pp
             self.save()
         return points
 
