@@ -1,0 +1,210 @@
+from operator import attrgetter
+
+from django import forms
+from django.contrib import admin
+from django.core.urlresolvers import reverse_lazy
+from django.db import connection
+from django.db.models import Q
+from django.forms import ModelForm
+from django.utils.html import format_html
+from django.utils.translation import ugettext, ungettext, ugettext_lazy as _
+from reversion.admin import VersionAdmin
+
+from judge.models import Profile, LanguageLimit, ProblemTranslation, Problem
+from judge.widgets import HeavySelect2MultipleWidget, Select2MultipleWidget, Select2Widget, \
+    HeavyPreviewAdminPageDownWidget, CheckboxSelectMultipleWithSelectAll
+
+
+class ProblemForm(ModelForm):
+    change_message = forms.CharField(max_length=256, label='Edit reason', required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(ProblemForm, self).__init__(*args, **kwargs)
+        self.fields['authors'].widget.can_add_related = False
+        self.fields['testers'].widget.can_add_related = False
+        self.fields['banned_users'].widget.can_add_related = False
+        self.fields['change_message'].widget.attrs.update({
+            'placeholder': ugettext('Describe the changes you made (optional)')
+        })
+
+    class Meta:
+        widgets = {
+            'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'testers': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'types': Select2MultipleWidget,
+            'group': Select2Widget,
+        }
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets['description'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('problem_preview'))
+
+
+class ProblemCreatorListFilter(admin.SimpleListFilter):
+    title = parameter_name = 'creator'
+
+    def lookups(self, request, model_admin):
+        return [(name, name) for name in Profile.objects.exclude(authored_problems=None)
+                                                .values_list('user__username', flat=True)]
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+        return queryset.filter(authors__user__username=self.value())
+
+
+class LanguageLimitInlineForm(ModelForm):
+    class Meta:
+        widgets = {'language': Select2Widget}
+
+
+class LanguageLimitInline(admin.TabularInline):
+    model = LanguageLimit
+    fields = ('language', 'time_limit', 'memory_limit')
+    form = LanguageLimitInlineForm
+
+
+class ProblemTranslationForm(ModelForm):
+    class Meta:
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets = {'description': HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('problem_preview'))}
+
+
+class ProblemTranslationInline(admin.StackedInline):
+    model = ProblemTranslation
+    fields = ('language', 'name', 'description')
+    form = ProblemTranslationForm
+    extra = 0
+
+
+class ProblemAdmin(VersionAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'testers', 'description', 'license')
+        }),
+        (_('Social Media'), {'classes': ('collapse',), 'fields': ('og_image', 'summary')}),
+        (_('Taxonomy'), {'fields': ('types', 'group')}),
+        (_('Points'), {'fields': (('points', 'partial'), 'short_circuit')}),
+        (_('Limits'), {'fields': ('time_limit', 'memory_limit')}),
+        (_('Language'), {'fields': ('allowed_languages',)}),
+        (_('Justice'), {'fields': ('banned_users',)}),
+        (_('History'), {'fields': ('change_message',)})
+    )
+    list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'show_public']
+    ordering = ['code']
+    search_fields = ('code', 'name', 'authors__user__username')
+    inlines = [LanguageLimitInline, ProblemTranslationInline]
+    list_max_show_all = 1000
+    actions_on_top = True
+    actions_on_bottom = True
+    list_filter = ('is_public', ProblemCreatorListFilter)
+    form = ProblemForm
+
+    def get_actions(self, request):
+        actions = super(ProblemAdmin, self).get_actions(request)
+
+        if request.user.has_perm('judge.change_public_visibility'):
+            func, name, desc = self.get_action('make_public')
+            actions[name] = (func, name, desc)
+
+            func, name, desc = self.get_action('make_private')
+            actions[name] = (func, name, desc)
+
+        return actions
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.has_perm('judge.change_public_visibility'):
+            return self.readonly_fields + ('is_public',)
+        return self.readonly_fields
+
+    def show_authors(self, obj):
+        return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
+    show_authors.short_description = _('Authors')
+
+    def show_public(self, obj):
+        return format_html(u'<a href="{1}">{0}</a>', ugettext('View on site'), obj.get_absolute_url())
+    show_public.short_description = ''
+
+    def _update_points(self, problem_id, sign):
+        with connection.cursor() as c:
+            c.execute('''
+                UPDATE judge_profile prof INNER JOIN (
+                    SELECT sub.user_id AS user_id, MAX(sub.points) AS delta
+                    FROM judge_submission sub
+                    WHERE sub.problem_id = %s
+                    GROUP BY sub.user_id
+                ) `data` ON (`data`.user_id = prof.id)
+                SET prof.points = prof.points {} `data`.delta
+                WHERE `data`.delta IS NOT NULL
+            '''.format(sign), (problem_id,))
+
+    def _update_points_many(self, ids, sign):
+        with connection.cursor() as c:
+            c.execute('''
+                UPDATE judge_profile prof INNER JOIN (
+                    SELECT deltas.id, SUM(deltas) AS delta FROM (
+                        SELECT sub.user_id AS id, MAX(sub.points) AS deltas
+                             FROM judge_submission sub
+                             WHERE sub.problem_id IN ({})
+                             GROUP BY sub.user_id, sub.problem_id
+                    ) deltas GROUP BY id
+                ) `data` ON (`data`.id = prof.id)
+                SET prof.points = prof.points {} `data`.delta
+                WHERE `data`.delta IS NOT NULL
+            '''.format(', '.join(['%s'] * len(ids)), sign), ids)
+
+    def make_public(self, request, queryset):
+        count = queryset.update(is_public=True)
+        self._update_points_many(queryset.values_list('id', flat=True), '+')
+        self.message_user(request, ungettext('%d problem successfully marked as public.',
+                                             '%d problems successfully marked as public.',
+                                             count) % count)
+    make_public.short_description = _('Mark problems as public')
+
+    def make_private(self, request, queryset):
+        count = queryset.update(is_public=False)
+        self._update_points_many(queryset.values_list('id', flat=True), '-')
+        self.message_user(request, ungettext('%d problem successfully marked as private.',
+                                             '%d problems successfully marked as private.',
+                                             count) % count)
+    make_private.short_description = _('Mark problems as private')
+
+    def get_queryset(self, request):
+        queryset = Problem.objects.prefetch_related('authors__user')
+        if request.user.has_perm('judge.edit_all_problem'):
+            return queryset
+
+        access = Q()
+        if request.user.has_perm('judge.edit_public_problem'):
+            access |= Q(is_public=True)
+        if request.user.has_perm('judge.edit_own_problem'):
+            access |= Q(authors__id=request.user.profile.id)
+        return queryset.filter(access).distinct() if access else queryset.none()
+
+    def has_change_permission(self, request, obj=None):
+        if request.user.has_perm('judge.edit_all_problem') or obj is None:
+            return True
+        if request.user.has_perm('judge.edit_public_problem') and obj.is_public:
+            return True
+        if not request.user.has_perm('judge.edit_own_problem'):
+            return False
+        return obj.authors.filter(id=request.user.profile.id).exists()
+
+    def formfield_for_manytomany(self, db_field, request=None, **kwargs):
+        if db_field.name == 'allowed_languages':
+            kwargs['widget'] = CheckboxSelectMultipleWithSelectAll()
+        return super(ProblemAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+
+    def get_form(self, *args, **kwargs):
+        form = super(ProblemAdmin, self).get_form(*args, **kwargs)
+        form.base_fields['authors'].queryset = Profile.objects.all()
+        return form
+
+    def save_model(self, request, obj, form, change):
+        super(ProblemAdmin, self).save_model(request, obj, form, change)
+        if form.changed_data and 'is_public' in form.changed_data:
+            self._update_points(obj.id, '+' if obj.is_public else '-')
+
+    def construct_change_message(self, request, form, *args, **kwargs):
+        if form.cleaned_data.get('change_message'):
+            return form.cleaned_data['change_message']
+        return super(ProblemAdmin, self).construct_change_message(request, form, *args, **kwargs)
