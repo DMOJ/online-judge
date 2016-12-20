@@ -13,6 +13,7 @@ from django.utils.translation import ugettext_lazy as _, ugettext, ungettext
 from mptt.admin import MPTTModelAdmin
 from reversion.admin import VersionAdmin
 
+from judge.admin.comments import CommentAdmin
 from judge.admin.problem import ProblemAdmin
 from judge.admin.profile import ProfileAdmin
 from judge.admin.submission import SubmissionAdmin
@@ -37,64 +38,6 @@ class HeavySelect2Widget(HeavySelect2Widget):
 # except ImportError:
 SortableModelAdmin = object
 SortableTabularInline = admin.TabularInline
-
-
-class CommentForm(ModelForm):
-    class Meta:
-        widgets = {
-            'author': HeavySelect2Widget(data_view='profile_select2'),
-            'parent': HeavySelect2Widget(data_view='comment_select2'),
-        }
-
-
-class CommentAdmin(VersionAdmin):
-    fieldsets = (
-        (None, {'fields': ('author', 'page', 'parent', 'score', 'hidden')}),
-        ('Content', {'fields': ('title', 'body')}),
-    )
-    list_display = ['title', 'author', 'linked_page', 'time']
-    search_fields = ['author__user__username', 'author__name', 'page', 'title', 'body']
-    actions = ['hide_comment', 'unhide_comment']
-    list_filter = ['hidden']
-    actions_on_top = True
-    actions_on_bottom = True
-    form = CommentForm
-
-    def hide_comment(self, request, queryset):
-        count = queryset.update(hidden=True)
-        self.message_user(request, ungettext('%d comment successfully hidden.',
-                                             '%d comments successfully hidden.',
-                                             count) % count)
-
-    hide_comment.short_description = _('Hide comments')
-
-    def unhide_comment(self, request, queryset):
-        count = queryset.update(hidden=False)
-        self.message_user(request, ungettext('%d comment successfully unhidden.',
-                                             '%d comments successfully unhidden.',
-                                             count) % count)
-
-    unhide_comment.short_description = _('Unhide comments')
-
-    def get_queryset(self, request):
-        return Comment.objects.order_by('-time')
-
-    def linked_page(self, obj):
-        link = obj.link
-
-        if link is not None:
-            return format_html('<a href="{0}">{1}</a>', link, obj.page)
-        else:
-            return format_html('{0}', obj.page)
-
-    linked_page.short_description = _('Associated page')
-    linked_page.allow_tags = True
-    linked_page.admin_order_field = 'page'
-
-    if MathJaxAdminPagedownWidget is not None:
-        formfield_overrides = {
-            TextField: {'widget': MathJaxAdminPagedownWidget},
-        }
 
 
 class LanguageForm(ModelForm):
