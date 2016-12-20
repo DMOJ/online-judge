@@ -60,4 +60,4 @@ class CommentAdmin(VersionAdmin):
     def save_model(self, request, obj, form, change):
         super(CommentAdmin, self).save_model(request, obj, form, change)
         if obj.hidden:
-            obj.replies.update(hidden=obj.hidden)
+            obj.get_descendants().update(hidden=obj.hidden)
