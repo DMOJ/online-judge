@@ -7,12 +7,6 @@ from judge.models import Comment
 from judge.widgets import MathJaxAdminPagedownWidget, HeavySelect2Widget
 
 
-class HeavySelect2Widget(HeavySelect2Widget):
-    @property
-    def is_hidden(self):
-        return False
-
-
 class CommentForm(ModelForm):
     class Meta:
         widgets = {
