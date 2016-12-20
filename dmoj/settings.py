@@ -76,7 +76,7 @@ else:
                     'icon': 'fa-bar-chart',
                     'children': [
                         'judge.ContestParticipation',
-                        'judge.ContestTag'
+                        'judge.ContestTag',
                     ],
                 },
                 {
@@ -92,8 +92,21 @@ else:
                     'icon': 'fa-user-plus',
                     'children': [
                         'judge.Organization',
+                        'judge.OrganizationRequest',
                     ],
                 },
+                {
+                    'model': 'judge.NavigationBar',
+                    'icon': 'fa-bars',
+                    'children': [
+                        'judge.MiscConfig',
+                        'judge.License',
+                        'sites.Site',
+                        'redirects.Redirect',
+                    ],
+                },
+                ('judge.BlogPost', 'fa-rss-square'),
+                ('judge.Comment', 'fa-comment-o'),
                 ('flatpages.FlatPage', 'fa-file-text-o'),
                 ('judge.Solution', 'fa-pencil'),
             ],
