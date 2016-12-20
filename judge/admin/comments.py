@@ -56,3 +56,8 @@ class CommentAdmin(VersionAdmin):
     linked_page.short_description = _('Associated page')
     linked_page.allow_tags = True
     linked_page.admin_order_field = 'page'
+
+    def save_model(self, request, obj, form, change):
+        super(CommentAdmin, self).save_model(request, obj, form, change)
+        if obj.hidden:
+            obj.replies.update(hidden=obj.hidden)
