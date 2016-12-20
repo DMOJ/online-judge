@@ -94,10 +94,10 @@ block info_float
                     i.fa.fa-pencil-square-o.fa-fw
                     span.pi-name
                         - blocktrans trimmed count counter=authors|length
-                            | Problem author:
+                            | Author:
                             - plural
-                            | Problem authors:
-                    span.pi-value.authors-value: for author in authors
+                            | Authors:
+                    div.pi-value.authors-value: for author in authors
                         span(class=author.display_rank)
                             a(href='{% url "user_page" author.user.username %}') #{author.user.username}
                         if not forloop.last
