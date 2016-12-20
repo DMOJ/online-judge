@@ -11,8 +11,7 @@ from judge.admin.submission import SubmissionAdmin
 from judge.admin.taxon import ProblemGroupAdmin, ProblemTypeAdmin
 from judge.models import Language, Profile, Problem, ProblemGroup, ProblemType, Submission, Comment, \
     MiscConfig, Judge, NavigationBar, Contest, ContestParticipation, Organization, BlogPost, \
-    Solution, License, OrganizationRequest, \
-    ContestTag
+    Solution, License, OrganizationRequest, ContestTag
 
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Comment, CommentAdmin)
