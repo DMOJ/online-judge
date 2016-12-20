@@ -30,6 +30,10 @@ class DjangoJudgeHandler(JudgeHandler):
 
         # each value is (updates, last reset)
         self.update_counter = {}
+        self.judge = None
+
+        self._submission_cache_id = None
+        self._submission_cache = {}
 
     def on_close(self):
         super(DjangoJudgeHandler, self).on_close()
@@ -41,27 +45,27 @@ class DjangoJudgeHandler(JudgeHandler):
     def get_related_submission_data(self, submission):
         _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
 
-        pid, time, memory, short_circuit, lid, is_pretested = Submission.objects.filter(id=submission).\
-            values_list('problem__id', 'problem__time_limit', 'problem__memory_limit',
-                        'problem__short_circuit', 'language__id', 'is_pretested')[0]
+        try:
+            pid, time, memory, short_circuit, lid, is_pretested = (
+                Submission.objects.filter(id=submission)
+                          .values_list('problem__id', 'problem__time_limit', 'problem__memory_limit',
+                                       'problem__short_circuit', 'language__id', 'is_pretested')).get()
+        except Submission.DoesNotExist:
+            logger.error('Submission vanished: %d', submission)
+            return
 
         try:
-            limit = LanguageLimit.objects.get(problem__id=pid, language__id=lid)
+            time, memory = (LanguageLimit.objects.filter(problem__id=pid, language__id=lid)
+                                         .values_list('time_limit', 'memory_limit').get())
         except LanguageLimit.DoesNotExist:
             pass
-        else:
-            time, memory = limit.time_limit, limit.memory_limit
         return time, memory, short_circuit, is_pretested
 
     def _authenticate(self, id, key):
-        try:
-            judge = Judge.objects.get(name=id)
-        except Judge.DoesNotExist:
-            return False
-        return judge.auth_key == key
+        return Judge.objects.filter(name=id, auth_key=key).exists()
 
     def _connected(self):
-        judge = Judge.objects.get(name=self.name)
+        judge = self.judge = Judge.objects.get(name=self.name)
         judge.start_time = timezone.now()
         judge.online = True
         judge.problems = Problem.objects.filter(code__in=self.problems.keys())
@@ -70,18 +74,16 @@ class DjangoJudgeHandler(JudgeHandler):
         # Delete now in case we somehow crashed and left some over from the last connection
         RuntimeVersion.objects.filter(judge=judge).delete()
         for lang in judge.runtimes.all():
-            runtimes = []
-            for idx, data in enumerate(self.executors[lang.key]):
-                name, version = data
-                runtimes.append(RuntimeVersion(language=lang, name=name, version='.'.join(map(str, version)),
-                                               priority=idx, judge=judge))
-            RuntimeVersion.objects.bulk_create(runtimes)
+            RuntimeVersion.objects.bulk_create([
+                RuntimeVersion(language=lang, name=name, version='.'.join(map(str, version)), priority=idx, judge=judge)
+                for idx, (name, version) in enumerate(self.executors[lang.key])
+            ])
         judge.last_ip = self.client_address[0]
         judge.save()
 
     def _disconnected(self):
-        Judge.objects.filter(name=self.name).update(online=False)
-        RuntimeVersion.objects.filter(judge__name=self.name).delete()
+        Judge.objects.filter(id=self.judge.id).update(online=False)
+        RuntimeVersion.objects.filter(judge=self.judge).delete()
 
     def _update_ping(self):
         try:
@@ -91,59 +93,51 @@ class DjangoJudgeHandler(JudgeHandler):
             if e.__class__.__name__ == 'OperationalError' and e.__module__ == '_mysql_exceptions' and e.args[0] == 2006:
                 db.connection.close()
 
+    def _post_update_submission(self, id, state, done=False):
+        if self._submission_cache_id == id:
+            data = self._submission_cache
+        else:
+            self._submission_cache = data = Submission.objects.filter(id=id).values(
+                'problem__is_public', 'contest__participation__contest__key',
+                'user_id', 'problem_id', 'status', 'language__key'
+            )
+            self._submission_cache_id = id
+
+        if data['problem__is_public']:
+            event.post('submissions', {
+                'type': 'done-submission' if done else 'update-submission',
+                'state': state, 'id': id,
+                'contest': data['contest__participation__contest__key'],
+                'user': data['user_id'], 'problem': data['problem_id'],
+                'status': data['status'], 'language': data['language__key'],
+            })
+
     def on_submission_processing(self, packet):
-        try:
-            submission = Submission.objects.get(id=packet['submission-id'])
-        except Submission.DoesNotExist:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
-            return
-
-        try:
-            submission.judged_on = Judge.objects.get(name=self.name)
-        except Judge.DoesNotExist:
-            # Just in case. Is not necessary feature and is not worth the crash.
-            pass
-
-        submission.status = 'P'
-        submission.save()
-        event.post('sub_%d' % submission.id, {'type': 'processing'})
-        if not submission.problem.is_public:
-            return
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
-                                   'state': 'processing', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id,
-                                   'status': submission.status, 'language': submission.language.key})
+        id = packet['submission-id']
+        if Submission.objects.filter(id=id).update(status='P', judged_on=self.judge):
+            event.post('sub_%d' % id, {'type': 'processing'})
+            self._post_update_submission(id, 'processing')
+        else:
+            logger.warning('Unknown submission: %d', id)
 
     def on_grading_begin(self, packet):
         super(DjangoJudgeHandler, self).on_grading_begin(packet)
-        try:
-            submission = Submission.objects.get(id=packet['submission-id'])
-        except Submission.DoesNotExist:
+        if Submission.objects.filter(id=packet['submission-id']).update(
+                status='G', is_pretested=packet['pretested'],
+                current_testcase=1, batch=False):
+            SubmissionTestCase.objects.filter(submission_id=packet['submission-id']).delete()
+            event.post('sub_%d' % packet['submission-id'], {'type': 'grading-begin'})
+            self._post_update_submission(packet['submission-id'], 'grading-begin')
+        else:
             logger.warning('Unknown submission: %d', packet['submission-id'])
-            return
-        submission.status = 'G'
-
-        # Update pretest state now that we know for sure whether the problem has pretest data
-        submission.is_pretested = packet['pretested']
-        submission.current_testcase = 1
-        submission.batch = False
-        submission.save()
-        SubmissionTestCase.objects.filter(submission_id=submission.id).delete()
-        event.post('sub_%d' % submission.id, {'type': 'grading-begin'})
-        if not submission.problem.is_public:
-            return
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
-                                   'state': 'grading-begin', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id,
-                                   'status': submission.status, 'language': submission.language.key})
 
     def _submission_is_batch(self, id):
-        submission = Submission.objects.get(id=id)
-        submission.batch = True
-        submission.save()
+        if not Submission.objects.filter(id=id).update(batch=True):
+            logger.warning('Unknown submission: %d', id)
 
     def on_grading_end(self, packet):
         super(DjangoJudgeHandler, self).on_grading_end(packet)
+
         try:
             submission = Submission.objects.get(id=packet['submission-id'])
         except Submission.DoesNotExist:
@@ -221,94 +215,56 @@ class DjangoJudgeHandler(JudgeHandler):
         if hasattr(submission, 'contest'):
             participation = submission.contest.participation
             event.post('contest_%d' % participation.contest_id, {'type': 'update'})
-        if not submission.problem.is_public:
-            return
-        event.post('submissions', {'type': 'done-submission', 'id': submission.id,
-                                   'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id,
-                                   'status': submission.result, 'language': submission.language.key})
+        self._post_update_submission(submission.id, 'grading-end', done=True)
 
     def on_compile_error(self, packet):
         super(DjangoJudgeHandler, self).on_compile_error(packet)
-        try:
-            submission = Submission.objects.get(id=packet['submission-id'])
-        except Submission.DoesNotExist:
+
+        if Submission.objects.filter(id=packet['submission-id']).update(status='CE', result='CE', error=packet['log']):
+            event.post('sub_%d' % packet['submission-id'], {
+                'type': 'compile-error',
+                'log': packet['log']
+            })
+            self._post_update_submission(packet['submission-id'], 'compile-error', done=True)
+        else:
             logger.warning('Unknown submission: %d', packet['submission-id'])
-            return
-        submission.status = submission.result = 'CE'
-        submission.error = packet['log']
-        submission.save()
-        event.post('sub_%d' % submission.id, {
-            'type': 'compile-error',
-            'log': packet['log']
-        })
-        if not submission.problem.is_public:
-            return
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
-                                   'state': 'compile-error', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id,
-                                   'status': submission.status, 'language': submission.language.key})
 
     def on_compile_message(self, packet):
         super(DjangoJudgeHandler, self).on_compile_message(packet)
-        try:
-            submission = Submission.objects.get(id=packet['submission-id'])
-        except Submission.DoesNotExist:
+
+        if Submission.objects.filter(id=packet['submission-id']).update(error=packet['log']):
+            event.post('sub_%d' % packet['submission-id'], {'type': 'compile-message'})
+        else:
             logger.warning('Unknown submission: %d', packet['submission-id'])
-            return
-        submission.error = packet['log']
-        submission.save()
-        event.post('sub_%d' % submission.id, {
-            'type': 'compile-message'
-        })
 
     def on_internal_error(self, packet):
         super(DjangoJudgeHandler, self).on_internal_error(packet)
-        try:
-            submission = Submission.objects.get(id=packet['submission-id'])
-        except Submission.DoesNotExist:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
-            return
-        submission.status = submission.result = 'IE'
-        submission.error = packet['message']
-        submission.save()
-        event.post('sub_%d' % submission.id, {
-            'type': 'internal-error'
-        })
-        if not submission.problem.is_public:
-            return
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
-                                   'state': 'internal-error', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id,
-                                   'status': submission.status, 'language': submission.language.key})
+
+        id = packet['submission-id']
+        if Submission.objects.filter(id=id).update(status='CE', result='CE', error=packet['message']):
+            event.post('sub_%d' % id, {'type': 'internal-error'})
+            self._post_update_submission(id, 'internal-error', done=True)
+        else:
+            logger.warning('Unknown submission: %d', id)
 
     def on_submission_terminated(self, packet):
         super(DjangoJudgeHandler, self).on_submission_terminated(packet)
-        try:
-            submission = Submission.objects.get(id=packet['submission-id'])
-        except Submission.DoesNotExist:
+
+        if Submission.objects.filter(id=packet['submission-id']).update(status='AB', result='AB'):
+            event.post('sub_%d' % packet['submission-id'], {'type': 'aborted-submission'})
+            self._post_update_submission(packet['submission-id'], 'terminated', done=True)
+        else:
             logger.warning('Unknown submission: %d', packet['submission-id'])
-            return
-        submission.status = submission.result = 'AB'
-        submission.save()
-        if not submission.problem.is_public:
-            return
-        event.post('sub_%d' % submission.id, {
-            'type': 'aborted-submission'
-        })
-        event.post('submissions', {'type': 'update-submission', 'id': submission.id,
-                                   'state': 'terminated', 'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id,
-                                   'status': submission.status, 'language': submission.language.key})
 
     def on_test_case(self, packet, max_feedback=SubmissionTestCase._meta.get_field('feedback').max_length):
         super(DjangoJudgeHandler, self).on_test_case(packet)
-        try:
-            submission = Submission.objects.get(id=packet['submission-id'])
-        except Submission.DoesNotExist:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+        id = packet['submission-id']
+
+        if not Submission.objects.filter(id=id).update(current_testcase=packet['position'] + 1):
+            logger.warning('Unknown submission: %d', id)
             return
-        test_case = SubmissionTestCase(submission=submission, case=packet['position'])
+
+        test_case = SubmissionTestCase(submission_id=id, case=packet['position'])
         status = packet['status']
         if status & 4:
             test_case.status = 'TLE'
@@ -333,45 +289,36 @@ class DjangoJudgeHandler(JudgeHandler):
         test_case.batch = self.batch_id if self.in_batch else None
         test_case.feedback = (packet.get('feedback', None) or '')[:max_feedback]
         test_case.output = packet['output']
-        submission.current_testcase = packet['position'] + 1
-        submission.save()
         test_case.save()
 
         do_post = True
 
-        if submission.id in self.update_counter:
-            cnt, reset = self.update_counter[submission.id]
+        if id in self.update_counter:
+            cnt, reset = self.update_counter[id]
             cnt += 1
             if TIMER() - reset > UPDATE_RATE_TIME:
-                del self.update_counter[submission.id]
+                del self.update_counter[id]
             else:
-                self.update_counter[submission.id] = (cnt, reset)
+                self.update_counter[id] = (cnt, reset)
                 if cnt > UPDATE_RATE_LIMIT:
                     do_post = False
-        if submission.id not in self.update_counter:
-            self.update_counter[submission.id] = (1, TIMER())
+        if id not in self.update_counter:
+            self.update_counter[id] = (1, TIMER())
 
         if do_post:
-            event.post('sub_%d' % submission.id, {
+            event.post('sub_%d' % id, {
                 'type': 'test-case',
                 'id': packet['position'],
                 'status': test_case.status,
-                'time': "%.3f" % round(float(packet['time']), 3),
+                'time': '%.3f' % round(float(packet['time']), 3),
                 'memory': packet['memory'],
                 'points': float(test_case.points),
                 'total': float(test_case.total),
                 'output': packet['output']
             })
-            if not submission.problem.is_public:
-                return
-            event.post('submissions', {'type': 'update-submission', 'id': submission.id,
-                                       'state': 'test-case', 'contest': submission.contest_key,
-                                       'user': submission.user_id, 'problem': submission.problem_id,
-                                       'status': submission.status, 'language': submission.language.key})
+            self._post_update_submission(id, state='test-case')
 
     def on_supported_problems(self, packet):
         super(DjangoJudgeHandler, self).on_supported_problems(packet)
-
-        judge = Judge.objects.get(name=self.name)
-        judge.problems = Problem.objects.filter(code__in=self.problems.keys())
-        judge.save()
+        self.judge.problems = Problem.objects.filter(code__in=self.problems.keys())
+        self.judge.save()
