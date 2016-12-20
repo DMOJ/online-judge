@@ -60,9 +60,6 @@ def api_v2_user_info(request):
     last_rating = list(profile.ratings.order_by('-contest__end_time'))
 
     resp = {
-        "points": profile.points,
-        "rating": last_rating[0].rating,
-        "volatility": last_rating[0].volatility,
         "rank": profile.display_rank,
         "organizations": list(profile.organizations.values_list('key', flat=True))
     }
@@ -88,7 +85,11 @@ def api_v2_user_info(request):
             'rating': result.participation_rating,
         })
 
-    resp['contest_history'] = contest_history
+    resp['contests'] = {
+        "current_rating": last_rating[0].rating,
+        "volatility": last_rating[0].volatility,
+        'history': contest_history,
+    }
 
     solved_problems = []
     attempted_problems = []
@@ -107,8 +108,11 @@ def api_v2_user_info(request):
                 'problem': problem
             })
 
-    resp['solved_problems'] = solved_problems
-    resp['attempted_problems'] = attempted_problems
-    resp['authored_problems'] = list(Problem.objects.filter(authors=profile).values_list('code', flat=True))
+    resp['problems'] = {
+        'points': profile.points,
+        'solved': solved_problems,
+        'attempted': attempted_problems,
+        'authored': list(Problem.objects.filter(authors=profile).values_list('code', flat=True))
+    }
 
     return JsonResponse(resp)
