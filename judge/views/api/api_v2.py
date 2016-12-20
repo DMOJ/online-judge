@@ -85,7 +85,7 @@ def api_v2_user_info(request):
     solved_problems = []
     attempted_problems = []
 
-    problem_data = (Submission.objects.filter(user=profile, problem__is_public=True)
+    problem_data = (Submission.objects.filter(points__gt=0, user=profile, problem__is_public=True)
                     .annotate(max_pts=Max('points'))
                     .values_list('max_pts', 'problem__points', 'problem__code')
                     .distinct())
