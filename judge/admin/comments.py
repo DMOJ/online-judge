@@ -3,9 +3,14 @@ from django.utils.html import format_html
 from django.utils.translation import ungettext, ugettext_lazy as _
 from reversion.admin import VersionAdmin
 
-from judge.admin import HeavySelect2Widget
 from judge.models import Comment
-from judge.widgets import MathJaxAdminPagedownWidget
+from judge.widgets import MathJaxAdminPagedownWidget, HeavySelect2Widget
+
+
+class HeavySelect2Widget(HeavySelect2Widget):
+    @property
+    def is_hidden(self):
+        return False
 
 
 class CommentForm(ModelForm):
