@@ -6,6 +6,7 @@ from django.conf import settings
 
 DEFAULT_THROTTLE = (10, 60)
 
+
 def new_email():
     cache.add('error_email_throttle', 0, getattr(settings, 'EMAIL_THROTTLING', DEFAULT_THROTTLE)[1])
     return cache.incr('error_email_throttle')
@@ -22,7 +23,6 @@ class ThrottledEmailHandler(AdminEmailHandler):
             count = new_email()
         except Exception:
             traceback.print_exc()
-            pass
         else:
             if count >= self.throttle:
                 return
