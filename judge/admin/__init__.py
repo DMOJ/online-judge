@@ -12,7 +12,7 @@ from judge.admin.contest import ContestTagAdmin, ContestAdmin, ContestParticipat
 from judge.admin.organization import OrganizationAdmin, OrganizationRequestAdmin
 from judge.admin.problem import ProblemAdmin
 from judge.admin.profile import ProfileAdmin
-from judge.admin.runtime import JudgeAdmin
+from judge.admin.runtime import JudgeAdmin, LanguageAdmin
 from judge.admin.submission import SubmissionAdmin
 from judge.admin.taxon import LanguageAdmin, ProblemGroupAdmin, ProblemTypeAdmin
 from judge.dblock import LockModel

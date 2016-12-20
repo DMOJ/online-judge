@@ -1,11 +1,41 @@
 from django.db.models import TextField
-from django.forms import TextInput, ModelForm
+from django.forms import TextInput, ModelForm, ModelMultipleChoiceField
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from reversion.admin import VersionAdmin
 
-from judge.widgets import AdminPagedownWidget
+from judge.models import Problem
+from judge.widgets import AdminPagedownWidget, HeavySelect2MultipleWidget
+
+
+class LanguageForm(ModelForm):
+    problems = ModelMultipleChoiceField(
+        label=_('Disallowed problems'),
+        queryset=Problem.objects.all(),
+        required=False,
+        help_text=_('These problems are NOT allowed to be submitted in this language'),
+        widget=HeavySelect2MultipleWidget(data_view='problem_select2'))
+
+
+class LanguageAdmin(VersionAdmin):
+    fields = ('key', 'name', 'short_name', 'common_name', 'ace', 'pygments', 'info', 'description', 'problems')
+    list_display = ('key', 'name', 'common_name', 'info')
+    form = LanguageForm
+
+    if AdminPagedownWidget is not None:
+        formfield_overrides = {
+            TextField: {'widget': AdminPagedownWidget},
+        }
+
+    def save_model(self, request, obj, form, change):
+        super(LanguageAdmin, self).save_model(request, obj, form, change)
+        obj.problem_set = Problem.objects.exclude(id__in=form.cleaned_data['problems'].values('id'))
+
+    def get_form(self, request, obj=None, **kwargs):
+        self.form.base_fields['problems'].initial = \
+            Problem.objects.exclude(id__in=obj.problem_set.values('id')).values_list('pk', flat=True) if obj else []
+        return super(LanguageAdmin, self).get_form(request, obj, **kwargs)
 
 
 class GenerateKeyTextInput(TextInput):
