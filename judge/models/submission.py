@@ -63,9 +63,9 @@ class Submission(models.Model):
     points = models.FloatField(verbose_name=_('points granted'), null=True, db_index=True)
     language = models.ForeignKey(Language, verbose_name=_('submission language'))
     source = models.TextField(verbose_name=_('source code'), max_length=65536)
-    status = models.CharField(max_length=2, choices=STATUS, default='QU', db_index=True)
-    result = models.CharField(max_length=3, choices=SUBMISSION_RESULT, default=None, null=True,
-                              blank=True, db_index=True)
+    status = models.CharField(verbose_name=_('status'), max_length=2, choices=STATUS, default='QU', db_index=True)
+    result = models.CharField(verbose_name=_('result'), max_length=3, choices=SUBMISSION_RESULT,
+                              default=None, null=True, blank=True, db_index=True)
     error = models.TextField(verbose_name=_('compile errors'), null=True, blank=True)
     current_testcase = models.IntegerField(default=0)
     batch = models.BooleanField(verbose_name=_('batched cases'), default=False)
