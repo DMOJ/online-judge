@@ -223,13 +223,16 @@ urlpatterns = [
     url(r'^judge/(?P<name>[\w.]+)$', status.JudgeDetail.as_view(), name='judge_info'),
 
     url(r'^api/', include([
-        url(r'^contest/list$', api.api_contest_list),
-        url(r'^contest/info/(\w+)$', api.api_contest_detail),
-        url(r'^problem/list$', api.api_problem_list),
-        url(r'^problem/info/(\w+)$', api.api_problem_info),
-        url(r'^user/list$', api.api_user_list),
-        url(r'^user/info/(\w+)$', api.api_user_info),
-        url(r'^user/submissions/(\w+)$', api.api_user_submissions),
+        url(r'^contest/list$', api.api_v1_contest_list),
+        url(r'^contest/info/(\w+)$', api.api_v1_contest_detail),
+        url(r'^problem/list$', api.api_v1_problem_list),
+        url(r'^problem/info/(\w+)$', api.api_v1_problem_info),
+        url(r'^user/list$', api.api_v1_user_list),
+        url(r'^user/info/(\w+)$', api.api_v1_user_info),
+        url(r'^user/submissions/(\w+)$', api.api_v1_user_submissions),
+        url(r'^v2/', include([
+            url(r'user-info$', api.api_v2_user_info),
+        ])),
     ])),
 
     url(r'^blog/', paged_list_view(blog.PostList, 'blog_post_list')),

@@ -16,7 +16,7 @@ def sane_time_repr(delta):
     return '%02d:%02d:%02d' % (days, hours, minutes)
 
 
-def api_contest_list(request):
+def api_v1_contest_list(request):
     queryset = Contest.objects.filter(is_public=True, is_private=False).prefetch_related(
         Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description')
 
@@ -29,7 +29,7 @@ def api_contest_list(request):
     } for c in queryset})
 
 
-def api_contest_detail(request, contest):
+def api_v1_contest_detail(request, contest):
     contest = get_object_or_404(Contest, key=contest)
     contest_access_check(request, contest)
 
@@ -63,7 +63,7 @@ def api_contest_detail(request, contest):
     })
 
 
-def api_problem_list(request):
+def api_v1_problem_list(request):
     queryset = Problem.objects.filter(is_public=True)
     if settings.ENABLE_FTS and 'search' in request.GET:
         query = ' '.join(request.GET.getlist('search')).strip()
@@ -79,7 +79,7 @@ def api_problem_list(request):
     } for code, points, partial, name, group in queryset})
 
 
-def api_problem_info(request, problem):
+def api_v1_problem_info(request, problem):
     p = get_object_or_404(Problem, code=problem)
     if not p.is_accessible_by(request.user):
         raise Http404()
@@ -97,7 +97,7 @@ def api_problem_info(request, problem):
     })
 
 
-def api_user_list(request):
+def api_v1_user_list(request):
     queryset = Profile.objects.values_list('user__username', 'name', 'points', 'display_rank')
     return JsonResponse({username: {
         'display_name': name,
@@ -106,7 +106,7 @@ def api_user_list(request):
     } for username, name, points, rank in queryset})
 
 
-def api_user_info(request, user):
+def api_v1_user_info(request, user):
     profile = get_object_or_404(Profile, user__username=user)
     submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True)
                        .values('problem').distinct().values_list('problem__code', flat=True))
@@ -119,7 +119,7 @@ def api_user_info(request, user):
     })
 
 
-def api_user_submissions(request, user):
+def api_v1_user_submissions(request, user):
     profile = get_object_or_404(Profile, user__username=user)
     subs = Submission.objects.filter(user=profile, problem__is_public=True)
 
