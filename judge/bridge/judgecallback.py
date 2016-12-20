@@ -100,7 +100,7 @@ class DjangoJudgeHandler(JudgeHandler):
             self._submission_cache = data = Submission.objects.filter(id=id).values(
                 'problem__is_public', 'contest__participation__contest__key',
                 'user_id', 'problem_id', 'status', 'language__key'
-            )
+            ).get()
             self._submission_cache_id = id
 
         if data['problem__is_public']:
