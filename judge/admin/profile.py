@@ -54,8 +54,8 @@ class ProfileAdmin(VersionAdmin):
     form = ProfileForm
 
     def show_public(self, obj):
-        format = '<a href="{0}" style="white-space:nowrap;">%s</a>' % ugettext('View on site')
-        return format_html(format, obj.get_absolute_url())
+        return format_html('<a href="{0}" style="white-space:nowrap;">{1}</a>',
+                           obj.get_absolute_url(), ugettext('View on site'))
     show_public.short_description = ''
 
     def admin_user_admin(self, obj):
