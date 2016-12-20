@@ -6,7 +6,8 @@ from django.shortcuts import get_object_or_404
 
 from dmoj import settings
 from judge.models import Contest, Problem, Profile, Submission, ContestTag, ContestParticipation
-from judge.views.contests import contest_access_check, base_contest_ranking_list
+from judge.utils.ranker import ranker
+from judge.views.contests import contest_access_check, base_contest_ranking_list, contest_ranking_list
 
 
 def error(message):
@@ -56,28 +57,35 @@ def api_v2_user_info(request):
     except Profile.DoesNotExist:
         return error("no such user")
 
+    last_rating = list(profile.ratings.order_by('-contest__end_time'))
+
     resp = {
         "points": profile.points,
-        "rating": profile.rating,
+        "rating": last_rating[0].rating,
+        "volatility": last_rating[0].volatility,
         "rank": profile.display_rank,
         "organizations": list(profile.organizations.values_list('key', flat=True))
     }
 
     contest_history = []
-    for participation in ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True):
-        contest_obj = participation.contest
+    for participation in (ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True)
+                                  .order_by('-contest__end_time')):
+        contest = participation.contest
+
+        problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
+        rank, result = filter(lambda data: data[1].user == profile.user, ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')))
 
         contest_history.append({
             'contest': {
-                'code': contest_obj.key,
-                'name': contest_obj.name,
-                'tags': list(contest_obj.tags.values_list('name', flat=True)),
-                'time_limit': contest_obj.time_limit and contest_obj.time_limit.total_seconds(),
-                'start_time': contest_obj.start_time.isoformat(),
-                'end_time': contest_obj.end_time.isoformat(),
+                'code': contest.key,
+                'name': contest.name,
+                'tags': list(contest.tags.values_list('name', flat=True)),
+                'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
+                'start_time': contest.start_time.isoformat(),
+                'end_time': contest.end_time.isoformat(),
             },
-            'rank': -1,
-            'rating': -1,
+            'rank': rank,
+            'rating': rank.participation_rating,
         })
 
     resp['contest_history'] = contest_history
