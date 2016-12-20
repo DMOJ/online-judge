@@ -436,7 +436,8 @@ def problem_submit(request, problem=None, submission=None):
         initial = {'language': profile.language}
         if problem is not None:
             initial['problem'] = get_object_or_404(Problem, code=problem)
-            if not initial['problem'].is_accessible_by(request.user):
+            problem_object = initial['problem']
+            if not problem_object.is_accessible_by(request.user):
                 raise Http404()
         if submission is not None:
             try:
@@ -451,6 +452,7 @@ def problem_submit(request, problem=None, submission=None):
         form.fields['language'].queryset = (form_data['problem'].usable_languages.order_by('name', 'key')
                                             .prefetch_related(
             Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority'))))
+        problem_object = form_data['problem']
     if 'language' in form_data:
         form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = profile.ace_theme
@@ -458,12 +460,12 @@ def problem_submit(request, problem=None, submission=None):
     return render(request, 'problem/submit.jade', {
         'form': form,
         'title': _('Submit to %(problem)s') % {
-            'problem': problem.translated_name(request.LANGUAGE_CODE),
+            'problem': problem_object.translated_name(request.LANGUAGE_CODE),
         },
         'content_title': mark_safe(escape(_('Submit to %(problem)s')) % {
             'problem': format_html(u'<a href="{0}">{1}</a>',
-                                   reverse('problem_detail', args=[problem.code]),
-                                   problem.translated_name(request.LANGUAGE_CODE))
+                                   reverse('problem_detail', args=[problem_object.code]),
+                                   problem_object.translated_name(request.LANGUAGE_CODE))
         }),
         'langs': Language.objects.all(),
         'no_judges': not form.fields['language'].queryset,
