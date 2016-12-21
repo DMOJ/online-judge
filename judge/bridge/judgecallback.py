@@ -68,8 +68,8 @@ class DjangoJudgeHandler(JudgeHandler):
         judge = self.judge = Judge.objects.get(name=self.name)
         judge.start_time = timezone.now()
         judge.online = True
-        judge.problems = Problem.objects.filter(code__in=self.problems.keys())
-        judge.runtimes = Language.objects.filter(key__in=self.executors.keys())
+        judge.problems.set(Problem.objects.filter(code__in=self.problems.keys()))
+        judge.runtimes.set(Language.objects.filter(key__in=self.executors.keys()))
 
         # Delete now in case we somehow crashed and left some over from the last connection
         RuntimeVersion.objects.filter(judge=judge).delete()
@@ -320,5 +320,4 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def on_supported_problems(self, packet):
         super(DjangoJudgeHandler, self).on_supported_problems(packet)
-        self.judge.problems = Problem.objects.filter(code__in=self.problems.keys())
-        self.judge.save()
+        self.judge.problems.set(Problem.objects.filter(code__in=self.problems.keys()))
