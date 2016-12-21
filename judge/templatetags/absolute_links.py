@@ -1,3 +1,4 @@
+import urllib
 from urlparse import urljoin
 
 from django import template
@@ -20,3 +21,6 @@ def absolute_links(text, url):
 @register.filter(name='urljoin')
 def join(first, second):
     return urljoin(first, second)
+
+
+register.filter(name='urlquote')(urllib.quote)
