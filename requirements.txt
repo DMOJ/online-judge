@@ -9,7 +9,7 @@ django-social-share
 django-sortedm2m
 -e git://github.com/DMOJ/dmoj-wpadmin.git#egg=dmoj-wpadmin
 lxml
-markdown2
+markdown2==2.3.1
 Pygments
 -e git://github.com/DMOJ/pyjade.git#egg=pyjade
 python-social-auth
@@ -18,5 +18,3 @@ django-statici18n
 pika
 ua-parser
 pyyaml
-
-
