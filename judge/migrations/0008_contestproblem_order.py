@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
 from collections import defaultdict
+
+from django.db import models, migrations
 
 
 def add_contest_problem_order(apps, schema_editor):
     ContestProblem = apps.get_model('judge', 'ContestProblem')
     db_alias = schema_editor.connection.alias
-    order = defaultdict(lambda: 0)
+    order = defaultdict(int)
     for cp in ContestProblem.objects.using(db_alias):
         cp.order = order[cp.contest_id]
         cp.save()
@@ -28,6 +29,6 @@ class Migration(migrations.Migration):
             field=models.PositiveIntegerField(default=0, db_index=True),
             preserve_default=False,
         ),
-        migrations.RunPython(add_contest_problem_order, lambda apps, schema_editor: None),
+        migrations.RunPython(add_contest_problem_order, migrations.RunPython.noop),
     ]
 

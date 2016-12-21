@@ -27,5 +27,5 @@ class Migration(migrations.Migration):
             field=SortedManyToManyField(related_query_name=b'member', related_name='members', verbose_name=b'Organization', to='judge.Organization', blank=True),
             preserve_default=True,
         ),
-        migrations.RunPython(to_many_to_many_organization, lambda apps, schema_editor: None),
+        migrations.RunPython(to_many_to_many_organization, migrations.RunPython.noop),
     ]

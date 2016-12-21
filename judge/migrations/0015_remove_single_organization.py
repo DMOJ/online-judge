@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations
 
 
 def to_foreign_key_organization(apps, schema_editor):
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             model_name='profile',
             name='organization_join_time',
         ),
-        migrations.RunPython(lambda apps, schema_editor: None, to_foreign_key_organization),
+        migrations.RunPython(migrations.RunPython.noop, to_foreign_key_organization),
         migrations.RemoveField(
             model_name='profile',
             name='organization',
