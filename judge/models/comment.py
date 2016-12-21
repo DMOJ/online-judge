@@ -20,6 +20,18 @@ from judge.models.profile import Profile
 __all__ = ['Comment', 'CommentVote']
 
 
+class VersionRelation(GenericRelation):
+    def __init__(self):
+        super(VersionRelation, self).__init__(Version, object_id_field='object_id')
+
+    def get_extra_restriction(self, where_class, alias, remote_alias):
+        cond = super(VersionRelation, self).get_extra_restriction(where_class, alias, remote_alias)
+        field = self.remote_field.model._meta.get_field('db')
+        lookup = field.get_lookup('exact')(field.get_col(remote_alias), 'default')
+        cond.add(lookup, 'AND')
+        return cond
+
+
 class Comment(MPTTModel):
     author = models.ForeignKey(Profile, verbose_name=_('commenter'))
     time = models.DateTimeField(verbose_name=_('posted time'), auto_now_add=True)
@@ -31,7 +43,7 @@ class Comment(MPTTModel):
     body = models.TextField(verbose_name=_('body of comment'))
     hidden = models.BooleanField(verbose_name=_('hide the comment'), default=0)
     parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies')
-    versions = GenericRelation(Version, object_id_field='object_id')
+    versions = VersionRelation()
 
     class Meta:
         verbose_name = _('comment')
