@@ -31,7 +31,7 @@ class Comment(MPTTModel):
     body = models.TextField(verbose_name=_('body of comment'))
     hidden = models.BooleanField(verbose_name=_('hide the comment'), default=0)
     parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies')
-    versions = GenericRelation(Version, object_id_field='object_id_int')
+    versions = GenericRelation(Version, object_id_field='object_id')
 
     class Meta:
         verbose_name = _('comment')
