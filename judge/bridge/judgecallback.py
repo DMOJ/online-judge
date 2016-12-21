@@ -38,9 +38,7 @@ class DjangoJudgeHandler(JudgeHandler):
     def on_close(self):
         super(DjangoJudgeHandler, self).on_close()
         if self._working:
-            submission = Submission.objects.get(id=self._working)
-            submission.status = 'IE'
-            submission.save()
+            Submission.objects.filter(id=self._working).update(status='IE')
 
     def get_related_submission_data(self, submission):
         _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
