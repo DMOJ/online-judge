@@ -83,10 +83,10 @@ class Select2Mixin(object):
             attrs['class'] = 'django-select2'
         return attrs
 
-    def render_options(self, choices, selected_choices):
+    def render_options(self, *args, **kwargs):
         """Render options including an empty one, if the field is not required."""
         output = '<option></option>' if not self.is_required else ''
-        output += super(Select2Mixin, self).render_options(choices, selected_choices)
+        output += super(Select2Mixin, self).render_options(*args, **kwargs)
         return output
 
     def _get_media(self):
