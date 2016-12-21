@@ -116,7 +116,7 @@ block info_float
 
 block description
     #banner
-        a.date(href='http://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name|urlquote }}&amp;iso={{contest.start_time|utc|date:"Y-m-d\TH:i:s"}}')
+        a.date(href='http://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name|urlquote }}&amp;iso={{ contest.start_time|utc|date:"Y-m-d\TH:i:s"|urlquote }}')
             if participating and participation.virtual and not participation.ended
                 if participation.spectate
                     - blocktrans with countdown=contest.time_before_end|as_countdown
