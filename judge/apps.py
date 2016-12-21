@@ -14,5 +14,13 @@ class JudgeAppConfig(AppConfig):
         from . import signals
 
         from django.contrib.flatpages.models import FlatPage
-        from reversion.helpers import patch_admin
-        patch_admin(FlatPage)
+        from django.contrib.flatpages.admin import FlatPageAdmin
+        from django.contrib import admin
+
+        from reversion.admin import VersionAdmin
+
+        class FlatPageVersionAdmin(VersionAdmin, FlatPageAdmin):
+            pass
+
+        admin.site.unregister(FlatPage)
+        admin.site.register(FlatPage, FlatPageVersionAdmin)
