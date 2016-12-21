@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
-import mptt.fields
-import django.utils.timezone
-import judge.models
-import django.db.models.deletion
-from django.conf import settings
-import timedelta.fields
 import django.core.validators
+import django.db.models.deletion
+import django.utils.timezone
+import mptt.fields
+from django.conf import settings
+from django.db import models, migrations
+
+import judge.models
 
 
 class Migration(migrations.Migration):
@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(blank=True)),
                 ('start_time', models.DateTimeField(db_index=True)),
                 ('end_time', models.DateTimeField(db_index=True)),
-                (b'time_limit', timedelta.fields.TimedeltaField(max_value=None, min_value=None)),
+                ('time_limit', models.DurationField()),
                 ('is_public', models.BooleanField(default=False, verbose_name=b'Publicly visible')),
                 ('is_external', models.BooleanField(default=False, verbose_name=b'External contest')),
                 ('is_rated', models.BooleanField(default=False, help_text=b'Whether this contest can be rated.')),

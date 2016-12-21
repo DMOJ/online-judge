@@ -7,7 +7,6 @@ django-reversion==1.10.2
 -e git://github.com/DMOJ/django-select2.git#egg=django-select2
 django-social-share
 django-sortedm2m
-django-timedeltafield
 -e git://github.com/DMOJ/dmoj-wpadmin.git#egg=dmoj-wpadmin
 lxml
 markdown2
