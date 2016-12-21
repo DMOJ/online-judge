@@ -147,7 +147,7 @@ html(lang=LANGUAGE_CODE)
                                     li: a(href='{% url "auth_logout" %}?next=') {% trans "Log out" %}
                     else
                         span.anon
-                            a(href='{% url "django.contrib.auth.views.login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
+                            a(href='{% url "auth_login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
                                 b {% trans "Login" %}
                             | &nbsp;|&nbsp;
                             a(href='{% url "registration_register" %}') {% trans "Register" %}
