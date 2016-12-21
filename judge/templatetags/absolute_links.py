@@ -24,3 +24,4 @@ def join(first, second):
 
 
 register.filter(name='urlquote')(urllib.quote)
+register.filter(name='urlquote_plus')(urllib.quote_plus)
