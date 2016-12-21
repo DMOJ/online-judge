@@ -71,11 +71,13 @@ class DjangoJudgeHandler(JudgeHandler):
 
         # Delete now in case we somehow crashed and left some over from the last connection
         RuntimeVersion.objects.filter(judge=judge).delete()
+        versions = []
         for lang in judge.runtimes.all():
-            RuntimeVersion.objects.bulk_create([
+            versions += [
                 RuntimeVersion(language=lang, name=name, version='.'.join(map(str, version)), priority=idx, judge=judge)
                 for idx, (name, version) in enumerate(self.executors[lang.key])
-            ])
+            ]
+        RuntimeVersion.objects.bulk_create(versions)
         judge.last_ip = self.client_address[0]
         judge.save()
 
