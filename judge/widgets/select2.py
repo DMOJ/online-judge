@@ -209,8 +209,13 @@ class HeavySelect2Mixin(Select2Mixin):
         attrs['class'] += ' django-select2-heavy'
         return attrs
 
-    def render_options(self, choices, selected_choices):
+    def render_options(self, *args, **kwargs):
         """Render only selected options."""
+        if len(args) == 1:
+            choices, selected_choices = (), args[0]
+        else:
+            choices, selected_choices = args
+
         output = ['<option></option>' if not self.is_required else '']
         if isinstance(self.choices, ModelChoiceIterator):
             chosen = copy(self.choices)
