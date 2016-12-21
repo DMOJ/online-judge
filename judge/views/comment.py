@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, UpdateView
 from reversion import revisions
+from reversion.models import Version
 
 from judge.models import Comment, CommentVote
 from judge.utils.views import TitleMixin
@@ -69,7 +70,7 @@ class CommentHistoryAjax(CommentMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CommentHistoryAjax, self).get_context_data(**kwargs)
-        context['revisions'] = revisions.get_for_object(self.object)
+        context['revisions'] = Version.objects.get_for_object(self.object)
         return context
 
     def get_object(self, queryset=None):
