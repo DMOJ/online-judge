@@ -28,6 +28,8 @@ block user_data
                 = '.'
         else
             .start-time {% trans "Participation ended." %}
+    if perms.judge.change_contestparticipation
+        .edit-participation(data-link='{% url "admin:judge_contestparticipation_change" user.participation.id %}')
 
 block before_point_head
     each problem in problems
