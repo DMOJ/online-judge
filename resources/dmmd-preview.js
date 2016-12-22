@@ -48,14 +48,19 @@ $(function () {
                 });
             } else {
                 $content.empty();
-                $preview.removeClass('dmmd-preview-has-content');
+                $preview.removeClass('dmmd-preview-has-content').removeClass('dmmd-preview-stale');
             }
         }).click();
 
         var timeout = $preview.attr('data-timeout');
         var last_event = null;
+        var last_text = $textarea.val();
         if (timeout) {
-            $textarea.on('keyup', function () {
+            $textarea.on('keyup paste', function () {
+                var text = $textarea.val();
+                if (last_text == text) return;
+                last_text = text;
+
                 $preview.addClass('dmmd-preview-stale');
                 if (last_event)
                     clearTimeout(last_event);
