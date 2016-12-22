@@ -13,7 +13,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import connection, IntegrityError
-from django.db.models import Q, Min, Max
+from django.db.models import Q, Min, Max, cached_property
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
@@ -101,6 +101,11 @@ class ContestMixin(object):
     slug_field = 'key'
     slug_url_kwarg = 'contest'
 
+    @cached_property
+    def is_organizer(self):
+        return (self.request.user.is_authenticated and
+                self.object.organizers.filter(id=self.request.user.profile.id).exists())
+
     def get_object(self, queryset=None):
         contest = super(ContestMixin, self).get_object(queryset)
         user = self.request.user
@@ -181,7 +186,7 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def get(self, request, *args, **kwargs):
         contest = self.get_object()
-        if not contest.can_join:
+        if not contest.can_join and not self.is_organizer:
             return generic_message(request, _('Contest not ongoing'),
                                    _('"%s" is not currently ongoing.') % contest.name)
 
@@ -206,7 +211,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                     break
         else:
             participation, created = ContestParticipation.objects.get_or_create(
-                contest=contest, user=profile, virtual=(-1 if profile in contest.organizers.all() else 0),
+                contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0),
                 defaults={
                     'real_start': timezone.now()
                 }
