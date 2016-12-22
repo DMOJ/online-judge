@@ -75,8 +75,8 @@ class EditOrganizationForm(ModelForm):
         model = Organization
         fields = ['about', 'admins']
         widgets = {'admins': Select2MultipleWidget()}
-        if PagedownWidget is not None:
-            widgets['about'] = MathJaxPagedownWidget()
+        if HeavyPreviewPageDownWidget is not None:
+            widgets['about'] = HeavyPreviewPageDownWidget(preview=reverse_lazy('organization_preview'))
 
 
 class NewMessageForm(ModelForm):

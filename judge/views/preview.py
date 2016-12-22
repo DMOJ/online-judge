@@ -32,3 +32,7 @@ class CommentMarkdownPreviewView(MarkdownPreviewView):
 
 class ProfileMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'user/preview.jade'
+
+
+class OrganizationMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'organization/preview.jade'
