@@ -63,7 +63,7 @@ block js_media
                     return RefPresenter;
                 });*/
 
-                $('#id_language').on('select2:select', function (evt) {
+                $('#id_language').on('select2:open', function (evt) {
                     var dropdown = $('.select2-dropdown');
                     console.log(dropdown);
                     if(!$('#result-version-info').length)
