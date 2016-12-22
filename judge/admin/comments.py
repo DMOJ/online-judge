@@ -1,10 +1,11 @@
 from django.forms import ModelForm
+from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import ungettext, ugettext_lazy as _
 from reversion.admin import VersionAdmin
 
 from judge.models import Comment
-from judge.widgets import MathJaxAdminPagedownWidget, HeavySelect2Widget
+from judge.widgets import HeavyPreviewAdminPageDownWidget, HeavySelect2Widget
 
 
 class CommentForm(ModelForm):
@@ -13,8 +14,8 @@ class CommentForm(ModelForm):
             'author': HeavySelect2Widget(data_view='profile_select2'),
             'parent': HeavySelect2Widget(data_view='comment_select2'),
         }
-        if MathJaxAdminPagedownWidget is not None:
-            widgets['body'] = MathJaxAdminPagedownWidget
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets['body'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('comment_preview'))
 
 
 class CommentAdmin(VersionAdmin):
