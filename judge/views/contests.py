@@ -186,7 +186,7 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
 
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def get(self, request, *args, **kwargs):
-        contest = self.get_object()
+        contest = self.object = self.get_object()
         if not contest.can_join and not self.is_organizer:
             return generic_message(request, _('Contest not ongoing'),
                                    _('"%s" is not currently ongoing.') % contest.name)
