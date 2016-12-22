@@ -102,19 +102,15 @@ class Profile(models.Model):
 
     def calculate_points(self):
         from judge.models import Submission
-        qdata = sorted(map(itemgetter('points'),
-                         Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
-                         .values('problem_id').distinct().annotate(points=Max('points'))), reverse=True)
-        print qdata
+        qdata = Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True).values('problem_id').distinct().annotate(points=Max('points')).order_by('-points').values_list('points', flat=True)
         points = sum(qdata)
         problems = (self.submission_set.filter(points__gt=0, problem__is_public=True)
                     .values('problem').distinct().count())
-        nr = 0
+        val = 1.0
         pp = 0.0
         for x in qdata:
-            pp += (0.95**nr) * x
-            nr += 1
-        print pp
+            pp += val * x
+            val *= 0.95
         if self.points != points or problems != self.problem_count or self.pp != pp:
             self.points = points
             self.problem_count = problems
