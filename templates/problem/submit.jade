@@ -26,7 +26,7 @@ block js_media
                 function formatSelection(state) {
                     if (!state.id) return state.text; // optgroup
                     var data = makeDisplayData($("option[data-id=" + state.id + "]"));
-                    return "<span class=\"language-data\" aria-label=" + display_data + "><b>" + state.text + "</b> (" + data + ")</span>";
+                    return "<b>" + state.text + "</b> (" + data + ")";
                 }
 
                 $("#id_language").select2({
