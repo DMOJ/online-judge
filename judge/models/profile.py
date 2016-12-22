@@ -1,5 +1,5 @@
-from operator import itemgetter
-from operator import mul
+from operator import itemgetter, mul
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
