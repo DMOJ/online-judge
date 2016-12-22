@@ -13,7 +13,7 @@ $(function () {
                     csrfmiddlewaretoken: $.cookie('csrftoken')
                 }, function (result) {
                     $content.html(result);
-                    $preview.addClass('dmmd-preview-has-content');
+                    $preview.addClass('dmmd-preview-has-content').removeClass('dmmd-preview-stale');
 
                     var $jax = $content.find('.require-mathjax-support');
                     if ($jax.length) {
@@ -56,6 +56,7 @@ $(function () {
         var last_event = null;
         if (timeout) {
             $textarea.on('keyup', function () {
+                $preview.addClass('dmmd-preview-stale');
                 if (last_event)
                     clearTimeout(last_event);
                 last_event = setTimeout(function () {
