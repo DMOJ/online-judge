@@ -3,8 +3,8 @@ div.dmmd-preview {
 }
 
 div.dmmd-preview-update {
-    background: rgba(0, 0, 0, 0.2);
-    color: rgba(0, 0, 0, .8);
+    background: #ccc;
+    color: #333;
     text-align: center;
     cursor: pointer;
     border-radius: 4px;
@@ -22,4 +22,8 @@ div.dmmd-preview.dmmd-preview-has-content div.dmmd-preview-update {
 
 div.dmmd-preview-has-content div.dmmd-preview-content {
     padding-bottom: 7px;
+}
+
+.dmmd-preview-stale {
+	background: repeating-linear-gradient(-45deg, #fff, #fff 10px, #ddd 10px, #ddd 20px);
 }
