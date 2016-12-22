@@ -103,12 +103,14 @@ block users_js_media
         script(type='text/javascript', src='{% static "event.js" %}')
     if perms.judge.change_contestparticipation
         script(type='text/javascript').
-            $('td.user').find('a.user-name').click(function (e) {
-                var data = $(this).siblings('.edit-participation');
-                if (e.altKey && data.length) {
-                    window.open(data.attr('data-link'), '_blank');
-                    return false;
-                }
+            $(function () {
+                $('td.user').find('a.user-name').click(function (e) {
+                    var data = $(this).siblings('.edit-participation');
+                    if (e.altKey && data.length) {
+                        window.open(data.attr('data-link'), '_blank');
+                        return false;
+                    }
+                });
             });
     if not contest.ended
         script(type='text/javascript').
