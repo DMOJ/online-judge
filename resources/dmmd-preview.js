@@ -3,9 +3,10 @@ $(function () {
         var $update = $preview.find('.dmmd-preview-update');
         var $content = $preview.find('.dmmd-preview-content');
         var preview_url = $preview.attr('data-preview-url');
+        var $textarea = $('#' + $preview.attr('data-textarea-id'));
 
         $update.click(function () {
-            var text = $('#' + $preview.attr('data-textarea-id')).val();
+            var text = $textarea.val();
             if (text) {
                 $.post(preview_url, {
                     preview: text,
@@ -50,6 +51,19 @@ $(function () {
                 $preview.removeClass('dmmd-preview-has-content');
             }
         }).click();
+
+        var timeout = $preview.attr('data-timeout');
+        var last_event = null;
+        if (timeout) {
+            $textarea.on('keyup', function () {
+                if (last_event)
+                    clearTimeout(last_event);
+                last_event = setTimeout(function () {
+                    $update.click();
+                    last_event = null;
+                }, timeout);
+            });
+        }
     };
 
     $('.dmmd-preview').each(function () {

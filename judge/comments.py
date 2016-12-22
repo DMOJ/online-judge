@@ -32,7 +32,7 @@ class CommentForm(ModelForm):
 
         if HeavyPreviewPageDownWidget is not None:
             widgets['body'] = HeavyPreviewPageDownWidget(preview=reverse_lazy('comment_preview'),
-                                                         preview_timeout=5000)
+                                                         preview_timeout=3000)
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
