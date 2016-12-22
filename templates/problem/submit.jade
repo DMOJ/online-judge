@@ -30,8 +30,8 @@ block js_media
                 });
 
                 $('#id_language').change(function () {
-                    var lang = $("#id_language").find("option:selected").attr('value');
-                    window.ace_source.getSession().setMode("ace/mode/" + modes[lang]);
+                    var lang = $("#id_language").find("option:selected").attr('data-ace');
+                    window.ace_source.getSession().setMode("ace/mode/" + lang);
                 });
 
                 $('#ace_source').on('ace_load', function (e, editor) {
