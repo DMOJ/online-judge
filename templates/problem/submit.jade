@@ -8,100 +8,100 @@ block js_media
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
     script(type='text/javascript', src='{{ ACE_URL }}/ace.js')
     - compress js
-    | #{form.media.js}
-    script(type='text/javascript').
-        $(function () {
-            function format(state) {
-                if (!state.id) return state.text; // optgroup
-                return state.text;
-            }
-
-            function makeDisplayData(data) {
-                var site_data = data.attr('data-info');
-                var judge_data = data.attr('data-judge-info');
-                var display_data = site_data || judge_data;
-                return display_data;
-            }
-
-            function formatSelection(state) {
-                if (!state.id) return state.text; // optgroup
-                var data = makeDisplayData($("option[data-id=" + state.id + "]"));
-                return "<span class=\"result-display\" data-id=" + state.id + "></span><b>" + state.text + "</b> (" + data + ")</span>";
-            }
-
-            /*var tooltip_classes = 'tooltipped tooltipped-e';
-
-             $('body').on({
-             mouseenter: function () {
-             var lang = $(this).text();
-             var data = makeDisplayData($("option[data-name=\"" + lang + "\"]"));
-             $(this).addClass(tooltip_classes).attr('aria-label', data);
-             },
-             mouseleave: function () {
-             $(this).removeClass(tooltip_classes).removeAttr('aria-label');
-             }
-             }, '.select2-results__option.select2-results__option--highlighted');*/
-
-            // Terrible hack from https://github.com/select2/select2/issues/4436
-            RefPresenter = function () {
-            };
-            $.fn.select2.amd.require(['select2/results', 'select2/utils'], function (Result, Utils) {
-                RefPresenter = function ($element, options, dataAdapter) {
-                    RefPresenter.__super__.constructor.call(this, $element, options, dataAdapter);
-                };
-                Utils.Extend(RefPresenter, Result);
-                RefPresenter.prototype.bind = function (container, $container) {
-                    container.on('results:focus', function (params) {
-                        console.log('HIGHLIGHT', params);
-                        var option = params.data.element;
-                        var data = makeDisplayData(option);
-                        $(".result-display[data-id=" + option.attr('data-id') + "]").addClass(tooltip_classes).attr('aria-label', data);
-                    });
-                    RefPresenter.__super__.bind.call(this, container, $container);
-                };
-                return RefPresenter;
-            });
-
-            $("#id_language").select2({
-                templateResult: format,
-                templateSelection: formatSelection,
-                escapeMarkup: function (m) {
-                    return m;
-                },
-                resultsAdapter: RefPresenter
-            });
-
-            $('#id_language').change(function () {
-                var lang = $("#id_language").find("option:selected").attr('data-ace');
-                window.ace_source.getSession().setMode("ace/mode/" + lang);
-            });
-
-            $('#ace_source').on('ace_load', function (e, editor) {
-                var source = $('textarea#id_source');
-                if (source.val() == '') {
-                    var code = localStorage.getItem('submit:' + $('#id_problem').val());
-                    if (code) {
-                        source.val(code);
-                        editor.getSession().setValue(code);
-                    }
+        | #{form.media.js}
+        script(type='text/javascript').
+            $(function () {
+                function format(state) {
+                    if (!state.id) return state.text; // optgroup
+                    return state.text;
                 }
-                editor.commands.addCommand({
-                    name: 'save',
-                    bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
-                    exec: function () {
-                        localStorage.setItem('submit:' + $('#id_problem').val(), editor.getSession().getValue());
-                    }
-                });
-                editor.getSession().setUseWrapMode(true);
-                editor.setFontSize(14);
-                editor.setPrintMarginColumn(100);
-                editor.focus();
-            });
 
-            $(window).resize(function () {
-                $('#ace_source').height(Math.max($(window).height() - 353, 100));
-            }).resize();
-        });
+                function makeDisplayData(data) {
+                    var site_data = data.attr('data-info');
+                    var judge_data = data.attr('data-judge-info');
+                    var display_data = site_data || judge_data;
+                    return display_data;
+                }
+
+                function formatSelection(state) {
+                    if (!state.id) return state.text; // optgroup
+                    var data = makeDisplayData($("option[data-id=" + state.id + "]"));
+                    return "<span class=\"result-display\" data-id=" + state.id + "></span><b>" + state.text + "</b> (" + data + ")</span>";
+                }
+
+                /*var tooltip_classes = 'tooltipped tooltipped-e';
+
+                 $('body').on({
+                 mouseenter: function () {
+                 var lang = $(this).text();
+                 var data = makeDisplayData($("option[data-name=\"" + lang + "\"]"));
+                 $(this).addClass(tooltip_classes).attr('aria-label', data);
+                 },
+                 mouseleave: function () {
+                 $(this).removeClass(tooltip_classes).removeAttr('aria-label');
+                 }
+                 }, '.select2-results__option.select2-results__option--highlighted');*/
+
+                // Terrible hack from https://github.com/select2/select2/issues/4436
+                RefPresenter = function () {
+                };
+                $.fn.select2.amd.require(['select2/results', 'select2/utils'], function (Result, Utils) {
+                    RefPresenter = function ($element, options, dataAdapter) {
+                        RefPresenter.__super__.constructor.call(this, $element, options, dataAdapter);
+                    };
+                    Utils.Extend(RefPresenter, Result);
+                    RefPresenter.prototype.bind = function (container, $container) {
+                        container.on('results:focus', function (params) {
+                            console.log('HIGHLIGHT', params);
+                            var option = params.data.element;
+                            var data = makeDisplayData(option);
+                            $(".result-display[data-id=" + option.attr('data-id') + "]").addClass(tooltip_classes).attr('aria-label', data);
+                        });
+                        RefPresenter.__super__.bind.call(this, container, $container);
+                    };
+                    return RefPresenter;
+                });
+
+                $("#id_language").select2({
+                    templateResult: format,
+                    templateSelection: formatSelection,
+                    escapeMarkup: function (m) {
+                        return m;
+                    },
+                    resultsAdapter: RefPresenter
+                });
+
+                $('#id_language').change(function () {
+                    var lang = $("#id_language").find("option:selected").attr('data-ace');
+                    window.ace_source.getSession().setMode("ace/mode/" + lang);
+                });
+
+                $('#ace_source').on('ace_load', function (e, editor) {
+                    var source = $('textarea#id_source');
+                    if (source.val() == '') {
+                        var code = localStorage.getItem('submit:' + $('#id_problem').val());
+                        if (code) {
+                            source.val(code);
+                            editor.getSession().setValue(code);
+                        }
+                    }
+                    editor.commands.addCommand({
+                        name: 'save',
+                        bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
+                        exec: function () {
+                            localStorage.setItem('submit:' + $('#id_problem').val(), editor.getSession().getValue());
+                        }
+                    });
+                    editor.getSession().setUseWrapMode(true);
+                    editor.setFontSize(14);
+                    editor.setPrintMarginColumn(100);
+                    editor.focus();
+                });
+
+                $(window).resize(function () {
+                    $('#ace_source').height(Math.max($(window).height() - 353, 100));
+                }).resize();
+            });
 
 block media
     if has_select2
