@@ -10,65 +10,44 @@ block js_media
     - compress js
         | #{form.media.js}
         script(type='text/javascript').
-            $(function () {
-                function format(state) {
-                    if (!state.id) return state.text; // optgroup
-                    return state.text;
-                }
+            function format(state) {
+                if (!state.id) return state.text; // optgroup
+                return state.text;
+            }
 
-                function makeDisplayData(data) {
-                    var site_data = data.attr('data-info');
-                    var judge_data = data.attr('data-judge-info');
-                    var display_data = site_data || judge_data;
-                    return display_data;
-                }
+            function makeDisplayData(data) {
+                var site_data = data.attr('data-info');
+                var judge_data = data.attr('data-judge-info');
+                var display_data = site_data || judge_data;
+                return display_data;
+            }
 
-                function formatSelection(state) {
-                    if (!state.id) return state.text; // optgroup
-                    var data = makeDisplayData($("option[data-id=" + state.id + "]"));
-                    return "<span class=\"result-display\" data-id=" + state.id + "></span><b>" + state.text + "</b> (" + data + ")</span>";
-                }
+            function formatSelection(state) {
+                if (!state.id) return state.text; // optgroup
+                var data = makeDisplayData($("option[data-id=" + state.id + "]"));
+                return "<span class=\"result-display\" data-id=" + state.id + "></span><b>" + state.text + "</b> (" + data + ")</span>";
+            }
 
-                /*var tooltip_classes = 'tooltipped tooltipped-e';
-
-                 $('body').on({
-                 mouseenter: function () {
-                 var lang = $(this).text();
-                 var data = makeDisplayData($("option[data-name=\"" + lang + "\"]"));
-                 $(this).addClass(tooltip_classes).attr('aria-label', data);
-                 },
-                 mouseleave: function () {
-                 $(this).removeClass(tooltip_classes).removeAttr('aria-label');
-                 }
-                 }, '.select2-results__option.select2-results__option--highlighted');*/
-
-                // Terrible hack from https://github.com/select2/select2/issues/4436
-                RefPresenter = function () {
+            RefPresenter = function () {
+            };
+            $.fn.select2.amd.require(['select2/results', 'select2/utils'], function (Result, Utils) {
+                RefPresenter = function ($element, options, dataAdapter) {
+                    RefPresenter.__super__.constructor.call(this, $element, options, dataAdapter);
                 };
-                $.fn.select2.amd.require(['select2/results', 'select2/utils'], function (Result, Utils) {
-                    RefPresenter = function ($element, options, dataAdapter) {
-                        RefPresenter.__super__.constructor.call(this, $element, options, dataAdapter);
-                    };
-                    Utils.Extend(RefPresenter, Result);
-                    RefPresenter.prototype.bind = function (container, $container) {
-                        container.on('results:focus', function (params) {
-                            console.log('HIGHLIGHT', params);
-                            var option = params.data.element;
-                            var data = makeDisplayData(option);
-                            $("#result-version-info").text(data);
-                        });
-                        RefPresenter.__super__.bind.call(this, container, $container);
-                    };
-                    return RefPresenter;
-                });
+                Utils.Extend(RefPresenter, Result);
+                RefPresenter.prototype.bind = function (container, $container) {
+                    container.on('results:focus', function (params) {
+                        console.log('HIGHLIGHT', params);
+                        var option = makeDisplayData($("option[data-id=" + params.data.id + "]"));
+                        var data = makeDisplayData(option);
+                        $("#result-version-info").text(data);
+                    });
+                    RefPresenter.__super__.bind.call(this, container, $container);
+                };
+                return RefPresenter;
+            });
 
-                $('#id_language').on('select2:open', function (evt) {
-                    var dropdown = $('.select2-dropdown');
-                    console.log(dropdown);
-                    if(!$('#result-version-info').length)
-                        dropdown.append($("<span id=\"result-version-info\">python 2.7.9</span>"));
-                });
-
+            $(function () {
                 $("#id_language").select2({
                     templateResult: format,
                     templateSelection: formatSelection,
