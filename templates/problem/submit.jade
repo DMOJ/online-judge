@@ -43,9 +43,8 @@ block js_media
                  }, '.select2-results__option.select2-results__option--highlighted');*/
 
                 // Terrible hack from https://github.com/select2/select2/issues/4436
-               /* RefPresenter = function () {
+                RefPresenter = function () {
                 };
-                var tooltip_classes = 'tooltipped tooltipped-e';
                 $.fn.select2.amd.require(['select2/results', 'select2/utils'], function (Result, Utils) {
                     RefPresenter = function ($element, options, dataAdapter) {
                         RefPresenter.__super__.constructor.call(this, $element, options, dataAdapter);
@@ -56,12 +55,12 @@ block js_media
                             console.log('HIGHLIGHT', params);
                             var option = params.data.element;
                             var data = makeDisplayData(option);
-                            $(".result-display[data-id=" + option.attr('data-id') + "]").addClass(tooltip_classes).attr('aria-label', data);
+                            $("#result-version-info").text(data);
                         });
                         RefPresenter.__super__.bind.call(this, container, $container);
                     };
                     return RefPresenter;
-                });*/
+                });
 
                 $('#id_language').on('select2:open', function (evt) {
                     var dropdown = $('.select2-dropdown');
