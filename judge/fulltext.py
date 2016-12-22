@@ -24,7 +24,7 @@ class SearchQuerySet(QuerySet):
 
         # Get the table name and column names from the model
         # in `table_name`.`column_name` style
-        columns = [meta.get_field(name, many_to_many=False).column for name in self._search_fields]
+        columns = [meta.get_field(name).column for name in self._search_fields]
         full_names = ['%s.%s' %
                       (connection.ops.quote_name(meta.db_table),
                        connection.ops.quote_name(column))
