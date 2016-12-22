@@ -17,7 +17,6 @@ block media
 
         .line {
             position: relative;
-            font-family: monospace;
         }
 
         .highlighter {
@@ -52,6 +51,6 @@ block body
         td.source-ln: div
             for line in raw_source|split
                 a(href='#line-{{ forloop.counter }}', name='line-{{ forloop.counter }}')
-                    span.line= forloop.counter
+                    pre.line= forloop.counter
                         span.highlighter
         td.source-code #{highlighted_source}
