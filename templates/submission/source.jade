@@ -28,6 +28,10 @@ block media
             right: 0;
         }
 
+        .line {
+            font-family: monospace;
+        }
+
         a:active .line .highlighter {
             background: rgba(255, 212, 0, 0.48);
         }
@@ -51,7 +55,7 @@ block body
         td.source-ln: div
             for line in raw_source|split
                 a(href='#line-{{ forloop.counter }}', name='line-{{ forloop.counter }}')
-                    pre.line
+                    span.line
                         | #{forloop.counter}
-                        .highlighter
+                        span.highlighter
         td.source-code #{highlighted_source}
