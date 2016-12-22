@@ -36,3 +36,7 @@ class ProfileMarkdownPreviewView(MarkdownPreviewView):
 
 class OrganizationMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'organization/preview.jade'
+
+
+class SolutionMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'solution_preview.jade'

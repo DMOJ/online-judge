@@ -72,8 +72,8 @@ class BlogPostAdmin(VersionAdmin):
 class SolutionForm(ModelForm):
     class Meta:
         widgets = {'problem': HeavySelect2Widget(data_view='problem_select2', attrs={'style': 'width: 250px'})}
-        if MathJaxAdminPagedownWidget is not None:
-            widgets['content'] = MathJaxAdminPagedownWidget
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets['content'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('solution_preview'))
 
 
 class SolutionAdmin(VersionAdmin):

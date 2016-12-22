@@ -263,6 +263,7 @@ urlpatterns = [
             url(r'^comment$', preview.CommentMarkdownPreviewView.as_view(), name='comment_preview'),
             url(r'^profile$', preview.ProfileMarkdownPreviewView.as_view(), name='profile_preview'),
             url(r'^organization$', preview.OrganizationMarkdownPreviewView.as_view(), name='organization_preview'),
+            url(r'^solution$', preview.SolutionMarkdownPreviewView.as_view(), name='solution_preview'),
         ])),
     ])),
 
