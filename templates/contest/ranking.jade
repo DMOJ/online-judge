@@ -114,7 +114,7 @@ block users_js_media
                         $('a.user-name').each(function () {
                             var link = $(this);
                             link.mouseenter(function (e) {
-                                var start_time = link.find('.start-time').text();
+                                var start_time = link.siblings('.start-time').text();
                                 link.addClass('tooltipped tooltipped-e').attr('aria-label', start_time);
                             }).mouseleave(function (e) {
                                 link.removeClass('tooltipped tooltipped-e').removeAttr('aria-label');

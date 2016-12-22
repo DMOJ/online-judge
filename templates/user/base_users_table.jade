@@ -25,7 +25,7 @@ thead
                                     span.organization
                                         a(href='{% url "organization_home" org.key %}')= org.short_name
                             a.user-name(href='{% url "user_page" user.user.username %}')= user.user.username
-                                block user_data
+                            block user_data
                 else
                     td.user-name(class=user.display_rank)
                         a(href='{% url "user_page" user.user.username %}')= user.user.username
