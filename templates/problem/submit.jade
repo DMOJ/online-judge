@@ -26,7 +26,7 @@ block js_media
                 function formatSelection(state) {
                     if (!state.id) return state.text; // optgroup
                     var data = makeDisplayData($("option[data-id=" + state.id + "]"));
-                    return "<span class=\"result-display\" data-id=" + state.id + "></span><b>" + state.text + "</b> (" + data + ")</span>";
+                    return "<b>" + state.text + "</b> (" + data + ")";
                 }
 
                 // Terrible hack, adapted from https://github.com/select2/select2/issues/4436
@@ -120,7 +120,6 @@ block media
                 padding: 0.2em 0;
                 text-align: right;
             }
-
 
             .select2-results__message {
                 white-space: nowrap
