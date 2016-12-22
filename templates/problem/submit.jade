@@ -44,7 +44,7 @@ block js_media
 
                 // Terrible hack from https://github.com/select2/select2/issues/4436
                 RefPresenter = function () {
-                };
+               /* };
                 var tooltip_classes = 'tooltipped tooltipped-e';
                 $.fn.select2.amd.require(['select2/results', 'select2/utils'], function (Result, Utils) {
                     RefPresenter = function ($element, options, dataAdapter) {
@@ -61,7 +61,7 @@ block js_media
                         RefPresenter.__super__.bind.call(this, container, $container);
                     };
                     return RefPresenter;
-                });
+                });*/
 
                 $("#id_language").select2({
                     templateResult: format,
@@ -69,7 +69,7 @@ block js_media
                     escapeMarkup: function (m) {
                         return m;
                     },
-                    resultsAdapter: RefPresenter
+                    //resultsAdapter: RefPresenter
                 });
 
                 $('#id_language').change(function () {
