@@ -51,7 +51,7 @@ Use the site in whatever language you're most comfortable in &mdash; currently f
 ![](https://dmoj.ml/data/_other/readme/i18n.png)
 
 
-## Mobile support
+### Mobile support
 The DMOJ is usable on devices of all sizes, and improvements are constantly being made in this area.
 
 ![](https://dmoj.ml/data/_other/readme/mobile-c.png)
