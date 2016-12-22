@@ -21,7 +21,7 @@ block js_media
                     return state.text + " (" + $("option[data-id=" + state.id + "]").attr('data-judge-info') + ")";
                 }
 
-                $("#e2_2").select2({
+                $("#language-expand").select2({
                     templateResult: format,
                     templateSelection: formatSelection,
                     escapeMarkup: function (m) {
