@@ -13,10 +13,11 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import connection, IntegrityError
-from django.db.models import Q, Min, Max, cached_property
+from django.db.models import Q, Min, Max
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.timezone import make_aware
 from django.utils.translation import ugettext as _, ugettext_lazy
