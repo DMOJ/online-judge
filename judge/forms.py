@@ -2,7 +2,6 @@ from operator import attrgetter
 
 from django import forms
 from django.conf import settings
-from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from django.forms import ModelForm, CharField, TextInput
@@ -10,7 +9,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 from django_ace import AceWidget
-from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, Language
+from judge.models import Organization, Profile, Submission, PrivateMessage, Language
 from judge.utils.subscription import newsletter_id
 from judge.widgets import MathJaxPagedownWidget, HeavyPreviewPageDownWidget, PagedownWidget, \
     Select2Widget, Select2MultipleWidget
@@ -91,30 +90,6 @@ class NewMessageForm(ModelForm):
 class NewOrganizationForm(EditOrganizationForm):
     class Meta(EditOrganizationForm.Meta):
         fields = ['key'] + EditOrganizationForm.Meta.fields
-
-
-class ProblemEditForm(ModelForm):
-    class Meta:
-        model = Problem
-        fields = ['name', 'is_public', 'authors', 'types', 'group', 'description', 'time_limit',
-                  'memory_limit', 'points', 'partial', 'allowed_languages']
-        widgets = {
-            'authors': FilteredSelectMultiple('creators', False),
-            'types': FilteredSelectMultiple('types', False),
-            'allowed_languages': FilteredSelectMultiple('languages', False),
-        }
-        if MathJaxPagedownWidget is not None:
-            widgets['description'] = MathJaxPagedownWidget
-
-    def __init__(self, *args, **kwargs):
-        super(ProblemEditForm, self).__init__(*args, **kwargs)
-        self.fields['authors'].queryset = Profile.objects.filter(Q(user__groups__name__in=['ProblemSetter', 'Admin']) |
-                                                                 Q(user__is_superuser=True))
-
-
-class ProblemAddForm(ProblemEditForm):
-    class Meta(ProblemEditForm.Meta):
-        fields = ['code'] + ProblemEditForm.Meta.fields
 
 
 class CustomAuthenticationForm(AuthenticationForm):
