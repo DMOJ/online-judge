@@ -6,12 +6,14 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from django.forms import ModelForm, CharField, TextInput
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, Problem, PrivateMessage, Language
 from judge.utils.subscription import newsletter_id
-from judge.widgets import MathJaxPagedownWidget, PagedownWidget, Select2Widget, Select2MultipleWidget
+from judge.widgets import MathJaxPagedownWidget, HeavyPreviewPageDownWidget, PagedownWidget, \
+    Select2Widget, Select2MultipleWidget
 
 
 def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
@@ -34,8 +36,11 @@ class ProfileForm(ModelForm):
             'math_engine': Select2Widget(attrs={'style': 'width:200px'})
         }
 
-        if PagedownWidget is not None:
-            widgets['about'] = PagedownWidget(attrs={'style': 'max-width:700px;min-width:700px;width:700px'})
+        if HeavyPreviewPageDownWidget is not None:
+            widgets['about'] = HeavyPreviewPageDownWidget(
+                preview=reverse_lazy('profile_preview'),
+                attrs={'style': 'max-width:700px;min-width:700px;width:700px'}
+            )
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)

@@ -28,3 +28,7 @@ class ContestMarkdownPreviewView(MarkdownPreviewView):
 
 class CommentMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'comments/preview.jade'
+
+
+class ProfileMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'user/preview.jade'
