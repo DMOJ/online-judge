@@ -28,9 +28,7 @@ block js_media
                 return "<span class=\"result-display\" data-id=" + state.id + "></span><b>" + state.text + "</b> (" + data + ")</span>";
             }
 
-            RefPresenter = function () {
-            };
-            $.fn.select2.amd.require(['select2/results', 'select2/utils'], function (Result, Utils) {
+            $.fn.select2.amd.define('select2/data/customAdapter', ['select2/results', 'select2/utils'], function (Result, Utils) {
                 RefPresenter = function ($element, options, dataAdapter) {
                     RefPresenter.__super__.constructor.call(this, $element, options, dataAdapter);
                 };
@@ -38,14 +36,15 @@ block js_media
                 RefPresenter.prototype.bind = function (container, $container) {
                     container.on('results:focus', function (params) {
                         console.log('HIGHLIGHT', params);
-                        var option = makeDisplayData($("option[data-id=" + params.data.id + "]"));
-                        var data = makeDisplayData(option);
+                        var data = makeDisplayData($("option[data-id=" + params.data.id + "]"));
                         $("#result-version-info").text(data);
                     });
                     RefPresenter.__super__.bind.call(this, container, $container);
                 };
                 return RefPresenter;
             });
+
+            var customAdapter = $.fn.select2.amd.require('select2/data/customAdapter');
 
             $(function () {
                 $("#id_language").select2({
@@ -54,7 +53,7 @@ block js_media
                     escapeMarkup: function (m) {
                         return m;
                     },
-                    resultsAdapter: RefPresenter
+                    resultsAdapter: customAdapter
                 });
 
                 $('#id_language').change(function () {
