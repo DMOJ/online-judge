@@ -31,7 +31,8 @@ class Organization(models.Model):
     admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='+',
                                     help_text=_('Those who can edit this organization'))
     creation_date = models.DateTimeField(verbose_name=_('creation date'), auto_now_add=True)
-    is_open = models.BooleanField(help_text=_('Allow joining organization'), default=True)
+    is_open = models.BooleanField(verbose_name=_('is open organization?'),
+                                  help_text=_('Allow joining organization'), default=True)
     slots = models.IntegerField(verbose_name=_('maximum size'), null=True, blank=True,
                                 help_text=_('Maximum amount of users in this organization, '
                                             'only applicable to private organizations'))
