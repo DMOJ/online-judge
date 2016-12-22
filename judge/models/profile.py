@@ -100,7 +100,7 @@ class Profile(models.Model):
         orgs = self.organizations.all()
         return orgs[0] if orgs else None
 
-    def calculate_points(self):
+    def calculate_points(self, pp_step = getattr(settings, 'PP_STEP', 0.95)):
         from judge.models import Submission
         qdata = (Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
                  .values('problem_id').distinct().annotate(points=Max('points')).order_by('-points')
@@ -109,7 +109,6 @@ class Profile(models.Model):
         problems = len(qdata)
         val = 1.0
         pp = 0.0
-        pp_step = getattr(settings, 'PP_STEP', 0.95)
         for x in qdata:
             pp += val * x
             val *= pp_step
