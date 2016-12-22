@@ -18,7 +18,7 @@ block js_media
 
                 function formatSelection(state) {
                     if (!state.id) return state.text; // optgroup
-                    return state.text + " (" + $("#language-data li[data-id=" + state.id + "]").attr('data-judge-info') + ")";
+                    return state.text + " (" + $("option[data-id=" + state.id + "]").attr('data-judge-info') + ")";
                 }
 
                 $("#id_language").select2({
@@ -132,12 +132,12 @@ block body
             if not no_judges
                 #language
                     | #{form.language.errors}
-                    | #{form.language}
-                    ul#language-data: each lang in form.fields.language.queryset
-                        - var runtime_versions = lang.runtime_versions
-                        li(value=lang.id, data-id=lang.id, data-name=lang.name, data-info=lang.info,
-                           data-judge-info='{% include "runtime_version_fragment.jade" %}',
-                           data-ace=lang.ace)= lang.name
+                    #language-select
+                        select#id_language(name='language'): each lang in form.fields.language.queryset
+                            - var runtime_versions = lang.runtime_versions
+                            option(value=lang.id, data-id=lang.id, data-name=lang.name, data-info=lang.info,
+                               data-judge-info='{% include "runtime_version_fragment.jade" %}',
+                               data-ace=lang.ace, selected=('' if lang.id = default_lang.id else None))= lang.name
         hr
         if no_judges
             span(style='color: red') {% trans "No judge is available for this problem." %}
