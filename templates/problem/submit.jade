@@ -42,7 +42,7 @@ block js_media
                 $('body').on({
                     mouseenter: function () {
                         var lang = $(this).text();
-                        var data = makeDisplayData($("option[data-name=" + lang + "]"));
+                        var data = makeDisplayData($("option[data-name=\"" + lang + "\"]"));
                         $(this).addClass(tooltip_classes).attr('aria-label', data);
                     },
                     mouseleave: function () {
