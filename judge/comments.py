@@ -30,7 +30,7 @@ class CommentForm(ModelForm):
         }
 
         if HeavyPreviewPageDownWidget is not None:
-            widgets['body'] = HeavyPreviewPageDownWidget()
+            widgets['body'] = HeavyPreviewPageDownWidget(preview='comment_preview')
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
