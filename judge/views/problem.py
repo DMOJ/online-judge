@@ -462,7 +462,10 @@ def problem_submit(request, problem=None, submission=None):
     select2_js = getattr(settings, 'SELECT2_JS_URL', None)
     has_select2 = select2_css is not None and select2_js is not None
 
-    default_lang = request.user.profile.language
+    if submission is not None:
+        default_lang = submission.language
+    else:
+        default_lang = request.user.profile.language
 
     return render(request, 'problem/submit.jade', {
         'form': form,
