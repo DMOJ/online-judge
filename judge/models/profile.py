@@ -104,8 +104,7 @@ class Profile(models.Model):
         from judge.models import Submission
         qdata = Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True).values('problem_id').distinct().annotate(points=Max('points')).order_by('-points').values_list('points', flat=True)
         points = sum(qdata)
-        problems = (self.submission_set.filter(points__gt=0, problem__is_public=True)
-                    .values('problem').distinct().count())
+        problems = len(qdata)
         val = 1.0
         pp = 0.0
         for x in qdata:
