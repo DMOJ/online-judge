@@ -432,6 +432,8 @@ def problem_submit(request, problem=None, submission=None):
             return HttpResponseRedirect(reverse('submission_status', args=[str(model.id)]))
         else:
             form_data = form.cleaned_data
+            if submission is not None:
+                sub = get_object_or_404(Submission, id=int(submission))
     else:
         initial = {'language': profile.language}
         if problem is not None:
