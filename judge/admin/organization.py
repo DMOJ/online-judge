@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.forms import ModelForm
+from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import ugettext, ugettext_lazy as _
 from reversion.admin import VersionAdmin
 
 from judge.models import Organization
-from judge.widgets import HeavySelect2MultipleWidget, HeavySelect2Widget, MathJaxAdminPagedownWidget
+from judge.widgets import HeavySelect2MultipleWidget, HeavySelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
 class OrganizationForm(ModelForm):
@@ -14,8 +15,8 @@ class OrganizationForm(ModelForm):
             'admins': HeavySelect2MultipleWidget(data_view='profile_select2'),
             'registrant': HeavySelect2Widget(data_view='profile_select2'),
         }
-        if MathJaxAdminPagedownWidget is not None:
-            widgets['description'] = MathJaxAdminPagedownWidget
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets['about'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('organization_preview'))
 
 
 class OrganizationAdmin(VersionAdmin):
