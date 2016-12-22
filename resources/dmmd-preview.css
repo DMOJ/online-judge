@@ -25,5 +25,5 @@ div.dmmd-preview-has-content div.dmmd-preview-content {
 }
 
 .dmmd-preview-stale {
-	background: repeating-linear-gradient(-45deg, #fff, #fff 10px, #eee 10px, #eee 20px);
+	background: repeating-linear-gradient(-45deg, #fff, #fff 10px, #f8f8f8 10px, #f8f8f8 20px);
 }
