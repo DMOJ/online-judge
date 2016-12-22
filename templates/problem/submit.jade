@@ -10,43 +10,43 @@ block js_media
     - compress js
         | #{form.media.js}
         script(type='text/javascript').
-            function format(state) {
-                if (!state.id) return state.text; // optgroup
-                return state.text;
-            }
-
-            function makeDisplayData(data) {
-                var site_data = data.attr('data-info');
-                var judge_data = data.attr('data-judge-info');
-                var display_data = site_data || judge_data;
-                return display_data;
-            }
-
-            function formatSelection(state) {
-                if (!state.id) return state.text; // optgroup
-                var data = makeDisplayData($("option[data-id=" + state.id + "]"));
-                return "<span class=\"result-display\" data-id=" + state.id + "></span><b>" + state.text + "</b> (" + data + ")</span>";
-            }
-
-            $.fn.select2.amd.define('select2/data/customAdapter', ['select2/results', 'select2/utils'], function (Result, Utils) {
-                RefPresenter = function ($element, options, dataAdapter) {
-                    RefPresenter.__super__.constructor.call(this, $element, options, dataAdapter);
-                };
-                Utils.Extend(RefPresenter, Result);
-                RefPresenter.prototype.bind = function (container, $container) {
-                    container.on('results:focus', function (params) {
-                        console.log('HIGHLIGHT', params);
-                        var data = makeDisplayData($("option[data-id=" + params.data.id + "]"));
-                        $("#result-version-info").text(data);
-                    });
-                    RefPresenter.__super__.bind.call(this, container, $container);
-                };
-                return RefPresenter;
-            });
-
-            var customAdapter = $.fn.select2.amd.require('select2/data/customAdapter');
-
             $(function () {
+                function format(state) {
+                    if (!state.id) return state.text; // optgroup
+                    return state.text;
+                }
+
+                function makeDisplayData(data) {
+                    var site_data = data.attr('data-info');
+                    var judge_data = data.attr('data-judge-info');
+                    var display_data = site_data || judge_data;
+                    return display_data;
+                }
+
+                function formatSelection(state) {
+                    if (!state.id) return state.text; // optgroup
+                    var data = makeDisplayData($("option[data-id=" + state.id + "]"));
+                    return "<span class=\"result-display\" data-id=" + state.id + "></span><b>" + state.text + "</b> (" + data + ")</span>";
+                }
+
+                // Terrible hack, adapted from https://github.com/select2/select2/issues/4436
+                $.fn.select2.amd.define('select2/data/customAdapter', ['select2/results', 'select2/utils'], function (Result, Utils) {
+                    RefPresenter = function ($element, options, dataAdapter) {
+                        RefPresenter.__super__.constructor.call(this, $element, options, dataAdapter);
+                    };
+                    Utils.Extend(RefPresenter, Result);
+                    RefPresenter.prototype.bind = function (container, $container) {
+                        container.on('results:focus', function (params) {
+                            var data = makeDisplayData($("option[data-id=" + params.data.id + "]"));
+                            $("#result-version-info").text(data);
+                        });
+                        RefPresenter.__super__.bind.call(this, container, $container);
+                    };
+                    return RefPresenter;
+                });
+
+                var customAdapter = $.fn.select2.amd.require('select2/data/customAdapter');
+
                 $("#id_language").select2({
                     templateResult: format,
                     templateSelection: formatSelection,
@@ -58,7 +58,6 @@ block js_media
 
                 $('#id_language').on('select2:open', function (evt) {
                     var dropdown = $('.select2-dropdown');
-                    console.log(dropdown);
                     if (!$('#result-version-info').length)
                         dropdown.append($("<span id=\"result-version-info\"/>"));
                 });
