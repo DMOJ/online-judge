@@ -450,12 +450,17 @@ def problem_submit(request, problem=None, submission=None):
         form_data = initial
     if 'problem' in form_data:
         form.fields['language'].queryset = (form_data['problem'].usable_languages.order_by('name', 'key')
-                                            .prefetch_related(
+            .prefetch_related(
             Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority'))))
         problem_object = form_data['problem']
     if 'language' in form_data:
         form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = profile.ace_theme
+
+    # TODO: When this is changed to be a view, use LoadSelect2Mixin instead of this
+    select2_css = getattr(settings, 'SELECT2_CSS_URL', None)
+    select2_js = getattr(settings, 'SELECT2_JS_URL', None)
+    has_select2 = select2_css is not None and select2_js is not None
 
     return render(request, 'problem/submit.jade', {
         'form': form,
@@ -469,7 +474,11 @@ def problem_submit(request, problem=None, submission=None):
         }),
         'langs': Language.objects.all(),
         'no_judges': not form.fields['language'].queryset,
-        'ACE_URL': ACE_URL
+        'ACE_URL': ACE_URL,
+
+        'has_select2': has_select2,
+        'SELECT2_CSS_URL': select2_css,
+        'SELECT2_JS_URL': select2_js,
     })
 
 
