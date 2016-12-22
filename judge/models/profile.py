@@ -1,5 +1,5 @@
 from operator import itemgetter
-
+from operator import mul
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -100,18 +100,16 @@ class Profile(models.Model):
         orgs = self.organizations.all()
         return orgs[0] if orgs else None
 
-    def calculate_points(self, pp_step = getattr(settings, 'PP_STEP', 0.95)):
+    def calculate_points(self, table=(lambda x: [pow(x,i) for i in xrange(100)])(getattr(settings, 'PP_STEP', 0.95))):
         from judge.models import Submission
         qdata = (Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
                  .values('problem_id').distinct().annotate(points=Max('points')).order_by('-points')
                  .values_list('points', flat=True))
         points = sum(qdata)
         problems = len(qdata)
-        val = 1.0
-        pp = 0.0
-        for x in qdata:
-            pp += val * x
-            val *= pp_step
+        qdata = qdata[:min(len(qdata), len(table))]
+        table = table[:min(len(qdata), len(table))]
+        pp = sum(map(mul, table, qdata))
         if self.points != points or problems != self.problem_count or self.performance_points != pp:
             self.points = points
             self.problem_count = problems
