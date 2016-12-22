@@ -109,7 +109,7 @@ class Profile(models.Model):
         problems = len(qdata)
         val = 1.0
         pp = 0.0
-        pp_step = float(getattr(settings, 'PP_STEP', '0.95'))
+        pp_step = getattr(settings, 'PP_STEP', 0.95)
         for x in qdata:
             pp += val * x
             val *= pp_step
