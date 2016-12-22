@@ -123,13 +123,12 @@ block body
                                         if not forloop.last
                                             = ', '
                                     = ' '
-                            span.post-time.moment-time-toggle(data-unix='{{ post.publish_on|utc|date:"c" }}')
+                            span.post-time(data-unix='{{ post.publish_on|utc|date:"c" }}')
                                 | {% trans "posted" %}
                                 = ' '
                                 - blocktrans with time=post.publish_on|date:_("N j, Y, g:i") asvar str_time
                                     | on {{ time }}
                                 span.relative= str_time
-                                span.absolute= str_time
                         .summary
                             - cache 86400 post_summary post.id
                                 | #{post.summary|default:post.content|markdown:"blog"|reference|latex_math|proxy_images|nofollowexternal|lazy_load}
