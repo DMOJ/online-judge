@@ -97,11 +97,6 @@ block body
                 #language
                     | #{form.language.errors}
                     #language-select
-                        #language-current
-                            .data
-                                span.name
-                                span.info
-                            .fa.language-drop
                         select#id_language(name='language'): each lang in form.fields.language.queryset
                             - var runtime_versions = lang.runtime_versions
                             option(value=lang.id, data-id=lang.id, data-name=lang.name, data-info=lang.info,
