@@ -8,6 +8,7 @@ $(function () {
         $update.click(function () {
             var text = $textarea.val();
             if (text) {
+                $preview.addClass('dmmd-preview-stale');
                 $.post(preview_url, {
                     preview: text,
                     csrfmiddlewaretoken: $.cookie('csrftoken')
