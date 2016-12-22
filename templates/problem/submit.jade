@@ -16,13 +16,17 @@ block js_media
                     return state.text;
                 }
 
-                function formatSelection(state) {
-                    if (!state.id) return state.text; // optgroup
-                    var data = $("option[data-id=" + state.id + "]");
+                function makeDisplayData(data) {
                     var site_data = data.attr('data-info');
                     var judge_data = data.attr('data-judge-info');
                     var display_data = site_data || judge_data;
-                    return "<b>" + state.text + "</b> (" + display_data + ")";
+                    return display_data;
+                }
+
+                function formatSelection(state) {
+                    if (!state.id) return state.text; // optgroup
+                    var data = makeDisplayData($("option[data-id=" + state.id + "]"));
+                    return "<span class=\"language-data\" aria-label=" + display_data + "><b>" + state.text + "</b> (" + data + ")</span>";
                 }
 
                 $("#id_language").select2({
@@ -32,6 +36,19 @@ block js_media
                         return m;
                     }
                 });
+
+                var tooltip_classes = 'tooltipped tooltipped-e';
+
+                $('body').on({
+                    mouseenter: function () {
+                        var lang = $(this).text();
+                        var data = makeDisplayData($("option[data-name=" + lang + "]"));
+                        $(this).addClass(tooltip_classes).attr('aria-label', data);
+                    },
+                    mouseleave: function () {
+                        $(this).removeClass(tooltip_classes).removeAttr('aria-label');
+                    }
+                }, '.select2-results__option.select2-results__option--highlighted');
 
                 $('#id_language').change(function () {
                     var lang = $("#id_language").find("option:selected").attr('data-ace');
