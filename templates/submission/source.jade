@@ -15,6 +15,23 @@ block media
             color: gray;
         }
 
+        pre.line {
+            position: relative;
+        }
+
+        .highlighter {
+            position: absolute;
+            width: 9999px;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        a:active .line .highlighter {
+            background: rgba(255, 212, 0, 0.48);
+        }
+
 block body
     br
     div: a(href='{% url "submission_status" submission.id %}') {% trans "View status" %}
@@ -34,5 +51,7 @@ block body
         td.source-ln: div
             for line in raw_source|split
                 a(href='#line-{{ forloop.counter }}', name='line-{{ forloop.counter }}')
-                    pre #{forloop.counter}
+                    pre.line
+                        | #{forloop.counter}
+                        .highlighter
         td.source-code #{highlighted_source}
