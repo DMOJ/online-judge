@@ -74,7 +74,7 @@ class Profile(models.Model):
                                 default=getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto'))
     language = models.ForeignKey('Language', verbose_name=_('preferred language'))
     points = models.FloatField(default=0, db_index=True)
-    pp = models.FloatField(default=0, db_index=True)
+    performance_points = models.FloatField(default=0, db_index=True)
     problem_count = models.IntegerField(default=0, db_index=True)
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
     last_access = models.DateTimeField(verbose_name=_('last access time'), default=now)
@@ -109,13 +109,14 @@ class Profile(models.Model):
         problems = len(qdata)
         val = 1.0
         pp = 0.0
+        pp_step = float(getattr(settings, 'PP_STEP', '0.95'))
         for x in qdata:
             pp += val * x
-            val *= 0.95
-        if self.points != points or problems != self.problem_count or self.pp != pp:
+            val *= pp_step
+        if self.points != points or problems != self.problem_count or self.performance_points != pp:
             self.points = points
             self.problem_count = problems
-            self.pp = pp
+            self.performance_points = pp
             self.save()
         return points
 
