@@ -24,6 +24,18 @@ div.dmmd-preview-has-content div.dmmd-preview-content {
     padding-bottom: 7px;
 }
 
-.dmmd-preview-stale {
+div.dmmd-no-button div.dmmd-preview-update {
+	display: none;
+}
+
+div.dmmd-no-button div.dmmd-preview-content {
+	padding-bottom: 0;
+}
+
+div.dmmd-no-button:not(.dmmd-preview-has-content) {
+	display: none;
+}
+
+div.dmmd-preview-stale {
 	background: repeating-linear-gradient(-45deg, #fff, #fff 10px, #f8f8f8 10px, #f8f8f8 20px);
 }

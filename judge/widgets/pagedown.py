@@ -66,6 +66,7 @@ else:
             kwargs.setdefault('template', 'pagedown.jade')
             self.preview_url = kwargs.pop('preview')
             self.preview_timeout = kwargs.pop('preview_timeout', None)
+            self.hide_preview_button = kwargs.pop('hide_preview_button', False)
             super(HeavyPreviewPageDownWidget, self).__init__(*args, **kwargs)
 
         def render(self, name, value, attrs=None):
@@ -85,6 +86,7 @@ else:
                 'show_preview': self.show_preview,
                 'preview_url': self.preview_url,
                 'preview_timeout': self.preview_timeout,
+                'extra_classes': 'dmmd-no-button' if self.hide_preview_button else None,
             }
 
         def _media(self):

@@ -5,6 +5,6 @@
     if show_preview
         .wmd-panel.wmd-preview.dmmd-preview(id='{{ id|safe }}-preview',
                  data-preview-url=preview_url, data-textarea-id=id,
-                 data-timeout=preview_timeout)
+                 data-timeout=preview_timeout, class=extra_classes)
             .dmmd-preview-update #[i.fa.fa-refresh] Update Preview
             .dmmd-preview-content.content-description
