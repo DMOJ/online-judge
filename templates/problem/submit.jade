@@ -63,6 +63,13 @@ block js_media
                     return RefPresenter;
                 });*/
 
+                $('#id_language').on('select2:select', function (evt) {
+                    var dropdown = $('.select2-dropdown');
+                    console.log(dropdown);
+                    if(!$('#result-version-info').length)
+                        dropdown.append($("<span id=\"#result-version-info\">python 2.7.9</span>"));
+                });
+
                 $("#id_language").select2({
                     templateResult: format,
                     templateSelection: formatSelection,
@@ -122,9 +129,15 @@ block media
                 width: 100%;
             }
 
-            .result-display {
-                position: relative;
+            #result-version-info {
+                border-bottom: 1px solid rgb(148, 148, 148);
+                margin: 0px 1em;
+                color: #757575;
+                font-weight: 600;
+                padding: 0.2em 0;
+                text-align: right;
             }
+
 
             .select2-results__message {
                 white-space: nowrap
