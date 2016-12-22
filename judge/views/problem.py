@@ -463,7 +463,7 @@ def problem_submit(request, problem=None, submission=None):
     has_select2 = select2_css is not None and select2_js is not None
 
     if submission is not None:
-        default_lang = submission.language
+        default_lang = sub.language
     else:
         default_lang = request.user.profile.language
 
