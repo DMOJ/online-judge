@@ -116,7 +116,7 @@ block user_content
     if user.about
         h4 {% trans "About" %}
         - cache 86400 user_about user.id
-            | #{user.about|markdown:"self-description"|smart_math:MATH_ENGINE|proxy_images}
+            | #{user.about|markdown:"self-description"|reference|smart_math:MATH_ENGINE|proxy_images}
     else
         i
             if user.user == request.user

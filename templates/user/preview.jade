@@ -4,7 +4,7 @@
 - load staticfiles
 - load reference
 
-| #{preview_data|markdown:"self-description"|smart_math:MATH_ENGINE|proxy_images}
+| #{preview_data|markdown:"self-description"|reference|smart_math:MATH_ENGINE|proxy_images}
 
 if REQUIRE_JAX
     div.require-mathjax-support(data-config='{% static "mathjax_config.js" %}')
