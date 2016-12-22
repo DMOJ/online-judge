@@ -65,6 +65,7 @@ else:
         def __init__(self, *args, **kwargs):
             kwargs.setdefault('template', 'pagedown.jade')
             self.preview_url = kwargs.pop('preview')
+            self.preview_timeout = kwargs.pop('preview_timeout', None)
             super(HeavyPreviewPageDownWidget, self).__init__(*args, **kwargs)
 
         def render(self, name, value, attrs=None):
@@ -82,12 +83,13 @@ else:
                 'body': conditional_escape(force_unicode(value)),
                 'id': attrs['id'],
                 'show_preview': self.show_preview,
-                'preview_url': self.preview_url
+                'preview_url': self.preview_url,
+                'preview_timeout': self.preview_timeout,
             }
 
         def _media(self):
             media = super(HeavyPreviewPageDownWidget, self)._media()
-            media.add_css({'all': [staticfiles_storage.url('dmmd-preview.css'),]})
+            media.add_css({'all': [staticfiles_storage.url('dmmd-preview.css')]})
             media.add_js([staticfiles_storage.url('dmmd-preview.js')])
             return media
 
