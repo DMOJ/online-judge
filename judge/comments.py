@@ -7,6 +7,7 @@ from django.db.models.expressions import Value
 from django.db.models.functions import Coalesce
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.generic import View
@@ -30,7 +31,7 @@ class CommentForm(ModelForm):
         }
 
         if HeavyPreviewPageDownWidget is not None:
-            widgets['body'] = HeavyPreviewPageDownWidget(preview='comment_preview')
+            widgets['body'] = HeavyPreviewPageDownWidget(preview=reverse_lazy('comment_preview'))
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
