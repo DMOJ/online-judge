@@ -52,5 +52,4 @@ block body
             for line in raw_source|split
                 a(href='#line-{{ forloop.counter }}', name='line-{{ forloop.counter }}')
                     pre.line= forloop.counter
-                        // span.highlighter
         td.source-code #{highlighted_source}
