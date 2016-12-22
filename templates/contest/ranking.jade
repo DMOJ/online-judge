@@ -101,46 +101,58 @@ block users_media
 block users_js_media
     if last_msg
         script(type='text/javascript', src='{% static "event.js" %}')
-        if not contest.ended
-            script(type='text/javascript').
-                $(function () {
-                    function install_tooltips() {
-                        register_update_relative(function () {
-                            return $('.start-time.active');
-                        }, function (when) {
-                            return true;
-                        });
+    if perms.judge.change_contestparticipation
+        script(type='text/javascript').
+            $('td.user').find('a.user-name').click(function (e) {
+                var data = $(this).siblings('.edit-participation');
+                if (e.altKey && data.length) {
+                    window.open(data.attr('data-link'), '_blank');
+                    return false;
+                }
+            });
+    if not contest.ended
+        script(type='text/javascript').
+            $(function () {
+                window.install_tooltips = function () {
+                    register_update_relative(function () {
+                        return $('.start-time.active');
+                    }, function (when) {
+                        return true;
+                    });
 
-                        $('a.user-name').each(function () {
-                            var link = $(this);
-                            link.mouseenter(function (e) {
-                                var start_time = link.siblings('.start-time').text();
-                                link.addClass('tooltipped tooltipped-e').attr('aria-label', start_time);
-                            }).mouseleave(function (e) {
-                                link.removeClass('tooltipped tooltipped-e').removeAttr('aria-label');
-                            });
+                    $('td.user').find('a.user-name').each(function () {
+                        var link = $(this);
+                        link.mouseenter(function (e) {
+                            var start_time = link.siblings('.start-time').text();
+                            link.addClass('tooltipped tooltipped-e').attr('aria-label', start_time);
+                        }).mouseleave(function (e) {
+                            link.removeClass('tooltipped tooltipped-e').removeAttr('aria-label');
                         });
-                    }
-
-                    /*var receiver = new EventReceiver(
-                            "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
-                            ['contest_#{contest.id}'], #{last_msg}, function (message) {
-                                var table = $('#users-table');
-                                switch (message.type) {
-                                    case 'update':
-                                        $.ajax({
-                                            url: '{% url "contest_ranking_ajax" contest.key %}'
-                                        }).done(function (data) {
-                                            table.html(data);
-                                            install_tooltips();
-                                        }).fail(function () {
-                                            console.log('Failed to update table!');
-                                        });
-                                }
-                            }
-                    );*/
+                    });
                     install_tooltips();
-                });
+                };
+            });
+    if not contest.ended and last_msg
+        script(type='text/javascript').
+            $(function () {
+                /*var receiver = new EventReceiver(
+                        "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                        ['contest_#{contest.id}'], #{last_msg}, function (message) {
+                            var table = $('#users-table');
+                            switch (message.type) {
+                                case 'update':
+                                    $.ajax({
+                                        url: '{% url "contest_ranking_ajax" contest.key %}'
+                                    }).done(function (data) {
+                                        table.html(data);
+                                        install_tooltips();
+                                    }).fail(function () {
+                                        console.log('Failed to update table!');
+                                    });
+                            }
+                        }
+                );*/
+            });
 
 block users_table
     include contest/ranking_table
