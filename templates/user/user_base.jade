@@ -49,6 +49,13 @@ block body
                 b {% trans "Total points:" %}
                 |  #{user.points}
                 br
+                br
+                b {% trans "Rank by PP:" %}
+                |  ##{pp_rank}
+                br
+                b {% trans "Total PP:" %}
+                |  #{user.pp}
+                br
                 a(href='{% url "all_user_submissions" user.user.username %}') {% trans "View submissions" %}
                 if ratings
                     br
