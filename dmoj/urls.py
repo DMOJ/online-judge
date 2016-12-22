@@ -264,6 +264,7 @@ urlpatterns = [
             url(r'^profile$', preview.ProfileMarkdownPreviewView.as_view(), name='profile_preview'),
             url(r'^organization$', preview.OrganizationMarkdownPreviewView.as_view(), name='organization_preview'),
             url(r'^solution$', preview.SolutionMarkdownPreviewView.as_view(), name='solution_preview'),
+            url(r'^license$', preview.LicenseMarkdownPreviewView.as_view(), name='license_preview'),
         ])),
     ])),
 

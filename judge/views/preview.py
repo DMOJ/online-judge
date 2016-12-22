@@ -40,3 +40,7 @@ class OrganizationMarkdownPreviewView(MarkdownPreviewView):
 
 class SolutionMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'solution_preview.jade'
+
+
+class LicenseMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'license_preview.jade'

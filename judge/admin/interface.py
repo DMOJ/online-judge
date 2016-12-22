@@ -8,8 +8,7 @@ from reversion.admin import VersionAdmin
 
 from judge.dblock import LockModel
 from judge.models import NavigationBar
-from judge.widgets import HeavySelect2MultipleWidget, HeavyPreviewAdminPageDownWidget, HeavySelect2Widget, \
-    MathJaxAdminPagedownWidget
+from judge.widgets import HeavySelect2MultipleWidget, HeavyPreviewAdminPageDownWidget, HeavySelect2Widget
 
 
 class NavigationBarAdmin(MPTTModelAdmin):
@@ -98,8 +97,8 @@ class SolutionAdmin(VersionAdmin):
 
 class LicenseForm(ModelForm):
     class Meta:
-        if MathJaxAdminPagedownWidget is not None:
-            widgets = {'text': MathJaxAdminPagedownWidget}
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets = {'text': HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('license_preview'))}
 
 
 class LicenseAdmin(admin.ModelAdmin):
