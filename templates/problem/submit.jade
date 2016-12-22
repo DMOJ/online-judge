@@ -21,7 +21,7 @@ block js_media
                     return state.text + " (" + $("option[data-id=" + state.id + "]").attr('data-judge-info') + ")";
                 }
 
-                $("#language-expand").select2({
+                $("#id_language").select2({
                     templateResult: format,
                     templateSelection: formatSelection,
                     escapeMarkup: function (m) {
@@ -44,7 +44,7 @@ block media
                 margin-top: 4px;
             }
 
-            #language-expand { width: 100%; }
+            #id_language { width: 100%; }
 
             .select2-results__option {
                 color: #757575 !important;
@@ -96,14 +96,13 @@ block body
             if not no_judges
                 #language
                     | #{form.language.errors}
-                    | #{form.language}
                     #language-select
                         #language-current
                             .data
                                 span.name
                                 span.info
                             .fa.language-drop
-                        select#language-expand: each lang in form.fields.language.queryset
+                        select#id_language(name='language'): each lang in form.fields.language.queryset
                             - var runtime_versions = lang.runtime_versions
                             option(value=lang.id, data-id=lang.id, data-name=lang.name, data-info=lang.info,
                                data-judge-info='{% include "runtime_version_fragment.jade" %}',
