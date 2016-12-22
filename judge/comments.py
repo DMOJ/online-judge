@@ -18,7 +18,7 @@ from reversion.models import Revision, Version
 from judge.dblock import LockModel
 from judge.models import Comment, Profile, CommentVote
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
-from judge.widgets import PagedownWidget
+from judge.widgets import HeavyPreviewPageDownWidget
 
 
 class CommentForm(ModelForm):
@@ -29,8 +29,8 @@ class CommentForm(ModelForm):
             'parent': forms.HiddenInput(),
         }
 
-        if PagedownWidget is not None:
-            widgets['body'] = PagedownWidget()
+        if HeavyPreviewPageDownWidget is not None:
+            widgets['body'] = HeavyPreviewPageDownWidget()
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
