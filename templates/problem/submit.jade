@@ -18,7 +18,11 @@ block js_media
 
                 function formatSelection(state) {
                     if (!state.id) return state.text; // optgroup
-                    return "<b>" + state.text + "</b> (" + $("option[data-id=" + state.id + "]").attr('data-judge-info') + ")";
+                    var data = $("option[data-id=" + state.id + "]");
+                    var site_data = data.attr('data-info');
+                    var judge_data = data.attr('data-judge-info');
+                    var display_data = site_data || judge_data;
+                    return "<b>" + state.text + "</b> (" + display_data + ")";
                 }
 
                 $("#id_language").select2({
