@@ -7,6 +7,7 @@ extends common-content
 - load lazy_load
 - load camo_proxy
 - load i18n
+- load reference
 
 block info_float
     if request.user.is_authenticated
@@ -31,4 +32,4 @@ block info_float
 
 block description
     - cache 3600 organization_html organization.id MATH_ENGINE
-        | #{organization.about|markdown:"organization-about"|latex_math|smart_math:MATH_ENGINE|proxy_images|lazy_load}
+        | #{organization.about|markdown:"organization-about"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images|lazy_load}
