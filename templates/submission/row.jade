@@ -37,7 +37,7 @@ td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status
         span.time(data-unix='{{ submission.date|utc|date:"c" }}')
             - blocktrans with time=submission.date|date:_("N j, Y, g:i a") asvar str_time
                 | on {{ time }}
-            | #{str_time}
+            span.relative #{str_time}
 
 if submission.status == 'G'
     td.sub-testcase
