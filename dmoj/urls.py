@@ -291,7 +291,7 @@ urlpatterns = [
         url('^new/', include([
             url('^problem/(?P<code>[^/]+)$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
         ])),
-        url('^(\d+)$', ticket.TicketView.as_view(), name='ticket'),
+        url('^(?P<pk>\d+)$', ticket.TicketView.as_view(), name='ticket'),
     ])),
 
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {
