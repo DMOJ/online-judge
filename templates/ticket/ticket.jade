@@ -8,7 +8,7 @@ extends base
 
 block media
     style.
-        .messages {
+        .container {
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
@@ -52,8 +52,11 @@ block media
         }
 
 block body
-    main.messages
-        each message in messages
+    .container
+        .ticket-info
+            div #[b {% trans "Associated object:"}]
+                a(href=ticket.linked_item.get_absolute_url)= ticket.linked_item
+        main.messages: each message in messages
             section.message
                 .info
                     a.user(href='{% url "user_page" message.user.user.username %}')
