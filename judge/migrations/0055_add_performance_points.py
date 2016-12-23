@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0053_opengraph_problems'),
+        ('judge', '0054_tickets'),
     ]
 
     operations = [
