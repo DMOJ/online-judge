@@ -14,7 +14,7 @@ from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitem
     BlogPostSitemap, SolutionSitemap
 from judge.views import TitledTemplateView
 from judge.views import organization, language, status, blog, problem, solution, mailgun, license, register, user, \
-    submission, widgets, comment, contests, api, ranked_submission, stats, preview
+    submission, widgets, comment, contests, api, ranked_submission, stats, preview, ticket
 from judge.views.problem_data import ProblemDataView, problem_data_file, problem_init_view
 from judge.views.register import RegistrationView, ActivationView
 from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
@@ -285,6 +285,13 @@ urlpatterns = [
             url('^data/status/$', stats.status_data, name='stats_data_status'),
             url('^data/ac_rate/$', stats.ac_rate, name='language_stats_data_ac_rate'),
         ])),
+    ])),
+
+    url(r'^tickets/', include([
+        url('^new/', include([
+            url('^problem/(?P<code>[^/]+)$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
+        ])),
+        url('^(\d+)$', ticket.TicketView.as_view(), name='ticket'),
     ])),
 
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {
