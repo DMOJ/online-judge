@@ -1,0 +1,19 @@
+extends base
+
+- load i18n
+
+block body
+    table.table
+        thead: tr
+            th {% trans "Title" %}
+            th {% trans "User" %}
+            th {% trans "Assignees" %}
+        tbody: each ticket in tickets
+            td: a(href='{% url "ticket" ticket.id %}')= ticket.title
+            - with user=ticket.user
+                td: a(href='{% url "user_page" user.user.username %}', class=user.display_rank)= user.user.username
+            td: each assignee in ticket.assignees.all
+                a(href='{% url "user_page" assignee.user.username %}', class=assignee.display_rank)
+                    | #{assignee.user.username}
+                if not forloop.last
+                    | ,&#32;

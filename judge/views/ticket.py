@@ -4,13 +4,16 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.urls import reverse_lazy
+from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy, ugettext as _
 from django.views.generic import FormView
+from django.views.generic import ListView
 from django.views.generic.detail import SingleObjectMixin
 
 from judge.models import Ticket, TicketMessage, Problem
+from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.views import TitleMixin
 from judge.widgets import HeavyPreviewPageDownWidget
 
@@ -108,3 +111,23 @@ class TicketView(TitleMixin, LoginRequiredMixin, SingleObjectMixin, FormView):
         context['messages'] = self.object.messages.select_related('user__user')
         context['assignees'] = self.object.assignees.select_related('user')
         return context
+
+
+class TicketList(LoginRequiredMixin, ListView):
+    model = Ticket
+    template_name = 'ticket/list.jade'
+    context_object_name = 'tickets'
+    paginate_by = 50
+    paginator_class = DiggPaginator
+
+    @cached_property
+    def profile(self):
+        return self.request.user.profile
+
+    def _get_queryset(self):
+        return Ticket.objects.select_related('user__user').prefetch_related('assignee__user')
+
+    def get_queryset(self):
+        if self.request.user.has_perm('judge.change_ticket'):
+            return Ticket.objects.all()
+        return Ticket.objects.filter(assignee__id=self.profile.id)
