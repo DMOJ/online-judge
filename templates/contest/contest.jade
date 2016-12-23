@@ -118,6 +118,8 @@ block body
     - cache 3600 contest_html contest.id MATH_ENGINE
         | #{contest.description|markdown:"contest"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
 
+    block comments
+
 block description_end
 
 block comments
