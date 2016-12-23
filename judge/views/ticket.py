@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.urls import reverse_lazy
@@ -67,11 +68,22 @@ class TicketCommentForm(forms.Form):
     body = forms.CharField(widget=ticket_widget)
 
 
-class TicketView(TitleMixin, SingleObjectMixin, FormView):
+class TicketView(TitleMixin, LoginRequiredMixin, SingleObjectMixin, FormView):
     model = Ticket
     form_class = TicketCommentForm
     template_name = 'ticket/ticket.jade'
     context_object_name = 'ticket'
+
+    def get_object(self, queryset=None):
+        ticket = super(TicketView, self).get_object(queryset)
+        profile_id = self.request.user.profile.id
+        if self.request.user.has_perm('judge.change_ticket'):
+            return ticket
+        if ticket.user_id == profile_id:
+            return ticket
+        if ticket.assignees.filter(id=profile_id).exists():
+            return ticket
+        raise PermissionDenied()
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
