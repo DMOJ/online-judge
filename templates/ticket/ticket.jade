@@ -85,6 +85,12 @@ block body
         .ticket-info
             div #[b {% trans "Associated object:" %} ]
                 a(href=ticket.linked_item.get_absolute_url)= ticket.linked_item
+            div #[b {% trans "Assignees:" %} ]
+                each assignee in assignees
+                    a(href='{% url "user_page" assignee.user.username %}', class=assignee.display_rank)
+                        | #{assignee.user.username}
+                    if not forloop.last
+                        | ,&#32;
         main.messages: each message in messages
             section.message(id='message-{{ message.id }}')
                 .info
