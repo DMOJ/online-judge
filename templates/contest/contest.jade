@@ -124,7 +124,9 @@ block body
         - post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>"
         - post_to_twitter "{{ SITE_NAME }}:" post "<i class=\"fa fa-twitter\"></i>"
     .comment-area
-        h2 {% trans "Comments" %}
+        h2
+            i.fa.fa-comments(style='padding-right: 0.2em')
+            | {% trans "Comments" %}
         include comments/list
 
 
