@@ -28,6 +28,10 @@ block media
             padding-top: 50px;
         }
 
+        .message .info {
+            width: 130px;
+        }
+
         .message .username {
             text-align: center;
         }
@@ -38,19 +42,25 @@ block media
             margin: 0 auto;
         }
 
-        .message .info {
-            width: 130px;
-        }
-
         .message .message-date, .message .message-time {
-            text-align: center;
+            display: inline-block;
         }
 
         .message .detail {
             border: 1px #999 solid;
             border-radius: 5px;
-            padding: 7px;
             flex: 1;
+        }
+
+        .message .header {
+            background: #f8f8f8;
+            border-radius: 5px 5px 0 0;
+            padding: 2px 7px;
+            text-align: right;
+        }
+
+        .message .content {
+            padding: 7px;
         }
 
         .message .content :first-child {
@@ -66,7 +76,7 @@ block media
         }
 
         .new-message .detail {
-            padding: 15px 10px;
+            padding: 8px 10px;
         }
 
         .new-message .submit {
