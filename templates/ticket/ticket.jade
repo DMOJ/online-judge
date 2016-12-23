@@ -52,6 +52,10 @@ block media
             margin-bottom: 0;
         }
 
+        .ticket-info {
+            margin-bottom: 1em;
+        }
+
 block body
     .container
         .ticket-info
@@ -66,3 +70,18 @@ block body
                     .message-date #{message.time|date:"DATE_FORMAT"}
                     .message-time #{message.time|time:"TIME_FORMAT"}
                 .content #{message.body|markdown:"ticket"|reference|smart_math:MATH_ENGINE|proxy_images}
+        hr
+        section.message.new-message
+            .info
+                a.user(href='{% url "user_page" %}')
+                    img.gravatar(src='{% gravatar_url request.user.email 135 request.user.profile.mute %}')
+                    .username(class=request.user.display_rank) #{request.user.username}
+                .message-date #{message.time | date:"DATE_FORMAT"}
+                .message-time #{message.time | time:"TIME_FORMAT"}
+            .content: form(action='', method='post')
+                - csrf_token
+                .form-errors
+                    | {{ form.non_field_errors }}
+                    | {{ form.body.errors }}
+                .body-block #{form.body}
+                button.submit(type='submit') {% trans "Post" %}
