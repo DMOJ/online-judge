@@ -35,6 +35,6 @@ div.page-title
                     elif participating
                         a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_join" contest.key %}')
                             | {% trans "Join contest" %}
-                else
-                    a.contest-join-pseudotab.unselectable.button.full.first-join(href='{% url "contest_join" contest.key %}')
-                        | {% trans "Join contest" %}
+                    else
+                        a.contest-join-pseudotab.unselectable.button.full.first-join(href='{% url "contest_join" contest.key %}')
+                            | {% trans "Join contest" %}
