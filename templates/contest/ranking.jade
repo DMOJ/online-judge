@@ -157,4 +157,10 @@ block users_js_media
             });
 
 block users_table
+    if contest.start_time <= now or perms.judge.see_private_contest
+        a(href='{% url "contest_participation_own" contest.key %}') {% trans "My participation" %}
+        if has_select2
+            br
+            input#search(type='text', placeholder='{% trans "View user participation" %}')
+        hr
     include contest/ranking_table
