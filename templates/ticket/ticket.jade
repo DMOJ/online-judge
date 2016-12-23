@@ -70,6 +70,10 @@ block media
 block js_media
     | #{form.media.js}
 
+block content_title
+    | #{ticket.title}
+    small ##{ticket.id}
+
 block body
     .container
         .ticket-info
