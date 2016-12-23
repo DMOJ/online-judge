@@ -44,3 +44,7 @@ class SolutionMarkdownPreviewView(MarkdownPreviewView):
 
 class LicenseMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'license_preview.jade'
+
+
+class TicketMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'ticket/preview.jade'
