@@ -468,7 +468,6 @@ def contest_ranking_view(request, contest, participation=None):
         'users': users,
         'title': _('%s Rankings') % contest.name,
         'content_title': contest.name,
-        'subtitle': _('Rankings'),
         'problems': problems,
         'contest': contest,
         'show_organization': True,
@@ -505,8 +504,8 @@ def base_participation_list(request, contest, profile):
         'title': _('Your participation in %s') % contest.name if req_username == prof_username else
         _("%s's participation in %s") % (prof_username, contest.name),
         'content_title': contest.name,
-        'subtitle': _('Your participation') if req_username == prof_username else _(
-            "%s's participation") % prof_username,
+        #'subtitle': _('Your participation') if req_username == prof_username else _(
+        #    "%s's participation") % prof_username,
         'problems': problems,
         'contest': contest,
         'show_organization': False,
