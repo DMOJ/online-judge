@@ -8,6 +8,7 @@ extends base
 - load i18n
 
 block media
+    | #{form.media.css}
     style.
         .container {
             width: 100%;
@@ -55,6 +56,9 @@ block media
         .ticket-info {
             margin-bottom: 1em;
         }
+
+block js_media
+    | #{form.media.js}
 
 block body
     .container
