@@ -125,9 +125,9 @@ class TicketList(LoginRequiredMixin, ListView):
         return self.request.user.profile
 
     def _get_queryset(self):
-        return Ticket.objects.select_related('user__user').prefetch_related('assignee__user')
+        return Ticket.objects.select_related('user__user').prefetch_related('assignee__user').order('-id')
 
     def get_queryset(self):
         if self.request.user.has_perm('judge.change_ticket'):
-            return Ticket.objects.all()
-        return Ticket.objects.filter(assignee__id=self.profile.id)
+            return self._get_queryset()
+        return self._get_queryset().filter(assignee__id=self.profile.id)
