@@ -2,7 +2,9 @@ from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.html import escape, format_html
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy, ugettext as _
 from django.views.generic import FormView
 from django.views.generic.detail import SingleObjectMixin, DetailView
 
@@ -17,8 +19,8 @@ class TicketView(DetailView):
 
 
 class TicketForm(forms.Form):
-    title = forms.CharField(max_length=100, label=_('ticket title'))
-    body = forms.CharField(label=_('ticket body'))
+    title = forms.CharField(max_length=100, label=ugettext_lazy('Ticket title'))
+    body = forms.CharField(label=ugettext_lazy('Ticket body'))
 
 
 class NewTicketView(LoginRequiredMixin, SingleObjectMixin, FormView):
@@ -50,4 +52,9 @@ class NewProblemTicketView(TitleMixin, NewTicketView):
     slug_field = slug_url_kwarg = 'code'
 
     def get_title(self):
-        return ugettext('New ticket for %s') % self.object.name
+        return _('New ticket for %s') % self.object.name
+
+    def get_content_title(self):
+        return mark_safe(escape(_('New ticket for %s')) %
+                         format_html(u'<a href="{0}">{1}</a>', reverse('problem_detail', args=[self.object.code]),
+                                     self.object.translated_name(self.request.LANGUAGE_CODE)))
