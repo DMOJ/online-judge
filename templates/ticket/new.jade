@@ -4,6 +4,21 @@ extends base
 
 block media
     | #{form.media.css}
+    style.
+        form#ticket-form {
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 750px;
+        }
+
+        #id_title {
+            width: 100%;
+        }
+
+        form#ticket-form .submit {
+            margin-left: auto;
+        }
 
 block js_media
     | #{form.media.js}
@@ -16,4 +31,4 @@ block body
             | {{ form.title.errors }}
             | {{ form.body.errors }}
         .body-block #{form.body}
-        button(style='float:right', type='submit') {% trans "Create" %}
+        button.submit(type='submit') {% trans "Create" %}
