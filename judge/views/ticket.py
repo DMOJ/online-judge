@@ -51,6 +51,9 @@ class NewProblemTicketView(TitleMixin, NewTicketView):
     model = Problem
     slug_field = slug_url_kwarg = 'code'
 
+    def get_assignees(self):
+        return self.object.authors.all()
+
     def get_title(self):
         return _('New ticket for %s') % self.object.name
 
