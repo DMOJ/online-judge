@@ -5,11 +5,13 @@ extends base
 block body
     table#ticket-list.table
         thead: tr
+            th {% trans "ID" %}
             th {% trans "Title" %}
             th {% trans "User" %}
             th {% trans "Assignees" %}
         tbody: each ticket in tickets
             tr(id='ticket-{{ ticket.id }}')
+                td= ticket.id
                 td: a(href='{% url "ticket" ticket.id %}')= ticket.title
                 - with user=ticket.user
                     td: a(href='{% url "user_page" user.user.username %}', class=user.display_rank)= user.user.username
