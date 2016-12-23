@@ -1,38 +1,38 @@
 - load i18n
 
 div.page-title
-    if request.user.is_authenticated
-        if contest.can_join or participating or is_organizer
-            if contest.ended
-                // They're in the contest because they're participating virtually
-                if in_contest
-                    a.contest-join-pseudotab.unselectable.button.full.leaving-forever(href='{% url "contest_leave" contest.key %}')
-                        | {% trans "Leave contest" %}
-                else
-                    // They can virtual-join the contest
-                    a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_join" contest.key %}')
-                        | {% trans "Virtual join" %}
-            else
-                // Allow people with ended participations to continue spectating
-                if in_contest
-                    a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
-                        if participating and participation.ended or request.user.profile in contest.organizers.all
-                            | {% trans "Stop spectating" %}
-                        else
-                            | {% trans "Leave contest" %}
-                elif participating and participation.ended or is_organizer
-                    a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_join" contest.key %}')
-                        | {% trans "Spectate contest" %}
-                elif participating
-                    a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_join" contest.key %}')
-                        | {% trans "Join contest" %}
-            else
-                a.contest-join-pseudotab.unselectable.button.full.first-join(href='{% url "contest_join" contest.key %}')
-                    | {% trans "Join contest" %}
-
     ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
         h2(style='color:#393630; display: inline-block') {% trans title %}
         span.spacer
+        if request.user.is_authenticated
+            if contest.can_join or participating or is_organizer
+                if contest.ended
+                    // They're in the contest because they're participating virtually
+                    if in_contest
+                        a.contest-join-pseudotab.unselectable.button.full.leaving-forever(href='{% url "contest_leave" contest.key %}')
+                            | {% trans "Leave contest" %}
+                    else
+                        // They can virtual-join the contest
+                        a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_join" contest.key %}')
+                            | {% trans "Virtual join" %}
+                else
+                    // Allow people with ended participations to continue spectating
+                    if in_contest
+                        a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
+                            if participating and participation.ended or request.user.profile in contest.organizers.all
+                                | {% trans "Stop spectating" %}
+                            else
+                                | {% trans "Leave contest" %}
+                    elif participating and participation.ended or is_organizer
+                        a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_join" contest.key %}')
+                            | {% trans "Spectate contest" %}
+                    elif participating
+                        a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_join" contest.key %}')
+                            | {% trans "Join contest" %}
+                else
+                    a.contest-join-pseudotab.unselectable.button.full.first-join(href='{% url "contest_join" contest.key %}')
+                        | {% trans "Join contest" %}
+
         li(class=('active' if tab == 'detail' else ''))
             a(href='{% url "contest_view" contest.key %}') {% trans "Info" %}
         li(class=('active' if tab == 'ranking' else ''))
