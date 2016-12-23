@@ -13,6 +13,13 @@ extends common-content
 - load i18n
 - load reference
 
+block title_ruler
+
+block title_row
+    - var tab = 'detail'
+    - var title = contest.name
+    include contest/contest_tabs
+
 block content_js_media
     script(type='text/javascript').
         $(document).ready(function () {
