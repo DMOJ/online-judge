@@ -27,8 +27,9 @@ div.page-title
                     a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
                         | {% trans "Join contest" %}
             else
-            a.unselectable.button.full.first-join(href='{% url "contest_join" contest.key %}')
-                | {% trans "Join contest" %}
+                a.unselectable.button.full.first-join(href='{% url "contest_join" contest.key %}')
+                    | {% trans "Join contest" %}
+
     ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
         h2(style='color:#393630; display: inline-block') {% trans title %}
         span.spacer
