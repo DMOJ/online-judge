@@ -6,28 +6,28 @@ div.page-title
             if contest.ended
                 // They're in the contest because they're participating virtually
                 if in_contest
-                    a.unselectable.button.full.leaving-forever(href='{% url "contest_leave" contest.key %}')
+                    a.contest-join-pseudotab.unselectable.button.full.leaving-forever(href='{% url "contest_leave" contest.key %}')
                         | {% trans "Leave contest" %}
                 else
                     // They can virtual-join the contest
-                    a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
+                    a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_join" contest.key %}')
                         | {% trans "Virtual join" %}
             else
                 // Allow people with ended participations to continue spectating
                 if in_contest
-                    a.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
+                    a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_leave" contest.key %}')
                         if participating and participation.ended or request.user.profile in contest.organizers.all
                             | {% trans "Stop spectating" %}
                         else
                             | {% trans "Leave contest" %}
                 elif participating and participation.ended or is_organizer
-                    a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
+                    a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_join" contest.key %}')
                         | {% trans "Spectate contest" %}
                 elif participating
-                    a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
+                    a.contest-join-pseudotab.unselectable.button.full(href='{% url "contest_join" contest.key %}')
                         | {% trans "Join contest" %}
             else
-                a.unselectable.button.full.first-join(href='{% url "contest_join" contest.key %}')
+                a.contest-join-pseudotab.unselectable.button.full.first-join(href='{% url "contest_join" contest.key %}')
                     | {% trans "Join contest" %}
 
     ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
