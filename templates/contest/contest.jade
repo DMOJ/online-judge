@@ -77,7 +77,7 @@ block content_media
     include contest/contest_css_media
     include comments/media
 
-block description
+block body
     #banner
         a.date(href='https://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name|urlquote:"" }}&amp;iso={{ contest.start_time|utc|date:"Y-m-d\TH:i:s" }}')
             if participating and participation.virtual and not participation.ended
