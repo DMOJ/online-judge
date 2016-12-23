@@ -9,6 +9,6 @@ class TicketMessageInline(InlineModelAdmin):
 
 
 class TicketAdmin(ModelAdmin):
-    fields = ('title', 'user', 'time', 'assignees', 'content_type', 'object_id', 'notes')
+    fields = ('title', 'user', 'assignees', 'content_type', 'object_id', 'notes')
     list_display = ('title', 'user', 'time', 'linked_item')
     inlines = [TicketMessageInline]
