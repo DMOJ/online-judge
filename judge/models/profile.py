@@ -107,9 +107,8 @@ class Profile(models.Model):
                  .values_list('points', flat=True))
         points = sum(qdata)
         problems = len(qdata)
-        qdata = qdata[:min(len(qdata), len(table))]
-        table = table[:min(len(qdata), len(table))]
-        pp = sum(map(mul, table, qdata))
+        entries = min(len(qdata), len(table))
+        pp = sum(map(mul, table[:entries], qdata[:entries]))
         if self.points != points or problems != self.problem_count or self.performance_points != pp:
             self.points = points
             self.problem_count = problems

@@ -103,7 +103,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
         context['rank'] = Profile.objects.filter(points__gt=self.object.points).count() + 1
-        context['pp_rank'] = Profile.objects.filter(performance_points__gt=self.object.points).count() + 1
+        context['pp_rank'] = Profile.objects.filter(performance_points__gt=self.object.performance_points).count() + 1
         if rating:
             context['rating_rank'] = Profile.objects.filter(rating__gt=self.object.rating).count() + 1
             context['rated_users'] = Profile.objects.filter(rating__isnull=False).count()
