@@ -1,4 +1,4 @@
-from operator import itemgetter
+from operator import itemgetter, mul
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -75,6 +75,7 @@ class Profile(models.Model):
                                 default=getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto'))
     language = models.ForeignKey('Language', verbose_name=_('preferred language'))
     points = models.FloatField(default=0, db_index=True)
+    performance_points = models.FloatField(default=0, db_index=True)
     problem_count = models.IntegerField(default=0, db_index=True)
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
     last_access = models.DateTimeField(verbose_name=_('last access time'), default=now)
@@ -100,16 +101,19 @@ class Profile(models.Model):
         orgs = self.organizations.all()
         return orgs[0] if orgs else None
 
-    def calculate_points(self):
+    def calculate_points(self, table=(lambda x: [pow(x,i) for i in xrange(100)])(getattr(settings, 'PP_STEP', 0.95))):
         from judge.models import Submission
-        points = sum(map(itemgetter('points'),
-                         Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
-                         .values('problem_id').distinct().annotate(points=Max('points'))))
-        problems = (self.submission_set.filter(points__gt=0, problem__is_public=True)
-                    .values('problem').distinct().count())
-        if self.points != points or problems != self.problem_count:
+        qdata = (Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
+                 .values('problem_id').distinct().annotate(points=Max('points')).order_by('-points')
+                 .values_list('points', flat=True))
+        points = sum(qdata)
+        problems = len(qdata)
+        entries = min(len(qdata), len(table))
+        pp = sum(map(mul, table[:entries], qdata[:entries]))
+        if self.points != points or problems != self.problem_count or self.performance_points != pp:
             self.points = points
             self.problem_count = problems
+            self.performance_points = pp
             self.save()
         return points
 

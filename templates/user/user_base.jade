@@ -49,6 +49,14 @@ block body
                 b {% trans "Total points:" %}
                 |  #{user.points}
                 br
+                .pp-feature(style="display: none")
+                    br
+                    b {% trans "Rank by PP:" %}
+                    |  ##{pp_rank}
+                    br
+                    b {% trans "Total PP:" %}
+                    |  #{user.performance_points}
+                    br
                 a(href='{% url "all_user_submissions" user.user.username %}') {% trans "View submissions" %}
                 if ratings
                     br
