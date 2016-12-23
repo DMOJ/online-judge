@@ -1,6 +1,10 @@
 extends base
 
 - load gravatar
+- load markdown_trois_tags
+- load reference
+- load smart_math
+- load camo_proxy
 
 block media
     style.
@@ -25,10 +29,10 @@ block media
         }
 
         .message .info {
-            width: 100px;
+            margin-right: 10px;
         }
 
-        .message .date, .message .time {
+        .message .message-date, .message .message-time {
             text-align: center;
         }
 
@@ -46,7 +50,7 @@ block body
                 .info
                     a.user(href='{% url "user_page" message.user.user.username %}')
                         img.gravatar(src='{% gravatar_url message.user.user.email 135 message.user.mute %}')
-                        .username #{message.user}
-                    .date #{message.time|date:"DATE_FORMAT"}
-                    .time #{message.time|time:"TIME_FORMAT"}
+                        .username #{message.user|markdown:"ticket"|reference|smart_math:MATH_ENGINE|proxy_images}
+                    .message-date #{message.time|date:"DATE_FORMAT"}
+                    .message-time #{message.time|time:"TIME_FORMAT"}
                 .content #{message.body}
