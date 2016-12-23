@@ -55,7 +55,7 @@ block media
 block body
     .container
         .ticket-info
-            div #[b {% trans "Associated object:"}]
+            div #[b {% trans "Associated object:" }]
                 a(href=ticket.linked_item.get_absolute_url)= ticket.linked_item
         main.messages: each message in messages
             section.message
