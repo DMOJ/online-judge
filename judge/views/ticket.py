@@ -10,6 +10,7 @@ from django.views.generic.detail import SingleObjectMixin, DetailView
 
 from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.views import TitleMixin
+from judge.widgets import PagedownWidget
 
 
 class TicketView(DetailView):
@@ -20,7 +21,8 @@ class TicketView(DetailView):
 
 class TicketForm(forms.Form):
     title = forms.CharField(max_length=100, label=ugettext_lazy('Ticket title'))
-    body = forms.CharField(label=ugettext_lazy('Ticket body'))
+    body = forms.CharField(label=ugettext_lazy('Ticket body'),
+                           widget=forms.Textarea() if PagedownWidget is None else PagedownWidget())
 
 
 class NewTicketView(LoginRequiredMixin, SingleObjectMixin, FormView):
