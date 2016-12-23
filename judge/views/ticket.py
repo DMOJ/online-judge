@@ -78,6 +78,13 @@ class TicketView(TitleMixin, SingleObjectMixin, FormView):
         self.object = self.get_object()
         return super(TicketView, self).get(request, *args, **kwargs)
 
+    def form_valid(self, form):
+        message = TicketMessage(user=self.request.user.profile,
+                                body=form.cleaned_data['body'],
+                                ticket=self.object)
+        message.save()
+        return HttpResponseRedirect('%s#message-%d' % (reverse('ticket', args=[self.object.id]), message.id))
+
     def get_title(self):
         return _('%(title)s - Ticket %(id)d') % {'title': self.object.title, 'id': self.object.id}
 
