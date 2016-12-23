@@ -1,5 +1,11 @@
 extends base
 
+block media
+    | #{form.media.css}
+
+block js_media
+    | #{form.media.js}
+
 block body
     form(action='', method='POST')
-        | #{form.as_table}
+        table #{form.as_table}
