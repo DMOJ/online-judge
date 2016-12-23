@@ -47,6 +47,6 @@ block body
                     a.user(href='{% url "user_page" message.user.user.username %}')
                         img.gravatar(src='{% gravatar_url message.user.user.email 135 message.user.mute %}')
                         .username #{message.user}
-                    .date #{message.time|date:DATE_FORMAT}
-                    .time #{message.time|time:TIME_FORMAT}
+                    .date #{message.time|date:"DATE_FORMAT"}
+                    .time #{message.time|time:"TIME_FORMAT"}
                 .content #{message.body}
