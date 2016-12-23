@@ -1,6 +1,13 @@
 extends user/base_users
 - load staticfiles
 
+block title_ruler
+
+block title_row
+    - var tab = 'ranking'
+    - var title = contest.name
+    include contest/contest_tabs
+
 block users_media
     style.
         #content-left {
