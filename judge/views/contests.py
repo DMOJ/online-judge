@@ -464,6 +464,12 @@ def contest_access_check(request, contest):
 def contest_ranking_view(request, contest, participation=None):
     contest_access_check(request, contest)
     users, problems = get_contest_ranking_list(request, contest, participation)
+
+    # TODO: When this is changed to be a view, use LoadSelect2Mixin instead of this
+    select2_css = getattr(settings, 'SELECT2_CSS_URL', None)
+    select2_js = getattr(settings, 'SELECT2_JS_URL', None)
+    has_select2 = select2_css is not None and select2_js is not None
+
     return render(request, 'contest/ranking.jade', {
         'users': users,
         'title': _('%s Rankings') % contest.name,
@@ -473,6 +479,10 @@ def contest_ranking_view(request, contest, participation=None):
         'show_organization': True,
         'last_msg': event.last(),
         'has_rating': contest.ratings.exists(),
+
+        'has_select2': has_select2,
+        'SELECT2_CSS_URL': select2_css,
+        'SELECT2_JS_URL': select2_js,
     })
 
 
