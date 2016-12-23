@@ -9,12 +9,11 @@ block js_media
     | #{form.media.js}
 
 block body
-    #center-float
-        form#ticket-form(action='', method='POST')
-            - csrf_token
-            .title-block(class=('error' if form['title'].errors else '')) #{form.title}
-            .form-errors
-                #{form.title.errors}
-                #{form.body.errors}
-            .body-block #{form.body}
-            button(style='float:right', type='submit') {% trans "Create" %}
+    form#ticket-form(action='', method='POST')
+        - csrf_token
+        .title-block(class=('error' if form['title'].errors else '')) #{form.title}
+        .form-errors
+            | #{form.title.errors}
+            | #{form.body.errors}
+        .body-block #{form.body}
+        button(style='float:right', type='submit') {% trans "Create" %}
