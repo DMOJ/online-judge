@@ -13,9 +13,17 @@ from judge.utils.views import TitleMixin
 from judge.widgets import PagedownWidget
 
 
-class TicketView(DetailView):
+class TicketView(TitleMixin, DetailView):
     model = Ticket
     template_name = 'ticket/ticket.jade'
+
+    def get_title(self):
+        return _('%(title)s - Ticket %(id)d') % {'title': self.object.title, 'id': self.object.id}
+
+    def get_context_data(self, **kwargs):
+        context = super(TicketView, self).get_context_data(**kwargs)
+        context['messages'] = self.object.messages.select_related('user__user')
+        return context
 
 
 class TicketForm(forms.Form):
