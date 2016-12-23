@@ -2,11 +2,12 @@ from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.views.generic import FormView
 from django.views.generic.detail import SingleObjectMixin, DetailView
 
 from judge.models import Ticket, TicketMessage, Problem
+from judge.utils.views import TitleMixin
 
 
 class TicketView(DetailView):
@@ -22,6 +23,7 @@ class TicketForm(forms.Form):
 
 class NewTicketView(LoginRequiredMixin, SingleObjectMixin, FormView):
     form_class = TicketForm
+    template_name = 'ticket/new.jade'
 
     def get_assignees(self):
         return []
@@ -43,6 +45,9 @@ class NewTicketView(LoginRequiredMixin, SingleObjectMixin, FormView):
         return HttpResponseRedirect(reverse('ticket', args=[ticket.id]))
 
 
-class NewProblemTicketView(NewTicketView):
+class NewProblemTicketView(TitleMixin, NewTicketView):
     model = Problem
     slug_field = slug_url_kwarg = 'code'
+
+    def get_title(self):
+        return ugettext('New ticket for %s') % self.object.name
