@@ -12,15 +12,17 @@ block js_media
         script(type='text/javascript').
             $(function () {
                 var info_float = $('.info-float');
-                var container = $('#content-right');
-                if (window.bad_browser) {
-                    container.css('float', 'right');
-                } else if (!featureTest('position', 'sticky')) {
-                    fix_div(info_float, 55);
-                    $(window).resize(function () {
+                if (info_float.length) {
+                    var container = $('#content-right');
+                    if (window.bad_browser) {
+                        container.css('float', 'right');
+                    } else if (!featureTest('position', 'sticky')) {
+                        fix_div(info_float, 55);
+                        $(window).resize(function () {
+                            info_float.width(container.width());
+                        });
                         info_float.width(container.width());
-                    });
-                    info_float.width(container.width());
+                    }
                 }
 
                 var copyButton;
@@ -35,7 +37,7 @@ block js_media
                     $(copyButton.get(0)).mouseleave(function(){
                         $(this).attr('class', 'btn-clipboard');
                         $(this).removeAttr('aria-label');
-                    })
+                    });
 
                     var curClipboard = new Clipboard(copyButton.get(0));
 
