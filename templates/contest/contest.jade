@@ -27,53 +27,11 @@ block content_js_media
                 count_down($(this));
             });
         });
-    if has_select2
-        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
-        script(type='text/javascript').
-            $(function () {
-                var url = '{% url "contest_participation" contest.key "__username__" %}';
-                var placeholder = $('#search').replaceWith($('<select/>').attr({
-                    id: 'search'
-                })).attr('placeholder');
 
-                $('#search').select2({
-                    placeholder: placeholder,
-                    ajax: {
-                        url: '{% url "contest_user_search_select2_ajax" contest.key %}'
-                    },
-                    minimumInputLength: 1,
-                    escapeMarkup: function (markup) {
-                        return markup;
-                    },
-                    templateResult: function (data, container) {
-                        return ('<img class="user-search-image" src="' + data.gravatar_url + '" width="24" height="24">' +
-                                '<span class="' + data.display_rank + ' user-search-name">' + data.text + '</span>');
-                    }
-                }).on('change', function () {
-                    window.location.href = url.replace('__username__', $(this).val());
-                });
-
-                $('.leaving-forever').click(function () {
-                    return confirm('{% trans "Are you sure you want to leave?" %}\n' +
-                            '{% trans "You cannot come back to a virtual participation. You will have to start a new one." %}');
-                });
-
-                $('.first-join').click(function () {
-                    return confirm('{% trans "Are you sure you want to join?" %}\n' +
-                            '{% trans "Joining a contest starts your timer, after which it becomes unstoppable." %}');
-                });
-            });
+    include contest/contest_js_media
     include comments/js_media
 
 block content_media
-    if has_select2
-        link(href='{{ SELECT2_CSS_URL }}', type='text/css', media='screen', rel='stylesheet')
-        style.
-            .select2-selection__arrow { display: none; }
-            .select2-selection__rendered { cursor: text; overflow: initial !important }
-            .select2-results__option--highlighted { background-color: #DEDEDE !important; }
-            .select2-results__option { white-space: nowrap; }
-            #search, #search + .select2 { margin-top: 0.5em; }
     include contest/contest_css_media
     include comments/media
 
