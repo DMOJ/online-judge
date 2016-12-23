@@ -4,6 +4,12 @@ div.page-title
     ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
         h2(style='color:#393630; display: inline-block') {% trans title %}
         span.spacer
+        li(class=('active' if tab == 'detail' else ''))
+            a(href='{% url "contest_view" contest.key %}') {% trans "Info" %}
+        li(class=('active' if tab == 'ranking' else ''))
+            a(href='{% url "contest_ranking" contest.key %}') {% trans "Rankings" %}
+        if perms.judge.change_contest
+            li: a(href='{% url "admin:judge_contest_change" contest.id %}') {% trans "Edit" %}
         if request.user.is_authenticated
             if contest.can_join or participating or is_organizer
                 if contest.ended
@@ -32,10 +38,3 @@ div.page-title
                 else
                     a.contest-join-pseudotab.unselectable.button.full.first-join(href='{% url "contest_join" contest.key %}')
                         | {% trans "Join contest" %}
-
-        li(class=('active' if tab == 'detail' else ''))
-            a(href='{% url "contest_view" contest.key %}') {% trans "Info" %}
-        li(class=('active' if tab == 'ranking' else ''))
-            a(href='{% url "contest_ranking" contest.key %}') {% trans "Rankings" %}
-        if perms.judge.change_contest
-            li: a(href='{% url "admin:judge_contest_change" contest.id %}') {% trans "Edit" %}
