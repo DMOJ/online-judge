@@ -69,6 +69,14 @@ class TicketView(TitleMixin, SingleObjectMixin, FormView):
     form_class = TicketCommentForm
     template_name = 'ticket/ticket.jade'
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(TicketView, self).post(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(TicketView, self).get(request, *args, **kwargs)
+
     def get_title(self):
         return _('%(title)s - Ticket %(id)d') % {'title': self.object.title, 'id': self.object.id}
 
