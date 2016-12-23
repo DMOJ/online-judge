@@ -18,6 +18,8 @@ block media
 
         .message {
             display: flex;
+            margin-top: -40px;
+            padding-top: 50px;
         }
 
         .message .username {
@@ -74,7 +76,7 @@ block body
             div #[b {% trans "Associated object:" %} ]
                 a(href=ticket.linked_item.get_absolute_url)= ticket.linked_item
         main.messages: each message in messages
-            section.message
+            section.message(id='message-{{ message.id }}')
                 .info
                     a.user(href='{% url "user_page" message.user.user.username %}')
                         img.gravatar(src='{% gravatar_url message.user.user.email 135 message.user.mute %}')
