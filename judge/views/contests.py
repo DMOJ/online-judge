@@ -503,7 +503,7 @@ def base_participation_list(request, contest, profile):
     prof_username = profile.user.username
 
     queryset = contest.users.filter(user=profile, virtual__gte=0).order_by('-virtual')
-    live_link = format_html('<a href="{2}#!{1}">{0}</a>', _('Live'), prof_username,
+    live_link = format_html(u'<a href="{2}#!{1}">{0}</a>', _('Live'), prof_username,
                             reverse('contest_ranking', args=[contest.key]))
     users, problems = get_contest_ranking_list(
         request, contest, show_current_virtual=False,
