@@ -43,6 +43,14 @@ block media
             flex: 1;
         }
 
+        .message .content :first-child {
+            margin-top: 0;
+        }
+
+        .message .content :last-child {
+            margin-bottom: 0;
+        }
+
 block body
     main.messages
         each message in messages
