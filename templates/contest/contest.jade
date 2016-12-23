@@ -115,10 +115,6 @@ block info_float
                 br
                 input#search(type='text', placeholder='{% trans "View user participation" %}')
             hr
-
-        if perms.judge.change_contest
-            a(href='{% url "admin:judge_contest_change" contest.id %}') {% trans "Edit contest" %}
-            hr
         br
 
 block description

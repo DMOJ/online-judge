@@ -8,4 +8,5 @@ div.page-title
             a(href='{% url "user_list" %}') {% trans "Info" %}
         li(class=('active' if tab == 'ranking' else ''))
             a(href='{% url "contest_ranking" contest.key %}') {% trans "Rankings" %}
-        li: a(href='#') {% trans "Edit" %}
+        if perms.judge.change_contest
+            li: a(href='{% url "admin:judge_contest_change" contest.id %}') {% trans "Edit" %}
