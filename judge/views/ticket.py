@@ -130,4 +130,4 @@ class TicketList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         if self.request.user.has_perm('judge.change_ticket'):
             return self._get_queryset()
-        return self._get_queryset().filter(assignee__id=self.profile.id)
+        return self._get_queryset().filter(assignees__id=self.profile.id)
