@@ -2,6 +2,43 @@ extends base
 
 - load gravatar
 
+block media
+    style.
+        .messages {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .message {
+            display: flex;
+        }
+
+        .message .username {
+            text-align: center;
+        }
+
+        .message .gravatar {
+            width: 80px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .message .info {
+            width: 100px;
+        }
+
+        .message .date, .message .time {
+            text-align: center;
+        }
+
+        .message .content {
+            border: 1px #999 solid;
+            border-radius: 5px;
+            padding: 7px;
+            flex: 1;
+        }
+
 block body
     main.messages
         each message in messages
@@ -10,5 +47,6 @@ block body
                     a.user(href='{% url "user_page" message.user.user.username %}')
                         img.gravatar(src='{% gravatar_url message.user.user.email 135 message.user.mute %}')
                         .username #{message.user}
-                    .time #{message.time}
+                    .date #{message.time|date:DATE_FORMAT}
+                    .time #{message.time|time:TIME_FORMAT}
                 .content #{message.body}
