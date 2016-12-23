@@ -5,7 +5,7 @@ div.page-title
         h2(style='color:#393630; display: inline-block') {% trans title %}
         span.spacer
         li(class=('active' if tab == 'detail' else ''))
-            a(href='{% url "user_list" %}') {% trans "Info" %}
+            a(href='{% url "contest_view" contest.key %}') {% trans "Info" %}
         li(class=('active' if tab == 'ranking' else ''))
             a(href='{% url "contest_ranking" contest.key %}') {% trans "Rankings" %}
         if perms.judge.change_contest
