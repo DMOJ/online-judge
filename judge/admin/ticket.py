@@ -1,5 +1,5 @@
 from django.contrib.admin import ModelAdmin
-from django.contrib.admin.options import InlineModelAdmin
+from django.contrib.admin.options import StackedInline
 from django.forms import ModelForm
 
 from judge.models import TicketMessage
@@ -15,7 +15,7 @@ class TicketMessageForm(ModelForm):
             widgets['body'] = AdminPagedownWidget()
 
 
-class TicketMessageInline(InlineModelAdmin):
+class TicketMessageInline(StackedInline):
     model = TicketMessage
     form = TicketMessageForm
     fields = ('user', 'body')
