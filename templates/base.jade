@@ -83,8 +83,9 @@ html(lang=LANGUAGE_CODE)
             script(src='{% static "libs/jquery-taphold.js" %}')
             script(src='{% static "common.js" %}')
             script(src='{% static "libs/jquery.unveil.js" %}')
-            script(type='text/javascript', src='{% static "libs/moment.js" %}')
+            script(src='{% static "libs/moment.js" %}')
             script.
+                moment.locale('#{LANGUAGE_CODE}');
                 $(function () { $('img.unveil').unveil(200); });
         block js_media
         if IN_CONTEST

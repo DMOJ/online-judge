@@ -151,7 +151,6 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
 
             $('img.unveil').unveil(200);
 
-            moment.locale('#{LANGUAGE_CODE}');
             register_update_relative(function () {
                 return $('.comment-time');
             }, function (when) {
