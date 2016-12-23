@@ -9,6 +9,6 @@ block body
                 .info
                     a.user(href='{% url "user_page" message.user.user.username %}')
                         img.gravatar(src='{% gravatar_url message.user.user.email 135 message.user.mute %}')
-                        | #{message.user}
+                        .username #{message.user}
                     .time #{message.time}
                 .content #{message.body}
