@@ -50,7 +50,7 @@ block body
                 .info
                     a.user(href='{% url "user_page" message.user.user.username %}')
                         img.gravatar(src='{% gravatar_url message.user.user.email 135 message.user.mute %}')
-                        .username(class=user.display_rank) #{message.user.user.username}
+                        .username(class=message.user.display_rank) #{message.user.user.username}
                     .message-date #{message.time|date:"DATE_FORMAT"}
                     .message-time #{message.time|time:"TIME_FORMAT"}
                 .content #{message.body|markdown:"ticket"|reference|smart_math:MATH_ENGINE|proxy_images}
