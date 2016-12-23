@@ -104,8 +104,14 @@ class ContestMixin(object):
 
     @cached_property
     def is_organizer(self):
-        return (self.request.user.is_authenticated and
-                self.object.organizers.filter(id=self.request.user.profile.id).exists())
+        return self.check_organizer()
+
+    def check_organizer(self, contest=None, profile=None):
+        if profile is None:
+            if not self.request.user.is_authenticated:
+                return False
+            profile = self.request.user.profile
+        return (contest or self.object).organizers.filter(id=profile.id).exists()
 
     def get_object(self, queryset=None):
         contest = super(ContestMixin, self).get_object(queryset)
@@ -118,7 +124,7 @@ class ContestMixin(object):
 
         if not contest.is_public and not user.has_perm('judge.see_private_contest') and (
                     not user.has_perm('judge.edit_own_contest') or
-                    not contest.organizers.filter(id=profile.id).exists()):
+                    not self.check_organizer(contest, profile)):
             raise Http404()
 
         if contest.is_private:
