@@ -78,7 +78,7 @@ block content_media
 
 block info_float
     if request.user.is_authenticated
-        if contest.can_join or participating
+        if contest.can_join or participating or is_organizer
             if contest.ended
                 // They're in the contest because they're participating virtually
                 if in_contest
@@ -96,7 +96,7 @@ block info_float
                             | {% trans "Stop spectating" %}
                         else
                             | {% trans "Leave contest" %}
-                elif participating and participation.ended or request.user.profile in contest.organizers.all
+                elif participating and participation.ended or is_organizer
                     a.unselectable.button.full(href='{% url "contest_join" contest.key %}')
                         | {% trans "Spectate contest" %}
                 elif participating

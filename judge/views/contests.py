@@ -181,6 +181,7 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
             context['participation'] = None
             context['in_contest'] = False
         context['now'] = timezone.now()
+        context['is_organizer'] = self.is_organizer
 
         if not self.object.og_image or not self.object.summary:
             metadata = generate_opengraph('generated-meta-contest:%d' % self.object.id, self.object.description)
