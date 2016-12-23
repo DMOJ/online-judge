@@ -15,7 +15,6 @@ from judge.widgets import PagedownWidget
 
 class TicketView(DetailView):
     model = Ticket
-    pk_url_kwarg = 'id'
     template_name = 'ticket/ticket.jade'
 
 
