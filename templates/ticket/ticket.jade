@@ -74,8 +74,9 @@ block body
         section.message.new-message
             .info
                 a.user(href='{% url "user_page" %}')
-                    img.gravatar(src='{% gravatar_url request.user.email 135 request.user.profile.mute %}')
-                    .username(class=request.user.display_rank) #{request.user.username}
+                    - with profile=request.user.profile
+                        img.gravatar(src='{% gravatar_url request.user.email 135 profile.mute %}')
+                        .username(class=profile.display_rank) #{request.user.username}
                 .message-date #{message.time | date:"DATE_FORMAT"}
                 .message-time #{message.time | time:"TIME_FORMAT"}
             .content: form(action='', method='post')
