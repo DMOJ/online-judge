@@ -153,6 +153,12 @@ block body
                         | #{assignee.user.username}
                     if not forloop.last
                         | ,&#32;
+            button.close-ticket {% trans "Close ticket" %}
+            button.open-ticket {% trans "Reopen ticket" %}
+            if request.user.profile in assignees
+                .info-box
+                    .info-title {% trans "Assignee notes" %}
+                    .info-data #{ticket.notes|linebreaks}
 
         .ticket-messages
             main.messages: each message in messages
