@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
+from django.db.models import Q
 from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
@@ -161,13 +162,19 @@ class TicketList(LoginRequiredMixin, ListView):
     def profile(self):
         return self.request.user.profile
 
+    def GET_with_session(self, key):
+        if not self.request.GET:
+            return self.request.session.get(key, False)
+        return self.request.GET.get(key, None) == '1'
+
     def _get_queryset(self):
         return Ticket.objects.select_related('user__user').prefetch_related('assignees__user').order_by('-id')
 
     def get_queryset(self):
-        if self.request.user.has_perm('judge.change_ticket'):
-            return self._get_queryset()
-        return self._get_queryset().filter(assignees__id=self.profile.id)
+        queryset = self._get_queryset()
+        if not self.request.user.has_perm('judge.change_ticket') or self.GET_with_session('own'):
+            queryset = self._get_queryset().filter(Q(assignees__id=self.profile.id) | Q(user=self.profile)).distinct()
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(TicketList, self).get_context_data(**kwargs)
@@ -179,3 +186,13 @@ class TicketList(LoginRequiredMixin, ListView):
         }
         context.update(paginate_query_context(self.request))
         return context
+
+    def post(self, request, *args, **kwargs):
+        to_update = ('own',)
+        for key in to_update:
+            if key in request.GET:
+                val = request.GET.get(key) == '1'
+                request.session[key] = val
+            else:
+                request.session.pop(key, None)
+        return HttpResponseRedirect(request.get_full_path())
