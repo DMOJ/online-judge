@@ -15,7 +15,7 @@ block media
 block js_media
     script(type='text/javascript').
         $(function () {
-            $('input#id_own').click(function () {
+            $('input#own').click(function () {
                 ($('<form>').attr('action', window.location.pathname + '?' + $('form#filter-form').serialize())
                         .append($('<input>').attr('type', 'hidden').attr('name', 'csrfmiddlewaretoken')
                                 .attr('value', $.cookie('csrftoken')))
@@ -26,8 +26,8 @@ block js_media
 block body
     form#filter-form(name='form', action='', method='get')
         div#own-box.filter-check
-            | #{filter_form.own}
-            label(for='id_own') {% trans "Show my tickets only" %}
+            input#own(type='checkbox', name='own', checked=('checked' if filter_status['own'] else undefined), value='1')
+            label(for='own') {% trans "Show my tickets only" %}
     hr
 
     if page_obj.num_pages > 1

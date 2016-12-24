@@ -12,13 +12,14 @@ from django.utils.html import escape, format_html, linebreaks
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy, ugettext as _
 from django.views import View
-from django.views.generic import FormView, ListView, TemplateView
+from django.views.generic import FormView, ListView
 from django.views.generic.detail import SingleObjectMixin
 
+from judge.models import Profile
 from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.views import TitleMixin, paginate_query_context
-from judge.widgets import HeavyPreviewPageDownWidget
+from judge.widgets import HeavyPreviewPageDownWidget, HeavySelect2MultipleWidget
 
 ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
                  HeavyPreviewPageDownWidget(preview=reverse_lazy('ticket_preview'),
@@ -151,10 +152,6 @@ class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, Fo
         return HttpResponseBadRequest()
 
 
-class TicketFilterForm(forms.Form):
-    own = forms.BooleanField(required=False)
-
-
 class TicketList(LoginRequiredMixin, ListView):
     model = Ticket
     template_name = 'ticket/list.jade'
@@ -173,7 +170,7 @@ class TicketList(LoginRequiredMixin, ListView):
     def GET_with_session(self, key):
         if not self.request.GET:
             return self.request.session.get(key, False)
-        return self.request.GET.get(key, None) == 'on'
+        return self.request.GET.get(key, None) == '1'
 
     def _get_queryset(self):
         return Ticket.objects.select_related('user__user').prefetch_related('assignees__user').order_by('-id')
@@ -193,9 +190,9 @@ class TicketList(LoginRequiredMixin, ListView):
             'total': page.paginator.num_pages,
         }
         context['can_edit_all'] = self.can_edit_all
-        context['filter_form'] = TicketFilterForm(initial={
+        context['filter_status'] = {
             'own': self.GET_with_session('own'),
-        })
+        }
         context.update(paginate_query_context(self.request))
         return context
 
