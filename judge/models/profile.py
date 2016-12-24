@@ -104,7 +104,7 @@ class Profile(models.Model):
     def calculate_points(self, table=(lambda x: [pow(x, i) for i in xrange(100)])(getattr(settings, 'PP_STEP', 0.95))):
         from judge.models import Submission
         data = (Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
-                .annotate(max_points=Max('points')).order_by('-points')
+                .annotate(max_points=Max('points')).order_by('-max_points')
                 .values_list('problem_id', 'max_points').distinct())
         data = map(itemgetter(1), data)
         points = sum(data)
