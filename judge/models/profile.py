@@ -102,11 +102,10 @@ class Profile(models.Model):
         return orgs[0] if orgs else None
 
     def calculate_points(self, table=(lambda x: [pow(x, i) for i in xrange(100)])(getattr(settings, 'PP_STEP', 0.95))):
-        from judge.models import Submission
-        data = (Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
-                .annotate(max_points=Max('points')).order_by('-max_points')
-                .values_list('problem_id', 'max_points').distinct())
-        data = map(itemgetter(1), data)
+        from judge.models import Problem
+        data = (Problem.objects.filter(submission__user=self, submission__points__isnull=False, is_public=True)
+                .annotate(max_points=Max('submission__points')).order_by('-max_points')
+                .values_list('max_points', flat=True))
         points = sum(data)
         problems = len(data)
         entries = min(len(data), len(table))
