@@ -55,6 +55,7 @@ block media
             a.user-redirect:hover { text-shadow: 0 0 2px blue; }
 
 block js_media
+    script(type='text/javascript', src='{% static "event.js" %}')
     script(type='text/javascript').
         $(function () {
             $('input#own').click(function () {
@@ -63,6 +64,15 @@ block js_media
                                 .attr('value', $.cookie('csrftoken')))
                         .attr('method', 'POST').appendTo($('body')).submit());
             });
+
+            window.load_dynamic_update = function (last_msg) {
+                return new EventReceiver(
+                        "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                        ['submissions'], last_msg, function (message) {
+                            console.log(message);
+                        }
+                );
+            }
         });
     if has_select2
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
@@ -85,6 +95,11 @@ block js_media
                         {ajax: { url: '{% url "ticket_user_select2_ajax" %}' } }));
                 $('#filter-assignee').select2($.extend({}, user_select2,
                         {ajax: { url: '{% url "ticket_assignee_select2_ajax" %}' } }));
+            });
+    if last_msg
+        script(type='text/javascript').
+            $(function () {
+                load_dynamic_update(#{last_msg});
             });
 
 block body

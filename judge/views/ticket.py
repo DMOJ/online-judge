@@ -15,11 +15,12 @@ from django.views import View
 from django.views.generic import FormView, ListView
 from django.views.generic.detail import SingleObjectMixin
 
+from judge import event_poster as event
 from judge.models import Profile
 from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.views import TitleMixin, paginate_query_context, LoadSelect2Mixin
-from judge.widgets import HeavyPreviewPageDownWidget, HeavySelect2MultipleWidget
+from judge.widgets import HeavyPreviewPageDownWidget
 
 ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
                  HeavyPreviewPageDownWidget(preview=reverse_lazy('ticket_preview'),
@@ -206,6 +207,7 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
             'assignee_id': Profile.objects.filter(user__username__in=self.filter_assignees)
                                   .values_list('id', flat=True),
         }
+        context['last_msg'] = event.last()
         context.update(paginate_query_context(self.request))
         return context
 
