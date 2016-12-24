@@ -7,6 +7,8 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
+from django.template.loader import get_template
 from django.urls import reverse
 from django.urls import reverse_lazy
 from django.utils.functional import cached_property
@@ -228,6 +230,7 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
                                        .values_list('id', flat=True))),
             'assignee_id': json.dumps(list(Profile.objects.filter(user__username__in=self.filter_assignees)
                                            .values_list('id', flat=True))),
+            'own_id': 'null' if not self.can_edit_all or self.GET_with_session('own') else self.profile.id
         }
         context['last_msg'] = event.last()
         context.update(paginate_query_context(self.request))
@@ -242,3 +245,15 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
             else:
                 request.session.pop(key, None)
         return HttpResponseRedirect(request.get_full_path())
+
+
+class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
+    def get(self, request, *args, **kwargs):
+        try:
+            self.kwargs['pk'] = request.GET['id']
+        except KeyError:
+            return HttpResponseBadRequest()
+        ticket = self.get_object()
+        return JsonResponse({
+            'row': get_template('ticket/row.jade').render({'ticket': ticket}, request),
+        })
