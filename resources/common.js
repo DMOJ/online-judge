@@ -243,56 +243,54 @@ $('form').submit(function(evt) {
     evt.preventDefault();
 });
 
-$(function () {
-    window.notification_template = {
-        icon: '/logo.png'
-    };
-    window.notification_timeout = 5000;
+window.notification_template = {
+    icon: '/logo.png'
+};
+window.notification_timeout = 5000;
 
-    window.notify = function (type, title, data, timeout) {
-        if (!localStorage[type + '_notification']) return;
-        var template = window[type + '_notification_template'] || window.notification_template;
-        var data = (typeof data !== 'undefined' ? $.extend({}, template, data) : template);
-        var object = new Notification(title, data);
-        if (typeof timeout === 'undefined')
-            timeout = window.notification_timeout;
-        if (timeout)
-            setTimeout(function () {
-                object.close();
-            }, timeout);
-        return object;
-    };
+window.notify = function (type, title, data, timeout) {
+    if (!localStorage[type + '_notification']) return;
+    var template = window[type + '_notification_template'] || window.notification_template;
+    var data = (typeof data !== 'undefined' ? $.extend({}, template, data) : template);
+    var object = new Notification(title, data);
+    if (typeof timeout === 'undefined')
+        timeout = window.notification_timeout;
+    if (timeout)
+        setTimeout(function () {
+            object.close();
+        }, timeout);
+    return object;
+};
 
-    window.register_notify = function (type, $checkbox) {
-        var key = type + '_notification';
-        if ('Notification' in window) {
-            if (!(key in localStorage) || Notification.permission !== 'granted')
-                localStorage[key] = false;
-
-            $checkbox.change(function () {
-                var status = $checkbox.is(':checked');
-                if (status) {
-                    if (Notification.permission === 'granted') {
-                        localStorage[key] = true;
-                        notify(type, 'Notification enabled!');
-                    } else
-                        Notification.requestPermission(function (permission) {
-                            if (permission === 'granted') {
-                                localStorage[key] = true;
-                                notify(type, 'Notification enabled!');
-                            } else localStorage[key] = false;
-                        });
-                } else localStorage[key] = false;
-            }).prop();
-
-            $(window).on('storage', function (e) {
-                e = e.originalEvent;
-                if (e.key === key)
-                    $checkbox.prop('checked', e.newValue);
-            });
-        } else {
-            $checkbox.hide();
+window.register_notify = function (type, $checkbox) {
+    var key = type + '_notification';
+    if ('Notification' in window) {
+        if (!(key in localStorage) || Notification.permission !== 'granted')
             localStorage[key] = false;
-        }
-    };
-});
+
+        $checkbox.change(function () {
+            var status = $checkbox.is(':checked');
+            if (status) {
+                if (Notification.permission === 'granted') {
+                    localStorage[key] = true;
+                    notify(type, 'Notification enabled!');
+                } else
+                    Notification.requestPermission(function (permission) {
+                        if (permission === 'granted') {
+                            localStorage[key] = true;
+                            notify(type, 'Notification enabled!');
+                        } else localStorage[key] = false;
+                    });
+            } else localStorage[key] = false;
+        }).prop();
+
+        $(window).on('storage', function (e) {
+            e = e.originalEvent;
+            if (e.key === key)
+                $checkbox.prop('checked', e.newValue);
+        });
+    } else {
+        $checkbox.hide();
+        localStorage[key] = false;
+    }
+};
