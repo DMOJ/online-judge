@@ -93,6 +93,11 @@ block media
             background: #853011;
         }
 
+        .info-empty-notes {
+            color: #999;
+            font-style: italic;
+        }
+
         .message {
             display: flex;
             margin-top: -40px;
@@ -184,7 +189,11 @@ block body
             if request.user.profile in assignees
                 .info-box
                     .info-title {% trans "Assignee notes" %}
-                    .info-data #{ticket.notes|linebreaks}
+                    .info-data
+                        if ticket.notes
+                            #{ticket.notes|linebreaks}
+                        else
+                            .info-empty-notes {% trans "Nothing here." %}
 
         .ticket-messages
             main.messages: each message in messages
