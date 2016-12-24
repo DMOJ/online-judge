@@ -1,10 +1,8 @@
-from django.core.exceptions import ImproperlyConfigured
-from django.http import Http404
-from django.utils.translation import ugettext as _, ugettext_lazy
-from django.views.generic import DetailView, ListView, TemplateView
+from django.utils.translation import ugettext_lazy
+from django.views.generic import ListView
 
-from judge.models import Language, Judge
-from judge.utils.views import generic_message, TitleMixin
+from judge.models import Language
+from judge.utils.views import TitleMixin
 
 
 class LanguageList(TitleMixin, ListView):
