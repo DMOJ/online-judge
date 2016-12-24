@@ -171,6 +171,10 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
     def filter_users(self):
         return self.request.GET.getlist('user')
 
+    @cached_property
+    def filter_assignees(self):
+        return self.request.GET.getlist('assignee')
+
     def GET_with_session(self, key):
         if not self.request.GET:
             return self.request.session.get(key, False)
@@ -183,8 +187,8 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
         queryset = self._get_queryset()
         if not self.can_edit_all or self.GET_with_session('own'):
             queryset = queryset.filter(Q(assignees__id=self.profile.id) | Q(user=self.profile)).distinct()
-        if self.filter_users:
-            queryset = queryset.filter(user__user__username__in=self.filter_users)
+        if self.filter_assignees:
+            queryset = queryset.filter(assignees__user__username__in=self.filter_assignees)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -197,8 +201,10 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
         }
         context['can_edit_all'] = self.can_edit_all
         context['filter_status'] = {
-            'own': self.GET_with_session('own'), 'user': self.filter_users,
+            'own': self.GET_with_session('own'), 'user': self.filter_users, 'assignee': self.filter_assignees,
             'user_id': Profile.objects.filter(user__username__in=self.filter_users).values_list('id', flat=True),
+            'assignee_id': Profile.objects.filter(user__username__in=self.filter_assignees)
+                                  .values_list('id', flat=True),
         }
         context.update(paginate_query_context(self.request))
         return context

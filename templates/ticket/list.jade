@@ -68,8 +68,7 @@ block js_media
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script(type='text/javascript').
             $(function () {
-                $('#filter-user').select2({
-                    ajax: { url: '{% url "ticket_user_select2_ajax" %}' },
+                var user_select2 = {
                     escapeMarkup: function (markup) {
                         return markup;
                     },
@@ -81,7 +80,11 @@ block js_media
                                 }))
                                 .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text));
                     }
-                });
+                };
+                $('#filter-user').select2($.extend({}, user_select2,
+                        {ajax: { url: '{% url "ticket_user_select2_ajax" %}' } }));
+                $('#filter-assignee').select2($.extend({}, user_select2,
+                        {ajax: { url: '{% url "ticket_assignee_select2_ajax" %}' } }));
             });
 
 block body
@@ -92,9 +95,14 @@ block body
                     input#own(type='checkbox', name='own', checked=('checked' if filter_status['own'] else undefined), value='1')
                     label(for='own') {% trans "Show my tickets only" %}
                 div#user-box.filter-select2
-                    label(for='filter-user') {% trans "Filing user:" %}
+                    label(for='filter-user') {% trans "Filing user" %}
                     select#filter-user(style='width: 100%', multiple, name='user')
                         each username in filter_status.user
+                            option(value=username, selected)= username
+                div#assignee-box.filter-select2
+                    label(for='filter-user') {% trans "Filing assignee" %}
+                    select#filter-assignee(style='width: 100%', multiple, name='assignee')
+                        each username in filter_status.assignee
                             option(value=username, selected)= username
                 button.submit(type='submit', style='margin-left: auto') {% trans "Go" %}
 
