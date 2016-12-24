@@ -102,7 +102,7 @@ block js_media
                                 return;
                             if (filter_user_ids.length && !~filter_user_ids.indexOf(message.user))
                                 return;
-                            if ($assignees.length && !$assignees.filter(message.assignee).length)
+                            if ($assignees.length && !$assignees.filter(message.assignees).length)
                                 return;
                             switch (message.type) {
                                 case 'new-ticket': new_ticket(message); break;
