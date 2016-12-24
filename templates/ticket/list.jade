@@ -12,6 +12,26 @@ block media
             color: darkred;
         }
 
+    if has_select2
+        link(href='{{ SELECT2_CSS_URL }}', type='text/css', media='screen', rel='stylesheet')
+        style.
+            .select2-selection__arrow { display: none; }
+            .select2-selection__rendered { cursor: text; }
+            .select2-results__option {  position: relative; }
+            .select2-results__option--highlighted { background-color: #DEDEDE !important; }
+            li.select2-results__option--highlighted a.user-redirect { display: inline-block; }
+
+            a.user-redirect {
+                color: #2980b9;
+                vertical-align: middle;
+                font-size: 1.2em;
+                position: absolute;
+                right: 0.8em;
+                display: none;
+            }
+
+            a.user-redirect:hover { text-shadow: 0 0 2px blue; }
+
 block js_media
     script(type='text/javascript').
         $(function () {
@@ -22,12 +42,37 @@ block js_media
                         .attr('method', 'POST').appendTo($('body')).submit());
             });
         });
+    if has_select2
+        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
+        script(type='text/javascript').
+            $(function () {
+                $('#filter-user').select2({
+                    ajax: {
+                        url: '{% url "user_search_select2_ajax" %}'
+                    },
+                    escapeMarkup: function (markup) {
+                        return markup;
+                    },
+                    templateResult: function (data, container) {
+                        return $('<span>')
+                                .append($('<img>', {
+                                    'class': 'user-search-image', src: data.gravatar_url,
+                                    width: 24, height: 24
+                                }))
+                                .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text))
+
+                    }
+                });
+            });
 
 block body
     form#filter-form(name='form', action='', method='get')
         div#own-box.filter-check
             input#own(type='checkbox', name='own', checked=('checked' if filter_status['own'] else undefined), value='1')
             label(for='own') {% trans "Show my tickets only" %}
+        div#user-box.filter-select2
+            label(for='filter-user') {% trans "Filing user:" %}
+            select#filter-user(onchange='form.submit()')
     hr
 
     if page_obj.num_pages > 1

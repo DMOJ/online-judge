@@ -18,7 +18,7 @@ from django.views.generic.detail import SingleObjectMixin
 from judge.models import Profile
 from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
-from judge.utils.views import TitleMixin, paginate_query_context
+from judge.utils.views import TitleMixin, paginate_query_context, LoadSelect2Mixin
 from judge.widgets import HeavyPreviewPageDownWidget, HeavySelect2MultipleWidget
 
 ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
@@ -152,7 +152,7 @@ class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, Fo
         return HttpResponseBadRequest()
 
 
-class TicketList(LoginRequiredMixin, ListView):
+class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
     model = Ticket
     template_name = 'ticket/list.jade'
     context_object_name = 'tickets'
