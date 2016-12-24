@@ -2,6 +2,16 @@ extends base
 
 - load i18n
 
+block media
+    style.
+        #ticket-list .fa-check-circle-o {
+            color: #00a900;
+        }
+
+        #ticket-list .fa-exclamation-circle {
+            color: darkred;
+        }
+
 block body
     if page_obj.num_pages > 1
         div(style='margin-bottom:6px; margin-top:3px')
@@ -9,12 +19,18 @@ block body
 
     table#ticket-list.table
         thead: tr
+            th
             th {% trans "ID" %}
             th {% trans "Title" %}
             th {% trans "User" %}
             th {% trans "Assignees" %}
         tbody: each ticket in tickets
             tr(id='ticket-{{ ticket.id }}')
+                td
+                    if ticket.is_open
+                        i.fa.fa-exclamation-circle
+                    else
+                        i.fa.fa-check-circle-o
                 td= ticket.id
                 td: a(href='{% url "ticket" ticket.id %}')= ticket.title
                 - with user=ticket.user
