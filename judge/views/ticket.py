@@ -125,6 +125,7 @@ class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, SingleObjectMixin,
         if ticket.is_open != self.open:
             ticket.is_open = self.open
             ticket.save()
+        event.post('tickets')
         return HttpResponse(status=204)
 
 
