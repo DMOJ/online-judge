@@ -4,10 +4,10 @@ extends base
 - load i18n
 
 block js_media
-    include judge_js_media
+    include status/judge_js_media
 
 block media
-    include judge_css_media
+    include status/judge_css_media
     block content_media
 
 block header
@@ -21,4 +21,4 @@ block body
     h3 {% trans "Judges" %}
     hr
     table#judge-status.table
-        include judge_status_table
+        include status/judge_status_table

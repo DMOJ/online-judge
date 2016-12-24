@@ -10,5 +10,5 @@ from judge.utils.views import generic_message, TitleMixin
 class LanguageList(TitleMixin, ListView):
     model = Language
     context_object_name = 'languages'
-    template_name = 'language_list.jade'
+    template_name = 'status/language_list.jade'
     title = ugettext_lazy('Runtimes')
