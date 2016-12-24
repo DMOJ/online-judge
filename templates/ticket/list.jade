@@ -71,10 +71,37 @@ block js_media
             });
 
             window.load_dynamic_update = function (last_msg) {
+                var $tbody = $('#ticket-list').find('tbody');
+                var $assignees = $(filter_assignee_ids);
+
+                function new_ticket(ticket) {
+                    $.ajax({
+                        url: '{% url "ticket_ajax" %}',
+                        data: { id: ticket.id },
+                        success: function (data) {
+                            $tbody.prepend($(data.row));
+                        },
+                        error: function (data) {
+                            console.log('Could not load ticket:');
+                            console.log(data.responseText);
+                        }
+                    });
+                }
+
                 return new EventReceiver(
                         "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                         ['tickets'], last_msg, function (message) {
                             console.log(message);
+                            if (filter_own_id != null && message.user != filter_own_id &&
+                                    !~message.assignee.indexOf(filter_own_id))
+                                return;
+                            if (filter_user_ids.length && !~filter_user_ids.indexOf(message.user))
+                                return;
+                            if ($assignees.length && !$assignees.filter(message.assignee).length)
+                                return;
+                            switch (message.type) {
+                                case 'new-ticket': new_ticket(message); break;
+                            }
                         }
                 );
             }
