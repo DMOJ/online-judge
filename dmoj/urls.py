@@ -293,7 +293,7 @@ urlpatterns = [
             url('^problem/(?P<code>[^/]+)$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
         ])),
         url('^(?P<pk>\d+)$', ticket.TicketView.as_view(), name='ticket'),
-        url('^list/$', paged_list_view(ticket.TicketList, 'ticket_list')),
+        url('^list$', ticket.TicketList.as_view(), name='ticket_list'),
     ])),
 
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {

@@ -3,6 +3,10 @@ extends base
 - load i18n
 
 block body
+    if page_obj.num_pages > 1
+        div(style='margin-bottom:6px; margin-top:3px')
+            include list_pages
+
     table#ticket-list.table
         thead: tr
             th {% trans "ID" %}
@@ -20,3 +24,7 @@ block body
                         | #{assignee.user.username}
                     if not forloop.last
                         | ,&#32;
+
+    if page_obj.num_pages > 1
+        div(style='margin-top:10px')
+            include list_pages

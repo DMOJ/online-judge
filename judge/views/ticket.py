@@ -14,7 +14,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
-from judge.utils.views import TitleMixin
+from judge.utils.views import TitleMixin, paginate_query_context
 from judge.widgets import HeavyPreviewPageDownWidget
 
 ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
@@ -131,3 +131,8 @@ class TicketList(LoginRequiredMixin, ListView):
         if self.request.user.has_perm('judge.change_ticket'):
             return self._get_queryset()
         return self._get_queryset().filter(assignees__id=self.profile.id)
+
+    def get_context_data(self, **kwargs):
+        context = super(TicketList, self).get_context_data(**kwargs)
+        context.update(paginate_query_context(self.request))
+        return context

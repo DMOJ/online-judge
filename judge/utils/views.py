@@ -27,6 +27,18 @@ def generic_message(request, title, message, status=None):
     }, status=status)
 
 
+def paginate_query_context(request):
+    query = request.GET.copy()
+    query.setlist('page', [])
+    query = query.urlencode()
+    if query:
+        return {'page_prefix': '%s?%s&page=' % (request.path, query),
+                'first_page_href': '%s?%s' % (request.path, query)}
+    else:
+        return {'page_prefix': '%s?page=' % request.path,
+                'first_page_href': request.path}
+
+
 class LoadSelect2Mixin(object):
     def get_context_data(self, **kwargs):
         context = super(LoadSelect2Mixin, self).get_context_data(**kwargs)
@@ -95,12 +107,4 @@ class QueryStringSortMixin(object):
         return {'sort_links': links, 'sort_order': order}
 
     def get_sort_paginate_context(self):
-        query = self.request.GET.copy()
-        query.setlist('page', [])
-        query = query.urlencode()
-        if query:
-            return {'page_prefix': '%s?%s&page=' % (self.request.path, query),
-                    'first_page_href': '%s?%s' % (self.request.path, query)}
-        else:
-            return {'page_prefix': '%s?page=' % self.request.path,
-                    'first_page_href': self.request.path}
+        return paginate_query_context(self.request)
