@@ -1,3 +1,5 @@
+import json
+
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
@@ -222,9 +224,10 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
         context['can_edit_all'] = self.can_edit_all
         context['filter_status'] = {
             'own': self.GET_with_session('own'), 'user': self.filter_users, 'assignee': self.filter_assignees,
-            'user_id': Profile.objects.filter(user__username__in=self.filter_users).values_list('id', flat=True),
-            'assignee_id': Profile.objects.filter(user__username__in=self.filter_assignees)
-                                  .values_list('id', flat=True),
+            'user_id': json.dumps(list(Profile.objects.filter(user__username__in=self.filter_users)
+                                       .values_list('id', flat=True))),
+            'assignee_id': json.dumps(list(Profile.objects.filter(user__username__in=self.filter_assignees)
+                                           .values_list('id', flat=True))),
         }
         context['last_msg'] = event.last()
         context.update(paginate_query_context(self.request))
