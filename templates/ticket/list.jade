@@ -81,7 +81,9 @@ block js_media
                         $.extend({}, window.ticket_notification_template, data) :
                         window.ticket_notification_template);
                 var object = new Notification(title, data);
-                if (typeof timeout !== 'undefined')
+                if (typeof timeout === 'undefined')
+                    timeout = 5000;
+                if (timeout)
                     setTimeout(function () {
                         object.close();
                     }, timeout);
@@ -97,12 +99,12 @@ block js_media
                     if (status) {
                         if (Notification.permission === 'granted') {
                             localStorage.ticket_notification = true;
-                            notify('Notification enabled!', 5000);
+                            notify('Notification enabled!');
                         } else
                             Notification.requestPermission(function (permission) {
                                 if (permission === 'granted') {
                                     localStorage.ticket_notification = true;
-                                    notify('Notification enabled!', 5000);
+                                    notify('Notification enabled!');
                                 } else localStorage.ticket_notification = false;
                             });
                     } else localStorage.ticket_notification = false;
@@ -118,23 +120,27 @@ block js_media
                 localStorage.ticket_notification = false;
             }
 
-            window.load_dynamic_update = function (last_msg) {
-                var $tbody = $('#ticket-list').find('tbody');
-                var $assignees = $(filter_assignee_ids);
+            var $tbody = $('#ticket-list').find('tbody');
 
-                function new_ticket(ticket) {
-                    $.ajax({
-                        url: '{% url "ticket_ajax" %}',
-                        data: { id: ticket.id },
-                        success: function (data) {
-                            $tbody.prepend($(data.row));
-                        },
-                        error: function (data) {
-                            console.log('Could not load ticket:');
-                            console.log(data.responseText);
-                        }
-                    });
-                }
+            function new_ticket(ticket) {
+                $.ajax({
+                    url: '{% url "ticket_ajax" %}',
+                    data: {id: ticket.id},
+                    success: function (data) {
+                        $tbody.prepend($(data.row));
+                        notify(data.notification.title, {
+                            body: data.notification.body
+                        });
+                    },
+                    error: function (data) {
+                        console.log('Could not load ticket:');
+                        console.log(data.responseText);
+                    }
+                });
+            }
+
+            window.load_dynamic_update = function (last_msg) {
+                var $assignees = $(filter_assignee_ids);
 
                 return new EventReceiver(
                         "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
