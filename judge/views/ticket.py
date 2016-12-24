@@ -118,7 +118,7 @@ class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectMixin,
         return context
 
 
-class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, View):
+class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, View):
     open = None
 
     def post(self, request, *args, **kwargs):
