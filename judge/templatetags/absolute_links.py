@@ -21,7 +21,3 @@ def absolute_links(text, url):
 @register.filter(name='urljoin')
 def join(first, second):
     return urljoin(first, second)
-
-
-register.filter(name='urlquote')(urllib.quote)
-register.filter(name='urlquote_plus')(urllib.quote_plus)
