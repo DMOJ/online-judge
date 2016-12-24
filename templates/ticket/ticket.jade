@@ -69,6 +69,22 @@ block media
             padding: 2px 5px;
         }
 
+        .close-ticket {
+            display: block;
+            width: 100%;
+            background: linear-gradient(to bottom, #21de00, #35a815);
+            border-color: #24710e;
+            font-weight: 600;
+        }
+
+        .open-ticket {
+            display: block;
+            width: 100%;
+            background: linear-gradient(to bottom, #ff130f, #b03d17);
+            border-color: #853011;
+            font-weight: 600;
+        }
+
         .message {
             display: flex;
             margin-top: -40px;
@@ -153,8 +169,10 @@ block body
                         | #{assignee.user.username}
                     if not forloop.last
                         | ,&#32;
-            button.close-ticket {% trans "Close ticket" %}
-            button.open-ticket {% trans "Reopen ticket" %}
+            if ticket.is_open
+                button.close-ticket {% trans "Close ticket" %}
+            else
+                button.open-ticket {% trans "Reopen ticket" %}
             if request.user.profile in assignees
                 .info-box
                     .info-title {% trans "Assignee notes" %}
