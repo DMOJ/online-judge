@@ -12,6 +12,17 @@ block media
             color: darkred;
         }
 
+block js_media
+    script(type='text/javascript').
+        $(function () {
+            $('input#id_own').click(function () {
+                ($('<form>').attr('action', window.location.pathname + '?' + $('form#filter-form').serialize())
+                        .append($('<input>').attr('type', 'hidden').attr('name', 'csrfmiddlewaretoken')
+                                .attr('value', $.cookie('csrftoken')))
+                        .attr('method', 'POST').appendTo($('body')).submit());
+            });
+        });
+
 block body
     form#filter-form(name='form', action='', method='get')
         div#own-box.filter-check

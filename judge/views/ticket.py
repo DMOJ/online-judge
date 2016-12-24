@@ -173,7 +173,7 @@ class TicketList(LoginRequiredMixin, ListView):
     def GET_with_session(self, key):
         if not self.request.GET:
             return self.request.session.get(key, False)
-        return self.request.GET.get(key, None) == '1'
+        return self.request.GET.get(key, None) == 'on'
 
     def _get_queryset(self):
         return Ticket.objects.select_related('user__user').prefetch_related('assignees__user').order_by('-id')
