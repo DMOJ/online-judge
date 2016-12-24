@@ -187,9 +187,9 @@ block body
                     else
                         .info-empty {% trans "No one is assigned." %}
             if ticket.is_open
-                button.close-ticket {% trans "Close ticket" %}
+                button.close-ticket(data-ajax='{% url "ticket_close" ticket.id %}') {% trans "Close ticket" %}
             else
-                button.open-ticket {% trans "Reopen ticket" %}
+                button.open-ticket(data-ajax='{% url "ticket_open" ticket.id %}') {% trans "Reopen ticket" %}
             if perms.judge.change_ticket or request.user.profile in assignees
                 .info-box
                     .info-title {% trans "Assignee notes" %}

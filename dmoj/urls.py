@@ -289,11 +289,15 @@ urlpatterns = [
     ])),
 
     url(r'^tickets/', include([
-        url('^new/', include([
+        url(r'^new/', include([
             url('^problem/(?P<code>[^/]+)$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
         ])),
-        url('^(?P<pk>\d+)$', ticket.TicketView.as_view(), name='ticket'),
-        url('^list$', ticket.TicketList.as_view(), name='ticket_list'),
+        url(r'^(?P<pk>\d+)/', include([
+            url(r'^$', ticket.TicketView.as_view(), name='ticket'),
+            url(r'^open$', ticket.TicketStatusChangeView.as_view(open=True), name='ticket_open'),
+            url(r'^close$', ticket.TicketStatusChangeView.as_view(open=False), name='ticket_close'),
+        ])),
+        url(r'^list$', ticket.TicketList.as_view(), name='ticket_list'),
     ])),
 
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {

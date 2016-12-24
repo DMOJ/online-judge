@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ImproperlyConfigured
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.urls import reverse_lazy
@@ -8,6 +9,7 @@ from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy, ugettext as _
+from django.views import View
 from django.views.generic import FormView
 from django.views.generic import ListView
 from django.views.generic.detail import SingleObjectMixin
@@ -71,14 +73,11 @@ class TicketCommentForm(forms.Form):
     body = forms.CharField(widget=ticket_widget)
 
 
-class TicketView(TitleMixin, LoginRequiredMixin, SingleObjectMixin, FormView):
+class TicketMixin(object):
     model = Ticket
-    form_class = TicketCommentForm
-    template_name = 'ticket/ticket.jade'
-    context_object_name = 'ticket'
 
     def get_object(self, queryset=None):
-        ticket = super(TicketView, self).get_object(queryset)
+        ticket = super(TicketMixin, self).get_object(queryset)
         profile_id = self.request.user.profile.id
         if self.request.user.has_perm('judge.change_ticket'):
             return ticket
@@ -87,6 +86,12 @@ class TicketView(TitleMixin, LoginRequiredMixin, SingleObjectMixin, FormView):
         if ticket.assignees.filter(id=profile_id).exists():
             return ticket
         raise PermissionDenied()
+
+
+class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectMixin, FormView):
+    form_class = TicketCommentForm
+    template_name = 'ticket/ticket.jade'
+    context_object_name = 'ticket'
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -111,6 +116,19 @@ class TicketView(TitleMixin, LoginRequiredMixin, SingleObjectMixin, FormView):
         context['messages'] = self.object.messages.select_related('user__user')
         context['assignees'] = self.object.assignees.select_related('user')
         return context
+
+
+class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, View):
+    open = None
+
+    def post(self, request, *args, **kwargs):
+        if self.open is None:
+            raise ImproperlyConfigured('Need to define open')
+        ticket = self.get_object()
+        if ticket.is_open != self.open:
+            ticket.is_open = self.open
+            ticket.save()
+        return HttpResponse(status=204)
 
 
 class TicketList(LoginRequiredMixin, ListView):
