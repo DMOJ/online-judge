@@ -30,8 +30,25 @@ block media
 
         .container {
             width: 100%;
-            max-width: 800px;
             margin: 0 auto;
+            display: flex;
+            flex-direction: row-reverse;
+            max-width: 1000px;
+        }
+
+        .ticket-sidebar {
+            flex: 1;
+            padding: 10px 0 0 10px;
+            max-width: 200px;
+        }
+
+        .ticket-info {
+            position: sticky;
+            top: 60px;
+        }
+
+        .ticket-messages {
+            flex: 1;
         }
 
         .message {
@@ -85,10 +102,6 @@ block media
             margin-bottom: 0;
         }
 
-        .ticket-info {
-            margin-bottom: 5px;
-        }
-
         .new-message .detail {
             padding: 8px 10px;
         }
@@ -121,7 +134,7 @@ block body
                     if not forloop.last
                         | ,&#32;
 
-        .ticket-message
+        .ticket-messages
             main.messages: each message in messages
                 section.message(id='message-{{ message.id }}')
                     .info
