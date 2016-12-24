@@ -105,7 +105,7 @@ class Profile(models.Model):
         from judge.models import Problem
         data = (Problem.objects.filter(submission__user=self, submission__points__isnull=False, is_public=True)
                 .annotate(max_points=Max('submission__points')).order_by('-max_points')
-                .values_list('max_points', flat=True))
+                .values_list('max_points', flat=True).filter(max_points__gt=0))
         points = sum(data)
         problems = len(data)
         entries = min(len(data), len(table))
