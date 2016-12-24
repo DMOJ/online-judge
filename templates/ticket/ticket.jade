@@ -69,6 +69,11 @@ block media
             padding: 2px 5px;
         }
 
+        .info-empty {
+            color: #999;
+            font-style: italic;
+        }
+
         .close-ticket {
             display: block;
             width: 100%;
@@ -91,11 +96,6 @@ block media
 
         .open-ticket:hover {
             background: #853011;
-        }
-
-        .info-empty-notes {
-            color: #999;
-            font-style: italic;
         }
 
         .message {
@@ -177,23 +177,27 @@ block body
                 .info-data: a(href=ticket.linked_item.get_absolute_url())= ticket.linked_item
             .info-box
                 .info-title {% trans "Assignees" %}
-                .info-data: each assignee in assignees
-                    a(href='{% url "user_page" assignee.user.username %}', class=assignee.display_rank)
-                        | #{assignee.user.username}
-                    if not forloop.last
-                        | ,&#32;
+                .info-data
+                    if assignees
+                        each assignee in assignees
+                            a(href='{% url "user_page" assignee.user.username %}', class=assignee.display_rank)
+                                | #{assignee.user.username}
+                            if not forloop.last
+                                | ,&#32;
+                    else
+                        .info-empty {% trans "No one is assigned." %}
             if ticket.is_open
                 button.close-ticket {% trans "Close ticket" %}
             else
                 button.open-ticket {% trans "Reopen ticket" %}
-            if request.user.profile in assignees
+            if perms.judge.change_ticket or request.user.profile in assignees
                 .info-box
                     .info-title {% trans "Assignee notes" %}
                     .info-data
                         if ticket.notes
                             #{ticket.notes|linebreaks}
                         else
-                            .info-empty-notes {% trans "Nothing here." %}
+                            .info-empty {% trans "Nothing here." %}
 
         .ticket-messages
             main.messages: each message in messages
