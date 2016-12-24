@@ -59,8 +59,7 @@ block js_media
                                     'class': 'user-search-image', src: data.gravatar_url,
                                     width: 24, height: 24
                                 }))
-                                .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text))
-
+                                .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text));
                     }
                 });
             });
@@ -74,7 +73,7 @@ block body
                     label(for='own') {% trans "Show my tickets only" %}
                 div#user-box.filter-select2
                     label(for='filter-user') {% trans "Filing user:" %}
-                    select#filter-user(onchange='form.submit()', style='width: 100%', multiple)
+                    select#filter-user(style='width: 100%', multiple)
         #content-left
             if page_obj.num_pages > 1
                 div(style='margin-bottom:6px; margin-top:3px')
