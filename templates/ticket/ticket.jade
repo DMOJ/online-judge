@@ -215,7 +215,7 @@ block body
                     .info-title {% trans "Assignee notes" %}
                         a.edit-notes(href='#', data-featherlight='{% url "ticket_notes" ticket.id %}'): i.fa.fa-pencil
                     #ticket-notes.info-data
-                        .info-empty(style=('display: none' if data else None)) {% trans "Nothing here." %}
+                        .info-empty(style=('display: none' if ticket.notes else None)) {% trans "Nothing here." %}
                         .info-real {{ ticket.notes|linebreaks }}
 
         .ticket-messages
