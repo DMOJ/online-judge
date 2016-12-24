@@ -137,6 +137,10 @@ block js_media
 block body
     #container
         aside: div
+            div#notification-box
+                input#notification(type='checkbox')
+                label(for='notification') {% trans "Use desktop notification" %}
+
             form#filter-form(name='form', action='', method='get')
                 div#own-box.filter-check
                     input#own(type='checkbox', name='own', checked=('checked' if filter_status['own'] else undefined), value='1')
