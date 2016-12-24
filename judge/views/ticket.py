@@ -29,13 +29,7 @@ class TicketForm(forms.Form):
     body = forms.CharField(widget=ticket_widget)
 
 
-class NewTicketView(LoginRequiredMixin, SingleObjectMixin, FormView):
-    form_class = TicketForm
-    template_name = 'ticket/new.jade'
-
-    def get_assignees(self):
-        return []
-
+class SingleObjectFormView(SingleObjectMixin, FormView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super(NewTicketView, self).post(request, *args, **kwargs)
@@ -43,6 +37,14 @@ class NewTicketView(LoginRequiredMixin, SingleObjectMixin, FormView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super(NewTicketView, self).get(request, *args, **kwargs)
+
+
+class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
+    form_class = TicketForm
+    template_name = 'ticket/new.jade'
+
+    def get_assignees(self):
+        return []
 
     def form_valid(self, form):
         ticket = Ticket(user=self.request.user.profile, title=form.cleaned_data['title'])
@@ -88,18 +90,10 @@ class TicketMixin(object):
         raise PermissionDenied()
 
 
-class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectMixin, FormView):
+class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectFormView):
     form_class = TicketCommentForm
     template_name = 'ticket/ticket.jade'
     context_object_name = 'ticket'
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super(TicketView, self).post(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super(TicketView, self).get(request, *args, **kwargs)
 
     def form_valid(self, form):
         message = TicketMessage(user=self.request.user.profile,
@@ -139,6 +133,9 @@ class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, Fo
     template_name = 'ticket/edit_notes.jade'
     form_class = TicketNotesForm
     object = None
+
+    def get_initial(self):
+        return {'notes': self.get_object().notes}
 
     def form_valid(self, form):
         ticket = self.get_object()
