@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
+from django.template.defaultfilters import truncatechars
 from django.template.loader import get_template
 from django.urls import reverse
 from django.urls import reverse_lazy
@@ -254,6 +255,13 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
         except KeyError:
             return HttpResponseBadRequest()
         ticket = self.get_object()
+        message = ticket.messages.first()
         return JsonResponse({
             'row': get_template('ticket/row.jade').render({'ticket': ticket}, request),
+            'notification': {
+                'title': _('New Ticket: %s') % ticket.title,
+                'body': '%s\n%s' % (_('#%(id)d, assigned to: %(users)s') % {
+                    'id': ticket.id, 'users': _(', ').join(ticket.assignees.values_list('user__username', flat=True)),
+                }, truncatechars(message.body, 200)),
+            }
         })
