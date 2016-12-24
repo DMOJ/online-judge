@@ -100,7 +100,7 @@ block body
                         each username in filter_status.user
                             option(value=username, selected)= username
                 div#assignee-box.filter-select2
-                    label(for='filter-user') {% trans "Filing assignee" %}
+                    label(for='filter-user') {% trans "Assignee" %}
                     select#filter-assignee(style='width: 100%', multiple, name='assignee')
                         each username in filter_status.assignee
                             option(value=username, selected)= username
