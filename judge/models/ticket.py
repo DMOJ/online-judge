@@ -17,6 +17,7 @@ class Ticket(models.Model):
                                      on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField(verbose_name=_('linked item ID'))
     linked_item = GenericForeignKey()
+    is_open = models.BooleanField(verbose_name=_('is ticket open?'), default=True)
 
 
 class TicketMessage(models.Model):
