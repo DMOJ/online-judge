@@ -126,7 +126,7 @@ class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, SingleObjectMixin,
 
 
 class TicketNotesForm(forms.Form):
-    notes = forms.CharField(widget=forms.Textarea())
+    notes = forms.CharField(widget=forms.Textarea(), required=False)
 
 
 class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, FormView):
