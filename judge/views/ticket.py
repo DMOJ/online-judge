@@ -53,8 +53,15 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
         ticket = Ticket(user=self.request.user.profile, title=form.cleaned_data['title'])
         ticket.linked_item = self.object
         ticket.save()
-        TicketMessage(ticket=ticket, user=ticket.user, body=form.cleaned_data['body']).save()
+        message = TicketMessage(ticket=ticket, user=ticket.user, body=form.cleaned_data['body'])
+        message.save()
         ticket.assignees.set(self.get_assignees())
+        if event.real:
+            event.post('tickets', {
+                'type': 'new-ticket', 'id': ticket.id,
+                'message': message.id, 'user': ticket.user_id,
+                'assignees': list(ticket.assignees.values_list('id', flat=True)),
+            })
         return HttpResponseRedirect(reverse('ticket', args=[ticket.id]))
 
 
@@ -103,6 +110,12 @@ class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectFormVi
                                 body=form.cleaned_data['body'],
                                 ticket=self.object)
         message.save()
+        if event.real:
+            event.post('tickets', {
+                'type': 'ticket-message', 'id': self.object.id,
+                'message': message.id, 'user': self.object.user_id,
+                'assignees': list(self.object.assignees.values_list('id', flat=True)),
+            })
         return HttpResponseRedirect('%s#message-%d' % (reverse('ticket', args=[self.object.id]), message.id))
 
     def get_title(self):
@@ -125,7 +138,12 @@ class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, SingleObjectMixin,
         if ticket.is_open != self.open:
             ticket.is_open = self.open
             ticket.save()
-        event.post('tickets')
+            if event.real:
+                event.post('tickets', {
+                    'type': 'ticket-status', 'id': ticket.id,
+                    'open': self.open, 'user': ticket.user_id,
+                    'assignees': list(ticket.assignees.values_list('id', flat=True)),
+                })
         return HttpResponse(status=204)
 
 
