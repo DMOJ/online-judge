@@ -32,11 +32,11 @@ class TicketForm(forms.Form):
 class SingleObjectFormView(SingleObjectMixin, FormView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return super(NewTicketView, self).post(request, *args, **kwargs)
+        return super(SingleObjectFormView, self).post(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return super(NewTicketView, self).get(request, *args, **kwargs)
+        return super(SingleObjectFormView, self).get(request, *args, **kwargs)
 
 
 class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
