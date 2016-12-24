@@ -186,6 +186,19 @@ block js_media
                     }
                 });
             });
+
+            $('.edit-notes').featherlight({
+                afterOpen: function () {
+                    var $form = $('#edit-notes');
+                    $form.find('.submit').click(function () {
+                        $.post($form.attr('action'), $form.serialize()).done(function (data) {
+                            $('#ticket-notes').find('.info-empty').toggle(!data).end().find('.info-real').html(data);
+                            $.featherlight.current().close();
+                        });
+                        return false;
+                    });
+                }
+            });
         });
 
 block content_title
