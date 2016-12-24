@@ -134,5 +134,11 @@ class TicketList(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(TicketList, self).get_context_data(**kwargs)
+
+        page = context['page_obj']
+        context['title'] = _('Tickets - Page %(number)d of %(total)d') % {
+            'number': page.number,
+            'total': page.paginator.num_pages,
+        }
         context.update(paginate_query_context(self.request))
         return context
