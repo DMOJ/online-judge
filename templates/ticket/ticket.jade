@@ -111,7 +111,7 @@ block content_title
 
 block body
     .container
-        .ticket-info
+        aside.ticket-sidebar: .ticket-info
             div #[b {% trans "Associated object:" %} ]
                 a(href=ticket.linked_item.get_absolute_url())= ticket.linked_item
             div #[b {% trans "Assignees:" %} ]
