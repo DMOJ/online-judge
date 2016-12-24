@@ -14,7 +14,7 @@ def gen_pp(apps, schema_editor):
     table = (lambda x: [pow(x, i) for i in xrange(100)])(getattr(settings, 'PP_STEP', 0.95))
     for row in Profile.objects.all():
         data = (Submission.objects.filter(user=row, points__isnull=False, problem__is_public=True)
-                .annotate(max_points=Max('points')).order_by('-points')
+                .annotate(max_points=Max('points')).order_by('-max_points')
                 .values_list('problem_id', 'max_points').distinct())
         size = min(len(data), len(table))
         row.performance_points = sum(map(mul, table[:size], map(itemgetter(1), data[:size])))
