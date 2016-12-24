@@ -118,3 +118,13 @@ class ContestUserSearchSelect2View(UserSearchSelect2View):
         contest = get_object_or_404(Contest, key=self.kwargs['contest'])
         return Profile.objects.filter(contest_history__contest=contest,
                                       user__username__icontains=self.term).distinct()
+
+
+class TicketUserSelect2View(UserSearchSelect2View):
+    def get_queryset(self):
+        return Profile.objects.filter(tickets__isnull=False)
+
+
+class AssigneeSelect2View(UserSearchSelect2View):
+    def get_queryset(self):
+        return Profile.objects.filter(assigned_tickets__isnull=False)

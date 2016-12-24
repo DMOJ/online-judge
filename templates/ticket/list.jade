@@ -69,9 +69,7 @@ block js_media
         script(type='text/javascript').
             $(function () {
                 $('#filter-user').select2({
-                    ajax: {
-                        url: '{% url "user_search_select2_ajax" %}'
-                    },
+                    ajax: { url: '{% url "ticket_user_select2_ajax" %}' },
                     escapeMarkup: function (markup) {
                         return markup;
                     },
@@ -96,6 +94,7 @@ block body
                 div#user-box.filter-select2
                     label(for='filter-user') {% trans "Filing user:" %}
                     select#filter-user(style='width: 100%', multiple)
+                button.submit(type='submit', style='margin-left: auto') {% trans "Go" %}
 
         main
             if page_obj.num_pages > 1
