@@ -151,6 +151,10 @@ class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, Fo
         return HttpResponseBadRequest()
 
 
+class TicketFilterForm(forms.Form):
+    own = forms.BooleanField(required=False)
+
+
 class TicketList(LoginRequiredMixin, ListView):
     model = Ticket
     template_name = 'ticket/list.jade'
@@ -162,6 +166,10 @@ class TicketList(LoginRequiredMixin, ListView):
     def profile(self):
         return self.request.user.profile
 
+    @cached_property
+    def can_edit_all(self):
+        return self.request.user.has_perm('judge.change_ticket')
+
     def GET_with_session(self, key):
         if not self.request.GET:
             return self.request.session.get(key, False)
@@ -172,7 +180,7 @@ class TicketList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = self._get_queryset()
-        if not self.request.user.has_perm('judge.change_ticket') or self.GET_with_session('own'):
+        if not self.can_edit_all or self.GET_with_session('own'):
             queryset = self._get_queryset().filter(Q(assignees__id=self.profile.id) | Q(user=self.profile)).distinct()
         return queryset
 
@@ -184,6 +192,10 @@ class TicketList(LoginRequiredMixin, ListView):
             'number': page.number,
             'total': page.paginator.num_pages,
         }
+        context['can_edit_all'] = self.can_edit_all
+        context['filter_form'] = TicketFilterForm(initial={
+            'own': self.GET_with_session('own'),
+        })
         context.update(paginate_query_context(self.request))
         return context
 
