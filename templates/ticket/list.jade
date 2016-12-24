@@ -12,6 +12,28 @@ block media
             color: darkred;
         }
 
+        @media (min-width: 500px) {
+            #container {
+                display: flex;
+                flex-direction: row-reverse;
+            }
+
+            #container > main {
+                flex: 1;
+            }
+
+            #container > aside {
+                flex: 1;
+                max-width: 200px;
+                margin-left: 1em;
+            }
+
+            #container > aside > div {
+                position: sticky;
+                top: 60px;
+            }
+        }
+
     if has_select2
         link(href='{{ SELECT2_CSS_URL }}', type='text/css', media='screen', rel='stylesheet')
         style.
@@ -65,7 +87,7 @@ block js_media
             });
 
 block body
-    #contaier
+    #container
         aside: div
             form#filter-form(name='form', action='', method='get')
                 div#own-box.filter-check
