@@ -282,7 +282,7 @@ window.register_notify = function (type, $checkbox) {
                         } else localStorage[key] = false;
                     });
             } else localStorage[key] = false;
-        }).prop();
+        }).prop('checked', localStorage[key]);
 
         $(window).on('storage', function (e) {
             e = e.originalEvent;
