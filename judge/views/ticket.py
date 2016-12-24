@@ -137,6 +137,7 @@ class TicketNotesForm(forms.Form):
 
 class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, FormView):
     template_name = 'ticket/edit_notes.jade'
+    form_class = TicketNotesForm
     object = None
 
     def form_valid(self, form):
