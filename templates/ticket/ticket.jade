@@ -125,10 +125,12 @@ block content_title
 block body
     .container
         aside.ticket-sidebar: .ticket-info
-            div #[b {% trans "Associated object:" %} ]
-                a(href=ticket.linked_item.get_absolute_url())= ticket.linked_item
-            div #[b {% trans "Assignees:" %} ]
-                each assignee in assignees
+            .info-box
+                .info-title {% trans "Associated object" %}
+                .info-data: a(href=ticket.linked_item.get_absolute_url())= ticket.linked_item
+            .info-box
+                .info-title {% trans "Assignees" %}
+                .info-data: each assignee in assignees
                     a(href='{% url "user_page" assignee.user.username %}', class=assignee.display_rank)
                         | #{assignee.user.username}
                     if not forloop.last
