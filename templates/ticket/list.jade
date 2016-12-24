@@ -94,8 +94,8 @@ block body
                 div#user-box.filter-select2
                     label(for='filter-user') {% trans "Filing user:" %}
                     select#filter-user(style='width: 100%', multiple, name='user')
-                        each id, username in filter_status['user']
-                            option(value=id, selected)= username
+                        each username in filter_status['user']
+                            option(value=username, selected)= username
                 button.submit(type='submit', style='margin-left: auto') {% trans "Go" %}
 
         main
