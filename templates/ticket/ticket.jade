@@ -16,6 +16,19 @@ block media
             margin-left: 0.3em;
         }
 
+        #content > h2:first-child .status {
+            display: inline;
+            margin-right: 0.3em;
+        }
+
+        #content > h2:first-child .fa-check-circle-o {
+            color: #00a900;
+        }
+
+        #content > h2:first-child .fa-exclamation-circle {
+            color: darkred;
+        }
+
         .container {
             width: 100%;
             max-width: 800px;
@@ -89,6 +102,11 @@ block js_media
     | #{form.media.js}
 
 block content_title
+    .status
+        if ticket.is_open
+            i.fa.fa-exclamation-circle
+        else
+            i.fa.fa-check-circle-o
     | #{ticket.title}
     small ##{ticket.id}
 
