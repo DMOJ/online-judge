@@ -159,6 +159,20 @@ block media
 
 block js_media
     | #{form.media.js}
+    script(type='text/javascript').
+        $(function () {
+            $('.close-ticket, .open-ticket').click(function () {
+                $.ajax({
+                    url: $(this).attr('data-ajax'), type: 'POST',
+                    success: function () {
+                        window.location.reload();
+                    },
+                    error: function (data) {
+                        alert('Could not change ticket: ' + data.responseText);
+                    }
+                });
+            });
+        });
 
 block content_title
     .status
