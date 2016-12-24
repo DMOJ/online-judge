@@ -139,9 +139,12 @@ class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, Fo
 
     def form_valid(self, form):
         ticket = self.get_object()
-        ticket.notes = form.cleaned_data['notes']
+        ticket.notes = notes = form.cleaned_data['notes']
         ticket.save()
-        return HttpResponse(linebreaks(form.cleaned_data['notes'], autoescape=True))
+        if notes:
+            return HttpResponse(linebreaks(notes, autoescape=True))
+        else:
+            return HttpResponse(status=204)
 
     def form_invalid(self, form):
         return HttpResponseBadRequest()
