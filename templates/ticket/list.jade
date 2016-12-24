@@ -70,56 +70,7 @@ block js_media
                         .attr('method', 'POST').appendTo($('body')).submit());
             });
 
-            window.ticket_notification_template = {
-                icon: '/logo.png'
-            };
-
-            function notify(title, data, timeout) {
-                if (!localStorage.ticket_notification) return;
-
-                var data = (typeof data !== 'undefined' ?
-                        $.extend({}, window.ticket_notification_template, data) :
-                        window.ticket_notification_template);
-                var object = new Notification(title, data);
-                if (typeof timeout === 'undefined')
-                    timeout = 5000;
-                if (timeout)
-                    setTimeout(function () {
-                        object.close();
-                    }, timeout);
-                return object;
-            }
-
-            if ('Notification' in window) {
-                if (!('ticket_notification' in localStorage) || Notification.permission !== 'granted')
-                    localStorage.ticket_notification = false;
-
-                var $notification = $('#notification').change(function () {
-                    var status = $(this).is(':checked');
-                    if (status) {
-                        if (Notification.permission === 'granted') {
-                            localStorage.ticket_notification = true;
-                            notify('Notification enabled!');
-                        } else
-                            Notification.requestPermission(function (permission) {
-                                if (permission === 'granted') {
-                                    localStorage.ticket_notification = true;
-                                    notify('Notification enabled!');
-                                } else localStorage.ticket_notification = false;
-                            });
-                    } else localStorage.ticket_notification = false;
-                });
-
-                $(window).on('storage', function (e) {
-                    e = e.originalEvent;
-                    if (e.key === 'ticket_notification')
-                        $notification.prop('checked', e.newValue);
-                });
-            } else {
-                $('#notification').hide();
-                localStorage.ticket_notification = false;
-            }
-
+            register_notify('ticket', $('#notification'));
             var $tbody = $('#ticket-list').find('tbody');
 
             function new_ticket(ticket) {
@@ -128,7 +79,7 @@ block js_media
                     data: {id: ticket.id},
                     success: function (data) {
                         $tbody.prepend($(data.row));
-                        notify(data.notification.title, {
+                        notify('ticket', data.notification.title, {
                             body: data.notification.body
                         });
                     },
