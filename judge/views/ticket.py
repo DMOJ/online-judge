@@ -144,7 +144,7 @@ class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, Fo
         if notes:
             return HttpResponse(linebreaks(notes, autoescape=True))
         else:
-            return HttpResponse(status=204)
+            return HttpResponse()
 
     def form_invalid(self, form):
         return HttpResponseBadRequest()
