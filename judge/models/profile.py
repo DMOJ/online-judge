@@ -101,15 +101,16 @@ class Profile(models.Model):
         orgs = self.organizations.all()
         return orgs[0] if orgs else None
 
-    def calculate_points(self, table=(lambda x: [pow(x,i) for i in xrange(100)])(getattr(settings, 'PP_STEP', 0.95))):
+    def calculate_points(self, table=(lambda x: [pow(x, i) for i in xrange(100)])(getattr(settings, 'PP_STEP', 0.95))):
         from judge.models import Submission
-        qdata = (Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
-                 .values('problem_id').distinct().annotate(points=Max('points')).order_by('-points')
-                 .values_list('points', flat=True))
-        points = sum(qdata)
-        problems = len(qdata)
-        entries = min(len(qdata), len(table))
-        pp = sum(map(mul, table[:entries], qdata[:entries]))
+        data = (Submission.objects.filter(user=self, points__isnull=False, problem__is_public=True)
+                .annotate(max_points=Max('points')).order_by('-points')
+                .values_list('problem_id', 'max_points').distinct())
+        data = map(itemgetter(1), data)
+        points = sum(data)
+        problems = len(data)
+        entries = min(len(data), len(table))
+        pp = sum(map(mul, table[:entries], data[:entries]))
         if self.points != points or problems != self.problem_count or self.performance_points != pp:
             self.points = points
             self.problem_count = problems
