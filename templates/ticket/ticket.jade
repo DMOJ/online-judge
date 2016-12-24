@@ -213,7 +213,7 @@ block body
             if perms.judge.change_ticket or request.user.profile in assignees
                 .info-box
                     .info-title {% trans "Assignee notes" %}
-                        a.edit-notes(href='#', data-featherlight=''): i.fa.fa-pencil
+                        a.edit-notes(href='#', data-featherlight='{% url "ticket_notes" ticket.id %}'): i.fa.fa-pencil
                     .info-data
                         if ticket.notes
                             #{ticket.notes|linebreaks}

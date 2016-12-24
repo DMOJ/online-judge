@@ -2,16 +2,16 @@ from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.http import HttpResponse
+from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.urls import reverse_lazy
 from django.utils.functional import cached_property
-from django.utils.html import escape, format_html
+from django.utils.html import escape, format_html, linebreaks
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy, ugettext as _
 from django.views import View
-from django.views.generic import FormView
-from django.views.generic import ListView
+from django.views.generic import FormView, ListView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 
 from judge.models import Ticket, TicketMessage, Problem
@@ -129,6 +129,23 @@ class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, SingleObjectMixin,
             ticket.is_open = self.open
             ticket.save()
         return HttpResponse(status=204)
+
+
+class TicketNotesForm(forms.Form):
+    notes = forms.CharField(widget=forms.Textarea())
+
+
+class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, FormView):
+    template_name = 'ticket/edit_notes.jade'
+
+    def form_valid(self, form):
+        ticket = self.get_object()
+        ticket.notes = form.cleaned_data['notes']
+        ticket.save()
+        return HttpResponse(linebreaks(form.cleaned_data['notes'], autoescape=True))
+
+    def form_invalid(self, form):
+        return HttpResponseBadRequest()
 
 
 class TicketList(LoginRequiredMixin, ListView):
