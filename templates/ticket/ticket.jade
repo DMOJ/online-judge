@@ -121,31 +121,32 @@ block body
                     if not forloop.last
                         | ,&#32;
 
-        main.messages: each message in messages
-            section.message(id='message-{{ message.id }}')
+        .ticket-message
+            main.messages: each message in messages
+                section.message(id='message-{{ message.id }}')
+                    .info
+                        a.user(href='{% url "user_page" message.user.user.username %}')
+                            img.gravatar(src='{% gravatar_url message.user.user.email 135 message.user.mute %}')
+                            .username(class=message.user.display_rank) #{message.user.user.username}
+                    .detail
+                        .header
+                            .relative-time
+                            .message-date #{message.time|date:"DATE_FORMAT"}
+                            .message-time #{message.time|time:"TIME_FORMAT"}
+                        .content #{message.body|markdown:"ticket"|reference|smart_math:MATH_ENGINE|proxy_images}
+            hr
+            section.message.new-message
                 .info
-                    a.user(href='{% url "user_page" message.user.user.username %}')
-                        img.gravatar(src='{% gravatar_url message.user.user.email 135 message.user.mute %}')
-                        .username(class=message.user.display_rank) #{message.user.user.username}
-                .detail
-                    .header
-                        .relative-time
-                        .message-date #{message.time|date:"DATE_FORMAT"}
-                        .message-time #{message.time|time:"TIME_FORMAT"}
-                    .content #{message.body|markdown:"ticket"|reference|smart_math:MATH_ENGINE|proxy_images}
-        hr
-        section.message.new-message
-            .info
-                a.user(href='{% url "user_page" %}')
-                    - with profile=request.user.profile
-                        img.gravatar(src='{% gravatar_url request.user.email 135 profile.mute %}')
-                        .username(class=profile.display_rank) #{request.user.username}
-                .message-date #{message.time | date:"DATE_FORMAT"}
-                .message-time #{message.time | time:"TIME_FORMAT"}
-            .detail: form(action='', method='post')
-                - csrf_token
-                .form-errors
-                    | {{ form.non_field_errors }}
-                    | {{ form.body.errors }}
-                .body-block #{form.body}
-                button.submit(type='submit') {% trans "Post" %}
+                    a.user(href='{% url "user_page" %}')
+                        - with profile=request.user.profile
+                            img.gravatar(src='{% gravatar_url request.user.email 135 profile.mute %}')
+                            .username(class=profile.display_rank) #{request.user.username}
+                    .message-date #{message.time | date:"DATE_FORMAT"}
+                    .message-time #{message.time | time:"TIME_FORMAT"}
+                .detail: form(action='', method='post')
+                    - csrf_token
+                    .form-errors
+                        | {{ form.non_field_errors }}
+                        | {{ form.body.errors }}
+                    .body-block #{form.body}
+                    button.submit(type='submit') {% trans "Post" %}
