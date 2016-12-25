@@ -64,7 +64,7 @@ class PollServer(BaseServer):
                         self._poll.register(fd, self.READ)
                         self._fdmap[fd] = client
                     elif event & self.POLL_CLOSE:
-                        logger.debug('Client closed: %s', self._fdmap[fd].name)
+                        logger.debug('Client closed: %s', self._fdmap[fd].client_address)
                         self._clean_up_client(self._fdmap[fd])
                     else:
                         logger.debug('Taking close lock: event loop')
