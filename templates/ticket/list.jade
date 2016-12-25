@@ -70,7 +70,12 @@ block js_media
                         .attr('method', 'POST').appendTo($('body')).submit());
             });
 
-            register_notify('ticket', $('#notification'));
+            register_notify('ticket', {
+                $checkbox: $('#notification'),
+                change: function (enabled) {
+                    console.log(enabled);
+                }
+            });
             var $tbody = $('#ticket-list').find('tbody');
 
             function new_ticket(ticket) {

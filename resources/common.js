@@ -262,35 +262,54 @@ window.notify = function (type, title, data, timeout) {
     return object;
 };
 
-window.register_notify = function (type, $checkbox) {
+window.register_notify = function (type, options) {
+    if (typeof options === 'undefined')
+        options = {};
+
+    function status_change() {
+        if ('change' in options)
+            options.change(localStorage[key] == 'true');
+    }
+
     var key = type + '_notification';
     if ('Notification' in window) {
         if (!(key in localStorage) || Notification.permission !== 'granted')
             localStorage[key] = 'false';
 
-        $checkbox.change(function () {
-            var status = $checkbox.is(':checked');
-            if (status) {
-                if (Notification.permission === 'granted') {
-                    localStorage[key] = 'true';
-                    notify(type, 'Notification enabled!');
-                } else
-                    Notification.requestPermission(function (permission) {
-                        if (permission === 'granted') {
-                            localStorage[key] = 'true';
-                            notify(type, 'Notification enabled!');
-                        } else localStorage[key] = 'false';
-                    });
-            } else localStorage[key] = 'false';
-        }).prop('checked', localStorage[key] == 'true');
+        if ('$checkbox' in options) {
+            options.$checkbox.change(function () {
+                var status = $(this).is(':checked');
+                if (status) {
+                    if (Notification.permission === 'granted') {
+                        localStorage[key] = 'true';
+                        notify(type, 'Notification enabled!');
+                        status_change();
+                    } else
+                        Notification.requestPermission(function (permission) {
+                            if (permission === 'granted') {
+                                localStorage[key] = 'true';
+                                notify(type, 'Notification enabled!');
+                            } else localStorage[key] = 'false';
+                            status_change();
+                        });
+                } else {
+                    localStorage[key] = 'false';
+                    status_change();
+                }
+            }).prop('checked', localStorage[key] == 'true');
+        }
 
         $(window).on('storage', function (e) {
             e = e.originalEvent;
-            if (e.key === key)
-                $checkbox.prop('checked', e.newValue == 'true');
+            if (e.key === key) {
+                if ('$checkbox' in options)
+                    options.$checkbox.prop('checked', e.newValue == 'true');
+                status_change();
+            }
         });
     } else {
-        $checkbox.hide();
+        if ('$checkbox' in options) options.$checkbox.hide();
         localStorage[key] = 'false';
     }
+    status_change();
 };
