@@ -270,6 +270,11 @@ block js_media
                 );
             }
         });
+    if last_msg
+        script(type='text/javascript').
+            $(function () {
+                load_dynamic_update(#{last_msg});
+            });
 
 block content_title
     .status
