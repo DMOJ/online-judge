@@ -287,7 +287,7 @@ window.register_notify = function (type, $checkbox) {
         $(window).on('storage', function (e) {
             e = e.originalEvent;
             if (e.key === key)
-                $checkbox.prop('checked', e.newValue);
+                $checkbox.prop('checked', e.newValue == 'true');
         });
     } else {
         $checkbox.hide();
