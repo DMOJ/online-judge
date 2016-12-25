@@ -176,11 +176,24 @@ block js_media
     script(type='text/javascript', src='{% static "event.js" %}')
     script(type='text/javascript').
         $(function () {
+            var $h2 = $('#content').find('> h2:first-child');
+            var $status = $h2.find('.status i'), $title = $h2.find('.title');
+
+            function update_ticket_state(open) {
+                if (open)
+                    $status.removeClass('fa-check-circle-o').addClass('fa-exclamation-circle');
+                else
+                    $status.removeClass('fa-exclamation-circle').addClass('fa-check-circle-o');
+                $('.close-ticket').toggle(open);
+                $('.open-ticket').toggle(!open);
+            }
+
             $('.close-ticket, .open-ticket').click(function () {
+                var open = $(this).attr('data-open') == '1';
                 $.ajax({
                     url: $(this).attr('data-ajax'), type: 'POST',
                     success: function () {
-                        window.location.reload();
+                        update_ticket_state(open);
                     },
                     error: function (data) {
                         alert('Could not change ticket: ' + data.responseText);
@@ -245,18 +258,11 @@ block js_media
                 decrease_page_ref();
             });
 
-            var $h2 = $('#content').find('> h2:first-child');
-            var $status = $h2.find('.status i'), $title = $h2.find('.title');
             function ticket_status(ticket) {
-                if (!is_highest_ref()) return;
-
-                if (ticket.open) {
-                    $status.removeClass('fa-check-circle-o').addClass('fa-exclamation-circle');
-                    notify('ticket', '{% trans "Reopened: " %}' + $title.text());
-                } else {
-                    $status.removeClass('fa-exclamation-circle').addClass('fa-check-circle-o');
-                    notify('ticket', '{% trans "Closed: " %}' + $title.text());
-                }
+                update_ticket_state(ticket.open);
+                if (is_highest_ref())
+                    notify('ticket', (ticket.open ? '{% trans "Reopened: " %}' :
+                                      '{% trans "Closed: " %}') + $title.text());
             }
 
             window.load_dynamic_update = function (last_msg) {
@@ -303,10 +309,10 @@ block body
                                 | ,&#32;
                     else
                         .info-empty {% trans "No one is assigned." %}
-            if ticket.is_open
-                button.close-ticket(data-ajax='{% url "ticket_close" ticket.id %}') {% trans "Close ticket" %}
-            else
-                button.open-ticket(data-ajax='{% url "ticket_open" ticket.id %}') {% trans "Reopen ticket" %}
+            button.close-ticket(data-ajax='{% url "ticket_close" ticket.id %}', data-open='0',
+                                style=(None if ticket.is_open else 'display: none')) {% trans "Close ticket" %}
+            button.open-ticket(data-ajax='{% url "ticket_open" ticket.id %}', data-open='1',
+                               style=('display: none' if ticket.is_open else None)) {% trans "Reopen ticket" %}
             if perms.judge.change_ticket or request.user.profile in assignees
                 .info-box
                     .info-title {% trans "Assignee notes" %}
