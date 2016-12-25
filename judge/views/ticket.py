@@ -150,6 +150,9 @@ class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, SingleObjectMixin,
                     'assignees': list(ticket.assignees.values_list('id', flat=True)),
                     'title': ticket.title
                 })
+                event.post('ticket-%d' % ticket.id, {
+                    'type': 'ticket-status', 'open': self.open
+                })
         return HttpResponse(status=204)
 
 
