@@ -219,6 +219,12 @@ block js_media
                 page_ref = null;
             }
 
+            function is_highest_ref() {
+                if (page_ref_key in localStorage)
+                    return +localStorage[page_ref_key] == page_ref;
+                return true;
+            }
+
             $(window).on('storage', function (e) {
                 e = e.originalEvent;
                 if (e.key == page_close_key && e.newValue !== null)
@@ -236,6 +242,32 @@ block js_media
             $(window).on('beforeunload', function() {
                 decrease_page_ref();
             });
+
+            var $h2 = $('#content').find('> h2:first-child');
+            var $status = $h2.find('.status i'), $title = $h2.find('.title');
+            function ticket_status(ticket) {
+                if (!is_highest_ref()) return;
+
+                if (ticket.open) {
+                    $status.removeClass('fa-check-circle-o').addClass('fa-exclamation-circle');
+                    notify('ticket', '{% trans "Reopened: " %}' + $title.text());
+                } else {
+                    $status.removeClass('fa-exclamation-circle').addClass('fa-check-circle-o');
+                    notify('ticket', '{% trans "Closed: " %}' + $title.text());
+                }
+            }
+
+            window.load_dynamic_update = function (last_msg) {
+                return new EventReceiver(
+                        "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                        ['ticket-{{ ticket.id }}'], last_msg, function (message) {
+                            console.log(message);
+                            switch (message.type) {
+                                case 'ticket-status': ticket_status(message); break;
+                            }
+                        }
+                );
+            }
         });
 
 block content_title
@@ -244,7 +276,7 @@ block content_title
             i.fa.fa-exclamation-circle
         else
             i.fa.fa-check-circle-o
-    | #{ticket.title}
+    .title #{ticket.title}
     small ##{ticket.id}
 
 block body

@@ -79,6 +79,12 @@ block js_media
                                 delete localStorage[key];
                 }
             });
+
+            function main_list_notify(id) {
+                key = 'ticket:open:' + id;
+                return !(key in localStorage) || localStorage[key] == '0';
+            }
+
             var $tbody = $('#ticket-list').find('tbody');
 
             function new_ticket(ticket) {
@@ -99,6 +105,8 @@ block js_media
             }
 
             function ticket_status(ticket) {
+                if (!main_list_notify(ticket.id)) return;
+
                 var $row = $('#ticket-' + ticket.id);
                 if ($row.length) {
                     var $status = $row.find('td').first().find('i');
