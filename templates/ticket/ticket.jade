@@ -200,9 +200,32 @@ block js_media
                 }
             });
 
-            localStorage['ticket:open:{{ ticket.id }}'] = true;
+            var page_ref_key = 'ticket:open:{{ ticket.id }}';
+
+            function increase_page_ref() {
+                if (page_ref_key in localStorage)
+                    return localStorage[page_ref_key] = (+localStorage[page_ref_key] + 1).toString();
+                else
+                    return localStorage[page_ref_key] = '1';
+            }
+
+            function decrease_page_ref() {
+                if (page_ref_key in localStorage)
+                    return localStorage[page_ref_key] = (+localStorage[page_ref_key] - 1).toString();
+                return 0;
+            }
+
+            var page_ref;
+
+            register_notify('ticket', {
+                change: function (enabled) {
+                    if (enabled)
+                        page_ref = increase_page_ref();
+                }
+            });
+
             $(window).on('beforeunload', function() {
-                delete localStorage['ticket:open:{{ ticket.id }}'];
+                decrease_page_ref();
             });
         });
 

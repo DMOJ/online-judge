@@ -73,7 +73,10 @@ block js_media
             register_notify('ticket', {
                 $checkbox: $('#notification'),
                 change: function (enabled) {
-                    console.log(enabled);
+                    if (!enabled)
+                        for (key in localStorage)
+                            if (key.startsWith('ticket:open:'))
+                                delete localStorage[key];
                 }
             });
             var $tbody = $('#ticket-list').find('tbody');
