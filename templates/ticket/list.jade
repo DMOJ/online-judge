@@ -112,7 +112,7 @@ block js_media
                         ['tickets'], last_msg, function (message) {
                             console.log(message);
                             if (filter_own_id != null && message.user != filter_own_id &&
-                                    !~message.assignee.indexOf(filter_own_id))
+                                    !~message.assignees.indexOf(filter_own_id))
                                 return;
                             if (filter_user_ids.length && !~filter_user_ids.indexOf(message.user))
                                 return;
