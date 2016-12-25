@@ -200,27 +200,36 @@ block js_media
                 }
             });
 
-            var page_ref_key = 'ticket:open:{{ ticket.id }}';
+            var page_ref_key = 'ticket:open:{{ ticket.id }}', page_close_key = page_ref_key + ':close';
+            var page_ref;
 
             function increase_page_ref() {
                 if (page_ref_key in localStorage)
-                    return localStorage[page_ref_key] = (+localStorage[page_ref_key] + 1).toString();
+                    localStorage[page_ref_key] = page_ref = +localStorage[page_ref_key] + 1;
                 else
-                    return localStorage[page_ref_key] = '1';
+                    localStorage[page_ref_key] = page_ref = 1;
             }
 
             function decrease_page_ref() {
-                if (page_ref_key in localStorage)
-                    return localStorage[page_ref_key] = (+localStorage[page_ref_key] - 1).toString();
-                return 0;
+                if (page_ref_key in localStorage) {
+                    localStorage[page_close_key] = page_ref;
+                    delete localStorage[page_close_key];
+                    localStorage[page_ref_key] = +localStorage[page_ref_key] - 1;
+                }
+                page_ref = null;
             }
 
-            var page_ref;
+            $(window).on('storage', function (e) {
+                e = e.originalEvent;
+                if (e.key == page_close_key && e.newValue !== null)
+                    if (page_ref != null && page_ref > +e.newValue)
+                        --page_ref;
+            });
 
             register_notify('ticket', {
                 change: function (enabled) {
                     if (enabled)
-                        page_ref = increase_page_ref();
+                        increase_page_ref();
                 }
             });
 
