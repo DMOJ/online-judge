@@ -199,6 +199,11 @@ block js_media
                     });
                 }
             });
+
+            localStorage['ticket:open:{{ ticket.id }}'] = true;
+            $(window).on('beforeunload', function() {
+                delete localStorage['ticket:open:{{ ticket.id }}'];
+            });
         });
 
 block content_title
