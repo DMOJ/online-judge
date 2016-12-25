@@ -173,6 +173,7 @@ block media
 block js_media
     | #{form.media.js}
     script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/javascript')
+    script(type='text/javascript', src='{% static "event.js" %}')
     script(type='text/javascript').
         $(function () {
             $('.close-ticket, .open-ticket').click(function () {
