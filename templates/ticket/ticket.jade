@@ -17,7 +17,7 @@ block media
             margin-left: 0.3em;
         }
 
-        #content > h2:first-child .status {
+        #content > h2:first-child .status, #content > h2:first-child .title {
             display: inline;
         }
 
@@ -220,6 +220,7 @@ block js_media
             }
 
             function is_highest_ref() {
+                console.log(localStorage[page_ref_key], page_ref);
                 if (page_ref_key in localStorage)
                     return +localStorage[page_ref_key] == page_ref;
                 return true;
