@@ -82,7 +82,7 @@ class SolutionAdmin(VersionAdmin):
     form = SolutionForm
 
     def show_public(self, obj):
-        format = '<a href="{0}" style="white-space:nowrap;">%s</a>' % ugettext('View on site')
+        format = u'<a href="{0}" style="white-space:nowrap;">%s</a>' % ugettext('View on site')
         return format_html(format, obj.get_absolute_url())
     show_public.short_description = ''
 
