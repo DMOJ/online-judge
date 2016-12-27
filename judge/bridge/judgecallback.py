@@ -241,7 +241,7 @@ class DjangoJudgeHandler(JudgeHandler):
         super(DjangoJudgeHandler, self).on_internal_error(packet)
 
         id = packet['submission-id']
-        if Submission.objects.filter(id=id).update(status='CE', result='CE', error=packet['message']):
+        if Submission.objects.filter(id=id).update(status='IE', result='IE', error=packet['message']):
             event.post('sub_%d' % id, {'type': 'internal-error'})
             self._post_update_submission(id, 'internal-error', done=True)
         else:
