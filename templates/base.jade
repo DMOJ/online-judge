@@ -131,21 +131,19 @@ html(lang=LANGUAGE_CODE)
                             if not node.is_leaf_node
                                 ul {{ children }}
                     - endrecursetree
-                span#user-links(style='height: 100%')
+                span#user-links
                     if request.user.is_authenticated
-                        ul(style='display: block; margin: 0')
-                            li(style='display: block; height: 100%')
-                                a(href='{% url "user_page" %}', style='display: block; padding: 0px; height: 100%')
-                                    span
-                                        img(src='{% gravatar_url request.user.email 32 %}', height='24', width='24')
-                                        span
-                                            - blocktrans with username=request.user.username
-                                                | Hello, #[b {{ username }}].
-                                ul(style='width: 150px')
-                                    if request.user.is_staff or request.user.is_superuser
-                                        li: a(href='{% url "admin:index" %}') {% trans "Admin" %}
-                                    li: a(href='{% url "user_edit_profile" %}') {% trans "Edit profile" %}
-                                    li: a(href='{% url "auth_logout" %}?next=') {% trans "Log out" %}
+                        ul: li
+                            a: span
+                                img(src='{% gravatar_url request.user.email 32 %}', height='24', width='24')
+                                span
+                                    - blocktrans with username=request.user.username
+                                        | Hello, #[b {{ username }}].
+                            ul(style='width: 150px')
+                                if request.user.is_staff or request.user.is_superuser
+                                    li: a(href='{% url "admin:index" %}') {% trans "Admin" %}
+                                li: a(href='{% url "user_edit_profile" %}') {% trans "Edit profile" %}
+                                li: a(href='{% url "auth_logout" %}?next=') {% trans "Log out" %}
                     else
                         span.anon
                             a(href='{% url "auth_login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
