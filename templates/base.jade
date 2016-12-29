@@ -134,12 +134,11 @@ html(lang=LANGUAGE_CODE)
                 span#user-links
                     if request.user.is_authenticated
                         ul: li
-                            a(href='{% url "user_page" %}')
+                            a(href='{% url "user_page" %}'): span
+                                img(src='{% gravatar_url request.user.email 32 %}', height='24', width='24')
                                 span
-                                    img(src='{% gravatar_url request.user.email 32 %}', height='24', width='24')
-                                    span
-                                        - blocktrans with username=request.user.username
-                                            | Hello, #[b {{ username }}].
+                                    - blocktrans with username=request.user.username
+                                        | Hello, #[b {{ username }}].
                             ul(style='width: 150px')
                                 if request.user.is_staff or request.user.is_superuser
                                     li: a(href='{% url "admin:index" %}') {% trans "Admin" %}
