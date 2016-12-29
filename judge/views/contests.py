@@ -444,7 +444,7 @@ def contest_ranking_ajax(request, contest, participation=None):
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
 
     users, problems = get_contest_ranking_list(request, contest, participation)
-    return render(request, 'contest/ranking_table.jade', {
+    return render(request, 'contest/ranking-table.jade', {
         'users': users,
         'problems': problems,
         'contest': contest,
@@ -538,7 +538,7 @@ class ContestTagDetailAjax(DetailView):
     model = ContestTag
     slug_field = slug_url_kwarg = 'name'
     context_object_name = 'tag'
-    template_name = 'contest/tag_ajax.jade'
+    template_name = 'contest/tag-ajax.jade'
 
 
 class ContestTagDetail(TitleMixin, ContestTagDetailAjax):

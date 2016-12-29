@@ -49,7 +49,7 @@ class UserMixin(object):
 
 
 class UserPage(TitleMixin, UserMixin, DetailView):
-    template_name = 'user/user_base.jade'
+    template_name = 'user/user-base.jade'
 
     def get_object(self, queryset=None):
         if self.kwargs.get(self.slug_url_kwarg, None) is None:
@@ -120,7 +120,7 @@ EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
 
 
 class UserAboutPage(UserPage):
-    template_name = 'user/user_about.jade'
+    template_name = 'user/user-about.jade'
 
     def get_context_data(self, **kwargs):
         context = super(UserAboutPage, self).get_context_data(**kwargs)
@@ -154,7 +154,7 @@ class UserAboutPage(UserPage):
 
 
 class UserProblemsPage(UserPage):
-    template_name = 'user/user_problems.jade'
+    template_name = 'user/user-problems.jade'
 
 
 @login_required
@@ -192,7 +192,7 @@ def edit_profile(request):
                 form.fields['newsletter'].initial = subscription.subscribed
 
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
-    return render(request, 'user/edit_profile.jade', {
+    return render(request, 'user/edit-profile.jade', {
         'form': form, 'title': _('Edit profile'),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD'),

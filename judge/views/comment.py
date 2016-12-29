@@ -66,7 +66,7 @@ class CommentMixin(object):
 
 
 class CommentHistoryAjax(CommentMixin, DetailView):
-    template_name = 'comments/history_ajax.jade'
+    template_name = 'comments/history-ajax.jade'
 
     def get_context_data(self, **kwargs):
         context = super(CommentHistoryAjax, self).get_context_data(**kwargs)
@@ -96,7 +96,7 @@ class CommentEditForm(ModelForm):
 
 
 class CommentEditAjax(LoginRequiredMixin, CommentMixin, UpdateView):
-    template_name = 'comments/edit_ajax.jade'
+    template_name = 'comments/edit-ajax.jade'
     form_class = CommentEditForm
 
     def form_valid(self, form):

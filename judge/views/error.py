@@ -10,7 +10,7 @@ def error(request, context, status):
 
 def error404(request):
     # TODO: "panic: go back"
-    return render(request, 'generic_message.jade', {
+    return render(request, 'generic-message.jade', {
         'title': _('404 error'),
         'message': _('Could not find page "%s"') % request.path
     }, status=404)

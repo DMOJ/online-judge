@@ -96,7 +96,7 @@ class SubmissionStatus(SubmissionDetailBase):
 
 
 class SubmissionTestCaseQuery(SubmissionStatus):
-    template_name = 'submission/status_testcases.jade'
+    template_name = 'submission/status-testcases.jade'
 
     def get(self, request, *args, **kwargs):
         if 'id' not in request.GET or not request.GET['id'].isdigit():
@@ -181,7 +181,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         if check is not None:
             return check
         if 'results' in request.GET:
-            return render(request, 'problem/statistics_table.jade', {'results': self.get_result_table()})
+            return render(request, 'problem/statistics-table.jade', {'results': self.get_result_table()})
         return super(SubmissionsListBase, self).get(request, *args, **kwargs)
 
 
