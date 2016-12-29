@@ -1,4 +1,4 @@
-extends user/user_base
+extends user/user-base
 - load staticfiles
 - load gravatar
 - load list_processor
@@ -102,7 +102,7 @@ block title_ruler
 
 block title_row
     - var user_tab = 'about'
-    include user/user_tabs
+    include user/user-tabs
 
 block user_content
     - with orgs=user.organizations.all
@@ -143,7 +143,7 @@ block user_content
 
 block bodyend
     if REQUIRE_JAX
-         include mathjax_load
+         include mathjax-load
     if ratings
         script(type='text/javascript', src='{% static "libs/chart.js/Chart.Core.js" %}')
         script(type='text/javascript', src='{% static "libs/chart.js/Chart.Scatter.js" %}')

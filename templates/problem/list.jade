@@ -133,19 +133,19 @@ block title_ruler
 block title_row
     - var tab = 'list'
     - var title = 'Problems'
-    include problem/problem_list_tabs
+    include problem/problem-list-tabs
 
 block body
     #common-content
         block before_table
         if not IN_CONTEST
             #content-right.problems: .info-float
-                include problem/search_form
+                include problem/search-form
 
         #content-left.problems
             if page_obj.num_pages > 1
                 div(style='margin-bottom: 7px; margin-top: 3px;')
-                    include list_pages
+                    include list-pages
 
             table#problem-table.table.striped
                 thead: tr
@@ -209,5 +209,5 @@ block body
                             a(href='{% url "ranked_submissions" problem.code %}')= problem.user_count
             if page_obj.num_pages > 1
                 div(style='margin-top:10px;')
-                    include list_pages
+                    include list-pages
     br

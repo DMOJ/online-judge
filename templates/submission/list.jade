@@ -202,11 +202,11 @@ block body
                         a#go.button(onclick='form.submit()') {% trans "Go" %}
                 else
                     #statistics-table
-                        include problem/statistics_table
+                        include problem/statistics-table
         #content-left.submission
             if page_obj.num_pages > 1
                 div(style='margin-bottom:6px;margin-top:3px')
-                    include list_pages
+                    include list-pages
 
             table#submissions-table.table
                 colgroup
@@ -230,7 +230,7 @@ block body
 
             if page_obj.num_pages > 1
                 div(style='margin-top:10px;')
-                    include list_pages
+                    include list-pages
 
 block bodyend
 // Don't load MathJax from common-content!

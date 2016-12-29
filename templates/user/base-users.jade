@@ -148,7 +148,7 @@ block body
         #content-left.users
             if page_obj.num_pages > 1
                 div(style='margin-bottom: 7px; margin-top: 3px;')
-                    include list_pages
+                    include list-pages
                     if has_select2
                         form#search-form(name='form', action='{% url "user_ranking_redirect" %}', method='get')
                             input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
@@ -158,4 +158,4 @@ block body
 
             if page_obj.num_pages > 1
                 div(style='margin-top:10px;')
-                    include list_pages
+                    include list-pages

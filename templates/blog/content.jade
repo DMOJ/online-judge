@@ -10,10 +10,10 @@ extends base
 - load reference
 
 block js_media
-    include comments/js_media
+    include comments/media-js
 
 block media
-    include comments/media
+    include comments/media-css
 
 block header
     if perms.judge.change_blogpost
@@ -46,5 +46,5 @@ block body
 block bodyend
     | #{block.super}
     if REQUIRE_JAX
-        include mathjax_load
+        include mathjax-load
     include comments/math

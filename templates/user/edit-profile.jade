@@ -1,4 +1,4 @@
-extends user/user_base
+extends user/user-base
 
 - load i18n
 
@@ -56,7 +56,7 @@ block user_media
         }
 
 block js_media
-    include timezone/js_media
+    include timezone/js-media
     | #{form.media.js}
     script(type='text/javascript').
         $(function() {
@@ -70,7 +70,7 @@ block title_ruler
 block title_row
     - var user_tab = 'edit'
     - var user = request.user.profile
-    include user/user_tabs
+    include user/user-tabs
 
 block body
     #center-float: form.form-area#edit-form(action='', method='post')

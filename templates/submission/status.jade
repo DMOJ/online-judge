@@ -1,4 +1,4 @@
-extends submission/info_base
+extends submission/info-base
 - load staticfiles
 - load i18n
 
@@ -167,7 +167,7 @@ block body
     br
 
     #test-cases
-        include submission/status_testcases
+        include submission/status-testcases
 
     if not submission.is_graded
         if request.user == submission.user.user or perms.judge.abort_any_submission
