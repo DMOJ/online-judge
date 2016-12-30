@@ -23,13 +23,13 @@ ul.comments.top-level-comments.new-comments
                             img.gravatar(src='{% gravatar_url node.author.user.email 135 node.author.mute %}')
                     .detail
                         .header
+                            span.comment-title(style=('display: none' if node.title.startswith('Re:') else '')) #{node.title}&nbsp;
                             span.username(class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}&nbsp;
                             .relative-time
                             span.comment-time(data-unix='{{ node.time|utc|date:"c" }}')
                                 - blocktrans with time=node.time|date:_("N j, Y, g:i a") asvar str_time
                                     | on {{ time }}
                                 span.relative= str_time
-                            span.comment-title(style=('display: none' if node.title.startswith('Re:') else '')) &nbsp;#{node.title}
                             span.comment-spacer
                             span.comment-operation
                                 if node.revisions > 2
