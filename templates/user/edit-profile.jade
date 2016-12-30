@@ -100,7 +100,7 @@ block body
                         tr: td(colspan=2) #{form.newsletter}
                             label.inline-header.grayed(for='id_newsletter', style='float: unset;') {% "Notify me about upcoming contests" %}
                     tr: td(colspan=2) #{form.test_site}
-                        label.inline-header.grayed(for='id_test_site', style='float: unset')= form.test_site.label
+                        label.inline-header.grayed(for='id_test_site', style='float: unset') #{form.test_site.label}
                     tr: td(colspan=2)
                         a.inline-header(href='http://www.gravatar.com/', title='{% trans "Change your avatar" %}', target='_blank')
                             - trans "Change your avatar"
