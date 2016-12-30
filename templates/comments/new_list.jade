@@ -21,9 +21,9 @@ ul.comments.top-level-comments.new-comments
                     .info
                         a.user(href='{% url "user_page" node.author.user.username %}')
                             img.gravatar(src='{% gravatar_url node.author.user.email 135 node.author.mute %}')
-                            .username(class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}
                     .detail
                         .header
+                            span.username(class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}
                             span.comment-title(style=('display: none' if node.title.startswith('Re:') else '')) #{node.title}&nbsp;
                             .relative-time
                             span.comment-time(data-unix='{{ node.time|utc|date:"c" }}')
