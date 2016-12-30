@@ -74,7 +74,7 @@ block js_media
                 function load_dynamic_update(last_msg) {
                     var _collect = function (e) {
                         return e.value;
-                    }
+                    };
                     var language_filter = $.map($('select#language option[selected]'), _collect)
                     var status_filter = $.map($('select#status option[selected]'), _collect);
 
@@ -98,7 +98,7 @@ block js_media
                                 return;
                             first = id;
                             row = $('<tr/>', {id: id}).hide().prependTo(table);
-                            if (table.find('tr').length >= #{paginator.per_page})
+                            if (table.find('tr').length >= {{ paginator.per_page }})
                                 table.find('tr:last-child').hide('slow', function () {
                                     $(this).remove();
                                 });
@@ -130,7 +130,7 @@ block js_media
 
                     var $body = $(document.body);
 
-                    return new EventReceiver(
+                    var receiver = new EventReceiver(
                             "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                             ['submissions'], last_msg, function (message) {
                                 if (current_contest && message.contest != current_contest)
@@ -156,6 +156,10 @@ block js_media
                                 }
                             }
                     );
+                    receiver.onwsclose = function () {
+                        console.log('You probably should refresh?');
+                    };
+                    return receiver;
                 }
     if dynamic_update and last_msg
         script(type='text/javascript').

@@ -33,6 +33,7 @@ function EventReceiver(websocket, poller, channels, last_msg, onmessage) {
         long_poll();
     }
 
+    this.onwsclose = null;
     if (window.WebSocket) {
         this.websocket = new WebSocket(websocket);
         var timeout = setTimeout(function () {
@@ -56,6 +57,11 @@ function EventReceiver(websocket, poller, channels, last_msg, onmessage) {
             receiver.onmessage(data.message);
             receiver.last_msg = data.id;
         };
+        this.websocket.onclose = function (event) {
+            console.log('Websocket closed:', event);
+            if (event.code != 1000 && receiver.onwsclose !== null)
+                receiver.onwsclose(event);
+        }
     } else {
         this.websocket = null;
         init_poll();
