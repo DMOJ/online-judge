@@ -55,7 +55,7 @@ block body
                     |  ##{pp_rank}
                     br
                     b {% trans "Total PP:" %}
-                    |  #{user.performance_points|floatformat}
+                    |  #{user.performance_points|floatformat:"-2"}
                     br
                 a(href='{% url "all_user_submissions" user.user.username %}') {% trans "View submissions" %}
                 if ratings
