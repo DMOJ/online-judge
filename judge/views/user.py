@@ -4,7 +4,9 @@ from datetime import datetime
 import django
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Permission
 from django.contrib.auth.views import redirect_to_login
+from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count, Min
@@ -180,6 +182,12 @@ def edit_profile(request):
                     if subscription.subscribed != form.cleaned_data['newsletter']:
                         subscription.update(('unsubscribe', 'subscribe')[form.cleaned_data['newsletter']])
 
+            perm = Permission.objects.get(codename='test_site', content_type=ContentType.objects.get_for_model(Profile))
+            if form.cleaned_data['test_site']:
+                request.user.user_permissions.add(perm)
+            else:
+                request.user.user_permissions.remove(perm)
+
             return HttpResponseRedirect(request.path)
     else:
         form = ProfileForm(instance=profile, user=request.user)
@@ -190,6 +198,7 @@ def edit_profile(request):
                 form.fields['newsletter'].initial = False
             else:
                 form.fields['newsletter'].initial = subscription.subscribed
+        form.fields['test_site'].initial = request.user.has_perm('judge.test_site')
 
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
     return render(request, 'user/edit-profile.jade', {
