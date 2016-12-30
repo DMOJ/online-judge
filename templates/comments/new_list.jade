@@ -8,6 +8,7 @@
 - load tz
 - load smart_math
 - load reference
+- load ranking
 
 ul.comments.top-level-comments.new-comments
     if has_comments
@@ -20,7 +21,7 @@ ul.comments.top-level-comments.new-comments
                     .info
                         a.user(href='{% url "user_page" node.author.user.username %}')
                             img.gravatar(src='{% gravatar_url node.author.user.email 135 node.author.mute %}')
-                            .username(class=node.author.display_rank) #{node.author.user.username}
+                            .username(class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}
                     .detail
                         .header
                             .relative-time
