@@ -1,0 +1,37 @@
+- load staticfiles
+- load markdown_trois_tags
+- load mptt_tags
+- load gravatar
+- load camo_proxy
+- load lazy_load
+- load i18n
+- load tz
+- load smart_math
+- load reference
+
+ul.comments.top-level-comments.new-comments
+    if has_comments
+        - var logged_in = request.user.is_authenticated
+        if logged_in
+            - var profile = request.user.profile
+        - recursetree comment_list
+            if not node.hidden
+                section.comment(id='comment-{{ node.id }}')
+                    .info
+                        a.user(href='{% url "user_page" node.author.user.username %}')
+                            img.gravatar(src='{% gravatar_url node.author.user.email 135 node.author.mute %}')
+                            .username(class=node.author.display_rank) #{node.author.user.username}
+                    .detail
+                        .header
+                            .relative-time
+                            .message-date #{node.time | date:"DATE_FORMAT"}
+                            .message-time #{node.time | time:"TIME_FORMAT"}
+                        .content #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}
+
+                if not node.is_leaf_node
+                    ul.comments
+                        | {{ children }}
+
+        - endrecursetree
+    else
+        p {% trans "There are no comments at the moment." %}

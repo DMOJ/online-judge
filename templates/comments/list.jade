@@ -95,6 +95,8 @@ ul.comments.top-level-comments
     else
         p {% trans "There are no comments at the moment." %}
 
+include comments/new_list
+
 if request.user.is_authenticated and comment_form
     .form-area.comment-submit
         block comment_submit_title
