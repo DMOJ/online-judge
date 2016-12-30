@@ -23,7 +23,6 @@ ul.comments.top-level-comments.new-comments
                             img.gravatar(src='{% gravatar_url node.author.user.email 135 node.author.mute %}')
                     .detail
                         .header
-                            span.comment-title(style=('display: none' if node.title.startswith('Re:') else '')) #{node.title}&nbsp;
                             span.username(class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}&nbsp;
                             .relative-time
                             span.comment-time(data-unix='{{ node.time|utc|date:"c" }}')
@@ -65,7 +64,9 @@ ul.comments.top-level-comments.new-comments
                                                 i.fa.fa-pencil.fa-fw
                                         a(href='{% url "admin:judge_comment_change" node.id %}', title='{% trans "Admin" %}')
                                             i.fa.fa-cog.fa-fw
-                        .content #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}
+                        .content
+                            span.comment-title(style=('display: none' if node.title.startswith('Re:') else '')) #{node.title}
+                            | #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}
 
                 if not node.is_leaf_node
                     ul.comments
