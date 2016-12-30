@@ -2,6 +2,11 @@
 
 - compress css
     | #{comment_form.media.css}
+    if perms.judge.test_site
+        style.
+            .top-level-comments:not(.new-comments) { display: none; }
+            .new-comments { display: block; }
+
     style(media='all').
         .featherlight {
             z-index: 1000;
