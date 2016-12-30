@@ -24,11 +24,11 @@ ul.comments.top-level-comments.new-comments
                             .username(class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}
                     .detail
                         .header
-                            span.comment-title(style=('display: none' if node.title.startswith('Re:') else '')) #{node.title}
+                            span.comment-title(style=('display: none' if node.title.startswith('Re:') else '')) #{node.title}&nbsp;
                             .relative-time
                             span.comment-time(data-unix='{{ node.time|utc|date:"c" }}')
                                 - blocktrans with time=node.time|date:_("N j, Y, g:i a") asvar str_time
-                                    | on {{ time }}&nbsp;
+                                    | on {{ time }}
                                 span.relative= str_time
                             span.comment-spacer
                             span.comment-operation
