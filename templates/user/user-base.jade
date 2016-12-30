@@ -49,7 +49,7 @@ block body
                 b {% trans "Total points:" %}
                 |  #{user.points}
                 br
-                .pp-feature(style="display: none")
+                .pp-feature(style=(None if perms['judge']['test_site'] else 'display: none'))
                     br
                     b {% trans "Rank by PP:" %}
                     |  ##{pp_rank}
