@@ -24,8 +24,10 @@ ul.comments.top-level-comments.new-comments
                     .detail
                         .header
                             .relative-time
-                            .message-date #{node.time | date:"DATE_FORMAT"}
-                            .message-time #{node.time | time:"TIME_FORMAT"}
+                            span.comment-time(data-unix='{{ node.time|utc|date:"c" }}')
+                                - blocktrans with time=node.time|date:_("N j, Y, g:i a") asvar str_time
+                                    | on {{ time }}
+                                span.relative= str_time
                         .content #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}
 
                 if not node.is_leaf_node
