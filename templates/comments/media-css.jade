@@ -4,8 +4,8 @@
     | #{comment_form.media.css}
     if perms.judge.test_site
         style.
-            .top-level-comments:not(.new-comments) { display: none; }
-            .new-comments { display: block; }
+            .top-level-comments:not(.new-comments) { display: none !important; }
+            .new-comments { display: block !important; }
 
     style(media='all').
         .featherlight {
