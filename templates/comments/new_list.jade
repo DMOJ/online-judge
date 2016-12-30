@@ -24,6 +24,43 @@ ul.comments.top-level-comments.new-comments
                             .username(class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}
                     .detail
                         .header
+                            span.comment-info
+                                span.comment-title(style=('display: none' if node.title.startswith('Re:') else '')) #{node.title}
+                            span.comment-spacer
+                            span.comment-operation
+                                if node.revisions > 2
+                                    span.comment-edits
+                                        - var edits = node.revisions - 1
+                                        - blocktrans
+                                            | {{ edits }} edits
+                                elif node.revisions > 1
+                                    span.comment-edits {% trans "edited" %}
+                                else
+                                    span.comment-edits
+                                a.comment-link(href='#comment-{{ node.id }}', title='{% trans "Link" %}')
+                                    i.fa.fa-link.fa-fw
+                                a.history-link(data-featherlight='{% url "comment_history_ajax" node.id %}',
+                                               href='{% url "comment_history" node.id %}', title='{% trans "History" %}')
+                                    i.fa.fa-history.fa-fw
+                                if logged_in
+                                    - var can_edit = node.author.id == profile.id and not profile.mute
+                                    if can_edit
+                                        a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}',
+                                                    href='{% url "comment_edit" node.id %}', title='{% trans "Edit" %}')
+                                            i.fa.fa-pencil.fa-fw
+                                    else
+                                        a(href='javascript:comment_set_parent({{ node.id }})', title='{% trans "Reply" %}')
+                                            i.fa.fa-reply.fa-fw
+                                    if perms.judge.change_comment
+                                        if can_edit
+                                            a(href='javascript:comment_set_parent({{ node.id }})', title='{% trans "Reply" %}')
+                                                i.fa.fa-reply.fa-fw
+                                        else
+                                            a.edit-link(data-featherlight='{% url "comment_edit_ajax" node.id %}',
+                                                        href='{% url "comment_edit" node.id %}', title='{% trans "Edit" %}')
+                                                i.fa.fa-pencil.fa-fw
+                                        a(href='{% url "admin:judge_comment_change" node.id %}', title='{% trans "Admin" %}')
+                                            i.fa.fa-cog.fa-fw
                             .relative-time
                             span.comment-time(data-unix='{{ node.time|utc|date:"c" }}')
                                 - blocktrans with time=node.time|date:_("N j, Y, g:i a") asvar str_time
