@@ -1,0 +1,7 @@
+- load markdown_trois_tags
+- load smart_math
+
+
+- with node=revision.field_dict
+    .comment-title(style=('display: none' if node.title.startswith('Re:') else '')) #{node.title}
+    | #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}

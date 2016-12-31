@@ -17,7 +17,7 @@ ul.comments.top-level-comments.new-comments
             - var profile = request.user.profile
         - recursetree comment_list
             if not node.hidden
-                li.comment(id='comment-{{ node.id }}')
+                li.comment(id='comment-{{ node.id }}', data-revision=node.revisions, data-max-revision=node.revisions)
                     .info
                         .vote
                             if request.user.is_authenticated
@@ -44,13 +44,17 @@ ul.comments.top-level-comments.new-comments
                                 span.relative= str_time
                             span.comment-spacer
                             span.comment-operation
-                                if node.revisions > 2
+                                if node.revisions > 1
                                     span.comment-edits
-                                        - var edits = node.revisions - 1
-                                        - blocktrans
-                                            | {{ edits }} edits
-                                elif node.revisions > 1
-                                    span.comment-edits {% trans "edited" %}
+                                        a.previous-revision(href='javascript:comment_previous_revision({{ node.id }})') &larr;
+                                        span.comment-edit-text
+                                            if node.revisions > 2
+                                                - var edits = node.revisions - 1
+                                                - blocktrans
+                                                    | edit {{ edits }}
+                                            else
+                                                | {% trans "edited" %}
+                                        a.next-revision(href='javascript:comment_next_revision({{ node.id }})', style='display: none') &rarr;
                                 else
                                     span.comment-edits
                                 a.comment-link(href='#comment-{{ node.id }}', title='{% trans "Link" %}')
