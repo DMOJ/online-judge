@@ -3,7 +3,7 @@ extends user/user-base
 - load i18n
 
 block user_media
-    include timezone/media
+    include timezone/media-css
     | #{form.media.css}
     style.
         .sortedm2m-container, .sortedm2m-container p.selector-filter {
@@ -56,7 +56,7 @@ block user_media
         }
 
 block js_media
-    include timezone/js-media
+    include timezone/media-js
     | #{form.media.js}
     script(type='text/javascript').
         $(function() {
