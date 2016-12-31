@@ -18,19 +18,19 @@ ul.comments.top-level-comments.new-comments
         - recursetree comment_list
             if not node.hidden
                 li.comment(id='comment-{{ node.id }}')
-                    .vote
-                        if request.user.is_authenticated
-                            a.upvote-link.fa.fa-chevron-up.fa-fw(class=('voted' if node.vote_score == 1 else ''), href='javascript:comment_upvote({{ node.id }})')
-                        else
-                            a.upvote-link.fa.fa-chevron-up.fa-fw(href='javascript:void(0)',
-                            title='{% trans "Please login to vote" %}')
-                        br
-                        .comment-score #{node.score}
-                        if request.user.is_authenticated
-                            a.downvote-link.fa.fa-chevron-down.fa-fw(class=('voted' if node.vote_score == -1 else ''), href='javascript:comment_downvote({{ node.id }})')
-                        else
-                            a.downvote-link.fa.fa-chevron-down.fa-fw(href='javascript:void(0)', title='{% trans "Please login to vote" %}')
                     .info
+                        .vote
+                            if request.user.is_authenticated
+                                a.upvote-link.fa.fa-chevron-up.fa-fw(class=('voted' if node.vote_score == 1 else ''), href='javascript:comment_upvote({{ node.id }})')
+                            else
+                                a.upvote-link.fa.fa-chevron-up.fa-fw(href='javascript:void(0)',
+                                title='{% trans "Please login to vote" %}')
+                            br
+                            .comment-score #{node.score}
+                            if request.user.is_authenticated
+                                a.downvote-link.fa.fa-chevron-down.fa-fw(class=('voted' if node.vote_score == -1 else ''), href='javascript:comment_downvote({{ node.id }})')
+                            else
+                                a.downvote-link.fa.fa-chevron-down.fa-fw(href='javascript:void(0)', title='{% trans "Please login to vote" %}')
                         a.user(href='{% url "user_page" node.author.user.username %}')
                             img.gravatar(src='{% gravatar_url node.author.user.email 135 node.author.mute %}')
                     .detail
