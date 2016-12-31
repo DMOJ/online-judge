@@ -1,1 +1,1 @@
-{{ newsletter.title }} - Update information
+{{ newsletter.title|safe }} - Update information

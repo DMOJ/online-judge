@@ -1,11 +1,11 @@
 ++++++++++++++++++++
 
-{{ newsletter.title }}: {{ message.title }}
+{{ newsletter.title|safe }}: {{ message.title|safe }}
 
 ++++++++++++++++++++
 
 {% for article in message.articles.all %}
-{{ article.title }}
+{{ article.title|safe }}
 {{ article.text|striptags|safe }}
 
 {% endfor %}

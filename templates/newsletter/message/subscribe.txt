@@ -1,9 +1,9 @@
-Dear {{ subscription.name }},
+Dear {{ subscription.name|safe }},
 
-you, or someone in your name requested a subscription to {{ newsletter.title }}.
+you, or someone in your name requested a subscription to {{ newsletter.title|safe }}.
 
 If you would like to confirm your subscription, please follow this activation link:
 http://{{ site.domain }}{{ subscription.subscribe_activate_url }}
 
 Kind regards,
-{{ newsletter.sender }}
+{{ newsletter.sender|safe }}
