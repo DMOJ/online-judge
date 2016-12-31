@@ -333,7 +333,7 @@ block body
                             .relative-time
                             .message-date #{message.time|date:"DATE_FORMAT"}
                             .message-time #{message.time|time:"TIME_FORMAT"}
-                        .content #{message.body|markdown:"ticket"|reference|smart_math:MATH_ENGINE|proxy_images}
+                        .content.content-description #{message.body|markdown:"ticket"|reference|smart_math:MATH_ENGINE|proxy_images}
             hr
             section.message.new-message
                 .info
