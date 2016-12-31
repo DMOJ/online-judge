@@ -10,7 +10,7 @@
 - load reference
 
 ul.comments.top-level-comments
-    if has_comments
+    if has_comments and not perms.judge.test_site
         - var logged_in = request.user.is_authenticated
         if logged_in
             - var profile = request.user.profile
