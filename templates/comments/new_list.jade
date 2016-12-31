@@ -59,9 +59,6 @@ ul.comments.top-level-comments.new-comments
                                     span.comment-edits
                                 a.comment-link(href='#comment-{{ node.id }}', title='{% trans "Link" %}')
                                     i.fa.fa-link.fa-fw
-                                a.history-link(data-featherlight='{% url "comment_history_ajax" node.id %}',
-                                               href='{% url "comment_history" node.id %}', title='{% trans "History" %}')
-                                    i.fa.fa-history.fa-fw
                                 if logged_in
                                     - var can_edit = node.author.id == profile.id and not profile.mute
                                     if can_edit
