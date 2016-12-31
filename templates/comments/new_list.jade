@@ -38,7 +38,7 @@ ul.comments.top-level-comments.new-comments
                             span.username(class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}&nbsp;
                             .relative-time
                             span.comment-time(data-unix='{{ node.time|utc|date:"c" }}')
-                                | {% trans "commented" %}&nbsp;
+                                | {% trans "commented" %}
                                 - blocktrans with time=node.time|date:_("N j, Y, g:i a") asvar str_time
                                     | on {{ time }}
                                 span.relative= str_time
