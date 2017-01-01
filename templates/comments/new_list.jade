@@ -53,6 +53,7 @@ ul.comments.top-level-comments.new-comments
                                                 - blocktrans
                                                     | edit {{ edits }}
                                             else
+                                                = ' '
                                                 | {% trans "edited" %}
                                         a.next-revision(href='javascript:comment_next_revision({{ node.id }})', style='display: none') &rarr;
                                 else
