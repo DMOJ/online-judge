@@ -14,8 +14,8 @@ if perms.judge.test_site
 
         function show_revision(comment_id, offset) {
             var $comment = $("#comment-" + comment_id);
-            var cur_revision = $comment.attr("data-revision");
-            var max_revision = $comment.attr("data-max-revision");
+            var cur_revision = parseInt($comment.attr("data-revision"));
+            var max_revision = parseInt($comment.attr("data-max-revision"));
             var revision_ajax = $comment.attr("data-revision-ajax");
             var show_revision = cur_revision + offset;
 
