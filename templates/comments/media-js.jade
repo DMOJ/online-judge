@@ -31,8 +31,8 @@ if perms.judge.test_site
                 console.log($comment.find('.next-revision'));
                 console.log($comment.find('.content'));
 
-                $comment.find('.previous-revision').css({display: show_revision == 0 ? 'none' : ''});
-                $comment.find('.next-revision').css({display: show_revision == max_revision ? 'none' : ''});
+                $comment.find('.previous-revision').css({visibility: show_revision == 0 ? 'hidden' : ''});
+                $comment.find('.next-revision').css({visibility: show_revision == max_revision ? 'hidden' : ''});
                 $comment.find('.content').html(body);
 
                 var edit_text = '{% trans "edit {edits}" %}'.replace("{edits}", show_revision);
