@@ -55,7 +55,7 @@ ul.comments.top-level-comments.new-comments
                                             else
                                                 = ' '
                                                 | {% trans "edited" %}
-                                        a.next-revision(href='javascript:comment_next_revision({{ node.id }})', style='display: none') &rarr;
+                                        a.next-revision(href='javascript:comment_next_revision({{ node.id }})', style='visibility: hidden') &rarr;
                                 else
                                     span.comment-edits
                                 a.comment-link(href='#comment-{{ node.id }}', title='{% trans "Link" %}')
