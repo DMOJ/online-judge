@@ -46,7 +46,7 @@ ul.comments.top-level-comments.new-comments
                             span.comment-operation
                                 if node.revisions > 1
                                     span.comment-edits
-                                        a.previous-revision(href='javascript:comment_previous_revision({{ node.id }})') &larr;
+                                        a.previous-revision(href='javascript:show_revision({{ node.id }}, -1)') &larr;
                                         span.comment-edit-text
                                             if node.revisions > 2
                                                 = ' '
@@ -57,7 +57,7 @@ ul.comments.top-level-comments.new-comments
                                             else
                                                 = ' '
                                                 | {% trans "edited" %}
-                                        a.next-revision(href='javascript:comment_next_revision({{ node.id }})', style='visibility: hidden') &rarr;
+                                        a.next-revision(href='javascript:show_revision({{ node.id }}, 1)', style='visibility: hidden') &rarr;
                                 else
                                     span.comment-edits
                                 a.comment-link(href='#comment-{{ node.id }}', title='{% trans "Link" %}')

@@ -4,14 +4,6 @@
 
 if perms.judge.test_site
     script(type='text/javascript').
-        function comment_previous_revision(comment_id) {
-            show_revision(comment_id, -1);
-        }
-
-        function comment_next_revision(comment_id) {
-            show_revision(comment_id, 1);
-        }
-
         function show_revision(comment_id, offset) {
             var $comment = $("#comment-" + comment_id);
             var cur_revision = parseInt($comment.attr("data-revision"));
@@ -21,16 +13,9 @@ if perms.judge.test_site
 
             $comment.attr("data-revision", show_revision);
 
-            console.log('current revision=' + cur_revision + ', max revision=' + max_revision + ', requested revision=' + show_revision);
-
             $.get(revision_ajax, {
-                revision: show_revision,
+                revision: show_revision
             }).done(function(body) {
-                console.log('response from ajax: ', body);
-                console.log($comment.find('.previous-revision'));
-                console.log($comment.find('.next-revision'));
-                console.log($comment.find('.content'));
-
                 $comment.find('.previous-revision').css({visibility: show_revision == 0 ? 'hidden' : ''});
                 $comment.find('.next-revision').css({visibility: show_revision == max_revision ? 'hidden' : ''});
                 $comment.find('.content').html(body);
@@ -43,15 +28,10 @@ if perms.judge.test_site
                     edit_text = '{% trans "edited" %}';
                 }
 
-                console.log('edit text: ', edit_text);
-                console.log($comment.find('.comment-edit-text'));
-
                 $comment.find('.comment-edit-text').text(' ' + edit_text + ' ');
             });
         }
 
-        window.comment_next_revision = comment_next_revision;
-        window.comment_previous_revision = comment_previous_revision;
         window.show_revision = show_revision;
 
 script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/javascript')
