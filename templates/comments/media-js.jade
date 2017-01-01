@@ -35,7 +35,7 @@ if perms.judge.test_site
                 $comment.find('.next-revision').css({display: show_revision == max_revision ? 'none' : ''});
                 $comment.find('.content').html(body);
 
-                var edit_text = '{% trans "edit {{ edits }}" %}'.replace("{{{{ edits }}}}", show_revision);
+                var edit_text = '{% trans "edit {edits}" %}'.replace("{edits}", show_revision);
 
                 if (show_revision == 0) {
                     edit_text = '{% trans "original" %}';
