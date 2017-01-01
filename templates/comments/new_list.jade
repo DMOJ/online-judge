@@ -17,7 +17,7 @@ ul.comments.top-level-comments.new-comments
             - var profile = request.user.profile
         - recursetree comment_list
             if not node.hidden
-                li.comment(id='comment-{{ node.id }}', data-revision=node.revisions, data-max-revision=node.revisions, data-revision-ajax='{% url "comment_revision_ajax" node.id %}')
+                li.comment(id='comment-{{ node.id }}', data-revision=node.revisions - 1, data-max-revision=node.revisions - 1, data-revision-ajax='{% url "comment_revision_ajax" node.id %}')
                     .info
                         .vote
                             if request.user.is_authenticated
