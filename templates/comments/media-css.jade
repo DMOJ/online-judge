@@ -2,10 +2,6 @@
 
 - compress css
     | #{comment_form.media.css}
-    if perms.judge.test_site
-        style.
-            .top-level-comments:not(.new-comments) { display: none !important; }
-            .new-comments { display: block !important; }
 
     style(media='all').
         .featherlight {
@@ -20,8 +16,6 @@
             border-radius: 10px;
             border: 1px solid #CCC;
         }
-
-        .new-comments { display: none; }
 
         .new-comments .comment-display {
             display: flex;

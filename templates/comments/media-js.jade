@@ -2,38 +2,6 @@
 - load staticfiles
 - load i18n
 
-if perms.judge.test_site
-    script(type='text/javascript').
-        function show_revision(comment_id, offset) {
-            var $comment = $("#comment-" + comment_id);
-            var cur_revision = parseInt($comment.attr("data-revision"));
-            var max_revision = parseInt($comment.attr("data-max-revision"));
-            var revision_ajax = $comment.attr("data-revision-ajax");
-            var show_revision = cur_revision + offset;
-
-            $comment.attr("data-revision", show_revision);
-
-            $.get(revision_ajax, {
-                revision: show_revision
-            }).done(function(body) {
-                $comment.find('.previous-revision').css({visibility: show_revision == 0 ? 'hidden' : ''});
-                $comment.find('.next-revision').css({visibility: show_revision == max_revision ? 'hidden' : ''});
-                $comment.find('.content').html(body);
-
-                var edit_text = '{% trans "edit {edits}" %}'.replace("{edits}", show_revision);
-
-                if (show_revision == 0) {
-                    edit_text = '{% trans "original" %}';
-                } else if (show_revision == max_revision && max_revision == 1) {
-                    edit_text = '{% trans "edited" %}';
-                }
-
-                $comment.find('.comment-edit-text').text(' ' + edit_text + ' ');
-            });
-        }
-
-        window.show_revision = show_revision;
-
 script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/javascript')
 
 - compress js
@@ -73,6 +41,34 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                 $('html, body').animate({
                     scrollTop: $('.form-area.comment-submit').offset().top - $('#navigation').height() - 4
                 }, 500);
+            };
+
+            window.show_revision = function(comment_id, offset) {
+                var $comment = $("#comment-" + comment_id);
+                var cur_revision = parseInt($comment.attr("data-revision"));
+                var max_revision = parseInt($comment.attr("data-max-revision"));
+                var revision_ajax = $comment.attr("data-revision-ajax");
+                var show_revision = cur_revision + offset;
+
+                $comment.attr("data-revision", show_revision);
+
+                $.get(revision_ajax, {
+                    revision: show_revision
+                }).done(function (body) {
+                    $comment.find('.previous-revision').css({visibility: show_revision == 0 ? 'hidden' : ''});
+                    $comment.find('.next-revision').css({visibility: show_revision == max_revision ? 'hidden' : ''});
+                    $comment.find('.content').html(body);
+
+                    var edit_text = '{% trans "edit {edits}" %}'.replace("{edits}", show_revision);
+
+                    if (show_revision == 0) {
+                        edit_text = '{% trans "original" %}';
+                    } else if (show_revision == max_revision && max_revision == 1) {
+                        edit_text = '{% trans "edited" %}';
+                    }
+
+                    $comment.find('.comment-edit-text').text(' ' + edit_text + ' ');
+                });
             };
 
             function ajax_vote(url, id, delta, on_success) {
