@@ -53,6 +53,7 @@ ul.comments.top-level-comments.new-comments
                                                 - var edits = node.revisions - 1
                                                 - blocktrans
                                                     | edit {{ edits }}
+                                                = ' '
                                             else
                                                 = ' '
                                                 | {% trans "edited" %}
