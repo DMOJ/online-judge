@@ -19,6 +19,8 @@ if perms.judge.test_site
             var revision_ajax = $comment.attr("data-revision-ajax");
             var show_revision = cur_revision + offset;
 
+            $comment.attr("data-revision", show_revision);
+
             console.log('current revision=' + cur_revision + ', max revision=' + max_revision + ', requested revision=' + show_revision);
 
             $.get(revision_ajax, {
