@@ -26,8 +26,7 @@ ul.comments.top-level-comments.new-comments
                             if request.user.is_authenticated
                                 a.upvote-link.fa.fa-chevron-up.fa-fw(class=('voted' if node.vote_score == 1 else ''), href='javascript:comment_upvote({{ node.id }})')
                             else
-                                a.upvote-link.fa.fa-chevron-up.fa-fw(href='javascript:void(0)',
-                                title='{% trans "Please login to vote" %}')
+                                a.upvote-link.fa.fa-chevron-up.fa-fw(href='javascript:void(0)', title='{% trans "Please login to vote" %}')
                             br
                             .comment-score #{node.score}
                             if request.user.is_authenticated
@@ -38,7 +37,8 @@ ul.comments.top-level-comments.new-comments
                             img.gravatar(src='{% gravatar_url node.author.user.email 135 node.author.mute %}')
                     .detail
                         .header
-                            span.username(class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}&nbsp;
+                            a.username(href='{% url "user_page" node.author.user.username %}',
+                                       class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}&nbsp;
                             .relative-time
                             span.comment-time(data-unix='{{ node.time|utc|date:"c" }}')
                                 | {% trans "commented" %}
