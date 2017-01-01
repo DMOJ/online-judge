@@ -71,7 +71,7 @@ class CommentRevisionAjax(CommentMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(CommentRevisionAjax, self).get_context_data(**kwargs)
         revisions = Version.objects.get_for_object(self.object).order_by('-revision')
-        wanted = self.request.GET.get('revision', None)
+        wanted = int(self.request.GET.get('revision', None))
         context['revision'] = revisions[wanted]
         return context
 
