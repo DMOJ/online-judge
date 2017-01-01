@@ -22,7 +22,6 @@ if perms.judge.test_site
             console.log('current revision=' + cur_revision + ', max revision=' + max_revision + ', requested revision=' + show_revision);
 
             var body = $.get(revision_ajax, {
-                id: comment_id,
                 revision: show_revision,
             });
 
@@ -32,7 +31,7 @@ if perms.judge.test_site
             console.log($comment.find('.content'));
 
             $comment.find('.previous-revision').css({display: show_revision == 0 ? 'none' : ''});
-            $comment.find('.next-revision').css({display: show_revision == max - revision ? 'none' : ''});
+            $comment.find('.next-revision').css({display: show_revision == max_revision ? 'none' : ''});
             $comment.find('.content').html(body);
 
             var edit_text = '{% trans "edit {{ edits }}" %}'.replace("{{ edits }}", show_revision);
