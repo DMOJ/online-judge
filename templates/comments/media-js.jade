@@ -52,6 +52,10 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                 $comment.find('.comment-edit-text').text(edit_text);
             }
 
+            window.comment_next_revision = comment_next_revision;
+            window.comment_previous_revision = comment_previous_revision;
+            window.show_revision = show_revision;
+
     if not REQUIRE_JAX
         script(type='text/javascript').
             $(function() {
