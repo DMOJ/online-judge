@@ -38,7 +38,8 @@ ul.comments.top-level-comments.new-comments
                     .detail
                         .header
                             a.username(href='{% url "user_page" node.author.user.username %}',
-                                       class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}&nbsp;
+                                       class='rating {{ node.author.rating|rating_class }} {{node.author.display_rank}}') #{node.author.user.username}
+                            = ' '
                             .relative-time
                             span.comment-time(data-unix='{{ node.time|utc|date:"c" }}')
                                 | {% trans "commented" %}
