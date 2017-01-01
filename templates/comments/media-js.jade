@@ -1,5 +1,6 @@
 - load compress
 - load staticfiles
+- load trans
 
 script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/javascript')
 
@@ -20,11 +21,12 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                 var $comment = $("#comment-" + comment_id);
                 var cur_revision = $comment.attr("data-revisions");
                 var max_revision = $comment.attr("data-max-revisions");
+                var revision_ajax = $comment.attr("data-revision-ajax");
                 var show_revision = cur_revision + offset;
 
                 console.log('current revision=' + cur_revision + ', max revision=' + max_revision + ', requested revision=' + show_revision);
 
-                var body = $.get('{% url "comment_revision_ajax" %}', {
+                var body = $.get(revision_ajax, {
                     id: comment_id,
                     revision: show_revision,
                 });
