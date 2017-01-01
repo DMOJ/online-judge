@@ -49,6 +49,7 @@ ul.comments.top-level-comments.new-comments
                                         a.previous-revision(href='javascript:comment_previous_revision({{ node.id }})') &larr;
                                         span.comment-edit-text
                                             if node.revisions > 2
+                                                = ' '
                                                 - var edits = node.revisions - 1
                                                 - blocktrans
                                                     | edit {{ edits }}
