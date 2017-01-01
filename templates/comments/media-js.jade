@@ -21,31 +21,31 @@ if perms.judge.test_site
 
             console.log('current revision=' + cur_revision + ', max revision=' + max_revision + ', requested revision=' + show_revision);
 
-            var body = $.get(revision_ajax, {
+            $.get(revision_ajax, {
                 revision: show_revision,
+            }).done(function(body) {
+                console.log('response from ajax: ', body);
+                console.log($comment.find('.previous-revision'));
+                console.log($comment.find('.next-revision'));
+                console.log($comment.find('.content'));
+
+                $comment.find('.previous-revision').css({display: show_revision == 0 ? 'none' : ''});
+                $comment.find('.next-revision').css({display: show_revision == max_revision ? 'none' : ''});
+                $comment.find('.content').html(body);
+
+                var edit_text = '{% trans "edit {{ edits }}" %}'.replace("{{ edits }}", show_revision);
+
+                if (show_revision == 0) {
+                    edit_text = '{% trans "original" %}';
+                } else if (show_revision == max_revision && max_revision == 1) {
+                    edit_text = '{% trans "edited" %}';
+                }
+
+                console.log('edit text: ', edit_text);
+                console.log($comment.find('.comment-edit-text'));
+
+                $comment.find('.comment-edit-text').text(edit_text);
             });
-
-            console.log('response from ajax: ', body);
-            console.log($comment.find('.previous-revision'));
-            console.log($comment.find('.next-revision'));
-            console.log($comment.find('.content'));
-
-            $comment.find('.previous-revision').css({display: show_revision == 0 ? 'none' : ''});
-            $comment.find('.next-revision').css({display: show_revision == max_revision ? 'none' : ''});
-            $comment.find('.content').html(body);
-
-            var edit_text = '{% trans "edit {{ edits }}" %}'.replace("{{ edits }}", show_revision);
-
-            if (show_revision == 0) {
-                edit_text = '{% trans "original" %}';
-            } else if (show_revision == max_revision && max_revision == 1) {
-                edit_text = '{% trans "edited" %}';
-            }
-
-            console.log('edit text: ', edit_text);
-            console.log($comment.find('.comment-edit-text'));
-
-            $comment.find('.comment-edit-text').text(edit_text);
         }
 
         window.comment_next_revision = comment_next_revision;
