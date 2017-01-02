@@ -101,6 +101,12 @@ def timedelta(value, display='long'):
     return nice_repr(value, display)
 
 
+@register.filter(name='timestampdelta')
+def timestampdelta(value, *args, **kwargs):
+    value = datetime.datetime.fromtimestamp(value)
+    return timedelta(value, *args, **kwargs)
+
+
 @register.filter(name='seconds')
 def seconds(timedelta):
     return timedelta.total_seconds()

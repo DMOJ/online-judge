@@ -50,4 +50,4 @@ block before_point
 block point
     td.user-points
         | #{user.points|floatformat}
-        .solving-time #{user.cumtime|timedelta:"noday"}
+        .solving-time #{user.cumtime|timestampdelta:"noday"}
