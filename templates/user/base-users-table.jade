@@ -30,5 +30,6 @@ thead
                     td.user-name(class=user.display_rank)
                         a(href='{% url "user_page" user.user.username %}')= user.user.username
                 block before_point
-                td.user-points= user.points
+                block point
+                    td.user-points= user.points
                 block after_point
