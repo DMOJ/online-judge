@@ -102,9 +102,9 @@ def timedelta(value, display='long'):
 
 
 @register.filter(name='timestampdelta')
-def timestampdelta(value, *args, **kwargs):
+def timestampdelta(value, display='long'):
     value = datetime.datetime.fromtimestamp(value)
-    return timedelta(value, *args, **kwargs)
+    return timedelta(value, display)
 
 
 @register.filter(name='seconds')
