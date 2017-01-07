@@ -113,6 +113,37 @@ class ContestMixin(object):
             profile = self.request.user.profile
         return (contest or self.object).organizers.filter(id=profile.id).exists()
 
+    def get_context_data(self, **kwargs):
+        context = super(ContestMixin, self).get_context_data(**kwargs)
+        if self.request.user.is_authenticated():
+            profile = self.request.user.profile
+            in_contest = context['in_contest'] = (profile.current_contest is not None and
+                                                  profile.current_contest.contest == self.object)
+            if in_contest:
+                context['participation'] = profile.current_contest
+                context['participating'] = True
+            else:
+                try:
+                    context['participation'] = profile.contest_history.get(contest=self.object, virtual=0)
+                except ContestParticipation.DoesNotExist:
+                    context['participating'] = False
+                    context['participation'] = None
+                else:
+                    context['participating'] = True
+        else:
+            context['participating'] = False
+            context['participation'] = None
+            context['in_contest'] = False
+        context['now'] = timezone.now()
+        context['is_organizer'] = self.is_organizer
+
+        if not self.object.og_image or not self.object.summary:
+            metadata = generate_opengraph('generated-meta-contest:%d' % self.object.id, self.object.description)
+        context['meta_description'] = self.object.summary or metadata[0]
+        context['og_image'] = self.object.og_image or metadata[1]
+
+        return context
+
     def get_object(self, queryset=None):
         contest = super(ContestMixin, self).get_object(queryset)
         user = self.request.user
@@ -158,37 +189,6 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
 
     def get_title(self):
         return self.object.name
-
-    def get_context_data(self, **kwargs):
-        context = super(ContestDetail, self).get_context_data(**kwargs)
-        if self.request.user.is_authenticated():
-            profile = self.request.user.profile
-            in_contest = context['in_contest'] = (profile.current_contest is not None and
-                                                  profile.current_contest.contest == self.object)
-            if in_contest:
-                context['participation'] = profile.current_contest
-                context['participating'] = True
-            else:
-                try:
-                    context['participation'] = profile.contest_history.get(contest=self.object, virtual=0)
-                except ContestParticipation.DoesNotExist:
-                    context['participating'] = False
-                    context['participation'] = None
-                else:
-                    context['participating'] = True
-        else:
-            context['participating'] = False
-            context['participation'] = None
-            context['in_contest'] = False
-        context['now'] = timezone.now()
-        context['is_organizer'] = self.is_organizer
-
-        if not self.object.og_image or not self.object.summary:
-            metadata = generate_opengraph('generated-meta-contest:%d' % self.object.id, self.object.description)
-        context['meta_description'] = self.object.summary or metadata[0]
-        context['og_image'] = self.object.og_image or metadata[1]
-
-        return context
 
 
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
@@ -514,7 +514,7 @@ def base_participation_list(request, contest, profile):
         'title': _('Your participation in %s') % contest.name if req_username == prof_username else
         _("%s's participation in %s") % (prof_username, contest.name),
         'content_title': contest.name,
-        #'subtitle': _('Your participation') if req_username == prof_username else _(
+        # 'subtitle': _('Your participation') if req_username == prof_username else _(
         #    "%s's participation") % prof_username,
         'problems': problems,
         'contest': contest,
