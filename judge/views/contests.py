@@ -470,7 +470,7 @@ def contest_ranking_view(request, contest, participation=None):
     select2_js = getattr(settings, 'SELECT2_JS_URL', None)
     has_select2 = select2_css is not None and select2_js is not None
 
-    return render(request, 'contest/ranking.jade', {
+    context = {
         'users': users,
         'title': _('%s Rankings') % contest.name,
         'content_title': contest.name,
@@ -483,7 +483,31 @@ def contest_ranking_view(request, contest, participation=None):
         'has_select2': has_select2,
         'SELECT2_CSS_URL': select2_css,
         'SELECT2_JS_URL': select2_js,
-    })
+    }
+
+    # TODO: use ContestMixin when this becomes a class-based view
+    if request.user.is_authenticated():
+        profile = request.user.profile
+        in_contest = context['in_contest'] = (profile.current_contest is not None and
+                                              profile.current_contest.contest == contest)
+        if in_contest:
+            context['participation'] = profile.current_contest
+            context['participating'] = True
+        else:
+            try:
+                context['participation'] = profile.contest_history.get(contest=contest, virtual=0)
+            except ContestParticipation.DoesNotExist:
+                context['participating'] = False
+                context['participation'] = None
+            else:
+                context['participating'] = True
+    else:
+        context['participating'] = False
+        context['participation'] = None
+        context['in_contest'] = False
+    context['now'] = timezone.now()
+
+    return render(request, 'contest/ranking.jade', context)
 
 
 def contest_ranking(request, contest):
