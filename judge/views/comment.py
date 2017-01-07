@@ -65,8 +65,25 @@ class CommentMixin(object):
     context_object_name = 'comment'
 
 
+class CommentRevisionAjax(CommentMixin, DetailView):
+    template_name = 'comments/revision-ajax.jade'
+
+    def get_context_data(self, **kwargs):
+        context = super(CommentRevisionAjax, self).get_context_data(**kwargs)
+        revisions = Version.objects.get_for_object(self.object).order_by('-revision')
+        wanted = int(self.request.GET.get('revision', None))
+        context['revision'] = revisions[wanted]
+        return context
+
+    def get_object(self, queryset=None):
+        comment = super(CommentRevisionAjax, self).get_object(queryset)
+        if comment.hidden and not self.request.user.has_perm('judge.change_comment'):
+            raise Http404()
+        return comment
+
+
 class CommentHistoryAjax(CommentMixin, DetailView):
-    template_name = 'comments/history_ajax.jade'
+    template_name = 'comments/history-ajax.jade'
 
     def get_context_data(self, **kwargs):
         context = super(CommentHistoryAjax, self).get_context_data(**kwargs)
@@ -96,7 +113,7 @@ class CommentEditForm(ModelForm):
 
 
 class CommentEditAjax(LoginRequiredMixin, CommentMixin, UpdateView):
-    template_name = 'comments/edit_ajax.jade'
+    template_name = 'comments/edit-ajax.jade'
     form_class = CommentEditForm
 
     def form_valid(self, form):

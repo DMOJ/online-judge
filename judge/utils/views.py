@@ -21,7 +21,7 @@ def class_view_decorator(function_decorator):
 
 
 def generic_message(request, title, message, status=None):
-    return render(request, 'generic_message.jade', {
+    return render(request, 'generic-message.jade', {
         'message': message,
         'title': title
     }, status=status)

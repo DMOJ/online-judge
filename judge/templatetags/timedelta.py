@@ -101,6 +101,12 @@ def timedelta(value, display='long'):
     return nice_repr(value, display)
 
 
+@register.filter(name='timestampdelta')
+def timestampdelta(value, display='long'):
+    value = datetime.timedelta(seconds=value)
+    return timedelta(value, display)
+
+
 @register.filter(name='seconds')
 def seconds(timedelta):
     return timedelta.total_seconds()
@@ -108,4 +114,4 @@ def seconds(timedelta):
 
 @register.filter(is_safe=True)
 def as_countdown(timedelta):
-    return get_template('time_remaining_fragment.jade').render({'countdown': timedelta})
+    return get_template('time-remaining-fragment.jade').render({'countdown': timedelta})

@@ -41,7 +41,7 @@ for judge in judges
                     - var runtime_versions = info['runtime']
                     a.runtime-label(href='javascript:void(0);',
                                     data-judge=judge.id, data-lang=key,
-                                    data-runtime-info='{% include "runtime_version_fragment.jade" %}')= info.name
+                                    data-runtime-info='{% include "runtime-version-fragment.jade" %}')= info.name
                     if not forloop.last
                         = ', '
             else

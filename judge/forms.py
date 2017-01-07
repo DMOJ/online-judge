@@ -21,7 +21,8 @@ def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
 
 class ProfileForm(ModelForm):
     if newsletter_id is not None:
-        newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=False, required=False)
+        newsletter = forms.BooleanField(label=_('Subscribe to contest updates'), initial=False, required=False)
+    test_site = forms.BooleanField(label=_('Enable experimental features'), initial=False, required=False)
 
     class Meta:
         model = Profile

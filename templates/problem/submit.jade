@@ -184,7 +184,7 @@ block body
                         select#id_language(name='language'): each lang in form.fields.language.queryset
                             - var runtime_versions = lang.runtime_versions
                             option(value=lang.id, data-id=lang.id, data-name=lang.name, data-info=lang.info,
-                            data-judge-info='{% include "runtime_version_fragment.jade" %}',
+                            data-judge-info='{% include "runtime-version-fragment.jade" %}',
                             data-ace=lang.ace, selected=('' if lang.id == default_lang.id else None))= lang.name
         hr
         if no_judges

@@ -21,7 +21,7 @@ def get_judges(request):
 
 def status_all(request):
     see_all, judges = get_judges(request)
-    return render(request, 'status/judge_status.jade', {
+    return render(request, 'status/judge-status.jade', {
         'title': _('Status'),
         'judges': judges,
         'see_all_judges': see_all,
@@ -30,7 +30,7 @@ def status_all(request):
 
 def status_table(request):
     see_all, judges = get_judges(request)
-    return render(request, 'status/judge_status_table.jade', {
+    return render(request, 'status/judge-status-table.jade', {
         'judges': judges,
         'see_all_judges': see_all,
     })

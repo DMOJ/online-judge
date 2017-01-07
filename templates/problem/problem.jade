@@ -10,10 +10,10 @@ extends common-content
 - load reference
 
 block content_media
-    include comments/media
+    include comments/media-css
 
 block content_js_media
-    include comments/js_media
+    include comments/media-js
     script.
         $(function () {
             $('a#clone-link').click(function (event) {

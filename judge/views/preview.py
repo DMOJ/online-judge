@@ -39,11 +39,11 @@ class OrganizationMarkdownPreviewView(MarkdownPreviewView):
 
 
 class SolutionMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'solution_preview.jade'
+    template_name = 'solution-preview.jade'
 
 
 class LicenseMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'license_preview.jade'
+    template_name = 'license-preview.jade'
 
 
 class TicketMarkdownPreviewView(MarkdownPreviewView):

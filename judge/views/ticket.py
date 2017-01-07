@@ -162,7 +162,7 @@ class TicketNotesForm(forms.Form):
 
 
 class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, FormView):
-    template_name = 'ticket/edit_notes.jade'
+    template_name = 'ticket/edit-notes.jade'
     form_class = TicketNotesForm
     object = None
 

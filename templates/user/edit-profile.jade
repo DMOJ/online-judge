@@ -1,9 +1,9 @@
-extends user/user_base
+extends user/user-base
 
 - load i18n
 
 block user_media
-    include timezone/media
+    include timezone/media-css
     | #{form.media.css}
     style.
         .sortedm2m-container, .sortedm2m-container p.selector-filter {
@@ -56,7 +56,7 @@ block user_media
         }
 
 block js_media
-    include timezone/js_media
+    include timezone/media-js
     | #{form.media.js}
     script(type='text/javascript').
         $(function() {
@@ -70,7 +70,7 @@ block title_ruler
 block title_row
     - var user_tab = 'edit'
     - var user = request.user.profile
-    include user/user_tabs
+    include user/user-tabs
 
 block body
     #center-float: form.form-area#edit-form(action='', method='post')
@@ -98,7 +98,9 @@ block body
                         td: span.fullwidth #{form.math_engine}
                     if form.newsletter
                         tr: td(colspan=2) #{form.newsletter}
-                            label.inline-header.grayed(for='id_newsletter', style='float: unset;') Notify me about upcoming contests
+                            label.inline-header.grayed(for='id_newsletter', style='float: unset;') {% trans "Notify me about upcoming contests" %}
+                    tr: td(colspan=2) #{form.test_site}
+                        label.inline-header.grayed(for='id_test_site', style='float: unset') #{form.test_site.label}
                     tr: td(colspan=2)
                         a.inline-header(href='http://www.gravatar.com/', title='{% trans "Change your avatar" %}', target='_blank')
                             - trans "Change your avatar"

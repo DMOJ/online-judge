@@ -1,1 +1,1 @@
-{{ newsletter.title }} - {{ message.title }}
+{{ message.title|safe }}

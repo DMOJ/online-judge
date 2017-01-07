@@ -2,7 +2,7 @@ extends base
 - load i18n
 
 block media
-    include timezone/media
+    include timezone/media-css
     | #{form.media.css}
     style.
         .sortedm2m-container, .sortedm2m-container p.selector-filter {
@@ -111,7 +111,7 @@ block media
         }
 
 block js_media
-    include timezone/js_media
+    include timezone/media-js
     | #{form.media.js}
     script(type='text/javascript').
         $(function () {

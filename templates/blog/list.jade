@@ -18,7 +18,7 @@ block title_ruler
 block media
     link(rel='alternate', type='application/atom+xml', href='{% url "comment_atom" %}', title='Atom Comment Feed')
     link(rel='alternate', type='application/rss+xml', href='{% url "comment_rss" %}', title='RSS Comment Feed')
-    include blog/dashboard_media.jade
+    include blog/media-css.jade
     style.
         .sidebox h3 {
             margin: 0 -5px;
@@ -65,7 +65,7 @@ block media
         }
 
 block js_media
-    include blog/dashboard_js.jade
+    include blog/media-js.jade
     script(type='text/javascript').
         $(document).ready(function () {
             $('.time-remaining').each(function () {
@@ -134,7 +134,7 @@ block body
 
             if page_obj.num_pages > 1
                 div(style='margin-bottom:10px;margin-top:10px')
-                    include list_pages
+                    include list-pages
         .blog-sidebar
             if current_contests
                 .blog-sidebox.sidebox
@@ -161,11 +161,15 @@ block body
                 .sidebox-content
                     ul: for comment in comments
                         li
-                            div(style='font-size:1.1em;font-style:italic')
-                                a(href='{{comment.link}}#comment-{{comment.id}}')= comment.title
+                            if not perms.judge.test_site
+                                div(style='font-size:1.1em;font-style:italic')
+                                    a(href='{{comment.link}}#comment-{{comment.id}}')= comment.title
                             span.poster(class=comment.author.display_rank, style='padding-left:0.25em')
                                 a(href='{% url "user_page" comment.author.user.username %}')= comment.author.user.username
-                            | &#32;&rarr; #[a(href='{{comment.link}}')= comment.page_title]
+                            if perms.judge.test_site
+                                | &#32;&rarr; #[a(href='{{comment.link}}#comment-{{comment.id}}')= comment.page_title]
+                            else
+                                | &#32;&rarr; #[a(href='{{comment.link}}')= comment.page_title]
                     span.rssatom
                         a(href='{% url "comment_rss" %}') #[span: i.fa.fa-rss] RSS
                         | / #[a(href='{% url "comment_atom" %}') Atom]

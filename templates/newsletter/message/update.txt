@@ -1,9 +1,9 @@
-Dear {{ subscription.name }},
+Dear {{ subscription.name|safe }},
 
-you, or someone in your name requested updating your personal information for {{ newsletter.title }}.
+you, or someone in your name requested updating your personal information for {{ newsletter.title|safe }}.
 
 To make changes to your information in our database, please follow this activation link:
 http://{{ site.domain }}{{ subscription.update_activate_url }}
 
 Kind regards,
-{{ newsletter.sender }}
+{{ newsletter.sender|safe }}

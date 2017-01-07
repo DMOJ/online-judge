@@ -1,4 +1,4 @@
-extends user/base_users
+extends user/base-users
 - load staticfiles
 - load i18n
 
@@ -7,10 +7,10 @@ block title_ruler
 block title_row
     - var tab = 'ranking'
     - var title = contest.name
-    include contest/contest_tabs
+    include contest/contest-tabs
 
 block users_media
-    include contest/contest_css_media
+    include contest/media-css
     style.
         #content-left {
             overflow-x: scroll;
@@ -215,7 +215,7 @@ block users_js_media
                     window.location.href = url.replace('__username__', $(this).val());
                 });
             });
-    include contest/contest_js_media
+    include contest/media-js
 
 block users_table
     //if contest.start_time <= now or perms.judge.see_private_contest
@@ -224,4 +224,4 @@ block users_table
     //        br
     //        input#search(type='text', placeholder='{% trans "View user participation" %}')
     //    hr
-    include contest/ranking_table
+    include contest/ranking-table

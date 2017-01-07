@@ -18,7 +18,7 @@ block title_ruler
 block title_row
     - var tab = 'detail'
     - var title = contest.name
-    include contest/contest_tabs
+    include contest/contest-tabs
 
 block content_js_media
     script(type='text/javascript').
@@ -28,12 +28,12 @@ block content_js_media
             });
         });
 
-    include contest/contest_js_media
-    include comments/js_media
+    include contest/media-js
+    include comments/media-js
 
 block content_media
-    include contest/contest_css_media
-    include comments/media
+    include contest/media-css
+    include comments/media-css
 
 block body
     #banner

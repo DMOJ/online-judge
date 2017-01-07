@@ -1,4 +1,4 @@
-extends user/base_users_table
+extends user/base-users-table
 
 - load timedelta
 - load cache
@@ -46,3 +46,8 @@ block before_point
                     .solving-time #{problem.time|timedelta:"noday"}
         else
             td
+
+block point
+    td.user-points
+        | #{user.points|floatformat}
+        .solving-time #{user.cumtime|timestampdelta:"noday"}

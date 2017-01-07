@@ -1,4 +1,4 @@
-extends user/base_users
+extends user/base-users
 
 - load staticfiles
 - load cache
@@ -20,7 +20,7 @@ block title_ruler
 block title_row
     - var tab = 'list'
     - var title = 'Leaderboard'
-    include user/user_list_tabs
+    include user/user-list-tabs
 
 block users_table
-    include user/users_table
+    include user/users-table

@@ -1,4 +1,4 @@
-extends user/user_base
+extends user/user-base
 - load staticfiles
 - load gravatar
 - load list_processor
@@ -77,7 +77,7 @@ block title_ruler
 
 block title_row
     - var user_tab = 'problems'
-    include user/user_tabs
+    include user/user-tabs
 
 block user_content
     if authored

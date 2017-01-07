@@ -122,9 +122,9 @@ class ContestUserSearchSelect2View(UserSearchSelect2View):
 
 class TicketUserSelect2View(UserSearchSelect2View):
     def get_queryset(self):
-        return Profile.objects.filter(tickets__isnull=False)
+        return Profile.objects.filter(tickets__isnull=False).distinct()
 
 
 class AssigneeSelect2View(UserSearchSelect2View):
     def get_queryset(self):
-        return Profile.objects.filter(assigned_tickets__isnull=False)
+        return Profile.objects.filter(assigned_tickets__isnull=False).distinct()
