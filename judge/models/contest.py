@@ -221,6 +221,7 @@ class ContestProblem(models.Model):
     contest = models.ForeignKey(Contest, verbose_name=_('contest'), related_name='contest_problems')
     points = models.IntegerField(verbose_name=_('points'))
     partial = models.BooleanField(default=True, verbose_name=_('partial'))
+    is_pretested = models.BooleanField(default=False, verbose_name=_('is pretested'))
     order = models.PositiveIntegerField(db_index=True, verbose_name=_('order'))
     output_prefix_override = models.IntegerField(verbose_name=_('output prefix length override'), null=True, blank=True)
 

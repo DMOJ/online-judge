@@ -62,7 +62,7 @@ class ContestProblemInline(admin.TabularInline):
     model = ContestProblem
     verbose_name = _('Problem')
     verbose_name_plural = 'Problems'
-    fields = ('problem', 'points', 'partial', 'output_prefix_override', 'order')
+    fields = ('problem', 'points', 'partial', 'is_pretested', 'output_prefix_override', 'order')
     form = ContestProblemInlineForm
 
 
