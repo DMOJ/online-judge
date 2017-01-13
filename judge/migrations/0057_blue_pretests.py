@@ -17,9 +17,4 @@ class Migration(migrations.Migration):
             name='is_pretested',
             field=models.BooleanField(default=False, verbose_name=_('is pretested')),
         ),
-        migrations.AddField(
-            model_name='problem',
-            name='summary',
-            field=models.TextField(blank=True, help_text='Plain-text, shown in meta description tag, e.g. for social media.', verbose_name='problem summary'),
-        ),
 ]
