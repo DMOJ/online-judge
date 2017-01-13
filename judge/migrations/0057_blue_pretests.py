@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contestproblem',
             name='is_pretested',
-            field=models.BooleanField(default=False, verbose_name=_('is pretested')),
+            field=models.BooleanField(default=False, verbose_name='is pretested'),
         ),
 ]
