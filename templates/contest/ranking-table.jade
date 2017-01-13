@@ -40,7 +40,7 @@ block before_point_head
 block before_point
     each problem in user.problems
         if problem
-            td(class=('pretest-{{  problem.state }}' if problem.is_pretested else problem.state))
+            td(class=('pretest-{{  problem.state }}' if problem.is_pretested and contest.run_pretests_only else problem.state))
                 a(href='{% url "contest_user_submissions" contest.key user.user.username problem.code %}')
                     | #{problem.points|floatformat}
                     .solving-time #{problem.time|timedelta:"noday"}
