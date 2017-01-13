@@ -344,7 +344,7 @@ class CachedContestCalendar(ContestCalendar):
 ContestRankingProfile = namedtuple('ContestRankingProfile', 'id user display_rank long_display_name points '
                                                             'cumtime problems rating organization participation '
                                                             'participation_rating')
-BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
+BestSolutionData = namedtuple('BestSolutionData', 'code points time state is_pretested')
 
 
 def make_contest_ranking_profile(participation, problems):
@@ -396,7 +396,8 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None,
         return make_contest_ranking_profile(participation, [
             BestSolutionData(code=data[part, prob][0], points=data[part, prob][1],
                              time=data[part, prob][2] - participation.start,
-                             state=best_solution_state(data[part, prob][1], points))
+                             state=best_solution_state(data[part, prob][1], points),
+                             is_pretested=prob.is_pretested)
             if data[part, prob][1] is not None else None for prob, points in problems])
 
     return map(make_ranking_profile, queryset.select_related('user__user', 'rating')
