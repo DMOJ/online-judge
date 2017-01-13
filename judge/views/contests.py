@@ -389,7 +389,7 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None,
     data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in cursor}
     cursor.close()
 
-    problems = map(attrgetter('id', 'points'), problems)
+    problems = map(attrgetter('id', 'points', 'is_pretested'), problems)
 
     def make_ranking_profile(participation):
         part = participation.id
@@ -397,8 +397,8 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None,
             BestSolutionData(code=data[part, prob][0], points=data[part, prob][1],
                              time=data[part, prob][2] - participation.start,
                              state=best_solution_state(data[part, prob][1], points),
-                             is_pretested=prob.is_pretested)
-            if data[part, prob][1] is not None else None for prob, points in problems])
+                             is_pretested=is_pretested)
+            if data[part, prob][1] is not None else None for prob, points, is_pretested in problems])
 
     return map(make_ranking_profile, queryset.select_related('user__user', 'rating')
                .defer('user__about', 'user__organizations__about'))
