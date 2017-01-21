@@ -419,7 +419,8 @@ def get_participation_ranking_profile(contest, participation, problems):
     return make_contest_ranking_profile(participation, [
         BestSolutionData(code=problem.problem.code, points=scoring[problem.id][0],
                          time=scoring[problem.id][1] - participation.start,
-                         state=best_solution_state(scoring[problem.id][0], problem.points))
+                         state=best_solution_state(scoring[problem.id][0], problem.points),
+                         is_pretested=problem.is_pretested)
         if problem.id in scoring else None for problem in problems
         ])
 
