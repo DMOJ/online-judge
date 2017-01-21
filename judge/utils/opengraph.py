@@ -1,9 +1,6 @@
 from django.core.cache import cache
 from django.template.defaultfilters import truncatewords
 
-from judge.lxml_tree import HTMLTreeString
-from markdown_trois import markdown
-
 from judge.templatetags.reference import reference
 from markdown_trois.templatetags.markdown_trois_tags import markdown_filter
 
