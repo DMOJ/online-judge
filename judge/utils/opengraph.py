@@ -4,12 +4,14 @@ from django.template.defaultfilters import truncatewords
 from judge.lxml_tree import HTMLTreeString
 from markdown_trois import markdown
 
+from judge.templatetags.reference import reference
+from markdown_trois.templatetags.markdown_trois_tags import markdown_filter
 
 def generate_opengraph(cache_key, data):
     metadata = cache.get(cache_key)
     if metadata is None:
         description = None
-        tree = HTMLTreeString(markdown(data, 'contest')).tree
+        tree = reference(markdown_filter(data, 'contest')).tree
         for p in tree.iterfind('p'):
             text = p.text_content().strip()
             if text:
