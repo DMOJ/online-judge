@@ -40,7 +40,7 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
 
         if not self.request.user.has_perm('judge.view_all_submission'):
             if submission.user_id != profile.id:
-                if not (submission.problem.authors.filter(id=profile.id).exists() or submission.problem.curators.filter(id=profile.id).exists()):
+                if not (submission.problem.authors + submission.problem.curators).filter(id=profile.id).exists():
                     if not (submission.problem.is_public or submission.problem.testers.filter(id=user.profile.id).exists()):
                         if not Submission.objects.filter(user_id=profile.id, result='AC', problem__code=submission.problem.code, points=F('problem__points')).exists())):
                             raise PermissionDenied()
