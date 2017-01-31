@@ -146,7 +146,7 @@ class Problem(models.Model):
             return True
 
         # If the user authored the problem or is a currator
-        if user.has_perm('judge.edit_own_problem') and (self.authors.filter(id=user.profile.id).exists() or self.curators.filter(id=user.profile.id).exists()):
+        if user.has_perm('judge.edit_own_problem') and ((self.authors + self.curators).filter(id=user.profile.id).exists()):
             return True
 
         # If the user is in a contest containing that problem or is a tester
