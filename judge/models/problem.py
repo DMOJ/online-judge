@@ -97,6 +97,7 @@ class Problem(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('problem name'), db_index=True)
     description = models.TextField(verbose_name=_('problem body'))
     authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems')
+    curators = models.ManyToManyField(Profile, verbose_name=('curators'), blank=True, related_name='curated_problems')
     testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True, related_name='tested_problems',
                                      help_text=_(
                                          "These users will be able to view a private problem, but not edit it."))
@@ -144,11 +145,11 @@ class Problem(models.Model):
         if user.has_perm('judge.see_private_problem'):
             return True
 
-        # If the user authored the problem
-        if user.has_perm('judge.edit_own_problem') and self.authors.filter(id=user.profile.id).exists():
+        # If the user authored the problem or is a currator
+        if user.has_perm('judge.edit_own_problem') and (self.authors.filter(id=user.profile.id).exists() or self.curators.filter(id=user.profile.id).exists()):
             return True
 
-        # If the user is in a contest containing that problem
+        # If the user is in a contest containing that problem or is a tester
         if user.is_authenticated():
             return (self.testers.filter(id=user.profile.id).exists() or
                     Problem.objects.filter(id=self.id, contest__users__user=user.profile).exists())
