@@ -136,6 +136,9 @@ class Problem(models.Model):
     def languages_list(self):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
+    def is_editor(self, profile):
+        return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists()
+
     def is_accessible_by(self, user):
         # All users can see public problems
         if self.is_public:
@@ -146,7 +149,7 @@ class Problem(models.Model):
             return True
 
         # If the user authored the problem or is a currator
-        if user.has_perm('judge.edit_own_problem') and ((self.authors + self.curators).filter(id=user.profile.id).exists()):
+        if user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile):
             return True
 
         # If the user is in a contest containing that problem or is a tester
@@ -242,9 +245,6 @@ class Problem(models.Model):
         result = self._get_limits('memory_limit')
         cache.set(key, result)
         return result
-
-    def is_editor(self, profile):
-        return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists()
 
     class Meta:
         permissions = (
