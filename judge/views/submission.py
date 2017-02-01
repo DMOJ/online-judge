@@ -174,6 +174,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['show_problem'] = self.show_problem
         context['completed_problem_ids'] = user_completed_ids(self.request.user.profile) if authenticated else []
         context['authored_problem_ids'] = user_authored_ids(self.request.user.profile) if authenticated else []
+        context['editable_problem_ids'] = user_editable_ids(self.request.user.profile) if authenticated else []
         context['results'] = self.get_result_table()
         context['first_page_href'] = self.first_page_href or '.'
         context['my_submissions'] = self.get_my_submissions_page()
