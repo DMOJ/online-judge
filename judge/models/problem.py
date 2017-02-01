@@ -243,6 +243,9 @@ class Problem(models.Model):
         cache.set(key, result)
         return result
 
+    def is_editor(self, profile):
+        return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists()
+
     class Meta:
         permissions = (
             ('see_private_problem', 'See hidden problems'),
