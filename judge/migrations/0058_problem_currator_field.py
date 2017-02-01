@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='problem',
             name='curators',
-            field=models.ManyToManyField(Profile, verbose_name=('curators'), blank=True, related_name='curated_problems'),
+            field= models.ManyToManyField(Profile, verbose_name=_('curators'), blank=True, related_name='curated_problems',
+                                     help_text=("These users will be able to edit the problem, but not be publicly shown as an author"))
         ),
 ]
