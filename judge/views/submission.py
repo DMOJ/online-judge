@@ -242,10 +242,15 @@ class ProblemSubmissionsBase(SubmissionsListBase):
             if not user.is_authenticated():
                 raise Http404()
 
-            if (not (self.problem.is_editor(user.profile) or self.problem.testers.filter(id=user.profile.id).exists()) and
-                    not user.has_perm('judge.see_private_problem') and
-                    not (self.in_contest and self.contest.problems.filter(id=self.problem.id).exists())):
-                raise Http404()
+            if self.problem.is_editor(user.profile) or self.problem.testers.filter(id=user.profile.id).exists():
+                return
+
+            if user.has_perm('judge.see_private_problem'):
+                return
+
+            if self.in_contest and self.contest.problems.filter(id=self.problem.id).exists():
+                return
+            raise Http404()
 
     def get(self, request, *args, **kwargs):
         if 'problem' not in kwargs:
