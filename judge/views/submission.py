@@ -237,13 +237,10 @@ class ProblemSubmissionsBase(SubmissionsListBase):
             user = request.user
             if not user.is_authenticated():
                 raise Http404()
-
             if self.problem.is_editor(user.profile) or self.problem.testers.filter(id=user.profile.id).exists():
                 return
-
             if user.has_perm('judge.see_private_problem'):
                 return
-
             if self.in_contest and self.contest.problems.filter(id=self.problem.id).exists():
                 return
             raise Http404()
