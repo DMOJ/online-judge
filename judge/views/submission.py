@@ -37,16 +37,12 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
     def get_object(self, queryset=None):
         submission = super(SubmissionDetailBase, self).get_object(queryset)
         profile = self.request.user.profile
-
         if self.request.user.has_perm('judge.view_all_submission'):
             return submission
-
         if submission.user_id == profile.id:
             return submission
-
         if submission.problem.is_editor(profile):
             return submission
-
         if submission.problem.is_public or submission.problem.testers.filter(id=user.profile.id).exists():
             if Submission.objects.filter(user_id=profile.id, result='AC', problem__code=submission.problem.code,
                                          points=F('problem__points')).exists():
