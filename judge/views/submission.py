@@ -42,10 +42,11 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
             return submission
         if submission.user_id == profile.id:
             return submission
-        if (submission.problem.authors.filter(id=profile.id) | submission.problem.curators.filter(id=profile.id)).exists():
+        if submission.problem.is_editor(profile):
             return submission
         if submission.problem.is_public or submission.problem.testers.filter(id=user.profile.id).exists():
-            if Submission.objects.filter(user_id=profile.id, result='AC', problem__code=submission.problem.code, points=F('problem__points')).exists())):
+            if Submission.objects.filter(user_id=profile.id, result='AC', problem__code=submission.problem.code,
+                                         points=F('problem__points')).exists():
                 return submission
         raise PermissionDenied()
         
