@@ -51,7 +51,6 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
             if Submission.objects.filter(user_id=profile.id, result='AC', problem__code=submission.problem.code,
                                          points=F('problem__points')).exists():
                 return submission
-
         raise PermissionDenied()
 
 
