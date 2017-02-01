@@ -148,7 +148,7 @@ class Problem(models.Model):
         if user.has_perm('judge.see_private_problem'):
             return True
 
-        # If the user authored the problem or is a currator
+        # If the user authored the problem or is a curator
         if user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile):
             return True
 
