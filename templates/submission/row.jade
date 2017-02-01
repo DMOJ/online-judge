@@ -3,7 +3,7 @@
 - load i18n
 
 if profile_id
-    - var can_view = submission.problem_id in authored_problem_ids or profile_id == submission.user_id or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids and submission.problem.is_public
+    - var can_view = profile_id in submission.problem.editor_ids or profile_id == submission.user_id or perms['judge']['change_submission'] or submission.problem_id in completed_problem_ids and (submission.problem.is_public or profile_id in submission.problem.tester_ids)
     - var info_colspan = (1 if can_view else 2)
 else
     - var can_view = false
