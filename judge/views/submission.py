@@ -38,13 +38,17 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
         submission = super(SubmissionDetailBase, self).get_object(queryset)
         profile = self.request.user.profile
 
-        if not self.request.user.has_perm('judge.view_all_submission'):
-            if submission.user_id != profile.id:
-                if not (submission.problem.authors + submission.problem.curators).filter(id=profile.id).exists():
-                    if not (submission.problem.is_public or submission.problem.testers.filter(id=user.profile.id).exists()):
-                        if not Submission.objects.filter(user_id=profile.id, result='AC', problem__code=submission.problem.code, points=F('problem__points')).exists())):
-                            raise PermissionDenied()
-        return submission
+        if self.request.user.has_perm('judge.view_all_submission'):
+            return submission
+        if submission.user_id == profile.id:
+            return submission
+        if (submission.problem.authors.filter(id=profile.id) | submission.problem.curators.filter(id=profile.id)).exists():
+            return submission
+        if submission.problem.is_public or submission.problem.testers.filter(id=user.profile.id).exists():
+            if Submission.objects.filter(user_id=profile.id, result='AC', problem__code=submission.problem.code, points=F('problem__points')).exists())):
+                return submission
+        raise PermissionDenied()
+        
 
     def get_title(self):
         submission = self.object
