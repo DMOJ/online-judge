@@ -172,6 +172,14 @@ class Problem(models.Model):
         return self.authors.values_list('id', flat=True)
 
     @cached_property
+    def editor_ids(self):
+        return author_ids() | self.curators.values_list('id', flat=True)
+
+    @cached_property
+    def viewer_ids(self):
+        return editor_ids() | self.testers.values_list('id', flat=True)
+
+    @cached_property
     def usable_common_names(self):
         return set(self.usable_languages.values_list('common_name', flat=True))
 
