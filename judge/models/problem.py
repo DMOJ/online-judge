@@ -176,8 +176,8 @@ class Problem(models.Model):
         return author_ids() | self.curators.values_list('id', flat=True)
 
     @cached_property
-    def viewer_ids(self):
-        return editor_ids() | self.testers.values_list('id', flat=True)
+    def tester_ids(self):
+        return self.testers.values_list('id', flat=True)
 
     @cached_property
     def usable_common_names(self):
