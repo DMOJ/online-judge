@@ -30,6 +30,7 @@ class ProblemForm(ModelForm):
     class Meta:
         widgets = {
             'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'curators': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'testers': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'types': Select2MultipleWidget,
@@ -79,7 +80,7 @@ class ProblemTranslationInline(admin.StackedInline):
 class ProblemAdmin(VersionAdmin):
     fieldsets = (
         (None, {
-            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'testers', 'description', 'license')
+            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'curators', 'testers', 'description', 'license')
         }),
         (_('Social Media'), {'classes': ('collapse',), 'fields': ('og_image', 'summary')}),
         (_('Taxonomy'), {'fields': ('types', 'group')}),
