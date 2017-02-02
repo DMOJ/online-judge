@@ -294,6 +294,7 @@ def single_submission(request, submission_id, show_problem=True):
         'submission': submission,
         'authored_problem_ids': user_authored_ids(request.user.profile) if authenticated else [],
         'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
+        'editable_problem_ids': user_editable_ids(self.request.user.profile) if authenticated else [],
         'show_problem': show_problem,
         'problem_name': show_problem and submission.problem.translated_name(request.LANGUAGE_CODE),
         'profile_id': request.user.profile.id if authenticated else 0,
