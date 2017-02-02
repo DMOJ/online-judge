@@ -15,7 +15,7 @@ from django.views.generic import ListView, DetailView
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, Profile, Contest, ProblemTranslation, Language
-from judge.utils.problems import user_completed_ids, user_authored_ids, get_result_table
+from judge.utils.problems import user_completed_ids, user_authored_ids, user_editable_ids, get_result_table
 from judge.utils.raw_sql import use_straight_join
 from judge.utils.views import TitleMixin, DiggPaginatorMixin, LoadSelect2Mixin
 
