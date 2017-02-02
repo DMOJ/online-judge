@@ -113,6 +113,37 @@ class ContestMixin(object):
             profile = self.request.user.profile
         return (contest or self.object).organizers.filter(id=profile.id).exists()
 
+    def get_context_data(self, **kwargs):
+        context = super(ContestMixin, self).get_context_data(**kwargs)
+        if self.request.user.is_authenticated():
+            profile = self.request.user.profile
+            in_contest = context['in_contest'] = (profile.current_contest is not None and
+                                                  profile.current_contest.contest == self.object)
+            if in_contest:
+                context['participation'] = profile.current_contest
+                context['participating'] = True
+            else:
+                try:
+                    context['participation'] = profile.contest_history.get(contest=self.object, virtual=0)
+                except ContestParticipation.DoesNotExist:
+                    context['participating'] = False
+                    context['participation'] = None
+                else:
+                    context['participating'] = True
+        else:
+            context['participating'] = False
+            context['participation'] = None
+            context['in_contest'] = False
+        context['now'] = timezone.now()
+        context['is_organizer'] = self.is_organizer
+
+        if not self.object.og_image or not self.object.summary:
+            metadata = generate_opengraph('generated-meta-contest:%d' % self.object.id, self.object.description)
+        context['meta_description'] = self.object.summary or metadata[0]
+        context['og_image'] = self.object.og_image or metadata[1]
+
+        return context
+
     def get_object(self, queryset=None):
         contest = super(ContestMixin, self).get_object(queryset)
         user = self.request.user
@@ -158,37 +189,6 @@ class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailV
 
     def get_title(self):
         return self.object.name
-
-    def get_context_data(self, **kwargs):
-        context = super(ContestDetail, self).get_context_data(**kwargs)
-        if self.request.user.is_authenticated():
-            profile = self.request.user.profile
-            in_contest = context['in_contest'] = (profile.current_contest is not None and
-                                                  profile.current_contest.contest == self.object)
-            if in_contest:
-                context['participation'] = profile.current_contest
-                context['participating'] = True
-            else:
-                try:
-                    context['participation'] = profile.contest_history.get(contest=self.object, virtual=0)
-                except ContestParticipation.DoesNotExist:
-                    context['participating'] = False
-                    context['participation'] = None
-                else:
-                    context['participating'] = True
-        else:
-            context['participating'] = False
-            context['participation'] = None
-            context['in_contest'] = False
-        context['now'] = timezone.now()
-        context['is_organizer'] = self.is_organizer
-
-        if not self.object.og_image or not self.object.summary:
-            metadata = generate_opengraph('generated-meta-contest:%d' % self.object.id, self.object.description)
-        context['meta_description'] = self.object.summary or metadata[0]
-        context['og_image'] = self.object.og_image or metadata[1]
-
-        return context
 
 
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
@@ -344,7 +344,7 @@ class CachedContestCalendar(ContestCalendar):
 ContestRankingProfile = namedtuple('ContestRankingProfile', 'id user display_rank long_display_name points '
                                                             'cumtime problems rating organization participation '
                                                             'participation_rating')
-BestSolutionData = namedtuple('BestSolutionData', 'code points time state')
+BestSolutionData = namedtuple('BestSolutionData', 'code points time state is_pretested')
 
 
 def make_contest_ranking_profile(participation, problems):
@@ -389,15 +389,16 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None,
     data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in cursor}
     cursor.close()
 
-    problems = map(attrgetter('id', 'points'), problems)
+    problems = map(attrgetter('id', 'points', 'is_pretested'), problems)
 
     def make_ranking_profile(participation):
         part = participation.id
         return make_contest_ranking_profile(participation, [
             BestSolutionData(code=data[part, prob][0], points=data[part, prob][1],
                              time=data[part, prob][2] - participation.start,
-                             state=best_solution_state(data[part, prob][1], points))
-            if data[part, prob][1] is not None else None for prob, points in problems])
+                             state=best_solution_state(data[part, prob][1], points),
+                             is_pretested=is_pretested)
+            if data[part, prob][1] is not None else None for prob, points, is_pretested in problems])
 
     return map(make_ranking_profile, queryset.select_related('user__user', 'rating')
                .defer('user__about', 'user__organizations__about'))
@@ -418,7 +419,8 @@ def get_participation_ranking_profile(contest, participation, problems):
     return make_contest_ranking_profile(participation, [
         BestSolutionData(code=problem.problem.code, points=scoring[problem.id][0],
                          time=scoring[problem.id][1] - participation.start,
-                         state=best_solution_state(scoring[problem.id][0], problem.points))
+                         state=best_solution_state(scoring[problem.id][0], problem.points),
+                         is_pretested=problem.is_pretested)
         if problem.id in scoring else None for problem in problems
         ])
 
@@ -470,7 +472,7 @@ def contest_ranking_view(request, contest, participation=None):
     select2_js = getattr(settings, 'SELECT2_JS_URL', None)
     has_select2 = select2_css is not None and select2_js is not None
 
-    return render(request, 'contest/ranking.jade', {
+    context = {
         'users': users,
         'title': _('%s Rankings') % contest.name,
         'content_title': contest.name,
@@ -483,7 +485,31 @@ def contest_ranking_view(request, contest, participation=None):
         'has_select2': has_select2,
         'SELECT2_CSS_URL': select2_css,
         'SELECT2_JS_URL': select2_js,
-    })
+    }
+
+    # TODO: use ContestMixin when this becomes a class-based view
+    if request.user.is_authenticated():
+        profile = request.user.profile
+        in_contest = context['in_contest'] = (profile.current_contest is not None and
+                                              profile.current_contest.contest == contest)
+        if in_contest:
+            context['participation'] = profile.current_contest
+            context['participating'] = True
+        else:
+            try:
+                context['participation'] = profile.contest_history.get(contest=contest, virtual=0)
+            except ContestParticipation.DoesNotExist:
+                context['participating'] = False
+                context['participation'] = None
+            else:
+                context['participating'] = True
+    else:
+        context['participating'] = False
+        context['participation'] = None
+        context['in_contest'] = False
+    context['now'] = timezone.now()
+
+    return render(request, 'contest/ranking.jade', context)
 
 
 def contest_ranking(request, contest):
@@ -514,7 +540,7 @@ def base_participation_list(request, contest, profile):
         'title': _('Your participation in %s') % contest.name if req_username == prof_username else
         _("%s's participation in %s") % (prof_username, contest.name),
         'content_title': contest.name,
-        #'subtitle': _('Your participation') if req_username == prof_username else _(
+        # 'subtitle': _('Your participation') if req_username == prof_username else _(
         #    "%s's participation") % prof_username,
         'problems': problems,
         'contest': contest,

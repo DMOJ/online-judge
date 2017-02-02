@@ -15,7 +15,7 @@ from django.views.generic import ListView, DetailView
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, Profile, Contest, ProblemTranslation, Language
-from judge.utils.problems import user_completed_ids, user_authored_ids, get_result_table
+from judge.utils.problems import user_completed_ids, user_authored_ids, user_editable_ids, get_result_table
 from judge.utils.raw_sql import use_straight_join
 from judge.utils.views import TitleMixin, DiggPaginatorMixin, LoadSelect2Mixin
 
@@ -37,15 +37,18 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
     def get_object(self, queryset=None):
         submission = super(SubmissionDetailBase, self).get_object(queryset)
         profile = self.request.user.profile
+        if self.request.user.has_perm('judge.view_all_submission'):
+            return submission
+        if submission.user_id == profile.id:
+            return submission
+        if submission.problem.is_editor(profile):
+            return submission
+        if submission.problem.is_public or submission.problem.testers.filter(id=profile.id).exists():
+            if Submission.objects.filter(user_id=profile.id, result='AC', problem__code=submission.problem.code,
+                                         points=F('problem__points')).exists():
+                return submission
+        raise PermissionDenied()
 
-        if (not self.request.user.has_perm('judge.view_all_submission') and submission.user_id != profile.id and
-                not submission.problem.authors.filter(id=profile.id).exists() and
-                not (submission.problem.is_public and
-                     Submission.objects.filter(user_id=profile.id, result='AC',
-                                               problem__code=submission.problem.code,
-                                               points=F('problem__points')).exists())):
-            raise PermissionDenied()
-        return submission
 
     def get_title(self):
         submission = self.object
@@ -171,6 +174,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['show_problem'] = self.show_problem
         context['completed_problem_ids'] = user_completed_ids(self.request.user.profile) if authenticated else []
         context['authored_problem_ids'] = user_authored_ids(self.request.user.profile) if authenticated else []
+        context['editable_problem_ids'] = user_editable_ids(self.request.user.profile) if authenticated else []
         context['results'] = self.get_result_table()
         context['first_page_href'] = self.first_page_href or '.'
         context['my_submissions'] = self.get_my_submissions_page()
@@ -234,11 +238,13 @@ class ProblemSubmissionsBase(SubmissionsListBase):
             user = request.user
             if not user.is_authenticated():
                 raise Http404()
-
-            if (not self.problem.authors.filter(id=user.profile.id).exists() and
-                    not user.has_perm('judge.see_private_problem') and
-                    not (self.in_contest and self.contest.problems.filter(id=self.problem.id).exists())):
-                raise Http404()
+            if self.problem.is_editor(user.profile) or self.problem.testers.filter(id=user.profile.id).exists():
+                return
+            if user.has_perm('judge.see_private_problem'):
+                return
+            if self.in_contest and self.contest.problems.filter(id=self.problem.id).exists():
+                return
+            raise Http404()
 
     def get(self, request, *args, **kwargs):
         if 'problem' not in kwargs:
@@ -288,6 +294,7 @@ def single_submission(request, submission_id, show_problem=True):
         'submission': submission,
         'authored_problem_ids': user_authored_ids(request.user.profile) if authenticated else [],
         'completed_problem_ids': user_completed_ids(request.user.profile) if authenticated else [],
+        'editable_problem_ids': user_editable_ids(request.user.profile) if authenticated else [],
         'show_problem': show_problem,
         'problem_name': show_problem and submission.problem.translated_name(request.LANGUAGE_CODE),
         'profile_id': request.user.profile.id if authenticated else 0,

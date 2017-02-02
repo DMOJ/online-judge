@@ -12,7 +12,7 @@ lxml
 markdown2==2.3.1
 Pygments
 -e git://github.com/DMOJ/pyjade.git#egg=pyjade
-python-social-auth
+python-social-auth>=0.2,<0.3
 pytz
 django-statici18n
 pika

@@ -30,6 +30,7 @@ class ProblemForm(ModelForm):
     class Meta:
         widgets = {
             'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'curators': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'testers': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'types': Select2MultipleWidget,
@@ -79,7 +80,7 @@ class ProblemTranslationInline(admin.StackedInline):
 class ProblemAdmin(VersionAdmin):
     fieldsets = (
         (None, {
-            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'testers', 'description', 'license')
+            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'curators', 'testers', 'description', 'license')
         }),
         (_('Social Media'), {'classes': ('collapse',), 'fields': ('og_image', 'summary')}),
         (_('Taxonomy'), {'fields': ('types', 'group')}),
@@ -177,7 +178,7 @@ class ProblemAdmin(VersionAdmin):
         if request.user.has_perm('judge.edit_public_problem'):
             access |= Q(is_public=True)
         if request.user.has_perm('judge.edit_own_problem'):
-            access |= Q(authors__id=request.user.profile.id)
+            access |= Q(authors__id=request.user.profile.id) | Q(curators__id=request.user.profile.id)
         return queryset.filter(access).distinct() if access else queryset.none()
 
     def has_change_permission(self, request, obj=None):
@@ -187,7 +188,7 @@ class ProblemAdmin(VersionAdmin):
             return True
         if not request.user.has_perm('judge.edit_own_problem'):
             return False
-        return obj.authors.filter(id=request.user.profile.id).exists()
+        return obj.is_editor(request.user.profile)
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'allowed_languages':
