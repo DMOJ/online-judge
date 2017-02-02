@@ -6,11 +6,16 @@ from django.utils.translation import ugettext as _
 
 from judge.models import Submission, Problem
 
-__all__ = ['contest_completed_ids', 'user_completed_ids', 'user_authored_ids']
+__all__ = ['contest_completed_ids', 'user_completed_ids', 'user_authored_ids', 'user_editable_ids']
 
 
 def user_authored_ids(profile):
     result = set(Problem.objects.filter(authors=profile).values_list('id', flat=True))
+    return result
+
+
+def user_editable_ids(profile):
+    result = set((Problem.objects.filter(authors=profile) | Problem.objects.filter(curators=profile)).values_list('id', flat=True))
     return result
 
 

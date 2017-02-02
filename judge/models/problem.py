@@ -97,9 +97,12 @@ class Problem(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('problem name'), db_index=True)
     description = models.TextField(verbose_name=_('problem body'))
     authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems')
+    curators = models.ManyToManyField(Profile, verbose_name=_('curators'), blank=True, related_name='curated_problems',
+                                     help_text=_('These users will be able to edit a problem, '
+                                                 'but not be publicly shown as an author.'))
     testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True, related_name='tested_problems',
                                      help_text=_(
-                                         "These users will be able to view a private problem, but not edit it."))
+                                         'These users will be able to view a private problem, but not edit it.'))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'))
     time_limit = models.FloatField(verbose_name=_('time limit'))
@@ -135,6 +138,9 @@ class Problem(models.Model):
     def languages_list(self):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
+    def is_editor(self, profile):
+        return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists()
+
     def is_accessible_by(self, user):
         # All users can see public problems
         if self.is_public:
@@ -144,11 +150,11 @@ class Problem(models.Model):
         if user.has_perm('judge.see_private_problem'):
             return True
 
-        # If the user authored the problem
-        if user.has_perm('judge.edit_own_problem') and self.authors.filter(id=user.profile.id).exists():
+        # If the user authored the problem or is a curator
+        if user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile):
             return True
 
-        # If the user is in a contest containing that problem
+        # If the user is in a contest containing that problem or is a tester
         if user.is_authenticated():
             return (self.testers.filter(id=user.profile.id).exists() or
                     Problem.objects.filter(id=self.id, contest__users__user=user.profile).exists())
@@ -164,6 +170,14 @@ class Problem(models.Model):
     @cached_property
     def author_ids(self):
         return self.authors.values_list('id', flat=True)
+
+    @cached_property
+    def editor_ids(self):
+        return author_ids() | self.curators.values_list('id', flat=True)
+
+    @cached_property
+    def tester_ids(self):
+        return self.testers.values_list('id', flat=True)
 
     @cached_property
     def usable_common_names(self):
