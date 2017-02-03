@@ -117,7 +117,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             return False
         if request.user.has_perm('judge.edit_all_problem') or obj is None:
             return True
-        return obj.problem.authors.filter(id=request.user.profile.id).exists()
+        return obj.problem.is_editor(request.user.profile)
 
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
@@ -130,7 +130,7 @@ class SubmissionAdmin(admin.ModelAdmin):
                               level=messages.ERROR)
             return
         if not request.user.has_perm('judge.edit_all_problem'):
-            queryset = queryset.filter(problem__authors__id=request.user.profile.id)
+            queryset = queryset.filter(problem__authors__id=request.user.profile.id, problem__curators__id=request.user.profile.id)
         judged = len(queryset)
         for model in queryset:
             model.judge(was_rejudged=True)
@@ -222,7 +222,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             raise PermissionDenied()
         submission = get_object_or_404(Submission, id=id)
         if not request.user.has_perm('judge.edit_all_problem') and \
-                not submission.problem.authors.filter(id=request.user.profile.id).exists():
+                not submission.problem.is_editor(request.user.profile):
             raise PermissionDenied()
         submission.judge(was_rejudged=True)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
