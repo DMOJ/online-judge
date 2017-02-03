@@ -172,21 +172,20 @@ block body
                     tr
                         if request.user.is_authenticated
                             if problem.id in completed_problem_ids
-                                td(solved='1')
-                                    a(href='{% url "user_submissions" problem.code request.user.username %}')
-                                        if problem.is_public or IN_CONTEST
-                                            i.solved.fa.fa-check-circle
-                                        else
-                                            i.solved.fa.fa-lock
-                            else
-                                td(solved='0')
-                                    if problem.id in attempted_problems
-                                        a(href='{% url "user_submissions" problem.code request.user.username %}')
-                                            if problem.is_public or IN_CONTEST
-                                                i.attempted.fa.fa-minus-circle
-                                            else
-                                                i.attempted.fa.fa-lock
+                                td(solved='1'): a(href='{% url "user_submissions" problem.code request.user.username %}')
+                                    if problem.is_public or IN_CONTEST
+                                        i.solved.fa.fa-check-circle
                                     else
+                                        i.solved.fa.fa-lock
+                            else
+                                if problem.id in attempted_problems
+                                    td(solved='0'): a(href='{% url "user_submissions" problem.code request.user.username %}')
+                                        if problem.is_public or IN_CONTEST
+                                            i.attempted.fa.fa-minus-circle
+                                        else
+                                            i.attempted.fa.fa-lock
+                                else
+                                    td(solved='-1')
                                         if problem.is_public or IN_CONTEST
                                             i.unsolved.fa.fa-minus-circle
                                         else
