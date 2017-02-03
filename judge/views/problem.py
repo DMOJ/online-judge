@@ -218,9 +218,19 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, ListView):
                 queryset = queryset.order_by(self.order + '__name')
             elif sort_key == 'solved':
                 if self.request.user.is_authenticated():
-                    solved = user_completed_ids(self.request.user.profile)
+                    profile = self.request.user.profile
+                    solved = user_completed_ids(profile)
+                    attempted = user_attempted_ids(profile)
+
+                    def _solved_sort_order(problem):
+                        if problem.id in solved:
+                            return 1
+                        if problem.id in attempted:
+                            return 0
+                        return -1
+
                     queryset = list(queryset)
-                    queryset.sort(key=lambda problem: problem.id in solved, reverse=self.order.startswith('-'))
+                    queryset.sort(key=_solved_sort_order, reverse=self.order.startswith('-'))
             elif sort_key == 'type':
                 if self.show_types:
                     queryset = list(queryset)
