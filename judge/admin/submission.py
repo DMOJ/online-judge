@@ -106,7 +106,8 @@ class SubmissionAdmin(admin.ModelAdmin):
             'time', 'memory', 'points', 'status', 'result'
         )
         if not request.user.has_perm('judge.edit_all_problem'):
-            queryset = queryset.filter(problem__authors__id=request.user.profile.id)
+            id = request.user.profile.id
+            queryset = queryset.filter(problem__authors__id=id) | queryset.filter(problem__curators__id=id)
         return queryset
 
     def has_add_permission(self, request):
@@ -130,7 +131,8 @@ class SubmissionAdmin(admin.ModelAdmin):
                               level=messages.ERROR)
             return
         if not request.user.has_perm('judge.edit_all_problem'):
-            queryset = queryset.filter(problem__authors__id=request.user.profile.id, problem__curators__id=request.user.profile.id)
+            id = request.user.profile.id
+            queryset = queryset.filter(problem__authors__id=id)| queryset.filter(problem__curators__id=id)
         judged = len(queryset)
         for model in queryset:
             model.judge(was_rejudged=True)
