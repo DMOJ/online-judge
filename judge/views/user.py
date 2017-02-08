@@ -214,7 +214,7 @@ class UserList(LoadSelect2Mixin, QueryStringSortMixin, DiggPaginatorMixin, Title
     context_object_name = 'users'
     template_name = 'user/list.jade'
     paginate_by = 100
-    all_sorts = frozenset(('points', 'problem_count', 'rating'))
+    all_sorts = frozenset(('points', 'problem_count', 'rating', 'performance_points'))
     default_desc = all_sorts
     default_sort = '-points'
 
