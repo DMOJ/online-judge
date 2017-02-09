@@ -18,15 +18,15 @@ block after_rank
                 span.rate-box(class='{{ user.rating|rating_class }}')
                     span(style='height: {{ user.rating|rating_progress|floatformat:3 }}em')
                 span.rating(class='{{ user.rating|rating_class }}') #{user.rating}
+if perms['judge']['test_site']
+    block before_point_head
+        if sort_links
+            th.pp: a(href=sort_links['performance_points']) {% trans "PP" %}#{sort_order.performance_points}
+        else
+           th.pp {% trans "PP" %}
 
-block before_point_head
-    if sort_links
-       th.pp: a(href=sort_links['performance_points']) {% trans "PP" %}#{sort_order.performance_points}
-    else
-       th.pp {% trans "PP" %}
-
-block before_point
-    td #{user.performance_points|floatformat:2}
+    block before_point
+        td #{user.performance_points|floatformat:2}
 
 block after_point_head
     if sort_links
