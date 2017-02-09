@@ -274,6 +274,8 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, ListView):
         if self.profile is not None:
             filter |= Q(id__in=Problem.objects.filter(contest__users__user=self.profile).values('id').distinct())
             filter |= Q(authors=self.profile)
+            filter |= Q(curators=self.profile)
+            filter |= Q(testers=self.profile)
         queryset = Problem.objects.filter(filter).select_related('group').defer('description')
         if self.profile is not None and self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
