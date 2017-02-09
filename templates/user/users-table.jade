@@ -21,12 +21,12 @@ block after_rank
 
 block before_point_head
     if sort_links
-       th.pp: a(href=sort_links['performance_points']) {% trans "PP" %}#{sort_order.performance_points}
+       th.pp(style=(None if perms['judge']['test_site'] else 'display: none')): a(href=sort_links['performance_points']) {% trans "PP" %}#{sort_order.performance_points}
     else
-       th.pp {% trans "PP" %}
+       th.pp(style=(None if perms['judge']['test_site'] else 'display: none')) {% trans "PP" %}
 
 block before_point
-    td #{user.performance_points|floatformat:2}
+    td.pp-feature(style=(None if perms['judge']['test_site'] else 'display: none')) #{user.performance_points|floatformat:2}
 
 block after_point_head
     if sort_links
