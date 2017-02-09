@@ -19,15 +19,14 @@ block after_rank
                     span(style='height: {{ user.rating|rating_progress|floatformat:3 }}em')
                 span.rating(class='{{ user.rating|rating_class }}') #{user.rating}
 
-if perms['judge']['test_site']
-    block before_point_head
-        if sort_links
-            th.pp: a(href=sort_links['performance_points']) {% trans "PP" %}#{sort_order.performance_points}
-        else
-           th.pp {% trans "PP" %}
+block before_point_head
+    if sort_links
+       th.pp(style=(None if perms['judge']['test_site'] else 'display: none')): a(href=sort_links['performance_points']) {% trans "PP" %}#{sort_order.performance_points}
+    else
+       th.pp(style=(None if perms['judge']['test_site'] else 'display: none')) {% trans "PP" %}
 
-    block before_point
-        td #{user.performance_points|floatformat:2}
+block before_point
+    td.pp-feature(style=(None if perms['judge']['test_site'] else 'display: none')) #{user.performance_points|floatformat:2}
 
 block after_point_head
     if sort_links
