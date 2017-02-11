@@ -10,7 +10,7 @@ h3(style='color:red;font-weight:bold')
     else
         | {% trans "An internal error occurred while grading." %}
 if submission.error and request.user.is_authenticated
-    if request.user.profile.id in submission.problem.author_ids or request.user.profile.id in submission.problem.curator_ids or perms.judge.edit_all_problem
+    if request.user.profile.id in submission.problem.editor_ids or perms.judge.edit_all_problem
         hr(style='float:left;width:30%')
         br
         h4 {% trans "Error information" %}
