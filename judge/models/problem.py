@@ -173,7 +173,7 @@ class Problem(models.Model):
 
     @cached_property
     def editor_ids(self):
-        return author_ids() | self.curators.values_list('id', flat=True)
+        return self.author_ids | self.curators.values_list('id', flat=True)
 
     @cached_property
     def tester_ids(self):
