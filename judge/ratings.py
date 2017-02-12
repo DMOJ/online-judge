@@ -167,7 +167,7 @@ def rating_class(rating):
 
 def rating_progress(rating):
     level = bisect(RATING_VALUES, rating)
-    if level == 5:
+    if level == len(RATING_VALUES):
         return 1.0
     prev = 0 if not level else RATING_VALUES[level - 1]
     next = RATING_VALUES[level]
