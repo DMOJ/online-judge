@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='profile',
-            name='no_points',
-            field=models.BooleanField(default=False, help_text='User submissions will not receive any points.', verbose_name='no points for submissions'),
+            name='unlisted_user',
+            field=models.BooleanField(verbose_name=_('unlisted user'), help_text=_('User will not be ranked.'), default=False)
         ),
     ]
