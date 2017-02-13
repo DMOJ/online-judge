@@ -86,7 +86,7 @@ class Profile(models.Model):
                                     choices=(('user', 'Normal User'), ('setter', 'Problem Setter'), ('admin', 'Admin')))
     mute = models.BooleanField(verbose_name=_('comment mute'), help_text=_('Some users are at their best when silent.'),
                                default=False)
-    unlisted_user = models.BooleanField(verbose_name=_('no points for submissions'), help_text=_('User submissions will not receive any points.'),
+    unlisted_user = models.BooleanField(verbose_name=_('unlisted user'), help_text=_('User will not be ranked.'),
                                     default=False)
     rating = models.IntegerField(null=True, default=None)
     user_script = models.TextField(verbose_name=_('user script'), default='', blank=True, max_length=65536,
