@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='unlisted_user',
-            field=models.BooleanField(verbose_name=_('unlisted user'), help_text=_('User will not be ranked.'), default=False)
+            field=models.BooleanField(verbose_name='unlisted user', help_text='User will not be ranked.', default=False)
         ),
     ]
