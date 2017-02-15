@@ -83,21 +83,14 @@ block user_content
     if perms.judge.test_site
         if pp_breakdown
             table
-                thead
-                    th Problem
-                    th Points
-                    th Weight
-                    th Scaled
+                colgroup
+                    col.sub-result
+                    col.sub-info
+                    col.sub-usage
                 tbody
                     for breakdown in pp_breakdown
                         tr
-                            td.pp-problem
-                                a(href='{% url "problem_detail" breakdown.problem_code %}')= breakdown.problem_name
-                                = ' '
-                                | on #{breakdown.date}
-                            td.pp-points=breakdown.points
-                            td.pp-weight=breakdown.weight
-                            td.pp-scaled=breakdown.scaled_points
+                            - include "user/pp-row.jade"
         else
             i {% trans "This user has not yet solved any problems." %}
 

@@ -9,22 +9,22 @@ PP_STEP = getattr(settings, 'PP_STEP', 0.95)
 PP_ENTRIES = getattr(settings, 'PP_ENTRIES', 100)
 PP_WEIGHT_TABLE = [pow(PP_STEP, i) for i in xrange(PP_ENTRIES)]
 
-PPBreakdown = namedtuple('PPBreakdown', 'points weight scaled_points problem_name problem_code date')
+PPBreakdown = namedtuple('PPBreakdown', 'points weight scaled_points problem_name problem_code submission')
 
 
 def get_pp_breakdown(user):
     data = (Problem.objects.filter(submission__user=user, submission__points__isnull=False, is_public=True)
             .annotate(max_points=Max('submission__points')).order_by('-max_points')
-            .values('max_points', 'name', 'code', 'submission__date').filter(max_points__gt=0))
+            .values_list('max_points', 'name', 'code', 'submission').filter(max_points__gt=0))
 
     breakdown = []
     for weight, contrib in zip(PP_WEIGHT_TABLE, data):
-        points = contrib['max_points']
+        points, name, code, submission = contrib
         breakdown.append(PPBreakdown(points=points,
-                                     weight=weight,
+                                     weight=weight * 100,
                                      scaled_points=points * weight,
-                                     problem_name=contrib['name'],
-                                     problem_code=contrib['code'],
-                                     date=contrib['submission__date']))
+                                     problem_name=name,
+                                     problem_code=code,
+                                     submission=submission))
 
     return breakdown
