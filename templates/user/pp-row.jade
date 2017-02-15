@@ -19,10 +19,10 @@ td(colspan=2).sub-info
 
 td.sub-pp.sub-usage
     .pp
-        | #{breakdown.points}pp
+        | #{breakdown.points|floatformat:0}pp
     .pp-weighted
         | weighted
         = ' '
-        b #{breakdown.weight|floatformat:1}%
+        b #{breakdown.weight|floatformat:0}%
         = ' '
         | (#{breakdown.scaled_points|floatformat:0}pp)
