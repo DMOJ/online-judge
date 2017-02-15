@@ -78,16 +78,19 @@ class Submission(models.Model):
 
     objects = TranslatedProblemForeignKeyQuerySet.as_manager()
 
+    @classmethod
+    def result_class_from_code(cls, result, case_points, case_total):
+        if result == 'AC':
+            if case_points == case_total:
+                return 'AC'
+            return '_AC'
+
     @property
     def result_class(self):
         # This exists to save all these conditionals from being executed (slowly) in each row.jade template
         if self.status in 'IECE':
             return self.status
-        if self.result == 'AC':
-            if self.case_points == self.case_total:
-                return 'AC'
-            return '_AC'
-        return self.result
+        return Submission.result_class_from_code(self.result, self.case_points, self.case_total)
 
     @property
     def memory_bytes(self):
