@@ -11,7 +11,7 @@ td.sub-result(class=breakdown.submission.result_class)
         span.language #{breakdown.submission.language.short_display_name}
 
 td(colspan=2).sub-info
-    .name: a(href='{% url "problem_detail" submission.problem.code %}') #{breakdown.problem_name}
+    .name: a(href='{% url "problem_detail" breakdown.problem_code %}') #{breakdown.problem_name}
     div: span.time(data-unix='{{ breakdown.date|utc|date:"c" }}')
             - blocktrans with time=breakdown.submission.date|date:_("N j, Y, g:i a") asvar str_time
                 | on {{ time }}
