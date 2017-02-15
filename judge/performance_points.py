@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db.models import Max
 
-from judge.models import Problem
+from judge.models import Problem, Submission
 
 from collections import namedtuple
 
@@ -18,13 +18,13 @@ def get_pp_breakdown(user):
             .values_list('max_points', 'name', 'code', 'submission').filter(max_points__gt=0))
 
     breakdown = []
-    for weight, contrib in zip(PP_WEIGHT_TABLE, data):
+    for weight, contrib in zip(PP_WEIGHT_TABLE[:25], data[:25]):
         points, name, code, submission = contrib
         breakdown.append(PPBreakdown(points=points,
                                      weight=weight * 100,
                                      scaled_points=points * weight,
                                      problem_name=name,
                                      problem_code=code,
-                                     submission=submission))
+                                     submission=Submission.objects.get(id=submission)))
 
     return breakdown
