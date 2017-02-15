@@ -25,6 +25,7 @@ def get_pp_breakdown(user):
                                      scaled_points=points * weight,
                                      problem_name=name,
                                      problem_code=code,
-                                     submission=Submission.objects.filter(points=points).order_by('date')[0]))
+                                     submission=Submission.objects.filter(problem__code=code,
+                                                                          points=points).order_by('date')[0]))
 
     return breakdown
