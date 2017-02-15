@@ -27,4 +27,4 @@ def get_pp_breakdown(user):
                                      problem_code=contrib['code'],
                                      date=contrib['submission__date']))
 
-    return pp
+    return breakdown
