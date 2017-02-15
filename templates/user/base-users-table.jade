@@ -7,10 +7,11 @@ thead
         block after_rank_head
         th.header.username {% trans "Username" %}
         block before_point_head
-        if sort_links
-            th.header.points: a(href=sort_links['points']) {% trans "Points" %}#{sort_order.points}
-        else
-            th.header.points {% trans "Points" %}
+        if not perms.judge.test_site
+            if sort_links
+                th.header.points: a(href=sort_links['points']) {% trans "Points" %}#{sort_order.points}
+            else
+                th.header.points {% trans "Points" %}
         block after_point_head
     tbody
         for rank, user in users
