@@ -84,6 +84,12 @@ block user_media
 
         td.sub-pp { text-align: right; }
 
+        .breakdown-header {
+            font-weight: 600;
+            font-size: 1.7em;
+            margin-bottom: 0.2em;
+        }
+
 block user_js_media
     script(type='text/javascript').
         $(function () {
@@ -103,6 +109,7 @@ block title_row
 block user_content
     if perms.judge.test_site
         if pp_breakdown
+            h3.breakdown-header {% trans "Points Breakdown" %}
             table.pp-table.table#submissions-table
                 colgroup
                     col.sub-result
