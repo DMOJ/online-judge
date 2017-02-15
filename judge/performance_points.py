@@ -13,7 +13,7 @@ PPBreakdown = namedtuple('PPBreakdown', 'points weight scaled_points problem_nam
 
 
 def get_pp_breakdown(user):
-    data = (Problem.objects.filter(submission__user=self, submission__points__isnull=False, is_public=True)
+    data = (Problem.objects.filter(submission__user=user, submission__points__isnull=False, is_public=True)
             .annotate(max_points=Max('submission__points')).order_by('-max_points')
             .values_list('max_points', 'name', 'code', 'submission__date').filter(max_points__gt=0))
 
