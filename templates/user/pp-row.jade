@@ -20,8 +20,8 @@ td(colspan=2).sub-info
 td.sub-usage
     .pp=breakdown.points
     .pp-weighted
-        | 'weighted '
+        | weighted
         b #{breakdown.weight|floatformat:1}
-        = ' ('
-        =breakdown.scaled_points
+        = '% ('
+        | #{breakdown.scaled_points|floatformat:0}
         = ')'
