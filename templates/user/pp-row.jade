@@ -17,11 +17,11 @@ td(colspan=2).sub-info
                 | on {{ time }}
             span.relative= str_time
 
-td.sub-usage
-    .pp=breakdown.points
+td.sub-pp
+    .pp
+        | #{breakdown.points}pp
     .pp-weighted
         | weighted
-        b #{breakdown.weight|floatformat:1}
-        = '% ('
-        | #{breakdown.scaled_points|floatformat:0}
-        = ')'
+        b #{breakdown.weight|floatformat:1}%
+        = ' '
+        | (#{breakdown.scaled_points|floatformat:0}pp)

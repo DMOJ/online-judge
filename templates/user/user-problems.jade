@@ -73,6 +73,19 @@ block user_media
             margin-right: 5px;
         }
 
+        .pp {
+            font-weight: 600;
+            font-size: 1.4em;
+        }
+
+        .pp-scaled {
+            font-size: 0.8em;
+        }
+
+        td.sub-pp {
+            text-align: right;
+        }
+
 block title_ruler
 
 block title_row
@@ -82,11 +95,11 @@ block title_row
 block user_content
     if perms.judge.test_site
         if pp_breakdown
-            table
+            table.pp-table.table#submissions-table
                 colgroup
                     col.sub-result
                     col.sub-info
-                    col.sub-usage
+                    col.sub-pp
                 tbody
                     for breakdown in pp_breakdown
                         tr
