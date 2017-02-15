@@ -87,9 +87,11 @@ block user_media
 block user_js_media
     script(type='text/javascript').
         $(function () {
-            window.update_relative_time = register_update_relative(function () {
+            register_update_relative(function () {
                 return $('.pp-table').find('span.time');
-            });
+            }, function (when) {
+                return Math.abs(moment().diff(when, 'years')) < 1;
+            })
         });
 
 block title_ruler
