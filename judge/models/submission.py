@@ -84,6 +84,7 @@ class Submission(models.Model):
             if case_points == case_total:
                 return 'AC'
             return '_AC'
+        return self.result
 
     @property
     def result_class(self):
