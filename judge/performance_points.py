@@ -15,16 +15,16 @@ PPBreakdown = namedtuple('PPBreakdown', 'points weight scaled_points problem_nam
 def get_pp_breakdown(user):
     data = (Problem.objects.filter(submission__user=user, submission__points__isnull=False, is_public=True)
             .annotate(max_points=Max('submission__points')).order_by('-max_points')
-            .values_list('max_points', 'name', 'code', 'submission').filter(max_points__gt=0))
+            .values_list('max_points', 'name', 'code').filter(max_points__gt=0))
 
     breakdown = []
     for weight, contrib in zip(PP_WEIGHT_TABLE[:25], data[:25]):
-        points, name, code, submission = contrib
+        points, name, code = contrib
         breakdown.append(PPBreakdown(points=points,
                                      weight=weight * 100,
                                      scaled_points=points * weight,
                                      problem_name=name,
                                      problem_code=code,
-                                     submission=Submission.objects.get(id=submission)))
+                                     submission=Submission.objects.filter(points=points).order_by('date')[0]))
 
     return breakdown
