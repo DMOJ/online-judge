@@ -27,6 +27,7 @@ from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
+from judge.performance_points import get_pp_breakdown
 from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin, DiggPaginatorMixin, QueryStringSortMixin
 from .contests import contest_ranking_view
 
@@ -105,7 +106,10 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
         context['rank'] = Profile.objects.filter(points__gt=self.object.points).count() + 1
+
         context['pp_rank'] = Profile.objects.filter(performance_points__gt=self.object.performance_points).count() + 1
+        context['pp_breakdown'] = get_pp_breakdown(self.object)
+
         if rating:
             context['rating_rank'] = Profile.objects.filter(rating__gt=self.object.rating).count() + 1
             context['rated_users'] = Profile.objects.filter(rating__isnull=False).count()
