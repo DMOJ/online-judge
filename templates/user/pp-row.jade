@@ -3,7 +3,7 @@
 
 td.sub-result(class=breakdown.sub_result_class)
     .score
-        | #{breakdown.sub_case_points|floatformat:"0"} / #{breakdown.sub_case_total|floatformat:"0"}
+        | #{breakdown.sub_points|floatformat:"0"} / #{breakdown.sub_total|floatformat:"0"}
     .state
         span.status(title=breakdown.sub_long_status)= breakdown.sub_short_status
         = ' | '
