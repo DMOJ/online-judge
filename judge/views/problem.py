@@ -96,7 +96,7 @@ class ProblemDetail(ProblemMixin, CommentedDetailView):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
         user = self.request.user
         authed = user.is_authenticated()
-        context['has_submissions'] = authed and Submission.objects.filter(user=user.profile).exists()
+        context['has_submissions'] = authed and Submission.objects.filter(user=user.profile, problem=self.object).exists()
         context['contest_problem'] = (None if not authed or user.profile.current_contest is None else
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
