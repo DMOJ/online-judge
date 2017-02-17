@@ -12,12 +12,14 @@ def gen_pp(apps, schema_editor):
     Profile = apps.get_model('judge', 'Profile')
     Problem = apps.get_model('judge', 'Problem')
     table = (lambda x: [pow(x, i) for i in xrange(100)])(getattr(settings, 'PP_STEP', 0.95))
+    function =  getattr(settings, 'BONUS_PP_FUNCTION', lambda n: 300 * (1 - 0.997 ** n))
     for row in Profile.objects.all():
         data = (Problem.objects.filter(submission__user=row, submission__points__isnull=False, is_public=True)
                 .annotate(max_points=Max('submission__points')).order_by('-max_points')
                 .values_list('max_points', flat=True))
+        extradata = Problem.objects.filter(submission__user=self, submission__result='AC').values('id').distinct().count()
         size = min(len(data), len(table))
-        row.performance_points = sum(map(mul, table[:size], data[:size]))
+        row.performance_points = sum(map(mul, table[:size], data[:size])) + function(extradata)
         row.save()
 
 
