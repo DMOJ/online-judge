@@ -17,7 +17,7 @@ def gen_pp(apps, schema_editor):
         data = (Problem.objects.filter(submission__user=row, submission__points__isnull=False, is_public=True)
                 .annotate(max_points=Max('submission__points')).order_by('-max_points')
                 .values_list('max_points', flat=True))
-        extradata = Problem.objects.filter(submission__user=self, submission__result='AC').values('id').distinct().count()
+        extradata = Problem.objects.filter(submission__user=row, submission__result='AC').values('id').distinct().count()
         size = min(len(data), len(table))
         row.performance_points = sum(map(mul, table[:size], data[:size])) + bonus_function(extradata)
         row.save()
