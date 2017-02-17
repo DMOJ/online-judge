@@ -178,8 +178,6 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.case_total = total
 
         sub_points = round(points / total * submission.problem.points if total > 0 else 0, 3)
-        if submission.user.is_unlisted:
-            sub_points = 0
         if not submission.problem.partial and sub_points != submission.problem.points:
             sub_points = 0
 
