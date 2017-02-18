@@ -34,10 +34,8 @@ block content_js_media
 
 block title_row
     div.problem-title
-
         if request.user.is_authenticated
             if problem.id in completed_problem_ids
-                // td(solved='1'):
                 a(href='{% url "user_submissions" problem.code request.user.username %}')
                 if problem.is_public or IN_CONTEST
                     i.solved.title-state.fa.fa-check-circle
@@ -45,7 +43,6 @@ block title_row
                     i.solved.title-state.fa.fa-lock
             else
                 if problem.id in attempted_problems
-                    // td(solved='0'):
                     a(href='{% url "user_submissions" problem.code request.user.username %}')
                     if problem.is_public or IN_CONTEST
                         i.attempted.title-state.fa.fa-minus-circle
