@@ -25,6 +25,7 @@ block js_media
 
 block body
     form#ticket-form(action='', method='POST')
+        block guideline_message
         - csrf_token
         .title-block(class=('error' if form['title'].errors else '')) #{form.title}
         .form-errors

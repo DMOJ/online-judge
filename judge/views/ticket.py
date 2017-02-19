@@ -74,6 +74,7 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
 class NewProblemTicketView(TitleMixin, NewTicketView):
     model = Problem
     slug_field = slug_url_kwarg = 'code'
+    template_name = 'ticket/new_problem.jade'
 
     def get_assignees(self):
         return self.object.authors.all()
