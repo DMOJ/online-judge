@@ -43,6 +43,27 @@ def get_contest_problem(problem, profile):
     except ObjectDoesNotExist:
         return None
 
+
+class ProblemMixin(object):
+    model = Problem
+    slug_url_kwarg = 'problem'
+    slug_field = 'code'
+
+    def get_object(self, queryset=None):
+        problem = super(ProblemMixin, self).get_object(queryset)
+        if not problem.is_accessible_by(self.request.user):
+            raise Http404()
+        return problem
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super(ProblemMixin, self).get(request, *args, **kwargs)
+        except Http404:
+            code = kwargs.get(self.slug_url_kwarg, None)
+            return generic_message(request, _('No such problem'),
+                                   _('Could not find a problem with the code "%s".') % code, status=404)
+
+
 class SolvedProblemMixin(object):
     def get_completed_problems(self):
         if self.in_contest:
@@ -65,25 +86,6 @@ class SolvedProblemMixin(object):
         if not self.request.user.is_authenticated():
             return None
         return self.request.user.profile
-
-class ProblemMixin(object):
-    model = Problem
-    slug_url_kwarg = 'problem'
-    slug_field = 'code'
-
-    def get_object(self, queryset=None):
-        problem = super(ProblemMixin, self).get_object(queryset)
-        if not problem.is_accessible_by(self.request.user):
-            raise Http404()
-        return problem
-
-    def get(self, request, *args, **kwargs):
-        try:
-            return super(ProblemMixin, self).get(request, *args, **kwargs)
-        except Http404:
-            code = kwargs.get(self.slug_url_kwarg, None)
-            return generic_message(request, _('No such problem'),
-                                   _('Could not find a problem with the code "%s".') % code, status=404)
 
 
 class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
@@ -211,7 +213,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         return response
 
 
-class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, ListView, SolvedProblemMixin):
+class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProblemMixin, ListView):
     model = Problem
     title = ugettext_lazy('Problems')
     context_object_name = 'problems'
