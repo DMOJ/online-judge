@@ -10,8 +10,8 @@
 - load rating
 - load reference
 
-ul.comments.top-level-comments.new-comments
-    if has_comments
+if has_comments
+    ul.comments.top-level-comments.new-comments
         - var logged_in = request.user.is_authenticated
         if logged_in
             - var profile = request.user.profile
@@ -93,8 +93,8 @@ ul.comments.top-level-comments.new-comments
                         | {{ children }}
 
         - endrecursetree
-    else
-        p {% trans "There are no comments at the moment." %}
+else
+    p.no-comments-message {% trans "There are no comments at the moment." %}
 
 if request.user.is_authenticated and comment_form
     .form-area.comment-submit
