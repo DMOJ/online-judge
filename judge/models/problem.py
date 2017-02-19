@@ -1,6 +1,7 @@
 from operator import attrgetter
 
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
@@ -125,6 +126,7 @@ class Problem(models.Model):
     ac_rate = models.FloatField(verbose_name=_('rate of AC submissions'), default=0)
 
     objects = TranslatedProblemQuerySet.as_manager()
+    tickets = GenericRelation('Ticket')
 
     def __init__(self, *args, **kwargs):
         super(Problem, self).__init__(*args, **kwargs)
