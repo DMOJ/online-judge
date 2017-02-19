@@ -51,5 +51,5 @@ class SearchManager(models.Manager):
             return SearchQuerySet(model=self.model, fields=self._search_fields)
         return super(SearchManager, self).get_queryset()
 
-    def search(self, query):
-        return self.get_queryset().search(query)
+    def search(self, *args, **kwargs):
+        return self.get_queryset().search(*args, **kwargs)
