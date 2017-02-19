@@ -25,5 +25,5 @@ msgstr[0] "%d ngày %h:%m:%s"
 #: .\resources\common.js:188
 msgctxt "time format without day"
 msgid "%h:%m:%s"
-msgstr "% h: %m:%s"
+msgstr "%h:%m:%s"
 
