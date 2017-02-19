@@ -253,6 +253,11 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
         return HttpResponseRedirect(request.get_full_path())
 
 
+class ProblemTicketListView(TicketList):
+    def _get_queryset(self):
+        return Problem.objects.get(code=self.code).tickets
+
+
 class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
     def get(self, request, *args, **kwargs):
         try:

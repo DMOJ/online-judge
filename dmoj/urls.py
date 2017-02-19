@@ -302,6 +302,7 @@ urlpatterns = [
             url(r'^/notes$', ticket.TicketNotesEditView.as_view(), name='ticket_notes'),
         ])),
         url(r'^list$', ticket.TicketList.as_view(), name='ticket_list'),
+        url(r'^list/(?P<code>[^/]+)$', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
         url(r'^list/ajax$', ticket.TicketListDataAjax.as_view(), name='ticket_ajax'),
     ])),
 
