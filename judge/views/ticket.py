@@ -258,7 +258,7 @@ class ProblemTicketListView(TicketList):
     def _get_queryset(self):
         if 'code' not in self.kwargs:
             raise Http404
-        return Problem.objects.get(code=self.kwargs['code']).tickets
+        return Problem.objects.get(code=self.kwargs['code']).tickets.all()
 
 
 class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
