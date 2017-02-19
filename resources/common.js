@@ -126,7 +126,7 @@ $(function () {
     }, function () {
         $(this).removeClass('hover');
     });
-    
+
     $nav_list.find('li a .nav-expand').click(function (event) {
         event.preventDefault();
         $(this).parent().siblings('ul').css('display', 'block');
@@ -151,7 +151,7 @@ $(function () {
     });
 
     $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
+        beforeSend: function (xhr, settings) {
             if (!(/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) && !this.crossDomain)
                 xhr.setRequestHeader('X-CSRFToken', $.cookie('csrftoken'));
         }
@@ -218,15 +218,15 @@ window.register_update_relative = function (get_times, show_relative, interval) 
 };
 
 // Placeholder polyfill
-$('input[placeholder]').each(function() {
+$('input[placeholder]').each(function () {
     if ($(this).val() == '') {
 
         $(this).val($(this).attr('placeholder'));
-        $(this).focus(function() {
+        $(this).focus(function () {
             if ($(this).val() == $(this).attr('placeholder')) $(this).val('');
 
         });
-        $(this).blur(function() {
+        $(this).blur(function () {
             if ($(this).val() == '') {
                 $(this).val($(this).attr('placeholder'));
             }
@@ -234,8 +234,8 @@ $('input[placeholder]').each(function() {
     }
 });
 
-$('form').submit(function(evt) {
-    $('input[placeholder]').each(function() {
+$('form').submit(function (evt) {
+    $('input[placeholder]').each(function () {
         if ($(this).attr('placeholder') == $(this).val()) {
             $(this).val('');
         }
@@ -313,3 +313,12 @@ window.register_notify = function (type, options) {
     }
     status_change();
 };
+
+
+$(function () {
+    // Close dismissable boxes
+    $("a.close").click(function () {
+        var $closer = $(this);
+        $closer.parent().fadeOut(200);
+    });
+});
