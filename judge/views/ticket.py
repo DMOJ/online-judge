@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
+from django.http import Http404
 from django.template.defaultfilters import truncatechars
 from django.template.loader import get_template
 from django.urls import reverse
@@ -210,11 +211,11 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
             return self.request.session.get(key, False)
         return self.request.GET.get(key, None) == '1'
 
-    def _get_queryset(self):
+    def _get_queryset(self, **kwargs):
         return Ticket.objects.select_related('user__user').prefetch_related('assignees__user').order_by('-id')
 
-    def get_queryset(self):
-        queryset = self._get_queryset()
+    def get_queryset(self, **kwargs):
+        queryset = self._get_queryset(**kwargs)
         if not self.can_edit_all or self.GET_with_session('own'):
             queryset = queryset.filter(Q(assignees__id=self.profile.id) | Q(user=self.profile)).distinct()
         if self.filter_assignees:
@@ -254,8 +255,10 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
 
 
 class ProblemTicketListView(TicketList):
-    def _get_queryset(self):
-        return Problem.objects.get(code=self.code).tickets
+    def _get_queryset(self, **kwargs):
+        if 'code' not in kwargs:
+            raise Http404
+        return Problem.objects.get(code=kwargs['code']).tickets
 
 
 class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
