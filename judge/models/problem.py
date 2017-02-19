@@ -99,8 +99,8 @@ class Problem(models.Model):
     description = models.TextField(verbose_name=_('problem body'))
     authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems')
     curators = models.ManyToManyField(Profile, verbose_name=_('curators'), blank=True, related_name='curated_problems',
-                                     help_text=_('These users will be able to edit a problem, '
-                                                 'but not be publicly shown as an author.'))
+                                      help_text=_('These users will be able to edit a problem, '
+                                                  'but not be publicly shown as an author.'))
     testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True, related_name='tested_problems',
                                      help_text=_(
                                          'These users will be able to view a private problem, but not edit it.'))
@@ -141,7 +141,15 @@ class Problem(models.Model):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
     def is_editor(self, profile):
-        return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists() or profile.user.is_superuser()
+        if (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists():
+            return True
+        if profile.user.is_superuser:
+            return True
+        if profile.user.has_perm('judge.edit_public_problem') and self.is_public:
+            return True
+        if profile.user.has_perm('judge.change_problem'):
+            return True
+        return False
 
     def is_accessible_by(self, user):
         # All users can see public problems
