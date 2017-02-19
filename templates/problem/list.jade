@@ -31,18 +31,6 @@ block media
             padding: 4px 10px;
         }
 
-        .solved {
-            color: #44AD41
-        }
-
-        .unsolved {
-            color: #DE2121
-        }
-
-        .attempted {
-            color: orange
-        }
-
         #category, #types {
             visibility: hidden;
         }
@@ -174,22 +162,22 @@ block body
                             if problem.id in completed_problem_ids
                                 td(solved='1'): a(href='{% url "user_submissions" problem.code request.user.username %}')
                                     if problem.is_public or IN_CONTEST
-                                        i.solved.fa.fa-check-circle
+                                        i.solved-problem-color.fa.fa-check-circle
                                     else
-                                        i.solved.fa.fa-lock
+                                        i.solved-problem-color.fa.fa-lock
                             else
                                 if problem.id in attempted_problems
                                     td(solved='0'): a(href='{% url "user_submissions" problem.code request.user.username %}')
                                         if problem.is_public or IN_CONTEST
-                                            i.attempted.fa.fa-minus-circle
+                                            i.attempted-problem-color.fa.fa-minus-circle
                                         else
-                                            i.attempted.fa.fa-lock
+                                            i.attempted-problem-color.fa.fa-lock
                                 else
                                     td(solved='-1')
                                         if problem.is_public or IN_CONTEST
-                                            i.unsolved.fa.fa-minus-circle
+                                            i.unsolved-problem-color.fa.fa-minus-circle
                                         else
-                                            i.unsolved.fa.fa-lock
+                                            i.unsolved-problem-color.fa.fa-lock
                         td.problem
                             a(href='{% url "problem_detail" problem.code %}')= problem.i18n_name
                         td.category= problem.group.full_name
