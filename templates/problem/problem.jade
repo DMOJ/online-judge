@@ -161,6 +161,10 @@ block description
             span(style='float: left; font-size: 0.85em')
                 a(style='color: gray; text-decoration: none', href='{% url "license" license.key %}')= license.display
 
+block post_description_end
+    if perms.judge.test_site
+        a.button(style='float:right', href='{% url "new_problem_ticket" problem.code %}') {% trans "Report an issue" %}
+
 block comments
     .comment-area
         h2
