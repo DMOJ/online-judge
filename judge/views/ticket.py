@@ -38,7 +38,7 @@ class TicketForm(forms.Form):
     body = forms.CharField(widget=ticket_widget)
 
     def __init__(self, *args, **kwargs):
-        super(CustomAuthenticationForm, self).__init__(*args, **kwargs)
+        super(TicketForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'placeholder': _('Ticket title')})
         self.fields['body'].widget.attrs.update({'placeholder': _('Issue description')})
 
