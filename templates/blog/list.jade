@@ -10,6 +10,7 @@ extends base
 - load nofollow
 - load tz
 - load reference
+- load dicts
 
 block title_row
 
@@ -128,6 +129,9 @@ block body
                                 - blocktrans with time=post.publish_on|date:_("N j, Y, g:i") asvar str_time
                                     | on {{ time }}
                                 span.relative= str_time
+                        .comment-count
+                            a(href='{% url "blog_post" post.id post.slug %}') = #{{ post_comment_counts|get_dict_item:post.id }}
+                                i.fa.fa-comments
                         .summary
                             - cache 86400 post_summary post.id
                                 | #{post.summary|default:post.content|markdown:"blog"|reference|latex_math|proxy_images|nofollowexternal|lazy_load}
