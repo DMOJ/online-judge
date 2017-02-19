@@ -141,7 +141,7 @@ class Problem(models.Model):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
     def is_editor(self, profile):
-        return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists()
+        return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists() or profile.user.is_superuser()
 
     def is_accessible_by(self, user):
         # All users can see public problems
