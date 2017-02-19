@@ -229,6 +229,7 @@ LANGUAGES = [
     ('ro', _('Romanian')),
     ('ru', _('Russian')),
     ('sr-latn', _('Serbian (Latin)')),
+    ('vi', _('Vietnamese')),
     ('zh-hans', _('Simplified Chinese')),
 ]
 
