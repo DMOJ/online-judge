@@ -43,6 +43,28 @@ def get_contest_problem(problem, profile):
     except ObjectDoesNotExist:
         return None
 
+class SolvedProblemMixin(object):
+    def get_completed_problems(self):
+        if self.in_contest:
+            return contest_completed_ids(self.profile.current_contest)
+        else:
+            return user_completed_ids(self.profile) if self.profile is not None else ()
+
+    def get_attempted_problems(self):
+        if self.in_contest:
+            return contest_attempted_ids(self.profile.current_contest)
+        else:
+            return user_attempted_ids(self.profile) if self.profile is not None else ()
+
+    @cached_property
+    def in_contest(self):
+        return self.profile is not None and self.profile.current_contest is not None
+
+    @cached_property
+    def profile(self):
+        if not self.request.user.is_authenticated():
+            return None
+        return self.request.user.profile
 
 class ProblemMixin(object):
     model = Problem
@@ -85,7 +107,7 @@ class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMi
             ))
 
 
-class ProblemDetail(ProblemMixin, CommentedDetailView):
+class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     context_object_name = 'problem'
     template_name = 'problem/problem.jade'
 
@@ -101,6 +123,8 @@ class ProblemDetail(ProblemMixin, CommentedDetailView):
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         context['has_pdf_render'] = HAS_PDF
+        context['completed_problem_ids'] = self.get_completed_problems()
+        context['attempted_problems'] = self.get_attempted_problems()
         try:
             context['editorial'] = Solution.objects.get(problem=self.object)
         except ObjectDoesNotExist:
@@ -187,7 +211,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         return response
 
 
-class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, ListView):
+class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, ListView, SolvedProblemMixin):
     model = Problem
     title = ugettext_lazy('Problems')
     context_object_name = 'problems'
@@ -245,10 +269,6 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, ListView):
             return None
         return self.request.user.profile
 
-    @cached_property
-    def in_contest(self):
-        return self.profile is not None and self.profile.current_contest is not None
-
     def get_contest_queryset(self):
         queryset = self.profile.current_contest.contest.contest_problems.select_related('problem__group') \
             .defer('problem__description').order_by('problem__code') \
@@ -302,18 +322,6 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, ListView):
             return self.get_contest_queryset()
         else:
             return self.get_normal_queryset()
-
-    def get_completed_problems(self):
-        if self.in_contest:
-            return contest_completed_ids(self.profile.current_contest)
-        else:
-            return user_completed_ids(self.profile) if self.profile is not None else ()
-
-    def get_attempted_problems(self):
-        if self.in_contest:
-            return contest_attempted_ids(self.profile.current_contest)
-        else:
-            return user_attempted_ids(self.profile) if self.profile is not None else ()
 
     def get_context_data(self, **kwargs):
         context = super(ProblemList, self).get_context_data(**kwargs)
