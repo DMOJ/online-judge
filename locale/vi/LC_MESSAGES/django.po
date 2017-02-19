@@ -1563,7 +1563,7 @@ msgstr[0] "%d ngày %h:%m:%s"
 #: .\judge\templatetags\timedelta.py:57
 msgctxt "time format without day"
 msgid "%h:%m:%s"
-msgstr "% h: %m:%s"
+msgstr "%h:%m:%s"
 
 #: .\judge\templatetags\timedelta.py:63
 msgctxt "time format no seconds with day"
@@ -1580,7 +1580,7 @@ msgstr[0] "%d ngày"
 #: .\judge\templatetags\timedelta.py:67
 msgctxt "hours and minutes"
 msgid "%h:%m"
-msgstr "% h: %m"
+msgstr "%h:%m"
 
 #: .\judge\utils\problem_data.py:60
 msgid "Empty batches not allowed."
