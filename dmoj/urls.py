@@ -142,7 +142,7 @@ urlpatterns = [
     url(r'^users/', include([
         url(r'^$', user.users, name='user_list'),
         url(r'^(?P<page>\d+)$', lambda request, page:
-            HttpResponsePermanentRedirect('%s?page=%s' % (reverse('user_list'), page))),
+        HttpResponsePermanentRedirect('%s?page=%s' % (reverse('user_list'), page))),
         url(r'^find$', user.user_ranking_redirect, name='user_ranking_redirect'),
     ])),
 
@@ -153,7 +153,7 @@ urlpatterns = [
         url(r'^/solved$', user.UserProblemsPage.as_view(), name='user_problems'),
         url(r'^/submissions/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
 
-        url(r'^/$', lambda _, user: HttpResponsePermanentRedirect(reverse('user_page', args=[user]))), 
+        url(r'^/$', lambda _, user: HttpResponsePermanentRedirect(reverse('user_page', args=[user]))),
     ])),
 
     url(r'^comments/upvote/$', comment.upvote_comment, name='comment_upvote'),
@@ -191,7 +191,7 @@ urlpatterns = [
         url(r'^/participations$', contests.own_participation_list, name='contest_participation_own'),
         url(r'^/participations/(?P<user>\w+)$', contests.participation_list, name='contest_participation'),
 
-        url(r'^/$', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))), 
+        url(r'^/$', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))),
     ])),
 
     url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
@@ -215,7 +215,7 @@ urlpatterns = [
                 name='organization_requests_rejected'),
         ])),
 
-        url(r'^/$', lambda _, key: HttpResponsePermanentRedirect(reverse('organization_home', args=[key]))), 
+        url(r'^/$', lambda _, key: HttpResponsePermanentRedirect(reverse('organization_home', args=[key]))),
     ])),
 
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
@@ -334,14 +334,15 @@ favicon_paths = ['apple-touch-icon-180x180.png', 'apple-touch-icon-114x114.png',
                  'apple-touch-icon-57x57.png', 'apple-touch-icon-72x72.png', 'apple-touch-icon.png', 'mstile-70x70.png',
                  'android-chrome-36x36.png', 'apple-touch-icon-precomposed.png', 'apple-touch-icon-76x76.png',
                  'apple-touch-icon-60x60.png', 'android-chrome-96x96.png', 'mstile-144x144.png', 'mstile-150x150.png',
-                 'safari-pinned-tab.svg', 'android-chrome-144x144.png', 'apple-touch-icon-152x152.png', 'favicon-96x96.png',
+                 'safari-pinned-tab.svg', 'android-chrome-144x144.png', 'apple-touch-icon-152x152.png',
+                 'favicon-96x96.png',
                  'favicon-32x32.png', 'favicon-16x16.png', 'android-chrome-192x192.png', 'android-chrome-48x48.png',
                  'mstile-310x150.png', 'apple-touch-icon-144x144.png', 'browserconfig.xml', 'manifest.json',
                  'apple-touch-icon-120x120.png', 'mstile-310x310.png']
 
-
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.views.generic import RedirectView
+
 for favicon in favicon_paths:
     urlpatterns.append(url(r'^%s$' % favicon, RedirectView.as_view(url=static('icons/' + favicon))))
 
@@ -351,3 +352,5 @@ handler500 = 'judge.views.error.error500'
 
 if 'newsletter' in settings.INSTALLED_APPS:
     urlpatterns.append(url(r'^newsletter/', include('newsletter.urls')))
+if 'impersonate' in settings.INSTALLED_APPS:
+    urlpatterns.append(url(r'^impersonate/', include('impersonate.urls')))
