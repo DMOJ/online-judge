@@ -1,0 +1,90 @@
+msgid "Problems"
+msgstr "Đề bài"
+
+msgid "Editorials"
+msgstr "Biên tập"
+
+msgid "Submissions"
+msgstr "Nộp bài"
+
+msgid "Users"
+msgstr "Người dùng"
+
+msgid "Organizations"
+msgstr "Tổ chức"
+
+msgid "Contests"
+msgstr "Cuộc thi"
+
+msgid "About"
+msgstr "About"
+
+msgid "Status"
+msgstr "Trạng thái"
+
+msgid "Runtimes"
+msgstr "Đang chạy"
+
+msgid "Tips"
+msgstr "Mẹo"
+
+msgid "API"
+msgstr "Giao diện Lập trình Ứng dụng (API)"
+
+msgid "Github"
+msgstr "Github"
+
+msgid "???"
+msgstr "???"
+
+msgid "Ad Hoc"
+msgstr "Ad Hoc"
+
+msgid "Advanced Math"
+msgstr "Toán nâng cao"
+
+msgid "Brute Force"
+msgstr "Brute Force"
+
+msgid "Data Structures"
+msgstr "Cấu trúc dữ liệu"
+
+msgid "Divide and Conquer"
+msgstr "Chia để trị"
+
+msgid "Dynamic Programming"
+msgstr "Lập trình động"
+
+msgid "Game Theory"
+msgstr "Lý thuyết trò chơi"
+
+msgid "Geometry"
+msgstr "Hình học"
+
+msgid "Graph Theory"
+msgstr "Lý thuyết graph"
+
+msgid "Greedy Algorithms"
+msgstr "Giải thuật tham lam"
+
+msgid "Implementation"
+msgstr "Thực hiện"
+
+msgid "Intermediate Math"
+msgstr "Toán trung cấp"
+
+msgid "Recursion"
+msgstr "Đệ quy"
+
+msgid "Regular Expressions"
+msgstr "Biểu thức thông thường"
+
+msgid "Simple Math"
+msgstr "Toán học đơn giản"
+
+msgid "Simulation"
+msgstr "Mô phỏng"
+
+msgid "String Algorithms"
+msgstr "Thuật toán chuỗi"
+
