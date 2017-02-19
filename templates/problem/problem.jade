@@ -38,16 +38,16 @@ block title_row
             if problem.id in completed_problem_ids
                 a(href='{% url "user_submissions" problem.code request.user.username %}')
                 if problem.is_public or IN_CONTEST
-                    i.solved.title-state.fa.fa-check-circle
+                    i.solved-problem-color.title-state.fa.fa-check-circle
                 else
-                    i.solved.title-state.fa.fa-lock
+                    i.solved-problem-color.title-state.fa.fa-lock
             else
                 if problem.id in attempted_problems
                     a(href='{% url "user_submissions" problem.code request.user.username %}')
                     if problem.is_public or IN_CONTEST
-                        i.attempted.title-state.fa.fa-minus-circle
+                        i.attempted-problem-color.title-state.fa.fa-minus-circle
                     else
-                        i.attempted.title-state.fa.fa-lock
+                        i.attempted-problem-color.title-state.fa.fa-lock
 
         h2(style='color:#393630; display: inline-block')= title
         if has_pdf_render
