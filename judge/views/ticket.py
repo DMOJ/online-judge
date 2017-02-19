@@ -42,6 +42,7 @@ class TicketForm(forms.Form):
         self.fields['title'].widget.attrs.update({'placeholder': _('Ticket title')})
         self.fields['body'].widget.attrs.update({'placeholder': _('Issue description')})
 
+
 class SingleObjectFormView(SingleObjectMixin, FormView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
