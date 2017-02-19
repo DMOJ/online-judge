@@ -72,6 +72,9 @@ block info_float
 
     if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.editor_ids or perms.judge.edit_public_problem and problem.is_public
         hr
+        div: a(href='{% url "problem_ticket_list" problem.code %}')
+            - blocktrans with count=num_open_tickets
+                | Manage tickets ({{ count }} new)
         div: a(href='{% url "admin:judge_problem_change" problem.id %}') {% trans "Edit problem" %}
     if perms.judge.clone_problem
         div: form(action='{% url "problem_clone" problem.code %}', method='post')
