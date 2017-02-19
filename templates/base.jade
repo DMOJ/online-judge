@@ -70,6 +70,10 @@ html(lang=LANGUAGE_CODE)
             link(type='text/css', rel='stylesheet', href='{% static "libs/featherlight/featherlight.min.css" %}')
             link(rel='stylesheet', href='{% static "libs/clipboard/tooltip.css" %}')
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default:site.domain }}{{ request.get_full_path }}')
+        if request.user.is_impersonate
+            style.
+                #nav-container { background: #893e89 !important; }
+
         block media
         if not INLINE_JQUERY
             script(src=JQUERY_JS)
