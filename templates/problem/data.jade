@@ -104,21 +104,7 @@ block js_media
 
             $table.on('add-row', function (e, $tr) {
                 var $order = $tr.find('input').filter('[id$=order]').attr('type', 'hidden').val(++order)
-                        .after($('<i>', {'class': 'fa case-move fa-chevron-down'}).click(function () {
-                            var $tr = $(this).parents('tr'), $next = $tr.next();
-                            if ($next.length) {
-                                swap_row($tr, $next);
-                                window.scrollBy(0, $next.height());
-                            }
-                        }))
-                        .after($('<i>', {'class': 'fa case-move fa-chevron-up'}).click(function () {
-                            var $tr = $(this).parents('tr'), $prev = $tr.prev();
-                            if ($prev.length) {
-                                swap_row($prev, $tr);
-                                window.scrollBy(0, -$prev.height());
-                            }
-                        }));
-                $order.after($('<span>', {'class': 'order'}).text($order.val()))
+                        .after($('<span>', {'class': 'order'}).text($order.val()))
                         .after($('<i>', {'class': 'fa fa-fw fa-lg fa-ellipsis-v'}));
 
                 var $opts = $tr.find('input').slice(2, 6);
@@ -171,9 +157,9 @@ block js_media
                         this.$instance.find('.generator-args-editor')
                                 .find('textarea').val($input.val()).end()
                                 .find('.button').click(function () {
-                                    $input.val($(this).prev().val());
-                                    $.featherlight.current().close();
-                                }).end()
+                            $input.val($(this).prev().val());
+                            $.featherlight.current().close();
+                        }).end()
                                 .show();
                     }
                 });
@@ -269,16 +255,6 @@ block media
     if has_select2
         link(href='{{ SELECT2_CSS_URL }}', type='text/css', media='screen', rel='stylesheet')
     style.
-        .case-move {
-            cursor: pointer;
-        }
-
-        #case-table > tbody > tr:first-child .case-move.fa-chevron-up,
-        #case-table > tbody > tr:last-child .case-move.fa-chevron-down {
-            color: #ccc;
-            cursor: not-allowed;
-        }
-
         #case-table .select2 {
             text-align: initial;
         }
