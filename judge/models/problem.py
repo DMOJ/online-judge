@@ -141,13 +141,16 @@ class Problem(models.Model):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
     def is_editor(self, profile):
-        if profile.user.is_superuser:
+        return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists():
+
+    def is_editable_by(self, user):
+        if user.is_superuser:
             return True
-        if profile.user.has_perm('judge.edit_public_problem') and self.is_public:
+        if user.has_perm('judge.edit_public_problem') and self.is_public:
             return True
-        if profile.user.has_perm('judge.change_problem'):
+        if user.has_perm('judge.change_problem'):
             return True
-        if (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists():
+        if self.is_editor(user.profile):
             return True
         return False
 
