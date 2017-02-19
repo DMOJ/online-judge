@@ -140,6 +140,7 @@ INSTALLED_APPS += (
     'sortedm2m',
     'pyjade.ext.django',
     'statici18n',
+    'impersonate',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -157,7 +158,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'judge.social_auth.SocialAuthExceptionMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
+    'impersonate.middleware.ImpersonateMiddleware',
 )
+
+IMPERSONATE_REQUIRE_SUPERUSER = True
+IMPERSONATE_DISABLE_LOGGING = True
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
@@ -418,7 +423,6 @@ SOCIAL_AUTH_SLUGIFY_USERNAMES = True
 SOCIAL_AUTH_SLUGIFY_FUNCTION = 'judge.social_auth.slugify_username'
 
 JUDGE_AMQP_PATH = None
-
 
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:
