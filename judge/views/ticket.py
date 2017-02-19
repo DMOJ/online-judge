@@ -37,6 +37,10 @@ class TicketForm(forms.Form):
     title = forms.CharField(max_length=100, label=ugettext_lazy('Ticket title'))
     body = forms.CharField(widget=ticket_widget)
 
+    def __init__(self, *args, **kwargs):
+        super(CustomAuthenticationForm, self).__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({'placeholder': _('Ticket title')})
+        self.fields['body'].widget.attrs.update({'placeholder': _('Issue description')})
 
 class SingleObjectFormView(SingleObjectMixin, FormView):
     def post(self, request, *args, **kwargs):
