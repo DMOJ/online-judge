@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.db.models import Q, Max
+from django.db.models import Q, Max, Count
 from django.http import Http404
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -40,6 +40,9 @@ class PostList(ListView):
         context['submission_count'] = Submission.objects.filter(problem__is_public=True).count()
         context['language_count'] = Language.objects.count()
 
+        context['post_comment_counts'] = dict(Comment.objects.filter(page__in=['b:%d' % post.id for post in context['posts']])
+                                              .values_list('page').annotate(count=Count('page')).order_by())
+
         now = timezone.now()
 
         # Dashboard stuff
@@ -72,7 +75,7 @@ class PostView(TitleMixin, CommentedDetailView):
 
     def get_comment_page(self):
         return 'b:%s' % self.object.id
-        
+
     def get_context_data(self, **kwargs):
         context = super(PostView, self).get_context_data(**kwargs)
         context['og_image'] = self.object.og_image
