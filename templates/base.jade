@@ -148,7 +148,10 @@ html(lang=LANGUAGE_CODE)
                                 if request.user.is_staff or request.user.is_superuser
                                     li: a(href='{% url "admin:index" %}') {% trans "Admin" %}
                                 li: a(href='{% url "user_edit_profile" %}') {% trans "Edit profile" %}
-                                li: a(href='{% url "auth_logout" %}?next=') {% trans "Log out" %}
+                                if request.user.is_impersonate
+                                    li: a(href='{% url "impersonate-stop" %}') Stop impersonating
+                                else
+                                    li: a(href='{% url "auth_logout" %}?next=') {% trans "Log out" %}
                     else
                         span.anon
                             a(href='{% url "auth_login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
