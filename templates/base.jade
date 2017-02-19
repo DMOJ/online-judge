@@ -100,8 +100,9 @@ html(lang=LANGUAGE_CODE)
 
         if misc_config.analytics
             | #{misc_config.analytics|safe}
-        
-        if request.user.profile.user_script
+
+        // Don't run userscript since it may be malicious
+        if request.user.profile.user_script and not request.user.is_impersonate
             script(type='text/javascript') #{request.user.profile.user_script|safe}
 
         noscript
