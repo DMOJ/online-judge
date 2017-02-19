@@ -60,6 +60,12 @@ class SolvedProblemMixin(object):
     def in_contest(self):
         return self.profile is not None and self.profile.current_contest is not None
 
+    @cached_property
+    def profile(self):
+        if not self.request.user.is_authenticated():
+            return None
+        return self.request.user.profile
+
 class ProblemMixin(object):
     model = Problem
     slug_url_kwarg = 'problem'
