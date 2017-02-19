@@ -8,6 +8,8 @@ div.page-title
             a(href='{% url "user_page" user.user.username %}') {% trans "About" %}
         li(class=('active' if user_tab == 'problems' else ''))
             a(href='{% url "user_problems" user.user.username %}') {% trans "Problems" %}
+        if request.user.is_superuser
+            li: a(href='{% url "impersonate-start" user.user.id ') {% trans "Impersonate" %}
         if user.user == request.user
             li(class=('active' if user_tab == 'edit' else ''))
                 a(href='{% url "user_edit_profile" %}') {% trans "Edit profile" %}
