@@ -40,8 +40,9 @@ class PostList(ListView):
         context['submission_count'] = Submission.objects.filter(problem__is_public=True).count()
         context['language_count'] = Language.objects.count()
 
-        context['post_comment_counts'] = dict(Comment.objects.filter(page__in=['b:%d' % post.id for post in context['posts']])
+        comment_counts = dict(Comment.objects.filter(page__in=['b:%d' % post.id for post in context['posts']])
                                               .values_list('page').annotate(count=Count('page')).order_by())
+        context['post_comment_counts'] = {int(k[2:]): v for k, v in comment_counts}
 
         now = timezone.now()
 
