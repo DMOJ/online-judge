@@ -167,6 +167,15 @@ block media
 
 block body
     br
+    if perms.judge.test_site
+        if default_lang not in form.fields.language.queryset
+            .alert.alert-warning.alert-dismissable
+                a.close x
+                b {% trans "Warning!" %}
+                = ' '
+                - blocktrans with default_language=default_lang.name
+                    | Your default language, {{ default_language }}, is unavailable for this problem and has been deselected.
+
     form#problem_submit.form-area(style='width:100%;box-sizing:border-box', action='', method='post')
         - csrf_token
         | #{form.non_field_errors}
