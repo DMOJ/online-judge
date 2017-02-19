@@ -259,7 +259,7 @@ class ProblemTicketListView(TicketList):
         if 'code' not in self.kwargs:
             raise Http404
         problem = Problem.objects.get(code=self.kwargs['code'])
-        if not self.request.user.is_authenticated() or not problem.is_accessible_by(self.request.user):
+        if not self.request.user.is_authenticated() or not problem.is_editor(self.request.user.profile):
             raise Http404
         return problem.tickets.all()
 
