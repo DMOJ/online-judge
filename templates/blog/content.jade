@@ -39,9 +39,8 @@ block body
        - post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>"
        - post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>"
        - post_to_twitter "{{ SITE_NAME }}:" post "<i class=\"fa fa-twitter\"></i>"
-    .comment-area
-        h2 {% trans "Comments" %}
-        include comments/list
+
+    include comments/list
 
 block bodyend
     | #{block.super}
