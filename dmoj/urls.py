@@ -303,8 +303,8 @@ urlpatterns = [
         ])),
         url(r'list/', include([
             url(r'^$', ticket.TicketList.as_view(), name='ticket_list'),
-            url(r'^/problem/(?P<code>[^/]+)$', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
-            url(r'^/ajax$', ticket.TicketListDataAjax.as_view(), name='ticket_ajax')
+            url(r'^problem/(?P<code>[^/]+)$', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
+            url(r'^ajax$', ticket.TicketListDataAjax.as_view(), name='ticket_ajax')
         ]))
     ])),
 
