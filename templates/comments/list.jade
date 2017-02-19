@@ -46,7 +46,7 @@
                                 .relative-time
                                 span.comment-time(data-unix='{{ node.time|utc|date:"c" }}')
                                     | &nbsp;{% trans "commented" %}
-                                    - blocktrans with time=node.time|date:_("N j, Y, g:i a") asvar str_time
+                                    - blocktrans with time=node.time|date:_("N j, Y") asvar str_time
                                         | on {{ time }}
                                     span.relative= str_time
                                 span.comment-spacer
