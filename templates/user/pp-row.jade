@@ -24,7 +24,7 @@ td.sub-pp.sub-usage
         = ' '
         b #{breakdown.weight|floatformat:0}%
         = ' '
-        if breakdown.scaled_points < 1
+        if breakdown.scaled_points < 10
             | (#{breakdown.scaled_points|floatformat:1}pp)
         else
             | (#{breakdown.scaled_points|floatformat:0}pp)
