@@ -165,13 +165,15 @@ block user_content
             h3.unselectable.toggle.closed
                 span.fa.fa-chevron-right.fa-fw
                 | {% trans "Authored Problems" %} (#{authored | length})
-            ul.toggled(style='display: none')
-                each problem in authored
-                    li
-                        a(href='{% url "problem_detail" problem.code %}')= problem.name
-                        |  (
-                        a(href='{% url "ranked_submissions" problem.code %}') #{problem.points | floatformat}{% if problem.partial %}p{% endif %}
-                        | )
+            table.toggled(style='display: none')
+                thead: tr
+                    th {% trans "Problem" %}
+                    th {% trans "Points" %}
+                tbody
+                    each problem in authored
+                        tr
+                            td.problem-name: a(href='{% url "problem_detail" problem.code %}')= problem.name
+                            td.problem-score: a(href='{% url "ranked_submissions" problem.code %}') #{problem.points | floatformat}{% if problem.partial %}p{% endif %}
     if request.user.is_authenticated and request.user != user.user
         .strike
             span
