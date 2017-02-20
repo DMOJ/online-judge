@@ -81,6 +81,9 @@ block info_float
                 =' '
                 span.badge=num_open_tickets
         div: a(href='{% url "admin:judge_problem_change" problem.id %}') {% trans "Edit problem" %}
+        if not problem.is_manually_managed
+            div: a(href='{% url "problem_data" problem.code %}') {% trans "Edit test data" %}
+
     if perms.judge.clone_problem
         div: form(action='{% url "problem_clone" problem.code %}', method='post')
             - csrf_token
