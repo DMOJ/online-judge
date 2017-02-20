@@ -59,7 +59,8 @@ class ProblemTestCase(models.Model):
     type = models.CharField(max_length=1, verbose_name=_('case type'),
                             choices=(('C', _('Normal case')),
                                      ('S', _('Batch start')),
-                                     ('E', _('Batch end'))))
+                                     ('E', _('Batch end'))),
+                            default='C')
     input_file = models.CharField(max_length=100, verbose_name=_('input file name'), blank=True)
     output_file = models.CharField(max_length=100, verbose_name=_('output file name'), blank=True)
     generator_args = models.TextField(verbose_name=_('generator arguments'), blank=True)
