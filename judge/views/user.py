@@ -138,6 +138,7 @@ class UserPerformancePointsAjax(UserMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         httpresp = super(UserPerformancePointsAjax, self).get(request, *args, **kwargs)
+        httpresp.render()
 
         return JsonResponse({
             'results': httpresp.content,
