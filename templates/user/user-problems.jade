@@ -136,7 +136,8 @@ block user_content
                     col.sub-pp
                 tbody
                     - include 'user/pp-table-body.jade'
-            a#load-more-link(href='javascript:load_more_pp();') {% trans "Load more" %}
+            if pp_has_more
+                a#load-more-link(href='javascript:load_more_pp();') {% trans "Load more" %}
         else
             i {% trans "This user has not yet solved any problems." %}
 

@@ -111,7 +111,9 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         if self.request.user.has_perm('judge.test_site'):
             context['pp_rank'] = Profile.objects.filter(
                 performance_points__gt=self.object.performance_points).count() + 1
-            context['pp_breakdown'] = get_pp_breakdown(self.object, start=0, end=25)[0]
+            breakdown, has_more = get_pp_breakdown(self.object, start=0, end=25)
+            context['pp_breakdown'] = breakdown
+            context['pp_has_more'] = has_more
 
         if rating:
             context['rating_rank'] = Profile.objects.filter(rating__gt=self.object.rating).count() + 1
