@@ -257,7 +257,7 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
                                        .values_list('id', flat=True))),
             'assignee_id': json.dumps(list(Profile.objects.filter(user__username__in=self.filter_assignees)
                                            .values_list('id', flat=True))),
-            'own_id': self.profile.id if not self.can_edit_all or self.GET_with_session('own') else 'null',
+            'own_id': self.profile.id if self.GET_with_session('own') else 'null',
         }
         context['last_msg'] = event.last()
         context.update(paginate_query_context(self.request))

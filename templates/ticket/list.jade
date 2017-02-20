@@ -98,8 +98,12 @@ block js_media
                         });
                     },
                     error: function (data) {
-                        console.log('Could not load ticket:');
-                        console.log(data.responseText);
+                        if (data.status === 403)
+                            console.log('No right to see: ' + ticket.id);
+                        else {
+                            console.log('Could not load ticket:');
+                            console.log(data.responseText);
+                        }
                     }
                 });
             }
