@@ -149,7 +149,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                                 var $edits = $comment.find('.comment-edits').first();
                                 if ($edits.text()) {
                                     var edits = parseInt($edits.text());
-                                    $edits.text(isNaN(edits) ? '2 edits' : edits + 1 + ' edits')
+                                    $edits.text('updated')
                                 } else $edits.text('edited');
                             }).fail(function () {
                                 console.log('Failed to update comment:' + id);
