@@ -356,7 +356,7 @@ block body
 
     form(action='', method='POST', enctype='multipart/form-data')
         - csrf_token
-        #{cases_formset.management_form}
+        | #{cases_formset.management_form}
         table.table #{data_form.as_table}
         #column-visible(data-problem=problem.code)
             strong {% trans "Show columns:" %}
