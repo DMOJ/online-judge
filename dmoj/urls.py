@@ -162,7 +162,6 @@ urlpatterns = [
     url(r'^comments/upvote/$', comment.upvote_comment, name='comment_upvote'),
     url(r'^comments/downvote/$', comment.downvote_comment, name='comment_downvote'),
     url(r'^comments/(?P<id>\d+)/', include([
-        url(r'^revisions$', comment.CommentHistory.as_view(), name='comment_history'),
         url(r'^edit$', comment.CommentEdit.as_view(), name='comment_edit'),
         url(r'^history/ajax$', comment.CommentRevisionAjax.as_view(), name='comment_revision_ajax'),
         url(r'^edit/ajax$', comment.CommentEditAjax.as_view(), name='comment_edit_ajax'),
