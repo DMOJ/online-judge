@@ -203,11 +203,9 @@ block user_content
             table.table.toggled(style='display: none')
                 thead: tr
                     th {% trans "Problem" %}
-                    th {% trans "Category" %}
                     th {% trans "Score" %}
                 tbody
                     each entry in group.list
                         tr
                             td.problem-name: a(href='{% url "problem_detail" entry.code %}') #{entry.name}
-                            td.problem-category= entry.group.full_name
                             td.problem-score: a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
