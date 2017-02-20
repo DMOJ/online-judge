@@ -133,8 +133,8 @@ class UserPerformancePointsAjax(UserMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(UserPerformancePointsAjax, self).get_context_data(**kwargs)
         breakdown, self.has_more = get_pp_breakdown(self.object,
-                                               start=int(self.request.GET.get('start', 0)),
-                                               end=int(self.request.GET.get('end', PP_ENTRIES)))
+                                                    start=int(self.request.GET.get('start', 0)),
+                                                    end=int(self.request.GET.get('end', PP_ENTRIES)))
         context['pp_breakdown'] = breakdown
         return context
 
@@ -146,10 +146,6 @@ class UserPerformancePointsAjax(UserMixin, DetailView):
             'results': httpresp.content,
             'has_more': self.has_more,
         })
-
-    def get_name(self, obj):
-        return unicode(obj)
-
 
 
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
