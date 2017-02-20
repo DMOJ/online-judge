@@ -113,9 +113,12 @@ class ProblemAdmin(VersionAdmin):
         return actions
 
     def get_readonly_fields(self, request, obj=None):
+        fields = self.readonly_fields
         if not request.user.has_perm('judge.change_public_visibility'):
-            return self.readonly_fields + ('is_public',)
-        return self.readonly_fields
+            fields += ('is_public',)
+        if not request.user.has_perm('judge.change_manually_managed'):
+            fields += ('is_manually_managed',)
+        return fields
 
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
