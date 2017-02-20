@@ -135,8 +135,8 @@ block user_js_media
             window.currently_requesting_pp = true;
 
             $.get('{% url "user_pp_ajax" user.user.username %}', {
-                start: window.show_pp_base * 25,
-                end: (window.show_pp_base + 1) * 25
+                start: window.show_pp_base * 10,
+                end: (window.show_pp_base + 1) * 10
             }).done(function (data) {
                 $('table.pp-table').append(data['results']);
                 window.show_pp_base++;
