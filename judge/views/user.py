@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count, Min
 from django.http import HttpResponseRedirect, Http404
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, Context
 from django.utils import timezone
@@ -108,8 +109,9 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context['rank'] = Profile.objects.filter(points__gt=self.object.points).count() + 1
 
         if self.request.user.has_perm('judge.test_site'):
-            context['pp_rank'] = Profile.objects.filter(performance_points__gt=self.object.performance_points).count() + 1
-            context['pp_breakdown'] = get_pp_breakdown(self.object, start=0, end=25)
+            context['pp_rank'] = Profile.objects.filter(
+                performance_points__gt=self.object.performance_points).count() + 1
+            context['pp_breakdown'] = get_pp_breakdown(self.object, start=0, end=25)[0]
 
         if rating:
             context['rating_rank'] = Profile.objects.filter(rating__gt=self.object.rating).count() + 1
@@ -128,10 +130,23 @@ class UserPerformancePointsAjax(UserMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserPerformancePointsAjax, self).get_context_data(**kwargs)
-        context['pp_breakdown'] = get_pp_breakdown(self.object,
-                                                   start=int(self.request.GET.get('start', 0)),
-                                                   end=int(self.request.GET.get('end', PP_ENTRIES)))
+        breakdown, self.has_more = get_pp_breakdown(self.object,
+                                               start=int(self.request.GET.get('start', 0)),
+                                               end=int(self.request.GET.get('end', PP_ENTRIES)))
+        context['pp_breakdown'] = breakdown
         return context
+
+    def get(self, request, *args, **kwargs):
+        httpresp = super(UserPerformancePointsAjax, self).get(request, *args, **kwargs)
+
+        return JsonResponse({
+            'results': httpresp.content,
+            'has_more': self.has_more,
+        })
+
+    def get_name(self, obj):
+        return unicode(obj)
+
 
 
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)

@@ -111,10 +111,10 @@ block user_js_media
                 start: window.show_pp_base * 25,
                 end: (window.show_pp_base + 1) * 25
             }).done(function (data) {
-                $('table.pp-table').append(data);
+                $('table.pp-table').append(data['results']);
                 window.show_pp_base++;
-                if (window.show_pp_base == 4) {
-                    $('#load-more-link').hide();
+                if (!data['has_more']) {
+                    $("#load-more-link").hide();
                 }
             });
         };
