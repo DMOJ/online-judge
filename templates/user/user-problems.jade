@@ -113,7 +113,7 @@ block user_js_media
             }).done(function (data) {
                 $('table.pp-table').append(data);
                 window.show_pp_base++;
-                if (window.show_pp_base > 4) {
+                if (window.show_pp_base == 4) {
                     $('#load-more-link').hide();
                 }
             });
