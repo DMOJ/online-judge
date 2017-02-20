@@ -100,6 +100,15 @@ block user_media
             display: block;
         }
 
+        .problem-name {
+            text-align: left;
+            padding-left: 1em;
+        }
+
+        .problem-score {
+            width: 80px;
+        }
+
         .breakdown-header {
             font-weight: 600;
             font-size: 1.7em;
@@ -180,10 +189,10 @@ block user_content
                 | (#{group.list | list_getitem:"points"|sum_list|floatformat:1} {% trans "points" %})
             table.table.toggled(style='display: none')
                 thead: tr
-                    th.problem-name {% trans "Problem" %}
-                    th.problem-score {% trans "Score" %}
+                    th {% trans "Problem" %}
+                    th {% trans "Score" %}
                 tbody
                     each entry in group.list
                         tr
-                            td: a(href='{% url "problem_detail" entry.code %}') #{entry.name}
-                            td: a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
+                            td.problem-name: a(href='{% url "problem_detail" entry.code %}') #{entry.name}
+                            td.problem-score: a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
