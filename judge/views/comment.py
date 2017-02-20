@@ -82,28 +82,6 @@ class CommentRevisionAjax(CommentMixin, DetailView):
         return comment
 
 
-class CommentHistoryAjax(CommentMixin, DetailView):
-    template_name = 'comments/history-ajax.jade'
-
-    def get_context_data(self, **kwargs):
-        context = super(CommentHistoryAjax, self).get_context_data(**kwargs)
-        context['revisions'] = Version.objects.get_for_object(self.object)
-        return context
-
-    def get_object(self, queryset=None):
-        comment = super(CommentHistoryAjax, self).get_object(queryset)
-        if comment.hidden and not self.request.user.has_perm('judge.change_comment'):
-            raise Http404()
-        return comment
-
-
-class CommentHistory(TitleMixin, CommentHistoryAjax):
-    template_name = 'comments/history.jade'
-
-    def get_title(self):
-        return _('Revisions for %s') % self.object.title
-
-
 class CommentEditForm(ModelForm):
     class Meta:
         model = Comment
