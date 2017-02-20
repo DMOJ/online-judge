@@ -165,7 +165,7 @@ block user_content
             h3.unselectable.toggle.closed
                 span.fa.fa-chevron-right.fa-fw
                 | {% trans "Authored Problems" %} (#{authored | length})
-            table.toggled(style='display: none')
+            table.table.toggled(style='display: none')
                 thead: tr
                     th {% trans "Problem" %}
                     th {% trans "Points" %}
