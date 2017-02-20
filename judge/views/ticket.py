@@ -231,9 +231,6 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
 
     def get_queryset(self):
         queryset = self._get_queryset()
-        if self.filter_assignees:
-            return queryset.filter(assignees__user__username__in=self.filter_assignees)
-
         own_filter = Q(assignees__id=self.profile.id) | Q(user=self.profile)
         if self.GET_with_session('own'):
             queryset = queryset.filter(own_filter).distinct()
@@ -241,6 +238,8 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
             queryset = queryset.filter(own_filter |
                                        Q(content_type=ContentType.objects.get_for_model(Problem),
                                          object_id__in=editable_problems(self.user, self.profile)))
+        if self.filter_assignees:
+            queryset = queryset.filter(assignees__user__username__in=self.filter_assignees)
         return queryset
 
     def get_context_data(self, **kwargs):
