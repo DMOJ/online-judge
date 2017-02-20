@@ -10,6 +10,10 @@ block js_media
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script(type='text/javascript').
             $(function () {
+                $('select').select2({
+                    minimumResultsForSearch: -1
+                });
+
                 function autofill_if_exists($select, file) {
                     if (!$select.val() && ~window.valid_files.indexOf(file))
                         $select.val(file).trigger('change');
@@ -103,21 +107,7 @@ block js_media
             checker_precision($('#id_problem-data-checker'));
 
             $table.on('add-row', function (e, $tr) {
-                var $order = $tr.find('input').filter('[id$=order]').attr('type', 'hidden').val(++order)
-                        .after($('<i>', {'class': 'fa case-move fa-chevron-down'}).click(function () {
-                            var $tr = $(this).parents('tr'), $next = $tr.next();
-                            if ($next.length) {
-                                swap_row($tr, $next);
-                                window.scrollBy(0, $next.height());
-                            }
-                        }))
-                        .after($('<i>', {'class': 'fa case-move fa-chevron-up'}).click(function () {
-                            var $tr = $(this).parents('tr'), $prev = $tr.prev();
-                            if ($prev.length) {
-                                swap_row($prev, $tr);
-                                window.scrollBy(0, -$prev.height());
-                            }
-                        }));
+                var $order = $tr.find('input').filter('[id$=order]').attr('type', 'hidden').val(++order);
                 $order.after($('<span>', {'class': 'order'}).text($order.val()))
                         .after($('<i>', {'class': 'fa fa-fw fa-lg fa-ellipsis-v'}));
 
@@ -269,19 +259,11 @@ block media
     if has_select2
         link(href='{{ SELECT2_CSS_URL }}', type='text/css', media='screen', rel='stylesheet')
     style.
-        .case-move {
-            cursor: pointer;
-        }
-
-        #case-table > tbody > tr:first-child .case-move.fa-chevron-up,
-        #case-table > tbody > tr:last-child .case-move.fa-chevron-down {
-            color: #ccc;
-            cursor: not-allowed;
-        }
-
         #case-table .select2 {
             text-align: initial;
         }
+
+        .order-column { width: 1em; }
 
         .bad-file input, .bad-file .select2-selection {
             border-color: red;
@@ -346,6 +328,8 @@ block media
             white-space: nowrap;
         }
 
+        .type-column { width: 8em; }
+
 block header
     if data_form.instance.has_yml
         .title-line-action [#[a(href='{% url "problem_data_init" problem.code %}') {% trans "View YAML" %}]]
@@ -366,8 +350,8 @@ block body
             label #[input(type='checkbox', data-suffix='generator_args')] {% trans "Generator args" %}
         table.table#case-table
             thead: tr
-                th {% trans "Order" %}
-                th {% trans "Type" %}
+                th.order-column
+                th.type-column {% trans "Type" %}
                 th {% trans "Input file" %}
                 th {% trans "Output file" %}
                 th {% trans "Points" %}
@@ -385,7 +369,7 @@ block body
                     </tbody><tbody class="extra-row-body" style="display: none">
                 tr(data-type=form['type'].value())
                     td #{form.id}#{form.order.errors}#{form.order}
-                    td #{form.type.errors}#{form.type}
+                    td.type-column #{form.type.errors}#{form.type}
                     td(class=(None if form.empty_permitted or form['type'].value() != 'C' or form['input_file'].value() in valid_files else 'bad-file'))
                         | #{form.input_file.errors}#{form.input_file}
                     td(class=(None if form.empty_permitted or form['type'].value() != 'C' or form['output_file'].value() in valid_files else 'bad-file'))
