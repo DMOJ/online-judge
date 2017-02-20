@@ -74,11 +74,11 @@ block info_float
         hr
         div: a(href='{% url "solution" editorial.url %}') Read editorial
 
-    if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.editor_ids or perms.judge.edit_public_problem and problem.is_public
+    if can_edit_problem
         hr
         div: a(href='{% url "problem_ticket_list" problem.code %}') {% trans "Manage tickets" %}
             if num_open_tickets
-                =' '
+                = ' '
                 span.badge=num_open_tickets
         div: a(href='{% url "admin:judge_problem_change" problem.id %}') {% trans "Edit problem" %}
         if not problem.is_manually_managed
