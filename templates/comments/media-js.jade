@@ -96,7 +96,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                     upvote: $comment.find('.upvote-link').first(),
                     downvote: $comment.find('.downvote-link').first()
                 };
-            }
+            };
 
             window.comment_upvote = function (id) {
                 ajax_vote('{% url "comment_upvote" %}', id, 1, function () {
