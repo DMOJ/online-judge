@@ -50,9 +50,10 @@ block body
                 br
                 b {% trans "Total points:" %}
                 if perms.judge.test_site
-                    |  #{user.performance_points}
+                    |  #{user.performance_points|floatformat:0}
                 else
                     |  #{user.points}
+                br
                 br
                 a(href='{% url "all_user_submissions" user.user.username %}') {% trans "View submissions" %}
                 if ratings
