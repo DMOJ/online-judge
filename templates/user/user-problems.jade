@@ -178,10 +178,12 @@ block user_content
                 span.fa.fa-chevron-right.fa-fw
                 | #{group.grouper}
                 | (#{group.list | list_getitem:"points"|sum_list|floatformat:1} {% trans "points" %})
-            ul.toggled(style='display: none')
-                each entry in group.list
-                    li
-                        a(href='{% url "problem_detail" entry.code %}') #{entry.name}
-                        |  (
-                        a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
-                        | )
+            table.table.toggled(style='display: none')
+                thead: tr
+                    th.problem-name {% trans "Problem" %}
+                    th.problem-score {% trans "Score" %}
+                tbody
+                    each entry in group.list
+                        tr
+                            td: a(href='{% url "problem_detail" entry.code %}') #{entry.name}
+                            td: a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
