@@ -10,6 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count, Min
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect, Http404
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
@@ -132,9 +133,13 @@ class UserPerformancePointsAjax(UserMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserPerformancePointsAjax, self).get_context_data(**kwargs)
-        breakdown, self.has_more = get_pp_breakdown(self.object,
-                                                    start=int(self.request.GET.get('start', 0)),
-                                                    end=int(self.request.GET.get('end', PP_ENTRIES)))
+        try:
+            breakdown, self.has_more = get_pp_breakdown(self.object,
+                                                        start=int(self.request.GET.get('start', 0)),
+                                                        end=int(self.request.GET.get('end', PP_ENTRIES)))
+        except:
+            # Bad user trying to mess around
+            raise HttpResponse(status=402)
         context['pp_breakdown'] = breakdown
         return context
 
