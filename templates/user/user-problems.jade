@@ -153,10 +153,10 @@ block user_content
 
     if authored
         div.user-problem-group
-            h3.unselectable.toggle.open
+            h3.unselectable.toggle.closed
                 span.fa.fa-chevron-right.fa-fw
                 | {% trans "Authored Problems" %} (#{authored | length})
-            ul.toggled
+            ul.toggled(style='display: none')
                 each problem in authored
                     li
                         a(href='{% url "problem_detail" problem.code %}')= problem.name
@@ -174,11 +174,11 @@ block user_content
     - regroup best_submissions by group as problems
     each group in problems
         div.user-problem-group
-            h3.unselectable.toggle.open
+            h3.unselectable.toggle.closed
                 span.fa.fa-chevron-right.fa-fw
                 | #{group.grouper}
                 | (#{group.list | list_getitem:"points"|sum_list|floatformat:1} {% trans "points" %})
-            ul.toggled
+            ul.toggled(style='display: none')
                 each entry in group.list
                     li
                         a(href='{% url "problem_detail" entry.code %}') #{entry.name}
