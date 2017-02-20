@@ -88,10 +88,13 @@ block js_media
             var $tbody = $('#ticket-list').find('tbody');
 
             function new_ticket(ticket) {
+                console.log('Fetching data for: ' + ticket.id);
                 $.ajax({
                     url: '{% url "ticket_ajax" %}',
                     data: {id: ticket.id},
                     success: function (data) {
+                        console.log('Got data for: ' + ticket.id);
+                        console.log(data);
                         $tbody.prepend($(data.row));
                         notify('ticket', data.notification.title, {
                             body: data.notification.body
@@ -112,6 +115,7 @@ block js_media
                 if (!main_list_notify(ticket.id)) return;
 
                 var $row = $('#ticket-' + ticket.id);
+                console.log('Ticket status change: ' + ticket.id);
                 if ($row.length) {
                     var $status = $row.find('td').first().find('i');
                     if (ticket.open) {
