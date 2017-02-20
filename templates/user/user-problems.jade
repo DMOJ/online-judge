@@ -129,7 +129,11 @@ block user_js_media
             });
         });
         window.show_pp_base = 1;
+        window.currently_requesting_pp = false;
         window.load_more_pp = function () {
+            if (window.currently_requesting_pp) return;
+            window.currently_requesting_pp = true;
+
             $.get('{% url "user_pp_ajax" user.user.username %}', {
                 start: window.show_pp_base * 25,
                 end: (window.show_pp_base + 1) * 25
@@ -139,6 +143,7 @@ block user_js_media
                 if (!data['has_more']) {
                     $("#load-link-wrapper").hide();
                 }
+                window.currently_requesting_pp = false;
             });
         };
 
