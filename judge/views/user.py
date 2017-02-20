@@ -106,14 +106,15 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context['authored'] = self.object.authored_problems.filter(is_public=True).order_by('code')
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
-        context['rank'] = Profile.objects.filter(points__gt=self.object.points).count() + 1
 
         if self.request.user.has_perm('judge.test_site'):
-            context['pp_rank'] = Profile.objects.filter(
+            context['rank'] = Profile.objects.filter(
                 performance_points__gt=self.object.performance_points).count() + 1
             breakdown, has_more = get_pp_breakdown(self.object, start=0, end=25)
             context['pp_breakdown'] = breakdown
             context['pp_has_more'] = has_more
+        else:
+            context['rank'] = Profile.objects.filter(points__gt=self.object.points).count() + 1
 
         if rating:
             context['rating_rank'] = Profile.objects.filter(rating__gt=self.object.rating).count() + 1
