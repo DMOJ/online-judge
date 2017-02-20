@@ -168,11 +168,13 @@ block user_content
             table.table.toggled(style='display: none')
                 thead: tr
                     th {% trans "Problem" %}
+                    th {% trans "Category" %}
                     th {% trans "Points" %}
                 tbody
                     each problem in authored
                         tr
                             td.problem-name: a(href='{% url "problem_detail" problem.code %}')= problem.name
+                            td.problem-category= problem.group.full_name
                             td.problem-score: a(href='{% url "ranked_submissions" problem.code %}') #{problem.points | floatformat}{% if problem.partial %}p{% endif %}
     if request.user.is_authenticated and request.user != user.user
         .strike
