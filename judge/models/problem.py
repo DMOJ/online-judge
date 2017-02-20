@@ -146,11 +146,11 @@ class Problem(models.Model):
         return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists()
 
     def is_editable_by(self, user):
+        if not user.is_authenticated:
+            return False
         if user.has_perm('judge.edit_all_problem') or user.has_perm('judge.edit_public_problem') and self.is_public:
             return True
-        if self.is_editor(user.profile):
-            return True
-        return False
+        return self.is_editor(user.profile)
 
     def is_accessible_by(self, user):
         # All users can see public problems
