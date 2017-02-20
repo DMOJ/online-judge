@@ -13,7 +13,7 @@ from judge.models import Comment, CommentVote
 from judge.utils.views import TitleMixin
 from judge.widgets import MathJaxPagedownWidget
 
-__all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentEditAjax', 'CommentContent',
+__all__ = ['upvote_comment', 'downvote_comment', 'CommentEditAjax', 'CommentContent',
            'CommentEdit']
 
 
