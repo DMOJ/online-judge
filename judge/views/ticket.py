@@ -2,6 +2,7 @@ import json
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.db.models import Q
 from django.http import HttpResponse
@@ -25,6 +26,7 @@ from judge import event_poster as event
 from judge.models import Profile
 from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
+from judge.utils.problems import editable_problems
 from judge.utils.views import TitleMixin, paginate_query_context, LoadSelect2Mixin
 from judge.widgets import HeavyPreviewPageDownWidget
 
@@ -108,6 +110,9 @@ class TicketMixin(object):
         if ticket.user_id == profile_id:
             return ticket
         if ticket.assignees.filter(id=profile_id).exists():
+            return ticket
+        linked = ticket.linked_item
+        if isinstance(linked, Problem) and linked.is_editable_by(self.request.user):
             return ticket
         raise PermissionDenied()
 
@@ -197,8 +202,12 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
     paginator_class = DiggPaginator
 
     @cached_property
+    def user(self):
+        return self.request.user
+
+    @cached_property
     def profile(self):
-        return self.request.user.profile
+        return self.user.profile
 
     @cached_property
     def can_edit_all(self):
@@ -222,10 +231,16 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
 
     def get_queryset(self):
         queryset = self._get_queryset()
-        if not self.can_edit_all or self.GET_with_session('own'):
-            queryset = queryset.filter(Q(assignees__id=self.profile.id) | Q(user=self.profile)).distinct()
         if self.filter_assignees:
-            queryset = queryset.filter(assignees__user__username__in=self.filter_assignees)
+            return queryset.filter(assignees__user__username__in=self.filter_assignees)
+
+        own_filter = Q(assignees__id=self.profile.id) | Q(user=self.profile)
+        if self.GET_with_session('own'):
+            queryset = queryset.filter(own_filter).distinct()
+        elif not self.can_edit_all:
+            queryset = queryset.filter(own_filter |
+                                       Q(content_type=ContentType.objects.get_for_model(Problem),
+                                         object_id__in=editable_problems(self.user, self.profile)))
         return queryset
 
     def get_context_data(self, **kwargs):

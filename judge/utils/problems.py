@@ -81,3 +81,15 @@ def get_result_table(*args, **kwargs):
             (_('Memory Limit Exceeded'), 'MLE', results['MLE']),
             (_('Invalid Return'), 'IR', results['IR']),
             (_('Total'), 'TOT', sum(results.values()))]
+
+
+def editable_problems(user, profile=None):
+    subquery = Problem.objects.all()
+    if profile is None:
+        profile = user.profile
+    if not user.has_perm('judge.change_problem'):
+        subfilter = Q(authors__id=profile.id) | Q(curators__id=profile.id)
+        if user.has_perm('judge.edit_public_problem'):
+            subfilter |= Q(is_public=True)
+        subquery = subquery.filter(subfilter)
+    return subquery
