@@ -26,7 +26,7 @@ block before_point_head
        th.pp(style=(None if perms['judge']['test_site'] else 'display: none')) {% trans "Points" %}
 
 block before_point
-    td.pp-feature(style=(None if perms['judge']['test_site'] else 'display: none')) #{user.performance_points|floatformat:0}
+    td(style=(None if perms['judge']['test_site'] else 'display: none'), title='{{ user.performance_points|floatformat:2 }}') #{user.performance_points|floatformat:0}
 
 block after_point_head
     if sort_links
