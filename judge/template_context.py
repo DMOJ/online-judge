@@ -35,7 +35,7 @@ def get_resource(request):
 
 
 def get_profile(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return Profile.objects.get_or_create(user=request.user)[0]
     return None
 
@@ -103,7 +103,7 @@ def misc_config(request):
 
 
 def contest(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         profile = request.user.profile
         profile.update_contest()
         participation = profile.current_contest
@@ -123,7 +123,7 @@ def site_name(request):
 def math_setting(request):
     caniuse = CanIUse(request.META.get('HTTP_USER_AGENT', ''))
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         engine = request.user.profile.math_engine
     else:
         engine = getattr(settings, 'MATHOID_DEFAULT_TYPE', 'auto')

@@ -47,7 +47,7 @@ class PostList(ListView):
         now = timezone.now()
 
         # Dashboard stuff
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             user = self.request.user.profile
             context['recently_attempted_problems'] = (Submission.objects.filter(user=user)
                                                       .exclude(problem__id__in=user_completed_ids(user))
@@ -57,7 +57,7 @@ class PostList(ListView):
 
         visible_contests = Contest.objects.filter(is_public=True).order_by('start_time')
         q = Q(is_private=False)
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             q |= Q(organizations__in=user.organizations.all())
         visible_contests = visible_contests.filter(q)
         context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)

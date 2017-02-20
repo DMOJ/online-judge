@@ -166,7 +166,7 @@ class Problem(models.Model):
             return True
 
         # If the user is in a contest containing that problem or is a tester
-        if user.is_authenticated():
+        if user.is_authenticated:
             return (self.testers.filter(id=user.profile.id).exists() or
                     Problem.objects.filter(id=self.id, contest__users__user=user.profile).exists())
         else:

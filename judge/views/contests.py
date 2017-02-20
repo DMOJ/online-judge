@@ -56,7 +56,7 @@ class ContestListMixin(object):
             queryset = queryset.filter(is_public=True)
         if not self.request.user.has_perm('judge.edit_all_contest'):
             q = Q(is_private=False)
-            if self.request.user.is_authenticated():
+            if self.request.user.is_authenticated:
                 q |= Q(organizations__in=self.request.user.profile.organizations.all())
             queryset = queryset.filter(q)
         return queryset
@@ -115,7 +115,7 @@ class ContestMixin(object):
 
     def get_context_data(self, **kwargs):
         context = super(ContestMixin, self).get_context_data(**kwargs)
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             profile = self.request.user.profile
             in_contest = context['in_contest'] = (profile.current_contest is not None and
                                                   profile.current_contest.contest == self.object)
@@ -147,7 +147,7 @@ class ContestMixin(object):
     def get_object(self, queryset=None):
         contest = super(ContestMixin, self).get_object(queryset)
         user = self.request.user
-        profile = self.request.user.profile if user.is_authenticated() else None
+        profile = self.request.user.profile if user.is_authenticated else None
 
         if (profile is not None and
                 ContestParticipation.objects.filter(id=profile.current_contest_id, contest_id=contest.id).exists()):
@@ -431,7 +431,7 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
 
     if show_current_virtual:
-        if participation is None and request.user.is_authenticated():
+        if participation is None and request.user.is_authenticated:
             participation = request.user.profile.current_contest
             if participation is None or participation.contest_id != contest.id:
                 participation = None
@@ -488,7 +488,7 @@ def contest_ranking_view(request, contest, participation=None):
     }
 
     # TODO: use ContestMixin when this becomes a class-based view
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         profile = request.user.profile
         in_contest = context['in_contest'] = (profile.current_contest is not None and
                                               profile.current_contest.contest == contest)
@@ -525,7 +525,7 @@ def base_participation_list(request, contest, profile):
         return contest
     contest_access_check(request, contest)
 
-    req_username = request.user.username if request.user.is_authenticated() else None
+    req_username = request.user.username if request.user.is_authenticated else None
     prof_username = profile.user.username
 
     queryset = contest.users.filter(user=profile, virtual__gte=0).order_by('-virtual')

@@ -117,7 +117,7 @@ class SubmissionSourceRaw(SubmissionSource):
 @require_POST
 def abort_submission(request, submission):
     submission = get_object_or_404(Submission, id=int(submission))
-    if (not request.user.is_authenticated() or
+    if (not request.user.is_authenticated or
             request.user.profile != submission.user and not request.user.has_perm('abort_any_submission')):
         raise PermissionDenied()
     submission.abort()
@@ -141,7 +141,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
 
     @cached_property
     def in_contest(self):
-        return self.request.user.is_authenticated() and self.request.user.profile.current_contest is not None
+        return self.request.user.is_authenticated and self.request.user.profile.current_contest is not None
 
     @cached_property
     def contest(self):
@@ -169,7 +169,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(SubmissionsListBase, self).get_context_data(**kwargs)
-        authenticated = self.request.user.is_authenticated()
+        authenticated = self.request.user.is_authenticated
         context['dynamic_update'] = False
         context['show_problem'] = self.show_problem
         context['completed_problem_ids'] = user_completed_ids(self.request.user.profile) if authenticated else []
@@ -236,7 +236,7 @@ class ProblemSubmissionsBase(SubmissionsListBase):
     def access_check(self, request):
         if not self.problem.is_public:
             user = request.user
-            if not user.is_authenticated():
+            if not user.is_authenticated:
                 raise Http404()
             if self.problem.is_editor(user.profile) or self.problem.testers.filter(id=user.profile.id).exists():
                 return
@@ -264,7 +264,7 @@ class ProblemSubmissionsBase(SubmissionsListBase):
 
 class ProblemSubmissions(ProblemSubmissionsBase):
     def get_my_submissions_page(self):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             return reverse('user_submissions', kwargs={'problem': self.problem.code,
                                                        'user': self.request.user.username})
 
@@ -288,7 +288,7 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissionsBase):
 
 
 def single_submission(request, submission_id, show_problem=True):
-    authenticated = request.user.is_authenticated()
+    authenticated = request.user.is_authenticated
     submission = get_object_or_404(submission_related(Submission.objects.all()), id=int(submission_id))
     return render(request, 'submission/row.jade', {
         'submission': submission,
@@ -313,7 +313,7 @@ def single_submission_query(request):
 
 class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
     def get_my_submissions_page(self):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             return reverse('all_user_submissions', kwargs={'user': self.request.user.username})
 
     def get_queryset(self):

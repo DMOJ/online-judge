@@ -83,7 +83,7 @@ class SolvedProblemMixin(object):
 
     @cached_property
     def profile(self):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return None
         return self.request.user.profile
 
@@ -120,7 +120,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
         user = self.request.user
-        authed = user.is_authenticated()
+        authed = user.is_authenticated
         context['has_submissions'] = authed and Submission.objects.filter(user=user.profile, problem=self.object).exists()
         context['contest_problem'] = (None if not authed or user.profile.current_contest is None else
                                       get_contest_problem(self.object, user.profile))
@@ -246,7 +246,7 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProb
             elif sort_key == 'group':
                 queryset = queryset.order_by(self.order + '__name')
             elif sort_key == 'solved':
-                if self.request.user.is_authenticated():
+                if self.request.user.is_authenticated:
                     profile = self.request.user.profile
                     solved = user_completed_ids(profile)
                     attempted = user_attempted_ids(profile)
@@ -270,7 +270,7 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProb
 
     @cached_property
     def profile(self):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return None
         return self.request.user.profile
 

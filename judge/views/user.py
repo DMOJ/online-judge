@@ -62,7 +62,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.kwargs.get(self.slug_url_kwarg, None) is None:
-            if not self.request.user.is_authenticated():
+            if not self.request.user.is_authenticated:
                 return redirect_to_login(self.request.get_full_path())
         try:
             return super(UserPage, self).dispatch(request, *args, **kwargs)
@@ -77,7 +77,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
     # TODO: the same code exists in problem.py, maybe move to problems.py?
     @cached_property
     def profile(self):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return None
         return self.request.user.profile
 
@@ -274,7 +274,7 @@ user_list_view = UserList.as_view()
 
 
 def users(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         participation = request.user.profile.current_contest
         if participation is not None:
             return contest_ranking_view(request, participation.contest, participation)
