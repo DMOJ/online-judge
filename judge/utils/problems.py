@@ -2,6 +2,7 @@ from collections import defaultdict
 
 from django.core.cache import cache
 from django.db.models import F, Count, Max
+from django.db.models import Q
 from django.utils.translation import ugettext as _
 
 from judge.models import Submission, Problem
@@ -87,7 +88,7 @@ def editable_problems(user, profile=None):
     subquery = Problem.objects.all()
     if profile is None:
         profile = user.profile
-    if not user.has_perm('judge.change_problem'):
+    if not user.has_perm('judge.edit_all_problem'):
         subfilter = Q(authors__id=profile.id) | Q(curators__id=profile.id)
         if user.has_perm('judge.edit_public_problem'):
             subfilter |= Q(is_public=True)
