@@ -297,7 +297,8 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
             'notification': {
                 'title': _('New Ticket: %s') % ticket.title,
                 'body': '%s\n%s' % (_('#%(id)d, assigned to: %(users)s') % {
-                    'id': ticket.id, 'users': _(', ').join(ticket.assignees.values_list('user__username', flat=True)),
+                    'id': ticket.id, 'users': (_(', ').join(ticket.assignees.values_list('user__username', flat=True))
+                                               or _('no one')),
                 }, truncatechars(message.body, 200)),
             }
         })
