@@ -90,7 +90,7 @@ block user_media
             text-align: right;
         }
 
-        .load-link-wrapper {
+        #load-link-wrapper {
             text-align: center;
             border: 1px solid #ccc;
             padding: 0.5em 0;
@@ -124,7 +124,7 @@ block user_js_media
                 $('table.pp-table').append(data['results']);
                 window.show_pp_base++;
                 if (!data['has_more']) {
-                    $("#load-more-link").hide();
+                    $("#load-link-wrapper").hide();
                 }
             });
         };
@@ -147,7 +147,7 @@ block user_content
                 tbody
                     - include 'user/pp-table-body.jade'
             if pp_has_more
-                .load-link-wrapper: a#load-more-link(href='javascript:load_more_pp();') {% trans "Load more..." %}
+                #load-link-wrapper: a#load-more-link(href='javascript:load_more_pp();') {% trans "Load more..." %}
         else
             i {% trans "This user has not yet solved any problems." %}
 
