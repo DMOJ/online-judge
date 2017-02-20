@@ -129,8 +129,8 @@ class UserPerformancePointsAjax(UserMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(UserPerformancePointsAjax, self).get_context_data(**kwargs)
         context['pp_breakdown'] = get_pp_breakdown(self.object,
-                                                   start=self.request.GET.get('start', 0),
-                                                   end=self.request.GET.get('end', PP_ENTRIES))
+                                                   start=int(self.request.GET.get('start', 0)),
+                                                   end=int(self.request.GET.get('end', PP_ENTRIES)))
         return context
 
 
