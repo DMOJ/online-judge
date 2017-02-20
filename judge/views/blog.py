@@ -42,7 +42,7 @@ class PostList(ListView):
 
         comment_counts = dict(Comment.objects.filter(page__in=['b:%d' % post.id for post in context['posts']])
                                               .values_list('page').annotate(count=Count('page')).order_by())
-        context['post_comment_counts'] = {int(k[2:]): v for k, v in comment_counts}
+        context['post_comment_counts'] = {int(k[2:]): v for k, v in comment_counts.items()}
 
         now = timezone.now()
 
