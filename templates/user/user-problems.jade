@@ -107,7 +107,7 @@ block user_js_media
         });
         window.show_pp_base = 0;
         window.load_more_pp = function() {
-            $.get('{% url "user_pp_ajax" %}', {
+            $.get('{% url "user_pp_ajax" problem.code %}', {
                 start: window.show_pp_base * 25,
                 end: (window.show_pp_base + 1) * 25
             }).done(function (data) {
