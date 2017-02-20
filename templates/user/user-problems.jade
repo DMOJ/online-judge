@@ -116,9 +116,7 @@ block user_content
                     col.sub-info
                     col.sub-pp
                 tbody
-                    for breakdown in pp_breakdown
-                        tr
-                            - include "user/pp-row.jade"
+                    - include 'user/pp-table-body.jade'"
         else
             i {% trans "This user has not yet solved any problems." %}
 

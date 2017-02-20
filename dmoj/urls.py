@@ -150,7 +150,10 @@ urlpatterns = [
     url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
     url(r'^user/(?P<user>\w+)', include([
         url(r'^$', user.UserAboutPage.as_view(), name='user_page'),
-        url(r'^/solved$', user.UserProblemsPage.as_view(), name='user_problems'),
+        url(r'^/solved', include([
+            url(r'^$', user.UserProblemsPage.as_view(), name='user_problems'),
+            url(r'/ajax$', user.UserPerformancePointsAjax.as_view(), name='user_pp_ajax'),
+        ])),
         url(r'^/submissions/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
 
         url(r'^/$', lambda _, user: HttpResponsePermanentRedirect(reverse('user_page', args=[user]))),

@@ -27,7 +27,7 @@ from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
-from judge.performance_points import get_pp_breakdown
+from judge.performance_points import get_pp_breakdown, PP_ENTRIES
 from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin, DiggPaginatorMixin, QueryStringSortMixin
 from .contests import contest_ranking_view
 
@@ -109,7 +109,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
         if self.request.user.has_perm('judge.test_site'):
             context['pp_rank'] = Profile.objects.filter(performance_points__gt=self.object.performance_points).count() + 1
-            context['pp_breakdown'] = get_pp_breakdown(self.object)
+            context['pp_breakdown'] = get_pp_breakdown(self.object, start=0, end=25)
 
         if rating:
             context['rating_rank'] = Profile.objects.filter(rating__gt=self.object.rating).count() + 1
@@ -121,6 +121,17 @@ class UserPage(TitleMixin, UserMixin, DetailView):
     def get(self, request, *args, **kwargs):
         self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
         return super(UserPage, self).get(request, *args, **kwargs)
+
+
+class UserPerformancePointsAjax(UserMixin, DetailView):
+    template_name = 'user/pp-table-body.jade'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserPerformancePointsAjax, self).get_context_data(**kwargs)
+        context['pp_breakdown'] = get_pp_breakdown(self.object,
+                                                   start=self.request.GET.get('start', 0),
+                                                   end=self.request.GET('end', PP_ENTRIES))
+        return context
 
 
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
