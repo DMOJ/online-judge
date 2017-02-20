@@ -147,10 +147,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                                 $area.html(data);
                                 if ('MathJax' in window) MathJax.Hub.Queue(['Typeset', MathJax.Hub, $area.get(0)]);
                                 var $edits = $comment.find('.comment-edits').first();
-                                if ($edits.text()) {
-                                    var edits = parseInt($edits.text());
-                                    $edits.text('updated')
-                                } else $edits.text('edited');
+                                $edits.text('updated');
                             }).fail(function () {
                                 console.log('Failed to update comment:' + id);
                             });
