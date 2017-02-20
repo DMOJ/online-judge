@@ -279,6 +279,7 @@ class Problem(models.Model):
             ('edit_public_problem', 'Edit all public problems'),
             ('clone_problem', 'Clone problem'),
             ('change_public_visibility', 'Change is_public field'),
+            ('change_manually_managed', 'Change is_manually_managed field'),
         )
         verbose_name = _('problem')
         verbose_name_plural = _('problems')
