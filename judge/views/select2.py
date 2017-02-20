@@ -59,8 +59,8 @@ class ProblemSelect2View(Select2View):
             filter = Q(is_public=True)
             if self.request.user.is_authenticated():
                 filter |= Q(authors=self.request.user.profile)
-            queryset = queryset.filter(filter)
-        return queryset
+            queryset = queryset.filter(filter).distinct()
+        return queryset.distinct()
 
 
 class ContestSelect2View(Select2View):
