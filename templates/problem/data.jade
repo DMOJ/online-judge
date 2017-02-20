@@ -10,9 +10,12 @@ block js_media
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
         script(type='text/javascript').
             $(function () {
-                $('select').select2({
-                    minimumResultsForSearch: -1
-                });
+                function update_select2() {
+                    $('tbody:not(.extra-row-body) .type-column select').select2({
+                        minimumResultsForSearch: -1
+                    });
+                }
+                update_select2();
 
                 function autofill_if_exists($select, file) {
                     if (!$select.val() && ~window.valid_files.indexOf(file))
@@ -20,6 +23,7 @@ block js_media
                 }
 
                 $('#case-table').on('add-row', function (e, $tr) {
+                    update_select2();
                     $tr.find('input').filter('[id$=file]').each(function () {
                         var $select, val = $(this).replaceWith($select = $('<select/>').attr({
                             id: $(this).attr('id'),
