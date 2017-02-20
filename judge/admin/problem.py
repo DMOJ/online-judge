@@ -80,7 +80,7 @@ class ProblemTranslationInline(admin.StackedInline):
 class ProblemAdmin(VersionAdmin):
     fieldsets = (
         (None, {
-            'fields': ('code', 'name', 'is_public', 'date', 'authors', 'curators', 'testers', 'description', 'license')
+            'fields': ('code', 'name', 'is_public', 'is_manually_managed', 'date', 'authors', 'curators', 'testers', 'description', 'license')
         }),
         (_('Social Media'), {'classes': ('collapse',), 'fields': ('og_image', 'summary')}),
         (_('Taxonomy'), {'fields': ('types', 'group')}),
