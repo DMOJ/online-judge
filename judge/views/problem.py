@@ -98,6 +98,7 @@ class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMi
     def get_context_data(self, **kwargs):
         context = super(ProblemRaw, self).get_context_data(**kwargs)
         context['problem_name'] = self.object.name
+        context['url'] = self.request.build_absolute_uri()
         context['description'] = self.object.description
         return context
 
