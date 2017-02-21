@@ -162,7 +162,7 @@ block user_content
                 col.sub-info
                 col.sub-pp
             tbody
-                - include 'user/pp-table-body.jade'
+                include user/pp-table-body
         if pp_has_more
             #load-link-wrapper: a#load-more-link(href='javascript:load_more_pp();') {% trans "Load more..." %}
     else
