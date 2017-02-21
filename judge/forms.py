@@ -3,10 +3,11 @@ from operator import attrgetter
 from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms import ModelForm, CharField, TextInput
 from django.urls import reverse_lazy
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext_lazy
 
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, PrivateMessage, Language
@@ -41,6 +42,13 @@ class ProfileForm(ModelForm):
                 preview=reverse_lazy('profile_preview'),
                 attrs={'style': 'max-width:700px;min-width:700px;width:700px'}
             )
+
+    def clean(self):
+        organizations = self.cleaned_data.get('organizations')
+        if organizations and organizations.count() > 3:
+            raise ValidationError(ugettext_lazy('You cannot be part of more than 3 organizations.'))
+
+        return self.cleaned_data
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)

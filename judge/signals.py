@@ -5,9 +5,8 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import ValidationError
-from django.db.models.signals import post_save, post_delete, m2m_changed
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.utils.translation import ugettext_lazy
 
 from .caching import finished_submission
 from .models import Problem, Contest, Submission, Organization, Profile, MiscConfig, Language, Judge, \
@@ -128,11 +127,3 @@ _misc_config_i18n.append('')
 @receiver(post_save, sender=MiscConfig)
 def misc_config_update(sender, instance, **kwargs):
     cache.delete_many(['misc_config:%s:%s' % (lang, instance.key.split('.')[0]) for lang in _misc_config_i18n])
-
-
-def user_profile_organizations_changed(sender, **kwargs):
-    if kwargs['instance'].organizations.count() > 3:
-        raise ValidationError(ugettext_lazy('You cannot be part of more than 3 organizations.'))
-
-
-m2m_changed.connect(user_profile_organizations_changed, sender=Profile.organizations.through)
