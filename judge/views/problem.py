@@ -150,8 +150,13 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         authed = user.is_authenticated
         context['has_submissions'] = authed and Submission.objects.filter(user=user.profile,
                                                                           problem=self.object).exists()
-        context['contest_problem'] = (None if not authed or user.profile.current_contest is None else
+        contest_problem = (None if not authed or user.profile.current_contest is None else
                                       get_contest_problem(self.object, user.profile))
+        context['contest_problem'] = contest_problem
+        if contest_problem:
+            clarifications = contest_problem.clarifications
+            context['clarifications'] = clarifications
+            context['has_clarifications'] = clarifications.count() > 0
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         context['has_pdf_render'] = HAS_PDF
         context['completed_problem_ids'] = self.get_completed_problems()

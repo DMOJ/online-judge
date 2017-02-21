@@ -197,13 +197,16 @@ block comments
         h2
             i.fa.fa-question-circle(style='padding-right: 0.3em')
             | {% trans "Clarifications" %}
-        for clarification in contest_problem.problem.clarifications
-            .problem-clarification
-                .time(data-unix='{{ clarification.date|utc|date:"c" }}')
-                    - blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time
-                        | on {{ time }}
-                    span.relative= str_time
-                span.body #{clarification.description|markdown:"problem"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
+        if has_clarifications
+            for clarification in clarifications
+                .problem-clarification
+                    .time(data-unix='{{ clarification.date|utc|date:"c" }}')
+                        - blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time
+                            | on {{ time }}
+                        span.relative= str_time
+                    span.body #{clarification.description|markdown:"problem"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
+        else
+            p.no-comments-message {% trans "No clarifications have been made at this time." %}
     else
         include comments/list
 
