@@ -107,14 +107,11 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
 
-        if self.request.user.has_perm('judge.test_site'):
-            context['rank'] = Profile.objects.filter(
-                performance_points__gt=self.object.performance_points).count() + 1
-            breakdown, has_more = get_pp_breakdown(self.object, start=0, end=10)
-            context['pp_breakdown'] = breakdown
-            context['pp_has_more'] = has_more
-        else:
-            context['rank'] = Profile.objects.filter(points__gt=self.object.points).count() + 1
+        context['rank'] = Profile.objects.filter(
+            performance_points__gt=self.object.performance_points).count() + 1
+        breakdown, has_more = get_pp_breakdown(self.object, start=0, end=10)
+        context['pp_breakdown'] = breakdown
+        context['pp_has_more'] = has_more
 
         if rating:
             context['rating_rank'] = Profile.objects.filter(rating__gt=self.object.rating).count() + 1
@@ -250,11 +247,9 @@ class UserList(LoadSelect2Mixin, QueryStringSortMixin, DiggPaginatorMixin, Title
     paginate_by = 100
     all_sorts = frozenset(('points', 'problem_count', 'rating', 'performance_points'))
     default_desc = all_sorts
-    default_sort = '-points'
+    default_sort = '-performance_points'
 
     def get_default_sort_order(self, request):
-        if request.user.has_perm('judge.test_site'):
-            return '-performance_points'
         return self.default_sort
 
     def get_queryset(self):

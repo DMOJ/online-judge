@@ -55,10 +55,7 @@ block body
                 br
                 b.semibold {% trans "Total points:" %}
                 span(title='{{ user.performance_points|floatformat:2 }}')
-                    if perms.judge.test_site
-                        |  #{user.performance_points|floatformat:0}
-                    else
-                        |  #{user.points}
+                    |  #{user.performance_points|floatformat:0}
                 br
                 br
                 a(href='{% url "all_user_submissions" user.user.username %}') {% trans "View submissions" %}
