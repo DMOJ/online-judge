@@ -188,7 +188,7 @@ block body
                         ul.own-open-tickets: each ticket in own_open_tickets
                             li
                                 .title: a(href='{% url "ticket" ticket.id %}')= ticket.title
-                                .object
+                                .object: a(href=ticket.linked_item.get_absolute_url()) #{ticket.linked_item|item_title}
             if perms.judge.test_site and open_tickets
                 .blog-sidebox.sidebox
                     h3 {% trans "New tickets" %} #[i.fa.fa-exclamation-circle]
@@ -196,7 +196,7 @@ block body
                         ul.open-tickets: each ticket in open_tickets
                             li
                                 .title: a(href='{% url "ticket" ticket.id %}')= ticket.title
-                                .object
+                                .object: a(href=ticket.linked_item.get_absolute_url()) #{ticket.linked_item|item_title}
                                 - with user=ticket.user
                                     .user(class=user.display_rank)
                                         a(href='{% url "user_page" user.user.username %}') #{user.user.username}
