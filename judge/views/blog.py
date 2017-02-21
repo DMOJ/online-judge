@@ -7,7 +7,9 @@ from django.views.generic import ListView
 
 from judge.comments import CommentedDetailView
 from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submission, Language
+from judge.models import Ticket
 from judge.utils.diggpaginator import DiggPaginator
+from judge.utils.tickets import filter_visible_tickets
 from judge.utils.views import TitleMixin
 from judge.utils.problems import user_completed_ids
 
@@ -62,6 +64,20 @@ class PostList(ListView):
         visible_contests = visible_contests.filter(q)
         context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
+
+        if self.request.user.is_authenticated:
+            profile = self.request.user.profile
+            context['own_open_tickets'] = Ticket.objects.filter(user=profile, is_open=True)
+        else:
+            profile = None
+            context['own_open_tickets'] = []
+
+        # Superusers better be staffs, not the spell-casting kind either.
+        if self.request.user.is_staff:
+            context['open_tickets'] = filter_visible_tickets(Ticket.objects.order_by('-id').filter(is_open=True),
+                                                             self.request.user, profile)[:10]
+        else:
+            context['open_tickets'] = []
         return context
 
 
