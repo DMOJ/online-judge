@@ -187,17 +187,17 @@ block body
                     .sidebox-content
                         ul.own-open-tickets: each ticket in own_open_tickets
                             li
-                                span.title= ticket.title
-                                span.object
+                                .title: a(href='{% url "ticket" ticket.id %}')= ticket.title
+                                .object
             if perms.judge.test_site and open_tickets
                 .blog-sidebox.sidebox
                     h3 {% trans "New tickets" %} #[i.fa.fa-exclamation-circle]
                     .sidebox-content
                         ul.open-tickets: each ticket in open_tickets
                             li
-                                span.title= ticket.title
-                                span.object
+                                .title: a(href='{% url "ticket" ticket.id %}')= ticket.title
+                                .object
                                 - with user=ticket.user
-                                    span.user(class=user.display_rank)
+                                    .user(class=user.display_rank)
                                         a(href='{% url "user_page" user.user.username %}') #{user.user.username}
     block after_posts
