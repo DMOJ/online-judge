@@ -25,6 +25,7 @@ block js_media
     | #{form.media.js}
 
 block body
+    br
     form#ticket-form.form-area(action='', method='POST')
         block guideline_message
         - csrf_token
