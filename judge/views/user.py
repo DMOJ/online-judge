@@ -249,9 +249,6 @@ class UserList(LoadSelect2Mixin, QueryStringSortMixin, DiggPaginatorMixin, Title
     default_desc = all_sorts
     default_sort = '-performance_points'
 
-    def get_default_sort_order(self, request):
-        return self.default_sort
-
     def get_queryset(self):
         return (Profile.objects.order_by(self.order, 'id').select_related('user')
                 .only('display_rank', 'user__username', 'name', 'points', 'rating', 'performance_points'))
