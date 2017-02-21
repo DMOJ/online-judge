@@ -72,7 +72,7 @@ block info_float
 
     if editorial and editorial.is_public
         hr
-        div: a(href='{% url "solution" editorial.url %}') Read editorial
+        div: a(href='{% url "problem_editorial" problem.code %}') Read editorial
 
     if can_edit_problem
         hr
