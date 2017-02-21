@@ -450,7 +450,6 @@ def contest_ranking_ajax(request, contest, participation=None):
         'users': users,
         'problems': problems,
         'contest': contest,
-        'show_organization': True,
         'has_rating': contest.ratings.exists(),
     })
 
@@ -478,7 +477,6 @@ def contest_ranking_view(request, contest, participation=None):
         'content_title': contest.name,
         'problems': problems,
         'contest': contest,
-        'show_organization': True,
         'last_msg': event.last(),
         'has_rating': contest.ratings.exists(),
 
@@ -544,7 +542,6 @@ def base_participation_list(request, contest, profile):
         #    "%s's participation") % prof_username,
         'problems': problems,
         'contest': contest,
-        'show_organization': False,
         'last_msg': event.last(),
         'has_rating': False,
         'rank_header': _('Participation')
