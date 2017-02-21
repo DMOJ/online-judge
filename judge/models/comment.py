@@ -97,7 +97,7 @@ class Comment(MPTTModel):
             link = reverse('blog_post', args=(self.page[2:], slug))
         elif self.page.startswith('s:'):
             slug = self.page[2:]
-            if slug[0] == '/':
+            if '/' in slug:
                 link = reverse('solution', args=(self.page[2:],))
             else:
                 link = reverse('problem_editorial', args=(self.page[2:],))
