@@ -25,6 +25,13 @@ block content_media
             vertical-align: middle;
         }
 
+        .problem-clarification { border-bottom: 1px solid #ccc; }
+
+        .problem-clarification .body {
+            display: inline-block;
+            padding-left: 3em;
+        }
+
 block content_js_media
     include comments/media-js
     script.
@@ -181,8 +188,8 @@ block comments
     if contest_problem and contest_problem.contest.use_clarifications
         for clarification in contest_problem.problem.clarifications
             .problem-clarification
-                span.time(data-unix='{{ clarification.data|utc|date:"c" }}')
-                    - blocktrans with time=clarification.data|date:_("N j, Y") asvar str_time
+                .time(data-unix='{{ clarification.date|utc|date:"c" }}')
+                    - blocktrans with time=clarification.date|date:_("N j, Y") asvar str_time
                         | on {{ time }}
                     span.relative= str_time
                 span.body #{clarification.description|markdown:"problem"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
