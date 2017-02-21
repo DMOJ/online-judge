@@ -76,7 +76,7 @@ class SolutionForm(ModelForm):
 
 
 class SolutionAdmin(VersionAdmin):
-    fields = ('url', 'title', 'is_public', 'publish_on', 'problem', 'content')
+    fields = ('url', 'title', 'is_public', 'publish_on', 'problem', 'authors', 'content')
     list_display = ('title', 'url', 'problem_link', 'show_public')
     search_fields = ('url', 'title')
     form = SolutionForm
