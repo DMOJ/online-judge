@@ -47,7 +47,7 @@ class ProfileForm(ModelForm):
         organizations = self.cleaned_data.get('organizations') or []
         max_orgs = getattr(settings, 'MAX_USER_ORGANIZATION_COUNT', 3)
 
-        if Organization.objects.filter(id__in=organizations, is_open=True).count() > max_orgs:
+        if sum(org.is_open for org in organizations) > max_orgs:
             raise ValidationError(_('You may not be part of more than {count} public organizations.').format(count=max_orgs))
 
         return self.cleaned_data
