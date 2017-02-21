@@ -293,6 +293,12 @@ class ProblemTranslation(models.Model):
         verbose_name_plural = _('problem translations')
 
 
+class ProblemClarification(models.Model):
+    problem = models.ForeignKey(Problem, verbose_name=_('clarified problem'))
+    description = models.TextField(verbose_name=_('clarification body'))
+    date = models.DateTimeField(verbose_name=_('clarification timestamp'), auto_now_add=True)
+
+
 class LanguageLimit(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='language_limits')
     language = models.ForeignKey(Language, verbose_name=_('language'))
