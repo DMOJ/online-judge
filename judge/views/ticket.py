@@ -80,7 +80,8 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
 
 class NewProblemTicketView(TitleMixin, NewTicketView):
     model = Problem
-    slug_field = slug_url_kwarg = 'problem'
+    slug_field = 'code'
+    slug_url_kwarg = 'problem'
     template_name = 'ticket/new_problem.jade'
 
     def get_assignees(self):
