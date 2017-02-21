@@ -65,9 +65,7 @@ class LanguageLimitInline(admin.TabularInline):
 
 
 class ProblemClarificationForm(ModelForm):
-    class Meta:
-        if HeavyPreviewAdminPageDownWidget is not None:
-            widgets = {'description': HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('comment_preview'))}
+    pass
 
 
 class ProblemClarificationInline(admin.TabularInline):
@@ -77,7 +75,9 @@ class ProblemClarificationInline(admin.TabularInline):
 
 
 class ProblemTranslationForm(ModelForm):
-    pass
+    class Meta:
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets = {'description': HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('problem_preview'))}
 
 
 class ProblemTranslationInline(admin.StackedInline):
