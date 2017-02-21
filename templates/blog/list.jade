@@ -181,4 +181,23 @@ block body
                     span.rssatom
                         a(href='{% url "problem_rss" %}') #[span: i.fa.fa-rss] RSS
                         | / #[a(href='{% url "problem_atom" %}') Atom]
+            if perms.judge.test_site and own_open_tickets
+                .blog-sidebox.sidebox
+                    h3 {% trans "My open tickets" %} #[i.fa.fa-question-circle]
+                    .sidebox-content
+                        ul.own-open-tickets: each ticket in own_open_tickets
+                            li
+                                span.title= ticket.title
+                                span.object
+            if perms.judge.test_site and open_tickets
+                .blog-sidebox.sidebox
+                    h3 {% trans "New tickets" %} #[i.fa.fa-exclamation-circle]
+                    .sidebox-content
+                        ul.open-tickets: each ticket in open_tickets
+                            li
+                                span.title= ticket.title
+                                span.object
+                                - with user=ticket.user
+                                    span.user(class=user.display_rank)
+                                        a(href='{% url "user_page" user.user.username %}') #{user.user.username}
     block after_posts

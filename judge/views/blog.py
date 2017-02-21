@@ -67,15 +67,16 @@ class PostList(ListView):
 
         if self.request.user.is_authenticated:
             profile = self.request.user.profile
-            context['own_open_tickets'] = Ticket.objects.filter(user=profile, is_open=True)
+            context['own_open_tickets'] = (Ticket.objects.filter(user=profile, is_open=True)
+                                           .prefetch_related('linked_item'))
         else:
             profile = None
             context['own_open_tickets'] = []
 
         # Superusers better be staffs, not the spell-casting kind either.
         if self.request.user.is_staff:
-            context['open_tickets'] = filter_visible_tickets(Ticket.objects.order_by('-id').filter(is_open=True),
-                                                             self.request.user, profile)[:10]
+            tickets = Ticket.objects.order_by('-id').filter(is_open=True).prefetch_related('linked_item')
+            context['open_tickets'] = filter_visible_tickets(tickets, self.request.user, profile)[:10]
         else:
             context['open_tickets'] = []
         return context
