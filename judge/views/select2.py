@@ -58,7 +58,7 @@ class ProblemSelect2View(Select2View):
         if not self.request.user.has_perm('judge.see_private_problem'):
             filter = Q(is_public=True)
             if self.request.user.is_authenticated:
-                filter |= Q(authors=self.request.user.profile)
+                filter |= Q(authors=self.request.user.profile) | Q(curators=self.request.user.profile)
             queryset = queryset.filter(filter).distinct()
         return queryset.distinct()
 
