@@ -31,6 +31,10 @@ block content_media
             margin-bottom: 1em;
         }
 
+        .clarifications-area h2 {
+            margin-bottom: 20px;
+        }
+
         .problem-clarification .body {
             display: inline-block;
             padding-left: 3em;
@@ -194,20 +198,20 @@ block post_description_end
 
 block comments
     if contest_problem and contest_problem.contest.use_clarifications
-        h2
-            i.fa.fa-question-circle(style='padding-right: 0.3em')
-            | {% trans "Clarifications" %}
-        if has_clarifications
-            for clarification in clarifications
-                .problem-clarification
-                    .time(data-unix='{{ clarification.date|utc|date:"c" }}')
-                        - blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time
-                            | on {{ time }}
-                        span.relative= str_time
-                    span.body #{clarification.description|markdown:"problem"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
-        else
-            br
-            p.no-comments-message {% trans "No clarifications have been made at this time." %}
+        .clarifications-area
+            h2
+                i.fa.fa-question-circle(style='padding-right: 0.3em')
+                | {% trans "Clarifications" %}
+            if has_clarifications
+                for clarification in clarifications
+                    .problem-clarification
+                        .time(data-unix='{{ clarification.date|utc|date:"c" }}')
+                            - blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time
+                                | on {{ time }}
+                            span.relative= str_time
+                        span.body #{clarification.description|markdown:"problem"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
+            else
+                p.no-comments-message {% trans "No clarifications have been made at this time." %}
     else
         include comments/list
 
