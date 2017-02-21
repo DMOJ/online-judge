@@ -27,6 +27,7 @@ block content_media
 
         .problem-clarification {
             border-bottom: 1px solid #ccc;
+            margin-top: 1em;
             margin-bottom: 1em;
         }
 
@@ -203,6 +204,8 @@ block comments
                         | on {{ time }}
                     span.relative= str_time
                 span.body #{clarification.description|markdown:"problem"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
+        else
+            p.no-comments-message {% trans "There are no comments at the moment." %}
     else
         include comments/list
 
