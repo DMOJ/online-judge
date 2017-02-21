@@ -1,5 +1,6 @@
 - load cache
 - load i18n
+- load rating
 
 thead
     tr
@@ -18,7 +19,7 @@ thead
             tr(id='user-{{ user.user.username }}')
                 td #{rank}
                 block after_rank
-                td.user-name(class=user.display_rank)
+                td.user-name(class='rating {{ user.rating|rating_class }} {{ user.display_rank }}')
                     a(href='{% url "user_page" user.user.username %}')= user.user.username
                 block before_point
                 if not perms.judge.test_site
