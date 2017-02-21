@@ -4,8 +4,10 @@ import os
 from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
-from django.db.models.signals import post_save, post_delete
+from django.core.exceptions import ValidationError
+from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.dispatch import receiver
+from django.utils.translation import ugettext_lazy
 
 from .caching import finished_submission
 from .models import Problem, Contest, Submission, Organization, Profile, MiscConfig, Language, Judge, \
@@ -35,13 +37,13 @@ def problem_update(sender, instance, **kwargs):
         'problem_tls:%s' % instance.id, 'problem_mls:%s' % instance.id,
     ])
     cache.delete_many([
-        make_template_fragment_key('problem_html', (instance.id, engine, lang))
-        for lang, _ in settings.LANGUAGES for engine in EFFECTIVE_MATH_ENGINES
-    ])
+                          make_template_fragment_key('problem_html', (instance.id, engine, lang))
+                          for lang, _ in settings.LANGUAGES for engine in EFFECTIVE_MATH_ENGINES
+                          ])
     cache.delete_many([
-        make_template_fragment_key('problem_authors', (instance.id, lang))
-        for lang, _ in settings.LANGUAGES
-    ])
+                          make_template_fragment_key('problem_authors', (instance.id, lang))
+                          for lang, _ in settings.LANGUAGES
+                          ])
     cache.delete_many(['generated-meta-problem:%s:%d' % (lang, instance.id) for lang, _ in settings.LANGUAGES])
 
     if hasattr(settings, 'PROBLEM_PDF_CACHE'):
@@ -118,6 +120,7 @@ def organization_update(sender, instance, **kwargs):
     cache.delete_many([make_template_fragment_key('organization_html', (instance.id, engine))
                        for engine in EFFECTIVE_MATH_ENGINES])
 
+
 _misc_config_i18n = [code for code, _ in settings.LANGUAGES]
 _misc_config_i18n.append('')
 
@@ -125,3 +128,11 @@ _misc_config_i18n.append('')
 @receiver(post_save, sender=MiscConfig)
 def misc_config_update(sender, instance, **kwargs):
     cache.delete_many(['misc_config:%s:%s' % (lang, instance.key.split('.')[0]) for lang in _misc_config_i18n])
+
+
+def user_profile_organizations_changed(sender, **kwargs):
+    if kwargs['instance'].organizations.count() > 3:
+        raise ValidationError(ugettext_lazy('You cannot be part of more than 3 organizations.'))
+
+
+m2m_changed.connect(user_profile_organizations_changed, sender=Profile.organizations.through)
