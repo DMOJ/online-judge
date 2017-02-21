@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 SITE_ID = 1
 SITE_NAME = 'DMOJ'
-SITE_LONG_NAME = 'Don Mills Online Judge'
+SITE_LONG_NAME = 'DMOJ: Modern Online Judge'
 
 PYGMENT_THEME = 'pygment-github.css'
 
