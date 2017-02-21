@@ -72,7 +72,7 @@ class ProblemClarificationForm(ModelForm):
 
 class ProblemClarificationInline(admin.TabularInline):
     model = ProblemClarification
-    fields = ('date', 'description')
+    fields = ('description',)
     form = ProblemClarificationForm
 
 
