@@ -127,6 +127,9 @@ urlpatterns = [
         url(r'^/test_data$', ProblemDataView.as_view(), name='problem_data'),
         url(r'^/test_data/init$', problem_init_view, name='problem_data_init'),
         url(r'^/data/(?P<path>.+)$', problem_data_file, name='problem_data_file'),
+
+        url(r'^/tickets$', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
+        url(r'^/tickets/new$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
     ])),
 
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
@@ -293,20 +296,15 @@ urlpatterns = [
     ])),
 
     url(r'^tickets/', include([
-        url(r'^new/', include([
-            url('^problem/(?P<code>[^/]+)$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
-        ])),
-        url(r'^(?P<pk>\d+)', include([
-            url(r'^$', ticket.TicketView.as_view(), name='ticket'),
-            url(r'^/open$', ticket.TicketStatusChangeView.as_view(open=True), name='ticket_open'),
-            url(r'^/close$', ticket.TicketStatusChangeView.as_view(open=False), name='ticket_close'),
-            url(r'^/notes$', ticket.TicketNotesEditView.as_view(), name='ticket_notes'),
-        ])),
-        url(r'list/', include([
-            url(r'^$', ticket.TicketList.as_view(), name='ticket_list'),
-            url(r'^problem/(?P<code>[^/]+)$', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
-            url(r'^ajax$', ticket.TicketListDataAjax.as_view(), name='ticket_ajax')
-        ]))
+        url(r'^$', ticket.TicketList.as_view(), name='ticket_list'),
+        url(r'^ajax$', ticket.TicketListDataAjax.as_view(), name='ticket_ajax'),
+    ])),
+
+    url(r'^ticket/(?P<pk>\d+)', include([
+        url(r'^$', ticket.TicketView.as_view(), name='ticket'),
+        url(r'^/open$', ticket.TicketStatusChangeView.as_view(open=True), name='ticket_open'),
+        url(r'^/close$', ticket.TicketStatusChangeView.as_view(open=False), name='ticket_close'),
+        url(r'^/notes$', ticket.TicketNotesEditView.as_view(), name='ticket_notes'),
     ])),
 
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {

@@ -80,7 +80,7 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
 
 class NewProblemTicketView(TitleMixin, NewTicketView):
     model = Problem
-    slug_field = slug_url_kwarg = 'code'
+    slug_field = slug_url_kwarg = 'problem'
     template_name = 'ticket/new_problem.jade'
 
     def get_assignees(self):
@@ -276,11 +276,11 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
 
 class ProblemTicketListView(TicketList):
     def _get_queryset(self):
-        if 'code' not in self.kwargs:
-            raise Http404
-        problem = Problem.objects.get(code=self.kwargs['code'])
+        if 'problem' not in self.kwargs:
+            raise Http404()
+        problem = Problem.objects.get(code=self.kwargs['problem'])
         if not self.request.user.is_authenticated or not problem.is_editable_by(self.request.user):
-            raise Http404
+            raise Http404()
         return problem.tickets.all()
 
 
