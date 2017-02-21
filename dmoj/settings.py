@@ -49,7 +49,7 @@ else:
 
     WPADMIN = {
         'admin': {
-            'title': 'Don Mills Online Judge Admin',
+            'title': 'DMOJ Admin',
             'menu': {
                 'top': 'wpadmin.menu.menus.BasicTopMenu',
                 'left': 'wpadmin.menu.custom.CustomModelLeftMenuWithDashboard',
