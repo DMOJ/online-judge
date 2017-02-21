@@ -233,6 +233,12 @@ block users_js_media
                     window.location.href = url.replace('__username__', $(this).val());
                 });
             });
+    script(type='text/javascript').
+        $(function () {
+           $('#show-organizations-checkbox').click(function () {
+              $('.organization-column').toggle();
+           });
+        });
     include contest/media-js
 
 block users_table
