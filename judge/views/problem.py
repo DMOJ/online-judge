@@ -93,6 +93,13 @@ class ProblemSolution(ProblemMixin, CommentedDetailView):
     context_object_name = 'problem'
     template_name = 'problem/editorial.jade'
 
+    def get_title(self):
+        return _('Editorial for {0}').format(self.object.name)
+
+    def get_content_title(self):
+        return format_html(_(u'Editorial for <a href="{1}">{0}</a>'), self.object.name,
+                           reverse('problem_detail', args=[self.object.code]))
+
     def get_context_data(self, **kwargs):
         context = super(ProblemSolution, self).get_context_data(**kwargs)
         solution = Solution.objects.get(problem=self.object)

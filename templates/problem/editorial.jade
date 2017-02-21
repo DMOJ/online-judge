@@ -12,9 +12,7 @@ block content_js_media
 block content_media
     include comments/media-css
 
-block content_title
-    - blocktrans with problem_name=solution.problem.name
-        | Solution for {{ problem_name }}
+block header
     div(style='float:right')
         if perms.judge.change_solution
             | [#[a(href='{% url "admin:judge_solution_change" solution.id %}') {% trans "Edit" %}]]
