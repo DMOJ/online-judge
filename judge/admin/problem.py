@@ -77,9 +77,7 @@ class ProblemClarificationInline(admin.TabularInline):
 
 
 class ProblemTranslationForm(ModelForm):
-    class Meta:
-        if HeavyPreviewAdminPageDownWidget is not None:
-            widgets = {'description': HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('problem_preview'))}
+    pass
 
 
 class ProblemTranslationInline(admin.StackedInline):
