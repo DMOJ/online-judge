@@ -219,6 +219,10 @@ class Problem(models.Model):
     def i18n_name(self, value):
         self._i18n_name = value
 
+    @property
+    def clarifications(self):
+        return ProblemClarification.objects.filter(problem=self)
+
     def update_stats(self):
         self.user_count = self.submission_set.filter(points__gt=0).values('user').distinct().count()
         submissions = self.submission_set.count()
