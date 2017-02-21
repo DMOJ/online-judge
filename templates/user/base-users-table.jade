@@ -22,5 +22,5 @@ thead
                     a(href='{% url "user_page" user.user.username %}')= user.user.username
                 block before_point
                 block point
-                    td.user-points= user.performance_points
+                    td.user-points(title='{{ user.performance_points|floatformat:2 }}') #{user.performance_points|floatformat:0}
                 block after_point
