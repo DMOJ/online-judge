@@ -12,7 +12,7 @@ from reversion.admin import VersionAdmin
 
 from judge.models import Profile, LanguageLimit, ProblemTranslation, Problem, ProblemClarification
 from judge.widgets import HeavySelect2MultipleWidget, Select2MultipleWidget, Select2Widget, \
-    HeavyPreviewAdminPageDownWidget, CheckboxSelectMultipleWithSelectAll
+    HeavyPreviewAdminPageDownWidget, HeavyPreviewPageDownWidget, CheckboxSelectMultipleWithSelectAll
 
 
 class ProblemForm(ModelForm):
@@ -66,8 +66,8 @@ class LanguageLimitInline(admin.TabularInline):
 
 class ProblemClarificationForm(ModelForm):
     class Meta:
-        if HeavyPreviewAdminPageDownWidget is not None:
-            widgets = {'description': HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('comment_preview'))}
+        if HeavyPreviewPageDownWidget is not None:
+            widgets = {'description': HeavyPreviewPageDownWidget(preview=reverse_lazy('comment_preview'))}
 
 
 class ProblemClarificationInline(admin.TabularInline):
