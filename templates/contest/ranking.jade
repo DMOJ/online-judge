@@ -242,4 +242,7 @@ block users_table
     //        br
     //        input#search(type='text', placeholder='{% trans "View user participation" %}')
     //    hr
+    input#show-organizations-checkbox(type='checkbox')
+    label(for="show-organizations-checkbox") {% trans "Show organizations" %}
+
     include contest/ranking-table
