@@ -89,7 +89,7 @@ class SolvedProblemMixin(object):
         return self.request.user.profile
 
 
-class ProblemSolution(ProblemMixin, CommentedDetailView):
+class ProblemSolution(ProblemMixin, TitleMixin, CommentedDetailView):
     context_object_name = 'problem'
     template_name = 'problem/editorial.jade'
 
