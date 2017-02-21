@@ -206,6 +206,7 @@ block comments
                         span.relative= str_time
                     span.body #{clarification.description|markdown:"problem"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
         else
+            br
             p.no-comments-message {% trans "No clarifications have been made at this time." %}
     else
         include comments/list
