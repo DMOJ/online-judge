@@ -25,7 +25,10 @@ block content_media
             vertical-align: middle;
         }
 
-        .problem-clarification { border-bottom: 1px solid #ccc; }
+        .problem-clarification {
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 1em;
+        }
 
         .problem-clarification .body {
             display: inline-block;
@@ -182,7 +185,11 @@ block description
 
 block post_description_end
     if perms.judge.test_site
-        a.button(style='float:right', href='{% url "new_problem_ticket" problem.code %}') {% trans "Report an issue" %}
+        a.button(style='float:right', href='{% url "new_problem_ticket" problem.code %}')
+            if contest_problem and contest_problem.contest.use_clarifications
+                | {% trans "Request clarification" %}
+            else
+                | {% trans "Report an issue" %}
 
 block comments
     if contest_problem and contest_problem.contest.use_clarifications
