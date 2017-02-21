@@ -16,6 +16,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRespons
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import get_template
 from django.utils import translation
+from django.utils import timezone
 from django.utils.html import format_html, escape
 from django.utils.safestring import mark_safe
 from django.utils.functional import cached_property
@@ -94,8 +95,15 @@ class ProblemSolution(ProblemMixin, CommentedDetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ProblemSolution, self).get_context_data(**kwargs)
-        context['solution'] = Solution.objects.get(problem=self.object)
+        solution = Solution.objects.get(problem=self.object)
+        if (not solution.is_public or solution.publish_on > timezone.now()) and \
+                not self.request.user.has_perm('judge.see_private_solution'):
+            raise Http404()
+        context['solution'] = solution
         return context
+
+    def get_comment_page(self):
+        return 's:' + self.object.code
 
 
 class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
