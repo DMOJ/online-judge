@@ -88,6 +88,16 @@ class SolvedProblemMixin(object):
         return self.request.user.profile
 
 
+class ProblemSolution(ProblemMixin, CommentedDetailView):
+    context_object_name = 'problem'
+    template_name = 'problem/editorial.jade'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSolution, self).get_context_data(**kwargs)
+        context['solution'] = Solution.objects.get(problem=self.object)
+        return context
+
+
 class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
     context_object_name = 'problem'
     template_name = 'problem/raw.jade'
@@ -121,7 +131,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
         user = self.request.user
         authed = user.is_authenticated
-        context['has_submissions'] = authed and Submission.objects.filter(user=user.profile, problem=self.object).exists()
+        context['has_submissions'] = authed and Submission.objects.filter(user=user.profile,
+                                                                          problem=self.object).exists()
         context['contest_problem'] = (None if not authed or user.profile.current_contest is None else
                                       get_contest_problem(self.object, user.profile))
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()

@@ -1,0 +1,31 @@
+extends common-content
+- load markdown_trois_tags
+- load staticfiles
+- load smart_math
+- load latex_math
+- load i18n
+- load reference
+
+block content_js_media
+    include comments/media-js
+
+block content_media
+    include comments/media-css
+
+block content_title
+    - blocktrans with problem_name=solution.problem.name
+        | Solution for {{ problem_name }}
+    div(style='float:right')
+        if perms.judge.change_solution
+            | [#[a(href='{% url "admin:judge_solution_change" solution.id %}') {% trans "Edit" %}]]
+
+block body
+    .content-description
+        | #{solution.content|markdown:"solution"|reference|latex_math|smart_math:MATH_ENGINE}
+
+    include comments/list
+
+block bodyend
+    if REQUIRE_JAX
+        include mathjax-load
+    include comments/math
