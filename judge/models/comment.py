@@ -96,7 +96,11 @@ class Comment(MPTTModel):
                 cache.set(key, slug, 3600)
             link = reverse('blog_post', args=(self.page[2:], slug))
         elif self.page.startswith('s:'):
-            link = reverse('solution', args=(self.page[2:],))
+            slug = self.page[2:]
+            if slug[0] == '/':
+                link = reverse('solution', args=(self.page[2:],))
+            else:
+                link = reverse('problem_editorial', args=(self.page[2:],))
         return link
 
     @cached_property
