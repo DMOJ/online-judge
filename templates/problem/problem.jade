@@ -193,6 +193,9 @@ block post_description_end
 
 block comments
     if contest_problem and contest_problem.contest.use_clarifications
+        h2
+            i.fa.fa-question-circle(style='padding-right: 0.3em')
+            | {% trans "Clarifications" %}
         for clarification in contest_problem.problem.clarifications
             .problem-clarification
                 .time(data-unix='{{ clarification.date|utc|date:"c" }}')
