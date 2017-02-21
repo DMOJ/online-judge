@@ -27,6 +27,7 @@ from judge.models import Profile
 from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import editable_problems
+from judge.utils.tickets import own_ticket_filter, filter_visible_tickets
 from judge.utils.views import TitleMixin, paginate_query_context, LoadSelect2Mixin
 from judge.widgets import HeavyPreviewPageDownWidget
 
@@ -232,13 +233,10 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
 
     def get_queryset(self):
         queryset = self._get_queryset()
-        own_filter = Q(assignees__id=self.profile.id) | Q(user=self.profile)
         if self.GET_with_session('own'):
-            queryset = queryset.filter(own_filter)
+            queryset = queryset.filter(own_ticket_filter(self.profile.id))
         elif not self.can_edit_all:
-            queryset = queryset.filter(own_filter |
-                                       Q(content_type=ContentType.objects.get_for_model(Problem),
-                                         object_id__in=editable_problems(self.user, self.profile)))
+            queryset = filter_visible_tickets(queryset, self.user, self.profile)
         if self.filter_assignees:
             queryset = queryset.filter(assignees__user__username__in=self.filter_assignees)
         return queryset.distinct()
