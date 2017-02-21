@@ -154,7 +154,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                                       get_contest_problem(self.object, user.profile))
         context['contest_problem'] = contest_problem
         if contest_problem:
-            clarifications = contest_problem.clarifications
+            clarifications = self.object.clarifications
             context['clarifications'] = clarifications
             context['has_clarifications'] = clarifications.count() > 0
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
