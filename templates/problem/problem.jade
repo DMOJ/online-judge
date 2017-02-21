@@ -177,7 +177,16 @@ block post_description_end
         a.button(style='float:right', href='{% url "new_problem_ticket" problem.code %}') {% trans "Report an issue" %}
 
 block comments
-    include comments/list
+    if contest_problem and contest_problem.contest.use_clarifications
+        for clarification in contest_problem.problem.clarifications
+            .problem-clarification
+                span.time(data-unix='{{ clarification.data|utc|date:"c" }}')
+                    - blocktrans with time=clarification.data|date:_("N j, Y") asvar str_time
+                        | on {{ time }}
+                    span.relative= str_time
+                span.body #{clarification.description|markdown:"problem"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
+    else
+        include comments/list
 
 block bodyend
     | #{block.super}
