@@ -96,11 +96,7 @@ class Comment(MPTTModel):
                 cache.set(key, slug, 3600)
             link = reverse('blog_post', args=(self.page[2:], slug))
         elif self.page.startswith('s:'):
-            slug = self.page[2:]
-            if '/' in slug:
-                link = reverse('solution', args=(self.page[2:],))
-            else:
-                link = reverse('problem_editorial', args=(self.page[2:],))
+            link = reverse('problem_editorial', args=(self.page[2:],))
         return link
 
     @cached_property
@@ -113,10 +109,7 @@ class Comment(MPTTModel):
             elif self.page.startswith('b:'):
                 return BlogPost.objects.get(id=self.page[2:]).title
             elif self.page.startswith('s:'):
-                try:
-                    return Solution.objects.get(url=self.page[2:]).title
-                except:
-                    return Solution.objects.get(problem__code=self.page[2:]).title
+                return Solution.objects.get(problem__code=self.page[2:]).title
             return '<unknown>'
         except ObjectDoesNotExist:
             return '<deleted>'
