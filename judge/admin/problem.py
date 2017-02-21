@@ -13,6 +13,7 @@ from reversion.admin import VersionAdmin
 from judge.models import Profile, LanguageLimit, ProblemTranslation, Problem
 from judge.widgets import HeavySelect2MultipleWidget, Select2MultipleWidget, Select2Widget, \
     HeavyPreviewAdminPageDownWidget, CheckboxSelectMultipleWithSelectAll
+from models.problem import ProblemClarification
 
 
 class ProblemForm(ModelForm):
@@ -45,7 +46,7 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         return [(name, name) for name in Profile.objects.exclude(authored_problems=None)
-                                                .values_list('user__username', flat=True)]
+            .values_list('user__username', flat=True)]
 
     def queryset(self, request, queryset):
         if self.value() is None:
@@ -64,6 +65,18 @@ class LanguageLimitInline(admin.TabularInline):
     form = LanguageLimitInlineForm
 
 
+class ProblemClarificationForm(ModelForm):
+    class Meta:
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets = {'description': HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('comment_preview'))}
+
+
+class ProblemClarificationInline(admin.TabularInline):
+    model = ProblemClarification
+    fields = ('date', 'description')
+    form = ProblemClarificationForm
+
+
 class ProblemTranslationForm(ModelForm):
     class Meta:
         if HeavyPreviewAdminPageDownWidget is not None:
@@ -80,7 +93,10 @@ class ProblemTranslationInline(admin.StackedInline):
 class ProblemAdmin(VersionAdmin):
     fieldsets = (
         (None, {
-            'fields': ('code', 'name', 'is_public', 'is_manually_managed', 'date', 'authors', 'curators', 'testers', 'description', 'license')
+            'fields': (
+                'code', 'name', 'is_public', 'is_manually_managed', 'date', 'authors', 'curators', 'testers',
+                'description',
+                'license')
         }),
         (_('Social Media'), {'classes': ('collapse',), 'fields': ('og_image', 'summary')}),
         (_('Taxonomy'), {'fields': ('types', 'group')}),
@@ -93,7 +109,7 @@ class ProblemAdmin(VersionAdmin):
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'show_public']
     ordering = ['code']
     search_fields = ('code', 'name', 'authors__user__username', 'curators__user__username')
-    inlines = [LanguageLimitInline, ProblemTranslationInline]
+    inlines = [ProblemClarificationInline, LanguageLimitInline, ProblemTranslationInline]
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
@@ -122,10 +138,12 @@ class ProblemAdmin(VersionAdmin):
 
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
+
     show_authors.short_description = _('Authors')
 
     def show_public(self, obj):
         return format_html(u'<a href="{1}">{0}</a>', ugettext('View on site'), obj.get_absolute_url())
+
     show_public.short_description = ''
 
     def _update_points(self, problem_id, sign):
@@ -162,6 +180,7 @@ class ProblemAdmin(VersionAdmin):
         self.message_user(request, ungettext('%d problem successfully marked as public.',
                                              '%d problems successfully marked as public.',
                                              count) % count)
+
     make_public.short_description = _('Mark problems as public')
 
     def make_private(self, request, queryset):
@@ -170,6 +189,7 @@ class ProblemAdmin(VersionAdmin):
         self.message_user(request, ungettext('%d problem successfully marked as private.',
                                              '%d problems successfully marked as private.',
                                              count) % count)
+
     make_private.short_description = _('Mark problems as private')
 
     def get_queryset(self, request):
