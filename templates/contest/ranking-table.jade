@@ -18,7 +18,7 @@ block after_rank
                 span
                     span.rate-box(class='{{ user.participation_rating|rating_class }}')
                         span(style='height: {{ user.participation_rating|rating_progress|floatformat:3 }}em')
-                    span.rating(class='{{ user.participation_rating|rating_class }}') #{user.rating}
+                    span.rating(class='{{ user.participation_rating|rating_class }}') #{user.participation_rating}
     td.organization-column
         if user.organization
             span.organization
