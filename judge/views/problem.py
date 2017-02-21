@@ -103,7 +103,7 @@ class ProblemSolution(ProblemMixin, TitleMixin, CommentedDetailView):
     def get_context_data(self, **kwargs):
         context = super(ProblemSolution, self).get_context_data(**kwargs)
 
-        solution = Solution.objects.get_object_or_404(problem=self.object)
+        solution = get_object_or_404(Solution, problem=self.object)
 
         if (not solution.is_public or solution.publish_on > timezone.now()) and \
                 not self.request.user.has_perm('judge.see_private_solution'):
