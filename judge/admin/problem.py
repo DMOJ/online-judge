@@ -10,10 +10,9 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext, ungettext, ugettext_lazy as _
 from reversion.admin import VersionAdmin
 
-from judge.models import Profile, LanguageLimit, ProblemTranslation, Problem
+from judge.models import Profile, LanguageLimit, ProblemTranslation, Problem, ProblemClarification
 from judge.widgets import HeavySelect2MultipleWidget, Select2MultipleWidget, Select2Widget, \
     HeavyPreviewAdminPageDownWidget, CheckboxSelectMultipleWithSelectAll
-from models.problem import ProblemClarification
 
 
 class ProblemForm(ModelForm):
