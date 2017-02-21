@@ -18,18 +18,8 @@ thead
             tr(id='user-{{ user.user.username }}')
                 td #{rank}
                 block after_rank
-                if show_organization
-                    td(class=user.display_rank)
-                        .userinfo
-                            - with org=user.organization
-                                if org
-                                    span.organization
-                                        a(href='{% url "organization_home" org.key %}')= org.short_name
-                            a.user-name(href='{% url "user_page" user.user.username %}')= user.user.username
-                            block user_data
-                else
-                    td.user-name(class=user.display_rank)
-                        a(href='{% url "user_page" user.user.username %}')= user.user.username
+                td.user-name(class=user.display_rank)
+                    a(href='{% url "user_page" user.user.username %}')= user.user.username
                 block before_point
                 if not perms.judge.test_site
                     block point

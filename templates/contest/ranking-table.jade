@@ -9,6 +9,7 @@ extends user/base-users-table
 block after_rank_head
     if has_rating
         th {% trans "Rating" %}
+    th.organization-column {% trans "Organization"
 
 block after_rank
     if has_rating
@@ -18,6 +19,10 @@ block after_rank
                     span.rate-box(class='{{ user.participation_rating|rating_class }}')
                         span(style='height: {{ user.participation_rating|rating_progress|floatformat:3 }}em')
                     span.rating(class='{{ user.participation_rating|rating_class }}') #{user.rating}
+    td.organization-column
+        if user.organization
+            span.organization
+                a(href='{% url "organization_home" user.organization.key %}')= user.organization.short_name
 
 block user_data
     if not contest.ended
