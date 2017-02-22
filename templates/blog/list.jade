@@ -78,6 +78,8 @@ block media
             margin-left: 1em;
         }
 
+        .no-clarifications-message { font-style: italic; }
+
 block js_media
     include blog/media-js.jade
     script(type='text/javascript').
@@ -150,6 +152,20 @@ block body
                 div(style='margin-bottom:10px;margin-top:10px')
                     include list-pages
         .blog-sidebar
+            if IN_CONTEST and CONTEST.use_clarifications
+                .blog-sidebox.sidebox
+                    h3 {% trans "Clarifications" %} #[i.fa.fa-question-circle]
+                    .sidebox-content
+                        if has_clarifications
+                            for clarification in clarifications
+                                .clarification
+                                    span.problem=clarification.problem.name
+                                    span.time(data-unix='{{ clarification.date|utc|date:"c" }}')
+                                        - blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time
+                                            | on {{ time }}
+                                        span.relative= str_time
+                        else
+                            p.no-clarifications-message {% trans "No clarifications have been made at this time. %}
             if current_contests
                 .blog-sidebox.sidebox
                     h3 {% trans "Ongoing contests" %} #[i.fa.fa-trophy]

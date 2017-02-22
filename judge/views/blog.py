@@ -12,6 +12,7 @@ from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.tickets import filter_visible_tickets
 from judge.utils.views import TitleMixin
 from judge.utils.problems import user_completed_ids
+from models import ProblemClarification
 
 
 class PostList(ListView):
@@ -36,6 +37,13 @@ class PostList(ListView):
         context['page_prefix'] = reverse('blog_post_list')
         context['comments'] = Comment.most_recent(self.request.user, 10)
         context['new_problems'] = Problem.objects.filter(is_public=True).order_by('-date', '-id')[:7]
+
+        if self.request.user.is_authenticated:
+            clarifications = ProblemClarification.objects.filter(problem__in=self.request.user.profile.current_contest.problems.all())
+            context['has_clarifications'] = clarifications.count() > 0
+            context['clarifications'] = clarifications
+        else:
+            context['has_clarifications'] = False
 
         context['user_count'] = Profile.objects.count()
         context['problem_count'] = Problem.objects.filter(is_public=True).count()
