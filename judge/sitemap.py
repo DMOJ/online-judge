@@ -65,7 +65,7 @@ class SolutionSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return (Solution.objects.filter(is_public=True, publish_on__lte=timezone.now())
+        return (Solution.objects.filter(is_public=True, publish_on__lte=timezone.now(), problem__isnull=False)
                 .values_list('problem__code', flat=True))
 
     def location(self, obj):
