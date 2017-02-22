@@ -39,9 +39,9 @@ class PostList(ListView):
 
         context['has_clarifications'] = False
         if self.request.user.is_authenticated:
-            contest = self.request.user.profile.current_contest
-            if contest:
-                clarifications = ProblemClarification.objects.filter(problem__in=contest.problems.all())
+            participation = self.request.user.profile.current_contest
+            if participation:
+                clarifications = ProblemClarification.objects.filter(problem__in=participation.contest.problems.all())
                 context['has_clarifications'] = clarifications.count() > 0
                 context['clarifications'] = clarifications
 
