@@ -152,7 +152,7 @@ block body
                 div(style='margin-bottom:10px;margin-top:10px')
                     include list-pages
         .blog-sidebar
-            if IN_CONTEST and CONTEST.use_clarifications
+            if IN_CONTEST and CONTEST.contest.use_clarifications
                 .blog-sidebox.sidebox
                     h3 {% trans "Clarifications" %} #[i.fa.fa-question-circle]
                     .sidebox-content
