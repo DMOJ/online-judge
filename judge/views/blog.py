@@ -6,13 +6,12 @@ from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 
 from judge.comments import CommentedDetailView
-from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submission, Language
+from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submission, Language, ProblemClarification
 from judge.models import Ticket
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.tickets import filter_visible_tickets
 from judge.utils.views import TitleMixin
 from judge.utils.problems import user_completed_ids
-from models import ProblemClarification
 
 
 class PostList(ListView):
