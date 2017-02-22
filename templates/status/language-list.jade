@@ -42,6 +42,6 @@ block body
                                 - cache 86400 language_html language.id
                                     | #{language.description|markdown:"language"}
                         else
-                            .content-description
-                                - var runtime_versions = language.runtime_versions
+                            - var runtime_versions = language.runtime_versions
+                            code
                                 include runtime-version-fragment
