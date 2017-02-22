@@ -155,8 +155,9 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['contest_problem'] = contest_problem
         if contest_problem:
             clarifications = self.object.clarifications
-            context['clarifications'] = clarifications
             context['has_clarifications'] = clarifications.count() > 0
+            context['clarifications'] = clarifications.order_by('-date')
+
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         context['has_pdf_render'] = HAS_PDF
         context['completed_problem_ids'] = self.get_completed_problems()
