@@ -43,5 +43,5 @@ block body
                                     | #{language.description|markdown:"language"}
                         else
                             .content-description
-                                p
-                                    code= language.info
+                                - var runtime_versions = language.runtime_versions
+                                include runtime-version-fragment
