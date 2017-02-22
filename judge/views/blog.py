@@ -43,7 +43,7 @@ class PostList(ListView):
             if participation:
                 clarifications = ProblemClarification.objects.filter(problem__in=participation.contest.problems.all())
                 context['has_clarifications'] = clarifications.count() > 0
-                context['clarifications'] = clarifications
+                context['clarifications'] = clarifications.order_by('-date')
 
         context['user_count'] = Profile.objects.count()
         context['problem_count'] = Problem.objects.filter(is_public=True).count()
