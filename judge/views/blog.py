@@ -37,12 +37,13 @@ class PostList(ListView):
         context['comments'] = Comment.most_recent(self.request.user, 10)
         context['new_problems'] = Problem.objects.filter(is_public=True).order_by('-date', '-id')[:7]
 
+        context['has_clarifications'] = False
         if self.request.user.is_authenticated:
-            clarifications = ProblemClarification.objects.filter(problem__in=self.request.user.profile.current_contest.problems.all())
-            context['has_clarifications'] = clarifications.count() > 0
-            context['clarifications'] = clarifications
-        else:
-            context['has_clarifications'] = False
+            contest = self.request.user.profile.current_contest
+            if contest:
+                clarifications = ProblemClarification.objects.filter(problem__in=.problems.all())
+                context['has_clarifications'] = clarifications.count() > 0
+                context['clarifications'] = clarifications
 
         context['user_count'] = Profile.objects.count()
         context['problem_count'] = Problem.objects.filter(is_public=True).count()
