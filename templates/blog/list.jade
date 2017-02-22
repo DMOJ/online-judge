@@ -157,13 +157,15 @@ block body
                     h3 {% trans "Clarifications" %} #[i.fa.fa-question-circle]
                     .sidebox-content
                         if has_clarifications
-                            for clarification in clarifications
-                                .clarification
-                                    span.problem=clarification.problem.name
-                                    span.time(data-unix='{{ clarification.date|utc|date:"c" }}')
-                                        - blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time
-                                            | on {{ time }}
-                                        span.relative= str_time
+                            ul
+                                for clarification in clarifications
+                                    li.clarification
+                                        a.problem(href='{% url "problem_detail" clarification.problem.code %}')=clarification.problem.name
+                                        = ' '
+                                        span.time(data-unix='{{ clarification.date|utc|date:"c" }}')
+                                            - blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time
+                                                | on {{ time }}
+                                            span.relative= str_time
                         else
                             p.no-clarifications-message {% trans "No clarifications have been made at this time." %}
             if current_contests
@@ -206,7 +208,7 @@ block body
             .blog-sidebox.sidebox
                 h3 {% trans "New problems" %} #[i.fa.fa-puzzle-piece]
                 .sidebox-content
-                    ul.new-problems: for problem in new_problems
+                    ul.problem-list: for problem in new_problems
                         li: a(href='{% url "problem_detail" problem.code %}')= problem.name
                     span.rssatom
                         a(href='{% url "problem_rss" %}') #[span: i.fa.fa-rss] RSS
