@@ -65,10 +65,11 @@ class SolutionSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Solution.objects.filter(is_public=True, publish_on__lte=timezone.now())
+        return (Solution.objects.filter(is_public=True, publish_on__lte=timezone.now())
+                .values_list('problem__code', flat=True))
 
     def location(self, obj):
-        return reverse('solution', args=[obj.url])
+        return reverse('problem_editorial', args=[obj])
 
 
 class HomePageSitemap(Sitemap):
