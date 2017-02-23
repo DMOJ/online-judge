@@ -24,17 +24,17 @@ block js_media
                         var code = localStorage.getItem('submit:' + $('#id_language').val());
 
                         function update_submit_area(code) {
+                            window.previous_template = code;
                             source.val(code);
                             window.ace_editor.getSession().setValue(code);
                         }
 
-                        if (code) {
+                        if (code != null) {
                             update_submit_area(code);
                         } else {
                             $.get('{% url "language_template_ajax" %}', {
                                 id: lang_id
                             }).done(function (template) {
-                                window.previous_template = template;
                                 update_submit_area(template);
                             });
                         }
