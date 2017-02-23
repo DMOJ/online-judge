@@ -125,12 +125,12 @@ block js_media
                         case 'E':
                             disabled = val == 'S';
                             $opts.toggle(val != 'S');
-                            $files.show();
+                            $files.siblings('.select2').show();
                             $checker.toggle(val != 'S');
                             break;
                         default:
                             $opts.toggle(val != 'C');
-                            $files.toggle(val != 'C');
+                            $files.siblings('.select2').toggle(val != 'C');
                             $checker.toggle(val != 'C');
                             var $prevs = $tr.prevAll('tr[data-type=S], tr[data-type=E]');
                             disabled = $prevs.length && $prevs.get(0).getAttribute('data-type') == 'S';
