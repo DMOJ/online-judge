@@ -16,9 +16,10 @@ block js_media
                     return state.text;
                 }
 
+                window.previous_template = '';
                 function update_language_template() {
                     var source = $('textarea#id_source');
-                    if (source.val() == '') {
+                    if (source.val() == window.previous_template || source.val() == '') {
                         var lang_id = $('#id_language').val();
                         var code = localStorage.getItem('submit:' + $('#id_language').val());
 
@@ -33,6 +34,7 @@ block js_media
                             $.get('{% url "language_template_ajax" %}', {
                                 id: lang_id
                             }).done(function (template) {
+                                window.previous_template = template;
                                 update_submit_area(template);
                             });
                         }
