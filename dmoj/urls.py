@@ -131,6 +131,8 @@ urlpatterns = [
 
         url(r'^/tickets$', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
         url(r'^/tickets/new$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
+
+        url(r'^/template$', problem.LanguageTemplateAjax.as_view(), name='language_template_ajax'),
     ])),
 
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
