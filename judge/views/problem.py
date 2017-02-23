@@ -23,7 +23,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, View
-from django.views.generic.base import TemplateResponseMixin
+from django.views.generic.base import TemplateResponseMixin, TemplateView
 from django.views.generic.detail import SingleObjectMixin, DetailView
 
 from django_ace.widgets import ACE_URL
@@ -431,7 +431,7 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProb
         return HttpResponseRedirect(request.get_full_path())
 
 
-class LanguageTemplateAjax(DetailView):
+class LanguageTemplateAjax(TemplateView):
     template_name = 'problem/language-template-ajax.jade'
 
     def get_context_data(self, **kwargs):
