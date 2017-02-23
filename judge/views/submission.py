@@ -380,7 +380,7 @@ class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
     def get_title(self):
         if self.problem.is_accessible_by(self.request.user):
             return "%s's submissions for %s in %s" % (self.username, self.problem_name, self.contest.name)
-        return "%s's submissions for problem %s in %s" % (self.username, get_problem_number(self.problem), self.contest.name)
+        return "%s's submissions for problem %s in %s" % (self.username, self.get_problem_number(self.problem), self.contest.name)
 
     def access_check(self, request):
         super(UserContestSubmissions, self).access_check(request)
@@ -397,5 +397,5 @@ class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
         return format_html(_(u'<a href="{1}">{0}</a>\'s submissions for '
                              u'problem {2} in <a href="{4}">{3}</a>'),
                            self.username, reverse('user_page', args=[self.username]),
-                           get_problem_number(self.problem),
+                           self.get_problem_number(self.problem),
                            self.contest.name, reverse('contest_view', args=[self.contest.key]))
