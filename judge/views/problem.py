@@ -24,7 +24,7 @@ from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, View
 from django.views.generic.base import TemplateResponseMixin
-from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.detail import SingleObjectMixin, DetailView
 
 from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
@@ -151,7 +151,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['has_submissions'] = authed and Submission.objects.filter(user=user.profile,
                                                                           problem=self.object).exists()
         contest_problem = (None if not authed or user.profile.current_contest is None else
-                                      get_contest_problem(self.object, user.profile))
+                           get_contest_problem(self.object, user.profile))
         context['contest_problem'] = contest_problem
         if contest_problem:
             clarifications = self.object.clarifications
@@ -429,6 +429,18 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProb
             else:
                 request.session.pop(key, None)
         return HttpResponseRedirect(request.get_full_path())
+
+
+class LanguageTemplateAjax(DetailView):
+    template_name = 'problem/language-template-ajax.jade'
+
+    def get_context_data(self, **kwargs):
+        context = super(LanguageTemplateAjax, self).get_context_data(**kwargs)
+        try:
+            context['language'] = get_object_or_404(Language, id=int(self.request.GET.get('id', 0)))
+        except ValueError:
+            raise Http404()
+        return context
 
 
 class RandomProblem(ProblemList):
