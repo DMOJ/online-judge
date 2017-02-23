@@ -133,7 +133,7 @@ urlpatterns = [
         url(r'^/tickets/new$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
     ])),
 
-    url(r'^/template$', problem.LanguageTemplateAjax.as_view(), name='language_template_ajax'),
+    url(r'^template$', problem.LanguageTemplateAjax.as_view(), name='language_template_ajax'),
 
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
     url(r'^src/(?P<submission>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
