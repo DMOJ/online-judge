@@ -24,7 +24,7 @@ block js_media
 
                         function update_submit_area(code) {
                             source.val(code);
-                            editor.getSession().setValue(code);
+                            window.ace_editor.getSession().setValue(code);
                         }
 
                         if (code) {
@@ -92,6 +92,7 @@ block js_media
                 });
 
                 $('#ace_source').on('ace_load', function (e, editor) {
+                    window.ace_editor = editor;
                     update_language_template();
                     editor.commands.addCommand({
                         name: 'save',
