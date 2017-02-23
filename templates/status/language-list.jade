@@ -11,8 +11,7 @@ block media
         }
 
         .table td.info .content-description {
-            margin-top: -1em;
-            margin-bottom: -1em;
+            margin: -1em 1em -1em 1em;
         }
 
         td.info { width: 100%; }
@@ -41,12 +40,11 @@ block body
                         td.language
                             span= language.name
                         td.info
+                            - var runtime_versions = language.runtime_versions
+                            code
+                                include runtime-version-fragment
                             if language.description
                                 .content-description
                                     - cache 86400 language_html language.id
                                         | #{language.description|markdown:"language"}
-                            else
-                                - var runtime_versions = language.runtime_versions
-                                code
-                                    include runtime-version-fragment
     
