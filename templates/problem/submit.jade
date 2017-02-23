@@ -16,6 +16,29 @@ block js_media
                     return state.text;
                 }
 
+                function update_language_template() {
+                    var source = $('textarea#id_source');
+                    if (source.val() == '') {
+                        var lang_id = $('#id_language').val();
+                        var code = localStorage.getItem('submit:' + $('#id_language').val());
+
+                        function update_submit_area(code) {
+                            source.val(code);
+                            editor.getSession().setValue(code);
+                        }
+
+                        if (code) {
+                            update_submit_area(code);
+                        } else {
+                            $.get('{% url "language_template_ajax" %}', {
+                                id: lang_id
+                            }).done(function (template) {
+                                update_submit_area(template);
+                            });
+                        }
+                    }
+                }
+
                 function makeDisplayData(data) {
                     var site_data = data.attr('data-info');
                     var judge_data = data.attr('data-judge-info');
@@ -65,29 +88,11 @@ block js_media
                 $('#id_language').change(function () {
                     var lang = $("#id_language").find("option:selected").attr('data-ace');
                     window.ace_source.getSession().setMode("ace/mode/" + lang);
+                    update_language_template();
                 });
 
                 $('#ace_source').on('ace_load', function (e, editor) {
-                    var source = $('textarea#id_source');
-                    if (source.val() == '') {
-                        var lang_id = $('#id_language').val();
-                        var code = localStorage.getItem('submit:' + $('#id_language').val());
-
-                        function update_submit_area(code) {
-                            source.val(code);
-                            editor.getSession().setValue(code);
-                        }
-
-                        if (code) {
-                            update_submit_area(code);
-                        } else {
-                            $.get('{% url "language_template_ajax" %}', {
-                                id: lang_id
-                            }).done(function (template) {
-                               update_submit_area(template);
-                            });
-                        }
-                    }
+                    update_language_template();
                     editor.commands.addCommand({
                         name: 'save',
                         bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
