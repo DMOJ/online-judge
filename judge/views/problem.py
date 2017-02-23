@@ -23,8 +23,8 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, View
-from django.views.generic.base import TemplateResponseMixin, TemplateView
-from django.views.generic.detail import SingleObjectMixin, DetailView
+from django.views.generic.base import TemplateResponseMixin
+from django.views.generic.detail import SingleObjectMixin
 
 from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
@@ -431,16 +431,13 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProb
         return HttpResponseRedirect(request.get_full_path())
 
 
-class LanguageTemplateAjax(TemplateView):
-    template_name = 'problem/language-template-ajax.jade'
-
-    def get_context_data(self, **kwargs):
-        context = super(LanguageTemplateAjax, self).get_context_data(**kwargs)
+class LanguageTemplateAjax(View):
+    def get(self, request, *args, **kwargs):
         try:
-            context['language'] = get_object_or_404(Language, id=int(self.request.GET.get('id', 0)))
+            language = get_object_or_404(Language, id=int(request.GET.get('id', 0)))
         except ValueError:
             raise Http404()
-        return context
+        return HttpResponse(language.template)
 
 
 class RandomProblem(ProblemList):

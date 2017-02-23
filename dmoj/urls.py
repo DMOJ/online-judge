@@ -256,7 +256,7 @@ urlpatterns = [
         url(r'^detect_timezone$', widgets.DetectTimezone.as_view(), name='detect_timezone'),
         url(r'^status-table$', status.status_table, name='status_table'),
 
-        url(r'^template$', problem.LanguageTemplateAjax.as_view(), name='language_template_ajax'),
+        url(r'^template$', problem.LanguageTemplateAjax.as_view(), name='language_template_ajax'),  
 
         url(r'^select2/', include([
             url(r'^user_search$', UserSearchSelect2View.as_view(), name='user_search_select2_ajax'),
