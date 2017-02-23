@@ -375,7 +375,10 @@ class ForceContestMixin(object):
 
 class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
     def get_title(self):
-        return "%s's submissions for %s in %s" % (self.username, self.problem_name, self.contest.name)
+        if self.problem.is_accessible_by(self.user):
+            return "%s's submissions for %s in %s" % (self.username, self.problem_name, self.contest.name)
+        problemnumber = str(self.contest.select_related('problem').get(problem=self.problem).order)
+        return "%s's submissions for problem %s in %s" % (self.username, self.problemnumber, self.contest.name)
 
     def access_check(self, request):
         super(UserContestSubmissions, self).access_check(request)
@@ -383,8 +386,15 @@ class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
             raise Http404()
 
     def get_content_title(self):
+        if self.problem.is_accessible_by(self.user):
+            return format_html(_(u'<a href="{1}">{0}</a>\'s submissions for '
+                                u'<a href="{3}">{2}</a> in <a href="{5}">{4}</a>'),
+                                self.username, reverse('user_page', args=[self.username]),
+                                self.problem_name, reverse('problem_detail', args=[self.problem.code]),
+                                self.contest.name, reverse('contest_view', args=[self.contest.key]))
+        problemnumber = str(self.contest.select_related('problem').get(problem=self.problem).order)
         return format_html(_(u'<a href="{1}">{0}</a>\'s submissions for '
-                             u'<a href="{3}">{2}</a> in <a href="{5}">{4}</a>'),
+                             u'problem {2} in <a href="{4}">{3}</a>'),
                            self.username, reverse('user_page', args=[self.username]),
-                           self.problem_name, reverse('problem_detail', args=[self.problem.code]),
+                           problemnumber,
                            self.contest.name, reverse('contest_view', args=[self.contest.key]))
