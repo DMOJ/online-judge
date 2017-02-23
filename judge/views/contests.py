@@ -149,7 +149,7 @@ class ContestMixin(object):
         user = self.request.user
         profile = self.request.user.profile if user.is_authenticated() else None
 
-        if (profile is not None and
+        if (profile is not None and not profile.is_unlisted and
                 ContestParticipation.objects.filter(id=profile.current_contest_id, contest_id=contest.id).exists()):
             return contest
 
