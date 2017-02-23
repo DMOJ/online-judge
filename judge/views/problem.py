@@ -437,7 +437,7 @@ class LanguageTemplateAjax(View):
             language = get_object_or_404(Language, id=int(request.GET.get('id', 0)))
         except ValueError:
             raise Http404()
-        return HttpResponse(language.template)
+        return HttpResponse(language.template, content_type='text/plain')
 
 
 class RandomProblem(ProblemList):
