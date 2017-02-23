@@ -367,7 +367,7 @@ class ForceContestMixin(object):
                 raise Http404()
 
     def get_problem_number(self, problem):
-        return self.contest.select_related('problem').get(problem=problem).order
+        return self.contest.contest_problems.select_related('problem').get(problem=problem).order
 
     def get(self, request, *args, **kwargs):
         if 'contest' not in kwargs:
