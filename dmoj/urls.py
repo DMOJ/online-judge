@@ -133,8 +133,6 @@ urlpatterns = [
         url(r'^/tickets/new$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
     ])),
 
-    url(r'^template$', problem.LanguageTemplateAjax.as_view(), name='language_template_ajax'),
-
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
     url(r'^src/(?P<submission>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
     url(r'^src/(?P<submission>\d+)/raw$', submission.SubmissionSourceRaw.as_view(), name='submission_source_raw'),
@@ -257,6 +255,8 @@ urlpatterns = [
         url(r'^submission_testcases$', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
         url(r'^detect_timezone$', widgets.DetectTimezone.as_view(), name='detect_timezone'),
         url(r'^status-table$', status.status_table, name='status_table'),
+
+        url(r'^template$', problem.LanguageTemplateAjax.as_view(), name='language_template_ajax'),
 
         url(r'^select2/', include([
             url(r'^user_search$', UserSearchSelect2View.as_view(), name='user_search_select2_ajax'),
