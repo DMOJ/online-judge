@@ -58,7 +58,7 @@ block js_media
                 $table.find('tbody:first tr').each(function () {
                     switch ($(this).attr('data-type')) {
                         case 'C':
-                            $(this).find('input[id$=points], input[id$=pretest]').toggle(in_batch);
+                            $(this).find('input[id$=points], input[id$=pretest]').toggle(!in_batch);
                             break;
                         case 'S':
                             in_batch = true;
@@ -124,20 +124,20 @@ block js_media
                         case 'S':
                         case 'E':
                             disabled = val == 'S';
-                            $opts.toggle(val != 'S');
-                            $files.siblings('.select2').show();
-                            $checker.toggle(val != 'S');
+                            $opts.toggle(val == 'S');
+                            $files.siblings('.select2').hide();
+                            $checker.toggle(val == 'S');
                             break;
                         default:
-                            $opts.toggle(val != 'C');
-                            $files.siblings('.select2').toggle(val != 'C');
-                            $checker.toggle(val != 'C');
+                            $opts.toggle(val == 'C');
+                            $files.siblings('.select2').toggle(val == 'C');
+                            $checker.toggle(val == 'C');
                             var $prevs = $tr.prevAll('tr[data-type=S], tr[data-type=E]');
                             disabled = $prevs.length && $prevs.get(0).getAttribute('data-type') == 'S';
-                            $tr.find('input[id$=points], input[id$=pretest]').toggle(val != 'C' || disabled);
+                            $tr.find('input[id$=points], input[id$=pretest]').toggle(val == 'C' && !disabled);
                     }
                     $tr.attr('data-type', val).nextUntil('tr[data-type=S], tr[data-type=E], tr[data-type=]')
-                            .find('input[id$=points], input[id$=pretest]').toggle(disabled);
+                            .find('input[id$=points], input[id$=pretest]').toggle(!disabled);
                 }).change();
 
                 var tooltip_classes = 'tooltipped tooltipped-s';
