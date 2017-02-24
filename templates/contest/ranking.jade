@@ -105,6 +105,17 @@ block users_media
             position: relative;
         }
 
+        .organization-column {
+            display: none;
+            text-align: left !important;
+            border-right: none !important;
+        }
+
+        .organization-column a {
+            color: gray !important;
+            font-weight: 600;
+        }
+
     if has_rating
         style.
             #users-table .rate-box {
@@ -229,6 +240,12 @@ block users_js_media
                     window.location.href = url.replace('__username__', $(this).val());
                 });
             });
+    script(type='text/javascript').
+        $(function () {
+           $('#show-organizations-checkbox').click(function () {
+              $('.organization-column').toggle();
+           });
+        });
     include contest/media-js
 
 block users_table
@@ -238,4 +255,7 @@ block users_table
     //        br
     //        input#search(type='text', placeholder='{% trans "View user participation" %}')
     //    hr
+    input#show-organizations-checkbox(type='checkbox')
+    label(for="show-organizations-checkbox") {% trans "Show organizations" %}
+
     include contest/ranking-table

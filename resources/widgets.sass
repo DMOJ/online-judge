@@ -20,7 +20,8 @@
 
 // Bootstrap-y buttons
 .button, button, input[type=submit]
-  color: white
+  color: white !important
+  text-decoration: none !important
   cursor: pointer
   vertical-align: middle
   white-space: nowrap
@@ -102,7 +103,6 @@ input
 .btn-clipboard
   top: 0
   right: 0
-  z-index: 10
   display: block
   font-size: 12px
   color: #767676
@@ -153,6 +153,7 @@ ul.tabs
       padding: 10px 15px
       color: #337ab7
       text-decoration: none
+      white-space: nowrap
 
       &:hover
         border-color: #eee #eee rgba(0, 0, 0, 0.2)
@@ -219,3 +220,72 @@ ul.pagination
         background-color: #2980B9
         border-color: transparent
         cursor: default
+
+.alert
+  padding: 15px
+  margin-bottom: 20px
+  border: 1px solid transparent
+  border-radius: 4px
+
+.alert-info
+  color: #31708f
+  background-color: #d9edf7
+  border-color: #bce8f1
+
+.alert-warning
+  color: #8a6d3b
+  background-color: #fcf8e3
+  border-color: #faebcc
+
+.alert-danger
+  color: #a94442
+  background-color: #f2dede
+  border-color: #ebccd1
+
+.alert-dismissable, .alert-dismissible
+  padding-right: 35px
+
+.alert-dismissable .close, .alert-dismissible .close
+  position: relative
+  top: -2px
+  right: -21px
+  color: inherit
+
+.close
+  float: right
+  font-size: 21px
+  font-weight: 700
+  line-height: 1
+  color: #000
+  text-shadow: 0 1px 0 #fff
+  filter: alpha(opacity=20)
+  opacity: .2
+
+a.close
+  text-decoration: none !important
+  font-size: 18px !important
+  line-height: 1
+  &:hover
+    color: black !important
+
+.close
+  &:focus, &:hover
+    color: #000
+    text-decoration: none
+    cursor: pointer
+    filter: alpha(opacity = 50)
+    opacity: .5
+
+.badge
+  min-width: 10px
+  padding: 0px 7px
+  font-size: 12px
+  font-weight: 700
+  line-height: 1
+  color: #fff
+  text-align: center
+  white-space: nowrap
+  vertical-align: middle
+  background-color: #e84848
+  border-radius: 10px
+  box-sizing: border-box

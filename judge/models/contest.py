@@ -62,6 +62,9 @@ class Contest(models.Model):
                                                 'specified organizations.'))
     is_rated = models.BooleanField(verbose_name=_('contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
+    use_clarifications = models.BooleanField(verbose_name=_('no comments'),
+                                             help_text=_("Use clarification system instead of comments."),
+                                             default=True)
     rate_all = models.BooleanField(verbose_name=_('rate all'), help_text=_('Rate all users who joined.'), default=False)
     rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
                                           related_name='rate_exclude+')
@@ -154,6 +157,8 @@ class ContestParticipation(models.Model):
                              self.submissions.values('submission__problem').annotate(points=Max('points'))))
         self.save()
         return self.score
+
+    recalculate_score.alters_data = True
 
     @property
     def spectate(self):

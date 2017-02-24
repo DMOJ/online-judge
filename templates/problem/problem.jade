@@ -8,9 +8,37 @@ extends common-content
 - load camo_proxy
 - load i18n
 - load reference
+- load tz
 
 block content_media
     include comments/media-css
+    style.
+        .title-state {
+            font-size: 2em;
+            float: left;
+            width: 1.1em;
+            display: block;
+            margin-top: 0.16em;
+        }
+
+        .info-float a {
+            vertical-align: middle;
+        }
+
+        .problem-clarification {
+            border-bottom: 1px solid #ccc;
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+
+        .clarifications-area h2 {
+            margin-bottom: 20px;
+        }
+
+        .problem-clarification .body {
+            display: inline-block;
+            padding-left: 3em;
+        }
 
 block content_js_media
     include comments/media-js
@@ -25,6 +53,21 @@ block content_js_media
 
 block title_row
     div.problem-title
+        if request.user.is_authenticated
+            if problem.id in completed_problem_ids
+                a(href='{% url "user_submissions" problem.code request.user.username %}')
+                    if problem.is_public or IN_CONTEST
+                        i.solved-problem-color.title-state.fa.fa-check-circle
+                    else
+                        i.solved-problem-color.title-state.fa.fa-lock
+            else
+                if problem.id in attempted_problems
+                    a(href='{% url "user_submissions" problem.code request.user.username %}')
+                        if problem.is_public or IN_CONTEST
+                            i.attempted-problem-color.title-state.fa.fa-minus-circle
+                        else
+                            i.attempted-problem-color.title-state.fa.fa-lock
+
         h2(style='color:#393630; display: inline-block')= title
         if has_pdf_render
             span.spacer
@@ -45,11 +88,18 @@ block info_float
 
     if editorial and editorial.is_public
         hr
-        div: a(href='{% url "solution" editorial.url %}') Read editorial
+        div: a(href='{% url "problem_editorial" problem.code %}') Read editorial
 
-    if perms.judge.change_problem or perms.judge.edit_own_problem and request.user.profile.id in problem.editor_ids or perms.judge.edit_public_problem and problem.is_public
+    if can_edit_problem
         hr
+        div: a(href='{% url "problem_ticket_list" problem.code %}') {% trans "Manage tickets" %}
+            if num_open_tickets
+                = ' '
+                span.badge=num_open_tickets
         div: a(href='{% url "admin:judge_problem_change" problem.id %}') {% trans "Edit problem" %}
+        if not problem.is_manually_managed
+            div: a(href='{% url "problem_data" problem.code %}') {% trans "Edit test data" %}
+
     if perms.judge.clone_problem
         div: form(action='{% url "problem_clone" problem.code %}', method='post')
             - csrf_token
@@ -138,11 +188,31 @@ block description
             span(style='float: left; font-size: 0.85em')
                 a(style='color: gray; text-decoration: none', href='{% url "license" license.key %}')= license.display
 
+block post_description_end
+    if perms.judge.test_site
+        a.button(style='float:right', href='{% url "new_problem_ticket" problem.code %}')
+            if contest_problem and contest_problem.contest.use_clarifications
+                | {% trans "Request clarification" %}
+            else
+                | {% trans "Report an issue" %}
+
 block comments
-    .comment-area
-        h2
-            i.fa.fa-comments(style='padding-right: 0.2em')
-            | {% trans "Comments" %}
+    if contest_problem and contest_problem.contest.use_clarifications
+        .clarifications-area
+            h2
+                i.fa.fa-question-circle(style='padding-right: 0.3em')
+                | {% trans "Clarifications" %}
+            if has_clarifications
+                for clarification in clarifications
+                    .problem-clarification
+                        .time(data-unix='{{ clarification.date|utc|date:"c" }}')
+                            - blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time
+                                | on {{ time }}
+                            span.relative= str_time
+                        span.body #{clarification.description|markdown:"problem"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
+            else
+                p.no-comments-message {% trans "No clarifications have been made at this time." %}
+    else
         include comments/list
 
 block bodyend

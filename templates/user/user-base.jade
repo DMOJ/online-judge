@@ -29,10 +29,16 @@ block media
             display: flex;
         }
 
+        .semibold {
+            font-weight: 600;
+        }
+
         .user-content {
             width: 100%;
         }
 
+block js_media
+    block user_js_media
 
 block body
     table
@@ -42,47 +48,43 @@ block body
                     img(src='{% gravatar_url user.user.email 135 user.mute %}', alt='gravatar', width="135px", height="135px")
                 br
                 // Transblock
-                h4 #{user.problem_count} problems solved.
-                b {% trans "Rank by points:" %}
+                b #{user.problem_count} problems solved
+                br
+                b.semibold {% trans "Rank by points:" %}
                 |  ##{rank}
                 br
-                b {% trans "Total points:" %}
-                |  #{user.points}
+                b.semibold {% trans "Total points:" %}
+                span(title='{{ user.performance_points|floatformat:2 }}')
+                    |  #{user.performance_points|floatformat:0}
                 br
-                .pp-feature(style=(None if perms['judge']['test_site'] else 'display: none'))
-                    br
-                    b {% trans "Rank by PP:" %}
-                    |  ##{pp_rank}
-                    br
-                    b {% trans "Total PP:" %}
-                    |  #{user.performance_points|floatformat:2}
-                    br
+                br
                 a(href='{% url "all_user_submissions" user.user.username %}') {% trans "View submissions" %}
                 if ratings
                     br
                     br: br
-                    h4 #{ratings|length} contests written.
-                    b {% trans "Rank by rating:" %}
+                    b #{ratings|length} contests written
+                    br
+                    b.semibold {% trans "Rank by rating:" %}
                     |  ##{rating_rank}
                     br
-                    b {% trans "Rating:" %}
+                    b.semibold {% trans "Rating:" %}
                     = ' '
                     span.rate-group
                         span.rate-box(class='{{ rating.rating|rating_class }}')
                             span(style='height: {{ rating.rating|rating_progress|floatformat:3 }}em')
                         span.rating(class='{{ rating.rating|rating_class }}') #{rating.rating}
                     br
-                    b {% trans "Volatility:" %}
+                    b.semibold {% trans "Volatility:" %}
                     |  #{rating.volatility}
                     br
-                    b {% trans "Min. rating:" %}
+                    b.semibold {% trans "Min. rating:" %}
                     = ' '
                     span.rate-group
                         span.rate-box(class='{{ min_rating|rating_class }}')
                             span(style='height: {{ min_rating|rating_progress|floatformat:3 }}em')
                         span.rating(class='{{ min_rating|rating_class }}') #{min_rating}
                     br
-                    b {% trans "Max rating:" %}
+                    b.semibold {% trans "Max rating:" %}
                     = ' '
                     span.rate-group
                         span.rate-box(class='{{ max_rating|rating_class }}')

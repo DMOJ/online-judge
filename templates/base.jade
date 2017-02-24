@@ -70,6 +70,10 @@ html(lang=LANGUAGE_CODE)
             link(type='text/css', rel='stylesheet', href='{% static "libs/featherlight/featherlight.min.css" %}')
             link(rel='stylesheet', href='{% static "libs/clipboard/tooltip.css" %}')
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default:site.domain }}{{ request.get_full_path }}')
+        if request.user.is_impersonate
+            style.
+                #nav-container { background: #893e89 !important; }
+
         block media
         if not INLINE_JQUERY
             script(src=JQUERY_JS)
@@ -96,8 +100,9 @@ html(lang=LANGUAGE_CODE)
 
         if misc_config.analytics
             | #{misc_config.analytics|safe}
-        
-        if request.user.profile.user_script
+
+        // Don't run userscript since it may be malicious
+        if request.user.profile.user_script and not request.user.is_impersonate
             script(type='text/javascript') #{request.user.profile.user_script|safe}
 
         noscript
@@ -143,7 +148,10 @@ html(lang=LANGUAGE_CODE)
                                 if request.user.is_staff or request.user.is_superuser
                                     li: a(href='{% url "admin:index" %}') {% trans "Admin" %}
                                 li: a(href='{% url "user_edit_profile" %}') {% trans "Edit profile" %}
-                                li: a(href='{% url "auth_logout" %}?next=') {% trans "Log out" %}
+                                if request.user.is_impersonate
+                                    li: a(href='{% url "impersonate-stop" %}') Stop impersonating
+                                else
+                                    li: a(href='{% url "auth_logout" %}?next=') {% trans "Log out" %}
                     else
                         span.anon
                             a(href='{% url "auth_login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')

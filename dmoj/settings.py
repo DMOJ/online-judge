@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 SITE_ID = 1
 SITE_NAME = 'DMOJ'
-SITE_LONG_NAME = 'Don Mills Online Judge'
+SITE_LONG_NAME = 'DMOJ: Modern Online Judge'
 
 PYGMENT_THEME = 'pygment-github.css'
 
@@ -49,7 +49,7 @@ else:
 
     WPADMIN = {
         'admin': {
-            'title': 'Don Mills Online Judge Admin',
+            'title': 'DMOJ Admin',
             'menu': {
                 'top': 'wpadmin.menu.menus.BasicTopMenu',
                 'left': 'wpadmin.menu.custom.CustomModelLeftMenuWithDashboard',
@@ -140,6 +140,7 @@ INSTALLED_APPS += (
     'sortedm2m',
     'pyjade.ext.django',
     'statici18n',
+    'impersonate',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -157,7 +158,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'judge.social_auth.SocialAuthExceptionMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
+    'impersonate.middleware.ImpersonateMiddleware',
 )
+
+IMPERSONATE_REQUIRE_SUPERUSER = True
+IMPERSONATE_DISABLE_LOGGING = True
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
@@ -229,6 +234,7 @@ LANGUAGES = [
     ('ro', _('Romanian')),
     ('ru', _('Russian')),
     ('sr-latn', _('Serbian (Latin)')),
+    ('vi', _('Vietnamese')),
     ('zh-hans', _('Simplified Chinese')),
 ]
 
@@ -417,7 +423,6 @@ SOCIAL_AUTH_SLUGIFY_USERNAMES = True
 SOCIAL_AUTH_SLUGIFY_FUNCTION = 'judge.social_auth.slugify_username'
 
 JUDGE_AMQP_PATH = None
-
 
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:

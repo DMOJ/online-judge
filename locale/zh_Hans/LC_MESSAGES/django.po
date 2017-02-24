@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-12 22:43-0500\n"
-"PO-Revision-Date: 2016-11-13 01:14-0500\n"
+"PO-Revision-Date: 2017-02-19 22:52-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1018,7 +1018,7 @@ msgstr "字节全等"
 
 #: .\judge\models\problem_data.py:30
 msgid "data zip file"
-msgstr "数据 zip压缩 文件"
+msgstr "zip数据文件"
 
 #: .\judge\models\problem_data.py:32
 msgid "generator file"
@@ -1062,15 +1062,15 @@ msgstr "测试类型"
 
 #: .\judge\models\problem_data.py:60
 msgid "Normal case"
-msgstr "正常情况"
+msgstr "正常测试"
 
 #: .\judge\models\problem_data.py:61
 msgid "Batch start"
-msgstr "批量开始"
+msgstr "测试组开始"
 
 #: .\judge\models\problem_data.py:62
 msgid "Batch end"
-msgstr "批量结束"
+msgstr "测试组结束"
 
 #: .\judge\models\problem_data.py:63
 msgid "input file name"

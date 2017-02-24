@@ -108,10 +108,12 @@ class Profile(models.Model):
         data = (Problem.objects.filter(submission__user=self, submission__points__isnull=False, is_public=True)
                 .annotate(max_points=Max('submission__points')).order_by('-max_points')
                 .values_list('max_points', flat=True).filter(max_points__gt=0))
+        extradata = Problem.objects.filter(submission__user=self, submission__result='AC').values('id').distinct().count()
+        bonus_function = getattr(settings, 'PP_BONUS_FUNCTION', lambda n: 300 * (1 - 0.997 ** n))
         points = sum(data)
         problems = len(data)
         entries = min(len(data), len(table))
-        pp = sum(map(mul, table[:entries], data[:entries]))
+        pp = sum(map(mul, table[:entries], data[:entries])) + bonus_function(extradata)
         if self.points != points or problems != self.problem_count or self.performance_points != pp:
             self.points = points
             self.problem_count = problems

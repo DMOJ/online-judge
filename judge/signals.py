@@ -4,6 +4,7 @@ import os
 from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
+from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
@@ -34,14 +35,10 @@ def problem_update(sender, instance, **kwargs):
         make_template_fragment_key('problem_feed', (instance.id,)),
         'problem_tls:%s' % instance.id, 'problem_mls:%s' % instance.id,
     ])
-    cache.delete_many([
-        make_template_fragment_key('problem_html', (instance.id, engine, lang))
-        for lang, _ in settings.LANGUAGES for engine in EFFECTIVE_MATH_ENGINES
-    ])
-    cache.delete_many([
-        make_template_fragment_key('problem_authors', (instance.id, lang))
-        for lang, _ in settings.LANGUAGES
-    ])
+    cache.delete_many([make_template_fragment_key('problem_html', (instance.id, engine, lang))
+                       for lang, _ in settings.LANGUAGES for engine in EFFECTIVE_MATH_ENGINES])
+    cache.delete_many([make_template_fragment_key('problem_authors', (instance.id, lang))
+                       for lang, _ in settings.LANGUAGES])
     cache.delete_many(['generated-meta-problem:%s:%d' % (lang, instance.id) for lang, _ in settings.LANGUAGES])
 
     if hasattr(settings, 'PROBLEM_PDF_CACHE'):
@@ -95,10 +92,11 @@ def comment_update(sender, instance, **kwargs):
 def post_update(sender, instance, **kwargs):
     cache.delete_many([
         make_template_fragment_key('post_summary', (instance.id,)),
-        make_template_fragment_key('post_content', (instance.id,)),
         'blog_slug:%d' % instance.id,
         'blog_feed:%d' % instance.id,
     ])
+    cache.delete_many([make_template_fragment_key('post_content', (instance.id, engine))
+                       for engine in EFFECTIVE_MATH_ENGINES])
 
 
 @receiver(post_delete, sender=Submission)
@@ -117,6 +115,7 @@ def contest_submission_delete(sender, instance, **kwargs):
 def organization_update(sender, instance, **kwargs):
     cache.delete_many([make_template_fragment_key('organization_html', (instance.id, engine))
                        for engine in EFFECTIVE_MATH_ENGINES])
+
 
 _misc_config_i18n = [code for code, _ in settings.LANGUAGES]
 _misc_config_i18n.append('')

@@ -69,14 +69,22 @@ class BlogPostAdmin(VersionAdmin):
 
 
 class SolutionForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SolutionForm, self).__init__(*args, **kwargs)
+        self.fields['authors'].widget.can_add_related = False
+
     class Meta:
-        widgets = {'problem': HeavySelect2Widget(data_view='problem_select2', attrs={'style': 'width: 250px'})}
+        widgets = {
+            'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'problem': HeavySelect2Widget(data_view='problem_select2', attrs={'style': 'width: 250px'}),
+        }
+
         if HeavyPreviewAdminPageDownWidget is not None:
             widgets['content'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('solution_preview'))
 
 
 class SolutionAdmin(VersionAdmin):
-    fields = ('url', 'title', 'is_public', 'publish_on', 'problem', 'content')
+    fields = ('url', 'title', 'is_public', 'publish_on', 'problem', 'authors', 'content')
     list_display = ('title', 'url', 'problem_link', 'show_public')
     search_fields = ('url', 'title')
     form = SolutionForm

@@ -111,6 +111,7 @@ urlpatterns = [
 
     url(r'^problem/(?P<problem>[^/]+)', include([
         url(r'^$', problem.ProblemDetail.as_view(), name='problem_detail'),
+        url(r'^/editorial$', problem.ProblemSolution.as_view(), name='problem_editorial'),
         url(r'^/raw$', problem.ProblemRaw.as_view(), name='problem_raw'),
         url(r'^/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
         url(r'^/pdf/(?P<language>[a-z-]+)$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
@@ -127,6 +128,9 @@ urlpatterns = [
         url(r'^/test_data$', ProblemDataView.as_view(), name='problem_data'),
         url(r'^/test_data/init$', problem_init_view, name='problem_data_init'),
         url(r'^/data/(?P<path>.+)$', problem_data_file, name='problem_data_file'),
+
+        url(r'^/tickets$', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
+        url(r'^/tickets/new$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
     ])),
 
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
@@ -142,7 +146,7 @@ urlpatterns = [
     url(r'^users/', include([
         url(r'^$', user.users, name='user_list'),
         url(r'^(?P<page>\d+)$', lambda request, page:
-            HttpResponsePermanentRedirect('%s?page=%s' % (reverse('user_list'), page))),
+        HttpResponsePermanentRedirect('%s?page=%s' % (reverse('user_list'), page))),
         url(r'^find$', user.user_ranking_redirect, name='user_ranking_redirect'),
     ])),
 
@@ -150,19 +154,20 @@ urlpatterns = [
     url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
     url(r'^user/(?P<user>\w+)', include([
         url(r'^$', user.UserAboutPage.as_view(), name='user_page'),
-        url(r'^/solved$', user.UserProblemsPage.as_view(), name='user_problems'),
+        url(r'^/solved', include([
+            url(r'^$', user.UserProblemsPage.as_view(), name='user_problems'),
+            url(r'/ajax$', user.UserPerformancePointsAjax.as_view(), name='user_pp_ajax'),
+        ])),
         url(r'^/submissions/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
 
-        url(r'^/$', lambda _, user: HttpResponsePermanentRedirect(reverse('user_page', args=[user]))), 
+        url(r'^/$', lambda _, user: HttpResponsePermanentRedirect(reverse('user_page', args=[user]))),
     ])),
 
     url(r'^comments/upvote/$', comment.upvote_comment, name='comment_upvote'),
     url(r'^comments/downvote/$', comment.downvote_comment, name='comment_downvote'),
     url(r'^comments/(?P<id>\d+)/', include([
-        url(r'^revisions$', comment.CommentHistory.as_view(), name='comment_history'),
         url(r'^edit$', comment.CommentEdit.as_view(), name='comment_edit'),
         url(r'^history/ajax$', comment.CommentRevisionAjax.as_view(), name='comment_revision_ajax'),
-        url(r'^revisions/ajax$', comment.CommentHistoryAjax.as_view(), name='comment_history_ajax'),
         url(r'^edit/ajax$', comment.CommentEditAjax.as_view(), name='comment_edit_ajax'),
         url(r'^votes/ajax$', comment.CommentVotesAjax.as_view(), name='comment_votes_ajax'),
         url(r'^render$', comment.CommentContent.as_view(), name='comment_content'),
@@ -191,7 +196,7 @@ urlpatterns = [
         url(r'^/participations$', contests.own_participation_list, name='contest_participation_own'),
         url(r'^/participations/(?P<user>\w+)$', contests.participation_list, name='contest_participation'),
 
-        url(r'^/$', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))), 
+        url(r'^/$', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))),
     ])),
 
     url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
@@ -215,7 +220,7 @@ urlpatterns = [
                 name='organization_requests_rejected'),
         ])),
 
-        url(r'^/$', lambda _, key: HttpResponsePermanentRedirect(reverse('organization_home', args=[key]))), 
+        url(r'^/$', lambda _, key: HttpResponsePermanentRedirect(reverse('organization_home', args=[key]))),
     ])),
 
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
@@ -250,6 +255,8 @@ urlpatterns = [
         url(r'^submission_testcases$', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
         url(r'^detect_timezone$', widgets.DetectTimezone.as_view(), name='detect_timezone'),
         url(r'^status-table$', status.status_table, name='status_table'),
+
+        url(r'^template$', problem.LanguageTemplateAjax.as_view(), name='language_template_ajax'),
 
         url(r'^select2/', include([
             url(r'^user_search$', UserSearchSelect2View.as_view(), name='user_search_select2_ajax'),
@@ -292,17 +299,15 @@ urlpatterns = [
     ])),
 
     url(r'^tickets/', include([
-        url(r'^new/', include([
-            url('^problem/(?P<code>[^/]+)$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
-        ])),
-        url(r'^(?P<pk>\d+)', include([
-            url(r'^$', ticket.TicketView.as_view(), name='ticket'),
-            url(r'^/open$', ticket.TicketStatusChangeView.as_view(open=True), name='ticket_open'),
-            url(r'^/close$', ticket.TicketStatusChangeView.as_view(open=False), name='ticket_close'),
-            url(r'^/notes$', ticket.TicketNotesEditView.as_view(), name='ticket_notes'),
-        ])),
-        url(r'^list$', ticket.TicketList.as_view(), name='ticket_list'),
-        url(r'^list/ajax$', ticket.TicketListDataAjax.as_view(), name='ticket_ajax'),
+        url(r'^$', ticket.TicketList.as_view(), name='ticket_list'),
+        url(r'^ajax$', ticket.TicketListDataAjax.as_view(), name='ticket_ajax'),
+    ])),
+
+    url(r'^ticket/(?P<pk>\d+)', include([
+        url(r'^$', ticket.TicketView.as_view(), name='ticket'),
+        url(r'^/open$', ticket.TicketStatusChangeView.as_view(open=True), name='ticket_open'),
+        url(r'^/close$', ticket.TicketStatusChangeView.as_view(open=False), name='ticket_close'),
+        url(r'^/notes$', ticket.TicketNotesEditView.as_view(), name='ticket_notes'),
     ])),
 
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {
@@ -331,14 +336,15 @@ favicon_paths = ['apple-touch-icon-180x180.png', 'apple-touch-icon-114x114.png',
                  'apple-touch-icon-57x57.png', 'apple-touch-icon-72x72.png', 'apple-touch-icon.png', 'mstile-70x70.png',
                  'android-chrome-36x36.png', 'apple-touch-icon-precomposed.png', 'apple-touch-icon-76x76.png',
                  'apple-touch-icon-60x60.png', 'android-chrome-96x96.png', 'mstile-144x144.png', 'mstile-150x150.png',
-                 'safari-pinned-tab.svg', 'android-chrome-144x144.png', 'apple-touch-icon-152x152.png', 'favicon-96x96.png',
+                 'safari-pinned-tab.svg', 'android-chrome-144x144.png', 'apple-touch-icon-152x152.png',
+                 'favicon-96x96.png',
                  'favicon-32x32.png', 'favicon-16x16.png', 'android-chrome-192x192.png', 'android-chrome-48x48.png',
                  'mstile-310x150.png', 'apple-touch-icon-144x144.png', 'browserconfig.xml', 'manifest.json',
                  'apple-touch-icon-120x120.png', 'mstile-310x310.png']
 
-
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.views.generic import RedirectView
+
 for favicon in favicon_paths:
     urlpatterns.append(url(r'^%s$' % favicon, RedirectView.as_view(url=static('icons/' + favicon))))
 
@@ -348,3 +354,5 @@ handler500 = 'judge.views.error.error500'
 
 if 'newsletter' in settings.INSTALLED_APPS:
     urlpatterns.append(url(r'^newsletter/', include('newsletter.urls')))
+if 'impersonate' in settings.INSTALLED_APPS:
+    urlpatterns.append(url(r'^impersonate/', include('impersonate.urls')))

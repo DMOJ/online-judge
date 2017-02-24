@@ -18,3 +18,4 @@ Disallow: /contest/*/submissions/*/*/
 Disallow: /contest/*/join
 Disallow: /contest/*/leave
 Disallow: /contests/*/*/
+Disallow: /tickets/*

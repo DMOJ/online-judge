@@ -49,7 +49,7 @@ class OrganizationMixin(object):
     def can_edit_organization(self, org=None):
         if org is None:
             org = self.object
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return False
         profile_id = self.request.user.profile.id
         return org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id

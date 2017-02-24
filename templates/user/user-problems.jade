@@ -13,7 +13,7 @@ block user_media
         }
 
         .user-problem-group h3 {
-            font-weight: bold;
+            font-weight: 600;
             font-size: 1.25em;
             margin-bottom: -10px;
             max-height: 20%;
@@ -73,6 +73,80 @@ block user_media
             margin-right: 5px;
         }
 
+        .pp {
+            font-weight: 600;
+            font-size: 1.4em;
+        }
+
+        .pp-scaled {
+            font-size: 0.8em;
+        }
+
+        .pp-weighted {
+            color: #777;
+        }
+
+        td.sub-pp {
+            text-align: right;
+        }
+
+        #load-link-wrapper {
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        #load-more-link {
+            display: block;
+            padding: 0.5em 0;
+        }
+
+        td.problem-name {
+            text-align: left;
+            padding-left: 1em;
+        }
+
+        td.problem-score {
+            width: 80px;
+        }
+
+        td.problem-category {
+            width: 100px;
+        }
+
+        .breakdown-header {
+            font-weight: 600;
+            font-size: 1.25em;
+            margin-bottom: 0.2em;
+        }
+
+block user_js_media
+    script(type='text/javascript').
+        $(function () {
+            register_update_relative(function () {
+                return $('.pp-table').find('span.time');
+            }, function (when) {
+                return Math.abs(moment().diff(when, 'years')) < 1;
+            });
+        });
+        window.show_pp_base = 1;
+        window.currently_requesting_pp = false;
+        window.load_more_pp = function () {
+            if (window.currently_requesting_pp) return;
+            window.currently_requesting_pp = true;
+
+            $.get('{% url "user_pp_ajax" user.user.username %}', {
+                start: window.show_pp_base * 10,
+                end: (window.show_pp_base + 1) * 10
+            }).done(function (data) {
+                $('table.pp-table').append(data['results']);
+                window.show_pp_base++;
+                if (!data['has_more']) {
+                    $("#load-link-wrapper").hide();
+                }
+                window.currently_requesting_pp = false;
+            });
+        };
+
 block title_ruler
 
 block title_row
@@ -80,18 +154,36 @@ block title_row
     include user/user-tabs
 
 block user_content
+    if pp_breakdown
+        h3.breakdown-header {% trans "Points Breakdown" %}
+        table.pp-table.table#submissions-table
+            colgroup
+                col.sub-result
+                col.sub-info
+                col.sub-pp
+            tbody
+                include user/pp-table-body
+        if pp_has_more
+            #load-link-wrapper: a#load-more-link(href='javascript:load_more_pp();') {% trans "Load more..." %}
+    else
+        i {% trans "This user has not yet solved any problems." %}
+
     if authored
         div.user-problem-group
-            h3.unselectable.toggle.open
+            h3.unselectable.toggle.closed
                 span.fa.fa-chevron-right.fa-fw
                 | {% trans "Authored Problems" %} (#{authored | length})
-            ul.toggled
-                each problem in authored
-                    li
-                        a(href='{% url "problem_detail" problem.code %}')= problem.name
-                        |  (
-                        a(href='{% url "ranked_submissions" problem.code %}') #{problem.points | floatformat}{% if problem.partial %}p{% endif %}
-                        | )
+            table.table.toggled(style='display: none')
+                thead: tr
+                    th {% trans "Problem" %}
+                    th {% trans "Category" %}
+                    th {% trans "Points" %}
+                tbody
+                    each problem in authored
+                        tr
+                            td.problem-name: a(href='{% url "problem_detail" problem.code %}')= problem.name
+                            td.problem-category= problem.group.full_name
+                            td.problem-score: a(href='{% url "ranked_submissions" problem.code %}') #{problem.points | floatformat}{% if problem.partial %}p{% endif %}
     if request.user.is_authenticated and request.user != user.user
         .strike
             span
@@ -103,14 +195,16 @@ block user_content
     - regroup best_submissions by group as problems
     each group in problems
         div.user-problem-group
-            h3.unselectable.toggle.open
+            h3.unselectable.toggle.closed
                 span.fa.fa-chevron-right.fa-fw
                 | #{group.grouper}
                 | (#{group.list | list_getitem:"points"|sum_list|floatformat:1} {% trans "points" %})
-            ul.toggled
-                each entry in group.list
-                    li
-                        a(href='{% url "problem_detail" entry.code %}') #{entry.name}
-                        |  (
-                        a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}
-                        | )
+            table.table.toggled(style='display: none')
+                thead: tr
+                    th {% trans "Problem" %}
+                    th {% trans "Score" %}
+                tbody
+                    each entry in group.list
+                        tr
+                            td.problem-name: a(href='{% url "problem_detail" entry.code %}') #{entry.name}
+                            td.problem-score: a(href='{% url "user_submissions" entry.code user.user.username %}') #{entry.points} / #{entry.total}

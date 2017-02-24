@@ -10,10 +10,10 @@ class ProblemSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Problem.objects.filter(is_public=True)
+        return Problem.objects.filter(is_public=True).values_list('code')
 
     def location(self, obj):
-        return reverse('problem_detail', args=(obj.code,))
+        return reverse('problem_detail', args=obj)
 
 
 class UserSitemap(Sitemap):
@@ -21,10 +21,10 @@ class UserSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return User.objects.all()
+        return User.objects.values_list('username')
 
     def location(self, obj):
-        return reverse('user_page', args=(obj.username,))
+        return reverse('user_page', args=obj)
 
 
 class ContestSitemap(Sitemap):
@@ -32,10 +32,10 @@ class ContestSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Contest.objects.filter(is_public=True)
+        return Contest.objects.filter(is_public=True).values_list('key')
 
     def location(self, obj):
-        return reverse('contest_view', args=(obj.key,))
+        return reverse('contest_view', args=obj)
 
 
 class OrganizationSitemap(Sitemap):
@@ -43,10 +43,10 @@ class OrganizationSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Organization.objects.all()
+        return Organization.objects.values_list('key')
 
     def location(self, obj):
-        return reverse('organization_home', args=(obj.key,))
+        return reverse('organization_home', args=obj)
 
 
 class BlogPostSitemap(Sitemap):
@@ -54,10 +54,10 @@ class BlogPostSitemap(Sitemap):
     priority = 0.7
 
     def items(self):
-        return BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now())
+        return BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).values_list('id', 'slug')
 
     def location(self, obj):
-        return reverse('blog_post', args=(obj.id, obj.slug))
+        return reverse('blog_post', args=obj)
 
 
 class SolutionSitemap(Sitemap):
@@ -65,10 +65,11 @@ class SolutionSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Solution.objects.filter(is_public=True, publish_on__lte=timezone.now())
+        return (Solution.objects.filter(is_public=True, publish_on__lte=timezone.now(), problem__isnull=False)
+                .values_list('problem__code'))
 
     def location(self, obj):
-        return reverse('solution', args=[obj.url])
+        return reverse('problem_editorial', args=obj)
 
 
 class HomePageSitemap(Sitemap):

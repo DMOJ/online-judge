@@ -30,6 +30,8 @@ class Language(models.Model):
                                        'the Ace JavaScript file to use, e.g., "python".'))
     pygments = models.CharField(max_length=20, verbose_name=_('pygments name'),
                                 help_text=_('Language ID for Pygments highlighting in source windows.'))
+    template = models.TextField(verbose_name=_('code template'),
+                                help_text=_('Code template to display in submission editor.'), blank=True)
     info = models.CharField(max_length=50, verbose_name=_('runtime info override'), blank=True,
                             help_text=_("Do not set this unless you know what you're doing! It will override the "
                                         "usually more specific, judge-provided runtime info!"))
