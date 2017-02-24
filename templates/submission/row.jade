@@ -38,7 +38,7 @@ td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status
             - blocktrans with time=submission.date|date:_("N j, Y, g:i a") asvar str_time
                 | on {{ time }}
             span.relative= str_time
-        if submission.contest_or_none
+        if not IN_CONTEST and submission.contest_or_none
             = ' '
             span.submission-contest
                 - blocktrans with name=submission.contest_or_none.participation.contest.name
