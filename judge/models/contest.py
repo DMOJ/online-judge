@@ -158,6 +158,8 @@ class ContestParticipation(models.Model):
         self.save()
         return self.score
 
+    recalculate_score.alters_data = True
+
     @property
     def spectate(self):
         return self.virtual == -1
