@@ -156,6 +156,8 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                 queryset=ProblemTranslation.objects.filter(language=self.request.LANGUAGE_CODE), to_attr='_trans'))
         if self.in_contest:
             return queryset.filter(contest__participation__contest_id=self.contest.id)
+        else:
+            queryset = queryset.select_related('contest')
         return queryset
 
     def get_queryset(self):
