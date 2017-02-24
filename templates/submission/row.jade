@@ -40,7 +40,8 @@ td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status
             span.relative= str_time
         if not IN_CONTEST and submission.contest_or_none
             = ' '
-            span.submission-contest: i.fa.fa-dot-circle-o(title=submission.contest_or_none.participation.contest.name)
+            a(href='{% url "contest_view" submission.contest_or_none.participation.contest.key %}').submission-contest
+                i.fa.fa-dot-circle-o(title=submission.contest_or_none.participation.contest.name)
 
 if submission.status == 'G'
     td.sub-testcase
