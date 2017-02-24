@@ -19,7 +19,7 @@ block js_media
                 window.previous_template = '';
                 function update_language_template() {
                     var source = $('textarea#id_source');
-                    if (source.val().replace(/\r/g, '') == window.previous_template || source.val() == '') {
+                    if (source.val() == window.previous_template.replace(/\r/g, '') || source.val() == '') {
                         var lang_id = $('#id_language').val();
                         var code = localStorage.getItem('submit:' + $('#id_language').val());
 
