@@ -41,7 +41,7 @@ td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status
         if submission.contest_or_none
             = ' '
             span.submission-contest
-                - blocktrans with name=submission.contest_or_none.name
+                - blocktrans with name=submission.contest_or_none.participation.contest.name
                     | in {{ name }}
 
 if submission.status == 'G'
