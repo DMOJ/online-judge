@@ -26,7 +26,7 @@ for judge in judges
             else
                 | N/A
         td.ping
-            if judge.online and judge.ping_ms is None
+            if judge.online and judge.ping_ms
                 | #{judge.ping_ms|floatformat:3} ms
             else
                 | N/A
