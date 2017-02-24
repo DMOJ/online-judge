@@ -24,17 +24,17 @@ for judge in judges
             if judge.online
                 | #{judge.uptime|timedelta:"simple"}
             else
-                | N/A
+                | {% trans "N/A" %}
         td.ping
             if judge.online and judge.ping_ms
                 | #{judge.ping_ms|floatformat:3} ms
             else
-                | N/A
+                | {% trans "N/A" %}
         td
             if judge.online
                 | #{judge.load|floatformat:3}
             else
-                | N/A
+                | {% trans "N/A" %}
         td
             if judge.online
                 for key, info in judge.runtime_versions
