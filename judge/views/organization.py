@@ -80,7 +80,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
         context['title'] = _('%s Members') % self.object.name
         context['users'] = ranker(chain(*[
             i.select_related('user').defer('about') for i in (
-                self.object.members.filter(submission__points__gt=0).order_by('-points')
+                self.object.members.filter(submission__points__gt=0).order_by('-performance_points')
                     .annotate(problems=Count('submission__problem', distinct=True)),
                 self.object.members.annotate(problems=Max('submission__points')).filter(problems=0),
                 self.object.members.annotate(problems=Count('submission__problem', distinct=True)).filter(problems=0),
