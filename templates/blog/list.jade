@@ -140,7 +140,7 @@ block body
                                     | on {{ time }}
                                 span.relative= str_time
                         .comment-data
-                            a.(href='{% url "blog_post" post.id post.slug %}')
+                            a(href='{% url "blog_post" post.id post.slug %}')
                                 i.fa.fa-comments.comment-icon
                                 .comment-count {{ post_comment_counts|get_dict_item:post.id }}
                         .summary
