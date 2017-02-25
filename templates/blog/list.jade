@@ -11,6 +11,7 @@ extends base
 - load nofollow
 - load tz
 - load reference
+- load dicts
 
 block title_row
 
@@ -83,6 +84,16 @@ block media
             text-align: center;
         }
 
+        .comment-count {
+            font-size: 12px;
+        }
+
+        .comment-icon {
+            padding-top: 0.2em;
+            padding-left: 0.2em;
+            padding-right: 0.1em;
+        }
+
 block js_media
     include blog/media-js.jade
     script(type='text/javascript').
@@ -147,6 +158,10 @@ block body
                                 - blocktrans with time=post.publish_on|date:_("N j, Y, g:i") asvar str_time
                                     | on {{ time }}
                                 span.relative= str_time
+                        .comment-data
+                            a.comment-count(href='{% url "blog_post" post.id post.slug %}')
+                                | #{{ post_comment_counts|get_dict_item:post.id }}
+                                i.fa.fa-comments.comment-icon
                         .summary
                             - cache 86400 post_summary post.id
                                 | #{post.summary|default:post.content|markdown:"blog"|reference|latex_math|smart_math:"svg"|proxy_images|nofollowexternal|lazy_load}
