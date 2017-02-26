@@ -13,6 +13,7 @@ DISPLAY_MATH_SVG = getattr(settings, 'DISPLAY_MATH_SVG', DISPLAY_MATH_PNG)
 
 inline_math = re.compile(r'~(.*?)~|\\\((.*?)\\\)', re.S)
 display_math = re.compile(r'\$\$(.*?)\$\$|\\\[(.*?)\\\]', re.S)
+first_non_space = re.compile(r'\S')
 
 
 REPLACES = [
@@ -73,7 +74,15 @@ class MathHTMLParser(object):
             else:
                 last.tail = ''
 
-            for item in html.fragments_fromstring(result):
+            fragments = html.fragments_fromstring(result)
+            match = first_non_space.search(result)
+            prefix = result[:match.start()] if match is not None else result
+            if prefix:
+                if not fragments or isinstance(fragments[0], ElementBase):
+                    fragments.insert(0, prefix)
+                else:
+                    fragments[0] = prefix + fragments[0]
+            for item in fragments:
                 if isinstance(item, ElementBase):
                     if into_text:
                         last.insert(0, item)
