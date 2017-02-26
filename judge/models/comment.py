@@ -39,7 +39,7 @@ class Comment(MPTTModel):
                             validators=[RegexValidator('^[pc]:[a-z0-9]+$|^b:\d+$|^s:',
                                                        _('Page code must be ^[pc]:[a-z0-9]+$|^b:\d+$'))])
     score = models.IntegerField(verbose_name=_('votes'), default=0)
-    title = models.CharField(max_length=200, verbose_name=_('title of comment'))
+    title = models.CharField(max_length=200, verbose_name=_('title of comment'), blank=True)
     body = models.TextField(verbose_name=_('body of comment'))
     hidden = models.BooleanField(verbose_name=_('hide the comment'), default=0)
     parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies')

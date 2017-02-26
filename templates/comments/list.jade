@@ -89,7 +89,7 @@
                                             a(href='{% url "admin:judge_comment_change" node.id %}', title='{% trans "Admin" %}')
                                                 i.fa.fa-cog.fa-fw
                             .content.content-description
-                                .comment-title(style=('display: none' if node.title.startswith('Re:') else '')) #{node.title}
+                                .comment-title(style=('display: none' if not node.title or node.title.startswith('Re:') else '')) #{node.title}
                                 .comment-body #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}
 
                     if not node.is_leaf_node
