@@ -80,6 +80,7 @@ def get_result_table(*args, **kwargs):
             (_('Compile Error'), 'CE', results['CE']),
             (_('Time Limit Exceeded'), 'TLE', results['TLE']),
             (_('Memory Limit Exceeded'), 'MLE', results['MLE']),
+            (_('Execution Error'), 'EE', results['IR'] + results['RTE']),
             (_('Invalid Return'), 'IR', results['IR']),
             (_('Total'), 'TOT', sum(results.values()))]
 
