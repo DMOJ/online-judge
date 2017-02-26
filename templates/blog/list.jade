@@ -12,6 +12,7 @@ extends base
 - load tz
 - load reference
 - load dicts
+- load rating
 
 block title_row
 
@@ -149,7 +150,7 @@ block body
                             - with authors=post.authors.all
                                 if authors
                                     span.post-authors: for author in authors
-                                        span(class=author.display_rank)
+                                        span(class='rating {{ author.rating|rating_class }} {{ author.display_rank }}')
                                             a(href='{% url "user_page" author.user.username %}') #{author.user.username}
                                         if not forloop.last
                                             = ', '
@@ -213,7 +214,7 @@ block body
                 .sidebox-content
                     ul: for comment in comments
                         li
-                            span.poster(class=comment.author.display_rank, style='padding-left:0.25em')
+                            span.poster(class='rating {{ comment.author.rating|rating_class }} {{ comment.author.display_rank }}', style='padding-left:0.25em')
                                 a(href='{% url "user_page" comment.author.user.username %}')= comment.author.user.username
                             | &#32;&rarr; #[a(href='{{comment.link}}#comment-{{comment.id}}')= comment.page_title]
                     span.rssatom
