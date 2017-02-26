@@ -139,7 +139,7 @@ block body
                 each post in posts
                     section(class=('sticky post' if post.sticky else 'post'))
                         h2.title: a(href='{% url "blog_post" post.id post.slug %}')= post.title
-                        .time
+                        span.time
                             if post.sticky
                                 i.fa.fa-star.fa-fw(title='Sticky')
                             - with authors=post.authors.all
@@ -156,10 +156,10 @@ block body
                                 - blocktrans with time=post.publish_on|date:_("N j, Y, g:i") asvar str_time
                                     | on {{ time }}
                                 span.relative= str_time
-                        .comment-data
+                        span.comment-data
                             a(href='{% url "blog_post" post.id post.slug %}#comments')
                                 i.fa.fa-comments.comment-icon
-                                .comment-count {{ post_comment_counts|get_dict_item:post.id }}
+                                span.comment-count {{ post_comment_counts|get_dict_item:post.id }}
                         .summary
                             - cache 86400 post_summary post.id
                                 | #{post.summary|default:post.content|markdown:"blog"|reference|latex_math|smart_math:"svg"|proxy_images|nofollowexternal|lazy_load}
