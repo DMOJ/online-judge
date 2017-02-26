@@ -111,9 +111,6 @@
                     #form-errors
                         | #{comment_form.non_field_errors}
                         | #{comment_form.parent.errors}
-                        if comment_form.title.errors
-                            | {% trans "Invalid comment title." %}
-                            br
                         if comment_form.body.errors
                             | {% trans "Invalid comment body." %}
                 | #{comment_form.parent}
