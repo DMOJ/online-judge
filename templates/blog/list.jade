@@ -73,6 +73,10 @@ block media
         .comment-icon {
             padding: 0.2em 0.1em 0 0.2em;
         }
+        
+        .comment-count-link {
+            color: #555;
+        }
 
         .own-open-tickets .title a, .open-tickets .title a {
             display: block;
@@ -157,7 +161,7 @@ block body
                                     | on {{ time }}
                                 span.relative= str_time
                         span.comment-data
-                            a(href='{% url "blog_post" post.id post.slug %}#comments')
+                            a.comment-count-link(href='{% url "blog_post" post.id post.slug %}#comments')
                                 i.fa.fa-comments.comment-icon
                                 span.comment-count {{ post_comment_counts|get_dict_item:post.id }}
                         .summary
