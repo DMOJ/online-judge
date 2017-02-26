@@ -105,41 +105,39 @@ block title_row
     include user/user-tabs
 
 block user_content
-    - with orgs=user.organizations.all
-        if orgs
-            p(style='margin-top: 0px;')
-                b {% trans "From" %}
-                = ' '
-                each org in orgs
-                    a(href='{% url "organization_home" org.key %}')= org.name
-                    if not forloop.last
-                        = ', '
-    if user.about
-        h4 {% trans "About" %}
-        - cache 86400 user_about user.id
-            | #{user.about|markdown:"self-description"|reference|smart_math:MATH_ENGINE|proxy_images}
-    else
-        i
-            if user.user == request.user
-                | {% trans "You have not shared any information." %}
-            else
-                | {% trans "This user has not shared any information." %}
-        br
-    if rating
-        br
-        hr
-        br
-        h4 Rating History
-        #rating-chart: canvas
-        #rating-tooltip
-            .contest
-            .date
-            .rate-group
-                span.rate-box
-                    span
-                span.rating
-                | , #
-                span.rank
+    .content-description
+        - with orgs=user.organizations.all
+            if orgs
+                p(style='margin-top: 0px;')
+                    b {% trans "From" %}
+                    = ' '
+                    each org in orgs
+                        a(href='{% url "organization_home" org.key %}')= org.name
+                        if not forloop.last
+                            = ', '
+        if user.about
+            h4 {% trans "About" %}
+            - cache 86400 user_about user.id
+                | #{user.about|markdown:"self-description"|reference|smart_math:MATH_ENGINE|proxy_images}
+        else
+            i
+                if user.user == request.user
+                    | {% trans "You have not shared any information." %}
+                else
+                    | {% trans "This user has not shared any information." %}
+            br
+        if rating
+            h4 Rating History
+            #rating-chart: canvas
+            #rating-tooltip
+                .contest
+                .date
+                .rate-group
+                    span.rate-box
+                        span
+                    span.rating
+                    | , #
+                    span.rank
 
 block bodyend
     if REQUIRE_JAX
