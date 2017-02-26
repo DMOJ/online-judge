@@ -73,8 +73,9 @@ block body
                 - blocktrans with length=contest.contest_window_length|timedelta:"localized-no-seconds" start_time=contest.start_time|date:_("F j, Y, G:i T")
                     | #[b {{ length }}] long starting on #[b {{ start_time }}]
 
-    - cache 3600 contest_html contest.id MATH_ENGINE
-        | #{contest.description|markdown:"contest"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
+    .content-description
+        - cache 3600 contest_html contest.id MATH_ENGINE
+            | #{contest.description|markdown:"contest"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
 
     hr
     span.social
