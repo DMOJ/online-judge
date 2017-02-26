@@ -90,7 +90,7 @@
                                                 i.fa.fa-cog.fa-fw
                             .content.content-description
                                 .comment-title(style=('display: none' if node.title.startswith('Re:') else '')) #{node.title}
-                                | #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}
+                                .comment-body #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}
 
                     if not node.is_leaf_node
                         ul.comments

@@ -74,6 +74,10 @@ block title_row
 
 block body
     #center-float: form.form-area#edit-form(action='', method='post')
+        if form.errors
+           .alert.alert-danger.alert-dismissable
+                a.close(href='#') x
+                | #{form.non_field_errors}
         - csrf_token
         div(style='padding-top:0.5em')
             label.inline-header.grayed {% trans "Display name" %}:

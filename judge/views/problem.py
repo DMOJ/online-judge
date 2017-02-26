@@ -16,6 +16,7 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpRespons
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import get_template
 from django.utils import translation
+from django.utils import timezone
 from django.utils.html import format_html, escape
 from django.utils.safestring import mark_safe
 from django.utils.functional import cached_property
@@ -83,9 +84,35 @@ class SolvedProblemMixin(object):
 
     @cached_property
     def profile(self):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return None
         return self.request.user.profile
+
+
+class ProblemSolution(ProblemMixin, TitleMixin, CommentedDetailView):
+    context_object_name = 'problem'
+    template_name = 'problem/editorial.jade'
+
+    def get_title(self):
+        return _('Editorial for {0}').format(self.object.name)
+
+    def get_content_title(self):
+        return format_html(_(u'Editorial for <a href="{1}">{0}</a>'), self.object.name,
+                           reverse('problem_detail', args=[self.object.code]))
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSolution, self).get_context_data(**kwargs)
+
+        solution = get_object_or_404(Solution, problem=self.object)
+
+        if (not solution.is_public or solution.publish_on > timezone.now()) and \
+                not self.request.user.has_perm('judge.see_private_solution'):
+            raise Http404()
+        context['solution'] = solution
+        return context
+
+    def get_comment_page(self):
+        return 's:' + self.object.code
 
 
 class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
@@ -98,6 +125,7 @@ class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMi
     def get_context_data(self, **kwargs):
         context = super(ProblemRaw, self).get_context_data(**kwargs)
         context['problem_name'] = self.object.name
+        context['url'] = self.request.build_absolute_uri()
         context['description'] = self.object.description
         return context
 
@@ -119,15 +147,23 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
         user = self.request.user
-        authed = user.is_authenticated()
-        context['has_submissions'] = authed and Submission.objects.filter(user=user.profile, problem=self.object).exists()
-        context['contest_problem'] = (None if not authed or user.profile.current_contest is None else
-                                      get_contest_problem(self.object, user.profile))
+        authed = user.is_authenticated
+        context['has_submissions'] = authed and Submission.objects.filter(user=user.profile,
+                                                                          problem=self.object).exists()
+        contest_problem = (None if not authed or user.profile.current_contest is None else
+                           get_contest_problem(self.object, user.profile))
+        context['contest_problem'] = contest_problem
+        if contest_problem:
+            clarifications = self.object.clarifications
+            context['has_clarifications'] = clarifications.count() > 0
+            context['clarifications'] = clarifications.order_by('-date')
+
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         context['has_pdf_render'] = HAS_PDF
         context['completed_problem_ids'] = self.get_completed_problems()
         context['attempted_problems'] = self.get_attempted_problems()
         context['num_open_tickets'] = self.object.tickets.filter(is_open=True).count()
+        context['can_edit_problem'] = self.object.is_editable_by(self.request.user)
         try:
             context['editorial'] = Solution.objects.get(problem=self.object)
         except ObjectDoesNotExist:
@@ -244,7 +280,7 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProb
             elif sort_key == 'group':
                 queryset = queryset.order_by(self.order + '__name')
             elif sort_key == 'solved':
-                if self.request.user.is_authenticated():
+                if self.request.user.is_authenticated:
                     profile = self.request.user.profile
                     solved = user_completed_ids(profile)
                     attempted = user_attempted_ids(profile)
@@ -268,7 +304,7 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProb
 
     @cached_property
     def profile(self):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return None
         return self.request.user.profile
 
@@ -393,6 +429,15 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProb
             else:
                 request.session.pop(key, None)
         return HttpResponseRedirect(request.get_full_path())
+
+
+class LanguageTemplateAjax(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            language = get_object_or_404(Language, id=int(request.GET.get('id', 0)))
+        except ValueError:
+            raise Http404()
+        return HttpResponse(language.template, content_type='text/plain')
 
 
 class RandomProblem(ProblemList):

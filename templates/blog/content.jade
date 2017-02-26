@@ -4,6 +4,7 @@ extends base
 - load markdown_trois_tags
 - load social_share
 - load latex_math
+- load smart_math
 - load camo_proxy
 - load i18n
 - load nofollow
@@ -32,8 +33,8 @@ block body
                     = ' '
             span.post-time posted on #{post.publish_on|date:_("N j, Y, G:i")}
         .body
-            - cache 86400 post_content post.id
-                | #{post.content|markdown:"blog"|reference|latex_math|proxy_images|nofollowexternal}
+            - cache 86400 post_content post.id MATH_ENGINE
+                | #{post.content|markdown:"blog"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images|nofollowexternal}
     hr
     span.social
        - post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>"

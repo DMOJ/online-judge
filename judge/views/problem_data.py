@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
-from django.forms import ModelForm, formset_factory, HiddenInput, NumberInput, BaseModelFormSet
+from django.forms import ModelForm, formset_factory, HiddenInput, NumberInput, Select, BaseModelFormSet
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import get_object_or_404, render
 from django.utils.html import escape, format_html
@@ -64,6 +64,7 @@ class ProblemCaseForm(ModelForm):
                   'is_pretest', 'output_limit', 'output_prefix', 'checker', 'checker_args', 'generator_args')
         widgets = {
             'generator_args': HiddenInput,
+            'type': Select(attrs={'style': 'width: 100%'}),
             'points': NumberInput(attrs={'style': 'width: 4em'}),
             'output_prefix': NumberInput(attrs={'style': 'width: 4.5em'}),
             'output_limit': NumberInput(attrs={'style': 'width: 6em'}),
@@ -71,7 +72,7 @@ class ProblemCaseForm(ModelForm):
         }
 
 
-class ProblemCaseFormSet(formset_factory(ProblemCaseForm, formset=BaseModelFormSet, extra=10, can_delete=True)):
+class ProblemCaseFormSet(formset_factory(ProblemCaseForm, formset=BaseModelFormSet, extra=1, max_num=1, can_delete=True)):
     model = ProblemTestCase
 
     def __init__(self, *args, **kwargs):

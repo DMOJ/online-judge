@@ -6,6 +6,8 @@ from django.core.urlresolvers import reverse
 from lxml.html import Element
 
 from judge import lxml_tree
+from judge.models import Contest
+from judge.models import Problem
 from judge.models import Profile
 from judge.ratings import rating_class, rating_progress
 
@@ -118,3 +120,12 @@ def reference(text):
     update_tree(texts, results, is_tail=False)
     update_tree(tails, results, is_tail=True)
     return tree
+
+
+@register.filter(name='item_title')
+def item_title(item):
+    if isinstance(item, Problem):
+        return item.name
+    elif isinstance(item, Contest):
+        return item.name
+    return '<Unknown>'

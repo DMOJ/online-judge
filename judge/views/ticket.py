@@ -2,6 +2,7 @@ import json
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.db.models import Q
 from django.http import HttpResponse
@@ -25,6 +26,8 @@ from judge import event_poster as event
 from judge.models import Profile
 from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
+from judge.utils.problems import editable_problems
+from judge.utils.tickets import own_ticket_filter, filter_visible_tickets
 from judge.utils.views import TitleMixin, paginate_query_context, LoadSelect2Mixin
 from judge.widgets import HeavyPreviewPageDownWidget
 
@@ -78,7 +81,8 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
 
 class NewProblemTicketView(TitleMixin, NewTicketView):
     model = Problem
-    slug_field = slug_url_kwarg = 'code'
+    slug_field = 'code'
+    slug_url_kwarg = 'problem'
     template_name = 'ticket/new_problem.jade'
 
     def get_assignees(self):
@@ -108,6 +112,9 @@ class TicketMixin(object):
         if ticket.user_id == profile_id:
             return ticket
         if ticket.assignees.filter(id=profile_id).exists():
+            return ticket
+        linked = ticket.linked_item
+        if isinstance(linked, Problem) and linked.is_editable_by(self.request.user):
             return ticket
         raise PermissionDenied()
 
@@ -197,8 +204,12 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
     paginator_class = DiggPaginator
 
     @cached_property
+    def user(self):
+        return self.request.user
+
+    @cached_property
     def profile(self):
-        return self.request.user.profile
+        return self.user.profile
 
     @cached_property
     def can_edit_all(self):
@@ -222,11 +233,13 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
 
     def get_queryset(self):
         queryset = self._get_queryset()
-        if not self.can_edit_all or self.GET_with_session('own'):
-            queryset = queryset.filter(Q(assignees__id=self.profile.id) | Q(user=self.profile)).distinct()
+        if self.GET_with_session('own'):
+            queryset = queryset.filter(own_ticket_filter(self.profile.id))
+        elif not self.can_edit_all:
+            queryset = filter_visible_tickets(queryset, self.user, self.profile)
         if self.filter_assignees:
             queryset = queryset.filter(assignees__user__username__in=self.filter_assignees)
-        return queryset
+        return queryset.distinct()
 
     def get_context_data(self, **kwargs):
         context = super(TicketList, self).get_context_data(**kwargs)
@@ -243,7 +256,7 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
                                        .values_list('id', flat=True))),
             'assignee_id': json.dumps(list(Profile.objects.filter(user__username__in=self.filter_assignees)
                                            .values_list('id', flat=True))),
-            'own_id': self.profile.id if not self.can_edit_all or self.GET_with_session('own') else 'null',
+            'own_id': self.profile.id if self.GET_with_session('own') else 'null',
         }
         context['last_msg'] = event.last()
         context.update(paginate_query_context(self.request))
@@ -262,11 +275,11 @@ class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
 
 class ProblemTicketListView(TicketList):
     def _get_queryset(self):
-        if 'code' not in self.kwargs:
-            raise Http404
-        problem = Problem.objects.get(code=self.kwargs['code'])
-        if not self.request.user.is_authenticated() or not problem.is_editable_by(self.request.user):
-            raise Http404
+        if 'problem' not in self.kwargs:
+            raise Http404()
+        problem = Problem.objects.get(code=self.kwargs['problem'])
+        if not self.request.user.is_authenticated or not problem.is_editable_by(self.request.user):
+            raise Http404()
         return problem.tickets.all()
 
 
@@ -283,7 +296,8 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
             'notification': {
                 'title': _('New Ticket: %s') % ticket.title,
                 'body': '%s\n%s' % (_('#%(id)d, assigned to: %(users)s') % {
-                    'id': ticket.id, 'users': _(', ').join(ticket.assignees.values_list('user__username', flat=True)),
+                    'id': ticket.id, 'users': (_(', ').join(ticket.assignees.values_list('user__username', flat=True))
+                                               or _('no one')),
                 }, truncatechars(message.body, 200)),
             }
         })

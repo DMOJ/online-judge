@@ -3,6 +3,7 @@ from operator import attrgetter
 from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms import ModelForm, CharField, TextInput
 from django.urls import reverse_lazy
@@ -41,6 +42,15 @@ class ProfileForm(ModelForm):
                 preview=reverse_lazy('profile_preview'),
                 attrs={'style': 'max-width:700px;min-width:700px;width:700px'}
             )
+
+    def clean(self):
+        organizations = self.cleaned_data.get('organizations') or []
+        max_orgs = getattr(settings, 'MAX_USER_ORGANIZATION_COUNT', 3)
+
+        if sum(org.is_open for org in organizations) > max_orgs:
+            raise ValidationError(_('You may not be part of more than {count} public organizations.').format(count=max_orgs))
+
+        return self.cleaned_data
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)

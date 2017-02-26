@@ -57,10 +57,10 @@ class ProblemSelect2View(Select2View):
         queryset = Problem.objects.filter(Q(code__icontains=self.term) | Q(name__icontains=self.term))
         if not self.request.user.has_perm('judge.see_private_problem'):
             filter = Q(is_public=True)
-            if self.request.user.is_authenticated():
-                filter |= Q(authors=self.request.user.profile)
-            queryset = queryset.filter(filter)
-        return queryset
+            if self.request.user.is_authenticated:
+                filter |= Q(authors=self.request.user.profile) | Q(curators=self.request.user.profile)
+            queryset = queryset.filter(filter).distinct()
+        return queryset.distinct()
 
 
 class ContestSelect2View(Select2View):
@@ -70,7 +70,7 @@ class ContestSelect2View(Select2View):
             queryset = queryset.filter(is_public=True)
         if not self.request.user.has_perm('judge.edit_all_contest'):
             q = Q(is_private=False)
-            if self.request.user.is_authenticated():
+            if self.request.user.is_authenticated:
                 q |= Q(organizations__in=self.request.user.profile.organizations.all())
             queryset = queryset.filter(q)
         return queryset

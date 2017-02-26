@@ -6,8 +6,10 @@ from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 
 from judge.comments import CommentedDetailView
-from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submission, Language
+from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submission, Language, ProblemClarification
+from judge.models import Ticket
 from judge.utils.diggpaginator import DiggPaginator
+from judge.utils.tickets import filter_visible_tickets
 from judge.utils.views import TitleMixin
 from judge.utils.problems import user_completed_ids
 
@@ -35,6 +37,14 @@ class PostList(ListView):
         context['comments'] = Comment.most_recent(self.request.user, 10)
         context['new_problems'] = Problem.objects.filter(is_public=True).order_by('-date', '-id')[:7]
 
+        context['has_clarifications'] = False
+        if self.request.user.is_authenticated:
+            participation = self.request.user.profile.current_contest
+            if participation:
+                clarifications = ProblemClarification.objects.filter(problem__in=participation.contest.problems.all())
+                context['has_clarifications'] = clarifications.count() > 0
+                context['clarifications'] = clarifications.order_by('-date')
+
         context['user_count'] = Profile.objects.count()
         context['problem_count'] = Problem.objects.filter(is_public=True).count()
         context['submission_count'] = Submission.objects.filter(problem__is_public=True).count()
@@ -42,12 +52,12 @@ class PostList(ListView):
 
         comment_counts = dict(Comment.objects.filter(page__in=['b:%d' % post.id for post in context['posts']])
                                               .values_list('page').annotate(count=Count('page')).order_by())
-        context['post_comment_counts'] = {int(k[2:]): v for k, v in comment_counts}
+        context['post_comment_counts'] = {int(k[2:]): v for k, v in comment_counts.items()}
 
         now = timezone.now()
 
         # Dashboard stuff
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             user = self.request.user.profile
             context['recently_attempted_problems'] = (Submission.objects.filter(user=user)
                                                       .exclude(problem__id__in=user_completed_ids(user))
@@ -57,11 +67,26 @@ class PostList(ListView):
 
         visible_contests = Contest.objects.filter(is_public=True).order_by('start_time')
         q = Q(is_private=False)
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             q |= Q(organizations__in=user.organizations.all())
         visible_contests = visible_contests.filter(q)
         context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
+
+        if self.request.user.is_authenticated:
+            profile = self.request.user.profile
+            context['own_open_tickets'] = (Ticket.objects.filter(user=profile, is_open=True)
+                                           .prefetch_related('linked_item').order_by('-id'))
+        else:
+            profile = None
+            context['own_open_tickets'] = []
+
+        # Superusers better be staffs, not the spell-casting kind either.
+        if self.request.user.is_staff:
+            tickets = Ticket.objects.order_by('-id').filter(is_open=True).prefetch_related('linked_item')
+            context['open_tickets'] = filter_visible_tickets(tickets, self.request.user, profile)[:10]
+        else:
+            context['open_tickets'] = []
         return context
 
 

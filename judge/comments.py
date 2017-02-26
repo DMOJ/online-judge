@@ -41,7 +41,7 @@ class CommentForm(ModelForm):
         self.fields['body'].widget.attrs.update({'placeholder': _('Comment body')})
 
     def clean(self):
-        if self.request is not None and self.request.user.is_authenticated() and self.request.user.profile.mute:
+        if self.request is not None and self.request.user.is_authenticated and self.request.user.profile.mute:
             raise ValidationError(_('Your part is silent, little toad.'))
         return super(CommentForm, self).clean()
 
@@ -88,14 +88,14 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         queryset = queryset.select_related('author__user').defer('author__about').annotate(revisions=Count('versions'))
 
         # This version uses public Django interface, but it requires support on the model.
-        #if self.request.user.is_authenticated():
+        #if self.request.user.is_authenticated:
         #    votes = CommentVote.objects.filter(voter=self.request.user.profile)
         #else:
         #    votes = CommentVote.objects.none()
         #context['comment_list'] = queryset.prefetch_related(Prefetch('votes', queryset=votes))
 
         # This version digs into django internals.
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             queryset = queryset.annotate(vote_score=Coalesce(RawSQLColumn(CommentVote, 'score'), Value(0)))
             unique_together_left_join(queryset, CommentVote, 'comment', 'voter', self.request.user.profile.id)
         context['comment_list'] = queryset

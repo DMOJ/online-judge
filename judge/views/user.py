@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count, Min
 from django.http import HttpResponseRedirect, Http404
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, Context
 from django.utils import timezone
@@ -27,7 +28,7 @@ from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
-from judge.performance_points import get_pp_breakdown
+from judge.performance_points import get_pp_breakdown, PP_ENTRIES
 from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin, DiggPaginatorMixin, QueryStringSortMixin
 from .contests import contest_ranking_view
 
@@ -61,7 +62,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.kwargs.get(self.slug_url_kwarg, None) is None:
-            if not self.request.user.is_authenticated():
+            if not self.request.user.is_authenticated:
                 return redirect_to_login(self.request.get_full_path())
         try:
             return super(UserPage, self).dispatch(request, *args, **kwargs)
@@ -76,7 +77,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
     # TODO: the same code exists in problem.py, maybe move to problems.py?
     @cached_property
     def profile(self):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return None
         return self.request.user.profile
 
@@ -105,11 +106,12 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context['authored'] = self.object.authored_problems.filter(is_public=True).order_by('code')
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
-        context['rank'] = Profile.objects.filter(points__gt=self.object.points).count() + 1
 
-        if self.request.user.has_perm('judge.test_site'):
-            context['pp_rank'] = Profile.objects.filter(performance_points__gt=self.object.performance_points).count() + 1
-            context['pp_breakdown'] = get_pp_breakdown(self.object)
+        context['rank'] = Profile.objects.filter(
+            performance_points__gt=self.object.performance_points).count() + 1
+        breakdown, has_more = get_pp_breakdown(self.object, start=0, end=10)
+        context['pp_breakdown'] = breakdown
+        context['pp_has_more'] = has_more
 
         if rating:
             context['rating_rank'] = Profile.objects.filter(rating__gt=self.object.rating).count() + 1
@@ -121,6 +123,30 @@ class UserPage(TitleMixin, UserMixin, DetailView):
     def get(self, request, *args, **kwargs):
         self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
         return super(UserPage, self).get(request, *args, **kwargs)
+
+
+class UserPerformancePointsAjax(UserMixin, DetailView):
+    template_name = 'user/pp-table-body.jade'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserPerformancePointsAjax, self).get_context_data(**kwargs)
+        try:
+            start = int(self.request.GET.get('start', 0))
+            end = int(self.request.GET.get('end', PP_ENTRIES))
+        except ValueError:
+            start, end = 0, 100
+        breakdown, self.has_more = get_pp_breakdown(self.object, start=start, end=end)
+        context['pp_breakdown'] = breakdown
+        return context
+
+    def get(self, request, *args, **kwargs):
+        httpresp = super(UserPerformancePointsAjax, self).get(request, *args, **kwargs)
+        httpresp.render()
+
+        return JsonResponse({
+            'results': httpresp.content,
+            'has_more': self.has_more,
+        })
 
 
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
@@ -221,16 +247,12 @@ class UserList(LoadSelect2Mixin, QueryStringSortMixin, DiggPaginatorMixin, Title
     paginate_by = 100
     all_sorts = frozenset(('points', 'problem_count', 'rating', 'performance_points'))
     default_desc = all_sorts
-    default_sort = '-points'
-
-    def get_default_sort_order(self, request):
-        if request.user.has_perm('judge.test_site'):
-            return '-performance_points'
-        return self.default_sort
+    default_sort = '-performance_points'
 
     def get_queryset(self):
         return (Profile.objects.order_by(self.order, 'id').select_related('user')
-                .only('display_rank', 'user__username', 'name', 'points', 'rating', 'performance_points'))
+                .only('display_rank', 'user__username', 'name', 'points', 'rating', 'performance_points',
+                      'problem_count'))
 
     def get_context_data(self, **kwargs):
         context = super(UserList, self).get_context_data(**kwargs)
@@ -245,7 +267,7 @@ user_list_view = UserList.as_view()
 
 
 def users(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         participation = request.user.profile.current_contest
         if participation is not None:
             return contest_ranking_view(request, participation.contest, participation)

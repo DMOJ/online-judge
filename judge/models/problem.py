@@ -18,8 +18,8 @@ from judge.models.runtime import Language
 from judge.user_translations import ugettext as user_ugettext
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
 
-__all__ = ['ProblemGroup', 'ProblemType', 'Problem', 'ProblemTranslation', 'TranslatedProblemQuerySet',
-           'TranslatedProblemForeignKeyQuerySet', 'License']
+__all__ = ['ProblemGroup', 'ProblemType', 'Problem', 'ProblemTranslation', 'ProblemClarification',
+           'TranslatedProblemQuerySet', 'TranslatedProblemForeignKeyQuerySet', 'License']
 
 
 class ProblemType(models.Model):
@@ -113,6 +113,8 @@ class Problem(models.Model):
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
     allowed_languages = models.ManyToManyField(Language, verbose_name=_('allowed languages'))
     is_public = models.BooleanField(verbose_name=_('publicly visible'), db_index=True, default=False)
+    is_manually_managed = models.BooleanField(verbose_name=_('manually managed'), db_index=True, default=False,
+                                              help_text=_('Whether judges should be allowed to manage data or not'))
     date = models.DateTimeField(verbose_name=_('date of publishing'), null=True, blank=True, db_index=True,
                                 help_text=_("Doesn't have magic ability to auto-publish due to backward compatibility"))
     banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
@@ -144,15 +146,11 @@ class Problem(models.Model):
         return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists()
 
     def is_editable_by(self, user):
-        if user.is_superuser:
+        if not user.is_authenticated:
+            return False
+        if user.has_perm('judge.edit_all_problem') or user.has_perm('judge.edit_public_problem') and self.is_public:
             return True
-        if user.has_perm('judge.edit_public_problem') and self.is_public:
-            return True
-        if user.has_perm('judge.change_problem'):
-            return True
-        if self.is_editor(user.profile):
-            return True
-        return False
+        return self.is_editor(user.profile)
 
     def is_accessible_by(self, user):
         # All users can see public problems
@@ -168,7 +166,7 @@ class Problem(models.Model):
             return True
 
         # If the user is in a contest containing that problem or is a tester
-        if user.is_authenticated():
+        if user.is_authenticated:
             return (self.testers.filter(id=user.profile.id).exists() or
                     Problem.objects.filter(id=self.id, contest__users__user=user.profile).exists())
         else:
@@ -220,6 +218,10 @@ class Problem(models.Model):
     @i18n_name.setter
     def i18n_name(self, value):
         self._i18n_name = value
+
+    @property
+    def clarifications(self):
+        return ProblemClarification.objects.filter(problem=self)
 
     def update_stats(self):
         self.user_count = self.submission_set.filter(points__gt=0).values('user').distinct().count()
@@ -277,6 +279,7 @@ class Problem(models.Model):
             ('edit_public_problem', 'Edit all public problems'),
             ('clone_problem', 'Clone problem'),
             ('change_public_visibility', 'Change is_public field'),
+            ('change_manually_managed', 'Change is_manually_managed field'),
         )
         verbose_name = _('problem')
         verbose_name_plural = _('problems')
@@ -292,6 +295,12 @@ class ProblemTranslation(models.Model):
         unique_together = ('problem', 'language')
         verbose_name = _('problem translation')
         verbose_name_plural = _('problem translations')
+
+
+class ProblemClarification(models.Model):
+    problem = models.ForeignKey(Problem, verbose_name=_('clarified problem'))
+    description = models.TextField(verbose_name=_('clarification body'))
+    date = models.DateTimeField(verbose_name=_('clarification timestamp'), auto_now_add=True)
 
 
 class LanguageLimit(models.Model):

@@ -16,6 +16,31 @@ block js_media
                     return state.text;
                 }
 
+                window.previous_template = '';
+                function update_language_template() {
+                    var source = $('textarea#id_source');
+                    if (source.val() == window.previous_template.replace(/\r/g, '') || source.val() == '') {
+                        var lang_id = $('#id_language').val();
+                        var code = localStorage.getItem('submit:' + $('#id_language').val());
+
+                        function update_submit_area(code) {
+                            window.previous_template = code;
+                            source.val(code);
+                            window.ace_editor.getSession().setValue(code);
+                        }
+
+                        if (code != null) {
+                            update_submit_area(code);
+                        } else {
+                            $.get('{% url "language_template_ajax" %}', {
+                                id: lang_id
+                            }).done(function (template) {
+                                update_submit_area(template);
+                            });
+                        }
+                    }
+                }
+
                 function makeDisplayData(data) {
                     var site_data = data.attr('data-info');
                     var judge_data = data.attr('data-judge-info');
@@ -65,22 +90,17 @@ block js_media
                 $('#id_language').change(function () {
                     var lang = $("#id_language").find("option:selected").attr('data-ace');
                     window.ace_source.getSession().setMode("ace/mode/" + lang);
+                    update_language_template();
                 });
 
                 $('#ace_source').on('ace_load', function (e, editor) {
-                    var source = $('textarea#id_source');
-                    if (source.val() == '') {
-                        var code = localStorage.getItem('submit:' + $('#id_problem').val());
-                        if (code) {
-                            source.val(code);
-                            editor.getSession().setValue(code);
-                        }
-                    }
+                    window.ace_editor = editor;
+                    update_language_template();
                     editor.commands.addCommand({
                         name: 'save',
                         bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
                         exec: function () {
-                            localStorage.setItem('submit:' + $('#id_problem').val(), editor.getSession().getValue());
+                            localStorage.setItem('submit:' + $('#id_language').val(), editor.getSession().getValue());
                         }
                     });
                     editor.getSession().setUseWrapMode(true);
@@ -167,14 +187,13 @@ block media
 
 block body
     br
-    if perms.judge.test_site
-        if default_lang not in form.fields.language.queryset
-            .alert.alert-warning.alert-dismissable
-                a.close x
-                b {% trans "Warning!" %}
-                = ' '
-                - blocktrans with default_language=default_lang.name
-                    | Your default language, {{ default_language }}, is unavailable for this problem and has been deselected.
+    if default_lang not in form.fields.language.queryset
+        .alert.alert-warning.alert-dismissable
+            a.close x
+            b {% trans "Warning!" %}
+            = ' '
+            - blocktrans with default_language=default_lang.name
+                | Your default language, {{ default_language }}, is unavailable for this problem and has been deselected.
 
     form#problem_submit.form-area(style='width:100%;box-sizing:border-box', action='', method='post')
         - csrf_token

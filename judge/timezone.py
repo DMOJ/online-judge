@@ -8,7 +8,7 @@ from judge.models import Profile
 
 class TimezoneMiddleware(object):
     def process_request(self, request):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             try:
                 tzname = Profile.objects.get(user=request.user).timezone
             except ObjectDoesNotExist:

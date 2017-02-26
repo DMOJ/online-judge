@@ -49,7 +49,7 @@ class OrganizationMixin(object):
     def can_edit_organization(self, org=None):
         if org is None:
             org = self.object
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return False
         profile_id = self.request.user.profile.id
         return org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id
@@ -80,7 +80,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
         context['title'] = _('%s Members') % self.object.name
         context['users'] = ranker(chain(*[
             i.select_related('user').defer('about') for i in (
-                self.object.members.filter(submission__points__gt=0).order_by('-points')
+                self.object.members.filter(submission__points__gt=0).order_by('-performance_points')
                     .annotate(problems=Count('submission__problem', distinct=True)),
                 self.object.members.annotate(problems=Max('submission__points')).filter(problems=0),
                 self.object.members.annotate(problems=Count('submission__problem', distinct=True)).filter(problems=0),

@@ -96,7 +96,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                     upvote: $comment.find('.upvote-link').first(),
                     downvote: $comment.find('.downvote-link').first()
                 };
-            }
+            };
 
             window.comment_upvote = function (id) {
                 ajax_vote('{% url "comment_upvote" %}', id, 1, function () {
@@ -147,10 +147,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                                 $area.html(data);
                                 if ('MathJax' in window) MathJax.Hub.Queue(['Typeset', MathJax.Hub, $area.get(0)]);
                                 var $edits = $comment.find('.comment-edits').first();
-                                if ($edits.text()) {
-                                    var edits = parseInt($edits.text());
-                                    $edits.text(isNaN(edits) ? '2 edits' : edits + 1 + ' edits')
-                                } else $edits.text('edited');
+                                $edits.text('updated');
                             }).fail(function () {
                                 console.log('Failed to update comment:' + id);
                             });

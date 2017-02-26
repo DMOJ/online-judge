@@ -13,8 +13,8 @@ from judge.models import Comment, CommentVote
 from judge.utils.views import TitleMixin
 from judge.widgets import MathJaxPagedownWidget
 
-__all__ = ['upvote_comment', 'downvote_comment', 'CommentHistoryAjax', 'CommentEditAjax', 'CommentContent',
-           'CommentEdit', 'CommentHistory']
+__all__ = ['upvote_comment', 'downvote_comment', 'CommentEditAjax', 'CommentContent',
+           'CommentEdit']
 
 
 @login_required
@@ -71,7 +71,7 @@ class CommentRevisionAjax(CommentMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(CommentRevisionAjax, self).get_context_data(**kwargs)
         revisions = Version.objects.get_for_object(self.object).order_by('-revision')
-        wanted = int(self.request.GET.get('revision', None))
+        wanted = min(max(int(self.request.GET.get('revision', 0)), 0), len(revisions) - 1)
         context['revision'] = revisions[wanted]
         return context
 
@@ -80,28 +80,6 @@ class CommentRevisionAjax(CommentMixin, DetailView):
         if comment.hidden and not self.request.user.has_perm('judge.change_comment'):
             raise Http404()
         return comment
-
-
-class CommentHistoryAjax(CommentMixin, DetailView):
-    template_name = 'comments/history-ajax.jade'
-
-    def get_context_data(self, **kwargs):
-        context = super(CommentHistoryAjax, self).get_context_data(**kwargs)
-        context['revisions'] = Version.objects.get_for_object(self.object)
-        return context
-
-    def get_object(self, queryset=None):
-        comment = super(CommentHistoryAjax, self).get_object(queryset)
-        if comment.hidden and not self.request.user.has_perm('judge.change_comment'):
-            raise Http404()
-        return comment
-
-
-class CommentHistory(TitleMixin, CommentHistoryAjax):
-    template_name = 'comments/history.jade'
-
-    def get_title(self):
-        return _('Revisions for %s') % self.object.title
 
 
 class CommentEditForm(ModelForm):
