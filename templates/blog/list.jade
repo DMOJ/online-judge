@@ -163,7 +163,7 @@ block body
                         span.comment-data
                             a.comment-count-link(href='{% url "blog_post" post.id post.slug %}#comments')
                                 i.fa.fa-comments.comment-icon
-                                span.comment-count {{ post_comment_counts|get_dict_item:post.id }}
+                                span.comment-count {{ post_comment_counts|get_dict_item:post.id|default_if_none:0 }}
                         .summary
                             - cache 86400 post_summary post.id
                                 | #{post.summary|default:post.content|markdown:"blog"|reference|latex_math|smart_math:"svg"|proxy_images|nofollowexternal|lazy_load}
