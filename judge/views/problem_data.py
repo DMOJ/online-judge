@@ -159,7 +159,7 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
 @login_required
 def problem_data_file(request, problem, path):
     object = get_object_or_404(Problem, code=problem)
-    if not request.user.is_superuser and not object.authors.filter(id=request.user.profile.id).exists():
+    if not object.is_editable_by(request.user.profile):
         raise Http404()
 
     response = HttpResponse()
