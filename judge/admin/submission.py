@@ -108,7 +108,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         )
         if not request.user.has_perm('judge.edit_all_problem'):
             id = request.user.profile.id
-            queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id))
+            queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id)).distinct()
         return queryset
 
     def has_add_permission(self, request):
