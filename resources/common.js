@@ -240,6 +240,7 @@ $('form').submit(function (evt) {
             $(this).val('');
         }
     });
+    $("input[type='submit']").attr("disabled", "true");
     evt.preventDefault();
 });
 
