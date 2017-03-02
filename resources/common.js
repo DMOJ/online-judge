@@ -218,27 +218,7 @@ window.register_update_relative = function (get_times, show_relative, interval) 
 };
 
 $(function() {
-    // Placeholder polyfill
-    $('input[placeholder]').each(function () {
-        if ($(this).val() == '') {
-            $(this).val($(this).attr('placeholder'));
-            $(this).focus(function () {
-                if ($(this).val() == $(this).attr('placeholder')) $(this).val('');
-            });
-            $(this).blur(function () {
-                if ($(this).val() == '') {
-                    $(this).val($(this).attr('placeholder'));
-                }
-            });
-        }
-    });
-    
     $('form').submit(function (evt) {
-        $('input[placeholder]').each(function () {
-            if ($(this).attr('placeholder') == $(this).val()) {
-               $(this).val('');
-            }
-        });
         // Prevent multiple submissions of forms, see #565
         $("input[type='submit']").attr("disabled", "true");
     });
