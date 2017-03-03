@@ -2,7 +2,10 @@
 script(type='text/javascript', src='{% static "mathjax_config.js" %}')
 script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML')
 script(type='text/javascript').
-    MathJax.Hub.queue.Push(function () {
-        $('.tex-image').hide();
-        $('.tex-text').show();
-    });
+    window.reload_mathjax = function() {
+        MathJax.Hub.queue.Push(function () {
+            $('.tex-image').hide();
+            $('.tex-text').show();
+        });
+    };
+    window.reload_mathjax();
