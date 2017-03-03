@@ -57,7 +57,8 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                 }).done(function (body) {
                     $comment.find('.previous-revision').css({visibility: show_revision == 0 ? 'hidden' : ''});
                     $comment.find('.next-revision').css({visibility: show_revision == max_revision ? 'hidden' : ''});
-                    $comment.find('.content').html(body);
+                    var $content = $comment.find('.content');
+                    $content.find('.content').html(body);
 
                     var edit_text = '{% trans "edit {edits}" %}'.replace("{edits}", show_revision);
 
@@ -68,8 +69,12 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                     }
 
                     $comment.find('.comment-edit-text').text(' ' + edit_text + ' ');
-                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, $comment]);
-                    window.reload_mathjax();
+                    if ('MathJax' in window) {
+                        MathJax.Hub.Queue(['Typeset', MathJax.Hub, $content[0]], function () {
+                            $content.find('.tex-image').hide();
+                            $content.find('.tex-text').show();
+                        });
+                    }
                 });
             };
 
