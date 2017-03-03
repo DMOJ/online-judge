@@ -68,6 +68,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                     }
 
                     $comment.find('.comment-edit-text').text(' ' + edit_text + ' ');
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, $comment]);
                     window.reload_mathjax();
                 });
             };
