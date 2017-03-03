@@ -43,6 +43,16 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                 }, 500);
             };
 
+            function update_math($comment) {
+                if ('MathJax' in window) {
+                    var $body = $comment.find('.comment-body');
+                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, $body[0]], function () {
+                        $body.find('.tex-image').hide();
+                        $body.find('.tex-text').show();
+                    });
+                }
+            }
+
             window.show_revision = function(comment_id, offset) {
                 var $comment = $("#comment-" + comment_id);
                 var cur_revision = parseInt($comment.attr("data-revision"));
@@ -68,13 +78,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                     }
 
                     $comment.find('.comment-edit-text').text(' ' + edit_text + ' ');
-                    if ('MathJax' in window) {
-                        var $body = $comment.find('.comment-body');
-                        MathJax.Hub.Queue(['Typeset', MathJax.Hub, $body[0]], function() {
-                            $body.find('.tex-image').hide();
-                            $body.find('.tex-text').show();
-                        });
-                    }
+                    update_math($comment);
                 });
             };
 
@@ -152,7 +156,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                                 var $comment = $('#comment-' + id);
                                 var $area = $comment.find('.comment-body').first();
                                 $area.html(data);
-                                if ('MathJax' in window) MathJax.Hub.Queue(['Typeset', MathJax.Hub, $area.get(0)]);
+                                update_math($comment);
                                 var $edits = $comment.find('.comment-edits').first();
                                 $edits.text('updated');
                             }).fail(function () {
@@ -162,13 +166,6 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                     });
                 },
                 variant: 'featherlight-edit'
-            });
-
-            $('.comments').find('a.history-link').featherlight({
-                afterOpen: function () {
-                    if ('MathJax' in window)
-                        MathJax.Hub.Queue(['Typeset', MathJax.Hub, $('.featherlight-content').get(0)]);
-                }
             });
 
             var $root = $('html, body');
