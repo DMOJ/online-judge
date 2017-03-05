@@ -165,9 +165,11 @@ block js_media
         script(type='text/javascript').
             $(function () { load_dynamic_update(#{last_msg}); });
 
-block header
-    if my_submissions
-        .title-line-action: a(href=my_submissions) {% trans "My submissions" %}
+block title_ruler
+
+block title_row
+    - var tab = 'full_list'
+    include submission/submission-list-tabs
 
 block media
     if has_select2
