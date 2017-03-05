@@ -23,11 +23,12 @@ block js_media
             });
         });
 
-block header
-    div(style='float: right; margin-top: 0.9em; font-size: 1.3em;')
-        a(href='{% url "contest_calendar" now.year now.month %}') {% trans "Calendar view" %}
-        if perms.judge.change_contest
-            | &#32;[#[a(href='{% url "admin:judge_contest_changelist" %}') {% trans "Admin" %}]]
+block title_ruler
+
+block title_row
+    - var tab = 'list'
+    - var title = 'Contests'
+    include contest/contest-list-tabs
 
 block body
     .content-description
