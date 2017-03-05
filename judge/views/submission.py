@@ -229,6 +229,8 @@ class AllUserSubmissions(ConditionalUserTabMixin, UserMixin, SubmissionsListBase
         return _('All submissions by %s') % self.username
 
     def get_content_title(self):
+        if self.request.user.is_authenticated and self.request.user.profile == self.profile:
+            return format_html(u'All my submissions')
         return format_html(u'All submissions by <a href="{1}">{0}</a>', self.username,
                            reverse('user_page', args=[self.username]))
 
