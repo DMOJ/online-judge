@@ -77,6 +77,7 @@ block body
                                 else
                                     a.unselectable.button.full.participate-button.join-warning(href='{% url "contest_join" contest.key %}')
                                         | {% trans "Join" %}
+            br
 
         h4 {% trans "Upcoming Contests" %}
         if future_contests
@@ -111,6 +112,7 @@ block body
                                         | {{ window_length }} long
         else
             i {% trans "There are no scheduled contests at this time." %}
+        br
 
         h4 {% trans "Past Contests" %}
         table.contest-list.table.striped
