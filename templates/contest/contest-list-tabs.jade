@@ -11,6 +11,7 @@ div.page-title
                 = ' '
                 if next_month
                     a(href='{% url "contest_calendar" next_month.year next_month.month %}') {% trans "Next" %} &raquo;
+            span.spacer
         li(class=('active' if tab == 'list' else '')): a(href='{% url "problem_list" %}') {% trans "List" %}
         li(class=('active' if tab == 'calendar' else '')): a(href='{% url "contest_calendar" now.year now.month %}') {% trans "Calendar" %}
         if perms.judge.change_contest
