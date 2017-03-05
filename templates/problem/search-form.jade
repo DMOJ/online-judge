@@ -1,7 +1,6 @@
 - load i18n
 
-h3 {% trans "Problem search" %}
-hr
+h4 {% trans "Problem search" %}
 form#filter-form(name='form', action='', method='get')
     div: input#search(type='text', name='search', value=search_query, placeholder='{% trans "Search problems..." %}')
     if has_fts
@@ -37,6 +36,6 @@ form#filter-form(name='form', action='', method='get')
                         option(value=type.id, selected)= type.full_name
                     else
                         option(value=type.id)= type.full_name
-    hr
-    a#go.button(onclick='form.submit()') {% trans "Go" %}
-    a#random.button(href='{% url "problem_random" %}?{{ request.META.QUERY_STRING }}') {% trans "Random" %}
+    .form-submit-group
+        a#go.button(onclick='form.submit()') {% trans "Go" %}
+        a#random.button(href='{% url "problem_random" %}?{{ request.META.QUERY_STRING }}') {% trans "Random" %}

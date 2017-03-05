@@ -182,10 +182,9 @@ block media
 block body
     #common-content
         #content-right.submission
-            .info-float
+            .info-float.content-description
                 if has_select2
-                    h3 {% trans "Filter submissions" %}
-                    hr
+                    h4 {% trans "Filter submissions" %}
                     form#filter-form(name='form', action='', method='get')
                         div.filter-form-group
                             label(for='status'): i {% trans "Status" %}
@@ -203,8 +202,7 @@ block body
                                         option(value=code, selected)= name
                                     else
                                         option(value=code)= name
-                        hr
-                        a#go.button(onclick='form.submit()') {% trans "Go" %}
+                        .form-submit-group: a#go.button(onclick='form.submit()') {% trans "Go" %}
                 else
                     #statistics-table
                         include problem/statistics-table
