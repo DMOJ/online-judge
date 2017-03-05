@@ -293,8 +293,6 @@ class ProblemSubmissions(ProblemSubmissionsBase):
 
 
 class UserProblemSubmissions(UserMixin, ProblemSubmissionsBase):
-    tab = 'my_submissions_tab'
-
     def get_queryset(self):
         return super(UserProblemSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
@@ -315,6 +313,11 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissionsBase):
     def get_context_data(self, **kwargs):
         context = super(UserProblemSubmissions, self).get_context_data(**kwargs)
         context['dynamic_user_id'] = self.profile.id
+        if self.request.user.is_authenticated and self.request.user.profile == self.profile:
+            context['tab'] = 'my_submissions_tab'
+        else:
+            context['tab'] = 'user_submissions_tab'
+            context['tab_username'] = self.profile.user.username
         return context
 
 
