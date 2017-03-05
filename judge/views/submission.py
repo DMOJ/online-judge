@@ -216,6 +216,10 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
             return _('All my submissions')
         return _('All submissions by %s') % self.username
 
+    def get_my_submissions_page(self):
+        if self.request.user.is_authenticated:
+            return reverse('all_user_submissions', kwargs={'user': self.request.user.username})
+
     def get_content_title(self):
         return format_html(u'All submissions by <a href="{1}">{0}</a>', self.username,
                            reverse('user_page', args=[self.username]))
