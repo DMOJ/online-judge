@@ -8,7 +8,7 @@ div.page-title
             a(href=all_submissions_link) {% trans "All" %}
         if my_submissions_link or tab == 'my_submissions_tab'
             li(class=('active' if tab == 'my_submissions_tab' else ''))
-                a(href=my_submissions_link) {% trans "My" %}
+                a(href=my_submissions_link) {% trans "Mine" %}
         if best_submissions_link
             li(class=('active' if tab == 'best_submissions_list' else ''))
                 a(href=best_submissions_link) {% trans "Best" %}
