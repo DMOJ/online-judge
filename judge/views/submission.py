@@ -209,7 +209,7 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
 
     def get_title(self):
         if self.request.user.is_authenticated and self.request.user.profile == self.profile:
-            return _('All my submissions') % self.username
+            return _('All my submissions')
         return _('All submissions by %s') % self.username
 
     def get_content_title(self):
