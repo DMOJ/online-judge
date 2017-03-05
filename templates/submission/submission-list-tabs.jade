@@ -2,7 +2,7 @@
 
 div.page-title
     ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
-        h2(style='color:#393630; display: inline-block') #{content_title}
+        h2(style='color:#393630; display: inline-block') #{content_title|default_if_none:title}
         span.spacer
         li(class=('active' if tab == 'all_submissions_list' else ''))
             a(href=all_submissions_link) {% trans "All" %}
