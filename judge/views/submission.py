@@ -318,7 +318,8 @@ class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissi
 
     def get_my_submissions_page(self):
         if self.request.user.is_authenticated:
-            return reverse('user_submissions', kwargs={'user': self.request.user.username})
+            return reverse('user_submissions', kwargs={'problem': self.problem.code,
+                                                       'user': self.request.user.username})
 
     def get_context_data(self, **kwargs):
         context = super(UserProblemSubmissions, self).get_context_data(**kwargs)
