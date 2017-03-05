@@ -4,10 +4,10 @@ div.page-title
     ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
         h2(style='color:#393630; display: inline-block') #{title}
         span.spacer
-        li(class=('active' if tab == 'full_list' else ''))
+        li(class=('active' if tab == 'all_submissions_list' else ''))
             a(href='{% url "all_submissions" %}') {% trans "All submissions" %}
-        if my_submissions
-            li(class=('active' if tab == 'my_list' else ''))
+        if my_submissions or tab == 'my_submissions_tab'
+            li(class=('active' if tab == 'my_submissions_tab' else ''))
                 a(href=my_submissions) {% trans "My submissions" %}
         if perms.judge.change_submission
             li: a(href='{% url "admin:judge_submission_changelist" %}') {% trans "Admin" %}

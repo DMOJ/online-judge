@@ -129,6 +129,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     paginate_by = 50
     show_problem = True
     title = ugettext_lazy('All submissions')
+    tab = 'all_submissions_list'
     template_name = 'submission/list.jade'
     context_object_name = 'submissions'
     first_page_href = None
@@ -181,6 +182,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['results'] = self.get_result_table()
         context['first_page_href'] = self.first_page_href or '.'
         context['my_submissions'] = self.get_my_submissions_page()
+        context['tab'] = self.tab
         return context
 
     def get(self, request, *args, **kwargs):
@@ -206,6 +208,8 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
         return super(AllUserSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
     def get_title(self):
+        if self.request.user.is_authenticated and self.request.user.profile == self.profile:
+            return _('All my submissions') % self.username
         return _('All submissions by %s') % self.username
 
     def get_content_title(self):
@@ -217,6 +221,11 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
         context['dynamic_update'] = context['page_obj'].number == 1
         context['dynamic_user_id'] = self.profile.id
         context['last_msg'] = event.last()
+        if self.request.user.is_authenticated and self.request.user.profile == self.profile:
+            context['tab'] = 'my_submissions_tab'
+        else:
+            context['tab'] = 'user_submissions_tab'
+            context['user'] = self.profile
         return context
 
 
