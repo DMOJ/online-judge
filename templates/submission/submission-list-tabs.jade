@@ -9,7 +9,7 @@ div.page-title
         if my_submissions_link or tab == 'my_submissions_tab'
             li(class=('active' if tab == 'my_submissions_tab' else ''))
                 a(href=my_submissions_link) {% trans "My submissions" %}
-        if tab == 'user_submissions_tab':
+        if tab == 'user_submissions_tab'
             li.active: a
                 - blocktrans with username=user.user.username
                     | #{username}'s submissions
