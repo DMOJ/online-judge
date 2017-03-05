@@ -233,7 +233,7 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
             context['tab'] = 'my_submissions_tab'
         else:
             context['tab'] = 'user_submissions_tab'
-            context['user'] = self.profile
+            context['tab_username'] = self.profile.user.username
         return context
 
 
