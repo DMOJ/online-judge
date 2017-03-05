@@ -288,6 +288,7 @@ class ProblemSubmissionsBase(SubmissionsListBase):
             context['dynamic_update'] = context['page_obj'].number == 1
             context['dynamic_problem_id'] = self.problem.id
             context['last_msg'] = event.last()
+        context['best_submissions_link'] = reverse('ranked_submissions', kwargs={'problem': self.problem.code})
         return context
 
 

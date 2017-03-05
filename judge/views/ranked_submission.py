@@ -12,6 +12,7 @@ __all__ = ['RankedSubmissions', 'ContestRankedSubmission']
 
 
 class RankedSubmissions(ProblemSubmissionsBase):
+    tab = 'best_submissions_list'
     dynamic_update = False
 
     def get_queryset(self):
