@@ -315,6 +315,7 @@ class ContestCalendar(ContestListMixin, TemplateView):
             # 404 is valid because it merely declares the lack of existence, without any reason
             raise Http404()
 
+        context['now'] = timezone.now()
         context['calendar'] = self.get_table()
 
         if month > min_month:
