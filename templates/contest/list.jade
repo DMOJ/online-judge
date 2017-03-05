@@ -33,7 +33,6 @@ block body
     .content-description
         if current_contests
             h4 {% trans "Ongoing Contests" %}
-            br
             table.contest-list.table.striped
                 thead: tr
                     th(style='width:90%') {% trans "Contest" %}
@@ -80,7 +79,6 @@ block body
                                         | {% trans "Join" %}
 
         h4 {% trans "Upcoming Contests" %}
-        br
         if future_contests
             table.contest-list.table.striped
                 thead: tr: th {% trans "Contest" %}
@@ -115,7 +113,6 @@ block body
             i {% trans "There are no scheduled contests at this time." %}
 
         h4 {% trans "Past Contests" %}
-        br
         table.contest-list.table.striped
             thead: tr
                 th(style='width:90%') {% trans "Contest" %}
