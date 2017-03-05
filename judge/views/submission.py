@@ -207,7 +207,18 @@ class UserMixin(object):
         return super(UserMixin, self).get(request, *args, **kwargs)
 
 
-class AllUserSubmissions(UserMixin, SubmissionsListBase):
+class ConditionalUserTabMixin(object):
+    def get_context_data(self, **kwargs):
+        context = super(ConditionalUserTabMixin, self).get_context_data(**kwargs)
+        if self.request.user.is_authenticated and self.request.user.profile == self.profile:
+            context['tab'] = 'my_submissions_tab'
+        else:
+            context['tab'] = 'user_submissions_tab'
+            context['tab_username'] = self.profile.user.username
+        return context
+
+
+class AllUserSubmissions(ConditionalUserTabMixin, UserMixin, SubmissionsListBase):
     def get_queryset(self):
         return super(AllUserSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
@@ -216,24 +227,19 @@ class AllUserSubmissions(UserMixin, SubmissionsListBase):
             return _('All my submissions')
         return _('All submissions by %s') % self.username
 
-    def get_my_submissions_page(self):
-        if self.request.user.is_authenticated:
-            return reverse('all_user_submissions', kwargs={'user': self.request.user.username})
-
     def get_content_title(self):
         return format_html(u'All submissions by <a href="{1}">{0}</a>', self.username,
                            reverse('user_page', args=[self.username]))
+
+    def get_my_submissions_page(self):
+        if self.request.user.is_authenticated:
+            return reverse('all_user_submissions', kwargs={'user': self.request.user.username})
 
     def get_context_data(self, **kwargs):
         context = super(AllUserSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
         context['dynamic_user_id'] = self.profile.id
         context['last_msg'] = event.last()
-        if self.request.user.is_authenticated and self.request.user.profile == self.profile:
-            context['tab'] = 'my_submissions_tab'
-        else:
-            context['tab'] = 'user_submissions_tab'
-            context['tab_username'] = self.profile.user.username
         return context
 
 
@@ -292,7 +298,7 @@ class ProblemSubmissions(ProblemSubmissionsBase):
                                                        'user': self.request.user.username})
 
 
-class UserProblemSubmissions(UserMixin, ProblemSubmissionsBase):
+class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissionsBase):
     def get_queryset(self):
         return super(UserProblemSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
@@ -310,14 +316,13 @@ class UserProblemSubmissions(UserMixin, ProblemSubmissionsBase):
                            self.username, reverse('user_page', args=[self.username]),
                            self.problem_name, reverse('problem_detail', args=[self.problem.code]))
 
+    def get_my_submissions_page(self):
+        if self.request.user.is_authenticated:
+            return reverse('user_submissions', kwargs={'user': self.request.user.username})
+
     def get_context_data(self, **kwargs):
         context = super(UserProblemSubmissions, self).get_context_data(**kwargs)
         context['dynamic_user_id'] = self.profile.id
-        if self.request.user.is_authenticated and self.request.user.profile == self.profile:
-            context['tab'] = 'my_submissions_tab'
-        else:
-            context['tab'] = 'user_submissions_tab'
-            context['tab_username'] = self.profile.user.username
         return context
 
 
@@ -415,7 +420,7 @@ class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
         if self.problem.is_accessible_by(self.request.user):
             return "%s's submissions for %s in %s" % (self.username, self.problem_name, self.contest.name)
         return "%s's submissions for problem %s in %s" % (
-        self.username, self.get_problem_number(self.problem), self.contest.name)
+            self.username, self.get_problem_number(self.problem), self.contest.name)
 
     def access_check(self, request):
         super(UserContestSubmissions, self).access_check(request)
