@@ -299,7 +299,7 @@ class ProblemSubmissions(ProblemSubmissionsBase):
                                                        'user': self.request.user.username})
 
 
-class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissionsBase):
+class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissions):
     def get_queryset(self):
         return super(UserProblemSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
@@ -316,11 +316,6 @@ class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissi
         return format_html(u'''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
                            self.username, reverse('user_page', args=[self.username]),
                            self.problem_name, reverse('problem_detail', args=[self.problem.code]))
-
-    def get_my_submissions_page(self):
-        if self.request.user.is_authenticated:
-            return reverse('user_submissions', kwargs={'problem': self.problem.code,
-                                                       'user': self.request.user.username})
 
     def get_context_data(self, **kwargs):
         context = super(UserProblemSubmissions, self).get_context_data(**kwargs)
