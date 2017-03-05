@@ -282,13 +282,21 @@ class ProblemSubmissions(ProblemSubmissionsBase):
 
 
 class UserProblemSubmissions(UserMixin, ProblemSubmissionsBase):
+    tab = 'my_submissions_tab'
+
     def get_queryset(self):
         return super(UserProblemSubmissions, self).get_queryset().filter(user_id=self.profile.id)
 
     def get_title(self):
+        if self.request.user.is_authenticated and self.request.user.profile == self.profile:
+            return _("My submissions for %(problem)s") % {'problem': self.problem_name}
         return _("%(user)s's submissions for %(problem)s") % {'user': self.username, 'problem': self.problem_name}
 
     def get_content_title(self):
+        if self.request.user.is_authenticated and self.request.user.profile == self.profile:
+            return format_html(u'''My submissions for <a href="{3}">{2}</a>''',
+                               self.username, reverse('user_page', args=[self.username]),
+                               self.problem_name, reverse('problem_detail', args=[self.problem.code]))
         return format_html(u'''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
                            self.username, reverse('user_page', args=[self.username]),
                            self.problem_name, reverse('problem_detail', args=[self.problem.code]))
