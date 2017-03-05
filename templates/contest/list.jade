@@ -32,8 +32,7 @@ block header
 block body
     .content-description
         if current_contests
-            br
-            h3 {% trans "Ongoing Contests" %}
+            h4 {% trans "Ongoing Contests" %}
             br
             table.contest-list.table.striped
                 thead: tr
@@ -79,11 +78,8 @@ block body
                                 else
                                     a.unselectable.button.full.participate-button.join-warning(href='{% url "contest_join" contest.key %}')
                                         | {% trans "Join" %}
-            br
-            .dashed
 
-        br
-        h3 {% trans "Upcoming Contests" %}
+        h4 {% trans "Upcoming Contests" %}
         br
         if future_contests
             table.contest-list.table.striped
@@ -118,12 +114,7 @@ block body
         else
             i {% trans "There are no scheduled contests at this time." %}
 
-
-
-        br
-        hr.dashed
-        br
-        h3 {% trans "Past Contests" %}
+        h4 {% trans "Past Contests" %}
         br
         table.contest-list.table.striped
             thead: tr
