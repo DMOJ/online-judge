@@ -128,6 +128,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     paginate_by = 50
     show_problem = True
     title = ugettext_lazy('All submissions')
+    content_title = ugettext_lazy('All submissions')
     tab = 'all_submissions_list'
     template_name = 'submission/list.jade'
     context_object_name = 'submissions'
