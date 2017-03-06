@@ -1,9 +1,21 @@
+import re
+
 from django import template
 import mistune
 from django.conf import settings
 from judge.highlight_code import highlight_code
 
 register = template.Library()
+
+
+class CodeSafeInlineGrammar(mistune.InlineGrammar):
+    emphasis = re.compile(
+        r'^\*((?:\*\*|[^\*])+?)\*(?!\*)'  # *word*
+    )
+
+
+class CodeSafeInlineInlineLexer(mistune.InlineLexer):
+    grammar = CodeSafeInlineGrammar
 
 
 class HighlightRenderer(mistune.Renderer):
@@ -20,7 +32,7 @@ def markdown(value, style):
     styles = getattr(settings, 'MARKDOWN_STYLES', {}).get(style, getattr(settings, 'MARKDOWN_DEFAULT_STYLE', {}))
     escape = styles.get('safe_mode', 'escape') == 'escape'
     renderer = HighlightRenderer(escape=escape)
-    markdown = mistune.Markdown(renderer=renderer)
+    markdown = mistune.Markdown(renderer=renderer, inline=CodeSafeInlineInlineLexer())
     return markdown(value)
 
 
