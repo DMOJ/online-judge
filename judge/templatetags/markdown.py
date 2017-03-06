@@ -17,6 +17,9 @@ class HighlightRenderer(mistune.Renderer):
         formatter = HtmlFormatter()
         return highlight(code, lexer, formatter)
 
+    def header(self, text, level, *args, **kwargs):
+        return super(HighlightRenderer, self).header(text, level + 2, *args, **kwargs)
+
 
 def markdown(value, style):
     styles = getattr(settings, 'MARKDOWN_STYLES', {}).get(style, getattr(settings, 'MARKDOWN_DEFAULT_STYLE', {}))
