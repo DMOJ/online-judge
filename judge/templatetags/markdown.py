@@ -1,9 +1,7 @@
 from django import template
 import mistune
 from django.conf import settings
-from pygments import highlight
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters import HtmlFormatter
+from judge.highlight_code import highlight_code
 
 register = template.Library()
 
@@ -11,10 +9,8 @@ register = template.Library()
 class HighlightRenderer(mistune.Renderer):
     def block_code(self, code, lang):
         if not lang:
-            return '\n<div class="codehilite"><pre><code>%s</code></pre></div>\n' % mistune.escape(code).rstrip()
-        lexer = get_lexer_by_name(lang, stripall=True)
-        formatter = HtmlFormatter()
-        return highlight(code, lexer, formatter)
+            return '\n<pre><code>%s</code></pre>\n' % mistune.escape(code).rstrip()
+        return highlight_code(code, lang)
 
     def header(self, text, level, *args, **kwargs):
         return super(HighlightRenderer, self).header(text, level + 2, *args, **kwargs)
