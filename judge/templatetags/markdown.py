@@ -10,14 +10,10 @@ register = template.Library()
 
 class CodeSafeInlineGrammar(mistune.InlineGrammar):
     double_emphasis = re.compile(
-        r'^_{2}([\s\S]+?)_{2}(?!_)'  # __word__
-        r'|'
-        r'^\*{2}([\s\S]+?)\*{2}(?!\*)'  # **word**
+        r'^\*{2}([\s\S]+?)()\*{2}(?!\*)'  # **word**
     )
     emphasis = re.compile(
-        r'^\b_((?:__|[^_])+?)_\b'  # _word_
-        r'|'
-        r'^\*((?:\*\*|[^\*])+?)\*(?!\*)'  # *word*
+        r'^\*((?:\*\*|[^\*])+?)()\*(?!\*)'  # *word*
     )
 
 
@@ -26,7 +22,7 @@ class CodeSafeInlineInlineLexer(mistune.InlineLexer):
 
 
 class HighlightRenderer(mistune.Renderer):
-    def block_code(self, code, lang):
+    def block_code(self, code, lang=None):
         if not lang:
             return '\n<pre><code>%s</code></pre>\n' % mistune.escape(code).rstrip()
         return highlight_code(code, lang)
