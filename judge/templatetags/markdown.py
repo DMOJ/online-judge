@@ -24,8 +24,8 @@ class HighlightRenderer(mistune.Renderer):
 def markdown(value, style):
     styles = getattr(settings, 'MARKDOWN_STYLES', {}).get(style, getattr(settings, 'MARKDOWN_DEFAULT_STYLE', {}))
     escape = styles.get('safe_mode', 'escape') == 'escape'
-    renderer = HighlightRenderer()
-    markdown = mistune.Markdown(escape=escape, renderer=renderer)
+    renderer = HighlightRenderer(escape=escape)
+    markdown = mistune.Markdown(renderer=renderer)
     return markdown(value)
 
 
