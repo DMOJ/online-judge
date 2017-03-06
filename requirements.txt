@@ -12,6 +12,7 @@ django-impersonate
 lxml
 markdown2==2.3.1
 Pygments
+mistune
 -e git://github.com/DMOJ/pyjade.git#egg=pyjade
 python-social-auth>=0.2,<0.3
 pytz

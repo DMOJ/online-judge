@@ -14,8 +14,6 @@ import re
 
 from django.utils.translation import ugettext_lazy as _
 
-from markdown_trois.conf.settings import MARKDOWN_TROIS_DEFAULT_STYLE
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
@@ -129,7 +127,6 @@ INSTALLED_APPS += (
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'registration',
-    'markdown_trois',
     'mptt',
     'reversion',
     'django_social_share',
@@ -254,8 +251,14 @@ markdown_admin_editable_style = {
     'safe_mode': False,
 }
 
-MARKDOWN_TROIS_STYLES = {
-    'default': MARKDOWN_TROIS_DEFAULT_STYLE,
+MARKDOWN_DEFAULT_STYLE = {
+    'extras': {
+        'code-friendly': None,
+    },
+    'safe_mode': 'escape',
+}
+
+MARKDOWN_STYLES = {
     'trusted': {
         'extras': {
             'code-friendly': None,
