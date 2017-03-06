@@ -32,7 +32,7 @@ def markdown(value, style):
     styles = getattr(settings, 'MARKDOWN_STYLES', {}).get(style, getattr(settings, 'MARKDOWN_DEFAULT_STYLE', {}))
     escape = styles.get('safe_mode', 'escape') == 'escape'
     renderer = HighlightRenderer(escape=escape)
-    markdown = mistune.Markdown(renderer=renderer, inline=CodeSafeInlineInlineLexer())
+    markdown = mistune.Markdown(renderer=renderer, inline=CodeSafeInlineInlineLexer(renderer))
     return markdown(value)
 
 
