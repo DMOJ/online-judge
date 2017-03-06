@@ -11,8 +11,7 @@ register = template.Library()
 class HighlightRenderer(mistune.Renderer):
     def block_code(self, code, lang):
         if not lang:
-            return '\n<div class="codehilite"><pre><code>%s</code></pre></div>\n' % \
-                   mistune.escape(code)
+            return '\n<div class="codehilite"><pre><code>%s</code></pre></div>\n' % mistune.escape(code).rstrip()
         lexer = get_lexer_by_name(lang, stripall=True)
         formatter = HtmlFormatter()
         return highlight(code, lexer, formatter)
