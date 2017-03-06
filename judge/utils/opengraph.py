@@ -2,7 +2,7 @@ from django.core.cache import cache
 from django.template.defaultfilters import truncatewords
 
 from judge.templatetags.reference import reference
-from markdown_trois.templatetags.markdown_trois_tags import markdown_filter
+from judge.templatetags.markdown import markdown_filter
 
 def generate_opengraph(cache_key, data):
     metadata = cache.get(cache_key)
