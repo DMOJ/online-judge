@@ -15,7 +15,7 @@ class CodeSafeInlineGrammar(mistune.InlineGrammar):
 
 
 class CodeSafeInlineInlineLexer(mistune.InlineLexer):
-    grammar = CodeSafeInlineGrammar
+    grammar_class = CodeSafeInlineGrammar
 
 
 class HighlightRenderer(mistune.Renderer):
