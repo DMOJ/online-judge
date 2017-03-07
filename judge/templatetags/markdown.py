@@ -39,6 +39,6 @@ def markdown(value, style):
     return markdown(value)
 
 
-@register.filter(name='markdown')
+@register.filter(name='markdown', is_safe=True)
 def markdown_filter(value, style):
     return markdown(value, style)
