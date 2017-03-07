@@ -1,16 +1,13 @@
-import hmac
-from hashlib import sha1
 import re
 from urlparse import urlparse
 
-from django import template
 import mistune
+from django import template
 from django.conf import settings
-from judge.templatetags.camo_proxy import client as camo_client
-
 from django.utils.safestring import mark_safe
 
 from judge.highlight_code import highlight_code
+from judge.templatetags.camo_proxy import client as camo_client
 
 register = template.Library()
 
@@ -78,14 +75,14 @@ class AwesomeRenderer(mistune.Renderer):
         text = link = mistune.escape(link)
         if is_email:
             link = 'mailto:%s' % link
-        return '<a href="%s" %s>%s</a>' % (link, text, self._link_rel(link))
+        return '<a href="%s" %s>%s</a>' % (link, self._link_rel(link), text)
 
     def link(self, link, title, text):
         link = mistune.escape_link(link, quote=True)
         if not title:
-            return '<a href="%s" %s>%s</a>' % (link, text, self._link_rel(link))
+            return '<a href="%s" %s>%s</a>' % (link, self._link_rel(link), text)
         title = mistune.escape(title, quote=True)
-        return '<a href="%s" title="%s" %s>%s</a>' % (link, title, text, self._link_rel(link))
+        return '<a href="%s" title="%s" %s>%s</a>' % (link, title, self._link_rel(link), text)
 
     def block_code(self, code, lang):
         if not lang:
