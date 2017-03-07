@@ -35,7 +35,7 @@ class AwesomeRenderer(mistune.Renderer):
 
     def image(self, src, title, text):
         if camo_client:
-            src = camo_client.image_url(src)
+            src = camo_client.rewrite_url(src)
 
         src = mistune.escape_link(src, quote=True)
         text = mistune.escape(text, quote=True)
