@@ -42,7 +42,43 @@ block media
             }
 
     if not IN_CONTEST
-        style #problem-table th { padding: 0; }
+        style.
+            #problem-table th { padding: 0; }
+            .sidebox h3 {
+                margin: 0 -5px;
+                background: #3b3b3b;
+                border-radius: 4px 4px 0 0;
+                color: white;
+                padding-top: 2px;
+                padding-bottom: 4px;
+                padding-left: 7px;
+            }
+
+            .sidebox h3 .fa {
+                color: white;
+                float: right;
+                margin: 0.2em 0.4em 0 0;
+            }
+
+            .sidebox {
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+                margin-top: 0.5em;
+                padding: 0 5px !important;
+            }
+
+            .blog-content.sidebox {
+                margin-right: 1em;
+            }
+
+            .sidebox-content {
+                border: 1px solid #9D9D9D;
+                border-top: none;
+                margin: 0 -5px;
+                padding: 0 0.5em;
+                padding-top: 1px;
+                padding-bottom: 3px;
+            }
 
 block js_media
     if has_select2
@@ -129,6 +165,14 @@ block body
         if not IN_CONTEST
             #content-right.problems: .info-float.content-description
                 include problem/search-form
+                .sidebox
+                    h3 {% trans "Hot problems" %} #[i.fa.fa-puzzle-piece]
+                    .sidebox-content
+                        ul.problem-list: for problem in new_problems
+                            li
+                                a(href='{% url "problem_detail" problem.code %}')= problem.name
+                                - blocktrans count users=problem.count
+                                    |  ({{ users }} users)
 
         #content-left.problems
             if page_obj.num_pages > 1

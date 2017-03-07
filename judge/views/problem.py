@@ -2,6 +2,7 @@ import itertools
 import logging
 import os
 import shutil
+from datetime import timedelta
 from operator import itemgetter
 from random import randrange
 
@@ -15,11 +16,10 @@ from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import get_template
-from django.utils import translation
-from django.utils import timezone
+from django.utils import translation, timezone
+from django.utils.functional import cached_property
 from django.utils.html import format_html, escape
 from django.utils.safestring import mark_safe
-from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, View
@@ -34,7 +34,8 @@ from judge.models import Problem, Submission, ContestSubmission, ContestProblem,
 from judge.pdf_problems import HAS_PDF, DefaultPdfMaker
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
-from judge.utils.problems import contest_completed_ids, user_completed_ids, contest_attempted_ids, user_attempted_ids
+from judge.utils.problems import contest_completed_ids, user_completed_ids, contest_attempted_ids, user_attempted_ids, \
+    hot_problems
 from judge.utils.views import LoadSelect2Mixin, TitleMixin, generic_message, QueryStringSortMixin
 
 
@@ -380,6 +381,7 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProb
         context.update(self.get_sort_paginate_context())
         if not self.in_contest:
             context.update(self.get_sort_context())
+            context['hot_problems'] = hot_problems(timedelta(days=1), 10)
         return context
 
     def GET_with_session(self, request, key):

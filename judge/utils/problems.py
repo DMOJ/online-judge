@@ -1,8 +1,8 @@
 from collections import defaultdict
 
 from django.core.cache import cache
-from django.db.models import F, Count, Max
-from django.db.models import Q
+from django.db.models import F, Count, Max, Q
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from judge.models import Submission, Problem
@@ -16,7 +16,8 @@ def user_authored_ids(profile):
 
 
 def user_editable_ids(profile):
-    result = set((Problem.objects.filter(authors=profile) | Problem.objects.filter(curators=profile)).values_list('id', flat=True))
+    result = set((Problem.objects.filter(authors=profile) | Problem.objects.filter(curators=profile)).values_list('id',
+                                                                                                                  flat=True))
     return result
 
 
@@ -94,3 +95,13 @@ def editable_problems(user, profile=None):
             subfilter |= Q(is_public=True)
         subquery = subquery.filter(subfilter)
     return subquery
+
+
+def hot_problems(duration, limit):
+    cache_key = 'hot_problems:%d:%d' % (duration.total_seconds(), limit)
+    queryset = cache.get(cache_key)
+    if queryset is None:
+        queryset = Problem.objects.filter(submission__date__gt=timezone.now() - duration) \
+            .annotate(count=Count('submission')).order_by('count').defer('description')[:limit]
+        cache.set(cache_key, queryset, 900)
+    return queryset
