@@ -10,7 +10,6 @@ django-sortedm2m
 django-impersonate
 -e git://github.com/DMOJ/dmoj-wpadmin.git#egg=dmoj-wpadmin
 lxml
-markdown2==2.3.1
 Pygments
 mistune
 -e git://github.com/DMOJ/pyjade.git#egg=pyjade
