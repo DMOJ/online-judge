@@ -32,13 +32,40 @@ class CodeSafeInlineInlineLexer(mistune.InlineLexer):
 
 class AwesomeRenderer(mistune.Renderer):
     def __init__(self, *args, **kwargs):
-        self.nofollow = kwargs.pop('nofollow', False)
+        self.nofollow = kwargs.pop('nofollow', True)
+        self.lazyload = kwargs.pop('lazyload', False)
         super(AwesomeRenderer, self).__init__(*args, **kwargs)
 
     def image(self, src, title, text):
         if camo_client:
             src = camo_client.image_url(src)
-        super(AwesomeRenderer, self).image(src, title, text)
+
+        src = mistune.escape_link(src, quote=True)
+        text = mistune.escape(text, quote=True)
+        if title:
+            title = mistune.escape(title, quote=True)
+            html = '<img src="%s" alt="%s" title="%s"' % (src, text, title)
+        else:
+            html = '<img src="%s" alt="%s"' % (src, text)
+        if self.options.get('use_xhtml'):
+            return '%s />' % html
+        return '%s>' % html
+
+    # @register.filter(is_safe=True)
+    # def lazy_load(text):
+    #     blank = static('blank.gif')
+    #     tree = lxml_tree.fromstring(text)
+    #     for img in tree.xpath('.//img'):
+    #         src = img.get('src')
+    #         if src.startswith('data'):
+    #             continue
+    #         noscript = html.Element('noscript')
+    #         noscript.append(deepcopy(img))
+    #         img.addprevious(noscript)
+    #         img.set('data-src', src)
+    #         img.set('src', blank)
+    #         img.set('class', img.get('class') + ' unveil' if img.get('class') else 'unveil')
+    #     return tree
 
     def _link_rel(self, href):
         if href:
@@ -73,8 +100,9 @@ def markdown(value, style):
     styles = getattr(settings, 'MARKDOWN_STYLES', {}).get(style, getattr(settings, 'MARKDOWN_DEFAULT_STYLE', {}))
     escape = styles.get('safe_mode', True)
     nofollow = styles.get('nofollow', True)
+    lazyload = styles.get('lazy_load', False)
 
-    renderer = AwesomeRenderer(escape=escape, nofollow=nofollow)
+    renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, lazyload=lazyload)
     markdown = mistune.Markdown(renderer=renderer, inline=CodeSafeInlineInlineLexer(renderer))
     return markdown(value)
 
