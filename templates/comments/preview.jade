@@ -1,10 +1,9 @@
 - load markdown
 - load smart_math
-- load camo_proxy
 - load staticfiles
 - load reference
 
-| #{preview_data|markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images}
+| #{preview_data|markdown:"comment"|reference|smart_math:MATH_ENGINE}
 
 if REQUIRE_JAX
     div.require-mathjax-support(data-config='{% static "mathjax_config.js" %}')

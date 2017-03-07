@@ -5,7 +5,6 @@ extends user/user-base
 - load smart_math
 - load markdown
 - load rating
-- load camo_proxy
 - load cache
 - load i18n
 - load reference
@@ -118,7 +117,7 @@ block user_content
         if user.about
             h4 {% trans "About" %}
             - cache 86400 user_about user.id
-                | #{user.about|markdown:"self-description"|reference|smart_math:MATH_ENGINE|proxy_images}
+                | #{user.about|markdown:"self-description"|reference|smart_math:MATH_ENGINE}
         else
             i
                 if user.user == request.user

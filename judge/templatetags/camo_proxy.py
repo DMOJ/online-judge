@@ -23,13 +23,13 @@ class CamoClient(object):
                              hmac.new(self.key, url, sha1).hexdigest(),
                              url.encode('hex'))
 
-    def _rewrite_url(self, url):
+    def rewrite_url(self, url):
         if url.startswith(self.server) or url.startswith(self.excluded):
             return url
         elif url.startswith(('http://', 'https://')):
             return self.image_url(url)
         elif url.startswith('//'):
-            return self._rewrite_url(('https:' if self.https else 'http:') + url)
+            return self.rewrite_url(('https:' if self.https else 'http:') + url)
         else:
             return url
 
@@ -37,10 +37,10 @@ class CamoClient(object):
         doc = lxml_tree.fromstring(string)
         for img in doc.xpath('.//img'):
             if img.get('src'):
-                img.set('src', self._rewrite_url(img.get('src')))
+                img.set('src', self.rewrite_url(img.get('src')))
         for obj in doc.xpath('.//object'):
             if obj.get('data'):
-                obj.set('data', self._rewrite_url(obj.get('data')))
+                obj.set('data', self.rewrite_url(obj.get('data')))
         return doc
 
 

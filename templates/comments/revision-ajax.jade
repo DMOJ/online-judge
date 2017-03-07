@@ -1,8 +1,7 @@
 - load markdown
 - load smart_math
 - load reference
-- load camo_proxy
 
 - with node=revision.field_dict
     .comment-title(style=('display: none' if not node['title'] or node['title'].startswith('Re:') else '')) #{node.title}
-    .comment-body #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images}
+    .comment-body #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE}

@@ -5,7 +5,6 @@ extends base
 - load social_share
 - load latex_math
 - load smart_math
-- load camo_proxy
 - load i18n
 - load nofollow
 - load reference
@@ -34,7 +33,7 @@ block body
             span.post-time posted on #{post.publish_on|date:_("N j, Y, G:i")}
         .body.content-description
             - cache 86400 post_content post.id MATH_ENGINE
-                | #{post.content|markdown:"blog"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images|nofollowexternal}
+                | #{post.content|markdown:"blog"|reference|latex_math|smart_math:MATH_ENGINE|nofollowexternal}
     hr
     span.social
        - post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>"

@@ -2,7 +2,6 @@
 - load markdown
 - load mptt_tags
 - load gravatar
-- load camo_proxy
 - load lazy_load
 - load i18n
 - load tz
@@ -90,7 +89,7 @@
                                                 i.fa.fa-cog.fa-fw
                             .content.content-description
                                 .comment-title(style=('display: none' if not node.title or node.title.startswith('Re:') else '')) #{node.title}
-                                .comment-body #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}
+                                .comment-body #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|lazy_load}
 
                     if not node.is_leaf_node
                         ul.comments
