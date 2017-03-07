@@ -80,6 +80,10 @@ block media
                 padding-bottom: 3px;
             }
 
+            ul.problem-list {
+                padding: 0 !important;
+            }
+
 block js_media
     if has_select2
         script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
@@ -171,7 +175,7 @@ block body
                         ul.problem-list: for problem in hot_problems
                             li
                                 a(href='{% url "problem_detail" problem.code %}')= problem.name
-                                - blocktrans count submissions=problem.count
+                                div: - blocktrans count submissions=problem.count
                                     |  ({{ submissions }} submission)
                                     - plural
                                     |  ({{ submissions }} submissions)
