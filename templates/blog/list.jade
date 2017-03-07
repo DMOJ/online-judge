@@ -7,7 +7,6 @@ extends base
 - load smart_math
 - load lazy_load
 - load i18n
-- load nofollow
 - load tz
 - load reference
 - load dicts
@@ -166,7 +165,7 @@ block body
                                 span.comment-count {{ post_comment_counts|get_dict_item:post.id|default_if_none:0 }}
                         .summary.content-description
                             - cache 86400 post_summary post.id
-                                | #{post.summary|default:post.content|markdown:"blog"|reference|latex_math|smart_math:"svg"|nofollowexternal|lazy_load}
+                                | #{post.summary|default:post.content|markdown:"blog"|reference|latex_math|smart_math:"svg"|lazy_load}
 
             if page_obj.num_pages > 1
                 div(style='margin-bottom:10px;margin-top:10px')

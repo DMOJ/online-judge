@@ -235,110 +235,37 @@ LANGUAGES = [
     ('zh-hans', _('Simplified Chinese')),
 ]
 
-# Markdown Trois
 markdown_admin_editable_style = {
-    'extras': {
-        'pyshell': None,
-        'fenced-code-blocks': None,
-        'html-classes': {'pre': 'code'},
-        'cuddled-lists': None,
-        'footnotes': None,
-        'header-ids': None,
-        'demote-headers': 2,
-        'tables': None,
-        'code-friendly': None,
-    },
     'safe_mode': False,
 }
 
 MARKDOWN_DEFAULT_STYLE = {
-    'extras': {
-        'code-friendly': None,
-    },
-    'safe_mode': 'escape',
+    'safe_mode': True,
+    'nofollow': True,
 }
 
 MARKDOWN_STYLES = {
-    'trusted': {
-        'extras': {
-            'code-friendly': None,
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'footnotes': None,
-            'header-ids': None,
-        },
-        # Allow raw HTML (WARNING: don't use this for user-generated
-        # Markdown for your site!).
-        'safe_mode': False,
-    },
     'comment': {
-        'link_patterns': [
-            (re.compile(r'\bproblem:(\w+)\b', re.I), r'/problem/\1'),
-            (re.compile(r'\bsubmission:(\w+)\b', re.I), r'/submission/\1'),
-            (re.compile(r'@(\w+)\b', re.I), r'/user/\1'),
-        ],
-        'extras': {
-            'code-friendly': None,
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'demote-headers': 3,
-            'link-patterns': None,
-            'nofollow': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'footnotes': None,
-            'header-ids': None,
-        },
-        'safe_mode': 'escape',
+        'safe_mode': True,
     },
     'self-description': {
-        'extras': {
-            'code-friendly': None,
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'demote-headers': 3,
-            'nofollow': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'header-ids': None,
-        },
-        'safe_mode': 'escape',
+        'safe_mode': True,
     },
     'problem': markdown_admin_editable_style,
     'contest': markdown_admin_editable_style,
     'language': markdown_admin_editable_style,
     'license': markdown_admin_editable_style,
     'judge': markdown_admin_editable_style,
-    'blog': markdown_admin_editable_style,
+    'blog': {
+        'safe_mode': True,
+    },
     'solution': markdown_admin_editable_style,
     'contest_tag': markdown_admin_editable_style,
     'organization-about': {
-        'extras': {
-            'code-friendly': None,
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'demote-headers': 3,
-            'nofollow': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'header-ids': None,
-        },
-        'safe_mode': 'escape',
+        'safe_mode': True,
     },
     'ticket': {
-        'extras': {
-            'code-friendly': None,
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'demote-headers': 3,
-            'nofollow': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'header-ids': None,
-        },
-        'safe_mode': 'escape',
+        'safe_mode': True,
     },
 }
 
