@@ -168,7 +168,7 @@ block body
                 .sidebox
                     h3 {% trans "Hot problems" %} #[i.fa.fa-puzzle-piece]
                     .sidebox-content
-                        ul.problem-list: for problem in new_problems
+                        ul.problem-list: for problem in hot_problems
                             li
                                 a(href='{% url "problem_detail" problem.code %}')= problem.name
                                 - blocktrans count users=problem.count
