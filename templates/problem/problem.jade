@@ -208,7 +208,7 @@ block comments
                             - blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time
                                 | on {{ time }}
                             span.relative= str_time
-                        span.body #{clarification.description|markdown:"problem"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
+                        span.body #{clarification.description|markdown:"problem"|reference|latex_math|smart_math:MATH_ENGINE}
             else
                 p.no-comments-message {% trans "No clarifications have been made at this time." %}
     else
