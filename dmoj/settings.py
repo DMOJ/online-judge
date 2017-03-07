@@ -256,9 +256,7 @@ MARKDOWN_STYLES = {
     'language': markdown_admin_editable_style,
     'license': markdown_admin_editable_style,
     'judge': markdown_admin_editable_style,
-    'blog': {
-        'safe_mode': True,
-    },
+    'blog': markdown_admin_editable_style,
     'solution': markdown_admin_editable_style,
     'contest_tag': markdown_admin_editable_style,
     'organization-about': {

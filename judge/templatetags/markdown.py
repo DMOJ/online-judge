@@ -84,7 +84,7 @@ class AwesomeRenderer(mistune.Renderer):
         title = mistune.escape(title, quote=True)
         return '<a href="%s" title="%s" %s>%s</a>' % (link, title, self._link_rel(link), text)
 
-    def block_code(self, code, lang):
+    def block_code(self, code, lang=None):
         if not lang:
             return '\n<pre><code>%s</code></pre>\n' % mistune.escape(code).rstrip()
         return highlight_code(code, lang)
