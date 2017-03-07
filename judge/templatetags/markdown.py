@@ -1,8 +1,10 @@
 import re
 
-from django import template
 import mistune
+from django import template
 from django.conf import settings
+from django.utils.safestring import mark_safe
+
 from judge.highlight_code import highlight_code
 
 register = template.Library()
@@ -39,6 +41,6 @@ def markdown(value, style):
     return markdown(value)
 
 
-@register.filter(name='markdown', is_safe=True)
+@register.filter(name='markdown')
 def markdown_filter(value, style):
-    return markdown(value, style)
+    return mark_safe(markdown(value, style))
