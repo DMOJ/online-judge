@@ -173,9 +173,8 @@ block body
                                 a(href='{% url "problem_detail" problem.code %}')= problem.name
                                 - blocktrans count users=problem.count
                                     |  ({{ users }} user)
-                                - plural
+                                    - plural
                                     |  ({{ users }} users)
-                                - endblocktrans
 
         #content-left.problems
             if page_obj.num_pages > 1
