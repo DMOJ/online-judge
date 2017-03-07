@@ -98,7 +98,7 @@ class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemM
 
     def get_object(self, queryset=None):
         problem = super(ProblemDataView, self).get_object(queryset)
-        if self.request.user.is_superuser or problem.is_editable_by(request.user):
+        if self.request.user.is_superuser or problem.is_editable_by(self.request.user):
             return problem
         raise Http404()
 
@@ -182,7 +182,7 @@ def problem_data_file(request, problem, path):
 @login_required
 def problem_init_view(request, problem):
     problem = get_object_or_404(Problem, code=problem)
-    if not request.user.is_superuser and not problem.is_editable_by(request.user):
+    if not request.user.is_superuser and not problem.is_editable_by(self.request.user):
         raise Http404()
 
     try:
