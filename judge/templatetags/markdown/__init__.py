@@ -85,9 +85,9 @@ class AwesomeRenderer(mistune.Renderer):
                          'width: %s' % result['meta']['height']]
                 if 'inline' in attr:
                     tag = 'span'
-                    style += ['text-align: center']
                 else:
                     tag = 'div'
+                    style += ['text-align: center']
                 return '<%s style="%s">%s</%s>' % (tag, ';'.join(style), img, tag)
             else:
                 return '<pre>%s</pre>' % mistune.escape(result['error'])
