@@ -82,7 +82,7 @@ html
         //hr(style='border-bottom: 1px dashed;')
 
         .content-description.printing
-            | #{description|with_math_engine:"tex"|markdown:"problem"|reference|absolutify:url}
+            | #{description|with_math:"tex"|markdown:"problem"|reference|absolutify:url}
 
         script(type='text/javascript', src='mathjax_config.js')
         script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML')

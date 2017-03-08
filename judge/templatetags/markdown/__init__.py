@@ -157,5 +157,5 @@ class MarkdownSettingString(unicode):
         return template_filter
 
 
-MarkdownSettingString.make_filter('with_math_engine', 'math_engine')
+MarkdownSettingString.make_filter('with_math', 'math_engine')
 MarkdownSettingString.make_filter('with_lazy_load', 'lazy_load')

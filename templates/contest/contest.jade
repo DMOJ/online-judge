@@ -72,7 +72,7 @@ block body
 
     .content-description
         - cache 3600 contest_html contest.id MATH_ENGINE
-            | #{contest.description|with_math_engine:MATH_ENGINE|markdown:"contest"|reference}
+            | #{contest.description|with_math:MATH_ENGINE|markdown:"contest"|reference}
 
     hr
     span.social

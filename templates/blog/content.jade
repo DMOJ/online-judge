@@ -30,7 +30,7 @@ block body
             span.post-time posted on #{post.publish_on|date:_("N j, Y, G:i")}
         .body.content-description
             - cache 86400 post_content post.id MATH_ENGINE
-                | #{post.content|with_math_engine:MATH_ENGINE|markdown:"blog"|reference}
+                | #{post.content|with_math:MATH_ENGINE|markdown:"blog"|reference}
     hr
     span.social
        - post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>"

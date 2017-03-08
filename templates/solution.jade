@@ -27,7 +27,7 @@ block content_title
 
 block body
     .content-description
-        | #{solution.content|with_math_engine:MATH_ENGINE|markdown:"solution"|reference}
+        | #{solution.content|with_math:MATH_ENGINE|markdown:"solution"|reference}
 
     include comments/list
 

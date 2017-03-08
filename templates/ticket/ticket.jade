@@ -331,7 +331,7 @@ block body
                             .relative-time
                             .message-date #{message.time|date:"DATE_FORMAT"}
                             .message-time #{message.time|time:"TIME_FORMAT"}
-                        .content.content-description #{message.body|with_math_engine:MATH_ENGINE|markdown:"ticket"|reference}
+                        .content.content-description #{message.body|with_math:MATH_ENGINE|markdown:"ticket"|reference}
             hr
             section.message.new-message
                 .info

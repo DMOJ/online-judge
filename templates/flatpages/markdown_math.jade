@@ -14,7 +14,7 @@ block header
 
 block body
     .content-description
-        | #{flatpage.content|with_math_engine:MATH_ENGINE|markdown:"solution"|reference}
+        | #{flatpage.content|with_math:MATH_ENGINE|markdown:"solution"|reference}
 
 block bodyend
     if REQUIRE_JAX
