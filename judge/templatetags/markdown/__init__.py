@@ -74,7 +74,7 @@ class AwesomeRenderer(mistune.Renderer):
                 return '<pre>%s</pre>' % mistune.escape(latex)
             elif 'error' not in result:
                 img = ('''<img src="%(svg)s" onerror="this.src='%(png)s';this.onerror=null"'''
-                          'width="%(width)s" height="%(height)s"%(tail)s') % {
+                          'width="%(width)s" height="%(height)s"%(tail)s>') % {
                     'svg': result['svg'], 'png': result['png'],
                     'width': result['meta']['width'], 'height': result['meta']['height'],
                     'tail': ' /' if self.options.get('use_xhtml') else ''
