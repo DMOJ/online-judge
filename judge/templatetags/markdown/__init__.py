@@ -69,9 +69,9 @@ class AwesomeRenderer(mistune.Renderer):
         if self.texoid and html.startswith('<latex'):
             attr = html[6:html.index('>')]
             latex = html[html.index('>')+1:html.rindex('<')]
-            result = self.texoid.get_result(latex.text)
+            result = self.texoid.get_result(latex)
             if not result:
-                return '<pre>%s</pre>' % mistune.escape(latex.text)
+                return '<pre>%s</pre>' % mistune.escape(latex)
             elif 'error' not in result:
                 img = ('''<img src="%(svg)s" onerror="this.src='%(png)s';this.onerror=null"'''
                           'width="%(width)s" height="%(height)s"%(tail)s') % {
