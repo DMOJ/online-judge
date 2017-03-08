@@ -13,7 +13,7 @@ from lxml.etree import XMLSyntaxError
 from judge.highlight_code import highlight_code
 from judge.templatetags.markdown.camo import client as camo_client
 from judge.templatetags.markdown.lazy_load import lazy_load
-from judge.templatetags.markdown.math import MathRenderer, MathInlineLexer, MathBlockLexer, MathInlineGrammar
+from judge.templatetags.markdown.math import MathRenderer, MathInlineLexer, MathInlineGrammar
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
 
 register = template.Library()
@@ -37,10 +37,6 @@ class AwesomeInlineGrammar(MathInlineGrammar, CodeSafeInlineGrammar):
 
 class AwesomeInlineLexer(MathInlineLexer, mistune.InlineLexer):
     grammar_class = AwesomeInlineGrammar
-
-
-class AwesomeBlockLexer(MathBlockLexer, mistune.BlockLexer):
-    pass
 
 
 class AwesomeRenderer(MathRenderer, mistune.Renderer):
@@ -122,7 +118,7 @@ def markdown(value, style):
 
     renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, texoid=texoid,
                                math=math and math_engine is not None, math_engine=math_engine)
-    markdown = mistune.Markdown(renderer=renderer, inline=AwesomeInlineLexer, block=AwesomeBlockLexer)
+    markdown = mistune.Markdown(renderer=renderer, inline=AwesomeInlineLexer)
     result = markdown(value)
 
     if post_processors:

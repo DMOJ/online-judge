@@ -5,21 +5,6 @@ import mistune
 from judge.utils.mathoid import MathoidMathParser
 
 
-class MathBlockGrammar(mistune.BlockGrammar):
-    block_math = re.compile(r'^\$\$(.*?)\$\$|^\\\[(.*?)\\\]', re.DOTALL)
-
-
-class MathBlockLexer(mistune.BlockLexer):
-    default_rules = mistune.BlockLexer.default_rules + ['block_math']
-    grammar_class = MathBlockGrammar
-
-    def parse_block_math(self, m):
-        self.tokens.append({
-            'type': 'block_math',
-            'text': m.group(1) or m.group(2)
-        })
-
-
 class MathInlineGrammar(mistune.InlineGrammar):
     block_math = re.compile(r'^\$\$(.*?)\$\$|^\\\[(.*?)\\\]', re.DOTALL)
     math = re.compile(r'^~(.*?)~|^\\\((.*?)\\\)', re.DOTALL)
