@@ -16,10 +16,10 @@ class MathInlineLexer(mistune.InlineLexer):
     def __init__(self, *args, **kwargs):
         self.default_rules = self.default_rules[:]
         self.inline_html_rules = self.inline_html_rules[:]
-        self.default_rules.insert(self.default_rules.find('double_emphasis'), 'math')
-        self.default_rules.insert(self.default_rules.find('double_emphasis'), 'block_math')
-        self.inline_html_rules.insert(self.default_rules.find('double_emphasis'), 'math')
-        self.inline_html_rules.insert(self.default_rules.find('double_emphasis'), 'block_math')
+        self.default_rules.insert(self.default_rules.index('double_emphasis'), 'math')
+        self.default_rules.insert(self.default_rules.index('double_emphasis'), 'block_math')
+        self.inline_html_rules.insert(self.default_rules.index('double_emphasis'), 'math')
+        self.inline_html_rules.insert(self.default_rules.index('double_emphasis'), 'block_math')
         super(MathInlineLexer, self).__init__(*args, **kwargs)
 
     def output_block_math(self, m):
