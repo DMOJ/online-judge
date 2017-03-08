@@ -239,6 +239,7 @@ MARKDOWN_ADMIN_EDITABLE_STYLE = {
     'safe_mode': False,
     'use_camo': True,
     'texoid': True,
+    'math': True,
 }
 
 MARKDOWN_DEFAULT_STYLE = {
