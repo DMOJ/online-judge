@@ -183,14 +183,13 @@ block body
         if not IN_CONTEST
             #content-right.problems: .info-float
                 include problem/search-form
-                if perms.judge.test_site
-                    .sidebox
-                        h3 {% trans "Hot problems" %} #[i.fa.fa-fire]
-                        .sidebox-content
-                            ul.problem-list: for problem in hot_problems
-                                li
-                                    a.hot-problem-link(href='{% url "problem_detail" problem.code %}')= problem.name
-                                        span.hot-problem-count= problem.count
+                .sidebox
+                    h3 {% trans "Hot problems" %} #[i.fa.fa-fire]
+                    .sidebox-content
+                        ul.problem-list: for problem in hot_problems
+                            li
+                                a.hot-problem-link(href='{% url "problem_detail" problem.code %}')= problem.name
+                                    span.hot-problem-count= problem.count
 
 
         #content-left.problems
