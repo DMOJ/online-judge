@@ -54,6 +54,19 @@ block media
                 padding-left: 7px;
             }
 
+            a.hot-problem-link:hover > .hot-problem-count {
+                visibility: visible;
+            }
+
+            span.hot-problem-count {
+                color: #555;
+                font-size: 0.75em;
+                vertical-align: super;
+                visibility: hidden;
+                padding-left: 0.25em;
+                position: relative;
+            }
+
             .sidebox h3 .fa {
                 color: white;
                 float: right;
@@ -176,9 +189,9 @@ block body
                         .sidebox-content
                             ul.problem-list: for problem in hot_problems
                                 li
-                                    a(href='{% url "problem_detail" problem.code %}')= problem.name
-                                    = ' '
-                                    span.hot-problem-count= problem.count
+                                    a.hot-problem-link(href='{% url "problem_detail" problem.code %}')= problem.name
+                                        span.hot-problem-count= problem.count
+
 
         #content-left.problems
             if page_obj.num_pages > 1
