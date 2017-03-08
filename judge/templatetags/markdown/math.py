@@ -11,8 +11,16 @@ class MathInlineGrammar(mistune.InlineGrammar):
 
 
 class MathInlineLexer(mistune.InlineLexer):
-    default_rules = ['block_math', 'math'] + mistune.InlineLexer.default_rules
     grammar_class = MathInlineGrammar
+
+    def __init__(self, *args, **kwargs):
+        self.default_rules = self.default_rules[:]
+        self.inline_html_rules = self.inline_html_rules[:]
+        self.default_rules.insert(self.default_rules.find('double_emphasis'), 'math')
+        self.default_rules.insert(self.default_rules.find('double_emphasis'), 'block_math')
+        self.inline_html_rules.insert(self.default_rules.find('double_emphasis'), 'math')
+        self.inline_html_rules.insert(self.default_rules.find('double_emphasis'), 'block_math')
+        super(MathInlineLexer, self).__init__(*args, **kwargs)
 
     def output_block_math(self, m):
         return self.renderer.block_math(m.group(1) or m.group(2))
