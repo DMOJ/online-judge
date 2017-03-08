@@ -46,7 +46,6 @@ class AwesomeBlockLexer(MathBlockLexer, mistune.BlockLexer):
 class AwesomeRenderer(MathRenderer, mistune.Renderer):
     def __init__(self, *args, **kwargs):
         self.nofollow = kwargs.pop('nofollow', True)
-        self.lazyload = kwargs.pop('lazyload', False)
         self.texoid = TexoidRenderer() if kwargs.pop('texoid', False) else None
         super(AwesomeRenderer, self).__init__(*args, **kwargs)
 
@@ -121,7 +120,7 @@ def markdown(value, style):
     if getattr(value, 'lazy_load', False):
         post_processors.append(lazy_load)
 
-    renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, lazyload=lazyload, texoid=texoid,
+    renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, texoid=texoid,
                                math=math and math_engine is not None, math_engine=math_engine)
     markdown = mistune.Markdown(renderer=renderer, inline=AwesomeInlineLexer, block=AwesomeBlockLexer)
     result = markdown(value)
