@@ -11,7 +11,9 @@ def lazy_load(tree):
         if src.startswith('data'):
             continue
         noscript = html.Element('noscript')
-        noscript.append(deepcopy(img))
+        copy = deepcopy(img)
+        copy.tail = ''
+        noscript.append(copy)
         img.addprevious(noscript)
         img.set('data-src', src)
         img.set('src', blank)
