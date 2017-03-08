@@ -11,19 +11,40 @@ from django.core.cache import caches
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
-from judge.math_parser import MathHTMLParser
 from judge.utils.file_cache import HashFileCache
 
 logger = logging.getLogger('judge.mathoid')
 redollar = re.compile(r'(?<!\\)(?:\\{2})*\$')
 
+REPLACES = [
+    (u'\u2264', r'\le'),
+    (u'\u2265', r'\ge'),
+    (u'\u2026', '...'),
+    (u'\u2212', '-'),
+    ('&le;', r'\le'),
+    ('&le;', r'\ge'),
+    ('&lt;', '<'),
+    ('&gt;', '>'),
+    ('&amp;', '&'),
+    ('&#8722;', '-'),
+    ('&#8804;', r'\le'),
+    ('&#8805;', r'\ge'),
+    ('&#8230;', '...'),
+    (r'\lt', '<'),
+    (r'\gt', '>'),
+]
 
-class MathoidMathParser(MathHTMLParser):
+
+def format_math(math):
+    for a, b in REPLACES:
+        math = math.replace(a, b)
+    return math
+
+
+class MathoidMathParser(object):
     types = ('svg', 'mml', 'tex', 'jax')
 
     def __init__(self, type):
-        MathHTMLParser.__init__(self)
-
         assert type in self.types
         self.type = type
 
@@ -166,7 +187,9 @@ class MathoidMathParser(MathHTMLParser):
                            ['inline-math', 'display-math'][result['display']])
 
     def display_math(self, math):
+        math = format_math(math)
         return self.get_result('\displaystyle ' + math) or '$$%s$$' % math
 
     def inline_math(self, math):
+        math = format_math(math)
         return self.get_result(math) or '~%s~' % math
