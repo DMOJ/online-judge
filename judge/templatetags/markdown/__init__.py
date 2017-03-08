@@ -1,15 +1,20 @@
+import logging
 import re
+from parser import ParserError
 from urlparse import urlparse
 
 import mistune
 from django import template
 from django.conf import settings
 from django.utils.safestring import mark_safe
+from lxml import html
+from lxml.etree import XMLSyntaxError
 
 from judge.highlight_code import highlight_code
-from judge.templatetags.camo_proxy import client as camo_client
+from judge.templatetags.markdown.camo import client as camo_client
 
 register = template.Library()
+logger = logging.getLogger('judge.html')
 
 NOFOLLOW_WHITELIST = getattr(settings, 'NOFOLLOW_EXCLUDED', set())
 
@@ -31,38 +36,8 @@ class AwesomeRenderer(mistune.Renderer):
     def __init__(self, *args, **kwargs):
         self.nofollow = kwargs.pop('nofollow', True)
         self.lazyload = kwargs.pop('lazyload', False)
+        self.use_camo = kwargs.pop('use_camo', False)
         super(AwesomeRenderer, self).__init__(*args, **kwargs)
-
-    def image(self, src, title, text):
-        if camo_client:
-            src = camo_client.rewrite_url(src)
-
-        src = mistune.escape_link(src, quote=True)
-        text = mistune.escape(text, quote=True)
-        if title:
-            title = mistune.escape(title, quote=True)
-            html = '<img src="%s" alt="%s" title="%s"' % (src, text, title)
-        else:
-            html = '<img src="%s" alt="%s"' % (src, text)
-        if self.options.get('use_xhtml'):
-            return '%s />' % html
-        return '%s>' % html
-
-    # @register.filter(is_safe=True)
-    # def lazy_load(text):
-    #     blank = static('blank.gif')
-    #     tree = lxml_tree.fromstring(text)
-    #     for img in tree.xpath('.//img'):
-    #         src = img.get('src')
-    #         if src.startswith('data'):
-    #             continue
-    #         noscript = html.Element('noscript')
-    #         noscript.append(deepcopy(img))
-    #         img.addprevious(noscript)
-    #         img.set('data-src', src)
-    #         img.set('src', blank)
-    #         img.set('class', img.get('class') + ' unveil' if img.get('class') else 'unveil')
-    #     return tree
 
     def _link_rel(self, href):
         if href:
@@ -99,9 +74,25 @@ def markdown(value, style):
     nofollow = styles.get('nofollow', True)
     lazyload = styles.get('lazy_load', False)
 
+    post_processors = []
+    if styles.get('use_camo', False) and camo_client is not None:
+        post_processors.append(camo_client.update_tree)
+
     renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, lazyload=lazyload)
     markdown = mistune.Markdown(renderer=renderer, inline=CodeSafeInlineInlineLexer(renderer))
-    return markdown(value)
+    result = markdown(value)
+
+    if post_processors:
+        try:
+            tree = html.fromstring(result, parser=html.HTMLParser(recover=True))
+        except (XMLSyntaxError, ParserError) as e:
+            if str and (not isinstance(e, ParserError) or e.args[0] != 'Document is empty'):
+                logger.exception('Failed to parse HTML string')
+            tree = html.Element('div')
+        for processor in post_processors:
+            processor(tree)
+        result = html.tostring(tree, encoding='unicode')
+    return result
 
 
 @register.filter(name='markdown')
