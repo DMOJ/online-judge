@@ -12,7 +12,7 @@ from lxml.etree import XMLSyntaxError
 
 from judge.highlight_code import highlight_code
 from judge.templatetags.markdown.camo import client as camo_client
-from judge.templatetags.markdown.math import MathRenderer, MathInlineLexer, MathBlockLexer
+from judge.templatetags.markdown.math import MathRenderer, MathInlineLexer, MathBlockLexer, MathInlineGrammar
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
 
 register = template.Library()
@@ -30,8 +30,12 @@ class CodeSafeInlineGrammar(mistune.InlineGrammar):
     )
 
 
+class AwesomeInlineGrammar(MathInlineGrammar, CodeSafeInlineGrammar):
+    pass
+
+
 class AwesomeInlineLexer(MathInlineLexer, mistune.InlineLexer):
-    grammar_class = CodeSafeInlineGrammar
+    grammar_class = AwesomeInlineGrammar
 
 
 class AwesomeBlockLexer(MathBlockLexer, mistune.BlockLexer):
