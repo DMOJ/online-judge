@@ -14,7 +14,7 @@ from django.utils.safestring import mark_safe
 from judge.utils.file_cache import HashFileCache
 
 logger = logging.getLogger('judge.mathoid')
-redollar = re.compile(r'(?<!\\)(?:\\{2})*\$')
+reescape = re.compile(r'(?<!\\)(?:\\{2})*[&$]')
 
 REPLACES = [
     (u'\u2264', r'\le'),
@@ -30,7 +30,6 @@ REPLACES = [
     ('&#8804;', r'\le'),
     ('&#8805;', r'\ge'),
     ('&#8230;', '...'),
-    ('&', '\\&'),
     (r'\lt', '<'),
     (r'\gt', '>'),
 ]
@@ -65,7 +64,7 @@ class MathoidMathParser(object):
 
         try:
             request = urllib2.urlopen(self.mathoid_url, urlencode({
-                'q': redollar.sub(lambda m: '\\' + m.group(0), formula).encode('utf-8'),
+                'q': reescape.sub(lambda m: '\\' + m.group(0), formula).encode('utf-8'),
                 'type': 'tex' if formula.startswith('\displaystyle') else 'inline-tex'
             }))
         except urllib2.HTTPError as e:
