@@ -12,6 +12,7 @@ from lxml.etree import XMLSyntaxError
 
 from judge.highlight_code import highlight_code
 from judge.templatetags.markdown.camo import client as camo_client
+from judge.templatetags.markdown.lazy_load import lazy_load
 from judge.templatetags.markdown.math import MathRenderer, MathInlineLexer, MathBlockLexer, MathInlineGrammar
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
 
@@ -110,7 +111,6 @@ def markdown(value, style):
     styles = getattr(settings, 'MARKDOWN_STYLES', {}).get(style, getattr(settings, 'MARKDOWN_DEFAULT_STYLE', {}))
     escape = styles.get('safe_mode', True)
     nofollow = styles.get('nofollow', True)
-    lazyload = styles.get('lazy_load', False)
     texoid = TEXOID_ENABLED and styles.get('texoid', False)
     math = hasattr(settings, 'MATHOID_URL') and styles.get('math', False)
     math_engine = getattr(value, 'math_engine', None)
@@ -118,6 +118,8 @@ def markdown(value, style):
     post_processors = []
     if styles.get('use_camo', False) and camo_client is not None:
         post_processors.append(camo_client.update_tree)
+    if getattr(value, 'lazy_load', False):
+        post_processors.append(lazy_load)
 
     renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, lazyload=lazyload, texoid=texoid,
                                math=math and math_engine is not None, math_engine=math_engine)
@@ -128,7 +130,7 @@ def markdown(value, style):
         try:
             tree = html.fromstring(result, parser=html.HTMLParser(recover=True))
         except (XMLSyntaxError, ParserError) as e:
-            if str and (not isinstance(e, ParserError) or e.args[0] != 'Document is empty'):
+            if result and (not isinstance(e, ParserError) or e.args[0] != 'Document is empty'):
                 logger.exception('Failed to parse HTML string')
             tree = html.Element('div')
         for processor in post_processors:
@@ -142,15 +144,19 @@ def markdown_filter(value, style):
     return mark_safe(markdown(value, style))
 
 
-class MathEngineString(unicode):
-    __slots__ = ('math_engine',)
+class MarkdownSettingString(unicode):
+    __slots__ = ('math_engine', 'lazy_load')
 
-    def __new__(cls, unicode, math_engine):
-        self = super(MathEngineString, cls).__new__(cls, unicode)
-        self.math_engine = math_engine
-        return self
+    @classmethod
+    def make_filter(cls, name, field):
+        @register.filter(name=name)
+        def template_filter(value, data):
+            if not isinstance(value, MarkdownSettingString):
+                value = MarkdownSettingString(value)
+            setattr(value, field, data)
+            return value
+        return template_filter
 
 
-@register.filter(name='with_math_engine')
-def math_engine_filter(value, math_engine):
-    return MathEngineString(value, math_engine)
+MarkdownSettingString.make_filter('with_math_engine', 'math_engine')
+MarkdownSettingString.make_filter('with_lazy_load', 'lazy_load')
