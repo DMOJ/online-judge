@@ -7,8 +7,8 @@ from lxml import html
 def lazy_load(tree):
     blank = static('blank.gif')
     for img in tree.xpath('.//img'):
-        src = img.get('src')
-        if src.startswith('data') or '-math' in img.get('class'):
+        src = img.get('src', '')
+        if src.startswith('data') or '-math' in img.get('class', ''):
             continue
         noscript = html.Element('noscript')
         copy = deepcopy(img)
