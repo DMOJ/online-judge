@@ -178,7 +178,7 @@ block body
                                 li
                                     a(href='{% url "problem_detail" problem.code %}')= problem.name
                                     = ' '
-                                    span= problem.count
+                                    span.hot-problem-count= problem.count
 
         #content-left.problems
             if page_obj.num_pages > 1
