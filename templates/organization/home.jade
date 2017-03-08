@@ -2,7 +2,6 @@ extends common-content
 - load staticfiles
 - load markdown
 - load cache
-- load smart_math
 - load lazy_load
 - load i18n
 - load reference
@@ -30,4 +29,4 @@ block info_float
 
 block description
     - cache 3600 organization_html organization.id MATH_ENGINE
-        | #{organization.about|markdown:"organization-about"|reference|smart_math:MATH_ENGINE|lazy_load}
+        | #{organization.about|with_math_engine:MATH_ENGINE|markdown:"organization-about"|reference|lazy_load}

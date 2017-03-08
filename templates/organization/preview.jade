@@ -1,9 +1,8 @@
 - load markdown
-- load smart_math
 - load staticfiles
 - load reference
 
-| #{preview_data|markdown:"organization-about"|reference|smart_math:MATH_ENGINE}
+| #{preview_data|with_math_engine:MATH_ENGINE|markdown:"organization-about"|reference}
 
 if REQUIRE_JAX
     div.require-mathjax-support(data-config='{% static "mathjax_config.js" %}')

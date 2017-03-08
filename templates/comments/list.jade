@@ -5,7 +5,6 @@
 - load lazy_load
 - load i18n
 - load tz
-- load smart_math
 - load rating
 - load reference
 
@@ -89,7 +88,7 @@
                                                 i.fa.fa-cog.fa-fw
                             .content.content-description
                                 .comment-title(style=('display: none' if not node.title or node.title.startswith('Re:') else '')) #{node.title}
-                                .comment-body #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|lazy_load}
+                                .comment-body #{node.body|with_math_engine:MATH_ENGINE|markdown:"comment"|reference|lazy_load}
 
                     if not node.is_leaf_node
                         ul.comments

@@ -1,6 +1,5 @@
 - load markdown
-- load smart_math
 - load rating
 - load reference
 
-| #{comment.body|markdown:"comment"|reference|smart_math:MATH_ENGINE}
+| #{comment.body|with_math_engine:MATH_ENGINE|markdown:"comment"|reference}

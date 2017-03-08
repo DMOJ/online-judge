@@ -1,7 +1,6 @@
 - load markdown
-- load smart_math
 - load reference
 
 - with node=revision.field_dict
     .comment-title(style=('display: none' if not node['title'] or node['title'].startswith('Re:') else '')) #{node.title}
-    .comment-body #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE}
+    .comment-body #{node.body|with_math_engine:MATH_ENGINE|markdown:"comment"|reference}

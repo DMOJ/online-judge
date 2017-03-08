@@ -2,7 +2,6 @@ extends user/user-base
 - load staticfiles
 - load gravatar
 - load list_processor
-- load smart_math
 - load markdown
 - load rating
 - load cache
@@ -117,7 +116,7 @@ block user_content
         if user.about
             h4 {% trans "About" %}
             - cache 86400 user_about user.id
-                | #{user.about|markdown:"self-description"|reference|smart_math:MATH_ENGINE}
+                | #{user.about|with_math_engine:MATH_ENGINE|markdown:"self-description"|reference}
         else
             i
                 if user.user == request.user

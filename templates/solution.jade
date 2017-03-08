@@ -1,7 +1,6 @@
 extends base
 - load markdown
 - load staticfiles
-- load smart_math
 - load i18n
 - load reference
 
@@ -28,7 +27,7 @@ block content_title
 
 block body
     .content-description
-        | #{solution.content|markdown:"solution"|reference|smart_math:MATH_ENGINE}
+        | #{solution.content|with_math_engine:MATH_ENGINE|markdown:"solution"|reference}
 
     include comments/list
 

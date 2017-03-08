@@ -2,7 +2,6 @@ extends common-content
 - load staticfiles
 - load markdown
 - load cache
-- load smart_math
 - load filesize
 - load i18n
 - load reference
@@ -180,7 +179,7 @@ block info_float
 
 block description
     - cache 86400 problem_html problem.id MATH_ENGINE LANGUAGE_CODE
-        | #{description|markdown:"problem"|reference|smart_math:MATH_ENGINE}
+        | #{description|with_math_engine:MATH_ENGINE|markdown:"problem"|reference}
     - with license=problem.license
         if license
             span(style='float: left; font-size: 0.85em')
@@ -207,7 +206,7 @@ block comments
                             - blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time
                                 | on {{ time }}
                             span.relative= str_time
-                        span.body #{clarification.description|markdown:"problem"|reference|smart_math:MATH_ENGINE}
+                        span.body #{clarification.description|with_math_engine:MATH_ENGINE|markdown:"problem"|reference}
             else
                 p.no-comments-message {% trans "No clarifications have been made at this time." %}
     else
