@@ -188,8 +188,8 @@ class MathoidMathParser(object):
 
     def display_math(self, math):
         math = format_math(math)
-        return self.get_result('\displaystyle ' + math) or '$$%s$$' % math
+        return self.get_result('\displaystyle ' + math) or r'\[%s\]' % math
 
     def inline_math(self, math):
         math = format_math(math)
-        return self.get_result(math) or '~%s~' % math
+        return self.get_result(math) or r'\(%s\)' % math
