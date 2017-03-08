@@ -12,6 +12,7 @@ from lxml.etree import XMLSyntaxError
 
 from judge.highlight_code import highlight_code
 from judge.templatetags.markdown.camo import client as camo_client
+from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
 
 register = template.Library()
 logger = logging.getLogger('judge.html')
@@ -36,7 +37,7 @@ class AwesomeRenderer(mistune.Renderer):
     def __init__(self, *args, **kwargs):
         self.nofollow = kwargs.pop('nofollow', True)
         self.lazyload = kwargs.pop('lazyload', False)
-        self.use_camo = kwargs.pop('use_camo', False)
+        self.texoid = TexoidRenderer() if kwargs.pop('texoid', False) else None
         super(AwesomeRenderer, self).__init__(*args, **kwargs)
 
     def _link_rel(self, href):
@@ -64,6 +65,34 @@ class AwesomeRenderer(mistune.Renderer):
             return '\n<pre><code>%s</code></pre>\n' % mistune.escape(code).rstrip()
         return highlight_code(code, lang)
 
+    def block_html(self, html):
+        if self.texoid and html.startswith('<latex'):
+            attr = html[6:html.index('>')]
+            latex = html[html.index('>')+1:html.rindex('<')]
+            result = self.texoid.get_result(latex.text)
+            if not result:
+                return '<pre>%s</pre>' % mistune.escape(latex.text)
+            elif 'error' not in result:
+                img = ('''<img src="%(svg)s" onerror="this.src='%(png)s';this.onerror=null"'''
+                          'width="%(width)s" height="%(height)s"%(tail)s') % {
+                    'svg': result['svg'], 'png': result['png'],
+                    'width': result['meta']['width'], 'height': result['meta']['height'],
+                    'tail': ' /' if self.options.get('use_xhtml') else ''
+                }
+                style = ['max-width: 100%',
+                         'height: %s' % result['meta']['height'],
+                         'max-height: %s' % result['meta']['height'],
+                         'width: %s' % result['meta']['height']]
+                if 'inline' in attr:
+                    tag = 'span'
+                    style += ['text-align: center']
+                else:
+                    tag = 'div'
+                return '<%s style="%s">%s</%s>' % (tag, ';'.join(style), img, tag)
+            else:
+                return '<pre>%s</pre>' % mistune.escape(result['error'])
+        return super(AwesomeRenderer, self).block_html(html)
+
     def header(self, text, level, *args, **kwargs):
         return super(AwesomeRenderer, self).header(text, level + 2, *args, **kwargs)
 
@@ -73,12 +102,13 @@ def markdown(value, style):
     escape = styles.get('safe_mode', True)
     nofollow = styles.get('nofollow', True)
     lazyload = styles.get('lazy_load', False)
+    texoid = TEXOID_ENABLED and styles.get('texoid', False)
 
     post_processors = []
     if styles.get('use_camo', False) and camo_client is not None:
         post_processors.append(camo_client.update_tree)
 
-    renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, lazyload=lazyload)
+    renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, lazyload=lazyload, texoid=texoid)
     markdown = mistune.Markdown(renderer=renderer, inline=CodeSafeInlineInlineLexer(renderer))
     result = markdown(value)
 
