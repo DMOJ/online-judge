@@ -12,6 +12,7 @@ from lxml.etree import XMLSyntaxError
 
 from judge.highlight_code import highlight_code
 from judge.templatetags.markdown.camo import client as camo_client
+from judge.templatetags.markdown.math import MathRenderer, MathInlineLexer, MathBlockLexer
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
 
 register = template.Library()
@@ -29,11 +30,15 @@ class CodeSafeInlineGrammar(mistune.InlineGrammar):
     )
 
 
-class CodeSafeInlineInlineLexer(mistune.InlineLexer):
+class AwesomeInlineLexer(MathInlineLexer, mistune.InlineLexer):
     grammar_class = CodeSafeInlineGrammar
 
 
-class AwesomeRenderer(mistune.Renderer):
+class AwesomeBlockLexer(MathBlockLexer, mistune.BlockLexer):
+    pass
+
+
+class AwesomeRenderer(MathRenderer, mistune.Renderer):
     def __init__(self, *args, **kwargs):
         self.nofollow = kwargs.pop('nofollow', True)
         self.lazyload = kwargs.pop('lazyload', False)
@@ -103,13 +108,16 @@ def markdown(value, style):
     nofollow = styles.get('nofollow', True)
     lazyload = styles.get('lazy_load', False)
     texoid = TEXOID_ENABLED and styles.get('texoid', False)
+    math = hasattr(settings, 'MATHOID_URL') and styles.get('math', False)
+    math_engine = getattr(value, 'math_engine', None)
 
     post_processors = []
     if styles.get('use_camo', False) and camo_client is not None:
         post_processors.append(camo_client.update_tree)
 
-    renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, lazyload=lazyload, texoid=texoid)
-    markdown = mistune.Markdown(renderer=renderer, inline=CodeSafeInlineInlineLexer(renderer))
+    renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, lazyload=lazyload, texoid=texoid,
+                               math=math and math_engine is not None, math_engine=math_engine)
+    markdown = mistune.Markdown(renderer=renderer, inline=AwesomeInlineLexer, block=AwesomeBlockLexer)
     result = markdown(value)
 
     if post_processors:
@@ -128,3 +136,17 @@ def markdown(value, style):
 @register.filter(name='markdown')
 def markdown_filter(value, style):
     return mark_safe(markdown(value, style))
+
+
+class MathEngineString(unicode):
+    __slots__ = ('math_engine',)
+
+    def __new__(cls, unicode, math_engine):
+        self = super(MathEngineString, cls).__new__(cls, unicode)
+        self.math_engine = math_engine
+        return self
+
+
+@register.filter(name='with_math_engine')
+def math_engine_filter(value, math_engine):
+    return MathEngineString(value, math_engine)
