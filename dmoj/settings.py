@@ -247,9 +247,16 @@ MARKDOWN_DEFAULT_STYLE = {
     'use_camo': True,
 }
 
+MARKDOWN_USER_LARGE_STYLE = {
+    'safe_mode': True,
+    'nofollow': True,
+    'use_camo': True,
+    'texoid': True,
+}
+
 MARKDOWN_STYLES = {
     'comment': MARKDOWN_DEFAULT_STYLE,
-    'self-description': MARKDOWN_DEFAULT_STYLE,
+    'self-description': MARKDOWN_USER_LARGE_STYLE,
     'problem': MARKDOWN_ADMIN_EDITABLE_STYLE,
     'contest': MARKDOWN_ADMIN_EDITABLE_STYLE,
     'language': MARKDOWN_ADMIN_EDITABLE_STYLE,
@@ -258,8 +265,8 @@ MARKDOWN_STYLES = {
     'blog': MARKDOWN_ADMIN_EDITABLE_STYLE,
     'solution': MARKDOWN_ADMIN_EDITABLE_STYLE,
     'contest_tag': MARKDOWN_ADMIN_EDITABLE_STYLE,
-    'organization-about': MARKDOWN_DEFAULT_STYLE,
-    'ticket': MARKDOWN_DEFAULT_STYLE,
+    'organization-about': MARKDOWN_USER_LARGE_STYLE,
+    'ticket': MARKDOWN_USER_LARGE_STYLE,
 }
 
 # Database

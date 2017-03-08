@@ -2,7 +2,6 @@ extends common-content
 - load markdown
 - load staticfiles
 - load smart_math
-- load latex_math
 - load i18n
 - load reference
 
@@ -21,7 +20,7 @@ block body
     .content-description
         .alert.alert-info
             | {% trans "Remember to use this editorial only when stuck, and not to copy-paste code from it. Please be respectful to the problem author and editorialist." %}
-        | #{solution.content|markdown:"solution"|reference|latex_math|smart_math:MATH_ENGINE}
+        | #{solution.content|markdown:"solution"|reference|smart_math:MATH_ENGINE}
     hr
     include comments/list
 

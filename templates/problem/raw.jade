@@ -1,6 +1,5 @@
 - load markdown
 - load smart_math
-- load latex_math
 - load filesize
 - load i18n
 - load reference
@@ -84,7 +83,7 @@ html
         //hr(style='border-bottom: 1px dashed;')
 
         .content-description.printing
-            | #{description|markdown:"problem"|reference|latex_math|smart_math:"tex"|absolutify:url}
+            | #{description|markdown:"problem"|reference|smart_math:"tex"|absolutify:url}
 
         script(type='text/javascript', src='mathjax_config.js')
         script(type='text/javascript', src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML')

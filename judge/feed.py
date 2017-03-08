@@ -8,9 +8,8 @@ from django.utils.http import urlquote
 
 from judge.math_parser import MathHTMLParser, INLINE_MATH_PNG, DISPLAY_MATH_PNG
 from judge.models import Comment, BlogPost, Problem
-from judge.templatetags.latex_math import latex_math
-from judge.utils.mathoid import MathoidMathParser
 from judge.templatetags.markdown import markdown
+from judge.utils.mathoid import MathoidMathParser
 
 
 class OldFeedMath(MathHTMLParser):
@@ -116,7 +115,7 @@ class BlogFeed(Feed):
         key = 'blog_feed:%d' % post.id
         summary = cache.get(key)
         if summary is None:
-            summary = unicode(latex_math(FeedMath.convert(markdown(post.summary or post.content, 'blog'))))
+            summary = unicode(FeedMath.convert(markdown(post.summary or post.content, 'blog')))
             cache.set(key, summary, 86400)
         return summary
 

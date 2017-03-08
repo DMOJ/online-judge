@@ -6,7 +6,6 @@ extends common-content
 - load cache
 - load timedelta
 - load smart_math
-- load latex_math
 - load social_share
 - load tz
 - load i18n
@@ -74,7 +73,7 @@ block body
 
     .content-description
         - cache 3600 contest_html contest.id MATH_ENGINE
-            | #{contest.description|markdown:"contest"|reference|latex_math|smart_math:MATH_ENGINE}
+            | #{contest.description|markdown:"contest"|reference|smart_math:MATH_ENGINE}
 
     hr
     span.social

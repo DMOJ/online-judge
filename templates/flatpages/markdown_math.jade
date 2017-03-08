@@ -2,7 +2,6 @@ extends base
 - load markdown
 - load staticfiles
 - load smart_math
-- load latex_math
 - load lazy_load
 - load reference
 
@@ -17,7 +16,7 @@ block header
 
 block body
     .content-description
-        | #{flatpage.content|markdown:"solution"|reference|latex_math|smart_math:MATH_ENGINE|lazy_load}
+        | #{flatpage.content|markdown:"solution"|reference|smart_math:MATH_ENGINE|lazy_load}
 
 block bodyend
     if REQUIRE_JAX
