@@ -381,7 +381,7 @@ class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProb
         context.update(self.get_sort_paginate_context())
         if not self.in_contest:
             context.update(self.get_sort_context())
-            context['hot_problems'] = hot_problems(timedelta(days=1), 10)
+            context['hot_problems'] = hot_problems(timedelta(days=1), 7)
         return context
 
     def GET_with_session(self, request, key):
