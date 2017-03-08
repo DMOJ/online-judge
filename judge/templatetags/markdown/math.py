@@ -39,11 +39,11 @@ class MathRenderer(mistune.Renderer):
         super(MathRenderer, self).__init__(*args, **kwargs)
 
     def block_math(self, math):
-        if self.mathoid is None:
+        if self.mathoid is None or not math:
             return r'\[%s\]' % math
         return self.mathoid.display_math(math)
 
     def math(self, math):
-        if self.mathoid is None:
+        if self.mathoid is None or not math:
             return r'\(%s\)' % math
         return self.mathoid.inline_math(math)
