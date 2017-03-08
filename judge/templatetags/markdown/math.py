@@ -21,12 +21,16 @@ class MathBlockLexer(mistune.BlockLexer):
 
 
 class MathInlineGrammar(mistune.InlineGrammar):
-    math = re.compile(r'~(.*?)~|\\\((.*?)\\\)', re.DOTALL)
+    block_math = re.compile(r'^\$\$(.*?)\$\$|^\\\[(.*?)\\\]', re.DOTALL)
+    math = re.compile(r'^~(.*?)~|^\\\((.*?)\\\)', re.DOTALL)
 
 
 class MathInlineLexer(mistune.InlineLexer):
-    default_rules = ['math'] + mistune.InlineLexer.default_rules
+    default_rules = ['block_math', 'math'] + mistune.InlineLexer.default_rules
     grammar_class = MathInlineGrammar
+
+    def output_block_math(self, m):
+        return self.renderer.block_math(m.group(1) or m.group(2))
 
     def output_math(self, m):
         return self.renderer.math(m.group(1) or m.group(2))
