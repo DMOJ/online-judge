@@ -235,36 +235,30 @@ LANGUAGES = [
     ('zh-hans', _('Simplified Chinese')),
 ]
 
-markdown_admin_editable_style = {
+MARKDOWN_ADMIN_EDITABLE_STYLE = {
     'safe_mode': False,
+    'use_camo': True,
 }
 
 MARKDOWN_DEFAULT_STYLE = {
     'safe_mode': True,
     'nofollow': True,
+    'use_camo': True,
 }
 
 MARKDOWN_STYLES = {
-    'comment': {
-        'safe_mode': True,
-    },
-    'self-description': {
-        'safe_mode': True,
-    },
-    'problem': markdown_admin_editable_style,
-    'contest': markdown_admin_editable_style,
-    'language': markdown_admin_editable_style,
-    'license': markdown_admin_editable_style,
-    'judge': markdown_admin_editable_style,
-    'blog': markdown_admin_editable_style,
-    'solution': markdown_admin_editable_style,
-    'contest_tag': markdown_admin_editable_style,
-    'organization-about': {
-        'safe_mode': True,
-    },
-    'ticket': {
-        'safe_mode': True,
-    },
+    'comment': MARKDOWN_DEFAULT_STYLE,
+    'self-description': MARKDOWN_DEFAULT_STYLE,
+    'problem': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'contest': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'language': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'license': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'judge': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'blog': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'solution': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'contest_tag': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'organization-about': MARKDOWN_DEFAULT_STYLE,
+    'ticket': MARKDOWN_DEFAULT_STYLE,
 }
 
 # Database
