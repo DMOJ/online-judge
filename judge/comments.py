@@ -45,7 +45,7 @@ class CommentForm(ModelForm):
             profile = self.request.user.profile
             if profile.mute:
                 raise ValidationError(_('Your part is silent, little toad.'))
-            elif not profile.filter(points=F('problem__points')).exists():
+            elif not profile.submission_set.filter(points=F('problem__points')).exists():
                 raise ValidationError(_('You need to have solved at least one problem '
                                         'before your voice can be heard.'))
         return super(CommentForm, self).clean()
@@ -92,17 +92,11 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         context['has_comments'] = queryset.exists()
         queryset = queryset.select_related('author__user').defer('author__about').annotate(revisions=Count('versions'))
 
-        # This version uses public Django interface, but it requires support on the model.
-        #if self.request.user.is_authenticated:
-        #    votes = CommentVote.objects.filter(voter=self.request.user.profile)
-        #else:
-        #    votes = CommentVote.objects.none()
-        #context['comment_list'] = queryset.prefetch_related(Prefetch('votes', queryset=votes))
-
-        # This version digs into django internals.
         if self.request.user.is_authenticated:
             queryset = queryset.annotate(vote_score=Coalesce(RawSQLColumn(CommentVote, 'score'), Value(0)))
-            unique_together_left_join(queryset, CommentVote, 'comment', 'voter', self.request.user.profile.id)
+            profile = self.request.user.profile
+            unique_together_left_join(queryset, CommentVote, 'comment', 'voter', profile.id)
+            context['is_new_user'] = profile.submission_set.filter(points=F('problem__points')).exists()
         context['comment_list'] = queryset
 
         return context
