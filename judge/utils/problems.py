@@ -1,4 +1,5 @@
 from collections import defaultdict
+from math import e
 
 from django.core.cache import cache
 from django.db.models import F, Count, Max, Q, ExpressionWrapper, Case, When
