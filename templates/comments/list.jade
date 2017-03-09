@@ -98,13 +98,13 @@
         p.no-comments-message {% trans "There are no comments at the moment." %}
 
     if request.user.is_authenticated and comment_form
-        if is_new_user
-            .alert.alert-info {% trans "You need to have solved at least one problem before your voice can be heard." %}
-        else
-            .form-area.comment-submit
-                block comment_submit_title
-                    h3 {% trans "New comment" %}
-                    hr
+        .form-area.comment-submit
+            block comment_submit_title
+                h3 {% trans "New comment" %}
+                hr
+            if is_new_user
+                .alert.alert-info {% trans "You need to have solved at least one problem before your voice can be heard." %}
+            else
                 form#comment-submit(action='', method='post')
                     - csrf_token
                     if comment_form.errors
