@@ -90,7 +90,7 @@ class SolvedProblemMixin(object):
         return self.request.user.profile
 
 
-class ProblemSolution(ProblemMixin, TitleMixin, CommentedDetailView):
+class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDetailView):
     context_object_name = 'problem'
     template_name = 'problem/editorial.jade'
 
@@ -110,6 +110,7 @@ class ProblemSolution(ProblemMixin, TitleMixin, CommentedDetailView):
                 not self.request.user.has_perm('judge.see_private_solution'):
             raise Http404()
         context['solution'] = solution
+        context['has_solved_problem'] = self.object.id in self.get_completed_problems()
         return context
 
     def get_comment_page(self):
