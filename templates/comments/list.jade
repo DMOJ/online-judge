@@ -103,7 +103,8 @@
                 h3 {% trans "New comment" %}
                 hr
             if is_new_user
-                .alert.alert-info {% trans "You need to have solved at least one problem before your voice can be heard." %}
+                .alert.alert-info(style='margin-bottom: 0')
+                    - trans "You need to have solved at least one problem before your voice can be heard."
             else
                 form#comment-submit(action='', method='post')
                     - csrf_token
