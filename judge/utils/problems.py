@@ -101,8 +101,8 @@ def editable_problems(user, profile=None):
 
 def hot_problems(duration, limit):
     cache_key = 'hot_problems:%d:%d' % (duration.total_seconds(), limit)
-    queryset = cache.get(cache_key)
-    if queryset is None:
+    qs = cache.get(cache_key)
+    if qs is None:
         qs = Problem.objects.filter(is_public=True, submission__date__gt=timezone.now() - duration, points__gt=3, points__lt=25)
         # make this an aggregate
         mx = float(qs.annotate(k=Count('submission__user', distinct=True)).order_by('-k').values_list('k', flat=True)[0])
@@ -127,4 +127,4 @@ def hot_problems(duration, limit):
         qs = qs.annotate(ordering=ExpressionWrapper(0.5 * F('points') * (0.4 * F('ac_volume') / F('submission_volume') + 0.6 * F('ac_rate')) + 100 * e ** (F('unique_user_count') / mx), output_field=FloatField())).order_by('-ordering').defer('description')[:limit]
 
         cache.set(cache_key, qs, 900)
-    return queryset
+    return qs
