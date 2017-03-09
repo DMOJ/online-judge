@@ -1,7 +1,8 @@
 from collections import defaultdict
 
 from django.core.cache import cache
-from django.db.models import F, Count, Max, Q
+from django.db.models import F, Count, Max, Q, ExpressionWrapper
+from django.db.models.fields import FloatField
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
@@ -122,7 +123,7 @@ def hot_problems(duration, limit):
             )))
         qs = qs.filter(unique_user_count__gt=max(mx / 3.0, 1))
 
-        qs = qs.annotate(ordering=ExpressionWrapper(0.5 * F('points') * (0.4 * F('ac_volume') / F('submission_volume') + 0.6 * F('ac_rate')) + 100 * e ** (F('unique_user_count') / mx), output_field=FloatField())).order_by('-ordering').defer('description')[:limit].values_list('code', 'ordering', 'unique_user_count', 'submission_volume', 'ac_volume', 'submission_volume')
+        qs = qs.annotate(ordering=ExpressionWrapper(0.5 * F('points') * (0.4 * F('ac_volume') / F('submission_volume') + 0.6 * F('ac_rate')) + 100 * e ** (F('unique_user_count') / mx), output_field=FloatField())).order_by('-ordering').defer('description')[:limit]
 
         cache.set(cache_key, qs, 900)
     return queryset
