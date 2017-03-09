@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Count
-from django.db.models.expressions import Value
+from django.db.models.expressions import Value, F
 from django.db.models.functions import Coalesce
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
@@ -41,8 +41,13 @@ class CommentForm(ModelForm):
         self.fields['body'].widget.attrs.update({'placeholder': _('Comment body')})
 
     def clean(self):
-        if self.request is not None and self.request.user.is_authenticated and self.request.user.profile.mute:
-            raise ValidationError(_('Your part is silent, little toad.'))
+        if self.request is not None and self.request.user.is_authenticated:
+            profile = self.request.user.profile
+            if profile.mute:
+                raise ValidationError(_('Your part is silent, little toad.'))
+            elif not profile.filter(points=F('problem__points')).exists():
+                raise ValidationError(_('You need to have solved at least one problem '
+                                        'before your voice can be heard.'))
         return super(CommentForm, self).clean()
 
 
