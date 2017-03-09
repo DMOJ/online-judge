@@ -17,8 +17,7 @@ from reversion import revisions
 from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
-from judge.models import Comment, Profile, CommentVote
-from judge.models import Submission
+from judge.models import Comment, Profile, CommentVote, Problem, Submission
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
 from judge.widgets import HeavyPreviewPageDownWidget
 
@@ -65,7 +64,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         self.object = self.get_object()
         page = self.get_comment_page()
 
-        with LockModel(write=(Comment, Revision, Version), read=(Profile, ContentType, Submission)):
+        with LockModel(write=(Comment, Revision, Version), read=(Profile, ContentType, Submission, Problem)):
             form = CommentForm(request, request.POST)
             if form.is_valid():
                 comment = form.save(commit=False)
