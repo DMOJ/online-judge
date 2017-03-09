@@ -96,7 +96,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
             queryset = queryset.annotate(vote_score=Coalesce(RawSQLColumn(CommentVote, 'score'), Value(0)))
             profile = self.request.user.profile
             unique_together_left_join(queryset, CommentVote, 'comment', 'voter', profile.id)
-            context['is_new_user'] = profile.submission_set.filter(points=F('problem__points')).exists()
+            context['is_new_user'] = not profile.submission_set.filter(points=F('problem__points')).exists()
         context['comment_list'] = queryset
 
         return context
