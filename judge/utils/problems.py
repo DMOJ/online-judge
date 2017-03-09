@@ -101,7 +101,7 @@ def hot_problems(duration, limit):
     cache_key = 'hot_problems:%d:%d' % (duration.total_seconds(), limit)
     queryset = cache.get(cache_key)
     if queryset is None:
-        queryset = Problem.objects.filter(submission__date__gt=timezone.now() - duration) \
+        queryset = Problem.objects.filter(is_public=True, submission__date__gt=timezone.now() - duration) \
             .annotate(count=Count('submission')).order_by('-count').defer('description')[:limit]
         cache.set(cache_key, queryset, 900)
     return queryset
