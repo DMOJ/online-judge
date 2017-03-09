@@ -17,8 +17,9 @@ block header
 
 block body
     .content-description
-        .alert.alert-info
-            | {% trans "Remember to use this editorial <b>only</b> when stuck, and <b>not to copy-paste code from it</b>. Please be respectful to the problem author and editorialist. <b>Submitting an official solution before solving the problem yourself is a bannable offence.</b>" %}
+        if not has_solved_problem
+            .alert.alert-danger
+                | {% trans "Remember to use this editorial <b>only</b> when stuck, and <b>not to copy-paste code from it</b>. Please be respectful to the problem author and editorialist. <b>Submitting an official solution before solving the problem yourself is a bannable offence.</b>" %}
         | #{solution.content|with_math:MATH_ENGINE|markdown:"solution"|reference}
     hr
     include comments/list
