@@ -101,7 +101,28 @@ def hot_problems(duration, limit):
     cache_key = 'hot_problems:%d:%d' % (duration.total_seconds(), limit)
     queryset = cache.get(cache_key)
     if queryset is None:
-        queryset = Problem.objects.filter(is_public=True, submission__date__gt=timezone.now() - duration) \
-            .annotate(count=Count('submission__user', distinct=True)).order_by('-count').defer('description')[:limit]
-        cache.set(cache_key, queryset, 900)
+        qs = Problem.objects.filter(is_public=True, submission__date__gt=timezone.now() - duration, points__gt=3, points__lt=25)
+        # make this an aggregate
+        mx = float(qs.annotate(k=Count('submission__user', distinct=True)).order_by('-k').values_list('k', flat=True)[0])
+
+        qs = qs.annotate(unique_user_count=Count('submission__user', distinct=True))  
+        # fix braindamage in excluding CE  
+        qs = qs.annotate(submission_volume=Count(Case(
+                When(submission__result='AC', then=1),
+                When(submission__result='WA', then=1),
+                When(submission__result='IR', then=1),
+                When(submission__result='RTE', then=1),
+                When(submission__result='TLE', then=1),
+                When(submission__result='OLE', then=1),
+                output_field=FloatField(),
+            )))
+        qs = qs.annotate(ac_volume=Count(Case(
+                When(submission__result='AC', then=1),
+                output_field=FloatField(),
+            )))
+        qs = qs.filter(unique_user_count__gt=max(mx / 3.0, 1))
+
+        qs = qs.annotate(ordering=ExpressionWrapper(0.5 * F('points') * (0.4 * F('ac_volume') / F('submission_volume') + 0.6 * F('ac_rate')) + 100 * e ** (F('unique_user_count') / mx), output_field=FloatField())).order_by('-ordering').defer('description')[:limit].values_list('code', 'ordering', 'unique_user_count', 'submission_volume', 'ac_volume', 'submission_volume')
+
+        cache.set(cache_key, qs, 900)
     return queryset
