@@ -191,7 +191,7 @@ block body
         .alert.alert-warning.alert-dismissable
             a.close x
             - blocktrans with default_language=default_lang.name
-                | b {% trans "Warning!" %} Your default language, <b>{{ default_language }}</b>, is unavailable for this problem and has been deselected.
+                |  <b>Warning!</b> Your default language, <b>{{ default_language }}</b>, is unavailable for this problem and has been deselected.
 
     form#problem_submit.form-area(style='width:100%;box-sizing:border-box', action='', method='post')
         - csrf_token
