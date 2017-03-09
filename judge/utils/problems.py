@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from django.core.cache import cache
-from django.db.models import F, Count, Max, Q, ExpressionWrapper, Case
+from django.db.models import F, Count, Max, Q, ExpressionWrapper, Case, When
 from django.db.models.fields import FloatField
 from django.utils import timezone
 from django.utils.translation import ugettext as _
