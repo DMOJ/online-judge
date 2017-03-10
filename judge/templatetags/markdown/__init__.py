@@ -47,23 +47,27 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
 
     def _link_rel(self, href):
         if href:
-            url = urlparse(href)
-            if url.netloc and url.netloc not in NOFOLLOW_WHITELIST:
-                return 'rel="nofollow"'
+            try:
+                url = urlparse(href)
+            except ValueError:
+                return ' rel="nofollow"'
+            else:
+                if url.netloc and url.netloc not in NOFOLLOW_WHITELIST:
+                    return ' rel="nofollow"'
         return ''
 
     def autolink(self, link, is_email=False):
         text = link = mistune.escape(link)
         if is_email:
             link = 'mailto:%s' % link
-        return '<a href="%s" %s>%s</a>' % (link, self._link_rel(link), text)
+        return '<a href="%s"%s>%s</a>' % (link, self._link_rel(link), text)
 
     def link(self, link, title, text):
         link = mistune.escape_link(link, quote=True)
         if not title:
-            return '<a href="%s" %s>%s</a>' % (link, self._link_rel(link), text)
+            return '<a href="%s"%s>%s</a>' % (link, self._link_rel(link), text)
         title = mistune.escape(title, quote=True)
-        return '<a href="%s" title="%s" %s>%s</a>' % (link, title, self._link_rel(link), text)
+        return '<a href="%s" title="%s"%s>%s</a>' % (link, title, self._link_rel(link), text)
 
     def block_code(self, code, lang=None):
         if not lang:
