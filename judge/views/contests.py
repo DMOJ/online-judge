@@ -256,10 +256,11 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
 ContestDay = namedtuple('ContestDay', 'date weekday is_pad is_today starts ends oneday')
 
 
-class ContestCalendar(ContestListMixin, TemplateView):
+class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
     firstweekday = SUNDAY
     weekday_classes = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     template_name = 'contest/calendar.jade'
+    title = ugettext_lazy('Contests')
 
     def get(self, request, *args, **kwargs):
         try:
@@ -315,6 +316,7 @@ class ContestCalendar(ContestListMixin, TemplateView):
             # 404 is valid because it merely declares the lack of existence, without any reason
             raise Http404()
 
+        context['now'] = timezone.now()
         context['calendar'] = self.get_table()
 
         if month > min_month:

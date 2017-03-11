@@ -3,45 +3,9 @@ from django.contrib.syndication.views import Feed
 from django.core.cache import cache
 from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
-from django.utils.html import format_html
-from django.utils.http import urlquote
 
-from judge.math_parser import MathHTMLParser, INLINE_MATH_PNG, DISPLAY_MATH_PNG
 from judge.models import Comment, BlogPost, Problem
-from judge.templatetags.latex_math import latex_math
-from judge.utils.mathoid import MathoidMathParser
-from markdown_trois import markdown
-
-
-class OldFeedMath(MathHTMLParser):
-    def inline_math(self, math):
-        return (r'<img class="tex-image" src="%s?\textstyle %s" alt="%s"/>' %
-                (INLINE_MATH_PNG, urlquote(math), math))
-
-    def display_math(self, math):
-        return (r'<img class="tex-image" src="%s?\displaystyle %s" alt="%s"/>' %
-                (DISPLAY_MATH_PNG, urlquote(math), math))
-
-
-class MathoidFeedMath(MathoidMathParser):
-    types = ('png',)
-
-    def __init__(self):
-        MathoidMathParser.__init__(self, 'png')
-
-    def output_png(self, result):
-        return format_html(u'<img src="{0}" style="{1}{3}" alt="{2}">',
-                           result['png'], result['css'], result['tex'],
-                           ['', 'display: block; margin: 0 auto'][result['display']])
-
-
-class FeedMath(object):
-    @classmethod
-    def convert(cls, *args, **kwargs):
-        if hasattr(settings, 'MATHOID_URL'):
-            return MathoidFeedMath.convert(*args, **kwargs)
-        else:
-            return OldFeedMath.convert(*args, **kwargs)
+from judge.templatetags.markdown import markdown
 
 
 class ProblemFeed(Feed):
@@ -59,7 +23,7 @@ class ProblemFeed(Feed):
         key = 'problem_feed:%d' % problem.id
         desc = cache.get(key)
         if desc is None:
-            desc = unicode(FeedMath.convert(markdown(problem.description, 'problem'))[:500] + '...')
+            desc = unicode(markdown(problem.description, 'problem'))[:500] + '...'
             cache.set(key, desc, 86400)
         return desc
 
@@ -88,7 +52,7 @@ class CommentFeed(Feed):
         key = 'comment_feed:%d' % comment.id
         desc = cache.get(key)
         if desc is None:
-            desc = unicode(FeedMath.convert(markdown(comment.body, 'comment')))
+            desc = unicode(markdown(comment.body, 'comment'))
             cache.set(key, desc, 86400)
         return desc
 
@@ -116,7 +80,7 @@ class BlogFeed(Feed):
         key = 'blog_feed:%d' % post.id
         summary = cache.get(key)
         if summary is None:
-            summary = unicode(latex_math(FeedMath.convert(markdown(post.summary or post.content, 'blog'))))
+            summary = unicode(markdown(post.summary or post.content, 'blog'))
             cache.set(key, summary, 86400)
         return summary
 

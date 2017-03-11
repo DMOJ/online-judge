@@ -1,12 +1,9 @@
 - load staticfiles
-- load markdown_trois_tags
+- load markdown
 - load mptt_tags
 - load gravatar
-- load camo_proxy
-- load lazy_load
 - load i18n
 - load tz
-- load smart_math
 - load rating
 - load reference
 
@@ -90,7 +87,7 @@
                                                 i.fa.fa-cog.fa-fw
                             .content.content-description
                                 .comment-title(style=('display: none' if not node.title or node.title.startswith('Re:') else '')) #{node.title}
-                                .comment-body #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}
+                                .comment-body #{node.body|with_math:MATH_ENGINE|with_lazy_load:True|markdown:"comment"|reference}
 
                     if not node.is_leaf_node
                         ul.comments
@@ -105,17 +102,21 @@
             block comment_submit_title
                 h3 {% trans "New comment" %}
                 hr
-            form#comment-submit(action='', method='post')
-                - csrf_token
-                if comment_form.errors
-                    #form-errors
-                        | #{comment_form.non_field_errors}
-                        | #{comment_form.parent.errors}
-                        if comment_form.body.errors
-                            | {% trans "Invalid comment body." %}
-                | #{comment_form.parent}
-                .comment-post-wrapper
-                    #comment-form-body
-                        | #{comment_form.body}
-                hr
-                input.button(style='float:right', type='submit', value='{% trans "Post!" %}')
+            if is_new_user
+                .alert.alert-info(style='margin-bottom: 0')
+                    - trans "You need to have solved at least one problem before your voice can be heard."
+            else
+                form#comment-submit(action='', method='post')
+                    - csrf_token
+                    if comment_form.errors
+                        #form-errors
+                            | #{comment_form.non_field_errors}
+                            | #{comment_form.parent.errors}
+                            if comment_form.body.errors
+                                | {% trans "Invalid comment body." %}
+                    | #{comment_form.parent}
+                    .comment-post-wrapper
+                        #comment-form-body
+                            | #{comment_form.body}
+                    hr
+                    input.button(style='float:right', type='submit', value='{% trans "Post!" %}')

@@ -6,12 +6,13 @@ from django.utils.translation import ugettext as _
 
 from judge.models import Submission
 from judge.utils.problems import get_result_table
-from judge.views.submission import ProblemSubmissionsBase, ForceContestMixin
+from judge.views.submission import ProblemSubmissions, ForceContestMixin
 
 __all__ = ['RankedSubmissions', 'ContestRankedSubmission']
 
 
-class RankedSubmissions(ProblemSubmissionsBase):
+class RankedSubmissions(ProblemSubmissions):
+    tab = 'best_submissions_list'
     dynamic_update = False
 
     def get_queryset(self):

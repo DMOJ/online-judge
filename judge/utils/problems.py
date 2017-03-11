@@ -1,8 +1,10 @@
 from collections import defaultdict
+from math import e
 
 from django.core.cache import cache
-from django.db.models import F, Count, Max
-from django.db.models import Q
+from django.db.models import F, Count, Max, Q, ExpressionWrapper, Case, When
+from django.db.models.fields import FloatField
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from judge.models import Submission, Problem
@@ -16,7 +18,8 @@ def user_authored_ids(profile):
 
 
 def user_editable_ids(profile):
-    result = set((Problem.objects.filter(authors=profile) | Problem.objects.filter(curators=profile)).values_list('id', flat=True))
+    result = set((Problem.objects.filter(authors=profile) | Problem.objects.filter(curators=profile)).values_list('id',
+                                                                                                                  flat=True))
     return result
 
 
@@ -80,7 +83,7 @@ def get_result_table(*args, **kwargs):
             (_('Compile Error'), 'CE', results['CE']),
             (_('Time Limit Exceeded'), 'TLE', results['TLE']),
             (_('Memory Limit Exceeded'), 'MLE', results['MLE']),
-            (_('Invalid Return'), 'IR', results['IR']),
+            (_('Other'), 'OTH', results['RTE'] + results['IR'] + results['OLE'] + results['AB'] + results['IE']),
             (_('Total'), 'TOT', sum(results.values()))]
 
 
@@ -94,3 +97,34 @@ def editable_problems(user, profile=None):
             subfilter |= Q(is_public=True)
         subquery = subquery.filter(subfilter)
     return subquery
+
+
+def hot_problems(duration, limit):
+    cache_key = 'hot_problems:%d:%d' % (duration.total_seconds(), limit)
+    qs = cache.get(cache_key)
+    if qs is None:
+        qs = Problem.objects.filter(is_public=True, submission__date__gt=timezone.now() - duration, points__gt=3, points__lt=25)
+        # make this an aggregate
+        mx = float(qs.annotate(k=Count('submission__user', distinct=True)).order_by('-k').values_list('k', flat=True)[0])
+
+        qs = qs.annotate(unique_user_count=Count('submission__user', distinct=True))  
+        # fix braindamage in excluding CE  
+        qs = qs.annotate(submission_volume=Count(Case(
+                When(submission__result='AC', then=1),
+                When(submission__result='WA', then=1),
+                When(submission__result='IR', then=1),
+                When(submission__result='RTE', then=1),
+                When(submission__result='TLE', then=1),
+                When(submission__result='OLE', then=1),
+                output_field=FloatField(),
+            )))
+        qs = qs.annotate(ac_volume=Count(Case(
+                When(submission__result='AC', then=1),
+                output_field=FloatField(),
+            )))
+        qs = qs.filter(unique_user_count__gt=max(mx / 3.0, 1))
+
+        qs = qs.annotate(ordering=ExpressionWrapper(0.5 * F('points') * (0.4 * F('ac_volume') / F('submission_volume') + 0.6 * F('ac_rate')) + 100 * e ** (F('unique_user_count') / mx), output_field=FloatField())).order_by('-ordering').defer('description')[:limit]
+
+        cache.set(cache_key, qs, 900)
+    return qs

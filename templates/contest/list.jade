@@ -1,4 +1,4 @@
-extends base
+extends common-content
 - load staticfiles
 - load timedelta
 - load tz
@@ -23,26 +23,69 @@ block js_media
             });
         });
 
-block header
-    div(style='float: right; margin-top: 0.9em; font-size: 1.3em;')
-        a(href='{% url "contest_calendar" now.year now.month %}') {% trans "Calendar view" %}
-        if perms.judge.change_contest
-            | &#32;[#[a(href='{% url "admin:judge_contest_changelist" %}') {% trans "Admin" %}]]
+block title_ruler
+
+block title_row
+    - var tab = 'list'
+    - var title = 'Contests'
+    include contest/contest-list-tabs
 
 block body
-    if current_contests
-        br
-        h3 {% trans "Ongoing Contests" %}
-        br
-        table.contest-list.table.striped
-            thead: tr
-                th(style='width:90%') {% trans "Contest" %}
-                th {% trans "Users" %}
-                if not IN_CONTEST
-                    th(style='width:15%')
-            tbody: each contest in current_contests
-                tr
-                    td: div(style='position:relative')
+    .content-description
+        if current_contests
+            h4 {% trans "Ongoing Contests" %}
+            table.contest-list.table.striped
+                thead: tr
+                    th(style='width:90%') {% trans "Contest" %}
+                    th {% trans "Users" %}
+                    if not IN_CONTEST
+                        th(style='width:15%')
+                tbody: each contest in current_contests
+                    tr
+                        td: div(style='position:relative')
+                            .contest-tags: each tag in contest.tags.all
+                                span.contest-tag(style='background-color: {{ tag.color }}')
+                                    a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
+                                    data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
+                            a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
+                            if contest.start_time
+                                br
+                                if contest.time_before_end
+                                    span.time
+                                        - blocktrans with countdown=contest.time_before_end|as_countdown
+                                            | Ends in {{ countdown }}.
+                                elif contest.free_start and contest.start_time
+                                    span.time {% trans "Started at" %} #{contest.start_time|date:_("N j, Y, G:i")}
+                                .time.floating-time(style='text-align:right')
+                                    span(style='text-align:right;color:#777;')
+                                    if contest.time_limit
+                                        | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
+                                    else
+                                        | #{contest.start_time|date:_("M j, Y, G:i")}
+                                    br
+                                    if contest.time_limit
+                                        - blocktrans with time_limit=contest.time_limit|timedelta:"localized-no-seconds"
+                                            | {{ time_limit }} window
+                                    else
+                                        - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
+                                            | {{ window_length }} long
+                        td: a(href='{% url "contest_ranking" contest.key %}') #{contest.user_count}
+                        if not IN_CONTEST
+                            td
+                                if request.user.profile in contest.organizers.all
+                                    a.unselectable.button.full.participate-button(href='{% url "contest_join" contest.key %}')
+                                        | {% trans "Spectate" %}
+                                else
+                                    a.unselectable.button.full.participate-button.join-warning(href='{% url "contest_join" contest.key %}')
+                                        | {% trans "Join" %}
+            br
+
+        h4 {% trans "Upcoming Contests" %}
+        if future_contests
+            table.contest-list.table.striped
+                thead: tr: th {% trans "Contest" %}
+                tbody: each contest in future_contests
+                    tr: td: div(style='position:relative')
                         .contest-tags: each tag in contest.tags.all
                             span.contest-tag(style='background-color: {{ tag.color }}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
@@ -50,12 +93,11 @@ block body
                         a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                         if contest.start_time
                             br
-                            if contest.time_before_end
+                            if contest.time_before_start
                                 span.time
-                                    - blocktrans with countdown=contest.time_before_end|as_countdown
-                                        | Ends in {{ countdown }}.
-                            elif contest.free_start and contest.start_time
-                                span.time {% trans "Started at" %} #{contest.start_time|date:_("N j, Y, G:i")}
+                                    - blocktrans with countdown=contest.time_before_start|as_countdown
+                                        | Starting in {{ countdown }}.
+
                             .time.floating-time(style='text-align:right')
                                 span(style='text-align:right;color:#777;')
                                 if contest.time_limit
@@ -69,40 +111,26 @@ block body
                                 else
                                     - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
                                         | {{ window_length }} long
-                    td: a(href='{% url "contest_ranking" contest.key %}') #{contest.user_count}
-                    if not IN_CONTEST
-                        td
-                            if request.user.profile in contest.organizers.all
-                                a.unselectable.button.full.participate-button(href='{% url "contest_join" contest.key %}')
-                                    | {% trans "Spectate" %}
-                            else
-                                a.unselectable.button.full.participate-button.join-warning(href='{% url "contest_join" contest.key %}')
-                                    | {% trans "Join" %}
+        else
+            i {% trans "There are no scheduled contests at this time." %}
         br
-        .dashed
-        
-    br
-    h3 {% trans "Upcoming Contests" %}
-    br
-    if future_contests
-        table.contest-list.table.striped
-            thead: tr: th {% trans "Contest" %}
-            tbody: each contest in future_contests
-                tr: td: div(style='position:relative')
-                    .contest-tags: each tag in contest.tags.all
-                        span.contest-tag(style='background-color: {{ tag.color }}')
-                            a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
-                            data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
-                    a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
-                    if contest.start_time
-                        br
-                        if contest.time_before_start
-                            span.time
-                                - blocktrans with countdown=contest.time_before_start|as_countdown
-                                    | Starting in {{ countdown }}.
 
-                        .time.floating-time(style='text-align:right')
-                            span(style='text-align:right;color:#777;')
+        h4 {% trans "Past Contests" %}
+        table.contest-list.table.striped
+            thead: tr
+                th(style='width:90%') {% trans "Contest" %}
+                th {% trans "Users" %}
+                if not IN_CONTEST
+                    th(style='width:15%')
+            tbody: each contest in past_contests
+                tr
+                    td: div(style='position:relative')
+                        a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
+                        .contest-tags: each tag in contest.tags.all
+                            span.contest-tag(style='background-color: {{ tag.color }}')
+                                a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
+                                  data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
+                        span.floating-time-right(style='text-align:right;color:#777;')
                             if contest.time_limit
                                 | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
                             else
@@ -114,43 +142,7 @@ block body
                             else
                                 - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
                                     | {{ window_length }} long
-    else
-        i {% trans "There are no scheduled contests at this time." %}
-
-
-
-    br
-    hr.dashed
-    br
-    h3 {% trans "Past Contests" %}
-    br
-    table.contest-list.table.striped
-        thead: tr
-            th(style='width:90%') {% trans "Contest" %}
-            th {% trans "Users" %}
-            if not IN_CONTEST
-                th(style='width:15%')
-        tbody: each contest in past_contests
-            tr
-                td: div(style='position:relative')
-                    a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
-                    .contest-tags: each tag in contest.tags.all
-                        span.contest-tag(style='background-color: {{ tag.color }}')
-                            a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
-                              data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
-                    span.floating-time-right(style='text-align:right;color:#777;')
-                        if contest.time_limit
-                            | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
-                        else
-                            | #{contest.start_time|date:_("M j, Y, G:i")}
-                        br
-                        if contest.time_limit
-                            - blocktrans with time_limit=contest.time_limit|timedelta:"localized-no-seconds"
-                                | {{ time_limit }} window
-                        else
-                            - blocktrans with window_length=contest.contest_window_length|timedelta:"localized-no-seconds"
-                                | {{ window_length }} long
-                td: a(href='{% url "contest_ranking" contest.key %}') #{contest.user_count}
-                if not IN_CONTEST
-                    td: a.unselectable.button.full.participate-button(href='{% url "contest_join" contest.key %}')
-                            | {% trans "Virtual join" %}
+                    td: a(href='{% url "contest_ranking" contest.key %}') #{contest.user_count}
+                    if not IN_CONTEST
+                        td: a.unselectable.button.full.participate-button(href='{% url "contest_join" contest.key %}')
+                                | {% trans "Virtual join" %}

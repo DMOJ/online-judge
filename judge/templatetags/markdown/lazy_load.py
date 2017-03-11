@@ -1,26 +1,20 @@
 from copy import deepcopy
 
-from django import template
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from lxml import html
 
-from judge import lxml_tree
 
-register = template.Library()
-
-
-@register.filter(is_safe=True)
-def lazy_load(text):
+def lazy_load(tree):
     blank = static('blank.gif')
-    tree = lxml_tree.fromstring(text)
     for img in tree.xpath('.//img'):
-        src = img.get('src')
-        if src.startswith('data'):
+        src = img.get('src', '')
+        if src.startswith('data') or '-math' in img.get('class', ''):
             continue
         noscript = html.Element('noscript')
-        noscript.append(deepcopy(img))
+        copy = deepcopy(img)
+        copy.tail = ''
+        noscript.append(copy)
         img.addprevious(noscript)
         img.set('data-src', src)
         img.set('src', blank)
         img.set('class', img.get('class') + ' unveil' if img.get('class') else 'unveil')
-    return tree

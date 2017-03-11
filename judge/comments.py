@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Count
-from django.db.models.expressions import Value
+from django.db.models.expressions import Value, F
 from django.db.models.functions import Coalesce
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
@@ -17,7 +17,7 @@ from reversion import revisions
 from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
-from judge.models import Comment, Profile, CommentVote
+from judge.models import Comment, Profile, CommentVote, Problem, Submission
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
 from judge.widgets import HeavyPreviewPageDownWidget
 
@@ -41,8 +41,13 @@ class CommentForm(ModelForm):
         self.fields['body'].widget.attrs.update({'placeholder': _('Comment body')})
 
     def clean(self):
-        if self.request is not None and self.request.user.is_authenticated and self.request.user.profile.mute:
-            raise ValidationError(_('Your part is silent, little toad.'))
+        if self.request is not None and self.request.user.is_authenticated:
+            profile = self.request.user.profile
+            if profile.mute:
+                raise ValidationError(_('Your part is silent, little toad.'))
+            elif not profile.submission_set.filter(points=F('problem__points')).exists():
+                raise ValidationError(_('You need to have solved at least one problem '
+                                        'before your voice can be heard.'))
         return super(CommentForm, self).clean()
 
 
@@ -59,7 +64,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         self.object = self.get_object()
         page = self.get_comment_page()
 
-        with LockModel(write=(Comment, Revision, Version), read=(Profile, ContentType)):
+        with LockModel(write=(Comment, Revision, Version), read=(Profile, ContentType, Submission, Problem)):
             form = CommentForm(request, request.POST)
             if form.is_valid():
                 comment = form.save(commit=False)
@@ -87,17 +92,11 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         context['has_comments'] = queryset.exists()
         queryset = queryset.select_related('author__user').defer('author__about').annotate(revisions=Count('versions'))
 
-        # This version uses public Django interface, but it requires support on the model.
-        #if self.request.user.is_authenticated:
-        #    votes = CommentVote.objects.filter(voter=self.request.user.profile)
-        #else:
-        #    votes = CommentVote.objects.none()
-        #context['comment_list'] = queryset.prefetch_related(Prefetch('votes', queryset=votes))
-
-        # This version digs into django internals.
         if self.request.user.is_authenticated:
             queryset = queryset.annotate(vote_score=Coalesce(RawSQLColumn(CommentVote, 'score'), Value(0)))
-            unique_together_left_join(queryset, CommentVote, 'comment', 'voter', self.request.user.profile.id)
+            profile = self.request.user.profile
+            unique_together_left_join(queryset, CommentVote, 'comment', 'voter', profile.id)
+            context['is_new_user'] = not profile.submission_set.filter(points=F('problem__points')).exists()
         context['comment_list'] = queryset
 
         return context

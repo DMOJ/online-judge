@@ -1,3 +1,5 @@
-- load markdown_trois_tags
-- load camo_proxy
-| #{comment.body|markdown:"comment"|proxy_images}
+- load markdown
+- load rating
+- load reference
+
+| #{comment.body|with_math:MATH_ENGINE|markdown:"comment"|reference}

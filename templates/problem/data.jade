@@ -384,7 +384,7 @@ block body
                     td.output-prefix #{form.output_prefix.errors}#{form.output_prefix}
                     td.output-limit #{form.output_limit.errors}#{form.output_limit}
                     td.checker #{form.checker.errors}#{form.checker}
-                        #{form.checker_args.errors}#{form.checker_args}
+                        | #{form.checker_args.errors}#{form.checker_args}
                     td.generator-args #{form.generator_args.errors}#{form.generator_args}
                         a.edit-generator-args(href='javascript:void(0)') #[i.fa.fa-pencil] {% trans "Edit" %}
                     if cases_formset.can_delete

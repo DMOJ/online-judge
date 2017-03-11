@@ -1,8 +1,6 @@
 extends base
-- load markdown_trois_tags
+- load markdown
 - load staticfiles
-- load smart_math
-- load latex_math
 - load i18n
 - load reference
 
@@ -29,7 +27,7 @@ block content_title
 
 block body
     .content-description
-        | #{solution.content|markdown:"solution"|reference|latex_math|smart_math:MATH_ENGINE}
+        | #{solution.content|with_math:MATH_ENGINE|markdown:"solution"|reference}
 
     include comments/list
 

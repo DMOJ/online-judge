@@ -71,7 +71,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
                                    self.kwargs.get(self.slug_url_kwarg, None))
 
     def get_title(self):
-        return (_('My Account') if self.request.user == self.object.user else
+        return (_('My account') if self.request.user == self.object.user else
                 _('User %s') % self.object.user.username)
 
     # TODO: the same code exists in problem.py, maybe move to problems.py?

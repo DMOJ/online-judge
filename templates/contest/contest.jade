@@ -2,13 +2,10 @@ extends common-content
 
 - load absolute_links
 - load staticfiles
-- load markdown_trois_tags
+- load markdown
 - load cache
 - load timedelta
-- load smart_math
-- load latex_math
 - load social_share
-- load camo_proxy
 - load tz
 - load i18n
 - load reference
@@ -75,7 +72,7 @@ block body
 
     .content-description
         - cache 3600 contest_html contest.id MATH_ENGINE
-            | #{contest.description|markdown:"contest"|reference|latex_math|smart_math:MATH_ENGINE|proxy_images}
+            | #{contest.description|with_math:MATH_ENGINE|markdown:"contest"|reference}
 
     hr
     span.social

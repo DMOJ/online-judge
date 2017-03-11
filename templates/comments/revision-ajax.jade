@@ -1,10 +1,6 @@
-- load markdown_trois_tags
-- load smart_math
+- load markdown
 - load reference
-- load camo_proxy
-- load lazy_load
-
 
 - with node=revision.field_dict
     .comment-title(style=('display: none' if not node['title'] or node['title'].startswith('Re:') else '')) #{node.title}
-    | #{node.body | markdown:"comment"|reference|smart_math:MATH_ENGINE|proxy_images|lazy_load}
+    .comment-body #{node.body|with_math:MATH_ENGINE|markdown:"comment"|reference}

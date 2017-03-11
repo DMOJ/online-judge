@@ -14,8 +14,6 @@ import re
 
 from django.utils.translation import ugettext_lazy as _
 
-from markdown_trois.conf.settings import MARKDOWN_TROIS_DEFAULT_STYLE
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
@@ -129,7 +127,6 @@ INSTALLED_APPS += (
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'registration',
-    'markdown_trois',
     'mptt',
     'reversion',
     'django_social_share',
@@ -238,105 +235,41 @@ LANGUAGES = [
     ('zh-hans', _('Simplified Chinese')),
 ]
 
-# Markdown Trois
-markdown_admin_editable_style = {
-    'extras': {
-        'pyshell': None,
-        'fenced-code-blocks': None,
-        'html-classes': {'pre': 'code'},
-        'cuddled-lists': None,
-        'footnotes': None,
-        'header-ids': None,
-        'demote-headers': 2,
-        'tables': None,
-        'code-friendly': None,
-    },
+MARKDOWN_ADMIN_EDITABLE_STYLE = {
     'safe_mode': False,
+    'use_camo': True,
+    'texoid': True,
+    'math': True,
 }
 
-MARKDOWN_TROIS_STYLES = {
-    'default': MARKDOWN_TROIS_DEFAULT_STYLE,
-    'trusted': {
-        'extras': {
-            'code-friendly': None,
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'footnotes': None,
-            'header-ids': None,
-        },
-        # Allow raw HTML (WARNING: don't use this for user-generated
-        # Markdown for your site!).
-        'safe_mode': False,
-    },
-    'comment': {
-        'link_patterns': [
-            (re.compile(r'\bproblem:(\w+)\b', re.I), r'/problem/\1'),
-            (re.compile(r'\bsubmission:(\w+)\b', re.I), r'/submission/\1'),
-            (re.compile(r'@(\w+)\b', re.I), r'/user/\1'),
-        ],
-        'extras': {
-            'code-friendly': None,
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'demote-headers': 3,
-            'link-patterns': None,
-            'nofollow': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'footnotes': None,
-            'header-ids': None,
-        },
-        'safe_mode': 'escape',
-    },
-    'self-description': {
-        'extras': {
-            'code-friendly': None,
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'demote-headers': 3,
-            'nofollow': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'header-ids': None,
-        },
-        'safe_mode': 'escape',
-    },
-    'problem': markdown_admin_editable_style,
-    'contest': markdown_admin_editable_style,
-    'language': markdown_admin_editable_style,
-    'license': markdown_admin_editable_style,
-    'judge': markdown_admin_editable_style,
-    'blog': markdown_admin_editable_style,
-    'solution': markdown_admin_editable_style,
-    'contest_tag': markdown_admin_editable_style,
-    'organization-about': {
-        'extras': {
-            'code-friendly': None,
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'demote-headers': 3,
-            'nofollow': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'header-ids': None,
-        },
-        'safe_mode': 'escape',
-    },
-    'ticket': {
-        'extras': {
-            'code-friendly': None,
-            'pyshell': None,
-            'fenced-code-blocks': None,
-            'demote-headers': 3,
-            'nofollow': None,
-            'html-classes': {'pre': 'code'},
-            'cuddled-lists': None,
-            'header-ids': None,
-        },
-        'safe_mode': 'escape',
-    },
+MARKDOWN_DEFAULT_STYLE = {
+    'safe_mode': True,
+    'nofollow': True,
+    'use_camo': True,
+    'math': True,
+}
+
+MARKDOWN_USER_LARGE_STYLE = {
+    'safe_mode': True,
+    'nofollow': True,
+    'use_camo': True,
+    'texoid': True,
+    'math': True,
+}
+
+MARKDOWN_STYLES = {
+    'comment': MARKDOWN_DEFAULT_STYLE,
+    'self-description': MARKDOWN_USER_LARGE_STYLE,
+    'problem': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'contest': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'language': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'license': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'judge': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'blog': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'solution': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'contest_tag': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'organization-about': MARKDOWN_USER_LARGE_STYLE,
+    'ticket': MARKDOWN_USER_LARGE_STYLE,
 }
 
 # Database

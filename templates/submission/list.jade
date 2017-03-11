@@ -165,9 +165,10 @@ block js_media
         script(type='text/javascript').
             $(function () { load_dynamic_update(#{last_msg}); });
 
-block header
-    if my_submissions
-        .title-line-action: a(href=my_submissions) {% trans "My submissions" %}
+block title_ruler
+
+block title_row
+    include submission/submission-list-tabs
 
 block media
     if has_select2
@@ -181,10 +182,9 @@ block media
 block body
     #common-content
         #content-right.submission
-            .info-float
+            .info-float.content-description
                 if has_select2
-                    h3 {% trans "Filter submissions" %}
-                    hr
+                    h4 {% trans "Filter submissions" %}
                     form#filter-form(name='form', action='', method='get')
                         div.filter-form-group
                             label(for='status'): i {% trans "Status" %}
@@ -202,8 +202,7 @@ block body
                                         option(value=code, selected)= name
                                     else
                                         option(value=code)= name
-                        hr
-                        a#go.button(onclick='form.submit()') {% trans "Go" %}
+                        .form-submit-group: a#go.button(onclick='form.submit()') {% trans "Go" %}
                 else
                     #statistics-table
                         include problem/statistics-table
