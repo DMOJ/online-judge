@@ -486,19 +486,25 @@ def problem_submit(request, problem=None, submission=None):
                 return generic_message(request, _('Banned from Submitting'),
                                        _('You have been declared persona non grata for this problem. '
                                          'You are permanently barred from submitting this problem.'))
-            model = form.save()
 
-            profile.update_contest()
             if profile.current_contest is not None:
                 try:
-                    contest_problem = model.problem.contests.get(contest=profile.current_contest.contest)
+                    contest_problem = form.cleaned_data['problem'].contests.get(contest=profile.current_contest.contest)
                 except ContestProblem.DoesNotExist:
                     pass
                 else:
+                    max_subs = contest_problem.max_submissions
+                    if max_subs and profile.current_contest.submissions.filter(problem__problem__code=problem).count() > max_subs:
+                        return generic_message(request, _('Too Many Submissions!'),
+                                                _('You have excceded the submission limit for this problem.'))
+                    model = form.save()
                     contest = ContestSubmission(submission=model, problem=contest_problem,
                                                 participation=profile.current_contest)
                     contest.save()
+            else:
+                model = form.save()
 
+            profile.update_contest()
             model.judge()
             return HttpResponseRedirect(reverse('submission_status', args=[str(model.id)]))
         else:
