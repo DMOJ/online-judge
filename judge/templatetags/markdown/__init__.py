@@ -122,7 +122,8 @@ def markdown(value, style):
 
     renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, texoid=texoid,
                                math=math and math_engine is not None, math_engine=math_engine)
-    markdown = mistune.Markdown(renderer=renderer, inline=AwesomeInlineLexer)
+    markdown = mistune.Markdown(renderer=renderer, inline=AwesomeInlineLexer,
+                                parse_block_html=1, parse_inline_html=1)
     result = markdown(value)
 
     if post_processors:
