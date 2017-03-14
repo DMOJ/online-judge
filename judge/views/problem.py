@@ -159,6 +159,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             clarifications = self.object.clarifications
             context['has_clarifications'] = clarifications.count() > 0
             context['clarifications'] = clarifications.order_by('-date')
+            context['submission_limit'] = contest_problem.max_submissions
 
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         context['has_pdf_render'] = HAS_PDF
@@ -494,7 +495,7 @@ def problem_submit(request, problem=None, submission=None):
                     pass
                 else:
                     max_subs = contest_problem.max_submissions
-                    if max_subs and profile.current_contest.submissions.filter(problem__problem__code=problem).count() > max_subs:
+                    if max_subs and profile.current_contest.submissions.exclude(status__in=['IE']).filter(problem__problem__code=problem).count() > max_subs:
                         return generic_message(request, _('Too Many Submissions!'),
                                                 _('You have exceeded the submission limit for this problem.'))
                     model = form.save()
