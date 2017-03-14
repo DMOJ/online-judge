@@ -496,7 +496,7 @@ def problem_submit(request, problem=None, submission=None):
                     max_subs = contest_problem.max_submissions
                     if max_subs and profile.current_contest.submissions.filter(problem__problem__code=problem).count() > max_subs:
                         return generic_message(request, _('Too Many Submissions!'),
-                                                _('You have excceded the submission limit for this problem.'))
+                                                _('You have exceeded the submission limit for this problem.'))
                     model = form.save()
                     contest = ContestSubmission(submission=model, problem=contest_problem,
                                                 participation=profile.current_contest)
