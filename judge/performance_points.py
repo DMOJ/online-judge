@@ -52,7 +52,7 @@ def get_pp_breakdown(user, start=0, end=100):
 
     breakdown = []
     for weight, contrib in zip(PP_WEIGHT_TABLE[start:end], data[start:end]):
-        code, name, points, subID, date, case_points, case_total, result, lang_short_name, lang_key = contrib
+        code, name, points, id, date, case_points, case_total, result, lang_short_name, lang_key = contrib
 
         # Replicates a lot of the logic usually done on Submission objects
         lang_short_display_name = lang_short_name or lang_key
@@ -64,7 +64,7 @@ def get_pp_breakdown(user, start=0, end=100):
                                      scaled_points=points * weight,
                                      problem_name=name,
                                      problem_code=code,
-                                     sub_id=subID,
+                                     sub_id=id,
                                      sub_date=date,
                                      sub_points=case_points,
                                      sub_total=case_total,
