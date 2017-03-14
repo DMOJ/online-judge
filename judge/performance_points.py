@@ -11,8 +11,8 @@ PP_ENTRIES = getattr(settings, 'PP_ENTRIES', 100)
 PP_WEIGHT_TABLE = [pow(PP_STEP, i) for i in xrange(PP_ENTRIES)]
 
 PPBreakdown = namedtuple('PPBreakdown', 'points weight scaled_points problem_name problem_code '
-                                        'sub_date sub_points sub_total sub_result_class sub_short_status sub_long_status sub_lang')
-
+                                        'sub_id sub_date sub_points sub_total sub_result_class'
+                                        'sub_short_status sub_long_status sub_lang')
 
 def get_pp_breakdown(user, start=0, end=100):
     cursor = connection.cursor()
@@ -20,6 +20,7 @@ def get_pp_breakdown(user, start=0, end=100):
         SELECT max_points_table.problem_code,
                max_points_table.problem_name,
                max_points_table.max_points,
+               judge_submission.id,
                judge_submission.date,
                judge_submission.case_points,
                judge_submission.case_total,
@@ -51,7 +52,7 @@ def get_pp_breakdown(user, start=0, end=100):
 
     breakdown = []
     for weight, contrib in zip(PP_WEIGHT_TABLE[start:end], data[start:end]):
-        code, name, points, date, case_points, case_total, result, lang_short_name, lang_key = contrib
+        code, name, points, subID, date, case_points, case_total, result, lang_short_name, lang_key = contrib
 
         # Replicates a lot of the logic usually done on Submission objects
         lang_short_display_name = lang_short_name or lang_key
@@ -63,6 +64,7 @@ def get_pp_breakdown(user, start=0, end=100):
                                      scaled_points=points * weight,
                                      problem_name=name,
                                      problem_code=code,
+                                     sub_id=subID,
                                      sub_date=date,
                                      sub_points=case_points,
                                      sub_total=case_total,
