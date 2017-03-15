@@ -160,13 +160,14 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             context['has_clarifications'] = clarifications.count() > 0
             context['clarifications'] = clarifications.order_by('-date')
             context['submission_limit'] = contest_problem.max_submissions
+            context['submissions_left'] = max(contest_problem.max_submissions - user.profile.current_contest.submissions.exclude(submission__status__in=['IE']).filter(problem__problem__code=self.object).count(), 0)
 
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         context['has_pdf_render'] = HAS_PDF
         context['completed_problem_ids'] = self.get_completed_problems()
         context['attempted_problems'] = self.get_attempted_problems()
         context['num_open_tickets'] = self.object.tickets.filter(is_open=True).count()
-        context['can_edit_problem'] = self.object.is_editable_by(self.request.user)
+        context['can_edit_problem'] = self.object.is_editable_by(user)
         try:
             context['editorial'] = Solution.objects.get(problem=self.object)
         except ObjectDoesNotExist:
@@ -495,7 +496,7 @@ def problem_submit(request, problem=None, submission=None):
                     pass
                 else:
                     max_subs = contest_problem.max_submissions
-                    if max_subs and profile.current_contest.submissions.exclude(status__in=['IE']).filter(problem__problem__code=problem).count() > max_subs:
+                    if max_subs and profile.current_contest.submissions.exclude(submission__status__in=['IE']).filter(problem__problem__code=problem).count() > max_subs:
                         return generic_message(request, _('Too Many Submissions!'),
                                                 _('You have exceeded the submission limit for this problem.'))
                     model = form.save()

@@ -76,11 +76,22 @@ block title_row
 
 block info_float
     if request.user.is_authenticated and IN_CONTEST
-        {% with submission_count=request.user.profile.current_contest.submissions.exclude(status__in=['IE']).filter(problem__problem__code=problem).count() %}
-            if submission_limit
+        if submission_limit
+            if submission_count < submission_limit
                 a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
-
-        {% endwith %]}
+                span.submissions-left
+                  | {{ submissions_left }}
+                  - blocktrans trimmed count counter=submissions_left
+                    | submission
+                    - plural
+                    | submissions
+                  |  left
+            else
+                a.disabled-button.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
+                span.no-submissions-left.submissions-left
+                  | {% trans "0 submissions left" %}
+        else
+            a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
     else
         a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
 
