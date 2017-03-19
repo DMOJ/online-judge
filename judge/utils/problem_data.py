@@ -163,6 +163,8 @@ class ProblemDataCompiler(object):
             init['checker'] = make_checker(self.data)
         else:
             self.data.checker_args = ''
+        if self.generator:
+            init['generator'] = self.generator
         return init
 
     def compile(self):
