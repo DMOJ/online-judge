@@ -61,8 +61,8 @@ class ProblemTestCase(models.Model):
                                      ('S', _('Batch start')),
                                      ('E', _('Batch end'))),
                             default='C')
-    input_file = models.CharField(max_length=100, verbose_name=_('input file name'), blank=True, null=True)
-    output_file = models.CharField(max_length=100, verbose_name=_('output file name'), blank=True, null=True)
+    input_file = models.CharField(max_length=100, verbose_name=_('input file name'), blank=True)
+    output_file = models.CharField(max_length=100, verbose_name=_('output file name'), blank=True)
     generator_args = models.TextField(verbose_name=_('generator arguments'), blank=True)
     points = models.IntegerField(verbose_name=_('point value'), blank=True, null=True)
     is_pretest = models.BooleanField(verbose_name=_('case is pretest?'))
