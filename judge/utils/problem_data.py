@@ -167,7 +167,7 @@ class ProblemDataCompiler(object):
         else:
             self.data.checker_args = ''
         if self.generator:
-            init['generator'] = generator_path
+            init['generator'] = generator_path[1]
         return init
 
     def compile(self):
