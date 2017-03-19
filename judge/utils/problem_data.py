@@ -143,14 +143,20 @@ class ProblemDataCompiler(object):
         if batch:
             end_batch()
 
-        zippath = split_path_first(self.data.zipfile.name)
-        if len(zippath) != 2:
-            raise ProblemDataError(_('How did you corrupt the zip path?'))
-        
+        init = {}
+
+        if self.data.zipfile:
+            zippath = split_path_first(self.data.zipfile.name)
+            if len(zippath) != 2:
+                raise ProblemDataError(_('How did you corrupt the zip path?'))
+            init['archive'] = zippath[1]
+
         if self.generator:
             generator_path = split_path_first(self.generator.name)
+            if len(generator_path) != 2:
+                raise ProblemDataError(_('How did you corrupt the generator path?'))
+            init['generator'] = generator_path[1]
 
-        init = {'archive': zippath[1]}
         pretests = [case for case in cases if case['is_pretest']]
         for case in cases:
             del case['is_pretest']
@@ -166,8 +172,6 @@ class ProblemDataCompiler(object):
             init['checker'] = make_checker(self.data)
         else:
             self.data.checker_args = ''
-        if self.generator:
-            init['generator'] = generator_path[1]
         return init
 
     def compile(self):
