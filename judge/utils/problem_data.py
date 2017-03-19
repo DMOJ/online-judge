@@ -146,6 +146,9 @@ class ProblemDataCompiler(object):
         zippath = split_path_first(self.data.zipfile.name)
         if len(zippath) != 2:
             raise ProblemDataError(_('How did you corrupt the zip path?'))
+        
+        if self.generator:
+            generator_path = split_path_first(self.generator.name)
 
         init = {'archive': zippath[1]}
         pretests = [case for case in cases if case['is_pretest']]
@@ -164,7 +167,7 @@ class ProblemDataCompiler(object):
         else:
             self.data.checker_args = ''
         if self.generator:
-            init['generator'] = self.generator
+            init['generator'] = generator_path
         return init
 
     def compile(self):
