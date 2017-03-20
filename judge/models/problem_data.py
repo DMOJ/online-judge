@@ -55,9 +55,9 @@ class ProblemData(models.Model):
     def _update_code(self, original, new):
         problem_data_storage.rename(original, new)
         if self.zipfile:
-            self.zipfile.name = problem_directory_file(self.zipfile.name)
+            self.zipfile.name = problem_directory_file(new, self.zipfile.name)
         if self.generator:
-            self.generator.name = problem_directory_file(self.generator.name)
+            self.generator.name = problem_directory_file(new, self.generator.name)
         self.save()
     _update_code.alters_data = True
 
