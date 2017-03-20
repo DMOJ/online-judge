@@ -134,6 +134,7 @@ class Problem(models.Model):
         super(Problem, self).__init__(*args, **kwargs)
         self._translated_name_cache = {}
         self._i18n_name = None
+        self.__original_code = self.code
 
     @cached_property
     def types_list(self):
@@ -270,6 +271,17 @@ class Problem(models.Model):
         result = self._get_limits('memory_limit')
         cache.set(key, result)
         return result
+
+    def save(self, *args, **kwargs):
+        super(Problem, self).save(*args, **kwargs)
+        if self.code != self.__original_code:
+            try:
+                problem_data = self.data_files
+            except AttributeError:
+                pass
+            else:
+                problem_data._update_code(self.__original_code, self.code)
+    save.alters_data = True
 
     class Meta:
         permissions = (

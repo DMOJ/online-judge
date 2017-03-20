@@ -35,6 +35,9 @@ class ProblemDataStorage(FileSystemStorage):
     def get_available_name(self, name, max_length=None):
         return name
 
+    def rename(self, old, new):
+        return os.rename(self.path(old), self.path(new))
+
 
 class ProblemDataError(Exception):
     def __init__(self, message):

@@ -52,6 +52,15 @@ class ProblemData(models.Model):
     def has_yml(self):
         return problem_data_storage.exists('%s/init.yml' % self.problem.code)
 
+    def _update_code(self, original, new):
+        problem_data_storage.rename(original, new)
+        if self.zipfile:
+            self.zipfile.name = problem_directory_file(self.zipfile.name)
+        if self.generator:
+            self.generator.name = problem_directory_file(self.generator.name)
+        self.save()
+    _update_code.alters_data = True
+
 
 class ProblemTestCase(models.Model):
     dataset = models.ForeignKey('Problem', verbose_name=_('problem data set'), related_name='cases')
