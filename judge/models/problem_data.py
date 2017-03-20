@@ -10,8 +10,12 @@ __all__ = ['problem_data_storage', 'problem_directory_file', 'ProblemData', 'Pro
 problem_data_storage = ProblemDataStorage()
 
 
+def _problem_directory_file(code, filename):
+    return os.path.join(code, os.path.basename(filename))
+
+
 def problem_directory_file(data, filename):
-    return os.path.join(data.problem.code, os.path.basename(filename))
+    return _problem_directory_file(data.problem.code, filename)
 
 
 CHECKERS = (
@@ -55,9 +59,9 @@ class ProblemData(models.Model):
     def _update_code(self, original, new):
         problem_data_storage.rename(original, new)
         if self.zipfile:
-            self.zipfile.name = problem_directory_file(new, self.zipfile.name)
+            self.zipfile.name = _problem_directory_file(new, self.zipfile.name)
         if self.generator:
-            self.generator.name = problem_directory_file(new, self.generator.name)
+            self.generator.name = _problem_directory_file(new, self.generator.name)
         self.save()
     _update_code.alters_data = True
 
