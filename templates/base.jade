@@ -22,7 +22,7 @@ html(lang=LANGUAGE_CODE)
         if meta_description
             meta(name='description', content=meta_description)
         meta#viewport(name='viewport', content='width=device-width, initial-scale=1')
-        
+
         // Favicons
         link(rel='apple-touch-icon', sizes='57x57', href='/apple-touch-icon-57x57.png')
         link(rel='apple-touch-icon', sizes='60x60', href='/apple-touch-icon-60x60.png')
@@ -40,10 +40,10 @@ html(lang=LANGUAGE_CODE)
         link(rel='manifest', href='/manifest.json')
         meta(name='msapplication-TileColor', content='#FFBB33')
         meta(name='msapplication-TileImage', content='/mstile-144x144.png')
-        
+
         // Chrome 39 for Android colour
         meta(name='theme-color', content='#FFBB33')
-        
+
         if og_image
             meta(property='og:image', content='{{ request.build_absolute_uri|urljoin:og_image }}')
         else
@@ -67,8 +67,10 @@ html(lang=LANGUAGE_CODE)
                 link(rel='stylesheet', href='{% static PYGMENT_THEME %}')
             if INLINE_FONTAWESOME
                 link(rel='stylesheet', href='{% static "libs/fontawesome/font-awesome.css" %}')
-            link(type='text/css', rel='stylesheet', href='{% static "libs/featherlight/featherlight.min.css" %}')
-            link(rel='stylesheet', href='{% static "libs/clipboard/tooltip.css" %}')
+            link(rel='stylesheet', type='text/css', href='{% static "libs/featherlight/featherlight.min.css" %}')
+            link(rel='stylesheet', type='text/css', href='{% static "libs/clipboard/tooltip.css" %}')
+            link(rel='stylesheet', type='text/css', href='{% static "libs/select2/select2.css" %}', media="screen")
+
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default:site.domain }}{{ request.get_full_path }}')
         if request.user.is_impersonate
             style.
@@ -88,6 +90,7 @@ html(lang=LANGUAGE_CODE)
             script(src='{% static "common.js" %}')
             script(src='{% static "libs/jquery.unveil.js" %}')
             script(src='{% static "libs/moment.js" %}')
+            script(type='text/javascript', src='{% statis "libs/select2/select2.js" %}')
             script.
                 moment.locale('#{LANGUAGE_CODE}');
                 $(function () { $('img.unveil').unveil(200); });
@@ -110,7 +113,7 @@ html(lang=LANGUAGE_CODE)
                 #content {
                     margin: 80px auto auto;
                 }
-                
+
                 #navigation {
                     top: 27px;
                 }

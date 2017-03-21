@@ -28,7 +28,7 @@ from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import editable_problems
 from judge.utils.tickets import own_ticket_filter, filter_visible_tickets
-from judge.utils.views import TitleMixin, paginate_query_context, LoadSelect2Mixin
+from judge.utils.views import TitleMixin, paginate_query_context
 from judge.widgets import HeavyPreviewPageDownWidget
 
 ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
@@ -196,7 +196,7 @@ class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, Fo
         return HttpResponseBadRequest()
 
 
-class TicketList(LoginRequiredMixin, LoadSelect2Mixin, ListView):
+class TicketList(LoginRequiredMixin, ListView):
     model = Ticket
     template_name = 'ticket/list.jade'
     context_object_name = 'tickets'

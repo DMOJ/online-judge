@@ -24,15 +24,13 @@ block js_media
                 | window.show_problem = 1;
             else
                 | window.show_problem = 0;
-    if has_select2
-        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
-        script.
-            $(function () {
-                $('#status').select2({multiple: 1, placeholder: '{% trans "Filter by status..." %}'})
-                    .css({'visibility': 'visible'});
-                $('#language').select2({multiple: 1, placeholder: '{% trans "Filter by language..." %}'})
-                    .css({'visibility': 'visible'});
-            });
+    script.
+        $(function () {
+            $('#status').select2({multiple: 1, placeholder: '{% trans "Filter by status..." %}'})
+                .css({'visibility': 'visible'});
+            $('#language').select2({multiple: 1, placeholder: '{% trans "Filter by language..." %}'})
+                .css({'visibility': 'visible'});
+        });
 
     - compress js
         script(type='text/javascript', src='{% static "event.js" %}')
@@ -171,8 +169,6 @@ block title_row
     include submission/submission-list-tabs
 
 block media
-    if has_select2
-        link(href="{{ SELECT2_CSS_URL }}", type="text/css", media="screen", rel="stylesheet")
     if perms.judge.change_submission and perms.judge.rejudge_submission
         style.
             td.sub-prop, col.sub-prop { width: 22% }
@@ -183,29 +179,28 @@ block body
     #common-content
         #content-right.submission
             .info-float.content-description
-                if has_select2
-                    h4 {% trans "Filter submissions" %}
-                    form#filter-form(name='form', action='', method='get')
-                        div.filter-form-group
-                            label(for='status'): i {% trans "Status" %}
-                            select#status(name='status', multiple)
-                                each id, name in all_statuses
-                                    if id in selected_statuses
-                                        option(value=id, selected)= name
-                                    else
-                                        option(value=id)= name
-                        div.filter-form-group
-                            label(for='language'): i {% trans "Language" %}
-                            select#language(name='language', multiple)
-                                each code, name in all_languages
-                                    if code in selected_languages
-                                        option(value=code, selected)= name
-                                    else
-                                        option(value=code)= name
-                        .form-submit-group: a#go.button(onclick='form.submit()') {% trans "Go" %}
-                else
-                    #statistics-table
-                        include problem/statistics-table
+                h4 {% trans "Filter submissions" %}
+                form#filter-form(name='form', action='', method='get')
+                    div.filter-form-group
+                        label(for='status'): i {% trans "Status" %}
+                        select#status(name='status', multiple)
+                            each id, name in all_statuses
+                                if id in selected_statuses
+                                    option(value=id, selected)= name
+                                else
+                                    option(value=id)= name
+                    div.filter-form-group
+                        label(for='language'): i {% trans "Language" %}
+                        select#language(name='language', multiple)
+                            each code, name in all_languages
+                                if code in selected_languages
+                                    option(value=code, selected)= name
+                                else
+                                    option(value=code)= name
+                    .form-submit-group: a#go.button(onclick='form.submit()') {% trans "Go" %}
+
+                //    #statistics-table
+                //        include problem/statistics-table
         #content-left.submission
             if page_obj.num_pages > 1
                 div(style='margin-bottom:6px;margin-top:3px')

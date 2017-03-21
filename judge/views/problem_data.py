@@ -20,7 +20,7 @@ from django.views.generic import DetailView
 from judge.highlight_code import highlight_code
 from judge.models import ProblemData, Problem, ProblemTestCase, problem_data_storage
 from judge.utils.problem_data import ProblemDataCompiler
-from judge.utils.views import TitleMixin, LoadSelect2Mixin
+from judge.utils.views import TitleMixin
 from judge.views.problem import ProblemMixin
 
 mimetypes.init()
@@ -85,7 +85,7 @@ class ProblemCaseFormSet(formset_factory(ProblemCaseForm, formset=BaseModelFormS
         return form
 
 
-class ProblemDataView(LoginRequiredMixin, LoadSelect2Mixin, TitleMixin, ProblemMixin, DetailView):
+class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
     template_name = 'problem/data.jade'
 
     def get_title(self):

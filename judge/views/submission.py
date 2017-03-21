@@ -17,7 +17,7 @@ from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, Profile, Contest, ProblemTranslation, Language
 from judge.utils.problems import user_completed_ids, user_authored_ids, user_editable_ids, get_result_table
 from judge.utils.raw_sql import use_straight_join
-from judge.utils.views import TitleMixin, DiggPaginatorMixin, LoadSelect2Mixin
+from judge.utils.views import TitleMixin, DiggPaginatorMixin
 
 
 def submission_related(queryset):
@@ -350,7 +350,7 @@ def single_submission_query(request):
     return single_submission(request, int(request.GET['id']), bool(show_problem))
 
 
-class AllSubmissions(LoadSelect2Mixin, SubmissionsListBase):
+class AllSubmissions(SubmissionsListBase):
     def get_my_submissions_page(self):
         if self.request.user.is_authenticated:
             return reverse('all_user_submissions', kwargs={'user': self.request.user.username})

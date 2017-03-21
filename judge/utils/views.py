@@ -39,20 +39,6 @@ def paginate_query_context(request):
                 'first_page_href': request.path}
 
 
-class LoadSelect2Mixin(object):
-    def get_context_data(self, **kwargs):
-        context = super(LoadSelect2Mixin, self).get_context_data(**kwargs)
-
-        select2_css = getattr(settings, 'SELECT2_CSS_URL', None)
-        select2_js = getattr(settings, 'SELECT2_JS_URL', None)
-        has_select2 = select2_css is not None and select2_js is not None
-        context['has_select2'] = has_select2
-        if has_select2:
-            context['SELECT2_CSS_URL'] = select2_css
-            context['SELECT2_JS_URL'] = select2_js
-        return context
-
-
 class TitleMixin(object):
     title = '(untitled)'
     content_title = None

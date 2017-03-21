@@ -4,42 +4,40 @@ extends common-content
 
 block js_media
     block users_js_media
-    if has_select2
-        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
-        script.
-            $(function () {
-                $('#search').replaceWith($('<select/>').attr({
-                    id: 'search',
-                    name: 'handle',
-                    onchange: 'form.submit()'
-                }));
-                var in_user_redirect = false;
-                $('#search').select2({
-                    placeholder: '{% trans "Search by handle..." %}',
-                    ajax: {
-                        url: '{% url "user_search_select2_ajax" %}'
-                    },
-                    minimumInputLength: 1,
-                    escapeMarkup: function (markup) {
-                        return markup;
-                    },
-                    templateResult: function (data, container) {
-                        return $('<span>')
-                                .append($('<img>', {'class': 'user-search-image', src: data.gravatar_url,
-                                    width: 24, height: 24}))
-                                .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text))
-                                .append($('<a>', {href: '/user/' + data.text, 'class': 'user-redirect'})
-                                        .append($('<i>', {'class': 'fa fa-mail-forward'}))
-                                        .mouseover(function () {
-                                            in_user_redirect = true;
-                                        }).mouseout(function () {
-                                            in_user_redirect = false;
-                                        }));
-                    }
-                }).on('select2:selecting', function () {
-                    return !in_user_redirect;
-                });
+    script.
+        $(function () {
+            $('#search').replaceWith($('<select/>').attr({
+                id: 'search',
+                name: 'handle',
+                onchange: 'form.submit()'
+            }));
+            var in_user_redirect = false;
+            $('#search').select2({
+                placeholder: '{% trans "Search by handle..." %}',
+                ajax: {
+                    url: '{% url "user_search_select2_ajax" %}'
+                },
+                minimumInputLength: 1,
+                escapeMarkup: function (markup) {
+                    return markup;
+                },
+                templateResult: function (data, container) {
+                    return $('<span>')
+                            .append($('<img>', {'class': 'user-search-image', src: data.gravatar_url,
+                                width: 24, height: 24}))
+                            .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text))
+                            .append($('<a>', {href: '/user/' + data.text, 'class': 'user-redirect'})
+                                    .append($('<i>', {'class': 'fa fa-mail-forward'}))
+                                    .mouseover(function () {
+                                        in_user_redirect = true;
+                                    }).mouseout(function () {
+                                        in_user_redirect = false;
+                                    }));
+                }
+            }).on('select2:selecting', function () {
+                return !in_user_redirect;
             });
+        });
     script.
         $(function () {
             var $last = null;
@@ -57,41 +55,39 @@ block js_media
         });
 
 block media
-    if has_select2
-        link(href="{{ SELECT2_CSS_URL }}", type="text/css", media="screen", rel="stylesheet")
-        style.
-            .select2-selection__arrow {
-                display: none;
-            }
+    style.
+        .select2-selection__arrow {
+            display: none;
+        }
 
-            .select2-selection__rendered {
-                cursor: text;
-            }
+        .select2-selection__rendered {
+            cursor: text;
+        }
 
-            .select2-results__option {
-                position: relative;
-            }
+        .select2-results__option {
+            position: relative;
+        }
 
-            .select2-results__option--highlighted {
-                background-color: #DEDEDE !important;
-            }
+        .select2-results__option--highlighted {
+            background-color: #DEDEDE !important;
+        }
 
-            li.select2-results__option--highlighted a.user-redirect {
-                display: inline-block;
-            }
+        li.select2-results__option--highlighted a.user-redirect {
+            display: inline-block;
+        }
 
-            a.user-redirect {
-                color: #2980b9;
-                vertical-align: middle;
-                font-size: 1.2em;
-                position: absolute;
-                right: 0.8em;
-                display: none;
-            }
+        a.user-redirect {
+            color: #2980b9;
+            vertical-align: middle;
+            font-size: 1.2em;
+            position: absolute;
+            right: 0.8em;
+            display: none;
+        }
 
-            a.user-redirect:hover {
-                text-shadow: 0px 0px 2px blue;
-            }
+        a.user-redirect:hover {
+            text-shadow: 0px 0px 2px blue;
+        }
 
     style.
         #users-table .rank, .points, .problems, .username {
@@ -136,9 +132,8 @@ block body
             if page_obj.num_pages > 1
                 div(style='margin-bottom: 7px; margin-top: 3px;')
                     include list-pages
-                    if has_select2
-                        form#search-form(name='form', action='{% url "user_ranking_redirect" %}', method='get')
-                            input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
+                    form#search-form(name='form', action='{% url "user_ranking_redirect" %}', method='get')
+                        input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
 
             table#users-table.table
                 block users_table

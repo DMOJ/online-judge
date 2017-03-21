@@ -29,7 +29,7 @@ from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation, ContestTag, Profile
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
-from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin
+from judge.utils.views import TitleMixin, generic_message
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'participation_list', 'own_participation_list', 'get_contest_ranking_list',
@@ -181,7 +181,7 @@ class ContestMixin(object):
             }, status=403)
 
 
-class ContestDetail(LoadSelect2Mixin, ContestMixin, TitleMixin, CommentedDetailView):
+class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
     template_name = 'contest/contest.jade'
 
     def get_comment_page(self):
@@ -468,11 +468,6 @@ def contest_ranking_view(request, contest, participation=None):
     contest_access_check(request, contest)
     users, problems = get_contest_ranking_list(request, contest, participation)
 
-    # TODO: When this is changed to be a view, use LoadSelect2Mixin instead of this
-    select2_css = getattr(settings, 'SELECT2_CSS_URL', None)
-    select2_js = getattr(settings, 'SELECT2_JS_URL', None)
-    has_select2 = select2_css is not None and select2_js is not None
-
     context = {
         'users': users,
         'title': _('%s Rankings') % contest.name,
@@ -481,10 +476,6 @@ def contest_ranking_view(request, contest, participation=None):
         'contest': contest,
         'last_msg': event.last(),
         'has_rating': contest.ratings.exists(),
-
-        'has_select2': has_select2,
-        'SELECT2_CSS_URL': select2_css,
-        'SELECT2_JS_URL': select2_js,
     }
 
     # TODO: use ContestMixin when this becomes a class-based view

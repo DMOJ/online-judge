@@ -6,46 +6,45 @@ extends base
 block js_media
     script(type='text/javascript').
         window.valid_files = #{valid_files_json};
-    if has_select2
-        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
-        script(type='text/javascript').
-            $(function () {
-                function update_select2() {
-                    $('tbody:not(.extra-row-body) .type-column select').select2({
-                        minimumResultsForSearch: -1
-                    });
-                }
+
+        $(function () {
+            function update_select2() {
+                $('tbody:not(.extra-row-body) .type-column select').select2({
+                    minimumResultsForSearch: -1
+                });
+            }
+            update_select2();
+
+            function autofill_if_exists($select, file) {
+                if (!$select.val() && ~window.valid_files.indexOf(file))
+                    $select.val(file).trigger('change');
+            }
+
+            $('#case-table').on('add-row', function (e, $tr) {
                 update_select2();
-
-                function autofill_if_exists($select, file) {
-                    if (!$select.val() && ~window.valid_files.indexOf(file))
-                        $select.val(file).trigger('change');
-                }
-
-                $('#case-table').on('add-row', function (e, $tr) {
-                    update_select2();
-                    $tr.find('input').filter('[id$=file]').each(function () {
-                        var $select, val = $(this).replaceWith($select = $('<select/>').attr({
-                            id: $(this).attr('id'),
-                            name: $(this).attr('name'),
-                            style: 'width: 100%'
-                        })).val();
-                        $select.select2({
-                            data: window.valid_files,
-                            allowClear: true,
-                            placeholder: ''
-                        }).val(val).trigger('change').on('change', function () {
-                            var val = $select.val();
-                            if (val) {
-                                if ($select.attr('id').endsWith('input_file'))
-                                    autofill_if_exists($tr.find('select[id$=output_file]'), val.replace(/in(?!.*?in)/, 'out'));
-                                else
-                                    autofill_if_exists($tr.find('select[id$=input_file]'), val.replace(/out(?!.*?out)/, 'in'));
-                            }
-                        });
+                $tr.find('input').filter('[id$=file]').each(function () {
+                    var $select, val = $(this).replaceWith($select = $('<select/>').attr({
+                        id: $(this).attr('id'),
+                        name: $(this).attr('name'),
+                        style: 'width: 100%'
+                    })).val();
+                    $select.select2({
+                        data: window.valid_files,
+                        allowClear: true,
+                        placeholder: ''
+                    }).val(val).trigger('change').on('change', function () {
+                        var val = $select.val();
+                        if (val) {
+                            if ($select.attr('id').endsWith('input_file'))
+                                autofill_if_exists($tr.find('select[id$=output_file]'), val.replace(/in(?!.*?in)/, 'out'));
+                            else
+                                autofill_if_exists($tr.find('select[id$=input_file]'), val.replace(/out(?!.*?out)/, 'in'));
+                        }
                     });
                 });
             });
+        });
+
     script(type='text/javascript', src='{% static "libs/jquery-sortable.js" %}')
     script(type='text/javascript', src='{% static "libs/featherlight/featherlight.min.js" %}')
     script(type='text/javascript').
@@ -261,8 +260,6 @@ block js_media
         });
 
 block media
-    if has_select2
-        link(href='{{ SELECT2_CSS_URL }}', type='text/css', media='screen', rel='stylesheet')
     style.
         #case-table .select2 {
             text-align: initial;

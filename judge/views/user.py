@@ -29,7 +29,7 @@ from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
 from judge.performance_points import get_pp_breakdown, PP_ENTRIES
-from judge.utils.views import TitleMixin, generic_message, LoadSelect2Mixin, DiggPaginatorMixin, QueryStringSortMixin
+from judge.utils.views import TitleMixin, generic_message, DiggPaginatorMixin, QueryStringSortMixin
 from .contests import contest_ranking_view
 
 __all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile']
@@ -239,7 +239,7 @@ def edit_profile(request):
     })
 
 
-class UserList(LoadSelect2Mixin, QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
+class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
     title = ugettext_lazy('Leaderboard')
     context_object_name = 'users'

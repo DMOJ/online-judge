@@ -36,7 +36,7 @@ from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.problems import contest_completed_ids, user_completed_ids, contest_attempted_ids, user_attempted_ids, \
     hot_problems
-from judge.utils.views import LoadSelect2Mixin, TitleMixin, generic_message, QueryStringSortMixin
+from judge.utils.views import TitleMixin, generic_message, QueryStringSortMixin
 
 
 def get_contest_problem(problem, profile):
@@ -252,7 +252,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         return response
 
 
-class ProblemList(QueryStringSortMixin, LoadSelect2Mixin, TitleMixin, SolvedProblemMixin, ListView):
+class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView):
     model = Problem
     title = ugettext_lazy('Problems')
     context_object_name = 'problems'
@@ -530,11 +530,6 @@ def problem_submit(request, problem=None, submission=None):
         form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = profile.ace_theme
 
-    # TODO: When this is changed to be a view, use LoadSelect2Mixin instead of this
-    select2_css = getattr(settings, 'SELECT2_CSS_URL', None)
-    select2_js = getattr(settings, 'SELECT2_JS_URL', None)
-    has_select2 = select2_css is not None and select2_js is not None
-
     if submission is not None:
         default_lang = sub.language
     else:
@@ -555,10 +550,6 @@ def problem_submit(request, problem=None, submission=None):
         'ACE_URL': ACE_URL,
 
         'default_lang': default_lang,
-
-        'has_select2': has_select2,
-        'SELECT2_CSS_URL': select2_css,
-        'SELECT2_JS_URL': select2_js,
     })
 
 

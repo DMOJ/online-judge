@@ -11,14 +11,13 @@ from django.conf import settings
 from django.utils.translation import ugettext
 
 HAS_PHANTOMJS = os.access(getattr(settings, 'PHANTOMJS', ''), os.X_OK)
-HAS_WKHTMLTOPDF = os.access(getattr(settings, 'WKHTMLTOPDF', ''), os.X_OK)
-HAS_PDF = (os.path.isdir(getattr(settings, 'PROBLEM_PDF_CACHE', '')) and
-           (HAS_PHANTOMJS or HAS_WKHTMLTOPDF))
+HAS_PDF = (os.path.isdir(getattr(settings, 'PROBLEM_PDF_CACHE', '')) and HAS_PHANTOMJS)
 
 
 class BasePdfMaker(object):
     def __init__(self, dir=None, clean_up=True):
-        self.dir = dir or os.path.join(getattr(settings, 'PROBLEM_PDF_TEMP_DIR', tempfile.gettempdir()), str(uuid.uuid1()))
+        self.dir = dir or os.path.join(getattr(settings, 'PROBLEM_PDF_TEMP_DIR', tempfile.gettempdir()),
+                                       str(uuid.uuid1()))
         self.proc = None
         self.log = None
         self.htmlfile = os.path.join(self.dir, 'input.html')
@@ -61,20 +60,6 @@ class BasePdfMaker(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.clean_up:
             shutil.rmtree(self.dir, ignore_errors=True)
-
-
-class WebKitPdfMaker(BasePdfMaker):
-    def make(self, debug=False):
-        command = [
-            getattr(settings, 'WKHTMLTOPDF', 'wkhtmltopdf'), '--enable-javascript', '--javascript-delay', '5000',
-            '--footer-center', ugettext('Page [page] of [topage]').encode('utf-8'), '--footer-font-name', 'Segoe UI',
-            '--footer-font-size', '10', '--encoding', 'utf-8',
-            'input.html', 'output.pdf'
-        ]
-        if debug:
-            print subprocess.list2cmdline(command)
-        self.proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir)
-        self.log = self.proc.communicate()[0]
 
 
 class PhantomJSPdfMaker(BasePdfMaker):
@@ -133,9 +118,8 @@ page.open(param.input, function (status) {
         self.proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir)
         self.log = self.proc.communicate()[0]
 
+
 if HAS_PHANTOMJS:
     DefaultPdfMaker = PhantomJSPdfMaker
-elif HAS_WKHTMLTOPDF:
-    DefaultPdfMaker = WebKitPdfMaker
 else:
     DefaultPdfMaker = None

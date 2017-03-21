@@ -4,8 +4,6 @@ extends base
 - load compress
 
 block js_media
-    if has_select2
-        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
     script(type='text/javascript', src='{{ ACE_URL }}/ace.js')
     - compress js
         | #{form.media.js}
@@ -115,8 +113,6 @@ block js_media
             });
 
 block media
-    if has_select2
-        link(href="{{ SELECT2_CSS_URL }}", type="text/css", media="screen", rel="stylesheet")
     - compress css
         | #{form.media.css}
         style(media='screen').

@@ -4,8 +4,6 @@ extends common-content
 - load i18n
 
 block media
-    if has_select2
-        link(href="{{ SELECT2_CSS_URL }}", type="text/css", media="screen", rel="stylesheet")
     style.
         @media (max-width: 550px) {
             #problem-table tr :nth-child(6) {
@@ -98,33 +96,31 @@ block media
             }
 
 block js_media
-    if has_select2
-        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
-        script.
-            $(function() {
-                $('#category').select2().css({'visibility': 'visible'});
-                $('#types').select2({multiple: 1, placeholder: '{% trans "Filter by type..." %}'})
-                    .css({'visibility': 'visible'});
-                // This is incredibly nasty to do but it's needed because otherwise the select2 steals the focus
-                $('#search').keypress(function (e) {
-                    if (e.keyCode == 13)
-                        $('#go').click();
-                });
-                $('#random').click(function (e) {
-                    var $form = $('form#filter-form');
-                    var action = $form.attr('action');
-                    $form.attr('action', '{% url "problem_random" %}').attr('target', '_blank').submit();
-                    $form.attr('action', action).attr('target', '');
-                    e.preventDefault();
-                });
-
-                $('input#full_text, input#hide_solved, input#show_types').click(function () {
-                    ($('<form>').attr('action', window.location.pathname + '?' + $('form#filter-form').serialize())
-                            .append($('<input>').attr('type', 'hidden').attr('name', 'csrfmiddlewaretoken')
-                                    .attr('value', $.cookie('csrftoken')))
-                            .attr('method', 'POST').appendTo($('body')).submit());
-                });
+    script.
+        $(function() {
+            $('#category').select2().css({'visibility': 'visible'});
+            $('#types').select2({multiple: 1, placeholder: '{% trans "Filter by type..." %}'})
+                .css({'visibility': 'visible'});
+            // This is incredibly nasty to do but it's needed because otherwise the select2 steals the focus
+            $('#search').keypress(function (e) {
+                if (e.keyCode == 13)
+                    $('#go').click();
             });
+            $('#random').click(function (e) {
+                var $form = $('form#filter-form');
+                var action = $form.attr('action');
+                $form.attr('action', '{% url "problem_random" %}').attr('target', '_blank').submit();
+                $form.attr('action', action).attr('target', '');
+                e.preventDefault();
+            });
+
+            $('input#full_text, input#hide_solved, input#show_types').click(function () {
+                ($('<form>').attr('action', window.location.pathname + '?' + $('form#filter-form').serialize())
+                        .append($('<input>').attr('type', 'hidden').attr('name', 'csrfmiddlewaretoken')
+                                .attr('value', $.cookie('csrftoken')))
+                        .attr('method', 'POST').appendTo($('body')).submit());
+            });
+        });
 
     if IN_CONTEST
         script(src='{% static "libs/tablesorter.js" %}', type='text/javascript')

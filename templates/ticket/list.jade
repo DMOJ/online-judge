@@ -35,25 +35,23 @@ block media
             }
         }
 
-    if has_select2
-        link(href='{{ SELECT2_CSS_URL }}', type='text/css', media='screen', rel='stylesheet')
-        style.
-            .select2-selection__arrow { display: none; }
-            .select2-selection__rendered { cursor: text; }
-            .select2-results__option {  position: relative; }
-            .select2-results__option--highlighted { background-color: #DEDEDE !important; }
-            li.select2-results__option--highlighted a.user-redirect { display: inline-block; }
+    style.
+        .select2-selection__arrow { display: none; }
+        .select2-selection__rendered { cursor: text; }
+        .select2-results__option {  position: relative; }
+        .select2-results__option--highlighted { background-color: #DEDEDE !important; }
+        li.select2-results__option--highlighted a.user-redirect { display: inline-block; }
 
-            a.user-redirect {
-                color: #2980b9;
-                vertical-align: middle;
-                font-size: 1.2em;
-                position: absolute;
-                right: 0.8em;
-                display: none;
-            }
+        a.user-redirect {
+            color: #2980b9;
+            vertical-align: middle;
+            font-size: 1.2em;
+            position: absolute;
+            right: 0.8em;
+            display: none;
+        }
 
-            a.user-redirect:hover { text-shadow: 0 0 2px blue; }
+        a.user-redirect:hover { text-shadow: 0 0 2px blue; }
 
 block js_media
     script(type='text/javascript').
@@ -150,28 +148,27 @@ block js_media
                 );
             }
         });
-    if has_select2
-        script(type='text/javascript', src='{{ SELECT2_JS_URL }}')
-        script(type='text/javascript').
-            $(function () {
-                var user_select2 = {
-                    escapeMarkup: function (markup) {
-                        return markup;
-                    },
-                    templateResult: function (data, container) {
-                        return $('<span>')
-                                .append($('<img>', {
-                                    'class': 'user-search-image', src: data.gravatar_url,
-                                    width: 24, height: 24
-                                }))
-                                .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text));
-                    }
-                };
-                $('#filter-user').select2($.extend({}, user_select2,
-                        {ajax: { url: '{% url "ticket_user_select2_ajax" %}' } }));
-                $('#filter-assignee').select2($.extend({}, user_select2,
-                        {ajax: { url: '{% url "ticket_assignee_select2_ajax" %}' } }));
-            });
+
+    script(type='text/javascript').
+        $(function () {
+            var user_select2 = {
+                escapeMarkup: function (markup) {
+                    return markup;
+                },
+                templateResult: function (data, container) {
+                    return $('<span>')
+                            .append($('<img>', {
+                                'class': 'user-search-image', src: data.gravatar_url,
+                                width: 24, height: 24
+                            }))
+                            .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text));
+                }
+            };
+            $('#filter-user').select2($.extend({}, user_select2,
+                    {ajax: { url: '{% url "ticket_user_select2_ajax" %}' } }));
+            $('#filter-assignee').select2($.extend({}, user_select2,
+                    {ajax: { url: '{% url "ticket_assignee_select2_ajax" %}' } }));
+        });
     if last_msg
         script(type='text/javascript').
             $(function () {
