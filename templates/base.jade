@@ -90,7 +90,7 @@ html(lang=LANGUAGE_CODE)
             script(src='{% static "common.js" %}')
             script(src='{% static "libs/jquery.unveil.js" %}')
             script(src='{% static "libs/moment.js" %}')
-            script(type='text/javascript', src='{% statis "libs/select2/select2.js" %}')
+            script(type='text/javascript', src='{% static "libs/select2/select2.js" %}')
             script.
                 moment.locale('#{LANGUAGE_CODE}');
                 $(function () { $('img.unveil').unveil(200); });
