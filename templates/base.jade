@@ -69,7 +69,7 @@ html(lang=LANGUAGE_CODE)
                 link(rel='stylesheet', href='{% static "libs/fontawesome/font-awesome.css" %}')
             link(rel='stylesheet', type='text/css', href='{% static "libs/featherlight/featherlight.min.css" %}')
             link(rel='stylesheet', type='text/css', href='{% static "libs/clipboard/tooltip.css" %}')
-            link(rel='stylesheet', type='text/css', href='{% static "libs/select2/select2.css" %}', media="screen")
+            link(rel='stylesheet', type='text/css', href='{% static "libs/select2/select2.css" %}')
 
         link(rel='canonical', href='{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default:site.domain }}{{ request.get_full_path }}')
         if request.user.is_impersonate
@@ -90,7 +90,7 @@ html(lang=LANGUAGE_CODE)
             script(src='{% static "common.js" %}')
             script(src='{% static "libs/jquery.unveil.js" %}')
             script(src='{% static "libs/moment.js" %}')
-            script(type='text/javascript', src='{% static "libs/select2/select2.js" %}')
+            script(src='{% static "libs/select2/select2.js" %}')
             script.
                 moment.locale('#{LANGUAGE_CODE}');
                 $(function () { $('img.unveil').unveil(200); });
