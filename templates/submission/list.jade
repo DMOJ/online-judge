@@ -179,28 +179,29 @@ block body
     #common-content
         #content-right.submission
             .info-float.content-description
-                h4 {% trans "Filter submissions" %}
-                form#filter-form(name='form', action='', method='get')
-                    div.filter-form-group
-                        label(for='status'): i {% trans "Status" %}
-                        select#status(name='status', multiple)
-                            each id, name in all_statuses
-                                if id in selected_statuses
-                                    option(value=id, selected)= name
-                                else
-                                    option(value=id)= name
-                    div.filter-form-group
-                        label(for='language'): i {% trans "Language" %}
-                        select#language(name='language', multiple)
-                            each code, name in all_languages
-                                if code in selected_languages
-                                    option(value=code, selected)= name
-                                else
-                                    option(value=code)= name
-                    .form-submit-group: a#go.button(onclick='form.submit()') {% trans "Go" %}
-
-                //    #statistics-table
-                //        include problem/statistics-table
+                if all_statuses
+                    h4 {% trans "Filter submissions" %}
+                    form#filter-form(name='form', action='', method='get')
+                        div.filter-form-group
+                            label(for='status'): i {% trans "Status" %}
+                            select#status(name='status', multiple)
+                                each id, name in all_statuses
+                                    if id in selected_statuses
+                                        option(value=id, selected)= name
+                                    else
+                                        option(value=id)= name
+                        div.filter-form-group
+                            label(for='language'): i {% trans "Language" %}
+                            select#language(name='language', multiple)
+                                each code, name in all_languages
+                                    if code in selected_languages
+                                        option(value=code, selected)= name
+                                    else
+                                        option(value=code)= name
+                        .form-submit-group: a#go.button(onclick='form.submit()') {% trans "Go" %}
+                    else
+                        #statistics-table
+                            include problem/statistics-table
         #content-left.submission
             if page_obj.num_pages > 1
                 div(style='margin-bottom:6px;margin-top:3px')
