@@ -14,7 +14,7 @@ from django.utils.safestring import mark_safe
 from judge.utils.file_cache import HashFileCache
 
 logger = logging.getLogger('judge.mathoid')
-reescape = re.compile(r'(?<!\\)(?:\\{2})*[&$]')
+reescape = re.compile(r'(?<!\\)(?:\\{2})*[$]')
 
 REPLACES = [
     (u'\u2264', r'\le'),
@@ -25,7 +25,6 @@ REPLACES = [
     ('&le;', r'\ge'),
     ('&lt;', '<'),
     ('&gt;', '>'),
-    ('&amp;', '\\&'),
     ('&#8722;', '-'),
     ('&#8804;', r'\le'),
     ('&#8805;', r'\ge'),
