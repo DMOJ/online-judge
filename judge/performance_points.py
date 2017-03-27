@@ -11,7 +11,7 @@ PP_ENTRIES = getattr(settings, 'PP_ENTRIES', 100)
 PP_WEIGHT_TABLE = [pow(PP_STEP, i) for i in xrange(PP_ENTRIES)]
 
 PPBreakdown = namedtuple('PPBreakdown', 'points weight scaled_points problem_name problem_code '
-                                        'sub_id sub_date sub_points sub_total sub_result_class'
+                                        'sub_id sub_date sub_points sub_total sub_result_class '
                                         'sub_short_status sub_long_status sub_lang')
 
 def get_pp_breakdown(user, start=0, end=100):
