@@ -104,11 +104,12 @@ def hot_problems(duration, limit):
     qs = cache.get(cache_key)
     if qs is None:
         qs = Problem.objects.filter(is_public=True, submission__date__gt=timezone.now() - duration, points__gt=3, points__lt=25)
-        if not qs.count():
+        qs = qs.annotate(k=Count('submission__user', distinct=True)).order_by('-k').values_list('k', flat=True)
+        if not qs:
             # stop screwing over poor sites with small userbases
             return []
         # make this an aggregate
-        mx = float(qs.annotate(k=Count('submission__user', distinct=True)).order_by('-k').values_list('k', flat=True)[0])
+        mx = float(qs[0])
 
         qs = qs.annotate(unique_user_count=Count('submission__user', distinct=True))  
         # fix braindamage in excluding CE  
