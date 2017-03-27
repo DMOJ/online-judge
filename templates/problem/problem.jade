@@ -77,7 +77,7 @@ block title_row
 block info_float
     if request.user.is_authenticated and IN_CONTEST
         if submission_limit
-            if submission_count < submission_limit
+            if submissions_left > 0
                 a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
                 span.submissions-left
                     - blocktrans trimmed count counter=submissions_left
@@ -85,7 +85,7 @@ block info_float
                       - plural
                       | {{ counter }} submissions left
             else
-                a.disabled-button.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
+                a.unselectable.button.full.disabled-button {% trans "Submission limit reached" %}
                 span.no-submissions-left.submissions-left
                   | {% trans "0 submissions left" %}
         else
