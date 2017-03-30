@@ -75,7 +75,23 @@ block title_row
                 |  {% trans "View as PDF" %}
 
 block info_float
-    a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
+    if request.user.is_authenticated and IN_CONTEST
+        if submission_limit
+            if submissions_left > 0
+                a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
+                span.submissions-left
+                    - blocktrans trimmed count counter=submissions_left
+                      | {{ counter }} submission left
+                      - plural
+                      | {{ counter }} submissions left
+            else
+                a.unselectable.button.full.disabled {% trans "Submit solution" %}
+                span.no-submissions-left.submissions-left {% trans "0 submissions left" %}
+        else
+            a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
+    else
+        a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
+
     hr
     if request.user.is_authenticated and has_submissions
         div: a(href='{% url "user_submissions" problem.code request.user.username %}')

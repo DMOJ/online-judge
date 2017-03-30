@@ -45,6 +45,9 @@ def get_contest_problem(problem, profile):
     except ObjectDoesNotExist:
         return None
 
+def get_contest_submission_count(problem, profile):
+    return profile.current_contest.submissions.exclude(submission__status__in=['IE']).filter(problem__problem__code=problem).count()
+
 
 class ProblemMixin(object):
     model = Problem
@@ -159,13 +162,16 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             clarifications = self.object.clarifications
             context['has_clarifications'] = clarifications.count() > 0
             context['clarifications'] = clarifications.order_by('-date')
+            context['submission_limit'] = contest_problem.max_submissions
+            if contest_problem.max_submissions:
+                context['submissions_left'] = max(contest_problem.max_submissions - get_contest_submission_count(self.object.code, user.profile), 0)
 
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         context['has_pdf_render'] = HAS_PDF
         context['completed_problem_ids'] = self.get_completed_problems()
         context['attempted_problems'] = self.get_attempted_problems()
         context['num_open_tickets'] = self.object.tickets.filter(is_open=True).count()
-        context['can_edit_problem'] = self.object.is_editable_by(self.request.user)
+        context['can_edit_problem'] = self.object.is_editable_by(user)
         try:
             context['editorial'] = Solution.objects.get(problem=self.object)
         except ObjectDoesNotExist:
@@ -486,19 +492,25 @@ def problem_submit(request, problem=None, submission=None):
                 return generic_message(request, _('Banned from Submitting'),
                                        _('You have been declared persona non grata for this problem. '
                                          'You are permanently barred from submitting this problem.'))
-            model = form.save()
 
-            profile.update_contest()
             if profile.current_contest is not None:
                 try:
-                    contest_problem = model.problem.contests.get(contest=profile.current_contest.contest)
+                    contest_problem = form.cleaned_data['problem'].contests.get(contest=profile.current_contest.contest)
                 except ContestProblem.DoesNotExist:
                     pass
                 else:
+                    max_subs = contest_problem.max_submissions
+                    if max_subs and get_contest_submission_count(problem, profile) >= max_subs:
+                        return generic_message(request, _('Too Many Submissions!'),
+                                                _('You have exceeded the submission limit for this problem.'))
+                    model = form.save()
                     contest = ContestSubmission(submission=model, problem=contest_problem,
                                                 participation=profile.current_contest)
                     contest.save()
+            else:
+                model = form.save()
 
+            profile.update_contest()
             model.judge()
             return HttpResponseRedirect(reverse('submission_status', args=[str(model.id)]))
         else:
