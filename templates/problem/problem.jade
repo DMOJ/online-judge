@@ -79,14 +79,14 @@ block info_float
         if submission_limit
             if submissions_left > 0
                 a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
-                span.submissions-left
+                .submissions-left
                     - blocktrans trimmed count counter=submissions_left
                       | {{ counter }} submission left
                       - plural
                       | {{ counter }} submissions left
             else
                 a.unselectable.button.full.disabled {% trans "Submit solution" %}
-                span.no-submissions-left.submissions-left {% trans "0 submissions left" %}
+                .no-submissions-left.submissions-left {% trans "0 submissions left" %}
         else
             a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
     else
