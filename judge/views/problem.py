@@ -547,6 +547,15 @@ def problem_submit(request, problem=None, submission=None):
     else:
         default_lang = request.user.profile.language
 
+    IN_CONTEST = profile.current_contest is not None
+    if IN_CONTEST:
+        submission_limit = problem_object.contests.get(contest=profile.current_contest.contest).max_submissions
+    else:
+        submission_limit = None
+    if submission_limit:
+        submissions_left = submission_limit - get_contest_submission_count(problem, profile)
+    else:
+        submissions_left = None
     return render(request, 'problem/submit.jade', {
         'form': form,
         'title': _('Submit to %(problem)s') % {
@@ -559,6 +568,9 @@ def problem_submit(request, problem=None, submission=None):
         }),
         'langs': Language.objects.all(),
         'no_judges': not form.fields['language'].queryset,
+        'IN_CONTEST': IN_CONTEST,
+        'submission_limit': submission_limit,
+        'submissions_left': submissions_left,
         'ACE_URL': ACE_URL,
 
         'default_lang': default_lang,

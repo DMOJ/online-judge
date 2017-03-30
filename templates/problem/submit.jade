@@ -183,11 +183,24 @@ block media
 
 block body
     br
-    if not no_judges and default_lang not in form.fields.language.queryset
-        .alert.alert-warning.alert-dismissable
-            a.close x
-            - blocktrans with default_language=default_lang.name
-                |  <b>Warning!</b> Your default language, <b>{{ default_language }}</b>, is unavailable for this problem and has been deselected.
+    if not no_judges
+        if default_lang not in form.fields.language.queryset
+            .alert.alert-warning.alert-dismissable
+                a.close x
+                - blocktrans with default_language=default_lang.name
+                    |  <b>Warning!</b> Your default language, <b>{{ default_language }}</b>, is unavailable for this problem and has been deselected.
+        if IN_CONTEST and submission_limit
+            if submissions_left > 0
+                .alert.alert-warning.alert-dismissable
+                    a.close x
+                    - blocktrans count counter=submissions_left
+                        |  You have {{ counter }} submission left
+                        - plural
+                        | You have {{ counter }} submissions left
+            else
+                .alert.alert-warning.alert-dismissable
+                    a.close x
+                    {% trans "You have 0 submissions left" %}
 
     form#problem_submit.form-area(style='width:100%;box-sizing:border-box', action='', method='post')
         - csrf_token
@@ -212,4 +225,7 @@ block body
         if no_judges
             span(style='color: red') {% trans "No judge is available for this problem." %}
         else
-            input(class="button", style="float:right;padding:6px 12px", type='submit', value='{% trans "Submit!" %}')
+            if IN_CONTEST and submission_limit and not submissions_left
+                input(class="button", style="float:right;padding:6px 12px", type='submit', value='{% trans "Submit!" %}')
+            else
+                input(class="button", style="float:right;padding:6px 12px", type='submit', value='{% trans "Submit!" %}')
