@@ -85,7 +85,7 @@ block info_float
                       - plural
                       | {{ counter }} submissions left
             else
-                a.unselectable.button.full.disabled {% trans "Submit" %}
+                a.unselectable.button.full.disabled {% trans "Submit solution" %}
                 span.no-submissions-left.submissions-left {% trans "0 submissions left" %}
         else
             a.unselectable.button.full(href='{% url "problem_submit" problem.code %}') {% trans "Submit solution" %}
