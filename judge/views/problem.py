@@ -489,7 +489,7 @@ def problem_submit(request, problem=None, submission=None):
                 return HttpResponseForbidden('<h1>Do you want me to ban you?</h1>')
             if not request.user.is_superuser and form.cleaned_data['problem'].banned_users.filter(
                     id=profile.id).exists():
-                return generic_message(request, _('Banned from Submitting'),
+                return generic_message(request, _('Banned from submitting'),
                                        _('You have been declared persona non grata for this problem. '
                                          'You are permanently barred from submitting this problem.'))
 
@@ -501,7 +501,7 @@ def problem_submit(request, problem=None, submission=None):
                 else:
                     max_subs = contest_problem.max_submissions
                     if max_subs and get_contest_submission_count(problem, profile) >= max_subs:
-                        return generic_message(request, _('Too Many Submissions!'),
+                        return generic_message(request, _('Too many submissions'),
                                                 _('You have exceeded the submission limit for this problem.'))
                     model = form.save()
                     contest = ContestSubmission(submission=model, problem=contest_problem,
