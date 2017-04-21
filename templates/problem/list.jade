@@ -176,7 +176,7 @@ block title_row
 block body
     #common-content
         block before_table
-        if not IN_CONTEST
+        if not IN_CONTEST and hot_problems
             #content-right.problems: .info-float
                 include problem/search-form
                 .sidebox

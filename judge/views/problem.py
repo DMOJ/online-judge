@@ -389,6 +389,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         if not self.in_contest:
             context.update(self.get_sort_context())
             context['hot_problems'] = hot_problems(timedelta(days=1), 7)
+        else:
+            context['hot_problems'] = None
         return context
 
     def GET_with_session(self, request, key):
