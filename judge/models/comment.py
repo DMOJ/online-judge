@@ -112,7 +112,7 @@ class Comment(MPTTModel):
             elif self.page.startswith('b:'):
                 return BlogPost.objects.get(id=self.page[2:]).title
             elif self.page.startswith('s:'):
-                return Solution.objects.get(problem__code=self.page[2:]).title
+                return _('Editorial for %s') % Problem.objects.get(code=self.page[2:]).name
             return '<unknown>'
         except ObjectDoesNotExist:
             return '<deleted>'
