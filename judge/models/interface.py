@@ -87,14 +87,12 @@ class BlogPost(models.Model):
 
 
 class Solution(models.Model):
-    url = models.CharField('URL', max_length=100, db_index=True, blank=True)
-    title = models.CharField(max_length=200)
-    is_public = models.BooleanField(default=False)
-    publish_on = models.DateTimeField()
-    content = models.TextField()
-    authors = models.ManyToManyField(Profile, blank=True)
     problem = models.ForeignKey(Problem, on_delete=models.SET_NULL, verbose_name=_('associated problem'),
                                 null=True, blank=True)
+    is_public = models.BooleanField(verbose_name=_('public visibility'), default=False)
+    publish_on = models.DateTimeField(verbose_name=_('publish date'))
+    authors = models.ManyToManyField(Profile, verbose_name=_('authors'), blank=True)
+    content = models.TextField(verbose_name=_('editorial content'))
 
     def get_absolute_url(self):
         problem = self.problem
@@ -104,7 +102,7 @@ class Solution(models.Model):
             return reverse('problem_editorial', args=[problem.code])
 
     def __unicode__(self):
-        return self.title
+        return _('Editorial for %s') % self.problem.name
 
     class Meta:
         permissions = (
