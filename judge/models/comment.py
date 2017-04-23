@@ -106,13 +106,13 @@ class Comment(MPTTModel):
     def page_title(self):
         try:
             if self.page.startswith('p:'):
-                return Problem.objects.get(code=self.page[2:]).name
+                return Problem.objects.values_list('name', flat=True).get(code=self.page[2:])
             elif self.page.startswith('c:'):
-                return Contest.objects.get(key=self.page[2:]).name
+                return Contest.objects.values_list('name', flat=True).get(key=self.page[2:])
             elif self.page.startswith('b:'):
-                return BlogPost.objects.get(id=self.page[2:]).title
+                return BlogPost.objects.values_list('title', flat=True).get(id=self.page[2:])
             elif self.page.startswith('s:'):
-                return _('Editorial for %s') % Problem.objects.get(code=self.page[2:]).name
+                return _('Editorial for %s') % Problem.objects.values_list('name', flat=True).get(code=self.page[2:])
             return '<unknown>'
         except ObjectDoesNotExist:
             return '<deleted>'
