@@ -400,7 +400,8 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None,
                              time=data[part, prob][2] - participation.start,
                              state=best_solution_state(data[part, prob][1], points),
                              is_pretested=is_pretested)
-            if data[part, prob][1] is not None else None for prob, points, is_pretested in problems])
+            if (part, prob) in data and data[part, prob][1] is not None else None
+            for prob, points, is_pretested in problems])
 
     return map(make_ranking_profile, queryset.select_related('user__user', 'rating')
                .defer('user__about', 'user__organizations__about'))
