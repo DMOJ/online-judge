@@ -84,9 +84,9 @@ class SolutionForm(ModelForm):
 
 
 class SolutionAdmin(VersionAdmin):
-    fields = ('url', 'title', 'is_public', 'publish_on', 'problem', 'authors', 'content')
-    list_display = ('title', 'url', 'problem_link', 'show_public')
-    search_fields = ('url', 'title')
+    fields = ('title', 'is_public', 'publish_on', 'problem', 'authors', 'content')
+    list_display = ('title', 'problem_link', 'show_public')
+    search_fields = ('title', 'problem__name', 'problem__code')
     form = SolutionForm
 
     def show_public(self, obj):
