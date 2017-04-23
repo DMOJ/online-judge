@@ -13,8 +13,8 @@ from mptt.models import MPTTModel
 from reversion.models import Version
 
 from judge.models.contest import Contest
-from judge.models.interface import BlogPost, Solution
-from judge.models.problem import Problem
+from judge.models.interface import BlogPost
+from judge.models.problem import Problem, Solution
 from judge.models.profile import Profile
 
 __all__ = ['Comment', 'CommentVote']
