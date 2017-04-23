@@ -97,7 +97,11 @@ class Solution(models.Model):
                                 null=True, blank=True)
 
     def get_absolute_url(self):
-        return reverse('solution', args=[self.url])
+        problem = self.problem
+        if problem is None:
+            return reverse('home')
+        else:
+            return reverse('problem_editorial', args=[problem.code])
 
     def __unicode__(self):
         return self.title
