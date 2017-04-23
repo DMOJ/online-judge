@@ -83,26 +83,6 @@ class SolutionForm(ModelForm):
             widgets['content'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('solution_preview'))
 
 
-class SolutionAdmin(VersionAdmin):
-    fields = ('problem', 'is_public', 'publish_on', 'authors', 'content')
-    list_display = ('problem_link', 'show_public')
-    search_fields = ('problem__name', 'problem__code')
-    form = SolutionForm
-
-    def show_public(self, obj):
-        return format_html(u'<a href="{0}" style="white-space:nowrap;">{1}</a>',
-                           obj.get_absolute_url(), ugettext('View on site'))
-    show_public.short_description = ''
-
-    def problem_link(self, obj):
-        if obj.problem is None:
-            return 'N/A'
-        return format_html(u'<a href="{}">{}</a>', reverse('admin:judge_problem_change', args=[obj.problem_id]),
-                           obj.problem.name)
-    problem_link.short_description = _('Problem')
-    problem_link.admin_order_field = 'problem__name'
-
-
 class LicenseForm(ModelForm):
     class Meta:
         if HeavyPreviewAdminPageDownWidget is not None:

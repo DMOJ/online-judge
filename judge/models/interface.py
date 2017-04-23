@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
-from judge.models.problem import Problem
 from judge.models.profile import Profile
 
 __all__ = ['MiscConfig', 'validate_regex', 'NavigationBar', 'BlogPost', 'Solution']
@@ -84,29 +83,3 @@ class BlogPost(models.Model):
         )
         verbose_name = _('blog post')
         verbose_name_plural = _('blog posts')
-
-
-class Solution(models.Model):
-    problem = models.ForeignKey(Problem, on_delete=models.SET_NULL, verbose_name=_('associated problem'),
-                                null=True, blank=True)
-    is_public = models.BooleanField(verbose_name=_('public visibility'), default=False)
-    publish_on = models.DateTimeField(verbose_name=_('publish date'))
-    authors = models.ManyToManyField(Profile, verbose_name=_('authors'), blank=True)
-    content = models.TextField(verbose_name=_('editorial content'))
-
-    def get_absolute_url(self):
-        problem = self.problem
-        if problem is None:
-            return reverse('home')
-        else:
-            return reverse('problem_editorial', args=[problem.code])
-
-    def __unicode__(self):
-        return _('Editorial for %s') % self.problem.name
-
-    class Meta:
-        permissions = (
-            ('see_private_solution', 'See hidden solutions'),
-        )
-        verbose_name = _('solution')
-        verbose_name_plural = _('solutions')

@@ -12,8 +12,8 @@ block content_media
 
 block header
     div(style='float:right')
-        if perms.judge.change_solution
-            | [#[a(href='{% url "admin:judge_solution_change" solution.id %}') {% trans "Edit" %}]]
+        if perms.judge.change_problem
+            | [#[a(href='{% url "admin:judge_problem_change" problem.id %}') {% trans "Edit" %}]]
 
 block body
     .content-description
