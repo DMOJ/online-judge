@@ -3,10 +3,10 @@ from reversion import revisions
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES, EFFECTIVE_MATH_ENGINES
 from judge.models.comment import Comment, CommentVote
 from judge.models.contest import Contest, ContestTag, ContestParticipation, ContestProblem, ContestSubmission, Rating
-from judge.models.interface import MiscConfig, validate_regex, NavigationBar, BlogPost, Solution
+from judge.models.interface import MiscConfig, validate_regex, NavigationBar, BlogPost
 from judge.models.message import PrivateMessage, PrivateMessageThread
 from judge.models.problem import ProblemGroup, ProblemType, Problem, ProblemClarification, ProblemTranslation, \
-    TranslatedProblemQuerySet, TranslatedProblemForeignKeyQuerySet, License, LanguageLimit
+    TranslatedProblemQuerySet, TranslatedProblemForeignKeyQuerySet, License, LanguageLimit, Solution
 from judge.models.problem_data import problem_data_storage, problem_directory_file, ProblemData, ProblemTestCase, \
     CHECKERS
 from judge.models.profile import Profile, Organization, OrganizationRequest
