@@ -11,6 +11,7 @@ from django.utils.translation import ugettext, ungettext, ugettext_lazy as _
 from reversion.admin import VersionAdmin
 
 from judge.models import Profile, LanguageLimit, ProblemTranslation, Problem, ProblemClarification
+from judge.models import Solution
 from judge.widgets import HeavySelect2MultipleWidget, Select2MultipleWidget, Select2Widget, \
     HeavyPreviewAdminPageDownWidget, HeavyPreviewPageDownWidget, CheckboxSelectMultipleWithSelectAll
 
@@ -77,6 +78,27 @@ class ProblemClarificationInline(admin.StackedInline):
     extra = 0
 
 
+class ProblemSolutionForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProblemSolutionForm, self).__init__(*args, **kwargs)
+        self.fields['authors'].widget.can_add_related = False
+
+    class Meta:
+        widgets = {
+            'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+        }
+
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets['content'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('solution_preview'))
+
+
+class ProblemSolutionInline(admin.StackedInline):
+    model = Solution
+    fields = ('is_public', 'publish_on', 'authors', 'content')
+    form = ProblemSolutionForm
+    extra = 0
+
+
 class ProblemTranslationForm(ModelForm):
     class Meta:
         if HeavyPreviewAdminPageDownWidget is not None:
@@ -109,7 +131,7 @@ class ProblemAdmin(VersionAdmin):
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'show_public']
     ordering = ['code']
     search_fields = ('code', 'name', 'authors__user__username', 'curators__user__username')
-    inlines = [ProblemClarificationInline, LanguageLimitInline, ProblemTranslationInline]
+    inlines = [LanguageLimitInline, ProblemClarificationInline, ProblemSolutionInline, ProblemTranslationInline]
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
