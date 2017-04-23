@@ -99,7 +99,7 @@ class SolutionAdmin(VersionAdmin):
             return 'N/A'
         return format_html(u'<a href="{}">{}</a>', reverse('admin:judge_problem_change', args=[obj.problem_id]),
                            obj.problem.name)
-    problem_link.short_description = ''
+    problem_link.short_description = _('Problem')
     problem_link.admin_order_field = 'problem__name'
 
 
