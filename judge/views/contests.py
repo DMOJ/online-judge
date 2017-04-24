@@ -13,7 +13,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import connection, IntegrityError
-from django.db.models import Q, Min, Max
+from django.db.models import Q, Min, Max, Count
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
@@ -27,6 +27,7 @@ from django.views.generic.detail import BaseDetailView, DetailView
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation, ContestTag, Profile
+from judge.models import Problem
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
@@ -189,6 +190,13 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
 
     def get_title(self):
         return self.object.name
+
+    def get_context_data(self, **kwargs):
+        context = super(ContestDetail, self).get_context_data(**kwargs)
+        context['contest_problems'] = Problem.objects.filter(contests__contest=self.object) \
+                                             .order_by('contests__order').defer('description') \
+                                             .annotate(has_editorial=Count('solution'))
+        return context
 
 
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):

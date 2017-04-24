@@ -74,6 +74,30 @@ block body
         - cache 3600 contest_html contest.id MATH_ENGINE
             | #{contest.description|with_math:MATH_ENGINE|markdown:"contest"|reference}
 
+    if contest.ended
+        hr
+        .contest-problems
+            h3 {% trans "Problems" %}
+            table#contest-problems
+                thead: tr
+                    th {% trans "Problem" %}
+                    th {% trans "Points" %}
+                    th {% trans "AC Rate" %}
+                    th {% trans "Users" %}
+                    th
+                tbody
+                    each problem in contest_problems
+                        tr
+                            td: a(href='{% url "problem_detail" problem.code %}')= problem.i18n_name
+                            td #{problem.points|floatformat}
+                                if problem.partial
+                                    | p
+                            td #{problem.ac_rate|floatformat:"1"}%
+                            td: a(href='{% url "ranked_submissions" problem.code %}')= problem.user_count
+                            td
+                                if problem.has_editorial
+                                    a(href='{% url "problem_editorial" problem.code %}') {% trans "Editorial" %}
+
     hr
     span.social
         - post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>"

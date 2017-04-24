@@ -245,7 +245,7 @@ block body
                                     span.type-tag= type
                                     if not forloop.last
                                         = ', '
-                        td.p #{problem.points | floatformat}
+                        td.p #{problem.points|floatformat}
                             if problem.partial
                                 | p
                         if not IN_CONTEST
