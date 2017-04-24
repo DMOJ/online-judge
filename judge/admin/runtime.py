@@ -5,11 +5,17 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from reversion.admin import VersionAdmin
 
+from django_ace import AceWidget
 from judge.models import Problem
 from judge.widgets import AdminPagedownWidget, HeavySelect2MultipleWidget
 
 
 class LanguageForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(LanguageForm, self).__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['template'].widget.mode = self.instance.ace
+
     problems = ModelMultipleChoiceField(
         label=_('Disallowed problems'),
         queryset=Problem.objects.all(),
@@ -18,12 +24,14 @@ class LanguageForm(ModelForm):
         widget=HeavySelect2MultipleWidget(data_view='problem_select2'))
 
     class Meta:
+        widgets = {'template': AceWidget}
         if AdminPagedownWidget is not None:
             widgets = {'description': AdminPagedownWidget}
 
 
 class LanguageAdmin(VersionAdmin):
-    fields = ('key', 'name', 'short_name', 'common_name', 'ace', 'pygments', 'info', 'description', 'template', 'problems')
+    fields = ('key', 'name', 'short_name', 'common_name', 'ace', 'pygments', 'info', 'description',
+              'template', 'problems')
     list_display = ('key', 'name', 'common_name', 'info')
     form = LanguageForm
 
