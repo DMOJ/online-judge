@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _, pgettext, ugettext, ungettext
 
+from django_ace import AceWidget
 from judge.models import Submission, SubmissionTestCase, ContestSubmission, ContestParticipation, ContestProblem, \
     Profile
 
@@ -229,3 +230,9 @@ class SubmissionAdmin(admin.ModelAdmin):
             raise PermissionDenied()
         submission.judge(was_rejudged=True)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(SubmissionAdmin, self).get_form(request, obj, **kwargs)
+        if obj is not None:
+            form.base_fields['user_script'].widget = AceWidget(obj.language.ace, request.user.profile.ace_theme)
+        return form
