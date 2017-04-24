@@ -234,5 +234,5 @@ class SubmissionAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super(SubmissionAdmin, self).get_form(request, obj, **kwargs)
         if obj is not None:
-            form.base_fields['user_script'].widget = AceWidget(obj.language.ace, request.user.profile.ace_theme)
+            form.base_fields['source'].widget = AceWidget(obj.language.ace, request.user.profile.ace_theme)
         return form
