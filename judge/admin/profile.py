@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _, ugettext, ungettext
 from reversion.admin import VersionAdmin
 
+from django_ace import AceWidget
 from judge.models import Profile
 from judge.widgets import Select2Widget, AdminPagedownWidget
 
@@ -87,3 +88,9 @@ class ProfileAdmin(VersionAdmin):
                                              '%d users have scores recalculated.',
                                              count) % count)
     recalculate_points.short_description = _('Recalculate scores')
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ProfileAdmin, self).get_form(request, obj, **kwargs)
+        if obj is not None:
+            form.base_fields['template'].widget = AceWidget('js', request.user.profile.ace_theme)
+        return form
