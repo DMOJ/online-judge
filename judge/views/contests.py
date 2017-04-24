@@ -195,7 +195,8 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         context = super(ContestDetail, self).get_context_data(**kwargs)
         context['contest_problems'] = Problem.objects.filter(contests__contest=self.object) \
                                              .order_by('contests__order').defer('description') \
-                                             .annotate(has_editorial=Count('solution'))
+                                             .annotate(has_editorial=Count('solution')) \
+                                             .add_i18n_name(self.request.LANGUAGE_CODE)
         return context
 
 
