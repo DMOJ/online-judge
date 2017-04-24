@@ -11,11 +11,6 @@ from judge.widgets import AdminPagedownWidget, HeavySelect2MultipleWidget
 
 
 class LanguageForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(LanguageForm, self).__init__(*args, **kwargs)
-        if self.instance:
-            self.fields['template'].widget.mode = self.instance.ace
-
     problems = ModelMultipleChoiceField(
         label=_('Disallowed problems'),
         queryset=Problem.objects.all(),
@@ -24,7 +19,6 @@ class LanguageForm(ModelForm):
         widget=HeavySelect2MultipleWidget(data_view='problem_select2'))
 
     class Meta:
-        widgets = {'template': AceWidget}
         if AdminPagedownWidget is not None:
             widgets = {'description': AdminPagedownWidget}
 
@@ -42,6 +36,8 @@ class LanguageAdmin(VersionAdmin):
     def get_form(self, request, obj=None, **kwargs):
         self.form.base_fields['problems'].initial = \
             Problem.objects.exclude(id__in=obj.problem_set.values('id')).values_list('pk', flat=True) if obj else []
+        if obj is not None:
+            self.form.base_fields['template'].widget = AceWidget(obj.ace, request.user.profile.ace_theme)
         return super(LanguageAdmin, self).get_form(request, obj, **kwargs)
 
 
