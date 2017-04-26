@@ -1,5 +1,6 @@
 import os
 
+import errno
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -57,7 +58,11 @@ class ProblemData(models.Model):
         return problem_data_storage.exists('%s/init.yml' % self.problem.code)
 
     def _update_code(self, original, new):
-        problem_data_storage.rename(original, new)
+        try:
+            problem_data_storage.rename(original, new)
+        except OSError as e:
+            if e.errno != errno.ENOENT:
+                raise
         if self.zipfile:
             self.zipfile.name = _problem_directory_file(new, self.zipfile.name)
         if self.generator:
