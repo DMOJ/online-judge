@@ -83,7 +83,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
             latex = self.parser.unescape(latex)
             result = self.texoid.get_result(latex)
             if not result:
-                return '<pre>%s</pre>' % mistune.escape(latex)
+                return '<pre>%s</pre>' % mistune.escape(latex, smart_amp=False)
             elif 'error' not in result:
                 img = ('''<img src="%(svg)s" onerror="this.src='%(png)s';this.onerror=null"'''
                           'width="%(width)s" height="%(height)s"%(tail)s>') % {
@@ -102,7 +102,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
                     style += ['text-align: center']
                 return '<%s style="%s">%s</%s>' % (tag, ';'.join(style), img, tag)
             else:
-                return '<pre>%s</pre>' % mistune.escape(result['error'])
+                return '<pre>%s</pre>' % mistune.escape(result['error'], smart_amp=False)
         return super(AwesomeRenderer, self).block_html(html)
 
     def header(self, text, level, *args, **kwargs):
