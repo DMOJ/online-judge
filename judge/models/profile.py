@@ -1,4 +1,4 @@
-from operator import itemgetter, mul
+from operator import mul
 
 from django.conf import settings
 from django.contrib.auth.models import User
