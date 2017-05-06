@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.cache import caches
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from mistune import escape
 
 from judge.utils.file_cache import HashFileCache
 
@@ -188,8 +189,8 @@ class MathoidMathParser(object):
 
     def display_math(self, math):
         math = format_math(math)
-        return self.get_result('\displaystyle ' + math) or r'\[%s\]' % math
+        return self.get_result('\displaystyle ' + math) or r'\[%s\]' % escape(math)
 
     def inline_math(self, math):
         math = format_math(math)
-        return self.get_result(math) or r'\(%s\)' % math
+        return self.get_result(math) or r'\(%s\)' % escape(math)
