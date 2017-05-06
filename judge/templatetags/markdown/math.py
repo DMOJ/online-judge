@@ -54,10 +54,10 @@ class MathRenderer(mistune.Renderer):
 
     def block_math(self, math):
         if self.mathoid is None or not math:
-            return r'\[%s\]' % math
+            return r'\[%s\]' % mistune.escape(math)
         return self.mathoid.display_math(math)
 
     def math(self, math):
         if self.mathoid is None or not math:
-            return r'\(%s\)' % math
+            return r'\(%s\)' % mistune.escape(math)
         return self.mathoid.inline_math(math)
