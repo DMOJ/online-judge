@@ -253,7 +253,7 @@ block users_table
         if tab == 'participation'
             if contest.start_time <= now or perms.judge.see_private_contest
                 input#search-contest(type='text', placeholder='{% trans "View user participation" %}')
-        input#show-organizations-checkbox(type='checkbox')
-        label(for="show-organizations-checkbox") {% trans "Show organizations" %}
+        input#show-organizations-checkbox(type='checkbox', style='vertical-align: bottom')
+        label(for='show-organizations-checkbox', style='vertical-align: bottom') {% trans "Show organizations" %}
 
     include contest/ranking-table
