@@ -244,13 +244,10 @@ block users_js_media
     include contest/media-js
 
 block users_table
-    //if contest.start_time <= now or perms.judge.see_private_contest
-    //    a(href='{% url "contest_participation_own" contest.key %}') {% trans "My participation" %}
-    //    if has_select2
-    //        br
-    //        input#search(type='text', placeholder='{% trans "View user participation" %}')
-    //    hr
-    input#show-organizations-checkbox(type='checkbox')
-    label(for="show-organizations-checkbox") {% trans "Show organizations" %}
+    div(style='margin-bottom: 0.5em')
+        if contest.start_time <= now or perms.judge.see_private_contest
+            input#search(type='text', placeholder='{% trans "View user participation" %}')
+        input#show-organizations-checkbox(type='checkbox')
+        label(for="show-organizations-checkbox") {% trans "Show organizations" %}
 
     include contest/ranking-table
