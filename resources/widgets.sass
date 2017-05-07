@@ -131,13 +131,14 @@ input
   border-bottom-color: transparent
   border-image: none
 
-@media(min-width: 760px)
+@media not all and (max-width: 760px)
   .tabs
     display: flex
 
 .tabs
   border-bottom: 1px solid rgba(0, 0, 0, 0.2)
   margin: 0 0 8px
+  padding: 0
   width: 100%
 
   h2
