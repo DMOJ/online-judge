@@ -149,8 +149,13 @@ block users_media
             white-space: nowrap;
         }
 
-        #search, #search + .select2 {
+        #search-contest, #search-contest + .select2 {
             margin-top: 0.5em;
+        }
+
+        #search-contest {
+            width: 200px;
+            height: 2.3em;
         }
 
 block users_js_media
@@ -215,7 +220,7 @@ block users_js_media
         $(function () {
             var url = '{% url "contest_participation" contest.key "__username__" %}';
             var placeholder = $('#search-contest').replaceWith($('<select/>').attr({
-                id: 'search'
+                id: 'search-contest'
             })).attr('placeholder');
 
             $('#search-contest').select2({
