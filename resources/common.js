@@ -316,12 +316,13 @@ $.fn.textWidth = function () {
 $(function () {
     $('.tabs').each(function () {
         var $this = $(this), $h2 = $(this).find('h2'), $ul = $(this).find('ul');
-        var cutoff = ($h2.textWidth() || 400) + 20;
+        var cutoff = ($h2.textWidth() || 400) + 20, handler;
         $ul.children().each(function () {
             cutoff += $(this).width();
         });
-        $(window).resize(function () {
+        $(window).resize(handler = function () {
             $this.toggleClass('tabs-flex', $this.width() > cutoff);
         });
+        handler();
     });
 });
