@@ -250,8 +250,9 @@ block users_js_media
 
 block users_table
     div(style='margin-bottom: 0.5em')
-        if contest.start_time <= now or perms.judge.see_private_contest
-            input#search-contest(type='text', placeholder='{% trans "View user participation" %}')
+        if tab == 'participation'
+            if contest.start_time <= now or perms.judge.see_private_contest
+                input#search-contest(type='text', placeholder='{% trans "View user participation" %}')
         input#show-organizations-checkbox(type='checkbox')
         label(for="show-organizations-checkbox") {% trans "Show organizations" %}
 
