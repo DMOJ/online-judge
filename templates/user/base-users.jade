@@ -6,13 +6,13 @@ block js_media
     block users_js_media
     script.
         $(function () {
-            $('#search').replaceWith($('<select/>').attr({
+            $('#search-handle').replaceWith($('<select/>').attr({
                 id: 'search',
                 name: 'handle',
                 onchange: 'form.submit()'
             }));
             var in_user_redirect = false;
-            $('#search').select2({
+            $('#search-handle').select2({
                 placeholder: '{% trans "Search by handle..." %}',
                 ajax: {
                     url: '{% url "user_search_select2_ajax" %}'
@@ -133,7 +133,7 @@ block body
                 div(style='margin-bottom: 7px; margin-top: 3px;')
                     include list-pages
                     form#search-form(name='form', action='{% url "user_ranking_redirect" %}', method='get')
-                        input#search(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
+                        input#search-handle(type='text', name='search', placeholder='{% trans "Search by handle..." %}')
 
             table#users-table.table
                 block users_table

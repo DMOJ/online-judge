@@ -214,11 +214,11 @@ block users_js_media
     script(type='text/javascript').
         $(function () {
             var url = '{% url "contest_participation" contest.key "__username__" %}';
-            var placeholder = $('#search').replaceWith($('<select/>').attr({
+            var placeholder = $('#search-contest').replaceWith($('<select/>').attr({
                 id: 'search'
             })).attr('placeholder');
 
-            $('#search').select2({
+            $('#search-contest').select2({
                 placeholder: placeholder,
                 ajax: {
                     url: '{% url "contest_user_search_select2_ajax" contest.key %}'
@@ -246,7 +246,7 @@ block users_js_media
 block users_table
     div(style='margin-bottom: 0.5em')
         if contest.start_time <= now or perms.judge.see_private_contest
-            input#search(type='text', placeholder='{% trans "View user participation" %}')
+            input#search-contest(type='text', placeholder='{% trans "View user participation" %}')
         input#show-organizations-checkbox(type='checkbox')
         label(for="show-organizations-checkbox") {% trans "Show organizations" %}
 
