@@ -131,13 +131,14 @@ input
   border-bottom-color: transparent
   border-image: none
 
-.tabs.tabs-flex
-  display: flex
-
 .tabs
   border-bottom: 1px solid rgba(0, 0, 0, 0.2)
   margin: 0 0 8px
   width: 100%
+  display: flex
+
+  &.tabs-no-flex
+    display: block
 
   h2
     color: #393630

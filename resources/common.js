@@ -321,7 +321,7 @@ $(function () {
             cutoff += $(this).width();
         });
         $(window).resize(handler = function () {
-            $this.toggleClass('tabs-flex', $this.width() > cutoff);
+            $this.toggleClass('tabs-no-flex', $this.width() < cutoff);
         });
         handler();
     });
