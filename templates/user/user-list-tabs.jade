@@ -1,9 +1,9 @@
 - load i18n
 
-div.page-title
-    ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
-        h2(style='color:#393630; display: inline-block') {% trans title %}
-        span.spacer
+.page-title: .tabs
+    h2 {% trans title %}
+    span.spacer
+    ul
         li(class=('active' if tab == 'list' else ''))
             a(href='{% url "user_list" %}') {% trans "Leaderboard" %}
         li(class=('active' if tab == 'organizations' else ''))

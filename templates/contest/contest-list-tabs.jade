@@ -1,18 +1,17 @@
 - load i18n
 
-div.page-title
-    ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
-        h2(style='color:#393630; display: inline-block') {% trans title %}
+.page-title: .tabs
+    h2(style='color:#393630; display: inline-block') {% trans title %}
+    span.spacer
+    if tab == 'calendar'
+        div(style='font-size: 1.6em; margin-top: 0.3em')
+            if prev_month
+                a(href='{% url "contest_calendar" prev_month.year prev_month.month %}') &laquo; {% trans "Prev" %}
+            = ' '
+            if next_month
+                a(href='{% url "contest_calendar" next_month.year next_month.month %}') {% trans "Next" %} &raquo;
         span.spacer
-        if tab == 'calendar'
-            div(style='font-size: 1.6em; margin-top: 0.3em')
-                if prev_month
-                    a(href='{% url "contest_calendar" prev_month.year prev_month.month %}') &laquo; {% trans "Prev" %}
-                = ' '
-                if next_month
-                    a(href='{% url "contest_calendar" next_month.year next_month.month %}') {% trans "Next" %} &raquo;
-            span.spacer
-        li(class=('active' if tab == 'list' else '')): a(href='{% url "contest_list" %}') {% trans "List" %}
-        li(class=('active' if tab == 'calendar' else '')): a(href='{% url "contest_calendar" now.year now.month %}') {% trans "Calendar" %}
-        if perms.judge.change_contest
-            li: a(href='{% url "admin:judge_contest_changelist" %}') {% trans "Admin" %}
+    li(class=('active' if tab == 'list' else '')): a(href='{% url "contest_list" %}') {% trans "List" %}
+    li(class=('active' if tab == 'calendar' else '')): a(href='{% url "contest_calendar" now.year now.month %}') {% trans "Calendar" %}
+    if perms.judge.change_contest
+        li: a(href='{% url "admin:judge_contest_changelist" %}') {% trans "Admin" %}

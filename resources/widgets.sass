@@ -131,43 +131,54 @@ input
   border-bottom-color: transparent
   border-image: none
 
-ul.tabs
+@media(min-width: 760px)
+  .tabs
+    display: flex
+
+.tabs
   border-bottom: 1px solid rgba(0, 0, 0, 0.2)
-  padding: 0
-  list-style: outside none none
-  display: flex
+  margin: 0 0 8px
+  width: 100%
 
-  > li
-    margin-bottom: -1px
-    position: relative
-    display: block
-    &.active > a
-      @extend .ul_tab_a_active
-      &:hover
-        @extend .ul_tab_a_active
-      &:focus
-        @extend .ul_tab_a_active
+  h2
+    color: #393630
 
-    > a
-      margin-right: 2px
-      line-height: 1.42857
-      border: 1px solid transparent
-      border-radius: 4px 4px 0 0
+  > ul
+    margin: 0
+    list-style: outside none none
+    display: flex
+
+    > li
+      margin-bottom: -1px
       position: relative
       display: block
-      padding: 10px 15px
-      color: #337ab7
-      text-decoration: none
-      white-space: nowrap
+      &.active > a
+        @extend .ul_tab_a_active
+        &:hover
+          @extend .ul_tab_a_active
+        &:focus
+          @extend .ul_tab_a_active
 
-      &:hover
-        border-color: #eee #eee rgba(0, 0, 0, 0.2)
+      > a
+        margin-right: 2px
+        line-height: 1.42857
+        border: 1px solid transparent
+        border-radius: 4px 4px 0 0
+        position: relative
+        display: block
+        padding: 10px 15px
+        color: #337ab7
         text-decoration: none
-        background-color: #eee
+        white-space: nowrap
 
-      &:focus
-        text-decoration: none
-        background-color: #eee
+        &:hover
+          border-color: #eee #eee rgba(0, 0, 0, 0.2)
+          text-decoration: none
+          background-color: #eee
+
+        &:focus
+          text-decoration: none
+          background-color: #eee
 
 // Bootstrap-y pagination
 ul.pagination a:hover

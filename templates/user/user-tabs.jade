@@ -1,9 +1,9 @@
 - load i18n
 
-div.page-title
-    ul.tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
-        h2(style='color:#393630; display: inline-block')= title
-        span.spacer
+.page-title: .tabs(style='margin: 0px 0px 8px;padding:0px;width:100%')
+    h2(style='color:#393630; display: inline-block')= title
+    span.spacer
+    ul
         li(class=('active' if user_tab == 'about' else ''))
             a(href='{% url "user_page" user.user.username %}') {% trans "About" %}
         li(class=('active' if user_tab == 'problems' else ''))
