@@ -217,7 +217,7 @@ window.register_update_relative = function (get_times, show_relative, interval) 
     return update_relative_time;
 };
 
-$(function() {
+$(function () {
     $('form').submit(function (evt) {
         // Prevent multiple submissions of forms, see #565
         $("input[type='submit']").attr("disabled", "true");
@@ -301,5 +301,27 @@ $(function () {
     $("a.close").click(function () {
         var $closer = $(this);
         $closer.parent().fadeOut(200);
+    });
+});
+
+$.fn.textWidth = function () {
+    var html_org = $(this).html();
+    var html_calc = '<span style="white-space: nowrap;">' + html_org + '</span>';
+    $(this).html(html_calc);
+    var width = $(this).find('span:first').width();
+    $(this).html(html_org);
+    return width;
+};
+
+$(function () {
+    $('.tabs').each(function () {
+        var $this = $(this), $h2 = $(this).find('h2'), $ul = $(this).find('ul');
+        var cutoff = ($h2.textWidth() || 400) + 20;
+        $ul.children().each(function () {
+            cutoff += $(this).width();
+        });
+        $(window).resize(function () {
+            $this.toggleClass('tabs-flex', $this.width() > cutoff);
+        });
     });
 });
