@@ -486,6 +486,7 @@ def contest_ranking_view(request, contest, participation=None):
         'contest': contest,
         'last_msg': event.last(),
         'has_rating': contest.ratings.exists(),
+        'tab': 'ranking',
     }
 
     # TODO: use ContestMixin when this becomes a class-based view
@@ -547,7 +548,8 @@ def base_participation_list(request, contest, profile):
         'contest': contest,
         'last_msg': event.last(),
         'has_rating': False,
-        'rank_header': _('Participation')
+        'rank_header': _('Participation'),
+        'tab': 'participation',
     })
 
 
