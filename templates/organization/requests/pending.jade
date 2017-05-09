@@ -12,7 +12,7 @@ block body
     if formset.forms
         form(action='', method='post')
             - csrf_token
-            #{formset.management_form}
+            | #{formset.management_form}
             table
                 tr
                     th {% trans "User" %}
