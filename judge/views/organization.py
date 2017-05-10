@@ -232,9 +232,9 @@ class OrganizationRequestView(OrganizationRequestBaseView):
             messages.success(request,
                              ungettext('Approved %d user.', 'Approved %d users.', approved) % approved + '\n' +
                              ungettext('Rejected %d user.', 'Rejected %d users.', rejected) % rejected)
+            cache.delete(make_template_fragment_key('org_member_count', (organization.id,)))
             return HttpResponseRedirect(request.get_full_path())
-        context = self.get_context_data(object=organization)
-        return self.render_to_response(context)
+        return self.render_to_response(self.get_context_data(object=organization))
 
     put = post
 
