@@ -1,14 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db import IntegrityError, transaction
+from django.db.models import F
 from django.forms.models import ModelForm
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
-from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, UpdateView
 from reversion import revisions
 from reversion.models import Version
 
+from judge.dblock import LockModel
 from judge.models import Comment, CommentVote
 from judge.utils.views import TitleMixin
 from judge.widgets import MathJaxPagedownWidget
@@ -28,26 +29,36 @@ def vote_comment(request, delta):
     if 'id' not in request.POST:
         return HttpResponseBadRequest()
 
-    comment = get_object_or_404(Comment, id=request.POST['id'])
+    try:
+        comment_id = int(request.POST['id'])
+    except ValueError:
+        return HttpResponseBadRequest()
+    else:
+        if not Comment.objects.filter(id=comment_id).exists():
+            raise Http404()
 
     vote = CommentVote()
-    vote.comment = comment
+    vote.comment_id = comment_id
     vote.voter = request.user.profile
     vote.score = delta
 
-    try:
-        vote.save()
-    except IntegrityError:
-        vote = CommentVote.objects.get(comment=comment, voter=request.user.profile)
-        if -vote.score == delta:
-            comment.score -= vote.score
-            comment.save()
-            vote.delete()
+    while True:
+        try:
+            vote.save()
+        except IntegrityError:
+            with LockModel(write=(CommentVote,)):
+                try:
+                    vote = CommentVote.objects.get(comment_id=comment_id, voter=request.user.profile)
+                except CommentVote.DoesNotExist:
+                    # We must continue racing in case this is exploited to manipulate votes.
+                    continue
+                if -vote.score != delta:
+                    return HttpResponseBadRequest(_('You already voted.'), content_type='text/plain')
+                vote.delete()
+            Comment.objects.update(score=F('score') - vote.score)
         else:
-            return HttpResponseBadRequest(_('You already voted.'), content_type='text/plain')
-    else:
-        comment.score += delta
-        comment.save()
+            Comment.objects.update(score=F('score') + delta)
+        break
     return HttpResponse('success', content_type='text/plain')
 
 
