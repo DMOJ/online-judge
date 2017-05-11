@@ -500,7 +500,7 @@ def problem_submit(request, problem=None, submission=None):
                 try:
                     contest_problem = form.cleaned_data['problem'].contests.get(contest=profile.current_contest.contest)
                 except ContestProblem.DoesNotExist:
-                    pass
+                    model = form.save()
                 else:
                     max_subs = contest_problem.max_submissions
                     if max_subs and get_contest_submission_count(problem, profile) >= max_subs:
