@@ -55,9 +55,9 @@ def vote_comment(request, delta):
                 if -vote.score != delta:
                     return HttpResponseBadRequest(_('You already voted.'), content_type='text/plain')
                 vote.delete()
-            Comment.objects.update(score=F('score') - vote.score)
+            Comment.objects.filter(id=comment_id).update(score=F('score') - vote.score)
         else:
-            Comment.objects.update(score=F('score') + delta)
+            Comment.objects.filter(id=comment_id).update(score=F('score') + delta)
         break
     return HttpResponse('success', content_type='text/plain')
 
