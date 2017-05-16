@@ -171,7 +171,7 @@ html(lang=LANGUAGE_CODE)
                         | {% trans "spectating" %}
                     elif CONTEST.end_time
                         #contest-time-remaining(data-secs='{{ CONTEST.time_remaining|seconds }}')
-                            #{CONTEST.time_remaining|timedelta:"localized"}
+                            | #{CONTEST.time_remaining|timedelta:"localized"}
                     else
                         | {% trans "virtual" %}
         #page-container
