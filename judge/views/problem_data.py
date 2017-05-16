@@ -120,7 +120,7 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
             elif data.zipfile:
                 return ZipFile(data.zipfile.path).namelist()
         except BadZipfile:
-            return False
+            return []
         return []
 
     def get_context_data(self, **kwargs):
