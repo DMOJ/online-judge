@@ -121,7 +121,7 @@ class Comment(MPTTModel):
         return '%s#comment-%d' % (self.link, self.id)
 
     def __unicode__(self):
-        return self.title
+        return '%(page)s by %(user)s' % {'page': self.page, 'user': self.author.user.username}
 
         # Only use this when queried with
         # .prefetch_related(Prefetch('votes', queryset=CommentVote.objects.filter(voter_id=profile_id)))
