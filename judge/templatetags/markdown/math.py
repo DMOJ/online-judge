@@ -4,6 +4,8 @@ import mistune
 
 from judge.utils.mathoid import MathoidMathParser
 
+mistune._pre_tags.append('latex')
+
 
 class MathInlineGrammar(mistune.InlineGrammar):
     block_math = re.compile(r'^\$\$(.*?)\$\$|^\\\[(.*?)\\\]', re.DOTALL)
