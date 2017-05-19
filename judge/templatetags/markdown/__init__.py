@@ -65,7 +65,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
         return '<a href="%s"%s>%s</a>' % (link, self._link_rel(link), text)
 
     def link(self, link, title, text):
-        link = mistune.escape_link(link, quote=True)
+        link = mistune.escape_link(link)
         if not title:
             return '<a href="%s"%s>%s</a>' % (link, self._link_rel(link), text)
         title = mistune.escape(title, quote=True)
