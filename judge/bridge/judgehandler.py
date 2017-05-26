@@ -172,8 +172,12 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
                 handler(data)
         except:
             logger.exception('Error in packet handling (Judge-side)')
+            self._packet_exception()
             # You can't crash here because you aren't so sure about the judges
             # not being malicious or simply malforms. THIS IS A SERVER!
+
+    def _packet_exception(self):
+        pass
 
     def _submission_is_batch(self, id):
         pass

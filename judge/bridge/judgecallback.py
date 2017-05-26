@@ -46,6 +46,13 @@ class DjangoJudgeHandler(JudgeHandler):
             Submission.objects.filter(id=self._working).update(status='IE')
             json_log.error(self._make_json_log(sub=self._working, action='close', info='IE due to shutdown on grading'))
 
+    def on_malformed(self, packet):
+        super(DjangoJudgeHandler, self).on_malformed(packet)
+        json_log.exception(self._make_json_log(sub=self._working, info='malformed zlib packet'))
+
+    def _packet_exception(self):
+        json_log.exception(self._make_json_log(sub=self._working, info='packet processing exception'))
+
     def get_related_submission_data(self, submission):
         _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
 
