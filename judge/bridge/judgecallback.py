@@ -266,11 +266,12 @@ class DjangoJudgeHandler(JudgeHandler):
                 'log': packet['log']
             })
             self._post_update_submission(packet['submission-id'], 'compile-error', done=True)
-            json_log.info(self._make_json_log(packet, action='compile-error', log=packet['log'], finish=True))
+            json_log.info(self._make_json_log(packet, action='compile-error', log=packet['log'],
+                                              finish=True, result='CE'))
         else:
             logger.warning('Unknown submission: %d', packet['submission-id'])
             json_log.error(self._make_json_log(packet, action='compile-error', info='unknown submission',
-                                               log=packet['log'], finish=True))
+                                               log=packet['log'], finish=True, result='CE'))
 
     def on_compile_message(self, packet):
         super(DjangoJudgeHandler, self).on_compile_message(packet)
@@ -290,11 +291,12 @@ class DjangoJudgeHandler(JudgeHandler):
         if Submission.objects.filter(id=id).update(status='IE', result='IE', error=packet['message']):
             event.post('sub_%d' % id, {'type': 'internal-error'})
             self._post_update_submission(id, 'internal-error', done=True)
-            json_log.info(self._make_json_log(packet, action='internal-error', message=packet['message'], finish=True))
+            json_log.info(self._make_json_log(packet, action='internal-error', message=packet['message'],
+                                              finish=True, result='IE'))
         else:
             logger.warning('Unknown submission: %d', id)
             json_log.error(self._make_json_log(packet, action='internal-error', info='unknown submission',
-                                               message=packet['message'], finish=True))
+                                               message=packet['message'], finish=True, result='IE'))
 
     def on_submission_terminated(self, packet):
         super(DjangoJudgeHandler, self).on_submission_terminated(packet)
@@ -302,10 +304,11 @@ class DjangoJudgeHandler(JudgeHandler):
         if Submission.objects.filter(id=packet['submission-id']).update(status='AB', result='AB'):
             event.post('sub_%d' % packet['submission-id'], {'type': 'aborted-submission'})
             self._post_update_submission(packet['submission-id'], 'terminated', done=True)
-            json_log.info(self._make_json_log(packet, action='aborted', finish=True))
+            json_log.info(self._make_json_log(packet, action='aborted', finish=True, result='AB'))
         else:
             logger.warning('Unknown submission: %d', packet['submission-id'])
-            json_log.error(self._make_json_log(packet, action='aborted', info='unknown submission', finish=True))
+            json_log.error(self._make_json_log(packet, action='aborted', info='unknown submission',
+                                               finish=True, result='AB'))
 
     def on_batch_begin(self, packet):
         super(DjangoJudgeHandler, self).on_batch_begin(packet)
