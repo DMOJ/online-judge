@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import time
@@ -399,4 +400,4 @@ class DjangoJudgeHandler(JudgeHandler):
         if sub is not None:
             data['submission'] = sub
         data.update(kwargs)
-        return data
+        return json.dumps(data)
