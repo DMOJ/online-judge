@@ -37,15 +37,14 @@ class DjangoJudgeHandler(JudgeHandler):
         self._submission_cache_id = None
         self._submission_cache = {}
 
+        json_log.info(self._make_json_log(action='connect'))
+
     def on_close(self):
         super(DjangoJudgeHandler, self).on_close()
         json_log.info(self._make_json_log(action='disconnect', info='judge disconnected'))
         if self._working:
             Submission.objects.filter(id=self._working).update(status='IE')
-            json_log.error(self._make_json_log(
-                sub=self._working, action='close',
-                info='IE due to shutdown on grading'
-            ))
+            json_log.error(self._make_json_log(sub=self._working, action='close', info='IE due to shutdown on grading'))
 
     def get_related_submission_data(self, submission):
         _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
@@ -73,10 +72,7 @@ class DjangoJudgeHandler(JudgeHandler):
     def _authenticate(self, id, key):
         result = Judge.objects.filter(name=id, auth_key=key).exists()
         if not result:
-            json_log.warning(self._make_json_log(
-                action='connect', judge=id,
-                info='judge failed authentication'
-            ))
+            json_log.warning(self._make_json_log(action='auth', judge=id, info='judge failed authentication'))
         return result
 
     def _connected(self):
@@ -98,8 +94,8 @@ class DjangoJudgeHandler(JudgeHandler):
         judge.last_ip = self.client_address[0]
         judge.save()
         self.judge_address = '%s:%d' % (self.client_address[0], self.client_address[1])
-
-        json_log.info(self._make_json_log(action='connect', info='judge successfully connected'))
+        json_log.info(self._make_json_log(action='auth', info='judge successfully authenticated',
+                                          executors=self.executors.keys()))
 
     def _disconnected(self):
         Judge.objects.filter(id=self.judge.id).update(online=False)
@@ -143,8 +139,7 @@ class DjangoJudgeHandler(JudgeHandler):
             json_log.error(self._make_json_log(packet, action='processing', info='unknown submission'))
 
     def on_submission_wrong_acknowledge(self, packet, expected, got):
-        json_log.error(self._make_json_log(packet, action='processing', info='wrong-acknowledge',
-                                           expected=expected))
+        json_log.error(self._make_json_log(packet, action='processing', info='wrong-acknowledge', expected=expected))
 
     def on_grading_begin(self, packet):
         super(DjangoJudgeHandler, self).on_grading_begin(packet)
@@ -222,7 +217,7 @@ class DjangoJudgeHandler(JudgeHandler):
             packet, action='grading-end', time=time, memory=memory,
             points=sub_points, total=problem.points, result=submission.result,
             case_points=points, case_total=total, user=submission.user_id,
-            problem=problem.code
+            problem=problem.code, finish=True
         ))
 
         submission.user._updating_stats_only = True
@@ -263,10 +258,11 @@ class DjangoJudgeHandler(JudgeHandler):
                 'log': packet['log']
             })
             self._post_update_submission(packet['submission-id'], 'compile-error', done=True)
-            json_log.info(self._make_json_log(packet, action='compile-error', log=packet['log']))
+            json_log.info(self._make_json_log(packet, action='compile-error', log=packet['log'], finish=True))
         else:
             logger.warning('Unknown submission: %d', packet['submission-id'])
-            json_log.error(self._make_json_log(packet, action='compile-error', info='unknown submission'))
+            json_log.error(self._make_json_log(packet, action='compile-error', info='unknown submission',
+                                               log=packet['log'], finish=True))
 
     def on_compile_message(self, packet):
         super(DjangoJudgeHandler, self).on_compile_message(packet)
@@ -276,7 +272,8 @@ class DjangoJudgeHandler(JudgeHandler):
             json_log.info(self._make_json_log(packet, action='compile-message', log=packet['log']))
         else:
             logger.warning('Unknown submission: %d', packet['submission-id'])
-            json_log.error(self._make_json_log(packet, action='compile-message', info='unknown submission'))
+            json_log.error(self._make_json_log(packet, action='compile-message', info='unknown submission',
+                                               log=packet['log']))
 
     def on_internal_error(self, packet):
         super(DjangoJudgeHandler, self).on_internal_error(packet)
@@ -285,10 +282,11 @@ class DjangoJudgeHandler(JudgeHandler):
         if Submission.objects.filter(id=id).update(status='IE', result='IE', error=packet['message']):
             event.post('sub_%d' % id, {'type': 'internal-error'})
             self._post_update_submission(id, 'internal-error', done=True)
-            json_log.info(self._make_json_log(packet, action='internal-error', message=packet['message']))
+            json_log.info(self._make_json_log(packet, action='internal-error', message=packet['message'], finish=True))
         else:
             logger.warning('Unknown submission: %d', id)
-            json_log.error(self._make_json_log(packet, action='internal-error', info='unknown submission'))
+            json_log.error(self._make_json_log(packet, action='internal-error', info='unknown submission',
+                                               message=packet['message'], finish=True))
 
     def on_submission_terminated(self, packet):
         super(DjangoJudgeHandler, self).on_submission_terminated(packet)
@@ -296,10 +294,10 @@ class DjangoJudgeHandler(JudgeHandler):
         if Submission.objects.filter(id=packet['submission-id']).update(status='AB', result='AB'):
             event.post('sub_%d' % packet['submission-id'], {'type': 'aborted-submission'})
             self._post_update_submission(packet['submission-id'], 'terminated', done=True)
-            json_log.info(self._make_json_log(packet, action='aborted'))
+            json_log.info(self._make_json_log(packet, action='aborted', finish=True))
         else:
             logger.warning('Unknown submission: %d', packet['submission-id'])
-            json_log.error(self._make_json_log(packet, action='aborted', info='unknown submission'))
+            json_log.error(self._make_json_log(packet, action='aborted', info='unknown submission', finish=True))
 
     def on_batch_begin(self, packet):
         super(DjangoJudgeHandler, self).on_batch_begin(packet)
