@@ -100,7 +100,7 @@ class DjangoJudgeHandler(JudgeHandler):
         RuntimeVersion.objects.bulk_create(versions)
         judge.last_ip = self.client_address[0]
         judge.save()
-        self.judge_address = '%s:%d' % (self.client_address[0], self.client_address[1])
+        self.judge_address = '%s:%s' % (self.client_address[0], self.client_address[1])
         json_log.info(self._make_json_log(action='auth', info='judge successfully authenticated',
                                           executors=self.executors.keys()))
 
