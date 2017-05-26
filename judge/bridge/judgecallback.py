@@ -394,7 +394,7 @@ class DjangoJudgeHandler(JudgeHandler):
             'judge': self.name,
             'address': self.judge_address,
         }
-        if sub is None:
+        if sub is None and packet is not None:
             sub = packet.get('submission-id')
         if sub is not None:
             data['submission'] = sub
