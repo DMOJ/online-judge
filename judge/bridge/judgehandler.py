@@ -135,10 +135,14 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
     def on_submission_processing(self, packet):
         pass
 
+    def on_submission_wrong_acknowledge(self, packet, expected, got):
+        pass
+
     def on_submission_acknowledged(self, packet):
         if not packet.get('submission-id', None) == self._working:
             logger.error('Wrong acknowledgement: %s: %s, expected: %s', self.name, packet.get('submission-id', None),
                          self._working)
+            self.on_submission_wrong_acknowledge(packet, self._working, packet.get('submission-id', None))
             self.close()
         logger.info('Submission acknowledged: %d', self._working)
         if self._no_response_job:
