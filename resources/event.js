@@ -58,7 +58,6 @@ function EventReceiver(websocket, poller, channels, last_msg, onmessage) {
             receiver.last_msg = data.id;
         };
         this.websocket.onclose = function (event) {
-            console.log('Websocket closed:', event);
             if (event.code != 1000 && receiver.onwsclose !== null)
                 receiver.onwsclose(event);
         }

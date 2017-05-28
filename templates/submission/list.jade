@@ -156,6 +156,9 @@ block js_media
                     );
                     receiver.onwsclose = function () {
                         console.log('You probably should refresh?');
+                        $('.ws-closed').show().find('a').click(function () {
+                            window.location.reload();
+                        });
                     };
                     return receiver;
                 }
@@ -169,6 +172,21 @@ block title_row
     include submission/submission-list-tabs
 
 block media
+    style.
+        .ws-closed {
+            position: sticky;
+            top: 42px;
+            background: #eee;
+            border-radius: 5px 5px 0 0;
+            display: none;
+        }
+
+        .ws-closed a {
+            display: block;
+            padding: 5px 0;
+            text-align: center;
+        }
+
     if perms.judge.change_submission and perms.judge.rejudge_submission
         style.
             td.sub-prop, col.sub-prop { width: 22% }
@@ -207,6 +225,8 @@ block body
                 div(style='margin-bottom:6px;margin-top:3px')
                     include list-pages
 
+            .ws-closed: a(href='javascript:void(0)')
+                - trans "You were disconnected. Refresh to show latest updates."
             table#submissions-table.table
                 colgroup
                     col.sub-result
