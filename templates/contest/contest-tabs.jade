@@ -42,3 +42,6 @@
                     else
                         a.contest-join-pseudotab.unselectable.button.full.first-join(href='{% url "contest_join" contest.key %}')
                             | {% trans "Join contest" %}
+        elif contest.can_join
+            a.contest-join-pseudotab.unselectable.button.full(href='{% url "auth_login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
+                | {% trans "Login to participate" %}
