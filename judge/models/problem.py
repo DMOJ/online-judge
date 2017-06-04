@@ -166,12 +166,19 @@ class Problem(models.Model):
         if user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile):
             return True
 
-        # If the user is in a contest containing that problem or is a tester
-        if user.is_authenticated:
-            return (self.testers.filter(id=user.profile.id).exists() or
-                    Problem.objects.filter(id=self.id, contest__users__user=user.profile).exists())
-        else:
+        if not user.is_authenticated:
             return False
+
+        # If user is a tester
+        if self.testers.filter(id=user.profile.id).exists():
+            return True
+
+        # If user is currently in a contest containing that problem
+        current = user.profile.current_contest_id
+        if current is None:
+            return False
+        from judge.models import ContestProblem
+        return ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists()
 
     def __unicode__(self):
         return self.name
