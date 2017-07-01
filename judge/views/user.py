@@ -1,7 +1,7 @@
 import json
-from datetime import datetime
 
 import django
+from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
@@ -24,11 +24,11 @@ from reversion import revisions
 
 from judge.forms import ProfileForm, newsletter_id
 from judge.models import Profile, Submission, Rating
+from judge.performance_points import get_pp_breakdown, PP_ENTRIES
 from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
-from judge.performance_points import get_pp_breakdown, PP_ENTRIES
 from judge.utils.views import TitleMixin, generic_message, DiggPaginatorMixin, QueryStringSortMixin
 from .contests import contest_ranking_view
 
@@ -107,8 +107,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
 
-        context['rank'] = Profile.objects.filter(
-            performance_points__gt=self.object.performance_points).count() + 1
+        context['rank'] = Profile.objects.filter(performance_points__gt=self.object.performance_points).count() + 1
         breakdown, has_more = get_pp_breakdown(self.object, start=0, end=10)
         context['pp_breakdown'] = breakdown
         context['pp_has_more'] = has_more
@@ -160,19 +159,16 @@ class UserAboutPage(UserPage):
         ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
             .defer('contest__description')
 
-        context['rating_data'] = mark_safe(json.dumps([
-                                                          {'label': rating.contest.name, 'rating': rating.rating,
-                                                           'ranking': rating.rank,
-                                                           'link': reverse('contest_ranking',
-                                                                           args=(rating.contest.key,)),
-                                                           'timestamp': (
-                                                                            rating.contest.end_time - EPOCH).total_seconds() * 1000,
-                                                           'date': date_format(rating.contest.end_time,
-                                                                               _('M j, Y, G:i')),
-                                                           'class': rating_class(rating.rating),
-                                                           'height': '%.3fem' % rating_progress(rating.rating)}
-                                                          for rating in ratings
-                                                          ]))
+        context['rating_data'] = mark_safe(json.dumps([{
+            'label': rating.contest.name,
+            'rating': rating.rating,
+            'ranking': rating.rank,
+            'link': reverse('contest_ranking', args=(rating.contest.key,)),
+            'timestamp': (rating.contest.end_time - EPOCH).total_seconds() * 1000,
+            'date': date_format(rating.contest.end_time, _('M j, Y, G:i')),
+            'class': rating_class(rating.rating),
+            'height': '%.3fem' % rating_progress(rating.rating)
+        } for rating in ratings]))
 
         if ratings:
             user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
