@@ -48,7 +48,7 @@ def get_pp_breakdown(user, start=0, end=100):
             GROUP BY max_points_table.problem_id
             ORDER BY max_points DESC, judge_submission.date DESC
             LIMIT %s OFFSET %s
-        ''', (user.id, user.id, end - start, start))
+        ''', (user.id, user.id, end - start + 1, start))
         data = cursor.fetchall()
 
     breakdown = []
@@ -75,5 +75,5 @@ def get_pp_breakdown(user, start=0, end=100):
             sub_result_class=result_class,
             sub_lang=lang_short_display_name,
         ))
-    has_more = end < min(len(PP_WEIGHT_TABLE), len(data))
+    has_more = end < min(len(PP_WEIGHT_TABLE), start + len(data))
     return breakdown, has_more
