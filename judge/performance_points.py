@@ -47,11 +47,12 @@ def get_pp_breakdown(user, start=0, end=100):
             ON judge_submission.language_id = judge_language.id
             GROUP BY max_points_table.problem_id
             ORDER BY max_points DESC, judge_submission.date DESC
-        ''', (user.id, user.id))
+            LIMIT %s OFFSET %s
+        ''', (user.id, user.id, end - start, start))
         data = cursor.fetchall()
 
     breakdown = []
-    for weight, contrib in zip(PP_WEIGHT_TABLE[start:end], data[start:end]):
+    for weight, contrib in zip(PP_WEIGHT_TABLE[start:end], data):
         code, name, points, id, date, case_points, case_total, result, lang_short_name, lang_key = contrib
 
         # Replicates a lot of the logic usually done on Submission objects
