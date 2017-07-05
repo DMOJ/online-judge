@@ -88,6 +88,6 @@ class BlogFeed(Feed):
         return post.publish_on
 
 
-class AtomBlogFeed(CommentFeed):
+class AtomBlogFeed(BlogFeed):
     feed_type = Atom1Feed
     subtitle = BlogFeed.description
