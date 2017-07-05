@@ -30,6 +30,8 @@ class ProblemFeed(Feed):
     def item_pubdate(self, problem):
         return problem.date
 
+    item_updateddate = item_pubdate
+
 
 class AtomProblemFeed(ProblemFeed):
     feed_type = Atom1Feed
@@ -59,6 +61,8 @@ class CommentFeed(Feed):
     def item_pubdate(self, comment):
         return comment.time
 
+    item_updateddate = item_pubdate
+
 
 class AtomCommentFeed(CommentFeed):
     feed_type = Atom1Feed
@@ -86,6 +90,8 @@ class BlogFeed(Feed):
 
     def item_pubdate(self, post):
         return post.publish_on
+
+    item_updateddate = item_pubdate
 
 
 class AtomBlogFeed(BlogFeed):
