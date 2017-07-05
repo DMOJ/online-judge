@@ -9,7 +9,7 @@ from judge.templatetags.markdown import markdown
 
 
 class ProblemFeed(Feed):
-    title = 'Recently added %s problems' % getattr(settings, 'SITE_NAME', 'DMOJ')
+    title = 'Recently Added %s Problems' % getattr(settings, 'SITE_NAME', 'DMOJ')
     link = '/'
     description = 'The latest problems added on the %s website' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
 
@@ -39,7 +39,7 @@ class AtomProblemFeed(ProblemFeed):
 
 
 class CommentFeed(Feed):
-    title = 'Latest %s comments' % getattr(settings, 'SITE_NAME', 'DMOJ')
+    title = 'Latest %s Comments' % getattr(settings, 'SITE_NAME', 'DMOJ')
     link = '/'
     description = 'The latest comments on the %s website' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
 
