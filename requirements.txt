@@ -4,7 +4,6 @@ django-mptt>=0.8.4,<0.9
 django-pagedown
 django-registration-redux>=1.4,<1.5
 django-reversion
--e git://github.com/DMOJ/django-select2.git#egg=django-select2
 django-social-share
 django-sortedm2m
 django-impersonate
