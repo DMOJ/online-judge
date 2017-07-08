@@ -103,6 +103,15 @@ html(lang=LANGUAGE_CODE)
                     count_down($("#contest-time-remaining"));
                 });
 
+        if request.user.is_authenticated
+            script(type='text/javascript').
+                window.user = {
+                    email: '#{request.user.email|escapejs}',
+                    id: '#{request.user.id}',
+                    name: '#{request.user.username}'
+                };
+        else
+            script(type='text/javascript') window.user = {};
         if misc_config.analytics
             | #{misc_config.analytics|safe}
 
