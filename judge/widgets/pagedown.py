@@ -5,6 +5,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.forms.utils import flatatt
 from django.template.loader import get_template
 from django.utils.encoding import force_unicode
+from django.utils.functional import lazy
 from django.utils.html import conditional_escape
 
 from judge.widgets.mixins import CompressorWidgetMixin
@@ -27,7 +28,7 @@ else:
         compress_js = True
 
         def __init__(self, *args, **kwargs):
-            kwargs.setdefault('css', (staticfiles_storage.url('pagedown_widget.css'),))
+            kwargs.setdefault('css', (lazy(lambda: staticfiles_storage.url('pagedown_widget.css')),))
             super(PagedownWidget, self).__init__(*args, **kwargs)
 
 
