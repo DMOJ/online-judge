@@ -44,12 +44,10 @@ from itertools import chain
 
 from django import forms
 from django.conf import settings
-from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core import signing
 from django.core.urlresolvers import reverse_lazy
 from django.forms.models import ModelChoiceIterator
 from django.utils.encoding import force_text
-
 
 DEFAULT_SELECT2_JS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'
 DEFAULT_SELECT2_CSS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
@@ -98,7 +96,7 @@ class Select2Mixin(object):
         """
         return forms.Media(
             js=(getattr(settings, 'SELECT2_JS_URL', DEFAULT_SELECT2_JS),
-                static('django_select2.js')),
+                'django_select2.js'),
             css={'screen': (getattr(settings, 'SELECT2_CSS_URL', DEFAULT_SELECT2_CSS),)}
         )
 
