@@ -47,8 +47,7 @@ class CommentFeed(Feed):
         return Comment.objects.filter(hidden=False).order_by('-time')[:25]
 
     def item_title(self, comment):
-        return '%s -> %s' % (comment.author.user.username,
-                             comment.parent.title if comment.parent is not None else comment.page_title)
+        return '%s -> %s' % (comment.author.user.username, comment.page_title)
 
     def item_description(self, comment):
         key = 'comment_feed:%d' % comment.id
