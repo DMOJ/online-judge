@@ -69,10 +69,10 @@ else:
             self.hide_preview_button = kwargs.pop('hide_preview_button', False)
             super(HeavyPreviewPageDownWidget, self).__init__(*args, **kwargs)
 
-        def render(self, name, value, attrs=None):
+        def render(self, name, value, attrs=None, renderer=None):
             if value is None:
                 value = ''
-            final_attrs = self.build_attrs(attrs, name=name)
+            final_attrs = self.build_attrs(attrs, {'name': name})
             if 'class' not in final_attrs:
                 final_attrs['class'] = ''
             final_attrs['class'] += ' wmd-input'
