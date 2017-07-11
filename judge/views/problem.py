@@ -326,16 +326,16 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                                                                                      self.request.LANGUAGE_CODE,
                                                                                      'problem__name')
         return [{
-                    'id': p['problem_id'],
-                    'code': p['problem__code'],
-                    'name': p['problem__name'],
-                    'i18n_name': p['i18n_name'],
-                    'group': {'full_name': p['problem__group__full_name']},
-                    'points': p['points'],
-                    'partial': p['partial'],
-                    'user_count': p['user_count'],
-                } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
-                                           'problem__group__full_name', 'points', 'partial', 'user_count')]
+            'id': p['problem_id'],
+            'code': p['problem__code'],
+            'name': p['problem__name'],
+            'i18n_name': p['i18n_name'],
+            'group': {'full_name': p['problem__group__full_name']},
+            'points': p['points'],
+            'partial': p['partial'],
+            'user_count': p['user_count'],
+        } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
+                                   'problem__group__full_name', 'points', 'partial', 'user_count')]
 
     def get_normal_queryset(self):
         filter = Q(is_public=True)

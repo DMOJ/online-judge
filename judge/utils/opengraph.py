@@ -4,6 +4,7 @@ from django.template.defaultfilters import truncatewords
 from judge.templatetags.reference import reference
 from judge.templatetags.markdown import markdown_filter
 
+
 def generate_opengraph(cache_key, data):
     metadata = cache.get(cache_key)
     if metadata is None:
