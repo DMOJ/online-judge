@@ -139,7 +139,8 @@ class ContestMixin(object):
         context['is_organizer'] = self.is_organizer
 
         if not self.object.og_image or not self.object.summary:
-            metadata = generate_opengraph('generated-meta-contest:%d' % self.object.id, self.object.description)
+            metadata = generate_opengraph('generated-meta-contest:%d' % self.object.id,
+                                          self.object.description, 'contest')
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
 
