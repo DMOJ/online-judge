@@ -28,6 +28,7 @@ from judge import event_poster as event
 from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation, ContestTag, Profile
 from judge.models import Problem
+from judge.timezone import from_database_time
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
@@ -302,8 +303,8 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
 
     def get_table(self):
         calendar = Calendar(self.firstweekday).monthdatescalendar(self.year, self.month)
-        starts, ends, oneday = self.get_contest_data(timezone.make_aware(datetime.combine(calendar[0][0], time.min)),
-                                                     timezone.make_aware(datetime.combine(calendar[-1][-1], time.min)))
+        starts, ends, oneday = self.get_contest_data(make_aware(datetime.combine(calendar[0][0], time.min)),
+                                                     make_aware(datetime.combine(calendar[-1][-1], time.min)))
         return [[ContestDay(
             date=date, weekday=self.weekday_classes[weekday], is_pad=date.month != self.month,
             is_today=date == self.today, starts=starts[date], ends=ends[date], oneday=oneday[date],
@@ -384,8 +385,7 @@ def best_solution_state(points, total):
     return 'partial-score'
 
 
-def base_contest_ranking_list(contest, problems, queryset, for_user=None,
-                              tz=pytz.timezone(getattr(settings, 'TIME_ZONE', 'UTC'))):
+def base_contest_ranking_list(contest, problems, queryset, for_user=None):
     cursor = connection.cursor()
     cursor.execute('''
         SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, MAX(sub.date) AS `last`
@@ -398,7 +398,7 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None,
     '''.format(extra=('AND part.user_id = %s' if for_user is not None else
                                          'AND part.virtual = 0')),
                    (contest.id, contest.id) + ((for_user,) if for_user is not None else ()))
-    data = {(part, prob): (code, best, last and make_aware(last, tz)) for part, prob, code, best, last in cursor}
+    data = {(part, prob): (code, best, last and from_database_time(last)) for part, prob, code, best, last in cursor}
     cursor.close()
 
     problems = map(attrgetter('id', 'points', 'is_pretested'), problems)
