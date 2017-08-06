@@ -11,7 +11,6 @@ from judge.utils.views import TitleMixin, generic_message
 
 __all__ = ['status_all', 'status_table', 'JudgeDetail']
 
-
 def get_judges(request):
     if request.user.is_superuser or request.user.is_staff:
         return True, Judge.objects.order_by('-online', 'name')

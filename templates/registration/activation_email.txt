@@ -1,9 +1,8 @@
-Please activate your {{ SITE_NAME }} account in {{ expiration_days }} days.
+请在 {{ expiration_days }} 天内激活您的 {{ SITE_NAME }} 账号。
 
-Please click on the following link to activate your account:
+直接点击此链接进行激活：
     http://{{ site.domain }}/accounts/activate/{{ activation_key }}/
 
-Alternatively, you can reply to this message to activate your account.
-Your reply must keep the following text intact for this to work:
+或回复以下验证码进行激活：
 
 {{ activation_key }}

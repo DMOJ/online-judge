@@ -84,7 +84,7 @@ class RegistrationView(OldRegistrationView):
 
     def get_initial(self, *args, **kwargs):
         initial = super(RegistrationView, self).get_initial(*args, **kwargs)
-        initial['timezone'] = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto')
+        initial['timezone'] = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'China/Shanghai')
         initial['language'] = Language.objects.get(key=getattr(settings, 'DEFAULT_USER_LANGUAGE', 'PY2'))
         return initial
 

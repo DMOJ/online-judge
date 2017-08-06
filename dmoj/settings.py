@@ -28,8 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 SITE_ID = 1
-SITE_NAME = 'DMOJ'
-SITE_LONG_NAME = 'DMOJ: Modern Online Judge'
+SITE_NAME = 'HBUOJ'
+SITE_LONG_NAME = 'Hebei University Online Judge'
 
 PYGMENT_THEME = 'pygment-github.css'
 
@@ -225,14 +225,8 @@ LOCALE_PATHS = [
 ]
 
 LANGUAGES = [
-    ('de', _('German')),
-    ('en', _('English')),
-    ('fr', _('French')),
-    ('ro', _('Romanian')),
-    ('ru', _('Russian')),
-    ('sr-latn', _('Serbian (Latin)')),
-    ('vi', _('Vietnamese')),
     ('zh-hans', _('Simplified Chinese')),
+    ('en', _('English')),
 ]
 
 MARKDOWN_ADMIN_EDITABLE_STYLE = {
@@ -300,9 +294,9 @@ EVENT_DAEMON_KEY = None
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 # Whatever you do, this better be one of the entries in `LANGUAGES`.
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'UTC'
-DEFAULT_USER_TIME_ZONE = 'America/Toronto'
+DEFAULT_USER_TIME_ZONE = 'China/Shanghai'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
