@@ -2,7 +2,7 @@
     {
         "fields": {
             "key": "problems",
-            "label": "Problems",
+            "label": "题库",
             "level": 0,
             "lft": 1,
             "order": 1,
@@ -18,7 +18,7 @@
     {
         "fields": {
             "key": "submit",
-            "label": "Submissions",
+            "label": "提交",
             "level": 0,
             "lft": 1,
             "order": 2,
@@ -34,7 +34,7 @@
     {
         "fields": {
             "key": "user",
-            "label": "Users",
+            "label": "用户",
             "level": 0,
             "lft": 1,
             "order": 3,
@@ -50,7 +50,7 @@
     {
         "fields": {
             "key": "org",
-            "label": "Organizations",
+            "label": "组织",
             "level": 1,
             "lft": 2,
             "order": 4,
@@ -66,7 +66,7 @@
     {
         "fields": {
             "key": "contest",
-            "label": "Contests",
+            "label": "比赛",
             "level": 0,
             "lft": 1,
             "order": 5,
@@ -82,7 +82,7 @@
     {
         "fields": {
             "key": "about",
-            "label": "About",
+            "label": "关于",
             "level": 0,
             "lft": 1,
             "order": 6,
@@ -98,7 +98,7 @@
     {
         "fields": {
             "key": "status",
-            "label": "Status",
+            "label": "状态",
             "level": 1,
             "lft": 2,
             "order": 7,
