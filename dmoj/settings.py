@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 
 SITE_ID = 1
 SITE_NAME = 'HBUOJ'
-SITE_LONG_NAME = 'Hebei University Online Judge'
+SITE_LONG_NAME = 'HBU-OJ'
 
 PYGMENT_THEME = 'pygment-github.css'
 
@@ -47,7 +47,7 @@ else:
 
     WPADMIN = {
         'admin': {
-            'title': 'DMOJ Admin',
+            'title': 'HBU Admin',
             'menu': {
                 'top': 'wpadmin.menu.menus.BasicTopMenu',
                 'left': 'wpadmin.menu.custom.CustomModelLeftMenuWithDashboard',
@@ -161,7 +161,7 @@ MIDDLEWARE_CLASSES = (
 IMPERSONATE_REQUIRE_SUPERUSER = True
 IMPERSONATE_DISABLE_LOGGING = True
 
-ACCOUNT_ACTIVATION_DAYS = 7
+ACCOUNT_ACTIVATION_DAYS = 1
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -296,7 +296,7 @@ EVENT_DAEMON_KEY = None
 # Whatever you do, this better be one of the entries in `LANGUAGES`.
 LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'UTC'
-DEFAULT_USER_TIME_ZONE = 'China/Shanghai'
+DEFAULT_USER_TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True

@@ -14,9 +14,9 @@ class TimezoneMiddleware(object):
             try:
                 tzname = Profile.objects.get(user=request.user).timezone
             except ObjectDoesNotExist:
-                tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'China/Shanghai')
+                tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'Asia/Shanghai')
         else:
-            tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'China/Shanghai')
+            tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'Asia/Shanghai')
         timezone.activate(pytz.timezone(tzname))
 
     def process_response(self, request, response):
