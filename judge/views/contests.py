@@ -5,8 +5,6 @@ from functools import partial
 from itertools import chain
 from operator import attrgetter
 
-import pytz
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
@@ -196,9 +194,9 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
     def get_context_data(self, **kwargs):
         context = super(ContestDetail, self).get_context_data(**kwargs)
         context['contest_problems'] = Problem.objects.filter(contests__contest=self.object) \
-                                             .order_by('contests__order').defer('description') \
-                                             .annotate(has_editorial=Count('solution')) \
-                                             .add_i18n_name(self.request.LANGUAGE_CODE)
+            .order_by('contests__order').defer('description') \
+            .annotate(has_editorial=Count('solution')) \
+            .add_i18n_name(self.request.LANGUAGE_CODE)
         return context
 
 
@@ -435,7 +433,7 @@ def get_participation_ranking_profile(contest, participation, problems):
                          state=best_solution_state(scoring[problem.id][0], problem.points),
                          is_pretested=problem.is_pretested)
         if problem.id in scoring else None for problem in problems
-        ])
+    ])
 
 
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,

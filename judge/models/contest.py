@@ -201,7 +201,7 @@ class ContestParticipation(models.Model):
             if not solution:
                 continue
             dt = solution[0]['time'] - self.start
-            cumtime += dt.days * 86400 + dt.seconds
+            cumtime += dt.total_seconds()
         self.cumtime = cumtime
         self.save()
 
