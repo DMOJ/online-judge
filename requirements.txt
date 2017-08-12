@@ -19,4 +19,3 @@ pika
 ua-parser
 pyyaml
 django-select2
-django_ace

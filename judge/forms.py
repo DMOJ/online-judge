@@ -65,7 +65,9 @@ class ProfileForm(ModelForm):
 
 
 class ProblemSubmitForm(ModelForm):
-    source = CharField(max_length=65536, widget=AceWidget(theme='twilight', no_ace_media=True))
+    # What's the use of this parameter 'no_ace_media'?
+    # source = CharField(max_length=65536, widget=AceWidget(theme='twilight', no_ace_media=True))
+    source = CharField(max_length=65536, widget=AceWidget(theme='twilight'))
 
     def __init__(self, *args, **kwargs):
         super(ProblemSubmitForm, self).__init__(*args, **kwargs)
