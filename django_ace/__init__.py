@@ -1,4 +1,5 @@
-from .widgets import AceWidget
+"""
+Django-ace originally from https://github.com/bradleyayers/django-ace.
+"""
 
-# adhere to PEP 386
-__version__ = "1.0.3"
+from .widgets import AceWidget
