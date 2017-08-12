@@ -9,9 +9,10 @@ from judge.templatetags.markdown import markdown
 
 
 class ProblemFeed(Feed):
-    title = 'Recently added %s problems' % getattr(settings, 'SITE_NAME', 'DMOJ')
+    title = 'Recently added %s problems' % getattr(settings, 'SITE_NAME', 'HBUOJ')
     link = '/'
-    description = 'The latest problems added on the %s website' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
+    description = 'The latest problems added on the %s website' % getattr(settings, 'SITE_LONG_NAME',
+                                                                          getattr(settings, 'SITE_NAME', 'HBU_OJ'))
 
     def items(self):
         return Problem.objects.filter(is_public=True).order_by('-date', '-id')[:25]
@@ -39,9 +40,10 @@ class AtomProblemFeed(ProblemFeed):
 
 
 class CommentFeed(Feed):
-    title = 'Latest %s comments' % getattr(settings, 'SITE_NAME', 'DMOJ')
+    title = 'Latest %s Comments' % getattr(settings, 'SITE_NAME', 'HBUOJ')
     link = '/'
-    description = 'The latest comments on the %s website' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
+    description = 'The latest comments on the %s website' % getattr(settings, 'SITE_LONG_NAME',
+                                                                    getattr(settings, 'SITE_NAME', 'HBU_OJ'))
 
     def items(self):
         return Comment.objects.filter(hidden=False).order_by('-time')[:25]
@@ -69,9 +71,10 @@ class AtomCommentFeed(CommentFeed):
 
 
 class BlogFeed(Feed):
-    title = 'Latest %s Blog Posts' % getattr(settings, 'SITE_NAME', 'DMOJ')
+    title = 'Latest %s Blog Posts' % getattr(settings, 'SITE_NAME', 'HBUOJ')
     link = '/'
-    description = 'The latest blog posts from the %s' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
+    description = 'The latest blog posts from the %s' % getattr(settings, 'SITE_LONG_NAME',
+                                                                getattr(settings, 'SITE_NAME', 'HBU_OJ'))
 
     def items(self):
         return BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).order_by('-sticky', '-publish_on')
