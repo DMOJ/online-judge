@@ -1,9 +1,8 @@
 from django.contrib import admin
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.core.urlresolvers import reverse_lazy
 from django.forms import ModelForm
-from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _, ugettext
-from mptt.admin import MPTTModelAdmin
+from django.utils.translation import ugettext_lazy as _
+from mptt.admin import DraggableMPTTAdmin
 from reversion.admin import VersionAdmin
 
 from judge.dblock import LockModel
@@ -11,7 +10,7 @@ from judge.models import NavigationBar
 from judge.widgets import HeavySelect2MultipleWidget, HeavyPreviewAdminPageDownWidget, HeavySelect2Widget
 
 
-class NavigationBarAdmin(MPTTModelAdmin):
+class NavigationBarAdmin(DraggableMPTTAdmin):
     list_display = ('label', 'key', 'path')
     fields = ('key', 'label', 'path', 'order', 'regex', 'parent')
     list_editable = ()  # Bug in SortableModelAdmin: 500 without list_editable being set
