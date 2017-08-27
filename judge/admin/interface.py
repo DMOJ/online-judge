@@ -23,7 +23,7 @@ class NavigationBarAdmin(DraggableMPTTAdmin):
         self.__save_model_calls = 0
 
     def linked_path(self, obj):
-        return format_html(u'<a href="{0}">{0}</a>', obj.path)
+        return format_html(u'<a href="{0}" target="_blank">{0}</a>', obj.path)
     linked_path.short_description = _('link path')
 
     def save_model(self, request, obj, form, change):
