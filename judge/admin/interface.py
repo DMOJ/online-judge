@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.core.urlresolvers import reverse_lazy
 from django.forms import ModelForm
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
 from reversion.admin import VersionAdmin
@@ -20,6 +21,10 @@ class NavigationBarAdmin(DraggableMPTTAdmin):
     def __init__(self, *args, **kwargs):
         super(NavigationBarAdmin, self).__init__(*args, **kwargs)
         self.__save_model_calls = 0
+
+    def linked_path(self):
+        return format_html(u'<a href="{0}">{0}</a>', self.path)
+    linked_path.short_description = _('link path')
 
     def save_model(self, request, obj, form, change):
         self.__save_model_calls += 1
