@@ -2,9 +2,9 @@ from collections import namedtuple
 
 from django.conf import settings
 from django.db import connection
-from django.utils.timezone import make_aware, get_default_timezone
 
 from judge.models import Submission
+from judge.timezone import from_database_time
 
 PP_STEP = getattr(settings, 'PP_STEP', 0.95)
 PP_ENTRIES = getattr(settings, 'PP_ENTRIES', 100)
@@ -67,7 +67,7 @@ def get_pp_breakdown(user, start=0, end=100):
             problem_name=name,
             problem_code=code,
             sub_id=id,
-            sub_date=make_aware(date, get_default_timezone()),
+            sub_date=from_database_time(date),
             sub_points=case_points,
             sub_total=case_total,
             sub_short_status=result,

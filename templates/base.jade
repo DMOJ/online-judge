@@ -46,8 +46,6 @@ html(lang=LANGUAGE_CODE)
 
         if og_image
             meta(property='og:image', content='{{ request.build_absolute_uri|urljoin:og_image }}')
-        else
-            meta(property='og:image', content='{{ DMOJ_SCHEME }}://{{ site.domain }}/logo.png')
         block og_title
             meta(property='og:title', content='{{ title }} - {{ SITE_LONG_NAME }}')
         meta(property='og:site_name', content='{{ SITE_LONG_NAME }}')
@@ -88,10 +86,11 @@ html(lang=LANGUAGE_CODE)
                 script(src='{% static "libs/jquery-1.11.2.min.js" %}')
             script(src='{% static "libs/jquery-cookie.js" %}')
             script(src='{% static "libs/jquery-taphold.js" %}')
-            script(src='{% static "common.js" %}')
             script(src='{% static "libs/jquery.unveil.js" %}')
             script(src='{% static "libs/moment.js" %}')
             script(src='{% static "libs/select2/select2.js" %}')
+            include extra_js
+            script(src='{% static "common.js" %}')
             script.
                 moment.locale('#{LANGUAGE_CODE}');
                 $(function () { $('img.unveil').unveil(200); });
@@ -102,6 +101,15 @@ html(lang=LANGUAGE_CODE)
                     count_down($("#contest-time-remaining"));
                 });
 
+        if request.user.is_authenticated
+            script(type='text/javascript').
+                window.user = {
+                    email: '#{request.user.email|escapejs}',
+                    id: '#{request.user.id}',
+                    name: '#{request.user.username}'
+                };
+        else
+            script(type='text/javascript') window.user = {};
         if misc_config.analytics
             | #{misc_config.analytics|safe}
 

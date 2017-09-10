@@ -192,7 +192,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
 
         if not self.object.og_image or not self.object.summary:
             metadata = generate_opengraph('generated-meta-problem:%s:%d' % (context['language'], self.object.id),
-                                          context['description'])
+                                          context['description'], 'problem')
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
         return context
@@ -326,16 +326,16 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                                                                                      self.request.LANGUAGE_CODE,
                                                                                      'problem__name')
         return [{
-                    'id': p['problem_id'],
-                    'code': p['problem__code'],
-                    'name': p['problem__name'],
-                    'i18n_name': p['i18n_name'],
-                    'group': {'full_name': p['problem__group__full_name']},
-                    'points': p['points'],
-                    'partial': p['partial'],
-                    'user_count': p['user_count'],
-                } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
-                                           'problem__group__full_name', 'points', 'partial', 'user_count')]
+            'id': p['problem_id'],
+            'code': p['problem__code'],
+            'name': p['problem__name'],
+            'i18n_name': p['i18n_name'],
+            'group': {'full_name': p['problem__group__full_name']},
+            'points': p['points'],
+            'partial': p['partial'],
+            'user_count': p['user_count'],
+        } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
+                                   'problem__group__full_name', 'points', 'partial', 'user_count')]
 
     def get_normal_queryset(self):
         filter = Q(is_public=True)
