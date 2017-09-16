@@ -195,7 +195,7 @@ msgstr "语言"
 
 #: .\judge\admin\problem.py:106
 msgid "Justice"
-msgstr "司法"
+msgstr "封禁"
 
 #: .\judge\admin\problem.py:107
 msgid "History"
@@ -353,7 +353,7 @@ msgstr "%.2f MB"
 
 #: .\judge\admin\submission.py:212
 msgid "Memory"
-msgstr ""
+msgstr "内存"
 
 #: .\judge\admin\taxon.py:11 .\judge\admin\taxon.py:34
 msgid "Included problems"
@@ -393,16 +393,16 @@ msgstr "发布了评论"
 
 #: .\judge\forms.py:25
 msgid "Subscribe to contest updates"
-msgstr ""
+msgstr "订阅比赛更新"
 
 #: .\judge\forms.py:26
 msgid "Enable experimental features"
-msgstr ""
+msgstr "开启实验特性"
 
 #: .\judge\forms.py:51
 #, python-brace-format
 msgid "You may not be part of more than {count} public organizations."
-msgstr ""
+msgstr "你不是{count}个公开组织成员"
 
 #: .\judge\models\choices.py:60
 msgid "Leave as LaTeX"
@@ -564,7 +564,7 @@ msgstr "没有评论"
 
 #: .\judge\models\contest.py:66
 msgid "Use clarification system instead of comments."
-msgstr ""
+msgstr "使用系统声明替代评论"
 
 #: .\judge\models\contest.py:68
 msgid "rate all"
@@ -973,11 +973,11 @@ msgstr "作者"
 
 #: .\judge\models\problem.py:101
 msgid "curators"
-msgstr ""
+msgstr "管理者"
 
 #: .\judge\models\problem.py:102
 msgid "These users will be able to edit a problem, but not be publicly shown as an author."
-msgstr ""
+msgstr "这些用户可以编辑题目，但是不会被显示为作者"
 
 #: .\judge\models\problem.py:104
 msgid "testers"
@@ -1001,11 +1001,11 @@ msgstr "允许的语言"
 
 #: .\judge\models\problem.py:116
 msgid "manually managed"
-msgstr ""
+msgstr "人工管理"
 
 #: .\judge\models\problem.py:117
 msgid "Whether judges should be allowed to manage data or not"
-msgstr ""
+msgstr "评测机是否被允许管理数据"
 
 #: .\judge\models\problem.py:118
 msgid "date of publishing"
@@ -1025,7 +1025,7 @@ msgstr "禁止这些用户在该题目提交答案"
 
 #: .\judge\models\problem.py:124
 msgid "problem summary"
-msgstr ""
+msgstr "题目摘要"
 
 #: .\judge\models\problem.py:126
 msgid "amount of users"
@@ -1062,15 +1062,15 @@ msgstr "题目翻译"
 
 #: .\judge\models\problem.py:301
 msgid "clarified problem"
-msgstr ""
+msgstr "说明的问题"
 
 #: .\judge\models\problem.py:302
 msgid "clarification body"
-msgstr ""
+msgstr "说明正文"
 
 #: .\judge\models\problem.py:303
 msgid "clarification timestamp"
-msgstr ""
+msgstr "说明时间戳"
 
 #: .\judge\models\problem.py:314
 msgid "language-specific resource limit"
@@ -1222,7 +1222,7 @@ msgstr "创建日期"
 
 #: .\judge\models\profile.py:34
 msgid "is open organization?"
-msgstr ""
+msgstr "是公开组织?"
 
 #: .\judge\models\profile.py:35
 msgid "Allow joining organization"
@@ -1389,11 +1389,11 @@ msgstr "Pygments代码高亮语言标识符，在查看代码是使用。"
 
 #: .\judge\models\runtime.py:33
 msgid "code template"
-msgstr ""
+msgstr "代码模板"
 
 #: .\judge\models\runtime.py:34
 msgid "Code template to display in submission editor."
-msgstr ""
+msgstr "显示在提交编辑器中的代码模板"
 
 #: .\judge\models\runtime.py:35
 msgid "runtime info override"
@@ -1583,11 +1583,11 @@ msgstr "源码"
 
 #: .\judge\models\submission.py:66
 msgid "status"
-msgstr ""
+msgstr "状态"
 
 #: .\judge\models\submission.py:67
 msgid "result"
-msgstr ""
+msgstr "结果"
 
 #: .\judge\models\submission.py:69
 msgid "compile errors"
@@ -1659,51 +1659,51 @@ msgstr "程序测试"
 
 #: .\judge\models\ticket.py:10
 msgid "ticket title"
-msgstr ""
+msgstr "反馈标题"
 
 #: .\judge\models\ticket.py:11
 msgid "ticket creator"
-msgstr ""
+msgstr "反馈创建者"
 
 #: .\judge\models\ticket.py:12
 msgid "creation time"
-msgstr ""
+msgstr "创建时间"
 
 #: .\judge\models\ticket.py:13
 msgid "assignees"
-msgstr ""
+msgstr "受理"
 
 #: .\judge\models\ticket.py:14
 msgid "quick notes"
-msgstr ""
+msgstr "快速笔记"
 
 #: .\judge\models\ticket.py:15
 msgid "Staff notes for this issue to aid in processing."
-msgstr ""
+msgstr "提供辅助处理此问题的内容"
 
 #: .\judge\models\ticket.py:16
 msgid "linked item type"
-msgstr ""
+msgstr "链接的item 类型"
 
 #: .\judge\models\ticket.py:18
 msgid "linked item ID"
-msgstr ""
+msgstr "链接的item ID"
 
 #: .\judge\models\ticket.py:20
 msgid "is ticket open?"
-msgstr ""
+msgstr "开启反馈?"
 
 #: .\judge\models\ticket.py:24
 msgid "ticket"
-msgstr ""
+msgstr "反馈"
 
 #: .\judge\models\ticket.py:26
 msgid "poster"
-msgstr ""
+msgstr "发送者"
 
 #: .\judge\models\ticket.py:28
 msgid "message time"
-msgstr ""
+msgstr "消息时间"
 
 #: .\judge\pdf_problems.py:70 .\judge\pdf_problems.py:126
 msgid "Page [page] of [topage]"
@@ -1776,7 +1776,7 @@ msgstr "无法同时使用 queryset 和关键字筛选"
 
 #: .\judge\utils\problems.py:86
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
 #: .\judge\utils\problems.py:87
 msgid "Total"
@@ -2017,12 +2017,12 @@ msgstr "找不到代码为“%s”的题目。"
 #: .\judge\views\problem.py:98
 #, python-brace-format
 msgid "Editorial for {0}"
-msgstr ""
+msgstr "社论{0}"
 
 #: .\judge\views\problem.py:101
 #, python-brace-format
 msgid "Editorial for <a href=\"{1}\">{0}</a>"
-msgstr ""
+msgstr "社论<a href=\"{1}\">{0}</a>"
 
 #: .\judge\views\problem.py:257 .\templates\user\user-tabs.jade:7
 #: .\templates\user\users-table.jade:7 .\templates\user\users-table.jade:9
@@ -2040,7 +2040,7 @@ msgstr "您在该题目不受欢迎。您被永久禁止为该题目提交解决
 #: .\judge\views\problem.py:545 .\judge\views\problem.py:548
 #, python-format
 msgid "Submit to %(problem)s"
-msgstr ""
+msgstr "提交至%(problem)s"
 
 #: .\judge\views\problem_data.py:36
 msgid "Checker arguments must be a JSON object"
@@ -2082,7 +2082,7 @@ msgstr "竞赛 %(contest)s 中 %(problem)s 排行榜"
 #: .\judge\views\ranked_submission.py:74
 #, python-format
 msgid "Best solutions for problem %(number)s in %(contest)s"
-msgstr ""
+msgstr "%(contest)s中题目%(number)s的最好解决方案"
 
 #: .\judge\views\ranked_submission.py:79
 #, python-brace-format
@@ -2092,7 +2092,7 @@ msgstr "竞赛 <a href=\"{3}\">{2}</a> 中 <a href=\"{1}\">{0}</a> 排行榜"
 #: .\judge\views\ranked_submission.py:82
 #, python-brace-format
 msgid "Best solutions for problem {0} in <a href=\"{2}\">{1}</a>"
-msgstr ""
+msgstr "<a href=\"{2}\">{1}</a>中题目{0}的最好解决方案"
 
 #: .\judge\views\register.py:25
 #: .\templates\registration\registration_form.jade:118
@@ -2167,7 +2167,7 @@ msgstr "所有提交历史"
 
 #: .\judge\views\submission.py:228
 msgid "All my submissions"
-msgstr ""
+msgstr "我的所有提交"
 
 #: .\judge\views\submission.py:229
 #, python-format
@@ -2186,7 +2186,7 @@ msgstr "必须给予题目"
 #: .\judge\views\submission.py:311
 #, python-format
 msgid "My submissions for %(problem)s"
-msgstr ""
+msgstr "我在%(problem)s中的提交"
 
 #: .\judge\views\submission.py:312
 #, python-format
@@ -2205,48 +2205,48 @@ msgstr "<a href=\"{5}\">{4}</a> 中 <a href=\"{1}\">{0}</a> 在 <a href=\"{3}\">
 #: .\judge\views\submission.py:437
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions for problem {2} in <a href=\"{4}\">{3}</a>"
-msgstr ""
+msgstr "<a href=\"{1}\">{0}</a>在<a href=\"{4}\">{3}</a>中题目{2}的提交"
 
 #: .\judge\views\ticket.py:40 .\judge\views\ticket.py:45
 msgid "Ticket title"
-msgstr ""
+msgstr "反馈标题"
 
 #: .\judge\views\ticket.py:46
 msgid "Issue description"
-msgstr ""
+msgstr "问题描述"
 
 #: .\judge\views\ticket.py:92 .\judge\views\ticket.py:95
 #, python-format
 msgid "New ticket for %s"
-msgstr ""
+msgstr "对%s的新反馈"
 
 #: .\judge\views\ticket.py:141
 #, python-format
 msgid "%(title)s - Ticket %(id)d"
-msgstr ""
+msgstr "%(title)s - 反馈 %(id)d"
 
 #: .\judge\views\ticket.py:248
 #, python-format
 msgid "Tickets - Page %(number)d of %(total)d"
-msgstr ""
+msgstr "反馈 - 第 %(number)d 页／共 %(total)d页"
 
 #: .\judge\views\ticket.py:297
 #, python-format
 msgid "New Ticket: %s"
-msgstr ""
+msgstr "新反馈: %s"
 
 #: .\judge\views\ticket.py:298
 #, python-format
 msgid "#%(id)d, assigned to: %(users)s"
-msgstr ""
+msgstr "#%(id)d, 受托至: %(users)s"
 
 #: .\judge\views\ticket.py:299
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: .\judge\views\ticket.py:300
 msgid "no one"
-msgstr ""
+msgstr "没有一个"
 
 #: .\judge\views\user.py:70
 msgid "No such user"
@@ -2259,7 +2259,7 @@ msgstr "无名为“%s“的用户"
 
 #: .\judge\views\user.py:74
 msgid "My account"
-msgstr ""
+msgstr "我的账号"
 
 #: .\judge\views\user.py:75
 #, python-format
@@ -2395,7 +2395,7 @@ msgstr "发布于"
 
 #: .\templates\blog\list.jade:135 .\templates\problem\problem.jade:103
 msgid "Clarifications"
-msgstr ""
+msgstr "声明"
 
 #: .\templates\blog\list.jade:139
 #: .\templates\organization\requests\detail.jade:19
@@ -2406,7 +2406,7 @@ msgstr "Y年n月j日 G:i"
 
 #: .\templates\blog\list.jade:142 .\templates\problem\problem.jade:110
 msgid "No clarifications have been made at this time."
-msgstr ""
+msgstr "目前还没有声明"
 
 #: .\templates\blog\list.jade:146
 msgid "Ongoing contests"
@@ -2437,11 +2437,11 @@ msgstr "新题目"
 
 #: .\templates\blog\list.jade:194
 msgid "My open tickets"
-msgstr ""
+msgstr "我开启的反馈"
 
 #: .\templates\blog\list.jade:208
 msgid "New tickets"
-msgstr ""
+msgstr "新反馈"
 
 #: .\templates\comments\list.jade:3
 msgid "Comments"
@@ -2453,16 +2453,16 @@ msgstr "登录后才可投票"
 
 #: .\templates\comments\list.jade:16
 msgid "commented"
-msgstr ""
+msgstr "评论"
 
 #: .\templates\comments\list.jade:17 .\templates\user\pp-row.jade:11
 msgid "N j, Y"
-msgstr ""
+msgstr "N j, Y"
 
 #: .\templates\comments\list.jade:17
 #, python-format
 msgid "edit %(edits)s"
-msgstr ""
+msgstr "编辑 %(edits)s"
 
 #: .\templates\comments\list.jade:18 .\templates\comments\media-js.jade:68
 msgid "edited"
@@ -2495,11 +2495,11 @@ msgstr "发布"
 #: .\templates\comments\media-js.jade:63
 #, python-brace-format
 msgid "edit {edits}"
-msgstr ""
+msgstr "编辑 {edits}"
 
 #: .\templates\comments\media-js.jade:66
 msgid "original"
-msgstr ""
+msgstr "原始的"
 
 #: .\templates\contest\calendar.jade:1
 msgid "F Y"
@@ -2549,15 +2549,15 @@ msgstr "下个月"
 #: .\templates\contest\contest-list-tabs.jade:7
 #: .\templates\problem\problem-list-tabs.jade:5
 msgid "List"
-msgstr ""
+msgstr "列表"
 
 #: .\templates\contest\contest-list-tabs.jade:9
 msgid "Calendar"
-msgstr ""
+msgstr "日历"
 
 #: .\templates\contest\contest-tabs.jade:5
 msgid "Info"
-msgstr ""
+msgstr "信息"
 
 #: .\templates\contest\contest-tabs.jade:7
 msgid "Rankings"
@@ -2634,11 +2634,11 @@ msgstr "从 <b>%(start_time)s</b> 开始的 <b>%(length)s</b> 时间段"
 
 #: .\templates\contest\list.jade:12 .\templates\contest\media-js.jade:9
 msgid "Are you sure you want to join?"
-msgstr ""
+msgstr "你想加入吗?"
 
 #: .\templates\contest\list.jade:13
 msgid "Joining a contest for the first time starts your timer, after which it becomes unstoppable."
-msgstr ""
+msgstr "参加比赛开启计时，不可暂停"
 
 #: .\templates\contest\list.jade:19
 msgid "Ongoing Contests"
@@ -2700,7 +2700,7 @@ msgstr "离开虚拟竞赛后将无法再次返回，必须重新开始虚拟竞
 
 #: .\templates\contest\media-js.jade:10
 msgid "Joining a contest starts your timer, after which it becomes unstoppable."
-msgstr ""
+msgstr "参加比赛开启计时，不可暂停"
 
 #: .\templates\contest\private.jade:2
 msgid "Only the following organizations may access this contest:"
@@ -2724,7 +2724,7 @@ msgstr "查看用户参与历史"
 
 #: .\templates\contest\ranking.jade:240
 msgid "Show organizations"
-msgstr ""
+msgstr "显示组织"
 
 #: .\templates\contest\tag-title.jade:2
 msgid "Contest tag"
@@ -2831,7 +2831,7 @@ msgstr "查看请求"
 
 #: .\templates\organization\home.jade:10
 msgid "Admin organization"
-msgstr ""
+msgstr "管理组织"
 
 #: .\templates\organization\home.jade:12
 msgid "View members"
@@ -2975,7 +2975,7 @@ msgstr "添加新的用例"
 
 #: .\templates\problem\editorial.jade:6
 msgid "Remember to use this editorial <b>only</b> when stuck, and <b>not to copy-paste code from it</b>. Please be respectful to the problem author and editorialist. <br/><br/> <b>Submitting an official solution before solving the problem yourself is a bannable offence.</b>"
-msgstr ""
+msgstr "当卡住的时候使用这个社论，不要复制粘贴。请尊重题目作者和编辑人员。在解决自己问题之前提交解决方案是不负责任的。"
 
 #: .\templates\problem\list.jade:96
 msgid "Filter by type..."
@@ -2983,7 +2983,7 @@ msgstr "根据类型过滤"
 
 #: .\templates\problem\list.jade:166
 msgid "Hot problems"
-msgstr ""
+msgstr "热门题目"
 
 #: .\templates\problem\list.jade:186 .\templates\problem\list.jade:194
 #: .\templates\problem\search-form.jade:23
@@ -3018,7 +3018,7 @@ msgstr "提交排行"
 
 #: .\templates\problem\problem.jade:54
 msgid "Manage tickets"
-msgstr ""
+msgstr "管理反馈"
 
 #: .\templates\problem\problem.jade:56
 msgid "Edit problem"
@@ -3026,7 +3026,7 @@ msgstr "编辑题目"
 
 #: .\templates\problem\problem.jade:58
 msgid "Edit test data"
-msgstr ""
+msgstr "编辑测试数据"
 
 #: .\templates\problem\problem.jade:61
 msgid "Clone problem"
@@ -3069,11 +3069,11 @@ msgstr "没有支持 %(lang)s 的裁判服务器。"
 
 #: .\templates\problem\problem.jade:99
 msgid "Request clarification"
-msgstr ""
+msgstr "请求声明"
 
 #: .\templates\problem\problem.jade:100
 msgid "Report an issue"
-msgstr ""
+msgstr "报告问题"
 
 #: .\templates\problem\search-form.jade:3
 msgid "Problem search"
@@ -3120,12 +3120,12 @@ msgstr "统计数据"
 
 #: .\templates\problem\submit.jade:175
 msgid "Warning!"
-msgstr ""
+msgstr "警告"
 
 #: .\templates\problem\submit.jade:175
 #, python-format
 msgid "Your default language, %(default_language)s, is unavailable for this problem and has been deselected."
-msgstr ""
+msgstr "你的默认语言%(default_language)s在此题目中不支持，已被修改"
 
 #: .\templates\problem\submit.jade:194
 msgid "No judge is available for this problem."
@@ -3303,7 +3303,7 @@ msgstr "负载"
 #: .\templates\status\judge-status-table.jade:19
 #: .\templates\status\judge-status-table.jade:22
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: .\templates\status\judge-status-table.jade:29
 msgid "There are no judges available at this time."
@@ -3468,76 +3468,76 @@ msgstr "停止"
 
 #: .\templates\submission\submission-list-tabs.jade:7
 msgid "Mine"
-msgstr ""
+msgstr "我的"
 
 #: .\templates\submission\submission-list-tabs.jade:9
 msgid "Best"
-msgstr ""
+msgstr "最好的"
 
 #: .\templates\submission\submission-list-tabs.jade:11
 #, python-format
 msgid "%(username)s's"
-msgstr ""
+msgstr "%(username)s的"
 
 #: .\templates\ticket\list.jade:115 .\templates\ticket\ticket.jade:250
 msgid "Reopened: "
-msgstr ""
+msgstr "重新打开: "
 
 #: .\templates\ticket\list.jade:118 .\templates\ticket\ticket.jade:251
 msgid "Closed: "
-msgstr ""
+msgstr "关闭的: "
 
 #: .\templates\ticket\list.jade:179
 msgid "Use desktop notification"
-msgstr ""
+msgstr "使用桌面提醒"
 
 #: .\templates\ticket\list.jade:184
 msgid "Show my tickets only"
-msgstr ""
+msgstr "只显示我的反馈"
 
 #: .\templates\ticket\list.jade:187
 msgid "Filing user"
-msgstr ""
+msgstr "归档用户"
 
 #: .\templates\ticket\list.jade:193
 msgid "Assignee"
-msgstr ""
+msgstr "受理人"
 
 #: .\templates\ticket\list.jade:210
 msgid "Title"
-msgstr ""
+msgstr "标题"
 
 #: .\templates\ticket\list.jade:212 .\templates\ticket\ticket.jade:285
 msgid "Assignees"
-msgstr ""
+msgstr "受理人们"
 
 #: .\templates\ticket\new_problem.jade:2
 msgid "Thanks for opening a ticket!"
-msgstr ""
+msgstr "感谢反馈"
 
 #: .\templates\ticket\new_problem.jade:2
 msgid "Please keep in mind that this form is for reporting issues with a problem statement, and not for asking for help. If you require assistance on solving a problem, ask in the comments instead."
-msgstr ""
+msgstr "请记住，这份表格是针对有问题陈述的报告问题，而不是请求帮助。如果你需要帮助解决问题，请在评论中提问。"
 
 #: .\templates\ticket\ticket.jade:280
 msgid "Associated object"
-msgstr ""
+msgstr "关联的对象"
 
 #: .\templates\ticket\ticket.jade:289
 msgid "No one is assigned."
-msgstr ""
+msgstr "没有一个被受理"
 
 #: .\templates\ticket\ticket.jade:292
 msgid "Close ticket"
-msgstr ""
+msgstr "关闭反馈"
 
 #: .\templates\ticket\ticket.jade:293
 msgid "Reopen ticket"
-msgstr ""
+msgstr "重新打开反馈"
 
 #: .\templates\ticket\ticket.jade:295
 msgid "Assignee notes"
-msgstr ""
+msgstr "受理记录"
 
 #: .\templates\ticket\ticket.jade:298 .\templates\widgets\select_all.jade:5
 msgid "Nothing here."
@@ -3545,7 +3545,7 @@ msgstr "暂无内容！"
 
 #: .\templates\ticket\ticket.jade:333
 msgid "Post"
-msgstr ""
+msgstr "发送"
 
 #: .\templates\user\base-users-table.jade:4
 msgid "Rank"
@@ -3637,15 +3637,15 @@ msgstr "最高评分："
 
 #: .\templates\user\user-problems.jade:142
 msgid "Points Breakdown"
-msgstr ""
+msgstr "分数分类"
 
 #: .\templates\user\user-problems.jade:152
 msgid "Load more..."
-msgstr ""
+msgstr "加载更多"
 
 #: .\templates\user\user-problems.jade:153
 msgid "This user has not yet solved any problems."
-msgstr ""
+msgstr "这个用户还没有解出任何题目"
 
 #: .\templates\user\user-problems.jade:155
 msgid "Authored Problems"
@@ -3657,11 +3657,11 @@ msgstr "隐藏我已经解决的题目"
 
 #: .\templates\user\user-problems.jade:191
 msgid "Score"
-msgstr ""
+msgstr "分数"
 
 #: .\templates\user\user-tabs.jade:9
 msgid "Impersonate"
-msgstr ""
+msgstr "模拟"
 
 #: .\templates\user\user-tabs.jade:13
 msgid "Admin User"
