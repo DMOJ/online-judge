@@ -62,7 +62,7 @@ class ContestListMixin(object):
             if self.request.user.is_authenticated:
                 q |= Q(organizations__in=self.request.user.profile.organizations.all())
             queryset = queryset.filter(q)
-        return queryset
+        return queryset.distinct()
 
 
 class ContestList(TitleMixin, ContestListMixin, ListView):
