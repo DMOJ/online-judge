@@ -53,7 +53,10 @@ class ContestListMixin(object):
     def get_queryset(self):
         queryset = Contest.objects.all()
         if not self.request.user.has_perm('judge.see_private_contest'):
-            queryset = queryset.filter(is_public=True)
+            q = Q(is_public=True)
+            if self.request.user.is_authenticated:
+                q |= Q(organizers=self.request.user.profile)
+            queryset = queryset.filter(q)
         if not self.request.user.has_perm('judge.edit_all_contest'):
             q = Q(is_private=False)
             if self.request.user.is_authenticated:
