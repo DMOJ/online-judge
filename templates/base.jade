@@ -30,8 +30,6 @@ html(lang=LANGUAGE_CODE)
 
         if og_image
             meta(property='og:image', content='{{ request.build_absolute_uri|urljoin:og_image }}')
-        else
-            meta(property='og:image', content='{{ DMOJ_SCHEME }}://{{ site.domain }}/logo.png')
         block og_title
             meta(property='og:title', content='{{ title }} - {{ SITE_LONG_NAME }}')
         meta(property='og:site_name', content='{{ SITE_LONG_NAME }}')

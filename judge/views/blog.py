@@ -9,9 +9,9 @@ from judge.comments import CommentedDetailView
 from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submission, Language, ProblemClarification
 from judge.models import Ticket
 from judge.utils.diggpaginator import DiggPaginator
+from judge.utils.problems import user_completed_ids
 from judge.utils.tickets import filter_visible_tickets
 from judge.utils.views import TitleMixin
-from judge.utils.problems import user_completed_ids
 
 
 class PostList(ListView):
@@ -50,9 +50,12 @@ class PostList(ListView):
         context['submission_count'] = Submission.objects.filter(problem__is_public=True).count()
         context['language_count'] = Language.objects.count()
 
-        comment_counts = dict(Comment.objects.filter(page__in=['b:%d' % post.id for post in context['posts']])
-                                              .values_list('page').annotate(count=Count('page')).order_by())
-        context['post_comment_counts'] = {int(k[2:]): v for k, v in comment_counts.items()}
+        context['post_comment_counts'] = {
+            int(page[2:]): count for page, count in
+            Comment.objects
+                .filter(page__in=['b:%d' % post.id for post in context['posts']])
+                .values_list('page').annotate(count=Count('page')).order_by()
+        }
 
         now = timezone.now()
 

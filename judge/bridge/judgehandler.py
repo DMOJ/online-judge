@@ -171,7 +171,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
                 handler = self.handlers.get(data['name'], self.on_malformed)
                 handler(data)
         except:
-            logger.exception('Error in packet handling (Judge-side)')
+            logger.exception('Error in packet handling (Judge-side): %s', self.name)
             self._packet_exception()
             # You can't crash here because you aren't so sure about the judges
             # not being malicious or simply malforms. THIS IS A SERVER!

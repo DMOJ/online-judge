@@ -29,6 +29,7 @@
         .new-comments .comment .detail {
             margin: 0px 15px 0px;
             width: 100%;
+            max-width: calc(100% - 134px);
         }
 
         .new-comments .comment-title {
@@ -63,7 +64,10 @@
             display: flex;
         }
 
-        .new-comments .gravatar { width: 75px }
+        .new-comments .gravatar {
+            width: 75px;
+            max-width: 75px;
+        }
 
         .new-comments .vote {
             margin-right: 1em;
