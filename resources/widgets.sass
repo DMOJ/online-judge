@@ -41,7 +41,7 @@
     background: #265a88
 
   &.disabled
-    background: linear-gradient(to bottom,darkgray 0,gray 100%) repeat-x !important
+    background: linear-gradient(to bottom, darkgray 0, gray 100%) repeat-x !important
     border-color: grey !important
     cursor: not-allowed
 
@@ -140,6 +140,17 @@ input
   &.tabs-no-flex
     display: block
 
+  .tab
+    .tab-icon
+      padding-right: 0.3em
+      color: gray
+    &.active
+      a
+        border-top-color: #2980b9
+        border-top-width: 3px
+      .tab-icon
+        color: black
+
   h2
     color: #393630
 
@@ -192,45 +203,45 @@ ul.pagination
   margin: 0
   border-radius: 4px
   >
-    li
-      display: inline
-      &:first-child >
-        a, span
-          margin-left: 0px
-          border-top-left-radius: 4px
-          border-bottom-left-radius: 4px
-      &:last-child >
-        a, span
-          margin-left: 0px
-          border-top-right-radius: 4px
-          border-bottom-right-radius: 4px
-      >
-        a, span
-          position: relative
-          float: left
-          padding: 4px 12px
-          line-height: 1.42857
-          text-decoration: none
-          color: #FFF
-          background-color: #3B3B3B
-          border: 1px solid #505050
-          margin-left: -1px
+  li
+    display: inline
+    &:first-child >
+    a, span
+      margin-left: 0px
+      border-top-left-radius: 4px
+      border-bottom-left-radius: 4px
+    &:last-child >
+    a, span
+      margin-left: 0px
+      border-top-right-radius: 4px
+      border-bottom-right-radius: 4px
+    >
+    a, span
+      position: relative
+      float: left
+      padding: 4px 12px
+      line-height: 1.42857
+      text-decoration: none
+      color: #FFF
+      background-color: #3B3B3B
+      border: 1px solid #505050
+      margin-left: -1px
     .disabled-page >
-      a
-        color: #888
-        background-color: #3B3B3B
-        border-color: #282828
+    a
+      color: #888
+      background-color: #3B3B3B
+      border-color: #282828
       span
         color: #888
         background-color: #3B3B3B
         border-color: #505050
     .active-page >
-      a
-        z-index: 2
-        color: #FFF
-        background-color: #2980B9
-        border-color: transparent
-        cursor: default
+    a
+      z-index: 2
+      color: #FFF
+      background-color: #2980B9
+      border-color: transparent
+      cursor: default
       span
         z-index: 2
         color: #FFF
@@ -290,7 +301,7 @@ a.close
     color: #000
     text-decoration: none
     cursor: pointer
-    filter: alpha(opacity = 50)
+    filter: alpha(opacity=50)
     opacity: .5
 
 .badge
