@@ -1,4 +1,5 @@
 @charset "UTF-8"
+@import vars
 
 @-ms-viewport
   min-width: 480px
@@ -75,12 +76,12 @@ footer
   display: block
   width: 100%
   position: absolute
-  bottom: 0px
+  bottom: 0
 
 body
   position: relative
   min-height: 100%
-  margin: 0px auto
+  margin: 0 auto
   max-width: 107em
   font-size: 14px
   line-height: 1.231
@@ -164,7 +165,7 @@ header
         display: inline
         margin-top: 11px
         margin-right: 9px
-        padding: 0px
+        padding: 0
 
 #nav-shadow
   height: 3px
@@ -178,9 +179,9 @@ header
 
 #navigation
   position: fixed
-  top: 0px
-  left: 0px
-  right: 0px
+  top: 0
+  left: 0
+  right: 0
 
 nav
   position: relative
@@ -188,7 +189,7 @@ nav
   position: sticky
   top: 0
   width: 100%
-  margin: 0px auto
+  margin: 0 auto
   z-index: 500
   text-align: left
   ul
@@ -260,8 +261,7 @@ hr
   color: rgba(0, 0, 0, 0.2)
 
 #content
-  margin: auto
-  margin-top: 52px
+  margin: 52px auto auto
   // Header
   width: 90%
   height: 100%
@@ -292,7 +292,7 @@ noscript #noscript
   font-weight: bold
   background: $announcement_red
   text-align: center
-  padding: 5px 0px
+  padding: 5px 0
   left: 0
   right: 0
   position: fixed
@@ -306,8 +306,6 @@ noscript #noscript
   background: $announcement_red
   text-align: center
   max-width: 30%
-  padding: 15px 10px 5px
-  right: 0
   position: fixed
   border-radius: 4px
   z-index: 100
@@ -378,14 +376,14 @@ noscript #noscript
       height: 100%
       a
         display: block
-        padding: 0px
+        padding: 0
         height: 100%
 
 #page-container
   min-height: 100%
   max-width: 1300px
   position: relative
-  margin: 0px auto
+  margin: 0 auto
   border-right: 1px solid $border_gray
   border-left: 1px solid $border_gray
   background: white
