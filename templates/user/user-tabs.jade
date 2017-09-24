@@ -4,17 +4,17 @@
     h2(style='color:#393630; display: inline-block')= title
     span.spacer
     ul
-        li(class=('active' if user_tab == 'about' else ''))
-            a(href='{% url "user_page" user.user.username %}') {% trans "About" %}
-        li(class=('active' if user_tab == 'problems' else ''))
-            a(href='{% url "user_problems" user.user.username %}') {% trans "Problems" %}
+        li.tab(class=('active' if user_tab == 'about' else ''))
+            a(href='{% url "user_page" user.user.username %}') #[i.tab-icon.fa.fa-info-circle] {% trans "About" %}
+        li.tab(class=('active' if user_tab == 'problems' else ''))
+            a(href='{% url "user_problems" user.user.username %}') #[i.tab-icon.fa.fa-puzzle-piece] {% trans "Problems" %}
         if request.user.is_superuser and user.user != request.user and not user.user.is_superuser
-            li: a(href='{% url "impersonate-start" user.user.id %}') {% trans "Impersonate" %}
+            li.tab: a(href='{% url "impersonate-start" user.user.id %}') #[i.tab-icon.fa.fa-eye] {% trans "Impersonate" %}
         if user.user == request.user
-            li(class=('active' if user_tab == 'edit' else ''))
-                a(href='{% url "user_edit_profile" %}') {% trans "Edit profile" %}
+            li.tab(class=('active' if user_tab == 'edit' else ''))
+                a(href='{% url "user_edit_profile" %}') #[i.tab-icon.fa-edit] {% trans "Edit profile" %}
         else
             if perms.auth.change_user
-                li: a(href='{% url "admin:auth_user_change" user.user.id %}') {% trans "Admin User" %}
+                li.tab: a(href='{% url "admin:auth_user_change" user.user.id %}') #[i.tab-icon.fa-edit] {% trans "Admin User" %}
             if perms.judge.change_profile
-                li: a(href='{% url "admin:judge_profile_change" user.id %}') {% trans "Admin Profile" %}
+                li.tab: a(href='{% url "admin:judge_profile_change" user.id %}') #[i.tab-icon.fa-edit] {% trans "Admin Profile" %}
