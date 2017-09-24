@@ -12,9 +12,9 @@
             li.tab: a(href='{% url "impersonate-start" user.user.id %}') #[i.tab-icon.fa.fa-eye] {% trans "Impersonate" %}
         if user.user == request.user
             li.tab(class=('active' if user_tab == 'edit' else ''))
-                a(href='{% url "user_edit_profile" %}') #[i.tab-icon.fa-edit] {% trans "Edit profile" %}
+                a(href='{% url "user_edit_profile" %}') #[i.tab-icon.fa.fa-edit] {% trans "Edit profile" %}
         else
             if perms.auth.change_user
-                li.tab: a(href='{% url "admin:auth_user_change" user.user.id %}') #[i.tab-icon.fa-edit] {% trans "Admin User" %}
+                li.tab: a(href='{% url "admin:auth_user_change" user.user.id %}') #[i.tab-icon.fa.fa-edit] {% trans "Admin User" %}
             if perms.judge.change_profile
-                li.tab: a(href='{% url "admin:judge_profile_change" user.id %}') #[i.tab-icon.fa-edit] {% trans "Admin Profile" %}
+                li.tab: a(href='{% url "admin:judge_profile_change" user.id %}') #[i.tab-icon.fa.fa-edit] {% trans "Admin Profile" %}
