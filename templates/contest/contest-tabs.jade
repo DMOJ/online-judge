@@ -4,16 +4,16 @@
     h2 {% trans title %}
     span.spacer
     ul
-        li(class=('active' if tab == 'detail' else ''))
-            a(href='{% url "contest_view" contest.key %}') {% trans "Info" %}
+        li.tab(class=('active' if tab == 'detail' else ''))
+            a(href='{% url "contest_view" contest.key %}') #[i.tab-icon.fa.fa-info-circle] {% trans "Info" %}
         if contest.start_time <= now or perms.judge.see_private_contest
-            li(class=('active' if tab == 'ranking' else ''))
-                a(href='{% url "contest_ranking" contest.key %}') {% trans "Rankings" %}
+            li.tab(class=('active' if tab == 'ranking' else ''))
+                a(href='{% url "contest_ranking" contest.key %}') #[i.tab-icon.fa.fa-bar-chart] {% trans "Rankings" %}
             if request.user.is_authenticated
-                li(class=('active' if tab == 'participation' else ''))
-                    a(href='{% url "contest_participation_own" contest.key %}') {% trans "Participation" %}
+                li.tab(class=('active' if tab == 'participation' else ''))
+                    a(href='{% url "contest_participation_own" contest.key %}') #[i.tab-icon.fa.fa-users] {% trans "Participation" %}
         if perms.judge.change_contest
-            li: a(href='{% url "admin:judge_contest_change" contest.id %}') {% trans "Edit" %}
+            li.tab: a(href='{% url "admin:judge_contest_change" contest.id %}') #[i.tab-icon.fa.fa-edit] {% trans "Edit" %}
         if request.user.is_authenticated
             if contest.can_join or participating or is_organizer
                 if contest.ended
