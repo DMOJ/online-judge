@@ -24,6 +24,16 @@ block media
     style.
         .blog-content.sidebox {
             margin-right: 1em;
+            padding-bottom: 1.5em !important;
+        }
+
+        .sidebox-content {
+            border: 1px solid #9D9D9D;
+            border-top: none;
+            margin: 0 -5px;
+            padding: 0 0.5em;
+            padding-top: 1px;
+            padding-bottom: 3px;
         }
 
         .post {
@@ -101,8 +111,8 @@ block body
     block before_posts
 
     #mobile.tabs: ul
-        li.tab#blog-tab.active: a(href='#') #[i.tab-icon.fa.fa-terminal] {% trans "Blog" %}
-        li.tab#event-tab: a(href='#') #[i.tab-icon.fa.fa-exclamation-circle] {% trans "Events" %}
+        li.tab#blog-tab.active: a(href='#') #[i.tab-icon.fa.fa-info-circle]{% trans "Blog" %}
+        li.tab#event-tab: a(href='#') {% trans "Events" %}
 
     #blog-container
         .blog-content.sidebox
