@@ -61,7 +61,7 @@ input
     color: #555
     background-color: #FFF
     background-image: none
-    border: 1px solid #CCC
+    border: 1px solid $border_gray
     border-radius: 4px
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s
@@ -78,7 +78,7 @@ textarea
   color: #555
   background-color: #FFF
   background-image: none
-  border: 1px solid #CCC
+  border: 1px solid $border_gray
   border-radius: 4px
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset
   transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s
@@ -127,12 +127,12 @@ input
   color: black
   cursor: default
   background-color: #fff
-  border: 1px solid rgba(0, 0, 0, 0.2)
+  border: 1px solid $border_gray
   border-bottom-color: transparent
   border-image: none
 
 .tabs
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2)
+  border-bottom: 1px solid $border_gray
   margin: 0 0 8px
   width: 100%
   display: flex
@@ -148,7 +148,7 @@ input
       border-top-width: 3px !important
     &.active
       a
-        border-top-color: #2980b9 !important
+        border-top-color: $highlight_blue !important
       .tab-icon
         color: black
 
@@ -215,29 +215,29 @@ ul.pagination
           line-height: 1.42857
           text-decoration: none
           color: #FFF
-          background-color: #3B3B3B
+          background-color: $widget_black
           border: 1px solid #505050
           margin-left: -1px
     .disabled-page >
       a
         color: #888
-        background-color: #3B3B3B
+        background-color: $widget_black
         border-color: #282828
       span
         color: #888
-        background-color: #3B3B3B
+        background-color: $widget_black
         border-color: #505050
     .active-page >
       a
         z-index: 2
         color: #FFF
-        background-color: #2980B9
+        background-color: $highlight_blue
         border-color: transparent
         cursor: default
       span
         z-index: 2
         color: #FFF
-        background-color: #2980B9
+        background-color: $highlight_blue
         border-color: transparent
         cursor: default
 
@@ -322,7 +322,7 @@ ul.select2-selection__rendered
 
 .sidebox h3
   margin: 0 -5px
-  background: #3b3b3b
+  background: $widget_black
   border-radius: 4px 4px 0 0
   color: white
   padding-top: 5px
@@ -336,7 +336,7 @@ ul.select2-selection__rendered
   margin: 0.2em 0.4em 0 0
 
 .sidebox-content
-  border: 1px solid #9D9D9D
+  border: 1px solid $border_gray
   border-top: none
   margin: 0 -5px
   padding: 0 0.5em

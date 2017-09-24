@@ -27,7 +27,7 @@ img
   width: 100%
 
 table.sortable thead
-  background-color: #eee
+  background-color: $background_gray
   color: #666
   font-weight: bold
   cursor: default
@@ -50,21 +50,21 @@ hr
   height: 0
   border: 0
   font-style: italic
-  border-bottom: 1px solid #CCC
+  border-bottom: 1px solid $border_gray
   padding: 0
 
 .dashed
-  border-bottom: 1px dashed #CCC
+  border-bottom: 1px dashed $border_gray
 
 th
   vertical-align: middle
 
 .form-area
   display: inline-block
-  background: #fafafa
+  background: $background_light_gray
   padding: 5px 10px 10px 15px
   border-radius: 4px
-  border: 1px solid #ccc
+  border: 1px solid $border_gray
 
 div.info-float
   float: right
@@ -84,7 +84,7 @@ body
   max-width: 107em
   font-size: 14px
   line-height: 1.231
-  background: #f7f7f7
+  background: $background_light_gray
   font-family: 'Segoe UI', 'Lucida Grande', Arial, sans-serif
   color: #000
   height: 100%
@@ -171,7 +171,7 @@ header
   background: linear-gradient(rgba(0, 0, 0, 0.5), transparent)
 
 #nav-container
-  background: #3B3B3B
+  background: $widget_black
   // opacity: 0.77
   // filter: alpha(opacity=77)
   height: 100%
@@ -225,7 +225,7 @@ nav
           margin: 0
         &.active
           color: #FFF
-          background: #2980b9
+          background: $highlight_blue
         .nav-expand
           display: none
       ul
@@ -234,11 +234,11 @@ nav
         left: 5px
         display: none
         color: #fff
-        background: #3B3B3B
+        background: $widget_black
         li
           &:first-child
             a.active
-              border-top: 1px dashed #3B3B3B
+              border-top: 1px dashed $widget_black
         li
           display: block
           a
@@ -246,7 +246,7 @@ nav
             font-size: .8em
             line-height: 18px
             display: block
-            border-left: 4px solid #2980b9
+            border-left: 4px solid $highlight_blue
             white-space: nowrap
       &:hover > ul, &:active > ul, &:focus > ul
         display: block !important
@@ -274,7 +274,7 @@ hr
 footer
   text-align: center
   height: 40px
-  border-top: 1px solid #cccccc
+  border-top: 1px solid $border_gray
   background: #ededed
 
 html
@@ -290,7 +290,7 @@ noscript #noscript
   font-size: 111%
   color: white
   font-weight: bold
-  background: #ae0000
+  background: $announcement_red
   text-align: center
   padding: 5px 0px
   left: 0
@@ -303,7 +303,7 @@ noscript #noscript
   font-size: 111%
   color: white
   font-weight: bold
-  background: #ae0000
+  background: $announcement_red
   text-align: center
   max-width: 30%
   padding: 15px 10px 5px
@@ -341,13 +341,13 @@ noscript #noscript
   height: 47px
   max-width: 107em
   background: white
-  border-right: 1px solid #CCC
-  border-left: 1px solid #CCC
+  border-right: 1px solid $border_gray
+  border-left: 1px solid $border_gray
 
 #contest-info
   font-size: 1.25em
-  border-left: 1px solid #2980B9
-  border-bottom: 1px solid #2980B9
+  border-left: 1px solid
+  border-bottom: 1px solid $highlight_blue
   border-radius: 0 0 0 5px
   position: fixed
   top: 44px
@@ -386,8 +386,8 @@ noscript #noscript
   max-width: 1300px
   position: relative
   margin: 0px auto
-  border-right: 1px solid #CCC
-  border-left: 1px solid #CCC
+  border-right: 1px solid $border_gray
+  border-left: 1px solid $border_gray
   background: white
 // border-bottom: 1px solid rgb(204, 204, 204)
 // border-bottom-left-radius: 4px
@@ -451,16 +451,16 @@ math
     float: left
     &.hover
       color: #4db7fe
-      text-shadow: 0 0 5px #2980b9
+      text-shadow: 0 0 5px $highlight_blue
       transition-duration: 0.25s
   #nav-list
     display: none
     padding: 0
     margin-left: 0
-    border-left: 4px solid #2980B9
+    border-left: 4px solid $highlight_blue
     position: fixed
     top: 36px
-    background: #3B3B3B
+    background: $widget_black
     bottom: 0
     width: 8em
     left: 0
