@@ -229,7 +229,6 @@ urlpatterns = [
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
 
     url(r'^status/$', status.status_all, name='status_all'),
-    url(r'^judge/(?P<name>[\w.]+)$', status.JudgeDetail.as_view(), name='judge_info'),
 
     url(r'^api/', include([
         url(r'^contest/list$', api.api_v1_contest_list),
