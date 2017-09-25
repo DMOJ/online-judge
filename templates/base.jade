@@ -111,15 +111,29 @@ html(lang=LANGUAGE_CODE)
                         return false;
                     });
 
+                    if (localStorage.getItem("contest_timer_pos")) {
+                        data = localStorage.getItem("contest_timer_pos").split(":");
+                        $("#contest-info").css({
+                            left: data[0],
+                            top: data[1]
+                        });
+                    }
+
                     $(document).mousemove(function (e) {
                         x_pos = document.all ? window.event.clientX : e.pageX;
                         y_pos = document.all ? window.event.clientY : e.pageY;
                         x_pos = Math.max(Math.min(x_pos, window.innerWidth), 0);
                         y_pos = Math.max(Math.min(y_pos, window.innerHeight), 0);
+
+                        left_px = (x_pos - x_elem) + 'px';
+                        top_px = (y_pos - y_elem) + 'px';
+
+                        localStorage.setItem("contest_timer_pos", left_px + ":" + top_px);
+
                         if (selected !== null) {
                             selected.css({
-                                left: (x_pos - x_elem) + 'px',
-                                top: (y_pos - y_elem) + 'px'
+                                left: left_px,
+                                top: top_px
                             });
                         }
                     });
