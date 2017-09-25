@@ -107,7 +107,7 @@ html(lang=LANGUAGE_CODE)
                     $('#contest-info').mousedown(function () {
                         selected = $(this);
                         x_elem = x_pos - selected.offset().left;
-                        y_elem = y_pos - selected.offset().top;
+                        y_elem = y_pos - (selected.offset().top - $(window).scrollTop());
                         return false;
                     });
 
