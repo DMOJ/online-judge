@@ -22,9 +22,9 @@ block js_media
                         '{% trans "Joining a contest for the first time starts your timer, after which it becomes unstoppable." %}');
             });
         });
-block css_media
+
     style.
-        .floating-time-left {
+        .time-left {
             text-align:left;
             color:#777;
             padding-top: 0.5em;
@@ -150,7 +150,7 @@ block body
                             span.contest-tag(style='background-color: {{ tag.color }}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                   data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
-                        div.floating-time-left
+                        div.time-left
                             if contest.time_limit
                                 | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
                             else
