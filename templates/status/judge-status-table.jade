@@ -12,8 +12,7 @@ tr
     th {% trans "Runtimes" %}
 for judge in judges
     tr
-        td
-            a(href='{% url "judge_info" judge.name %}')= judge.name
+        td= judge.name
         if see_all_judges
             td
                 if judge.online
