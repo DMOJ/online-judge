@@ -62,8 +62,8 @@ block body
                         th(style='width:15%')
                 tbody: each contest in current_contests
                     tr
-                        td: div(style='position:relative')
-                            .contest-tags: each tag in contest.tags.all
+                        td: div.contest-block
+                            span.contest-tags: each tag in contest.tags.all
                                 span.contest-tag(style='background-color: {{ tag.color }}')
                                     a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                     data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
@@ -76,7 +76,7 @@ block body
                                             | Ends in {{ countdown }}.
                                 elif contest.free_start and contest.start_time
                                     span.time {% trans "Started at" %} #{contest.start_time|date:_("N j, Y, G:i")}
-                                .time.floating-time(style='text-align:right')
+                                .time.time-left
                                     span(style='text-align:right;color:#777;')
                                     if contest.time_limit
                                         | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
