@@ -22,6 +22,26 @@ block js_media
                         '{% trans "Joining a contest for the first time starts your timer, after which it becomes unstoppable." %}');
             });
         });
+block css_media
+    style.
+        .floating-time-left {
+            text-align:left;
+            color:#777;
+            padding-top: 0.5em;
+        }
+
+        .contest-block {
+            text-align: left;
+            padding-left: 1em;
+        }
+
+        .contest-tags {
+            vertical-align: top;
+        }
+
+        .contest-list-title {
+            font-weight: 600;
+        }
 
 block title_ruler
 
@@ -124,13 +144,13 @@ block body
                     th(style='width:15%')
             tbody: each contest in past_contests
                 tr
-                    td: div(style='position:relative')
+                    td: div.contest-block
                         a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
-                        .contest-tags: each tag in contest.tags.all
+                        span.contest-tags: each tag in contest.tags.all
                             span.contest-tag(style='background-color: {{ tag.color }}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                   data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
-                        span.floating-time-right(style='text-align:right;color:#777;')
+                        div.floating-time-left
                             if contest.time_limit
                                 | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
                             else
