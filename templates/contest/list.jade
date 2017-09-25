@@ -63,11 +63,11 @@ block body
                 tbody: each contest in current_contests
                     tr
                         td: div.contest-block
+                            a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                             span.contest-tags: each tag in contest.tags.all
                                 span.contest-tag(style='background-color: {{ tag.color }}')
                                     a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                     data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
-                            a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                             if contest.start_time
                                 br
                                 if contest.time_before_end
@@ -118,7 +118,7 @@ block body
                                     - blocktrans with countdown=contest.time_before_start|as_countdown
                                         | Starting in {{ countdown }}.
 
-                            .time.floating-time(style='text-align:right')
+                            .time.time-left
                                 span(style='text-align:right;color:#777;')
                                 if contest.time_limit
                                     | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
