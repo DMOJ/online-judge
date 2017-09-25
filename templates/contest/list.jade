@@ -23,14 +23,13 @@ block js_media
                         '{% trans "Joining a contest for the first time starts your timer, after which it becomes unstoppable." %}');
             });
 
-            var tooltip_classes = 'tooltipped tooltipped-w';
+            var tooltip_classes = 'tooltipped tooltipped-e';
 
             $('.contest-tag').each(function () {
                 var link = $(this);
                 link.mouseenter(function (e) {
                     link.addClass(tooltip_classes).attr('aria-label', link.attr('data-description'));
                 }).mouseleave(function (e) {
-                    active_judge = active_lang = null;
                     link.removeClass(tooltip_classes).removeAttr('aria-label');
                 });
             });
