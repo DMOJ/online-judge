@@ -119,9 +119,9 @@ html(lang=LANGUAGE_CODE)
                         });
                     }
 
-                    $(document).mousemove(function (e) {
-                        x_pos = document.all ? window.event.clientX : e.pageX;
-                        y_pos = document.all ? window.event.clientY : e.pageY;
+                    $(document).mousemove(function(e) {
+                        x_pos = e.pageX;
+                        y_pos = e.pageY;
                         x_pos = Math.max(Math.min(x_pos, window.innerWidth), 0);
                         y_pos = Math.max(Math.min(y_pos, window.innerHeight), 0);
 
