@@ -21,6 +21,18 @@ block js_media
                 return confirm('{% trans "Are you sure you want to join?" %}\n' +
                         '{% trans "Joining a contest for the first time starts your timer, after which it becomes unstoppable." %}');
             });
+
+            var tooltip_classes = 'tooltipped tooltipped-w';
+
+            $('.contest-tag').each(function () {
+                var link = $(this);
+                link.mouseenter(function (e) {
+                    link.addClass(tooltip_classes).attr('aria-label', link.attr('data-description'));
+                }).mouseleave(function (e) {
+                    active_judge = active_lang = null;
+                    link.removeClass(tooltip_classes).removeAttr('aria-label');
+                });
+            });
         });
 
     style.
@@ -52,7 +64,7 @@ block body
                         td: div.contest-block
                             a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                             span.contest-tags: each tag in contest.tags.all
-                                span.contest-tag(style='background-color: {{ tag.color }}')
+                                span.contest-tag(style='background-color: {{ tag.color }}', data-description='{{tag.description|markdown:"contest_tag"}}')
                                     a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                     data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
                             if contest.start_time
@@ -95,7 +107,7 @@ block body
                     tr: td: div.contest-block
                         a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                         span.contest-tags: each tag in contest.tags.all
-                            span.contest-tag(style='background-color: {{ tag.color }}')
+                            span.contest-tag(style='background-color: {{ tag.color }}', data-description='{{tag.description|markdown:"contest_tag"}}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                 data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
                         if contest.start_time
@@ -134,7 +146,7 @@ block body
                     td: div.contest-block
                         a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                         span.contest-tags: each tag in contest.tags.all
-                            span.contest-tag(style='background-color: {{ tag.color }}')
+                            span.contest-tag(style='background-color: {{ tag.color }}', data-description='{{tag.description|markdown:"contest_tag"}}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                   data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
                         div.time-left
