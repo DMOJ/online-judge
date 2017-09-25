@@ -344,15 +344,18 @@ noscript #noscript
 
 #contest-info
   font-size: 1.25em
-  border-left: 1px solid
-  border-bottom: 1px solid $highlight_blue
-  border-radius: 0 0 0 $widget_border_radius
-  position: fixed
-  top: 44px
-  right: 0
-  background: rgba(0, 0, 0, 0.77)
+  border: 5px solid $highlight_blue
+  border-left: 5px dotted white
+  border-radius: 0 $widget_border_radius $widget_border_radius 0
+  background: rgba(0,0,0,.77)
   z-index: 1
-  padding: 0 0.2em 0.2em
+  padding: 10px 12px
+  width: 250px
+  color: white
+  cursor: move
+  position: relative
+  left: 20px
+  top: 80px
 
   a
     height: 1.4em

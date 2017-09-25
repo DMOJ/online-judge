@@ -99,6 +99,34 @@ html(lang=LANGUAGE_CODE)
             script(type='text/javascript').
                 $(document).ready(function () {
                     count_down($("#contest-time-remaining"));
+
+                    var selected = null,
+                        x_pos = 0, y_pos = 0,
+                        x_elem = 0, y_elem = 0;
+
+                    $('#contest-info').mousedown(function () {
+                        selected = $(this);
+                        x_elem = x_pos - selected.offset().left;
+                        y_elem = y_pos - selected.offset().top;
+                        return false;
+                    });
+
+                    $(document).mousemove(function (e) {
+                        x_pos = document.all ? window.event.clientX : e.pageX;
+                        y_pos = document.all ? window.event.clientY : e.pageY;
+                        x_pos = Math.max(Math.min(x_pos, window.innerWidth), 0);
+                        y_pos = Math.max(Math.min(y_pos, window.innerHeight), 0);
+                        if (selected !== null) {
+                            selected.css({
+                                left: (x_pos - x_elem) + 'px',
+                                top: (y_pos - y_elem) + 'px'
+                            });
+                        }
+                    });
+
+                    $(document).mouseup(function () {
+                        selected = null;
+                    })
                 });
 
         if request.user.is_authenticated
