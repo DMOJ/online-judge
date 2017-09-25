@@ -171,7 +171,7 @@ block body
                     .sidebox-content
                         each contest in current_contests
                             .contest
-                                .name: a(href='{% url "contest_view" contest.key %}')= contest.name
+                                .contest-list-title: a(href='{% url "contest_view" contest.key %}')= contest.name
                                 .time
                                     - blocktrans with countdown=contest.time_before_end|as_countdown
                                         | Ends in {{ countdown }}.
@@ -181,7 +181,7 @@ block body
                     .sidebox-content
                         each contest in future_contests
                             .contest
-                                .name: a(href='{% url "contest_view" contest.key %}')= contest.name
+                                .contest-list-title: a(href='{% url "contest_view" contest.key %}')= contest.name
                                 .time
                                     - blocktrans with countdown=contest.time_before_start|as_countdown
                                         | Starting in {{ countdown }}.
