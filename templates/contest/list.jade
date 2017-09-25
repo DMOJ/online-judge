@@ -106,11 +106,11 @@ block body
                 thead: tr: th {% trans "Contest" %}
                 tbody: each contest in future_contests
                     tr: td: div.contest-block
+                        a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                         span.contest-tags: each tag in contest.tags.all
                             span.contest-tag(style='background-color: {{ tag.color }}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                 data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
-                        a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                         if contest.start_time
                             br
                             if contest.time_before_start
