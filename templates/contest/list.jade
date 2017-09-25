@@ -105,8 +105,8 @@ block body
             table.contest-list.table.striped
                 thead: tr: th {% trans "Contest" %}
                 tbody: each contest in future_contests
-                    tr: td: div(style='position:relative')
-                        .contest-tags: each tag in contest.tags.all
+                    tr: td: div.contest-block
+                        span.contest-tags: each tag in contest.tags.all
                             span.contest-tag(style='background-color: {{ tag.color }}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                 data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
