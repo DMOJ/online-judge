@@ -154,7 +154,11 @@ block js_media
                                 }
                             }
                     );
-                    receiver.onwsclose = function () {
+                    receiver.onwsclose = function (event) {
+                        if (event.code == 1001) {
+                            console.log('Navigated away');
+                            return;
+                        }
                         console.log('You probably should refresh?');
                         $('.ws-closed').show().find('a').click(function () {
                             window.location.reload();
