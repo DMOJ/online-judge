@@ -196,8 +196,8 @@ block media
 block body
     #common-content
         #content-right.submission
-            .info-float: .sidebox
-                if all_statuses
+            .info-float
+                .sidebox
                     h3 {% trans "Filter submissions" %} #[i.fa.fa-search]
                     .sidebox-content
                         form#filter-form(name='form', action='', method='get')
@@ -218,9 +218,8 @@ block body
                                         else
                                             option(value=code)= name
                             .form-submit-group: a#go.button(onclick='form.submit()') {% trans "Go" %}
-                else
-                    #statistics-table
-                        include problem/statistics-table
+                #statistics-table
+                    include problem/statistics-table
         #content-left.submission
             if page_obj.num_pages > 1
                 div(style='margin-bottom:6px;margin-top:3px')
