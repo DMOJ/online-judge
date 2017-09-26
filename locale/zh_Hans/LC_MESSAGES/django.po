@@ -1001,7 +1001,7 @@ msgstr "允许的语言"
 
 #: .\judge\models\problem.py:116
 msgid "manually managed"
-msgstr "人工管理"
+msgstr "评测机是否可以管理数据"
 
 #: .\judge\models\problem.py:117
 msgid "Whether judges should be allowed to manage data or not"
