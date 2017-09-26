@@ -8,7 +8,7 @@ block header
             
             if perms.judge.change_submission and submission.judged_on
                 = ' on '
-                a(href='{% url "judge_info" submission.judged_on.name %}')=submission.judged_on.name
+                = submission.judged_on.name
             br
             span= submission.language
             = ' '
