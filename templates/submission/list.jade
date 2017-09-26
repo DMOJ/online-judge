@@ -201,7 +201,7 @@ block body
             .info-float.sidebox
                 if all_statuses
                     h3 {% trans "Filter submissions" %}
-                    form#filter-form(name='form', action='', method='get')
+                    form.sidebox-content#filter-form(name='form', action='', method='get')
                         div.filter-form-group
                             label(for='status'): i {% trans "Status" %}
                             select#status(name='status', multiple)
