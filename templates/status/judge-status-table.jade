@@ -12,7 +12,11 @@ tr
     th {% trans "Runtimes" %}
 for judge in judges
     tr
-        td= judge.name
+        td
+            if perms.judge.change_judge
+                a(href='{% url "admin:judge_judge_change" judge.id %}')= judge.name
+            else
+                = judge.name
         if see_all_judges
             td
                 if judge.online
