@@ -176,23 +176,6 @@ block title_row
     include submission/submission-list-tabs
 
 block media
-    style.
-        .ws-closed {
-            position: sticky;
-            top: 42px;
-            background: #ae0000;
-            border-radius: 5px 5px 0 0;
-            display: none;
-        }
-
-        .ws-closed a {
-            display: block;
-            padding: 7px 0;
-            text-align: center;
-            color: white;
-            font-weight: 600;
-        }
-
     if perms.judge.change_submission and perms.judge.rejudge_submission
         style.
             td.sub-prop, col.sub-prop { width: 22% }
