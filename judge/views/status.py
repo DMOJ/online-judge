@@ -1,13 +1,7 @@
-from itertools import chain
-
-from django.http import Http404
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
-from django.views.generic import DetailView
 
 from judge.models import Judge
-from judge.utils.views import TitleMixin, generic_message
-
 
 __all__ = ['status_all', 'status_table']
 
