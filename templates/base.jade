@@ -207,7 +207,9 @@ html(lang=LANGUAGE_CODE)
                                 if request.user.is_impersonate
                                     li: a(href='{% url "impersonate-stop" %}') Stop impersonating
                                 else
-                                    li: a(href='{% url "auth_logout" %}?next=') {% trans "Log out" %}
+                                    li: form(action='{% url "auth_logout" %}', method='POST')
+                                        - csrf_token
+                                        button(type='submit') {% trans "Log out" %}
                     else
                         span.anon
                             a(href='{% url "auth_login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')
