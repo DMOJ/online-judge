@@ -222,7 +222,7 @@ block body
                                         else
                                             option(value=code)= name
                             .form-submit-group: a#go.button(onclick='form.submit()') {% trans "Go" %}
-                #statistics-table
+                .sidebox: #statistics-table
                     include problem/statistics-table
         #content-left.submission
             if page_obj.num_pages > 1
