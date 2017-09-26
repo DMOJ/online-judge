@@ -211,7 +211,7 @@ nav
           border-bottom: none
           padding-top: 0
           padding-bottom: 0
-      a
+      a, button
         display: inline-block
         text-decoration: none
         vertical-align: middle
@@ -244,13 +244,16 @@ nav
               border-top: 1px solid $widget_black
         li
           display: block
-          a
+          a, button
             padding: 8px 20px 8px 8px !important
             font-size: .8em
             line-height: 18px
             display: block
             border-left: 4px solid $highlight_blue
             white-space: nowrap
+      button
+        background: none
+        text-align: left
       &:hover > ul, &:active > ul, &:focus > ul
         display: block !important
       &.home-nav-element a:hover
