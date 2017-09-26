@@ -213,11 +213,12 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         check = self.access_check(request)
         if check is not None:
             return check
-        if 'results' in request.GET:
-            return render(request, 'problem/statistics-table.jade', {'results': self.get_result_table()})
 
         self.selected_languages = set(request.GET.getlist('language'))
         self.selected_statuses = set(request.GET.getlist('status'))
+
+        if 'results' in request.GET:
+            return render(request, 'problem/statistics-table.jade', {'results': self.get_result_table()})
 
         return super(SubmissionsListBase, self).get(request, *args, **kwargs)
 
