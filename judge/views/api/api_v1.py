@@ -47,8 +47,8 @@ def api_v1_contest_detail(request, contest):
             {
                 'points': int(problem.points),
                 'partial': problem.partial,
-                'name': str(problem.problem.name),
-                'code': str(problem.problem.code)
+                'name': problem.problem.name,
+                'code': problem.problem.code,
             } for problem in problems],
         'rankings': [
             {
