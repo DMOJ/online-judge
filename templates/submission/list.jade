@@ -187,6 +187,8 @@ block media
             text-align: center;
         }
 
+        .submission .sidebox { margin-top: 2em; }
+
     if perms.judge.change_submission and perms.judge.rejudge_submission
         style.
             td.sub-prop, col.sub-prop { width: 22% }
@@ -196,9 +198,9 @@ block media
 block body
     #common-content
         #content-right.submission
-            .info-float.content-description
+            .info-float.sidebox
                 if all_statuses
-                    h4 {% trans "Filter submissions" %}
+                    h3 {% trans "Filter submissions" %}
                     form#filter-form(name='form', action='', method='get')
                         div.filter-form-group
                             label(for='status'): i {% trans "Status" %}
