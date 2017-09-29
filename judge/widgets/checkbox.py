@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import FieldError
-from django.template import Context
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 
@@ -8,23 +7,21 @@ from django.utils.safestring import mark_safe
 class CheckboxSelectMultipleWithSelectAll(forms.CheckboxSelectMultiple):
     _all_selected = False
 
-    def render(self, *args, **kwargs):
-        empty = False
-        if not self.choices:
-            empty = True
-        has_id = kwargs and ('attrs' in kwargs) and ('id' in kwargs['attrs'])
-        if not has_id:
+    def render(self, name, value, attrs=None, original=None):
+        if 'id' not in attrs:
             raise FieldError('id required')
-        select_all_id = kwargs['attrs']['id'] + '_all'
-        select_all_name = args[0] + '_all'
-        renderer = super(CheckboxSelectMultipleWithSelectAll, self).get_renderer(*args, **kwargs)
+
+        select_all_id = attrs['id'] + '_all'
+        select_all_name = name + '_all'
+        original = super(CheckboxSelectMultipleWithSelectAll, self).render(name, value, attrs, original)
         template = get_template('widgets/select_all.jade')
-        context = Context({'original_widget': renderer.render(),
-                           'select_all_id': select_all_id,
-                           'select_all_name': select_all_name,
-                           'all_selected': all(choice[0] in renderer.value for choice in renderer.choices),
-                           'empty': empty})
-        return mark_safe(template.render(context))
+        return mark_safe(template.render({
+            'original_widget': original,
+            'select_all_id': select_all_id,
+            'select_all_name': select_all_name,
+            'all_selected': all(choice[0] in value for choice in self.choices),
+            'empty': not self.choices,
+        }))
 
     def value_from_datadict(self, *args, **kwargs):
         original = super(CheckboxSelectMultipleWithSelectAll, self).value_from_datadict(*args, **kwargs)

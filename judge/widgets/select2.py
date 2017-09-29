@@ -44,12 +44,10 @@ from itertools import chain
 
 from django import forms
 from django.conf import settings
-from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core import signing
 from django.core.urlresolvers import reverse_lazy
 from django.forms.models import ModelChoiceIterator
 from django.utils.encoding import force_text
-
 
 DEFAULT_SELECT2_JS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'
 DEFAULT_SELECT2_CSS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
@@ -67,9 +65,9 @@ class Select2Mixin(object):
     form media.
     """
 
-    def build_attrs(self, extra_attrs=None, **kwargs):
+    def build_attrs(self, base_attrs, extra_attrs=None):
         """Add select2 data attributes."""
-        attrs = super(Select2Mixin, self).build_attrs(extra_attrs=extra_attrs, **kwargs)
+        attrs = super(Select2Mixin, self).build_attrs(base_attrs, extra_attrs)
         if self.is_required:
             attrs.setdefault('data-allow-clear', 'false')
         else:
@@ -98,7 +96,7 @@ class Select2Mixin(object):
         """
         return forms.Media(
             js=(getattr(settings, 'SELECT2_JS_URL', DEFAULT_SELECT2_JS),
-                static('django_select2.js')),
+                'django_select2.js'),
             css={'screen': (getattr(settings, 'SELECT2_CSS_URL', DEFAULT_SELECT2_CSS),)}
         )
 
@@ -108,12 +106,13 @@ class Select2Mixin(object):
 class Select2TagMixin(object):
     """Mixin to add select2 tag functionality."""
 
-    def build_attrs(self, extra_attrs=None, **kwargs):
+    def build_attrs(self, base_attrs, extra_attrs=None):
         """Add select2's tag attributes."""
-        self.attrs.setdefault('data-minimum-input-length', 1)
-        self.attrs.setdefault('data-tags', 'true')
-        self.attrs.setdefault('data-token-separators', [",", " "])
-        return super(Select2TagMixin, self).build_attrs(extra_attrs, **kwargs)
+        extra_attrs = extra_attrs or {}
+        extra_attrs.setdefault('data-minimum-input-length', 1)
+        extra_attrs.setdefault('data-tags', 'true')
+        extra_attrs.setdefault('data-token-separators', [",", " "])
+        return super(Select2TagMixin, self).build_attrs(base_attrs, extra_attrs)
 
 
 class Select2Widget(Select2Mixin, forms.Select):
@@ -193,9 +192,9 @@ class HeavySelect2Mixin(Select2Mixin):
             return self.data_url
         return reverse_lazy(self.data_view)
 
-    def build_attrs(self, extra_attrs=None, **kwargs):
+    def build_attrs(self, base_attrs, extra_attrs=None):
         """Set select2's ajax attributes."""
-        attrs = super(HeavySelect2Mixin, self).build_attrs(extra_attrs=extra_attrs, **kwargs)
+        attrs = super(HeavySelect2Mixin, self).build_attrs(base_attrs, extra_attrs)
 
         # encrypt instance Id
         self.widget_id = signing.dumps(id(self))
