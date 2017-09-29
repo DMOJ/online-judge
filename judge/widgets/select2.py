@@ -169,22 +169,18 @@ class Select2TagWidget(Select2TagMixin, Select2Mixin, forms.SelectMultiple):
 class HeavySelect2Mixin(Select2Mixin):
     """Mixin that adds select2's ajax options."""
 
-    def __init__(self, **kwargs):
-        """
-        Return HeavySelect2Mixin.
+    def __init__(self, attrs=None, choices=(), **kwargs):
+        self.choices = choices
+        if attrs is not None:
+            self.attrs = attrs.copy()
+        else:
+            self.attrs = {}
 
-        :param data_view: url pattern name
-        :type data_view: str
-        :param data_url: url
-        :type data_url: str
-        :return:
-        """
         self.data_view = kwargs.pop('data_view', None)
         self.data_url = kwargs.pop('data_url', None)
+
         if not (self.data_view or self.data_url):
             raise ValueError('You must ether specify "data_view" or "data_url".')
-        self.userGetValTextFuncName = kwargs.pop('userGetValTextFuncName', 'null')
-        super(HeavySelect2Mixin, self).__init__(**kwargs)
 
     def get_url(self):
         """Return url from instance or by reversing :attr:`.data_view`."""
@@ -208,25 +204,14 @@ class HeavySelect2Mixin(Select2Mixin):
         attrs['class'] += ' django-select2-heavy'
         return attrs
 
-    def render_options(self, selected_choices):
-        """Render only selected options."""
-
-        output = ['<option></option>' if not self.is_required else '']
-
-        if isinstance(self.choices, ModelChoiceIterator):
-            chosen = copy(self.choices)
-            chosen.queryset = chosen.queryset.filter(pk__in=[
-                int(i) for i in selected_choices if isinstance(i, (int, long)) or i.isdigit()
-            ])
-            chosen = set(chosen)
-        else:
-            choices = self.choices
-            selected_choices = {force_text(v) for v in selected_choices}
-            chosen = {(k, v) for k, v in choices if force_text(k) in selected_choices}
-
-        for option_value, option_label in chosen:
-            output.append(self.render_option(selected_choices, option_value, option_label))
-        return '\n'.join(output)
+    def format_value(self, value):
+        result = super(HeavySelect2Mixin, self).format_value(value)
+        chosen = copy(self.choices)
+        chosen.queryset = chosen.queryset.filter(pk__in=[
+            int(i) for i in result if isinstance(i, (int, long)) or i.isdigit()
+        ])
+        self.choices = set(chosen)
+        return result
 
 
 class HeavySelect2Widget(HeavySelect2Mixin, forms.Select):
