@@ -208,25 +208,21 @@ class HeavySelect2Mixin(Select2Mixin):
         attrs['class'] += ' django-select2-heavy'
         return attrs
 
-    def render_options(self, *args, **kwargs):
+    def render_options(self, selected_choices):
         """Render only selected options."""
-        if len(args) == 1:
-            choices, selected_choices = (), args[0]
-        else:
-            choices, selected_choices = args
 
         output = ['<option></option>' if not self.is_required else '']
+
         if isinstance(self.choices, ModelChoiceIterator):
             chosen = copy(self.choices)
-            chosen.queryset = chosen.queryset.filter(pk__in=[int(i) for i in selected_choices
-                                                             if isinstance(i, (int, long)) or i.isdigit()])
+            chosen.queryset = chosen.queryset.filter(pk__in=[
+                int(i) for i in selected_choices if isinstance(i, (int, long)) or i.isdigit()
+            ])
             chosen = set(chosen)
         else:
-            choices = chain(self.choices, choices)
-            chosen = set()
-
-        selected_choices = {force_text(v) for v in selected_choices}
-        chosen.update((k, v) for k, v in choices if force_text(k) in selected_choices)
+            choices = self.choices
+            selected_choices = {force_text(v) for v in selected_choices}
+            chosen = {(k, v) for k, v in choices if force_text(k) in selected_choices}
 
         for option_value, option_label in chosen:
             output.append(self.render_option(selected_choices, option_value, option_label))
