@@ -49,11 +49,7 @@ register_patterns = [
         {'template_name': 'registration/login.jade', 'extra_context': {'title': 'Login'},
          'authentication_form': CustomAuthenticationForm},
         name='auth_login'),
-    url(r'^logout/$',
-        auth_views.logout,
-        {'template_name': 'registration/logout.jade',
-         'extra_context': {'title': 'You have been successfully logged out.'}},
-        name='auth_logout'),
+    url(r'^logout/$', user.UserLogoutView.as_view(), name='auth_logout'),
     url(r'^password/change/$',
         auth_views.password_change,
         {'template_name': 'registration/password_change_form.jade', 'extra_context': {'title': 'Change Password'}},
@@ -229,7 +225,6 @@ urlpatterns = [
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
 
     url(r'^status/$', status.status_all, name='status_all'),
-    url(r'^judge/(?P<name>[\w.]+)$', status.JudgeDetail.as_view(), name='judge_info'),
 
     url(r'^api/', include([
         url(r'^contest/list$', api.api_v1_contest_list),

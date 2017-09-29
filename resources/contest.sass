@@ -1,15 +1,17 @@
+@import vars
+
 #contest-calendar
   border-collapse: collapse
   th
-    border-bottom: 1px solid #aaa
+    border-bottom: 1px solid $border_gray
 
     &.sun
-      border-left: 1px solid #aaa
+      border-left: 1px solid $border_gray
 
     &.sun, &.mon, &.tue, &.wed, &.thu, &.fri, &.sat
       font-size: 0.95em
-      border-right: 1px solid #aaa
-      background: #f2f2f2
+      border-right: 1px solid $border_gray
+      background: $background_light_gray
 
   td
     height: 110px
@@ -18,15 +20,15 @@
     vertical-align: top
     text-align: right
     font-size: 0.75em
-    border-right: 1px solid #aaa
-    border-bottom: 1px solid #aaa
+    border-right: 1px solid $border_gray
+    border-bottom: 1px solid $border_gray
     transition-duration: 0.2s
 
     .num
       font-size: 1.1em
       font-weight: bold
       display: block
-      border-bottom: 1px dashed #ccc
+      border-bottom: 1px dashed $border_gray
       padding-right: 0.2em
       margin-bottom: 0.4em
 
@@ -88,7 +90,7 @@
     text-align: center
     display: block
     color: rgb(85, 85, 85)
-    font-size: 14px
+    font-size: $base_font_size
 
 .contest-list
   td
@@ -117,12 +119,16 @@
     bottom: 0
 
   .contest-tags
-    position: absolute
-    bottom: 0
+    padding-left: 0.75em
+    vertical-align: top
 
   .participate-button
     display: inline-block
     width: 90px
+
+  .contest-block
+    text-align: left
+    padding: 0.5em 0.5em 0.5em 1em
 
 .contest-tag
   box-shadow: inset 0 -0.1em 0 rgba(0, 0, 0, 0.12)
@@ -130,6 +136,8 @@
   border-radius: 0.15em
   font-weight: 600
   margin-right: 0.45em
+  position: relative
 
 .contest-list-title
-  font-size: 16px
+  font-size: 18px
+  font-weight: 600

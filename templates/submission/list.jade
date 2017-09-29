@@ -154,7 +154,11 @@ block js_media
                                 }
                             }
                     );
-                    receiver.onwsclose = function () {
+                    receiver.onwsclose = function (event) {
+                        if (event.code == 1001) {
+                            console.log('Navigated away');
+                            return;
+                        }
                         console.log('You probably should refresh?');
                         $('.ws-closed').show().find('a').click(function () {
                             window.location.reload();
@@ -172,21 +176,6 @@ block title_row
     include submission/submission-list-tabs
 
 block media
-    style.
-        .ws-closed {
-            position: sticky;
-            top: 42px;
-            background: #eee;
-            border-radius: 5px 5px 0 0;
-            display: none;
-        }
-
-        .ws-closed a {
-            display: block;
-            padding: 5px 0;
-            text-align: center;
-        }
-
     if perms.judge.change_submission and perms.judge.rejudge_submission
         style.
             td.sub-prop, col.sub-prop { width: 22% }
@@ -196,30 +185,30 @@ block media
 block body
     #common-content
         #content-right.submission
-            .info-float.content-description
-                if all_statuses
-                    h4 {% trans "Filter submissions" %}
-                    form#filter-form(name='form', action='', method='get')
-                        div.filter-form-group
-                            label(for='status'): i {% trans "Status" %}
-                            select#status(name='status', multiple)
-                                each id, name in all_statuses
-                                    if id in selected_statuses
-                                        option(value=id, selected)= name
-                                    else
-                                        option(value=id)= name
-                        div.filter-form-group
-                            label(for='language'): i {% trans "Language" %}
-                            select#language(name='language', multiple)
-                                each code, name in all_languages
-                                    if code in selected_languages
-                                        option(value=code, selected)= name
-                                    else
-                                        option(value=code)= name
-                        .form-submit-group: a#go.button(onclick='form.submit()') {% trans "Go" %}
-                    else
-                        #statistics-table
-                            include problem/statistics-table
+            .info-float
+                .sidebox
+                    h3 {% trans "Filter submissions" %} #[i.fa.fa-search]
+                    .sidebox-content
+                        form#filter-form(name='form', action='', method='get')
+                            div.filter-form-group
+                                label(for='status'): i {% trans "Status" %}
+                                select#status(name='status', multiple)
+                                    each id, name in all_statuses
+                                        if id in selected_statuses
+                                            option(value=id, selected)= name
+                                        else
+                                            option(value=id)= name
+                            div.filter-form-group
+                                label(for='language'): i {% trans "Language" %}
+                                select#language(name='language', multiple)
+                                    each code, name in all_languages
+                                        if code in selected_languages
+                                            option(value=code, selected)= name
+                                        else
+                                            option(value=code)= name
+                            .form-submit-group: a#go.button(onclick='form.submit()') {% trans "Go" %}
+                .sidebox: #statistics-table
+                    include problem/statistics-table
         #content-left.submission
             if page_obj.num_pages > 1
                 div(style='margin-bottom:6px;margin-top:3px')

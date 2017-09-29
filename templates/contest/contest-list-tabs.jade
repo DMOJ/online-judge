@@ -12,7 +12,7 @@
                 a(href='{% url "contest_calendar" next_month.year next_month.month %}') {% trans "Next" %} &raquo;
         span.spacer
     ul
-        li(class=('active' if tab == 'list' else '')): a(href='{% url "contest_list" %}') {% trans "List" %}
-        li(class=('active' if tab == 'calendar' else '')): a(href='{% url "contest_calendar" now.year now.month %}') {% trans "Calendar" %}
+        li.tab(class=('active' if tab == 'list' else '')): a(href='{% url "contest_list" %}') #[i.tab-icon.fa.fa-list] {% trans "List" %}
+        li.tab(class=('active' if tab == 'calendar' else '')): a(href='{% url "contest_calendar" now.year now.month %}') #[i.tab-icon.fa.fa-calendar] {% trans "Calendar" %}
         if perms.judge.change_contest
-            li: a(href='{% url "admin:judge_contest_changelist" %}') {% trans "Admin" %}
+            li.tab: a(href='{% url "admin:judge_contest_changelist" %}') #[i.tab-icon.fa.fa-edit] {% trans "Admin" %}

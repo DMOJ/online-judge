@@ -3,7 +3,7 @@
 - load i18n
 - load list_processor
 tr
-    th {% trans "Name" %}
+    th {% trans "Judge" %}
     if see_all_judges
         th {% trans "Online" %}
     th {% trans "Uptime" %}
@@ -13,7 +13,10 @@ tr
 for judge in judges
     tr
         td
-            a(href='{% url "judge_info" judge.name %}')= judge.name
+            if perms.judge.change_judge
+                a(href='{% url "admin:judge_judge_change" judge.id %}')= judge.name
+            else
+                = judge.name
         if see_all_judges
             td
                 if judge.online

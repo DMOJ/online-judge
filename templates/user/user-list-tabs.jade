@@ -4,7 +4,7 @@
     h2 {% trans title %}
     span.spacer
     ul
-        li(class=('active' if tab == 'list' else ''))
-            a(href='{% url "user_list" %}') {% trans "Leaderboard" %}
-        li(class=('active' if tab == 'organizations' else ''))
-            a(href='{% url "organization_list" %}') {% trans "Organizations" %}
+        li.tab(class=('active' if tab == 'list' else ''))
+            a(href='{% url "user_list" %}') #[i.tab-icon.fa.fa-users] {% trans "Leaderboard" %}
+        li.tab(class=('active' if tab == 'organizations' else ''))
+            a(href='{% url "organization_list" %}') #[i.tab-icon.fa.fa-university] {% trans "Organizations" %}

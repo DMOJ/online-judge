@@ -15,10 +15,5 @@ block header
         .title-line-action [#[a(href='{% url "admin:judge_judge_changelist" %}') {% trans "Admin" %}]]
 
 block body
-    p
-        - blocktrans with name=SITE_NAME
-            | This page shows the live status of {{ name }}'s judging servers.
-    h3 {% trans "Judges" %}
-    hr
     table#judge-status.table
         include status/judge-status-table

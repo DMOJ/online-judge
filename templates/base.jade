@@ -99,6 +99,50 @@ html(lang=LANGUAGE_CODE)
             script(type='text/javascript').
                 $(document).ready(function () {
                     count_down($("#contest-time-remaining"));
+
+                    var selected = null,
+                        x_pos = 0, y_pos = 0,
+                        x_elem = 0, y_elem = 0;
+
+                    $('#contest-info').mousedown(function () {
+                        selected = $(this);
+                        x_elem = x_pos - selected.offset().left;
+                        y_elem = y_pos - (selected.offset().top - $(window).scrollTop());
+                        return false;
+                    });
+
+                    if (localStorage.getItem("contest_timer_pos")) {
+                        data = localStorage.getItem("contest_timer_pos").split(":");
+                        $("#contest-info").css({
+                            left: data[0],
+                            top: data[1]
+                        });
+                    }
+
+                    $("#contest-info").show();
+
+                    $(document).mousemove(function(e) {
+                        x_pos = e.screenX;
+                        y_pos = e.screenY;
+                        x_pos = Math.max(Math.min(x_pos, window.innerWidth), 0);
+                        y_pos = Math.max(Math.min(y_pos, window.innerHeight), 0);
+
+                        if (selected !== null) {
+                            left_px = (x_pos - x_elem) + 'px';
+                            top_px = (y_pos - y_elem) + 'px';
+
+                            localStorage.setItem("contest_timer_pos", left_px + ":" + top_px);
+
+                            selected.css({
+                                left: left_px,
+                                top: top_px
+                            });
+                        }
+                    });
+
+                    $(document).mouseup(function () {
+                        selected = null;
+                    })
                 });
 
         if request.user.is_authenticated
@@ -163,7 +207,9 @@ html(lang=LANGUAGE_CODE)
                                 if request.user.is_impersonate
                                     li: a(href='{% url "impersonate-stop" %}') Stop impersonating
                                 else
-                                    li: a(href='{% url "auth_logout" %}?next=') {% trans "Log out" %}
+                                    li: form(action='{% url "auth_logout" %}', method='POST')
+                                        - csrf_token
+                                        button(type='submit') {% trans "Log out" %}
                     else
                         span.anon
                             a(href='{% url "auth_login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}')

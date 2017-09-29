@@ -1,15 +1,18 @@
+@import vars
+
 .blog-content
-  padding-right: 1em
+  padding-right: 0em
   flex: 73.5%
   vertical-align: top
-  margin-right: 0em
+  margin-right: 0
 
   .post
-    border-bottom: 1px solid #9D9D9D
+    border-bottom: 1px solid $border_gray
     padding-top: 0.5em
 
     .title
-      font-weight: 400
+      font-weight: 600
+      font-size: 1.7em
       a
         color: #5b80b9 !important
         &:hover
@@ -22,8 +25,6 @@
   flex: 26.5%
 
 .blog-sidebox
-  margin-bottom: 1em
-
   h3
     padding-bottom: 0.25em
     padding-left: 0.5em
@@ -38,7 +39,7 @@
   .contest
     padding: 1.25em 0 1.5em 0
     text-align: center
-    border-bottom: 1px solid #9d9d9d
+    border-bottom: 1px solid $border_gray
 
     &:last-child
       border-bottom: none
@@ -60,6 +61,7 @@
 
 #mobile.tabs
   margin: 0
+  margin-bottom: 1em
 
 .rssatom
   text-align: right
