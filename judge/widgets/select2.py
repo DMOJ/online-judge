@@ -206,11 +206,12 @@ class HeavySelect2Mixin(Select2Mixin):
 
     def format_value(self, value):
         result = super(HeavySelect2Mixin, self).format_value(value)
-        chosen = copy(self.choices)
-        chosen.queryset = chosen.queryset.filter(pk__in=[
-            int(i) for i in result if isinstance(i, (int, long)) or i.isdigit()
-        ])
-        self.choices = set(chosen)
+        if isinstance(self.choices, ModelChoiceIterator):
+            chosen = copy(self.choices)
+            chosen.queryset = chosen.queryset.filter(pk__in=[
+                int(i) for i in result if isinstance(i, (int, long)) or i.isdigit()
+            ])
+            self.choices = set(chosen)
         return result
 
 
