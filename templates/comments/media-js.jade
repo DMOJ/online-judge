@@ -129,7 +129,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                 });
             };
 
-            window.comment_delete = function (id) {
+            window.comment_hide = function (id) {
                 $.post('{% url "comment_hide" %}', { id : id }).then(function () {
                     $('#comment-' + id).remove();
                 }).catch(function () {
