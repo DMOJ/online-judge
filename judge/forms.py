@@ -61,7 +61,7 @@ class ProfileForm(ModelForm):
             )
 
     def clean_name(self):
-        return fix_unicode(self.cleaned_data['name'])
+        return fix_unicode(self.cleaned_data['name'] or '')
 
 
 class ProblemSubmitForm(ModelForm):
