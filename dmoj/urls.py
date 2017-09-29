@@ -170,6 +170,7 @@ urlpatterns = [
         url(r'^edit/ajax$', comment.CommentEditAjax.as_view(), name='comment_edit_ajax'),
         url(r'^votes/ajax$', comment.CommentVotesAjax.as_view(), name='comment_votes_ajax'),
         url(r'^render$', comment.CommentContent.as_view(), name='comment_content'),
+        url(r'^hide$', comment.comment_hide, name='comment_hide'),
     ])),
 
     url(r'^contests/$', contests.ContestList.as_view(), name='contest_list'),
