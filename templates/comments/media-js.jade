@@ -129,6 +129,14 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                 });
             };
 
+            window.comment_delete = function (id) {
+                $.post('{% url "comment_hide" %}', { id : id }).then(function () {
+                    $('#comment-' + id).remove();
+                }).catch(function () {
+                    alert('Failed.');
+                })
+            }
+
             $('.comments').find('a.edit-link').featherlight({
                 afterOpen: function () {
                     if ('DjangoPagedown' in window) {

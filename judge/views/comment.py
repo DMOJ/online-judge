@@ -153,10 +153,15 @@ class CommentVotesAjax(PermissionRequiredMixin, CommentMixin, DetailView):
 
 
 @require_POST
-def comment_hide(request, comment_id):
+def comment_hide(request):
     if not request.user.has_perm('judge.change_comment'):
         raise PermissionDenied()
+    try:
+        comment_id = int(request.POST['id'])
+    except ValueError:
+        return HttpResponseBadRequest()
+
     comment = get_object_or_404(Comment, id=comment_id)
     comment.hidden = True
     comment.save(update_fields=['hidden'])
-    return HttpResponseRedirect(comment.get_absolute_url())
+    return HttpResponse('ok')

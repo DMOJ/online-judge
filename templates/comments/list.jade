@@ -85,9 +85,8 @@
                                                     i.fa.fa-pencil.fa-fw
                                             a(href='{% url "admin:judge_comment_change" node.id %}', title='{% trans "Admin" %}')
                                                 i.fa.fa-cog.fa-fw
-                                            form(action='{% url "comment_hide" node.id %}', method='post')
-                                                - csrf_token
-                                                a(href='#', onclick='form.submit()'): i.fa.fa-trash.fa-fw
+                                            a(href='javascript:comment_hide({{ node.id }})', title='{% trans "Hide" %}')
+                                                i.fa.fa-trash.fa-fw
                                             a(href='{% url "admin:judge_comment_change" node.id %}', title='{% trans "Admin" %}')
                                                 i.fa.fa-cog.fa-fw
                             .content.content-description
