@@ -101,6 +101,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     actions_on_top = True
     actions_on_bottom = True
     inlines = [SubmissionTestCaseInline, ContestSubmissionInline]
+    date_hierarchy = 'date'
 
     def get_queryset(self, request):
         queryset = Submission.objects.only(
