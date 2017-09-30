@@ -16,20 +16,26 @@ register = template.Library()
 rereference = re.compile(r'\[(r?user):(\w+)\]')
 
 
-def get_user(username, rank):
-    if rank is None:
+def get_user(username, data):
+    if not data:
         element = Element('span')
-    else:
-        element = Element('a', {'class': rank, 'href': reverse('user_page', args=[username])})
-    element.text = username
+        element.text = username
+        return element
+
+    element = Element('span', {'class': Profile.get_user_css_class(*data)})
+    link = Element('a', {'href': reverse('user_page', args=[username])})
+    link.text = username
+    element.append(link)
     return element
 
 
-def get_user_info(usernames):
-    return dict(Profile.objects.filter(user__username__in=usernames).values_list('user__username', 'display_rank'))
+def get_user_rating(username, data):
+    if not data:
+        element = Element('span')
+        element.text = username
+        return element
 
-
-def get_user_rating(username, rating):
+    rating = data[1]
     element = Element('a', {'class': 'rate-group', 'href': reverse('user_page', args=[username])})
     if rating:
         rating_css = rating_class(rating)
@@ -44,13 +50,15 @@ def get_user_rating(username, rating):
     return element
 
 
-def get_user_rating_info(usernames):
-    return dict(Profile.objects.filter(user__username__in=usernames).values_list('user__username', 'rating'))
+def get_user_info(usernames):
+    return {name: (rank, rating) for name, rank, rating in
+            Profile.objects.filter(user__username__in=usernames)
+                   .values_list('user__username', 'display_rank', 'rating')}
 
 
 reference_map = {
     'user': (get_user, get_user_info),
-    'ruser': (get_user_rating, get_user_rating_info),
+    'ruser': (get_user_rating, get_user_info),
 }
 
 
