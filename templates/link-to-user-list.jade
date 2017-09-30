@@ -1,5 +1,5 @@
 for user in users
     span(class=user.display_rank)
-        a(href='{% url "user_page" author.user.username %}') #{user.user.username}
+        a(href='{% url "user_page" user.user.username %}') #{user.user.username}
     if not forloop.last
         = ', '
