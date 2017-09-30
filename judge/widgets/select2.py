@@ -47,7 +47,6 @@ from django.conf import settings
 from django.core import signing
 from django.core.urlresolvers import reverse_lazy
 from django.forms.models import ModelChoiceIterator
-from django.utils.encoding import force_text
 
 DEFAULT_SELECT2_JS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'
 DEFAULT_SELECT2_CSS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
@@ -81,11 +80,11 @@ class Select2Mixin(object):
             attrs['class'] = 'django-select2'
         return attrs
 
-    def render_options(self, *args, **kwargs):
-        """Render options including an empty one, if the field is not required."""
-        output = '<option></option>' if not self.is_required else ''
-        output += super(Select2Mixin, self).render_options(*args, **kwargs)
-        return output
+    def optgroups(self, name, value, attrs=None):
+        """Add empty option for clearable selects."""
+        if not self.is_required and not self.allow_multiple_selected:
+            self.choices = list(chain([('', '')], self.choices))
+        return super(Select2Mixin, self).optgroups(name, value, attrs=attrs)
 
     def _get_media(self):
         """
