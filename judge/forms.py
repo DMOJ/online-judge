@@ -106,8 +106,8 @@ class NewOrganizationForm(EditOrganizationForm):
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(CustomAuthenticationForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({'placeholder': 'Username'})
-        self.fields['password'].widget.attrs.update({'placeholder': 'Password'})
+        self.fields['username'].widget.attrs.update({'placeholder': _('Username')})
+        self.fields['password'].widget.attrs.update({'placeholder': _('Password')})
 
         self.has_google_auth = self._has_social_auth('GOOGLE_OAUTH2')
         self.has_facebook_auth = self._has_social_auth('FACEBOOK')
