@@ -140,6 +140,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                 }).catch(function () {
                     alert('Failed.');
                 });
+                return false;
             })
 
             $comments.find('a.edit-link').featherlight({
