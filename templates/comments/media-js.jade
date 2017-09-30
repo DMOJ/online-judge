@@ -131,6 +131,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
 
             var $comments = $('.comments');
             $comments.find('a.hide-comment').click(function (e) {
+                e.preventDefault();
                 if (!e.ctrlKey && !confirm('Are you sure you want to hide this comment?'))
                     return;
 
@@ -140,7 +141,6 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                 }).catch(function () {
                     alert('Failed.');
                 });
-                return false;
             })
 
             $comments.find('a.edit-link').featherlight({
