@@ -21,11 +21,7 @@ block body
         .time
             - with authors=post.authors.all
                 if authors
-                    span.post-authors: for author in authors
-                        span(class=author.display_rank)
-                            a(href='{% url "user_page" author.user.username %}') #{author.user.username}
-                        if not forloop.last
-                            = ', '
+                    span.post-authors {% include "link-to-user-list.jade" with users=authors %}
                     = ' '
             span.post-time posted on #{post.publish_on|date:_("N j, Y, G:i")}
         .body.content-description

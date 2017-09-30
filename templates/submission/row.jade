@@ -31,7 +31,7 @@ td(colspan=info_colspan, class=('sub-info sub-info-grading' if submission.status
         .name
             a(href='{% url "problem_detail" submission.problem.code %}') #{problem_name}
     div
-        span(class=submission.user.display_rank)
+        span(class=submission.user.css_class)
             a(href='{% url "user_page" submission.user.user.username %}') #{submission.user.user.username}
         = ' '
         span.time(data-unix='{{ submission.date|utc|date:"c" }}')

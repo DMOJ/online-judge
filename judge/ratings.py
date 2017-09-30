@@ -7,7 +7,6 @@ from django.db import connection, transaction
 from django.db.models import Count
 from django.utils import timezone
 
-from judge.models import Rating, Profile
 from judge.utils.ranker import tie_ranker
 
 
@@ -94,6 +93,8 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated):
 
 
 def rate_contest(contest):
+    from judge.models import Rating, Profile
+
     cursor = connection.cursor()
     cursor.execute('''
         SELECT judge_rating.user_id, judge_rating.rating, judge_rating.volatility, r.times
