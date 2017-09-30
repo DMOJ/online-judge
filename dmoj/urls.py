@@ -46,6 +46,7 @@ register_patterns = [
                                    title='Registration not allowed'),
         name='registration_disallowed'),
     url(r'^login/$', auth_views.LoginView.as_view(
+        template='registration/login.jade',
         extra_context={'title': _('Login')},
         authentication_form=CustomAuthenticationForm,
     ), name='auth_login'),
