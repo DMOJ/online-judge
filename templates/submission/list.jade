@@ -126,8 +126,25 @@ block js_media
                         }
                     };
 
-                    var $body = $(document.body);
+                    var stats_outdated = false;
+                    function update_stats() {
+                        $.ajax({
+                            url: '?results'
+                        }).done(function (data) {
+                            statistics.html(data);
+                        }).fail(function () {
+                            console.log('Failed to update statistics table!' + id);
+                        }).always(function () {
+                            stats_outdated = false;
+                        });
+                    }
 
+                    $(window).on('dmoj:window-visible', function () {
+                        if (stats_outdated)
+                            update_stats();
+                    });
+
+                    var $body = $(document.body);
                     var receiver = new EventReceiver(
                             "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                             ['submissions'], last_msg, function (message) {
@@ -144,13 +161,9 @@ block js_media
                                     update_submission(message, true);
 
                                     if (!statistics.length) return;
-                                    $.ajax({
-                                        url: '?results'
-                                    }).done(function (data) {
-                                        statistics.html(data);
-                                    }).fail(function () {
-                                        console.log('Failed to update statistics table!' + id);
-                                    });
+                                    if ($('body').hasClass('window-hidden'))
+                                        return stats_outdated = true;
+                                    update_stats();
                                 }
                             }
                     );
