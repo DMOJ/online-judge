@@ -231,6 +231,7 @@ def edit_profile(request):
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
     return render(request, 'user/edit-profile.jade', {
         'form': form, 'title': _('Edit profile'),
+        'has_math_config': bool(getattr(settings, 'MATHOID_URL', False)),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD'),
     })
