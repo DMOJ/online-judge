@@ -21,34 +21,34 @@ A modern online judge and contest platform system, supporting <b>IO-based</b>, <
 Problems are written in Markdown, with LaTeX-enabled math and figures, as well as syntax highlighting. Problem statements can be saved to PDF for ease of distribution to contestants.
 
 
-![](https://dmoj.ml/data/_other/readme/problem-text-demo.png)
+![](https://i.imgur.com/skLK22P.png)
 
 ### Submit in over 50 languages
 Contestants may submit in over 50 programming languages with syntax highlighting. New languages can easily be added to the site, and problem authors can limit the languages which may be used to solve a problem.
 
 
-![](https://dmoj.ml/data/_other/readme/submit-languages.png)
+![](https://i.imgur.com/8CjfHQb.png)
 
 
 ### Live submission status
 Submission pages feature live updates, and submissions may be aborted by both submission authors and administrators. Compilation errors and warnings for a number of languages feature color highlighting.
 
 
-![](https://dmoj.ml/data/_other/readme/status-updates.png)
+![](https://i.imgur.com/Hom0U3R.png)
 
 
 ### Configurable contest system
 Contests feature an optional rating system, and can be configured to run in any timeframe. Users are also able to participate virtually after the contest ends.
 
 
-![](https://dmoj.ml/data/_other/readme/contest-list.png)
+![](https://i.imgur.com/qcnmVeI.png)
 
 
 ### Internationalized interface
 Use the site in whatever language you're most comfortable in &mdash; currently fully supporting English, Simplified Chinese, and Romanian. Problem authors can provide statements in multiple languages, and DMOJ will display the most relevant one to a reader.
 
 
-![](https://dmoj.ml/data/_other/readme/i18n.png)
+![](https://i.imgur.com/uSfqWJP.png)
 
 
 ### Mobile support
