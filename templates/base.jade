@@ -54,10 +54,12 @@ html(lang=LANGUAGE_CODE)
             meta(property='og:description', content=meta_description)
 
         | <!--[if lt IE 9]>
-        | <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+        | <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
         | <script>window.bad_browser = true</script>
         | <![endif]-->
+
         block meta
+
         if not INLINE_FONTAWESOME
             link(rel='stylesheet', href=FONTAWESOME_CSS)
         - compress css
@@ -76,6 +78,7 @@ html(lang=LANGUAGE_CODE)
                 #nav-container { background: #893e89 !important; }
 
         block media
+
         if not INLINE_JQUERY
             script(src=JQUERY_JS)
         - compress js
@@ -94,7 +97,9 @@ html(lang=LANGUAGE_CODE)
             script.
                 moment.locale('#{LANGUAGE_CODE}');
                 $(function () { $('img.unveil').unveil(200); });
+
         block js_media
+
         if IN_CONTEST
             script(type='text/javascript').
                 $(document).ready(function () {
@@ -154,6 +159,7 @@ html(lang=LANGUAGE_CODE)
                 };
         else
             script(type='text/javascript') window.user = {};
+
         if misc_config.analytics
             | #{misc_config.analytics|safe}
 
@@ -249,6 +255,9 @@ html(lang=LANGUAGE_CODE)
                 div#announcement #{i18n_config.announcement|safe}
             block bodyend
             footer: span#footer-content
+                br
+                a(style='color: #808080', href='https://dmoj.ca') proudly powered by #[b DMOJ] |
+                = ' '
                 if i18n_config.footer
                     | #{i18n_config.footer|safe}
                     = ' | '
