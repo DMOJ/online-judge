@@ -3,6 +3,7 @@ import re
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
@@ -77,9 +78,16 @@ class BlogPost(models.Model):
     def get_absolute_url(self):
         return reverse('blog_post', args=(self.id, self.slug))
 
+    def can_see(self, user):
+        if self.visible and self.publish_on <= timezone.now():
+            return True
+        if user.has_perm('judge.edit_all_post'):
+            return True
+        return self.authors.filter(id=user.profile.id).exists()
+
     class Meta:
         permissions = (
-            ('see_hidden_post', 'See hidden posts'),
+            ('edit_all_post', _('Edit all posts')),
         )
         verbose_name = _('blog post')
         verbose_name_plural = _('blog posts')
