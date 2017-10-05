@@ -83,7 +83,7 @@ class BlogPost(models.Model):
             return True
         if user.has_perm('judge.edit_all_post'):
             return True
-        return self.authors.filter(id=user.profile.id).exists()
+        return user.is_authenticated and self.authors.filter(id=user.profile.id).exists()
 
     class Meta:
         permissions = (
