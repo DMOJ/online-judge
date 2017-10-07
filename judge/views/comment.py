@@ -134,7 +134,7 @@ class CommentEdit(TitleMixin, CommentEditAjax):
     template_name = 'comments/edit.jade'
 
     def get_title(self):
-        return _('Editing %s') % self.object.title
+        return _('Editing comment')
 
 
 class CommentContent(CommentMixin, DetailView):
