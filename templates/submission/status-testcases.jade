@@ -32,7 +32,7 @@ if submission.status != 'IE'
             h3 {% trans "Execution Results" %}
         br
         - regroup test_cases by batch as batches
-        - get_counter test_case_id
+        - get_counter as test_case_id
         each batch in batches
             if batch.grouper
                 b {% trans "Batch " %}##{test_case_id}
