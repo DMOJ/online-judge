@@ -8,10 +8,9 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
-from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import View
 from registration.models import RegistrationProfile
-
 
 logger = logging.getLogger('judge.mail.activate')
 
@@ -50,7 +49,7 @@ class MailgunActivationView(View):
 
             key = registration.activation_key
             if key in params.get('body-plain', '') or key in params.get('body-html', ''):
-                if RegistrationProfile.objects.activate_user(key):
+                if RegistrationProfile.objects.activate_user(key, request.site):
                     logger.info('Activated sender: %s: %s', sender, params.get('from'))
                     return HttpResponse('Activated', status=200)
                 logger.info('Failed to activate sender: %s: %s', sender, params.get('from'))
