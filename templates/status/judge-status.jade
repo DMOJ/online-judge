@@ -10,9 +10,11 @@ block media
     include status/media-css
     block content_media
 
-block header
-    if perms.judge.change_judge
-        .title-line-action [#[a(href='{% url "admin:judge_judge_changelist" %}') {% trans "Admin" %}]]
+block title_ruler
+
+block title_row
+    - var user_tab = 'judges'
+    include status/status-tabs
 
 block body
     table#judge-status.table
