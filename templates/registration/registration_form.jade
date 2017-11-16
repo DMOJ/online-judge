@@ -172,6 +172,8 @@ block body
 
         if form.captcha
             div(style='margin-top: 0.5em') #{form.captcha}
+            if form.captcha.errors
+                .form-field-error #{form.captcha.errors}
 
         hr
         if tos_url
