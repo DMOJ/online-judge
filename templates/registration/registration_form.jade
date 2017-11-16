@@ -171,7 +171,7 @@ block body
                 label.inline-header.grayed(for='id_newsletter', style='float: unset;') {% trans "Notify me about upcoming contests" %}
 
         if form.captcha
-            div #{form.captcha}
+            div(style='margin-top: 0.5em') #{form.captcha}
 
         hr
         if tos_url
