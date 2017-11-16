@@ -1,5 +1,6 @@
 extends base
 - load i18n
+- load recaptcha2
 
 block media
     include timezone/media-css
@@ -120,6 +121,7 @@ block js_media
                 return false;
             });
         });
+    - recaptcha_init LANGUAGE_CODE
 
 block body
     #center-float: form.form-area#edit-form(action='', method='post')
@@ -163,9 +165,13 @@ block body
 
         div.block-header {% trans "Affiliated organizations" %}
         | #{form.organizations}
+
         if form.newsletter
             div(style='padding-top: 0.5em;') #{form.newsletter}
                 label.inline-header.grayed(for='id_newsletter', style='float: unset;') {% trans "Notify me about upcoming contests" %}
+
+        if form.captcha
+            div #{form.captcha}
 
         hr
         if tos_url
