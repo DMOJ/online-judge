@@ -163,7 +163,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                 .defer('contest__participation__contest__description')
 
         if self.selected_languages:
-            queryset = queryset.filter(language__key__in=self.selected_languages)
+            queryset = queryset.filter(language_id__in=Language.objects.filter(key__in=self.selected_languages))
         if self.selected_statuses:
             queryset = queryset.filter(result__in=self.selected_statuses)
 
