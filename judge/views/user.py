@@ -1,8 +1,9 @@
 import json
+from datetime import datetime
 
 import django
-from datetime import datetime
 from django.conf import settings
+from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
 from django.contrib.auth.views import redirect_to_login
@@ -19,7 +20,7 @@ from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _, ugettext_lazy
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from reversion import revisions
 
 from judge.forms import ProfileForm, newsletter_id
@@ -230,6 +231,7 @@ def edit_profile(request):
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
     return render(request, 'user/edit-profile.jade', {
         'form': form, 'title': _('Edit profile'),
+        'has_math_config': bool(getattr(settings, 'MATHOID_URL', False)),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD'),
     })
@@ -276,7 +278,16 @@ def user_ranking_redirect(request):
     except KeyError:
         raise Http404()
     user = get_object_or_404(Profile, user__username=username)
-    rank = Profile.objects.filter(points__gt=user.points).count()
-    rank += Profile.objects.filter(points__exact=user.points, id__lt=user.id).count()
+    rank = Profile.objects.filter(performance_points__gt=user.performance_points).count()
+    rank += Profile.objects.filter(performance_points__exact=user.performance_points, id__lt=user.id).count()
     page = rank // UserList.paginate_by
     return HttpResponseRedirect('%s%s#!%s' % (reverse('user_list'), '?page=%d' % (page + 1) if page else '', username))
+
+
+class UserLogoutView(TitleMixin, TemplateView):
+    template_name = 'registration/logout.jade'
+    title = 'You have been successfully logged out.'
+
+    def post(self, request, *args, **kwargs):
+        auth_logout(request)
+        return HttpResponseRedirect(request.get_full_path())

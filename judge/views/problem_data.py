@@ -98,6 +98,8 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
 
     def get_object(self, queryset=None):
         problem = super(ProblemDataView, self).get_object(queryset)
+        if problem.is_manually_managed:
+            raise Http404()
         if self.request.user.is_superuser or problem.is_editable_by(self.request.user):
             return problem
         raise Http404()

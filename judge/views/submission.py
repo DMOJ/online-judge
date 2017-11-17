@@ -161,6 +161,12 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         else:
             queryset = queryset.select_related('contest__participation__contest') \
                 .defer('contest__participation__contest__description')
+
+        if self.selected_languages:
+            queryset = queryset.filter(language_id__in=Language.objects.filter(key__in=self.selected_languages))
+        if self.selected_statuses:
+            queryset = queryset.filter(result__in=self.selected_statuses)
+
         return queryset
 
     def get_queryset(self):
@@ -175,6 +181,12 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     def get_all_submissions_page(self):
         return reverse('all_submissions')
 
+    def get_searchable_status_codes(self):
+        hidden_codes = ['SC']
+        if not self.request.user.is_superuser and not self.request.user.is_staff:
+            hidden_codes += ['IE']
+        return [(key, value) for key, value in Submission.RESULT if key not in hidden_codes]
+
     def get_context_data(self, **kwargs):
         context = super(SubmissionsListBase, self).get_context_data(**kwargs)
         authenticated = self.request.user.is_authenticated
@@ -183,6 +195,13 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['completed_problem_ids'] = user_completed_ids(self.request.user.profile) if authenticated else []
         context['authored_problem_ids'] = user_authored_ids(self.request.user.profile) if authenticated else []
         context['editable_problem_ids'] = user_editable_ids(self.request.user.profile) if authenticated else []
+
+        context['all_languages'] = Language.objects.all().values_list('key', 'name')
+        context['selected_languages'] = self.selected_languages
+
+        context['all_statuses'] = self.get_searchable_status_codes()
+        context['selected_statuses'] = self.selected_statuses
+
         context['results'] = self.get_result_table()
         context['first_page_href'] = self.first_page_href or '.'
         context['my_submissions_link'] = self.get_my_submissions_page()
@@ -194,8 +213,13 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         check = self.access_check(request)
         if check is not None:
             return check
+
+        self.selected_languages = set(request.GET.getlist('language'))
+        self.selected_statuses = set(request.GET.getlist('status'))
+
         if 'results' in request.GET:
             return render(request, 'problem/statistics-table.jade', {'results': self.get_result_table()})
+
         return super(SubmissionsListBase, self).get(request, *args, **kwargs)
 
 
@@ -355,38 +379,13 @@ class AllSubmissions(SubmissionsListBase):
         if self.request.user.is_authenticated:
             return reverse('all_user_submissions', kwargs={'user': self.request.user.username})
 
-    def get_queryset(self):
-        qs = super(AllSubmissions, self).get_queryset()
-        if self.selected_languages:
-            qs = qs.filter(language__key__in=self.selected_languages)
-        if self.selected_statuses:
-            qs = qs.filter(result__in=self.selected_statuses)
-        return qs
-
-    def get_searchable_status_codes(self):
-        hidden_codes = ['SC']
-        if not self.request.user.is_superuser and not self.request.user.is_staff:
-            hidden_codes += ['IE']
-        return [(key, value) for key, value in Submission.RESULT if key not in hidden_codes]
-
     def get_context_data(self, **kwargs):
         context = super(AllSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
         context['last_msg'] = event.last()
-
-        context['all_languages'] = Language.objects.all().values_list('key', 'name')
-        context['selected_languages'] = self.selected_languages
-
-        context['all_statuses'] = self.get_searchable_status_codes()
-        context['selected_statuses'] = self.selected_statuses
         context['page_suffix'] = suffix = ('?' + self.request.GET.urlencode()) if self.request.GET else ''
         context['first_page_href'] += suffix
         return context
-
-    def get(self, request, *args, **kwargs):
-        self.selected_languages = set(request.GET.getlist('language'))
-        self.selected_statuses = set(request.GET.getlist('status'))
-        return super(AllSubmissions, self).get(request, *args, **kwargs)
 
 
 class ForceContestMixin(object):

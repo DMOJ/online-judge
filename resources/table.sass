@@ -1,3 +1,5 @@
+@import vars
+
 $table_header_rounding: 6px
 
 .table
@@ -10,13 +12,12 @@ $table_header_rounding: 6px
   &.striped tr:nth-child(even)
     background: #f7f7f7
   td:first-child
-    border-color: #d4d4d4
+    border-color: $border_gray
     border-width: 1px 1px 0 1px
   tr:last-child td
     &:first-child
-      border-color: #d4d4d4
-      border-width: 1px 1px 1px 1px
-    border-color: #d4d4d4
+      border: 1px solid $border_gray
+    border-color: $border_gray
     border-width: 1px 1px 1px 0
   thead th
     vertical-align: middle
@@ -28,20 +29,22 @@ $table_header_rounding: 6px
   th
     height: 2em
     color: #FFF
-    background-color: #393630
+    background-color: $widget_black
     border-color: #555
     border-width: 1px 1px 0 0
     border-style: solid
     padding: 4px 10px
-    vertical-align: top
+    vertical-align: middle
     text-align: center
     white-space: nowrap
+    font-weight: 600
+    font-size: 1.1em
     &:first-child
       border-top-left-radius: $table_header_rounding
     &:last-child
       border-top-right-radius: $table_header_rounding
   td
-    border-color: #d4d4d4
+    border-color: $border_gray
     border-width: 1px 1px 0 0
     border-style: solid
     padding: 7px 5px

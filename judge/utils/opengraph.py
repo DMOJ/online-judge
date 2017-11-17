@@ -1,8 +1,8 @@
 from django.core.cache import cache
 from django.template.defaultfilters import truncatewords
 
-from judge.templatetags.reference import reference
 from judge.templatetags.markdown import markdown_filter
+from judge.templatetags.reference import reference
 
 
 def generate_opengraph(cache_key, data, style):
@@ -15,6 +15,9 @@ def generate_opengraph(cache_key, data, style):
             if text:
                 description = text
                 break
+        if description:
+            for remove in (r'\[', r'\]', r'\(', r'\)'):
+                description = description.replace(remove, '')
         img = tree.xpath('.//img')
         metadata = truncatewords(description, 60), img[0].get('src') if img else None
         cache.set(cache_key, metadata, 86400)

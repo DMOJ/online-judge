@@ -100,6 +100,7 @@ class ContestAdmin(VersionAdmin):
     form = ContestForm
     change_list_template = 'admin/judge/contest/change_list.html'
     filter_horizontal = ['rate_exclude']
+    date_hierarchy = 'start_time'
 
     def get_queryset(self, request):
         queryset = Contest.objects.all()
@@ -191,6 +192,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     actions_on_bottom = actions_on_top = True
     search_fields = ('contest__key', 'contest__name', 'user__user__username', 'user__name')
     form = ContestParticipationForm
+    date_hierarchy = 'real_start'
 
     def get_queryset(self, request):
         return super(ContestParticipationAdmin, self).get_queryset(request).only(

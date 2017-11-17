@@ -3,6 +3,7 @@ extends common-content
 - load timedelta
 - load tz
 - load i18n
+- load markdown
 
 block meta
     meta(name='description', content="The {{ SITE_NAME }}'s contest list - past, present, and future.")
@@ -21,7 +22,25 @@ block js_media
                 return confirm('{% trans "Are you sure you want to join?" %}\n' +
                         '{% trans "Joining a contest for the first time starts your timer, after which it becomes unstoppable." %}');
             });
+
+            // var tooltip_classes = 'tooltipped tooltipped-e';
+            //
+            // $('.contest-tag').each(function () {
+            //     var link = $(this);//
+            //     link.mouseenter(function (e) {
+            //         link.addClass(tooltip_classes).attr('aria-label', link.attr('data-description'));
+            //     }).mouseleave(function (e) {
+            //         link.removeClass(tooltip_classes).removeAttr('aria-label');
+            //     });
+            // });
         });
+
+    style.
+        .time-left {
+            text-align:left;
+            color:#777;
+            padding-top: 0.5em;
+        }
 
 block title_ruler
 
@@ -42,12 +61,12 @@ block body
                         th(style='width:15%')
                 tbody: each contest in current_contests
                     tr
-                        td: div(style='position:relative')
-                            .contest-tags: each tag in contest.tags.all
+                        td: div.contest-block
+                            a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
+                            span.contest-tags: each tag in contest.tags.all
                                 span.contest-tag(style='background-color: {{ tag.color }}')
                                     a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                     data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
-                            a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                             if contest.start_time
                                 br
                                 if contest.time_before_end
@@ -56,7 +75,7 @@ block body
                                             | Ends in {{ countdown }}.
                                 elif contest.free_start and contest.start_time
                                     span.time {% trans "Started at" %} #{contest.start_time|date:_("N j, Y, G:i")}
-                                .time.floating-time(style='text-align:right')
+                                .time.time-left
                                     span(style='text-align:right;color:#777;')
                                     if contest.time_limit
                                         | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
@@ -85,12 +104,12 @@ block body
             table.contest-list.table.striped
                 thead: tr: th {% trans "Contest" %}
                 tbody: each contest in future_contests
-                    tr: td: div(style='position:relative')
-                        .contest-tags: each tag in contest.tags.all
+                    tr: td: div.contest-block
+                        a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
+                        span.contest-tags: each tag in contest.tags.all
                             span.contest-tag(style='background-color: {{ tag.color }}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                 data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
-                        a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
                         if contest.start_time
                             br
                             if contest.time_before_start
@@ -98,7 +117,7 @@ block body
                                     - blocktrans with countdown=contest.time_before_start|as_countdown
                                         | Starting in {{ countdown }}.
 
-                            .time.floating-time(style='text-align:right')
+                            .time.time-left
                                 span(style='text-align:right;color:#777;')
                                 if contest.time_limit
                                     | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
@@ -113,6 +132,7 @@ block body
                                         | {{ window_length }} long
         else
             i {% trans "There are no scheduled contests at this time." %}
+            br
         br
 
         h4 {% trans "Past Contests" %}
@@ -124,13 +144,13 @@ block body
                     th(style='width:15%')
             tbody: each contest in past_contests
                 tr
-                    td: div(style='position:relative')
+                    td: div.contest-block
                         a.contest-list-title(href='{% url "contest_view" contest.key %}')= contest.name
-                        .contest-tags: each tag in contest.tags.all
+                        span.contest-tags: each tag in contest.tags.all
                             span.contest-tag(style='background-color: {{ tag.color }}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                   data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
-                        span.floating-time-right(style='text-align:right;color:#777;')
+                        div.time-left
                             if contest.time_limit
                                 | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
                             else

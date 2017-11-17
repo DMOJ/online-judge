@@ -129,7 +129,21 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
                 });
             };
 
-            $('.comments').find('a.edit-link').featherlight({
+            var $comments = $('.comments');
+            $comments.find('a.hide-comment').click(function (e) {
+                e.preventDefault();
+                if (!e.ctrlKey && !confirm('Are you sure you want to hide this comment?'))
+                    return;
+
+                var id = $(this).attr('data-id');
+                $.post('{% url "comment_hide" %}', {id: id}).then(function () {
+                    $('#comment-' + id).remove();
+                }).catch(function () {
+                    alert('Failed.');
+                });
+            })
+
+            $comments.find('a.edit-link').featherlight({
                 afterOpen: function () {
                     if ('DjangoPagedown' in window) {
                         var $wmd = $('.featherlight .wmd-input');
@@ -169,7 +183,7 @@ script(src='{% static "libs/featherlight/featherlight.min.js" %}', type='text/ja
             });
 
             var $root = $('html, body');
-            $('.comments').find('a.comment-link').click(function() {
+            $comments.find('a.comment-link').click(function() {
                 var href = $.attr(this, 'href');
                 $root.animate({
                     scrollTop: $(href).offset().top

@@ -1,4 +1,5 @@
 @charset "UTF-8"
+@import vars
 
 @-ms-viewport
   min-width: 480px
@@ -27,7 +28,7 @@ img
   width: 100%
 
 table.sortable thead
-  background-color: #eee
+  background-color: $background_gray
   color: #666
   font-weight: bold
   cursor: default
@@ -50,21 +51,21 @@ hr
   height: 0
   border: 0
   font-style: italic
-  border-bottom: 1px solid #CCC
+  border-bottom: 1px solid $border_gray
   padding: 0
 
 .dashed
-  border-bottom: 1px dashed #CCC
+  border-bottom: 1px dashed $border_gray
 
 th
   vertical-align: middle
 
 .form-area
   display: inline-block
-  background: #fafafa
+  background: $background_light_gray
   padding: 5px 10px 10px 15px
-  border-radius: 4px
-  border: 1px solid #ccc
+  border-radius: $widget_border_radius
+  border: 1px solid $border_gray
 
 div.info-float
   float: right
@@ -75,16 +76,16 @@ footer
   display: block
   width: 100%
   position: absolute
-  bottom: 0px
+  bottom: 0
 
 body
   position: relative
   min-height: 100%
-  margin: 0px auto
+  margin: 0 auto
   max-width: 107em
-  font-size: 14px
+  font-size: $base_font_size
   line-height: 1.231
-  background: #f7f7f7
+  background: $background_light_gray
   font-family: 'Segoe UI', 'Lucida Grande', Arial, sans-serif
   color: #000
   height: 100%
@@ -105,14 +106,14 @@ b
 h2
   font-weight: 400
   font-size: 2em
-  border-radius: 4px
+  border-radius: $widget_border_radius
   padding: 0
   margin: 0
 
 h3
   font-weight: 400
   font-size: 1.4em
-  border-radius: 4px
+  border-radius: $widget_border_radius
   padding: 0
   margin: 0
 
@@ -155,7 +156,7 @@ header
       white-space: nowrap
       & > img
         vertical-align: middle
-        border-radius: 6px
+        border-radius: $widget_border_radius
         display: inline
         margin: 2px 6px 0 5px
       & > span
@@ -164,23 +165,23 @@ header
         display: inline
         margin-top: 11px
         margin-right: 9px
-        padding: 0px
+        padding: 0
 
 #nav-shadow
   height: 3px
   background: linear-gradient(rgba(0, 0, 0, 0.5), transparent)
 
 #nav-container
-  background: #3B3B3B
+  background: $widget_black
   // opacity: 0.77
   // filter: alpha(opacity=77)
   height: 100%
 
 #navigation
   position: fixed
-  top: 0px
-  left: 0px
-  right: 0px
+  top: 0
+  left: 0
+  right: 0
 
 nav
   position: relative
@@ -188,7 +189,7 @@ nav
   position: sticky
   top: 0
   width: 100%
-  margin: 0px auto
+  margin: 0 auto
   z-index: 500
   text-align: left
   ul
@@ -210,7 +211,7 @@ nav
           border-bottom: none
           padding-top: 0
           padding-bottom: 0
-      a
+      a, button
         display: inline-block
         text-decoration: none
         vertical-align: middle
@@ -225,7 +226,7 @@ nav
           margin: 0
         &.active
           color: #FFF
-          background: #2980b9
+          background: $highlight_blue
         .nav-expand
           display: none
       ul
@@ -234,20 +235,29 @@ nav
         left: 5px
         display: none
         color: #fff
-        background: #3B3B3B
+        background: $widget_black
+        margin: 0 !important
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4)
         li
           &:first-child
             a.active
-              border-top: 1px dashed #3B3B3B
+              border-top: 1px solid $widget_black
         li
           display: block
-          a
-            padding: 8px 15px 8px 8px !important
+          a, button
+            padding: 8px 20px 8px 8px !important
             font-size: .8em
             line-height: 18px
             display: block
-            border-left: 4px solid #2980b9
+            border-left: 4px solid $highlight_blue
             white-space: nowrap
+      button
+        background: none
+        text-align: left
+        border: none
+        width: 100%
+        border-radius: 0
+        height: auto
       &:hover > ul, &:active > ul, &:focus > ul
         display: block !important
       &.home-nav-element a:hover
@@ -260,8 +270,7 @@ hr
   color: rgba(0, 0, 0, 0.2)
 
 #content
-  margin: auto
-  margin-top: 52px
+  margin: 52px auto auto
   // Header
   width: 90%
   height: 100%
@@ -274,7 +283,7 @@ hr
 footer
   text-align: center
   height: 40px
-  border-top: 1px solid #cccccc
+  border-top: 1px solid $border_gray
   background: #ededed
 
 html
@@ -290,9 +299,9 @@ noscript #noscript
   font-size: 111%
   color: white
   font-weight: bold
-  background: #ae0000
+  background: $announcement_red
   text-align: center
-  padding: 5px 0px
+  padding: 5px 0
   left: 0
   right: 0
   position: fixed
@@ -303,13 +312,11 @@ noscript #noscript
   font-size: 111%
   color: white
   font-weight: bold
-  background: #ae0000
+  background: $announcement_red
   text-align: center
   max-width: 30%
-  padding: 15px 10px 5px
-  right: 0
   position: fixed
-  border-radius: 4px
+  border-radius: $widget_border_radius
   z-index: 100
   bottom: -4px
   right: -4px
@@ -330,7 +337,7 @@ noscript #noscript
 #form-errors
   background: rgba(255, 0, 0, 0.3)
   border: 3px solid red
-  border-radius: 4px
+  border-radius: $widget_border_radius
   padding: 0 1em .1em 1em
   margin: 0.3em 0 0.5em 0
 
@@ -341,26 +348,30 @@ noscript #noscript
   height: 47px
   max-width: 107em
   background: white
-  border-right: 1px solid #CCC
-  border-left: 1px solid #CCC
+  border-right: 1px solid $border_gray
+  border-left: 1px solid $border_gray
 
 #contest-info
   font-size: 1.25em
-  border-left: 1px solid #2980B9
-  border-bottom: 1px solid #2980B9
-  border-radius: 0 0 0 5px
+  border: 5px solid $highlight_blue
+  border-left: 5px dotted white
+  border-radius: 0 $widget_border_radius $widget_border_radius 0
+  background: rgba(0,0,0,.77)
+  z-index: 100000
+  padding: 10px 12px
+  color: white
+  cursor: move
   position: fixed
-  top: 44px
-  right: 0
-  background: rgba(0, 0, 0, 0.77)
-  z-index: 1
-  padding: 0 0.2em 0.2em
+  left: 20px
+  top: 90%
+  display: none
 
   a
     height: 1.4em
     padding: 0
     margin: 0
     color: white
+    display: block
 
 #contest-time-remaining
   display: inline-block
@@ -378,16 +389,16 @@ noscript #noscript
       height: 100%
       a
         display: block
-        padding: 0px
+        padding: 0
         height: 100%
 
 #page-container
   min-height: 100%
   max-width: 1300px
   position: relative
-  margin: 0px auto
-  border-right: 1px solid #CCC
-  border-left: 1px solid #CCC
+  margin: 0 auto
+  border-right: 1px solid $border_gray
+  border-left: 1px solid $border_gray
   background: white
 // border-bottom: 1px solid rgb(204, 204, 204)
 // border-bottom-left-radius: 4px
@@ -451,16 +462,16 @@ math
     float: left
     &.hover
       color: #4db7fe
-      text-shadow: 0 0 5px #2980b9
+      text-shadow: 0 0 5px $highlight_blue
       transition-duration: 0.25s
   #nav-list
     display: none
     padding: 0
     margin-left: 0
-    border-left: 4px solid #2980B9
+    border-left: 4px solid $highlight_blue
     position: fixed
     top: 36px
-    background: #3B3B3B
+    background: $widget_black
     bottom: 0
     width: 8em
     left: 0

@@ -20,9 +20,11 @@ block media
             text-align: left;
         }
 
-block header
-    if perms.judge.change_language
-        .title-line-action [#[a(href='{% url "admin:judge_language_changelist" %}') {% trans "Admin" %}]]
+block title_ruler
+
+block title_row
+    - var tab = 'runtimes'
+    include status/status-tabs
 
 block body
     table.table

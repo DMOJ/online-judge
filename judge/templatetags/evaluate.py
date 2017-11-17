@@ -1,28 +1,26 @@
 from django import template
 
 register = template.Library()
+template_cache = {}
+
+MAX_CACHE = 100
 
 
-@register.tag(name='evaluate')
-def do_evaluate(parser, token):
-    """
-    tag usage {% evaluate object.textfield %}
-    """
+def compile_template(template_code):
+    if template_code in template_cache:
+        return template_cache[template_code]
+
+    # If this works for re.compile, it works for us too.
+    if len(template_cache) > MAX_CACHE:
+        template_cache.clear()
+
+    t = template_cache[template_code] = template.Template(template_code)
+    return t
+
+
+@register.simple_tag(name='evaluate', takes_context=True)
+def evaluate_tag(context, template_code):
     try:
-        tag_name, variable = token.split_contents()
-    except ValueError:
-        raise template.TemplateSyntaxError('%r tag requires a single argument' % token.contents.split()[0])
-    return EvaluateNode(variable)
-
-
-class EvaluateNode(template.Node):
-    def __init__(self, variable):
-        self.variable = template.Variable(variable)
-
-    def render(self, context):
-        try:
-            content = self.variable.resolve(context)
-            t = template.Template(content)
-            return t.render(context)
-        except template.VariableDoesNotExist, template.TemplateSyntaxError:
-            return 'Error rendering', self.variable
+        return compile_template(template_code).render(context)
+    except (template.VariableDoesNotExist, template.TemplateSyntaxError):
+        return 'Error rendering: %r' % template_code

@@ -160,11 +160,7 @@ block info_float
                             | Author:
                             - plural
                             | Authors:
-                    div.pi-value.authors-value: for author in authors
-                        span(class=author.display_rank)
-                            a(href='{% url "user_page" author.user.username %}') #{author.user.username}
-                        if not forloop.last
-                            = ', '
+                    div.pi-value.authors-value {% include "link-to-user-list.jade" with users=authors %}
     br
     if not contest_problem or not contest_problem.contest.hide_problem_tags
         div#problem-types

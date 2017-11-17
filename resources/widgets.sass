@@ -1,3 +1,5 @@
+@import vars
+
 .social i
   display: inline
   font-size: 1.9em
@@ -8,7 +10,7 @@
 .tweet-this i
   color: #55ACEE
 
-.facebook-this i
+.facebook-this it
   color: #133783
 
 .gplus-this i
@@ -27,26 +29,26 @@
   white-space: nowrap
   font-weight: 400
   line-height: 1.4
-  background: rgb(51, 122, 183) none repeat scroll 0% (0% / auto) padding-box border-box
+  background: rgb(51, 122, 183) none repeat scroll 0 (0% / auto) padding-box border-box
   background: -webkit-linear-gradient(top, #337ab7 0, #265a88 100%) repeat-x
   background: linear-gradient(to bottom, #337ab7 0, #265a88 100%) repeat-x
-  border-radius: 4px 4px 4px 4px
+  border-radius: $widget_border_radius
   padding: 6px 12px
   display: block
   border: 1px solid #245580
   text-align: center
   // 4k hack
-  font-size: 14px
+  font-size: $base_font_size
   &:hover
     background: #265a88
 
   &.disabled
-    background: linear-gradient(to bottom,darkgray 0,gray 100%) repeat-x !important
+    background: linear-gradient(to bottom, darkgray 0, gray 100%) repeat-x !important
     border-color: grey !important
     cursor: not-allowed
 
 .button.full, input[type=submit].full, button.full
-  padding: 6px 0px
+  padding: 6px 0
 
 button:hover, button:hover, input[type=submit]:hover
   background: #265a88
@@ -59,16 +61,15 @@ input
   &[type=text], &[type=password], &[type=email], &[type=number]
     padding: 4px 8px
     color: #555
-    background-color: #FFF
-    background-image: none
-    border: 1px solid #CCC
-    border-radius: 4px
+    background: #FFF none
+    border: 1px solid $border_gray
+    border-radius: $widget_border_radius
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s
     box-sizing: border-box
     // Need this explicitly because UA stylesheet for Chrome on 4k makes
     // everything look bad otherwise (forces it to 9.3px)
-    font-size: 14px
+    font-size: $base_font_size
 
   &[type=number]
     padding: 2px 0 2px 5px
@@ -76,11 +77,10 @@ input
 textarea
   padding: 4px 8px
   color: #555
-  background-color: #FFF
-  background-image: none
-  border: 1px solid #CCC
-  border-radius: 4px
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset
+  background: #FFF none
+  border: 1px solid $border_gray
+  border-radius: $widget_border_radius
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset
   transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s
   box-sizing: border-box
 
@@ -114,7 +114,7 @@ input
   cursor: pointer
   background-color: #FFF
   border: 1px solid #E1E1E8
-  border-radius: 0 4px
+  border-radius: 0 $widget_border_radius
   position: absolute
   padding: 5px 8px
 
@@ -124,21 +124,33 @@ input
 
 // Bootstrap-y tabs
 .ul_tab_a_active
-  color: #555
+  color: black
   cursor: default
   background-color: #fff
-  border: 1px solid rgba(0, 0, 0, 0.2)
+  border: 1px solid $border_gray
   border-bottom-color: transparent
   border-image: none
 
 .tabs
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2)
+  border-bottom: 1px solid $border_gray
   margin: 0 0 8px
   width: 100%
   display: flex
 
   &.tabs-no-flex
     display: block
+
+  .tab
+    .tab-icon
+      padding-right: 0.3em
+      color: gray
+    a
+      border-top-width: 3px !important
+    &.active
+      a
+        border-top-color: $highlight_blue !important
+      .tab-icon
+        color: black
 
   h2
     color: #393630
@@ -164,22 +176,13 @@ input
         margin-right: 2px
         line-height: 1.42857
         border: 1px solid transparent
-        border-radius: 4px 4px 0 0
+        border-radius: $widget_border_radius $widget_border_radius 0 0
         position: relative
         display: block
         padding: 10px 15px
-        color: #337ab7
+        color: #555
         text-decoration: none
         white-space: nowrap
-
-        &:hover
-          border-color: #eee #eee rgba(0, 0, 0, 0.2)
-          text-decoration: none
-          background-color: #eee
-
-        &:focus
-          text-decoration: none
-          background-color: #eee
 
 // Bootstrap-y pagination
 ul.pagination a:hover
@@ -188,22 +191,22 @@ ul.pagination a:hover
 
 ul.pagination
   display: inline-block
-  padding-left: 0px
+  padding-left: 0
   margin: 0
-  border-radius: 4px
+  border-radius: $widget_border_radius
   >
     li
       display: inline
       &:first-child >
         a, span
-          margin-left: 0px
-          border-top-left-radius: 4px
-          border-bottom-left-radius: 4px
+          margin-left: 0
+          border-top-left-radius: $widget_border_radius
+          border-bottom-left-radius: $widget_border_radius
       &:last-child >
         a, span
-          margin-left: 0px
-          border-top-right-radius: 4px
-          border-bottom-right-radius: 4px
+          margin-left: 0
+          border-top-right-radius: $widget_border_radius
+          border-bottom-right-radius: $widget_border_radius
       >
         a, span
           position: relative
@@ -212,29 +215,29 @@ ul.pagination
           line-height: 1.42857
           text-decoration: none
           color: #FFF
-          background-color: #3B3B3B
+          background-color: $widget_black
           border: 1px solid #505050
           margin-left: -1px
     .disabled-page >
       a
         color: #888
-        background-color: #3B3B3B
+        background-color: $widget_black
         border-color: #282828
       span
         color: #888
-        background-color: #3B3B3B
+        background-color: $widget_black
         border-color: #505050
     .active-page >
       a
         z-index: 2
         color: #FFF
-        background-color: #2980B9
+        background-color: $highlight_blue
         border-color: transparent
         cursor: default
       span
         z-index: 2
         color: #FFF
-        background-color: #2980B9
+        background-color: $highlight_blue
         border-color: transparent
         cursor: default
 
@@ -242,7 +245,7 @@ ul.pagination
   padding: 15px
   margin-bottom: 20px
   border: 1px solid transparent
-  border-radius: 4px
+  border-radius: $widget_border_radius
 
 .alert-info
   color: #31708f
@@ -295,7 +298,7 @@ a.close
 
 .badge
   min-width: 10px
-  padding: 0px 7px
+  padding: 0 7px
   font-size: 12px
   font-weight: 700
   line-height: 1
@@ -315,3 +318,57 @@ a.close
 
 ul.select2-selection__rendered
   padding: 0 5px !important
+
+
+.sidebox h3
+  margin: 0 -5px
+  background: $widget_black
+  border-radius: $widget_border_radius $widget_border_radius 0 0
+  color: white
+  padding-top: 5px
+  padding-bottom: 5px
+  padding-left: 7px
+  font-size: 1.3em
+
+.sidebox h3 .fa
+  color: white
+  float: right
+  margin: 0.2em 0.4em 0 0
+
+.sidebox-content
+  border: 1px solid $border_gray
+  border-top: none
+  margin: 0 -5px
+  padding: 1px 0.5em 3px
+
+  &.sidebox-table
+    border: none
+    padding: 0
+
+    .table
+      margin: 0 !important
+
+.sidebox
+  border-top-left-radius: $widget_border_radius
+  border-top-right-radius: $widget_border_radius
+  padding: 0 5px !important
+  padding-bottom: 1.5em !important
+
+
+.ws-closed
+  position: sticky
+  top: 42px
+  background: $announcement_red
+  border-radius: 5px 5px 0 0
+  display: none
+
+.ws-closed a
+  display: block
+  padding: 7px 0
+  text-align: center
+  color: white
+  font-weight: 600
+
+.semibold
+  font-weight: 600
+

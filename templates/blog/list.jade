@@ -22,42 +22,6 @@ block media
     link(rel='alternate', type='application/rss+xml', href='{% url "problem_rss" %}', title='RSS Problem Feed')
     include blog/media-css.jade
     style.
-        .sidebox h3 {
-            margin: 0 -5px;
-            background: #3b3b3b;
-            border-radius: 4px 4px 0px 0px;
-            color: white;
-            padding-top: 2px;
-            padding-bottom: 4px;
-            padding-left: 7px;
-        }
-
-        .sidebox h3 .fa {
-            color: white;
-            float: right;
-            margin: 0.2em 0.4em 0 0;
-        }
-
-        .sidebox {
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-            margin-top: 0.5em;
-            padding: 0 5px !important;
-        }
-
-        .blog-content.sidebox {
-            margin-right: 1em;
-        }
-
-        .sidebox-content {
-            border: 1px solid #9D9D9D;
-            border-top: none;
-            margin: 0 -5px;
-            padding: 0 0.5em;
-            padding-top: 1px;
-            padding-bottom: 3px;
-        }
-
         .post {
             margin: 0 1.4em;
         }
@@ -133,8 +97,8 @@ block body
     block before_posts
 
     #mobile.tabs: ul
-        li#blog-tab.active: a(href='#') {% trans "Blog" %}
-        li#event-tab: a(href='#') {% trans "Events" %}
+        li.tab#blog-tab.active: a(href='#') #[i.tab-icon.fa.fa-info-circle] {% trans "Blog" %}
+        li.tab#event-tab: a(href='#') #[i.tab-icon.fa.fa-rss] {% trans "Events" %}
 
     #blog-container
         .blog-content.sidebox
@@ -194,7 +158,7 @@ block body
                     .sidebox-content
                         each contest in current_contests
                             .contest
-                                .name: a(href='{% url "contest_view" contest.key %}')= contest.name
+                                .contest-list-title: a(href='{% url "contest_view" contest.key %}')= contest.name
                                 .time
                                     - blocktrans with countdown=contest.time_before_end|as_countdown
                                         | Ends in {{ countdown }}.
@@ -204,7 +168,7 @@ block body
                     .sidebox-content
                         each contest in future_contests
                             .contest
-                                .name: a(href='{% url "contest_view" contest.key %}')= contest.name
+                                .contest-list-title: a(href='{% url "contest_view" contest.key %}')= contest.name
                                 .time
                                     - blocktrans with countdown=contest.time_before_start|as_countdown
                                         | Starting in {{ countdown }}.

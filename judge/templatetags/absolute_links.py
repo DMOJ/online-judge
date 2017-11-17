@@ -1,4 +1,3 @@
-import urllib
 from urlparse import urljoin
 
 from django import template

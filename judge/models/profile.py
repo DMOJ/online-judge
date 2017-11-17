@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _, pgettext
 from sortedm2m.fields import SortedManyToManyField
 
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES
+from judge.ratings import rating_class
 
 __all__ = ['Organization', 'Profile', 'OrganizationRequest']
 
@@ -153,6 +154,16 @@ class Profile(models.Model):
 
     def __unicode__(self):
         return self.user.username
+
+    @classmethod
+    def get_user_css_class(cls, display_rank, rating, rating_colors=getattr(settings, 'DMOJ_RATING_COLORS', False)):
+        if rating_colors:
+            return 'rating %s %s' % (rating_class(rating) if rating is not None else 'rate-none', display_rank)
+        return display_rank
+
+    @cached_property
+    def css_class(self):
+        return self.get_user_css_class(self.display_rank, self.rating)
 
     class Meta:
         permissions = (

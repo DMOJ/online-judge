@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 请在 {{ expiration_days }} 天内激活您的 {{ SITE_LONG_NAME }}HBU_OJ 账号。
 
 直接点击此链接进行激活：

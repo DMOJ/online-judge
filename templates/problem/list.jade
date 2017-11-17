@@ -42,15 +42,6 @@ block media
     if not IN_CONTEST
         style.
             #problem-table th { padding: 0; }
-            .sidebox h3 {
-                margin: 0 -5px;
-                background: #3b3b3b;
-                border-radius: 4px 4px 0 0;
-                color: white;
-                padding-top: 2px;
-                padding-bottom: 4px;
-                padding-left: 7px;
-            }
 
             a.hot-problem-link:hover > .hot-problem-count {
                 visibility: visible;
@@ -65,30 +56,8 @@ block media
                 position: relative;
             }
 
-            .sidebox h3 .fa {
-                color: white;
-                float: right;
-                margin: 0.2em 0.4em 0 0;
-            }
-
-            .sidebox {
-                border-top-left-radius: 4px;
-                border-top-right-radius: 4px;
-                padding: 0 5px !important;
-                padding-bottom: 1.5em !important;
-            }
-
             .blog-content.sidebox {
                 margin-right: 1em;
-            }
-
-            .sidebox-content {
-                border: 1px solid #9D9D9D;
-                border-top: none;
-                margin: 0 -5px;
-                padding: 0 0.5em;
-                padding-top: 1px;
-                padding-bottom: 3px;
             }
 
             ul.problem-list {
@@ -176,16 +145,17 @@ block title_row
 block body
     #common-content
         block before_table
-        if not IN_CONTEST and hot_problems
+        if not IN_CONTEST
             #content-right.problems: .info-float
                 include problem/search-form
-                .sidebox
-                    h3 {% trans "Hot problems" %} #[i.fa.fa-fire]
-                    .sidebox-content
-                        ul.problem-list: for problem in hot_problems
-                            li
-                                a.hot-problem-link(href='{% url "problem_detail" problem.code %}')= problem.name
-                                    span.hot-problem-count= problem.count
+                if hot_problems
+                    .sidebox
+                        h3 {% trans "Hot problems" %} #[i.fa.fa-fire]
+                        .sidebox-content
+                            ul.problem-list: for problem in hot_problems
+                                li
+                                    a.hot-problem-link(href='{% url "problem_detail" problem.code %}')= problem.name
+                                        span.hot-problem-count= problem.count
 
 
         #content-left.problems

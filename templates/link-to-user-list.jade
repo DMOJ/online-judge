@@ -1,0 +1,5 @@
+for user in users
+    span(class=user.css_class)
+        a(href='{% url "user_page" user.user.username %}') #{user.user.username}
+    if not forloop.last
+        = ', '

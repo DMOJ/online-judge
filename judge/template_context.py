@@ -128,5 +128,5 @@ def math_setting(request):
     else:
         engine = getattr(settings, 'MATHOID_DEFAULT_TYPE', 'auto')
     if engine == 'auto':
-        engine = 'mml' if caniuse.mathml == SUPPORT else 'jax'
+        engine = 'mml' if bool(getattr(settings, 'MATHOID_URL', False)) and caniuse.mathml == SUPPORT else 'jax'
     return {'MATH_ENGINE': engine, 'REQUIRE_JAX': engine == 'jax', 'caniuse': caniuse}

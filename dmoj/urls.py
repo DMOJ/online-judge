@@ -45,44 +45,33 @@ register_patterns = [
         TitledTemplateView.as_view(template_name='registration/registration_closed.html',
                                    title='Registration not allowed'),
         name='registration_disallowed'),
-    url(r'^login/$', auth_views.login,
-        {'template_name': 'registration/login.jade', 'extra_context': {'title': 'Login'},
-         'authentication_form': CustomAuthenticationForm},
-        name='auth_login'),
-    url(r'^logout/$',
-        auth_views.logout,
-        {'template_name': 'registration/logout.jade',
-         'extra_context': {'title': 'You have been successfully logged out.'}},
-        name='auth_logout'),
-    url(r'^password/change/$',
-        auth_views.password_change,
-        {'template_name': 'registration/password_change_form.jade', 'extra_context': {'title': 'Change Password'}},
-        name='password_change'),
-    url(r'^password/change/done/$',
-        auth_views.password_change_done,
-        {'template_name': 'registration/password_change_done.jade', 'extra_context': {'title': 'Password Changed'}},
-        name='password_change_done'),
-    url(r'^password/reset/$',
-        auth_views.password_reset,
-        {'template_name': 'registration/password_reset.jade', 'extra_context': {'title': 'Reset Password'},
-         'html_email_template_name': 'registration/password_reset_email.html',
-         'email_template_name': 'registration/password_reset_email.txt'},
-        name='password_reset'),
+    url(r'^login/$', auth_views.LoginView.as_view(
+        template_name='registration/login.jade',
+        extra_context={'title': _('Login')},
+        authentication_form=CustomAuthenticationForm,
+    ), name='auth_login'),
+    url(r'^logout/$', user.UserLogoutView.as_view(), name='auth_logout'),
+    url(r'^password/change/$', auth_views.PasswordChangeView.as_view(
+        template_name='registration/password_change_form.jade'
+    ), name='password_change'),
+    url(r'^password/change/done/$', auth_views.PasswordChangeDoneView.as_view(
+        template_name='registration/password_change_done.jade',
+    ), name='password_change_done'),
+    url(r'^password/reset/$',auth_views.PasswordResetView.as_view(
+        template_name='registration/password_reset.jade',
+        html_email_template_name='registration/password_reset_email.html',
+        email_template_name='registration/password_reset_email.txt',
+    ), name='password_reset'),
     url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
-        auth_views.password_reset_confirm,
-        {'template_name': 'registration/password_reset_confirm.jade',
-         'extra_context': {'title': 'Confirm Reset Password'}},
-        name='password_reset_confirm'),
-    url(r'^password/reset/complete/$',
-        auth_views.password_reset_complete,
-        {'template_name': 'registration/password_reset_complete.jade',
-         'extra_context': {'title': 'Password Reset Complete'}},
-        name='password_reset_complete'),
-    url(r'^password/reset/done/$',
-        auth_views.password_reset_done,
-        {'template_name': 'registration/password_reset_done.jade',
-         'extra_context': {'title': 'Password Reset Successful'}},
-        name='password_reset_done'),
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name='registration/password_reset_confirm.jade',
+        ), name='password_reset_confirm'),
+    url(r'^password/reset/complete/$', auth_views.PasswordResetCompleteView.as_view(
+        template_name='registration/password_reset_complete.jade',
+    ), name='password_reset_complete'),
+    url(r'^password/reset/done/$', auth_views.PasswordResetDoneView.as_view(
+        template_name='registration/password_reset_done.jade',
+    ), name='password_reset_done'),
     url(r'^social/error/$', register.social_auth_error, name='social_auth_error'),
 ]
 
@@ -168,6 +157,7 @@ urlpatterns = [
 
     url(r'^comments/upvote/$', comment.upvote_comment, name='comment_upvote'),
     url(r'^comments/downvote/$', comment.downvote_comment, name='comment_downvote'),
+    url(r'^comments/hide/$', comment.comment_hide, name='comment_hide'),
     url(r'^comments/(?P<id>\d+)/', include([
         url(r'^edit$', comment.CommentEdit.as_view(), name='comment_edit'),
         url(r'^history/ajax$', comment.CommentRevisionAjax.as_view(), name='comment_revision_ajax'),
@@ -229,7 +219,6 @@ urlpatterns = [
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
 
     url(r'^status/$', status.status_all, name='status_all'),
-    url(r'^judge/(?P<name>[\w.]+)$', status.JudgeDetail.as_view(), name='judge_info'),
 
     url(r'^api/', include([
         url(r'^contest/list$', api.api_v1_contest_list),

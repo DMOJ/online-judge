@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 
 from django.contrib.admin import widgets as admin_widgets
-from django.contrib.staticfiles.storage import staticfiles_storage
 from django.forms.utils import flatatt
 from django.template.loader import get_template
 from django.utils.encoding import force_unicode
@@ -27,7 +26,7 @@ else:
         compress_js = True
 
         def __init__(self, *args, **kwargs):
-            kwargs.setdefault('css', (staticfiles_storage.url('pagedown_widget.css'),))
+            kwargs.setdefault('css', ('pagedown_widget.css',))
             super(PagedownWidget, self).__init__(*args, **kwargs)
 
 
@@ -35,10 +34,10 @@ else:
         def _media(self):
             media = super(AdminPagedownWidget, self)._media()
             media.add_css({'all': [
-                staticfiles_storage.url('content-description.css'),
-                staticfiles_storage.url('admin/css/pagedown.css'),
+                'content-description.css',
+                'admin/css/pagedown.css',
             ]})
-            media.add_js([staticfiles_storage.url('admin/js/pagedown.js')])
+            media.add_js(['admin/js/pagedown.js'])
             return media
 
         media = property(_media)
@@ -48,9 +47,9 @@ else:
         def _media(self):
             media = super(MathJaxPagedownWidget, self)._media()
             media.add_js([
-                staticfiles_storage.url('mathjax_config.js'),
+                'mathjax_config.js',
                 '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
-                staticfiles_storage.url('pagedown_math.js'),
+                'pagedown_math.js',
             ])
             return media
 
@@ -69,10 +68,10 @@ else:
             self.hide_preview_button = kwargs.pop('hide_preview_button', False)
             super(HeavyPreviewPageDownWidget, self).__init__(*args, **kwargs)
 
-        def render(self, name, value, attrs=None):
+        def render(self, name, value, attrs=None, renderer=None):
             if value is None:
                 value = ''
-            final_attrs = self.build_attrs(attrs, name=name)
+            final_attrs = self.build_attrs(attrs, {'name': name})
             if 'class' not in final_attrs:
                 final_attrs['class'] = ''
             final_attrs['class'] += ' wmd-input'
@@ -91,8 +90,8 @@ else:
 
         def _media(self):
             media = super(HeavyPreviewPageDownWidget, self)._media()
-            media.add_css({'all': [staticfiles_storage.url('dmmd-preview.css')]})
-            media.add_js([staticfiles_storage.url('dmmd-preview.js')])
+            media.add_css({'all': ['dmmd-preview.css']})
+            media.add_js(['dmmd-preview.js'])
             return media
 
         media = property(_media)
@@ -101,9 +100,9 @@ else:
         def _media(self):
             media = super(HeavyPreviewAdminPageDownWidget, self)._media()
             media.add_css({'all': [
-                staticfiles_storage.url('pygment-github.css'),
-                staticfiles_storage.url('table.css'),
-                staticfiles_storage.url('ranks.css'),
+                'pygment-github.css',
+                'table.css',
+                'ranks.css',
             ]})
             return media
 

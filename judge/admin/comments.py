@@ -30,6 +30,7 @@ class CommentAdmin(VersionAdmin):
     actions_on_top = True
     actions_on_bottom = True
     form = CommentForm
+    date_hierarchy = 'time'
 
     def get_queryset(self, request):
         return Comment.objects.order_by('-time')

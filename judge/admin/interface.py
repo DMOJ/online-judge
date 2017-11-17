@@ -66,10 +66,13 @@ class BlogPostAdmin(VersionAdmin):
     list_display_links = ('id', 'title')
     ordering = ('-publish_on',)
     form = BlogPostForm
+    date_hierarchy = 'publish_on'
 
     def has_change_permission(self, request, obj=None):
-        return request.user.is_superuser or (request.user.has_perm('judge.see_hidden_post') and
-               (obj is None or obj.authors.filter(id=request.user.profile.id).exists()))
+        return (request.user.has_perm('judge.edit_all_post') or
+                request.user.has_perm('judge.change_blogpost') and (
+                    obj is None or
+                    obj.authors.filter(id=request.user.profile.id).exists()))
 
 
 class SolutionForm(ModelForm):

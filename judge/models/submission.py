@@ -57,7 +57,7 @@ class Submission(models.Model):
 
     user = models.ForeignKey(Profile)
     problem = models.ForeignKey(Problem)
-    date = models.DateTimeField(verbose_name=_('submission time'), auto_now_add=True)
+    date = models.DateTimeField(verbose_name=_('submission time'), auto_now_add=True, db_index=True)
     time = models.FloatField(verbose_name=_('execution time'), null=True, db_index=True)
     memory = models.FloatField(verbose_name=_('memory usage'), null=True)
     points = models.FloatField(verbose_name=_('points granted'), null=True, db_index=True)
@@ -89,7 +89,7 @@ class Submission(models.Model):
     @property
     def result_class(self):
         # This exists to save all these conditionals from being executed (slowly) in each row.jade template
-        if self.status in 'IECE':
+        if self.status in ('IE', 'CE'):
             return self.status
         return Submission.result_class_from_code(self.result, self.case_points, self.case_total)
 

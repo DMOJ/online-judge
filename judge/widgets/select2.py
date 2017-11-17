@@ -44,12 +44,9 @@ from itertools import chain
 
 from django import forms
 from django.conf import settings
-from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core import signing
 from django.core.urlresolvers import reverse_lazy
 from django.forms.models import ModelChoiceIterator
-from django.utils.encoding import force_text
-
 
 DEFAULT_SELECT2_JS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'
 DEFAULT_SELECT2_CSS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
@@ -67,9 +64,9 @@ class Select2Mixin(object):
     form media.
     """
 
-    def build_attrs(self, extra_attrs=None, **kwargs):
+    def build_attrs(self, base_attrs, extra_attrs=None):
         """Add select2 data attributes."""
-        attrs = super(Select2Mixin, self).build_attrs(extra_attrs=extra_attrs, **kwargs)
+        attrs = super(Select2Mixin, self).build_attrs(base_attrs, extra_attrs)
         if self.is_required:
             attrs.setdefault('data-allow-clear', 'false')
         else:
@@ -83,11 +80,11 @@ class Select2Mixin(object):
             attrs['class'] = 'django-select2'
         return attrs
 
-    def render_options(self, *args, **kwargs):
-        """Render options including an empty one, if the field is not required."""
-        output = '<option></option>' if not self.is_required else ''
-        output += super(Select2Mixin, self).render_options(*args, **kwargs)
-        return output
+    def optgroups(self, name, value, attrs=None):
+        """Add empty option for clearable selects."""
+        if not self.is_required and not self.allow_multiple_selected:
+            self.choices = list(chain([('', '')], self.choices))
+        return super(Select2Mixin, self).optgroups(name, value, attrs=attrs)
 
     def _get_media(self):
         """
@@ -98,7 +95,7 @@ class Select2Mixin(object):
         """
         return forms.Media(
             js=(getattr(settings, 'SELECT2_JS_URL', DEFAULT_SELECT2_JS),
-                static('django_select2.js')),
+                'django_select2.js'),
             css={'screen': (getattr(settings, 'SELECT2_CSS_URL', DEFAULT_SELECT2_CSS),)}
         )
 
@@ -108,12 +105,13 @@ class Select2Mixin(object):
 class Select2TagMixin(object):
     """Mixin to add select2 tag functionality."""
 
-    def build_attrs(self, extra_attrs=None, **kwargs):
+    def build_attrs(self, base_attrs, extra_attrs=None):
         """Add select2's tag attributes."""
-        self.attrs.setdefault('data-minimum-input-length', 1)
-        self.attrs.setdefault('data-tags', 'true')
-        self.attrs.setdefault('data-token-separators', [",", " "])
-        return super(Select2TagMixin, self).build_attrs(extra_attrs, **kwargs)
+        extra_attrs = extra_attrs or {}
+        extra_attrs.setdefault('data-minimum-input-length', 1)
+        extra_attrs.setdefault('data-tags', 'true')
+        extra_attrs.setdefault('data-token-separators', [",", " "])
+        return super(Select2TagMixin, self).build_attrs(base_attrs, extra_attrs)
 
 
 class Select2Widget(Select2Mixin, forms.Select):
@@ -170,22 +168,18 @@ class Select2TagWidget(Select2TagMixin, Select2Mixin, forms.SelectMultiple):
 class HeavySelect2Mixin(Select2Mixin):
     """Mixin that adds select2's ajax options."""
 
-    def __init__(self, **kwargs):
-        """
-        Return HeavySelect2Mixin.
+    def __init__(self, attrs=None, choices=(), **kwargs):
+        self.choices = choices
+        if attrs is not None:
+            self.attrs = attrs.copy()
+        else:
+            self.attrs = {}
 
-        :param data_view: url pattern name
-        :type data_view: str
-        :param data_url: url
-        :type data_url: str
-        :return:
-        """
         self.data_view = kwargs.pop('data_view', None)
         self.data_url = kwargs.pop('data_url', None)
+
         if not (self.data_view or self.data_url):
             raise ValueError('You must ether specify "data_view" or "data_url".')
-        self.userGetValTextFuncName = kwargs.pop('userGetValTextFuncName', 'null')
-        super(HeavySelect2Mixin, self).__init__(**kwargs)
 
     def get_url(self):
         """Return url from instance or by reversing :attr:`.data_view`."""
@@ -193,9 +187,9 @@ class HeavySelect2Mixin(Select2Mixin):
             return self.data_url
         return reverse_lazy(self.data_view)
 
-    def build_attrs(self, extra_attrs=None, **kwargs):
+    def build_attrs(self, base_attrs, extra_attrs=None):
         """Set select2's ajax attributes."""
-        attrs = super(HeavySelect2Mixin, self).build_attrs(extra_attrs=extra_attrs, **kwargs)
+        attrs = super(HeavySelect2Mixin, self).build_attrs(base_attrs, extra_attrs)
 
         # encrypt instance Id
         self.widget_id = signing.dumps(id(self))
@@ -209,29 +203,15 @@ class HeavySelect2Mixin(Select2Mixin):
         attrs['class'] += ' django-select2-heavy'
         return attrs
 
-    def render_options(self, *args, **kwargs):
-        """Render only selected options."""
-        if len(args) == 1:
-            choices, selected_choices = (), args[0]
-        else:
-            choices, selected_choices = args
-
-        output = ['<option></option>' if not self.is_required else '']
+    def format_value(self, value):
+        result = super(HeavySelect2Mixin, self).format_value(value)
         if isinstance(self.choices, ModelChoiceIterator):
             chosen = copy(self.choices)
-            chosen.queryset = chosen.queryset.filter(pk__in=[int(i) for i in selected_choices
-                                                             if isinstance(i, (int, long)) or i.isdigit()])
-            chosen = set(chosen)
-        else:
-            choices = chain(self.choices, choices)
-            chosen = set()
-
-        selected_choices = {force_text(v) for v in selected_choices}
-        chosen.update((k, v) for k, v in choices if force_text(k) in selected_choices)
-
-        for option_value, option_label in chosen:
-            output.append(self.render_option(selected_choices, option_value, option_label))
-        return '\n'.join(output)
+            chosen.queryset = chosen.queryset.filter(pk__in=[
+                int(i) for i in result if isinstance(i, (int, long)) or i.isdigit()
+            ])
+            self.choices = set(chosen)
+        return result
 
 
 class HeavySelect2Widget(HeavySelect2Mixin, forms.Select):

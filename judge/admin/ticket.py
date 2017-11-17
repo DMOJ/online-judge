@@ -31,7 +31,8 @@ class TicketForm(ModelForm):
 
 
 class TicketAdmin(ModelAdmin):
-    fields = ('title', 'user', 'assignees', 'content_type', 'object_id', 'notes')
+    fields = ('title', 'time', 'user', 'assignees', 'content_type', 'object_id', 'notes')
     list_display = ('title', 'user', 'time', 'linked_item')
     inlines = [TicketMessageInline]
     form = TicketForm
+    date_hierarchy = 'time'
