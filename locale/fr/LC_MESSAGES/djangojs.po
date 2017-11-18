@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-12 01:20-0500\n"
-"PO-Revision-Date: 2017-03-09 03:25-0500\n"
+"POT-Creation-Date: 2017-11-17 21:11-0500\n"
+"PO-Revision-Date: 2017-11-17 21:12-0500\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -16,14 +16,14 @@ msgstr ""
 "X-Crowdin-Language: fr\n"
 "X-Crowdin-File: djangojs.po\n"
 
-#: .\resources\common.js:185
+#: .\resources\common.js:203
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
 msgstr[0] "%d jour %h:%m:%s"
 msgstr[1] "%d jours %h:%m:%s"
 
-#: .\resources\common.js:188
+#: .\resources\common.js:206
 msgctxt "time format without day"
 msgid "%h:%m:%s"
 msgstr "%h:%m:%s"
