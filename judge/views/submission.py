@@ -203,7 +203,9 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['selected_statuses'] = self.selected_statuses
 
         context['results'] = self.get_result_table()
-        context['first_page_href'] = self.first_page_href or '.'
+        
+        context['page_suffix'] = suffix = ('?' + self.request.GET.urlencode()) if self.request.GET else ''
+        context['first_page_href'] = (self.first_page_href or '.') + suffix
         context['my_submissions_link'] = self.get_my_submissions_page()
         context['all_submissions_link'] = self.get_all_submissions_page()
         context['tab'] = self.tab
@@ -383,8 +385,6 @@ class AllSubmissions(SubmissionsListBase):
         context = super(AllSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
         context['last_msg'] = event.last()
-        context['page_suffix'] = suffix = ('?' + self.request.GET.urlencode()) if self.request.GET else ''
-        context['first_page_href'] += suffix
         return context
 
 
