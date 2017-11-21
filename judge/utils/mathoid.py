@@ -46,7 +46,6 @@ class MathoidMathParser(object):
     types = ('svg', 'mml', 'tex', 'jax')
 
     def __init__(self, type):
-        assert type in self.types
         self.type = type
 
         self.mathoid_url = settings.MATHOID_URL
@@ -151,6 +150,7 @@ class MathoidMathParser(object):
             'svg': self.output_svg,
             'jax': self.output_jax,
             'png': self.output_png,
+            'raw': lambda x: x,
         }[self.type](result)
 
     def output_mml(self, result):
