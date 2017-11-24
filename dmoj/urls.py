@@ -333,11 +333,15 @@ favicon_paths = ['apple-touch-icon-180x180.png', 'apple-touch-icon-114x114.png',
                  'mstile-310x150.png', 'apple-touch-icon-144x144.png', 'browserconfig.xml', 'manifest.json',
                  'apple-touch-icon-120x120.png', 'mstile-310x310.png']
 
-from django.contrib.staticfiles.templatetags.staticfiles import static
+
+from django.templatetags.static import static
+from django.utils.functional import lazystr
 from django.views.generic import RedirectView
 
 for favicon in favicon_paths:
-    urlpatterns.append(url(r'^%s$' % favicon, RedirectView.as_view(url=static('icons/' + favicon))))
+    urlpatterns.append(url(r'^%s$' % favicon, RedirectView.as_view(
+        url=lazystr(lambda: static('icons/' + favicon))
+    )))
 
 handler404 = 'judge.views.error.error404'
 handler403 = 'judge.views.error.error403'
