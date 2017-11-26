@@ -1,7 +1,6 @@
 import logging
 import re
 from HTMLParser import HTMLParser
-from parser import ParserError
 from urlparse import urlparse
 
 import mistune
@@ -9,7 +8,7 @@ from django import template
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from lxml import html
-from lxml.etree import XMLSyntaxError
+from lxml.etree import XMLSyntaxError, ParserError
 
 from judge.highlight_code import highlight_code
 from judge.templatetags.markdown.camo import client as camo_client
