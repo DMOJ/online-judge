@@ -1,6 +1,54 @@
 [
     {
         "fields": {
+            "about": "",
+            "ace_theme": "github",
+            "current_contest": null,
+            "display_rank": "admin",
+            "ip": "10.0.2.2",
+            "language": 1,
+            "last_access": "2017-12-02T08:57:10.093Z",
+            "math_engine": "auto",
+            "mute": false,
+            "name": null,
+            "organizations": [
+                1
+            ],
+            "performance_points": 0.0,
+            "points": 0.0,
+            "problem_count": 0,
+            "rating": null,
+            "timezone": "America/Toronto",
+            "user": 1,
+            "user_script": ""
+        },
+        "model": "judge.profile",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "date_joined": "2017-12-02T08:34:17.408Z",
+            "email": "",
+            "first_name": "",
+            "groups": [
+
+            ],
+            "is_active": true,
+            "is_staff": true,
+            "is_superuser": true,
+            "last_login": "2017-12-02T08:34:31.840Z",
+            "last_name": "",
+            "password": "pbkdf2_sha256$36000$eFRRZq4DgktS$md1gk0bBJb7PH/+3YEXkcCW8K+KmiI+y/amqR32G2DY=",
+            "user_permissions": [
+
+            ],
+            "username": "admin"
+        },
+        "model": "auth.user",
+        "pk": 1
+    },
+    {
+        "fields": {
             "about": "This is a sample organization. You can use organizations to split up your user base, host private contests, and more.",
             "access_code": null,
             "admins": [
@@ -122,28 +170,6 @@
             "name": "DMOJ: Modern Online Judge"
         },
         "model": "sites.site",
-        "pk": 1
-    },
-    {
-        "fields": {
-            "date_joined": "2017-12-02T08:34:17.408Z",
-            "email": "",
-            "first_name": "",
-            "groups": [
-
-            ],
-            "is_active": true,
-            "is_staff": true,
-            "is_superuser": true,
-            "last_login": "2017-12-02T08:34:31.840Z",
-            "last_name": "",
-            "password": "pbkdf2_sha256$36000$eFRRZq4DgktS$md1gk0bBJb7PH/+3YEXkcCW8K+KmiI+y/amqR32G2DY=",
-            "user_permissions": [
-
-            ],
-            "username": "admin"
-        },
-        "model": "auth.user",
         "pk": 1
     }
 ]
