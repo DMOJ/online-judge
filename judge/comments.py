@@ -45,7 +45,8 @@ class CommentForm(ModelForm):
             profile = self.request.user.profile
             if profile.mute:
                 raise ValidationError(_('Your part is silent, little toad.'))
-            elif not profile.submission_set.filter(points=F('problem__points')).exists():
+            elif (not self.request.user.is_staff and
+                  not profile.submission_set.filter(points=F('problem__points')).exists()):
                 raise ValidationError(_('You need to have solved at least one problem '
                                         'before your voice can be heard.'))
         return super(CommentForm, self).clean()
@@ -96,7 +97,8 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
             queryset = queryset.annotate(vote_score=Coalesce(RawSQLColumn(CommentVote, 'score'), Value(0)))
             profile = self.request.user.profile
             unique_together_left_join(queryset, CommentVote, 'comment', 'voter', profile.id)
-            context['is_new_user'] = not profile.submission_set.filter(points=F('problem__points')).exists()
+            context['is_new_user'] = (not self.request.user.is_staff and
+                                      not profile.submission_set.filter(points=F('problem__points')).exists())
         context['comment_list'] = queryset
 
         return context
