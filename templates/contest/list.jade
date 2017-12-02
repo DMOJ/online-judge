@@ -67,6 +67,10 @@ block body
                                 span.contest-tag(style='background-color: {{ tag.color }}')
                                     a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                     data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
+                            if not contest.is_public
+                                i.fa.fa-eye-slash
+                            if contest.is_private
+                                i.fa.fa-lock
                             if contest.start_time
                                 br
                                 if contest.time_before_end
@@ -110,6 +114,10 @@ block body
                             span.contest-tag(style='background-color: {{ tag.color }}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                 data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
+                        if not contest.is_public
+                            i.fa.fa-eye-slash
+                        if contest.is_private
+                            i.fa.fa-lock
                         if contest.start_time
                             br
                             if contest.time_before_start
@@ -150,6 +158,10 @@ block body
                             span.contest-tag(style='background-color: {{ tag.color }}')
                                 a(href='{% url "contest_tag" tag.name %}', style='color: {{ tag.text_color }}',
                                   data-featherlight='{% url "contest_tag_ajax" tag.name %}')= tag.name
+                        if not contest.is_public
+                            i.fa.fa-eye-slash
+                        if contest.is_private
+                            i.fa.fa-lock
                         div.time-left
                             if contest.time_limit
                                 | #{contest.start_time|date:_("M j, Y, G:i")} - #{contest.end_time|date:_("M j, Y, G:i")}
