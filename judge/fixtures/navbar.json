@@ -41,27 +41,11 @@
             "parent": null,
             "path": "/users/",
             "regex": "^/user",
-            "rght": 4,
+            "rght": 2,
             "tree_id": 3
         },
         "model": "judge.navigationbar",
         "pk": 3
-    },
-    {
-        "fields": {
-            "key": "org",
-            "label": "Organizations",
-            "level": 1,
-            "lft": 2,
-            "order": 4,
-            "parent": 3,
-            "path": "/organizations/",
-            "regex": "^/organization",
-            "rght": 3,
-            "tree_id": 3
-        },
-        "model": "judge.navigationbar",
-        "pk": 4
     },
     {
         "fields": {
@@ -112,4 +96,3 @@
         "pk": 7
     }
 ]
-
