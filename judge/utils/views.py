@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 
-from dmoj import settings
 from judge.utils.diggpaginator import DiggPaginator
 
 

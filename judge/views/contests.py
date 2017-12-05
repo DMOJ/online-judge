@@ -1,10 +1,11 @@
 from calendar import Calendar, SUNDAY
 from collections import namedtuple, defaultdict
-from datetime import timedelta, date, datetime, time
 from functools import partial
 from itertools import chain
 from operator import attrgetter
 
+from datetime import timedelta, date, datetime, time
+from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
@@ -203,9 +204,29 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         return context
 
 
+class ContestAccessDenied(Exception):
+    pass
+
+
+class ContestAccessCodeForm(forms.Form):
+    access_code = forms.CharField(max_length=255)
+
+
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def get(self, request, *args, **kwargs):
-        contest = self.object = self.get_object()
+        self.object = self.get_object()
+        try:
+            return self.join_contest(request)
+        except ContestAccessDenied:
+            return self.ask_for_access_code()
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return self.ask_for_access_code(ContestAccessCodeForm(request.POST))
+
+    def join_contest(self, request, access_code=None):
+        contest = self.object
+
         if not contest.can_join and not self.is_organizer:
             return generic_message(request, _('Contest not ongoing'),
                                    _('"%s" is not currently ongoing.') % contest.name)
@@ -230,26 +251,44 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 else:
                     break
         else:
-            participation, created = ContestParticipation.objects.get_or_create(
-                contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0),
-                defaults={
-                    'real_start': timezone.now()
-                }
-            )
+            try:
+                participation = ContestParticipation.objects.get(
+                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0)
+                )
+            except ContestParticipation.DoesNotExist:
+                if access_code != contest.access_code:
+                    raise ContestAccessDenied()
 
-            if not created and participation.ended:
-                participation = ContestParticipation.objects.get_or_create(
-                    contest=contest, user=profile, virtual=-1,
-                    defaults={
-                        'real_start': timezone.now()
-                    }
-                )[0]
+                participation = ContestParticipation.objects.create(
+                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0),
+                    real_start=timezone.now(),
+                )
+            else:
+                if participation.ended:
+                    participation = ContestParticipation.objects.get_or_create(
+                        contest=contest, user=profile, virtual=-1,
+                        defaults={
+                            'real_start': timezone.now()
+                        }
+                    )[0]
 
         profile.current_contest = participation
         profile.save()
         contest._updating_stats_only = True
         contest.update_user_count()
         return HttpResponseRedirect(reverse('problem_list'))
+
+    def ask_for_access_code(self, form=None):
+        contest = self.object
+        if form:
+            if form.is_valid() and form.cleaned_data['access_code'] == contest.access_code:
+                return self.join_contest(self.request, form.cleaned_data['access_code'])
+        else:
+            form = ContestAccessCodeForm()
+        return render(self.request, 'contest/access_code.jade', {
+            'form': form,
+            'title': _('Enter access code for "%s"') % contest.name,
+        })
 
 
 class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):

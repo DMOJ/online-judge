@@ -1,0 +1,11 @@
+extends base
+
+block body
+    form.form-area(action='', method='post')
+        if form.errors
+            #form-errors
+                p.error {% trans "Invalid access code." %}
+
+        p {% trans "Please enter your access code:" %}
+        p #{form.access_code}
+        button(type='submit') {% trans "Join Contest" %}
