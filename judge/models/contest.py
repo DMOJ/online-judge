@@ -84,6 +84,9 @@ class Contest(models.Model):
     user_count = models.IntegerField(verbose_name=_('the amount of live participants'), default=0)
     summary = models.TextField(blank=True, verbose_name=_('contest summary'),
                                help_text=_('Plain-text, shown in meta description tag, e.g. for social media.'))
+    access_code = models.CharField(verbose_name=_('access code'), blank=True, default='', max_length=255,
+                                   help_text=_('An optional code to prompt contestants before they are allowed '
+                                               'to join the contest. Leave it blank to disable.'))
 
     def clean(self):
         if self.start_time >= self.end_time:
