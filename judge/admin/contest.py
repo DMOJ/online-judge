@@ -86,11 +86,12 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'use_clarifications', 'hide_problem_tags', 'run_pretests_only')}),
+        (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'use_clarifications',
+                           'hide_problem_tags', 'run_pretests_only')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'tags', 'summary')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
-        (_('Organization'), {'fields': ('is_private', 'organizations')}),
+        (_('Organization'), {'fields': ('is_private', 'organizations', 'access_code')}),
     )
     list_display = ('key', 'name', 'is_public', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
     actions = ['make_public', 'make_private']
@@ -110,9 +111,12 @@ class ContestAdmin(VersionAdmin):
             return queryset.filter(organizers__id=request.user.profile.id)
 
     def get_readonly_fields(self, request, obj=None):
-        if request.user.has_perm('judge.contest_rating'):
-            return []
-        return ['is_rated', 'rate_all', 'rate_exclude']
+        readonly = []
+        if not request.user.has_perm('judge.contest_rating'):
+            readonly += ['is_rated', 'rate_all', 'rate_exclude']
+        if not request.user.has_perm('judge.contest_access_code'):
+            readonly += ['access_code']
+        return readonly
 
     def has_change_permission(self, request, obj=None):
         if not request.user.has_perm('judge.edit_own_contest'):
