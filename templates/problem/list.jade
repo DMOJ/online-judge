@@ -147,7 +147,7 @@ block js_media
                     connect: true,
                     snap: true,
                     tooltips: [intFormatter, intFormatter],
-                    range: #{point_values|json}
+                    range: #{point_values|json|safe}
                 });
             }
         });
