@@ -369,6 +369,11 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                     queryset = queryset.filter(
                         Q(code__icontains=query) | Q(name__icontains=query) |
                         Q(translations__name__icontains=query, translations__language=self.request.LANGUAGE_CODE))
+        self.prepoint_queryset = queryset
+        if self.point_start:
+            queryset = queryset.filter(points__gte=self.point_start)
+        if self.point_end:
+            queryset = queryset.filter(points__lte=self.point_end)
         return queryset.distinct()
 
     def get_queryset(self):
@@ -396,14 +401,14 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         if not self.in_contest:
             context.update(self.get_sort_context())
             context['hot_problems'] = hot_problems(timedelta(days=1), 7)
+            context['point_start'], context['point_end'], context['point_values'] = self.get_noui_slider_points()
         else:
             context['hot_problems'] = None
-
-        context['point_start'], context['point_end'], context['point_values'] = self.get_noui_slider_points()
+            context['point_start'], context['point_end'], context['point_values'] = 0, 0, {}
         return context
 
     def get_noui_slider_points(self):
-        points = list(self.object_list.values_list('points', flat=True).distinct())
+        points = list(self.prepoint_queryset.values_list('points', flat=True).distinct())
         if not points:
             return 0, 0, {}
         if len(points) == 1:
@@ -440,19 +445,21 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         if not self.show_types:
             self.all_sorts.discard('type')
 
-        if 'category' in request.GET:
+        def safe_int_or_none(value):
             try:
-                self.category = int(request.GET.get('category'))
-            except ValueError:
-                pass
+                return int(value)
+            except (ValueError, TypeError):
+                return None
+
+        self.category = safe_int_or_none(request.GET.get('category'))
         if 'type' in request.GET:
             try:
                 self.selected_types = map(int, request.GET.getlist('type'))
             except ValueError:
                 pass
 
-        self.point_start = request.GET.get('point_start')
-        self.point_end = request.GET.get('point_end')
+        self.point_start = safe_int_or_none(request.GET.get('point_start'))
+        self.point_end = safe_int_or_none(request.GET.get('point_end'))
 
     def get(self, request, *args, **kwargs):
         self.setup(request)
