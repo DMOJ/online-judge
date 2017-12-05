@@ -185,8 +185,7 @@ WSGI_APPLICATION = 'dmoj.wsgi.application'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'APP_DIRS': True,
+        'BACKEND': 'django_jinja.backend.Jinja2',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
         ],
@@ -209,10 +208,15 @@ TEMPLATES = [
                 'social.apps.django_app.context_processors.backends',
                 'social.apps.django_app.context_processors.login_redirect',
             ],
+            'filters': {
+                'markdown': 'judge.templatetags.markdown.markdown',
+            },
+            'globals': {
+                'rating_class': 'judge.jinja2.rating.get_rating_class',
+            },
         },
     },
     {
-        # A lot of Django stuff needs this, actually.
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'APP_DIRS': True,
         'DIRS': [],

@@ -12,7 +12,7 @@ from lxml.etree import XMLSyntaxError, ParserError
 
 from judge.highlight_code import highlight_code
 from judge.templatetags.markdown.camo import client as camo_client
-from judge.templatetags.markdown.lazy_load import lazy_load
+from judge.templatetags.markdown.lazy_load import lazy_load as lazy_load_processor
 from judge.templatetags.markdown.math import MathRenderer, MathInlineLexer, MathInlineGrammar
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
 
@@ -108,19 +108,18 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
         return super(AwesomeRenderer, self).header(text, level + 2, *args, **kwargs)
 
 
-def markdown(value, style):
+def markdown(value, style, math_engine=None, lazy_load=False):
     styles = getattr(settings, 'MARKDOWN_STYLES', {}).get(style, getattr(settings, 'MARKDOWN_DEFAULT_STYLE', {}))
     escape = styles.get('safe_mode', True)
     nofollow = styles.get('nofollow', True)
     texoid = TEXOID_ENABLED and styles.get('texoid', False)
     math = hasattr(settings, 'MATHOID_URL') and styles.get('math', False)
-    math_engine = getattr(value, 'math_engine', None)
 
     post_processors = []
     if styles.get('use_camo', False) and camo_client is not None:
         post_processors.append(camo_client.update_tree)
-    if getattr(value, 'lazy_load', False):
-        post_processors.append(lazy_load)
+    if lazy_load:
+        post_processors.append(lazy_load_processor)
 
     renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, texoid=texoid,
                                math=math and math_engine is not None, math_engine=math_engine)
@@ -143,7 +142,10 @@ def markdown(value, style):
 
 @register.filter(name='markdown')
 def markdown_filter(value, style):
-    return mark_safe(markdown(value, style))
+    return mark_safe(markdown(
+        value, style, math_engine=getattr(value, 'math_engine', None),
+        lazy_load=getattr(value, 'lazy_load', None),
+    ))
 
 
 class MarkdownSettingString(unicode):
