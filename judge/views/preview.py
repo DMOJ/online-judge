@@ -15,36 +15,36 @@ class MarkdownPreviewView(TemplateResponseMixin, ContextMixin, View):
 
 
 class ProblemMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'problem/preview.jade'
+    template_name = 'problem/preview.html'
 
 
 class BlogMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'blog/preview.jade'
+    template_name = 'blog/preview.html'
 
 
 class ContestMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'contest/preview.jade'
+    template_name = 'contest/preview.html'
 
 
 class CommentMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'comments/preview.jade'
+    template_name = 'comments/preview.html'
 
 
 class ProfileMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'user/preview.jade'
+    template_name = 'user/preview.html'
 
 
 class OrganizationMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'organization/preview.jade'
+    template_name = 'organization/preview.html'
 
 
 class SolutionMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'solution-preview.jade'
+    template_name = 'solution-preview.html'
 
 
 class LicenseMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'license-preview.jade'
+    template_name = 'license-preview.html'
 
 
 class TicketMarkdownPreviewView(MarkdownPreviewView):
-    template_name = 'ticket/preview.jade'
+    template_name = 'ticket/preview.html'

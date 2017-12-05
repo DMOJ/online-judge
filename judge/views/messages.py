@@ -17,7 +17,7 @@ from judge.utils.views import generic_message, TitleMixin
 
 
 class NewMessage(LoginRequiredMixin, TitleMixin, CreateView):
-    template_name = 'messages/new.jade'
+    template_name = 'messages/new.html'
     model = PrivateMessage
     form_class = NewMessageForm
     title = 'New Message'
@@ -42,7 +42,7 @@ class NewMessage(LoginRequiredMixin, TitleMixin, CreateView):
 
 class MessageList(LoginRequiredMixin, TitleMixin, ListView):
     model = PrivateMessage
-    template_name = 'messages/list.jade'
+    template_name = 'messages/list.html'
     title = 'Inbox'
 
     def get_context_data(self, **kwargs):

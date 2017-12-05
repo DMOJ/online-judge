@@ -212,7 +212,7 @@ TEMPLATES = [
         },
     },
     {
-        # FIXME: CompressorMixin needs this.
+        # A lot of Django stuff needs this, actually.
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'APP_DIRS': True,
         'DIRS': [],

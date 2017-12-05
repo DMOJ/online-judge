@@ -80,7 +80,7 @@ class CommentMixin(object):
 
 
 class CommentRevisionAjax(CommentMixin, DetailView):
-    template_name = 'comments/revision-ajax.jade'
+    template_name = 'comments/revision-ajax.html'
 
     def get_context_data(self, **kwargs):
         context = super(CommentRevisionAjax, self).get_context_data(**kwargs)
@@ -108,7 +108,7 @@ class CommentEditForm(ModelForm):
 
 
 class CommentEditAjax(LoginRequiredMixin, CommentMixin, UpdateView):
-    template_name = 'comments/edit-ajax.jade'
+    template_name = 'comments/edit-ajax.html'
     form_class = CommentEditForm
 
     def form_valid(self, form):
@@ -131,18 +131,18 @@ class CommentEditAjax(LoginRequiredMixin, CommentMixin, UpdateView):
 
 
 class CommentEdit(TitleMixin, CommentEditAjax):
-    template_name = 'comments/edit.jade'
+    template_name = 'comments/edit.html'
 
     def get_title(self):
         return _('Editing comment')
 
 
 class CommentContent(CommentMixin, DetailView):
-    template_name = 'comments/content.jade'
+    template_name = 'comments/content.html'
 
 
 class CommentVotesAjax(PermissionRequiredMixin, CommentMixin, DetailView):
-    template_name = 'comments/votes.jade'
+    template_name = 'comments/votes.html'
     permission_required = 'judge.change_commentvote'
 
     def get_context_data(self, **kwargs):

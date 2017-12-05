@@ -18,7 +18,7 @@ class PostList(ListView):
     model = BlogPost
     paginate_by = 10
     context_object_name = 'posts'
-    template_name = 'blog/list.jade'
+    template_name = 'blog/list.html'
     title = None
 
     def get_paginator(self, queryset, per_page, orphans=0,
@@ -97,7 +97,7 @@ class PostView(TitleMixin, CommentedDetailView):
     model = BlogPost
     pk_url_kwarg = 'id'
     context_object_name = 'post'
-    template_name = 'blog/content.jade'
+    template_name = 'blog/content.html'
 
     def get_title(self):
         return self.object.title

@@ -58,7 +58,7 @@ class SingleObjectFormView(SingleObjectMixin, FormView):
 
 class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
     form_class = TicketForm
-    template_name = 'ticket/new.jade'
+    template_name = 'ticket/new.html'
 
     def get_assignees(self):
         return []
@@ -83,7 +83,7 @@ class NewProblemTicketView(TitleMixin, NewTicketView):
     model = Problem
     slug_field = 'code'
     slug_url_kwarg = 'problem'
-    template_name = 'ticket/new_problem.jade'
+    template_name = 'ticket/new_problem.html'
 
     def get_assignees(self):
         return self.object.authors.all()
@@ -121,7 +121,7 @@ class TicketMixin(object):
 
 class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectFormView):
     form_class = TicketCommentForm
-    template_name = 'ticket/ticket.jade'
+    template_name = 'ticket/ticket.html'
     context_object_name = 'ticket'
 
     def form_valid(self, form):
@@ -176,7 +176,7 @@ class TicketNotesForm(forms.Form):
 
 
 class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, FormView):
-    template_name = 'ticket/edit-notes.jade'
+    template_name = 'ticket/edit-notes.html'
     form_class = TicketNotesForm
     object = None
 
@@ -198,7 +198,7 @@ class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, Fo
 
 class TicketList(LoginRequiredMixin, ListView):
     model = Ticket
-    template_name = 'ticket/list.jade'
+    template_name = 'ticket/list.html'
     context_object_name = 'tickets'
     paginate_by = 50
     paginator_class = DiggPaginator
@@ -292,7 +292,7 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
         ticket = self.get_object()
         message = ticket.messages.first()
         return JsonResponse({
-            'row': get_template('ticket/row.jade').render({'ticket': ticket}, request),
+            'row': get_template('ticket/row.html').render({'ticket': ticket}, request),
             'notification': {
                 'title': _('New Ticket: %s') % ticket.title,
                 'body': '%s\n%s' % (_('#%(id)d, assigned to: %(users)s') % {

@@ -68,7 +68,7 @@ class ContestListMixin(object):
 
 class ContestList(TitleMixin, ContestListMixin, ListView):
     model = Contest
-    template_name = 'contest/list.jade'
+    template_name = 'contest/list.html'
     title = ugettext_lazy('Contests')
 
     def get_queryset(self):
@@ -181,13 +181,13 @@ class ContestMixin(object):
                 return generic_message(request, _('No such contest'),
                                        _('Could not find such contest.'))
         except PrivateContestError as e:
-            return render(request, 'contest/private.jade', {
+            return render(request, 'contest/private.html', {
                 'orgs': e.orgs, 'title': _('Access to contest "%s" denied') % escape(e.name)
             }, status=403)
 
 
 class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
-    template_name = 'contest/contest.jade'
+    template_name = 'contest/contest.html'
 
     def get_comment_page(self):
         return 'c:%s' % self.object.key
@@ -292,7 +292,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 wrong_code = True
         else:
             form = ContestAccessCodeForm()
-        return render(self.request, 'contest/access_code.jade', {
+        return render(self.request, 'contest/access_code.html', {
             'form': form, 'wrong_code': wrong_code,
             'title': _('Enter access code for "%s"') % contest.name,
         })
@@ -317,7 +317,7 @@ ContestDay = namedtuple('ContestDay', 'date weekday is_pad is_today starts ends 
 class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
     firstweekday = SUNDAY
     weekday_classes = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-    template_name = 'contest/calendar.jade'
+    template_name = 'contest/calendar.html'
     title = ugettext_lazy('Contests')
 
     def get(self, request, *args, **kwargs):
@@ -506,7 +506,7 @@ def contest_ranking_ajax(request, contest, participation=None):
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
 
     users, problems = get_contest_ranking_list(request, contest, participation)
-    return render(request, 'contest/ranking-table.jade', {
+    return render(request, 'contest/ranking-table.html', {
         'users': users,
         'problems': problems,
         'contest': contest,
@@ -559,7 +559,7 @@ def contest_ranking_view(request, contest, participation=None):
         context['in_contest'] = False
     context['now'] = timezone.now()
 
-    return render(request, 'contest/ranking.jade', context)
+    return render(request, 'contest/ranking.html', context)
 
 
 def contest_ranking(request, contest):
@@ -585,7 +585,7 @@ def base_participation_list(request, contest, profile):
         request, contest, show_current_virtual=False,
         ranking_list=partial(base_contest_ranking_list, for_user=profile.id, queryset=queryset),
         ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users))
-    return render(request, 'contest/ranking.jade', {
+    return render(request, 'contest/ranking.html', {
         'users': users,
         'title': _('Your participation in %s') % contest.name if req_username == prof_username else
         _("%s's participation in %s") % (prof_username, contest.name),
@@ -614,11 +614,11 @@ class ContestTagDetailAjax(DetailView):
     model = ContestTag
     slug_field = slug_url_kwarg = 'name'
     context_object_name = 'tag'
-    template_name = 'contest/tag-ajax.jade'
+    template_name = 'contest/tag-ajax.html'
 
 
 class ContestTagDetail(TitleMixin, ContestTagDetailAjax):
-    template_name = 'contest/tag.jade'
+    template_name = 'contest/tag.html'
 
     def get_title(self):
         return _('Contest tag: %s') % self.object.name

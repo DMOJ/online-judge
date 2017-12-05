@@ -114,4 +114,4 @@ def seconds(timedelta):
 
 @register.filter(is_safe=True)
 def as_countdown(timedelta):
-    return get_template('time-remaining-fragment.jade').render({'countdown': timedelta})
+    return get_template('time-remaining-fragment.html').render({'countdown': timedelta})

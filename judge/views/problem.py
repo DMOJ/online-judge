@@ -99,7 +99,7 @@ class SolvedProblemMixin(object):
 
 class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDetailView):
     context_object_name = 'problem'
-    template_name = 'problem/editorial.jade'
+    template_name = 'problem/editorial.html'
 
     def get_title(self):
         return _('Editorial for {0}').format(self.object.name)
@@ -126,7 +126,7 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
 
 class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
     context_object_name = 'problem'
-    template_name = 'problem/raw.jade'
+    template_name = 'problem/raw.html'
 
     def get_title(self):
         return self.object.name
@@ -148,7 +148,7 @@ class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMi
 
 class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     context_object_name = 'problem'
-    template_name = 'problem/problem.jade'
+    template_name = 'problem/problem.html'
 
     def get_comment_page(self):
         return 'p:%s' % self.object.code
@@ -233,7 +233,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.%s.pdf', problem.code, language)
             with DefaultPdfMaker() as maker, translation.override(language):
-                maker.html = get_template('problem/raw.jade').render({
+                maker.html = get_template('problem/raw.html').render({
                     'problem': problem,
                     'problem_name': problem.name if trans is None else trans.name,
                     'description': problem.description if trans is None else trans.description,
@@ -266,7 +266,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     model = Problem
     title = ugettext_lazy('Problems')
     context_object_name = 'problems'
-    template_name = 'problem/list.jade'
+    template_name = 'problem/list.html'
     paginate_by = 50
     sql_sort = frozenset(('points', 'ac_rate', 'user_count', 'code'))
     manual_sort = frozenset(('name', 'group', 'solved', 'type'))
@@ -590,7 +590,7 @@ def problem_submit(request, problem=None, submission=None):
         else:
             if submission_limit:
                 submissions_left = submission_limit - get_contest_submission_count(problem, profile)
-    return render(request, 'problem/submit.jade', {
+    return render(request, 'problem/submit.html', {
         'form': form,
         'title': _('Submit to %(problem)s') % {
             'problem': problem_object.translated_name(request.LANGUAGE_CODE),

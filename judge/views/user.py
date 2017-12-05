@@ -54,7 +54,7 @@ class UserMixin(object):
 
 
 class UserPage(TitleMixin, UserMixin, DetailView):
-    template_name = 'user/user-base.jade'
+    template_name = 'user/user-base.html'
 
     def get_object(self, queryset=None):
         if self.kwargs.get(self.slug_url_kwarg, None) is None:
@@ -126,7 +126,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
 
 class UserPerformancePointsAjax(UserMixin, DetailView):
-    template_name = 'user/pp-table-body.jade'
+    template_name = 'user/pp-table-body.html'
 
     def get_context_data(self, **kwargs):
         context = super(UserPerformancePointsAjax, self).get_context_data(**kwargs)
@@ -153,7 +153,7 @@ EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
 
 
 class UserAboutPage(UserPage):
-    template_name = 'user/user-about.jade'
+    template_name = 'user/user-about.html'
 
     def get_context_data(self, **kwargs):
         context = super(UserAboutPage, self).get_context_data(**kwargs)
@@ -184,7 +184,7 @@ class UserAboutPage(UserPage):
 
 
 class UserProblemsPage(UserPage):
-    template_name = 'user/user-problems.jade'
+    template_name = 'user/user-problems.html'
 
 
 @login_required
@@ -229,7 +229,7 @@ def edit_profile(request):
         form.fields['test_site'].initial = request.user.has_perm('judge.test_site')
 
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
-    return render(request, 'user/edit-profile.jade', {
+    return render(request, 'user/edit-profile.html', {
         'form': form, 'title': _('Edit profile'),
         'has_math_config': bool(getattr(settings, 'MATHOID_URL', False)),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
@@ -241,7 +241,7 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
     title = ugettext_lazy('Leaderboard')
     context_object_name = 'users'
-    template_name = 'user/list.jade'
+    template_name = 'user/list.html'
     paginate_by = 100
     all_sorts = frozenset(('points', 'problem_count', 'rating', 'performance_points'))
     default_desc = all_sorts
@@ -285,7 +285,7 @@ def user_ranking_redirect(request):
 
 
 class UserLogoutView(TitleMixin, TemplateView):
-    template_name = 'registration/logout.jade'
+    template_name = 'registration/logout.html'
     title = 'You have been successfully logged out.'
 
     def post(self, request, *args, **kwargs):
