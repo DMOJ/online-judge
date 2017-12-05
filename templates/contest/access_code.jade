@@ -19,6 +19,7 @@ block media
 
 block body
     form#access-code-form.form-area(action='', method='post')
+        - csrf_token
         if form.errors
             #form-errors
                 p.error {% trans "Invalid access code." %}
