@@ -38,6 +38,8 @@
                                 option(value=type.id, selected)= type.full_name
                             else
                                 option(value=type.id)= type.full_name
+            div.form-label {% trans "Point range" %}
+            #point-slider
             .form-submit-group
                 a#go.button(onclick='form.submit()') {% trans "Go" %}
                 a#random.button(href='{% url "problem_random" %}?{{ request.META.QUERY_STRING }}') {% trans "Random" %}

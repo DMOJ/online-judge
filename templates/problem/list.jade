@@ -4,6 +4,7 @@ extends common-content
 - load i18n
 
 block media
+    link(rel='stylesheet', href='{% static "libs/nouislider.min.css" %}')
     style.
         @media (max-width: 550px) {
             #problem-table tr :nth-child(6) {
@@ -31,6 +32,45 @@ block media
 
         #category, #types {
             visibility: hidden;
+        }
+
+        .form-label {
+            margin-top: 0.5em;
+            font-style: italic;
+        }
+
+        #point-slider {
+            margin: 30px 15px 10px;
+        }
+
+        #point-slider {
+            height: 10px;
+        }
+
+        #point-slider .noUi-handle {
+            height: 20px;
+            width: 16px;
+            left: -8px;
+        }
+
+        #point-slider .noUi-handle:before, #point-slider .noUi-handle:after {
+            top: 3px;
+            height: 12px;
+        }
+
+        #point-slider .noUi-handle:before {
+            left: 5px;
+        }
+
+        #point-slider .noUi-handle:after {
+            left: 8px;
+        }
+
+        #point-slider .noUi-tooltip {
+            height: 17px;
+            line-height: 13px;
+            padding: 0 3px;
+            font-size: 13px;
         }
 
     noscript
@@ -65,6 +105,7 @@ block media
             }
 
 block js_media
+    script(src='{% static "libs/nouislider.min.js" %}', type='text/javascript')
     script.
         $(function() {
             $('#category').select2().css({'visibility': 'visible'});
@@ -89,6 +130,31 @@ block js_media
                                 .attr('value', $.cookie('csrftoken')))
                         .attr('method', 'POST').appendTo($('body')).submit());
             });
+
+            var intFormatter = {
+                to: function (value) {
+                    return value;
+                },
+                from: function (value) {
+                    return +value;
+                },
+            };
+            var $slider = $('#point-slider');
+            if ($slider.length) {
+                noUiSlider.create($slider[0], {
+                    start: [1, 7],
+                    connect: true,
+                    snap: true,
+                    tooltips: [intFormatter, intFormatter],
+                    range: {
+                        'min': 0,
+                        '25%': 1,
+                        '50%': 3,
+                        '75%': 7,
+                        'max': 10,
+                    }
+                });
+            }
         });
 
     if IN_CONTEST
