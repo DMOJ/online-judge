@@ -284,13 +284,16 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
 
     def ask_for_access_code(self, form=None):
         contest = self.object
+        wrong_code = False
         if form:
-            if form.is_valid() and form.cleaned_data['access_code'] == contest.access_code:
-                return self.join_contest(self.request, form.cleaned_data['access_code'])
+            if form.is_valid():
+                if form.cleaned_data['access_code'] == contest.access_code:
+                    return self.join_contest(self.request, form.cleaned_data['access_code'])
+                wrong_code = True
         else:
             form = ContestAccessCodeForm()
         return render(self.request, 'contest/access_code.jade', {
-            'form': form,
+            'form': form, 'wrong_code': wrong_code,
             'title': _('Enter access code for "%s"') % contest.name,
         })
 
