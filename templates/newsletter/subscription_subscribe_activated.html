@@ -1,1 +1,4 @@
-{% include "newsletter/subscription_subscribe_activated.jade" %}
+{% extends "base.jade" %}{% block title %}Newsletter {{newsletter.title|escape}} {{action|escape}} activate{% endblock %}
+{% block body %}
+<h1>Newsletter {{newsletter.title|escape}} {{action|escape}} activate</h1>
+<p>Your subscription has successfully been activated.</p>{% endblock %}

@@ -1,0 +1,28 @@
+{%  load static from staticfiles %}{%  load tz %}{%  load i18n %}{%  load submission %}{%  submission_layout submission profile_id user editable_problem_ids completed_problem_ids %}
+<td{{__pyjade_attrs(attrs=[('class', (("sub-result") , (submission.result_class)))])}}>
+  <div class="score">{% if  submission.is_graded %}{% if  submission.status in 'IECEAB' %}---{% else %}
+{{submission.case_points|floatformat:"0"|escape}} / {{submission.case_total|floatformat:"0"|escape}}{% endif %}{% else %}
+<i class="fa fa-spinner fa-pulse"></i>{% endif %}
+  </div>
+  <div class="state"><span{{__pyjade_attrs(attrs=[('title',(submission.long_status))])}} class="status">{{submission.short_status|escape}}</span>{{' | '|escape}}<span class="language">{{submission.language.short_display_name|escape}}</span>
+  </div>
+</td>
+<td{{__pyjade_attrs(attrs=[('colspan',(info_colspan)), ('class', ((('sub-info sub-info-grading' if submission.status == 'G' else 'sub-info'))))])}}>{% if  show_problem %}
+  <div class="name"><a href="{% url "problem_detail" submission.problem.code %}">{{problem_name|escape}}</a>
+  </div>{% endif %}
+  <div><span{{__pyjade_attrs(attrs=[('class', ((submission.user.css_class)))])}}><a href="{% url "user_page" submission.user.user.username %}">{{submission.user.user.username|escape}}</a></span>{{' '|escape}}<span data-unix="{{ submission.date|utc|date:"c" }}" class="time">{%  blocktrans with time=submission.date|date:_("N j, Y, g:i a") asvar str_time %}on {{ time }}<span class="relative">{{str_time|escape}}</span></span>{% if  not IN_CONTEST and submission.contest_or_none %}{{' '|escape}}<a href="{% url "contest_view" submission.contest_or_none.participation.contest.key %}" class="submission-contest"><i{{__pyjade_attrs(attrs=[('title',(submission.contest_or_none.participation.contest.name))])}} class="fa fa-dot-circle-o"></i></a>{% endif %}
+  </div>
+</td>{% if  submission.status == 'G' %}
+<td class="sub-testcase">{% if  submission.current_testcase > 0 %}{% trans "Case " %}#{{submission.current_testcase|escape}}{% else %}
+...{% endif %}
+</td>{% endif %}
+{% if  can_view %}
+<td class="sub-prop"><a href="{% url "submission_status" submission.id %}"><i class="fa fa-eye fa-fw"></i><span class="label">{% trans "view" %}</span></a>{% if  perms.judge.rejudge_submission %}{{' · '|escape}}<a href="#" onclick="rejudge_submission({{ submission.id }}, event);return false"><i class="fa fa-refresh fa-fw"></i><span class="label">{% trans "rejudge" %}</span></a>{% endif %}{% if  perms.judge.change_submission %}{{' · '|escape}}<a href="{% url "admin:judge_submission_change" submission.id %}"><i class="fa fa-cog fa-fw"></i><span class="label">{% trans "admin" %}</span></a>{% endif %}
+</td>{% endif %}
+<td class="sub-usage">{% if  submission.status in 'QUPGCEIEAB' %}
+  <div class="time">---</div>
+  <div class="memory">---</div>{% else %}{% if  "TLE" != submission.result %}
+  <div title="{{ submission.time|default_if_none:0 }}s" class="time">{{submission.time|default_if_none:0|floatformat:"2"|escape}}s</div>{% else %}
+  <div class="time">---</div>{% endif %}
+  <div class="memory">{{submission.memory_bytes|filesizeformat|escape}}</div>{% endif %}
+</td>

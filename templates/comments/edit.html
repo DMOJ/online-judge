@@ -1,0 +1,5 @@
+{% extends "base.jade" %}{%  load compress %}{% block media %}{%  compress css %}{{form.media.css|escape}}{% endcompress %}{% endblock %}
+{% block js_media %}{{form.media.js|escape}}{% endblock %}
+{% block body %}
+<div class="form-area">{% include "comments/edit-ajax.jade" %}
+</div>{% endblock %}

@@ -1,0 +1,203 @@
+{% extends "user/user-base.jade" %}{%  load staticfiles %}{%  load gravatar %}{%  load list_processor %}{%  load markdown %}{%  load rating %}{%  load i18n %}{% block user_media %}
+<style>a.edit-profile {
+    float: right;
+    padding-top: 1em;
+}
+
+.user-problem-group h3 {
+    font-weight: 600;
+    font-size: 1.25em;
+    margin-bottom: -10px;
+    max-height: 20%;
+    line-height: 2.5em;
+}
+
+.user-problem-group ul {
+    -webkit-columns: 300px 4;
+    -moz-columns: 300px 4;
+    columns: 300px 4;
+    list-style-type: none;
+    margin-top: 0;
+    margin-left: -20px;
+    margin-bottom: 0;
+}
+
+.user-problem-group a img {
+    max-width: 1em;
+    margin-right: 3px;
+    padding-bottom: 1px;
+    vertical-align: middle;
+}
+
+.user-info-cell {
+    padding-left: 15px;
+    border-left: 1px solid #CCC;
+}
+
+.contest-history-cell {
+    border-left: 1px solid #CCC;
+    padding: 0 0.5em;
+}
+
+table td {
+    margin: 0;
+    vertical-align: top;
+}
+
+.strike {
+    text-align: right;
+    overflow: hidden;
+}
+
+.strike > span {
+    position: relative;
+    display: inline-block;
+}
+
+.strike > span:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 100000px;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.2);
+    right: 100%;
+    margin-right: 5px;
+}
+
+.pp {
+    font-weight: 600;
+    font-size: 1.4em;
+}
+
+.pp-scaled {
+    font-size: 0.8em;
+}
+
+.pp-weighted {
+    color: #777;
+}
+
+td.sub-pp {
+    text-align: right;
+}
+
+#load-link-wrapper {
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+#load-more-link {
+    display: block;
+    padding: 0.5em 0;
+}
+
+td.problem-name {
+    text-align: left;
+    padding-left: 1em;
+}
+
+td.problem-score {
+    width: 80px;
+}
+
+td.problem-category {
+    width: 100px;
+}
+
+.breakdown-header {
+    font-weight: 600;
+    font-size: 1.25em;
+    margin-bottom: 0.2em;
+}
+</style>{% endblock %}
+{% block user_js_media %}
+<script type="text/javascript">$(function () {
+    register_update_relative(function () {
+        return $('.pp-table').find('span.time');
+    }, function (when) {
+        return Math.abs(moment().diff(when, 'years')) < 1;
+    });
+});
+window.show_pp_base = 1;
+window.currently_requesting_pp = false;
+window.load_more_pp = function () {
+    if (window.currently_requesting_pp) return;
+    window.currently_requesting_pp = true;
+
+    $.get('{% url "user_pp_ajax" user.user.username %}', {
+        start: window.show_pp_base * 10,
+        end: (window.show_pp_base + 1) * 10
+    }).done(function (data) {
+        $('table.pp-table').append(data['results']);
+        window.show_pp_base++;
+        if (!data['has_more']) {
+            $("#load-link-wrapper").hide();
+        }
+        window.currently_requesting_pp = false;
+    });
+};
+</script>{% endblock %}
+{% block title_ruler %}{% endblock %}{% block title_row %}{% set user_tab = 'problems' %}{% include "user/user-tabs.jade" %}{% endblock %}{% block user_content %}{% if  pp_breakdown %}
+<h3 class="breakdown-header">{% trans "Points Breakdown" %}</h3>
+<table id="submissions-table" class="pp-table table">
+  <colgroup>
+    <col class="sub-result"/>
+    <col class="sub-info"/>
+    <col class="sub-pp"/>
+  </colgroup>
+  <tbody>{% include "user/pp-table-body.jade" %}
+  </tbody>
+</table>{% if  pp_has_more %}
+<div id="load-link-wrapper"><a id="load-more-link" href="javascript:load_more_pp();">{% trans "Load more..." %}</a>
+</div>{% endif %}{% else %}<i>{% trans "This user has not yet solved any problems." %}</i>{% endif %}{% if  authored %}
+<div class="user-problem-group">
+  <h3 class="unselectable toggle closed"><span class="fa fa-chevron-right fa-fw"></span>{% trans "Authored Problems" %} ({{authored | length|escape}})
+  </h3>
+  <table style="display: none" class="table toggled">
+    <thead>
+      <tr>
+        <th>{% trans "Problem" %}</th>
+        <th>{% trans "Category" %}</th>
+        <th>{% trans "Points" %}</th>
+      </tr>
+    </thead>
+    <tbody>{% for problem in __pyjade_iter(authored,1) %}
+      <tr>
+        <td class="problem-name"><a href="{% url "problem_detail" problem.code %}">{{problem.name|escape}}</a>
+        </td>
+        <td class="problem-category">{{problem.group.full_name|escape}}</td>
+        <td class="problem-score"><a href="{% url "ranked_submissions" problem.code %}">{{problem.points | floatformat|escape}}{% if problem.partial %}p{% endif %}</a>
+        </td>
+      </tr>{% endfor %}
+    </tbody>
+  </table>
+</div>{% endif %}{% if  request.user.is_authenticated and request.user != user.user %}
+<div class="strike"><span>
+    <form name="form" action="" method="get">
+      <input id="hide_solved" style="vertical-align:middle" onclick="form.submit()" type="checkbox" name="hide_solved"{{__pyjade_attrs(attrs=[('checked',(('checked' if hide_solved else undefined)))])}} value="1"/>
+      <label style="vertical-align:middle" for="hide_solved">{% trans "Hide problems I've solved" %}</label>
+    </form></span>
+</div>{% else %}
+<hr/>{% endif %}{%  regroup best_submissions by group as problems %}{% for group in __pyjade_iter(problems,1) %}
+<div class="user-problem-group">
+  <h3 class="unselectable toggle closed"><span class="fa fa-chevron-right fa-fw"></span>{{group.grouper|escape}}
+({{group.list | list_getitem:"points"|sum_list|floatformat:1|escape}} {% trans "points" %})
+  </h3>
+  <table style="display: none" class="table toggled">
+    <thead>
+      <tr>
+        <th>{% trans "Problem" %}</th>
+        <th>{% trans "Score" %}</th>
+      </tr>
+    </thead>
+    <tbody>{% for entry in __pyjade_iter(group.list,1) %}
+      <tr>
+        <td class="problem-name"><a href="{% url "problem_detail" entry.code %}">{{entry.name|escape}}</a>
+        </td>
+        <td class="problem-score"><a href="{% url "user_submissions" entry.code user.user.username %}">{{entry.points|escape}} / {{entry.total|escape}}</a>
+        </td>
+      </tr>{% endfor %}
+    </tbody>
+  </table>
+</div>{% endfor %}{% endblock %}

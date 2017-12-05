@@ -1,0 +1,49 @@
+{%  load i18n %}
+<div class="sidebox">
+  <h3>{% trans "Problem search" %} <i class="fa fa-search"></i>
+  </h3>
+  <div class="sidebox-content">
+    <form id="filter-form" name="form" action="" method="get">
+      <div>
+        <input id="search" type="text" name="search"{{__pyjade_attrs(attrs=[('value',(search_query))])}} placeholder="{% trans "Search problems..." %}"/>
+      </div>{% if  has_fts %}
+      <div>
+        <input id="full_text" type="checkbox" name="full_text"{{__pyjade_attrs(attrs=[('checked',(('checked' if full_text else undefined)))])}} value="1"/>
+        <label for="full_text">{% trans "Full text search" %}</label>
+      </div>{% endif %}{% if  request.user.is_authenticated %}
+      <div>
+        <input id="hide_solved" type="checkbox" name="hide_solved"{{__pyjade_attrs(attrs=[('checked',(('checked' if hide_solved else undefined)))])}} value="1"/>
+        <label for="hide_solved">{% trans "Hide solved problems" %}</label>
+      </div>{% endif %}
+      <div>
+        <input id="show_types" type="checkbox" name="show_types"{{__pyjade_attrs(attrs=[('checked',(('checked' if show_types else undefined)))])}} value="1"/>
+        <label for="show_types">{% trans "Show problem types" %}</label>
+      </div>
+      <div class="filter-form-group">
+        <label for="category"><i>{% trans "Category" %}</i>
+        </label>
+        <select id="category" name="category">{% if  category %}
+          <option value="" selected="selected">{% trans "All" %}</option>{% else %}
+          <option value="">{% trans "All" %}</option>{% endif %}
+          <option disabled="disabled">---</option>{% for group in __pyjade_iter(categories,1) %}{% if  group.id == category %}
+          <option{{__pyjade_attrs(attrs=[('value',(group.id))])}} selected="selected">{{group.full_name|escape}}</option>{% else %}
+          <option{{__pyjade_attrs(attrs=[('value',(group.id))])}}>{{group.full_name|escape}}</option>{% endif %}{% endfor %}
+        </select>
+      </div>{% if  show_types %}
+      <div class="filter-form-group">
+        <label for="type"><i>{% trans "Problem types" %}</i>
+        </label>
+        <select id="types" name="type" multiple="multiple">{% for type in __pyjade_iter(problem_types,1) %}{% if  type.id in selected_types %}
+          <option{{__pyjade_attrs(attrs=[('value',(type.id))])}} selected="selected">{{type.full_name|escape}}</option>{% else %}
+          <option{{__pyjade_attrs(attrs=[('value',(type.id))])}}>{{type.full_name|escape}}</option>{% endif %}{% endfor %}
+        </select>
+      </div>{% endif %}{% if  point_values %}
+      <div class="form-label">{% trans "Point range" %}</div>
+      <div id="point-slider"></div>{% endif %}
+      <input id="point-start" type="hidden" name="point_start" disabled="disabled"/>
+      <input id="point-end" type="hidden" name="point_end" disabled="disabled"/>
+      <div class="form-submit-group"><a id="go" class="button">{% trans "Go" %}</a><a id="random" href="{% url "problem_random" %}?{{ request.META.QUERY_STRING }}" class="button">{% trans "Random" %}</a>
+      </div>
+    </form>
+  </div>
+</div>

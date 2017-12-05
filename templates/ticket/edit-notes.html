@@ -1,0 +1,4 @@
+{%  load i18n %}
+<form id="edit-notes"{{__pyjade_attrs(attrs=[('action',(request.get_full_path()))])}} method="post">{%  csrf_token %}{{form.notes|escape}}
+  <button type="submit" class="submit">{% trans "Update" %}</button>
+</form>

@@ -1,0 +1,3 @@
+{%  load i18n %}{% if  perms.flatpages.change_flatpage %}
+<div class="title-line-action">[<a href="{% url "admin:flatpages_flatpage_change" flatpage.id %}">{% trans "Edit" %}</a>]
+</div>{% endif %}

@@ -1,0 +1,2 @@
+{% extends "base.jade" %}{%  load staticfiles %}{% for message in __pyjade_iter(incoming,1) %}{% if  not message.read %}<b>{{message.title|escape}} &rarr; me <span class="time">({{message.timestamp|escape}})</span></b>{% else %}{{message.title|escape}} &rarr; me<span class="time">({{message.timestamp|escape}})</span>{% endif %}<br/>{% endfor %}<br/>
+<div class="dashed"></div><br/>{% for message in __pyjade_iter(outgoing,1) %}{{message.title|escape}} &rarr; {{message.target|escape}}<span class="time">({{message.timestamp|escape}})</span><br/>{% endfor %}

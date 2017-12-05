@@ -1,0 +1,338 @@
+{% extends "base.jade" %}{%  load gravatar %}{%  load markdown %}{%  load reference %}{%  load i18n %}{%  load staticfiles %}{% block media %}{{form.media.css|escape}}
+<style>#content > h2:first-child small {
+    color: #999;
+    font-size: 0.9em;
+    margin-left: 0.3em;
+}
+
+#content > h2:first-child .status, #content > h2:first-child .title {
+    display: inline;
+}
+
+#content > h2:first-child .fa-check-circle-o {
+    color: #00a900;
+}
+
+#content > h2:first-child .fa-exclamation-circle {
+    color: darkred;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row-reverse;
+    max-width: 1000px;
+}
+
+.ticket-sidebar {
+    flex: 1;
+    padding: 10px 0 0 10px;
+    max-width: 200px;
+}
+
+.ticket-info {
+    position: sticky;
+    top: 60px;
+}
+
+.ticket-messages {
+    flex: 1;
+}
+
+.info-box {
+    margin: 5px 0 10px;
+    border: 1px #999 solid;
+    border-radius: 5px;
+}
+
+.info-title {
+    padding: 2px 5px;
+    font-weight: 600;
+    border-bottom: 1px #999 solid;
+    background: #eee;
+    border-radius: 5px 5px 0 0;
+}
+
+.info-data {
+    padding: 2px 5px;
+}
+
+.info-empty {
+    color: #999;
+    font-style: italic;
+}
+
+.close-ticket {
+    display: block;
+    width: 100%;
+    background: linear-gradient(to bottom, #4bad00 0%, #278811 100%);
+    border-color: #24710e;
+    font-weight: 600;
+}
+
+.close-ticket:hover {
+    background: #24710e;
+}
+
+.open-ticket {
+    display: block;
+    width: 100%;
+    background: linear-gradient(to bottom, #ff130f, #b03d17);
+    border-color: #853011;
+    font-weight: 600;
+}
+
+.open-ticket:hover {
+    background: #853011;
+}
+
+a.edit-notes {
+    float: right;
+}
+
+#ticket-notes .info-real :first-child {
+    margin-top: 0;
+}
+
+#ticket-notes .info-real :last-child {
+    margin-bottom: 0;
+}
+
+.message {
+    display: flex;
+    margin-top: -40px;
+    padding-top: 55px;
+}
+
+.message .info {
+    width: 130px;
+}
+
+.message .username {
+    text-align: center;
+}
+
+.message .gravatar {
+    width: 80px;
+    display: block;
+    margin: 0 auto;
+}
+
+.message .message-date, .message .message-time {
+    display: inline-block;
+}
+
+.message .detail {
+    border: 1px #999 solid;
+    border-radius: 5px;
+    flex: 1;
+}
+
+.message .header {
+    background: #eee;
+    color: #777;
+    border-bottom: 1px solid #999;
+    border-radius: 5px 5px 0 0;
+    padding: 2px 7px;
+    text-align: right;
+}
+
+.message .content {
+    padding: 7px;
+}
+
+.message .content :first-child {
+    margin-top: 0;
+}
+
+.message .content :last-child {
+    margin-bottom: 0;
+}
+
+.new-message .detail {
+    padding: 8px 10px;
+}
+
+.new-message .submit, #edit-notes .submit {
+    margin: 10px 0 0 auto;
+}
+</style>{% endblock %}
+{% block js_media %}{{form.media.js|escape}}
+<script src="{% static "libs/featherlight/featherlight.min.js" %}" type="text/javascript"></script>
+<script type="text/javascript" src="{% static "event.js" %}"></script>
+<script type="text/javascript">$(function () {
+    var $h2 = $('#content').find('> h2:first-child');
+    var $status = $h2.find('.status i'), $title = $h2.find('.title');
+
+    function update_ticket_state(open) {
+        if (open)
+            $status.removeClass('fa-check-circle-o').addClass('fa-exclamation-circle');
+        else
+            $status.removeClass('fa-exclamation-circle').addClass('fa-check-circle-o');
+        $('.close-ticket').toggle(open);
+        $('.open-ticket').toggle(!open);
+    }
+
+    $('.close-ticket, .open-ticket').click(function () {
+        var open = $(this).attr('data-open') == '1';
+        $.ajax({
+            url: $(this).attr('data-ajax'), type: 'POST',
+            success: function () {
+                update_ticket_state(open);
+            },
+            error: function (data) {
+                alert('Could not change ticket: ' + data.responseText);
+            }
+        });
+    });
+
+    $('.edit-notes').featherlight({
+        afterOpen: function () {
+            var $form = $('#edit-notes');
+            $form.find('.submit').click(function () {
+                $.post($form.attr('action'), $form.serialize()).done(function (data) {
+                    $('#ticket-notes').find('.info-empty').toggle(!data).end().find('.info-real').html(data);
+                    $.featherlight.current().close();
+                });
+                return false;
+            });
+        }
+    });
+
+    var page_ref_key = 'ticket:open:{{ ticket.id }}', page_close_key = page_ref_key + ':close';
+    var page_ref;
+
+    function increase_page_ref() {
+        if (page_ref_key in localStorage)
+            localStorage[page_ref_key] = page_ref = +localStorage[page_ref_key] + 1;
+        else
+            localStorage[page_ref_key] = page_ref = 1;
+    }
+
+    function decrease_page_ref() {
+        if (page_ref_key in localStorage) {
+            localStorage[page_close_key] = page_ref;
+            delete localStorage[page_close_key];
+            localStorage[page_ref_key] = +localStorage[page_ref_key] - 1;
+        }
+        page_ref = null;
+    }
+
+    function is_highest_ref() {
+        console.log(localStorage[page_ref_key], page_ref);
+        if (page_ref_key in localStorage)
+            return +localStorage[page_ref_key] == page_ref;
+        return true;
+    }
+
+    $(window).on('storage', function (e) {
+        e = e.originalEvent;
+        if (e.key == page_close_key && e.newValue !== null)
+            if (page_ref != null && page_ref > +e.newValue)
+                --page_ref;
+    });
+
+    register_notify('ticket', {
+        change: function (enabled) {
+            if (enabled)
+                increase_page_ref();
+        }
+    });
+
+    $(window).on('beforeunload', function() {
+        decrease_page_ref();
+    });
+
+    function ticket_status(ticket) {
+        update_ticket_state(ticket.open);
+        if (is_highest_ref())
+            notify('ticket', (ticket.open ? '{% trans "Reopened: " %}' :
+                              '{% trans "Closed: " %}') + $title.text());
+    }
+
+    window.load_dynamic_update = function (last_msg) {
+        return new EventReceiver(
+                "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                ['ticket-{{ ticket.id }}'], last_msg, function (message) {
+                    console.log(message);
+                    switch (message.type) {
+                        case 'ticket-status': ticket_status(message); break;
+                    }
+                }
+        );
+    }
+});
+</script>
+{% if  last_msg %}
+<script type="text/javascript">$(function () {
+    load_dynamic_update({{last_msg|escape}});
+});
+</script>{% endif %}{% endblock %}
+{% block content_title %}
+<div class="status">{% if  ticket.is_open %}<i class="fa fa-exclamation-circle"></i>{% else %}<i class="fa fa-check-circle-o"></i>{% endif %}
+</div>
+<div class="title">{{ticket.title|escape}}</div><small>#{{ticket.id|escape}}</small>{% endblock %}{% block body %}
+<div class="container">
+  <aside class="ticket-sidebar">
+    <div class="ticket-info">
+      <div class="info-box">
+        <div class="info-title">{% trans "Associated object" %}</div>
+        <div class="info-data"><a{{__pyjade_attrs(attrs=[('href',(ticket.linked_item.get_absolute_url()))])}}>{{ticket.linked_item|escape}}</a>
+        </div>
+      </div>
+      <div class="info-box">
+        <div class="info-title">{% trans "Assignees" %}</div>
+        <div class="info-data">{% if  assignees %}{% for assignee in __pyjade_iter(assignees,1) %}<a href="{% url "user_page" assignee.user.username %}"{{__pyjade_attrs(attrs=[('class', ((assignee.display_rank)))])}}>{{assignee.user.username|escape}}</a>
+{% if  not forloop.last %},&#32;{% endif %}{% endfor %}{% else %}
+
+          <div class="info-empty">{% trans "No one is assigned." %}</div>{% endif %}
+        </div>
+      </div>
+      <button data-ajax="{% url "ticket_close" ticket.id %}" data-open="0"{{__pyjade_attrs(attrs=[('style',((None if ticket.is_open else 'display: none')))])}} class="close-ticket">{% trans "Close ticket" %}</button>
+      <button data-ajax="{% url "ticket_open" ticket.id %}" data-open="1"{{__pyjade_attrs(attrs=[('style',(('display: none' if ticket.is_open else None)))])}} class="open-ticket">{% trans "Reopen ticket" %}</button>{% if  perms.judge.change_ticket or request.user.profile in assignees %}
+      <div class="info-box">
+        <div class="info-title">{% trans "Assignee notes" %}<a href="#" data-featherlight="{% url "ticket_notes" ticket.id %}" class="edit-notes"><i class="fa fa-pencil"></i></a>
+        </div>
+        <div id="ticket-notes" class="info-data">
+          <div{{__pyjade_attrs(attrs=[('style',(('display: none' if ticket.notes else None)))])}} class="info-empty">{% trans "Nothing here." %}</div>
+          <div class="info-real">{{ ticket.notes|linebreaks }}</div>
+        </div>
+      </div>{% endif %}
+    </div>
+  </aside>
+  <div class="ticket-messages">
+    <main class="messages">{% for message in __pyjade_iter(messages,1) %}
+      <section id="message-{{ message.id }}" class="message">
+        <div class="info"><a href="{% url "user_page" message.user.user.username %}" class="user"><img src="{% gravatar_url message.user.user.email 135 message.user.mute %}" class="gravatar"/>
+            <div{{__pyjade_attrs(attrs=[('class', (("username") , (message.user.display_rank)))])}}>{{message.user.user.username|escape}}</div></a>
+        </div>
+        <div class="detail">
+          <div class="header">
+            <div class="relative-time"></div>
+            <div class="message-date">{{message.time|date:"DATE_FORMAT"|escape}}</div>
+            <div class="message-time">{{message.time|time:"TIME_FORMAT"|escape}}</div>
+          </div>
+          <div class="content content-description">{{message.body|with_math:MATH_ENGINE|markdown:"ticket"|reference|escape}}</div>
+        </div>
+      </section>{% endfor %}
+    </main>
+    <hr/>
+    <section class="message new-message">
+      <div class="info"><a href="{% url "user_page" %}" class="user">{%  with profile=request.user.profile %}<img src="{% gravatar_url request.user.email 135 profile.mute %}" class="gravatar"/>
+          <div{{__pyjade_attrs(attrs=[('class', (("username") , (profile.display_rank)))])}}>{{request.user.username|escape}}</div>{% endwith %}</a>
+        <div class="message-date">{{message.time | date:"DATE_FORMAT"|escape}}</div>
+        <div class="message-time">{{message.time | time:"TIME_FORMAT"|escape}}</div>
+      </div>
+      <div class="detail">
+        <form action="" method="post">{%  csrf_token %}
+          <div class="form-errors">{{ form.non_field_errors }}
+{{ form.body.errors }}
+          </div>
+          <div class="body-block">{{form.body|escape}}</div>
+          <button type="submit" class="submit">{% trans "Post" %}</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>{% endblock %}

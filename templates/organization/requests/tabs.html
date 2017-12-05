@@ -1,0 +1,13 @@
+{%  load i18n %}
+<div class="tabs">
+  <ul>
+    <li{{__pyjade_attrs(attrs=[('class', ((('active' if tab == 'pending' else ''))))])}}><a href="{% url "organization_requests_pending" object.key %}">{% trans "Pending" %}</a>
+    </li>
+    <li{{__pyjade_attrs(attrs=[('class', ((('active' if tab == 'log' else ''))))])}}><a href="{% url "organization_requests_log" object.key %}">{% trans "Log" %}</a>
+    </li>
+    <li{{__pyjade_attrs(attrs=[('class', ((('active' if tab == 'approved' else ''))))])}}><a href="{% url "organization_requests_approved" object.key %}">{% trans "Approved" %}</a>
+    </li>
+    <li{{__pyjade_attrs(attrs=[('class', ((('active' if tab == 'rejected' else ''))))])}}><a href="{% url "organization_requests_rejected" object.key %}">{% trans "Rejected" %}</a>
+    </li>
+  </ul>
+</div>

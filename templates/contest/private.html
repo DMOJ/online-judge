@@ -1,0 +1,6 @@
+{% extends "base.jade" %}{%  load i18n %}{% block body %}
+<p>{% trans "Only the following organizations may access this contest:" %}</p>
+<ul>{% for org in __pyjade_iter(orgs,1) %}
+  <li><a href="{% url "organization_home" org.key %}">{{org.name|escape}}</a>
+  </li>{% endfor %}
+</ul>{% endblock %}

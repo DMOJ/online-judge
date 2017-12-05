@@ -1,0 +1,7 @@
+{% extends "user/users-table.jade" %}{%  load i18n %}{% block before_point_head %}{% if  is_admin %}
+<th class="header"></th>{% endif %}{% endblock %}{% block before_point %}{% if  is_admin %}
+<td>
+  <form{{__pyjade_attrs(attrs=[('action',(kick_url))])}} method="POST" class="kick-form">{%  csrf_token %}
+    <input type="hidden" name="user"{{__pyjade_attrs(attrs=[('value',(user.id))])}}/><a href="#" class="button">{% trans "Kick" %}</a>
+  </form>
+</td>{% endif %}{% endblock %}

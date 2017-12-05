@@ -1,0 +1,194 @@
+{% extends "base.jade" %}{%  load staticfiles %}{%  load cache %}{%  load markdown %}{%  load timedelta %}{%  load i18n %}{%  load tz %}{%  load reference %}{%  load dicts %}{%  load rating %}{% block title_row %}{% endblock %}{% block title_ruler %}{% endblock %}{% block media %}
+<link rel="alternate" type="application/atom+xml" href="{% url "blog_atom" %}" title="Atom Blog Feed"/>
+<link rel="alternate" type="application/rss+xml" href="{% url "blog_rss" %}" title="RSS Blog Feed"/>
+<link rel="alternate" type="application/atom+xml" href="{% url "comment_atom" %}" title="Atom Comment Feed"/>
+<link rel="alternate" type="application/rss+xml" href="{% url "comment_rss" %}" title="RSS Comment Feed"/>
+<link rel="alternate" type="application/atom+xml" href="{% url "problem_atom" %}" title="Atom Problem Feed"/>
+<link rel="alternate" type="application/rss+xml" href="{% url "problem_rss" %}" title="RSS Problem Feed"/>{% include "blog/media-css.jade" %}
+<style>.post {
+    margin: 0 1.4em;
+}
+
+.post:first-child {
+    margin-top: 0.6em;
+}
+
+.comment-count {
+    font-size: 12px;
+}
+
+.comment-icon {
+    padding: 0.1em 0.2em 0 0.5em;
+}
+
+.comment-count-link {
+    color: #555;
+}
+
+.own-open-tickets .title a, .open-tickets .title a {
+    display: block;
+}
+
+.own-open-tickets .object, .open-tickets .object {
+    margin-left: 1em;
+    font-style: italic;
+}
+
+.open-tickets .user {
+    margin-left: 1em;
+}
+
+.no-clarifications-message {
+    font-style: italic;
+    text-align: center;
+}
+</style>{% endblock %}
+{% block js_media %}{% include "blog/media-js.jade" %}
+<script type="text/javascript">$(document).ready(function () {
+    $('.time-remaining').each(function () {
+        count_down($(this));
+    });
+
+    $('.blog-sidebar').hide();
+    $('#blog-tab').find('a').click(function (e) {
+        e.preventDefault();
+        $('#blog-tab').addClass('active');
+        $('#event-tab').removeClass('active');
+        $('.blog-content').show();
+        $('.blog-sidebar').hide();
+    });
+    $('#event-tab').find('a').click(function (e) {
+        e.preventDefault();
+        $('#event-tab').addClass('active');
+        $('#blog-tab').removeClass('active');
+        $('.blog-content').hide();
+        $('.blog-sidebar').show();
+    });
+    register_update_relative(function () {
+        return $('.post-time');
+    }, function (when) {
+        return Math.abs(moment().diff(when, 'years')) < 1;
+    });
+});
+</script>{% endblock %}
+{% block body %}
+<!--if request.user.is_authenticated and request.user.is_superuser or perms.judge.test_site-->
+<!--    include blog/dashboard.jade-->
+<!--else-->{% block before_posts %}{% endblock %}
+<div id="mobile" class="tabs">
+  <ul>
+    <li id="blog-tab" class="tab active"><a href="#"><i class="tab-icon fa fa-info-circle"></i> {% trans "Blog" %}</a>
+    </li>
+    <li id="event-tab" class="tab"><a href="#"><i class="tab-icon fa fa-rss"></i> {% trans "Events" %}</a>
+    </li>
+  </ul>
+</div>
+<div id="blog-container">
+  <div class="blog-content sidebox">
+    <h3>{% trans "News" %} <i class="fa fa-terminal"></i>
+    </h3>
+    <div class="sidebox-content">{% for post in __pyjade_iter(posts,1) %}
+      <section{{__pyjade_attrs(attrs=[('class', ((('sticky post' if post.sticky else 'post'))))])}}>
+        <h2 class="title"><a href="{% url "blog_post" post.id post.slug %}">{{post.title|escape}}</a>
+        </h2><span class="time">{% if  post.sticky %}<i title="Sticky" class="fa fa-star fa-fw"></i>{% endif %}{%  with authors=post.authors.all %}{% if  authors %}<span class="post-authors">{% for author in __pyjade_iter(authors,1) %}<span class="rating {{ author.rating|rating_class }} {{ author.display_rank }}"><a href="{% url "user_page" author.user.username %}">{{author.user.username|escape}}</a></span>{% if  not forloop.last %}{{', '|escape}}{% endif %}{% endfor %}</span>{{' '|escape}}{% endif %}{% endwith %}<span data-unix="{{ post.publish_on|utc|date:"c" }}" class="post-time">{% trans "posted" %}
+{{' '|escape}}{%  blocktrans with time=post.publish_on|date:_("N j, Y, g:i") asvar str_time %}on {{ time }}<span class="relative">{{str_time|escape}}</span></span></span><span class="comment-data"><a href="{% url "blog_post" post.id post.slug %}#comments" class="comment-count-link"><i class="fa fa-comments comment-icon"></i><span class="comment-count">{{ post_comment_counts|get_dict_item:post.id|default_if_none:0 }}</span></a></span>
+        <div class="summary content-description">{%  cache 86400 post_summary post.id %}{{post.summary|default:post.content|with_math:"svg"|with_lazy_load:True|markdown:"blog"|reference|escape}}{% endcache %}
+        </div>
+      </section>{% endfor %}
+    </div>
+{% if  page_obj.num_pages > 1 %}
+    <div style="margin-bottom:10px;margin-top:10px">{% include "list-pages.jade" %}
+    </div>{% endif %}
+  </div>
+  <div class="blog-sidebar">{% if  IN_CONTEST and CONTEST.contest.use_clarifications %}
+    <div class="blog-sidebox sidebox">
+      <h3>{% trans "Clarifications" %} <i class="fa fa-question-circle"></i>
+      </h3>
+      <div class="sidebox-content">{% if  has_clarifications %}
+        <ul>{% for clarification in __pyjade_iter(clarifications,1) %}
+          <li class="clarification"><a href="{% url "problem_detail" clarification.problem.code %}" class="problem">{{clarification.problem.name|escape}}</a>{{' '|escape}}<span data-unix="{{ clarification.date|utc|date:"c" }}" class="time">{%  blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time %}on {{ time }}<span class="relative">{{str_time|escape}}</span></span>
+          </li>{% endfor %}
+        </ul>{% else %}
+        <p class="no-clarifications-message">{% trans "No clarifications have been made at this time." %}</p>{% endif %}
+      </div>
+    </div>{% endif %}{% if  current_contests %}
+    <div class="blog-sidebox sidebox">
+      <h3>{% trans "Ongoing contests" %} <i class="fa fa-trophy"></i>
+      </h3>
+      <div class="sidebox-content">{% for contest in __pyjade_iter(current_contests,1) %}
+        <div class="contest">
+          <div class="contest-list-title"><a href="{% url "contest_view" contest.key %}">{{contest.name|escape}}</a>
+          </div>
+          <div class="time">{%  blocktrans with countdown=contest.time_before_end|as_countdown %}Ends in {{ countdown }}.
+          </div>
+        </div>{% endfor %}
+      </div>
+    </div>{% endif %}
+{% if  future_contests %}
+    <div class="blog-sidebox sidebox">
+      <h3>{% trans "Upcoming contests" %} <i class="fa fa-trophy"></i>
+      </h3>
+      <div class="sidebox-content">{% for contest in __pyjade_iter(future_contests,1) %}
+        <div class="contest">
+          <div class="contest-list-title"><a href="{% url "contest_view" contest.key %}">{{contest.name|escape}}</a>
+          </div>
+          <div class="time">{%  blocktrans with countdown=contest.time_before_start|as_countdown %}Starting in {{ countdown }}.
+          </div>
+        </div>{% endfor %}
+      </div>
+    </div>{% endif %}
+    <div class="blog-sidebox sidebox">
+      <h3>{% trans "Comment stream" %} <i class="fa fa-comments"></i>
+      </h3>
+      <div class="sidebox-content">
+        <ul>{% for comment in __pyjade_iter(comments,1) %}
+          <li><span style="padding-left:0.25em" class="poster rating {{ comment.author.rating|rating_class }} {{ comment.author.display_rank }}"><a href="{% url "user_page" comment.author.user.username %}">{{comment.author.user.username|escape}}</a></span>&#32;&rarr; <a href="{{comment.link}}#comment-{{comment.id}}">{{comment.page_title|escape}}</a>
+          </li>{% endfor %}
+        </ul><span class="rssatom"><a href="{% url "comment_rss" %}"><span><i class="fa fa-rss"></i></span> RSS</a>
+/ <a href="{% url "comment_atom" %}">Atom</a></span>
+      </div>
+    </div>
+    <div class="blog-sidebox sidebox">
+      <h3>{% trans "New problems" %} <i class="fa fa-puzzle-piece"></i>
+      </h3>
+      <div class="sidebox-content">
+        <ul class="problem-list">{% for problem in __pyjade_iter(new_problems,1) %}
+          <li><a href="{% url "problem_detail" problem.code %}">{{problem.name|escape}}</a>
+          </li>{% endfor %}
+        </ul><span class="rssatom"><a href="{% url "problem_rss" %}"><span><i class="fa fa-rss"></i></span> RSS</a>
+/ <a href="{% url "problem_atom" %}">Atom</a></span>
+      </div>
+    </div>
+{% if  perms.judge.test_site and own_open_tickets %}
+    <div class="blog-sidebox sidebox">
+      <h3>{% trans "My open tickets" %} <i class="fa fa-question-circle"></i>
+      </h3>
+      <div class="sidebox-content">
+        <ul class="own-open-tickets">{% for ticket in __pyjade_iter(own_open_tickets,1) %}
+          <li>
+            <div class="title"><a href="{% url "ticket" ticket.id %}">{{ticket.title|escape}}</a>
+            </div>
+            <div class="object"><a{{__pyjade_attrs(attrs=[('href',(ticket.linked_item.get_absolute_url()))])}}>{{ticket.linked_item|item_title|escape}}</a>
+            </div>
+          </li>{% endfor %}
+        </ul>
+      </div>
+    </div>{% endif %}{% if  perms.judge.test_site and open_tickets %}
+    <div class="blog-sidebox sidebox">
+      <h3>{% trans "New tickets" %} <i class="fa fa-exclamation-circle"></i>
+      </h3>
+      <div class="sidebox-content">
+        <ul class="open-tickets">{% for ticket in __pyjade_iter(open_tickets,1) %}
+          <li>
+            <div class="title"><a href="{% url "ticket" ticket.id %}">{{ticket.title|escape}}</a>
+            </div>
+            <div class="object"><a{{__pyjade_attrs(attrs=[('href',(ticket.linked_item.get_absolute_url()))])}}>{{ticket.linked_item|item_title|escape}}</a>
+            </div>{%  with user=ticket.user %}
+            <div{{__pyjade_attrs(attrs=[('class', (("user") , (user.display_rank)))])}}><a href="{% url "user_page" user.user.username %}">{{user.user.username|escape}}</a>
+            </div>{% endwith %}
+          </li>{% endfor %}
+        </ul>
+      </div>
+    </div>{% endif %}
+  </div>
+</div>{% block after_posts %}{% endblock %}{% endblock %}

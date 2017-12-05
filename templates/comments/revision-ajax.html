@@ -1,0 +1,3 @@
+{%  load markdown %}{%  load reference %}{%  with node=revision.field_dict %}
+<div{{__pyjade_attrs(attrs=[('style',(('display: none' if not node['title'] or node['title'].startswith('Re:') else '')))])}} class="comment-title">{{node.title|escape}}</div>
+<div class="comment-body">{{node.body|with_math:MATH_ENGINE|markdown:"comment"|reference|escape}}</div>{% endwith %}

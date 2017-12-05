@@ -1,0 +1,12 @@
+<tr id="ticket-{{ ticket.id }}">
+  <td>{% if  ticket.is_open %}<i class="fa fa-exclamation-circle"></i>{% else %}<i class="fa fa-check-circle-o"></i>{% endif %}
+  </td>
+  <td>{{ticket.id|escape}}</td>
+  <td><a href="{% url "ticket" ticket.id %}">{{ticket.title|escape}}</a>
+  </td>{%  with user=ticket.user %}
+  <td><a href="{% url "user_page" user.user.username %}"{{__pyjade_attrs(attrs=[('class', ((user.display_rank)))])}}>{{user.user.username|escape}}</a>
+  </td>{% endwith %}
+  <td>{% for assignee in __pyjade_iter(ticket.assignees.all,1) %}<a href="{% url "user_page" assignee.user.username %}"{{__pyjade_attrs(attrs=[('class', ((assignee.display_rank)))])}}>{{assignee.user.username|escape}}</a>
+{% if  not forloop.last %},&#32;{% endif %}{% endfor %}
+  </td>
+</tr>

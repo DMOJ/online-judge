@@ -1,0 +1,3 @@
+{%  spaceless %}{% for name,versions in __pyjade_iter(runtime_versions,2) %}{% if  versions %}{% if  versions.0 != versions|last %}{{name|escape}} {{versions.0|escape}} - {{versions|last|escape}}{% else %}
+{{name|escape}} {{versions.0|escape}}{% endif %}{% else %}
+{{name|escape}}{% endif %}{% if  not forloop.last %}{{', '|escape}}{% endif %}{% endfor %}{%  endspaceless %}

@@ -1,0 +1,203 @@
+{% extends "base.jade" %}{%  load staticfiles %}{%  load i18n %}{%  load compress %}{% block js_media %}
+<script type="text/javascript" src="{{ ACE_URL }}/ace.js"></script>{%  compress js %}{{form.media.js|escape}}
+<script type="text/javascript">$(function () {
+    function format(state) {
+        if (!state.id) return state.text; // optgroup
+        return state.text;
+    }
+
+    window.previous_template = '';
+    function update_language_template() {
+        var source = $('textarea#id_source');
+        if (source.val() == window.previous_template.replace(/\r/g, '') || source.val() == '') {
+            var lang_id = $('#id_language').val();
+            var code = localStorage.getItem('submit:' + $('#id_language').val());
+
+            function update_submit_area(code) {
+                window.previous_template = code;
+                source.val(code);
+                window.ace_editor.getSession().setValue(code);
+            }
+
+            if (code != null) {
+                update_submit_area(code);
+            } else {
+                $.get('{% url "language_template_ajax" %}', {
+                    id: lang_id
+                }).done(function (template) {
+                    update_submit_area(template);
+                });
+            }
+        }
+    }
+
+    function makeDisplayData(data) {
+        var site_data = data.attr('data-info');
+        var judge_data = data.attr('data-judge-info');
+        var display_data = site_data || judge_data;
+        return display_data;
+    }
+
+    function formatSelection(state) {
+        if (!state.id) return state.text; // optgroup
+        var data = makeDisplayData($("option[data-id=" + state.id + "]"));
+        return "<b>" + state.text + "</b> (" + data + ")";
+    }
+
+    // Terrible hack, adapted from https://github.com/select2/select2/issues/4436
+    $.fn.select2.amd.define('select2/data/customAdapter', ['select2/results', 'select2/utils'], function (Result, Utils) {
+        RefPresenter = function ($element, options, dataAdapter) {
+            RefPresenter.__super__.constructor.call(this, $element, options, dataAdapter);
+        };
+        Utils.Extend(RefPresenter, Result);
+        RefPresenter.prototype.bind = function (container, $container) {
+            container.on('results:focus', function (params) {
+                var data = makeDisplayData($("option[data-id=" + params.data.id + "]"));
+                $("#result-version-info").text(data);
+            });
+            RefPresenter.__super__.bind.call(this, container, $container);
+        };
+        return RefPresenter;
+    });
+
+    var customAdapter = $.fn.select2.amd.require('select2/data/customAdapter');
+
+    $("#id_language").select2({
+        templateResult: format,
+        templateSelection: formatSelection,
+        escapeMarkup: function (m) {
+            return m;
+        },
+        resultsAdapter: customAdapter
+    });
+
+    $('#id_language').on('select2:open', function (evt) {
+        var dropdown = $('.select2-dropdown');
+        if (!$('#result-version-info').length)
+            dropdown.append($("<span id=\"result-version-info\"/>"));
+    });
+
+    $('#id_language').change(function () {
+        var lang = $("#id_language").find("option:selected").attr('data-ace');
+        window.ace_source.getSession().setMode("ace/mode/" + lang);
+        update_language_template();
+    });
+
+    $('#ace_source').on('ace_load', function (e, editor) {
+        window.ace_editor = editor;
+        update_language_template();
+        editor.commands.addCommand({
+            name: 'save',
+            bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
+            exec: function () {
+                localStorage.setItem('submit:' + $('#id_language').val(), editor.getSession().getValue());
+            }
+        });
+        editor.getSession().setUseWrapMode(true);
+        editor.setFontSize(14);
+        editor.setPrintMarginColumn(100);
+        editor.focus();
+    });
+
+    $(window).resize(function () {
+        $('#ace_source').height(Math.max($(window).height() - 353, 100));
+    }).resize();
+});
+</script>{% endcompress %}{% endblock %}
+{% block media %}{%  compress css %}{{form.media.css|escape}}
+<style media="screen">#submit-wrapper {
+    margin-top: 0.7em;
+}
+
+#submit-wrapper #problem-id, #submit-wrapper #editor, #submit-wrapper #language {
+    margin-top: 4px;
+}
+
+#id_language {
+    width: 100%;
+}
+
+#result-version-info {
+    border-bottom: 1px solid rgb(148, 148, 148);
+    margin: 0px 1em;
+    color: #757575;
+    font-weight: 600;
+    padding: 0.2em 0;
+    text-align: right;
+}
+
+.select2-results__message {
+    white-space: nowrap
+}
+
+.select2-dropdown--above {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.select2-results__option {
+    color: #757575 !important;
+    background: white !important;
+}
+
+.select2-results__option--highlighted {
+    text-decoration: underline;
+}
+
+.select2-results__option[aria-selected=true] {
+    font-weight: bold;
+    color: black !important;
+}
+
+.select2-results__option {
+    padding: 4px 0px;
+}
+
+.select2-results__options {
+    overflow-y: visible !important;
+}
+
+.select2-results__option {
+    break-inside: avoid-column;
+}
+
+.select2-results {
+    -webkit-columns: 10 7em;
+    -moz-columns: 10 7em;
+    columns: 10 7em;
+    padding-left: 1.5em;
+    padding-top: 0.5em;
+}
+</style>{% endcompress %}{% endblock %}
+{% block body %}<br/>{% if  not no_judges %}{% if  default_lang not in form.fields.language.queryset %}
+<div class="alert alert-warning alert-dismissable"><a class="close">x</a>{%  blocktrans with default_language=default_lang.name %} <b>Warning!</b> Your default language, <b>{{ default_language }}</b>, is unavailable for this problem and has been deselected.
+</div>{% endif %}
+{% if  IN_CONTEST and submission_limit %}{% if  submissions_left > 0 %}
+<div class="alert alert-warning alert-dismissable"><a class="close">x</a>{%  blocktrans count counter=submissions_left %} You have {{ counter }} submission left
+{%  plural %}You have {{ counter }} submissions left
+</div>{% else %}
+
+<div class="alert alert-warning alert-dismissable"><a class="close">x</a>{% trans "You have 0 submissions left" %}
+
+</div>{% endif %}{% endif %}{% endif %}
+<form id="problem_submit" style="width:100%;box-sizing:border-box" action="" method="post" class="form-area">{%  csrf_token %}{{form.non_field_errors|escape}}
+  <div id="submit-wrapper">
+    <div id="problem-id">{{form.problem.errors|escape}}
+{{form.problem|escape}}
+    </div>
+    <div id="editor">{{form.source.errors|escape}}
+{{form.source|escape}}
+    </div>
+{% if  not no_judges %}
+    <div id="language">{{form.language.errors|escape}}
+      <div id="language-select">
+        <select id="id_language" name="language">{% for lang in __pyjade_iter(form.fields.language.queryset,1) %}{% set runtime_versions = lang.runtime_versions %}
+          <option{{__pyjade_attrs(attrs=[('value',(lang.id)), ('data-id',(lang.id)), ('data-name',(lang.name)), ('data-info',(lang.info))])}} data-judge-info="{% include "runtime-version-fragment.jade" %}"{{__pyjade_attrs(attrs=[('data-ace',(lang.ace)), ('selected',(('' if lang.id == default_lang.id else None)))])}}>{{lang.name|escape}}</option>{% endfor %}
+        </select>
+      </div>
+    </div>{% endif %}
+  </div>
+  <hr/>{% if  no_judges %}<span style="color: red">{% trans "No judge is available for this problem." %}</span>{% else %}{% if  IN_CONTEST and submission_limit and not submissions_left %}
+  <input style="float:right;padding:6px 12px" type="submit" value="{% trans "Submit!" %}" class="button"/>{% else %}
+  <input style="float:right;padding:6px 12px" type="submit" value="{% trans "Submit!" %}" class="button"/>{% endif %}{% endif %}
+</form>{% endblock %}

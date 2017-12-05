@@ -1,0 +1,9 @@
+{% extends "base.jade" %}{%  load markdown %}{%  load staticfiles %}{%  load i18n %}{%  load reference %}{% block js_media %}{% include "comments/media-js.jade" %}{% endblock %}{% block media %}{% include "comments/media-css.jade" %}{% endblock %}{% block site_title %}<span style="color: #FFDE05">DM::</span><span style="color: #AAA">Solutions</span>{% endblock %}{% block title %}{{solution.title|escape}} - {{SITE_LONG_NAME|escape}}{% endblock %}
+{% block content_title %}{{solution.title|escape}}
+<div style="float:right">{% if  solution.problem %}[<a href="{% url "problem_detail" solution.problem.code %}">{% trans "Problem" %}</a>]{% endif %}
+{% if  perms.judge.change_solution %}[<a href="{% url "admin:judge_solution_change" solution.id %}">{% trans "Edit" %}</a>]{% endif %}
+</div>{% endblock %}
+{% block body %}
+<div class="content-description">{{solution.content|with_math:MATH_ENGINE|markdown:"solution"|reference|escape}}
+</div>
+{% include "comments/list.jade" %}{% endblock %}{% block bodyend %}{% if  REQUIRE_JAX %}{% include "mathjax-load.jade" %}{% endif %}{% include "comments/math.jade" %}{% endblock %}

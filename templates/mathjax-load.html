@@ -1,0 +1,11 @@
+{%  load staticfiles %}
+<script type="text/javascript" src="{% static "mathjax_config.js" %}"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/javascript">window.reload_mathjax = function() {
+    MathJax.Hub.queue.Push(function () {
+        $('.tex-image').hide();
+        $('.tex-text').show();
+    });
+};
+window.reload_mathjax();
+</script>

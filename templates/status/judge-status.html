@@ -1,0 +1,3 @@
+{% extends "base.jade" %}{%  load static from staticfiles %}{%  load i18n %}{% block js_media %}{% include "status/media-js.jade" %}{% endblock %}{% block media %}{% include "status/media-css.jade" %}{% block content_media %}{% endblock %}{% endblock %}{% block title_ruler %}{% endblock %}{% block title_row %}{% set tab = 'judges' %}{% include "status/status-tabs.jade" %}{% endblock %}{% block body %}
+<table id="judge-status" class="table">{% include "status/judge-status-table.jade" %}
+</table>{% endblock %}

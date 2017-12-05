@@ -1,0 +1,21 @@
+{%  load tz %}{%  load i18n %}
+<td{{__pyjade_attrs(attrs=[('class', (("sub-result") , (breakdown.sub_result_class)))])}}>
+  <div class="score">{{breakdown.sub_points|floatformat:"0"|escape}} / {{breakdown.sub_total|floatformat:"0"|escape}}
+  </div>
+  <div class="state"><span{{__pyjade_attrs(attrs=[('title',(breakdown.sub_long_status))])}} class="status">{{breakdown.sub_short_status|escape}}</span>{{' | '|escape}}<span class="language">{{breakdown.sub_lang|escape}}</span>
+  </div>
+</td>
+<td colspan="2" class="sub-info">
+  <div class="name"><a href="{% url "problem_detail" breakdown.problem_code %}">{{breakdown.problem_name|escape}}</a>
+  </div>
+  <div><span data-unix="{{ breakdown.sub_date|utc|date:"c" }}" class="time">{%  blocktrans with time=breakdown.sub_date|date:_("N j, Y") asvar str_time %}on {{ time }}<span class="relative">{{str_time|escape}}</span></span>
+  </div>
+</td>
+<td class="sub-pp sub-usage">
+  <div class="pp"><a href="{% url "submission_status" breakdown.sub_id %}">{{breakdown.points|floatformat:0|escape}}pp</a>
+  </div>
+  <div class="pp-weighted">weighted
+{{' '|escape}}<b>{{breakdown.weight|floatformat:0|escape}}%</b>{{' '|escape}}{% if  breakdown.scaled_points < 10 %}({{breakdown.scaled_points|floatformat:1|escape}}pp){% else %}
+({{breakdown.scaled_points|floatformat:0|escape}}pp){% endif %}
+  </div>
+</td>

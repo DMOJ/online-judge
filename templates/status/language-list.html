@@ -1,0 +1,37 @@
+{% extends "base.jade" %}{%  load cache %}{%  load markdown %}{%  load i18n %}{% block media %}
+<style>.table td.language {
+    white-space: nowrap;
+}
+
+.table td.info .content-description {
+    margin: -1em 1em -1em 1em;
+}
+
+td.info { width: 100%; }
+
+.table td {
+    text-align: left;
+}
+</style>{% endblock %}
+{% block title_ruler %}{% endblock %}{% block title_row %}{% set tab = 'runtimes' %}{% include "status/status-tabs.jade" %}{% endblock %}{% block body %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>{% trans "ID" %}</th>
+      <th>{% trans "Name" %}</th>
+      <th>{% trans "Runtime Info" %}</th>
+    </tr>
+  </thead>
+  <tbody>{% for language in __pyjade_iter(languages,1) %}
+    <!-- All online languages have runtime_versions, even if we're not going to display them-->{% if  language.runtime_versions %}
+    <tr>
+      <td>{{language.short_display_name|escape}}</td>
+      <td class="language"><span>{{language.name|escape}}</span>
+      </td>
+      <td class="info">{% set runtime_versions = language.runtime_versions %}<code>{% include "runtime-version-fragment.jade" %}</code>{% if  language.description %}
+        <div class="content-description">{%  cache 86400 language_html language.id %}{{language.description|markdown:"language"|escape}}{% endcache %}
+        </div>{% endif %}
+      </td>
+    </tr>{% endif %}{% endfor %}
+  </tbody>
+</table>{% endblock %}

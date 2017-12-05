@@ -1,0 +1,54 @@
+{% extends "common-content.jade" %}{%  load absolute_links %}{%  load staticfiles %}{%  load markdown %}{%  load cache %}{%  load timedelta %}{%  load social_share %}{%  load tz %}{%  load i18n %}{%  load reference %}{% block title_ruler %}{% endblock %}{% block title_row %}{% set tab = 'detail' %}{% set title = contest.name %}{% include "contest/contest-tabs.jade" %}{% endblock %}{% block content_js_media %}
+<script type="text/javascript">$(document).ready(function () {
+    $('.time-remaining').each(function () {
+        count_down($(this));
+    });
+});
+</script>
+{% include "contest/media-js.jade" %}{% include "comments/media-js.jade" %}{% endblock %}{% block content_media %}{% include "contest/media-css.jade" %}{% include "comments/media-css.jade" %}{% endblock %}{% block body %}
+<div id="banner"><a href="https://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name|urlencode:"" }}&amp;iso={{ contest.start_time|utc|date:"Y-m-d\TH:i:s" }}" class="date">{% if  participating and participation.virtual and not participation.ended %}{% if  participation.spectate %}{%  blocktrans with countdown=contest.time_before_end|as_countdown %}Spectating, contest ends in {{ countdown }}.{% elif  participation.end_time %}
+{%  blocktrans with countdown=participation.time_remaining|as_countdown %}Participating virtually, {{ countdown }} remaining.{% else %}
+{% trans "Participating virtually." %}{% endif %}{% else %}
+{% if  contest.start_time > now %}{%  blocktrans with countdown=contest.time_before_start|as_countdown %}Starting in {{ countdown }}.{% elif  contest.end_time < now %}
+{% trans "Contest is over." %}{% else %}
+{% if  participating %}{% if  participation.ended %}{%  blocktrans with countdown=contest.time_before_end|as_countdown %}Your time is up! Contest ends in {{ countdown }}.{% else %}
+{%  blocktrans with countdown=participation.time_remaining|as_countdown %}You have {{ countdown }} remaining.{% endif %}{% else %}
+{%  blocktrans with countdown=contest.time_before_end|as_countdown %}Contest ends in {{ countdown }}.{% endif %}{% endif %}{% endif %}</a>
+  <div id="time">{% if  contest.time_limit %}{%  blocktrans with start_time=contest.start_time|date:_("F j, Y, G:i T") end_time=contest.end_time|date:_("F j, Y, G:i T") time_limit=contest.time_limit|timedelta:"localized-no-seconds" %}<b>{{ time_limit }}</b> window between <b>{{ start_time }}</b> and <b>{{ end_time }}</b>{% else %}
+{%  blocktrans with length=contest.contest_window_length|timedelta:"localized-no-seconds" start_time=contest.start_time|date:_("F j, Y, G:i T") %}<b>{{ length }}</b> long starting on <b>{{ start_time }}</b>{% endif %}
+  </div>
+</div>
+<div class="content-description">{%  cache 3600 contest_html contest.id MATH_ENGINE %}{{contest.description|with_math:MATH_ENGINE|markdown:"contest"|reference|escape}}{% endcache %}
+</div>
+{% if  contest.ended or request.user.is_superuser or is_organizer %}
+<hr/>
+<div class="contest-problems">
+  <h2 style="margin-bottom: 0.2em"><i class="fa fa-fw fa-question-circle"></i>{% trans "Problems" %}
+  </h2>
+  <table id="contest-problems" class="table">
+    <thead>
+      <tr>
+        <th>{% trans "Problem" %}</th>
+        <th>{% trans "Points" %}</th>
+        <th>{% trans "AC Rate" %}</th>
+        <th>{% trans "Users" %}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>{% for problem in __pyjade_iter(contest_problems,1) %}
+      <tr>
+        <td><a href="{% url "problem_detail" problem.code %}">{{problem.i18n_name|escape}}</a>
+        </td>
+        <td>{{problem.points|floatformat|escape}}{% if  problem.partial %}p{% endif %}
+        </td>
+        <td>{{problem.ac_rate|floatformat:"1"|escape}}%</td>
+        <td><a href="{% url "ranked_submissions" problem.code %}">{{problem.user_count|escape}}</a>
+        </td>
+        <td>{% if  problem.has_editorial %}<a href="{% url "problem_editorial" problem.code %}">{% trans "Editorial" %}</a>{% endif %}
+        </td>
+      </tr>{% endfor %}
+    </tbody>
+  </table>
+</div>{% endif %}
+<hr/><span class="social">{%  post_to_gplus post "<i class=\"fa fa-google-plus-square\"></i>" %}{%  post_to_facebook post "<i class=\"fa fa-facebook-official\"></i>" %}{%  post_to_twitter "{{ SITE_NAME }}:" post "<i class=\"fa fa-twitter\"></i>" %}</span>{% include "comments/list.jade" %}{% endblock %}{% block description_end %}{% endblock %}{% block bodyend %}{{block.super|escape}}
+{% include "comments/math.jade" %}{% endblock %}

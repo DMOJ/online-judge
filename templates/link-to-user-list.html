@@ -1,0 +1,1 @@
+{% for user in __pyjade_iter(users,1) %}<span{{__pyjade_attrs(attrs=[('class', ((user.css_class)))])}}><a href="{% url "user_page" user.user.username %}">{{user.user.username|escape}}</a></span>{% if  not forloop.last %}{{', '|escape}}{% endif %}{% endfor %}

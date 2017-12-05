@@ -1,0 +1,230 @@
+{% extends "common-content.jade" %}{%  load staticfiles %}{%  load cache %}{%  load compress %}{%  load i18n %}{% block js_media %}{% if  dynamic_update and last_msg %}
+<script type="text/javascript">{% if  IN_CONTEST %}window.current_contest = '{{CONTEST.contest.key|escape}}';{% else %}
+window.current_contest = null;{% endif %}
+{% if  dynamic_user_id %}window.dynamic_user_id = {{dynamic_user_id|escape}};{% else %}
+window.dynamic_user_id = null;{% endif %}
+{% if  dynamic_problem_id %}window.dynamic_problem_id = {{dynamic_problem_id|escape}};{% else %}
+window.dynamic_problem_id = null;{% endif %}
+{% if  show_problem %}window.show_problem = 1;{% else %}
+window.show_problem = 0;{% endif %}
+</script>{% endif %}
+<script>$(function () {
+    $('#status').select2({multiple: 1, placeholder: '{% trans "Filter by status..." %}'})
+        .css({'visibility': 'visible'});
+    $('#language').select2({multiple: 1, placeholder: '{% trans "Filter by language..." %}'})
+        .css({'visibility': 'visible'});
+});
+</script>
+{%  compress js %}
+<script type="text/javascript" src="{% static "event.js" %}"></script>{% if  request.user.is_authenticated and perms.judge.rejudge_submission %}
+<script type="text/javascript">window.rejudge_submission = function(id, e) {
+    if ((typeof e !== 'undefined' && e.ctrlKey) ||
+            confirm('Are you sure you want to rejudge?')) {
+        $.ajax({
+            url: '{% url "submission_rejudge" %}',
+            type: "POST",
+            data: {
+                id: id
+            }
+        });
+    }
+};
+</script>{% endif %}
+<script type="text/javascript">$(function () {
+    var info_float = $('.info-float');
+    var container = $('#content-right');
+    if (window.bad_browser) {
+        container.css('float', 'right');
+    } else if (!featureTest('position', 'sticky')) {
+        fix_div(info_float, 55);
+        $(window).resize(function () {
+            info_float.width(container.width());
+        });
+        info_float.width(container.width());
+    }
+
+    window.update_relative_time = register_update_relative(function () {
+        return $('#submissions-table').find('span.time');
+    });
+});
+</script>
+{% if  dynamic_update and last_msg %}
+<script type="text/javascript">function load_dynamic_update(last_msg) {
+    var _collect = function (e) {
+        return e.value;
+    };
+    var language_filter = $.map($('select#language option[selected]'), _collect)
+    var status_filter = $.map($('select#status option[selected]'), _collect);
+
+    var table = $('#submissions-table');
+    var statistics = $("#statistics-table");
+    var doing_ajax = false;
+    var first = parseInt(table.find('tr:first-child').attr('id'));
+
+    var update_submission = function (message, force) {
+        if (language_filter.length && 'language' in message &&
+                language_filter.indexOf(message.language) == -1)
+            return;
+        if (status_filter.length && 'status' in message &&
+                status_filter.indexOf(message.status) == -1)
+            return;
+
+        var id = message.id;
+        var row = table.find('tr#' + id);
+        if (row.length < 1) {
+            if (id < first)
+                return;
+            first = id;
+            row = $('<tr/>', {id: id}).hide().prependTo(table);
+            if (table.find('tr').length >= {{ paginator.per_page }})
+                table.find('tr:last-child').hide('slow', function () {
+                    $(this).remove();
+                });
+        }
+        if (force || !doing_ajax) {
+            if (!force) doing_ajax = true;
+            $.ajax({
+                url: '{% url "submission_single_query" %}',
+                data: {id: id, show_problem: show_problem}
+            }).done(function (data) {
+                var was_shown = row.is(':visible');
+                row.html(data);
+                update_relative_time(row.find('span.time'));
+                if (!was_shown) {
+                    row.show('slow');
+                    // Hack for Chrome
+                    $('#submissions-table').hide().show(0);
+                }
+                if (!force)
+                    setTimeout(function () {
+                        doing_ajax = false;
+                    }, 1000);
+            }).fail(function () {
+                console.log('Failed to update submission: ' + id);
+                if (!force) doing_ajax = false;
+            });
+        }
+    };
+
+    var stats_outdated = false;
+    function update_stats() {
+        $.ajax({
+            url: '?results'
+        }).done(function (data) {
+            statistics.html(data);
+        }).fail(function () {
+            console.log('Failed to update statistics table!' + id);
+        }).always(function () {
+            stats_outdated = false;
+        });
+    }
+
+    $(window).on('dmoj:window-visible', function () {
+        if (stats_outdated)
+            update_stats();
+    });
+
+    var $body = $(document.body);
+    var receiver = new EventReceiver(
+            "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+            ['submissions'], last_msg, function (message) {
+                if (current_contest && message.contest != current_contest)
+                    return;
+                if (dynamic_user_id && message.user != dynamic_user_id ||
+                    dynamic_problem_id && message.problem != dynamic_problem_id)
+                    return;
+                if (message.type == 'update-submission') {
+                    if (message.state == 'test-case' && $body.hasClass('window-hidden'))
+                        return;
+                    update_submission(message);
+                } else if (message.type == 'done-submission') {
+                    update_submission(message, true);
+
+                    if (!statistics.length) return;
+                    if ($('body').hasClass('window-hidden'))
+                        return stats_outdated = true;
+                    update_stats();
+                }
+            }
+    );
+    receiver.onwsclose = function (event) {
+        if (event.code == 1001) {
+            console.log('Navigated away');
+            return;
+        }
+        console.log('You probably should refresh?');
+        $('.ws-closed').show().find('a').click(function () {
+            window.location.reload();
+        });
+    };
+    return receiver;
+}
+</script>{% endif %}{% endcompress %}
+{% if  dynamic_update and last_msg %}
+<script type="text/javascript">$(function () { load_dynamic_update({{last_msg|escape}}); });
+
+</script>{% endif %}{% endblock %}
+{% block title_ruler %}{% endblock %}{% block title_row %}{% include "submission/submission-list-tabs.jade" %}{% endblock %}{% block media %}{% if  perms.judge.change_submission and perms.judge.rejudge_submission %}
+<style>td.sub-prop, col.sub-prop { width: 22% }
+col.sub-info, td.sub-info { width: 78% }
+#status, #language { visibility: hidden; }
+</style>{% endif %}{% endblock %}
+{% block body %}
+<div id="common-content">
+  <div id="content-right" class="submission">
+    <div class="info-float">
+      <div class="sidebox">
+        <h3>{% trans "Filter submissions" %} <i class="fa fa-search"></i>
+        </h3>
+        <div class="sidebox-content">
+          <form id="filter-form" name="form" action="" method="get">
+            <div class="filter-form-group">
+              <label for="status"><i>{% trans "Status" %}</i>
+              </label>
+              <select id="status" name="status" multiple="multiple">{% for id,name in __pyjade_iter(all_statuses,2) %}{% if  id in selected_statuses %}
+                <option{{__pyjade_attrs(attrs=[('value',(id))])}} selected="selected">{{name|escape}}</option>{% else %}
+                <option{{__pyjade_attrs(attrs=[('value',(id))])}}>{{name|escape}}</option>{% endif %}{% endfor %}
+              </select>
+            </div>
+            <div class="filter-form-group">
+              <label for="language"><i>{% trans "Language" %}</i>
+              </label>
+              <select id="language" name="language" multiple="multiple">{% for code,name in __pyjade_iter(all_languages,2) %}{% if  code in selected_languages %}
+                <option{{__pyjade_attrs(attrs=[('value',(code))])}} selected="selected">{{name|escape}}</option>{% else %}
+                <option{{__pyjade_attrs(attrs=[('value',(code))])}}>{{name|escape}}</option>{% endif %}{% endfor %}
+              </select>
+            </div>
+            <div class="form-submit-group"><a id="go" onclick="form.submit()" class="button">{% trans "Go" %}</a>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="sidebox">
+        <div id="statistics-table">{% include "problem/statistics-table.jade" %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="content-left" class="submission">{% if  page_obj.num_pages > 1 %}
+    <div style="margin-bottom:6px;margin-top:3px">{% include "list-pages.jade" %}
+    </div>{% endif %}
+    <div class="ws-closed"><a href="javascript:void(0)">{%  trans "You were disconnected. Refresh to show latest updates." %}</a>
+    </div>
+    <table id="submissions-table" class="table">
+      <colgroup>
+        <col class="sub-result"/>
+        <col class="sub-info"/>
+        <col class="sub-testcase"/>
+        <col class="sub-prop"/>
+        <col class="sub-usage"/>
+      </colgroup>{% if  request.user.is_authenticated %}{% set profile_id = request.user.profile.id %}{% else %}{% set profile_id = 0 %}{% endif %}{% if  show_problem %}{% for submission in __pyjade_iter(submissions,1) %}
+      <tr{{__pyjade_attrs(attrs=[('id',(submission.id))])}}>{%  include "submission/row.jade" with problem_name=submission.problem.i18n_name %}
+      </tr>{% endfor %}{% else %}{% for submission in __pyjade_iter(submissions,1) %}
+      <tr{{__pyjade_attrs(attrs=[('id',(submission.id))])}}>{% include "submission/row.jade" %}
+      </tr>{% endfor %}{% endif %}
+    </table>{% if  page_obj.num_pages > 1 %}
+    <div style="margin-top:10px;">{% include "list-pages.jade" %}
+    </div>{% endif %}
+  </div>
+</div>{% endblock %}{% block bodyend %}{% endblock %}
+<!-- Don't load MathJax from common-content!-->

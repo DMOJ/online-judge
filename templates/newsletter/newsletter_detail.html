@@ -1,1 +1,13 @@
-{% include "newsletter/newsletter_detail.jade" %}
+{% extends "base.jade" %}{% block title %}{{object.title|escape}} - Newsletter - {{SITE_LONG_NAME|escape}}{% endblock %}
+{% block content_title %}Newsletter: {{ object.title }}{% endblock %}
+{% block body %}
+<ul>
+  <li><a href="{% url "newsletter_subscribe_request" object.slug %}">Subscribe</a>
+  </li>
+  <li><a href="{% url "newsletter_unsubscribe_request" object.slug %}">Unsubscribe</a>
+  </li>
+  <li><a href="{% url "newsletter_archive" object.slug %}">Archive</a>
+  </li>
+  <li><a href="{% url "newsletter_list" %}">Back to list</a>
+  </li>
+</ul>{% endblock %}

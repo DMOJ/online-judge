@@ -1,8 +1,0 @@
-extends base
-
-- load i18n
-
-block body
-    p {% trans "Only the following organizations may access this contest:" %}
-    ul: each org in orgs
-        li: a(href='{% url "organization_home" org.key %}')= org.name

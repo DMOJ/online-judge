@@ -1,0 +1,11 @@
+{% extends "user/base-users.jade" %}{%  load staticfiles %}{%  load cache %}{%  load i18n %}{% block users_media %}
+<style>#users-table td:nth-child(2), #users-table th:nth-child(2) {
+    border-right: none;
+    text-align: left;
+}
+
+#users-table th a {
+    color: white;
+}
+</style>{% endblock %}
+{% block title_ruler %}{% endblock %}{% block title_row %}{% set tab = 'list' %}{% set title = 'Leaderboard' %}{% include "user/user-list-tabs.jade" %}{% endblock %}{% block users_table %}{% include "user/users-table.jade" %}{% endblock %}

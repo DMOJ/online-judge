@@ -1,0 +1,131 @@
+{% extends "user/user-base.jade" %}{%  load i18n %}{% block user_media %}{% include "timezone/media-css.jade" %}{{form.media.css|escape}}
+<style>.sortedm2m-container, .sortedm2m-container p.selector-filter {
+    width: 300px;
+}
+
+.sortedm2m-container p.selector-filter input {
+    width: 262px;
+}
+
+ul.sortedm2m {
+    width: 284px;
+    min-height: 70px;
+    max-height: 200px;
+    height:70px
+}
+
+.grayed {
+    color: #666;
+}
+
+.inline-header {
+    float: left;
+    font-size: 1.1em;
+    padding: 4px 8px;
+    padding-left: 0;
+}
+
+.block-header {
+    color: #666;
+    font-size: 1.1em;
+}
+
+.fullwidth {
+    display: block;
+    overflow: hidden;
+}
+
+#edit-form {
+    border: unset;
+    background: unset;
+    max-width: 700px;
+}
+
+#center-float {
+    position: relative;
+    margin: 0em auto auto -28.5em;
+    left: 50%;
+    width: 700px;
+}
+</style>{% endblock %}
+{% block js_media %}{% include "timezone/media-js.jade" %}{{form.media.js|escape}}
+<script type="text/javascript">$(function() {
+    $('#ace_user_script').on('ace_load', function (e, editor) {
+        editor.getSession().setMode("ace/mode/javascript");
+    });
+});
+</script>{% endblock %}
+{% block title_ruler %}{% endblock %}{% block title_row %}{% set user_tab = 'edit' %}{% set user = request.user.profile %}{% include "user/user-tabs.jade" %}{% endblock %}{% block body %}
+<div id="center-float">
+  <form id="edit-form" action="" method="post" class="form-area">{% if  form.errors %}
+    <div class="alert alert-danger alert-dismissable"><a href="#" class="close">x</a>{{form.non_field_errors|escape}}
+    </div>{% endif %}
+{%  csrf_token %}
+    <div style="padding-top:0.5em">
+      <label class="inline-header grayed">{% trans "Display name" %}:</label><span class="fullwidth">{{form.name|escape}}</span>
+    </div>
+    <div style="padding-top:1em" class="block-header">{% trans "Self-description" %}:</div>{{form.about|escape}}
+    <hr/>
+    <table border="0" style="padding-top:0.7em">
+      <tr>
+        <td style="vertical-align:top;">
+          <table style="padding-right:0.8em">
+            <tr>
+              <td>
+                <label class="inline-header grayed">{% trans "Location" %}:</label>
+              </td>
+              <td><span class="fullwidth">{{form.timezone|escape}}</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="inline-header grayed">{% trans "Preferred language" %}:</label>
+              </td>
+              <td><span class="fullwidth">{{form.language|escape}}</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="inline-header grayed">{% trans "Editor theme" %}:</label>
+              </td>
+              <td><span class="fullwidth">{{form.ace_theme|escape}}</span>
+              </td>
+            </tr>{% if  has_math_config %}
+            <tr>
+              <td>
+                <label class="inline-header grayed">{% trans "Math engine" %}:</label>
+              </td>
+              <td><span class="fullwidth">{{form.math_engine|escape}}</span>
+              </td>
+            </tr>{% endif %}{% if  form.newsletter %}
+            <tr>
+              <td colspan="2">{{form.newsletter|escape}}
+                <label for="id_newsletter" style="float: unset;" class="inline-header grayed">{% trans "Notify me about upcoming contests" %}</label>
+              </td>
+            </tr>{% endif %}
+            <tr>
+              <td colspan="2">{{form.test_site|escape}}
+                <label for="id_test_site" style="float: unset" class="inline-header grayed">{{form.test_site.label|escape}}</label>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2"><a href="http://www.gravatar.com/" title="{% trans "Change your avatar" %}" target="_blank" class="inline-header">{%  trans "Change your avatar" %}</a>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2"><a href="{% url "password_change" %}" class="inline-header">{%  trans "Change your password" %}</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <div style="padding-bottom:0.4em;margin-top:-2em;" class="block-header">{% trans "Affiliated organizations" %}:</div>{{form.organizations|escape}}
+        </td>
+      </tr>
+    </table>
+    <hr/>
+    <div class="block-header">{% trans "User-script" %}:</div>{{form.user_script|escape}}
+    <hr/>
+    <input type="submit" style="float:right" value="{% trans "Update profile" %}"/>
+  </form>
+</div>{% endblock %}

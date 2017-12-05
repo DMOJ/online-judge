@@ -1,0 +1,18 @@
+{% extends "base.jade" %}{%  load i18n %}{% block js_media %}
+<script type="text/javascript">$(function () {
+    $('#id_reason').keydown(function (e) {
+        if (e.ctrlKey && (e.keyCode === 13 || e.keyCode === 10)) {
+            $(this).closest('form').submit();
+        }
+    });
+});
+</script>{% endblock %}
+{% block body %}
+<form action="" method="post" class="form-area">{%  csrf_token %}
+  <p>
+    <label for="{{ form.reason.id_for_label }}"><b>{% trans "Your reason for joining:" %}</b>
+    </label>
+  </p>
+  <p>{{form.reason|escape}}</p>
+  <button type="submit">{% trans "Request" %}</button>
+</form>{% endblock %}

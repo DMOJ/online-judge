@@ -1,0 +1,18 @@
+<ul class="pagination">{% if  page_obj.has_previous %}{% if  page_obj.previous_page_number == 1 and first_page_href != None %}
+  <li><a{{__pyjade_attrs(attrs=[('href',(first_page_href))])}}>«</a>
+  </li>{% else %}
+  <li><a href="{{ page_prefix }}{{ page_obj.previous_page_number }}{{ page_suffix }}">«</a>
+  </li>{% endif %}{% else %}
+  <li class="disabled-page"><span>«</span>
+  </li>{% endif %}{% for page in __pyjade_iter(page_obj.page_range,1) %}{% if  not page %}
+  <li class="disabled-page"><span>...</span>
+  </li>{% else %}{% if  page == 1 and first_page_href != None %}
+  <li{{__pyjade_attrs(attrs=[('class', ((('active-page' if page == page_obj.number else undefined))))])}}><a{{__pyjade_attrs(attrs=[('href',(first_page_href))])}}>{{page|escape}}</a>
+  </li>{% else %}
+  <li{{__pyjade_attrs(attrs=[('class', ((('active-page' if page == page_obj.number else undefined))))])}}><a href="{{ page_prefix }}{{ page }}{{ page_suffix }}">{{page|escape}}</a>
+  </li>{% endif %}{% endif %}{% endfor %}{% if  page_obj.has_next %}
+  <li><a href="{{ page_prefix }}{{ page_obj.next_page_number }}{{ page_suffix }}">»</a>
+  </li>{% else %}
+  <li class="disabled-page"><span>»</span>
+  </li>{% endif %}
+</ul>

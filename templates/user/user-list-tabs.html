@@ -1,0 +1,12 @@
+{%  load i18n %}
+<div class="page-title">
+  <div class="tabs">
+    <h2>{% trans title %}</h2><span class="spacer"></span>
+    <ul>
+      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'list' else ''))))])}}><a href="{% url "user_list" %}"><i class="tab-icon fa fa-users"></i> {% trans "Leaderboard" %}</a>
+      </li>
+      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'organizations' else ''))))])}}><a href="{% url "organization_list" %}"><i class="tab-icon fa fa-university"></i> {% trans "Organizations" %}</a>
+      </li>
+    </ul>
+  </div>
+</div>

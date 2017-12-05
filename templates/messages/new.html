@@ -1,0 +1,11 @@
+{% extends "base.jade" %}{%  load staticfiles %}{%  load i18n %}{% block media %}
+<link rel="stylesheet" href="{% static "admin/css/widgets.css" %}" type="text/css"/>{{form.media|escape}}
+<link rel="stylesheet" href="{% static "admin/css/pagedown.css" %}" type="text/css"/>
+<link rel="stylesheet" href="{% static "problem_edit.css" %}" type="text/css"/>{% endblock %}
+{% block body %}<b>{% trans "To:" %}</b>{{target|escape}}
+<hr/>
+<form action="" method="post" class="form-area">{%  csrf_token %}
+  <table border="0" style="text-align:left">{{form.as_table|escape}}</table>
+  <hr/>
+  <input type="submit" style="float:right;" value="{% trans "Send!" %}"/>
+</form>{% endblock %}

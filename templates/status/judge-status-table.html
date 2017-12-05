@@ -1,0 +1,31 @@
+{%  load static from staticfiles %}{%  load timedelta %}{%  load i18n %}{%  load list_processor %}
+<tr>
+  <th>{% trans "Judge" %}</th>{% if  see_all_judges %}
+  <th>{% trans "Online" %}</th>{% endif %}
+  <th>{% trans "Uptime" %}</th>
+  <th>{% trans "Ping" %}</th>
+  <th>{% trans "Load" %}</th>
+  <th>{% trans "Runtimes" %}</th>
+</tr>{% for judge in __pyjade_iter(judges,1) %}
+<tr>
+  <td>{% if  perms.judge.change_judge %}<a href="{% url "admin:judge_judge_change" judge.id %}">{{judge.name|escape}}</a>{% else %}{{judge.name|escape}}{% endif %}
+  </td>{% if  see_all_judges %}
+  <td>{% if  judge.online %}<i style="color:#44AD41" class="fa fa-check-circle"></i>{% else %}<i style="color:#DE2121" class="fa fa-minus-circle"></i>{% endif %}
+  </td>{% endif %}
+  <td>{% if  judge.online %}{{judge.uptime|timedelta:"simple"|escape}}{% else %}
+{% trans "N/A" %}{% endif %}
+  </td>
+  <td class="ping">{% if  judge.online and judge.ping_ms %}{{judge.ping_ms|floatformat:3|escape}} ms{% else %}
+{% trans "N/A" %}{% endif %}
+  </td>
+  <td>{% if  judge.online %}{{judge.load|floatformat:3|escape}}{% else %}
+{% trans "N/A" %}{% endif %}
+  </td>
+  <td>{% if  judge.online %}{% for key,info in __pyjade_iter(judge.runtime_versions,2) %}{% set runtime_versions = info['runtime'] %}<a href="javascript:void(0);"{{__pyjade_attrs(attrs=[('data-judge',(judge.id)), ('data-lang',(key))])}} data-runtime-info="{% include "runtime-version-fragment.jade" %}" class="runtime-label">{{info.name|escape}}</a>{% if  not forloop.last %}{{', '|escape}}{% endif %}{% endfor %}{% else %}N/A{% endif %}
+  </td>
+</tr>{% endfor %}
+{% if  not judges %}
+<tr>
+  <td colspan="6"><em>{% trans "There are no judges available at this time." %}</em>
+  </td>
+</tr>{% endif %}

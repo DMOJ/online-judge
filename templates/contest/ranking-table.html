@@ -1,0 +1,21 @@
+{% extends "user/base-users-table.jade" %}{%  load timedelta %}{%  load cache %}{%  load rating %}{%  load i18n %}{%  load tz %}{% block after_rank_head %}{% if  has_rating %}
+<th>{% trans "Rating" %}</th>{% endif %}
+<th class="organization-column">{% trans "Organization" %}</th>{% endblock %}{% block after_rank %}{% if  has_rating %}
+<td>{% if  user.participation_rating %}<span><span class="rate-box {{ user.participation_rating|rating_class }}"><span style="height: {{ user.participation_rating|rating_progress|floatformat:3 }}em"></span></span><span class="rating {{ user.participation_rating|rating_class }}">{{user.participation_rating|escape}}</span></span>{% endif %}
+</td>{% endif %}
+<td class="organization-column">{% if  user.organization %}<span class="organization"><a href="{% url "organization_home" user.organization.key %}">{{user.organization.short_name|escape}}</a></span>{% endif %}
+</td>{% endblock %}{% block user_data %}{% if  not contest.ended %}{% if  user.participation and not user.participation.ended %}
+<div data-unix="{{ user.participation.start|utc|date:"c" }}" class="start-time active moment-time-toggle">{% trans "Started" %}{{' '|escape}}<span class="relative"></span>{{'.'|escape}}
+</div>{% else %}
+<div class="start-time">{% trans "Participation ended." %}</div>{% endif %}{% endif %}{% if  perms.judge.change_contestparticipation %}
+<div data-link="{% url "admin:judge_contestparticipation_change" user.participation.id %}" class="edit-participation"></div>{% endif %}{% endblock %}{% block before_point_head %}{% for problem in __pyjade_iter(problems,1) %}
+<th class="points header"><a href="{% url "contest_ranked_submissions" contest.key problem.problem.code %}">{{forloop.counter|escape}}
+    <div class="point-denominator">{{problem.points|escape}}</div></a>
+</th>{% endfor %}{% endblock %}{% block before_point %}{% for problem in __pyjade_iter(user.problems,1) %}{% if  problem %}
+<td{{__pyjade_attrs(attrs=[('class', ((('pretest-' + problem.state if problem.is_pretested and contest.run_pretests_only else problem.state))))])}}><a href="{% url "contest_user_submissions" contest.key user.user.username problem.code %}">{{problem.points|floatformat|escape}}
+    <div class="solving-time">{{problem.time|timedelta:"noday"|escape}}</div></a>
+</td>{% else %}
+<td></td>{% endif %}{% endfor %}{% endblock %}{% block point %}
+<td class="user-points">{{user.points|floatformat|escape}}
+  <div class="solving-time">{{user.cumtime|timestampdelta:"noday"|escape}}</div>
+</td>{% endblock %}

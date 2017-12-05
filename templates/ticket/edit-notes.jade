@@ -1,5 +1,0 @@
-- load i18n
-form#edit-notes(action=request.get_full_path(), method='post')
-    - csrf_token
-    | #{form.notes}
-    button.submit(type='submit') {% trans "Update" %}
