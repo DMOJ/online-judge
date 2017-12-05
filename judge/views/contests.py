@@ -256,7 +256,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                     contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0)
                 )
             except ContestParticipation.DoesNotExist:
-                if access_code != contest.access_code:
+                if contest.access_code and access_code != contest.access_code:
                     raise ContestAccessDenied()
 
                 participation = ContestParticipation.objects.create(
