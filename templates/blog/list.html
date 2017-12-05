@@ -88,14 +88,14 @@
     <div id="mobile" class="tabs">
         <ul>
             <li id="blog-tab" class="tab active"><a href="#">
-                <i class="tab-icon fa fa-info-circle"></i> {% trans "Blog" %}
+                <i class="tab-icon fa fa-info-circle"></i> {{ _('Blog') }}
             </a></li>
-            <li id="event-tab" class="tab"><a href="#"><i class="tab-icon fa fa-rss"></i> {% trans "Events" %}</a></li>
+            <li id="event-tab" class="tab"><a href="#"><i class="tab-icon fa fa-rss"></i> {{ _('Events') }}</a></li>
         </ul>
     </div>
     <div id="blog-container">
         <div class="blog-content sidebox">
-            <h3>{% trans "News" %} <i class="fa fa-terminal"></i></h3>
+            <h3>{{ _('News') }} <i class="fa fa-terminal"></i></h3>
             <div class="sidebox-content">
                 {% for post in posts %}
                     <section class="{% if post.sticky %}sticky {% endif %}post">
@@ -109,7 +109,7 @@
                                     <span class="post-authors">
                                         {% for author in authors %}
                                             <span class="rating {{ rating_class(author) }} {{ author.display_rank }}">
-                                                <a href="{% url "user_page" author.user.username %}">{{ author.user.username }}</a>
+                                                <a href="{{ url('user_page', author.user.username) }}">{{ author.user.username }}</a>
                                             </span>{% if not loop.last %}, {% endif %}
                                         {% endfor %}
                                     </span>
@@ -119,7 +119,7 @@
                                 {% trans time=post.publish_on|date(_("N j, Y, g:i")) %}
                                     posted on {{ time }}
                                 {% endtrans %}
-                                {% trans "posted" %}
+                                {{ _('posted') }}
                             </span>
                         </span>
                         <span class="comment-data">
@@ -130,7 +130,7 @@
                         </span>
                         <div class="summary content-description">
                             {% cache 86400 post_summary post.id %}
-                                {{ post.summary|default(post.content)|markdown('blog', 'svg', lazy_load=True)|reference|escape }}
+                                {{ post.summary|default(post.content)|markdown('blog', 'svg', lazy_load=True)|reference }}
                             {% endcache %}
                         </div>
                     </section>
@@ -151,7 +151,7 @@
                             <ul>
                                 {% for clarification in clarifications %}
                                     <li class="clarification">
-                                        <a href="{% url "problem_detail" clarification.problem.code %}" class="problem">
+                                        <a href="{{ url('problem_detail', clarification.problem.code) }}" class="problem">
                                             {{ clarification.problem.name }}
                                         </a>
                                         <span data-unix="{{ clarification.date|utc|date("c") }}" class="time">
@@ -204,14 +204,14 @@
             {% endif %}
 
             <div class="blog-sidebox sidebox">
-                <h3>{% _('Comment stream') %} <i class="fa fa-comments"></i></h3>
+                <h3>{{ _('Comment stream') }} <i class="fa fa-comments"></i></h3>
                 <div class="sidebox-content">
                     <ul>
                         {% for comment in comments %}
                             <li>
                             <span style="padding-left:0.25em"
                                   class="poster rating {{ rating_class(comment.author) }} {{ comment.author.display_rank }}">
-                                <a href="{% url "user_page" comment.author.user.username %}">
+                                <a href="{{ url('user_page', comment.author.user.username) }}">
                                     {{ comment.author.user.username }}
                                 </a>
                             </span> &rarr; <a
@@ -226,12 +226,12 @@
                 </div>
             </div>
             <div class="blog-sidebox sidebox">
-                <h3>{% trans "New problems" %} <i class="fa fa-puzzle-piece"></i>
+                <h3>{{ _('New problems') }} <i class="fa fa-puzzle-piece"></i>
                 </h3>
                 <div class="sidebox-content">
                     <ul class="problem-list">
                         {% for problem in new_problems %}
-                            <li><a href="{% url "problem_detail" problem.code %}">{{ problem.name }}</a></li>
+                            <li><a href="{{ url('problem_detail', problem.code) }}">{{ problem.name }}</a></li>
                         {% endfor %}
                     </ul>
                     <span class="rssatom">
@@ -243,13 +243,13 @@
             </div>
             {% if perms.judge.test_site and own_open_tickets %}
                 <div class="blog-sidebox sidebox">
-                    <h3>{% trans "My open tickets" %} <i class="fa fa-question-circle"></i></h3>
+                    <h3>{{ _('My open tickets') }} <i class="fa fa-question-circle"></i></h3>
                     <div class="sidebox-content">
                         <ul class="own-open-tickets">
-                            {% for ticket in __pyjade_iter(own_open_tickets,1) %}
+                            {% for ticket in own_open_tickets %}
                                 <li>
                                     <div class="title">
-                                        <a href="{% url "ticket" ticket.id %}">{{ ticket.title }}</a>
+                                        <a href="{{ url('ticket', ticket.id) }}">{{ ticket.title }}</a>
                                     </div>
                                     <div class="object">
                                         <a href="{{ ticket.linked_item.get_absolute_url() }}">
@@ -264,13 +264,13 @@
 
             {% if perms.judge.test_site and open_tickets %}
                 <div class="blog-sidebox sidebox">
-                    <h3>{% trans "New tickets" %} <i class="fa fa-exclamation-circle"></i></h3>
+                    <h3>{{ _('New tickets') }} <i class="fa fa-exclamation-circle"></i></h3>
                     <div class="sidebox-content">
                         <ul class="open-tickets">
                             {% for ticket in open_tickets %}
                                 <li>
                                     <div class="title">
-                                        <a href="{% url "ticket" ticket.id %}">{{ ticket.title }}</a>
+                                        <a href="{{ url(ticket, ticket.id) }}">{{ ticket.title }}</a>
                                     </div>
                                     <div class="object">
                                         <a href="{{ ticket.linked_item.get_absolute_url() }}">
@@ -278,7 +278,7 @@
                                     </div>
                                     {% with user=ticket.user %}
                                         <div class="user {{ user.display_rank }}">
-                                            <a href="{% url "user_page" user.user.username %}">{{ user.user.username }}</a>
+                                            <a href="{{ url('user_page', user.user.username) }}">{{ user.user.username }}</a>
                                         </div>
                                     {% endwith %}
                                 </li>

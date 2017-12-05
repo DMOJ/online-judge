@@ -1,7 +1,7 @@
 {% extends "blog/list.html" %}
 {% block before_posts %}
     {% if i18n_config.home_page_top %}
-        {% evaluate i18n_config.home_page_top %}
+        {{ render_django(i18n_config.home_page_top) }}
     {% endif %}
 {% endblock %}
 {% block meta %}

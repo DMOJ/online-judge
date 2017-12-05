@@ -138,6 +138,7 @@ INSTALLED_APPS += (
     'pyjade.ext.django',
     'statici18n',
     'impersonate',
+    'django_jinja',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -190,6 +191,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'templates'),
         ],
         'OPTIONS': {
+            'match_extension': '.html',
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.media',
@@ -210,6 +212,9 @@ TEMPLATES = [
             ],
             'filters': {
                 'markdown': 'judge.templatetags.markdown.markdown',
+                'reference': 'judge.templatetags.reference.reference',
+                'item_title': 'judge.templatetags.reference.item_title',
+                'as_countdown': 'judge.templatetags.timedelta.as_countdown',
             },
             'globals': {
                 'rating_class': 'judge.jinja2.rating.get_rating_class',
@@ -219,7 +224,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'APP_DIRS': True,
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
     }
 ]
 
