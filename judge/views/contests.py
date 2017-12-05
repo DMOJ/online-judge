@@ -211,6 +211,10 @@ class ContestAccessDenied(Exception):
 class ContestAccessCodeForm(forms.Form):
     access_code = forms.CharField(max_length=255)
 
+    def __init__(self, *args, **kwargs):
+        super(ContestAccessCodeForm, self).__init__(*args, **kwargs)
+        self.fields['access_code'].widget.attrs.update({'autocomplete': 'off'})
+
 
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def get(self, request, *args, **kwargs):
