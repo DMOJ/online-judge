@@ -2,6 +2,7 @@ extends common-content
 - load staticfiles
 - load cache
 - load i18n
+- load json
 
 block media
     link(rel='stylesheet', href='{% static "libs/nouislider.min.css" %}')
@@ -137,22 +138,16 @@ block js_media
                 },
                 from: function (value) {
                     return +value;
-                },
+                }
             };
             var $slider = $('#point-slider');
             if ($slider.length) {
                 noUiSlider.create($slider[0], {
-                    start: [1, 7],
+                    start: [#{point_start}, #{point_end}],
                     connect: true,
                     snap: true,
                     tooltips: [intFormatter, intFormatter],
-                    range: {
-                        'min': 0,
-                        '25%': 1,
-                        '50%': 3,
-                        '75%': 7,
-                        'max': 10,
-                    }
+                    range: #{point_values|json}
                 });
             }
         });

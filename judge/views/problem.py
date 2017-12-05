@@ -1,3 +1,5 @@
+from __future__ import division
+
 import itertools
 import logging
 import os
@@ -396,7 +398,28 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             context['hot_problems'] = hot_problems(timedelta(days=1), 7)
         else:
             context['hot_problems'] = None
+
+        context['point_start'], context['point_end'], context['point_values'] = self.get_noui_slider_points()
         return context
+
+    def get_noui_slider_points(self):
+        points = list(self.object_list.values_list('points', flat=True).distinct())
+        if not points:
+            return 0, 0, {}
+        if len(points) == 1:
+            return points[0], points[0], {
+                'min': points[0] - 1,
+                'max': points[0] + 1,
+            }
+
+        start, end = points[0], points[-1]
+        if self.point_start is not None:
+            start = self.point_start
+        if self.point_end is not None:
+            end = self.point_end
+        points_map = {0.0: 'min', 1.0: 'max'}
+        size = len(points) - 1
+        return start, end, {points_map.get(i / size, '%.2f%%' % (100 * i / size,)): j for i, j in enumerate(points)}
 
     def GET_with_session(self, request, key):
         if not request.GET:
@@ -427,6 +450,9 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                 self.selected_types = map(int, request.GET.getlist('type'))
             except ValueError:
                 pass
+
+        self.point_start = request.GET.get('point_start')
+        self.point_end = request.GET.get('point_end')
 
     def get(self, request, *args, **kwargs):
         self.setup(request)
