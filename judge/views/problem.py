@@ -371,9 +371,9 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                         Q(code__icontains=query) | Q(name__icontains=query) |
                         Q(translations__name__icontains=query, translations__language=self.request.LANGUAGE_CODE))
         self.prepoint_queryset = queryset
-        if self.point_start:
+        if self.point_start is not None:
             queryset = queryset.filter(points__gte=self.point_start)
-        if self.point_end:
+        if self.point_end is not None:
             queryset = queryset.filter(points__lte=self.point_end)
         return queryset.distinct()
 
