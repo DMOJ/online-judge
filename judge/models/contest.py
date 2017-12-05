@@ -137,10 +137,11 @@ class Contest(models.Model):
 
     class Meta:
         permissions = (
-            ('see_private_contest', 'See private contests'),
-            ('edit_own_contest', 'Edit own contests'),
-            ('edit_all_contest', 'Edit all contests'),
-            ('contest_rating', 'Rate contests'),
+            ('see_private_contest', _('See private contests')),
+            ('edit_own_contest', _('Edit own contests')),
+            ('edit_all_contest', _('Edit all contests')),
+            ('contest_rating', _('Rate contests')),
+            ('contest_access_code', _('Contest access codes')),
         )
         verbose_name = _('contest')
         verbose_name_plural = _('contests')

@@ -24,4 +24,8 @@ class Migration(migrations.Migration):
             name='timezone',
             field=models.CharField(choices=TIMEZONE, default=b'America/Toronto', max_length=50, verbose_name='location'),
         ),
+        migrations.AlterModelOptions(
+            name='contest',
+            options={'permissions': (('see_private_contest', 'See private contests'), ('edit_own_contest', 'Edit own contests'), ('edit_all_contest', 'Edit all contests'), ('contest_rating', 'Rate contests'), ('contest_access_code', 'Contest access codes')), 'verbose_name': 'contest', 'verbose_name_plural': 'contests'},
+        ),
     ]
