@@ -106,6 +106,11 @@ block media
             }
 
 block js_media
+    script.
+        window.point_start = #{point_start};
+        window.point_end = #{point_end};
+        window.point_values = #{point_values|json|safe};
+
     script(src='{% static "libs/nouislider.min.js" %}', type='text/javascript')
     script.
         $(function() {
@@ -132,6 +137,18 @@ block js_media
                         .attr('method', 'POST').appendTo($('body')).submit());
             });
 
+            var info_float = $('.info-float');
+            var container = $('#content-right');
+            if (window.bad_browser) {
+                container.css('float', 'right');
+            } else if (!featureTest('position', 'sticky')) {
+                fix_div(info_float, 55);
+                $(window).resize(function () {
+                    info_float.width(container.width());
+                });
+                info_float.width(container.width());
+            }
+
             var intFormatter = {
                 to: function (value) {
                     return value;
@@ -142,12 +159,19 @@ block js_media
             };
             var $slider = $('#point-slider');
             if ($slider.length) {
+                var $start = $('#point-start');
+                var $end = $('#point-end');
+
                 noUiSlider.create($slider[0], {
-                    start: [#{point_start}, #{point_end}],
+                    start: [point_start, point_end],
                     connect: true,
                     snap: true,
                     tooltips: [intFormatter, intFormatter],
-                    range: #{point_values|json|safe}
+                    range: point_values
+                }).on('change', function (values) {
+                    var start = +values[0], end = +values[1];
+                    $start.prop('disabled', start === point_values.min).val(start);
+                    $end.prop('disabled', end === point_values.max).val(end);
                 });
             }
         });
@@ -180,21 +204,6 @@ block js_media
                     }
                 });
             });
-
-    script(type='text/javascript').
-        $(function() {
-            var info_float = $('.info-float');
-            var container = $('#content-right');
-            if (window.bad_browser) {
-                container.css('float', 'right');
-            } else if (!featureTest('position', 'sticky')) {
-                fix_div(info_float, 55);
-                $(window).resize(function () {
-                    info_float.width(container.width());
-                });
-                info_float.width(container.width());
-            }
-        });
 
 block title_ruler
 

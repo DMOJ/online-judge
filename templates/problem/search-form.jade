@@ -41,6 +41,8 @@
             if point_values
                 div.form-label {% trans "Point range" %}
                 #point-slider
+            input#point-start(type='hidden', name='point_start', disabled)
+            input#point-end(type='hidden', name='point_end', disabled)
             .form-submit-group
                 a#go.button(onclick='form.submit()') {% trans "Go" %}
                 a#random.button(href='{% url "problem_random" %}?{{ request.META.QUERY_STRING }}') {% trans "Random" %}
