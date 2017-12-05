@@ -18,7 +18,7 @@
                 label(for='show_types') {% trans "Show problem types" %}
             .filter-form-group
                 label(for='category'): i {% trans "Category" %}
-                select#category(name='category', onchange='form.submit()')
+                select#category(name='category')
                     if category
                         option(value='', selected) {% trans "All" %}
                     else
@@ -44,5 +44,5 @@
             input#point-start(type='hidden', name='point_start', disabled)
             input#point-end(type='hidden', name='point_end', disabled)
             .form-submit-group
-                a#go.button(onclick='form.submit()') {% trans "Go" %}
+                a#go.button() {% trans "Go" %}
                 a#random.button(href='{% url "problem_random" %}?{{ request.META.QUERY_STRING }}') {% trans "Random" %}

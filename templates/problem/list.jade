@@ -116,21 +116,34 @@ block js_media
         script(src='{% static "libs/nouislider.min.js" %}', type='text/javascript')
         script.
             $(function() {
-                $('#category').select2().css({'visibility': 'visible'});
+                var $form = $('form#filter-form');
+                var $search = $('#search');
+                var $category = $('#category');
+
+                function clean_submit() {
+                    $search.prop('disabled', !$search.val());
+                    $category.prop('disabled', !$category.val());
+                    $form.submit();
+                }
+
+                $category.select2().css({'visibility': 'visible'}).change(clean_submit);
                 $('#types').select2({multiple: 1, placeholder: '{% trans "Filter by type..." %}'})
                     .css({'visibility': 'visible'});
+
                 // This is incredibly nasty to do but it's needed because otherwise the select2 steals the focus
-                $('#search').keypress(function (e) {
+                $search.keypress(function (e) {
                     if (e.keyCode == 13)
                         $('#go').click();
                 });
+
                 $('#random').click(function (e) {
-                    var $form = $('form#filter-form');
                     var action = $form.attr('action');
                     $form.attr('action', '{% url "problem_random" %}').attr('target', '_blank').submit();
                     $form.attr('action', action).attr('target', '');
                     e.preventDefault();
                 });
+
+                $('#go').click(clean_submit);
 
                 $('input#full_text, input#hide_solved, input#show_types').click(function () {
                     ($('<form>').attr('action', window.location.pathname + '?' + $('form#filter-form').serialize())
