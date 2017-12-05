@@ -38,6 +38,7 @@ from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.problems import contest_completed_ids, user_completed_ids, contest_attempted_ids, user_attempted_ids, \
     hot_problems
+from judge.utils.strings import safe_int_or_none, safe_float_or_none
 from judge.utils.views import TitleMixin, generic_message, QueryStringSortMixin
 
 
@@ -445,12 +446,6 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         if not self.show_types:
             self.all_sorts.discard('type')
 
-        def safe_int_or_none(value):
-            try:
-                return int(value)
-            except (ValueError, TypeError):
-                return None
-
         self.category = safe_int_or_none(request.GET.get('category'))
         if 'type' in request.GET:
             try:
@@ -458,8 +453,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             except ValueError:
                 pass
 
-        self.point_start = safe_int_or_none(request.GET.get('point_start'))
-        self.point_end = safe_int_or_none(request.GET.get('point_end'))
+        self.point_start = safe_float_or_none(request.GET.get('point_start'))
+        self.point_end = safe_float_or_none(request.GET.get('point_end'))
 
     def get(self, request, *args, **kwargs):
         self.setup(request)
