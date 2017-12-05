@@ -408,7 +408,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         return context
 
     def get_noui_slider_points(self):
-        points = list(self.prepoint_queryset.values_list('points', flat=True).distinct())
+        points = sorted(self.prepoint_queryset.values_list('points', flat=True).distinct())
         if not points:
             return 0, 0, {}
         if len(points) == 1:
