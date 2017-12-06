@@ -7,6 +7,7 @@ import mistune
 from django.conf import settings
 from lxml import html
 from lxml.etree import XMLSyntaxError, ParserError
+from jinja2 import Markup
 
 from judge.highlight_code import highlight_code
 from judge.jinja2.markdown.camo import client as camo_client
@@ -136,4 +137,4 @@ def markdown(value, style, math_engine=None, lazy_load=False):
         for processor in post_processors:
             processor(tree)
         result = html.tostring(tree, encoding='unicode')
-    return result
+    return Markup(result)
