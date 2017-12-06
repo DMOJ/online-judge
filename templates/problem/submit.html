@@ -234,10 +234,9 @@
                     <div id="language-select">
                         <select id="id_language" name="language">
                             {% for lang in form.fields.language.queryset %}
-                                {% set runtime_versions = lang.runtime_versions %}
-                                <option id="{{ lang.id }}" data-id="{{ lang.id }}" data-name="{{ lang.name }}"
+                                <option value="{{ lang.id }}" data-id="{{ lang.id }}" data-name="{{ lang.name }}"
                                         data-info="{{ lang.info }}" data-ace="{{ lang.ace }}"
-                                        data-judge-info="{{ runtime_versions(lang.runtime_versions) }}"
+                                        data-judge-info="{{ runtime_versions(lang.runtime_versions()) }}"
                                         {% if lang.id == default_lang.id %}selected{% endif %}>{{ lang.name }}</option>
                             {% endfor %}
                         </select>
