@@ -1,8 +1,8 @@
 from django.core.cache import cache
 from django.template.defaultfilters import truncatewords
 
-from judge.templatetags.markdown import markdown_filter
-from judge.templatetags.reference import reference
+from judge.jinja2.markdown import markdown_filter
+from judge.jinja2.reference import reference
 
 
 def generate_opengraph(cache_key, data, style):

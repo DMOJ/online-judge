@@ -1,6 +1,8 @@
 from django.utils import translation
+from django_jinja import library
 
 
+@library.global_function('language_info')
 def get_language_info(language):
     # ``language`` is either a language code string or a sequence
     # with the language code as its first item
@@ -10,5 +12,6 @@ def get_language_info(language):
         return translation.get_language_info(str(language))
 
 
+@library.global_function('language_info_list')
 def get_language_info_list(langs):
     return [get_language_info(lang) for lang in langs]

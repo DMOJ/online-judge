@@ -1,1 +1,3 @@
-{%  load timedelta %}<span data-secs="{{ countdown|seconds }}" class="time-remaining">{{countdown|timedelta:"localized"|escape}}</span>
+<span data-secs="{{ countdown|seconds }}" class="time-remaining">
+    {{ countdown|timedelta("localized") }}
+</span>

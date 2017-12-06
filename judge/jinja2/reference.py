@@ -1,8 +1,9 @@
 import re
 from collections import defaultdict
 
-from django import template
+from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
+from django_jinja import library
 from lxml.html import Element
 
 from judge import lxml_tree
@@ -10,8 +11,6 @@ from judge.models import Contest
 from judge.models import Problem
 from judge.models import Profile
 from judge.ratings import rating_class, rating_progress
-
-register = template.Library()
 
 rereference = re.compile(r'\[(r?user):(\w+)\]')
 
@@ -53,7 +52,7 @@ def get_user_rating(username, data):
 def get_user_info(usernames):
     return {name: (rank, rating) for name, rank, rating in
             Profile.objects.filter(user__username__in=usernames)
-                   .values_list('user__username', 'display_rank', 'rating')}
+                .values_list('user__username', 'display_rank', 'rating')}
 
 
 reference_map = {
@@ -112,7 +111,7 @@ def update_tree(list, results, is_tail=False):
             link = child
 
 
-@register.filter(is_safe=True)
+@library.filter
 def reference(text):
     tree = lxml_tree.fromstring(text)
     texts = []
@@ -130,10 +129,22 @@ def reference(text):
     return tree
 
 
-@register.filter(name='item_title')
+@library.filter
 def item_title(item):
     if isinstance(item, Problem):
         return item.name
     elif isinstance(item, Contest):
         return item.name
     return '<Unknown>'
+
+
+@library.global_function
+@library.render_with('user/link.html')
+def link_user(user):
+    if isinstance(user, Profile):
+        user, profile = user.user, user
+    elif isinstance(user, AbstractUser):
+        profile = user.profile
+    else:
+        raise ValueError('Expected profile or user, got %s' % (type(user),))
+    return {'user': user, 'profile': profile}

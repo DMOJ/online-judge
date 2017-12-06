@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.templatetags.static import static
 from lxml import html
 
 

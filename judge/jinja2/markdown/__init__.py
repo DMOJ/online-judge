@@ -4,19 +4,17 @@ from HTMLParser import HTMLParser
 from urlparse import urlparse
 
 import mistune
-from django import template
 from django.conf import settings
-from django.utils.safestring import mark_safe
+from django_jinja import library
 from lxml import html
 from lxml.etree import XMLSyntaxError, ParserError
 
 from judge.highlight_code import highlight_code
-from judge.templatetags.markdown.camo import client as camo_client
-from judge.templatetags.markdown.lazy_load import lazy_load as lazy_load_processor
-from judge.templatetags.markdown.math import MathRenderer, MathInlineLexer, MathInlineGrammar
+from judge.jinja2.markdown.camo import client as camo_client
+from judge.jinja2.markdown.lazy_load import lazy_load as lazy_load_processor
+from judge.jinja2.markdown.math import MathRenderer, MathInlineLexer, MathInlineGrammar
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
 
-register = template.Library()
 logger = logging.getLogger('judge.html')
 
 NOFOLLOW_WHITELIST = getattr(settings, 'NOFOLLOW_EXCLUDED', set())
@@ -78,18 +76,18 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
     def block_html(self, html):
         if self.texoid and html.startswith('<latex'):
             attr = html[6:html.index('>')]
-            latex = html[html.index('>')+1:html.rindex('<')]
+            latex = html[html.index('>') + 1:html.rindex('<')]
             latex = self.parser.unescape(latex)
             result = self.texoid.get_result(latex)
             if not result:
                 return '<pre>%s</pre>' % mistune.escape(latex, smart_amp=False)
             elif 'error' not in result:
                 img = ('''<img src="%(svg)s" onerror="this.src='%(png)s';this.onerror=null"'''
-                          'width="%(width)s" height="%(height)s"%(tail)s>') % {
-                    'svg': result['svg'], 'png': result['png'],
-                    'width': result['meta']['width'], 'height': result['meta']['height'],
-                    'tail': ' /' if self.options.get('use_xhtml') else ''
-                }
+                       'width="%(width)s" height="%(height)s"%(tail)s>') % {
+                          'svg': result['svg'], 'png': result['png'],
+                          'width': result['meta']['width'], 'height': result['meta']['height'],
+                          'tail': ' /' if self.options.get('use_xhtml') else ''
+                      }
                 style = ['max-width: 100%',
                          'height: %s' % result['meta']['height'],
                          'max-height: %s' % result['meta']['height'],
@@ -108,6 +106,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
         return super(AwesomeRenderer, self).header(text, level + 2, *args, **kwargs)
 
 
+@library.filter
 def markdown(value, style, math_engine=None, lazy_load=False):
     styles = getattr(settings, 'MARKDOWN_STYLES', {}).get(style, getattr(settings, 'MARKDOWN_DEFAULT_STYLE', {}))
     escape = styles.get('safe_mode', True)
@@ -138,29 +137,3 @@ def markdown(value, style, math_engine=None, lazy_load=False):
             processor(tree)
         result = html.tostring(tree, encoding='unicode')
     return result
-
-
-@register.filter(name='markdown')
-def markdown_filter(value, style):
-    return mark_safe(markdown(
-        value, style, math_engine=getattr(value, 'math_engine', None),
-        lazy_load=getattr(value, 'lazy_load', None),
-    ))
-
-
-class MarkdownSettingString(unicode):
-    __slots__ = ('math_engine', 'lazy_load')
-
-    @classmethod
-    def make_filter(cls, name, field):
-        @register.filter(name=name)
-        def template_filter(value, data):
-            if not isinstance(value, MarkdownSettingString):
-                value = MarkdownSettingString(value)
-            setattr(value, field, data)
-            return value
-        return template_filter
-
-
-MarkdownSettingString.make_filter('with_math', 'math_engine')
-MarkdownSettingString.make_filter('with_lazy_load', 'lazy_load')

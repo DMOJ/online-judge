@@ -108,9 +108,7 @@
                                 {% if authors %}
                                     <span class="post-authors">
                                         {% for author in authors %}
-                                            <span class="rating {{ rating_class(author) }} {{ author.display_rank }}">
-                                                <a href="{{ url('user_page', author.user.username) }}">{{ author.user.username }}</a>
-                                            </span>{% if not loop.last %}, {% endif %}
+                                            {{ link_user(author) }}{% if not loop.last %}, {% endif %}
                                         {% endfor %}
                                     </span>
                                 {% endif %}
@@ -130,7 +128,7 @@
                         </span>
                         <div class="summary content-description">
                             {% cache 86400 post_summary post.id %}
-                                {{ post.summary|default(post.content, true)|markdown('blog', 'svg', lazy_load=True)|reference|str }}
+                                {{ post.summary|default(post.content, true)|markdown('blog', 'svg', lazy_load=True)|reference|str|safe }}
                             {% endcache %}
                         </div>
                     </section>
@@ -151,7 +149,8 @@
                             <ul>
                                 {% for clarification in clarifications %}
                                     <li class="clarification">
-                                        <a href="{{ url('problem_detail', clarification.problem.code) }}" class="problem">
+                                        <a href="{{ url('problem_detail', clarification.problem.code) }}"
+                                           class="problem">
                                             {{ clarification.problem.name }}
                                         </a>
                                         <span data-unix="{{ clarification.date|utc|date("c") }}" class="time">
@@ -209,13 +208,10 @@
                     <ul>
                         {% for comment in comments %}
                             <li>
-                            <span style="padding-left:0.25em"
-                                  class="poster rating {{ rating_class(comment.author) }} {{ comment.author.display_rank }}">
-                                <a href="{{ url('user_page', comment.author.user.username) }}">
-                                    {{ comment.author.user.username }}
-                                </a>
-                            </span> &rarr; <a
-                                    href="{{ comment.link }}#comment-{{ comment.id }}">{{ comment.page_title }}</a>
+                                <span style="padding-left:0.25em" class="poster">
+                                    {{ link_user(comment.author) }}
+                                </span> &rarr;
+                                <a href="{{ comment.link }}#comment-{{ comment.id }}">{{ comment.page_title }}</a>
                             </li>{% endfor %}
                     </ul>
                     <span class="rssatom">

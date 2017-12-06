@@ -11,7 +11,7 @@ class JudgeAppConfig(AppConfig):
         #          OPERATIONS MAY HAVE SIDE EFFECTS.
         #          DO NOT REMOVE THINKING THE IMPORT IS UNUSED.
         # noinspection PyUnresolvedReferences
-        from . import signals
+        from . import signals, jinja2
 
         from django.contrib.flatpages.models import FlatPage
         from django.contrib.flatpages.admin import FlatPageAdmin
