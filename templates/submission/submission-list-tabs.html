@@ -1,23 +1,32 @@
-{%  load i18n %}
 <div class="page-title">
-  <div class="tabs">
-    <h2>{{content_title|escape}}</h2><span class="spacer"></span>
-    <ul>
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'all_submissions_list' else ''))))])}}><a{{__pyjade_attrs(attrs=[('href',(all_submissions_link))])}}><i class="tab-icon fa fa-list"></i> {% trans "All" %}</a>
-      </li>
-{% if  my_submissions_link or tab == 'my_submissions_tab' %}
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'my_submissions_tab' else ''))))])}}><a{{__pyjade_attrs(attrs=[('href',(my_submissions_link))])}}><i class="tab-icon fa fa-user"></i> {% trans "Mine" %}</a>
-      </li>{% endif %}
-{% if  best_submissions_link %}
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'best_submissions_list' else ''))))])}}><a{{__pyjade_attrs(attrs=[('href',(best_submissions_link))])}}><i class="tab-icon fa fa-bar-chart"></i> {% trans "Best" %}</a>
-      </li>{% endif %}
-{% if  tab == 'user_submissions_tab' %}
-      <li class="tab active"><a><i class="tab-icon fa fa-user"></i>
-{%  blocktrans with username=tab_username %}{{ username }}'s</a>
-      </li>{% endif %}
-{% if  perms.judge.change_submission %}
-      <li class="tab"><a href="{% url "admin:judge_submission_changelist" %}"><i class="tab-icon fa fa-edit"></i> {% trans "Admin" %}</a>
-      </li>{% endif %}
-    </ul>
-  </div>
+    <div class="tabs">
+        <h2>{{ content_title }}</h2><span class="spacer"></span>
+        <ul>
+            <li class="tab{% if tab == 'all_submissions_list' %} active{% endif %}">
+                <a href="{{ all_submissions_link }}"><i class="tab-icon fa fa-list"></i> {{ _('All') }}</a>
+            </li>
+            {% if my_submissions_link or tab == 'my_submissions_tab' %}
+                <li class="tab{% if tab == 'my_submissions_tab' %} active{% endif %}">
+                    <a href="{{ my_submissions_link }}"><i class="tab-icon fa fa-user"></i> {{ _('Mine') }}</a>
+                </li>
+            {% endif %}
+            {% if best_submissions_link %}
+                <li class="tab{% if tab == 'best_submissions_list' %} active{% endif %}">
+                    <a href="{{ best_submissions_link }}"><i class="tab-icon fa fa-bar-chart"></i> {{ _('Best') }}</a>
+                </li>
+            {% endif %}
+            {% if tab == 'user_submissions_tab' %}
+                <li class="tab active">
+                    <a><i class="tab-icon fa fa-user"></i>{{ _("%(user)s's", user=username) }}</a>
+                </li>
+            {% endif %}
+            {% if perms.judge.change_submission %}
+                <li class="tab">
+                    <a href="{{ url('admin:judge_submission_changelist') }}">
+                        <i class="tab-icon fa fa-edit"></i> {{ _('Admin') }}
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
 </div>

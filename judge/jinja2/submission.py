@@ -1,10 +1,8 @@
-from django import template
-
-register = template.Library()
+from . import registry
 
 
-@register.simple_tag(takes_context=True)
-def submission_layout(context, submission, profile_id, user, editable_problem_ids, completed_problem_ids):
+@registry.function
+def submission_layout(submission, profile_id, user, editable_problem_ids, completed_problem_ids):
     problem_id = submission.problem_id
     can_view = False
 
@@ -24,6 +22,4 @@ def submission_layout(context, submission, profile_id, user, editable_problem_id
     if submission.status != 'G':
         info_colspan += 1
 
-    context['can_view'] = can_view
-    context['info_colspan'] = info_colspan
-    return ''
+    return can_view, info_colspan

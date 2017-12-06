@@ -212,3 +212,14 @@ label[for="language"], label[for="status"] {
 .source-wrap {
     overflow-x: auto;
 }
+
+.statistics-table {
+    .status {
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .count {
+        color: black;
+    }
+}

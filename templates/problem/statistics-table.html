@@ -1,11 +1,11 @@
-{%  load i18n %}
-<h3>{% trans "Statistics" %} <i class="fa fa-pie-chart"></i>
-</h3>
+<h3>{{ _('Statistics') }} <i class="fa fa-pie-chart"></i></h3>
 <div class="sidebox-content sidebox-table">
-  <table class="table">{% for key,cls,count in __pyjade_iter(results,3) %}
-    <tr{{__pyjade_attrs(attrs=[('class', ((cls)))])}}>
-      <td style="font-weight:bold;text-align:left">{{key|escape}}</td>
-      <td style="color:black">{{count|escape}}</td>
-    </tr>{% endfor %}
-  </table>
+    <table class="table statistics-table">
+        {% for key, cls, count in results %}
+            <tr class="{{ cls }}">
+                <td class="status">{{ key }}</td>
+                <td class="count">{{ count }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 </div>
