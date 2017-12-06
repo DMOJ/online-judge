@@ -7,6 +7,7 @@ register = template.Library()
 
 
 def get_gravatar_url(email, size=80, default=None):
+    email = getattr(email, 'email', email)
     gravatar_url = '//www.gravatar.com/avatar/' + hashlib.md5(email.strip().lower()).hexdigest() + '?'
     args = {'d': 'identicon', 's': str(size)}
     if default:

@@ -48,7 +48,7 @@
     {% compress css %}
         <link rel="stylesheet" href="{{ static('style.css') }}">
         {% if PYGMENT_THEME %}
-            <link rel="stylesheet" href="{% static PYGMENT_THEME %}">
+            <link rel="stylesheet" href="{{ static(PYGMENT_THEME) }}">
         {% endif %}{% if INLINE_FONTAWESOME %}
         <link rel="stylesheet" href="{{ static('libs/fontawesome/font-awesome.css') }}">{% endif %}
         <link rel="stylesheet" type="text/css" href="{{ static('libs/featherlight/featherlight.min.css') }}">
@@ -56,7 +56,7 @@
         <link rel="stylesheet" type="text/css" href="{{ static('libs/select2/select2.css') }}">
     {% endcompress %}
     <link rel="canonical"
-          href="{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default:site.domain }}{{ request.get_full_path }}">
+          href="{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default(site.domain) }}{{ request.get_full_path() }}">
     {% if request.user.is_impersonate %}
         <style>
             #nav-container {
@@ -70,7 +70,7 @@
     {% endif %}
 
     {% compress js %}
-        <script>{% autoescape off %}{% inlinei18n LANGUAGE_CODE %}{% endautoescape %}</script>
+        <script>{{ inlinei18n(LANGUAGE_CODE)|safe }}</script>
         {% if INLINE_JQUERY %}
             <script src="{{ static('libs/jquery-1.11.2.min.js') }}"></script>
         {% endif %}
@@ -82,12 +82,12 @@
         {% include "extra_js.html" %}
         <script src="{{ static('common.js') }}"></script>
         <script>
+            moment.locale('{{ LANGUAGE_CODE }}');
             $(function () {
                 $('img.unveil').unveil(200);
             });
         </script>
     {% endcompress %}
-    <script>moment.locale('{{ LANGUAGE_CODE }}');</script>
     {% block js_media %}{% endblock %}
     {% if IN_CONTEST %}
         <script>$(function () {
@@ -157,7 +157,7 @@
     {% endif %}
 
     {# Don't run userscript since it may be malicious #}
-    {% if request.user.profile.user_script and not request.user.is_impersonate %}
+    {% if request.user.is_authenticated and request.user.profile.user_script and not request.user.is_impersonate %}
         <script type="text/javascript">{{ request.user.profile.user_script|safe }}</script>
     {% endif %}
 
@@ -178,7 +178,7 @@
     <div id="nav-container">
         <a id="navicon" href="javascript:void(0)"><i class="fa fa-bars"></i></a>
         <ul id="nav-list">
-            <li class="home-nav-element"><a href="{% url('home') %}">{% include "site-logo-fragment.html" %}</a></li>
+            <li class="home-nav-element"><a href="{{ url('home') }}">{% include "site-logo-fragment.html" %}</a></li>
             <li class="home-nav-element"><span class="nav-divider"></span></li>
             <li class="home-menu-item"><a href="{{ url('home') }}" class="nav-home">{{ _('Home') }}</a></li>
             {% for node in nav_bar recursive %}
@@ -204,7 +204,7 @@
                             <span>
                                 <img src="{{ gravatar(request.user, 32) }}" height="24" width="24">
                                 <span>
-                                    {% trans with username=request.user.username %}
+                                    {% trans username=request.user.username %}
                                         Hello, <b>{{ username }}</b>.
                                     {% endtrans %}
                                 </span>
@@ -241,13 +241,13 @@
 </nav>
 {% if IN_CONTEST %}
     <div id="contest-info">
-        <a href="{% url "contest_view" CONTEST.contest.key %}" style="vertical-align: middle">
+        <a href="{{ url('contest_view', CONTEST.contest.key) }}" style="vertical-align: middle">
             {{ CONTEST.contest.name }} -
             {% if CONTEST.spectate %}
                 {{ _('spectating') }}
             {% elif CONTEST.end_time %}
                 <div id="contest-time-remaining" data-secs="{{ CONTEST.time_remaining|seconds }}">
-                    {{ CONTEST.time_remaining|timedelta:"localized"}}
+                    {{ CONTEST.time_remaining|timedelta("localized") }}
                 </div>
             {% else %}
                 {{ _('virtual') }}

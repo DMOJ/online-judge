@@ -191,8 +191,10 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
         ],
+        'APP_DIRS': False,
         'OPTIONS': {
             'match_extension': '.html',
+            #'match_regex': r'^(?!admin/)(?!wpadmin/)',
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.media',
@@ -216,11 +218,15 @@ TEMPLATES = [
                 'reference': 'judge.templatetags.reference.reference',
                 'item_title': 'judge.templatetags.reference.item_title',
                 'as_countdown': 'judge.templatetags.timedelta.as_countdown',
+                'seconds': 'judge.templatetags.timedelta.seconds',
+                'timedelta': 'judge.templatetags.timedelta.timedelta',
+                'user_trans': 'judge.user_translations.ugettext',
             },
             'globals': {
                 'rating_class': 'judge.jinja2.rating.get_rating_class',
                 'gravatar': 'judge.templatetags.gravatar.get_gravatar_url',
                 'language_info_list': 'judge.jinja2.language.get_language_info_list',
+                'inlinei18n': 'statici18n.templatetags.statici18n.inlinei18n',
             },
             'extensions': DEFAULT_EXTENSIONS + [
                 'compressor.contrib.jinja2ext.CompressorExtension',
@@ -233,6 +239,16 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
         ],
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.media',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
     }
 ]
 
