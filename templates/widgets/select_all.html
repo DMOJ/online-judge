@@ -1,31 +1,34 @@
-{%  load i18n %}
-<div style="border:none"{{__pyjade_attrs(attrs=[('id',(select_all_name))])}}>
-  <div class="original-checkboxes">{{ original_widget }}
-  </div>
-{% if  empty %}{% trans "Nothing here." %}{% else %}
-
-  <label{{__pyjade_attrs(attrs=[('for',(select_all_id))])}}>
-    <input{{__pyjade_attrs(attrs=[('id',(select_all_id)), ('name',(select_all_name)), ('checked',(all_selected))])}} type="checkbox" class="checkall"/>{{' '|escape}}{% trans "Check all" %}
-  </label>{% endif %}
+<div style="border:none" id="{{ select_all_name }}">
+    <div class="original-checkboxes">{{ original_widget }}</div>
+    {% if empty %}
+        {{ _('Nothing here.') }}
+    {% else %}
+        <label>
+            <input id="{{ select_all_id }}" name="{{ select_all_name }}"{% if all_selected %} checked{% endif %}
+                   type="checkbox" class="checkall"> {{ _('Check all') }}
+        </label>
+    {% endif %}
 </div>
-<style>div.original-checkboxes ul {
-    margin: 0 0 0 2em;
-    padding: 0;
-    list-style-type: none;
-    -moz-columns: 15em 5;
-    -webkit-columns: 15em 5;
-    columns: 15em 5
-}
+<style>
+    div.original-checkboxes ul {
+        margin: 0 0 0 2em;
+        padding: 0;
+        list-style-type: none;
+        -moz-columns: 15em 5;
+        -webkit-columns: 15em 5;
+        columns: 15em 5
+    }
 
-div.original-checkboxes ul li {
-    list-style-type: none;
-}
+    div.original-checkboxes ul li {
+        list-style-type: none;
+    }
 </style>
-<script type="text/javascript">django.jQuery(function($) {
-    var box = $('div#' + '{{ select_all_name }}');
-    var original = box.find('.original-checkboxes');
-    $('.checkall').click(function ()  {
-        original.find(':checkbox').prop('checked', this.checked);
+<script type="text/javascript">
+    django.jQuery(function ($) {
+        var box = $('div#' + '{{ select_all_name }}');
+        var original = box.find('.original-checkboxes');
+        $('.checkall').click(function () {
+            original.find(':checkbox').prop('checked', this.checked);
+        });
     });
-});
 </script>
