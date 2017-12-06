@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block media %}
+    {% block content_media %}{% endblock %}
+{% endblock %}
+
 {% block js_media %}
     {% compress js %}
         <script src="{{ static('libs/clipboard/clipboard.js') }}"></script>

@@ -129,7 +129,7 @@
 
     {% if perms.judge.clone_problem %}
         <div>
-            <form action="{{ url('problem_cline', problem.code) }}" method="post">
+            <form action="{{ url('problem_clone', problem.code) }}" method="post">
                 {% csrf_token %}
                 <a id="clone-link" href="#">{{ _('Clone problem') }}</a>
             </form>
@@ -138,8 +138,7 @@
 
     <hr>
     <div class="problem-info-entry">
-        <i class="fa fa-check fa-fw"></i>
-        <span class="pi-name">{{ _('Points:') }}</span>
+        <i class="fa fa-check fa-fw"></i><span class="pi-name">{{ _('Points:') }}</span>
         <span class="pi-value">
             {% if contest_problem %}
                 {{ contest_problem.points }}{% if contest_problem.partial %} {{ _('(partial)') }}{% endif %}
@@ -149,8 +148,7 @@
         </span>
     </div>
     <div class="problem-info-entry">
-        <i class="fa fa-clock-o fa-fw"></i>
-        <span class="pi-name">{{ _('Time limit:') }}</span>
+        <i class="fa fa-clock-o fa-fw"></i><span class="pi-name">{{ _('Time limit:') }}</span>
         <span class="pi-value">{{ problem.time_limit }}s</span>
     </div>
     <div class="problem-lang-limits">
@@ -162,8 +160,7 @@
         {% endfor %}
     </div>
     <div class="problem-info-entry">
-        <i class="fa fa-server fa-fw"></i>
-        <span class="pi-name">{{ _('Memory limit:') }}</span>
+        <i class="fa fa-server fa-fw"></i><span class="pi-name">{{ _('Memory limit:') }}</span>
         <span class="pi-value">{{ problem.memory_limit|kbsimpleformat }}</span>
     </div>
     <div class="problem-lang-limits">
@@ -175,13 +172,14 @@
         {% endfor %}
     </div>
     {% cache 86400 problem_authors problem.id LANGUAGE_CODE %}
-        {% with authors=problem.authors.all %}
+        {% with authors=problem.authors.all() %}
             {% if authors %}
                 <div class="problem-info-entry">
-                    <i class="fa fa-pencil-square-o fa-fw"></i>
-                    <span class="pi-name">
-                        {% trans count=authors|length %}Author:{% pluralize count %}Authors:{% endtrans %}
-                    </span>
+                    <i class="fa fa-pencil-square-o fa-fw"></i><span class="pi-name">{% trans trimmed count=authors|length %}
+                        Author:
+                    {% pluralize count %}
+                        Authors:
+                    {% endtrans %}</span>
                     <div class="pi-value authors-value">{{ link_users(authors) }}</div>
                 </div>
             {% endif %}
@@ -192,8 +190,7 @@
         <div id="problem-types">
             {% with types=problem.types_list %}
                 <div class="toggle closed unselectable">
-                    <i class="fa fa-chevron-right fa-fw"></i>
-                    {% trans trimmed count=problem.types_list|length %}
+                    <i class="fa fa-chevron-right fa-fw"></i>{% trans trimmed count=problem.types_list|length %}
                         Problem type
                     {% pluralize count %}
                         Problem types
@@ -207,8 +204,7 @@
     {% if show_languages %}
         <div id="allowed-langs">
             <div class="toggle open unselectable">
-                <span class="fa fa-chevron-right fa-fw"></span>
-                {{ _('Allowed languages') }}
+                <i class="fa fa-chevron-right fa-fw"></i>{{ _('Allowed languages') }}
             </div>
             <div style="margin-bottom:-1em" class="toggled">
                 {% with usable=problem.usable_common_names, langs=problem.languages_list %}
