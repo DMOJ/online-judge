@@ -220,6 +220,7 @@ TEMPLATES = [
             'globals': {
                 'rating_class': 'judge.jinja2.rating.get_rating_class',
                 'gravatar': 'judge.templatetags.gravatar.get_gravatar_url',
+                'language_info_list': 'judge.jinja2.language.get_language_info_list',
             },
             'extensions': DEFAULT_EXTENSIONS + [
                 'compressor.contrib.jinja2ext.CompressorExtension',
