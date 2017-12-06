@@ -1,7 +1,7 @@
 import datetime
 
 from django.utils.translation import npgettext, pgettext, ungettext
-from django_jinja import library
+from . import registry
 
 
 def nice_repr(timedelta, display='long', sep=', '):
@@ -91,25 +91,25 @@ def nice_repr(timedelta, display='long', sep=', '):
     return sep.join(result)
 
 
-@library.filter
+@registry.filter
 def timedelta(value, display='long'):
     if value is None:
         return value
     return nice_repr(value, display)
 
 
-@library.filter
+@registry.filter
 def timestampdelta(value, display='long'):
     value = datetime.timedelta(seconds=value)
     return timedelta(value, display)
 
 
-@library.filter
+@registry.filter
 def seconds(timedelta):
     return timedelta.total_seconds()
 
 
-@library.filter
-@library.render_with('time-remaining-fragment.html')
+@registry.filter
+@registry.render_with('time-remaining-fragment.html')
 def as_countdown(timedelta):
     return {'countdown': timedelta}

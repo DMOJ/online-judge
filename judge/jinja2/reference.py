@@ -3,14 +3,12 @@ from collections import defaultdict
 
 from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
-from django_jinja import library
 from lxml.html import Element
 
 from judge import lxml_tree
-from judge.models import Contest
-from judge.models import Problem
-from judge.models import Profile
+from judge.models import Contest, Problem, Profile
 from judge.ratings import rating_class, rating_progress
+from . import registry
 
 rereference = re.compile(r'\[(r?user):(\w+)\]')
 
@@ -111,7 +109,7 @@ def update_tree(list, results, is_tail=False):
             link = child
 
 
-@library.filter
+@registry.filter
 def reference(text):
     tree = lxml_tree.fromstring(text)
     texts = []
@@ -129,7 +127,7 @@ def reference(text):
     return tree
 
 
-@library.filter
+@registry.filter
 def item_title(item):
     if isinstance(item, Problem):
         return item.name
@@ -138,8 +136,8 @@ def item_title(item):
     return '<Unknown>'
 
 
-@library.global_function
-@library.render_with('user/link.html')
+@registry.function
+@registry.render_with('user/link.html')
 def link_user(user):
     if isinstance(user, Profile):
         user, profile = user.user, user

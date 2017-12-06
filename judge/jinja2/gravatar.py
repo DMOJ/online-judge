@@ -1,10 +1,11 @@
 import hashlib
 
 from django.utils.http import urlencode
-from django_jinja import library
+
+from . import registry
 
 
-@library.global_function
+@registry.function
 def gravatar(email, size=80, default=None):
     email = getattr(email, 'email', email)
     gravatar_url = '//www.gravatar.com/avatar/' + hashlib.md5(email.strip().lower()).hexdigest() + '?'

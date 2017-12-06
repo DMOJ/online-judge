@@ -5,7 +5,6 @@ from urlparse import urlparse
 
 import mistune
 from django.conf import settings
-from django_jinja import library
 from lxml import html
 from lxml.etree import XMLSyntaxError, ParserError
 
@@ -14,6 +13,7 @@ from judge.jinja2.markdown.camo import client as camo_client
 from judge.jinja2.markdown.lazy_load import lazy_load as lazy_load_processor
 from judge.jinja2.markdown.math import MathRenderer, MathInlineLexer, MathInlineGrammar
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
+from .. import registry
 
 logger = logging.getLogger('judge.html')
 
@@ -106,7 +106,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
         return super(AwesomeRenderer, self).header(text, level + 2, *args, **kwargs)
 
 
-@library.filter
+@registry.filter
 def markdown(value, style, math_engine=None, lazy_load=False):
     styles = getattr(settings, 'MARKDOWN_STYLES', {}).get(style, getattr(settings, 'MARKDOWN_DEFAULT_STYLE', {}))
     escape = styles.get('safe_mode', True)

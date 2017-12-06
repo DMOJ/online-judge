@@ -216,6 +216,7 @@ TEMPLATES = [
             'autoescape': True,
             'extensions': DEFAULT_EXTENSIONS + [
                 'compressor.contrib.jinja2ext.CompressorExtension',
+                'judge.jinja2.DMOJExtension',
             ],
         },
     },
