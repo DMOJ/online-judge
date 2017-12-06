@@ -1,0 +1,163 @@
+#problem-table {
+    td {
+        &.category {
+            text-align: left;
+            padding: 0 1em;
+        }
+
+        &.problem {
+            text-align: left;
+            padding-left: 1em;
+            width: 100%;
+        }
+
+        &.pp {
+            text-align: left;
+            padding-left: 1em;
+            width: 100%;
+        }
+
+        &.users {
+            text-align: left;
+            padding: 0 1em;
+            white-space: nowrap;
+        }
+
+        &.types {
+            text-align: left;
+            padding: 0 1em;
+        }
+
+        &.ac-rate {
+            white-space: nowrap;
+        }
+
+        &.points {
+            white-space: nowrap;
+        }
+    }
+
+    tr {
+        transition: background-color linear 0.2s;
+
+        &:hover {
+            background: #eaeaea;
+        }
+    }
+}
+
+#filter-form {
+    vertical-align: top;
+    margin-bottom: 0.5em;
+    margin-top: 0.75em;
+
+    a {
+        margin-right: 5px;
+        display: inline-block;
+        padding: 3px 10px;
+        vertical-align: middle;
+    }
+
+    input {
+        vertical-align: middle;
+        margin-bottom: 0.5em;
+    }
+
+    label {
+        vertical-align: middle;
+    }
+
+    .filter-form-group {
+        margin-top: 5px;
+    }
+}
+
+#content-right {
+    &.problems {
+        flex: 26.5%;
+        max-width: unset;
+        padding-top: 2.25em;
+    }
+}
+
+#content-left {
+    &.problems {
+        flex: 73.5%;
+    }
+}
+
+#search {
+    width: 100%;
+    height: 2.3em;
+}
+
+label[for="category"], label[for="type"] {
+    padding-bottom: 0.25em;
+    display: block;
+}
+
+#category {
+    margin-top: 0.5em;
+    width: 100%;
+}
+
+#types {
+    width: 100%;
+}
+
+span.type-tag {
+    white-space: nowrap;
+}
+
+ul.problem-list {
+    list-style: none;
+    padding-left: 1em;
+    padding-right: 0.5em;
+
+    li {
+        margin-bottom: 0.5em;
+    }
+}
+
+.pi-name {
+    font-weight: bold;
+}
+
+.pi-name:after {
+    content: " ";
+}
+
+.authors-value {
+    padding-left: 1.5em;
+}
+
+.lang-name:after {
+    content: ": ";
+}
+
+.lang-limit {
+    margin-left: 1.5em;
+}
+
+.solved-problem-color {
+    color: #44AD41;
+}
+
+.unsolved-problem-color {
+    color: #DE2121;
+}
+
+.attempted-problem-color {
+    color: orange;
+}
+
+.submissions-left {
+    color: black;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 0.5em;
+}
+
+.no-submissions-left {
+    color: red;
+}
