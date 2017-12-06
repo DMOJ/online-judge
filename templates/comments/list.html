@@ -22,7 +22,7 @@
                                 <div class="comment-score">{{ node.score }}</div>
                                 {% if logged_in %}
                                     <a href="javascript:comment_downvote({{ node.id }})"
-                                       class="upvote-link fa fa-chevron-up fa-fw{% if node.vote_score -= 1 %} voted{% endif %}"></a>
+                                       class="upvote-link fa fa-chevron-up fa-fw{% if node.vote_score == -1 %} voted{% endif %}"></a>
                                 {% else %}
                                     <a href="javascript:void(0)" title="{{ _('Please login to vote') }}"
                                        class="downvote-link fa fa-chevron-down fa-fw"></a>

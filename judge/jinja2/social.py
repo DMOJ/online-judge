@@ -14,10 +14,15 @@ SHARES = [
 ]
 
 
-for name, template, url_func in SHARES:
-    def func(request, link_text, *args):
-        context = {'request': request, 'link_text': link_text}
-        context = url_func(context, *args)
+def make_func(name, template, url_func):
+    def func(request, *args):
+        link_text = args[-1]
+        context = {'request': request, 'link_text': mark_safe(link_text)}
+        context = url_func(context, *args[:-1])
         return mark_safe(get_template(template).render(context))
     func.__name__ = name
     registry.function(name, func)
+
+
+for name, template, url_func in SHARES:
+    make_func(name, template, url_func)
