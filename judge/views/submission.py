@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
@@ -79,6 +81,27 @@ class SubmissionSource(SubmissionDetailBase):
         return context
 
 
+def make_batch(batch, cases):
+    result = {'id': batch, 'cases': cases}
+    if batch:
+        result['points'] = min(map(attrgetter('points'), cases))
+        result['total'] = max(map(attrgetter('total'), cases))
+    return result
+
+
+def group_test_cases(cases):
+    result = []
+    buf = []
+    last = None
+    for case in cases:
+        if case.batch != last and buf:
+            result.append(make_batch(last, buf))
+        buf.append(case)
+    if buf:
+        result.append(make_batch(last, buf))
+    return result
+
+
 class SubmissionStatus(SubmissionDetailBase):
     template_name = 'submission/status.html'
 
@@ -86,7 +109,7 @@ class SubmissionStatus(SubmissionDetailBase):
         context = super(SubmissionStatus, self).get_context_data(**kwargs)
         submission = self.object
         context['last_msg'] = event.last()
-        context['test_cases'] = submission.test_cases.all()
+        context['batches'] = group_test_cases(submission.test_cases.all())
         context['time_limit'] = submission.problem.time_limit
         try:
             lang_limit = submission.problem.language_limits.get(language=submission.language)
@@ -203,7 +226,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['selected_statuses'] = self.selected_statuses
 
         context['results'] = self.get_result_table()
-        
+
         context['page_suffix'] = suffix = ('?' + self.request.GET.urlencode()) if self.request.GET else ''
         context['first_page_href'] = (self.first_page_href or '.') + suffix
         context['my_submissions_link'] = self.get_my_submissions_page()

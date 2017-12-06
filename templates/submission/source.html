@@ -1,53 +1,59 @@
-{% extends "submission/info-base.jade" %}{%  load static from staticfiles %}{%  load strings %}{%  load i18n %}{% block media %}
-<style>.submission-info {
-    text-align: right;
-    float: right;
-}
+{% extends "submission/info-base.html" %}
+{% block media %}
+    <style>
+        .line {
+            position: relative;
+        }
 
-.submission-info .submission-date {
-    color: gray;
-}
+        .highlighter {
+            position: absolute;
+            width: 9999px;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
 
-.line {
-    position: relative;
-}
+        a:active .line .highlighter {
+            background: rgba(255, 212, 0, 0.48);
+        }
+    </style>
+{% endblock %}
 
-.highlighter {
-    position: absolute;
-    width: 9999px;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-a:active .line .highlighter {
-    background: rgba(255, 212, 0, 0.48);
-}
-</style>{% endblock %}
-{% block body %}<br/>
-<div><a href="{% url "submission_status" submission.id %}">{% trans "View status" %}</a>
-</div>
-<div><a href="{% url "submission_source_raw" submission.id %}">{% trans "View raw source" %}</a>
-</div>{% if  request.user == submission.user.user or perms.judge.resubmit_other %}
-<div><a href="{% url "problem_submit" submission.problem.code submission.id %}">{% trans "Resubmit" %}</a>
-</div>{% endif %}{% if  perms.judge.rejudge_submission %}
-<div>
-  <form action="{% url "submission_rejudge" %}" method="post">{% csrf_token %}<a href="#" onclick="parentNode.submit();">{% trans "Rejudge" %}</a>
-    <input type="hidden" name="id"{{__pyjade_attrs(attrs=[('value',(submission.id))])}}/>
-    <input type="hidden" name="path" value="{% url "submission_status" submission.id %}"/>
-  </form>
-</div>{% endif %}<br/>
-<hr style="float:left;width:30%"/><br/>
-<div class="source-wrap">
-  <table>
-    <tr>
-      <td class="source-ln">
-        <div>{% for line in __pyjade_iter(raw_source|split,1) %}<a href="#line-{{ forloop.counter }}" name="line-{{ forloop.counter }}">
-            <pre class="line">{{forloop.counter|escape}}</pre></a>{% endfor %}
+{% block body %}
+    <br/>
+    <div><a href="{{ url('submission_status', submission.id) }}">{{ _('View status') }}</a></div>
+    <div><a href="{{ url('submission_source_raw', submission.id) }}">{{ _('View raw source') }}</a></div>
+    {% if request.user == submission.user.user or perms.judge.resubmit_other %}
+        <div><a href="{{ url('problem_submit', submission.problem.code, submission.id) }}">{{ _('Resubmit') }}</a></div>
+    {% endif %}
+    {% if perms.judge.rejudge_submission %}
+        <div>
+            <form action="{{ url('submission_rejudge') }}" method="post">
+                {% csrf_token %}
+                <a href="#" onclick="parentNode.submit()">{{ _('Rejudge') }}</a>
+                <input type="hidden" name="id" value="{{ submission.id }}">
+                <input type="hidden" name="path" value="{{ url('submission_status', submission.id) }}">
+            </form>
         </div>
-      </td>
-      <td class="source-code">{{highlighted_source|escape}}</td>
-    </tr>
-  </table>
-</div>{% endblock %}
+    {% endif %}
+    <br>
+    <hr class="half-hr">
+    <br>
+    <div class="source-wrap">
+        <table>
+            <tr>
+                <td class="source-ln">
+                    <div>
+                        {% for line in raw_source.split('\n') %}
+                            <a href="#line-{{ loop.counter }}" name="line-{{ loop.counter }}">
+                                <pre class="line">{{ loop.counter }}</pre>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </td>
+                <td class="source-code">{{ highlighted_source }}</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

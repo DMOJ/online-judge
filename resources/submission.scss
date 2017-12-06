@@ -223,3 +223,117 @@ label[for="language"], label[for="status"] {
         color: black;
     }
 }
+
+#test-cases {
+    .toggle .fa {
+        margin-left: -1.28571em;
+    }
+
+    .batch-cases {
+        margin: 0;
+        padding-left: 1em;
+        padding-bottom: 3px;
+        padding-top: 3px;
+        display: inline-block;
+    }
+
+    .batch-cases .case-row td b {
+        font-weight: 500;
+    }
+
+    .case-row td:nth-child(3) {
+        padding-right: 0;
+        text-align: right;
+    }
+
+    .case-row td:nth-child(3) span {
+        float: right;
+    }
+
+    .case-row td:nth-child(4) {
+        text-align: right;
+    }
+
+    .case-info {
+        margin: 0;
+        padding-left: 1em;
+        padding-bottom: 3px;
+        padding-top: 3px;
+        border: 1px solid #2980b9;
+        border-left-width: .5em;
+        border-radius: 4px;
+        color: #222;
+    }
+
+    .case-output {
+        margin: 0;
+        margin-right: 1em;
+    }
+
+    table td {
+        margin: 0;
+        padding: 0 5px 0 0;
+    }
+
+    .case-AC {
+        color: green;
+        font-weight: bold;
+    }
+
+    .case-_AC {
+        color: red;
+        font-weight: bold;
+    }
+
+    .case-WA {
+        color: red;
+        font-weight: bold;
+    }
+
+    .case-TLE, .case-SC {
+        color: gray;
+        font-weight: bold;
+    }
+
+    .case-MLE, .case-OLE, .case-RTE, .case-IR {
+        color: orange;
+        font-weight: bold;
+    }
+
+    .toggle {
+        font-weight: normal;
+    }
+}
+
+.half-hr {
+    float: left;
+    width: 30%;
+}
+
+.source-wrap {
+    .line {
+        position: relative;
+    }
+
+    .highlighter {
+        position: absolute;
+        width: 9999px;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    a:active .line .highlighter {
+        background: rgba(255, 212, 0, 0.48);
+    }
+}
+
+.submission-info {
+    text-align: right;
+    float: right;
+
+    .submission-date {
+        color: gray;
+    }
+}

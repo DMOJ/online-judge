@@ -1,163 +1,94 @@
-{% extends "submission/info-base.jade" %}{%  load staticfiles %}{%  load i18n %}{% block js_media %}
-<script type="text/javascript" src="{% static "event.js" %}"></script>{% if  not submission.is_graded and last_msg %}
-<script type="text/javascript">$(function () {
-    var blocked = false, request = false;
-    var list = $('#test-cases');
+{% extends "submission/info-base.html" %}
+{% block js_media %}
+    <script type="text/javascript" src="{{ static('event.js') }}"></script>
+    {% if not submission.is_graded and last_msg %}
+        <script type="text/javascript">$(function () {
+            var blocked = false, request = false;
+            var list = $('#test-cases');
 
-    function update() {
-        if (blocked) {
-            request = true;
-            return;
-        }
-        request = false;
-        blocked = true;
-        $.ajax({
-            url: '{% url "submission_testcases_query" %}',
-            data: {id: '{{ submission.id }}'}
-        }).done(function (data) {
-            list.empty().html(data).find('.toggle').each(function () {
-                register_toggle($(this));
-            });
-            setTimeout(function () {
-                blocked = false;
-                if (request)
-                    update();
-            }, 500);
-        }).fail(function (data) {
-            console.log('Failed to update testcases!');
+            function update() {
+                if (blocked) {
+                    request = true;
+                    return;
+                }
+                request = false;
+                blocked = true;
+                $.ajax({
+                    url: '{{ url('submission_testcases_query') }}',
+                    data: {id: '{{ submission.id }}'}
+                }).done(function (data) {
+                    list.empty().html(data).find('.toggle').each(function () {
+                        register_toggle($(this));
+                    });
+                    setTimeout(function () {
+                        blocked = false;
+                        if (request)
+                            update();
+                    }, 500);
+                }).fail(function (data) {
+                    console.log('Failed to update testcases!');
+                });
+
+                if ($(window).scrollTop() + $(window).height() > $(document).height() - 100)
+                    $("html, body").animate({scrollTop: $(document).height()}, 0);
+            }
+
+            var receiver = new EventReceiver(
+                "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                ['sub_{{ submission.id }}'], {{ last_msg }}, function (message) {
+                    switch (message.type) {
+                        case 'internal-error':
+                        case 'grading-end':
+                        case 'compile-error':
+                            $('#abort-button').remove();
+                            $('#grading-label').remove();
+                        case 'test-case':
+                        case 'grading-begin':
+                        case 'processing':
+                            update();
+                    }
+                }
+            )
         });
+        </script>
+    {% endif %}
+{% endblock %}
 
-        if ($(window).scrollTop() + $(window).height() > $(document).height() - 100)
-            $("html, body").animate({scrollTop: $(document).height()}, 0);
-    }
+{% block body %}
+    <br>
+    <div><a href="{{ url('submission_source', submission.id) }}">{{ _('View source') }}</a></div>
+    {% if request.user == submission.user.user or perms.judge.resubmit_other %}
+        <div><a href="{{ url('problem_submit', submission.problem.code, submission.id) }}">{{ _('Resubmit') }}</a></div>
+    {% endif %}
+    {% if perms.judge.rejudge_submission %}
+        <div>
+            <form action="{{ url('submission_rejudge') }}" method="post">
+                {% csrf_token %}
+                <a href="#" onclick="parentNode.submit()">{{ _('Rejudge') }}</a>
+                <input type="hidden" name="id" value="{{ submission.id }}">
+                <input type="hidden" name="path" value="{{ url('submission_status', submission.id) }}">
+            </form>
+        </div>
+    {% endif %}
 
-    var receiver = new EventReceiver(
-        "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
-        ['sub_{{ submission.id }}'], {{ last_msg }}, function (message) {
-            switch (message.type) {
-                case 'internal-error':
-                case 'grading-end':                                                                           
-                case 'compile-error':
-                   $('#abort-button').remove();
-                   $('#grading-label').remove();
-                case 'test-case':
-                case 'grading-begin':
-                case 'processing':
-                    update();
-            }                        
-        }
-    )
-});
-</script>{% endif %}{% endblock %}
-{% block media %}
-<style>#test-cases .toggle .fa {
-    margin-left: -1.28571em;
-}
+    <br>
+    <hr class="half-hr">
+    <br>
 
-.batch-cases {
-    margin: 0;
-    padding-left: 1em;
-    padding-bottom: 3px;
-    padding-top: 3px;
-    display: inline-block;
-}
+    <div id="test-cases">{% include "submission/status-testcases.html" %}</div>
 
-.batch-cases .case-row td b {
-    font-weight: 500;
-}
-
-.case-row td:nth-child(3) {
-    padding-right: 0;
-    text-align: right;
-}
-
-.case-row td:nth-child(3) span {
-    float: right;
-}
-
-.case-row td:nth-child(4) {
-    text-align: right;
-}
-
-.case-info {
-    margin: 0;
-    padding-left: 1em;
-    padding-bottom: 3px;
-    padding-top: 3px;
-    border: 1px solid #2980b9;
-    border-left-width: .5em;
-    border-radius: 4px;
-    color: #222;
-}
-
-.case-output {
-    margin: 0;
-    margin-right: 1em;
-}
-
-.submission-info {
-    text-align: right;
-    float: right;
-}
-
-.submission-info .submission-date {
-    color: gray;
-}
-
-table td {
-    margin: 0;
-    padding: 0 5px 0 0;
-}
-
-.case-AC {
-    color: green;
-    font-weight: bold;
-}
-
-.case-_AC {
-    color: red;
-    font-weight: bold;
-}
-
-.case-WA {
-    color: red;
-    font-weight: bold;
-}
-
-.case-TLE, .case-SC {
-    color: gray;
-    font-weight: bold;
-}
-
-.case-MLE, .case-OLE, .case-RTE, .case-IR {
-    color: orange;
-    font-weight: bold;
-}
-
-.toggle {
-    font-weight:normal;
-}
-
-.half-hr {
-    float: left;
-    width: 30%;
-}
-</style>{% endblock %}
-{% block body %}<br/>
-<div><a href="{% url "submission_source" submission.id %}">{% trans "View source" %}</a>
-</div>{% if  request.user == submission.user.user or perms.judge.resubmit_other %}
-<div><a href="{% url "problem_submit" submission.problem.code submission.id %}">{% trans "Resubmit" %}</a>
-</div>{% endif %}{% if  perms.judge.rejudge_submission %}
-<form action="{% url "submission_rejudge" %}" method="post">{%  csrf_token %}<a href="#" onclick="parentNode.submit();">{% trans "Rejudge" %}</a>
-  <input type="hidden" name="id"{{__pyjade_attrs(attrs=[('value',(submission.id))])}}/>
-  <input type="hidden" name="path" value="{% url "submission_status" submission.id %}"/>
-</form>{% endif %}<br/>
-<hr style="float:left;width:30%"/><br/>
-<div id="test-cases">{% include "submission/status-testcases.jade" %}
-</div>{% if  not submission.is_graded %}{% if  request.user == submission.user.user or perms.judge.abort_any_submission %}
-<div id="abort-button"><br/>
-  <hr class="half-hr"/><br/>
-  <form action="{% url "submission_abort" submission.id %}" method="post">{% csrf_token %}
-    <input style="float:left" type="submit" value="{% trans "Abort" %}" class="button"/><br/><br/>
-  </form>
-</div>{% endif %}{% endif %}{% endblock %}
+    {% if not submission.is_graded %}
+        {% if request.user == submission.user.user or perms.judge.abort_any_submission %}
+            <div id="abort-button">
+                <br>
+                <hr class="half-hr">
+                <br>
+                <form action="{{ url('submission_abort', submission.id) }}" method="post">
+                    {% csrf_token %}
+                    <input style="float:left" type="submit" value="{{ _('Abort') }}" class="button">
+                    <br><br>
+                </form>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
