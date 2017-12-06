@@ -205,3 +205,67 @@ ul.problem-list {
         padding: 6px 12px;
     }
 }
+
+@media (max-width: 550px) {
+    #problem-table tr :nth-child(6) {
+        display: none;
+    }
+}
+
+@media (max-width: 450px) {
+    #problem-table tr :nth-child(4) {
+        display: none;
+    }
+}
+
+@media (max-width: 350px) {
+    #problem-table tr :nth-child(3) {
+        display: none;
+    }
+}
+
+#problem-table th a {
+    color: inherit;
+    display: block;
+    padding: 4px 10px;
+}
+
+#category, #types {
+    visibility: hidden;
+}
+
+#filter-form .form-label {
+    margin-top: 0.5em;
+    font-style: italic;
+}
+
+#point-slider {
+    margin: 30px 15px 10px;
+    height: 10px;
+
+    .noUi-handle {
+        height: 20px;
+        width: 16px;
+        left: -8px;
+    }
+
+    .noUi-handle:before, .noUi-handle:after {
+        top: 3px;
+        height: 12px;
+    }
+
+    .noUi-handle:before {
+        left: 5px;
+    }
+
+    .noUi-handle:after {
+        left: 8px;
+    }
+
+    .noUi-tooltip {
+        height: 17px;
+        line-height: 13px;
+        padding: 0 3px;
+        font-size: 13px;
+    }
+}

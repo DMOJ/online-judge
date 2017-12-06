@@ -2,74 +2,6 @@
 
 {% block media %}
     <link rel="stylesheet" href="{{ static('libs/nouislider.min.css') }}"/>
-    <style>
-        @media (max-width: 550px) {
-            #problem-table tr :nth-child(6) {
-                display: none;
-            }
-        }
-
-        @media (max-width: 450px) {
-            #problem-table tr :nth-child(4) {
-                display: none;
-            }
-        }
-
-        @media (max-width: 350px) {
-            #problem-table tr :nth-child(3) {
-                display: none;
-            }
-        }
-
-        #problem-table th a {
-            color: inherit;
-            display: block;
-            padding: 4px 10px;
-        }
-
-        #category, #types {
-            visibility: hidden;
-        }
-
-        .form-label {
-            margin-top: 0.5em;
-            font-style: italic;
-        }
-
-        #point-slider {
-            margin: 30px 15px 10px;
-        }
-
-        #point-slider {
-            height: 10px;
-        }
-
-        #point-slider .noUi-handle {
-            height: 20px;
-            width: 16px;
-            left: -8px;
-        }
-
-        #point-slider .noUi-handle:before, #point-slider .noUi-handle:after {
-            top: 3px;
-            height: 12px;
-        }
-
-        #point-slider .noUi-handle:before {
-            left: 5px;
-        }
-
-        #point-slider .noUi-handle:after {
-            left: 8px;
-        }
-
-        #point-slider .noUi-tooltip {
-            height: 17px;
-            line-height: 13px;
-            padding: 0 3px;
-            font-size: 13px;
-        }
-    </style>
     <noscript>
         <style>#category, #types {
             visibility: visible;
@@ -93,10 +25,6 @@
                 visibility: hidden;
                 padding-left: 0.25em;
                 position: relative;
-            }
-
-            .blog-content.sidebox {
-                margin-right: 1em;
             }
 
             ul.problem-list {
