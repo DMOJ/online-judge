@@ -1,12 +1,13 @@
-{%  load i18n %}
 <div class="page-title">
-  <div class="tabs">
-    <h2>{% trans title %}</h2><span class="spacer"></span>
-    <ul>
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'judges' else ''))))])}}><a href="{% url "status_all" %}"><i class="tab-icon fa fa-server"></i> {% trans "Judges" %}</a>
-      </li>
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'runtimes' else ''))))])}}><a href="{% url "runtime_list" %}"><i class="tab-icon fa fa-code"></i> {% trans "Runtimes" %}</a>
-      </li>
-    </ul>
-  </div>
+    <div class="tabs">
+        <h2>{% trans title %}</h2><span class="spacer"></span>
+        <ul>
+            <li class="tab{% if tab == 'judges' %} active{% endif %}">
+                <a href="{{ url('status_all') }}"><i class="tab-icon fa fa-server"></i> {{ _('Judges') }}</a>
+            </li>
+            <li class="tab{% if tab == 'runtimes' %} active{% endif %}">
+                <a href="{{ url('runtime_list') }}"><i class="tab-icon fa fa-code"></i> {{ _('Runtimes') }}</a>
+            </li>
+        </ul>
+    </div>
 </div>
