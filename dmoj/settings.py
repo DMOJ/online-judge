@@ -221,6 +221,7 @@ TEMPLATES = [
                 'seconds': 'judge.templatetags.timedelta.seconds',
                 'timedelta': 'judge.templatetags.timedelta.timedelta',
                 'user_trans': 'judge.user_translations.ugettext',
+                'str': unicode,
             },
             'globals': {
                 'rating_class': 'judge.jinja2.rating.get_rating_class',

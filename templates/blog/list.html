@@ -104,7 +104,7 @@
                         </h2>
                         <span class="time">
                             {% if post.sticky %}<i title="Sticky" class="fa fa-star fa-fw"></i>{% endif %}
-                            {% with authors=post.authors.all %}
+                            {% with authors=post.authors.all() %}
                                 {% if authors %}
                                     <span class="post-authors">
                                         {% for author in authors %}
@@ -130,7 +130,7 @@
                         </span>
                         <div class="summary content-description">
                             {% cache 86400 post_summary post.id %}
-                                {{ post.summary|default(post.content)|markdown('blog', 'svg', lazy_load=True)|reference }}
+                                {{ post.summary|default(post.content)|markdown('blog', 'svg', lazy_load=True)|reference|str }}
                             {% endcache %}
                         </div>
                     </section>
