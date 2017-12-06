@@ -195,3 +195,13 @@ ul.problem-list {
 .clarify {
     float: right;
 }
+
+#problem_submit {
+    width: 100%;
+    box-sizing: border-box;
+
+    .button {
+        float: right;
+        padding: 6px 12px;
+    }
+}

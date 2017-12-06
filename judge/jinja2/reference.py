@@ -152,3 +152,9 @@ def link_user(user):
 @registry.render_with('user/link-list.html')
 def link_users(users):
     return {'users': users}
+
+
+@registry.function
+@registry.render_with('runtime-version-fragment.html')
+def runtime_versions(versions):
+    return {'runtime_versions': versions}
