@@ -213,6 +213,8 @@ TEMPLATES = [
                 'social.apps.django_app.context_processors.login_redirect',
             ],
             'autoescape': True,
+            'trim_blocks': True,
+            'lstrip_blocks': True,
             'extensions': DEFAULT_EXTENSIONS + [
                 'compressor.contrib.jinja2ext.CompressorExtension',
                 'judge.jinja2.DMOJExtension',
