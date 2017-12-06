@@ -106,18 +106,13 @@
                             {% if post.sticky %}<i title="Sticky" class="fa fa-star fa-fw"></i>{% endif %}
                             {% with authors=post.authors.all() %}
                                 {% if authors %}
-                                    <span class="post-authors">
-                                        {% for author in authors %}
-                                            {{ link_user(author) }}{% if not loop.last %}, {% endif %}
-                                        {% endfor %}
-                                    </span>
+                                    <span class="post-authors">{{ link_users(authors) }}</span>
                                 {% endif %}
                             {% endwith %}
                             <span data-unix="{{ post.publish_on|utc|date("c") }}" class="post-time">
                                 {% trans time=post.publish_on|date(_("N j, Y, g:i")) %}
                                     posted on {{ time }}
                                 {% endtrans %}
-                                {{ _('posted') }}
                             </span>
                         </span>
                         <span class="comment-data">

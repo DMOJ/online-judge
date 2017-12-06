@@ -1,86 +1,95 @@
-{%  load compress %}{%  compress css %}{{comment_form.media.css|escape}}
-<style media="all">.featherlight {
-    z-index: 1000;
-}
+{% compress css %}
+    {{ comment_form.media.css }}
+    <style media="all">
+        .featherlight {
+            z-index: 1000;
+        }
 
-.revision-text p:first-child { margin-top: 0; }
-.revision-text p:last-child { margin-bottom: 0; }
-.featherlight-edit .featherlight-content {
-    background: #FAFAFA;
-    padding: 10px 15px 10px 10px;
-    border-radius: 10px;
-    border: 1px solid #CCC;
-}
+        .revision-text p:first-child {
+            margin-top: 0;
+        }
 
-.new-comments .comment-display {
-    display: flex;
-    margin-top: -0.25em !important;
-    padding-left: 1em;
-    padding-top: 0.5em !important;
-    border: 1px solid #ccc;
-    background: #fafafa;
-}
+        .revision-text p:last-child {
+            margin-bottom: 0;
+        }
 
-.new-comments .comment .detail {
-    margin: 0px 15px 0px;
-    width: 100%;
-    max-width: calc(100% - 134px);
-}
+        .featherlight-edit .featherlight-content {
+            background: #FAFAFA;
+            padding: 10px 15px 10px 10px;
+            border-radius: 10px;
+            border: 1px solid #CCC;
+        }
 
-.new-comments .comment-title {
-    font-weight: 600;
-    color: black;
-    padding-top: 0.8em;
-}
+        .new-comments .comment-display {
+            display: flex;
+            margin-top: -0.25em !important;
+            padding-left: 1em;
+            padding-top: 0.5em !important;
+            border: 1px solid #ccc;
+            background: #fafafa;
+        }
 
-.new-comments .comment-edits {
-    padding-right: 0.75em;
-}
+        .new-comments .comment .detail {
+            margin: 0px 15px 0px;
+            width: 100%;
+            max-width: calc(100% - 134px);
+        }
 
-.new-comments .comment .detail .header {
-    display: flex;
-    padding: 2px 0px;
-    font-weight: normal;
-    border-bottom: 1px #888 solid;
-    color: #888;
-    text-align: right;
-}
+        .new-comments .comment-title {
+            font-weight: 600;
+            color: black;
+            padding-top: 0.8em;
+        }
 
-.previous-revision, .next-revision {
-    color: #444;
-}
+        .new-comments .comment-edits {
+            padding-right: 0.75em;
+        }
 
-.new-comments .header i {
-    color: #888 !important;
-}
+        .new-comments .comment .detail .header {
+            display: flex;
+            padding: 2px 0px;
+            font-weight: normal;
+            border-bottom: 1px #888 solid;
+            color: #888;
+            text-align: right;
+        }
 
-.new-comments .info {
-    padding-top: 0.4em;
-    display: flex;
-}
+        .previous-revision, .next-revision {
+            color: #444;
+        }
 
-.new-comments .gravatar {
-    width: 75px;
-    max-width: 75px;
-}
+        .new-comments .header i {
+            color: #888 !important;
+        }
 
-.new-comments .vote {
-    margin-right: 1em;
-    height: 75px;
-    padding-top: 0.4em;
-}
+        .new-comments .info {
+            padding-top: 0.4em;
+            display: flex;
+        }
 
-.new-comments .comment-display {
-    border-radius: 4px;
-}
+        .new-comments .gravatar {
+            width: 75px;
+            max-width: 75px;
+        }
 
-.new-comments .comment:target > .comment-display {
-    border: 1px solid #2980b9;
-    border-left: 10px solid #2980b9;
-    padding-left: 5px;
-}
+        .new-comments .vote {
+            margin-right: 1em;
+            height: 75px;
+            padding-top: 0.4em;
+        }
 
-.comments.top-level-comments {
-    margin-bottom: -3px;
-}
-</style>{% endcompress %}
+        .new-comments .comment-display {
+            border-radius: 4px;
+        }
+
+        .new-comments .comment:target > .comment-display {
+            border: 1px solid #2980b9;
+            border-left: 10px solid #2980b9;
+            padding-left: 5px;
+        }
+
+        .comments.top-level-comments {
+            margin-bottom: -3px;
+        }
+    </style>
+{% endcompress %}

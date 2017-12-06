@@ -146,3 +146,9 @@ def link_user(user):
     else:
         raise ValueError('Expected profile or user, got %s' % (type(user),))
     return {'user': user, 'profile': profile}
+
+
+@registry.function
+@registry.render_with('user/link-list.html')
+def link_users(users):
+    return {'users': users}
