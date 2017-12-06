@@ -25,11 +25,11 @@
             <h3>{{ _('Execution Results') }}</h3>
         {% endif %}
         <br>
-        {% set test_case_id = counter(0) %}
+        {% set test_case_id = counter() %}
         {% for batch in batches %}
             {% if batch.id %}
                 <b>{{ _('Batch ') }}#{{ test_case_id() }}</b>
-                ({{ _('%(point)s/%(total)s', points=batch.points|floatformat(0), total=batch.total|floatformat(0)) }}
+                ({{ _('%(points)s/%(total)s', points=batch.points|floatformat(0), total=batch.total|floatformat(0)) }}
                 <br>
                 <div class="batch-cases">
             {% endif %}
@@ -44,7 +44,7 @@
                     {% elif is_pretest %}
                         <b>{{ _('Pretest') }} #{{ test_case_id() }}:</b>
                     {% else %}
-                        <b>{{ _('Test case') }} #{{ test_case_id }}:</b>
+                        <b>{{ _('Test case') }} #{{ test_case_id() }}:</b>
                     {% endif %}
                 </td>
 
@@ -103,12 +103,12 @@
                 {{ submission.case_points|floatformat(0) }}/{{ submission.case_total|floatformat(0) }}
                 {% if IN_CONTEST and submission.contest_or_none %}
                     {% with contest=submission.contest_or_none %}
-                        ({{ _('%(point)s/%(total)s points', points=contest.points|floatformat(-3),
-                              total=contest.total|floatformat(-1)) }})
+                        ({{ _('%(points)s/%(total)s points', points=contest.points|floatformat(-3),
+                              total=contest.problem.points|floatformat(-1)) }})
                     {% endwith %}
                 {% else %}
-                    ({{ _('%(point)s/%(total)s points', points=submission.points|floatformat(-3),
-                          total=submission.total|floatformat(-1)) }})
+                    ({{ _('%(points)s/%(total)s points', points=submission.points|floatformat(-3),
+                          total=submission.problem.points|floatformat(-1)) }})
                 {% endif %}
                 {% if is_pretest and submission.result == "AC" %}
                     <br/>

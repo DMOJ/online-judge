@@ -47,7 +47,7 @@
                     <div>
                         {% for line in raw_source.split('\n') %}
                             <a href="#line-{{ loop.counter }}" name="line-{{ loop.counter }}">
-                                <pre class="line">{{ loop.counter }}</pre>
+                                <pre class="line">{{ loop.index }}</pre>
                             </a>
                         {% endfor %}
                     </div>
