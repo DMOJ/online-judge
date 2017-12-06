@@ -161,3 +161,37 @@ ul.problem-list {
 .no-submissions-left {
     color: red;
 }
+
+.pdf-icon {
+    position: relative;
+    display: inline-block;
+    font-size: 1.5em;
+
+    .pdf-icon-logo {
+        color: #d40e13;
+    }
+
+    .pdf-icon-bar {
+        height: 0.2em;
+        display: block;
+        position: absolute;
+        top: 0.3em;
+        background: #d40e13;
+        width: 0.6em;
+        margin-left: -0.15em;
+    }
+}
+
+.license {
+    float: left;
+    font-size: 0.85em;
+
+    a {
+        color: gray;
+        text-decoration: none;
+    }
+}
+
+.clarify {
+    float: right;
+}

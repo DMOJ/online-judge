@@ -1,117 +1,279 @@
-{% extends "common-content.jade" %}{%  load staticfiles %}{%  load markdown %}{%  load cache %}{%  load filesize %}{%  load i18n %}{%  load reference %}{%  load tz %}{% block content_media %}{% include "comments/media-css.jade" %}
-<style>.title-state {
-    font-size: 2em;
-    float: left;
-    width: 1.1em;
-    display: block;
-    margin-top: 0.16em;
-}
+{% extends "common-content.html" %}
+{% block content_media %}
+    {% include "comments/media-css.html" %}
+    <style>
+        .title-state {
+            font-size: 2em;
+            float: left;
+            width: 1.1em;
+            display: block;
+            margin-top: 0.16em;
+        }
 
-.info-float a {
-    vertical-align: middle;
-}
+        .info-float a {
+            vertical-align: middle;
+        }
 
-.problem-clarification {
-    border-bottom: 1px solid #ccc;
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
+        .problem-clarification {
+            border-bottom: 1px solid #ccc;
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
 
-.clarifications-area h2 {
-    margin-bottom: 20px;
-}
+        .clarifications-area h2 {
+            margin-bottom: 20px;
+        }
 
-.problem-clarification .body {
-    display: inline-block;
-    padding-left: 3em;
-}
-</style>{% endblock %}
-{% block content_js_media %}{% include "comments/media-js.jade" %}
-<script>$(function () {
-    $('a#clone-link').click(function (event) {
-        event.preventDefault();
-        if (confirm('Are you sure you want to clone?'))
-            $(this).closest("form").submit();
-    })
-});
-</script>{% endblock %}
+        .problem-clarification .body {
+            display: inline-block;
+            padding-left: 3em;
+        }
+    </style>
+{% endblock %}
+
+{% block content_js_media %}
+    {% include "comments/media-js.html" %}
+    <script>
+        $(function () {
+            $('a#clone-link').click(function (event) {
+                event.preventDefault();
+                if (confirm('Are you sure you want to clone?'))
+                    $(this).closest("form").submit();
+            })
+        });
+    </script>
+{% endblock %}
+
 {% block title_row %}
-<div class="problem-title">{% if  request.user.is_authenticated %}{% if  problem.id in completed_problem_ids %}<a href="{% url "user_submissions" problem.code request.user.username %}">{% if  problem.is_public or IN_CONTEST %}<i class="solved-problem-color title-state fa fa-check-circle"></i>{% else %}<i class="solved-problem-color title-state fa fa-lock"></i>{% endif %}</a>{% else %}{% if  problem.id in attempted_problems %}<a href="{% url "user_submissions" problem.code request.user.username %}">{% if  problem.is_public or IN_CONTEST %}<i class="attempted-problem-color title-state fa fa-minus-circle"></i>{% else %}<i class="attempted-problem-color title-state fa fa-lock"></i>{% endif %}</a>{% endif %}{% endif %}{% endif %}
-  <h2 style="color:#393630; display: inline-block">{{title|escape}}</h2>{% if  has_pdf_render %}<span class="spacer"></span><a href="{% url "problem_pdf" problem.code %}" class="view-pdf"><span style="position: relative; display: inline-block; font-size: 1.5em"><span style="color: #d40e13" class="fa fa-file-pdf-o"></span><span style="height: 0.2em; display: block; position: absolute; top: 0.3em; background: #d40e13; width: 0.6em; margin-left: -0.15em"></span></span> {% trans "View as PDF" %}</a>{% endif %}
-</div>{% endblock %}
-{% block info_float %}{% if  request.user.is_authenticated and IN_CONTEST %}{% if  submission_limit %}{% if  submissions_left > 0 %}<a href="{% url "problem_submit" problem.code %}" class="unselectable button full">{% trans "Submit solution" %}</a>
-<div class="submissions-left">{%  blocktrans trimmed count counter=submissions_left %}{{ counter }} submission left
-{%  plural %}{{ counter }} submissions left
-</div>{% else %}
-<a class="unselectable button full disabled">{% trans "Submit solution" %}</a>
-<div class="no-submissions-left submissions-left">{% trans "0 submissions left" %}</div>{% endif %}{% else %}<a href="{% url "problem_submit" problem.code %}" class="unselectable button full">{% trans "Submit solution" %}</a>{% endif %}{% else %}<a href="{% url "problem_submit" problem.code %}" class="unselectable button full">{% trans "Submit solution" %}</a>{% endif %}
-<hr/>{% if  request.user.is_authenticated and has_submissions %}
-<div><a href="{% url "user_submissions" problem.code request.user.username %}">{% trans "My submissions" %}</a>
-</div>{% endif %}
-<div><a href="{% url "chronological_submissions" problem.code %}">{% trans "All submissions" %}</a>
-</div>
-<div><a href="{% url "ranked_submissions" problem.code %}">{% trans "Best submissions" %}</a>
-</div>{% if  editorial and editorial.is_public %}
-<hr/>
-<div><a href="{% url "problem_editorial" problem.code %}">Read editorial</a>
-</div>{% endif %}{% if  can_edit_problem %}
-<hr/>
-<div><a href="{% url "problem_ticket_list" problem.code %}">{% trans "Manage tickets" %}{% if  num_open_tickets %}{{' '|escape}}<span class="badge">{{num_open_tickets|escape}}</span>{% endif %}</a>
-</div>
-<div><a href="{% url "admin:judge_problem_change" problem.id %}">{% trans "Edit problem" %}</a>
-</div>{% if  not problem.is_manually_managed %}
-<div><a href="{% url "problem_data" problem.code %}">{% trans "Edit test data" %}</a>
-</div>{% endif %}{% endif %}{% if  perms.judge.clone_problem %}
-<div>
-  <form action="{% url "problem_clone" problem.code %}" method="post">{%  csrf_token %}<a id="clone-link" href="#">{% trans "Clone problem" %}</a>
-  </form>
-</div>{% endif %}
-<hr/><br/>
-<div class="problem-info-entry"><i class="fa fa-check fa-fw"></i><span class="pi-name">{% trans "Points:" %}</span><span class="pi-value">{% if  contest_problem %}{{contest_problem.points|escape}}
-{% if  contest_problem.partial %}{%  trans "(partial)" %}{% endif %}{% else %}{{problem.points|floatformat|escape}}
-{% if  problem.partial %}{%  trans "(partial)" %}{% endif %}{% endif %}</span>
-</div>
-<div class="problem-info-entry"><i class="fa fa-clock-o fa-fw"></i><span class="pi-name">{% trans "Time limit:" %}</span><span class="pi-value">{{problem.time_limit|escape}}s</span>
-</div>
-<div class="problem-lang-limits">{% for name,limit in __pyjade_iter(problem.language_time_limit,2) %}
-  <div class="lang-limit"><span class="lang-name">{{name|escape}}</span><span class="lang-tl">{{limit|escape}}s</span>
-  </div>{% endfor %}
-</div>
-<div class="problem-info-entry"><i class="fa fa-server fa-fw"></i><span class="pi-name">{% trans "Memory limit:" %}</span><span class="pi-value">{{problem.memory_limit|kbsimpleformat|escape}}</span>
-</div>
-<div class="problem-lang-limits">{% for name,limit in __pyjade_iter(problem.language_memory_limit,2) %}
-  <div class="lang-limit"><span class="lang-name">{{name|escape}}</span><span class="lang-ml">{{limit|kbsimpleformat|escape}}</span>
-  </div>{% endfor %}
-</div>{%  get_current_language as LANGUAGE_CODE %}{%  cache 86400 problem_authors problem.id LANGUAGE_CODE %}{%  with authors=problem.authors.all %}{% if  authors %}
-<div class="problem-info-entry"><i class="fa fa-pencil-square-o fa-fw"></i><span class="pi-name">{%  blocktrans trimmed count counter=authors|length %}Author:
-{%  plural %}Authors:</span>
-  <div class="pi-value authors-value">{% include "link-to-user-list.jade" with users=authors %}</div>
-</div>{% endif %}{% endwith %}{% endcache %}<br/>{% if  not contest_problem or not contest_problem.contest.hide_problem_tags %}
-<div id="problem-types">{%  with types=problem.types_list %}
-  <div class="toggle closed unselectable"><span class="fa fa-chevron-right fa-fw"></span>{%  blocktrans trimmed count counter=problem.types_list|length %}Problem type
-{%  plural %}Problem types
-  </div>
-  <div style="display:none" class="toggled">{{problem.types_list|join:", "|escape}}</div>{% endwith %}
-</div><br/>{% endif %}{% if  show_languages %}
-<div id="allowed-langs">
-  <div class="toggle open unselectable"><span class="fa fa-chevron-right fa-fw"></span>{% trans "Allowed languages" %}
-  </div>
-  <div style="margin-bottom:-1em" class="toggled">{%  with usable=problem.usable_common_names langs=problem.languages_list %}{% for lang in __pyjade_iter(langs,1) %}{% if  lang in usable %}{{lang|escape}}{% else %}
-    <s title="{% blocktrans %}No {{ lang }} judge online{% endblocktrans %}">{{lang|escape}}</s>{% endif %}{% if  not forloop.last %}{{', '|escape}}{% endif %}{% endfor %}{% endwith %}
-  </div>
-</div><br/>{% endif %}{% endblock %}{% block description %}{%  cache 86400 problem_html problem.id MATH_ENGINE LANGUAGE_CODE %}{{description|with_math:MATH_ENGINE|markdown:"problem"|reference|escape}}{% endcache %}
-{%  with license=problem.license %}{% if  license %}<span style="float: left; font-size: 0.85em"><a style="color: gray; text-decoration: none" href="{% url "license" license.key %}">{{license.display|default:license.name|escape}}</a></span>{% endif %}{% endwith %}{% endblock %}
-{% block post_description_end %}<a style="float:right" href="{% url "new_problem_ticket" problem.code %}" class="button">{% if  contest_problem and contest_problem.contest.use_clarifications %}{% trans "Request clarification" %}{% else %}
-{% trans "Report an issue" %}{% endif %}</a>{% endblock %}
-{% block comments %}{% if  contest_problem and contest_problem.contest.use_clarifications %}
-<div class="clarifications-area">
-  <h2><i style="padding-right: 0.3em" class="fa fa-question-circle"></i>{% trans "Clarifications" %}
-  </h2>
-{% if  has_clarifications %}{% for clarification in __pyjade_iter(clarifications,1) %}
-  <div class="problem-clarification">
-    <div data-unix="{{ clarification.date|utc|date:"c" }}" class="time">{%  blocktrans with time=clarification.date|date:_("N j, Y, g:i a") asvar str_time %}on {{ time }}<span class="relative">{{str_time|escape}}</span>
-    </div><span class="body">{{clarification.description|with_math:MATH_ENGINE|markdown:"problem"|reference|escape}}</span>
-  </div>{% endfor %}{% else %}
-  <p class="no-comments-message">{% trans "No clarifications have been made at this time." %}</p>{% endif %}
-</div>{% else %}{% include "comments/list.jade" %}{% endif %}{% endblock %}{% block bodyend %}{{block.super|escape}}
-{% include "comments/math.jade" %}{% endblock %}
+    <div class="problem-title">
+        {% if request.user.is_authenticated %}
+            {% if problem.id in completed_problem_ids %}
+                <a href="{{ url('user_submissions', problem.code, request.user.username) }}">
+                    {% if problem.is_public or IN_CONTEST %}
+                        <i class="solved-problem-color title-state fa fa-check-circle"></i>
+                    {% else %}
+                        <i class="solved-problem-color title-state fa fa-lock"></i>
+                    {% endif %}
+                </a>
+            {% elif problem.id in attempted_problems %}
+                <a href="{{ url('user_submissions', problem.code, request.user.username) }}">
+                    {% if problem.is_public or IN_CONTEST %}
+                        <i class="attempted-problem-color title-state fa fa-minus-circle"></i>
+                    {% else %}
+                        <i class="attempted-problem-color title-state fa fa-lock"></i>
+                    {% endif %}
+                </a>
+            {% endif %}
+        {% endif %}
+        <h2 style="color:#393630; display: inline-block">{{ title }}</h2>
+        {% if has_pdf_render %}
+            <span class="spacer"></span>
+            <a href="{{ url('problem_pdf', problem.code) }}" class="view-pdf">
+                <span class="pdf-icon">
+                    <span class="fa fa-file-pdf-o pdf-icon-logo"></span>
+                    <span class="pdf-icon-bar"></span>
+                </span>
+                {{ _('View as PDF') }}
+            </a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block info_float %}
+    {% if request.user.is_authenticated and IN_CONTEST and submission_limit %}
+        {% if submissions_left > 0 %}
+            <a href="{{ url('problem_submit', problem.code) }}" class="unselectable button full">
+                {{ _('Submit solution') }}
+            </a>
+            <div class="submissions-left">
+                {% trans counter=submissions_left %}
+                    {{ counter }} submission left
+                    {% plural %}
+                    {{ counter }} submissions left
+                {% endtrans %}
+            </div>
+        {% else %}
+            <a class="unselectable button full disabled">{{ _('Submit solution') }}</a>
+            <div class="no-submissions-left submissions-left">{{ _('0 submissions left') }}</div>
+        {% endif %}
+    {% else %}
+        <a href="{{ url('problem_submit', problem.code) }}" class="unselectable button full">
+            {{ _('Submit solution') }}
+        </a>
+    {% endif %}
+    <hr>
+
+    {% if request.user.is_authenticated and has_submissions %}
+        <div>
+            <a href="{{ url('user_submissions', problem.code, request.user.username) }}">{{ _('My submissions') }}</a>
+        </div>
+    {% endif %}
+    <div><a href="{{ url('chronological_submissions', problem.code) }}">{{ _('All submissions') }}</a></div>
+    <div><a href="{{ url('ranked_submissions', problem.code) }}">{{ _('Best submissions') }}</a></div>
+    {% if editorial and editorial.is_public %}
+        <hr>
+        <div><a href="{{ url('problem_editorial', problem.code) }}">{{ _('Read editorial') }}</a></div>
+    {% endif %}
+    {% if can_edit_problem %}
+        <hr>
+        <div>
+            <a href="{{ url('problem_ticket_list', problem.code) }}">{{ _('Manage tickets') }}
+                {% if num_open_tickets %}<span class="badge">{{ num_open_tickets }}</span>{% endif %}
+            </a>
+        </div>
+        <div><a href="{{ url('admin:judge_problem_change', problem.id) }}">{{ _('Edit problem') }}</a></div>
+        {% if not problem.is_manually_managed %}
+            <div><a href="{{ url('problem_data', problem.code) }}">{{ _('Edit test data') }}</a></div>
+        {% endif %}
+    {% endif %}
+
+    {% if perms.judge.clone_problem %}
+        <div>
+            <form action="{{ url('problem_cline', problem.code) }}" method="post">
+                {% csrf_token %}
+                <a id="clone-link" href="#">{{ _('Clone problem') }}</a>
+            </form>
+        </div>
+    {% endif %}
+
+    <hr>
+    <div class="problem-info-entry">
+        <i class="fa fa-check fa-fw"></i>
+        <span class="pi-name">{{ _('Points:') }}</span>
+        <span class="pi-value">
+            {% if contest_problem %}
+                {{ contest_problem.points }}{% if contest_problem.partial %} {{ _('(partial)') }}{% endif %}
+            {% else %}
+                {{ problem.points|floatformat }}{% if problem.partial %} {{ _('(partial)') }}{% endif %}
+            {% endif %}
+        </span>
+    </div>
+    <div class="problem-info-entry">
+        <i class="fa fa-clock-o fa-fw"></i>
+        <span class="pi-name">{{ _('Time limit:') }}</span>
+        <span class="pi-value">{{ problem.time_limit }}s</span>
+    </div>
+    <div class="problem-lang-limits">
+        {% for name, limit in problem.language_time_limit %}
+            <div class="lang-limit">
+                <span class="lang-name">{{ name }}</span>
+                <span class="lang-tl">{{ limit }}s</span>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="problem-info-entry">
+        <i class="fa fa-server fa-fw"></i>
+        <span class="pi-name">{{ _('Memory limit:') }}</span>
+        <span class="pi-value">{{ problem.memory_limit|kbsimpleformat }}</span>
+    </div>
+    <div class="problem-lang-limits">
+        {% for name, limit in problem.language_memory_limit %}
+            <div class="lang-limit">
+                <span class="lang-name">{{ name }}</span>
+                <span class="lang-ml">{{ limit|kbsimpleformat }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    {% cache 86400 problem_authors problem.id LANGUAGE_CODE %}
+        {% with authors=problem.authors.all %}
+            {% if authors %}
+                <div class="problem-info-entry">
+                    <i class="fa fa-pencil-square-o fa-fw"></i>
+                    <span class="pi-name">
+                        {% trans counter=authors|length %}Author:{% plural %}Authors:{% endtrans %}
+                    </span>
+                    <div class="pi-value authors-value">{{ link_users(authors) }}</div>
+                </div>
+            {% endif %}
+        {% endwith %}
+    {% endcache %}
+    <br/>
+    {% if not contest_problem or not contest_problem.contest.hide_problem_tags %}
+        <div id="problem-types">
+            {% with types=problem.types_list %}
+                <div class="toggle closed unselectable">
+                    <i class="fa fa-chevron-right fa-fw"></i>
+                    {% trans counter=problem.types_list|length %}Problem type{% plural %}Problem types{% endtrans %}
+                </div>
+                <div style="display:none" class="toggled">{{ problem.types_list|join(", ") }}</div>
+            {% endwith %}
+        </div>
+        <br/>
+    {% endif %}
+    {% if show_languages %}
+        <div id="allowed-langs">
+            <div class="toggle open unselectable">
+                <span class="fa fa-chevron-right fa-fw"></span>
+                {{ _('Allowed languages') }}
+            </div>
+            <div style="margin-bottom:-1em" class="toggled">
+                {% with usable=problem.usable_common_names, langs=problem.languages_list %}
+                    {% for lang in langs %}
+                        {% if lang in usable %}
+                            {{ lang }}
+                        {% else %}
+                            <s title="{{ _('No %(lang)s judge online', lang=lang) }}">{{ lang }}</s>
+                        {% endif %}
+                        {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% endwith %}
+            </div>
+        </div>
+        <br/>
+    {% endif %}
+{% endblock %}
+
+{% block description %}
+    {% cache 86400 problem_html problem.id MATH_ENGINE LANGUAGE_CODE %}
+        {{ description|markdown("problem", MATH_ENGINE)|reference|str|safe }}
+    {% endcache %}
+
+    {% with license=problem.license %}
+        {% if license %}
+            <span class="license">
+            <a href="{{ url('license', license.key) }}">{{ license.display or license.name }}</a>
+        </span>
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
+{% block post_description_end %}
+    <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
+        {% if contest_problem and contest_problem.contest.use_clarifications %}
+            {{ _('Request clarification') }}
+        {% else %}
+            {{ _('Report an issue') }}
+        {% endif %}
+    </a>
+{% endblock %}
+
+{% block comments %}
+    {% if contest_problem and contest_problem.contest.use_clarifications %}
+        <div class="clarifications-area">
+            <h2><i class="fa fa-question-circle"></i> {{ _('Clarifications') }}</h2>
+            {% if has_clarifications %}
+                {% for clarification in clarifications %}
+                    <div class="problem-clarification">
+                        <div data-unix="{{ clarification.date|utc|date('c') }}" class="time">
+                            {% trans time=clarification.date|date(_("N j, Y, g:i")) %}
+                                on {{ time }}
+                            {% endtrans %}
+                        </div>
+                        <span class="body">
+                            {{ clarification.description|markdown('problem', MATH_ENGINE)|reference }}
+                        </span>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-comments-message">{{ _('No clarifications have been made at this time.') }}</p>
+            {% endif %}
+        </div>
+    {% else %}
+        {% include "comments/list.html" %}
+    {% endif %}
+{% endblock %}
+
+{% block bodyend %}
+    {{ super() }}
+    {% include "comments/math.html" %}
+{% endblock %}
