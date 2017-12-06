@@ -1,0 +1,468 @@
+@import "vars";
+
+.social i {
+    display: inline;
+    font-size: 1.9em;
+}
+
+.facebook-this, .tweet-this, .gplus-this {
+    display: inline;
+}
+
+.tweet-this i {
+    color: #55ACEE;
+}
+
+.facebook-this it {
+    color: #133783;
+}
+
+.gplus-this i {
+    color: #DD4B38;
+}
+
+.social {
+    font-size: 1.3em;
+    float: right;
+}
+
+// Bootstrap-y buttons
+.button, button, input[type=submit] {
+    color: white !important;
+    text-decoration: none !important;
+    cursor: pointer;
+    vertical-align: middle;
+    white-space: nowrap;
+    font-weight: 400;
+    line-height: 1.4;
+    background: rgb(51, 122, 183) none repeat scroll 0 (0% / auto) padding-box border-box;
+    background: -webkit-linear-gradient(top, #337ab7 0, #265a88 100%) repeat-x;
+    background: linear-gradient(to bottom, #337ab7 0, #265a88 100%) repeat-x;
+    border-radius: $widget_border_radius;
+    padding: 6px 12px;
+    display: block;
+    border: 1px solid #245580;
+    text-align: center;
+
+    // 4k hack
+    font-size: $base_font_size;
+
+    &:hover {
+        background: #265a88;
+    }
+
+    &.disabled {
+        background: linear-gradient(to bottom, darkgray 0, gray 100%) repeat-x !important;
+        border-color: grey !important;
+        cursor: not-allowed;
+    }
+}
+
+.button.full, input[type=submit].full, button.full {
+    padding: 6px 0;
+}
+
+button:hover, button:hover, input[type=submit]:hover {
+    background: #265a88;
+}
+
+.button:active, button:active, input[type=submit]:hover {
+    border-color: #245580;
+    background: #265a88;
+}
+
+input {
+    &[type=text], &[type=password], &[type=email], &[type=number] {
+        padding: 4px 8px;
+        color: #555;
+        background: #FFF none;
+        border: 1px solid $border_gray;
+        border-radius: $widget_border_radius;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+        transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+        box-sizing: border-box;
+
+        // Need this explicitly because UA stylesheet for Chrome on 4k makes
+        // everything look bad otherwise (forces it to 9.3px)
+        font-size: $base_font_size;
+    }
+
+    &[type=number] {
+        padding: 2px 0 2px 5px;
+    }
+}
+
+textarea {
+    padding: 4px 8px;
+    color: #555;
+    background: #FFF none;
+    border: 1px solid $border_gray;
+    border-radius: $widget_border_radius;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    box-sizing: border-box;
+}
+
+textarea:hover {
+    border-color: rgba(82, 168, 236, 0.8);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px rgba(82, 168, 236, 0.6);
+}
+
+input {
+    &[type="text"]:hover, &[type="password"]:hover {
+        border-color: rgba(82, 168, 236, 0.8);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px rgba(82, 168, 236, 0.6);
+    }
+}
+
+textarea:focus {
+    border-color: rgba(82, 168, 236, 0.8);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+    outline: 0;
+}
+
+input {
+    &[type="text"]:focus, &[type="password"]:focus {
+        border-color: rgba(82, 168, 236, 0.8);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+        outline: 0;
+    }
+}
+
+// Bootstrap-y copy button
+.btn-clipboard {
+    top: 0;
+    right: 0;
+    display: block;
+    font-size: 12px;
+    color: #767676;
+    cursor: pointer;
+    background-color: #FFF;
+    border: 1px solid #E1E1E8;
+    border-radius: 0 $widget_border_radius;
+    position: absolute;
+    padding: 5px 8px;
+}
+
+.copy-clipboard {
+    position: relative;
+    margin-top: 1.5em;
+}
+
+// Bootstrap-y tabs
+.ul_tab_a_active {
+    color: black;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid $border_gray;
+    border-bottom-color: transparent;
+    border-image: none;
+}
+
+.tabs {
+    border-bottom: 1px solid $border_gray;
+    margin: 0 0 8px;
+    width: 100%;
+    display: flex;
+
+    &.tabs-no-flex {
+        display: block;
+    }
+
+    .tab {
+        .tab-icon {
+            padding-right: 0.3em;
+            color: gray;
+        }
+
+        a {
+            border-top-width: 3px !important;
+        }
+
+        &.active {
+            a {
+                border-top-color: $highlight_blue !important;
+            }
+
+            .tab-icon {
+                color: black;
+            }
+        }
+    }
+
+    h2 {
+        color: #393630;
+    }
+
+    > ul {
+        margin: 0;
+        padding: 0;
+        list-style: outside none none;
+        display: flex;
+
+        > li {
+            margin-bottom: -1px;
+            position: relative;
+            display: block;
+
+            &.active > a {
+                @extend .ul_tab_a_active;
+
+                &:hover {
+                    @extend .ul_tab_a_active;
+                }
+
+                &:focus {
+                    @extend .ul_tab_a_active;
+                }
+            }
+
+            > a {
+                margin-right: 2px;
+                line-height: 1.42857;
+                border: 1px solid transparent;
+                border-radius: $widget_border_radius $widget_border_radius 0 0;
+                position: relative;
+                display: block;
+                padding: 10px 15px;
+                color: #555;
+                text-decoration: none;
+                white-space: nowrap;
+            }
+        }
+    }
+}
+
+// Bootstrap-y pagination
+ul.pagination a:hover {
+    color: #FFF;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+ul.pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 0;
+    border-radius: $widget_border_radius;
+
+    > {
+        li {
+            display: inline;
+
+            &:first-child > {
+                a, span {
+                    margin-left: 0;
+                    border-top-left-radius: $widget_border_radius;
+                    border-bottom-left-radius: $widget_border_radius;
+                }
+            }
+
+            &:last-child > {
+                a, span {
+                    margin-left: 0;
+                    border-top-right-radius: $widget_border_radius;
+                    border-bottom-right-radius: $widget_border_radius;
+                }
+            }
+
+            > {
+                a, span {
+                    position: relative;
+                    float: left;
+                    padding: 4px 12px;
+                    line-height: 1.42857;
+                    text-decoration: none;
+                    color: #FFF;
+                    background-color: $widget_black;
+                    border: 1px solid #505050;
+                    margin-left: -1px;
+                }
+            }
+        }
+
+        .disabled-page > {
+            a {
+                color: #888;
+                background-color: $widget_black;
+                border-color: #282828;
+            }
+
+            span {
+                color: #888;
+                background-color: $widget_black;
+                border-color: #505050;
+            }
+        }
+
+        .active-page > {
+            a {
+                z-index: 2;
+                color: #FFF;
+                background-color: $highlight_blue;
+                border-color: transparent;
+                cursor: default;
+            }
+
+            span {
+                z-index: 2;
+                color: #FFF;
+                background-color: $highlight_blue;
+                border-color: transparent;
+                cursor: default;
+            }
+        }
+    }
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: $widget_border_radius;
+}
+
+.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.alert-dismissable, .alert-dismissible {
+    padding-right: 35px;
+}
+
+.alert-dismissable .close, .alert-dismissible .close {
+    position: relative;
+    top: -2px;
+    right: -21px;
+    color: inherit;
+}
+
+.close {
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity = 20);
+    opacity: 0.2;
+}
+
+a.close {
+    text-decoration: none !important;
+    font-size: 18px !important;
+    line-height: 1;
+
+    &:hover {
+        color: black !important;
+    }
+}
+
+.close {
+    &:focus, &:hover {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        filter: alpha(opacity = 50);
+        opacity: 0.5;
+    }
+}
+
+.badge {
+    min-width: 10px;
+    padding: 0 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #e84848;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.form-submit-group {
+    border-top: 1px solid #EEE;
+    margin-top: 0.8em;
+    padding-top: 0.5em;
+    text-align: right;
+}
+
+ul.select2-selection__rendered {
+    padding: 0 5px !important;
+}
+
+.sidebox h3 {
+    margin: 0 -5px;
+    background: $widget_black;
+    border-radius: $widget_border_radius $widget_border_radius 0 0;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 7px;
+    font-size: 1.3em;
+}
+
+.sidebox h3 .fa {
+    color: white;
+    float: right;
+    margin: 0.2em 0.4em 0 0;
+}
+
+.sidebox-content {
+    border: 1px solid $border_gray;
+    border-top: none;
+    margin: 0 -5px;
+    padding: 1px 0.5em 3px;
+
+    &.sidebox-table {
+        border: none;
+        padding: 0;
+
+        .table {
+            margin: 0 !important;
+        }
+    }
+}
+
+.sidebox {
+    border-top-left-radius: $widget_border_radius;
+    border-top-right-radius: $widget_border_radius;
+    padding: 0 5px !important;
+    padding-bottom: 1.5em !important;
+}
+
+.ws-closed {
+    position: sticky;
+    top: 42px;
+    background: $announcement_red;
+    border-radius: 5px 5px 0 0;
+    display: none;
+}
+
+.ws-closed a {
+    display: block;
+    padding: 7px 0;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+}
+
+.semibold {
+    font-weight: 600;
+}
