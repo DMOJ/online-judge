@@ -86,9 +86,9 @@
                 {{ _('Submit solution') }}
             </a>
             <div class="submissions-left">
-                {% trans counter=submissions_left %}
+                {% trans trimmed counter=submissions_left %}
                     {{ counter }} submission left
-                    {% plural %}
+                {% pluralize %}
                     {{ counter }} submissions left
                 {% endtrans %}
             </div>
@@ -180,7 +180,7 @@
                 <div class="problem-info-entry">
                     <i class="fa fa-pencil-square-o fa-fw"></i>
                     <span class="pi-name">
-                        {% trans counter=authors|length %}Author:{% plural %}Authors:{% endtrans %}
+                        {% trans count=authors|length %}Author:{% pluralize count %}Authors:{% endtrans %}
                     </span>
                     <div class="pi-value authors-value">{{ link_users(authors) }}</div>
                 </div>
@@ -193,7 +193,11 @@
             {% with types=problem.types_list %}
                 <div class="toggle closed unselectable">
                     <i class="fa fa-chevron-right fa-fw"></i>
-                    {% trans counter=problem.types_list|length %}Problem type{% plural %}Problem types{% endtrans %}
+                    {% trans trimmed count=problem.types_list|length %}
+                        Problem type
+                    {% pluralize count %}
+                        Problem types
+                    {% endtrans %}
                 </div>
                 <div style="display:none" class="toggled">{{ problem.types_list|join(", ") }}</div>
             {% endwith %}
