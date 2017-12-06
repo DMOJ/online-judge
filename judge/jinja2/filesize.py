@@ -1,7 +1,6 @@
-from django.template import Library
 from django.utils.html import avoid_wrapping
 
-register = Library()
+from . import registry
 
 
 def _format_size(bytes, callback):
@@ -27,11 +26,11 @@ def _format_size(bytes, callback):
         return callback('P', bytes / PB)
     
 
-@register.filter(is_safe=True)
+@registry.filter
 def kbdetailformat(bytes):
     return avoid_wrapping(_format_size(bytes * 1024, lambda x, y: ['%d %sB', '%.2f %sB'][bool(x)] % (y, x)))
 
 
-@register.filter(is_safe=True)
+@registry.filter
 def kbsimpleformat(kb):
     return _format_size(kb * 1024, lambda x, y: '%.0f%s' % (y, x or 'B'))
