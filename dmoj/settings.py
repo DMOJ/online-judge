@@ -228,6 +228,7 @@ TEMPLATES = [
                 'gravatar': 'judge.templatetags.gravatar.get_gravatar_url',
                 'language_info_list': 'judge.jinja2.language.get_language_info_list',
                 'inlinei18n': 'statici18n.templatetags.statici18n.inlinei18n',
+                'mptt_tree': 'mptt.utils.get_cached_trees',
             },
             'extensions': DEFAULT_EXTENSIONS + [
                 'compressor.contrib.jinja2ext.CompressorExtension',

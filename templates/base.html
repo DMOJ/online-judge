@@ -181,7 +181,7 @@
             <li class="home-nav-element"><a href="{{ url('home') }}">{% include "site-logo-fragment.html" %}</a></li>
             <li class="home-nav-element"><span class="nav-divider"></span></li>
             <li class="home-menu-item"><a href="{{ url('home') }}" class="nav-home">{{ _('Home') }}</a></li>
-            {% for node in nav_bar recursive %}
+            {% for node in mptt_tree(nav_bar) recursive %}
                 <li>
                     <a href="{{ node.path }}" class="nav-{{ node.key }}{% if node.key in nav_tab %} active{% endif %}">
                         {{ node.label|user_trans }}
@@ -189,9 +189,9 @@
                             <div href="javascript:void(0)" class="nav-expand">></div>
                         {% endif %}
                     </a>
-                    {% if not node.is_leaf_node %}
-                        <ul>{{ loop(node.get_children()) }}</ul>
-                    {% endif %}
+                    {% with children=node.get_children() %}
+                        {% if children %}<ul>{{ loop(children) }}</ul>{% endif %}
+                    {% endwith %}
                 </li>
             {% endfor %}
         </ul>
