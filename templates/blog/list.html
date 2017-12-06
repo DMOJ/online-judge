@@ -130,7 +130,7 @@
                         </span>
                         <div class="summary content-description">
                             {% cache 86400 post_summary post.id %}
-                                {{ post.summary|default(post.content)|markdown('blog', 'svg', lazy_load=True)|reference|str }}
+                                {{ post.summary|default(post.content, true)|markdown('blog', 'svg', lazy_load=True)|reference|str }}
                             {% endcache %}
                         </div>
                     </section>
