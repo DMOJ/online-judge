@@ -17,15 +17,15 @@
         <span class="language">{{ submission.language.short_display_name }}</span>
     </div>
 </td>
-<td colspan="{{ info_colspan }}" class="sub-info{% submission.status == 'G' %} sub-info-grading{% endif %}">
+<td colspan="{{ info_colspan }}" class="sub-info{% if submission.status == 'G' %} sub-info-grading{% endif %}">
     {% if show_problem %}
         <div class="name"><a href="{{ url('problem_detail', submission.problem.code) }}">{{ problem_name }}</a></div>
     {% endif %}
     <div>
         {{ link_user(submission.user) }}
-        <span data-unix="{{ post.publish_on|utc|date("c") }}" class="post-time">
-            {% trans time=post.publish_on|date(_("N j, Y, g:i")) %}
-                posted on {{ time }}
+        <span data-unix="{{ submission.date|utc|date("c") }}" class="post-time">
+            {% trans time=submission.date|date(_("N j, Y, g:i")) %}
+                on {{ time }}
             {% endtrans %}
         </span>
         {% if not IN_CONTEST and submission.contest_or_none %}
@@ -72,7 +72,7 @@
     {% else %}
         {% if "TLE" != submission.result %}
             <div title="{{ submission.time or 0 }}s" class="time">
-                {{ submission.time or 0|floatformat(2) }}s
+                {{ (submission.time or 0)|floatformat(2) }}s
             </div>
         {% else %}
             <div class="time">---</div>
