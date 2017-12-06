@@ -1,6 +1,6 @@
 <div class="page-title">
     <div class="tabs">
-        <h2>{% trans title %}</h2><span class="spacer"></span>
+        <h2>{{ _(title) }}</h2><span class="spacer"></span>
         <ul>
             <li class="tab{% if tab == 'judges' %} active{% endif %}">
                 <a href="{{ url('status_all') }}"><i class="tab-icon fa fa-server"></i> {{ _('Judges') }}</a>
