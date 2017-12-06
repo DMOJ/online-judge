@@ -13,6 +13,7 @@ import os
 import re
 
 from django.utils.translation import ugettext_lazy as _
+from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -218,7 +219,11 @@ TEMPLATES = [
             },
             'globals': {
                 'rating_class': 'judge.jinja2.rating.get_rating_class',
+                'gravatar': 'judge.templatetags.gravatar.get_gravatar_url',
             },
+            'extensions': DEFAULT_EXTENSIONS + [
+                'compressor.contrib.jinja2ext.CompressorExtension',
+            ],
         },
     },
     {

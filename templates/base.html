@@ -1,12 +1,14 @@
-<!DOCTYPE html>{%  load staticfiles %}{%  load strings %}{%  load timedelta %}{%  load cache %}{%  load mptt_tags %}{%  load compress %}{%  load gravatar %}{%  load i18n %}{%  load dmoj_user_i18n %}{%  load statici18n %}{%  load absolute_links %}
-<html{{__pyjade_attrs(terse=True, attrs=[('lang',(LANGUAGE_CODE))])}}>
-  <head>
-    <title>{% block title %}{{title|escape}} - {{SITE_LONG_NAME|escape}}{% endblock %}
-    </title>
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <title>{% block title %}{{ title }} - {{ SITE_LONG_NAME }}{% endblock %}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-{% if  misc_config.meta_keywords %}
-    <meta name="keywords"{{__pyjade_attrs(terse=True, attrs=[('content',(misc_config['meta_keywords']))])}}>{% endif %}{% if  meta_description %}
-    <meta name="description"{{__pyjade_attrs(terse=True, attrs=[('content',(meta_description))])}}>{% endif %}
+    {% if misc_config.meta_keywords %}
+        <meta name="keywords" content="{{ misc_config.meta_keywords }}">
+    {% endif %}
+    {% if meta_description %}
+        <meta name="description" content="{{ meta_description }}">
+    {% endif %}
     <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicons-->
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
@@ -26,183 +28,281 @@
     <meta name="msapplication-TileColor" content="#FFBB33">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <!-- Chrome 39 for Android colour-->
-    <meta name="theme-color" content="#FFBB33">{% if  og_image %}
-    <meta property="og:image" content="{{ request.build_absolute_uri|urljoin:og_image }}">{% endif %}{% block og_title %}
-    <meta property="og:title" content="{{ title }} - {{ SITE_LONG_NAME }}">{% endblock %}
+    <meta name="theme-color" content="#FFBB33">{% if og_image %}
+    <meta property="og:image" content="{{ request.build_absolute_uri(og_image) }}">{% endif %}
+    {% block og_title %}{% endblock %}
     <meta property="og:site_name" content="{{ SITE_LONG_NAME }}">
-    <meta property="og:url" content="{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default:site.domain }}{{ request.get_full_path }}">{% if  meta_description %}
-    <meta property="og:description"{{__pyjade_attrs(terse=True, attrs=[('content',(meta_description))])}}>{% endif %}<!--[if lt IE 9]>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script>window.bad_browser = true</script>
-<![endif]-->
-{% block meta %}{% endblock %}{% if  not INLINE_FONTAWESOME %}
-    <link rel="stylesheet"{{__pyjade_attrs(terse=True, attrs=[('href',(FONTAWESOME_CSS))])}}>{% endif %}{%  compress css %}
-    <link rel="stylesheet" href="{% static "style.css" %}">{% if  PYGMENT_THEME %}
-    <link rel="stylesheet" href="{% static PYGMENT_THEME %}">{% endif %}{% if  INLINE_FONTAWESOME %}
-    <link rel="stylesheet" href="{% static "libs/fontawesome/font-awesome.css" %}">{% endif %}
-    <link rel="stylesheet" type="text/css" href="{% static "libs/featherlight/featherlight.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "libs/clipboard/tooltip.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "libs/select2/select2.css" %}">{% endcompress %}
-    <link rel="canonical" href="{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default:site.domain }}{{ request.get_full_path }}">{% if  request.user.is_impersonate %}
-    <style>#nav-container { background: #893e89 !important; }
+    <meta property="og:url"
+          content="{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default(site.domain) }}{{ request.get_full_path() }}">
+    {% if meta_description %}
+        <meta property="og:description" content="{{ meta_description }}">
+    {% endif %}
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script>window.bad_browser = true</script>
+    <![endif]-->
+    {% block meta %}{% endblock %}
+    {% if not INLINE_FONTAWESOME %}
+        <link rel="stylesheet" href="{{ FONTAWESOME_CSS }}">
+    {% endif %}
+    {% compress css %}
+        <link rel="stylesheet" href="{{ static('style.css') }}">
+        {% if PYGMENT_THEME %}
+            <link rel="stylesheet" href="{% static PYGMENT_THEME %}">
+        {% endif %}{% if INLINE_FONTAWESOME %}
+        <link rel="stylesheet" href="{{ static('libs/fontawesome/font-awesome.css') }}">{% endif %}
+        <link rel="stylesheet" type="text/css" href="{{ static('libs/featherlight/featherlight.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ static('libs/clipboard/tooltip.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ static('libs/select2/select2.css') }}">
+    {% endcompress %}
+    <link rel="canonical"
+          href="{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default:site.domain }}{{ request.get_full_path }}">
+    {% if request.user.is_impersonate %}
+        <style>
+            #nav-container {
+                background: #893e89 !important;
+            }
+        </style>
+    {% endif %}
+    {% block media %}{% endblock %}
+    {% if not INLINE_JQUERY %}
+        <script src="{{ JQUERY_JS }}"></script>
+    {% endif %}
 
-    </style>{% endif %}
-{% block media %}{% endblock %}{% if  not INLINE_JQUERY %}
-    <script{{__pyjade_attrs(terse=True, attrs=[('src',(JQUERY_JS))])}}></script>{% endif %}{%  compress js %}
-    <script>{%  autoescape off %}{%  inlinei18n LANGUAGE_CODE %}{% endautoescape %}
-    </script>{% if  INLINE_JQUERY %}
-    <script src="{% static "libs/jquery-1.11.2.min.js" %}"></script>{% endif %}
-    <script src="{% static "libs/jquery-cookie.js" %}"></script>
-    <script src="{% static "libs/jquery-taphold.js" %}"></script>
-    <script src="{% static "libs/jquery.unveil.js" %}"></script>
-    <script src="{% static "libs/moment.js" %}"></script>
-    <script src="{% static "libs/select2/select2.js" %}"></script>{% include "extra_js.jade" %}
-    <script src="{% static "common.js" %}"></script>
-    <script>moment.locale('{{LANGUAGE_CODE|escape}}');
-$(function () { $('img.unveil').unveil(200); });
-    </script>{% endcompress %}
-{% block js_media %}{% endblock %}{% if  IN_CONTEST %}
-    <script type="text/javascript">$(document).ready(function () {
-    count_down($("#contest-time-remaining"));
-
-    var selected = null,
-        x_pos = 0, y_pos = 0,
-        x_elem = 0, y_elem = 0;
-
-    $('#contest-info').mousedown(function () {
-        selected = $(this);
-        x_elem = x_pos - selected.offset().left;
-        y_elem = y_pos - (selected.offset().top - $(window).scrollTop());
-        return false;
-    });
-
-    if (localStorage.getItem("contest_timer_pos")) {
-        data = localStorage.getItem("contest_timer_pos").split(":");
-        $("#contest-info").css({
-            left: data[0],
-            top: data[1]
-        });
-    }
-
-    $("#contest-info").show();
-
-    $(document).mousemove(function(e) {
-        x_pos = e.screenX;
-        y_pos = e.screenY;
-        x_pos = Math.max(Math.min(x_pos, window.innerWidth), 0);
-        y_pos = Math.max(Math.min(y_pos, window.innerHeight), 0);
-
-        if (selected !== null) {
-            left_px = (x_pos - x_elem) + 'px';
-            top_px = (y_pos - y_elem) + 'px';
-
-            localStorage.setItem("contest_timer_pos", left_px + ":" + top_px);
-
-            selected.css({
-                left: left_px,
-                top: top_px
+    {% compress js %}
+        <script>{% autoescape off %}{% inlinei18n LANGUAGE_CODE %}{% endautoescape %}</script>
+        {% if INLINE_JQUERY %}
+            <script src="{{ static('libs/jquery-1.11.2.min.js') }}"></script>
+        {% endif %}
+        <script src="{{ static('libs/jquery-cookie.js') }}"></script>
+        <script src="{{ static('libs/jquery-taphold.js') }}"></script>
+        <script src="{{ static('libs/jquery.unveil.js') }}"></script>
+        <script src="{{ static('libs/moment.js') }}"></script>
+        <script src="{{ static('libs/select2/select2.js') }}"></script>
+        {% include "extra_js.html" %}
+        <script src="{{ static('common.js') }}"></script>
+        <script>
+            $(function () {
+                $('img.unveil').unveil(200);
             });
-        }
-    });
+        </script>
+    {% endcompress %}
+    <script>moment.locale('{{ LANGUAGE_CODE }}');</script>
+    {% block js_media %}{% endblock %}
+    {% if IN_CONTEST %}
+        <script>$(function () {
+            count_down($("#contest-time-remaining"));
 
-    $(document).mouseup(function () {
-        selected = null;
-    })
-});
-    </script>{% endif %}
-{% if  request.user.is_authenticated %}
-    <script type="text/javascript">window.user = {
-    email: '{{request.user.email|escapejs|escape}}',
-    id: '{{request.user.id|escape}}',
-    name: '{{request.user.username|escape}}'
-};
-    </script>{% else %}
+            var selected = null,
+                x_pos = 0, y_pos = 0,
+                x_elem = 0, y_elem = 0;
 
-    <script type="text/javascript">window.user = {};</script>{% endif %}{% if  misc_config.analytics %}{{misc_config.analytics|safe|escape}}{% endif %}
+            $('#contest-info').mousedown(function () {
+                selected = $(this);
+                x_elem = x_pos - selected.offset().left;
+                y_elem = y_pos - (selected.offset().top - $(window).scrollTop());
+                return false;
+            });
 
-    <!-- Don't run userscript since it may be malicious-->{% if  request.user.profile.user_script and not request.user.is_impersonate %}
-    <script type="text/javascript">{{request.user.profile.user_script|safe|escape}}</script>{% endif %}
+            if (localStorage.getItem("contest_timer_pos")) {
+                data = localStorage.getItem("contest_timer_pos").split(":");
+                $("#contest-info").css({
+                    left: data[0],
+                    top: data[1]
+                });
+            }
+
+            $("#contest-info").show();
+
+            $(document).mousemove(function (e) {
+                x_pos = e.screenX;
+                y_pos = e.screenY;
+                x_pos = Math.max(Math.min(x_pos, window.innerWidth), 0);
+                y_pos = Math.max(Math.min(y_pos, window.innerHeight), 0);
+
+                if (selected !== null) {
+                    left_px = (x_pos - x_elem) + 'px';
+                    top_px = (y_pos - y_elem) + 'px';
+
+                    localStorage.setItem("contest_timer_pos", left_px + ":" + top_px);
+
+                    selected.css({
+                        left: left_px,
+                        top: top_px
+                    });
+                }
+            });
+
+            $(document).mouseup(function () {
+                selected = null;
+            })
+        });
+        </script>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <script>
+            window.user = {
+                email: '{{ request.user.emailjs }}',
+                id: '{{ request.user.idjs }}',
+                name: '{{ request.user.usernamejs }}'
+            };
+        </script>
+    {% else %}
+        <script>window.user = {};</script>
+    {% endif %}
+
+    {% if misc_config.analytics %}
+        {{ misc_config.analytics|safe }}
+    {% endif %}
+
+    {# Don't run userscript since it may be malicious #}
+    {% if request.user.profile.user_script and not request.user.is_impersonate %}
+        <script type="text/javascript">{{ request.user.profile.user_script|safe }}</script>
+    {% endif %}
+
     <noscript>
-      <style>#content {
-    margin: 80px auto auto;
-}
+        <style>
+            #content {
+                margin: 80px auto auto;
+            }
 
-#navigation {
-    top: 27px;
-}
-      </style>
+            #navigation {
+                top: 27px;
+            }
+        </style>
     </noscript>
-  </head>
-  <body>
-    <nav id="navigation" class="unselectable">
-      <div id="nav-container"><a id="navicon" href="javascript:void(0)"><i class="fa fa-bars"></i></a>
+</head>
+<body>
+<nav id="navigation" class="unselectable">
+    <div id="nav-container">
+        <a id="navicon" href="javascript:void(0)"><i class="fa fa-bars"></i></a>
         <ul id="nav-list">
-          <li class="home-nav-element"><a href="{% url "home" %}">{% include "site-logo-fragment.jade" %}</a>
-          </li>
-          <!-- Divider-->
-          <li class="home-nav-element"><span style="width: 1px; vertical-align: middle; padding-left: 3px; display: inline-block; height: 32px; margin-right: 1px; border-right: 3px solid rgba(255, 255, 255, 0.15);"></span>
-          </li>
-          <li class="home-menu-item"><a href="{% url "home" %}" class="nav-home">{% trans "Home" %}</a>
-          </li>{%  recursetree nav_bar %}
-          <li><a{{__pyjade_attrs(terse=True, attrs=[('href',(node.path))])}} class="nav-{{ node.key }}{% if node.key in nav_tab %} active{% endif %}">{{node.label|user_trans|escape}}
-{% if  not node.is_leaf_node %}
-              <div href="javascript:void(0)" class="nav-expand">></div>{% endif %}</a>{% if  not node.is_leaf_node %}
-            <ul>{{ children }}</ul>{% endif %}
-          </li>{%  endrecursetree %}
-        </ul><span id="user-links">{% if  request.user.is_authenticated %}
-          <ul>
-            <li><a href="{% url "user_page" %}"><span><img src="{% gravatar_url request.user.email 32 %}" height="24" width="24"><span>{%  blocktrans with username=request.user.username %}Hello, <b>{{ username }}</b>.</span></span></a>
-              <ul style="width: 150px">{% if  request.user.is_staff or request.user.is_superuser %}
-                <li><a href="{% url "admin:index" %}">{% trans "Admin" %}</a>
-                </li>{% endif %}
-                <li><a href="{% url "user_edit_profile" %}">{% trans "Edit profile" %}</a>
-                </li>{% if  request.user.is_impersonate %}
-                <li><a href="{% url "impersonate-stop" %}">Stop impersonating</a>
-                </li>{% else %}
+            <li class="home-nav-element"><a href="{% url('home') %}">{% include "site-logo-fragment.html" %}</a></li>
+            <li class="home-nav-element"><span class="nav-divider"></span></li>
+            <li class="home-menu-item"><a href="{{ url('home') }}" class="nav-home">{{ _('Home') }}</a></li>
+            {% for node in nav_bar recursive %}
                 <li>
-                  <form action="{% url "auth_logout" %}" method="POST">{%  csrf_token %}
-                    <button type="submit">{% trans "Log out" %}</button>
-                  </form>
-                </li>{% endif %}
-              </ul>
-            </li>
-          </ul>{% else %}<span class="anon"><a href="{% url "auth_login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}"><b>{% trans "Login" %}</b></a>&nbsp;|&nbsp;<a href="{% url "registration_register" %}">{% trans "Register" %}</a></span>{% endif %}</span>
-      </div>
-      <div id="nav-shadow"></div>
-    </nav>{% if  IN_CONTEST %}
-    <div id="contest-info"><a href="{% url "contest_view" CONTEST.contest.key %}" style="vertical-align: middle;">{{CONTEST.contest.name|escape}} -
-{% if  CONTEST.spectate %}{% trans "spectating" %}{% elif  CONTEST.end_time %}
+                    <a href="{{ node.path }}" class="nav-{{ node.key }}{% if node.key in nav_tab %} active{% endif %}">
+                        {{ node.label|user_trans }}
+                        {% if not node.is_leaf_node %}
+                            <div href="javascript:void(0)" class="nav-expand">></div>
+                        {% endif %}
+                    </a>
+                    {% if not node.is_leaf_node %}
+                        <ul>{{ loop(node.get_children()) }}</ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
 
-        <div id="contest-time-remaining" data-secs="{{ CONTEST.time_remaining|seconds }}">{{CONTEST.time_remaining|timedelta:"localized"|escape}}
-        </div>{% else %}
-{% trans "virtual" %}{% endif %}</a>
-    </div>{% endif %}
-    <div id="page-container">
-      <noscript>
-        <div id="noscript">{%  trans "This site works best with JavaScript enabled." %}
-        </div>
-      </noscript><br>
-      <article id="content">{% block title_row %}
-        <h2 style="color:#393630; display:inline">{% block content_title %}{% if  content_title %}{{content_title|escape}}{% else %}
-{{title|escape}}{% endif %}{% endblock %}
-        </h2>{% endblock %}
-{% block header %}{% endblock %}{% block title_ruler %}
-        <hr>{% endblock %}
-        <div id="content-body">{% block body %}{% endblock %}
-        </div>
-      </article>{% if  i18n_config.announcement %}
-      <div id="announcement">{{i18n_config.announcement|safe|escape}}</div>{% endif %}{% block bodyend %}{% endblock %}
-      <footer><span id="footer-content"><br><a style="color: #808080" href="https://dmoj.ca">proudly powered by <b>DMOJ</b> |</a>
-{{' '|escape}}{% if  i18n_config.footer %}{{i18n_config.footer|safe|escape}}
-{{' | '|escape}}{% endif %}
-          <form action="{% url "set_language" %}" method="post" style="display: inline">{%  csrf_token %}
-            <input name="next" type="hidden"{{__pyjade_attrs(terse=True, attrs=[('value',(request.get_full_path()))])}}>
-            <select name="language" onchange="form.submit()" style="height: 1.5em">{%  get_language_info_list for LANGUAGES as languages %}{% for language in __pyjade_iter(languages,1) %}
-              <option{{__pyjade_attrs(terse=True, attrs=[('value',(language['code'])), ('selected',(('' if language['code'] == LANGUAGE_CODE else None)))])}}>{{language.name_local|escape}} ({{language.code|escape}})
-              </option>{% endfor %}
-            </select>
-          </form></span>
-      </footer>
+        <span id="user-links">
+            {% if request.user.is_authenticated %}
+                <ul>
+                    <li>
+                        <a href="{{ url('user_page') }}">
+                            <span>
+                                <img src="{{ gravatar(request.user, 32) }}" height="24" width="24">
+                                <span>
+                                    {% trans with username=request.user.username %}
+                                        Hello, <b>{{ username }}</b>.
+                                    {% endtrans %}
+                                </span>
+                            </span>
+                        </a>
+                        <ul style="width: 150px">
+                            {% if request.user.is_staff or request.user.is_superuser %}
+                                <li><a href="{{ url('admin:index') }}">{{ _('Admin') }}</a></li>
+                            {% endif %}
+                            <li><a href="{{ url('user_edit_profile') }}">{{ _('Edit profile') }}</a></li>
+                            {% if request.user.is_impersonate %}
+                                <li><a href="{{ url('impersonate-stop') }}">Stop impersonating</a></li>
+                            {% else %}
+                                <li>
+                                    <form action="{{ url('auth_logout') }}" method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit">{{ _('Log out') }}</button>
+                                    </form>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+            {% else %}
+                <span class="anon">
+                    <a href="{{ url('auth_login') }}?next={{ LOGIN_RETURN_PATH|urlencode }}">
+                        <b>{{ _('Login') }}</b>
+                    </a>&nbsp;|&nbsp;<a href="{{ url('registration_register') }}">{{ _('Register') }}</a>
+                </span>
+            {% endif %}
+        </span>
     </div>
-  </body>
+    <div id="nav-shadow"></div>
+</nav>
+{% if IN_CONTEST %}
+    <div id="contest-info">
+        <a href="{% url "contest_view" CONTEST.contest.key %}" style="vertical-align: middle">
+            {{ CONTEST.contest.name }} -
+            {% if CONTEST.spectate %}
+                {{ _('spectating') }}
+            {% elif CONTEST.end_time %}
+                <div id="contest-time-remaining" data-secs="{{ CONTEST.time_remaining|seconds }}">
+                    {{ CONTEST.time_remaining|timedelta:"localized"}}
+                </div>
+            {% else %}
+                {{ _('virtual') }}
+            {% endif %}
+        </a>
+    </div>
+{% endif %}
+<div id="page-container">
+    <noscript>
+        <div id="noscript">{{ _('This site works best with JavaScript enabled.') }}</div>
+    </noscript>
+    <br>
+    <main id="content">
+        {% block title_row %}
+            <h2 style="color:#393630; display:inline">
+                {% block content_title %}
+                    {% if content_title %}{{ content_title }}{% else %}{{ title }}{% endif %}
+                {% endblock %}
+            </h2>
+        {% endblock %}
+        {% block header %}{% endblock %}
+        {% block title_ruler %}
+            <hr>
+        {% endblock %}
+        <div id="content-body">{% block body %}{% endblock %}</div>
+    </main>
+
+    {% if i18n_config.announcement %}
+        <div id="announcement">{{ i18n_config.announcement|safe }}</div>
+    {% endif %}
+
+    {% block bodyend %}{% endblock %}
+
+    <footer>
+        <span id="footer-content">
+            <br>
+            <a style="color: #808080" href="https://dmoj.ca">proudly powered by <b>DMOJ</b></a> |
+            {% if i18n_config.footer %}
+                {{ i18n_config.footer|safe }} |
+            {% endif %}
+            <form action="{{ url('set_language') }}" method="post" style="display: inline">
+                {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path() }}">
+            <select name="language" onchange="form.submit()" style="height: 1.5em">
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% for language in languages %}
+                    <option value="{{ language['code'] }}"
+                            {% if language['code'] == LANGUAGE_CODE %}selected{% endif %}>
+                        {{ language.name_local }} ({{ language.code }})
+                    </option>
+                {% endfor %}
+            </select>
+          </form>
+        </span>
+    </footer>
+</div>
+</body>
 </html>
