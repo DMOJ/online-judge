@@ -24,6 +24,7 @@ def _register_function(store, name, func):
     elif name is not None and func is None:
         if callable(name):
             _store_function(store, name)
+            return func
         else:
             def decorator(func):
                 _store_function(store, func, name)
