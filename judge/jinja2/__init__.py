@@ -3,7 +3,8 @@ from mptt.utils import get_cached_trees
 from statici18n.templatetags.statici18n import inlinei18n
 
 from judge.user_translations import ugettext
-from . import language, gravatar, rating, markdown, reference, registry
+from . import registry
+from . import language, gravatar, rating, markdown, reference, timedelta
 
 registry.function('str', unicode)
 registry.filter('str', unicode)
