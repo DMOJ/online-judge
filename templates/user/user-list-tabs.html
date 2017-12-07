@@ -1,14 +1,6 @@
-<div class="page-title">
-    <div class="tabs">
-        <h2>{{ _(title) }}</h2><span class="spacer"></span>
-        <ul>
-            <li class="tab{% if tab == 'list' %} active{% endif %}">
-                <a href="{{ url('user_list') }}"><i class="tab-icon fa fa-users"></i> {{ _('Leaderboard') }}</a>
-            </li>
-            <li class="tab{% if tab == 'organization' %} active{% endif %}">
-                <a href="{{ url('organization_list') }}"><i class="tab-icon fa fa-university"></i>
-                    {{ _('Organizations') }}</a>
-            </li>
-        </ul>
-    </div>
-</div>
+{% extends "tabs-base.html" %}
+
+{% block tabs %}
+    {{ make_tab('list', 'fa-users', url('user_list'), _('Leaderboard')) }}
+    {{ make_tab('organization', 'fa-university', url('organization_list'), _('Organizations')) }}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% macro make_tab(name, fa, url, text) %}
+    <li class="tab{% if tab == name %} active{% endif %}">
+        <a href="{{ url }}"><i class="tab-icon fa {{ fa }}"></i> {{ text }}</a>
+    </li>
+{% endmacro %}
+
+<div class="page-title">
+    <div class="tabs">
+        <h2>{{ _(title) }}</h2>
+        <span class="spacer"></span>
+        {% block post_tab_spacer %}{% endblock %}
+        <ul>
+            {% block tabs %}{% endblock %}
+        </ul>
+    </div>
+</div>
