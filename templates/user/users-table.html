@@ -13,16 +13,7 @@
 {% endblock %}
 
 {% block after_rank %}
-    <td>
-        {% if user.rating %}
-            <span class="rate-group">
-                <span class="rate-box {{ rating_class(user) }}">
-                    <span style="height: {{ rating_progress(user.rating)|floatformat(3) }}em"></span>
-                </span>
-                <span class="rating {{ rating_class(user) }}">{{ user.rating }}</span>
-            </span>
-        {% endif %}
-    </td>
+    <td>{% if user.rating %}{{ rating_number(user) }}{% endif %}</td>
 {% endblock %}
 
 {% block after_point_head %}

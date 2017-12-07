@@ -27,3 +27,9 @@ def get_name(obj):
 @registry.filter(name='rating_progress')
 def get_progress(obj):
     return _get_rating_value(rating_name, obj) or 0.0
+
+
+@registry.function
+@registry.render_with('user/rating.html')
+def rating_number(obj):
+    return {'rating': obj}

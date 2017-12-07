@@ -1,200 +1,156 @@
-{% extends "user/user-base.jade" %}{%  load staticfiles %}{%  load gravatar %}{%  load list_processor %}{%  load markdown %}{%  load rating %}{%  load cache %}{%  load i18n %}{%  load reference %}{% block user_media %}
-<style>a.edit-profile {
-    float: right;
-    padding-top: 1em;
-}
+{% extends "user/user-base.html" %}
 
-.user-problem-group h3 {
-    font-weight: bold;
-    font-size: 1.25em;
-    margin-bottom: -10px;
-    max-height: 20%;
-    line-height: 2.5em;
-}
+{% block title_ruler %}{% endblock %}
 
-.user-problem-group ul {
-    -webkit-columns: 300px 4;
-    -moz-columns: 300px 4;
-    columns: 300px 4;
-    list-style-type: none;
-    margin-top: 0;
-    margin-left: -20px;
-    margin-bottom: 0;
-}
+{% block title_row %}
+    {% set user_tab = 'about' %}
+    {% include "user/user-tabs.html" %}
+{% endblock %}
 
-.user-problem-group a img {
-    max-width: 1em;
-    margin-right: 3px;
-    padding-bottom: 1px;
-    vertical-align: middle;
-}
+{% block user_content %}
+    <div class="content-description">
+        {% with orgs=user.organizations.all() %}
+            {% if orgs %}
+                <p style="margin-top: 0"><b>{{ _('From') }}</b>
+                    {% for org in orgs -%}
+                        <a href="{{ url('organization_home', org.key) }}">{{ org.name }}</a>
+                        {%- if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+            {% endif %}
+        {% endwith %}
 
-.user-info-cell {
-    padding-left: 15px;
-    border-left: 1px solid #CCC;
-}
+        {% if user.about %}
+            <h4>{{ _('About') }}</h4>
+            {% cache 86400 user_about user.id %}
+                {{ user.about|markdown('self-description', MATH_ENGINE)|reference|str|safe }}
+            {% endcache %}
+        {% else %}
+            <i>
+                {% if user.user == request.user %}
+                    {{ _('You have not shared any information.') }}
+                {% else %}
+                    {{ _('This user has not shared any information.') }}
+                {% endif %}
+            </i>
+            <br>
+        {% endif %}
 
-.contest-history-cell {
-    border-left: 1px solid #CCC;
-    padding: 0 0.5em;
-}
-
-table td {
-    margin: 0;
-    vertical-align: top;
-}
-
-.strike {
-    text-align: right;
-    overflow: hidden;
-}
-
-.strike > span {
-    position: relative;
-    display: inline-block;
-}
-
-.strike > span:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 100000px;
-    height: 1px;
-    background: rgba(0, 0, 0, 0.2);
-    right: 100%;
-    margin-right: 5px;
-}
-
-#rating-chart {
-    height: 400px;
-    margin-top: 1em;
-}
-
-#rating-tooltip {
-    display: none;
-    position: absolute;
-    background: rgba(0, 0, 0, .7);
-    color: white;
-    padding: 3px;
-    border-radius: 3px;
-    -webkit-transition: all .1s ease;
-    transition: all .1s ease;
-    pointer-events: none;
-    -webkit-transform: translate(-50%, 0);
-    transform: translate(-50%, 0);
-}
-
-#rating-tooltip.rate-group {
-    color:white;
-}
-</style>{% endblock %}
-{% block title_ruler %}{% endblock %}{% block title_row %}{% set user_tab = 'about' %}{% include "user/user-tabs.jade" %}{% endblock %}{% block user_content %}
-<div class="content-description">{%  with orgs=user.organizations.all %}{% if  orgs %}
-  <p style="margin-top: 0px;"><b>{% trans "From" %}</b>{{' '|escape}}{% for org in __pyjade_iter(orgs,1) %}<a href="{% url "organization_home" org.key %}">{{org.name|escape}}</a>{% if  not forloop.last %}{{', '|escape}}{% endif %}{% endfor %}
-  </p>{% endif %}{% endwith %}{% if  user.about %}
-  <h4>{% trans "About" %}</h4>{%  cache 86400 user_about user.id %}{{user.about|with_math:MATH_ENGINE|markdown:"self-description"|reference|escape}}{% endcache %}{% else %}
-<i>{% if  user.user == request.user %}{% trans "You have not shared any information." %}{% else %}
-{% trans "This user has not shared any information." %}{% endif %}</i><br/>{% endif %}{% if  rating %}
-  <h4>Rating History</h4>
-  <div id="rating-chart">
-    <canvas></canvas>
-  </div>
-  <div id="rating-tooltip">
-    <div class="contest"></div>
-    <div class="date"></div>
-    <div class="rate-group"><span class="rate-box"><span></span></span><span class="rating"></span>, #<span class="rank"></span>
+        {% if rating %}
+            <h4>Rating History</h4>
+            <div id="rating-chart">
+                <canvas></canvas>
+            </div>
+            <div id="rating-tooltip">
+                <div class="contest"></div>
+                <div class="date"></div>
+                <div class="rate-group">
+                    <span class="rate-box"><span></span></span>
+                    <span class="rating"></span>, #<span class="rank"></span>
+                </div>
+            </div>
+        {% endif %}
     </div>
-  </div>{% endif %}
-</div>{% endblock %}{% block bodyend %}{% if  REQUIRE_JAX %}{% include "mathjax-load.jade" %}{% endif %}{% if  ratings %}
-<script type="text/javascript" src="{% static "libs/chart.js/Chart.Core.js" %}"></script>
-<script type="text/javascript" src="{% static "libs/chart.js/Chart.Scatter.js" %}"></script>
-<script type="text/javascript">var rating_history = {{rating_data|escape}};
-var data_index = {};
+{% endblock %}
 
-$.each(rating_history, function (index, item) {
-    data_index[item.timestamp.toString() + ',' + item.rating.toString()] = index;
-    item.x = new Date(item.timestamp);
-    item.y = item.rating;
-});
+{% block bodyend %}
+    {% if REQUIRE_JAX %}
+        {% include "mathjax-load.html" %}
+    {% endif %}
 
-$(function () {
-    var $canvas = $('#rating-chart').find('canvas');
-    var ctx = $canvas.get(0).getContext('2d');
+    {% if ratings %}
+        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.Core.js') }}"></script>
+        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.Scatter.js') }}"></script>
+        <script type="text/javascript">
+            var rating_history = {{rating_data}};
+            var data_index = {};
 
-    var getItem = function(elements) {
-        return rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
-    };
+            $.each(rating_history, function (index, item) {
+                data_index[item.timestamp.toString() + ',' + item.rating.toString()] = index;
+                item.x = new Date(item.timestamp);
+                item.y = item.rating;
+            });
 
-    Chart.types.Scatter.extend({
-        name: 'RatingScatter',
-        showTooltip: function (elements) {
-            var $tooltip = $('#rating-tooltip');
+            $(function () {
+                var $canvas = $('#rating-chart').find('canvas');
+                var ctx = $canvas.get(0).getContext('2d');
 
-            this.draw();
-            if (elements.length > 0) {
-                var item = getItem(elements);
-                var offset = elements[0].tooltipPosition();
+                var getItem = function (elements) {
+                    return rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
+                };
 
-                $tooltip.find('.contest').text(item.label);
-                $tooltip.find('.date').text(item.date);
-                $tooltip.find('.rate-box').attr('class', 'rate-box ' + item.class)
-                        .find('span').css('height', item.height);
-                $tooltip.find('.rating').text(item.rating).attr('class', 'rating ' + item.class);
-                $tooltip.find('.rank').text(item.ranking);
+                Chart.types.Scatter.extend({
+                    name: 'RatingScatter',
+                    showTooltip: function (elements) {
+                        var $tooltip = $('#rating-tooltip');
 
-                $tooltip.removeClass('above below');
-                $tooltip.addClass(offset.y < $tooltip.height() ? 'below' : 'above');
+                        this.draw();
+                        if (elements.length > 0) {
+                            var item = getItem(elements);
+                            var offset = elements[0].tooltipPosition();
 
-                var position = $canvas.offset();
-                var container = $('#page-container').offset();
-                $tooltip.css({
-                    left: position.left - container.left + offset.x + $tooltip.width() / 2,
-                    top: position.top - container.top + offset.y - $tooltip.height() - 13,
-                    fontFamily: this.options.tooltipFontFamily,
-                    fontSize: this.options.tooltipFontSize,
-                    fontStyle: this.options.tooltipFontStyle
-                }).show();
-            } else
-                $tooltip.hide();
+                            $tooltip.find('.contest').text(item.label);
+                            $tooltip.find('.date').text(item.date);
+                            $tooltip.find('.rate-box').attr('class', 'rate-box ' + item.class)
+                                .find('span').css('height', item.height);
+                            $tooltip.find('.rating').text(item.rating).attr('class', 'rating ' + item.class);
+                            $tooltip.find('.rank').text(item.ranking);
 
-            return this;
-        }
-    });
+                            $tooltip.removeClass('above below');
+                            $tooltip.addClass(offset.y < $tooltip.height() ? 'below' : 'above');
 
-    window.rating_chart = new Chart(ctx).RatingScatter([
-        {
-            label: 'rating',
-            strokeColor: '#A31515',
-            fillColor: '#A31515',
-            data: rating_history
-        }
-    ], {
-        bezierCurve: false,
-        showTooltips: true,
-        scaleShowHorizontalLines: true,
-        scaleShowLabels: true,
-        scaleType: 'date',
-        responsive: true,
-        maintainAspectRatio: false,
-        pointDotRadius: 6,
-        pointHitDetectionRadius: 6
-    });
+                            var position = $canvas.offset();
+                            var container = $('#page-container').offset();
+                            $tooltip.css({
+                                left: position.left - container.left + offset.x + $tooltip.width() / 2,
+                                top: position.top - container.top + offset.y - $tooltip.height() - 13,
+                                fontFamily: this.options.tooltipFontFamily,
+                                fontSize: this.options.tooltipFontSize,
+                                fontStyle: this.options.tooltipFontStyle
+                            }).show();
+                        } else
+                            $tooltip.hide();
 
-    $canvas.click(function(evt) {
-        var elements = window.rating_chart.getPointsAtEvent(evt);
-        if (elements.length > 0) {
-            var item = getItem(elements);
-            window.location.href = item.link;
-        }
-    });
+                        return this;
+                    }
+                });
 
-    $canvas.mousemove(function(evt) {
-        var elements = window.rating_chart.getPointsAtEvent(evt);
-        if (elements.length > 0) {
-            $canvas.css('cursor', 'pointer');
-        } else {
-            $canvas.css('cursor', '');
-        }
-    });
-});
-</script>{% endif %}{% endblock %}
+                window.rating_chart = new Chart(ctx).RatingScatter([
+                    {
+                        label: 'rating',
+                        strokeColor: '#A31515',
+                        fillColor: '#A31515',
+                        data: rating_history
+                    }
+                ], {
+                    bezierCurve: false,
+                    showTooltips: true,
+                    scaleShowHorizontalLines: true,
+                    scaleShowLabels: true,
+                    scaleType: 'date',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    pointDotRadius: 6,
+                    pointHitDetectionRadius: 6
+                });
+
+                $canvas.click(function (evt) {
+                    var elements = window.rating_chart.getPointsAtEvent(evt);
+                    if (elements.length > 0) {
+                        var item = getItem(elements);
+                        window.location.href = item.link;
+                    }
+                });
+
+                $canvas.mousemove(function (evt) {
+                    var elements = window.rating_chart.getPointsAtEvent(evt);
+                    if (elements.length > 0) {
+                        $canvas.css('cursor', 'pointer');
+                    } else {
+                        $canvas.css('cursor', '');
+                    }
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}

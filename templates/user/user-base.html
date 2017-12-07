@@ -1,37 +1,74 @@
-{% extends "base.jade" %}{%  load staticfiles %}{%  load gravatar %}{%  load list_processor %}{%  load markdown %}{%  load rating %}{%  load i18n %}{% block media %}{% block user_media %}{% endblock %}
-<style>.user-gravatar {
-    display: block;
-    padding-right: 15px;
-    width: 135px;
-}
+{% extends "base.html" %}
 
-.user-gravatar img {    
-    width: 135px;
-    height: 135px;
-    display: block;
-    border-radius: 6px;
-}
+{% block media %}
+    {% block user_media %}{% endblock %}
 
-.page-title {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-}
+    <style>
+        .user-gravatar {
+            display: block;
+            padding-right: 15px;
+            width: 135px;
+        }
 
-.user-content {
-    width: 100%;
-}
-</style>{% endblock %}
-{% block js_media %}{% block user_js_media %}{% endblock %}{% endblock %}{% block body %}
-<table>
-  <tr>
-    <td style="padding-left:1em">
-      <div class="user-gravatar"><img src="{% gravatar_url user.user.email 135 user.mute %}" alt="gravatar" width="135px" height="135px"/>
-      </div><br/>
-      <!-- Transblock--><b>{{user.problem_count|escape}} problems solved</b><br/><b class="semibold">{% trans "Rank by points:" %}</b> #{{rank|escape}}<br/><b class="semibold">{% trans "Total points:" %}</b><span title="{{ user.performance_points|floatformat:2 }}"> {{user.performance_points|floatformat:0|escape}}</span><br/><br/><a href="{% url "all_user_submissions" user.user.username %}">{% trans "View submissions" %}</a>{% if  ratings %}<br/><br/><b>{{ratings|length|escape}} contests written</b><br/><b class="semibold">{% trans "Rank by rating:" %}</b> #{{rating_rank|escape}}<br/><b class="semibold">{% trans "Rating:" %}</b>{{' '|escape}}<span class="rate-group"><span class="rate-box {{ rating.rating|rating_class }}"><span style="height: {{ rating.rating|rating_progress|floatformat:3 }}em"></span></span><span class="rating {{ rating.rating|rating_class }}">{{rating.rating|escape}}</span></span><br/><b class="semibold">{% trans "Volatility:" %}</b> {{rating.volatility|escape}}<br/><b class="semibold">{% trans "Min. rating:" %}</b>{{' '|escape}}<span class="rate-group"><span class="rate-box {{ min_rating|rating_class }}"><span style="height: {{ min_rating|rating_progress|floatformat:3 }}em"></span></span><span class="rating {{ min_rating|rating_class }}">{{min_rating|escape}}</span></span><br/><b class="semibold">{% trans "Max rating:" %}</b>{{' '|escape}}<span class="rate-group"><span class="rate-box {{ max_rating|rating_class }}"><span style="height: {{ max_rating|rating_progress|floatformat:3 }}em"></span></span><span class="rating {{ max_rating|rating_class }}">{{max_rating|escape}}</span></span>{% endif %}<br/>
-    </td>
-    <td class="user-content">{% block user_content %}{% endblock %}
-    </td>
-  </tr>
-</table>{% endblock %}
+        .user-gravatar img {
+            width: 135px;
+            height: 135px;
+            display: block;
+            border-radius: 6px;
+        }
+
+        .page-title {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .user-content {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block js_media %}
+    {% block user_js_media %}{% endblock %}
+{% endblock %}
+
+{% block body %}
+    <table>
+        <tr>
+            <td style="padding-left:1em">
+                <div class="user-gravatar">
+                    <img src="{{ gravatar(user, 135) }}" width="135px" height="135px">
+                </div>
+                <br>
+
+                <div><b>{{ _('%(count)d problems solved', count=user.problem_count) }}</b></div>
+
+                <div><b class="semibold">{{ _('Rank by points:') }}</b> #{{ rank }}</div>
+                <div>
+                    <b class="semibold">{{ _('Total points:') }}</b>
+                    <span title="{{ user.performance_points|floatformat(2) }}">
+                        {{ user.performance_points|floatformat(0) }}
+                    </span>
+                </div>
+
+                <br>
+                <div>
+                    <a href="{{ url('all_user_submissions', user.user.username) }}">{{ _('View submissions') }}</a>
+                </div>
+
+                {% if ratings %}
+                    <br>
+                    <div><b>{{ ratings|length }} contests written</b></div>
+                    <div><b class="semibold">{{ _('Rank by rating:') }}</b> #{{ rating_rank }}</div>
+                    <div><b class="semibold">{{ _('Rating:') }}</b> {{ rating_number(rating) }}</div>
+                    <div><b class="semibold">{{ _('Volatility:') }}</b> {{ rating.volatility }}</div>
+                    <div><b class="semibold">{{ _('Min. rating:') }}</b> {{ rating_number(min_rating) }}</div>
+                    <div><b class="semibold">{{ _('Max rating:') }}</b> {{ rating_number(max_rating) }}</div>
+                {% endif %}
+            </td>
+            <td class="user-content">{% block user_content %}{% endblock %}</td>
+        </tr>
+    </table>
+{% endblock %}

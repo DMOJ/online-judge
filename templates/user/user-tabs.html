@@ -1,24 +1,47 @@
-{%  load i18n %}
 <div class="page-title">
-  <div style="margin: 0px 0px 8px;padding:0px;width:100%" class="tabs">
-    <h2 style="color:#393630; display: inline-block">{{title|escape}}</h2><span class="spacer"></span>
-    <ul>
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if user_tab == 'about' else ''))))])}}><a href="{% url "user_page" user.user.username %}"><i class="tab-icon fa fa-info-circle"></i> {% trans "About" %}</a>
-      </li>
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if user_tab == 'problems' else ''))))])}}><a href="{% url "user_problems" user.user.username %}"><i class="tab-icon fa fa-puzzle-piece"></i> {% trans "Problems" %}</a>
-      </li>
-{% if  request.user.is_superuser and user.user != request.user and not user.user.is_superuser %}
-      <li class="tab"><a href="{% url "impersonate-start" user.user.id %}"><i class="tab-icon fa fa-eye"></i> {% trans "Impersonate" %}</a>
-      </li>{% endif %}
-{% if  user.user == request.user %}
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if user_tab == 'edit' else ''))))])}}><a href="{% url "user_edit_profile" %}"><i class="tab-icon fa fa-edit"></i> {% trans "Edit profile" %}</a>
-      </li>{% else %}
-{% if  perms.auth.change_user %}
-      <li class="tab"><a href="{% url "admin:auth_user_change" user.user.id %}"><i class="tab-icon fa fa-edit"></i> {% trans "Admin User" %}</a>
-      </li>{% endif %}
-{% if  perms.judge.change_profile %}
-      <li class="tab"><a href="{% url "admin:judge_profile_change" user.id %}"><i class="tab-icon fa fa-edit"></i> {% trans "Admin Profile" %}</a>
-      </li>{% endif %}{% endif %}
-    </ul>
-  </div>
+    <div style="margin: 0 0 8px; padding:0; width:100%" class="tabs">
+        <h2 style="color:#393630; display: inline-block">{{ title }}</h2>
+        <span class="spacer"></span>
+        <ul>
+            <li class="tab{% if user_tab == 'about' %} active{% endif %}">
+                <a href="{{ url('user_page', user.user.username) }}">
+                    <i class="tab-icon fa fa-info-circle"></i> {{ _('About') }}
+                </a>
+            </li>
+            <li class="tab{% if user_tab == 'problems' %} active{% endif %}">
+                <a href="{{ url('user_problems', user.user.username) }}">
+                    <i class="tab-icon fa fa-puzzle-piece"></i> {{ _('Problems') }}
+                </a>
+            </li>
+            {% if request.user.is_superuser and user.user != request.user and not user.user.is_superuser %}
+                <li class="tab">
+                    <a href="{{ url('impersonate-start', user.user.id) }}">
+                        <i class="tab-icon fa fa-eye"></i> {{ _('Impersonate') }}
+                    </a>
+                </li>
+            {% endif %}
+            {% if user.user == request.user %}
+                <li class="tab{% if user_tab == 'edit' %} active{% endif %}">
+                    <a href="{{ url('user_edit_profile') }}">
+                        <i class="tab-icon fa fa-edit"></i> {{ _('Edit profile') }}
+                    </a>
+                </li>
+            {% else %}
+                {% if perms.auth.change_user %}
+                    <li class="tab">
+                        <a href="{{ url('admin:auth_user_change', user.user.id) }}">
+                            <i class="tab-icon fa fa-edit"></i> {{ _('Admin User') }}
+                        </a>
+                    </li>
+                {% endif %}
+                {% if perms.judge.change_profile %}
+                    <li class="tab">
+                        <a href="{{ url('admin:judge_profile_change', user.id) }}">
+                            <i class="tab-icon fa fa-edit"></i> {{ _('Admin Profile') }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </div>
 </div>
