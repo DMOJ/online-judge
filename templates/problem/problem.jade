@@ -199,11 +199,12 @@ block description
                     | #{license.display|default:license.name}
 
 block post_description_end
-    a.button(style='float:right', href='{% url "new_problem_ticket" problem.code %}')
-        if contest_problem and contest_problem.contest.use_clarifications
-            | {% trans "Request clarification" %}
-        else
-            | {% trans "Report an issue" %}
+    if request.user.is_authenticated and not request.user.profile.mute
+        a.button(style='float:right', href='{% url "new_problem_ticket" problem.code %}')
+            if contest_problem and contest_problem.contest.use_clarifications
+                | {% trans "Request clarification" %}
+            else
+                | {% trans "Report an issue" %}
 
 block comments
     if contest_problem and contest_problem.contest.use_clarifications
