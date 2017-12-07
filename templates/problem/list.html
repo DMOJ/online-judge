@@ -176,7 +176,6 @@
                                 <ul class="problem-list">{% for problem in hot_problems %}
                                     <li><a href="{{ url('problem_detail', problem.code) }}" class="hot-problem-link">
                                         {{ problem.name }}
-                                        <span class="hot-problem-count">{{ problem.count }}</span>
                                     </a></li>
                                 {% endfor %}</ul>
                             </div>

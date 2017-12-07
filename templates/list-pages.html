@@ -3,7 +3,7 @@
         {% if page_obj.previous_page_number == 1 and first_page_href != None %}
             <li><a href="{{ first_page_href }}">«</a></li>
         {% else %}
-            <li><a href="{{ page_prefix }}{{ page_obj.previous_page_number }}{{ page_suffix }}">«</a></li>
+            <li><a href="{{ page_prefix or '' }}{{ page_obj.previous_page_number }}{{ page_suffix or '' }}">«</a></li>
         {% endif %}
     {% else %}
         <li class="disabled-page"><span>«</span></li>
@@ -11,20 +11,21 @@
 
     {% for page in page_obj.page_range %}
         {% if not page %}
-        <li class="disabled-page"><span>...</span></li>
+            <li class="disabled-page"><span>...</span></li>
         {% else %}
-        <li{% if page == page_obj.number %} class="active-page"{% endif %}>
-        <a href="
-            {%- if page == 1 and first_page_href != None -%}
-                {{ first_page_href }}
-            {%- else -%}
-                {{ page_prefix }}{{ page }}{{ page_suffix }}
-            {%- endif -%}
-        ">{{ page }}</a>
+            <li{% if page == page_obj.number %} class="active-page"{% endif %}>
+            <a href="
+                {%- if page == 1 and first_page_href != None -%}
+                    {{ first_page_href }}
+                {%- else -%}
+                    {{ page_prefix or '' }}{{ page }}{{ page_suffix or '' }}
+                {%- endif -%}
+            ">{{ page }}</a>
+        {% endif %}
     {% endfor %}
 
     {% if page_obj.has_next %}
-        <li><a href="{{ page_prefix }}{{ page_obj.next_page_number }}{{ page_suffix }}">»</a></li>
+        <li><a href="{{ page_prefix or '' }}{{ page_obj.next_page_number }}{{ page_suffix or '' }}">»</a></li>
     {% else %}
         <li class="disabled-page"><span>»</span></li>
     {% endif %}

@@ -14,7 +14,7 @@
                 <p style="margin-top: 0"><b>{{ _('From') }}</b>
                     {% for org in orgs -%}
                         <a href="{{ url('organization_home', org.key) }}">{{ org.name }}</a>
-                        {%- if not forloop.last %}, {% endif %}
+                        {%- if not loop.last %}, {% endif %}
                     {% endfor %}
                 </p>
             {% endif %}

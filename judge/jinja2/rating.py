@@ -24,7 +24,7 @@ def get_name(obj):
     return _get_rating_value(rating_name, obj) or 'Unrated'
 
 
-@registry.filter(name='rating_progress')
+@registry.function(name='rating_progress')
 def get_progress(obj):
     return _get_rating_value(rating_name, obj) or 0.0
 

@@ -261,7 +261,7 @@
                             {% for ticket in open_tickets %}
                                 <li>
                                     <div class="title">
-                                        <a href="{{ url(ticket, ticket.id) }}">{{ ticket.title }}</a>
+                                        <a href="{{ url('ticket', ticket.id) }}">{{ ticket.title }}</a>
                                     </div>
                                     <div class="object">
                                         <a href="{{ ticket.linked_item.get_absolute_url() }}">
