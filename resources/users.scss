@@ -48,3 +48,69 @@ th.header.rank {
 .user-search-name {
     padding-left: 0.5em;
 }
+
+#users-table {
+    .username {
+        width: 100%;
+    }
+
+    .header {
+        vertical-align: middle;
+    }
+
+    .rank, .points, .problems, .username {
+        white-space: nowrap;
+    }
+
+    tr {
+        transition: background-color linear .2s;
+
+        &:hover {
+            background: #EAEAEA;
+        }
+
+        &.highlight {
+            background: #fff897;
+        }
+    }
+}
+
+#search-form {
+    display: inline-block;
+    vertical-align: top;
+    width: 225px;
+    float: right;
+
+    .select2-selection__arrow {
+        display: none;
+    }
+
+    .select2-selection__rendered {
+        cursor: text;
+    }
+
+    .select2-results__option {
+        position: relative;
+    }
+
+    .select2-results__option--highlighted {
+        background-color: #DEDEDE !important;
+    }
+
+    li.select2-results__option--highlighted a.user-redirect {
+        display: inline-block;
+    }
+}
+
+a.user-redirect {
+    color: #2980b9;
+    vertical-align: middle;
+    font-size: 1.2em;
+    position: absolute;
+    right: 0.8em;
+    display: none;
+
+    &:hover {
+        text-shadow: 0 0 2px blue;
+    }
+}

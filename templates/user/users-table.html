@@ -1,10 +1,38 @@
-{% extends "user/base-users-table.jade" %}{%  load rating %}{%  load i18n %}{% block after_rank_head %}
-<th class="header rank">{% if  sort_links %}<a{{__pyjade_attrs(attrs=[('href',(sort_links['rating']))])}}><span class="rate-group"><span style="color: white" class="rate-box"><span style="background: white; height: 0.3em"></span></span></span>{{sort_order.rating|escape}}</a>{% else %}
-<span class="rate-group"><span style="color: white" class="rate-box"><span style="background: white; height: 0.3em"></span></span></span>{% endif %}
-</th>{% endblock %}{% block after_rank %}
-<td>{% if  user.rating %}<span class="rate-group"><span class="rate-box {{ user.rating|rating_class }}"><span style="height: {{ user.rating|rating_progress|floatformat:3 }}em"></span></span><span class="rating {{ user.rating|rating_class }}">{{user.rating|escape}}</span></span>{% endif %}
-</td>{% endblock %}{% block after_point_head %}{% if  sort_links %}
-<th class="problems"><a{{__pyjade_attrs(attrs=[('href',(sort_links['problem_count']))])}}>{% trans "Problems" %}{{sort_order.problem_count|escape}}</a>
-</th>{% else %}
-<th class="problems">{% trans "Problems" %}</th>{% endif %}{% endblock %}{% block after_point %}
-<td>{{user.problem_count|escape}}</td>{% endblock %}
+{% extends "user/base-users-table.html" %}
+
+{% block after_rank_head %}
+    <th class="header rank">
+        {% if sort_links %}<a href="{{ sort_links.rating }}">{% endif %}
+        <span class="rate-group">
+            <span style="color: white" class="rate-box">
+                <span style="background: white; height: 0.3em"></span>
+            </span>
+        </span>
+        {%- if sort_links %}{{ sort_order.rating }}</a>{% endif %}
+    </th>
+{% endblock %}
+
+{% block after_rank %}
+    <td>
+        {% if user.rating %}
+            <span class="rate-group">
+                <span class="rate-box {{ rating_class(user) }}">
+                    <span style="height: {{ user.rating|rating_progress|floatformat(3) }}em"></span>
+                </span>
+                <span class="rating {{ rating_class(user) }}">{{ user.rating }}</span>
+            </span>
+        {% endif %}
+    </td>
+{% endblock %}
+
+{% block after_point_head %}
+    <th class="problems">
+        {% if sort_links %}<a href="{{ sort_links.problem_count }}">{% endif %}
+        {{ _('Problems') }}
+        {%- if sort_links %}{{ sort_order.problem_count }}</a>{% endif %}
+    </th>
+{% endblock %}
+
+{% block after_point %}
+    <td>{{ user.problem_count }}</td>
+{% endblock %}
