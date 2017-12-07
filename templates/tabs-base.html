@@ -1,12 +1,14 @@
 {% macro make_tab(name, fa, url, text) %}
     <li class="tab{% if tab == name %} active{% endif %}">
-        <a href="{{ url }}"><i class="tab-icon fa {{ fa }}"></i> {{ text }}</a>
+        {%- if url %}<a href="{{ url }}">{% endif -%}
+        <i class="tab-icon fa {{ fa }}"></i> {{ text }}
+        {%- if url %}</a>{% endif -%}
     </li>
 {% endmacro %}
 
 <div class="page-title">
     <div class="tabs">
-        <h2>{{ _(title) }}</h2>
+        <h2>{{ content_title or title }}</h2>
         <span class="spacer"></span>
         {% block post_tab_spacer %}{% endblock %}
         <ul>

@@ -70,7 +70,7 @@
 {% block title_ruler %}{% endblock %}
 
 {% block title_row %}
-    {% set user_tab = 'edit' %}
+    {% set tab = 'edit' %}
     {% set user = request.user.profile %}
     {% include "user/user-tabs.html" %}
 {% endblock %}

@@ -1,32 +1,17 @@
-<div class="page-title">
-    <div class="tabs">
-        <h2>{{ content_title }}</h2><span class="spacer"></span>
-        <ul>
-            <li class="tab{% if tab == 'all_submissions_list' %} active{% endif %}">
-                <a href="{{ all_submissions_link }}"><i class="tab-icon fa fa-list"></i> {{ _('All') }}</a>
-            </li>
-            {% if my_submissions_link or tab == 'my_submissions_tab' %}
-                <li class="tab{% if tab == 'my_submissions_tab' %} active{% endif %}">
-                    <a href="{{ my_submissions_link }}"><i class="tab-icon fa fa-user"></i> {{ _('Mine') }}</a>
-                </li>
-            {% endif %}
-            {% if best_submissions_link %}
-                <li class="tab{% if tab == 'best_submissions_list' %} active{% endif %}">
-                    <a href="{{ best_submissions_link }}"><i class="tab-icon fa fa-bar-chart"></i> {{ _('Best') }}</a>
-                </li>
-            {% endif %}
-            {% if tab == 'user_submissions_tab' %}
-                <li class="tab active">
-                    <a><i class="tab-icon fa fa-user"></i>{{ _("%(user)s's", user=username) }}</a>
-                </li>
-            {% endif %}
-            {% if perms.judge.change_submission %}
-                <li class="tab">
-                    <a href="{{ url('admin:judge_submission_changelist') }}">
-                        <i class="tab-icon fa fa-edit"></i> {{ _('Admin') }}
-                    </a>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
-</div>
+{% extends "tabs-base.html" %}
+
+{% block tabs %}
+    {{ make_tab('all_submissions_list', 'fa-list', all_submissions_link, _('All')) }}
+    {% if my_submissions_link or tab == 'my_submissions_tab' %}
+        {{ make_tab('my_submissions_tab', 'fa-user', my_submissions_link, _('Mine')) }}
+    {% endif %}
+    {% if best_submissions_list %}
+        {{ make_tab('my_submissions_tab', 'fa-bar-chart', best_submissions_link, _('Best')) }}
+    {% endif %}
+    {% if tab == 'user_submissions_tab' %}
+        {{ make_tab('user_submissions_tab', 'fa-bar-user', None, _("%(user)s's", user=username)) }}
+    {% endif %}
+    {% if perms.judge.change_submission %}
+        {{ make_tab('admin', 'fa-edit', url('admin:judge_submission_changelist'), _('Admin')) }}
+    {% endif %}
+{% endblock %}

@@ -1,15 +1,8 @@
-<div class="page-title">
-    <div class="tabs">
-        <h2 style="color:#393630">{{ _(title) }}</h2><span class="spacer"></span>
-        <ul>
-            {% if perms.judge.edit_all_problem or perms.judge.edit_public_problem or perms.judge.edit_own_problem %}
-                <li class="tab{% if tab == 'list' %} active"{% endif %}>
-                    <a href="{{ url('problem_list') }}"><i class="tab-icon fa fa-list"></i> {{ _('List') }}</a>
-                </li>
-                <li class="tab"><a href="{{ url('admin:judge_problem_changelist') }}">
-                    <i class="tab-icon fa fa-edit"></i> {{ _('Admin') }}
-                </a></li>
-            {% endif %}
-        </ul>
-    </div>
-</div>
+{% extends "tabs-base.html" %}
+
+{% block tabs %}
+    {% if perms.judge.edit_all_problem or perms.judge.edit_public_problem or perms.judge.edit_own_problem %}
+        {{ make_tab('list', 'fa-list', url('problem_list'), _('List')) }}
+        {{ make_tab('admin', 'fa-edit', url('admin:judge_problem_changelist'), _('Admin')) }}
+    {% endif %}
+{% endblock %}

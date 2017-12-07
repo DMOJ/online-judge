@@ -1,47 +1,19 @@
-<div class="page-title">
-    <div style="margin: 0 0 8px; padding:0; width:100%" class="tabs">
-        <h2 style="color:#393630; display: inline-block">{{ title }}</h2>
-        <span class="spacer"></span>
-        <ul>
-            <li class="tab{% if user_tab == 'about' %} active{% endif %}">
-                <a href="{{ url('user_page', user.user.username) }}">
-                    <i class="tab-icon fa fa-info-circle"></i> {{ _('About') }}
-                </a>
-            </li>
-            <li class="tab{% if user_tab == 'problems' %} active{% endif %}">
-                <a href="{{ url('user_problems', user.user.username) }}">
-                    <i class="tab-icon fa fa-puzzle-piece"></i> {{ _('Problems') }}
-                </a>
-            </li>
-            {% if request.user.is_superuser and user.user != request.user and not user.user.is_superuser %}
-                <li class="tab">
-                    <a href="{{ url('impersonate-start', user.user.id) }}">
-                        <i class="tab-icon fa fa-eye"></i> {{ _('Impersonate') }}
-                    </a>
-                </li>
-            {% endif %}
-            {% if user.user == request.user %}
-                <li class="tab{% if user_tab == 'edit' %} active{% endif %}">
-                    <a href="{{ url('user_edit_profile') }}">
-                        <i class="tab-icon fa fa-edit"></i> {{ _('Edit profile') }}
-                    </a>
-                </li>
-            {% else %}
-                {% if perms.auth.change_user %}
-                    <li class="tab">
-                        <a href="{{ url('admin:auth_user_change', user.user.id) }}">
-                            <i class="tab-icon fa fa-edit"></i> {{ _('Admin User') }}
-                        </a>
-                    </li>
-                {% endif %}
-                {% if perms.judge.change_profile %}
-                    <li class="tab">
-                        <a href="{{ url('admin:judge_profile_change', user.id) }}">
-                            <i class="tab-icon fa fa-edit"></i> {{ _('Admin Profile') }}
-                        </a>
-                    </li>
-                {% endif %}
-            {% endif %}
-        </ul>
-    </div>
-</div>
+{% extends "tabs-base.html" %}
+
+{% block tabs %}
+    {{ make_tab('about', 'fa-info-circle', url('user_page', user.user.username), _('About')) }}
+    {{ make_tab('problems', 'fa-puzzle-piece', url('user_problems', user.user.username), _('Problems')) }}
+    {% if request.user.is_superuser and user.user != request.user and not user.user.is_superuser %}
+        {{ make_tab('impersonate', 'fa-eye', url('impersonate-start', user.user.id), _('Impersonate')) }}
+    {% endif %}
+    {% if user.user == request.user %}
+        {{ make_tab('edit', 'fa-edit', url('user_edit_profile'), _('Edit profile')) }}
+    {% else %}
+        {% if perms.auth.change_user %}
+            {{ make_tab('edit', 'fa-edit', url('admin:auth_user_change', user.user.id), _('Admin User')) }}
+        {% endif %}
+        {% if perms.judge.change_profile %}
+            {{ make_tab('edit', 'fa-edit', url('admin:judge_profile_change', user.id), _('Admin Profile')) }}
+        {% endif %}
+    {% endif %}
+{% endblock %}

@@ -1,13 +1,6 @@
-<div class="page-title">
-    <div class="tabs">
-        <h2>{{ _(title) }}</h2><span class="spacer"></span>
-        <ul>
-            <li class="tab{% if tab == 'judges' %} active{% endif %}">
-                <a href="{{ url('status_all') }}"><i class="tab-icon fa fa-server"></i> {{ _('Judges') }}</a>
-            </li>
-            <li class="tab{% if tab == 'runtimes' %} active{% endif %}">
-                <a href="{{ url('runtime_list') }}"><i class="tab-icon fa fa-code"></i> {{ _('Runtimes') }}</a>
-            </li>
-        </ul>
-    </div>
-</div>
+{% extends "tabs-base.html" %}
+
+{% block tabs %}
+    {{ make_tab('judges', 'fa-server', url('status_all'), _('Judges')) }}
+    {{ make_tab('runtimes', 'fa-code', url('runtime_list'), _('Runtimes')) }}
+{% endblock %}
