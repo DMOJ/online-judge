@@ -176,12 +176,12 @@ a.edit-profile {
     margin-right: 5px;
 }
 
-#submissions-table {
-    td {
-        margin: 0;
-        vertical-align: top;
-    }
+table.user-info-page td {
+    margin: 0;
+    vertical-align: top;
+}
 
+.pp-table {
     .pp {
         font-weight: 600;
         font-size: 1.4em;
