@@ -49,9 +49,6 @@ class UserMixin(object):
     context_object_name = 'user'
 
     def render_to_response(self, context, **response_kwargs):
-        if django.VERSION < (1, 8) and not isinstance(context, Context):
-            context = RequestContext(self.request, context)
-            context[self.context_object_name] = self.object
         return super(UserMixin, self).render_to_response(context, **response_kwargs)
 
 
