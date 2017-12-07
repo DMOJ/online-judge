@@ -26,7 +26,7 @@
 
 {% block body %}
     <div id="banner">
-        <a href="https://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name|urlencode('') }}&amp;iso=
+        <a href="https://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name|urlquote('') }}&amp;iso=
                 {{- contest.start_time|utc|date('Y-m-d\TH:i:s') }}" class="date">
             {%- if participating and participation.virtual and not participation.ended -%}
                 {% if participation.spectate %}
@@ -56,11 +56,11 @@
         </a>
         <div id="time">
             {% if contest.time_limit %}
-                {% trans trimmed start_time=contest.start_time|date(_("F j, Y, G:i T")) end_time=contest.end_time|date(_("F j, Y, G:i T")) time_limit=contest.time_limit|timedelta:"localized-no-seconds" %}
+                {% trans trimmed start_time=contest.start_time|date(_("F j, Y, G:i T")), end_time=contest.end_time|date(_("F j, Y, G:i T")), time_limit=contest.time_limit|timedelta('localized-no-seconds') %}
                     <b>{{ time_limit }}</b> window between <b>{{ start_time }}</b> and <b>{{ end_time }}</b>
                 {% endtrans %}
             {% else %}
-                {% trans trimmed length=contest.contest_window_length|timedelta("localized-no-seconds") start_time=contest.start_time|date(_("F j, Y, G:i T")) %}
+                {% trans trimmed length=contest.contest_window_length|timedelta("localized-no-seconds"), start_time=contest.start_time|date(_("F j, Y, G:i T")) %}
                     <b>{{ length }}</b> long starting on <b>{{ start_time }}</b>
                 {% endtrans %}
             {% endif %}

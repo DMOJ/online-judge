@@ -1,6 +1,7 @@
 import json
-
 import itertools
+
+from django.utils.http import urlquote
 from jinja2.ext import Extension
 from mptt.utils import get_cached_trees
 from statici18n.templatetags.statici18n import inlinei18n
@@ -14,6 +15,7 @@ registry.function('str', unicode)
 registry.filter('str', unicode)
 registry.filter('json', json.dumps)
 registry.filter('highlight', highlight_code)
+registry.filter('urlquote', urlquote)
 registry.function('inlinei18n', inlinei18n)
 registry.function('mptt_tree', get_cached_trees)
 registry.function('user_trans', ugettext)
