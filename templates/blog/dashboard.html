@@ -1,19 +1,34 @@
-{%  load staticfiles %}{%  load cache %}{%  load markdown %}{%  load timedelta %}{%  load i18n %}{%  load tz %}{%  load gravatar %}
 <div class="sidebox dashboard">
-  <h3>Dashboard <i class="fa fa-dashboard"></i>
-  </h3>
-  <div class="sidebox-content">
-    <div class="user-gravatar"><img src="{% gravatar_url request.user.email 135 request.user.profile.mute %}" alt="gravatar" width="135px" height="135px"/>
+    <h3>Dashboard <i class="fa fa-dashboard"></i>
+    </h3>
+    <div class="sidebox-content">
+        <div class="user-gravatar">
+            <img src="{{ gravatar(request.user, 135) }}"
+                 alt="gravatar" width="135px" height="135px">
+        </div>
+        <div class="recently-attempted">
+            <h4>Recently attempted problems</h4>
+            <ul>
+                {% for code, name, problem_points, user_points, s_date in recently_attempted_problems %}
+                    <li>
+                        <a href="{{ url('problem_detail', code) }}">{{ name }}</a>
+                        [<a href="{{ url('user_submissions', code, request.user.username }}">
+                        {{- user_points }}/{{ problem_points|floatformat }}</a>]
+
+                        <span class="time">
+                            <span data-unix="{{ submission.date|utc|date("c") }}"
+                                  class="recent-time moment-time-toggle">
+                                {% trans time=submission.date|date(_("N j, Y, g:i")) %}
+                                    on {{ time }}
+                                {% endtrans %}
+                            </span>
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="recommended-problems">
+            <h4>Recommended problems</h4><i>Coming soon.</i>
+        </div>
     </div>
-    <div class="recently-attempted">
-      <h4>Recently attempted problems</h4>
-      <ul>{% for code,name,problem_points,user_points,s_date in __pyjade_iter(recently_attempted_problems,5) %}
-        <li><a href="{% url "problem_detail" code %}">{{name|escape}}</a>{{' ['|escape}}<a href="{% url "user_submissions" code request.user.username %}">{{user_points|escape}}/{{problem_points|floatformat|escape}}</a>{{'] '|escape}}<span class="time"><span data-unix="{{ s_date|utc|date:"c" }}" class="recent-time moment-time-toggle">{%  blocktrans with time=s_date|date:_("N j, Y, g:i") asvar str_time %}on {{ time }}<span class="relative">{{str_time|escape}}</span><span class="absolute">{{str_time|escape}}</span></span></span>
-        </li>{% endfor %}
-      </ul>
-    </div>
-    <div class="recommended-problems">
-      <h4>Recommended problems</h4><i>Coming soon.</i>
-    </div>
-  </div>
 </div>

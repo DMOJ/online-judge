@@ -1,7 +1,9 @@
-{% extends "base.jade" %}{%  load markdown %}{%  load staticfiles %}{%  load reference %}{% block title %}{{flatpage.title|escape}} - {{SITE_LONG_NAME|escape}}{% endblock %}
-{% block og_title %}
-<meta property="og:title" content="{{ flatpage.title }} - {{ SITE_LONG_NAME }}"/>{% endblock %}{% block content_title %}{{flatpage.title|escape}}{% endblock %}
-{% block header %}{% include "flatpages/admin_link.jade" %}{% endblock %}{% block body %}
-<div class="content-description">{{flatpage.content|with_math:MATH_ENGINE|markdown:"solution"|reference|escape}}
-</div>{% endblock %}
-{% block bodyend %}{% if  REQUIRE_JAX %}{% include "mathjax-load.jade" %}{% endif %}{% endblock %}
+{% extends "flatpages/markdown.html" %}
+
+{% block body %}
+    <div class="content-description">{{ flatpage.content|markdown('solution', MATH_ENGINE)|reference }}</div>
+{% endblock %}
+
+{% block bodyend %}
+    {% if REQUIRE_JAX %}{% include "mathjax-load.html" %}{% endif %}
+{% endblock %}

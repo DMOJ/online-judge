@@ -1,4 +1,15 @@
-{% extends "base.jade" %}{% load evaluate %}{% block title %}{{flatpage.title|escape}} - {{SITE_LONG_NAME|escape}}{% endblock %}
+{% extends "base.html" %}
+{% block title %}{{ flatpage.title }} - {{ SITE_LONG_NAME }}{% endblock %}
 {% block og_title %}
-<meta property="og:title" content="{{ flatpage.title }} - {{ SITE_LONG_NAME }}"/>{% endblock %}{% block content_title %}{{flatpage.title|escape}}{% endblock %}
-{% block header %}{% include "flatpages/admin_link.jade" %}{% endblock %}{% block body %}{% evaluate flatpage.content %}{% endblock %}
+    <meta property="og:title" content="{{ flatpage.title }} - {{ SITE_LONG_NAME }}">
+{% endblock %}
+
+{% block content_title %}{{ flatpage.title }}{% endblock %}
+
+{% block header %}
+    {% include "flatpages/admin_link.html" %}
+{% endblock %}
+
+{% block body %}
+    {{ render_django(flatpage.content) }}
+{% endblock %}

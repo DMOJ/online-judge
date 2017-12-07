@@ -1,4 +1,0 @@
-{% extends "flatpages/markdown-math.jade" %}{% block site_title %}<span style="color: #FFDE05">DM::</span><span style="color: #AAA">Solutions</span>{% endblock %}{% block content_title %}{{flatpage.title|escape}}
-{% if  perms.judge.change_solution %}
-<div class="title-line-action">[<a href="{% url "admin:judge_solution_change" flatpage.id %}">{% trans "Edit" %}</a>]
-</div>{% endif %}{% endblock %}

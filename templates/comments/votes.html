@@ -1,14 +1,17 @@
 <h2>Votes</h2>
 <table class="table">
-  <thead>
-    <th>Voter</th>
-    <th>Score</th>
-  </thead>
-  <tbody>{% for vote in __pyjade_iter(votes,1) %}
-    <tr>{%  with user=vote.voter %}
-      <td{{__pyjade_attrs(attrs=[('class', ((user.display_rank)))])}}><a href="{% url "user_page" user.user.username %}" class="user-name">{{user.user.username|escape}}</a>
-      </td>{% endwith %}
-      <td>{{vote.score|escape}}</td>
-    </tr>{% endfor %}
-  </tbody>
+    <thead>
+    <tr>
+        <th>Voter</th>
+        <th>Score</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for vote in votes %}
+        <tr>
+            <td>{{ link_user(vote.voter) }}</td>
+            <td>{{ vote.score }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
 </table>

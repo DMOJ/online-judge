@@ -30,7 +30,7 @@
                             </div>
                             {% with author=node.author, user=node.author.user %}
                                 <a href="{{ url('user_page', user.username) }}" class="user">
-                                    <img src="{{ gravatar(user, 135, author.mute) }}" class="gravatar">
+                                    <img src="{{ gravatar(author, 135) }}" class="gravatar">
                                 </a>
                             {% endwith %}
                         </div>
@@ -40,7 +40,7 @@
                                 <div class="relative-time"></div>
                                 <span data-unix="{{ node.time|utc|date('c') }}" class="comment-time">
                                     {% trans time=post.publish_on|date(_("N j, Y, g:i")) %}
-                                        posted on {{ time }}
+                                        commented on {{ time }}
                                     {% endtrans %}
                                 </span>
                                 <span class="comment-spacer"></span>

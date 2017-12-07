@@ -1,13 +1,17 @@
 <div class="comment-submit">
-  <form id="comment-edit" action="{{ request.get_full_path }}" method="post"><span style="display: none" class="comment-id">{{comment.id|escape}}</span><span style="display: none" class="read-back">{% url "comment_content" comment.id %}</span>{%  csrf_token %}
-    <div class="form-errors">{{form.non_field_errors|escape}}
-{{form.parent.errors|escape}}
-{{form.parent|escape}}
-    </div>
-    <div class="comment-post-wrapper">
-      <div id="comment-form-body">{{form.body|escape}}</div>
-    </div>
-    <hr/>
-    <input style="float: right" type="submit" value="Post!" class="button"/>
-  </form>
+    <form id="comment-edit" action="" method="post">
+        <span style="display: none" class="comment-id">{{ comment.id }}</span>
+        <span style="display: none" class="read-back">{{ url('comment_content', comment.id) }}</span>
+        {% csrf_token %}
+        <div class="form-errors">
+            {{ form.non_field_errors }}
+            {{ form.parent.errors }}
+            {{ form.parent }}
+        </div>
+        <div class="comment-post-wrapper">
+            <div id="comment-form-body">{{ form.body }}</div>
+        </div>
+        <hr/>
+        <input style="float: right" type="submit" value="Post!" class="button">
+    </form>
 </div>

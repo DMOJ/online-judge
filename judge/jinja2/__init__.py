@@ -8,7 +8,7 @@ from statici18n.templatetags.statici18n import inlinei18n
 from judge.highlight_code import highlight_code
 from judge.user_translations import ugettext
 from . import registry
-from . import language, filesize, gravatar, rating, markdown, reference, social, submission, timedelta
+from . import language, filesize, gravatar, rating, markdown, reference, render, social, submission, timedelta
 
 registry.function('str', unicode)
 registry.filter('str', unicode)

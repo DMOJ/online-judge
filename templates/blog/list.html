@@ -130,8 +130,7 @@
                 {% endfor %}
             </div>
             {% if page_obj.num_pages > 1 %}
-                <div style="margin-bottom:10px;margin-top:10px">{% include "list-pages.jade" %}
-                </div>
+                <div style="margin-bottom:10px;margin-top:10px">{% include "list-pages.html" %}</div>
             {% endif %}
         </div>
 
@@ -179,6 +178,7 @@
                     </div>
                 </div>
             {% endif %}
+
             {% if future_contests %}
                 <div class="blog-sidebox sidebox">
                     <h3>{{ _('Upcoming contests') }} <i class="fa fa-trophy"></i></h3>
@@ -267,11 +267,7 @@
                                         <a href="{{ ticket.linked_item.get_absolute_url() }}">
                                             {{ ticket.linked_item|item_title }}</a>
                                     </div>
-                                    {% with user=ticket.user %}
-                                        <div class="user {{ user.display_rank }}">
-                                            <a href="{{ url('user_page', user.user.username) }}">{{ user.user.username }}</a>
-                                        </div>
-                                    {% endwith %}
+                                    <div>{{ link_user(ticket.user) }}</div>
                                 </li>
                             {% endfor %}
                         </ul>
