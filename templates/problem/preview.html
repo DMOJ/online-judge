@@ -1,3 +1,4 @@
-{%  load markdown %}{%  load staticfiles %}{%  load reference %}{{preview_data|with_math:MATH_ENGINE|markdown:"problem"|reference|escape}}
-{% if  REQUIRE_JAX %}
-<div data-config="{% static "mathjax_config.js" %}" class="require-mathjax-support"></div>{% endif %}
+{{ preview_data|markdown('problem', MATH_ENGINE)|reference|str|safe }}
+{% if REQUIRE_JAX %}
+    <div data-config="{{ static('mathjax_config.js') }}" class="require-mathjax-support"></div>
+{% endif %}
