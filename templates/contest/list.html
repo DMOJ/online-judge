@@ -57,7 +57,7 @@
     <span class="contest-tags">
         {% for tag in contest.tags.all() %}
             <span style="background-color: {{ tag.color }}" class="contest-tag">{# -#}
-                <a href="{% url "contest_tag" tag.name %}"
+                <a href="{{ url('contest_tag', tag.name) }}"
                    style="color: {{ tag.text_color }}"
                    data-featherlight="{{ url('contest_tag_ajax', tag.name) }}">
                     {{- tag.name -}}

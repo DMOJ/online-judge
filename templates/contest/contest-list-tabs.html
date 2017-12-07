@@ -1,17 +1,37 @@
-{%  load i18n %}
 <div class="page-title">
-  <div class="tabs">
-    <h2 style="color:#393630; display: inline-block">{% trans title %}</h2><span class="spacer"></span>{% if  tab == 'calendar' %}
-    <div style="font-size: 1.6em; margin-top: 0.3em">{% if  prev_month %}<a href="{% url "contest_calendar" prev_month.year prev_month.month %}">&laquo; {% trans "Prev" %}</a>{% endif %}{{' '|escape}}{% if  next_month %}<a href="{% url "contest_calendar" next_month.year next_month.month %}">{% trans "Next" %} &raquo;</a>{% endif %}
-    </div><span class="spacer"></span>{% endif %}
-    <ul>
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'list' else ''))))])}}><a href="{% url "contest_list" %}"><i class="tab-icon fa fa-list"></i> {% trans "List" %}</a>
-      </li>
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'calendar' else ''))))])}}><a href="{% url "contest_calendar" now.year now.month %}"><i class="tab-icon fa fa-calendar"></i> {% trans "Calendar" %}</a>
-      </li>
-{% if  perms.judge.change_contest %}
-      <li class="tab"><a href="{% url "admin:judge_contest_changelist" %}"><i class="tab-icon fa fa-edit"></i> {% trans "Admin" %}</a>
-      </li>{% endif %}
-    </ul>
-  </div>
+    <div class="tabs">
+        <h2 style="color:#393630; display: inline-block">{{ _(title) }}</h2>
+        <span class="spacer"></span>
+        {% if tab == 'calendar' %}
+            <div style="font-size: 1.6em; margin-top: 0.3em">
+                {% if prev_month %}
+                    <a href="{{ url('contest_calendar', prev_month.year, prev_month.month) }}">&laquo; {{ _('Prev') }}</a>
+                {% endif %}
+                {% if next_month %}
+                    <a href="{{ url('contest_calendar', next_month.year, next_month.month) }}">{{ _('Next') }}
+                        &raquo;</a>
+                {% endif %}
+            </div>
+            <span class="spacer"></span>
+        {% endif %}
+
+        <ul>
+            <li class="tab{% if tab == 'list' %} active{% endif %}">
+                <a href="{{ url('contest_list') }}"><i class="tab-icon fa fa-list"></i> {{ _('List') }}</a>
+            </li>
+            <li class="tab{% if tab == 'calendar' %} active{% endif %}">
+                <a href="{{ url('contest_calendar', now.year, now.month) }}">
+                    <i class="tab-icon fa fa-calendar"></i> {{ _('Calendar') }}
+                </a>
+            </li>
+
+            {% if perms.judge.change_contest %}
+                <li class="tab">
+                    <a href="{{ url('admin:judge_contest_changelist') }}">
+                        <i class="tab-icon fa fa-edit"></i> {{ _('Admin') }}
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
 </div>
