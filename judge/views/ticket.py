@@ -40,10 +40,18 @@ class TicketForm(forms.Form):
     title = forms.CharField(max_length=100, label=ugettext_lazy('Ticket title'))
     body = forms.CharField(widget=ticket_widget)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
         super(TicketForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'placeholder': _('Ticket title')})
         self.fields['body'].widget.attrs.update({'placeholder': _('Issue description')})
+
+    def clean(self):
+        if self.request is not None and self.request.user.is_authenticated:
+            profile = self.request.user.profile
+            if profile.mute:
+                raise ValidationError(_('Your part is silent, little toad.'))
+        return super(TicketForm, self).clean()
 
 
 class SingleObjectFormView(SingleObjectMixin, FormView):
