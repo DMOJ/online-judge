@@ -1,30 +1,55 @@
-{%  load i18n %}
-<div class="page-title">
-  <div class="tabs">
-    <h2>{% trans title %}</h2><span class="spacer"></span>
-    <ul>
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'detail' else ''))))])}}><a href="{% url "contest_view" contest.key %}"><i class="tab-icon fa fa-info-circle"></i> {% trans "Info" %}</a>
-      </li>
-{% if  contest.start_time <= now or perms.judge.see_private_contest %}
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'ranking' else ''))))])}}><a href="{% url "contest_ranking" contest.key %}"><i class="tab-icon fa fa-bar-chart"></i> {% trans "Rankings" %}</a>
-      </li>
-{% if  request.user.is_authenticated %}
-      <li{{__pyjade_attrs(attrs=[('class', (("tab") , (('active' if tab == 'participation' else ''))))])}}><a href="{% url "contest_participation_own" contest.key %}"><i class="tab-icon fa fa-users"></i> {% trans "Participation" %}</a>
-      </li>{% endif %}{% endif %}
-{% if  perms.judge.change_contest %}
-      <li class="tab"><a href="{% url "admin:judge_contest_change" contest.id %}"><i class="tab-icon fa fa-edit"></i> {% trans "Edit" %}</a>
-      </li>{% endif %}
-{% if  request.user.is_authenticated %}{% if  contest.can_join or participating or is_organizer %}{% if  contest.ended %}
-      <!-- They're in the contest because they're participating virtually-->{% if  in_contest %}<a href="{% url "contest_leave" contest.key %}" class="contest-join-pseudotab unselectable button full leaving-forever">{% trans "Leave contest" %}</a>{% else %}
+{% extends "tabs-base.html" %}
 
-      <!-- They can virtual-join the contest--><a href="{% url "contest_join" contest.key %}" class="contest-join-pseudotab unselectable button full">{% trans "Virtual join" %}</a>{% endif %}{% else %}
+{% block tabs %}
+    {{ make_tab('detail', 'fa-info-circle', url('contest_view', contest.key), _('Info')) }}
 
-      <!-- Allow people with ended participations to continue spectating-->{% if  in_contest %}<a href="{% url "contest_leave" contest.key %}" class="contest-join-pseudotab unselectable button full">{% if  participating and participation.ended or request.user.profile in contest.organizers.all %}{% trans "Stop spectating" %}{% else %}
-{% trans "Leave contest" %}{% endif %}</a>{% elif  participating and participation.ended or is_organizer %}
-<a href="{% url "contest_join" contest.key %}" class="contest-join-pseudotab unselectable button full">{% trans "Spectate contest" %}</a>{% elif  participating %}
-<a href="{% url "contest_join" contest.key %}" class="contest-join-pseudotab unselectable button full">{% trans "Join contest" %}</a>{% else %}
-<a href="{% url "contest_join" contest.key %}" class="contest-join-pseudotab unselectable button full first-join">{% trans "Join contest" %}</a>{% endif %}{% endif %}{% endif %}{% elif  contest.can_join %}
-<a href="{% url "auth_login" %}?next={{ LOGIN_RETURN_PATH|urlencode }}" class="contest-join-pseudotab unselectable button full">{% trans "Login to participate" %}</a>{% endif %}
-    </ul>
-  </div>
-</div>
+    {% if contest.start_time <= now or perms.judge.see_private_contest %}
+        {{ make_tab('ranking', 'fa-bar-chart', url('contest_ranking', contest.key), _('Rankings')) }}
+        {% if request.user.is_authenticated %}
+            {{ make_tab('participation', 'fa-bar-users', url('contest_participation_own', contest.key), _('Participation')) }}
+        {% endif %}
+    {% endif %}
+    {% if perms.judge.change_contest %}
+        {{ make_tab('edit', 'fa-edit', url('admin:judge_contest_change', contest.id), _('Edit')) }}
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        {% if contest.can_join or participating or is_organizer %}
+            {% if contest.ended %}
+                {% if in_contest %}
+                    {# They're in the contest because they're participating virtually #}
+                    <a href="{{ url('contest_leave', contest.key) }}"
+                       class="contest-join-pseudotab unselectable button full leaving-forever">{{ _('Leave contest') }}</a>
+                {% else %}
+                    {# They're in the contest because they're participating virtually #}
+                    <a href="{{ url('contest_join', contest.key) }}"
+                       class="contest-join-pseudotab unselectable button full">{{ _('Virtual join') }}</a>
+                {% endif %}
+            {% else %}
+                {% if in_contest %}
+                    {# Allow people with ended participations to continue spectating #}
+                    <a href="{{ url('contest_leave', contest.key) }}"
+                       class="contest-join-pseudotab unselectable button full">
+                        {%- if participating and participation.ended or request.user.profile in contest.organizers.all %}
+                            {{- _('Stop spectating') -}}
+                        {% else %}
+                            {{- _('Leave contest') -}}
+                        {% endif %}
+                    </a>
+                {% elif participating and participation.ended or is_organizer %}
+                    <a href="{{ url('contest_join', contest.key) }}"
+                       class="contest-join-pseudotab unselectable button full">{{ _('Spectate contest') }}</a>
+                {% elif participating %}
+                    <a href="{{ url('contest_join', contest.key) }}"
+                       class="contest-join-pseudotab unselectable button full">{{ _('Join contest') }}</a>
+                {% else %}
+                    <a href="{{ url('contest_join', contest.key) }}"
+                       class="contest-join-pseudotab unselectable button full first-join">{{ _('Join contest') }}</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% elif contest.can_join %}
+        <a href="{{ url('auth_login') }}?next={{ LOGIN_RETURN_PATH|urlencode }}"
+           class="contest-join-pseudotab unselectable button full">{{ _('Login to participate') }}</a>
+    {% endif %}
+{% endblock %}
