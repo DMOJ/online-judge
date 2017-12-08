@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block js_media %}{{ form.media.js }}{% endblock %}
+{% block media %}{{ form.media.css }}{% endblock %}
+
+{% block body %}
+    <form action="" method="post" class="form-area">
+        {% csrf_token %}
+        <table border="0" style="text-align:left">{{ form.as_table() }}</table>
+        <button type="submit">{{ _('Create') }}</button>
+    </form>
+{% endblock %}

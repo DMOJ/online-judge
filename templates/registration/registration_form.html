@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block media %}
+    {% include "timezone/media-css.html" %}
+    {{ form.media.css }}
+    <style>
+        .sortedm2m-container, .sortedm2m-container p.selector-filter {
+            width: 300px;
+        }
+
+        .sortedm2m-container p.selector-filter input {
+            width: 262px;
+        }
+
+        ul.sortedm2m {
+            width: 284px;
+            min-height: 100px;
+            max-height: 200px;
+        }
+
+        .sortedm2m-container, .sortedm2m-container p.selector-filter {
+            width: 300px;
+        }
+
+        .sortedm2m-container p.selector-filter input {
+            width: 262px;
+        }
+
+        ul.sortedm2m {
+            width: 284px;
+            min-height: 70px;
+            max-height: 200px;
+            height: 70px
+        }
+
+        .grayed {
+            color: #666;
+        }
+
+        .inline-header {
+            float: left;
+            font-size: 1.1em;
+            padding: 4px 8px;
+            padding-left: 0;
+        }
+
+        .block-header {
+            color: #555;
+            font-size: 1.1em;
+            font-weight: 600;
+            padding-bottom: 0.2em;
+            padding-left: 2px;
+            margin-top: 0.75em
+        }
+
+        .fullwidth {
+            display: block;
+            overflow: hidden;
+        }
+
+        .fullwidth input {
+            width: 100%;
+        }
+
+        .fullwidth-error input {
+            width: 100%;
+            border-color: red;
+        }
+
+        .form-field-error {
+            color: red;
+        }
+
+        small {
+            font-size: 0.7em;
+            padding-left: 0.6em;
+        }
+
+        #edit-form {
+            border: unset;
+            background: unset;
+            max-width: 450px;
+            width: 450px;
+        }
+
+        #content-body {
+            text-align: center;
+        }
+
+        #center-float {
+            display: inline-block;
+            text-align: initial;
+            max-width: 450px;
+            width: 450px;
+        }
+
+        ul.errorlist {
+            margin: 0px;
+            text-align: right;
+            list-style: none;
+        }
+
+        .full-textfield {
+            padding-top: 0.5em;
+        }
+
+        .tos-section {
+            display: inline-block;
+            padding-right: 1em;
+        }
+    </style>
+{% endblock %}
+
+{% block js_media %}
+    {% include "timezone/media-js.html" %}
+    {{ form.media.js }}
+    <script type="text/javascript">
+        $(function () {
+            $('.pass-req-link').click(function () {
+                $('.pass-req').toggle('fast');
+                return false;
+            });
+        });
+    </script>
+    {% if form.captcha %}
+        {{ recaptcha_init(LANGUAGE_CODE) }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div id="center-float">
+        <form id="edit-form" action="" method="post" class="form-area">
+            {% csrf_token %}
+
+            <div class="block-header">{{ _('Username') }}</div>
+            <span class="fullwidth{% if form.username.errors %}-error{% endif %}">{{ form.username }}</span>
+            {% if form.username.errors %}
+                <div class="form-field-error">{{ form.username.errors }}</div>
+            {% endif %}
+
+            <div class="block-header">{{ _('Email') }}</div>
+            <span class="fullwidth{% if form.email.errors %}-error{% endif %}">{{ form.email }}</span>
+            {% if form.email.errors %}
+                <div class="form-field-error">{{ form.email.errors }}</div>
+            {% endif %}
+
+            <div class="block-header">{{ _('Password') -}}
+                <small>(<a href="#" class="pass-req-link">?</a>)</small>
+            </div>
+            <div style="display: none" class="pass-req">
+                <ul>
+                    {% for validator in password_validators %}
+                        <li>{{ validator.get_help_text() }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <span class="fullwidth{% if form.password1.errors %}-error{% endif %}">{{ form.password1 }}</span>
+            {% if form.password1.errors %}
+                <div class="form-field-error">{{ form.password1.errors }}</div>
+            {% endif %}
+            <div class="block-header">{{ _('Password') }}<sup style="font-size: 0.7em;padding-left: 0.2em;">2</sup>{# -#}
+                <small>{{ _('(again, for confirmation)') }}</small>
+            </div>
+            <span class="fullwidth{% if form.password2.errors %}-error{% endif %}">{{ form.password2 }}</span>
+            {% if form.password2.errors %}
+                <div class="form-field-error">{{ form.password2.errors }}</div>
+            {% endif %}
+
+            <div class="block-header">{{ _('Location') }}</div>
+            <div class="fullwidth">
+                <div>{{ form.timezone }}
+                    <div style="float: right">
+                        {{ _('or') }}
+                        <a id="open-map" href="#" data-featherlight=".map-wrap">{{ _('pick from map') }}</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block-header">{{ _('Default language') }}</div>
+            <span class="fullwidth">{{ form.language }}</span>
+
+            <div class="block-header">{{ _('Affiliated organizations') }}</div>
+            {{ form.organizations }}
+
+            {% if form.newsletter %}
+                <div style="padding-top: 0.5em;">{{ form.newsletter }}
+                    <label for="id_newsletter" style="float: unset;"
+                           class="inline-header grayed">{{ _('Notify me about upcoming contests') }}</label>
+                </div>
+            {% endif %}
+
+            {% if form.captcha %}
+                <div style="margin-top: 0.5em">{{ form.captcha }}</div>
+                {% if form.captcha.errors %}
+                    <div class="form-field-error">{{ form.captcha.errors }}</div>
+                {% endif %}
+            {% endif %}
+
+            <hr>
+            {% if tos_url %}
+                <span class="tos-section">
+                    {{ _('By registering, you agree to our') }}
+                    <a href="{{ tos_url }}">{{ _('Terms & Conditions') }}</a>.
+                </span>
+            {% endif %}
+            <button style="float:right;" type="submit">{{ _('Register!') }}</button>
+        </form>
+    </div>
+
+    <div class="map-wrap">
+        <div class="map-inset">
+            <div class="map-axis-x"></div>
+            <div class="map-axis-y"></div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% set can_view, info_colspan = submission_layout(submission, profile_id, request.user, editable_problem_ids, completed_problem_ids) %}
+<td class="sub-result {{ submission.result_class }}">
+    <div class="score">
+        {%- if submission.is_graded -%}
+            {%- if submission.status in ('IE', 'CE', 'AB') -%}
+                ---
+            {%- else -%}
+                {{ submission.case_points|floatformat(0) }} / {{ submission.case_total|floatformat(0) }}
+            {%- endif -%}
+        {%- else -%}
+            <i class="fa fa-spinner fa-pulse"></i>
+        {%- endif -%}
+    </div>
+
+    <div class="state">
+        <span title="{{ submission.long_status }}" class="status">{{ submission.short_status }}</span> |
+        <span class="language">{{ submission.language.short_display_name }}</span>
+    </div>
+</td>
+<td colspan="{{ info_colspan }}" class="sub-info{% if submission.status == 'G' %} sub-info-grading{% endif %}">
+    {% if show_problem %}
+        <div class="name"><a href="{{ url('problem_detail', submission.problem.code) }}">{{ problem_name }}</a></div>
+    {% endif %}
+    <div>
+        {{ link_user(submission.user) }}
+        <span class="time" data-unix="{{ submission.date|utc|date("c") }}">
+            {% trans time=submission.date|date(_("N j, Y, g:i a")) %}
+                on {{ time }}
+            {% endtrans %}
+        </span>
+        {% if not IN_CONTEST and submission.contest_or_none %}
+            <a href="{{ url('contest_view', submission.contest_or_none.participation.contest.key) }}"
+               class="submission-contest">
+                <i title="{{ submission.contest_or_none.participation.contest.name }}" class="fa fa-dot-circle-o"></i>
+            </a>
+        {% endif %}
+    </div>
+</td>
+
+{% if submission.status == 'G' %}
+    <td class="sub-testcase">
+        {%- if submission.current_testcase > 0 -%}
+            {{ _('Case #%(case)s', case=submission.current_testcase) }}
+        {%- else -%}
+            ...
+        {%- endif -%}
+    </td>
+{% endif %}
+
+{% if can_view %}
+    <td class="sub-prop">
+        <a href="{{ url('submission_status', submission.id) }}">
+            <i class="fa fa-eye fa-fw"></i><span class="label">{{ _('view') }}</span>
+        </a>
+        {% if perms.judge.rejudge_submission %} ·
+            <a href="#" onclick="rejudge_submission({{ submission.id }}, event);return false">
+                <i class="fa fa-refresh fa-fw"></i><span class="label">{{ _('rejudge') }}</span>
+            </a>
+        {% endif %}
+        {% if perms.judge.change_submission %} ·
+            <a href="{{ url('admin:judge_submission_change', submission.id) }}">
+                <i class="fa fa-cog fa-fw"></i><span class="label">{{ _('admin') }}</span>
+            </a>
+        {% endif %}
+    </td>
+{% endif %}
+
+<td class="sub-usage">
+    {% if submission.status in ('QU', 'P', 'G', 'CE', 'IE', 'AB') %}
+        <div class="time">---</div>
+        <div class="memory">---</div>
+    {% else %}
+        {% if "TLE" != submission.result %}
+            <div title="{{ submission.time or 0 }}s" class="time">
+                {{ (submission.time or 0)|floatformat(2) }}s
+            </div>
+        {% else %}
+            <div class="time">---</div>
+        {% endif %}
+        {# No one actually like IEC prefixes, Jinja2. #}
+        <div class="memory">{{ (submission.memory_bytes|filesizeformat(True)).replace('i', '') }}</div>
+    {% endif %}
+</td>

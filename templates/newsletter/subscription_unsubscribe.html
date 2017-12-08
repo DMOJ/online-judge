@@ -1,1 +1,17 @@
-{% include "newsletter/subscription_unsubscribe.jade" %}
+{% extends "base.html" %}
+
+{% block title %}Newsletter unsubscribe{% endblock %}
+
+{% block body %}
+    <h1>Newsletter unsubscribe {{ newsletter.title }}</h1>
+    {% if error %}
+        <p>Due to a technical error we were not able to submit your confirmation email.
+            This could be because your email address is invalid.</p>
+    {% else %}
+        <form enctype="multipart/form-data" method="post" action=".">
+            {% csrf_token %}
+            {{ form.as_p() }}
+            <p><input id="id_submit" name="submit" value="Unsubscribe" type="submit"></p>
+        </form>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block body %}
+    {% include "organization/requests/tabs.html" %}
+
+    {% if requests %}
+        <table>
+            <tr>
+                <th>{{ _('User') }}</th>
+                <th>{{ _('Time') }}</th>
+                <th>{{ _('State') }}</th>
+                <th>{{ _('Reason') }}</th>
+            </tr>
+            {% for r in requests %}
+                <tr id="request-{{ r.id }}">
+                    <td>{{ link_user(r.user) }}</td>
+                    <td>
+                        <a href="{{ url('request_organization_detail', object.key, r.id) }}">
+                            {{- r.time|date(_("N j, Y, H:i")) -}}
+                        </a>
+                    </td>
+                    <td>{{ r.state }}</td>
+                    <td>{{ r.reason|truncatechars(50) }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>{{ _('There are no requests to approve.') }}</p>
+    {% endif %}
+{% endblock %}

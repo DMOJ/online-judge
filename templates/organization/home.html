@@ -1,0 +1,45 @@
+{% extends "common-content.html" %}
+
+{% block info_float %}
+    {% if request.user.is_authenticated %}
+        {% with profile=request.user.profile %}
+            {% if profile in organization %}
+                <a href="{{ url('leave_organization', organization.key) }}"
+                   class="unselectable button full">{{ _('Leave organization') }}</a>
+            {% elif organization.is_open %}
+                <a href="{{ url('join_organization', organization.key) }}"
+                   class="unselectable button full">{{ _('Join organization') }}</a>
+            {% else %}
+                <a href="{{ url('request_organization', organization.key) }}"
+                   class="unselectable button full">{{ _('Request membership') }}</a>
+            {% endif %}
+        {% endwith %}
+        <hr>
+    {% endif %}
+
+    {% if can_edit %}
+        <div><a href="{{ url('edit_organization', organization.key) }}">{{ _('Edit organization') }}</a></div>
+
+        {% if not organization.is_open %}
+            <div>
+                <a href="{{ url('organization_requests_pending', organization.key) }}">{{ _('View requests') }}</a>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {% if perms.judge.change_organization %}
+        <div>
+            <a href="{{ url('admin:judge_organization_change', organization.id) }}">{{ _('Admin organization') }}</a>
+        </div>
+    {% endif %}
+
+    <div>
+        <a href="{{ url('organization_users', organization.key) }}">{{ _('View members') }}</a>
+    </div>
+{% endblock %}
+
+{% block description %}
+    {% cache 3600 organization_html organization.id MATH_ENGINE %}
+        {{ organization.about|markdown('organization-about', MATH_ENGINE)|reference|str|safe }}
+    {% endcache %}
+{% endblock %}

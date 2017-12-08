@@ -1,0 +1,68 @@
+{% extends "user/base-users-table.html" %}
+
+{% block after_rank_head %}
+    {% if has_rating %}
+        <th>{{ _('Rating') }}</th>
+    {% endif %}
+    <th class="organization-column">{{ _('Organization') }}</th>
+{% endblock %}
+
+{% block after_rank %}
+    {% if has_rating %}
+        <td>{% if user.participation_rating %}{{ rating_number(user.participation_rating) }}{% endif %}</td>
+    {% endif %}
+    <td class="organization-column">
+        {% if user.organization %}
+            <span class="organization"><a href="{{ url('organization_home', user.organization.key) }}">
+                {{- user.organization.short_name -}}
+            </a></span>
+        {% endif %}
+    </td>
+{% endblock %}
+
+{% block user_data %}
+    {% if not contest.ended %}
+        {% if user.participation and not user.participation.ended %}
+            <div data-unix="{{ user.participation.start|utc|date("c") }}" class="start-time active moment-time-toggle">
+                {{ _('Started') }} <span class="relative"></span>.
+            </div>
+        {% else %}
+            <div class="start-time">{{ _('Participation ended.') }}</div>
+        {% endif %}
+    {% endif %}
+    {% if perms.judge.change_contestparticipation %}
+        <div data-link="{{ url('admin:judge_contestparticipation_change', user.participation.id) }}"
+             class="edit-participation"></div>
+    {% endif %}
+{% endblock %}
+
+{% block before_point_head %}
+    {% for problem in problems %}
+        <th class="points header"><a href="{{ url('contest_ranked_submissions', contest.key, problem.problem.code) }}">
+            {{- loop.index }}
+            <div class="point-denominator">{{ problem.points }}</div>
+        </a></th>
+    {% endfor %}
+{% endblock %}
+
+{% block before_point %}
+    {% for problem in user.problems %}
+        {% if problem %}
+            <td class="{% if problem.is_pretested and contest.run_pretests_only %}pretest-{% endif %}{{ problem.state }}">
+                <a href="{{ url('contest_user_submissions', contest.key, user.user.username, problem.code) }}">
+                    {{- problem.points|floatformat }}
+                    <div class="solving-time">{{ problem.time|timedelta('noday') }}</div>
+                </a>
+            </td>
+        {% else %}
+            <td></td>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block point %}
+    <td class="user-points">
+        {{- user.points|floatformat }}
+        <div class="solving-time">{{ user.cumtime|timestampdelta('noday') }}</div>
+    </td>
+{% endblock %}

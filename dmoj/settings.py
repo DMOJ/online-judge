@@ -13,6 +13,7 @@ import os
 import re
 
 from django.utils.translation import ugettext_lazy as _
+from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -138,6 +139,7 @@ INSTALLED_APPS += (
     'pyjade.ext.django',
     'statici18n',
     'impersonate',
+    'django_jinja',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -185,18 +187,19 @@ WSGI_APPLICATION = 'dmoj.wsgi.application'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'BACKEND': 'django_jinja.backend.Jinja2',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
         ],
+        'APP_DIRS': False,
         'OPTIONS': {
+            'match_extension': '.html',
+            'match_regex': '^(?!admin/)',
             'context_processors': [
-                'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.media',
                 'django.template.context_processors.tz',
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.request',
-                'django.contrib.messages.context_processors.messages',
                 'judge.template_context.comet_location',
                 'judge.template_context.get_resource',
                 'judge.template_context.general_info',
@@ -208,15 +211,33 @@ TEMPLATES = [
                 'social.apps.django_app.context_processors.backends',
                 'social.apps.django_app.context_processors.login_redirect',
             ],
-            'loaders': [
-                ('pyjade.ext.django.Loader', (
-                    'django.template.loaders.filesystem.Loader',
-                    'django.template.loaders.app_directories.Loader',
-                ))
+            'autoescape': True,
+            'trim_blocks': True,
+            'lstrip_blocks': True,
+            'extensions': DEFAULT_EXTENSIONS + [
+                'compressor.contrib.jinja2ext.CompressorExtension',
+                'judge.jinja2.DMOJExtension',
+                'judge.jinja2.spaceless.SpacelessExtension',
             ],
-            'builtins': ['pyjade.ext.django.templatetags'],
         },
     },
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.media',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    }
 ]
 
 LOCALE_PATHS = [

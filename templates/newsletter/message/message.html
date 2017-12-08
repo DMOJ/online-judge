@@ -1,5 +1,4 @@
-{% load thumbnail %}<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 <html lang="en">
 <head>
@@ -7,15 +6,15 @@
 	<title>{{ newsletter.title }}: {{ message.title }}</title>
 </head>
 <body>
-    {% for article in message.articles.all %}
+    {% for article in message.articles.all() %}
         <div>{{ article.text|safe }}</div>
         
         {% if article.url %}
-            <div><a href="{{ article.url }}">Read more</div></a>
+            <div><a href="{{ article.url }}">Read more</a></div>
         {% endif %}
     {% endfor %}
 
-    <a href="http://{{ site.domain }}{% url "newsletter_unsubscribe_request" newsletter.slug %}" style="color:#999;float:right">Unsubscribe</a>
+    <a href="http://{{ site.domain }}{{ url('newsletter_unsubscribe_request', newsletter.slug) }}" style="color:#999;float:right">Unsubscribe</a>
     {% if submission.publish %}
         <a href="http://{{ site.domain }}{{ submission.get_absolute_url }}" style="color:#999">Read message online</a>
     {% endif %}

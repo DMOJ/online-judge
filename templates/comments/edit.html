@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block media %}
+    {% compress css %}
+        {{ form.media.css }}
+    {% endcompress %}
+{% endblock %}
+
+{% block js_media %}
+    {{ form.media.js }}
+{% endblock %}
+{% block body %}
+    <div class="form-area">{% include "comments/edit-ajax.html" %}</div>
+{% endblock %}

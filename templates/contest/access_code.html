@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block media %}
+    <style>
+        #access-code-form {
+            margin: 50px auto 0;
+            display: block;
+            max-width: 500px;
+        }
+
+        #id_access_code {
+            width: 100%;
+        }
+
+        .button-line {
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <form id="access-code-form" action="" method="post" class="form-area">
+        {% csrf_token %}
+        {% if form.errors or wrong_code %}
+            <div id="form-errors">
+                <p class="error">{{ _('Invalid access code.') }}</p>
+            </div>
+        {% endif %}
+        <p>{{ _('Please enter your access code:') }}</p>
+        <p>{{ form.access_code }}</p>
+        <p class="button-line">
+            <button type="submit">{{ _('Join Contest') }}</button>
+        </p>
+    </form>
+{% endblock %}

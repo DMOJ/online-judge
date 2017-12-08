@@ -1,0 +1,125 @@
+{% if IN_CONTEST and submission.contest_or_none and CONTEST.id == submission.contest_or_none.participation_id %}
+    {% set prefix_length = submission.contest_or_none.problem.output_prefix_override %}
+{% else %}
+    {% set prefix_length = None %}
+{% endif %}
+{% set is_pretest = submission.is_pretested %}
+
+{% if submission.status != 'IE' %}
+    {% if submission.status == 'QU' %}
+        <h4>{{ _('We are waiting for a suitable judge to process your submission...') }}</h4>
+    {% elif submission.status == 'P' %}
+        <h4>{{ _('Your submission is being processed...') }}</h4>
+    {% elif submission.status == 'CE' %}
+        <h3>{{ _('Compilation Error') }}</h3>
+        <pre>{{ submission.error|safe }}</pre>
+    {% else %}
+        {% if submission.error %}
+            <h3>{{ _('Compilation Warnings') }}</h3>
+            <pre>{{ submission.error|safe }}</pre>
+            <hr class="half-hr"><br>
+        {% endif %}
+        {% if is_pretest %}
+            <h3>{{ _('Pretest Execution Results') }}</h3>
+        {% else %}
+            <h3>{{ _('Execution Results') }}</h3>
+        {% endif %}
+        <br>
+        {% set test_case_id = counter() %}
+        {% for batch in batches %}
+            {% if batch.id %}
+                <b>{{ _('Batch ') }}#{{ test_case_id() }}</b>
+                ({{ _('%(points)s/%(total)s points', points=batch.points|floatformat(0), total=batch.total|floatformat(0)) }})
+                <br>
+                <div class="batch-cases">
+            {% endif %}
+        <table>{% for case in batch.cases %}
+            <tr id="{{ case.id }}" class="case-row toggle closed">
+                <td>
+                    {% if case.status != 'AC' and case.output %}
+                        <i class="fa fa-chevron-right fa-fw"></i>
+                    {% endif %}
+                    {% if batch.id %}
+                        <b>{{ _('Case') }} #{{ loop.index }}:</b>
+                    {% elif is_pretest %}
+                        <b>{{ _('Pretest') }} #{{ test_case_id() }}:</b>
+                    {% else %}
+                        <b>{{ _('Test case') }} #{{ test_case_id() }}:</b>
+                    {% endif %}
+                </td>
+
+                <td>
+                    <span title="{{ case.long_status }}" class="case-{{ case.status }}">
+                        {%- if case.status == 'SC' %}&mdash;{% else %}{{ case.status }}{% endif -%}
+                    </span>
+                    {% if case.feedback %}&nbsp;({{ case.feedback }}){% endif %}
+                </td>
+
+                <td>
+                    {% if case.status != 'SC' %}
+                        {% if case.status == 'TLE' %}
+                            [&gt;<span>{{ time_limit|floatformat(3) }}s,</span>
+                        {% else %}
+                            [<span title="{{ case.time }}s">{{ case.time|floatformat(3) }}s,</span>
+                        {% endif %}
+                    {% endif %}
+                </td>
+
+                <td>{% if case.status != 'SC' %}{{ case.memory|kbdetailformat }}]{% endif %}</td>
+
+                {% if not batch.id %}
+                    <td>({{ case.points|floatformat(0) }}/{{ case.total|floatformat(0) }})</td>
+                {% endif %}
+            </tr>
+
+            {% if case.status != 'AC' and case.output %}
+                <tr id="{{ case.id }}-output" style="display:none" class="toggled">
+                    <td colspan="5">
+                        <div class="case-info">
+                            <strong>{{ _('Your output (clipped)') }}</strong>
+                            {% if prefix_length == None %}
+                                <pre class="case-output">{{ case.output|linebreaksbr }}</pre>
+                            {% else %}
+                                <pre class="case-output">{{ case.output[:prefix_length]|linebreaksbr }}
+                                </pre>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </table>
+        {% if batch.id %}</div>{% endif %}
+            <br>
+        {% endfor %}
+        {% if submission.is_graded %}
+            <br>
+            {% if submission.result != "AB" %}
+                {% if is_pretest %}
+                    <b>{{ _('Final pretest score:') }}</b>
+                {% else %}
+                    <b>{{ _('Final score:') }}</b>
+                {% endif %}
+                {{ submission.case_points|floatformat(0) }}/{{ submission.case_total|floatformat(0) }}
+                {% if IN_CONTEST and submission.contest_or_none %}
+                    {% with contest=submission.contest_or_none %}
+                        ({{ _('%(points)s/%(total)s points', points=contest.points|roundfloat(3),
+                              total=contest.problem.points|floatformat(-1)) }})
+                    {% endwith %}
+                {% else %}
+                    ({{ _('%(points)s/%(total)s points', points=submission.points|roundfloat(3),
+                          total=submission.problem.points|floatformat(-1)) }})
+                {% endif %}
+                {% if is_pretest and submission.result == "AC" %}
+                    <br>
+                    <i>{{ _('Passing pretests does not guarantee a full score on system tests.') }}</i>
+                {% endif %}
+            {% else %}
+                <b>{{ _('Submission aborted!') }}</b>
+            {% endif %}
+            <br>
+        {% endif %}
+    {% endif %}
+{% else %}
+    {% include "submission/internal-error-message.html" %}
+{% endif %}

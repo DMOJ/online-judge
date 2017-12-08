@@ -1,0 +1,131 @@
+{% extends "user/user-base.html" %}
+
+{% block user_js_media %}
+    <script type="text/javascript">
+        $(function () {
+            register_update_relative(function () {
+                return $('.pp-table').find('span.time');
+            }, function (when) {
+                return Math.abs(moment().diff(when, 'years')) < 1;
+            });
+        });
+        window.show_pp_base = 1;
+        window.currently_requesting_pp = false;
+        window.load_more_pp = function () {
+            if (window.currently_requesting_pp) return;
+            window.currently_requesting_pp = true;
+
+            $.get('{{ url('user_pp_ajax', user.user.username) }}', {
+                start: window.show_pp_base * 10,
+                end: (window.show_pp_base + 1) * 10
+            }).done(function (data) {
+                $('table.pp-table').append(data['results']);
+                window.show_pp_base++;
+                if (!data['has_more']) {
+                    $("#load-link-wrapper").hide();
+                }
+                window.currently_requesting_pp = false;
+            });
+        };
+    </script>
+{% endblock %}
+
+{% block title_ruler %}{% endblock %}
+
+{% block title_row %}
+    {% set tab = 'problems' %}
+    {% include "user/user-tabs.html" %}
+{% endblock %}
+
+{% block user_content %}
+    {% if pp_breakdown %}
+        <h3 class="pp-breakdown-header">{{ _('Points Breakdown') }}</h3>
+        <table id="submissions-table" class="pp-table table">
+            <colgroup>
+                <col class="sub-result">
+                <col class="sub-info">
+                <col class="sub-pp">
+            </colgroup>
+            <tbody>{% include "user/pp-table-body.html" %}</tbody>
+        </table>
+        {% if pp_has_more %}
+            <div id="pp-load-link-wrapper">
+                <a id="pp-load-more-link" href="javascript:load_more_pp()">{{ _('Load more...') }}</a>
+            </div>
+        {% endif %}
+    {% else %}
+        <i>{{ _('This user has not yet solved any problems.') }}</i>
+    {% endif %}
+
+    {% if authored %}
+        <div class="user-problem-group">
+            <h3 class="unselectable toggle closed">
+                <span class="fa fa-chevron-right fa-fw"></span>{{ _('Authored Problems') }} ({{ authored|length }})
+            </h3>
+            <table style="display: none" class="table toggled">
+                <thead>
+                <tr>
+                    <th>{{ _('Problem') }}</th>
+                    <th>{{ _('Category') }}</th>
+                    <th>{{ _('Points') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for problem in authored %}
+                    <tr>
+                        <td class="problem-name">
+                            <a href="{{ url('problem_detail', problem.code) }}">{{ problem.name }}</a>
+                        </td>
+                        <td class="problem-category">{{ problem.group.full_name }}</td>
+                        <td class="problem-score"><a href="{{ url('ranked_submissions', problem.code) }}">
+                            {{ problem.points|floatformat }}{% if problem.partial %}p{% endif %}
+                        </a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    {% if request.user.is_authenticated and request.user != user.user %}
+        <div class="hide-solved-problems"><span>
+            <form name="form" action="" method="get">
+                <input id="hide_solved" style="vertical-align:middle" onclick="form.submit()" type="checkbox"
+                       name="hide_solved"{% if hide_solved %} checked{% endif %} value="1">
+                <label style="vertical-align:middle" for="hide_solved">{{ _("Hide problems I've solved") }}</label>
+            </form>
+        </span></div>
+    {% else %}
+        <hr>
+    {% endif %}
+
+    {% for group in best_submissions %}
+        <div class="user-problem-group">
+            <h3 class="unselectable toggle closed"><span class="fa fa-chevron-right fa-fw"></span>
+                {{ group.name }} ({{ _('%(points).1f points', points=group.points) }})
+            </h3>
+            <table style="display: none" class="table toggled">
+                <thead>
+                <tr>
+                    <th>{{ _('Problem') }}</th>
+                    <th>{{ _('Score') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry in group.problems %}
+                    <tr>
+                        <td class="problem-name">
+                            <a href="{{ url('problem_detail', entry.code) }}">{{ entry.name }}</a>
+                        </td>
+                        <td class="problem-score">
+                            <a href="{{ url('user_submissions', entry.code, user.user.username) }}">
+                                {{ _('%(points)s / %(total)s', points=entry.points, total=entry.total) }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+{% endblock %}

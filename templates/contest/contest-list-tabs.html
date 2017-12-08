@@ -1,0 +1,23 @@
+{% extends "tabs-base.html" %}
+
+{% block post_tab_spacer %}
+    {% if tab == 'calendar' %}
+        <div style="font-size: 1.6em; margin-top: 0.3em">
+            {% if prev_month %}
+                <a href="{{ url('contest_calendar', prev_month.year, prev_month.month) }}">&laquo; {{ _('Prev') }}</a>
+            {% endif %}
+            {% if next_month %}
+                <a href="{{ url('contest_calendar', next_month.year, next_month.month) }}">{{ _('Next') }} &raquo;</a>
+            {% endif %}
+        </div>
+        <span class="spacer"></span>
+    {% endif %}
+{% endblock %}
+
+{% block tabs %}
+    {{ make_tab('list', 'fa-list', url('contest_list'), _('List')) }}
+    {{ make_tab('calendar', 'fa-calendar', url('contest_calendar', now.year, now.month), _('Calendar')) }}
+    {% if perms.judge.change_contest %}
+        {{ make_tab('admin', 'fa-edit', url('admin:judge_contest_changelist'), _('Admin')) }}
+    {% endif %}
+{% endblock %}

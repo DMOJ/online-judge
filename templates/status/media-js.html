@@ -1,0 +1,62 @@
+<script src="{{ static('libs/tablesorter.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var table = $("#judge-status");
+        table.tablesorter();
+
+        var tooltip_classes = 'tooltipped tooltipped-w';
+        var active_judge = null;
+        var active_lang = null;
+
+        function display_tooltip(where) {
+            where.addClass(tooltip_classes).attr('aria-label', where.attr('data-runtime-info'));
+        }
+
+        function install_tooltips() {
+            $('.runtime-label').each(function () {
+                var link = $(this);
+                link.mouseenter(function (e) {
+                    active_judge = link.attr('data-judge');
+                    active_lang = link.attr('data-lang');
+                    display_tooltip(link);
+                }).mouseleave(function (e) {
+                    active_judge = active_lang = null;
+                    link.removeClass(tooltip_classes).removeAttr('aria-label');
+                });
+            });
+        }
+
+        var outdated = false;
+
+        function update_table() {
+            if ($('body').hasClass('window-hidden'))
+                return outdated = true;
+            $.ajax({
+                url: '{{ url('status_table') }}'
+            }).done(function (data) {
+                // Readd the tooltip classes to minimize flicker on update
+                var new_node = $(data);
+
+                if (active_lang && active_judge) {
+                    var selected = new_node.find('[data-judge=' + active_judge + '][data-lang=' + active_lang + ']');
+                    if (selected) // Might have been removed, when a judge disconnected
+                        display_tooltip(selected);
+                }
+
+                table.html(new_node);
+                install_tooltips();
+            }).always(function () {
+                outdated = false;
+                setTimeout(update_table, 10000);
+            });
+        }
+
+        $(window).on('dmoj:window-visible', function () {
+            if (outdated)
+                update_table();
+        });
+
+        setTimeout(update_table, 10000);
+        install_tooltips();
+    });
+</script>

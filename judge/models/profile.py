@@ -51,10 +51,6 @@ class Organization(models.Model):
     def __unicode__(self):
         return self.name
 
-    @property
-    def member_count(self):
-        return self.members.count()
-
     def get_absolute_url(self):
         return reverse('organization_home', args=(self.key,))
 

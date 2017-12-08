@@ -90,6 +90,6 @@ def ac_rate(request):
 
 
 def language(request):
-    return render(request, 'stats/language.jade', {
+    return render(request, 'stats/language.html', {
         'title': _('Language statistics'), 'tab': 'language'
     })

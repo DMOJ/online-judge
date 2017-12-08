@@ -62,7 +62,7 @@ else:
 
     class HeavyPreviewPageDownWidget(PagedownWidget):
         def __init__(self, *args, **kwargs):
-            kwargs.setdefault('template', 'pagedown.jade')
+            kwargs.setdefault('template', 'pagedown.html')
             self.preview_url = kwargs.pop('preview')
             self.preview_timeout = kwargs.pop('preview_timeout', None)
             self.hide_preview_button = kwargs.pop('hide_preview_button', False)

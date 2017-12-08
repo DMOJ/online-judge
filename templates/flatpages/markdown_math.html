@@ -1,0 +1,9 @@
+{% extends "flatpages/markdown.html" %}
+
+{% block body %}
+    <div class="content-description">{{ flatpage.content|markdown('solution', MATH_ENGINE)|reference }}</div>
+{% endblock %}
+
+{% block bodyend %}
+    {% if REQUIRE_JAX %}{% include "mathjax-load.html" %}{% endif %}
+{% endblock %}

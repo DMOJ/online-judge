@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from judge.templatetags.markdown.camo import client as camo_client
+from judge.jinja2.markdown.camo import client as camo_client
 
 
 class Command(BaseCommand):

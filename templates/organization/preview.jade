@@ -1,8 +1,0 @@
-- load markdown
-- load staticfiles
-- load reference
-
-| #{preview_data|with_math:MATH_ENGINE|markdown:"organization-about"|reference}
-
-if REQUIRE_JAX
-    div.require-mathjax-support(data-config='{% static "mathjax_config.js" %}')

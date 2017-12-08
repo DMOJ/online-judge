@@ -20,7 +20,7 @@ def class_view_decorator(function_decorator):
 
 
 def generic_message(request, title, message, status=None):
-    return render(request, 'generic-message.jade', {
+    return render(request, 'generic-message.html', {
         'message': message,
         'title': title
     }, status=status)

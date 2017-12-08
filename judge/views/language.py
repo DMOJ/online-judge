@@ -8,5 +8,5 @@ from judge.utils.views import TitleMixin
 class LanguageList(TitleMixin, ListView):
     model = Language
     context_object_name = 'languages'
-    template_name = 'status/language-list.jade'
+    template_name = 'status/language-list.html'
     title = ugettext_lazy('Runtimes')

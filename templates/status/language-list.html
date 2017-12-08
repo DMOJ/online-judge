@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block media %}
+    <style>
+        .table td.language {
+            white-space: nowrap;
+        }
+
+        .table td.info .content-description {
+            margin: -1em 1em -1em 1em;
+        }
+
+        td.info {
+            width: 100%;
+        }
+
+        .table td {
+            text-align: left;
+        }
+    </style>
+{% endblock %}
+
+{% block title_ruler %}{% endblock %}
+
+{% block title_row %}
+    {% set tab = 'runtimes' %}
+    {% include "status/status-tabs.html" %}
+{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ _('ID') }}</th>
+            <th>{{ _('Name') }}</th>
+            <th>{{ _('Runtime Info') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for language in languages %}
+            {# All online languages have runtime_versions, even if we're not going to display them #}
+            {% if language.runtime_versions %}
+                <tr>
+                    <td>{{ language.short_display_name }}</td>
+                    <td class="language">{{ language.name }}</td>
+                    <td class="info">
+                        <code>{{ runtime_versions(language.runtime_versions()) }}</code>
+                        {% if language.description %}
+                            <div class="content-description">
+                                {% cache 86400 language_html language.id %}
+                                    {{ language.description|markdown('language') }}
+                                {% endcache %}
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

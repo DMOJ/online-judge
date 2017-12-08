@@ -1,0 +1,300 @@
+{% extends "common-content.html" %}
+
+{% block media %}
+    <link rel="stylesheet" href="{{ static('libs/nouislider.min.css') }}">
+    <noscript>
+        <style>#category, #types {
+            visibility: visible;
+        }
+        </style>
+    </noscript>
+    {% if not IN_CONTEST %}
+        <style>
+            #problem-table th {
+                padding: 0;
+            }
+
+            a.hot-problem-link:hover > .hot-problem-count {
+                visibility: visible;
+            }
+
+            span.hot-problem-count {
+                color: #555;
+                font-size: 0.75em;
+                vertical-align: super;
+                visibility: hidden;
+                padding-left: 0.25em;
+                position: relative;
+            }
+
+            ul.problem-list {
+                padding: 0 !important;
+            }
+        </style>
+    {% endif %}
+{% endblock %}
+
+{% block js_media %}
+    <script>
+        window.point_start = {{point_start}};
+        window.point_end = {{point_end}};
+        window.point_values = {{point_values|json|safe}};
+    </script>
+    {% compress js %}
+        <script src="{{ static('libs/nouislider.min.js') }}" type="text/javascript"></script>
+        <script>
+            $(function () {
+                var $form = $('form#filter-form');
+                var $search = $('#search');
+                var $category = $('#category');
+
+                function clean_submit() {
+                    $search.prop('disabled', !$search.val());
+                    $category.prop('disabled', !$category.val());
+                    $form.submit();
+                }
+
+                $category.select2().css({'visibility': 'visible'}).change(clean_submit);
+                $('#types').select2({multiple: 1, placeholder: '{{ _('Filter by type...') }}'})
+                    .css({'visibility': 'visible'});
+
+                // This is incredibly nasty to do but it's needed because otherwise the select2 steals the focus
+                $search.keypress(function (e) {
+                    if (e.keyCode == 13)
+                        $('#go').click();
+                });
+
+                $('#random').click(function (e) {
+                    var action = $form.attr('action');
+                    $form.attr('action', '{{ url('problem_random') }}').attr('target', '_blank').submit();
+                    $form.attr('action', action).attr('target', '');
+                    e.preventDefault();
+                });
+
+                $('#go').click(clean_submit);
+
+                $('input#full_text, input#hide_solved, input#show_types').click(function () {
+                    ($('<form>').attr('action', window.location.pathname + '?' + $('form#filter-form').serialize())
+                        .append($('<input>').attr('type', 'hidden').attr('name', 'csrfmiddlewaretoken')
+                            .attr('value', $.cookie('csrftoken')))
+                        .attr('method', 'POST').appendTo($('body')).submit());
+                });
+
+                var info_float = $('.info-float');
+                var container = $('#content-right');
+                if (window.bad_browser) {
+                    container.css('float', 'right');
+                } else if (!featureTest('position', 'sticky')) {
+                    fix_div(info_float, 55);
+                    $(window).resize(function () {
+                        info_float.width(container.width());
+                    });
+                    info_float.width(container.width());
+                }
+
+                var intFormatter = {
+                    to: function (value) {
+                        return value;
+                    },
+                    from: function (value) {
+                        return +value;
+                    }
+                };
+                var $slider = $('#point-slider');
+                if ($slider.length) {
+                    var $start = $('#point-start');
+                    var $end = $('#point-end');
+
+                    noUiSlider.create($slider[0], {
+                        start: [point_start, point_end],
+                        connect: true,
+                        snap: true,
+                        tooltips: [intFormatter, intFormatter],
+                        range: point_values
+                    }).on('change', function (values) {
+                        var start = +values[0], end = +values[1];
+                        $start.prop('disabled', start === point_values.min).val(start);
+                        $end.prop('disabled', end === point_values.max).val(end);
+                    });
+                }
+            });
+        </script>
+    {% endcompress %}
+    {% if IN_CONTEST %}
+        {% compress js %}
+            <script src="{{ static('libs/tablesorter.js') }}" type="text/javascript"></script>
+            <script type="text/javascript">
+                $(function () {
+                    $.tablesorter.addParser({
+                        id: 'solvedsort',
+                        is: function (s) {
+                            return false;
+                        },
+                        format: function (s, table, cell, cellIndex) {
+                            return $(cell).attr('solved');
+                        },
+                        type: 'numeric'
+                    });
+
+                    $('#problem-table').tablesorter({
+                        headers: {
+                            0: {
+                                sorter: 'solvedsort'
+                            }
+                        },
+                        textExtraction: function (node) {
+                            node = $(node);
+                            var text = node.text().replace(/^\s+|\s+$/g, '');
+                            return (node.hasClass('p') ? text.replace(/p$/, '') : text);
+                        }
+                    });
+                });
+            </script>
+        {% endcompress %}
+    {% endif %}
+{% endblock %}
+
+{% block title_ruler %}{% endblock %}
+
+{% block title_row %}
+    {% set tab = 'list' %}
+    {% set title = 'Problems' %}
+    {% include "problem/problem-list-tabs.html" %}
+{% endblock %}
+
+{% block body %}
+    <div id="common-content">
+        {% block before_table %}{% endblock %}
+        {% if not IN_CONTEST %}
+            <div id="content-right" class="problems">
+                <div class="info-float">
+                    {% include "problem/search-form.html" %}
+                    {% if hot_problems %}
+                        <div class="sidebox">
+                            <h3>{{ _('Hot problems') }} <i class="fa fa-fire"></i></h3>
+                            <div class="sidebox-content">
+                                <ul class="problem-list">{% for problem in hot_problems %}
+                                    <li><a href="{{ url('problem_detail', problem.code) }}" class="hot-problem-link">
+                                        {{ problem.name }}
+                                    </a></li>
+                                {% endfor %}</ul>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        <div id="content-left" class="problems">
+            {% if page_obj.num_pages > 1 %}
+                <div style="margin-bottom: 7px; margin-top: 3px;">
+                    {% include "list-pages.html" %}
+                </div>
+            {% endif %}
+
+            <table id="problem-table" class="table striped">
+                <thead>
+                <tr>
+                    {% if IN_CONTEST %}
+                        {% if request.user.is_authenticated %}
+                            <th class="solved"><i class="fa fa-check"></i></th>
+                        {% endif %}
+                        <th class="problem">{{ _('Problem') }}</th>
+                        <th class="category">{{ _('Category') }}</th>
+                        {% if show_types %}
+                            <th>{{ _('Types') }}</th>
+                        {% endif %}
+                        <th class="points">{{ _('Points') }}</th>
+                        <th class="users">{{ _('Users') }}</th>
+                    {% else %}
+                        {% if request.user.is_authenticated %}
+                            <th class="solved">
+                                <a href="{{ sort_links['solved'] }}"><i class="fa fa-check"></i>{{ sort_order.solved }}
+                                </a>
+                            </th>
+                        {% endif %}
+                        <th class="problem">
+                            <a href="{{ sort_links.name }}">{{ _('Problem') }}{{ sort_order.name }}</a>
+                        </th>
+                        <th class="category">
+                            <a href="{{ sort_links.group }}">{{ _('Category') }}{{ sort_order.group }}</a>
+                        </th>
+                        {% if show_types %}
+                            <th>
+                                <a href="{{ sort_links.type }}">{{ _('Types') }}{{ sort_order.type }}</a>
+                            </th>
+                        {% endif %}
+                        <th class="points">
+                            <a href="{{ sort_links.points }}">{{ _('Points') }}{{ sort_order.points }}</a>
+                        </th>
+                        <th class="ac-rate">
+                            <a href="{{ sort_links.ac_rate }}">{{ _('AC %%') }}{{ sort_order.ac_rate }}</a>
+                        </th>
+                        <th class="users">
+                            <a href="{{ sort_links.user_count }}">{{ _('Users') }}{{ sort_order.user_count }}</a>
+                        </th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for problem in problems %}
+                    <tr>
+                        {% if request.user.is_authenticated %}
+                            {% if problem.id in completed_problem_ids %}
+                                <td solved="1">
+                                    <a href="{{ url('user_submissions', problem.code, request.user.username) }}">
+                                        {% if problem.is_public or IN_CONTEST %}
+                                            <i class="solved-problem-color fa fa-check-circle"></i>
+                                        {% else %}
+                                            <i class="solved-problem-color fa fa-lock"></i>
+                                        {% endif %}
+                                    </a>
+                                </td>
+                            {% elif problem.id in attempted_problems %}
+                                <td solved="0">
+                                    <a href="{{ url('user_submissions', problem.code, request.user.username) }}">
+                                        {% if problem.is_public or IN_CONTEST %}
+                                            <i class="attempted-problem-color fa fa-minus-circle"></i>
+                                        {% else %}
+                                            <i class="attempted-problem-color fa fa-lock"></i>
+                                        {% endif %}
+                                    </a>
+                                </td>
+                            {% else %}
+                                <td solved="-1">
+                                    {% if problem.is_public or IN_CONTEST %}
+                                        <i class="unsolved-problem-color fa fa-minus-circle"></i>
+                                    {% else %}
+                                        <i class="unsolved-problem-color fa fa-lock"></i>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                        {% endif %}
+                        <td class="problem">
+                            <a href="{{ url('problem_detail', problem.code) }}">{{ problem.i18n_name }}</a>
+                        </td>
+                        <td class="category">{{ problem.group.full_name }}</td>
+                        {% if show_types %}
+                            <td class="types">
+                                {% for type in problem.types_list %}
+                                    <span class="type-tag">{{ type }}</span>{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                        <td class="p">{{ problem.points|floatformat }}{% if problem.partial %}p{% endif %}</td>
+                        {% if not IN_CONTEST %}
+                            <td class="ac-rate">{{ problem.ac_rate|floatformat(1) }}%</td>
+                        {% endif %}
+                        <td class="users">
+                            <a href="{{ url('ranked_submissions', problem.code) }}">{{ problem.user_count }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if page_obj.num_pages > 1 %}
+                <div style="margin-top:10px;">{% include "list-pages.html" %}</div>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+{% endblock %}

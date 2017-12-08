@@ -4,8 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     {% load i18n %}
     <head>
-        <title>{% block title %}{% trans "Newsletter" %}{% endblock title %}</title>
-        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <title>{% block title %}{{ _('Newsletter') }}{% endblock title %}</title>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" >
         {% block header %}
         {% endblock header %}
     </head>

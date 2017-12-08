@@ -1,0 +1,34 @@
+<div class="sidebox dashboard">
+    <h3>Dashboard <i class="fa fa-dashboard"></i>
+    </h3>
+    <div class="sidebox-content">
+        <div class="user-gravatar">
+            <img src="{{ gravatar(request.user, 135) }}"
+                 alt="gravatar" width="135px" height="135px">
+        </div>
+        <div class="recently-attempted">
+            <h4>Recently attempted problems</h4>
+            <ul>
+                {% for code, name, problem_points, user_points, s_date in recently_attempted_problems %}
+                    <li>
+                        <a href="{{ url('problem_detail', code) }}">{{ name }}</a>
+                        [<a href="{{ url('user_submissions', code, request.user.username }}">
+                        {{- user_points }}/{{ problem_points|floatformat }}</a>]
+
+                        <span class="time">
+                            <span data-unix="{{ submission.date|utc|date("c") }}"
+                                  class="recent-time moment-time-toggle">
+                                {% trans time=submission.date|date(_("N j, Y, g:i a")) %}
+                                    on {{ time }}
+                                {% endtrans %}
+                            </span>
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="recommended-problems">
+            <h4>Recommended problems</h4><i>Coming soon.</i>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<td class="sub-result {{ breakdown.sub_result_class }}">
+    <div class="score">{{ breakdown.sub_points|floatformat(0) }} / {{ breakdown.sub_total|floatformat(0) }}</div>
+    <div class="state">
+        <span title="{{ breakdown.sub_long_status }}" class="status">{{ breakdown.sub_short_status }}</span>
+        |
+        <span class="language">{{ breakdown.sub_lang }}</span>
+    </div>
+</td>
+
+<td colspan="2" class="sub-info">
+    <div class="name">
+        <a href="{{ url('problem_detail', breakdown.problem_code) }}">{{ breakdown.problem_name }}</a>
+    </div>
+    <div>
+        <span class="time" data-unix="{{ breakdown.sub_date|utc|date("c") }}">
+            {% trans time=breakdown.sub_date|date(_("N j, Y, g:i a")) %}
+                on {{ time }}
+            {% endtrans %}
+        </span>
+    </div>
+</td>
+
+<td class="sub-pp sub-usage">
+    <div class="pp">
+        <a href="{{ url('submission_status', breakdown.sub_id) }}">{{ breakdown.points|floatformat(0) }}pp</a>
+    </div>
+    <div class="pp-weighted">
+        {% trans weight=breakdown.weight|floatformat(0) %}
+            weighted <b>{{ weight }}%</b>
+        {% endtrans %}
+
+        {% if breakdown.scaled_points < 10 %}
+            ({{ _('%(pp).1fpp', pp=breakdown.scaled_points) }})
+        {% else %}
+            ({{ _('%(pp).0fpp', pp=breakdown.scaled_points) }})
+        {% endif %}
+    </div>
+</td>

@@ -1,6 +1,7 @@
 from functools import partial
 
 from django.conf import settings
+from django.contrib.auth.context_processors import PermWrapper
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.cache import cache
 from django.utils.functional import SimpleLazyObject, new_method_proxy
@@ -62,6 +63,7 @@ def general_info(request):
         'nav_tab': FixedSimpleLazyObject(partial(__nav_tab, request.path)),
         'nav_bar': NavigationBar.objects.all(),
         'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path,
+        'perms': PermWrapper(request.user),
     }
 
 
