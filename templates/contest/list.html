@@ -51,22 +51,23 @@
 {% endblock %}
 
 {% macro contest_head(contest) %}
-    <a href="{{ url('contest_view', contest.key) }}" class="contest-list-title">
-        {{- contest.name -}}
-    </a>
-    <span class="contest-tags">
-        {% for tag in contest.tags.all() %}
-            <span style="background-color: {{ tag.color }}" class="contest-tag">{# -#}
-                <a href="{{ url('contest_tag', tag.name) }}"
-                   style="color: {{ tag.text_color }}"
-                   data-featherlight="{{ url('contest_tag_ajax', tag.name) }}">
-                    {{- tag.name -}}
-                </a>{# -#}
-            </span>
-        {% endfor %}
-    </span>
-    {% if not contest.is_public %}<i class="fa fa-eye-slash"></i>{% endif %}
-    {% if contest.is_private %}<i class="fa fa-lock"></i>{% endif %}
+    {% spaceless %}
+        <a href="{{ url('contest_view', contest.key) }}" class="contest-list-title">
+            {{- contest.name -}}
+        </a><span class="contest-tags">
+            {% for tag in contest.tags.all() %}
+                <span style="background-color: {{ tag.color }}" class="contest-tag">
+                    <a href="{{ url('contest_tag', tag.name) }}"
+                       style="color: {{ tag.text_color }}"
+                       data-featherlight="{{ url('contest_tag_ajax', tag.name) }}">
+                        {{- tag.name -}}
+                    </a>
+                </span>
+            {% endfor %}
+        </span>
+        {% if not contest.is_public %}<i class="fa fa-eye-slash"></i>{% endif %}
+        {% if contest.is_private %}<i class="fa fa-lock"></i>{% endif %}
+    {% endspaceless %}
 {% endmacro %}
 
 {% macro time_left(contest) %}
@@ -156,7 +157,7 @@
                                 {% if contest.start_time %}
                                     <br>
                                     {% if contest.time_before_start %}
-                                        <span class="time">{{ _('Staring in %(countdown)s', countdown=contest.time_before_start|as_countdown) }}</span>
+                                        <span class="time">{{ _('Starting in %(countdown)s.', countdown=contest.time_before_start|as_countdown) }}</span>
                                     {% endif %}
                                     {{ time_left(contest) }}
                                 {% endif %}
