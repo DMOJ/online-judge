@@ -171,7 +171,7 @@
             </div>
         {% endfor %}
     </div>
-    {% cache 86400 problem_authors problem.id LANGUAGE_CODE %}
+    {% cache 86400 'problem_authors' problem.id LANGUAGE_CODE %}
         {% with authors=problem.authors.all() %}
             {% if authors %}
                 <div class="problem-info-entry">
@@ -225,7 +225,7 @@
 {% endblock %}
 
 {% block description %}
-    {% cache 86400 problem_html problem.id MATH_ENGINE LANGUAGE_CODE %}
+    {% cache 86400 'problem_html' problem.id MATH_ENGINE LANGUAGE_CODE %}
         {{ description|markdown("problem", MATH_ENGINE)|reference|str|safe }}
     {% endcache %}
 

@@ -39,7 +39,7 @@
 {% endblock %}
 
 {% block description %}
-    {% cache 3600 organization_html organization.id MATH_ENGINE %}
+    {% cache 3600 'organization_html' organization.id MATH_ENGINE %}
         {{ organization.about|markdown('organization-about', MATH_ENGINE)|reference|str|safe }}
     {% endcache %}
 {% endblock %}

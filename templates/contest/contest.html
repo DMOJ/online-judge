@@ -68,7 +68,7 @@
     </div>
 
     <div class="content-description">
-        {% cache 3600 contest_html contest.id MATH_ENGINE %}
+        {% cache 3600 'contest_html' contest.id MATH_ENGINE %}
             {{ contest.description|markdown('contest', MATH_ENGINE)|reference|str|safe }}
         {% endcache %}
     </div>
