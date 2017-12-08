@@ -315,7 +315,7 @@
                 <button data-ajax="{{ url('ticket_close', ticket.id) }}" data-open="0" class="close-ticket"
                         {% if not ticket.is_open %}style="display: none"{% endif %}>{{ _('Close ticket') }}</button>
                 <button data-ajax="{{ url('ticket_open', ticket.id) }}" data-open="1" class="open-ticket"
-                        {% if not ticket.is_open %}style="display: none"{% endif %}>{{ _('Reopen ticket') }}</button>
+                        {% if ticket.is_open %}style="display: none"{% endif %}>{{ _('Reopen ticket') }}</button>
 
                 {% if perms.judge.change_ticket or request.user.profile in assignees %}
                     <div class="info-box">
@@ -352,7 +352,7 @@
                                 <div class="message-time">{{ message.time|time('TIME_FORMAT') }}</div>
                             </div>
                             <div class="content content-description">
-                                {{ message.body|markdown('ticket', MATH_ENGINE)|reference }}
+                                {{ message.body|markdown('ticket', MATH_ENGINE)|reference|str|safe }}
                             </div>
                         </div>
                     </section>
@@ -365,8 +365,6 @@
                         <img src="{{ gravatar(request.user) }}" class="gravatar">
                         <div class="username {{ request.user.profile.css_class }}">{{ request.user.username }}</div>
                     </a>
-                    <div class="message-date">{{ message.time|date("DATE_FORMAT") }}</div>
-                    <div class="message-time">{{ message.time|time("TIME_FORMAT") }}</div>
                 </div>
                 <div class="detail">
                     <form action="" method="post">

@@ -200,7 +200,6 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.request',
-                'django.contrib.messages.context_processors.messages',
                 'judge.template_context.comet_location',
                 'judge.template_context.get_resource',
                 'judge.template_context.general_info',
