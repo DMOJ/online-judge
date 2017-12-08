@@ -4,7 +4,7 @@
     {% block users_js_media %}{% endblock %}
     <script>
         $(function () {
-            $('#search-handle').replaceWith($('<select/>').attr({
+            $('#search-handle').replaceWith($('<select>').attr({
                 id: 'search-handle',
                 name: 'handle',
                 onchange: 'form.submit()'

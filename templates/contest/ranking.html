@@ -202,7 +202,7 @@
     <script type="text/javascript">
         $(function () {
             var url = '{{ url('contest_participation', contest.key, '__username__') }}';
-            var placeholder = $('#search-contest').replaceWith($('<select/>').attr({
+            var placeholder = $('#search-contest').replaceWith($('<select>').attr({
                 id: 'search-contest'
             })).attr('placeholder');
 
@@ -235,10 +235,10 @@
     <div style="margin-bottom: 0.5em">
         {% if tab == 'participation' %}
             {% if contest.start_time <= now or perms.judge.see_private_contest %}
-                <input id="search-contest" type="text" placeholder="{{ _('View user participation') }}"/>
+                <input id="search-contest" type="text" placeholder="{{ _('View user participation') }}">
             {% endif %}
         {% endif %}
-        <input id="show-organizations-checkbox" type="checkbox" style="vertical-align: bottom"/>
+        <input id="show-organizations-checkbox" type="checkbox" style="vertical-align: bottom">
         <label for="show-organizations-checkbox" style="vertical-align: bottom">{{ _('Show organizations') }}</label>
     </div>
     {% include "contest/ranking-table.html" %}

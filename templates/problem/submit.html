@@ -80,7 +80,7 @@
                 $('#id_language').on('select2:open', function (evt) {
                     var dropdown = $('.select2-dropdown');
                     if (!$('#result-version-info').length)
-                        dropdown.append($("<span id=\"result-version-info\"/>"));
+                        dropdown.append($("<span id=\"result-version-info\">"));
                 });
 
                 $('#id_language').change(function () {
@@ -185,7 +185,7 @@
 {% endblock %}
 
 {% block body %}
-    <br/>
+    <br>
     {% if not no_judges %}
         {% if default_lang not in form.fields.language.queryset %}
             <div class="alert alert-warning alert-dismissable">

@@ -26,8 +26,8 @@
 
                 var copyButton;
                 $('pre code').each(function () {
-                    $(this).parent().before($('<div/>', {'class': 'copy-clipboard'})
-                        .append(copyButton = $('<span/>', {
+                    $(this).parent().before($('<div>', {'class': 'copy-clipboard'})
+                        .append(copyButton = $('<span>', {
                             'class': 'btn-clipboard',
                             'data-clipboard-text': $(this).text(),
                             'title': 'Click to copy'
@@ -65,7 +65,7 @@
             <div class="content-description screen">
                 {% block description %}{% endblock %}
                 {% block description_end %}
-                    <hr/>
+                    <hr>
                 {% endblock %}
                 {% block post_description_end %}{% endblock %}
             </div>

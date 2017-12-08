@@ -18,7 +18,7 @@
         <form enctype="multipart/form-data" method="post"
               action="{{ url('newsletter_unsubscribe_confirm', newsletter.slug) }}">
             {% csrf_token %}
-            <p><input id="id_submit" name="submit" value="{{ _('Unsubscribe') }}" type="submit"/></p>
+            <p><input id="id_submit" name="submit" value="{{ _('Unsubscribe') }}" type="submit"></p>
         </form>
     {% endif %}
 

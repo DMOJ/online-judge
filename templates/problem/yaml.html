@@ -1,13 +1,13 @@
-{% extends "base.jade" %}{%  load strings %}{% block body %}
+{% extends "base.html" %}{%  load strings %}{% block body %}
 <div class="source-wrap">
   <table>
     <tr>
       <td class="source-ln">
         <div>{% for line in __pyjade_iter(raw_source|split,1) %}<a href="#line-{{ forloop.counter }}" name="line-{{ forloop.counter }}">
-            <pre>{{forloop.counter|escape}}</pre></a>{% endfor %}
+            <pre>{{forloop.counter}}</pre></a>{% endfor %}
         </div>
       </td>
-      <td class="source-code">{{highlighted_source|escape}}</td>
+      <td class="source-code">{{highlighted_source}}</td>
     </tr>
   </table>
 </div>{% endblock %}

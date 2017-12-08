@@ -1,5 +1,5 @@
-{% extends "base.jade" %}{%  load i18n %}{%  load staticfiles %}{% block js_media %}
-<script type="text/javascript">window.valid_files = {{valid_files_json|escape}};
+{% extends "base.html" %}{%  load i18n %}{%  load staticfiles %}{% block js_media %}
+<script type="text/javascript">window.valid_files = {{valid_files_json}};
 
 $(function () {
     function update_select2() {
@@ -17,7 +17,7 @@ $(function () {
     $('#case-table').on('add-row', function (e, $tr) {
         update_select2();
         $tr.find('input').filter('[id$=file]').each(function () {
-            var $select, val = $(this).replaceWith($select = $('<select/>').attr({
+            var $select, val = $(this).replaceWith($select = $('<select>').attr({
                 id: $(this).attr('id'),
                 name: $(this).attr('name'),
                 style: 'width: 100%'
@@ -39,8 +39,8 @@ $(function () {
     });
 });
 </script>
-<script type="text/javascript" src="{% static "libs/jquery-sortable.js" %}"></script>
-<script type="text/javascript" src="{% static "libs/featherlight/featherlight.min.js" %}"></script>
+<script type="text/javascript" src="{{ static('libs/jquery-sortable.js') }}"></script>
+<script type="text/javascript" src="{{ static('libs/featherlight/featherlight.min.js') }}"></script>
 <script type="text/javascript">$(function () {
     var order = 0;
     var $table = $('#case-table');
@@ -205,7 +205,7 @@ $(function () {
         itemPath: '> tbody:first',
         itemSelector: 'tr',
         handle: 'i.fa-ellipsis-v',
-        placeholder: '<tr class="placeholder"/>',
+        placeholder: '<tr class="placeholder">',
         onDragStart: function ($item, container, _super) {
             oldIndex = $item.index();
             _super($item, container);
@@ -332,75 +332,75 @@ ul.errorlist {
     background: #e99;
 }
 </style>{% endblock %}
-{% block header %}{% if  data_form.instance.has_yml %}
-<div class="title-line-action">[<a href="{% url "problem_data_init" problem.code %}">{% trans "View YAML" %}</a>]
+{% block header %}{% if data_form.instance.has_yml %}
+<div class="title-line-action">[<a href="{{ url('problem_data_init', problem.code) }}">{{ _('View YAML') }}</a>]
 </div>{% endif %}{% endblock %}
-{% block body %}{% if  data_form.instance.feedback %}
+{% block body %}{% if data_form.instance.feedback %}
 <ul class="errorlist">
-  <li>{{data_form.instance.feedback|escape}}</li>
+  <li>{{data_form.instance.feedback}}</li>
 </ul>{% endif %}
-<form action="" method="POST" enctype="multipart/form-data">{%  csrf_token %}{{cases_formset.management_form|escape}}
-  <table class="table">{{data_form.as_table|escape}}</table>
-  <div id="column-visible"{{__pyjade_attrs(attrs=[('data-problem',(problem.code))])}}><strong>{% trans "Show columns:" %}</strong>
+<form action="" method="POST" enctype="multipart/form-data">{%  csrf_token %}{{cases_formset.management_form}}
+  <table class="table">{{data_form.as_table}}</table>
+  <div id="column-visible"{{__pyjade_attrs(attrs=[('data-problem',(problem.code))])}}><strong>{{ _('Show columns:') }}</strong>
     <label>
-      <input type="checkbox" data-suffix="output_prefix"/>
- {% trans "Output prefix" %}
+      <input type="checkbox" data-suffix="output_prefix">
+ {{ _('Output prefix') }}
     </label>
     <label>
-      <input type="checkbox" data-suffix="output_limit"/>
- {% trans "Output limit" %}
+      <input type="checkbox" data-suffix="output_limit">
+ {{ _('Output limit') }}
     </label>
     <label>
-      <input type="checkbox" data-suffix="checker"/>
- {% trans "Checker" %}
+      <input type="checkbox" data-suffix="checker">
+ {{ _('Checker') }}
     </label>
     <label>
-      <input type="checkbox" data-suffix="generator_args"/>
- {% trans "Generator args" %}
+      <input type="checkbox" data-suffix="generator_args">
+ {{ _('Generator args') }}
     </label>
   </div>
   <table id="case-table" class="table">
     <thead>
       <tr>
         <th class="order-column"></th>
-        <th class="type-column">{% trans "Type" %}</th>
-        <th>{% trans "Input file" %}</th>
-        <th>{% trans "Output file" %}</th>
-        <th>{% trans "Points" %}</th>
-        <th>{% trans "Pretest?" %}</th>
-        <th class="output-prefix">{% trans "Output prefix" %}</th>
-        <th class="output-limit">{% trans "Output limit" %}</th>
-        <th class="checker">{% trans "Checker" %}</th>
-        <th class="generator-args">{% trans "Generator args" %}</th>{% if  cases_formset.can_delete %}
-        <th>{% trans "Delete?" %}</th>{% endif %}
+        <th class="type-column">{{ _('Type') }}</th>
+        <th>{{ _('Input file') }}</th>
+        <th>{{ _('Output file') }}</th>
+        <th>{{ _('Points') }}</th>
+        <th>{{ _('Pretest?') }}</th>
+        <th class="output-prefix">{{ _('Output prefix') }}</th>
+        <th class="output-limit">{{ _('Output limit') }}</th>
+        <th class="checker">{{ _('Checker') }}</th>
+        <th class="generator-args">{{ _('Generator args') }}</th>{% if cases_formset.can_delete %}
+        <th>{{ _('Delete?') }}</th>{% endif %}
       </tr>
     </thead>
-    <tbody>{% for form in __pyjade_iter(all_case_forms,1) %}{% if  form.non_field_errors %}
+    <tbody>{% for form in __pyjade_iter(all_case_forms,1) %}{% if form.non_field_errors %}
       <tr>
-        <td{{__pyjade_attrs(attrs=[('colspan',((9 + cases_formset.can_delete)))])}}>{{form.non_field_errors|escape}}</td>
-      </tr>{% endif %}{% if  form.prefix and '__prefix__' in form.prefix %}</tbody><tbody class="extra-row-body" style="display: none">
+        <td{{__pyjade_attrs(attrs=[('colspan',((9 + cases_formset.can_delete)))])}}>{{form.non_field_errors}}</td>
+      </tr>{% endif %}{% if form.prefix and '__prefix__' in form.prefix %}</tbody><tbody class="extra-row-body" style="display: none">
 {% endif %}
       <tr{{__pyjade_attrs(attrs=[('data-type',(form['type'].value()))])}}>
-        <td>{{form.id|escape}}{{form.order.errors|escape}}{{form.order|escape}}</td>
-        <td class="type-column">{{form.type.errors|escape}}{{form.type|escape}}</td>
-        <td{{__pyjade_attrs(attrs=[('class', (((None if form.empty_permitted or form['type'].value() != 'C' or form['input_file'].value() in valid_files else 'bad-file'))))])}}>{{form.input_file.errors|escape}}{{form.input_file|escape}}
+        <td>{{form.id}}{{form.order.errors}}{{form.order}}</td>
+        <td class="type-column">{{form.type.errors}}{{form.type}}</td>
+        <td{{__pyjade_attrs(attrs=[('class', (((None if form.empty_permitted or form['type'].value() != 'C' or form['input_file'].value() in valid_files else 'bad-file'))))])}}>{{form.input_file.errors}}{{form.input_file}}
         </td>
-        <td{{__pyjade_attrs(attrs=[('class', (((None if form.empty_permitted or form['type'].value() != 'C' or form['output_file'].value() in valid_files else 'bad-file'))))])}}>{{form.output_file.errors|escape}}{{form.output_file|escape}}
+        <td{{__pyjade_attrs(attrs=[('class', (((None if form.empty_permitted or form['type'].value() != 'C' or form['output_file'].value() in valid_files else 'bad-file'))))])}}>{{form.output_file.errors}}{{form.output_file}}
         </td>
-        <td>{{form.points.errors|escape}}{{form.points|escape}}</td>
-        <td>{{form.is_pretest.errors|escape}}{{form.is_pretest|escape}}</td>
-        <td class="output-prefix">{{form.output_prefix.errors|escape}}{{form.output_prefix|escape}}</td>
-        <td class="output-limit">{{form.output_limit.errors|escape}}{{form.output_limit|escape}}</td>
-        <td class="checker">{{form.checker.errors|escape}}{{form.checker|escape}}{{form.checker_args.errors|escape}}{{form.checker_args|escape}}
+        <td>{{form.points.errors}}{{form.points}}</td>
+        <td>{{form.is_pretest.errors}}{{form.is_pretest}}</td>
+        <td class="output-prefix">{{form.output_prefix.errors}}{{form.output_prefix}}</td>
+        <td class="output-limit">{{form.output_limit.errors}}{{form.output_limit}}</td>
+        <td class="checker">{{form.checker.errors}}{{form.checker}}{{form.checker_args.errors}}{{form.checker_args}}
         </td>
-        <td class="generator-args">{{form.generator_args.errors|escape}}{{form.generator_args|escape}}<a href="javascript:void(0)" class="edit-generator-args"><i class="fa fa-pencil"></i> {% trans "Edit" %}</a>
+        <td class="generator-args">{{form.generator_args.errors}}{{form.generator_args}}<a href="javascript:void(0)" class="edit-generator-args"><i class="fa fa-pencil"></i> {{ _('Edit') }}</a>
         </td>
-{% if  cases_formset.can_delete %}
-        <td>{{form.DELETE|escape}}</td>{% endif %}
+{% if cases_formset.can_delete %}
+        <td>{{form.DELETE}}</td>{% endif %}
       </tr>{% endfor %}
     </tbody>
   </table>
-  <input type="submit" value="{% trans "Submit!" %}" class="button"/><a id="add-case-row" href="#"><i class="fa fa-plus"></i> {% trans "Add new case" %}</a>
+  <input type="submit" value="{{ _('Submit!') }}" class="button"><a id="add-case-row" href="#"><i class="fa fa-plus"></i> {{ _('Add new case') }}</a>
 </form>
 <div style="display: none" class="generator-args-editor"><textarea></textarea><a class="button">Save</a>
 </div>{% endblock %}

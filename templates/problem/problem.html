@@ -185,7 +185,7 @@
             {% endif %}
         {% endwith %}
     {% endcache %}
-    <br/>
+    <br>
     {% if not contest_problem or not contest_problem.contest.hide_problem_tags %}
         <div id="problem-types">
             {% with types=problem.types_list %}
@@ -199,7 +199,7 @@
                 <div style="display:none" class="toggled">{{ problem.types_list|join(", ") }}</div>
             {% endwith %}
         </div>
-        <br/>
+        <br>
     {% endif %}
     {% if show_languages %}
         <div id="allowed-langs">
@@ -219,7 +219,7 @@
                 {% endwith %}
             </div>
         </div>
-        <br/>
+        <br>
     {% endif %}
 {% endblock %}
 

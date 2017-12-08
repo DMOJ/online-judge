@@ -6,6 +6,6 @@
 
 {% if perms.judge.change_contesttag %}
     <div class="title-line-action">
-        [<a href="{% url "admin:judge_contesttag_change" tag.id %}">{{ _('Edit') }}</a>]
+        [<a href="{{ url('admin:judge_contesttag_change', tag.id) }}">{{ _('Edit') }}</a>]
     </div>
 {% endif %}

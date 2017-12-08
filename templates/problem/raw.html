@@ -37,12 +37,12 @@ tr {
     </style>
   </head>
   <body>
-    <h2 style="color:#393630; display: inline-block">{{problem_name|escape}}</h2>
+    <h2 style="color:#393630; display: inline-block">{{problem_name}}</h2>
     <hr>
     <!--table.table#info-table-->
     <!--    tbody-->
     <!--        tr-->
-    <!--            td.key {% trans "Points:" %}-->
+    <!--            td.key {{ _('Points:') }}-->
     <!--            td.value-->
     <!--                |  #{problem.points|floatformat}-->
     <!--                if problem.partial-->
@@ -54,16 +54,16 @@ tr {
     <!--                    | Problem types-->
     <!--            td.value #{problem.types_list|join:", "}-->
     <!--        tr-->
-    <!--            td.key {% trans "Time limit:" %}-->
+    <!--            td.key {{ _('Time limit:') }}-->
     <!--            td.value #{problem.time_limit}s-->
-    <!--            td.key {% trans "Allowed languages" %}-->
+    <!--            td.key {{ _('Allowed languages') }}-->
     <!--            td.value-->
     <!--                if show_languages-->
     <!--                    | #{problem.languages_list|join:", "}-->
     <!--                else-->
     <!--                    - trans "All" context "languages"-->
     <!--        tr-->
-    <!--            td.key {% trans "Memory limit:" %}-->
+    <!--            td.key {{ _('Memory limit:') }}-->
     <!--            td.value #{problem.memory_limit|kbsimpleformat}-->
     <!--            if authors-->
     <!--                td.key-->
@@ -73,7 +73,7 @@ tr {
     <!--                        | Authors:-->
     <!--                td.value #{authors|join:", "}-->
     <!--hr(style='border-bottom: 1px dashed;')-->
-    <div class="content-description printing">{{description|with_math:"tex"|markdown:"problem"|reference|absolutify:url|escape}}
+    <div class="content-description printing">{{description|with_math:"tex"|markdown:"problem"|reference|absolutify:url}}
     </div>
     <script type="text/javascript" src="mathjax_config.js"></script>
     <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>

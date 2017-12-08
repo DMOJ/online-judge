@@ -31,7 +31,7 @@
 <h2>SIGSEGV: {{ id }}</h2>
 <pre>{{ description }}
 site: fatal signal: Segmentation fault
-site died (signal <b>{{ code }}</b>, exit -11)<br/><br/>panic: <a href="javascript:history.back()">go back</a></pre>
+site died (signal <b>{{ code }}</b>, exit -11)<br><br>panic: <a href="javascript:history.back()">go back</a></pre>
 {% if request.user.is_superuser and traceback %}
     <pre>{{ traceback }}</pre>
 {% endif %}
