@@ -122,7 +122,9 @@
             });
         });
     </script>
-    {{ recaptcha_init(LANGUAGE_CODE) }}
+    {% if form.captcha %}
+        {{ recaptcha_init(LANGUAGE_CODE) }}
+    {% endif %}
 {% endblock %}
 
 {% block body %}
@@ -142,7 +144,7 @@
                 <div class="form-field-error">{{ form.email.errors }}</div>
             {% endif %}
 
-            <div class="block-header">{{ _('Password') }}
+            <div class="block-header">{{ _('Password') -}}
                 <small>(<a href="#" class="pass-req-link">?</a>)</small>
             </div>
             <div style="display: none" class="pass-req">
@@ -156,7 +158,7 @@
             {% if form.password1.errors %}
                 <div class="form-field-error">{{ form.password1.errors }}</div>
             {% endif %}
-            <div class="block-header">{{ _('Password') }}<sup style="font-size: 0.7em;padding-left: 0.2em;">2</sup>
+            <div class="block-header">{{ _('Password') }}<sup style="font-size: 0.7em;padding-left: 0.2em;">2</sup>{# -#}
                 <small>{{ _('(again, for confirmation)') }}</small>
             </div>
             <span class="fullwidth{% if form.password2.errors %}-error{% endif %}">{{ form.password2 }}</span>
@@ -167,8 +169,8 @@
             <div class="block-header">{{ _('Location') }}</div>
             <div class="fullwidth">
                 <div>{{ form.timezone }}
-                    <div style="float: right">{
-                        { _('or') }}
+                    <div style="float: right">
+                        {{ _('or') }}
                         <a id="open-map" href="#" data-featherlight=".map-wrap">{{ _('pick from map') }}</a>
                     </div>
                 </div>
