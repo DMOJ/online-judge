@@ -5,7 +5,7 @@ tests = {}
 filters = {}
 extensions = []
 
-__all__ = ['render_with', 'function', 'filter', 'test']
+__all__ = ['render_with', 'function', 'filter', 'test', 'extension']
 
 
 def _store_function(store, func, name=None):
@@ -46,3 +46,8 @@ def function(name=None, func=None):
 
 def test(name=None, func=None):
     return _register_function(tests, name, func)
+
+
+def extension(cls):
+    extensions.append(cls)
+    return cls

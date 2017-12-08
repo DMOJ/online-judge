@@ -1,5 +1,5 @@
-import json
 import itertools
+import json
 
 from django.utils.http import urlquote
 from jinja2.ext import Extension
@@ -8,8 +8,9 @@ from statici18n.templatetags.statici18n import inlinei18n
 
 from judge.highlight_code import highlight_code
 from judge.user_translations import ugettext
+from . import (language, filesize, gravatar, rating, markdown, reference, render, social, spaceless, submission,
+               timedelta)
 from . import registry
-from . import language, filesize, gravatar, rating, markdown, reference, render, social, submission, timedelta
 
 registry.function('str', unicode)
 registry.filter('str', unicode)
@@ -32,3 +33,6 @@ class DMOJExtension(Extension):
         env.globals.update(registry.globals)
         env.filters.update(registry.filters)
         env.tests.update(registry.tests)
+
+        for ext in registry.extensions:
+            env.add_extension(ext)
