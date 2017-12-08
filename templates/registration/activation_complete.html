@@ -1,2 +1,4 @@
-{% extends "base.jade" %}{%  load i18n %}{% block body %}
-<p>{% trans "Your account has been successfully activated." %}</p>{% endblock %}
+{% extends "base.html" %}
+{% block body %}
+    <p>{{ _('Your account has been successfully activated.') }}</p>
+{% endblock %}

@@ -1,156 +1,214 @@
-{% extends "base.jade" %}{%  load i18n %}{%  load recaptcha2 %}{% block media %}{% include "timezone/media-css.jade" %}{{form.media.css|escape}}
-<style>.sortedm2m-container, .sortedm2m-container p.selector-filter {
-    width: 300px;
-}
+{% extends "base.html" %}
 
-.sortedm2m-container p.selector-filter input {
-    width: 262px;
-}
+{% block media %}
+    {% include "timezone/media-css.html" %}
+    {{ form.media.css }}
+    <style>
+        .sortedm2m-container, .sortedm2m-container p.selector-filter {
+            width: 300px;
+        }
 
-ul.sortedm2m {
-    width: 284px;
-    min-height: 100px;
-    max-height: 200px;
-}
+        .sortedm2m-container p.selector-filter input {
+            width: 262px;
+        }
 
-.sortedm2m-container, .sortedm2m-container p.selector-filter {
-    width: 300px;
-}
+        ul.sortedm2m {
+            width: 284px;
+            min-height: 100px;
+            max-height: 200px;
+        }
 
-.sortedm2m-container p.selector-filter input {
-    width: 262px;
-}
+        .sortedm2m-container, .sortedm2m-container p.selector-filter {
+            width: 300px;
+        }
 
-ul.sortedm2m {
-    width: 284px;
-    min-height: 70px;
-    max-height: 200px;
-    height: 70px
-}
+        .sortedm2m-container p.selector-filter input {
+            width: 262px;
+        }
 
-.grayed {
-    color: #666;
-}
+        ul.sortedm2m {
+            width: 284px;
+            min-height: 70px;
+            max-height: 200px;
+            height: 70px
+        }
 
-.inline-header {
-    float: left;
-    font-size: 1.1em;
-    padding: 4px 8px;
-    padding-left: 0;
-}
+        .grayed {
+            color: #666;
+        }
 
-.block-header {
-    color: #555;
-    font-size: 1.1em;
-    font-weight: 600;
-    padding-bottom: 0.2em;
-    padding-left: 2px;
-    margin-top: 0.75em
-}
+        .inline-header {
+            float: left;
+            font-size: 1.1em;
+            padding: 4px 8px;
+            padding-left: 0;
+        }
 
-.fullwidth {
-    display: block;
-    overflow: hidden;
-}
+        .block-header {
+            color: #555;
+            font-size: 1.1em;
+            font-weight: 600;
+            padding-bottom: 0.2em;
+            padding-left: 2px;
+            margin-top: 0.75em
+        }
 
-.fullwidth input {
-    width: 100%;
-}
+        .fullwidth {
+            display: block;
+            overflow: hidden;
+        }
 
-.fullwidth-error input {
-    width: 100%;
-    border-color: red;
-}
+        .fullwidth input {
+            width: 100%;
+        }
 
-.form-field-error {
-    color: red;
-}
+        .fullwidth-error input {
+            width: 100%;
+            border-color: red;
+        }
 
-small {
-    font-size: 0.7em;
-    padding-left: 0.6em;
-}
+        .form-field-error {
+            color: red;
+        }
 
-#edit-form {
-    border: unset;
-    background: unset;
-    max-width: 450px;
-    width: 450px;
-}
+        small {
+            font-size: 0.7em;
+            padding-left: 0.6em;
+        }
 
-#content-body {
-    text-align: center;
-}
+        #edit-form {
+            border: unset;
+            background: unset;
+            max-width: 450px;
+            width: 450px;
+        }
 
-#center-float {
-    display: inline-block;
-    text-align: initial;
-    max-width: 450px;
-    width: 450px;
-}
+        #content-body {
+            text-align: center;
+        }
 
-ul.errorlist {
-    margin: 0px;
-    text-align: right;
-    list-style: none;
-}
+        #center-float {
+            display: inline-block;
+            text-align: initial;
+            max-width: 450px;
+            width: 450px;
+        }
 
-.full-textfield {
-    padding-top: 0.5em;
-}
+        ul.errorlist {
+            margin: 0px;
+            text-align: right;
+            list-style: none;
+        }
 
-.tos-section {
-    display: inline-block;
-    padding-right: 1em;
-}
-</style>{% endblock %}
-{% block js_media %}{% include "timezone/media-js.jade" %}{{form.media.js|escape}}
-<script type="text/javascript">$(function () {
-    $('.pass-req-link').click(function () {
-        $('.pass-req').toggle('fast');
-        return false;
-    });
-});
-</script>
-{%  recaptcha_init LANGUAGE_CODE %}{% endblock %}{% block body %}
-<div id="center-float">
-  <form id="edit-form" action="" method="post" class="form-area">{%  csrf_token %}
-    <div class="block-header">{% trans "Username" %}</div><span{{__pyjade_attrs(attrs=[('class', ((('fullwidth-error' if form['username'].errors else 'fullwidth'))))])}}>{{form.username|escape}}</span>{% if  form.username.errors %}
-    <div class="form-field-error">{{form.username.errors|escape}}</div>{% endif %}
-    <div class="block-header">{% trans "Email" %}</div><span{{__pyjade_attrs(attrs=[('class', ((('fullwidth-error' if form['email'].errors else 'fullwidth'))))])}}>{{form.email|escape}}</span>{% if  form.email.errors %}
-    <div class="form-field-error">{{form.email.errors|escape}}</div>{% endif %}
-    <div class="block-header">{% trans "Password" %}<small>(<a href="#" class="pass-req-link">?</a>)</small>
+        .full-textfield {
+            padding-top: 0.5em;
+        }
+
+        .tos-section {
+            display: inline-block;
+            padding-right: 1em;
+        }
+    </style>
+{% endblock %}
+
+{% block js_media %}
+    {% include "timezone/media-js.html" %}
+    {{ form.media.js }}
+    <script type="text/javascript">
+        $(function () {
+            $('.pass-req-link').click(function () {
+                $('.pass-req').toggle('fast');
+                return false;
+            });
+        });
+    </script>
+    {{ recaptcha_init(LANGUAGE_CODE) }}
+{% endblock %}
+
+{% block body %}
+    <div id="center-float">
+        <form id="edit-form" action="" method="post" class="form-area">
+            {% csrf_token %}
+
+            <div class="block-header">{{ _('Username') }}</div>
+            <span class="fullwidth{% if form.username.errors %}-error{% endif %}">{{ form.username }}</span>
+            {% if form.username.errors %}
+                <div class="form-field-error">{{ form.username.errors }}</div>
+            {% endif %}
+
+            <div class="block-header">{{ _('Email') }}</div>
+            <span class="fullwidth{% if form.email.errors %}-error{% endif %}">{{ form.email }}</span>
+            {% if form.email.errors %}
+                <div class="form-field-error">{{ form.email.errors }}</div>
+            {% endif %}
+
+            <div class="block-header">{{ _('Password') }}
+                <small>(<a href="#" class="pass-req-link">?</a>)</small>
+            </div>
+            <div style="display: none" class="pass-req">
+                <ul>
+                    {% for validator in password_validators %}
+                        <li>{{ validator.get_help_text() }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <span class="fullwidth{% if form.password1.errors %}-error{% endif %}">{{ form.password1 }}</span>
+            {% if form.password1.errors %}
+                <div class="form-field-error">{{ form.password1.errors }}</div>
+            {% endif %}
+            <div class="block-header">{{ _('Password') }}<sup style="font-size: 0.7em;padding-left: 0.2em;">2</sup>
+                <small>{{ _('(again, for confirmation)') }}</small>
+            </div>
+            <span class="fullwidth{% if form.password2.errors %}-error{% endif %}">{{ form.password2 }}</span>
+            {% if form.password2.errors %}
+                <div class="form-field-error">{{ form.password2.errors }}</div>
+            {% endif %}
+
+            <div class="block-header">{{ _('Location') }}</div>
+            <div class="fullwidth">
+                <div>{{ form.timezone }}
+                    <div style="float: right">{
+                        { _('or') }}
+                        <a id="open-map" href="#" data-featherlight=".map-wrap">{{ _('pick from map') }}</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block-header">{{ _('Default language') }}</div>
+            <span class="fullwidth">{{ form.language }}</span>
+
+            <div class="block-header">{{ _('Affiliated organizations') }}</div>
+            {{ form.organizations }}
+
+            {% if form.newsletter %}
+                <div style="padding-top: 0.5em;">{{ form.newsletter }}
+                    <label for="id_newsletter" style="float: unset;"
+                           class="inline-header grayed">{{ _('Notify me about upcoming contests') }}</label>
+                </div>
+            {% endif %}
+
+            {% if form.captcha %}
+                <div style="margin-top: 0.5em">{{ form.captcha }}</div>
+                {% if form.captcha.errors %}
+                    <div class="form-field-error">{{ form.captcha.errors }}</div>
+                {% endif %}
+            {% endif %}
+
+            <hr>
+            {% if tos_url %}
+                <span class="tos-section">
+                    {{ _('By registering, you agree to our') }}
+                    <a href="{{ tos_url }}">{{ _('Terms & Conditions') }}</a>.
+                </span>
+            {% endif %}
+            <button style="float:right;" type="submit">{{ _('Register!') }}</button>
+        </form>
     </div>
-    <div style="display: none" class="pass-req">
-      <ul>{% for validator in __pyjade_iter(password_validators,1) %}
-        <li>{{validator.get_help_text|escape}}</li>{% endfor %}
-      </ul>
-    </div><span{{__pyjade_attrs(attrs=[('class', ((('fullwidth-error' if form['password1'].errors else 'fullwidth'))))])}}>{{form.password1|escape}}</span>{% if  form.password1.errors %}
-    <div class="form-field-error">{{form.password1.errors|escape}}</div>{% endif %}
-    <div class="block-header">{% trans "Password" %}<sup style="font-size: 0.7em;padding-left: 0.2em;">2</sup><small>{% trans "(again, for confirmation)" %}</small>
-    </div><span{{__pyjade_attrs(attrs=[('class', ((('fullwidth-error' if form['password2'].errors else 'fullwidth'))))])}}>{{form.password2|escape}}</span>{% if  form.password2.errors %}
-    <div class="form-field-error">{{form.password2.errors|escape}}</div>{% endif %}
-    <div class="block-header">{% trans "Location" %}</div><span class="fullwidth">
-      <div>{{form.timezone|escape}}
-        <div style="float: right">{% trans "or" %}
-{{' '|escape}}<a id="open-map" href="#" data-featherlight=".map-wrap">{% trans "pick from map" %}</a>
+
+    <div class="map-wrap">
+        <div class="map-inset">
+            <div class="map-axis-x"></div>
+            <div class="map-axis-y"></div>
         </div>
-      </div></span>
-    <div class="block-header">{% trans "Default language" %}</div><span class="fullwidth">{{form.language|escape}}</span>
-    <div class="block-header">{% trans "Affiliated organizations" %}</div>{{form.organizations|escape}}
-{% if  form.newsletter %}
-    <div style="padding-top: 0.5em;">{{form.newsletter|escape}}
-      <label for="id_newsletter" style="float: unset;" class="inline-header grayed">{% trans "Notify me about upcoming contests" %}</label>
-    </div>{% endif %}{% if  form.captcha %}
-    <div style="margin-top: 0.5em">{{form.captcha|escape}}</div>{% if  form.captcha.errors %}
-    <div class="form-field-error">{{form.captcha.errors|escape}}</div>{% endif %}{% endif %}
-    <hr/>{% if  tos_url %}<span class="tos-section">{% trans "By registering, you agree to our " %}<a{{__pyjade_attrs(attrs=[('href',(tos_url))])}}>{% trans "Terms & Conditions" %}</a>{{'.'|escape}}</span>{% endif %}
-    <button style="float:right;" type="submit">{% trans "Register!" %}</button>
-  </form>
-</div>
-<div class="map-wrap">
-  <div class="map-inset">
-    <div class="map-axis-x"></div>
-    <div class="map-axis-y"></div>
-  </div>
-</div>{% endblock %}
+    </div>
+{% endblock %}

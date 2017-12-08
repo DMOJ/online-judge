@@ -20,9 +20,15 @@ def make_func(name, template, url_func):
         context = {'request': request, 'link_text': mark_safe(link_text)}
         context = url_func(context, *args[:-1])
         return mark_safe(get_template(template).render(context))
+
     func.__name__ = name
     registry.function(name, func)
 
 
 for name, template, url_func in SHARES:
     make_func(name, template, url_func)
+
+
+@registry.function
+def recaptcha_init(language=None):
+    get_template('snowpenguin/recaptcha/recaptcha_init.html').render({'explicit': False, 'language': language})
