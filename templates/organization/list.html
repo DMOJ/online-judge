@@ -1,25 +1,37 @@
-{% extends "base.jade" %}{%  load cache %}{%  load staticfiles %}{%  load i18n %}{% block js_media %}
-<script src="{% static "libs/tablesorter.js" %}" type="text/javascript"></script>
-<script type="text/javascript">$(document).ready(function () {
-    $("#organization-table").tablesorter();
-});
-</script>{% endblock %}
-{% block title_ruler %}{% endblock %}{% block title_row %}{% set tab = 'organizations' %}{% set title = 'Organizations' %}{% include "user/user-list-tabs.jade" %}{% endblock %}{% block body %}<br/>
-<table id="organization-table" class="table">
-  <thead>
-    <tr>
-      <th>{% trans "ID" %}</th>
-      <th style="width:85%">{% trans "Name" %}</th>
-      <th>{% trans "Members" %}</th>
-    </tr>
-  </thead>
-  <tbody>{% for org in __pyjade_iter(organizations,1) %}
-    <tr>
-      <td>{{org.key|escape}}</td>
-      <td><a href="{% url "organization_home" org.key %}">{{org.name|escape}}</a>
-      </td>
-      <td>{%  cache 86400 org_member_count org.id %}<a href="{% url "organization_users" org.key %}">{{org.member_count|escape}}</a>{% endcache %}
-      </td>
-    </tr>{% endfor %}
-  </tbody>
-</table>{% endblock %}
+{% extends "base.html" %}
+{% block js_media %}
+    <script src="{{ static('libs/tablesorter.js') }}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#organization-table").tablesorter();
+        });
+    </script>
+{% endblock %}
+
+{% block title_ruler %}{% endblock %}
+
+{% block title_row %}
+    {% set tab = 'organizations' %}
+    {% set title = 'Organizations' %}{% include "user/user-list-tabs.html" %}
+{% endblock %}
+
+{% block body %}
+    <table id="organization-table" class="table">
+        <thead>
+        <tr>
+            <th>{{ _('ID') }}</th>
+            <th style="width:85%">{{ _('Name') }}</th>
+            <th>{{ _('Members') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for org in organizations %}
+            <tr>
+                <td>{{ org.key }}</td>
+                <td><a href="{{ url('organization_home', org.key) }}">{{ org.name }}</a></td>
+                <td><a href="{{ url('organization_users', org.key) }}">{{ org.member_count }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
