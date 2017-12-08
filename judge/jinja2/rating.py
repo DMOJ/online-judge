@@ -1,6 +1,6 @@
 from django.utils import six
 
-from judge.ratings import rating_class, rating_name
+from judge.ratings import rating_class, rating_name, rating_progress
 from . import registry
 
 
@@ -26,7 +26,7 @@ def get_name(obj):
 
 @registry.function(name='rating_progress')
 def get_progress(obj):
-    return _get_rating_value(rating_name, obj) or 0.0
+    return _get_rating_value(rating_progress, obj) or 0.0
 
 
 @registry.function
