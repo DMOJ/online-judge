@@ -1,8 +1,12 @@
-{% extends "base.jade" %}{% block title %}Newsletter {{newsletter.title|escape}} {{action|escape}} activate{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Newsletter {{ newsletter.title }} {{ action }} activate{% endblock %}
+
 {% block body %}
-<h1>Newsletter {{newsletter.title|escape}} {{action|escape}} activate</h1>
-<form enctype="multipart/form-data" method="post" action=".">{%  csrf_token %}{{form.as_p|escape}}
-  <p>
-    <input id="id_submit" name="submit" type="submit" value="Activate"/>
-  </p>
-</form>{% endblock %}
+    <h1>Newsletter {{ newsletter.title }} {{ action }} activate</h1>
+    <form enctype="multipart/form-data" method="post" action=".">
+        {% csrf_token %}
+        {{ form.as_p() }}
+        <p><input id="id_submit" name="submit" type="submit" value="Activate"></p>
+    </form>
+{% endblock %}

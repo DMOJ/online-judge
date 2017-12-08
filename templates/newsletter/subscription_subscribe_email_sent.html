@@ -1,4 +1,8 @@
-{% extends "base.jade" %}{% block title %}Newsletter subscribe{% endblock %}
+{% extends "base.html" %}
+{% block title %}Newsletter subscribe{% endblock %}
+
 {% block body %}
-<h1>Newsletter subscribe {{newsletter.title|escape}}</h1>
-<p>Your subscription request was successfully received and an activation email has been sent to you. In that email you will find a link which you need to follow in order to activate your subscription.</p>{% endblock %}
+    <h1>Newsletter subscribe {{ newsletter.title }}</h1>
+    <p>Your subscription request was successfully received and an activation email has been sent to you. In that email
+        you will find a link which you need to follow in order to activate your subscription.</p>
+{% endblock %}

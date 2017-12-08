@@ -1,29 +1,42 @@
-{% extends "base.jade" %}{% block title %}Newsletter list - {{SITE_LONG_NAME|escape}}{% endblock %}
+{% extends "base.html" %}
+{% block title %}Newsletter list - {{ SITE_LONG_NAME }}{% endblock %}
 {% block content_title %}Newsletter list{% endblock %}
-{% block body %}{% if  user.is_authenticated %}
-<form method="POST" action="" class="form-area">{%  csrf_token %}{{ formset.management_form }}
-  <table>
-    <tr>
-      <th>Newsletter</th>
-      <th>Subscribe</th>
-    </tr>{% for form in __pyjade_iter(formset.forms,1) %}
-    <tr>
-      <td>{{ form.id }}{{ form.newsletter }}<a href="{% url "newsletter_archive" form.instance.newsletter.slug %}">{{form.instance.newsletter.title|escape}}</a>
-      </td>
-      <td>{{form.subscribed|escape}}</td>
-    </tr>{% endfor %}
-  </table>
-  <hr/>
-  <p>
-    <input id="id_submit" name="submit" value="Update subscriptions" type="submit" style="float: right"/>
-  </p>
-</form>{% else %}
-<table class="form-area">
-  <tr>
-    <th>Newsletter</th>
-  </tr>{% for newsletter in __pyjade_iter(object_list,1) %}
-  <tr>
-    <td><a href="{% url "newsletter_detail" newsletter.slug %}">{{newsletter.title|escape}}</a>
-    </td>
-  </tr>{% endfor %}
-</table>{% endif %}{% endblock %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+        <form method="POST" action="" class="form-area">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table>
+                <tr>
+                    <th>Newsletter</th>
+                    <th>Subscribe</th>
+                </tr>
+                {% for form in formset.forms %}
+                    <tr>
+                        <td>{{ form.id }}{{ form.newsletter }}
+                            <a href="{{ url('newsletter_archive', form.instance.newsletter.slug) }}">
+                                {{ form.instance.newsletter.title }}</a>
+                        </td>
+                        <td>{{ form.subscribed }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <hr>
+            <p>
+                <input id="id_submit" name="submit" value="Update subscriptions" type="submit" style="float: right">
+            </p>
+        </form>
+    {% else %}
+        <table class="form-area">
+            <tr>
+                <th>Newsletter</th>
+            </tr>
+            {% for newsletter in object_list %}
+                <tr>
+                    <td><a href="{{ url('newsletter_detail', newsletter.slug) }}">{{ newsletter.title }}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

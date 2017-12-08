@@ -1,4 +1,7 @@
-{% extends "base.jade" %}{% block title %}Newsletter {{newsletter.title|escape}} {{action|escape}} activate{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Newsletter {{ newsletter.title }} {{ action }} activate{% endblock %}
 {% block body %}
-<h1>Newsletter {{newsletter.title|escape}} {{action|escape}} activate</h1>
-<p>Your subscription has successfully been activated.</p>{% endblock %}
+    <h1>Newsletter {{ newsletter.title }} {{ action }} activate</h1>
+    <p>Your subscription has successfully been activated.</p>
+{% endblock %}

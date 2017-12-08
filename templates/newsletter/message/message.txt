@@ -4,7 +4,7 @@
 
 ++++++++++++++++++++
 
-{% for article in message.articles.all %}
+{% for article in message.articles.all() %}
 {{ article.title|safe }}
 {{ article.text|striptags|safe }}
 
@@ -12,4 +12,4 @@
 
 ++++++++++++++++++++
 
-Unsubscribe: http://{{ site }}{% url "newsletter_unsubscribe_request" newsletter.slug %}
+Unsubscribe: http://{{ site }}{{ url('newsletter_unsubscribe_request', newsletter.slug) }}
