@@ -103,11 +103,11 @@
                 {{ submission.case_points|floatformat(0) }}/{{ submission.case_total|floatformat(0) }}
                 {% if IN_CONTEST and submission.contest_or_none %}
                     {% with contest=submission.contest_or_none %}
-                        ({{ _('%(points)s/%(total)s points', points=contest.points|floatformat(-3),
+                        ({{ _('%(points)s/%(total)s points', points=contest.points|roundfloat(3),
                               total=contest.problem.points|floatformat(-1)) }})
                     {% endwith %}
                 {% else %}
-                    ({{ _('%(points)s/%(total)s points', points=submission.points|floatformat(-3),
+                    ({{ _('%(points)s/%(total)s points', points=submission.points|roundfloat(3),
                           total=submission.problem.points|floatformat(-1)) }})
                 {% endif %}
                 {% if is_pretest and submission.result == "AC" %}

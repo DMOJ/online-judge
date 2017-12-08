@@ -24,7 +24,7 @@ def _format_size(bytes, callback):
         return callback('T', bytes / TB)
     else:
         return callback('P', bytes / PB)
-    
+
 
 @registry.filter
 def kbdetailformat(bytes):
