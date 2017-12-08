@@ -13,7 +13,7 @@
             </tr>
             {% for r in requests %}
                 <tr id="request-{{ r.id }}">
-                    <td>{{ form.id }}{{ link_user(r.user) }}</td>
+                    <td>{{ link_user(r.user) }}</td>
                     <td>
                         <a href="{{ url('request_organization_detail', object.key, r.id) }}">
                             {{- r.time|date(_("N j, Y, H:i")) -}}
