@@ -88,7 +88,7 @@
             <div class="submissions-left">
                 {% trans trimmed counter=submissions_left %}
                     {{ counter }} submission left
-                {% pluralize %}
+                    {% pluralize %}
                     {{ counter }} submissions left
                 {% endtrans %}
             </div>
@@ -175,11 +175,12 @@
         {% with authors=problem.authors.all() %}
             {% if authors %}
                 <div class="problem-info-entry">
-                    <i class="fa fa-pencil-square-o fa-fw"></i><span class="pi-name">{% trans trimmed count=authors|length %}
-                        Author:
+                    <i class="fa fa-pencil-square-o fa-fw"></i><span
+                        class="pi-name">{% trans trimmed count=authors|length %}
+                    Author:
                     {% pluralize count %}
-                        Authors:
-                    {% endtrans %}</span>
+                    Authors:
+                {% endtrans %}</span>
                     <div class="pi-value authors-value">{{ link_users(authors) }}</div>
                 </div>
             {% endif %}
@@ -191,10 +192,10 @@
             {% with types=problem.types_list %}
                 <div class="toggle closed unselectable">
                     <i class="fa fa-chevron-right fa-fw"></i>{% trans trimmed count=problem.types_list|length %}
-                        Problem type
+                    Problem type
                     {% pluralize count %}
-                        Problem types
-                    {% endtrans %}
+                    Problem types
+                {% endtrans %}
                 </div>
                 <div style="display:none" class="toggled">{{ problem.types_list|join(", ") }}</div>
             {% endwith %}
@@ -238,13 +239,15 @@
 {% endblock %}
 
 {% block post_description_end %}
-    <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
-        {% if contest_problem and contest_problem.contest.use_clarifications %}
-            {{ _('Request clarification') }}
-        {% else %}
-            {{ _('Report an issue') }}
-        {% endif %}
-    </a>
+    {% if request.user.is_authenticated and not request.user.profile.mute %}
+        <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
+            {%- if contest_problem and contest_problem.contest.use_clarifications -%}
+                {{ _('Request clarification') }}
+            {%- else -%}
+                {{ _('Report an issue') }}
+            {%- endif -%}
+        </a>
+    {% endif %}
 {% endblock %}
 
 {% block comments %}
