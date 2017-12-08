@@ -1,12 +1,9 @@
 import re
 
-from jinja2 import nodes
+from jinja2 import nodes, Markup
 from jinja2.ext import Extension
 
-from . import registry
 
-
-@registry.extension
 class SpacelessExtension(Extension):
     """
     Removes whitespace between HTML tags at compile time, including tab and newline characters.
@@ -29,4 +26,4 @@ class SpacelessExtension(Extension):
         ).set_lineno(lineno)
 
     def _strip_spaces(self, caller=None):
-        return re.sub(r'>\s+<', '><', caller().strip())
+        return Markup(re.sub(r'>\s+<', '><', caller().unescape().strip()))

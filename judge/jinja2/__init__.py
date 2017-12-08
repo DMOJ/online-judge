@@ -33,6 +33,3 @@ class DMOJExtension(Extension):
         env.globals.update(registry.globals)
         env.filters.update(registry.filters)
         env.tests.update(registry.tests)
-
-        for ext in registry.extensions:
-            env.add_extension(ext)

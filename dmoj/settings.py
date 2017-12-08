@@ -217,6 +217,7 @@ TEMPLATES = [
             'extensions': DEFAULT_EXTENSIONS + [
                 'compressor.contrib.jinja2ext.CompressorExtension',
                 'judge.jinja2.DMOJExtension',
+                'judge.jinja2.spaceless.SpacelessExtension',
             ],
         },
     },
