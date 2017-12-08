@@ -103,22 +103,22 @@
                             <a href="{{ url('blog_post', post.id, post.slug) }}">{{ post.title }}</a>
                         </h2>
                         <span class="time">
-                            {% if post.sticky %}<i title="Sticky" class="fa fa-star fa-fw"></i>{% endif %}
+                            {%- if post.sticky %}<i title="Sticky" class="fa fa-star fa-fw"></i>{% endif -%}
                             {% with authors=post.authors.all() %}
-                                {% if authors %}
+                                {%- if authors -%}
                                     <span class="post-authors">{{ link_users(authors) }}</span>
-                                {% endif %}
+                                {%- endif -%}
                             {% endwith %}
                             <span data-unix="{{ post.publish_on|utc|date("c") }}" class="post-time">
-                                {% trans time=post.publish_on|date(_("N j, Y, g:i")) %}
+                                {%- trans time=post.publish_on|date(_("N j, Y, g:i")) -%}
                                     posted on {{ time }}
-                                {% endtrans %}
+                                {%- endtrans -%}
                             </span>
-                        </span>
-                        <span class="comment-data">
+                        </span><span class="comment-data">
                             <a href="{{ url('blog_post', post.id, post.slug) }}#comments" class="comment-count-link">
-                                <i class="fa fa-comments comment-icon"></i>
-                                <span class="comment-count">{{ post_comment_counts[post.id] or 0 }}</span>
+                                <i class="fa fa-comments comment-icon"></i><span class="comment-count">
+                                    {{- post_comment_counts[post.id] or 0 -}}
+                                </span>
                             </a>
                         </span>
                         <div class="summary content-description">

@@ -27,9 +27,11 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="msapplication-TileColor" content="#FFBB33">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
-    <!-- Chrome 39 for Android colour-->
-    <meta name="theme-color" content="#FFBB33">{% if og_image %}
-    <meta property="og:image" content="{{ request.build_absolute_uri(og_image) }}">{% endif %}
+    {# Chrome 39 for Android colour #}
+    <meta name="theme-color" content="#FFBB33">
+    {% if og_image %}
+        <meta property="og:image" content="{{ request.build_absolute_uri(og_image) }}">
+    {% endif %}
     {% block og_title %}{% endblock %}
     <meta property="og:site_name" content="{{ SITE_LONG_NAME }}">
     <meta property="og:url"
@@ -143,9 +145,9 @@
     {% if request.user.is_authenticated %}
         <script>
             window.user = {
-                email: '{{ request.user.emailjs }}',
+                email: '{{ request.user.email|escapejs }}',
                 id: '{{ request.user.idjs }}',
-                name: '{{ request.user.usernamejs }}'
+                name: '{{ request.user.username|escapejs }}'
             };
         </script>
     {% else %}
