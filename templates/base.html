@@ -202,11 +202,11 @@
                     <li>
                         <a href="{{ url('user_page') }}">
                             <span>
-                                <img src="{{ gravatar(request.user, 32) }}" height="24" width="24">
+                                <img src="{{ gravatar(request.user, 32) }}" height="24" width="24">{# -#}
                                 <span>
-                                    {% trans username=request.user.username %}
+                                    {%- trans username=request.user.username -%}
                                         Hello, <b>{{ username }}</b>.
-                                    {% endtrans %}
+                                    {%- endtrans %}
                                 </span>
                             </span>
                         </a>
