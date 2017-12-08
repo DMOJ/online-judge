@@ -1,18 +1,30 @@
-{% extends "base.jade" %}{%  load i18n %}{% block body %}{% include "organization/requests/tabs.jade" %}{% if  requests %}
-<table>
-  <tr>
-    <th>{% trans "User" %}</th>
-    <th>{% trans "Time" %}</th>
-    <th>{% trans "State" %}</th>
-    <th>{% trans "Reason" %}</th>
-  </tr>{% for r in __pyjade_iter(requests,1) %}
-  <tr id="request-{{ r.id }}">{%  with user=r.user %}
-    <td{{__pyjade_attrs(attrs=[('class', ((user.display_rank)))])}}>{{form.id|escape}}<a href="{% url "user_page" user.user.username %}" target="_blank">{{user.long_display_name|escape}}</a>
-    </td>{% endwith %}
-    <td><a href="{% url "request_organization_detail" object.key r.id %}">{{r.time|date:_("N j, Y, H:i")|escape}}</a>
-    </td>
-    <td>{{r.state|escape}}</td>
-    <td>{{r.reason|truncatechars:50|escape}}</td>
-  </tr>{% endfor %}
-</table>{% else %}
-<p>{% trans "There are no requests to approve." %}</p>{% endif %}{% endblock %}
+{% extends "base.html" %}
+
+{% block body %}
+    {% include "organization/requests/tabs.html" %}
+
+    {% if requests %}
+        <table>
+            <tr>
+                <th>{{ _('User') }}</th>
+                <th>{{ _('Time') }}</th>
+                <th>{{ _('State') }}</th>
+                <th>{{ _('Reason') }}</th>
+            </tr>
+            {% for r in requests %}
+                <tr id="request-{{ r.id }}">
+                    <td>{{ form.id }}{{ link_user(r.user) }}</td>
+                    <td>
+                        <a href="{{ url('request_organization_detail', object.key, r.id) }}">
+                            {{- r.time|date(_("N j, Y, H:i")) -}}
+                        </a>
+                    </td>
+                    <td>{{ r.state }}</td>
+                    <td>{{ r.reason|truncatechars(50) }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>{{ _('There are no requests to approve.') }}</p>
+    {% endif %}
+{% endblock %}

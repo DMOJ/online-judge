@@ -1,26 +1,46 @@
-{% extends "base.jade" %}{%  load i18n %}{% block body %}{% if  messages %}
-<ul class="messages">{% for message in __pyjade_iter(messages,1) %}
-  <li{{__pyjade_attrs(attrs=[('class', ((message.tags)))])}}>{{message|escape}}</li>{% endfor %}
-</ul>{% endif %}{% include "organization/requests/tabs.jade" %}{% if  formset.forms %}
-<form action="" method="post">{%  csrf_token %}{{formset.management_form|escape}}
-  <table>
-    <tr>
-      <th>{% trans "User" %}</th>
-      <th>{% trans "Time" %}</th>
-      <th>{% trans "State" %}</th>
-      <th>{% trans "Reason" %}</th>{% if  formset.can_delete %}
-      <th>{% trans "Delete?" %}</th>{% endif %}
-    </tr>{% for form in __pyjade_iter(formset,1) %}
-    <tr id="request-{{ form.instance.id }}">{%  with user=form.instance.user %}
-      <td{{__pyjade_attrs(attrs=[('class', ((user.display_rank)))])}}>{{form.id|escape}}<a href="{% url "user_page" user.user.username %}" target="_blank">{{user.long_display_name|escape}}</a>
-      </td>{% endwith %}
-      <td><a href="{% url "request_organization_detail" object.key form.instance.id %}">{{form.instance.time|date:_("N j, Y, H:i")|escape}}</a>
-      </td>
-      <td>{{form.state|escape}}</td>
-      <td>{{form.instance.reason|truncatechars:50|escape}}</td>{% if  formset.can_delete %}
-      <td>{{form.DELETE|escape}}</td>{% endif %}
-    </tr>{% endfor %}
-  </table>
-  <button type="submit">{% trans "Update" %}</button>
-</form>{% else %}
-<p>{% trans "There are no requests to approve." %}</p>{% endif %}{% endblock %}
+{% extends "base.html" %}
+{% block body %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% include "organization/requests/tabs.html" %}
+
+    {% if formset.forms %}
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table>
+                <tr>
+                    <th>{{ _('User') }}</th>
+                    <th>{{ _('Time') }}</th>
+                    <th>{{ _('State') }}</th>
+                    <th>{{ _('Reason') }}</th>
+                    {% if formset.can_delete %}
+                        <th>{{ _('Delete?') }}</th>
+                    {% endif %}
+                </tr>
+                {% for form in formset %}
+                    <tr id="request-{{ form.instance.id }}">
+                        <td>{{ form.id }}{{ link_user(form.instance.user) }}</td>
+                        <td><a href="{{ url('request_organization_detail', object.key, form.instance.id) }}">
+                            {{ form.instance.time|date(_("N j, Y, H:i")) }}
+                        </a></td>
+                        <td>{{ form.state }}</td>
+                        <td>{{ form.instance.reason|truncatechars(50) }}</td>
+                        {% if formset.can_delete %}
+                            <td>{{ form.DELETE }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <button type="submit">{{ _('Update') }}</button>
+        </form>
+    {% else %}
+        <p>{{ _('There are no requests to approve.') }}</p>
+    {% endif %}
+{% endblock %}
