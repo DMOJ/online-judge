@@ -1,1 +1,9 @@
-{% extends "base.jade" %}{% block content_title %}{% include "contest/tag-title.jade" %}{% endblock %}{% block body %}{% include "contest/tag-ajax.jade" %}{% endblock %}
+{% extends "base.html" %}
+
+{% block content_title %}
+    {% include "contest/tag-title.html" %}
+{% endblock %}
+
+{% block body %}
+    {% include "contest/tag-ajax.html" %}
+{% endblock %}

@@ -1,5 +1,11 @@
-{%  load i18n %}
-<h2 style="display:inline"><span style="background-color: {{ tag.color }}; color: {{ tag.text_color }}" class="contest-tag">{{tag.name|escape}}</span>
-</h2>{% if  perms.judge.change_contesttag %}
-<div class="title-line-action">[<a href="{% url "admin:judge_contesttag_change" tag.id %}">{% trans "Edit" %}</a>]
-</div>{% endif %}
+<h2 style="display:inline">
+    <span style="background-color: {{ tag.color }}; color: {{ tag.text_color }}" class="contest-tag">
+        {{- tag.name -}}
+    </span>
+</h2>
+
+{% if perms.judge.change_contesttag %}
+    <div class="title-line-action">
+        [<a href="{% url "admin:judge_contesttag_change" tag.id %}">{{ _('Edit') }}</a>]
+    </div>
+{% endif %}

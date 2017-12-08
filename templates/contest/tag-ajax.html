@@ -1,2 +1,7 @@
-{%  load markdown %}{% if  not title %}{% include "contest/tag-title.jade" %}<br/><br/>
-<hr/>{% endif %}{{tag.description|markdown:"contest_tag"|escape}}
+{% if not title %}
+    {% include "contest/tag-title.html" %}
+    <br><br>
+    <hr>
+{% endif %}
+
+{{ tag.description|markdown('contest_tag') }}

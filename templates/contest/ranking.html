@@ -1,238 +1,245 @@
-{% extends "user/base-users.jade" %}{%  load staticfiles %}{%  load i18n %}{% block title_ruler %}{% endblock %}{% block title_row %}{% set title = contest.name %}{% include "contest/contest-tabs.jade" %}{% endblock %}{% block users_media %}
-<style>#content-left {
-    overflow-x: scroll;
-}
+{% extends "user/base-users.html" %}
 
-#users-table .username {
-    min-width: 29em;
-}
+{% block title_ruler %}{% endblock %}
 
-#users-table td {
-    height: 2.5em;
-}
+{% block title_row %}
+    {% set title = contest.name %}
+    {% include "contest/contest-tabs.html" %}
+{% endblock %}
 
-#users-table a {
-    display: block;
-}
-
-.userinfo a {
-    display: inline !important;
-}
-
-#users-table th a, #users-table th a:link, #users-table th a:visited {
-    color: white;
-}
-
-#users-table th a:hover {
-    color: #0F0;
-}
-
-#users-table td a:hover {
-    text-decoration: underline;
-}
-
-.rank {
-    min-width: 2.5em
-}
-
-.points {
-    min-width: 4em;
-}
-
-.full-score, .full-score a {
-    font-weight: bold;
-    color: green;
-}
-
-.partial-score, .partial-score a {
-    color: green;
-}
-
-.failed-score, .failed-score a {
-    font-weight: bold;
-    color: red;
-}
-
-.pretest-full-score, .pretest-full-score a {
-    font-weight: bold;
-    color: #2980b9;
-}
-
-.pretest-partial-score, .pretest-partial-score a {
-    color: #2980b9;
-}
-
-.pretest-failed-score, .pretest-failed-score a {
-    font-weight: bold;
-    color: red;
-}
-
-.user-points {
-    font-weight: bold;
-    color: black;
-}
-
-.solving-time {
-    color: gray;
-    font-weight: normal;
-    font-size: 0.75em;
-    padding-bottom: -0.75em;
-}
-
-.point-denominator {
-    border-top: 1px solid gray;
-    font-size: 0.7em;
-}
-
-.start-time {
-    display: none;
-}
-
-.user-name {
-    position: relative;
-}
-
-.organization-column {
-    display: none;
-    text-align: left !important;
-    border-right: none !important;
-}
-
-.organization-column a {
-    color: gray !important;
-    font-weight: 600;
-}
-</style>
-{% if  has_rating %}
-<style>#users-table .rate-box {
-    font-size: 0.85em;
-    float: left;
-}
-
-#users-table td:nth-child(1) .rating {
-    margin-left: 1.25em;
-    display: block;
-}
-
-#users-table td:nth-child(2) a {
-    display: block;
-}
-</style>{% endif %}
-<style>.select2-selection__arrow {
-    display: none;
-}
-
-.select2-selection__rendered {
-    cursor: text;
-    overflow: initial !important
-}
-
-.select2-results__option--highlighted {
-    background-color: #DEDEDE !important;
-}
-
-.select2-results__option {
-    white-space: nowrap;
-}
-
-#search-contest, #search-contest + .select2 {
-    margin-top: 0.5em;
-}
-
-#search-contest {
-    width: 200px;
-    height: 2.3em;
-}
-</style>{% endblock %}
-{% block users_js_media %}{% if  last_msg %}
-<script type="text/javascript" src="{% static "event.js" %}"></script>{% endif %}{% if  perms.judge.change_contestparticipation %}
-<script type="text/javascript">$(function () {
-    $('td.user').find('a.user-name').click(function (e) {
-        var data = $(this).siblings('.edit-participation');
-        if (e.altKey && data.length) {
-            window.open(data.attr('data-link'), '_blank');
-            return false;
+{% block users_media %}
+    <style>
+        #content-left {
+            overflow-x: scroll;
         }
-    });
-});
-</script>{% endif %}
-{% if  not contest.ended %}
-<script type="text/javascript">$(function () {
-    window.install_tooltips = function () {
-        register_update_relative(function () {
-            return $('.start-time.active');
-        }, function (when) {
-            return true;
-        });
 
-        $('td.user').find('a.user-name').each(function () {
-            var link = $(this);
-            link.mouseenter(function (e) {
-                var start_time = link.siblings('.start-time').text();
-                link.addClass('tooltipped tooltipped-e').attr('aria-label', start_time);
-            }).mouseleave(function (e) {
-                link.removeClass('tooltipped tooltipped-e').removeAttr('aria-label');
+        #users-table .username {
+            min-width: 29em;
+        }
+
+        #users-table td {
+            height: 2.5em;
+        }
+
+        #users-table a {
+            display: block;
+        }
+
+        .userinfo a {
+            display: inline !important;
+        }
+
+        #users-table th a, #users-table th a:link, #users-table th a:visited {
+            color: white;
+        }
+
+        #users-table th a:hover {
+            color: #0F0;
+        }
+
+        #users-table td a:hover {
+            text-decoration: underline;
+        }
+
+        .rank {
+            min-width: 2.5em
+        }
+
+        .points {
+            min-width: 4em;
+        }
+
+        .full-score, .full-score a {
+            font-weight: bold;
+            color: green;
+        }
+
+        .partial-score, .partial-score a {
+            color: green;
+        }
+
+        .failed-score, .failed-score a {
+            font-weight: bold;
+            color: red;
+        }
+
+        .pretest-full-score, .pretest-full-score a {
+            font-weight: bold;
+            color: #2980b9;
+        }
+
+        .pretest-partial-score, .pretest-partial-score a {
+            color: #2980b9;
+        }
+
+        .pretest-failed-score, .pretest-failed-score a {
+            font-weight: bold;
+            color: red;
+        }
+
+        .user-points {
+            font-weight: bold;
+            color: black;
+        }
+
+        .solving-time {
+            color: gray;
+            font-weight: normal;
+            font-size: 0.75em;
+            padding-bottom: -0.75em;
+        }
+
+        .point-denominator {
+            border-top: 1px solid gray;
+            font-size: 0.7em;
+        }
+
+        .start-time {
+            display: none;
+        }
+
+        .user-name {
+            position: relative;
+        }
+
+        .organization-column {
+            display: none;
+            text-align: left !important;
+            border-right: none !important;
+        }
+
+        .organization-column a {
+            color: gray !important;
+            font-weight: 600;
+        }
+    </style>
+
+    {% if has_rating %}
+        <style>#users-table .rate-box {
+            font-size: 0.85em;
+            float: left;
+        }
+
+        #users-table td:nth-child(1) .rating {
+            margin-left: 1.25em;
+            display: block;
+        }
+
+        #users-table td:nth-child(2) a {
+            display: block;
+        }
+        </style>
+    {% endif %}
+
+    <style>
+        .select2-selection__arrow {
+            display: none;
+        }
+
+        .select2-selection__rendered {
+            cursor: text;
+            overflow: initial !important
+        }
+
+        .select2-results__option--highlighted {
+            background-color: #DEDEDE !important;
+        }
+
+        .select2-results__option {
+            white-space: nowrap;
+        }
+
+        #search-contest, #search-contest + .select2 {
+            margin-top: 0.5em;
+        }
+
+        #search-contest {
+            width: 200px;
+            height: 2.3em;
+        }
+    </style>
+{% endblock %}
+
+{% block users_js_media %}
+    {% if perms.judge.change_contestparticipation %}
+        <script type="text/javascript">
+            $(function () {
+                $('td.user').find('a.user-name').click(function (e) {
+                    var data = $(this).siblings('.edit-participation');
+                    if (e.altKey && data.length) {
+                        window.open(data.attr('data-link'), '_blank');
+                        return false;
+                    }
+                });
+            });
+        </script>
+    {% endif %}
+    {% if not contest.ended %}
+        <script type="text/javascript">
+            $(function () {
+                window.install_tooltips = function () {
+                    register_update_relative(function () {
+                        return $('.start-time.active');
+                    }, function (when) {
+                        return true;
+                    });
+
+                    $('td.user').find('a.user-name').each(function () {
+                        var link = $(this);
+                        link.mouseenter(function (e) {
+                            var start_time = link.siblings('.start-time').text();
+                            link.addClass('tooltipped tooltipped-e').attr('aria-label', start_time);
+                        }).mouseleave(function (e) {
+                            link.removeClass('tooltipped tooltipped-e').removeAttr('aria-label');
+                        });
+                    });
+                };
+
+                install_tooltips();
+            });
+        </script>
+    {% endif %}
+    <script type="text/javascript">
+        $(function () {
+            var url = '{{ url('contest_participation', contest.key, '__username__') }}';
+            var placeholder = $('#search-contest').replaceWith($('<select/>').attr({
+                id: 'search-contest'
+            })).attr('placeholder');
+
+            $('#search-contest').select2({
+                placeholder: placeholder,
+                ajax: {
+                    url: '{{ url('contest_user_search_select2_ajax', contest.key) }}'
+                },
+                minimumInputLength: 1,
+                escapeMarkup: function (markup) {
+                    return markup;
+                },
+                templateResult: function (data, container) {
+                    return ('<img class="user-search-image" src="' + data.gravatar_url + '" width="24" height="24">' +
+                        '<span class="' + data.display_rank + ' user-search-name">' + data.text + '</span>');
+                }
+            }).on('change', function () {
+                window.location.href = url.replace('__username__', $(this).val());
+            });
+
+            $('#show-organizations-checkbox').click(function () {
+                $('.organization-column').toggle();
             });
         });
-    };
+    </script>
+    {% include "contest/media-js.html" %}
+{% endblock %}
 
-    install_tooltips();
-});
-</script>{% endif %}
-{% if  not contest.ended and last_msg %}
-<script type="text/javascript">$(function () {
-    /*var receiver = new EventReceiver(
-            "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
-            ['contest_{{contest.id|escape}}'], {{last_msg|escape}}, function (message) {
-                var table = $('#users-table');
-                switch (message.type) {
-                    case 'update':
-                        $.ajax({
-                            url: '{% url "contest_ranking_ajax" contest.key %}'
-                        }).done(function (data) {
-                            table.html(data);
-                            install_tooltips();
-                        }).fail(function () {
-                            console.log('Failed to update table!');
-                        });
-                }
-            }
-    );*/
-});
-</script>{% endif %}
-<script type="text/javascript">$(function () {
-    var url = '{% url "contest_participation" contest.key "__username__" %}';
-    var placeholder = $('#search-contest').replaceWith($('<select/>').attr({
-        id: 'search-contest'
-    })).attr('placeholder');
-
-    $('#search-contest').select2({
-        placeholder: placeholder,
-        ajax: {
-            url: '{% url "contest_user_search_select2_ajax" contest.key %}'
-        },
-        minimumInputLength: 1,
-        escapeMarkup: function (markup) {
-            return markup;
-        },
-        templateResult: function (data, container) {
-            return ('<img class="user-search-image" src="' + data.gravatar_url + '" width="24" height="24">' +
-            '<span class="' + data.display_rank + ' user-search-name">' + data.text + '</span>');
-        }
-    }).on('change', function () {
-        window.location.href = url.replace('__username__', $(this).val());
-    });
-});
-</script>
-<script type="text/javascript">$(function () {
-   $('#show-organizations-checkbox').click(function () {
-      $('.organization-column').toggle();
-   });
-});
-</script>
-{% include "contest/media-js.jade" %}{% endblock %}{% block users_table %}
-<div style="margin-bottom: 0.5em">{% if  tab == 'participation' %}{% if  contest.start_time <= now or perms.judge.see_private_contest %}
-  <input id="search-contest" type="text" placeholder="{% trans "View user participation" %}"/>{% endif %}{% endif %}
-  <input id="show-organizations-checkbox" type="checkbox" style="vertical-align: bottom"/>
-  <label for="show-organizations-checkbox" style="vertical-align: bottom">{% trans "Show organizations" %}</label>
-</div>{% include "contest/ranking-table.jade" %}{% endblock %}
+{% block users_table %}
+    <div style="margin-bottom: 0.5em">
+        {% if tab == 'participation' %}
+            {% if contest.start_time <= now or perms.judge.see_private_contest %}
+                <input id="search-contest" type="text" placeholder="{{ _('View user participation') }}"/>
+            {% endif %}
+        {% endif %}
+        <input id="show-organizations-checkbox" type="checkbox" style="vertical-align: bottom"/>
+        <label for="show-organizations-checkbox" style="vertical-align: bottom">{{ _('Show organizations') }}</label>
+    </div>
+    {% include "contest/ranking-table.html" %}
+{% endblock %}
