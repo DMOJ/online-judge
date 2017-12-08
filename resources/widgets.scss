@@ -175,12 +175,12 @@ input {
             color: gray;
         }
 
-        a {
+        a, span {
             border-top-width: 3px !important;
         }
 
         &.active {
-            a {
+            a, span {
                 border-top-color: $highlight_blue !important;
             }
 

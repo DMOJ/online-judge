@@ -9,7 +9,7 @@
         {{ make_tab('best_submissions_list', 'fa-bar-chart', best_submissions_link, _('Best')) }}
     {% endif %}
     {% if tab == 'user_submissions_tab' %}
-        {{ make_tab('user_submissions_tab', 'fa-bar-user', None, _("%(user)s's", user=username)) }}
+        {{ make_tab('user_submissions_tab', 'fa-bar-user', None, _("%(user)s's", user=tab_username)) }}
     {% endif %}
     {% if perms.judge.change_submission %}
         {{ make_tab('admin', 'fa-edit', url('admin:judge_submission_changelist'), _('Admin')) }}
