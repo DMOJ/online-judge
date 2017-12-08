@@ -110,7 +110,7 @@
                                 {%- endif -%}
                             {% endwith %}
                             <span data-unix="{{ post.publish_on|utc|date("c") }}" class="post-time">
-                                {%- trans time=post.publish_on|date(_("N j, Y, g:i")) -%}
+                                {%- trans time=post.publish_on|date(_("N j, Y, g:i a")) -%}
                                     posted on {{ time }}
                                 {%- endtrans -%}
                             </span>

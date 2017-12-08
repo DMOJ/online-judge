@@ -13,7 +13,7 @@
     </div>
     <div>
         <span data-unix="{{ breakdown.sub_date|utc|date("c") }}">
-            {% trans time=breakdown.sub_date|date(_("N j, Y, g:i")) %}
+            {% trans time=breakdown.sub_date|date(_("N j, Y, g:i a")) %}
                 on {{ time }}
             {% endtrans %}
         </span>

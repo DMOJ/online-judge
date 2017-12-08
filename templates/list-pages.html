@@ -1,9 +1,9 @@
 <ul class="pagination">
-    {% if page_obj.has_previous %}
-        {% if page_obj.previous_page_number == 1 and first_page_href != None %}
+    {% if page_obj.has_previous() %}
+        {% if page_obj.previous_page_number() == 1 and first_page_href != None %}
             <li><a href="{{ first_page_href }}">«</a></li>
         {% else %}
-            <li><a href="{{ page_prefix or '' }}{{ page_obj.previous_page_number }}{{ page_suffix or '' }}">«</a></li>
+            <li><a href="{{ page_prefix or '' }}{{ page_obj.previous_page_number() }}{{ page_suffix or '' }}">«</a></li>
         {% endif %}
     {% else %}
         <li class="disabled-page"><span>«</span></li>
@@ -24,8 +24,8 @@
         {% endif %}
     {% endfor %}
 
-    {% if page_obj.has_next %}
-        <li><a href="{{ page_prefix or '' }}{{ page_obj.next_page_number }}{{ page_suffix or '' }}">»</a></li>
+    {% if page_obj.has_next() %}
+        <li><a href="{{ page_prefix or '' }}{{ page_obj.next_page_number() }}{{ page_suffix or '' }}">»</a></li>
     {% else %}
         <li class="disabled-page"><span>»</span></li>
     {% endif %}

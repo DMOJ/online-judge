@@ -39,7 +39,7 @@
                                 {{ link_user(node.author) }}&nbsp;
                                 <div class="relative-time"></div>
                                 <span data-unix="{{ node.time|utc|date('c') }}" class="comment-time">
-                                    {% trans time=node.time|date(_("N j, Y, g:i")) %}
+                                    {% trans time=node.time|date(_("N j, Y")) %}
                                         commented on {{ time }}
                                     {% endtrans %}
                                 </span>

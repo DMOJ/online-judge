@@ -5,8 +5,8 @@
     {% if my_submissions_link or tab == 'my_submissions_tab' %}
         {{ make_tab('my_submissions_tab', 'fa-user', my_submissions_link, _('Mine')) }}
     {% endif %}
-    {% if best_submissions_list %}
-        {{ make_tab('my_submissions_tab', 'fa-bar-chart', best_submissions_link, _('Best')) }}
+    {% if best_submissions_link %}
+        {{ make_tab('best_submissions_list', 'fa-bar-chart', best_submissions_link, _('Best')) }}
     {% endif %}
     {% if tab == 'user_submissions_tab' %}
         {{ make_tab('user_submissions_tab', 'fa-bar-user', None, _("%(user)s's", user=username)) }}

@@ -24,7 +24,7 @@
                 {% endif %}
             {% endwith %}
             <span class="post-time">
-                {% trans time=post.publish_on|date(_("N j, Y, g:i")) %}
+                {% trans time=post.publish_on|date(_("N j, Y, g:i a")) %}
                     posted on {{ time }}
                 {% endtrans %}
             </span>

@@ -135,8 +135,8 @@
             </form>
         </div>
     {% endif %}
-
     <hr>
+    <br>
     <div class="problem-info-entry">
         <i class="fa fa-check fa-fw"></i><span class="pi-name">{{ _('Points:') }}</span>
         <span class="pi-value">
@@ -255,7 +255,7 @@
                 {% for clarification in clarifications %}
                     <div class="problem-clarification">
                         <div data-unix="{{ clarification.date|utc|date('c') }}" class="time">
-                            {% trans time=clarification.date|date(_("N j, Y, g:i")) %}
+                            {% trans time=clarification.date|date(_("N j, Y, g:i a")) %}
                                 on {{ time }}
                             {% endtrans %}
                         </div>
