@@ -3,7 +3,10 @@ import re
 from jinja2 import nodes
 from jinja2.ext import Extension
 
+from . import registry
 
+
+@registry.extension
 class SpacelessExtension(Extension):
     """
     Removes whitespace between HTML tags at compile time, including tab and newline characters.
@@ -11,6 +14,8 @@ class SpacelessExtension(Extension):
     and their text content.
     Adapted from coffin:
         https://github.com/coffin/coffin/blob/master/coffin/template/defaulttags.py
+    Adapted from StackOverflow:
+        https://stackoverflow.com/a/23741298/1090657
     """
 
     tags = {'spaceless'}
