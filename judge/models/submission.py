@@ -115,6 +115,7 @@ class Submission(models.Model):
 
     abort.alters_data = True
 
+    @property
     def is_graded(self):
         return self.status not in ('QU', 'P', 'G')
 
