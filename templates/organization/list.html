@@ -12,7 +12,8 @@
 
 {% block title_row %}
     {% set tab = 'organizations' %}
-    {% set title = 'Organizations' %}{% include "user/user-list-tabs.html" %}
+    {% set title = _('Organizations') %}
+    {% include "user/user-list-tabs.html" %}
 {% endblock %}
 
 {% block body %}

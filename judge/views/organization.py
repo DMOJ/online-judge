@@ -62,7 +62,7 @@ class OrganizationList(TitleMixin, ListView):
     title = ugettext_lazy('Organizations')
 
     def get_queryset(self):
-        return super(OrganizationList, self).get_queryset().annotate(member_count=Count('members'))
+        return super(OrganizationList, self).get_queryset().annotate(member_count=Count('member'))
 
 
 class OrganizationHome(OrganizationMixin, DetailView):
