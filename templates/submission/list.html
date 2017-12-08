@@ -92,7 +92,7 @@
                         if (id < first)
                             return;
                         first = id;
-                        row = $('<tr/>', {id: id}).hide().prependTo(table);
+                        row = $('<tr>', {id: id}).hide().prependTo(table);
                         if (table.find('tr').length >= {{ paginator.per_page }})
                             table.find('tr:last-child').hide('slow', function () {
                                 $(this).remove();
@@ -265,11 +265,11 @@
 
             <table id="submissions-table" class="table">
                 <colgroup>
-                    <col class="sub-result"/>
-                    <col class="sub-info"/>
-                    <col class="sub-testcase"/>
-                    <col class="sub-prop"/>
-                    <col class="sub-usage"/>
+                    <col class="sub-result">
+                    <col class="sub-info">
+                    <col class="sub-testcase">
+                    <col class="sub-prop">
+                    <col class="sub-usage">
                 </colgroup>
                 {% set profile_id = request.user.profile.id if request.user.is_authenticated else 0 %}
                 {% for submission in submissions %}

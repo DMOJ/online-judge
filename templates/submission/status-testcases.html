@@ -90,10 +90,10 @@
         {% endfor %}
         </table>
         {% if batch.grouper %}</div>{% endif %}
-            <br/>
+            <br>
         {% endfor %}
         {% if submission.is_graded %}
-            <br/>
+            <br>
             {% if submission.result != "AB" %}
                 {% if is_pretest %}
                     <b>{{ _('Final pretest score:') }}</b>
@@ -111,13 +111,13 @@
                           total=submission.problem.points|floatformat(-1)) }})
                 {% endif %}
                 {% if is_pretest and submission.result == "AC" %}
-                    <br/>
+                    <br>
                     <i>{{ _('Passing pretests does not guarantee a full score on system tests.') }}</i>
                 {% endif %}
             {% else %}
                 <b>{{ _('Submission aborted!') }}</b>
             {% endif %}
-            <br/>
+            <br>
         {% endif %}
     {% endif %}
 {% else %}
