@@ -29,7 +29,7 @@
         {% for batch in batches %}
             {% if batch.id %}
                 <b>{{ _('Batch ') }}#{{ test_case_id() }}</b>
-                ({{ _('%(points)s/%(total)s', points=batch.points|floatformat(0), total=batch.total|floatformat(0)) }}
+                ({{ _('%(points)s/%(total)s points', points=batch.points|floatformat(0), total=batch.total|floatformat(0)) }})
                 <br>
                 <div class="batch-cases">
             {% endif %}
@@ -40,7 +40,7 @@
                         <i class="fa fa-chevron-right fa-fw"></i>
                     {% endif %}
                     {% if batch.id %}
-                        <b>{{ _('Case') }} #{{ loop.counter }}:</b>
+                        <b>{{ _('Case') }} #{{ loop.index }}:</b>
                     {% elif is_pretest %}
                         <b>{{ _('Pretest') }} #{{ test_case_id() }}:</b>
                     {% else %}
@@ -89,7 +89,7 @@
             {% endif %}
         {% endfor %}
         </table>
-        {% if batch.grouper %}</div>{% endif %}
+        {% if batch.id %}</div>{% endif %}
             <br>
         {% endfor %}
         {% if submission.is_graded %}

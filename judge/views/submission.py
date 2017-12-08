@@ -96,7 +96,9 @@ def group_test_cases(cases):
     for case in cases:
         if case.batch != last and buf:
             result.append(make_batch(last, buf))
+            buf = []
         buf.append(case)
+        last = case.batch
     if buf:
         result.append(make_batch(last, buf))
     return result
