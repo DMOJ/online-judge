@@ -1,27 +1,38 @@
-{% extends "base.jade" %}{%  load i18n %}{% block media %}{{form.media.css|escape}}
-<style>form#ticket-form {
-    display: block;
-    margin: 0 auto;
-    width: 100%;
-    max-width: 750px;
-    padding-top: 1em;
-}
+{% extends "base.html" %}
 
-#id_title {
-    width: 100%;
-}
+{% block media %}
+    {{ form.media.css }}
+    <style>
+        form#ticket-form {
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 750px;
+            padding-top: 1em;
+        }
 
-form#ticket-form .submit {
-    margin: 10px 0 0 auto;
-}
-</style>{% endblock %}
-{% block js_media %}{{form.media.js|escape}}{% endblock %}
-{% block body %}<br/>
-<form id="ticket-form" action="" method="POST" class="form-area">{% block guideline_message %}{% endblock %}{%  csrf_token %}
-  <div{{__pyjade_attrs(attrs=[('class', (("title-block") , (('error' if form['title'].errors else ''))))])}}>{{form.title|escape}}</div>
-  <div class="form-errors">{{ form.title.errors }}
-{{ form.body.errors }}
-  </div>
-  <div class="body-block">{{form.body|escape}}</div>
-  <button type="submit" class="submit">{% trans "Create" %}</button>
-</form>{% endblock %}
+        #id_title {
+            width: 100%;
+        }
+
+        form#ticket-form .submit {
+            margin: 10px 0 0 auto;
+        }
+    </style>
+{% endblock %}
+
+{% block js_media %}{{ form.media.js }}{% endblock %}
+
+{% block body %}
+    <form id="ticket-form" action="" method="POST" class="form-area">
+        {% block guideline_message %}{% endblock %}
+        {% csrf_token %}
+        <div class="title-block{% if form.title.errors %} error{% endif %}">{{ form.title }}</div>
+        <div class="form-errors">
+            {{ form.title.errors }}
+            {{ form.body.errors }}
+        </div>
+        <div class="body-block">{{ form.body }}</div>
+        <button type="submit" class="submit">{{ _('Create') }}</button>
+    </form>
+{% endblock %}
