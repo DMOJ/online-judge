@@ -401,9 +401,14 @@ class CachedContestCalendar(ContestCalendar):
         return response
 
 
-ContestRankingProfile = namedtuple('ContestRankingProfile', 'id user display_rank long_display_name points '
-                                                            'cumtime problems rating organization participation '
-                                                            'participation_rating')
+class ContestRankingProfile(namedtuple(
+    'ContestRankingProfile', 'id user display_rank long_display_name points cumtime problems rating organization '
+                             'participation participation_rating')):
+    @cached_property
+    def css_class(self):
+        return Profile.get_user_css_class(self.display_rank, self.rating)
+
+
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state is_pretested')
 
 
@@ -596,6 +601,7 @@ def base_participation_list(request, contest, profile):
         'contest': contest,
         'last_msg': event.last(),
         'has_rating': False,
+        'now': timezone.now(),
         'rank_header': _('Participation'),
         'tab': 'participation',
     })
