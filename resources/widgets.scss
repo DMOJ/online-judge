@@ -205,7 +205,7 @@ input {
             position: relative;
             display: block;
 
-            &.active > a {
+            &.active > a, &.active > span {
                 @extend .ul_tab_a_active;
 
                 &:hover {
@@ -217,7 +217,7 @@ input {
                 }
             }
 
-            > a {
+            > a, > span {
                 margin-right: 2px;
                 line-height: 1.42857;
                 border: 1px solid transparent;
