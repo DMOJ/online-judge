@@ -1,91 +1,104 @@
-{% extends "stats/base.jade" %}{%  load i18n %}{% block media %}
-<style>.chart {
-    margin: 10px 0;
-}
+{% extends "stats/base.html" %}
+{% block media %}
+    <style>
+        .chart {
+            margin: 10px 0;
+        }
 
-ul.legend {
-    list-style-type: none;
-    padding: 0;
-}
+        ul.legend {
+            list-style-type: none;
+            padding: 0;
+        }
 
-.legend .square {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    margin-right: .3em;
-}
+        .legend .square {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            margin-right: .3em;
+        }
 
-@media (max-width: 450px) {
-    ul.legend {
-        -moz-columns: 5 7em;
-    }
-
-    .chart canvas {
-        display: block;
-        margin: 0 auto;
-    }
-}
-
-@media (min-width: 451px) {
-    .chart {
-        display: flex;
-    }
-
-    ul.legend {
-        margin-left: 20px;
-    }
-}
-</style>{% endblock %}
-{% block chart_body %}
-<h3>{% trans "Submission Statistics" %}</h3>
-<div id="status-counts" class="chart">
-  <canvas width="300" height="300"></canvas>
-  <ul class="legend"></ul>
-</div>
-<h3>{% trans "Submissions by Language" %}</h3>
-<div id="lang-all" class="chart">
-  <canvas width="300" height="300"></canvas>
-  <ul class="legend"></ul>
-</div>
-<h3>{% trans "AC Submissions by Language" %}</h3>
-<div id="lang-ac" class="chart">
-  <canvas width="300" height="300"></canvas>
-  <ul class="legend"></ul>
-</div>
-<h3>{% trans "Language AC Rate" %}</h3>
-<canvas id="ac-rate" width="350" height="700"></canvas>{% endblock %}{% block bodyend %}
-<script type="text/javascript">$(function () {
-    Chart.defaults.global.scaleFontFamily =
-    Chart.defaults.global.tooltipFontFamily =
-    Chart.defaults.global.tooltipTitleFontFamily =
-            $('body').css('font-family');
-
-    function draw_pie_chart(url, $chart) {
-        $.getJSON(url, function (data) {
-            var ctx = $chart.find('canvas').get(0).getContext('2d');
-            var chart = new Chart(ctx).Pie(data, {
-                animation: false,
-            });
-
-            var $legend = $chart.find('.legend');
-            for (var i = 0; i < data.length; ++i) {
-                $legend.append($('<li>')
-                        .append($('<span>').addClass('square').css('background-color', data[i].color))
-                        .append($('<span>').text(data[i].label))
-                );
+        @media (max-width: 450px) {
+            ul.legend {
+                -moz-columns: 5 7em;
             }
-        });
-    }
-    draw_pie_chart('{% url "language_stats_data_all" %}', $('#lang-all'));
-    draw_pie_chart('{% url "language_stats_data_ac" %}', $('#lang-ac'));
-    draw_pie_chart('{% url "stats_data_status" %}', $('#status-counts'));
 
-    $.getJSON('{% url "language_stats_data_ac_rate" %}', function (data) {
-        var ctx = $('canvas#ac-rate').get(0).getContext('2d');
-        ctx.canvas.height = 20 * data.labels.length;
-        new Chart(ctx).HorizontalBar(data, {
-            tooltipTemplate: '<%=label%>: <%= Math.round(value * 100) / 100 %>%'
+            .chart canvas {
+                display: block;
+                margin: 0 auto;
+            }
+        }
+
+        @media (min-width: 451px) {
+            .chart {
+                display: flex;
+            }
+
+            ul.legend {
+                margin-left: 20px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block chart_body %}
+    <h3>{{ _('Submission Statistics') }}</h3>
+    <div id="status-counts" class="chart">
+        <canvas width="300" height="300"></canvas>
+        <ul class="legend"></ul>
+    </div>
+
+    <h3>{{ _('Submissions by Language') }}</h3>
+    <div id="lang-all" class="chart">
+        <canvas width="300" height="300"></canvas>
+        <ul class="legend"></ul>
+    </div>
+
+    <h3>{{ _('AC Submissions by Language') }}</h3>
+    <div id="lang-ac" class="chart">
+        <canvas width="300" height="300"></canvas>
+        <ul class="legend"></ul>
+    </div>
+
+    <h3>{{ _('Language AC Rate') }}</h3>
+    <canvas id="ac-rate" width="350" height="700"></canvas>
+{% endblock %}
+
+{% block bodyend %}
+    <script type="text/javascript">
+        $(function () {
+            Chart.defaults.global.scaleFontFamily =
+                Chart.defaults.global.tooltipFontFamily =
+                    Chart.defaults.global.tooltipTitleFontFamily =
+                        $('body').css('font-family');
+
+            function draw_pie_chart(url, $chart) {
+                $.getJSON(url, function (data) {
+                    var ctx = $chart.find('canvas').get(0).getContext('2d');
+                    var chart = new Chart(ctx).Pie(data, {
+                        animation: false,
+                    });
+
+                    var $legend = $chart.find('.legend');
+                    for (var i = 0; i < data.length; ++i) {
+                        $legend.append($('<li>')
+                            .append($('<span>').addClass('square').css('background-color', data[i].color))
+                            .append($('<span>').text(data[i].label))
+                        );
+                    }
+                });
+            }
+
+            draw_pie_chart('{{ url('language_stats_data_all') }}', $('#lang-all'));
+            draw_pie_chart('{{ url('language_stats_data_ac') }}', $('#lang-ac'));
+            draw_pie_chart('{{ url('stats_data_status') }}', $('#status-counts'));
+
+            $.getJSON('{{ url('language_stats_data_ac_rate') }}', function (data) {
+                var ctx = $('canvas#ac-rate').get(0).getContext('2d');
+                ctx.canvas.height = 20 * data.labels.length;
+                new Chart(ctx).HorizontalBar(data, {
+                    tooltipTemplate: '<%=label%>: <%= Math.round(value * 100) / 100 %>%'
+                });
+            });
         });
-    });
-});
-</script>{% endblock %}
+    </script>
+{% endblock %}

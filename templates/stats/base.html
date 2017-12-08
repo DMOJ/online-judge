@@ -1,9 +1,20 @@
-{% extends "base.jade" %}{%  load i18n %}{%  load staticfiles %}{%  load compress %}{% block js_media %}{%  compress js %}
-<script type="text/javascript" src="{% static "libs/chart.js/Chart.Core.js" %}"></script>
-<script type="text/javascript" src="{% static "libs/chart.js/Chart.Doughnut.js" %}"></script>
-<script type="text/javascript" src="{% static "libs/chart.js/Chart.HorizontalBar.js" %}"></script>{% endcompress %}{% endblock %}{% block content_title %}{% trans "Statistics" %}{% endblock %}
+{% extends "base.html" %}
+
+{% block js_media %}
+    {% compress js %}
+        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.Core.js') }}"></script>
+        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.Doughnut.js') }}"></script>
+        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.HorizontalBar.js') }}"></script>
+    {% endcompress %}
+{% endblock %}
+
+{% block content_title %}{{ _('Statistics') }}{% endblock %}
+
 {% block body %}
-<div class="tabs">
-  <li{{__pyjade_attrs(attrs=[('class', ((('active' if tab == 'language' else ''))))])}}><a href="{% url "language_stats" %}">{% trans "Language" %}</a>
-  </li>
-</div>{% block chart_body %}{% endblock %}{% endblock %}
+    <div class="tabs">
+        <li{% if tab == 'language' %} class="active"{% endif %}>
+            <a href="{{ url('language_stats') }}">{{ _('Language') }}</a>
+        </li>
+    </div>
+    {% block chart_body %}{% endblock %}
+{% endblock %}
