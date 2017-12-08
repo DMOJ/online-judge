@@ -1,86 +1,56 @@
-{%  load markdown %}{%  load filesize %}{%  load i18n %}{%  load reference %}{%  load absolute_links %}<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-  <head>
+<head>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="pygment-github.css" type="text/css">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <style>html {
-    background: white;
-}
+    <style>
+        html {
+            background: white;
+        }
 
-body {
-    overflow: hidden;
-    page-break-after: always;
-    background: white;
-}
+        body {
+            overflow: hidden;
+            page-break-after: always;
+            background: white;
+        }
 
-tr {
-    page-break-inside: avoid;
-}
+        tr {
+            page-break-inside: avoid;
+        }
 
-#info-table {
-    width: auto;
-    background: white;
-}
+        #info-table {
+            width: auto;
+            background: white;
+        }
 
-#info-table td {
-    text-align: left;
-}
+        #info-table td {
+            text-align: left;
+        }
 
-#info-table td.value {
-    min-width: 10em;
-}
+        #info-table td.value {
+            min-width: 10em;
+        }
 
-#info-table td.key {
-    font-weight: bold;
-}
+        #info-table td.key {
+            font-weight: bold;
+        }
     </style>
-  </head>
-  <body>
-    <h2 style="color:#393630; display: inline-block">{{problem_name}}</h2>
-    <hr>
-    <!--table.table#info-table-->
-    <!--    tbody-->
-    <!--        tr-->
-    <!--            td.key {{ _('Points:') }}-->
-    <!--            td.value-->
-    <!--                |  #{problem.points|floatformat}-->
-    <!--                if problem.partial-->
-    <!--                    | (partial)-->
-    <!--            td.key-->
-    <!--                - blocktrans trimmed count counter=problem.types_list|length-->
-    <!--                    | Problem type-->
-    <!--                    - plural-->
-    <!--                    | Problem types-->
-    <!--            td.value #{problem.types_list|join:", "}-->
-    <!--        tr-->
-    <!--            td.key {{ _('Time limit:') }}-->
-    <!--            td.value #{problem.time_limit}s-->
-    <!--            td.key {{ _('Allowed languages') }}-->
-    <!--            td.value-->
-    <!--                if show_languages-->
-    <!--                    | #{problem.languages_list|join:", "}-->
-    <!--                else-->
-    <!--                    - trans "All" context "languages"-->
-    <!--        tr-->
-    <!--            td.key {{ _('Memory limit:') }}-->
-    <!--            td.value #{problem.memory_limit|kbsimpleformat}-->
-    <!--            if authors-->
-    <!--                td.key-->
-    <!--                    - blocktrans trimmed count counter=authors|length-->
-    <!--                        | Author:-->
-    <!--                        - plural-->
-    <!--                        | Authors:-->
-    <!--                td.value #{authors|join:", "}-->
-    <!--hr(style='border-bottom: 1px dashed;')-->
-    <div class="content-description printing">{{description|with_math:"tex"|markdown:"problem"|reference|absolutify:url}}
-    </div>
-    <script type="text/javascript" src="mathjax_config.js"></script>
-    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-    <script type="text/javascript">MathJax.Hub.queue.Push(function () {
-    if (typeof window.callPhantom === 'function')
-        window.callPhantom({'action': 'snapshot'});
-});
-    </script>
-  </body>
+</head>
+
+<body>
+<h2 style="color:#393630; display: inline-block">{{ problem_name }}</h2>
+<hr>
+<div class="content-description printing">
+    {{ description|markdown('problem', 'tex')|reference|absolutify(url)|str|safe }}
+</div>
+<script type="text/javascript" src="mathjax_config.js"></script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/javascript">
+    MathJax.Hub.queue.Push(function () {
+        if (typeof window.callPhantom === 'function')
+            window.callPhantom({'action': 'snapshot'});
+    });
+</script>
+</body>
 </html>

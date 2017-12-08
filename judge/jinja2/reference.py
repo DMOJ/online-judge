@@ -1,5 +1,6 @@
 import re
 from collections import defaultdict
+from urlparse import urljoin
 
 from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
@@ -160,3 +161,20 @@ def link_users(users):
 @registry.render_with('runtime-version-fragment.html')
 def runtime_versions(versions):
     return {'runtime_versions': versions}
+
+
+@registry.filter(name='absolutify')
+def absolute_links(text, url):
+    tree = lxml_tree.fromstring(text)
+    for anchor in tree.xpath('.//a'):
+        href = anchor.get('href')
+        if href:
+            anchor.set('href', urljoin(url, href))
+    return tree
+
+
+@registry.function(name='urljoin')
+def join(first, second, *rest):
+    if not rest:
+        return urljoin(first, second)
+    return urljoin(urljoin(first, second), *rest)
