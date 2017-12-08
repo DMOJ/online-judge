@@ -10,3 +10,6 @@ class LanguageList(TitleMixin, ListView):
     context_object_name = 'languages'
     template_name = 'status/language-list.html'
     title = ugettext_lazy('Runtimes')
+
+    def get_queryset(self):
+        return super(LanguageList, self).get_queryset().prefetch_related('runtimeversion_set')
