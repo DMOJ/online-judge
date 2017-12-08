@@ -4,14 +4,14 @@
         <span style="display: none" class="read-back">{{ url('comment_content', comment.id) }}</span>
         {% csrf_token %}
         <div class="form-errors">
-            {{ form.non_field_errors }}
+            {{ form.non_field_errors() }}
             {{ form.parent.errors }}
             {{ form.parent }}
         </div>
         <div class="comment-post-wrapper">
             <div id="comment-form-body">{{ form.body }}</div>
         </div>
-        <hr/>
+        <hr>
         <input style="float: right" type="submit" value="Post!" class="button">
     </form>
 </div>

@@ -81,7 +81,7 @@
             {% if form.errors %}
                 <div class="alert alert-danger alert-dismissable">
                     <a href="#" class="close">x</a>
-                    {{ form.non_field_errors }}
+                    {{ form.non_field_errors() }}
                 </div>
             {% endif %}
 

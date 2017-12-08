@@ -404,9 +404,9 @@
             </thead>
             <tbody>
             {% for form in all_case_forms %}
-                {% if form.non_field_errors %}
+                {% if form.non_field_errors() %}
                     <tr>
-                        <td colspan="{{ 9 + cases_formset.can_delete }}">{{ form.non_field_errors }}</td>
+                        <td colspan="{{ 9 + cases_formset.can_delete }}">{{ form.non_field_errors() }}</td>
                     </tr>
                 {% endif %}
                 {% if form.prefix and '__prefix__' in form.prefix %}
