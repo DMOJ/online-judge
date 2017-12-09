@@ -49,7 +49,7 @@ class PostList(ListView):
 
         context['user_count'] = lazy(Profile.objects.count, int, long)
         context['problem_count'] = lazy(Problem.objects.filter(is_public=True).count, int, long)
-        context['submission_count'] = lazy(Submission.objects.filter(problem__is_public=True).count, int, long)
+        context['submission_count'] = lazy(Submission.objects.count, int, long)
         context['language_count'] = lazy(Language.objects.count, int, long)
 
         context['post_comment_counts'] = {
