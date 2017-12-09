@@ -13,14 +13,13 @@
         {% if not page %}
             <li class="disabled-page"><span>...</span></li>
         {% else %}
-            <li{% if page == page_obj.number %} class="active-page"{% endif %}>
-            <a href="
+            <li{% if page == page_obj.number %} class="active-page"{% endif %}><a href="
                 {%- if page == 1 and first_page_href != None -%}
                     {{ first_page_href }}
                 {%- else -%}
                     {{ page_prefix or '' }}{{ page }}{{ page_suffix or '' }}
                 {%- endif -%}
-            ">{{ page }}</a>
+            ">{{ page }}</a></li>
         {% endif %}
     {% endfor %}
 
