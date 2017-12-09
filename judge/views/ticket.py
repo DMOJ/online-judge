@@ -2,14 +2,12 @@ import json
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import PermissionDenied, ImproperlyConfigured
-from django.db.models import Q
+from django.core.exceptions import PermissionDenied, ImproperlyConfigured, ValidationError
+from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
-from django.http import Http404
 from django.template.defaultfilters import truncatechars
 from django.template.loader import get_template
 from django.urls import reverse
@@ -26,7 +24,6 @@ from judge import event_poster as event
 from judge.models import Profile
 from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
-from judge.utils.problems import editable_problems
 from judge.utils.tickets import own_ticket_filter, filter_visible_tickets
 from judge.utils.views import TitleMixin, paginate_query_context
 from judge.widgets import HeavyPreviewPageDownWidget
@@ -70,6 +67,11 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
 
     def get_assignees(self):
         return []
+
+    def get_form_kwargs(self):
+        kwargs = super(NewTicketView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def form_valid(self, form):
         ticket = Ticket(user=self.request.user.profile, title=form.cleaned_data['title'])
