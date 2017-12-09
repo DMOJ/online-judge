@@ -36,33 +36,33 @@
         <table>{% for case in batch.cases %}
             <tr id="{{ case.id }}" class="case-row toggle closed">
                 <td>
-                    {% if case.status != 'AC' and case.output %}
+                    {%- if case.status != 'AC' and case.output -%}
                         <i class="fa fa-chevron-right fa-fw"></i>
-                    {% endif %}
-                    {% if batch.id %}
+                    {%- endif -%}
+                    {%- if batch.id -%}
                         <b>{{ _('Case') }} #{{ loop.index }}:</b>
-                    {% elif is_pretest %}
+                    {%- elif is_pretest -%}
                         <b>{{ _('Pretest') }} #{{ test_case_id() }}:</b>
-                    {% else %}
+                    {%- else -%}
                         <b>{{ _('Test case') }} #{{ test_case_id() }}:</b>
-                    {% endif %}
+                    {%- endif -%}
                 </td>
 
                 <td>
                     <span title="{{ case.long_status }}" class="case-{{ case.status }}">
                         {%- if case.status == 'SC' %}&mdash;{% else %}{{ case.status }}{% endif -%}
                     </span>
-                    {% if case.feedback %}&nbsp;({{ case.feedback }}){% endif %}
+                    {%- if case.feedback %}&nbsp;({{ case.feedback }}){% endif -%}
                 </td>
 
                 <td>
-                    {% if case.status != 'SC' %}
-                        {% if case.status == 'TLE' %}
+                    {%- if case.status != 'SC' -%}
+                        {%- if case.status == 'TLE' -%}
                             [&gt;<span>{{ time_limit|floatformat(3) }}s,</span>
-                        {% else %}
+                        {%- else -%}
                             [<span title="{{ case.time }}s">{{ case.time|floatformat(3) }}s,</span>
-                        {% endif %}
-                    {% endif %}
+                        {%- endif -%}
+                    {%- endif -%}
                 </td>
 
                 <td>{% if case.status != 'SC' %}{{ case.memory|kbdetailformat }}]{% endif %}</td>
@@ -80,8 +80,7 @@
                             {% if prefix_length == None %}
                                 <pre class="case-output">{{ case.output|linebreaksbr }}</pre>
                             {% else %}
-                                <pre class="case-output">{{ case.output[:prefix_length]|linebreaksbr }}
-                                </pre>
+                                <pre class="case-output">{{ case.output[:prefix_length]|linebreaksbr }}</pre>
                             {% endif %}
                         </div>
                     </td>
@@ -89,6 +88,7 @@
             {% endif %}
         {% endfor %}
         </table>
+
         {% if batch.id %}</div>{% endif %}
             <br>
         {% endfor %}
