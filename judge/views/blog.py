@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q, Max, Count
 from django.http import Http404
 from django.utils import timezone
+from django.utils.functional import lazy
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 
@@ -27,7 +28,8 @@ class PostList(ListView):
                              orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
 
     def get_queryset(self):
-        return BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).order_by('-sticky', '-publish_on')
+        return (BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).order_by('-sticky', '-publish_on')
+                        .prefetch_related('authors__user'))
 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data(**kwargs)
@@ -45,10 +47,10 @@ class PostList(ListView):
                 context['has_clarifications'] = clarifications.count() > 0
                 context['clarifications'] = clarifications.order_by('-date')
 
-        context['user_count'] = Profile.objects.count()
-        context['problem_count'] = Problem.objects.filter(is_public=True).count()
-        context['submission_count'] = Submission.objects.filter(problem__is_public=True).count()
-        context['language_count'] = Language.objects.count()
+        context['user_count'] = lazy(Profile.objects.count, int, long)
+        context['problem_count'] = lazy(Problem.objects.filter(is_public=True).count, int, long)
+        context['submission_count'] = lazy(Submission.objects.filter(problem__is_public=True).count, int, long)
+        context['language_count'] = lazy(Language.objects.count, int, long)
 
         context['post_comment_counts'] = {
             int(page[2:]): count for page, count in
@@ -78,15 +80,16 @@ class PostList(ListView):
 
         if self.request.user.is_authenticated:
             profile = self.request.user.profile
-            context['own_open_tickets'] = (Ticket.objects.filter(user=profile, is_open=True)
-                                           .prefetch_related('linked_item').order_by('-id'))
+            context['own_open_tickets'] = (Ticket.objects.filter(user=profile, is_open=True).order_by('-id')
+                                           .prefetch_related('linked_item').select_related('user__user'))
         else:
             profile = None
             context['own_open_tickets'] = []
 
         # Superusers better be staffs, not the spell-casting kind either.
         if self.request.user.is_staff:
-            tickets = Ticket.objects.order_by('-id').filter(is_open=True).prefetch_related('linked_item')
+            tickets = (Ticket.objects.order_by('-id').filter(is_open=True).prefetch_related('linked_item')
+                             .select_related('user__user'))
             context['open_tickets'] = filter_visible_tickets(tickets, self.request.user, profile)[:10]
         else:
             context['open_tickets'] = []
