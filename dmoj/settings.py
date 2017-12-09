@@ -14,6 +14,7 @@ import re
 
 from django.utils.translation import ugettext_lazy as _
 from django_jinja.builtins import DEFAULT_EXTENSIONS
+from jinja2 import select_autoescape
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -211,7 +212,7 @@ TEMPLATES = [
                 'social.apps.django_app.context_processors.backends',
                 'social.apps.django_app.context_processors.login_redirect',
             ],
-            'autoescape': True,
+            'autoescape': select_autoescape(['html', 'xml']),
             'trim_blocks': True,
             'lstrip_blocks': True,
             'extensions': DEFAULT_EXTENSIONS + [
