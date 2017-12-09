@@ -22,7 +22,7 @@
 
         {% if user.about %}
             <h4>{{ _('About') }}</h4>
-            {% cache 86400 'user_about' user.id %}
+            {% cache 86400 'user_about' user.id MATH_ENGINE %}
                 {{ user.about|markdown('self-description', MATH_ENGINE)|reference|str|safe }}
             {% endcache %}
         {% else %}
