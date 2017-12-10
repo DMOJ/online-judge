@@ -194,7 +194,7 @@ TEMPLATES = [
         ],
         'APP_DIRS': False,
         'OPTIONS': {
-            'match_extension': '.html',
+            'match_extension': ('.html', '.txt'),
             'match_regex': '^(?!admin/)',
             'context_processors': [
                 'django.template.context_processors.media',
