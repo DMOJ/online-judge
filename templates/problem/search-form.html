@@ -17,13 +17,13 @@
             {% if request.user.is_authenticated %}
                 <div>
                     <input id="hide_solved" type="checkbox" name="hide_solved" value="1"
-                           {% if full_text %}checked{% endif %}>
+                           {% if hide_solved %}checked{% endif %}>
                     <label for="hide_solved">{{ _('Hide solved problems') }}</label>
                 </div>
             {% endif %}
             <div>
                 <input id="show_types" type="checkbox" name="show_types" value="1"
-                        {% if full_text %} checked{% endif %}>
+                        {% if show_types %} checked{% endif %}>
                 <label for="show_types">{{ _('Show problem types') }}</label>
             </div>
             <div class="filter-form-group">
