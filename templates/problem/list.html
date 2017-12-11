@@ -208,7 +208,7 @@
                     {% else %}
                         {% if request.user.is_authenticated %}
                             <th class="solved">
-                                <a href="{{ sort_links['solved'] }}"><i class="fa fa-check"></i>{{ sort_order.solved }}
+                                <a href="{{ sort_links.solved }}"><i class="fa fa-check"></i>{{ sort_order.solved }}
                                 </a>
                             </th>
                         {% endif %}
