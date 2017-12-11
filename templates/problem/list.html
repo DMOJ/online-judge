@@ -48,9 +48,13 @@
                 var $search = $('#search');
                 var $category = $('#category');
 
-                function clean_submit() {
+                function prep_form() {
                     $search.prop('disabled', !$search.val());
                     $category.prop('disabled', !$category.val());
+                }
+
+                function clean_submit() {
+                    prep_form();
                     $form.submit();
                 }
 
@@ -74,7 +78,8 @@
                 $('#go').click(clean_submit);
 
                 $('input#full_text, input#hide_solved, input#show_types').click(function () {
-                    ($('<form>').attr('action', window.location.pathname + '?' + $('form#filter-form').serialize())
+                    prep_form();
+                    ($('<form>').attr('action', window.location.pathname + '?' + $form.serialize())
                         .append($('<input>').attr('type', 'hidden').attr('name', 'csrfmiddlewaretoken')
                             .attr('value', $.cookie('csrftoken')))
                         .attr('method', 'POST').appendTo($('body')).submit());
