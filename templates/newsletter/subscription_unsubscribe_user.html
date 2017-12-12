@@ -5,7 +5,7 @@
 {% block body %}
     <h1>{{ _('Newsletter unsubscribe') }} {{ newsletter.title }}</h1>
 
-    <p>Welcome, {{ user }}!</p>
+    <p>Welcome, {{ request.user }}!</p>
 
     {% if messages %}
         <ul>

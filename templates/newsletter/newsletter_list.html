@@ -3,7 +3,7 @@
 {% block content_title %}Newsletter list{% endblock %}
 
 {% block body %}
-    {% if user.is_authenticated %}
+    {% if request.user.is_authenticated %}
         <form method="POST" action="" class="form-area">
             {% csrf_token %}
             {{ formset.management_form }}
