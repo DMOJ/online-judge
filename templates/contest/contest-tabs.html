@@ -30,7 +30,7 @@
                     {# Allow people with ended participations to continue spectating #}
                     <a href="{{ url('contest_leave', contest.key) }}"
                        class="contest-join-pseudotab unselectable button full">
-                        {%- if participating and participation.ended or request.user.profile in contest.organizers.all %}
+                        {%- if participating and participation.ended or request.user.profile in contest.organizers.all() %}
                             {{- _('Stop spectating') -}}
                         {% else %}
                             {{- _('Leave contest') -}}

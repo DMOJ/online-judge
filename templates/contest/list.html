@@ -123,7 +123,7 @@
                         </td>
                         {% if not IN_CONTEST %}
                             <td>
-                                {% if request.user.profile in contest.organizers.all %}
+                                {% if request.user.profile in contest.organizers.all() %}
                                     <a href="{{ url('contest_join', contest.key) }}"
                                        class="unselectable button full participate-button">{{ _('Spectate') }}</a>
                                 {% else %}
