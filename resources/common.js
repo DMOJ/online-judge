@@ -233,6 +233,8 @@ function register_time(elems, limit) {
             if (outdated)
                 update();
         });
+
+        update();
     });
 }
 
