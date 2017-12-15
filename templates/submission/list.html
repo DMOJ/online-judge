@@ -103,7 +103,7 @@
                         }).done(function (data) {
                             var was_shown = row.is(':visible');
                             row.html(data);
-                            register_time(row.find('span.time'));
+                            register_time(row.find('.time-with-rel'));
                             if (!was_shown) {
                                 row.show('slow');
                                 // Hack for Chrome
