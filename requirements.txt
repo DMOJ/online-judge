@@ -11,7 +11,7 @@ django-impersonate
 lxml
 Pygments
 mistune
-python-social-auth>=0.2,<0.3
+social-auth-app-django
 pytz
 django-statici18n
 pika
