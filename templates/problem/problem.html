@@ -257,11 +257,7 @@
             {% if has_clarifications %}
                 {% for clarification in clarifications %}
                     <div class="problem-clarification">
-                        <div data-unix="{{ clarification.date|utc|date('c') }}" class="time">
-                            {% trans time=clarification.date|date(_("N j, Y, g:i a")) %}
-                                on {{ time }}
-                            {% endtrans %}
-                        </div>
+                        <div class="time">{{ relative_time(clarification.date) }}</div>
                         <span class="body">
                             {{ clarification.description|markdown('problem', MATH_ENGINE)|reference }}
                         </span>

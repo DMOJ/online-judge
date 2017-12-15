@@ -11,13 +11,7 @@
     <div class="name">
         <a href="{{ url('problem_detail', breakdown.problem_code) }}">{{ breakdown.problem_name }}</a>
     </div>
-    <div>
-        <span class="time" data-unix="{{ breakdown.sub_date|utc|date("c") }}">
-            {% trans time=breakdown.sub_date|date(_("N j, Y, g:i a")) %}
-                on {{ time }}
-            {% endtrans %}
-        </span>
-    </div>
+    <div class="time">{{ relative_time(breakdown.sub_date) }}</div>
 </td>
 
 <td class="sub-pp sub-usage">

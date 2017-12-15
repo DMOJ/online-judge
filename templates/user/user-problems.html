@@ -2,13 +2,6 @@
 
 {% block user_js_media %}
     <script type="text/javascript">
-        $(function () {
-            register_update_relative(function () {
-                return $('.pp-table').find('span.time');
-            }, function (when) {
-                return Math.abs(moment().diff(when, 'years')) < 1;
-            });
-        });
         window.show_pp_base = 1;
         window.currently_requesting_pp = false;
         window.load_more_pp = function () {

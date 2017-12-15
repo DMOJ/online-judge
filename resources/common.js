@@ -240,36 +240,7 @@ function register_time(elems, limit) {
 
 $(function () {
     register_time($('.time-with-rel'));
-});
 
-window.register_update_relative = function (get_times, show_relative, interval) {
-    if (typeof interval === 'undefined')
-        interval = 60000;
-
-    if (typeof show_relative === 'undefined')
-        show_relative = function (time) {
-            return Math.abs(moment().diff(time, 'days')) < 1;
-        };
-
-    function update_relative_time($time) {
-        var when = moment($time.attr('data-unix'));
-        if (show_relative(when))
-            $time.find('.relative').text(when.fromNow());
-        else
-            $time.addClass('too-long-ago');
-    }
-
-    setInterval(function update() {
-        get_times().filter(':not(.too-long-ago)').each(function () {
-            update_relative_time($(this));
-        });
-        return update;
-    }(), interval);
-
-    return update_relative_time;
-};
-
-$(function () {
     $('form').submit(function (evt) {
         // Prevent multiple submissions of forms, see #565
         $("input[type='submit']").attr("disabled", "true");
