@@ -237,7 +237,7 @@ function register_time(elems, limit) {
 }
 
 $(function () {
-    register_time($('.time'));
+    register_time($('.time-with-rel'));
 });
 
 window.register_update_relative = function (get_times, show_relative, interval) {

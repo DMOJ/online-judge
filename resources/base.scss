@@ -436,7 +436,9 @@ noscript #noscript {
 
 .time {
     color: #555;
+}
 
+.time-with-rel {
     &:hover .rel-time, .abs-time {
         display: none;
     }
