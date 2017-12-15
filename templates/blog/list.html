@@ -125,7 +125,7 @@
         </div>
 
         <div class="blog-sidebar">
-            {% if IN_CONTEST and CONTEST.contest.use_clarifications %}
+            {% if request.in_contest and request.participation.contest.use_clarifications %}
                 <div class="blog-sidebox sidebox">
                     <h3>{{ _('Clarifications') }} <i class="fa fa-question-circle"></i></h3>
                     <div class="sidebox-content">

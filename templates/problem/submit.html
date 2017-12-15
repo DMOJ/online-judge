@@ -197,7 +197,7 @@
             </div>
         {% endif %}
 
-        {% if IN_CONTEST and submission_limit %}
+        {% if request.in_contest and submission_limit %}
             {% if submissions_left > 0 %}
                 <div class="alert alert-warning alert-dismissable">
                     <a class="close">x</a>
@@ -251,7 +251,7 @@
             <span style="color: red">{{ _('No judge is available for this problem.') }}</span>
         {% else %}
             <input type="submit" value="{{ _('Submit!') }}" class="button"
-                   {% if IN_CONTEST and submission_limit and not submissions_left %}disabled{% endif %}>
+                   {% if request.in_contest and submission_limit and not submissions_left %}disabled{% endif %}>
         {% endif %}
     </form>
 {% endblock %}

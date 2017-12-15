@@ -104,18 +104,6 @@ def misc_config(request):
             'i18n_config': MiscConfigDict(language=request.LANGUAGE_CODE, domain=domain)}
 
 
-def contest(request):
-    if request.user.is_authenticated:
-        profile = request.user.profile
-        profile.update_contest()
-        participation = profile.current_contest
-        in_contest = participation is not None
-    else:
-        in_contest = False
-        participation = None
-    return {'IN_CONTEST': in_contest, 'CONTEST': participation}
-
-
 def site_name(request):
     return {'SITE_NAME': getattr(settings, 'SITE_NAME', 'DMOJ'),
             'SITE_LONG_NAME': getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ')),

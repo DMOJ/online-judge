@@ -1,4 +1,4 @@
-{% if IN_CONTEST and submission.contest_or_none and CONTEST.id == submission.contest_or_none.participation_id %}
+{% if request.in_contest and submission.contest_or_none and request.participation.id == submission.contest_or_none.participation_id %}
     {% set prefix_length = submission.contest_or_none.problem.output_prefix_override %}
 {% else %}
     {% set prefix_length = None %}
@@ -101,7 +101,7 @@
                     <b>{{ _('Final score:') }}</b>
                 {% endif %}
                 {{ submission.case_points|floatformat(0) }}/{{ submission.case_total|floatformat(0) }}
-                {% if IN_CONTEST and submission.contest_or_none %}
+                {% if request.in_contest and submission.contest_or_none %}
                     {% with contest=submission.contest_or_none %}
                         ({{ _('%(points)s/%(total)s points', points=contest.points|roundfloat(3),
                               total=contest.problem.points|floatformat(-1)) }})

@@ -8,7 +8,7 @@
         }
         </style>
     </noscript>
-    {% if not IN_CONTEST %}
+    {% if not request.in_contest %}
         <style>
             #problem-table th {
                 padding: 0;
@@ -125,7 +125,7 @@
             });
         </script>
     {% endcompress %}
-    {% if IN_CONTEST %}
+    {% if request.in_contest %}
         {% compress js %}
             <script src="{{ static('libs/tablesorter.js') }}" type="text/javascript"></script>
             <script type="text/javascript">
@@ -170,7 +170,7 @@
 {% block body %}
     <div id="common-content">
         {% block before_table %}{% endblock %}
-        {% if not IN_CONTEST %}
+        {% if not request.in_contest %}
             <div id="content-right" class="problems">
                 <div class="info-float">
                     {% include "problem/search-form.html" %}
@@ -199,7 +199,7 @@
             <table id="problem-table" class="table striped">
                 <thead>
                 <tr>
-                    {% if IN_CONTEST %}
+                    {% if request.in_contest %}
                         {% if request.user.is_authenticated %}
                             <th class="solved"><i class="fa fa-check"></i></th>
                         {% endif %}
@@ -247,7 +247,7 @@
                             {% if problem.id in completed_problem_ids %}
                                 <td solved="1">
                                     <a href="{{ url('user_submissions', problem.code, request.user.username) }}">
-                                        {% if problem.is_public or IN_CONTEST %}
+                                        {% if problem.is_public or request.in_contest %}
                                             <i class="solved-problem-color fa fa-check-circle"></i>
                                         {% else %}
                                             <i class="solved-problem-color fa fa-lock"></i>
@@ -257,7 +257,7 @@
                             {% elif problem.id in attempted_problems %}
                                 <td solved="0">
                                     <a href="{{ url('user_submissions', problem.code, request.user.username) }}">
-                                        {% if problem.is_public or IN_CONTEST %}
+                                        {% if problem.is_public or request.in_contest %}
                                             <i class="attempted-problem-color fa fa-minus-circle"></i>
                                         {% else %}
                                             <i class="attempted-problem-color fa fa-lock"></i>
@@ -266,7 +266,7 @@
                                 </td>
                             {% else %}
                                 <td solved="-1">
-                                    {% if problem.is_public or IN_CONTEST %}
+                                    {% if problem.is_public or request.in_contest %}
                                         <i class="unsolved-problem-color fa fa-minus-circle"></i>
                                     {% else %}
                                         <i class="unsolved-problem-color fa fa-lock"></i>
@@ -286,7 +286,7 @@
                             </td>
                         {% endif %}
                         <td class="p">{{ problem.points|floatformat }}{% if problem.partial %}p{% endif %}</td>
-                        {% if not IN_CONTEST %}
+                        {% if not request.in_contest %}
                             <td class="ac-rate">{{ problem.ac_rate|floatformat(1) }}%</td>
                         {% endif %}
                         <td class="users">

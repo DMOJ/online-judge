@@ -2,8 +2,8 @@
 {% block js_media %}
     {% if dynamic_update and last_msg %}
         <script type="text/javascript">
-            {% if IN_CONTEST %}
-                window.current_contest = '{{CONTEST.contest.key}}';
+            {% if request.in_contest %}
+                window.current_contest = '{{request.participation.contest.key}}';
             {% else %}
                 window.current_contest = null;
             {% endif %}

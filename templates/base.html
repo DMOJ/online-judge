@@ -91,7 +91,7 @@
         </script>
     {% endcompress %}
     {% block js_media %}{% endblock %}
-    {% if IN_CONTEST %}
+    {% if request.in_contest %}
         <script>$(function () {
             count_down($("#contest-time-remaining"));
 
@@ -241,15 +241,15 @@
     </div>
     <div id="nav-shadow"></div>
 </nav>
-{% if IN_CONTEST %}
+{% if request.in_contest %}
     <div id="contest-info">
-        <a href="{{ url('contest_view', CONTEST.contest.key) }}" style="vertical-align: middle">
-            {{ CONTEST.contest.name }} -
-            {% if CONTEST.spectate %}
+        <a href="{{ url('contest_view', request.participation.contest.key) }}" style="vertical-align: middle">
+            {{ request.participation.contest.name }} -
+            {% if request.participation.spectate %}
                 {{ _('spectating') }}
-            {% elif CONTEST.end_time %}
-                <div id="contest-time-remaining" data-secs="{{ CONTEST.time_remaining|seconds }}">
-                    {{ CONTEST.time_remaining|timedelta("localized") }}
+            {% elif request.participation.end_time %}
+                <div id="contest-time-remaining" data-secs="{{ request.participation.time_remaining|seconds }}">
+                    {{ request.participation.time_remaining|timedelta("localized") }}
                 </div>
             {% else %}
                 {{ _('virtual') }}

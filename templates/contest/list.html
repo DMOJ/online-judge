@@ -96,7 +96,7 @@
                 <tr>
                     <th style="width:90%">{{ _('Contest') }}</th>
                     <th>{{ _('Users') }}</th>
-                    {% if not IN_CONTEST %}
+                    {% if not request.in_contest %}
                         <th style="width:15%"></th>
                     {% endif %}
                 </tr>
@@ -121,7 +121,7 @@
                         <td>
                             <a href="{{ url('contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
                         </td>
-                        {% if not IN_CONTEST %}
+                        {% if not request.in_contest %}
                             <td>
                                 {% if request.user.profile in contest.organizers.all() %}
                                     <a href="{{ url('contest_join', contest.key) }}"
@@ -179,7 +179,7 @@
             <tr>
                 <th style="width:90%">{{ _('Contest') }}</th>
                 <th>{{ _('Users') }}</th>
-                {% if not IN_CONTEST %}
+                {% if not request.in_contest %}
                     <th style="width:15%"></th>
                 {% endif %}
             </tr>
@@ -194,7 +194,7 @@
                         </div>
                     </td>
                     <td><a href="{{ url('contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
-                    </td>{% if not IN_CONTEST %}
+                    </td>{% if not request.in_contest %}
                     <td><a href="{{ url('contest_join', contest.key) }}"
                            class="unselectable button full participate-button">{{ _('Virtual join') }}</a>
                     </td>

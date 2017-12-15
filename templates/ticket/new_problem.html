@@ -1,7 +1,7 @@
 {% extends "ticket/new.html" %}
 
 {% block guideline_message %}
-    {% if not IN_CONTEST %}
+    {% if not request.in_contest %}
         <div class="alert alert-warning alert-dismissable">
             <a class="close">x</a>
             <b>{{ _('Thanks for opening a ticket!') }}</b>
