@@ -436,6 +436,14 @@ noscript #noscript {
 
 .time {
     color: #555;
+
+    &:hover .rel-time, .abs-time {
+        display: none;
+    }
+
+    .rel-time:empty + .abs-time, &:hover .abs-time {
+        display: inline;
+    }
 }
 
 .toggle {
@@ -554,36 +562,6 @@ math {
 .MathJax {
     &:focus {
         outline: none;
-    }
-}
-
-.moment-time-toggle {
-    .absolute {
-        display: none;
-    }
-
-    .relative {
-        display: inline;
-    }
-
-    &:hover > {
-        .relative {
-            display: none;
-        }
-
-        .absolute {
-            display: inline;
-        }
-    }
-
-    &.too-long-ago {
-        .relative {
-            display: none !important;
-        }
-
-        .absolute {
-            display: inline !important;
-        }
     }
 }
 
