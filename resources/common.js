@@ -208,6 +208,38 @@ function count_down(label) {
     }, 1000);
 }
 
+function register_time(elems, limit) {
+    limit = limit || 300;
+    elems.each(function () {
+        var outdated = false;
+        var $this = $(this);
+        var time = moment($this.attr('data-iso'));
+        var $rel = $this.find('.rel-time');
+        var rel_format = $rel.attr('data-format');
+
+        function update() {
+            if ($('body').hasClass('window-hidden'))
+                return outdated = true;
+            outdated = false;
+            if (moment().diff(time, 'days') > limit) {
+                $rel.text('');
+                return;
+            }
+            $rel.text(rel_format.replace('{time}', time.fromNow()));
+            setTimeout(update, 10000);
+        }
+
+        $(window).on('dmoj:window-visible', function () {
+            if (outdated)
+                update();
+        });
+    });
+}
+
+$(function () {
+    register_time($('.time'));
+});
+
 window.register_update_relative = function (get_times, show_relative, interval) {
     if (typeof interval === 'undefined')
         interval = 60000;
