@@ -1,6 +1,6 @@
 {% spaceless %}
-    <span data-iso="{{ post.publish_on|utc|date('c') }}" class="time">
+    <span data-iso="{{ time|utc|date('c') }}" class="time">
         <span class="rel-time" data-format="{{ rel_format }}"></span>
-        <span class="abs-time">{{ abs_format|format(time=post.publish_on|date(format)) }}</span>
+        <span class="abs-time">{{ abs_format.replace('{time}', time|date(format)) }}</span>
     </span>
 {% endspaceless %}
