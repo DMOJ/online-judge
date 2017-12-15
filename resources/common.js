@@ -214,18 +214,18 @@ function register_time(elems, limit) {
         var outdated = false;
         var $this = $(this);
         var time = moment($this.attr('data-iso'));
-        var $rel = $this.find('.rel-time');
-        var rel_format = $rel.attr('data-format');
+        var rel_format = $this.attr('data-format');
+        var abs = $this.text();
 
         function update() {
             if ($('body').hasClass('window-hidden'))
                 return outdated = true;
             outdated = false;
             if (moment().diff(time, 'days') > limit) {
-                $rel.text('');
+                $this.text(abs);
                 return;
             }
-            $rel.text(rel_format.replace('{time}', time.fromNow()));
+            $this.text(rel_format.replace('{time}', time.fromNow()));
             setTimeout(update, 10000);
         }
 

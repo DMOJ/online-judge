@@ -438,16 +438,6 @@ noscript #noscript {
     color: #555;
 }
 
-.time-with-rel {
-    &:hover .rel-time, .abs-time {
-        display: none;
-    }
-
-    .rel-time:empty + .abs-time, &:hover .abs-time {
-        display: inline;
-    }
-}
-
 .toggle {
     font-weight: bold;
 
