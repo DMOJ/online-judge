@@ -132,7 +132,7 @@ INSTALLED_APPS += (
     'mptt',
     'reversion',
     'django_social_share',
-    'social.apps.django_app.default',
+    'social_django',
     'compressor',
     'django_ace',
     'pagedown',
@@ -209,8 +209,8 @@ TEMPLATES = [
                 'judge.template_context.misc_config',
                 'judge.template_context.contest',
                 'judge.template_context.math_setting',
-                'social.apps.django_app.context_processors.backends',
-                'social.apps.django_app.context_processors.login_redirect',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
             'autoescape': select_autoescape(['html', 'xml']),
             'trim_blocks': True,
@@ -349,27 +349,27 @@ CACHES = {}
 
 # Authentication
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOAuth2',
-    'social.backends.dropbox.DropboxOAuth2',
-    'social.backends.facebook.FacebookOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.dropbox.DropboxOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
     'judge.social_auth.GitHubSecureEmailOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIAL_AUTH_PIPELINE = (
-    'social.pipeline.social_auth.social_details',
-    'social.pipeline.social_auth.social_uid',
-    'social.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
     'judge.social_auth.verify_email',
-    'social.pipeline.social_auth.social_user',
-    'social.pipeline.user.get_username',
-    'social.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
     'judge.social_auth.choose_username',
-    'social.pipeline.user.create_user',
+    'social_core.pipeline.user.create_user',
     'judge.social_auth.make_profile',
-    'social.pipeline.social_auth.associate_user',
-    'social.pipeline.social_auth.load_extra_data',
-    'social.pipeline.user.user_details'
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details'
 )
 
 SOCIAL_AUTH_GITHUB_SECURE_SCOPE = ['user:email']

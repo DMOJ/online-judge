@@ -6,7 +6,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.core.urlresolvers import reverse
 from django.http import HttpResponsePermanentRedirect
 from django.utils.translation import ugettext_lazy as _
-from social.apps.django_app.urls import urlpatterns as social_auth_patterns
+from social_django.urls import urlpatterns as social_auth_patterns
 
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
 from judge.forms import CustomAuthenticationForm

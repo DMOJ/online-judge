@@ -11,10 +11,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from requests import HTTPError
 from reversion import revisions
-from social.apps.django_app.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
-from social.backends.github import GithubOAuth2
-from social.exceptions import InvalidEmail, SocialAuthBaseException
-from social.pipeline.partial import partial
+from social_django.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
+from social_core.backends.github import GithubOAuth2
+from social_core.exceptions import InvalidEmail, SocialAuthBaseException
+from social_core.pipeline.partial import partial
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Language
