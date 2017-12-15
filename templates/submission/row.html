@@ -23,11 +23,7 @@
     {% endif %}
     <div>
         {{ link_user(submission.user) }}
-        <span class="time" data-unix="{{ submission.date|utc|date("c") }}">
-            {% trans time=submission.date|date(_("N j, Y, g:i a")) %}
-                on {{ time }}
-            {% endtrans %}
-        </span>
+        <span class="time">{{ relative_time(submission.date) }}</span>
         {% if not IN_CONTEST and submission.contest_or_none %}
             <a href="{{ url('contest_view', submission.contest_or_none.participation.contest.key) }}"
                class="submission-contest">

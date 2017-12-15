@@ -557,36 +557,6 @@ math {
     }
 }
 
-.moment-time-toggle {
-    .absolute {
-        display: none;
-    }
-
-    .relative {
-        display: inline;
-    }
-
-    &:hover > {
-        .relative {
-            display: none;
-        }
-
-        .absolute {
-            display: inline;
-        }
-    }
-
-    &.too-long-ago {
-        .relative {
-            display: none !important;
-        }
-
-        .absolute {
-            display: inline !important;
-        }
-    }
-}
-
 @media(max-width: 1300px) {
     #page-container {
         border-left: none;

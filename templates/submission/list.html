@@ -57,9 +57,6 @@
                     info_float.width(container.width());
                 }
 
-                window.update_relative_time = register_update_relative(function () {
-                    return $('#submissions-table').find('span.time');
-                });
                 $('#status').select2({multiple: 1, placeholder: '{{ _('Filter by status...') }}'})
                     .css({'visibility': 'visible'});
                 $('#language').select2({multiple: 1, placeholder: '{{ _('Filter by language...') }}'})
@@ -106,7 +103,7 @@
                         }).done(function (data) {
                             var was_shown = row.is(':visible');
                             row.html(data);
-                            update_relative_time(row.find('span.time'));
+                            register_time(row.find('.time-with-rel'));
                             if (!was_shown) {
                                 row.show('slow');
                                 // Hack for Chrome

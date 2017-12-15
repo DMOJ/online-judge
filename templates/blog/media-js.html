@@ -1,9 +1,0 @@
-<script>
-    $(function () {
-        register_update_relative(function () {
-            return $('.recent-time');
-        }, function (when) {
-            return Math.abs(moment().diff(when, 'years')) < 1;
-        });
-    });
-</script>

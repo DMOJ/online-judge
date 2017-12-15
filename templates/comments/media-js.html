@@ -188,12 +188,6 @@
             });
 
             $('img.unveil').unveil(200);
-
-            register_update_relative(function () {
-                return $('.comment-time');
-            }, function (when) {
-                return Math.abs(moment().diff(when, 'years')) < 1;
-            });
         });
     </script>
 {% endcompress %}

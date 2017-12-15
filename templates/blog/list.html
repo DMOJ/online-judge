@@ -52,7 +52,6 @@
 {% endblock %}
 
 {% block js_media %}
-    {% include "blog/media-js.html" %}
     <script type="text/javascript">
         $(document).ready(function () {
             $('.time-remaining').each(function () {
@@ -73,11 +72,6 @@
                 $('#blog-tab').removeClass('active');
                 $('.blog-content').hide();
                 $('.blog-sidebar').show();
-            });
-            register_update_relative(function () {
-                return $('.post-time');
-            }, function (when) {
-                return Math.abs(moment().diff(when, 'years')) < 1;
             });
         });
     </script>
@@ -109,11 +103,7 @@
                                     <span class="post-authors">{{ link_users(authors) }}</span>
                                 {%- endif -%}
                             {% endwith %}
-                            <span data-unix="{{ post.publish_on|utc|date("c") }}" class="post-time">
-                                {%- trans time=post.publish_on|date(_("N j, Y, g:i a")) -%}
-                                    posted on {{ time }}
-                                {%- endtrans -%}
-                            </span>
+                            {{ relative_time(post.publish_on, abs=_('posted on {time}'), rel=_('posted {time}')) -}}
                         </span><span class="comment-data">
                             <a href="{{ url('blog_post', post.id, post.slug) }}#comments" class="comment-count-link">
                                 <i class="fa fa-comments comment-icon"></i><span class="comment-count">
@@ -147,9 +137,7 @@
                                            class="problem">
                                             {{ clarification.problem.name }}
                                         </a>
-                                        <span data-unix="{{ clarification.date|utc|date("c") }}" class="time">
-                                            {{ _('on %(time)s', time=clarification.date|date(_("N j, Y, g:i a"))) }}
-                                        </span>
+                                        <span class="time">{{ relative_time(clarification.date) }}</span>
                                     </li>
                                 {% endfor %}
                             </ul>
