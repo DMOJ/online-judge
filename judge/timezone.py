@@ -9,7 +9,13 @@ from judge.models import Profile
 
 
 class TimezoneMiddleware(object):
+    def __init__(self, get_response=None):
+        self.get_response = get_response
+
     def process_request(self, request):
+        timezone.activate(self.get_timezone(request))
+
+    def get_timezone(self, request):
         if request.user.is_authenticated:
             try:
                 tzname = Profile.objects.get(user=request.user).timezone
@@ -17,11 +23,15 @@ class TimezoneMiddleware(object):
                 tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto')
         else:
             tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto')
-        timezone.activate(pytz.timezone(tzname))
+        return pytz.timezone(tzname)
 
     def process_response(self, request, response):
         timezone.deactivate()
         return response
+
+    def __call__(self, request):
+        with timezone.override(self.get_timezone(request)):
+            return self.get_response(request)
 
 
 def from_database_time(datetime):
