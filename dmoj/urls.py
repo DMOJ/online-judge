@@ -217,7 +217,7 @@ urlpatterns = [
     ])),
 
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
-
+    url(r'^runtimes/matrix/$', status.version_matrix, name='version_matrix'),
     url(r'^status/$', status.status_all, name='status_all'),
 
     url(r'^api/', include([
