@@ -45,8 +45,9 @@ def version_matrix(request):
     judges = Judge.objects.filter(online=True).order_by('name')
     languages = Language.objects.filter(judges__isnull=False)
 
-    for version in RuntimeVersion.objects.filter(judge__online=True).order_by('priority'):
-        matrix[version.judge_id, version.language_id].append(version)
+    for runtime in RuntimeVersion.objects.filter(judge__online=True).order_by('priority'):
+        if runtime.version:
+            matrix[runtime.judge_id, runtime.language_id].append(runtime)
 
     for (judge, language), versions in six.iteritems(matrix):
         versions.versions = [LooseVersion(runtime.version) for runtime in versions]
