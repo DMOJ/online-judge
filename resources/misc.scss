@@ -1,0 +1,44 @@
+#judge-versions {
+    display: block;
+
+    .version {
+        font-family: monospace;
+    }
+
+    .version-blank {
+        background: #eee;
+    }
+
+    .version-latest {
+        background: #b3ff3fe6;
+    }
+
+    .version-outdated {
+        background: #f00c;
+        color: white;
+    }
+
+    tbody {
+        display: block;
+    }
+
+    tr {
+        display: flex;
+        flex-direction: row;
+        padding: 0;
+
+        &:first-child {
+            position: sticky;
+            top: 42px;
+            line-height: 1.8em;
+        }
+    }
+
+    td, th {
+        display: block;
+        flex: 1 0 110px;
+        overflow-x: hidden;
+        height: auto;
+        padding: 7px 5px;
+    }
+}

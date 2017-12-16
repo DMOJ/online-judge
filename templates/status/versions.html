@@ -1,29 +1,20 @@
 {% extends "base.html" %}
 
-{% block media %}
-    <style>
-
-    </style>
-{% endblock %}
-
 {% block title_ruler %}{% endblock %}
 
 {% block title_row %}
-    {% set tab = 'judges' %}
+    {% set tab = 'matrix' %}
     {% include "status/status-tabs.html" %}
 {% endblock %}
 
 {% block body %}
     <table id="judge-versions" class="table">
-        <thead>
         <tr>
             <th></th>
             {% for judge in judges %}
                 <th>{{ judge.name }}</th>
             {% endfor %}
         </tr>
-        </thead>
-        <tbody>
         {% for language in languages %}
             <tr>
                 <th>{{ language.name }}</th>
@@ -46,6 +37,5 @@
                 {% endfor %}
             </tr>
         {% endfor %}
-        </tbody>
     </table>
 {% endblock %}
