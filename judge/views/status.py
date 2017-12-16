@@ -43,7 +43,7 @@ def version_matrix(request):
     latest = defaultdict(list)
 
     judges = Judge.objects.filter(online=True).order_by('name')
-    languages = Language.objects.filter(judges__isnull=False)
+    languages = Language.objects.filter(judges__isnull=False).distinct()
 
     for runtime in RuntimeVersion.objects.filter(judge__online=True).order_by('priority'):
         if runtime.version:
