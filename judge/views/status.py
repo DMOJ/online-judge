@@ -1,5 +1,7 @@
 from collections import defaultdict
 from distutils.version import LooseVersion
+from functools import partial
+from operator import itemgetter
 
 from django.shortcuts import render
 from django.utils import six
@@ -38,28 +40,73 @@ class LatestList(list):
     __slots__ = ('versions', 'is_latest')
 
 
-def version_matrix(request):
-    matrix = defaultdict(LatestList)
-    latest = defaultdict(list)
+def compare_version_list(x, y):
+    keys = x.keys()
+    if keys != y.keys():
+        return False
+    for k in keys:
+        if len(x[k]) != len(y[k]):
+            return False
+        for a, b in zip(x[k], y[k]):
+            if a.name != b.name:
+                return False
+            if a.version != b.version:
+                return False
+    return True
 
-    judges = Judge.objects.filter(online=True).order_by('name')
-    languages = Language.objects.filter(judges__isnull=False).distinct()
+
+def version_matrix(request):
+    matrix = defaultdict(partial(defaultdict, LatestList))
+    latest = defaultdict(list)
+    groups = defaultdict(list)
+
+    judges = {judge.id: judge.name for judge in Judge.objects.filter(online=True)}
+    languages = Language.objects.all()
 
     for runtime in RuntimeVersion.objects.filter(judge__online=True).order_by('priority'):
         if runtime.version:
-            matrix[runtime.judge_id, runtime.language_id].append(runtime)
+            matrix[runtime.judge_id][runtime.language_id].append(runtime)
 
-    for (judge, language), versions in six.iteritems(matrix):
-        versions.versions = [LooseVersion(runtime.version) for runtime in versions]
-        if versions.versions > latest[language]:
-            latest[language] = versions.versions
+    for judge, data in six.iteritems(matrix):
+        groups[judges[judge].rpartition('.')[0]].append((judges[judge], data))
 
-    for (judge, language), versions in six.iteritems(matrix):
-        versions.is_latest = versions.versions == latest[language]
+    matrix = {}
+    for group, data in six.iteritems(groups):
+        if len(data) == 1:
+            judge, data = data[0]
+            matrix[judge] = data
+            continue
+
+        ds = range(len(data))
+        size = [1] * len(data)
+        for i, (p, x) in enumerate(data):
+            if ds[i] != i:
+                continue
+            for j, (q, y) in enumerate(data):
+                if i != j and compare_version_list(x, y):
+                    ds[j] = i
+                    size[i] += 1
+                    size[j] = 0
+
+        rep = max(xrange(len(data)), key=size.__getitem__)
+        matrix[group] = data[rep][1]
+        for i, (j, x) in enumerate(data):
+            if ds[i] != rep:
+                matrix[j] = x
+
+    for data in six.itervalues(matrix):
+        for language, versions in six.iteritems(data):
+            versions.versions = [LooseVersion(runtime.version) for runtime in versions]
+            if versions.versions > latest[language]:
+                latest[language] = versions.versions
+
+    for data in six.itervalues(matrix):
+        for language, versions in six.iteritems(data):
+            versions.is_latest = versions.versions == latest[language]
 
     return render(request, 'status/versions.html', {
         'title': _('Version matrix'),
-        'judges': judges,
+        'judges': sorted(matrix.keys()),
         'languages': languages,
         'matrix': matrix,
     })

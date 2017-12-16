@@ -12,14 +12,14 @@
         <tr>
             <th></th>
             {% for judge in judges %}
-                <th>{{ judge.name }}</th>
+                <th>{{ judge }}</th>
             {% endfor %}
         </tr>
         {% for language in languages %}
             <tr>
                 <th>{{ language.name }}</th>
                 {% for judge in judges %}
-                    {% set versions = matrix[(judge.id, language.id)] %}
+                    {% set versions = matrix[judge][language.id] %}
                     <td class="version version-
                         {%- if not versions -%}
                             blank
