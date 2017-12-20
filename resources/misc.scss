@@ -1,8 +1,10 @@
+@import "vars";
+
 #judge-versions {
     display: block;
 
     .version {
-        font-family: monospace;
+        font-family: $monospace-fonts;
     }
 
     .version-blank {
