@@ -5,7 +5,7 @@ from django.utils.encoding import smart_text
 from django.views.generic.list import BaseListView
 
 from judge.models import Profile, Organization, Problem, Comment, Contest
-from judge.jinja2.gravatar import get_gravatar_url
+from judge.jinja2.gravatar import gravatar
 
 
 def _get_user_queryset(term):
@@ -103,7 +103,7 @@ class UserSearchSelect2View(BaseListView):
                 {
                     'text': username,
                     'id': username,
-                    'gravatar_url': get_gravatar_url(email, self.gravatar_size, self.gravatar_default),
+                    'gravatar_url': gravatar(email, self.gravatar_size, self.gravatar_default),
                     'display_rank': display_rank,
                 } for pk, username, email, display_rank in context['object_list']],
             'more': context['page_obj'].has_next(),
