@@ -9,30 +9,10 @@ if settings.USE_I18N:
     _translations = {}
 
 
-    class UserTranslation(DjangoTranslation):
-        def _init_translation_catalog(self, *args, **kwargs):
-            self._catalog = {}
-            DjangoTranslation._init_translation_catalog(self, *args, **kwargs)
-
-        def _new_gnu_trans(self, localedir, use_null_fallback=True):
-            translation = gettext_module.translation(
-                    domain='dmoj-user',
-                    localedir=localedir,
-                    languages=[self._DjangoTranslation__locale],
-                    codeset='utf-8',
-                    fallback=True)
-            if not hasattr(translation, '_catalog'):
-                # provides merge support for NullTranslations()
-                translation._catalog = {}
-                translation._info = {}
-                translation.plural = lambda n: int(n != 1)
-            return translation
-
-
     def translation(language):
         global _translations
         if language not in _translations:
-            _translations[language] = UserTranslation(language)
+            _translations[language] = DjangoTranslation(language, domain='dmoj-user')
         return _translations[language]
 
 
@@ -44,10 +24,10 @@ if settings.USE_I18N:
         if len(eol_message) == 0:
             # Returns an empty value of the corresponding type if an empty message
             # is given, instead of metadata, which is the default gettext behavior.
-            result = type(message)("")
+            result = u''
         else:
             translation_object = translation(get_language())
-            result = getattr(translation_object, translation_function)(eol_message)
+            result = getattr(translation_object, translation_function)(eol_message).decode('utf-8')
 
         if isinstance(message, SafeData):
             return mark_safe(result)
