@@ -137,7 +137,6 @@ INSTALLED_APPS += (
     'django_ace',
     'pagedown',
     'sortedm2m',
-    'pyjade.ext.django',
     'statici18n',
     'impersonate',
     'django_jinja',
