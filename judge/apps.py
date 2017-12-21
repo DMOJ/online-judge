@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.db import ProgrammingError
 from django.utils.translation import ugettext_lazy
 
 
@@ -28,8 +29,11 @@ class JudgeAppConfig(AppConfig):
         from judge.models import Language, Profile
         from django.contrib.auth.models import User
 
-        lang = Language.get_python2()
-        for user in User.objects.filter(profile=None):
-            # These poor profileless users
-            profile = Profile(user=user, language=lang)
-            profile.save()
+        try:
+            lang = Language.get_python2()
+            for user in User.objects.filter(profile=None):
+                # These poor profileless users
+                profile = Profile(user=user, language=lang)
+                profile.save()
+        except ProgrammingError:
+            pass
