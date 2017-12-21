@@ -5,7 +5,7 @@ from django.utils.encoding import smart_text
 from django.views.generic.list import BaseListView
 
 from judge.models import Profile, Organization, Problem, Comment, Contest
-from judge.templatetags.gravatar import get_gravatar_url
+from judge.jinja2.gravatar import get_gravatar_url
 
 
 def _get_user_queryset(term):
