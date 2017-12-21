@@ -144,7 +144,7 @@ class Judge(models.Model):
 
     @cached_property
     def ping_ms(self):
-        return self.ping * 1000
+        return self.ping * 1000 if self.ping is not None else None
 
     @cached_property
     def runtime_list(self):
