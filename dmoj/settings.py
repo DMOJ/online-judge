@@ -246,7 +246,10 @@ LOCALE_PATHS = [
 LANGUAGES = [
     ('de', _('German')),
     ('en', _('English')),
+    ('es', _('Spanish')),
     ('fr', _('French')),
+    ('hr', _('Croatian')),
+    ('ko', _('Korean')),
     ('ro', _('Romanian')),
     ('ru', _('Russian')),
     ('sr-latn', _('Serbian (Latin)')),

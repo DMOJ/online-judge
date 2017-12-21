@@ -1,5 +1,5 @@
 from django.apps import AppConfig
-from django.db import ProgrammingError
+from django.db import DatabaseError
 from django.utils.translation import ugettext_lazy
 
 
@@ -35,5 +35,5 @@ class JudgeAppConfig(AppConfig):
                 # These poor profileless users
                 profile = Profile(user=user, language=lang)
                 profile.save()
-        except ProgrammingError:
+        except DatabaseError:
             pass
