@@ -1,6 +1,7 @@
 import gettext as gettext_module
 
 from django.conf import settings
+from django.utils import six
 from django.utils.safestring import SafeData, mark_safe
 
 if settings.USE_I18N:
@@ -27,7 +28,9 @@ if settings.USE_I18N:
             result = u''
         else:
             translation_object = translation(get_language())
-            result = getattr(translation_object, translation_function)(eol_message).decode('utf-8')
+            result = getattr(translation_object, translation_function)(eol_message)
+            if not isinstance(result, six.text_type):
+                result = result.decode('utf-8')
 
         if isinstance(message, SafeData):
             return mark_safe(result)
