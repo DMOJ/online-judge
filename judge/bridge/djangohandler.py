@@ -34,7 +34,7 @@ class DjangoHandler(ZlibPacketHandler):
             result = self.handlers.get(packet.get('name', None), self.on_malformed)(packet)
         except:
             logger.exception('Error in packet handling (Django-facing)')
-            result = {"name": "bad-request"}
+            result = {'name': 'bad-request'}
         self.send(result, self._schedule_close)
 
     def _schedule_close(self):
@@ -45,14 +45,17 @@ class DjangoHandler(ZlibPacketHandler):
         problem = data['problem-id']
         language = data['language']
         source = data['source']
-        self.server.judges.judge(id, problem, language, source)
+        priority = data['priority']
+        if not self.server.judges.check_priority(priority):
+            return {'name': 'bad-request'}
+        self.server.judges.judge(id, problem, language, source, priority)
         return {'name': 'submission-received', 'submission-id': id}
 
     def on_termination(self, data):
         try:
             self.server.judges.abort(data['submission-id'])
         except KeyError:
-            return {"name": "bad-request"}
+            return {'name': 'bad-request'}
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)

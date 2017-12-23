@@ -1,32 +1,46 @@
 import logging
+from collections import namedtuple
 from operator import attrgetter
 from threading import RLock
 
+try:
+    from llist import dllist
+except ImportError:
+    from pyllist import dllist
+
 logger = logging.getLogger('judge.bridge')
+
+PriorityMarker = namedtuple('PriorityMarker', 'priority')
 
 
 class JudgeList(object):
+    priorities = 2
+
     def __init__(self):
-        self.queue = []
+        self.queue = dllist()
+        self.priority = [self.queue.append(PriorityMarker(i)) for i in range(self.priorities)]
         self.judges = set()
         self.submission_map = {}
         self.lock = RLock()
 
     def _handle_free_judge(self, judge):
         with self.lock:
-            for i, elem in enumerate(self.queue):
-                id, problem, language, source = elem
-                if judge.can_judge(problem, language):
-                    self.submission_map[id] = judge
-                    logger.info('Dispatched queued submission %d: %s', id, judge.name)
-                    try:
-                        judge.submit(id, problem, language, source)
-                    except Exception:
-                        logger.exception('Failed to dispatch %d (%s, %s) to %s', id, problem, language, judge.name)
-                        self.judges.remove(judge)
-                        return
-                    del self.queue[i]
-                    break
+            node = self.queue.first
+            while node:
+                if not isinstance(node.value, PriorityMarker):
+                    id, problem, language, source = node.value
+                    if judge.can_judge(problem, language):
+                        self.submission_map[id] = judge
+                        logger.info('Dispatched queued submission %d: %s', id, judge.name)
+                        try:
+                            judge.submit(id, problem, language, source)
+                        except Exception:
+                            logger.exception('Failed to dispatch %d (%s, %s) to %s', id, problem, language, judge.name)
+                            self.judges.remove(judge)
+                            return
+                        self.queue.remove(node)
+                        break
+                node = node.next
 
     def register(self, judge):
         with self.lock:
@@ -61,7 +75,10 @@ class JudgeList(object):
             logger.info('Abort request: %d', submission)
             self.submission_map[submission].abort()
 
-    def judge(self, id, problem, language, source):
+    def check_priority(self, priority):
+        return 0 <= priority < self.priorities
+
+    def judge(self, id, problem, language, source, priority):
         with self.lock:
             if id in self.submission_map:
                 logger.warning('Already judging? %d', id)
@@ -78,7 +95,7 @@ class JudgeList(object):
                 except Exception:
                     logger.exception('Failed to dispatch %d (%s, %s) to %s', id, problem, language, judge.name)
                     self.judges.discard(judge)
-                    return self.judge(id, problem, language, source)
+                    return self.judge(id, problem, language, source, priority)
             else:
-                self.queue.append((id, problem, language, source))
+                self.queue.insert((id, problem, language, source), self.priority[priority])
                 logger.info('Queued submission: %d', id)
