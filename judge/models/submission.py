@@ -105,8 +105,8 @@ class Submission(models.Model):
     def long_status(self):
         return Submission.USER_DISPLAY_CODES.get(self.short_status, '')
 
-    def judge(self, **kwargs):
-        judge_submission(self, **kwargs)
+    def judge(self, rejudge):
+        judge_submission(self, rejudge)
 
     judge.alters_data = True
 

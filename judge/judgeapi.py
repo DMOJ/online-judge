@@ -39,11 +39,11 @@ def judge_request(packet, reply=True):
         return result
 
 
-def judge_submission(submission, **kwargs):
+def judge_submission(submission, rejudge):
     from .models import ContestSubmission, Submission, SubmissionTestCase
 
-    updates = {'time': None, 'memory': None, 'points': None, 'result': None, 'error': None}
-    updates.update(kwargs, status='QU')
+    updates = {'time': None, 'memory': None, 'points': None, 'result': None, 'error': None,
+               'was_rejudged': rejudge, 'status': 'QU'}
     try:
         # This is set proactively; it might get unset in judgecallback's on_grading_begin if the problem doesn't
         # actually have pretests stored on the judge.
@@ -72,6 +72,7 @@ def judge_submission(submission, **kwargs):
             'problem-id': submission.problem.code,
             'language': submission.language.key,
             'source': submission.source,
+            'priority': 1 if rejudge else 0,
         })
     except BaseException:
         logger.exception('Failed to send request to judge')

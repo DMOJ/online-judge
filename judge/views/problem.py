@@ -546,7 +546,7 @@ def problem_submit(request, problem=None, submission=None):
                 model = form.save()
 
             profile.update_contest()
-            model.judge()
+            model.judge(rejudge=False)
             return HttpResponseRedirect(reverse('submission_status', args=[str(model.id)]))
         else:
             form_data = form.cleaned_data
