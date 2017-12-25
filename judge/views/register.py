@@ -27,7 +27,7 @@ class CustomRegistrationForm(RegistrationForm):
                                 error_messages={'invalid': _('A username must contain letters, '
                                                              'numbers, or underscores')})
     display_name = CharField(max_length=50, required=False, label=_('Real name (optional)'))
-    timezone = ChoiceField(label=_('Location'), choices=TIMEZONE,
+    timezone = ChoiceField(label=_('Timezone'), choices=TIMEZONE,
                            widget=Select2Widget(attrs={'style': 'width:100%'}))
     language = ModelChoiceField(queryset=Language.objects.all(), label=_('Preferred language'), empty_label=None,
                                 widget=Select2Widget(attrs={'style': 'width:100%'}))

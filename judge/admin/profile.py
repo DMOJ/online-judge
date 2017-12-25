@@ -29,7 +29,7 @@ class ProfileForm(ModelForm):
 
 
 class TimezoneFilter(admin.SimpleListFilter):
-    title = _('Location')
+    title = _('timezone')
     parameter_name = 'timezone'
 
     def lookups(self, request, model_admin):
