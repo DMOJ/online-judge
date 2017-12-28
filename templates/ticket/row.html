@@ -1,0 +1,7 @@
+<tr id="ticket-{{ ticket.id }}">
+    <td><i class="fa {% if ticket.is_open %}fa-exclamation-circle{% else %}fa-check-circle-o{% endif %}"></i></td>
+    <td>{{ ticket.id }}</td>
+    <td><a href="{{ url('ticket', ticket.id) }}">{{ ticket.title }}</a></td>
+    <td>{{ link_user(ticket.user) }}</td>
+    <td>{{ link_users(ticket.assignees.all()) }}</td>
+</tr>

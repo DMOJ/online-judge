@@ -1,0 +1,13 @@
+{% extends "common-content.html" %}
+{% block description %}
+    {% cache 3600 'license_html' license.id %}
+        {{ license.text|markdown('license') }}
+    {% endcache %}
+{% endblock %}
+
+{% block info_float %}
+    {% if perms.judge.change_license %}
+        <div><a href="{{ url('admin:judge_license_change', license.id) }}">{{ _('Edit') }}</a></div>
+    {% endif %}
+    <div><b>{{ _('Source:') }}</b> <a href="{{ license.link }}">{{ license.link }}</a></div>
+{% endblock %}

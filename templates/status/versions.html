@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title_ruler %}{% endblock %}
+
+{% block title_row %}
+    {% set tab = 'matrix' %}
+    {% include "status/status-tabs.html" %}
+{% endblock %}
+
+{% block body %}
+    <table id="judge-versions" class="table">
+        <tr>
+            <th></th>
+            {% for judge in judges %}
+                <th>{{ judge }}</th>
+            {% endfor %}
+        </tr>
+        {% for language in languages %}
+            <tr>
+                <th>{{ language.name }}</th>
+                {% for judge in judges %}
+                    {% set versions = matrix[judge][language.id] %}
+                    <td class="version version-
+                        {%- if not versions -%}
+                            blank
+                        {%- elif versions.is_latest -%}
+                            latest
+                        {%- else -%}
+                            outdated
+                        {%- endif %}">
+                        {%- for version in versions -%}
+                            {{ version.name }}&nbsp;{{ version.version }}{% if not loop.last %}<br>{% endif %}
+                        {%- else -%}
+                            &mdash;
+                        {%- endfor -%}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

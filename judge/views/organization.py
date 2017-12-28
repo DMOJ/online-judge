@@ -58,12 +58,15 @@ class OrganizationMixin(object):
 class OrganizationList(TitleMixin, ListView):
     model = Organization
     context_object_name = 'organizations'
-    template_name = 'organization/list.jade'
+    template_name = 'organization/list.html'
     title = ugettext_lazy('Organizations')
+
+    def get_queryset(self):
+        return super(OrganizationList, self).get_queryset().annotate(member_count=Count('member'))
 
 
 class OrganizationHome(OrganizationMixin, DetailView):
-    template_name = 'organization/home.jade'
+    template_name = 'organization/home.html'
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationHome, self).get_context_data(**kwargs)
@@ -73,7 +76,7 @@ class OrganizationHome(OrganizationMixin, DetailView):
 
 
 class OrganizationUsers(OrganizationMixin, DetailView):
-    template_name = 'organization/users.jade'
+    template_name = 'organization/users.html'
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
@@ -131,7 +134,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
     model = Organization
     slug_field = 'key'
     slug_url_kwarg = 'key'
-    template_name = 'organization/requests/request.jade'
+    template_name = 'organization/requests/request.html'
     form_class = OrganizationRequestForm
 
     def dispatch(self, request, *args, **kwargs):
@@ -157,7 +160,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
 
 class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
     model = OrganizationRequest
-    template_name = 'organization/requests/detail.jade'
+    template_name = 'organization/requests/detail.html'
     title = ugettext_lazy('Join request detail')
 
     def get_object(self, queryset=None):
@@ -193,7 +196,7 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
 
 
 class OrganizationRequestView(OrganizationRequestBaseView):
-    template_name = 'organization/requests/pending.jade'
+    template_name = 'organization/requests/pending.html'
     tab = 'pending'
 
     def get_context_data(self, **kwargs):
@@ -242,7 +245,7 @@ class OrganizationRequestView(OrganizationRequestBaseView):
 class OrganizationRequestLog(OrganizationRequestBaseView):
     states = ('A', 'R')
     tab = 'log'
-    template_name = 'organization/requests/log.jade'
+    template_name = 'organization/requests/log.html'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -256,7 +259,7 @@ class OrganizationRequestLog(OrganizationRequestBaseView):
 
 
 class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, UpdateView):
-    template_name = 'organization/edit.jade'
+    template_name = 'organization/edit.html'
     model = Organization
     form_class = EditOrganizationForm
 

@@ -1,0 +1,14 @@
+<div id="{{ id|safe }}-wmd-wrapper" class="wmd-wrapper">
+    <div class="wmd-panel">
+        <div id="{{ id|safe }}_wmd_button_bar"></div>
+        <textarea{{ attrs|safe }}>{{ body }}</textarea>
+    </div>
+
+    {% if show_preview %}
+        <div id="{{ id|safe }}-preview" data-preview-url="{{ preview_url }}" data-textarea-id="{{ id }}"
+             data-timeout="{{ preview_timeout or '' }}" class="wmd-panel wmd-preview dmmd-preview {{ extra_classes }}">
+            <div class="dmmd-preview-update"><i class="fa fa-refresh"></i> Update Preview</div>
+            <div class="dmmd-preview-content content-description"></div>
+        </div>
+    {% endif %}
+</div>

@@ -32,6 +32,7 @@ class TicketForm(ModelForm):
 
 class TicketAdmin(ModelAdmin):
     fields = ('title', 'time', 'user', 'assignees', 'content_type', 'object_id', 'notes')
+    readonly_fields = ('time',)
     list_display = ('title', 'user', 'time', 'linked_item')
     inlines = [TicketMessageInline]
     form = TicketForm

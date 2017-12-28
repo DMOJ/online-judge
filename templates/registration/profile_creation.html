@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block media %}
+    <link rel="stylesheet" href="{{ static('libs/timezone-map/timezone-map.css') }}">
+    {{ form.media.css }}
+    <style>
+        .map-inset {
+            background: url('{{TIMEZONE_MAP}}') 50% 50%
+        }
+
+        .map-wrap {
+            display: none
+        }
+
+        .featherlight {
+            z-index: 1000
+        }
+
+        .featherlight .featherlight-content {
+            min-width: 80%
+        }
+
+        {% if TIMEZONE_BG %}
+            .map-wrap {
+                background: {{TIMEZONE_BG}}
+            }
+        {% endif %}
+    </style>
+{% endblock %}
+
+{% block js_media %}{{ form.media.js }}{% endblock %}
+
+{% block body %}
+    <form action="" method="post" class="form-area">
+        {% csrf_token %}
+        <table border="0" style="text-align:left">{{ form.as_table() }}</table>
+        <input type="submit" style="float:right;" value="{{ _('Continue >') }}">
+    </form>
+
+    <div class="map-wrap">
+        <div class="map-inset">
+            <div class="map-axis-x"></div>
+            <div class="map-axis-y"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block bodyend %}
+    <script type="text/javascript" src="{{ static('libs/timezone-map/timezone-picker.js') }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#open-map').featherlight({
+                afterOpen: function () {
+                    timezone_picker($('.featherlight-inner .map-inset'), $('#id_timezone'), '{{ static('libs/timezone-map/timezone-picker.json') }}');
+                }
+            });
+        });
+    </script>
+{% endblock %}

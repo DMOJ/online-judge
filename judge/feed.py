@@ -4,8 +4,8 @@ from django.core.cache import cache
 from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
 
+from judge.jinja2.markdown import markdown
 from judge.models import Comment, BlogPost, Problem
-from judge.templatetags.markdown import markdown
 
 
 class ProblemFeed(Feed):

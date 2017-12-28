@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block media %}
+    <style>
+        th {
+            text-align: left
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>{{ _('User:') }}</th>
+            <td>{{ link_user(object.user) }}</td>
+        </tr>
+        <tr>
+            <th>{{ _('Organization:') }}</th>
+            <td>
+                {% with org=object.organization %}
+                    <a href="{{ url('organization_home', org.key) }}">{{ org.name }}</a>
+                {% endwith %}
+            </td>
+        </tr>
+        <tr>
+            <th>{{ _('Time:') }}</th>
+            <td>{{ object.time|date(_("N j, Y, g:i a")) }}</td>
+        </tr>
+        <tr>
+            <th colspan="2">{{ _('Reason:') }}</th>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding-left: 2em">{{ object.reason }}</td>
+        </tr>
+    </table>
+{% endblock %}

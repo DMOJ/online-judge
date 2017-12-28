@@ -1,0 +1,135 @@
+@import "vars";
+
+.comment-score {
+    font-weight: bold;
+    text-align: center;
+}
+
+a {
+    &.upvote-link, &.downvote-link {
+        color: black;
+    }
+
+    &.voted {
+        text-shadow: 0 0 4px black, 0 0 9px blue;
+    }
+}
+
+.comment-area {
+    margin-right: 30px;
+
+    h2 {
+        margin-bottom: 20px;
+    }
+}
+
+.no-comments-message {
+    margin-top: -15px;
+    margin-left: 2.75em;
+}
+
+.comment-author {
+    font-weight: bold;
+    color: #333;
+}
+
+.comment-header {
+    color: rgba(1, 1, 1, 1);
+    background: rgba(0, 0, 0, 0.1);
+    padding: 5px 10px 5px 5px;
+    margin-left: 30px;
+    border: 1px solid $border_gray;
+    border-radius: $widget_border_radius;
+    display: flex;
+}
+
+.comment-spacer {
+    flex: 1;
+}
+
+.comment-edits:not(:empty) {
+    padding-right: 2px;
+    color: #444;
+}
+
+.comment-operation {
+    float: right;
+
+    .fa {
+        color: #444;
+    }
+
+    a + a {
+        padding-left: 2px;
+    }
+}
+
+.comments.top-level-comments {
+    margin-right: -26px;
+}
+
+.comment-submit {
+    width: 100%;
+}
+
+.comment-post-wrapper {
+    div {
+        padding-bottom: 2px;
+        padding-right: 10px;
+    }
+
+    input, textarea {
+        min-width: 100%;
+        max-width: 100%;
+
+        // Hack for 4k on Chrome
+        font-size: $base_font_size;
+    }
+}
+
+.comment-box {
+    border-radius: $widget_border_radius;
+    padding: 5px 10px 10px 15px;
+    border: 1px solid $border_gray;
+    background: rgba(0, 0, 0, 0.01);
+}
+
+.comment {
+    list-style: none none;
+    border-radius: $widget_border_radius;
+    margin: (-50px) -4px 10px -40px;
+    padding-top: 50px;
+
+    &:target > .comment-box {
+        border-left: 10px solid $highlight_blue;
+        padding-left: 5px;
+    }
+
+    &:before {
+        display: block;
+        content: " ";
+        margin-top: -50px;
+        height: 50px;
+        visibility: hidden;
+    }
+}
+
+.comment-title {
+    font-weight: bold;
+}
+
+.comment-author {
+    margin-bottom: 1em;
+
+    img {
+        width: 1.25em;
+        height: 1.25em;
+        border-radius: 0.2em;
+        vertical-align: bottom;
+        margin-right: 0.3em;
+    }
+}
+
+.comment-body {
+    word-wrap: break-word;
+}

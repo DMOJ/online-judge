@@ -11,10 +11,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from requests import HTTPError
 from reversion import revisions
-from social.apps.django_app.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
-from social.backends.github import GithubOAuth2
-from social.exceptions import InvalidEmail, SocialAuthBaseException
-from social.pipeline.partial import partial
+from social_django.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
+from social_core.backends.github import GithubOAuth2
+from social_core.exceptions import InvalidEmail, SocialAuthBaseException
+from social_core.pipeline.partial import partial
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Language
@@ -73,7 +73,7 @@ def choose_username(backend, user, username=None, *args, **kwargs):
                 return {'username': form.cleaned_data['username']}
         else:
             form = UsernameForm(initial={'username': username})
-        return render(request, 'registration/username_select.jade', {
+        return render(request, 'registration/username_select.html', {
             'title': 'Choose a username', 'form': form
         })
 
@@ -102,7 +102,7 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
                     revisions.set_user(user)
                     revisions.set_comment('Updated on registration')
                     return
-        return render(backend.strategy.request, 'registration/profile_creation.jade', {
+        return render(backend.strategy.request, 'registration/profile_creation.html', {
             'title': 'Create your profile', 'form': form
         })
 

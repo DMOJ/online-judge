@@ -1,0 +1,3 @@
+{% for user in users -%}
+    {{ link_user(user) }}{% if not loop.last %}, {% endif %}
+{%- endfor %}

@@ -1,5 +1,7 @@
+import itertools
 import json
 from datetime import datetime
+from operator import itemgetter
 
 import django
 from django.conf import settings
@@ -47,14 +49,11 @@ class UserMixin(object):
     context_object_name = 'user'
 
     def render_to_response(self, context, **response_kwargs):
-        if django.VERSION < (1, 8) and not isinstance(context, Context):
-            context = RequestContext(self.request, context)
-            context[self.context_object_name] = self.object
         return super(UserMixin, self).render_to_response(context, **response_kwargs)
 
 
 class UserPage(TitleMixin, UserMixin, DetailView):
-    template_name = 'user/user-base.jade'
+    template_name = 'user/user-base.html'
 
     def get_object(self, queryset=None):
         if self.kwargs.get(self.slug_url_kwarg, None) is None:
@@ -96,22 +95,11 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context = super(UserPage, self).get_context_data(**kwargs)
 
         context['hide_solved'] = int(self.hide_solved)
-        result = Submission.objects.filter(user=self.object, points__gt=0, problem__is_public=True) \
-            .exclude(problem__id__in=self.get_completed_problems() if self.hide_solved else []) \
-            .values('problem__id', 'problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
-            .distinct().annotate(points=Max('points')).order_by('problem__group__full_name', 'problem__code')
-        context['best_submissions'] = remap_keys(result, {
-            'problem__code': 'code', 'problem__name': 'name', 'problem__points': 'total',
-            'problem__group__full_name': 'group'
-        })
         context['authored'] = self.object.authored_problems.filter(is_public=True).order_by('code')
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
 
         context['rank'] = Profile.objects.filter(performance_points__gt=self.object.performance_points).count() + 1
-        breakdown, has_more = get_pp_breakdown(self.object, start=0, end=10)
-        context['pp_breakdown'] = breakdown
-        context['pp_has_more'] = has_more
 
         if rating:
             context['rating_rank'] = Profile.objects.filter(rating__gt=self.object.rating).count() + 1
@@ -125,35 +113,11 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         return super(UserPage, self).get(request, *args, **kwargs)
 
 
-class UserPerformancePointsAjax(UserMixin, DetailView):
-    template_name = 'user/pp-table-body.jade'
-
-    def get_context_data(self, **kwargs):
-        context = super(UserPerformancePointsAjax, self).get_context_data(**kwargs)
-        try:
-            start = int(self.request.GET.get('start', 0))
-            end = int(self.request.GET.get('end', PP_ENTRIES))
-        except ValueError:
-            start, end = 0, 100
-        breakdown, self.has_more = get_pp_breakdown(self.object, start=start, end=end)
-        context['pp_breakdown'] = breakdown
-        return context
-
-    def get(self, request, *args, **kwargs):
-        httpresp = super(UserPerformancePointsAjax, self).get(request, *args, **kwargs)
-        httpresp.render()
-
-        return JsonResponse({
-            'results': httpresp.content,
-            'has_more': self.has_more,
-        })
-
-
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
 
 
 class UserAboutPage(UserPage):
-    template_name = 'user/user-about.jade'
+    template_name = 'user/user-about.html'
 
     def get_context_data(self, **kwargs):
         context = super(UserAboutPage, self).get_context_data(**kwargs)
@@ -184,7 +148,57 @@ class UserAboutPage(UserPage):
 
 
 class UserProblemsPage(UserPage):
-    template_name = 'user/user-problems.jade'
+    template_name = 'user/user-problems.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserProblemsPage, self).get_context_data(**kwargs)
+
+        result = Submission.objects.filter(user=self.object, points__gt=0, problem__is_public=True) \
+            .exclude(problem__id__in=self.get_completed_problems() if self.hide_solved else []) \
+            .values('problem__id', 'problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
+            .distinct().annotate(points=Max('points')).order_by('problem__group__full_name', 'problem__code')
+
+        def process_group(group, problems_iter):
+            problems = list(problems_iter)
+            points = sum(map(itemgetter('points'), problems))
+            return {'name': group, 'problems': problems, 'points': points}
+
+        context['best_submissions'] = [
+            process_group(group, problems) for group, problems in itertools.groupby(
+                remap_keys(result, {
+                    'problem__code': 'code', 'problem__name': 'name', 'problem__points': 'total',
+                    'problem__group__full_name': 'group'
+                }), itemgetter('group'))
+        ]
+        breakdown, has_more = get_pp_breakdown(self.object, start=0, end=10)
+        context['pp_breakdown'] = breakdown
+        context['pp_has_more'] = has_more
+
+        return context
+
+
+class UserPerformancePointsAjax(UserProblemsPage):
+    template_name = 'user/pp-table-body.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserPerformancePointsAjax, self).get_context_data(**kwargs)
+        try:
+            start = int(self.request.GET.get('start', 0))
+            end = int(self.request.GET.get('end', PP_ENTRIES))
+        except ValueError:
+            start, end = 0, 100
+        breakdown, self.has_more = get_pp_breakdown(self.object, start=start, end=end)
+        context['pp_breakdown'] = breakdown
+        return context
+
+    def get(self, request, *args, **kwargs):
+        httpresp = super(UserPerformancePointsAjax, self).get(request, *args, **kwargs)
+        httpresp.render()
+
+        return JsonResponse({
+            'results': httpresp.content,
+            'has_more': self.has_more,
+        })
 
 
 @login_required
@@ -229,7 +243,7 @@ def edit_profile(request):
         form.fields['test_site'].initial = request.user.has_perm('judge.test_site')
 
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
-    return render(request, 'user/edit-profile.jade', {
+    return render(request, 'user/edit-profile.html', {
         'form': form, 'title': _('Edit profile'),
         'has_math_config': bool(getattr(settings, 'MATHOID_URL', False)),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
@@ -241,7 +255,7 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
     title = ugettext_lazy('Leaderboard')
     context_object_name = 'users'
-    template_name = 'user/list.jade'
+    template_name = 'user/list.html'
     paginate_by = 100
     all_sorts = frozenset(('points', 'problem_count', 'rating', 'performance_points'))
     default_desc = all_sorts
@@ -285,7 +299,7 @@ def user_ranking_redirect(request):
 
 
 class UserLogoutView(TitleMixin, TemplateView):
-    template_name = 'registration/logout.jade'
+    template_name = 'registration/logout.html'
     title = 'You have been successfully logged out.'
 
     def post(self, request, *args, **kwargs):

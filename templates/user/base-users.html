@@ -1,0 +1,83 @@
+{% extends "common-content.html" %}
+
+{% block js_media %}
+    {% block users_js_media %}{% endblock %}
+    <script>
+        $(function () {
+            $('#search-handle').replaceWith($('<select>').attr({
+                id: 'search-handle',
+                name: 'handle',
+                onchange: 'form.submit()'
+            }));
+            var in_user_redirect = false;
+            $('#search-handle').select2({
+                placeholder: '{{ _('Search by handle...') }}',
+                ajax: {
+                    url: '{{ url('user_search_select2_ajax') }}'
+                },
+                minimumInputLength: 1,
+                escapeMarkup: function (markup) {
+                    return markup;
+                },
+                templateResult: function (data, container) {
+                    return $('<span>')
+                        .append($('<img>', {
+                            'class': 'user-search-image', src: data.gravatar_url,
+                            width: 24, height: 24
+                        }))
+                        .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text))
+                        .append($('<a>', {href: '/user/' + data.text, 'class': 'user-redirect'})
+                            .append($('<i>', {'class': 'fa fa-mail-forward'}))
+                            .mouseover(function () {
+                                in_user_redirect = true;
+                            }).mouseout(function () {
+                                in_user_redirect = false;
+                            }));
+                }
+            }).on('select2:selecting', function () {
+                return !in_user_redirect;
+            });
+
+            var $last = null;
+            $(window).on('hashchange', function () {
+                var hash = window.location.hash;
+                if (hash.startsWith('#!')) {
+                    var $user = $('#user-' + hash.substring(2)).addClass('highlight');
+                    if ($user) {
+                        $(document).scrollTop($user.position().top - 50);
+                        if ($last !== null) $last.removeClass('highlight');
+                        $last = $user;
+                    }
+                }
+            }).trigger('hashchange');
+        });
+    </script>
+{% endblock %}
+
+{% block media %}
+    {% block users_media %}{% endblock %}
+{% endblock %}
+
+{% block body %}
+    <div id="common-content">
+        <div id="content-left" class="users">
+            {% if page_obj and page_obj.num_pages > 1 %}
+                <div style="margin-bottom: 7px; margin-top: 3px;">
+                    {% include "list-pages.html" %}
+                    <form id="search-form" name="form" action="{{ url('user_ranking_redirect') }}" method="get">
+                        <input id="search-handle" type="text" name="search"
+                               placeholder="{{ _('Search by handle...') }}">
+                    </form>
+                </div>
+            {% endif %}
+
+            <table id="users-table" class="table">
+                {% block users_table %}{% endblock %}
+            </table>
+
+            {% if page_obj and page_obj.num_pages > 1 %}
+                <div style="margin-top:10px;">{% include "list-pages.html" %}</div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

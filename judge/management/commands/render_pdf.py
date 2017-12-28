@@ -38,7 +38,7 @@ class Command(BaseCommand):
         directory = options['directory']
         with options['engine'](directory, clean_up=directory is None) as maker, \
                 translation.override(options['language']):
-            maker.html = get_template('problem/raw.jade').render({
+            maker.html = get_template('problem/raw.html').render({
                 'problem': problem,
                 'problem_name': problem.name if trans is None else trans.name,
                 'description': problem.description if trans is None else trans.description,

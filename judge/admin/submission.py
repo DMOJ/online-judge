@@ -138,7 +138,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id))
         judged = len(queryset)
         for model in queryset:
-            model.judge(was_rejudged=True)
+            model.judge(rejudge=True)
         self.message_user(request, ungettext('%d submission were successfully scheduled for rejudging.',
                                              '%d submissions were successfully scheduled for rejudging.',
                                              judged) % judged)
@@ -229,7 +229,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.edit_all_problem') and \
                 not submission.problem.is_editor(request.user.profile):
             raise PermissionDenied()
-        submission.judge(was_rejudged=True)
+        submission.judge(rejudge=True)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
     def get_form(self, request, obj=None, **kwargs):

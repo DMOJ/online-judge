@@ -1,0 +1,134 @@
+.admin a, .admin {
+    color: black !important;
+    font-weight: bold !important;
+}
+
+.rate-box {
+    width: 1em;
+    height: 1em;
+    border-radius: 1em;
+    overflow: hidden;
+    position: relative;
+    border: solid 2px;
+    display: block;
+
+    span {
+        width: 1em;
+        position: absolute;
+        bottom: 0;
+        display: block;
+    }
+
+    &.rate-none {
+        border: none;
+    }
+
+    &.rate-newbie {
+        border-color: #999;
+    }
+
+    &.rate-amateur {
+        border-color: #00a900;
+    }
+
+    &.rate-expert {
+        border-color: #66f;
+    }
+
+    &.rate-candidate-master {
+        border-color: #f6f;
+    }
+
+    &.rate-master {
+        border-color: #dc0;
+    }
+
+    &.rate-grandmaster, &.rate-target {
+        border-color: #e00;
+    }
+
+    &.rate-newbie span {
+        background: #999;
+    }
+
+    &.rate-amateur span {
+        background: #00a900;
+    }
+
+    &.rate-expert span {
+        background: #66f;
+    }
+
+    &.rate-candidate-master span {
+        background: #f6f;
+    }
+
+    &.rate-master span {
+        background: #dc0;
+    }
+
+    &.rate-grandmaster span {
+        background: #e00;
+    }
+
+    &.rate-target span {
+        top: 0.28em;
+        bottom: 0.28em;
+        left: 0.28em;
+        right: 0.28em;
+        background: #e00;
+        height: auto !important;
+        width: auto !important;
+        border-radius: 50%;
+    }
+}
+
+.rating {
+    font-weight: bold;
+}
+
+.rate-none, .rate-none a {
+    color: black;
+    font-weight: normal;
+}
+
+.rate-newbie, .rate-newbie a {
+    color: #999;
+}
+
+.rate-amateur, .rate-amateur a {
+    color: #00a900;
+}
+
+.rate-expert, .rate-expert a {
+    color: blue;
+}
+
+.rate-candidate-master, .rate-candidate-master a {
+    color: purple;
+}
+
+.rate-master, .rate-master a {
+    color: #ffb100;
+}
+
+.rate-grandmaster, .rate-grandmaster a, .rate-target, .rate-target a {
+    color: #e00;
+}
+
+.rate-group {
+    white-space: nowrap;
+    display: inline-block;
+    color: black;
+
+    .rating {
+        display: inline-block;
+    }
+
+    .rate-box {
+        display: inline-block;
+        margin-right: 0.2em;
+        vertical-align: bottom;
+        font-size: 0.8em;
+    }
+}

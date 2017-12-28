@@ -1,3 +1,5 @@
+from __future__ import division
+
 import itertools
 import logging
 import os
@@ -36,6 +38,7 @@ from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.problems import contest_completed_ids, user_completed_ids, contest_attempted_ids, user_attempted_ids, \
     hot_problems
+from judge.utils.strings import safe_int_or_none, safe_float_or_none
 from judge.utils.views import TitleMixin, generic_message, QueryStringSortMixin
 
 
@@ -96,7 +99,7 @@ class SolvedProblemMixin(object):
 
 class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDetailView):
     context_object_name = 'problem'
-    template_name = 'problem/editorial.jade'
+    template_name = 'problem/editorial.html'
 
     def get_title(self):
         return _('Editorial for {0}').format(self.object.name)
@@ -123,7 +126,7 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
 
 class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
     context_object_name = 'problem'
-    template_name = 'problem/raw.jade'
+    template_name = 'problem/raw.html'
 
     def get_title(self):
         return self.object.name
@@ -145,7 +148,7 @@ class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMi
 
 class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     context_object_name = 'problem'
-    template_name = 'problem/problem.jade'
+    template_name = 'problem/problem.html'
 
     def get_comment_page(self):
         return 'p:%s' % self.object.code
@@ -230,7 +233,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.%s.pdf', problem.code, language)
             with DefaultPdfMaker() as maker, translation.override(language):
-                maker.html = get_template('problem/raw.jade').render({
+                maker.html = get_template('problem/raw.html').render({
                     'problem': problem,
                     'problem_name': problem.name if trans is None else trans.name,
                     'description': problem.description if trans is None else trans.description,
@@ -263,7 +266,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     model = Problem
     title = ugettext_lazy('Problems')
     context_object_name = 'problems'
-    template_name = 'problem/list.jade'
+    template_name = 'problem/list.html'
     paginate_by = 50
     sql_sort = frozenset(('points', 'ac_rate', 'user_count', 'code'))
     manual_sort = frozenset(('name', 'group', 'solved', 'type'))
@@ -367,6 +370,11 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                     queryset = queryset.filter(
                         Q(code__icontains=query) | Q(name__icontains=query) |
                         Q(translations__name__icontains=query, translations__language=self.request.LANGUAGE_CODE))
+        self.prepoint_queryset = queryset
+        if self.point_start is not None:
+            queryset = queryset.filter(points__gte=self.point_start)
+        if self.point_end is not None:
+            queryset = queryset.filter(points__lte=self.point_end)
         return queryset.distinct()
 
     def get_queryset(self):
@@ -394,9 +402,30 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         if not self.in_contest:
             context.update(self.get_sort_context())
             context['hot_problems'] = hot_problems(timedelta(days=1), 7)
+            context['point_start'], context['point_end'], context['point_values'] = self.get_noui_slider_points()
         else:
             context['hot_problems'] = None
+            context['point_start'], context['point_end'], context['point_values'] = 0, 0, {}
         return context
+
+    def get_noui_slider_points(self):
+        points = sorted(self.prepoint_queryset.values_list('points', flat=True).distinct())
+        if not points:
+            return 0, 0, {}
+        if len(points) == 1:
+            return points[0], points[0], {
+                'min': points[0] - 1,
+                'max': points[0] + 1,
+            }
+
+        start, end = points[0], points[-1]
+        if self.point_start is not None:
+            start = self.point_start
+        if self.point_end is not None:
+            end = self.point_end
+        points_map = {0.0: 'min', 1.0: 'max'}
+        size = len(points) - 1
+        return start, end, {points_map.get(i / size, '%.2f%%' % (100 * i / size,)): j for i, j in enumerate(points)}
 
     def GET_with_session(self, request, key):
         if not request.GET:
@@ -417,16 +446,15 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         if not self.show_types:
             self.all_sorts.discard('type')
 
-        if 'category' in request.GET:
-            try:
-                self.category = int(request.GET.get('category'))
-            except ValueError:
-                pass
+        self.category = safe_int_or_none(request.GET.get('category'))
         if 'type' in request.GET:
             try:
                 self.selected_types = map(int, request.GET.getlist('type'))
             except ValueError:
                 pass
+
+        self.point_start = safe_float_or_none(request.GET.get('point_start'))
+        self.point_end = safe_float_or_none(request.GET.get('point_end'))
 
     def get(self, request, *args, **kwargs):
         self.setup(request)
@@ -518,7 +546,7 @@ def problem_submit(request, problem=None, submission=None):
                 model = form.save()
 
             profile.update_contest()
-            model.judge()
+            model.judge(rejudge=False)
             return HttpResponseRedirect(reverse('submission_status', args=[str(model.id)]))
         else:
             form_data = form.cleaned_data
@@ -562,7 +590,7 @@ def problem_submit(request, problem=None, submission=None):
         else:
             if submission_limit:
                 submissions_left = submission_limit - get_contest_submission_count(problem, profile)
-    return render(request, 'problem/submit.jade', {
+    return render(request, 'problem/submit.html', {
         'form': form,
         'title': _('Submit to %(problem)s') % {
             'problem': problem_object.translated_name(request.LANGUAGE_CODE),

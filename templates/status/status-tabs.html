@@ -1,0 +1,7 @@
+{% extends "tabs-base.html" %}
+
+{% block tabs %}
+    {{ make_tab('judges', 'fa-server', url('status_all'), _('Judges')) }}
+    {{ make_tab('runtimes', 'fa-code', url('runtime_list'), _('Runtimes')) }}
+    {{ make_tab('matrix', 'fa-table', url('version_matrix'), _('Version Matrix')) }}
+{% endblock %}

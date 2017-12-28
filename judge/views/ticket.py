@@ -2,14 +2,12 @@ import json
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import PermissionDenied, ImproperlyConfigured
-from django.db.models import Q
+from django.core.exceptions import PermissionDenied, ImproperlyConfigured, ValidationError
+from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
-from django.http import Http404
 from django.template.defaultfilters import truncatechars
 from django.template.loader import get_template
 from django.urls import reverse
@@ -26,7 +24,6 @@ from judge import event_poster as event
 from judge.models import Profile
 from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
-from judge.utils.problems import editable_problems
 from judge.utils.tickets import own_ticket_filter, filter_visible_tickets
 from judge.utils.views import TitleMixin, paginate_query_context
 from judge.widgets import HeavyPreviewPageDownWidget
@@ -40,10 +37,18 @@ class TicketForm(forms.Form):
     title = forms.CharField(max_length=100, label=ugettext_lazy('Ticket title'))
     body = forms.CharField(widget=ticket_widget)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
         super(TicketForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'placeholder': _('Ticket title')})
         self.fields['body'].widget.attrs.update({'placeholder': _('Issue description')})
+
+    def clean(self):
+        if self.request is not None and self.request.user.is_authenticated:
+            profile = self.request.user.profile
+            if profile.mute:
+                raise ValidationError(_('Your part is silent, little toad.'))
+        return super(TicketForm, self).clean()
 
 
 class SingleObjectFormView(SingleObjectMixin, FormView):
@@ -58,10 +63,15 @@ class SingleObjectFormView(SingleObjectMixin, FormView):
 
 class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
     form_class = TicketForm
-    template_name = 'ticket/new.jade'
+    template_name = 'ticket/new.html'
 
     def get_assignees(self):
         return []
+
+    def get_form_kwargs(self):
+        kwargs = super(NewTicketView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def form_valid(self, form):
         ticket = Ticket(user=self.request.user.profile, title=form.cleaned_data['title'])
@@ -83,7 +93,7 @@ class NewProblemTicketView(TitleMixin, NewTicketView):
     model = Problem
     slug_field = 'code'
     slug_url_kwarg = 'problem'
-    template_name = 'ticket/new_problem.jade'
+    template_name = 'ticket/new_problem.html'
 
     def get_assignees(self):
         return self.object.authors.all()
@@ -121,7 +131,7 @@ class TicketMixin(object):
 
 class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectFormView):
     form_class = TicketCommentForm
-    template_name = 'ticket/ticket.jade'
+    template_name = 'ticket/ticket.html'
     context_object_name = 'ticket'
 
     def form_valid(self, form):
@@ -176,7 +186,7 @@ class TicketNotesForm(forms.Form):
 
 
 class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, FormView):
-    template_name = 'ticket/edit-notes.jade'
+    template_name = 'ticket/edit-notes.html'
     form_class = TicketNotesForm
     object = None
 
@@ -198,7 +208,7 @@ class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, Fo
 
 class TicketList(LoginRequiredMixin, ListView):
     model = Ticket
-    template_name = 'ticket/list.jade'
+    template_name = 'ticket/list.html'
     context_object_name = 'tickets'
     paginate_by = 50
     paginator_class = DiggPaginator
@@ -292,7 +302,7 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
         ticket = self.get_object()
         message = ticket.messages.first()
         return JsonResponse({
-            'row': get_template('ticket/row.jade').render({'ticket': ticket}, request),
+            'row': get_template('ticket/row.html').render({'ticket': ticket}, request),
             'notification': {
                 'title': _('New Ticket: %s') % ticket.title,
                 'body': '%s\n%s' % (_('#%(id)d, assigned to: %(users)s') % {

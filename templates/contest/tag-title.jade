@@ -1,5 +1,0 @@
-- load i18n
-h2(style='display:inline')
-    span.contest-tag(style='background-color: {{ tag.color }}; color: {{ tag.text_color }}')= tag.name
-if perms.judge.change_contesttag
-    .title-line-action [#[a(href='{% url "admin:judge_contesttag_change" tag.id %}') {% trans "Edit" %}]]

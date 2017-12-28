@@ -1,0 +1,4 @@
+{{ preview_data|markdown('comment', MATH_ENGINE)|reference|str|safe }}
+{% if REQUIRE_JAX %}
+    <div data-config="{{ static('mathjax_config.js') }}" class="require-mathjax-support"></div>
+{% endif %}

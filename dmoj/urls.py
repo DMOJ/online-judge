@@ -6,7 +6,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.core.urlresolvers import reverse
 from django.http import HttpResponsePermanentRedirect
 from django.utils.translation import ugettext_lazy as _
-from social.apps.django_app.urls import urlpatterns as social_auth_patterns
+from social_django.urls import urlpatterns as social_auth_patterns
 
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
 from judge.forms import CustomAuthenticationForm
@@ -24,7 +24,7 @@ admin.autodiscover()
 
 register_patterns = [
     url(r'^activate/complete/$',
-        TitledTemplateView.as_view(template_name='registration/activation_complete.jade',
+        TitledTemplateView.as_view(template_name='registration/activation_complete.html',
                                    title='Activation Successful!'),
         name='registration_activation_complete'),
     # Activation keys get matched by \w+ instead of the more specific
@@ -38,7 +38,7 @@ register_patterns = [
         RegistrationView.as_view(title='Register'),
         name='registration_register'),
     url(r'^register/complete/$',
-        TitledTemplateView.as_view(template_name='registration/registration_complete.jade',
+        TitledTemplateView.as_view(template_name='registration/registration_complete.html',
                                    title='Registration Completed'),
         name='registration_complete'),
     url(r'^register/closed/$',
@@ -46,31 +46,31 @@ register_patterns = [
                                    title='Registration not allowed'),
         name='registration_disallowed'),
     url(r'^login/$', auth_views.LoginView.as_view(
-        template_name='registration/login.jade',
+        template_name='registration/login.html',
         extra_context={'title': _('Login')},
         authentication_form=CustomAuthenticationForm,
     ), name='auth_login'),
     url(r'^logout/$', user.UserLogoutView.as_view(), name='auth_logout'),
     url(r'^password/change/$', auth_views.PasswordChangeView.as_view(
-        template_name='registration/password_change_form.jade'
+        template_name='registration/password_change_form.html'
     ), name='password_change'),
     url(r'^password/change/done/$', auth_views.PasswordChangeDoneView.as_view(
-        template_name='registration/password_change_done.jade',
+        template_name='registration/password_change_done.html',
     ), name='password_change_done'),
     url(r'^password/reset/$',auth_views.PasswordResetView.as_view(
-        template_name='registration/password_reset.jade',
+        template_name='registration/password_reset.html',
         html_email_template_name='registration/password_reset_email.html',
         email_template_name='registration/password_reset_email.txt',
     ), name='password_reset'),
     url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
         auth_views.PasswordResetConfirmView.as_view(
-            template_name='registration/password_reset_confirm.jade',
+            template_name='registration/password_reset_confirm.html',
         ), name='password_reset_confirm'),
     url(r'^password/reset/complete/$', auth_views.PasswordResetCompleteView.as_view(
-        template_name='registration/password_reset_complete.jade',
+        template_name='registration/password_reset_complete.html',
     ), name='password_reset_complete'),
     url(r'^password/reset/done/$', auth_views.PasswordResetDoneView.as_view(
-        template_name='registration/password_reset_done.jade',
+        template_name='registration/password_reset_done.html',
     ), name='password_reset_done'),
     url(r'^social/error/$', register.social_auth_error, name='social_auth_error'),
 ]
@@ -88,7 +88,7 @@ def paged_list_view(view, name):
 
 
 urlpatterns = [
-    url(r'^$', blog.PostList.as_view(template_name='home.jade', title=_('Home')), kwargs={'page': 1}, name='home'),
+    url(r'^$', blog.PostList.as_view(template_name='home.html', title=_('Home')), kwargs={'page': 1}, name='home'),
     url(r'^500/$', exception),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
@@ -217,7 +217,7 @@ urlpatterns = [
     ])),
 
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
-
+    url(r'^runtimes/matrix/$', status.version_matrix, name='version_matrix'),
     url(r'^status/$', status.status_all, name='status_all'),
 
     url(r'^api/', include([
@@ -333,11 +333,15 @@ favicon_paths = ['apple-touch-icon-180x180.png', 'apple-touch-icon-114x114.png',
                  'mstile-310x150.png', 'apple-touch-icon-144x144.png', 'browserconfig.xml', 'manifest.json',
                  'apple-touch-icon-120x120.png', 'mstile-310x310.png']
 
-from django.contrib.staticfiles.templatetags.staticfiles import static
+
+from django.templatetags.static import static
+from django.utils.functional import lazystr
 from django.views.generic import RedirectView
 
 for favicon in favicon_paths:
-    urlpatterns.append(url(r'^%s$' % favicon, RedirectView.as_view(url=static('icons/' + favicon))))
+    urlpatterns.append(url(r'^%s$' % favicon, RedirectView.as_view(
+        url=lazystr(lambda: static('icons/' + favicon))
+    )))
 
 handler404 = 'judge.views.error.error404'
 handler403 = 'judge.views.error.error403'

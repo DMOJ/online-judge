@@ -5,12 +5,12 @@ from django.utils.translation import ugettext as _
 
 
 def error(request, context, status):
-    return render(request, 'error.jade', context=context, status=status)
+    return render(request, 'error.html', context=context, status=status)
 
 
 def error404(request):
     # TODO: "panic: go back"
-    return render(request, 'generic-message.jade', {
+    return render(request, 'generic-message.html', {
         'title': _('404 error'),
         'message': _('Could not find page "%s"') % request.path
     }, status=404)

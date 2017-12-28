@@ -27,7 +27,7 @@ class CustomRegistrationForm(RegistrationForm):
                                 error_messages={'invalid': _('A username must contain letters, '
                                                              'numbers, or underscores')})
     display_name = CharField(max_length=50, required=False, label=_('Real name (optional)'))
-    timezone = ChoiceField(label=_('Location'), choices=TIMEZONE,
+    timezone = ChoiceField(label=_('Timezone'), choices=TIMEZONE,
                            widget=Select2Widget(attrs={'style': 'width:100%'}))
     language = ModelChoiceField(queryset=Language.objects.all(), label=_('Preferred language'), empty_label=None,
                                 widget=Select2Widget(attrs={'style': 'width:100%'}))
@@ -57,7 +57,7 @@ class CustomRegistrationForm(RegistrationForm):
 class RegistrationView(OldRegistrationView):
     title = _('Registration')
     form_class = CustomRegistrationForm
-    template_name = 'registration/registration_form.jade'
+    template_name = 'registration/registration_form.html'
 
     def get_context_data(self, **kwargs):
         if 'title' not in kwargs:
@@ -95,7 +95,7 @@ class RegistrationView(OldRegistrationView):
 
 class ActivationView(OldActivationView):
     title = _('Registration')
-    template_name = 'registration/activate.jade'
+    template_name = 'registration/activate.html'
 
     def get_context_data(self, **kwargs):
         if 'title' not in kwargs:
@@ -104,7 +104,7 @@ class ActivationView(OldActivationView):
 
 
 def social_auth_error(request):
-    return render(request, 'generic-message.jade', {
+    return render(request, 'generic-message.html', {
         'title': ugettext('Authentication failure'),
         'message': request.GET.get('message')
     })

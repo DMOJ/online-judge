@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% block media %}
+    <style>
+        #ticket-list .fa-check-circle-o {
+            color: #00a900;
+        }
+
+        #ticket-list .fa-exclamation-circle {
+            color: darkred;
+        }
+
+        @media (min-width: 500px) {
+            #container {
+                display: flex;
+                flex-direction: row-reverse;
+            }
+
+            #container > main {
+                flex: 1;
+            }
+
+            #container > aside {
+                flex: 1;
+                max-width: 200px;
+                margin-left: 1em;
+            }
+
+            #container > aside > div {
+                position: sticky;
+                top: 60px;
+            }
+        }
+
+        .select2-selection__arrow {
+            display: none;
+        }
+
+        .select2-selection__rendered {
+            cursor: text;
+        }
+
+        .select2-results__option {
+            position: relative;
+        }
+
+        .select2-results__option--highlighted {
+            background-color: #DEDEDE !important;
+        }
+
+        li.select2-results__option--highlighted a.user-redirect {
+            display: inline-block;
+        }
+
+        a.user-redirect {
+            color: #2980b9;
+            vertical-align: middle;
+            font-size: 1.2em;
+            position: absolute;
+            right: 0.8em;
+            display: none;
+        }
+
+        a.user-redirect:hover {
+            text-shadow: 0 0 2px blue;
+        }
+    </style>
+{% endblock %}
+
+{% block js_media %}
+    <script type="text/javascript">
+        window.filter_user_ids = {{filter_status.user_id}};
+        window.filter_own_id = {{filter_status.own_id}};
+        window.filter_assignee_ids = {{filter_status.assignee_id}};
+    </script>
+    <script type="text/javascript" src="{{ static('event.js') }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('input#own').click(function () {
+                ($('<form>').attr('action', window.location.pathname + '?' + $('form#filter-form').serialize())
+                    .append($('<input>').attr('type', 'hidden').attr('name', 'csrfmiddlewaretoken')
+                        .attr('value', $.cookie('csrftoken')))
+                    .attr('method', 'POST').appendTo($('body')).submit());
+            });
+
+            register_notify('ticket', {
+                $checkbox: $('#notification'),
+                change: function (enabled) {
+                    if (!enabled)
+                        for (key in localStorage)
+                            if (key.startsWith('ticket:open:'))
+                                delete localStorage[key];
+                }
+            });
+
+            function main_list_notify(id) {
+                key = 'ticket:open:' + id;
+                return !(key in localStorage) || localStorage[key] == '0';
+            }
+
+            var $tbody = $('#ticket-list').find('tbody');
+
+            function new_ticket(ticket) {
+                console.log('Fetching data for: ' + ticket.id);
+                $.ajax({
+                    url: '{{ url('ticket_ajax') }}',
+                    data: {id: ticket.id},
+                    success: function (data) {
+                        console.log('Got data for: ' + ticket.id);
+                        console.log(data);
+                        $tbody.prepend($(data.row));
+                        notify('ticket', data.notification.title, {
+                            body: data.notification.body
+                        });
+                    },
+                    error: function (data) {
+                        if (data.status === 403)
+                            console.log('No right to see: ' + ticket.id);
+                        else {
+                            console.log('Could not load ticket:');
+                            console.log(data.responseText);
+                        }
+                    }
+                });
+            }
+
+            function ticket_status(ticket) {
+                if (!main_list_notify(ticket.id)) return;
+
+                var $row = $('#ticket-' + ticket.id);
+                console.log('Ticket status change: ' + ticket.id);
+                if ($row.length) {
+                    var $status = $row.find('td').first().find('i');
+                    if (ticket.open) {
+                        $status.removeClass('fa-check-circle-o').addClass('fa-exclamation-circle');
+                        notify('ticket', '{{ _('Reopened: ') }}' + ticket.title);
+                    } else {
+                        $status.removeClass('fa-exclamation-circle').addClass('fa-check-circle-o');
+                        notify('ticket', '{{ _('Closed: ') }}' + ticket.title);
+                    }
+                }
+            }
+
+            window.load_dynamic_update = function (last_msg) {
+                var $assignees = $(filter_assignee_ids);
+
+                return new EventReceiver(
+                    "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                    ['tickets'], last_msg, function (message) {
+                        console.log(message);
+                        if (filter_own_id != null && message.user != filter_own_id &&
+                            !~message.assignees.indexOf(filter_own_id))
+                            return;
+                        if (filter_user_ids.length && !~filter_user_ids.indexOf(message.user))
+                            return;
+                        if ($assignees.length && !$assignees.filter(message.assignees).length)
+                            return;
+                        switch (message.type) {
+                            case 'new-ticket':
+                                new_ticket(message);
+                                break;
+                            case 'ticket-status':
+                                ticket_status(message);
+                                break;
+                        }
+                    }
+                );
+            };
+
+            var user_select2 = {
+                escapeMarkup: function (markup) {
+                    return markup;
+                },
+                templateResult: function (data, container) {
+                    return $('<span>')
+                        .append($('<img>', {
+                            'class': 'user-search-image', src: data.gravatar_url,
+                            width: 24, height: 24
+                        }))
+                        .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text));
+                }
+            };
+
+            $('#filter-user').select2($.extend({}, user_select2,
+                {ajax: {url: '{{ url('ticket_user_select2_ajax') }}'}}));
+            $('#filter-assignee').select2($.extend({}, user_select2,
+                {ajax: {url: '{{ url('ticket_assignee_select2_ajax') }}'}}));
+        });
+    </script>
+
+    {% if last_msg %}
+        <script type="text/javascript">
+            $(function () {
+                load_dynamic_update({{last_msg}});
+            });
+        </script>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div id="container">
+        <aside>
+            <div>
+                <div id="notification-box">
+                    <input id="notification" type="checkbox">
+                    <label for="notification">{{ _('Use desktop notification') }}</label>
+                </div>
+
+                <form id="filter-form" name="form" action="" method="get">
+                    <div id="own-box" class="filter-check">
+                        <input id="own" type="checkbox" name="own"{% if filter_status %} checked{% endif %} value="1">
+                        <label for="own">{{ _('Show my tickets only') }}</label>
+                    </div>
+
+                    <div id="user-box" class="filter-select2">
+                        <label for="filter-user">{{ _('Filing user') }}</label>
+                        <select id="filter-user" style="width: 100%" multiple="multiple" name="user">
+                            {% for username in filter_status.user %}
+                                <option value="{{ username }}" selected>{{ username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div id="assignee-box" class="filter-select2">
+                        <label for="filter-user">{{ _('Assignee') }}</label>
+                        <select id="filter-assignee" style="width: 100%" multiple name="assignee">
+                            {% for username in filter_status.assignee %}
+                                <option value="{{ username }}" selected>{{ username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" style="margin-left: auto" class="submit">{{ _('Go') }}</button>
+                </form>
+            </div>
+        </aside>
+
+        <main>
+            {% if page_obj.num_pages > 1 %}
+                <div style="margin-bottom:6px; margin-top:3px">{% include "list-pages.html" %}</div>
+            {% endif %}
+            <table id="ticket-list" class="table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>{{ _('ID') }}</th>
+                    <th>{{ _('Title') }}</th>
+                    <th>{{ _('User') }}</th>
+                    <th>{{ _('Assignees') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ticket in tickets %}
+                    {% include "ticket/row.html" %}
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if page_obj.num_pages > 1 %}
+                <div style="margin-top:10px">{% include "list-pages.html" %}</div>
+            {% endif %}
+        </main>
+    </div>
+{% endblock %}

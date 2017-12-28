@@ -1,1 +1,12 @@
-{% include "newsletter/subscription_activate.jade" %}
+{% extends "base.html" %}
+
+{% block title %}Newsletter {{ newsletter.title }} {{ action }} activate{% endblock %}
+
+{% block body %}
+    <h1>Newsletter {{ newsletter.title }} {{ action }} activate</h1>
+    <form enctype="multipart/form-data" method="post" action=".">
+        {% csrf_token %}
+        {{ form.as_p() }}
+        <p><input id="id_submit" name="submit" type="submit" value="Activate"></p>
+    </form>
+{% endblock %}

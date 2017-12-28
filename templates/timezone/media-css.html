@@ -1,0 +1,27 @@
+{% compress css %}
+    {% if TIMEZONE_BG %}
+        <style>
+            .map-wrap {
+                background: url('{{TIMEZONE_BG}}')
+            }
+        </style>
+    {% endif %}
+    <link rel="stylesheet" href="{{ static('libs/timezone-map/timezone-map.css') }}">
+    <style>
+        .map-inset {
+            background: url('{{TIMEZONE_MAP}}') 50% 50%
+        }
+
+        .map-wrap {
+            display: none
+        }
+
+        .featherlight {
+            z-index: 1000
+        }
+
+        .featherlight .featherlight-content {
+            min-width: 80%
+        }
+    </style>
+{% endcompress %}

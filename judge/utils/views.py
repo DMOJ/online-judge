@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 
-from dmoj import settings
 from judge.utils.diggpaginator import DiggPaginator
 
 
@@ -21,7 +20,7 @@ def class_view_decorator(function_decorator):
 
 
 def generic_message(request, title, message, status=None):
-    return render(request, 'generic-message.jade', {
+    return render(request, 'generic-message.html', {
         'message': message,
         'title': title
     }, status=status)

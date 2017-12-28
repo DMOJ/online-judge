@@ -41,7 +41,7 @@
             "parent": null,
             "path": "/users/",
             "regex": "^/user",
-            "rght": 4,
+            "rght": 2,
             "tree_id": 3
         },
         "model": "judge.navigationbar",
@@ -112,4 +112,3 @@
         "pk": 7
     }
 ]
-

@@ -208,34 +208,39 @@ function count_down(label) {
     }, 1000);
 }
 
-window.register_update_relative = function (get_times, show_relative, interval) {
-    if (typeof interval === 'undefined')
-        interval = 60000;
+function register_time(elems, limit) {
+    limit = limit || 300;
+    elems.each(function () {
+        var outdated = false;
+        var $this = $(this);
+        var time = moment($this.attr('data-iso'));
+        var rel_format = $this.attr('data-format');
+        var abs = $this.text();
 
-    if (typeof show_relative === 'undefined')
-        show_relative = function (time) {
-            return Math.abs(moment().diff(time, 'days')) < 1;
-        };
+        function update() {
+            if ($('body').hasClass('window-hidden'))
+                return outdated = true;
+            outdated = false;
+            if (moment().diff(time, 'days') > limit) {
+                $this.text(abs);
+                return;
+            }
+            $this.text(rel_format.replace('{time}', time.fromNow()));
+            setTimeout(update, 10000);
+        }
 
-    function update_relative_time($time) {
-        var when = moment($time.attr('data-unix'));
-        if (show_relative(when))
-            $time.find('.relative').text(when.fromNow());
-        else
-            $time.addClass('too-long-ago');
-    }
-
-    setInterval(function update() {
-        get_times().filter(':not(.too-long-ago)').each(function () {
-            update_relative_time($(this));
+        $(window).on('dmoj:window-visible', function () {
+            if (outdated)
+                update();
         });
-        return update;
-    }(), interval);
 
-    return update_relative_time;
-};
+        update();
+    });
+}
 
 $(function () {
+    register_time($('.time-with-rel'));
+
     $('form').submit(function (evt) {
         // Prevent multiple submissions of forms, see #565
         $("input[type='submit']").attr("disabled", "true");

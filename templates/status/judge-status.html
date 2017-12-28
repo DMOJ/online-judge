@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block js_media %}
+    {% include "status/media-js.html" %}
+{% endblock %}
+
+{% block media %}
+    {% include "status/media-css.html" %}
+    {% block content_media %}{% endblock %}
+{% endblock %}
+
+{% block title_ruler %}{% endblock %}
+
+{% block title_row %}
+    {% set tab = 'judges' %}
+    {% include "status/status-tabs.html" %}
+{% endblock %}
+
+{% block body %}
+    <table id="judge-status" class="table">
+        {% include "status/judge-status-table.html" %}
+    </table>
+{% endblock %}

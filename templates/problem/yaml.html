@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div class="source-wrap">
+        <table>
+            <tr>
+                <td class="source-ln">
+                    <div>
+                        {% for line in raw_source.split('\n') %}
+                            <a href="#line-{{ loop.index }}" name="line-{{ loop.index }}">
+                                <pre>{{ loop.index }}</pre>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </td>
+                <td class="source-code">{{ highlighted_source }}</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

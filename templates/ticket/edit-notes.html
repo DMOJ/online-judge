@@ -1,0 +1,5 @@
+<form id="edit-notes" action="" method="post">
+    {% csrf_token %}
+    {{ form.notes }}
+    <button type="submit" class="submit">{{ _('Update') }}</button>
+</form>

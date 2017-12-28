@@ -1,0 +1,67 @@
+<tr>
+    <th>{{ _('Judge') }}</th>
+    {% if see_all_judges %}
+        <th>{{ _('Online') }}</th>
+    {% endif %}
+    <th>{{ _('Uptime') }}</th>
+    <th>{{ _('Ping') }}</th>
+    <th>{{ _('Load') }}</th>
+    <th>{{ _('Runtimes') }}</th>
+</tr>
+
+{% for judge in judges %}
+    <tr>
+        <td>
+            {% if perms.judge.change_judge %}
+                <a href="{{ url('admin:judge_judge_change', judge.id) }}">{{ judge.name }}</a>
+            {% else %}
+                {{ judge.name }}
+            {% endif %}
+        </td>
+        {% if see_all_judges %}
+            <td>
+                {% if judge.online %}
+                    <i style="color:#44AD41" class="fa fa-check-circle"></i>
+                {% else %}
+                    <i style="color:#DE2121" class="fa fa-minus-circle"></i>
+                {% endif %}
+            </td>
+        {% endif %}
+        <td>
+            {% if judge.online %}
+                {{ judge.uptime|timedelta("simple") }}
+            {% else %}
+                {{ _('N/A') }}
+            {% endif %}
+        </td>
+        <td class="ping">
+            {% if judge.online and judge.ping_ms %}
+                {{ judge.ping_ms|floatformat(3) }} ms
+            {% else %}
+                {{ _('N/A') }}
+            {% endif %}
+        </td>
+        <td>
+            {% if judge.online %}
+                {{ judge.load|floatformat(3) }}
+            {% else %}
+                {{ _('N/A') }}
+            {% endif %}
+        </td>
+        <td>
+            {% if judge.online %}
+                {% for key, info in judge.runtime_versions -%}
+                    <a href="javascript:void(0)" data-judge="{{ judge.id }}" data-lang="{{ key }}"
+                       data-runtime-info="{{ runtime_versions(info.runtime) }}"
+                       class="runtime-label">{{ info.name }}</a>
+                    {%- if not loop.last %}, {% endif %}
+                {%- endfor %}
+            {% else %}{{ _('N/A') }}{% endif %}
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="6"><em>{{ _('There are no judges available at this time.') }}</em>
+        </td>
+    </tr>
+{% endfor %}

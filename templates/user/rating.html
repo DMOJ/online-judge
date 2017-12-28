@@ -1,0 +1,8 @@
+{% spaceless %}
+    <span class="rate-group">
+        <span class="rate-box {{ rating_class(rating) }}">
+            <span style="height: {{ rating_progress(rating)|floatformat(3) }}em"></span>
+        </span>
+        <span class="rating {{ rating_class(rating) }}">{{ rating.rating|default(rating) }}</span>
+    </span>
+{% endspaceless %}

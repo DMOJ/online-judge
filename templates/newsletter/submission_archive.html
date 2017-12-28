@@ -1,1 +1,13 @@
-{% include "newsletter/submission_archive.jade" %}
+{% extends "base.html" %}
+{% block title %}{{ object.title }} - Newsletter Archive - {{ SITE_LONG_NAME }}{% endblock %}
+{% block content_title %}Newsletter Archive: {{ object.title }}{% endblock %}
+
+{% block body %}
+    <ul>
+        {% for submission in latest %}
+            <li><a href="{{ submission.get_absolute_url }}">{{ submission }}</a></li>
+        {% endfor %}
+    </ul>
+    <hr>
+    <p><a href="{{ url('newsletter_list') }}">Back to list</a></p>
+{% endblock %}

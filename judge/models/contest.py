@@ -84,6 +84,9 @@ class Contest(models.Model):
     user_count = models.IntegerField(verbose_name=_('the amount of live participants'), default=0)
     summary = models.TextField(blank=True, verbose_name=_('contest summary'),
                                help_text=_('Plain-text, shown in meta description tag, e.g. for social media.'))
+    access_code = models.CharField(verbose_name=_('access code'), blank=True, default='', max_length=255,
+                                   help_text=_('An optional code to prompt contestants before they are allowed '
+                                               'to join the contest. Leave it blank to disable.'))
 
     def clean(self):
         if self.start_time >= self.end_time:
@@ -134,10 +137,11 @@ class Contest(models.Model):
 
     class Meta:
         permissions = (
-            ('see_private_contest', 'See private contests'),
-            ('edit_own_contest', 'Edit own contests'),
-            ('edit_all_contest', 'Edit all contests'),
-            ('contest_rating', 'Rate contests'),
+            ('see_private_contest', _('See private contests')),
+            ('edit_own_contest', _('Edit own contests')),
+            ('edit_all_contest', _('Edit all contests')),
+            ('contest_rating', _('Rate contests')),
+            ('contest_access_code', _('Contest access codes')),
         )
         verbose_name = _('contest')
         verbose_name_plural = _('contests')

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block js_media %}
+    <script type="text/javascript">
+        $(function () {
+            $('#id_reason').keydown(function (e) {
+                if (e.ctrlKey && (e.keyCode === 13 || e.keyCode === 10)) {
+                    $(this).closest('form').submit();
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <form action="" method="post" class="form-area">
+        {% csrf_token %}
+        <p><label for="{{ form.reason.id_for_label }}"><b>{{ _('Your reason for joining:') }}</b></label></p>
+        <p>{{ form.reason }}</p>
+        <button type="submit">{{ _('Request') }}</button>
+    </form>
+{% endblock %}

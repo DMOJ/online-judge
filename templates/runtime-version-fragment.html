@@ -1,0 +1,12 @@
+{% for name, versions in runtime_versions -%}
+    {%- if versions -%}
+        {%- if versions[0] != versions|last -%}
+            {{ name }} {{ versions[0] }} - {{ versions|last }}
+        {%- else -%}
+            {{ name }} {{ versions[0] }}
+        {%- endif -%}
+    {%- else -%}
+        {{ name }}
+    {%- endif -%}
+    {%- if not loop.last %}, {% endif -%}
+{%- endfor -%}

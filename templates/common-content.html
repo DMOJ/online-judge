@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block media %}
+    {% block content_media %}{% endblock %}
+{% endblock %}
+
+{% block js_media %}
+    {% compress js %}
+        <script src="{{ static('libs/clipboard/clipboard.js') }}"></script>
+        <script src="{{ static('libs/clipboard/tooltip.js') }}"></script>
+        <script type="text/javascript">
+            $(function () {
+                var info_float = $('.info-float');
+                if (info_float.length) {
+                    var container = $('#content-right');
+                    if (window.bad_browser) {
+                        container.css('float', 'right');
+                    } else if (!featureTest('position', 'sticky')) {
+                        fix_div(info_float, 55);
+                        $(window).resize(function () {
+                            info_float.width(container.width());
+                        });
+                        info_float.width(container.width());
+                    }
+                }
+
+                var copyButton;
+                $('pre code').each(function () {
+                    $(this).parent().before($('<div>', {'class': 'copy-clipboard'})
+                        .append(copyButton = $('<span>', {
+                            'class': 'btn-clipboard',
+                            'data-clipboard-text': $(this).text(),
+                            'title': 'Click to copy'
+                        }).text('Copy')));
+
+                    $(copyButton.get(0)).mouseleave(function () {
+                        $(this).attr('class', 'btn-clipboard');
+                        $(this).removeAttr('aria-label');
+                    });
+
+                    var curClipboard = new Clipboard(copyButton.get(0));
+
+                    curClipboard.on('success', function (e) {
+                        e.clearSelection();
+                        showTooltip(e.trigger, 'Copied!');
+                    });
+
+                    curClipboard.on('error', function (e) {
+                        showTooltip(e.trigger, fallbackMessage(e.action));
+                    });
+
+                });
+            });
+        </script>
+    {% endcompress %}
+    {% block content_js_media %}{% endblock %}
+{% endblock %}
+
+{% block body %}
+    <div id="common-content">
+        <div id="content-right">
+            <div class="info-float">{% block info_float %}{% endblock %}</div>
+        </div>
+        <div id="content-left" class="split-common-content">
+            <div class="content-description screen">
+                {% block description %}{% endblock %}
+                {% block description_end %}
+                    <hr>
+                {% endblock %}
+                {% block post_description_end %}{% endblock %}
+            </div>
+            {% block comments %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block bodyend %}
+    {% if REQUIRE_JAX %}
+        {% include "mathjax-load.html" %}
+    {% endif %}
+{% endblock %}

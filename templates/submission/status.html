@@ -1,0 +1,94 @@
+{% extends "submission/info-base.html" %}
+{% block js_media %}
+    <script type="text/javascript" src="{{ static('event.js') }}"></script>
+    {% if not submission.is_graded and last_msg %}
+        <script type="text/javascript">$(function () {
+            var blocked = false, request = false;
+            var list = $('#test-cases');
+
+            function update() {
+                if (blocked) {
+                    request = true;
+                    return;
+                }
+                request = false;
+                blocked = true;
+                $.ajax({
+                    url: '{{ url('submission_testcases_query') }}',
+                    data: {id: '{{ submission.id }}'}
+                }).done(function (data) {
+                    list.empty().html(data).find('.toggle').each(function () {
+                        register_toggle($(this));
+                    });
+                    setTimeout(function () {
+                        blocked = false;
+                        if (request)
+                            update();
+                    }, 500);
+                }).fail(function (data) {
+                    console.log('Failed to update testcases!');
+                });
+
+                if ($(window).scrollTop() + $(window).height() > $(document).height() - 100)
+                    $("html, body").animate({scrollTop: $(document).height()}, 0);
+            }
+
+            var receiver = new EventReceiver(
+                "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                ['sub_{{ submission.id }}'], {{ last_msg }}, function (message) {
+                    switch (message.type) {
+                        case 'internal-error':
+                        case 'grading-end':
+                        case 'compile-error':
+                            $('#abort-button').remove();
+                            $('#grading-label').remove();
+                        case 'test-case':
+                        case 'grading-begin':
+                        case 'processing':
+                            update();
+                    }
+                }
+            )
+        });
+        </script>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <br>
+    <div><a href="{{ url('submission_source', submission.id) }}">{{ _('View source') }}</a></div>
+    {% if request.user == submission.user.user or perms.judge.resubmit_other %}
+        <div><a href="{{ url('problem_submit', submission.problem.code, submission.id) }}">{{ _('Resubmit') }}</a></div>
+    {% endif %}
+    {% if perms.judge.rejudge_submission %}
+        <div>
+            <form action="{{ url('submission_rejudge') }}" method="post">
+                {% csrf_token %}
+                <a href="#" onclick="parentNode.submit()">{{ _('Rejudge') }}</a>
+                <input type="hidden" name="id" value="{{ submission.id }}">
+                <input type="hidden" name="path" value="{{ url('submission_status', submission.id) }}">
+            </form>
+        </div>
+    {% endif %}
+
+    <br>
+    <hr class="half-hr">
+    <br>
+
+    <div id="test-cases">{% include "submission/status-testcases.html" %}</div>
+
+    {% if not submission.is_graded %}
+        {% if request.user == submission.user.user or perms.judge.abort_any_submission %}
+            <div id="abort-button">
+                <br>
+                <hr class="half-hr">
+                <br>
+                <form action="{{ url('submission_abort', submission.id) }}" method="post">
+                    {% csrf_token %}
+                    <input style="float:left" type="submit" value="{{ _('Abort') }}" class="button">
+                    <br><br>
+                </form>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

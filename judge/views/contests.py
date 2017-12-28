@@ -1,10 +1,11 @@
 from calendar import Calendar, SUNDAY
 from collections import namedtuple, defaultdict
-from datetime import timedelta, date, datetime, time
 from functools import partial
 from itertools import chain
 from operator import attrgetter
 
+from datetime import timedelta, date, datetime, time
+from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
@@ -67,7 +68,7 @@ class ContestListMixin(object):
 
 class ContestList(TitleMixin, ContestListMixin, ListView):
     model = Contest
-    template_name = 'contest/list.jade'
+    template_name = 'contest/list.html'
     title = ugettext_lazy('Contests')
 
     def get_queryset(self):
@@ -180,13 +181,13 @@ class ContestMixin(object):
                 return generic_message(request, _('No such contest'),
                                        _('Could not find such contest.'))
         except PrivateContestError as e:
-            return render(request, 'contest/private.jade', {
+            return render(request, 'contest/private.html', {
                 'orgs': e.orgs, 'title': _('Access to contest "%s" denied') % escape(e.name)
             }, status=403)
 
 
 class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
-    template_name = 'contest/contest.jade'
+    template_name = 'contest/contest.html'
 
     def get_comment_page(self):
         return 'c:%s' % self.object.key
@@ -203,9 +204,33 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         return context
 
 
+class ContestAccessDenied(Exception):
+    pass
+
+
+class ContestAccessCodeForm(forms.Form):
+    access_code = forms.CharField(max_length=255)
+
+    def __init__(self, *args, **kwargs):
+        super(ContestAccessCodeForm, self).__init__(*args, **kwargs)
+        self.fields['access_code'].widget.attrs.update({'autocomplete': 'off'})
+
+
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def get(self, request, *args, **kwargs):
-        contest = self.object = self.get_object()
+        self.object = self.get_object()
+        try:
+            return self.join_contest(request)
+        except ContestAccessDenied:
+            return self.ask_for_access_code()
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return self.ask_for_access_code(ContestAccessCodeForm(request.POST))
+
+    def join_contest(self, request, access_code=None):
+        contest = self.object
+
         if not contest.can_join and not self.is_organizer:
             return generic_message(request, _('Contest not ongoing'),
                                    _('"%s" is not currently ongoing.') % contest.name)
@@ -230,26 +255,47 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 else:
                     break
         else:
-            participation, created = ContestParticipation.objects.get_or_create(
-                contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0),
-                defaults={
-                    'real_start': timezone.now()
-                }
-            )
+            try:
+                participation = ContestParticipation.objects.get(
+                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0)
+                )
+            except ContestParticipation.DoesNotExist:
+                if contest.access_code and access_code != contest.access_code:
+                    raise ContestAccessDenied()
 
-            if not created and participation.ended:
-                participation = ContestParticipation.objects.get_or_create(
-                    contest=contest, user=profile, virtual=-1,
-                    defaults={
-                        'real_start': timezone.now()
-                    }
-                )[0]
+                participation = ContestParticipation.objects.create(
+                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0),
+                    real_start=timezone.now(),
+                )
+            else:
+                if participation.ended:
+                    participation = ContestParticipation.objects.get_or_create(
+                        contest=contest, user=profile, virtual=-1,
+                        defaults={
+                            'real_start': timezone.now()
+                        }
+                    )[0]
 
         profile.current_contest = participation
         profile.save()
         contest._updating_stats_only = True
         contest.update_user_count()
         return HttpResponseRedirect(reverse('problem_list'))
+
+    def ask_for_access_code(self, form=None):
+        contest = self.object
+        wrong_code = False
+        if form:
+            if form.is_valid():
+                if form.cleaned_data['access_code'] == contest.access_code:
+                    return self.join_contest(self.request, form.cleaned_data['access_code'])
+                wrong_code = True
+        else:
+            form = ContestAccessCodeForm()
+        return render(self.request, 'contest/access_code.html', {
+            'form': form, 'wrong_code': wrong_code,
+            'title': _('Enter access code for "%s"') % contest.name,
+        })
 
 
 class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
@@ -271,7 +317,7 @@ ContestDay = namedtuple('ContestDay', 'date weekday is_pad is_today starts ends 
 class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
     firstweekday = SUNDAY
     weekday_classes = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-    template_name = 'contest/calendar.jade'
+    template_name = 'contest/calendar.html'
     title = ugettext_lazy('Contests')
 
     def get(self, request, *args, **kwargs):
@@ -355,9 +401,14 @@ class CachedContestCalendar(ContestCalendar):
         return response
 
 
-ContestRankingProfile = namedtuple('ContestRankingProfile', 'id user display_rank long_display_name points '
-                                                            'cumtime problems rating organization participation '
-                                                            'participation_rating')
+class ContestRankingProfile(namedtuple(
+    'ContestRankingProfile', 'id user display_rank long_display_name points cumtime problems rating organization '
+                             'participation participation_rating')):
+    @cached_property
+    def css_class(self):
+        return Profile.get_user_css_class(self.display_rank, self.rating)
+
+
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state is_pretested')
 
 
@@ -460,7 +511,7 @@ def contest_ranking_ajax(request, contest, participation=None):
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
 
     users, problems = get_contest_ranking_list(request, contest, participation)
-    return render(request, 'contest/ranking-table.jade', {
+    return render(request, 'contest/ranking-table.html', {
         'users': users,
         'problems': problems,
         'contest': contest,
@@ -513,7 +564,7 @@ def contest_ranking_view(request, contest, participation=None):
         context['in_contest'] = False
     context['now'] = timezone.now()
 
-    return render(request, 'contest/ranking.jade', context)
+    return render(request, 'contest/ranking.html', context)
 
 
 def contest_ranking(request, contest):
@@ -539,7 +590,7 @@ def base_participation_list(request, contest, profile):
         request, contest, show_current_virtual=False,
         ranking_list=partial(base_contest_ranking_list, for_user=profile.id, queryset=queryset),
         ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users))
-    return render(request, 'contest/ranking.jade', {
+    return render(request, 'contest/ranking.html', {
         'users': users,
         'title': _('Your participation in %s') % contest.name if req_username == prof_username else
         _("%s's participation in %s") % (prof_username, contest.name),
@@ -550,6 +601,7 @@ def base_participation_list(request, contest, profile):
         'contest': contest,
         'last_msg': event.last(),
         'has_rating': False,
+        'now': timezone.now(),
         'rank_header': _('Participation'),
         'tab': 'participation',
     })
@@ -568,11 +620,11 @@ class ContestTagDetailAjax(DetailView):
     model = ContestTag
     slug_field = slug_url_kwarg = 'name'
     context_object_name = 'tag'
-    template_name = 'contest/tag-ajax.jade'
+    template_name = 'contest/tag-ajax.html'
 
 
 class ContestTagDetail(TitleMixin, ContestTagDetailAjax):
-    template_name = 'contest/tag.jade'
+    template_name = 'contest/tag.html'
 
     def get_title(self):
         return _('Contest tag: %s') % self.object.name

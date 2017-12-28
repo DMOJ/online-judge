@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title_ruler %}{% endblock %}
+
+{% block title_row %}
+    {% set tab = 'calendar' %}
+    {% set title = _('Contests in %(month)s', month=month|date(_("F Y"))) %}
+    {% include "contest/contest-list-tabs.html" %}
+{% endblock %}
+
+{% block body %}
+    <table id="contest-calendar">
+        <tr>
+            <th>{{ _('Sunday') }}</th>
+            <th>{{ _('Monday') }}</th>
+            <th>{{ _('Tuesday') }}</th>
+            <th>{{ _('Wednesday') }}</th>
+            <th>{{ _('Thursday') }}</th>
+            <th>{{ _('Friday') }}</th>
+            <th>{{ _('Saturday') }}</th>
+        </tr>
+        {% for week in calendar %}
+            <tr>{% for day in week %}
+                <td class="{{ day.weekday }}{% if day.is_today %} today{% endif %}{% if day.is_pad %} noday{% endif %}">
+                    <span class="num">{{ day.date.day }}</span>
+                    <ul class="fa-ul">
+                        {% for contest in day.starts %}
+                            <li class="start"><i class="fa fa-li fa-lg fa-step-forward"></i>
+                                <a href="{{ url('contest_view', contest.key) }}">{{ contest.name }}</a>
+                            </li>
+                        {% endfor %}
+                        {% for contest in day.oneday %}
+                            <li class="oneday">
+                                <i class="fa fa-li fa-lg fa-play"></i>
+                                <a href="{{ url('contest_view', contest.key) }}">{{ contest.name }}</a>
+                            </li>
+                        {% endfor %}
+                        {% for contest in day.ends %}
+                            <li class="end"><i class="fa fa-li fa-lg fa-step-backward"></i>
+                                <a href="{{ url('contest_view', contest.key) }}">{{ contest.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            {% endfor %}</tr>
+        {% endfor %}
+    </table>
+{% endblock %}
