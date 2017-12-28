@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+<meta charset="utf-8">
+<span style="display:block;margin: 0 2px;padding: 1em;border: 3px solid #2980B9;background-color: #f8f8f8;border-radius: 6px;font-size: .95em;color: #444;">
+
+<b>感谢您注册 {{ SITE_LONG_NAME }}HBU_OJ!</b><br/><br/>
+请在 24 小时内激活您的 {{ SITE_NAME }} 账号。<br/>你可以直接回复以下验证码至该邮箱:
+
+=======
 <div style="display:block;margin: 0 2px;padding: 1em;border: 3px solid #FFDE05;background-color: #000;border-radius: 6px;font-size: .95em;color: #444;margin-bottom:0.75em">
 <div style="display:table;margin-left:2em"><img src="https://avatars1.githubusercontent.com/u/6934864?v=3&s=101" style="display:inline;vertical-align: middle">
 <h1 style="font-size:4em;display:inline;vertical-align: middle"><a href="//{{ site.domain }}" style="text-decoration:none;color:gray"><span style="color: #FFDE05">DM::</span>OJ</a>
@@ -8,17 +16,22 @@
 
 <b>Thanks for registering on the {{ site.name }}! We're glad to have you.</b><br><br>
 The last step is activating your account. Please activate your {{ SITE_NAME }} account in 7 days.<br>To activate, just reply to this email with this exact text:
+>>>>>>> df7996a1ecf262975d021f4138b66cdf5087ca3f
 <pre style="margin-left:1em">
 {{ activation_key }}
 </pre>
-Alternatively, click the button below to activate your account.
+或者直接点击以下按钮完成账号激活：
 <p align="center">
 <a href="http://{{ site.domain }}/accounts/activate/{{ activation_key }}/" style="cursor: pointer;display:block;text-align: center;padding: 4px 2px 5px;color: white;border: 1px solid #666;border-radius: 1px;background: #2980b9;background: linear-gradient(180deg, #00aee0, #2980b9);text-decoration: none;line-height:2em;font-size:1emm;width:12em;">Activate</a>
 </p>
 
 {% if SITE_ADMIN_EMAIL %}
-See you soon! If you have problems activating your account, feel free to shoot us an email at <a href="mailto:{{ SITE_ADMIN_EMAIL }}">{{ SITE_ADMIN_EMAIL }}</a>
+    如有疑问，请与系统管理员联系： <a href="mailto:{{ SITE_ADMIN_EMAIL }}">{{ SITE_ADMIN_EMAIL }}</a>
 {% else %}
-See you soon!
+    我们稍后见！
 {% endif %}
+<<<<<<< HEAD
+</span>
+=======
 </div>
+>>>>>>> df7996a1ecf262975d021f4138b66cdf5087ca3f

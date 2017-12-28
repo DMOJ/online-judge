@@ -105,8 +105,8 @@ def misc_config(request):
 
 
 def site_name(request):
-    return {'SITE_NAME': getattr(settings, 'SITE_NAME', 'DMOJ'),
-            'SITE_LONG_NAME': getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ')),
+    return {'SITE_NAME': getattr(settings, 'SITE_NAME', 'HBUOJ'),
+            'SITE_LONG_NAME': getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'HBU_OJ')),
             'SITE_ADMIN_EMAIL': getattr(settings, 'SITE_ADMIN_EMAIL', False)}
 
 

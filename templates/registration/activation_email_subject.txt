@@ -1,1 +1,1 @@
-Activate your {{ SITE_NAME }} account
+激活您的 {{ SITE_LONG_NAME }}HBU_OJ 账号

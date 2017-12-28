@@ -30,8 +30,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 SITE_ID = 1
-SITE_NAME = 'DMOJ'
-SITE_LONG_NAME = 'DMOJ: Modern Online Judge'
+SITE_NAME = 'HBUOJ'
+SITE_LONG_NAME = 'HBU-OJ'
 
 PYGMENT_THEME = 'pygment-github.css'
 
@@ -49,7 +49,7 @@ else:
 
     WPADMIN = {
         'admin': {
-            'title': 'DMOJ Admin',
+            'title': 'HBU Admin',
             'menu': {
                 'top': 'wpadmin.menu.menus.BasicTopMenu',
                 'left': 'wpadmin.menu.custom.CustomModelLeftMenuWithDashboard',
@@ -162,7 +162,7 @@ MIDDLEWARE = (
 IMPERSONATE_REQUIRE_SUPERUSER = True
 IMPERSONATE_DISABLE_LOGGING = True
 
-ACCOUNT_ACTIVATION_DAYS = 7
+ACCOUNT_ACTIVATION_DAYS = 1
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -244,17 +244,8 @@ LOCALE_PATHS = [
 ]
 
 LANGUAGES = [
-    ('de', _('German')),
-    ('en', _('English')),
-    ('es', _('Spanish')),
-    ('fr', _('French')),
-    ('hr', _('Croatian')),
-    ('ko', _('Korean')),
-    ('ro', _('Romanian')),
-    ('ru', _('Russian')),
-    ('sr-latn', _('Serbian (Latin)')),
-    ('vi', _('Vietnamese')),
     ('zh-hans', _('Simplified Chinese')),
+    ('en', _('English')),
 ]
 
 MARKDOWN_ADMIN_EDITABLE_STYLE = {
@@ -322,9 +313,9 @@ EVENT_DAEMON_KEY = None
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 # Whatever you do, this better be one of the entries in `LANGUAGES`.
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'UTC'
-DEFAULT_USER_TIME_ZONE = 'America/Toronto'
+DEFAULT_USER_TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
