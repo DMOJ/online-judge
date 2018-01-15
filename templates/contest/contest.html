@@ -95,7 +95,7 @@
                         <td>{{ problem.ac_rate|floatformat(1) }}%</td>
                         <td><a href="{{ url('ranked_submissions', problem.code) }}">{{ problem.user_count }}</a></td>
                         <td>
-                            {%- if problem.has_editorial -%}
+                            {%- if problem.has_public_editorial -%}
                                 <a href="{{ url('problem_editorial', problem.code) }}">{{ _('Editorial') }}</a>
                             {%- endif -%}
                         </td>
