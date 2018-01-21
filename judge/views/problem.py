@@ -343,11 +343,6 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     def get_normal_queryset(self):
         filter = Q(is_public=True)
         if self.profile is not None:
-            filter |= Q(
-                id__in=Problem.objects.annotate(contest_user_count=Count('contest__users'))
-                              .filter(contest__users=self.profile.current_contest_id,
-                                      contest_user_count__gt=0).values('id').distinct()
-            )
             filter |= Q(authors=self.profile)
             filter |= Q(curators=self.profile)
             filter |= Q(testers=self.profile)
