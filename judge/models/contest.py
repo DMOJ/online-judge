@@ -137,10 +137,9 @@ class Contest(models.Model):
         self.user_count = self.users.filter(virtual=0).count()
         self.save()
 
+    @cached_property
     def show_scoreboard(self):
-        if self.hide_scoreboard:
-            return False
-        if self.end_time is not None and self.end_time > timezone.now():
+        if self.hide_scoreboard and not self.ended:
             return False
         return True
 
