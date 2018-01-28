@@ -3,7 +3,7 @@
 {% block js_media %}
     <script type="text/javascript">
         $(function () {
-            $('a.sub-case').featherlight($('.partial-output-window'), {
+            $('a.sub-case-status').featherlight($('.partial-output-window'), {
                 afterOpen: function () {
                     var $parent = this.$currentTarget.parent();
                     var partial = $parent.attr('data-partial-output');
