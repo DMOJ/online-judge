@@ -4,10 +4,10 @@
     {{ make_tab('detail', 'fa-info-circle', url('contest_view', contest.key), _('Info')) }}
 
     {% if contest.start_time <= now or perms.judge.see_private_contest %}
-        {% if contest.show_scoreboard %}
+        {% if contest.show_scoreboard or perms.judge.see_private_contest %}
             {{ make_tab('ranking', 'fa-bar-chart', url('contest_ranking', contest.key), _('Rankings')) }}
         {% endif %}
-        {% if request.user.is_authenticated %}
+        {% if contest.show_scoreboard and request.user.is_authenticated %}
             {{ make_tab('participation', 'fa-users', url('contest_participation_own', contest.key), _('Participation')) }}
         {% endif %}
     {% endif %}
