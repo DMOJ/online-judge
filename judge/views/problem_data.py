@@ -95,7 +95,7 @@ class ProblemManagerMixin(LoginRequiredMixin, ProblemMixin, DetailView):
         raise Http404()
 
 
-class ProblemSubmissionDiff(TitleMixin, ProblemManagerMixin):
+class ProblemSubmissionDiff(TitleMixin, ProblemMixin, DetailView):
     template_name = 'problem/submission-diff.html'
 
     def get_title(self):
@@ -104,6 +104,12 @@ class ProblemSubmissionDiff(TitleMixin, ProblemManagerMixin):
     def get_content_title(self):
         return format_html(_(u'Comparing submissions for <a href="{1}">{0}</a>'), self.object.name,
                            reverse('problem_detail', args=[self.object.code]))
+
+    def get_object(self, queryset=None):
+        problem = super(ProblemSubmissionDiff, self).get_object(queryset)
+        if self.request.user.is_superuser or problem.is_editable_by(self.request.user):
+            return problem
+        raise Http404()
 
     def get_context_data(self, **kwargs):
         context = super(ProblemSubmissionDiff, self).get_context_data(**kwargs)
@@ -114,8 +120,16 @@ class ProblemSubmissionDiff(TitleMixin, ProblemManagerMixin):
             raise Http404
         if not subs:
             raise Http404
+
         context['submissions'] = subs
-        context['cases'] = ProblemTestCase.objects.filter(dataset=self.object, type='C')
+
+        # If we have associated data we can do better than just guess
+        data = ProblemTestCase.objects.filter(dataset=self.object, type='C')
+        if data:
+            num_cases = data.count()
+        else:
+            num_cases = subs.first().test_cases.count()
+        context['num_cases'] = num_cases
         return context
 
 

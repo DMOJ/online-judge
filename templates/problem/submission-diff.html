@@ -58,7 +58,7 @@
             <th class="sub-result">Result</th>
             <th class="sub-language">Language</th>
             <th class="sub-date">Date</th>
-            {% for case in cases %}
+            {% for case in range(num_cases) %}
                 <th class="sub-case">{{ loop.index }}</th>
             {% endfor %}
         </tr>
