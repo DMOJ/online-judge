@@ -538,7 +538,7 @@ def contest_access_check(request, contest):
             raise Http404()
         if contest.start_time is not None and contest.start_time > timezone.now():
             raise Http404()
-        if contest.hide_scoreboard and not is_in_contest(request, contest):
+        if contest.hide_scoreboard and not is_in_contest(request, contest) and contest.end_time > timezone.now():
             raise Http404()
 
 
