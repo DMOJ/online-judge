@@ -119,7 +119,11 @@
                             </div>
                         </td>
                         <td>
-                            <a href="{{ url('contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
+                            {% if contest.hide_scoreboard %}
+                                {{ contest.user_count }}
+                            {% else %}
+                                <a href="{{ url('contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
+                            {% endif %}
                         </td>
                         {% if not request.in_contest %}
                             <td>
@@ -193,12 +197,18 @@
                             {{ time_left(contest) }}
                         </div>
                     </td>
-                    <td><a href="{{ url('contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
-                    </td>{% if not request.in_contest %}
-                    <td><a href="{{ url('contest_join', contest.key) }}"
-                           class="unselectable button full participate-button">{{ _('Virtual join') }}</a>
+                    <td>
+                        {% if contest.hide_scoreboard %}
+                            {{ contest.user_count }}
+                        {% else %}
+                            <a href="{{ url('contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
+                        {% endif %}
                     </td>
-                {% endif %}
+                    {% if not request.in_contest %}
+                        <td><a href="{{ url('contest_join', contest.key) }}"
+                               class="unselectable button full participate-button">{{ _('Virtual join') }}</a>
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
