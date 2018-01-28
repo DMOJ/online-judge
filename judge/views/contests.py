@@ -470,12 +470,17 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None):
                .defer('user__about', 'user__organizations__about'))
 
 
-def contest_ranking_list(contest, problems, for_user=None):
-    users = contest.users.filter(virtual=0)
-    if contest.hide_scoreboard and for_user:
-        users = users.filter(user=for_user)
-    return base_contest_ranking_list(contest, problems, users.prefetch_related('user__organizations')
-                                                             .order_by('-score', 'cumtime'))
+def is_in_contest(request, contest):
+    if request.user.is_authenticated:
+        profile = request.user.profile
+        return profile.current_contest is not None and profile.current_contest.contest == contest
+    return False
+
+
+def contest_ranking_list(contest, problems):
+    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
+                                                                     .prefetch_related('user__organizations')
+                                                                     .order_by('-score', 'cumtime'))
 
 
 def get_participation_ranking_profile(contest, participation, problems):
@@ -496,7 +501,12 @@ def get_participation_ranking_profile(contest, participation, problems):
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
                              show_current_virtual=True, ranker=ranker):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
-    users = ranker(ranking_list(contest, problems, for_user=request.user.profile), key=attrgetter('points', 'cumtime'))
+
+    if contest.hide_scoreboard and is_in_contest(request, contest):
+        return [('-', get_participation_ranking_profile(contest,
+                                                        request.user.profile.current_contest, problems))], problems
+
+    users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
 
     if show_current_virtual:
         if participation is None and request.user.is_authenticated:
@@ -524,9 +534,11 @@ def contest_ranking_ajax(request, contest, participation=None):
 
 def contest_access_check(request, contest):
     if not request.user.has_perm('judge.see_private_contest'):
-        if not contest.is_public or contest.hide_scoreboard:
+        if not contest.is_public:
             raise Http404()
         if contest.start_time is not None and contest.start_time > timezone.now():
+            raise Http404()
+        if contest.hide_scoreboard and not is_in_contest(request, contest):
             raise Http404()
 
 
