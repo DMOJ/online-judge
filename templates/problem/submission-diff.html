@@ -1,0 +1,17 @@
+{% for sub in submissions %}
+<tr>
+<td>{% sub.user.username %}/{% sub.id %}</td>
+<td>{% sub.result %}</td>
+<td>{% sub.language.name %}</td>
+<td>{% sub.date %}</td>
+    {% for case in sub.test_cases %}
+        <td data-partial-output="{{ case.output }}">
+        {% if case.result == 'AC' %}
+            {% case.time %}
+        {% else %}
+            {% case.result %}
+        {% endif %}
+        </td>
+    {% endfor %}
+</tr>
+{% endfor %}

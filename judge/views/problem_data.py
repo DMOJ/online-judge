@@ -18,7 +18,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
 
 from judge.highlight_code import highlight_code
-from judge.models import ProblemData, Problem, ProblemTestCase, problem_data_storage
+from judge.models import ProblemData, Problem, ProblemTestCase, problem_data_storage, Submission
 from judge.utils.problem_data import ProblemDataCompiler
 from judge.utils.views import TitleMixin
 from judge.views.problem import ProblemMixin
@@ -85,7 +85,33 @@ class ProblemCaseFormSet(formset_factory(ProblemCaseForm, formset=BaseModelFormS
         return form
 
 
-class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
+class ProblemManagerMixin(LoginRequiredMixin, ProblemMixin, DetailView):
+    def get_object(self, queryset=None):
+        problem = super(ProblemManagerMixin, self).get_object(queryset)
+        if problem.is_manually_managed:
+            raise Http404()
+        if self.request.user.is_superuser or problem.is_editable_by(self.request.user):
+            return problem
+        raise Http404()
+
+
+class ProblemSubmissionDiffAjax(ProblemManagerMixin):
+    template_name = 'problem/submission-diff.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSubmissionDiffAjax, self).get_context_data(**kwargs)
+        try:
+            ids = self.request.GET.getlist('ids')
+            subs = Submission.objects.filter(id__in=ids)
+        except ValueError:
+            raise Http404
+        if not subs:
+            raise Http404
+        context['submissions'] = subs
+        return context
+
+
+class ProblemDataView(TitleMixin, ProblemManagerMixin):
     template_name = 'problem/data.html'
 
     def get_title(self):
@@ -95,14 +121,6 @@ class ProblemDataView(LoginRequiredMixin, TitleMixin, ProblemMixin, DetailView):
         return mark_safe(escape(_('Editing data for %s')) % (
             format_html(u'<a href="{1}">{0}</a>', self.object.name,
                         reverse('problem_detail', args=[self.object.code]))))
-
-    def get_object(self, queryset=None):
-        problem = super(ProblemDataView, self).get_object(queryset)
-        if problem.is_manually_managed:
-            raise Http404()
-        if self.request.user.is_superuser or problem.is_editable_by(self.request.user):
-            return problem
-        raise Http404()
 
     def get_data_form(self, post=False):
         return ProblemDataForm(data=self.request.POST if post else None, prefix='problem-data',
