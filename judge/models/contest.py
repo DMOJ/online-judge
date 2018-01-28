@@ -137,6 +137,13 @@ class Contest(models.Model):
         self.user_count = self.users.filter(virtual=0).count()
         self.save()
 
+    def show_scoreboard(self):
+        if self.hide_scoreboard:
+            return False
+        if self.end_time is not None and self.end_time > timezone.now():
+            return False
+        return True
+
     update_user_count.alters_data = True
 
     class Meta:
