@@ -503,8 +503,8 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
 
     if contest.hide_scoreboard and is_in_contest(request, contest):
-        return [('-', get_participation_ranking_profile(contest,
-                                                        request.user.profile.current_contest, problems))], problems
+        return [(_('???'), get_participation_ranking_profile(contest,
+                                                             request.user.profile.current_contest, problems))], problems
 
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
 
