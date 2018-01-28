@@ -95,19 +95,27 @@ class ProblemManagerMixin(LoginRequiredMixin, ProblemMixin, DetailView):
         raise Http404()
 
 
-class ProblemSubmissionDiffAjax(ProblemManagerMixin):
+class ProblemSubmissionDiff(TitleMixin, ProblemManagerMixin):
     template_name = 'problem/submission-diff.html'
 
+    def get_title(self):
+        return _('Comparing submissions for {0}').format(self.object.name)
+
+    def get_content_title(self):
+        return format_html(_(u'Comparing submissions for <a href="{1}">{0}</a>'), self.object.name,
+                           reverse('problem_detail', args=[self.object.code]))
+
     def get_context_data(self, **kwargs):
-        context = super(ProblemSubmissionDiffAjax, self).get_context_data(**kwargs)
+        context = super(ProblemSubmissionDiff, self).get_context_data(**kwargs)
         try:
-            ids = self.request.GET.getlist('ids')
+            ids = self.request.GET.getlist('id')
             subs = Submission.objects.filter(id__in=ids)
         except ValueError:
             raise Http404
         if not subs:
             raise Http404
         context['submissions'] = subs
+        context['cases'] = ProblemTestCase.objects.filter(dataset=self.object, type='C')
         return context
 
 
@@ -115,7 +123,11 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
     template_name = 'problem/data.html'
 
     def get_title(self):
-        return _('Editing data for %s') % self.object.name
+        return _('Editing data for {0}').format(self.object.name)
+
+    def get_content_title(self):
+        return format_html(_(u'Editing data for <a href="{1}">{0}</a>'), self.object.name,
+                           reverse('problem_detail', args=[self.object.code]))
 
     def get_content_title(self):
         return mark_safe(escape(_('Editing data for %s')) % (

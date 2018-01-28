@@ -15,7 +15,8 @@ from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitem
 from judge.views import TitledTemplateView
 from judge.views import organization, language, status, blog, problem, mailgun, license, register, user, \
     submission, widgets, comment, contests, api, ranked_submission, stats, preview, ticket
-from judge.views.problem_data import ProblemDataView, ProblemSubmissionDiffAjax, problem_data_file, problem_init_view
+from judge.views.problem_data import ProblemDataView, ProblemSubmissionDiff, \
+    problem_data_file, problem_init_view
 from judge.views.register import RegistrationView, ActivationView
 from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
     ContestSelect2View, UserSearchSelect2View, ContestUserSearchSelect2View, TicketUserSelect2View, AssigneeSelect2View
@@ -116,7 +117,7 @@ urlpatterns = [
 
         url(r'^/test_data$', ProblemDataView.as_view(), name='problem_data'),
         url(r'^/test_data/init$', problem_init_view, name='problem_data_init'),
-        url(r'^/test_data/diff$', ProblemSubmissionDiffAjax.as_view(), name='problem_submission_diff'),
+        url(r'^/test_data/diff$', ProblemSubmissionDiff.as_view(), name='problem_submission_diff'),
         url(r'^/data/(?P<path>.+)$', problem_data_file, name='problem_data_file'),
 
         url(r'^/tickets$', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
