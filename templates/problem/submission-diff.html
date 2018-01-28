@@ -1,17 +1,90 @@
-{% for sub in submissions %}
-<tr>
-<td>{% sub.user.username %}/{% sub.id %}</td>
-<td>{% sub.result %}</td>
-<td>{% sub.language.name %}</td>
-<td>{% sub.date %}</td>
-    {% for case in sub.test_cases %}
-        <td data-partial-output="{{ case.output }}">
-        {% if case.result == 'AC' %}
-            {% case.time %}
-        {% else %}
-            {% case.result %}
-        {% endif %}
-        </td>
-    {% endfor %}
-</tr>
-{% endfor %}
+{% extends "common-content.html" %}
+
+{% block js_media %}
+    <script type="text/javascript">
+        $(function () {
+            $('a.sub-case').featherlight($('.partial-output-window'), {
+                afterOpen: function () {
+                    var $parent = this.$currentTarget.parent();
+                    var partial = $parent.attr('data-partial-output');
+                    this.$instance.find('.partial-output-window').find('code').text(partial).end().show();
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript" src="{{ static('libs/featherlight/featherlight.min.js') }}"></script>
+    <script type="text/javascript">
+    </script>
+{% endblock %}
+
+{% block media %}
+    <style>
+        .partial-output {
+            display: none;
+        }
+
+        .sub-id {
+          width: 5em;
+        }
+
+        .sub-username {
+            width: 5em;
+        }
+
+        .sub-result {
+          width: 3em;
+        }
+
+        .sub-language {
+          width: 6em;
+        }
+
+        .sub-date {
+          width: 8em;
+        }
+
+        .sub-case {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <table id="case-table" class="table">
+        <thead>
+        <tr>
+            <th class="sub-id">ID</th>
+            <th class="sub-username">Username</th>
+            <th class="sub-result">Result</th>
+            <th class="sub-language">Language</th>
+            <th class="sub-date">Date</th>
+            {% for case in cases %}
+                <th class="sub-case">{{ loop.index }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for sub in submissions %}
+            <tr>
+                <td><a href="{{ url('submission_source', sub.id) }}">{{ sub.id }}</a></td>
+                <td>{{ link_user(sub.user) }}</td>
+                <td><span class="case-{{ sub.result }}">{{ sub.result }}</span></td>
+                <td>{{ sub.language.name }}</td>
+                <td><span class="time">{{ relative_time(sub.date) }}</span></td>
+                {% for case in sub.test_cases.all() %}
+                    <td data-partial-output="{{ case.output }}">
+                        <a href="javascript:void(0);" class="sub-case case-{{ case.status }}">
+                            {% if case.status == 'AC' %}
+                                {{ case.time|floatformat(2) }}
+                            {% else %}
+                                {{ case.status }}
+                            {% endif %}
+                        </a>
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div style="display: none" class="partial-output-window"><pre><code></code></pre></div>
+{% endblock %}

@@ -275,34 +275,34 @@ label[for="language"], label[for="status"] {
         padding: 0 5px 0 0;
     }
 
-    .case-AC {
-        color: green;
-        font-weight: bold;
-    }
-
-    .case-_AC {
-        color: red;
-        font-weight: bold;
-    }
-
-    .case-WA {
-        color: red;
-        font-weight: bold;
-    }
-
-    .case-TLE, .case-SC {
-        color: gray;
-        font-weight: bold;
-    }
-
-    .case-MLE, .case-OLE, .case-RTE, .case-IR {
-        color: orange;
-        font-weight: bold;
-    }
-
     .toggle {
         font-weight: normal;
     }
+}
+
+.case-AC {
+    color: green;
+    font-weight: bold;
+}
+
+.case-_AC {
+    color: red;
+    font-weight: bold;
+}
+
+.case-WA {
+    color: red;
+    font-weight: bold;
+}
+
+.case-TLE, .case-SC {
+    color: gray;
+    font-weight: bold;
+}
+
+.case-MLE, .case-OLE, .case-RTE, .case-IR {
+    color: orange;
+    font-weight: bold;
 }
 
 .half-hr {
