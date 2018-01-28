@@ -62,6 +62,10 @@ class Contest(models.Model):
                                                 'specified organizations.'))
     is_rated = models.BooleanField(verbose_name=_('contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
+    hide_scoreboard = models.BooleanField(verbose_name=_('hide scoreboard'),
+                                          help_text=_('Whether the scoreboard should remain hidden for the duration '
+                                                      'of the contest.'),
+                                          default=False)
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
