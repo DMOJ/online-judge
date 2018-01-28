@@ -522,7 +522,7 @@ def contest_ranking_ajax(request, contest, participation=None):
 
 def contest_access_check(request, contest):
     if not request.user.has_perm('judge.see_private_contest'):
-        if not contest.is_public:
+        if not contest.is_public or contest.hide_scoreboard:
             raise Http404()
         if contest.start_time is not None and contest.start_time > timezone.now():
             raise Http404()
