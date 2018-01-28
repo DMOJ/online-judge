@@ -79,15 +79,17 @@
                 <td><span class="time">{{ relative_time(sub.date) }}</span></td>
                 {% for case in sub.test_cases.all() %}
                     <td data-partial-output="{{ case.output }}">
-                        <a href="javascript:void(0);" class="sub-case-status case-{{ case.status }}">
-                            {% if case.status == 'AC' %}
-                                {{ case.time|floatformat(2) }}
-                            {% elif case.status == 'SC' %}
-                                ---
-                            {% else %}
-                                {{ case.status }}
-                            {% endif %}
-                        </a>
+                        {% if case.status == 'SC' %}
+                            <span class="case-SC">---</span>
+                        {% else %}
+                            <a href="javascript:void(0);" class="sub-case-status case-{{ case.status }}">
+                                {% if case.status == 'AC' %}
+                                    {{ case.time|floatformat(2) }}
+                                {% else %}
+                                    {{ case.status }}
+                                {% endif %}
+                            </a>
+                        {% endif %}
                     </td>
                 {% endfor %}
             </tr>
