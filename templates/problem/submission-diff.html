@@ -19,12 +19,14 @@
 
 {% block media %}
     <style>
-        .partial-output {
-            display: none;
+        #content-body {
+            overflow-x: auto;
+            padding-bottom: 0;
         }
 
         .sub-id {
-          width: 5em;
+            width: 4em;
+            min-width: 4em;
         }
 
         .sub-username {
@@ -32,18 +34,22 @@
         }
 
         .sub-result {
-          width: 3em;
+            width: 3em;
         }
 
         .sub-language {
-          width: 6em;
+            width: 6em;
         }
 
         .sub-date {
-          width: 8em;
+            min-width: 8em;
         }
 
         .sub-case {
+            min-width: 3em;
+        }
+
+        .sub-case-status {
             text-decoration: underline;
         }
     </style>
@@ -73,9 +79,11 @@
                 <td><span class="time">{{ relative_time(sub.date) }}</span></td>
                 {% for case in sub.test_cases.all() %}
                     <td data-partial-output="{{ case.output }}">
-                        <a href="javascript:void(0);" class="sub-case case-{{ case.status }}">
+                        <a href="javascript:void(0);" class="sub-case-status case-{{ case.status }}">
                             {% if case.status == 'AC' %}
                                 {{ case.time|floatformat(2) }}
+                            {% elif case.status == 'SC' %}
+                                ---
                             {% else %}
                                 {{ case.status }}
                             {% endif %}
