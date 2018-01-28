@@ -470,10 +470,12 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None):
                .defer('user__about', 'user__organizations__about'))
 
 
-def contest_ranking_list(contest, problems):
-    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
-                                     .prefetch_related('user__organizations')
-                                     .order_by('-score', 'cumtime'))
+def contest_ranking_list(contest, problems, for_user=None):
+    users = contest.users.filter(virtual=0)
+    if contest.hide_scoreboard and for_user:
+        users = users.filter(user=for_user)
+    return base_contest_ranking_list(contest, problems, users.prefetch_related('user__organizations')
+                                                             .order_by('-score', 'cumtime'))
 
 
 def get_participation_ranking_profile(contest, participation, problems):
@@ -494,7 +496,7 @@ def get_participation_ranking_profile(contest, participation, problems):
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
                              show_current_virtual=True, ranker=ranker):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
-    users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
+    users = ranker(ranking_list(contest, problems, for_user=request.user.profile), key=attrgetter('points', 'cumtime'))
 
     if show_current_virtual:
         if participation is None and request.user.is_authenticated:
