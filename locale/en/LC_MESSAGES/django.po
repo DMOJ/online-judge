@@ -426,7 +426,7 @@ msgid "Posted comment"
 msgstr ""
 
 #: .\judge\forms.py:25
-msgid "Subscribe to contest updates"
+msgid "Subscribe to task updates"
 msgstr ""
 
 #: .\judge\forms.py:26
@@ -593,27 +593,27 @@ msgid "tag description"
 msgstr ""
 
 #: .\judge\models\contest.py:44
-msgid "contest tag"
+msgid "task tag"
 msgstr ""
 
 #: .\judge\models\contest.py:45 .\judge\models\contest.py:83
-msgid "contest tags"
+msgid "task tags"
 msgstr ""
 
 #: .\judge\models\contest.py:49
-msgid "contest id"
+msgid "task id"
 msgstr ""
 
 #: .\judge\models\contest.py:50
-msgid "Contest id must be ^[a-z0-9]+$"
+msgid "Task id must be ^[a-z0-9]+$"
 msgstr ""
 
 #: .\judge\models\contest.py:51
-msgid "contest name"
+msgid "Task name"
 msgstr ""
 
 #: .\judge\models\contest.py:52
-msgid "These people will be able to edit the contest."
+msgid "These people will be able to edit the task."
 msgstr ""
 
 #: .\judge\models\contest.py:54 .\judge\models\runtime.py:118
@@ -716,7 +716,7 @@ msgid "the amount of live participants"
 msgstr ""
 
 #: .\judge\models\contest.py:85
-msgid "contest summary"
+msgid "task summary"
 msgstr ""
 
 #: .\judge\models\contest.py:86 .\judge\models\problem.py:125
@@ -750,20 +750,20 @@ msgid "Rate contests"
 msgstr ""
 
 #: .\judge\models\contest.py:144
-msgid "Contest access codes"
+msgid "Task access codes"
 msgstr ""
 
 #: .\judge\models\contest.py:146 .\judge\models\contest.py:234
 #: .\judge\models\contest.py:269
-msgid "contest"
+msgid "task"
 msgstr ""
 
 #: .\judge\models\contest.py:147
-msgid "contests"
+msgid "tasks"
 msgstr ""
 
 #: .\judge\models\contest.py:151
-msgid "associated contest"
+msgid "associated task"
 msgstr ""
 
 #: .\judge\models\contest.py:152 .\judge\models\contest.py:268
@@ -803,11 +803,11 @@ msgid "%s in %s"
 msgstr ""
 
 #: .\judge\models\contest.py:226
-msgid "contest participation"
+msgid "task participation"
 msgstr ""
 
 #: .\judge\models\contest.py:227
-msgid "contest participations"
+msgid "task participations"
 msgstr ""
 
 #: .\judge\models\contest.py:233 .\judge\models\contest.py:253
@@ -846,11 +846,11 @@ msgid "Why include a problem you can't submit to?"
 msgstr ""
 
 #: .\judge\models\contest.py:247
-msgid "contest problem"
+msgid "task problem"
 msgstr ""
 
 #: .\judge\models\contest.py:248
-msgid "contest problems"
+msgid "task problems"
 msgstr ""
 
 #: .\judge\models\contest.py:252 .\judge\models\submission.py:149
@@ -866,11 +866,11 @@ msgid "Whether this submission was ran only on pretests."
 msgstr ""
 
 #: .\judge\models\contest.py:263
-msgid "contest submission"
+msgid "task submission"
 msgstr ""
 
 #: .\judge\models\contest.py:264
-msgid "contest submissions"
+msgid "task submissions"
 msgstr ""
 
 #: .\judge\models\contest.py:271
@@ -894,7 +894,7 @@ msgid "contest rating"
 msgstr ""
 
 #: .\judge\models\contest.py:279
-msgid "contest ratings"
+msgid "task ratings"
 msgstr ""
 
 #: .\judge\models\interface.py:24
@@ -1355,7 +1355,7 @@ msgid "Organization name shows in URL"
 msgstr ""
 
 #: .\judge\models\profile.py:27
-msgid "Displayed beside user name during contests"
+msgid "Displayed beside user name during task"
 msgstr ""
 
 #: .\judge\models\profile.py:28
@@ -1458,7 +1458,7 @@ msgid "User-defined JavaScript for site customization."
 msgstr ""
 
 #: .\judge\models\profile.py:89
-msgid "current contest"
+msgid "current task"
 msgstr ""
 
 #: .\judge\models\profile.py:91
@@ -1952,29 +1952,29 @@ msgstr ""
 
 #: .\judge\views\contests.py:48 .\judge\views\contests.py:178
 #: .\judge\views\contests.py:181 .\judge\views\contests.py:307
-msgid "No such contest"
+msgid "No such task"
 msgstr ""
 
 #: .\judge\views\contests.py:49 .\judge\views\contests.py:179
 #, python-format
-msgid "Could not find a contest with the key \"%s\"."
+msgid "Could not find a task with the key \"%s\"."
 msgstr ""
 
 #: .\judge\views\contests.py:72 .\judge\views\contests.py:321
-msgid "Contests"
+msgid "Tasks"
 msgstr ""
 
 #: .\judge\views\contests.py:182
-msgid "Could not find such contest."
+msgid "Could not find such Task."
 msgstr ""
 
 #: .\judge\views\contests.py:185
 #, python-format
-msgid "Access to contest \"%s\" denied"
+msgid "Access to task \"%s\" denied"
 msgstr ""
 
 #: .\judge\views\contests.py:235
-msgid "Contest not ongoing"
+msgid "Assignment not ongoing"
 msgstr ""
 
 #: .\judge\views\contests.py:236
@@ -1983,12 +1983,12 @@ msgid "\"%s\" is not currently ongoing."
 msgstr ""
 
 #: .\judge\views\contests.py:240
-msgid "Already in contest"
+msgid "Already in task"
 msgstr ""
 
 #: .\judge\views\contests.py:241
 #, python-format
-msgid "You are already in a contest: \"%s\"."
+msgid "You are already in a task: \"%s\"."
 msgstr ""
 
 #: .\judge\views\contests.py:297
@@ -1998,11 +1998,11 @@ msgstr ""
 
 #: .\judge\views\contests.py:308
 #, python-format
-msgid "You are not in contest \"%s\"."
+msgid "You are not in the task \"%s\"."
 msgstr ""
 
 #: .\judge\views\contests.py:328
-msgid "ContestCalender requires integer year and month"
+msgid "Assignment Calender requires integer year and month"
 msgstr ""
 
 #: .\judge\views\contests.py:536
@@ -2030,7 +2030,7 @@ msgstr ""
 
 #: .\judge\views\contests.py:630
 #, python-format
-msgid "Contest tag: %s"
+msgid "Task tag: %s"
 msgstr ""
 
 #: .\judge\views\error.py:14
@@ -2353,7 +2353,7 @@ msgid "%(user)s's submissions for %(problem)s"
 msgstr ""
 
 #: .\judge\views\submission.py:437
-msgid "Must pass a contest"
+msgid "Must pass a task"
 msgstr ""
 
 #: .\judge\views\submission.py:456
@@ -2462,7 +2462,7 @@ msgid "Rate"
 msgstr ""
 
 #: .\templates\admin\judge\contest\change_list.html:9
-msgid "Rate all ratable contests"
+msgid "Rate all ratable tasks"
 msgstr ""
 
 #: .\templates\admin\judge\profile\change_form.html:14
@@ -2555,11 +2555,11 @@ msgid "No clarifications have been made at this time."
 msgstr ""
 
 #: .\templates\blog\list.html:154
-msgid "Ongoing contests"
+msgid "Ongoing Tasks"
 msgstr ""
 
 #: .\templates\blog\list.html:172
-msgid "Upcoming contests"
+msgid "Upcoming Tasks"
 msgstr ""
 
 #: .\templates\blog\list.html:189
@@ -2646,12 +2646,12 @@ msgid "Please enter your access code:"
 msgstr ""
 
 #: .\templates\contest\access_code.html:32
-msgid "Join Contest"
+msgid "Join Task"
 msgstr ""
 
 #: .\templates\contest\calendar.html:6
 #, python-format
-msgid "Contests in %(month)s"
+msgid "Tasks in %(month)s"
 msgstr ""
 
 #: .\templates\contest\calendar.html:13
@@ -2721,12 +2721,12 @@ msgid "Stop spectating"
 msgstr ""
 
 #: .\templates\contest\contest-tabs.html:41
-msgid "Spectate contest"
+msgid "Spectate task"
 msgstr ""
 
 #: .\templates\contest\contest-tabs.html:44
 #: .\templates\contest\contest-tabs.html:47
-msgid "Join contest"
+msgid "Join task"
 msgstr ""
 
 #: .\templates\contest\contest-tabs.html:53
@@ -2738,7 +2738,7 @@ msgid "Participating virtually."
 msgstr ""
 
 #: .\templates\contest\contest.html:43
-msgid "Contest is over."
+msgid "Task is over."
 msgstr ""
 
 #: .\templates\contest\contest.html:59 .\templates\contest\contest.html:63
@@ -2782,12 +2782,12 @@ msgid ""
 msgstr ""
 
 #: .\templates\contest\list.html:93
-msgid "Ongoing Contests"
+msgid "Ongoing tasks"
 msgstr ""
 
 #: .\templates\contest\list.html:97 .\templates\contest\list.html:149
 #: .\templates\contest\list.html:180
-msgid "Contest"
+msgid "Task"
 msgstr ""
 
 #: .\templates\contest\list.html:128
@@ -2799,15 +2799,15 @@ msgid "Join"
 msgstr ""
 
 #: .\templates\contest\list.html:144
-msgid "Upcoming Contests"
+msgid "Upcoming tasks"
 msgstr ""
 
 #: .\templates\contest\list.html:171
-msgid "There are no scheduled contests at this time."
+msgid "There are no scheduled tasks at this time."
 msgstr ""
 
 #: .\templates\contest\list.html:176
-msgid "Past Contests"
+msgid "Past Tasks"
 msgstr ""
 
 #: .\templates\contest\media-js.html:4
@@ -2822,11 +2822,11 @@ msgstr ""
 
 #: .\templates\contest\media-js.html:10
 msgid ""
-"Joining a contest starts your timer, after which it becomes unstoppable."
+"Joining a contest task your timer, after which it becomes unstoppable."
 msgstr ""
 
 #: .\templates\contest\private.html:4
-msgid "Only the following organizations may access this contest:"
+msgid "Only the following organizations may access this task:"
 msgstr ""
 
 #: .\templates\contest\ranking-table.html:27
@@ -3410,7 +3410,7 @@ msgstr ""
 
 #: .\templates\registration\registration_form.html:188
 #: .\templates\user\edit-profile.html:126
-msgid "Notify me about upcoming contests"
+msgid "Notify me about upcoming tasks"
 msgstr ""
 
 #: .\templates\registration\registration_form.html:202

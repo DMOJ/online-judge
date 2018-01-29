@@ -1,7 +1,7 @@
 from calendar import Calendar, SUNDAY
 from collections import namedtuple, defaultdict
 from functools import partial
-from itertools import chain
+from itertools import chain, tee
 from operator import attrgetter
 
 from datetime import timedelta, date, datetime, time
@@ -22,7 +22,7 @@ from django.utils.timezone import make_aware
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView, DetailView
-
+from django.utils.encoding import force_text
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation, ContestTag, Profile
@@ -238,7 +238,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
         profile = request.user.profile
         if profile.current_contest is not None:
             return generic_message(request, _('Already in contest'),
-                                   _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
+                                   _('You are already in a Task: "%s". -- you need to leave that one first.') % profile.current_contest.contest.name)
 
         if contest.ended:
             while True:
@@ -494,7 +494,6 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
                              show_current_virtual=True, ranker=ranker):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
-
     if show_current_virtual:
         if participation is None and request.user.is_authenticated:
             participation = request.user.profile.current_contest
@@ -502,6 +501,11 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
                 participation = None
         if participation is not None and participation.virtual:
             users = chain([('-', get_participation_ranking_profile(contest, participation, problems))], users)
+    if not request.user.has_perm('judge.view_all_submission'):
+         users = (  ('*',) + x[1:len(x)] for x in users if force_text(request.user)==x[1].long_display_name)
+    users, users2 = tee(users)
+    print "users2"
+    print list(users2)
     return users, problems
 
 
@@ -512,7 +516,7 @@ def contest_ranking_ajax(request, contest, participation=None):
 
     users, problems = get_contest_ranking_list(request, contest, participation)
     return render(request, 'contest/ranking-table.html', {
-        'users': users,
+        'users': [], #users,
         'problems': problems,
         'contest': contest,
         'has_rating': contest.ratings.exists(),
@@ -584,8 +588,8 @@ def base_participation_list(request, contest, profile):
     prof_username = profile.user.username
 
     queryset = contest.users.filter(user=profile, virtual__gte=0).order_by('-virtual')
-    live_link = format_html(u'<a href="{2}#!{1}">{0}</a>', _('Live'), prof_username,
-                            reverse('contest_ranking', args=[contest.key]))
+    live_link = format_html(u'<a href="https://www.uky.edu/>  </a>') #live_link = format_html(u'<a href="{2}#!{1}">{0}</a>', _('Live'), prof_username,
+    #                        reverse('contest_ranking', args=[contest.key]))
     users, problems = get_contest_ranking_list(
         request, contest, show_current_virtual=False,
         ranking_list=partial(base_contest_ranking_list, for_user=profile.id, queryset=queryset),

@@ -1,6 +1,8 @@
 <thead>
 <tr>
+    {% if is_admin %}
     <th class="header rank">{{ rank_header or _("Rank") }}</th>
+    {% endif %}
     {% block after_rank_head %}{% endblock %}
     <th class="header username">{{ _('Username') }}</th>
     {% block before_point_head %}{% endblock %}
@@ -17,13 +19,28 @@
 <tbody>
 {% for rank, user in users %}
     <tr id="user-{{ user.user.username }}">
+        {% if is_admin %}
         <td>{{ rank }}</td>
+        {% endif %}
         {% block after_rank scoped %}{% endblock %}
-        <td class="user-name">{{ link_user(user) }}</td>
+        <td class="user-name">
+        {% if is_admin or (user.user.username == request.user.username) %}
+        {{ link_user(user) }} 
+        {% if (user.user.username == request.user.username) %}
+         -- This is you. 
+        {% endif %}
+        {% else %}
+        Username Hidden.
+        {% endif %}
+        </td>
         {% block before_point scoped %}{% endblock %}
         {% block point scoped %}
             <td title="{{ user.performance_points|floatformat(2) }}" class="user-points">
+                {% if is_admin or (user.user.username == request.user.username) %}
                 {{ user.performance_points|floatformat(0) }}
+                {% else %}
+                 - 
+                {% endif %}
             </td>
         {% endblock %}
         {% block after_point scoped %}{% endblock %}

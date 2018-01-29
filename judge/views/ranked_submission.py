@@ -56,10 +56,10 @@ class RankedSubmissions(ProblemSubmissions):
             return queryset.order_by('-points', 'time')
 
     def get_title(self):
-        return _('Best solutions for %s') % self.problem_name
+        return _('You can only view your own submissions: %s') % self.problem_name
 
     def get_content_title(self):
-        return format_html(_(u'Best solutions for <a href="{1}">{0}</a>'), self.problem_name,
+        return format_html(_(u'You can only view your own submissions for <a href="{1}">{0}</a>'), self.problem_name,
                            reverse('problem_detail', args=[self.problem.code]))
 
     def get_result_table(self):

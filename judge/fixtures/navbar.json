@@ -49,8 +49,8 @@
     },
     {
         "fields": {
-            "key": "contest",
-            "label": "Contests",
+            "key": "Tasks",
+            "label": "Tasks",
             "level": 0,
             "lft": 1,
             "order": 5,

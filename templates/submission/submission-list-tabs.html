@@ -1,7 +1,9 @@
 {% extends "tabs-base.html" %}
 
 {% block tabs %}
-    {{ make_tab('all_submissions_list', 'fa-list', all_submissions_link, _('All')) }}
+    {% if perms.judge.change_submission %}
+        {{ make_tab('all_submissions_list', 'fa-list', all_submissions_link, _('All')) }}
+    {% endif %}
     {% if my_submissions_link or tab == 'my_submissions_tab' %}
         {{ make_tab('my_submissions_tab', 'fa-user', my_submissions_link, _('Mine')) }}
     {% endif %}
@@ -9,7 +11,7 @@
         {{ make_tab('best_submissions_list', 'fa-bar-chart', best_submissions_link, _('Best')) }}
     {% endif %}
     {% if tab == 'user_submissions_tab' %}
-        {{ make_tab('user_submissions_tab', 'fa-user', None, _("%(user)s's", user=tab_username)) }}
+        {{ make_tab('user_submissions_tab', 'fa-user', my_submissions_link, _("%(user)s's", user=tab_username)) }}
     {% endif %}
     {% if perms.judge.change_submission %}
         {{ make_tab('admin', 'fa-edit', url('admin:judge_submission_changelist'), _('Admin')) }}
