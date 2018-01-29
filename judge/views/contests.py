@@ -12,7 +12,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import connection, IntegrityError
-from django.db.models import Q, Min, Max, Count
+from django.db.models import Q, Min, Max, Count, Sum, Case, When, IntegerField
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
@@ -34,7 +34,7 @@ from judge.utils.views import TitleMixin, generic_message
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'participation_list', 'own_participation_list', 'get_contest_ranking_list',
-           'base_contest_ranking_list', 'contest_access_check']
+           'base_contest_ranking_list']
 
 
 def _find_contest(request, key, private_check=True):
@@ -199,7 +199,8 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         context = super(ContestDetail, self).get_context_data(**kwargs)
         context['contest_problems'] = Problem.objects.filter(contests__contest=self.object) \
             .order_by('contests__order').defer('description') \
-            .annotate(has_editorial=Count('solution')) \
+            .annotate(has_public_editorial=Sum(Case(When(solution__is_public=True, then=1),
+                                                    default=0, output_field=IntegerField()))) \
             .add_i18n_name(self.request.LANGUAGE_CODE)
         return context
 
@@ -471,8 +472,8 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None):
 
 def contest_ranking_list(contest, problems):
     return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
-                                     .prefetch_related('user__organizations')
-                                     .order_by('-score', 'cumtime'))
+                                                                     .prefetch_related('user__organizations')
+                                                                     .order_by('-score', 'cumtime'))
 
 
 def get_participation_ranking_profile(contest, participation, problems):
@@ -493,6 +494,11 @@ def get_participation_ranking_profile(contest, participation, problems):
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
                              show_current_virtual=True, ranker=ranker):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
+
+    if contest.hide_scoreboard and contest.is_in_contest(request):
+        return [(_('???'), get_participation_ranking_profile(contest,
+                                                             request.user.profile.current_contest, problems))], problems
+
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
     if show_current_virtual:
         if participation is None and request.user.is_authenticated:
@@ -523,16 +529,9 @@ def contest_ranking_ajax(request, contest, participation=None):
     })
 
 
-def contest_access_check(request, contest):
-    if not request.user.has_perm('judge.see_private_contest'):
-        if not contest.is_public:
-            raise Http404()
-        if contest.start_time is not None and contest.start_time > timezone.now():
-            raise Http404()
-
-
 def contest_ranking_view(request, contest, participation=None):
-    contest_access_check(request, contest)
+    if not contest.can_see_scoreboard(request):
+        raise Http404()
     users, problems = get_contest_ranking_list(request, contest, participation)
 
     context = {
@@ -582,7 +581,8 @@ def base_participation_list(request, contest, profile):
     contest, exists = _find_contest(request, contest)
     if not exists:
         return contest
-    contest_access_check(request, contest)
+    if not contest.can_see_scoreboard(request):
+        raise Http404()
 
     req_username = request.user.username if request.user.is_authenticated else None
     prof_username = profile.user.username

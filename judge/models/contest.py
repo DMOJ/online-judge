@@ -62,6 +62,10 @@ class Contest(models.Model):
                                                 'specified organizations.'))
     is_rated = models.BooleanField(verbose_name=_('contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
+    hide_scoreboard = models.BooleanField(verbose_name=_('hide scoreboard'),
+                                          help_text=_('Whether the scoreboard should remain hidden for the duration '
+                                                      'of the contest.'),
+                                          default=False)
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
@@ -91,6 +95,25 @@ class Contest(models.Model):
     def clean(self):
         if self.start_time >= self.end_time:
             raise ValidationError('What is this? A contest that ended before it starts?')
+
+    def is_in_contest(self, request):
+        if request.user.is_authenticated:
+            profile = request.user.profile
+            return profile and profile.current_contest is not None and profile.current_contest.contest == self
+        return False
+
+    def can_see_scoreboard(self, request):
+        if request.user.has_perm('judge.see_private_contest'):
+            return True
+        if request.user.is_authenticated and self.organizers.filter(id=request.user.profile.id).exists():
+            return True
+        if not self.is_public:
+            return False
+        if self.start_time is not None and self.start_time > timezone.now():
+            return False
+        if self.hide_scoreboard and not self.is_in_contest(request) and self.end_time > timezone.now():
+            return False
+        return True
 
     @property
     def contest_window_length(self):
@@ -132,6 +155,12 @@ class Contest(models.Model):
     def update_user_count(self):
         self.user_count = self.users.filter(virtual=0).count()
         self.save()
+
+    @cached_property
+    def show_scoreboard(self):
+        if self.hide_scoreboard and not self.ended:
+            return False
+        return True
 
     update_user_count.alters_data = True
 

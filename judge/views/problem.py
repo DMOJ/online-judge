@@ -91,6 +91,10 @@ class SolvedProblemMixin(object):
         return self.profile is not None and self.profile.current_contest is not None
 
     @cached_property
+    def contest(self):
+        return self.request.user.profile.current_contest.contest
+
+    @cached_property
     def profile(self):
         if not self.request.user.is_authenticated:
             return None
@@ -343,11 +347,6 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     def get_normal_queryset(self):
         filter = Q(is_public=True)
         if self.profile is not None:
-            filter |= Q(
-                id__in=Problem.objects.annotate(contest_user_count=Count('contest__users'))
-                              .filter(contest__users=self.profile.current_contest_id,
-                                      contest_user_count__gt=0).values('id').distinct()
-            )
             filter |= Q(authors=self.profile)
             filter |= Q(curators=self.profile)
             filter |= Q(testers=self.profile)
@@ -406,6 +405,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         else:
             context['hot_problems'] = None
             context['point_start'], context['point_end'], context['point_values'] = 0, 0, {}
+            context['hide_contest_scoreboard'] = self.contest.hide_scoreboard
         return context
 
     def get_noui_slider_points(self):
