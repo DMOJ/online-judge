@@ -478,7 +478,7 @@ def is_in_contest(request, contest):
 
 
 def contest_ranking_list(contest, problems):
-    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
+    return base_contest_ranking_list(contest, problems, contest.users.filter(user__user__is_active=True,virtual=0)
                                                                      .prefetch_related('user__organizations')
                                                                      .order_by('-score', 'cumtime'))
 

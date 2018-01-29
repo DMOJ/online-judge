@@ -25,7 +25,8 @@ class RankedSubmissions(ProblemSubmissions):
             contest_join = ''
             points = 'sub.points'
             constraint = ''
-        queryset = super(RankedSubmissions, self).get_queryset().filter(id__in=RawSQL(
+        queryset = super(RankedSubmissions, self).get_queryset().filter(user__user__is_active=True,
+                                                                        id__in=RawSQL(
                 '''
                     SELECT sub.id
                     FROM (
