@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 
 from dmoj import settings
 from judge.models import Contest, Problem, Profile, Submission, ContestTag
-from judge.views.contests import contest_access_check, base_contest_ranking_list
+from judge.views.contests import base_contest_ranking_list
 
 
 def sane_time_repr(delta):
@@ -31,7 +31,8 @@ def api_v1_contest_list(request):
 
 def api_v1_contest_detail(request, contest):
     contest = get_object_or_404(Contest, key=contest)
-    contest_access_check(request, contest)
+    if not contest.can_see_scoreboard(request):
+        raise Http404()
 
     problems = list(contest.contest_problems.select_related('problem')
                     .defer('problem__description').order_by('order'))

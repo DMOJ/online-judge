@@ -91,6 +91,10 @@ class SolvedProblemMixin(object):
         return self.profile is not None and self.profile.current_contest is not None
 
     @cached_property
+    def contest(self):
+        return self.request.user.profile.current_contest.contest
+
+    @cached_property
     def profile(self):
         if not self.request.user.is_authenticated:
             return None
@@ -401,6 +405,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         else:
             context['hot_problems'] = None
             context['point_start'], context['point_end'], context['point_values'] = 0, 0, {}
+            context['hide_contest_scoreboard'] = self.contest.hide_scoreboard
         return context
 
     def get_noui_slider_points(self):

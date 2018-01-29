@@ -34,7 +34,7 @@ from judge.utils.views import TitleMixin, generic_message
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'participation_list', 'own_participation_list', 'get_contest_ranking_list',
-           'base_contest_ranking_list', 'contest_access_check']
+           'base_contest_ranking_list']
 
 
 def _find_contest(request, key, private_check=True):
@@ -470,13 +470,6 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None):
                .defer('user__about', 'user__organizations__about'))
 
 
-def is_in_contest(request, contest):
-    if request.user.is_authenticated:
-        profile = request.user.profile
-        return profile.current_contest is not None and profile.current_contest.contest == contest
-    return False
-
-
 def contest_ranking_list(contest, problems):
     return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
                                                                      .prefetch_related('user__organizations')
@@ -502,7 +495,7 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
                              show_current_virtual=True, ranker=ranker):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
 
-    if contest.hide_scoreboard and is_in_contest(request, contest):
+    if contest.hide_scoreboard and contest.is_in_contest(request):
         return [(_('???'), get_participation_ranking_profile(contest,
                                                              request.user.profile.current_contest, problems))], problems
 
@@ -532,18 +525,9 @@ def contest_ranking_ajax(request, contest, participation=None):
     })
 
 
-def contest_access_check(request, contest):
-    if not request.user.has_perm('judge.see_private_contest'):
-        if not contest.is_public:
-            raise Http404()
-        if contest.start_time is not None and contest.start_time > timezone.now():
-            raise Http404()
-        if contest.hide_scoreboard and not is_in_contest(request, contest) and contest.end_time > timezone.now():
-            raise Http404()
-
-
 def contest_ranking_view(request, contest, participation=None):
-    contest_access_check(request, contest)
+    if not contest.can_see_scoreboard(request):
+        raise Http404()
     users, problems = get_contest_ranking_list(request, contest, participation)
 
     context = {
@@ -593,7 +577,8 @@ def base_participation_list(request, contest, profile):
     contest, exists = _find_contest(request, contest)
     if not exists:
         return contest
-    contest_access_check(request, contest)
+    if not contest.can_see_scoreboard(request):
+        raise Http404()
 
     req_username = request.user.username if request.user.is_authenticated else None
     prof_username = profile.user.username

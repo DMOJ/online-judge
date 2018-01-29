@@ -290,7 +290,13 @@
                             <td class="ac-rate">{{ problem.ac_rate|floatformat(1) }}%</td>
                         {% endif %}
                         <td class="users">
-                            <a href="{{ url('ranked_submissions', problem.code) }}">{{ problem.user_count }}</a>
+                            <a href="{{ url('ranked_submissions', problem.code) }}">
+                                {% if not request.in_contest or not hide_contest_scoreboard %}
+                                    {{ problem.user_count }}
+                                {% else %}
+                                    ???
+                                {% endif %}
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}
