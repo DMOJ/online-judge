@@ -67,7 +67,8 @@ def version_matrix(request):
             matrix[runtime.judge_id][runtime.language_id].append(runtime)
 
     for judge, data in six.iteritems(matrix):
-        groups[judges[judge].rpartition('.')[0]].append((judges[judge], data))
+        name_tuple = judges[judge].rpartition('.')
+        groups[name_tuple[0] or name_tuple[-1]].append((judges[judge], data))
 
     matrix = {}
     for group, data in six.iteritems(groups):
