@@ -65,17 +65,16 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         self.object = self.get_object()
         page = self.get_comment_page()
 
-        with LockModel(write=(Comment, Revision, Version), read=(Profile, ContentType, Submission, Problem)):
-            form = CommentForm(request, request.POST)
-            if form.is_valid():
-                comment = form.save(commit=False)
-                comment.author = request.user.profile
-                comment.page = page
-                with revisions.create_revision():
-                    revisions.set_user(request.user)
-                    revisions.set_comment(_('Posted comment'))
-                    comment.save()
-                return HttpResponseRedirect(request.path)
+        form = CommentForm(request, request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user.profile
+            comment.page = page
+            with LockModel(write=(Comment, Revision, Version), read=(ContentType,)), revisions.create_revision():
+                revisions.set_user(request.user)
+                revisions.set_comment(_('Posted comment'))
+                comment.save()
+            return HttpResponseRedirect(request.path)
 
         context = self.get_context_data(object=self.object, comment_form=form)
         return self.render_to_response(context)
