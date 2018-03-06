@@ -152,11 +152,11 @@ MIDDLEWARE = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'judge.user_log.LogUserAccessMiddleware',
     'judge.timezone.TimezoneMiddleware',
+    'impersonate.middleware.ImpersonateMiddleware',
     'judge.middleware.ContestMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'judge.social_auth.SocialAuthExceptionMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
-    'impersonate.middleware.ImpersonateMiddleware',
 )
 
 IMPERSONATE_REQUIRE_SUPERUSER = True
