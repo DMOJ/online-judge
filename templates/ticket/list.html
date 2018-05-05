@@ -213,7 +213,7 @@
 
                     <div id="user-box" class="filter-select2">
                         <label for="filter-user">{{ _('Filing user') }}</label>
-                        <select id="filter-user" style="width: 100%" multiple="multiple" name="user">
+                        <select id="filter-user" style="width: 100%" multiple name="user">
                             {% for username in filter_status.user %}
                                 <option value="{{ username }}" selected>{{ username }}</option>
                             {% endfor %}
