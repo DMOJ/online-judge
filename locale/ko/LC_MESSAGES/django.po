@@ -1851,7 +1851,7 @@ msgstr "만든 시간"
 
 #: judge/models/ticket.py:13
 msgid "assignees"
-msgstr "확인한 사람"
+msgstr "맡은 사람"
 
 #: judge/models/ticket.py:14
 msgid "quick notes"
@@ -2760,7 +2760,7 @@ msgstr "준비중인 대회"
 
 #: templates/contest/list.html:171
 msgid "There are no scheduled contests at this time."
-msgstr ""
+msgstr "표시할 대회가 없습니다."
 
 #: templates/contest/list.html:176
 msgid "Past Contests"
@@ -2875,15 +2875,15 @@ msgstr ""
 #: templates/organization/requests/pending.html:41
 #: templates/ticket/edit-notes.html:4
 msgid "Update"
-msgstr ""
+msgstr "업데이트"
 
 #: templates/organization/home.html:8
 msgid "Leave organization"
-msgstr ""
+msgstr "소속 나가기"
 
 #: templates/organization/home.html:11
 msgid "Join organization"
-msgstr ""
+msgstr "소속 가입하기"
 
 #: templates/organization/home.html:14
 msgid "Request membership"
@@ -2891,19 +2891,19 @@ msgstr ""
 
 #: templates/organization/home.html:21
 msgid "Edit organization"
-msgstr ""
+msgstr "소속 수정"
 
 #: templates/organization/home.html:25
 msgid "View requests"
-msgstr ""
+msgstr "요청 보기"
 
 #: templates/organization/home.html:32
 msgid "Admin organization"
-msgstr ""
+msgstr "소속 관리"
 
 #: templates/organization/home.html:37
 msgid "View members"
-msgstr ""
+msgstr "멤버 보기"
 
 #: templates/organization/list.html:23 templates/status/language-list.html:33
 #: templates/ticket/list.html:245
@@ -2920,33 +2920,33 @@ msgstr ""
 
 #: templates/organization/new.html:10 templates/ticket/new.html:36
 msgid "Create"
-msgstr ""
+msgstr "만들기"
 
 #: templates/organization/requests/detail.html:13
 msgid "User:"
-msgstr ""
+msgstr "유저:"
 
 #: templates/organization/requests/detail.html:17
 msgid "Organization:"
-msgstr ""
+msgstr "소속:"
 
 #: templates/organization/requests/detail.html:25
 msgid "Time:"
-msgstr ""
+msgstr "시간:"
 
 #: templates/organization/requests/detail.html:29
 msgid "Reason:"
-msgstr ""
+msgstr "이유:"
 
 #: templates/organization/requests/log.html:11
 #: templates/organization/requests/pending.html:21
 msgid "State"
-msgstr ""
+msgstr "상태"
 
 #: templates/organization/requests/log.html:12
 #: templates/organization/requests/pending.html:22
 msgid "Reason"
-msgstr ""
+msgstr "이유"
 
 #: templates/organization/requests/log.html:28
 #: templates/organization/requests/pending.html:44
@@ -2956,35 +2956,35 @@ msgstr ""
 #: templates/organization/requests/pending.html:24
 #: templates/problem/data.html:401
 msgid "Delete?"
-msgstr ""
+msgstr "삭제?"
 
 #: templates/organization/requests/request.html:18
 msgid "Your reason for joining:"
-msgstr ""
+msgstr "가입 신청 이유"
 
 #: templates/organization/requests/request.html:20
 msgid "Request"
-msgstr ""
+msgstr "요청"
 
 #: templates/organization/requests/tabs.html:4
 msgid "Pending"
-msgstr ""
+msgstr "승인 대기중"
 
 #: templates/organization/requests/tabs.html:7
 msgid "Log"
-msgstr ""
+msgstr "로그"
 
 #: templates/organization/requests/tabs.html:10
 msgid "Approved"
-msgstr ""
+msgstr "승인됨"
 
 #: templates/organization/requests/tabs.html:13
 msgid "Rejected"
-msgstr ""
+msgstr "거절됨"
 
 #: templates/organization/users-table.html:15
 msgid "Kick"
-msgstr ""
+msgstr "내보내기"
 
 #: templates/problem/data.html:353
 msgid "View YAML"
@@ -3384,7 +3384,7 @@ msgstr "제출 필터링"
 
 #: templates/submission/list.html:260
 msgid "You were disconnected. Refresh to show latest updates."
-msgstr "연결 실패. 새로고침 후 확인해보세요."
+msgstr "연결이 끊겼습니다. 최신 상태를 확인하려면 새로고침 하세요."
 
 #: templates/submission/row.html:49
 msgid "view"
@@ -3527,7 +3527,7 @@ msgstr ""
 
 #: templates/ticket/ticket.html:309
 msgid "No one is assigned."
-msgstr ""
+msgstr "아무도 맡지 않음."
 
 #: templates/ticket/ticket.html:315
 msgid "Close ticket"
@@ -3543,7 +3543,7 @@ msgstr ""
 
 #: templates/ticket/ticket.html:328 templates/widgets/select_all.html:4
 msgid "Nothing here."
-msgstr ""
+msgstr "아무것도 없습니다."
 
 #: templates/ticket/ticket.html:376
 msgid "Post"
@@ -3555,7 +3555,7 @@ msgstr ""
 
 #: templates/user/edit-profile.html:91
 msgid "Display name"
-msgstr ""
+msgstr "표시될 이름"
 
 #: templates/user/edit-profile.html:95
 msgid "Self-description"
