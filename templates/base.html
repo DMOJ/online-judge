@@ -146,7 +146,7 @@
         <script>
             window.user = {
                 email: '{{ request.user.email|escapejs }}',
-                id: '{{ request.user.idjs }}',
+                id: '{{ request.user.id|escapejs }}',
                 name: '{{ request.user.username|escapejs }}'
             };
         </script>
