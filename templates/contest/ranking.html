@@ -228,7 +228,7 @@
 {% block users_table %}
     <div style="margin-bottom: 0.5em">
         {% if tab == 'participation' %}
-            {% if contest.start_time <= now or perms.judge.see_private_contest %}
+            {% if perms.judge.see_private_contest %}
                 <input id="search-contest" type="text" placeholder="{{ _('View user participation') }}">
             {% endif %}
         {% endif %}

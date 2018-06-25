@@ -6,19 +6,13 @@
 </div>
 <div style="display:block;margin: 0 2px;padding: 1em;border: 3px solid #2980B9;background-color: #f8f8f8;border-radius: 6px;font-size: .95em;color: #444;">
 
-<b>Thanks for registering on the {{ site.name }}! We're glad to have you.</b><br><br>
-The last step is activating your account. Please activate your {{ SITE_NAME }} account in 7 days.<br>To activate, just reply to this email with this exact text:
+<b>Thanks for registering on the UKY CS Online Judge! We're glad to have you.</b><br><br>
 <pre style="margin-left:1em">
-{{ activation_key }}
 </pre>
-Alternatively, click the button below to activate your account.
+Click the button below to activate your account.
 <p align="center">
-<a href="http://{{ site.domain }}/accounts/activate/{{ activation_key }}/" style="cursor: pointer;display:block;text-align: center;padding: 4px 2px 5px;color: white;border: 1px solid #666;border-radius: 1px;background: #2980b9;background: linear-gradient(180deg, #00aee0, #2980b9);text-decoration: none;line-height:2em;font-size:1emm;width:12em;">Activate</a>
+<a href="http://csurs9.csr.uky.edu/accounts/activate/{{ activation_key }}/" style="cursor: pointer;display:block;text-align: center;padding: 4px 2px 5px;color: white;border: 1px solid #666;border-radius: 1px;background: #2980b9;background: linear-gradient(180deg, #00aee0, #2980b9);text-decoration: none;line-height:2em;font-size:1emm;width:12em;">Activate</a>
 </p>
 
-{% if SITE_ADMIN_EMAIL %}
-See you soon! If you have problems activating your account, feel free to shoot us an email at <a href="mailto:{{ SITE_ADMIN_EMAIL }}">{{ SITE_ADMIN_EMAIL }}</a>
-{% else %}
 See you soon!
-{% endif %}
 </div>

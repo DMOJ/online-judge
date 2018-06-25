@@ -25,7 +25,7 @@
 
             $('.join-warning').click(function () {
                 return confirm('{{ _('Are you sure you want to join?') }}\n' +
-                    '{{ _('Joining a contest for the first time starts your timer, after which it becomes unstoppable.') }}');
+                    '{{ _('For time-limited tasks: Joining a task for the first time starts your timer, after which it becomes unstoppable.') }}');
             });
 
             // var tooltip_classes = 'tooltipped tooltipped-e';
@@ -46,7 +46,7 @@
 
 {% block title_row %}
     {% set tab = 'list' %}
-    {% set title = 'Contests' %}
+    {% set title = 'Tasks' %}
     {% include "contest/contest-list-tabs.html" %}
 {% endblock %}
 
@@ -90,11 +90,11 @@
 {% block body %}
     <div class="content-description">
         {% if current_contests %}
-            <h4>{{ _('Ongoing Contests') }}</h4>
+            <h4>{{ _('Ongoing Tasks') }}</h4>
             <table class="contest-list table striped">
                 <thead>
                 <tr>
-                    <th style="width:90%">{{ _('Contest') }}</th>
+                    <th style="width:90%">{{ _('Task') }}</th>
                     <th>{{ _('Users') }}</th>
                     {% if not request.in_contest %}
                         <th style="width:15%"></th>
@@ -145,12 +145,12 @@
             <br>
         {% endif %}
 
-        <h4>{{ _('Upcoming Contests') }}</h4>
+        <h4>{{ _('Upcoming Tasks') }}</h4>
         {% if future_contests %}
             <table class="contest-list table striped">
                 <thead>
                 <tr>
-                    <th>{{ _('Contest') }}</th>
+                    <th>{{ _('Task') }}</th>
                 </tr>
                 </thead>
                 <tbody>{% for contest in future_contests %}
@@ -177,11 +177,11 @@
         {% endif %}
         <br>
 
-        <h4>{{ _('Past Contests') }}</h4>
+        <h4>{{ _('Past Tasks') }}</h4>
         <table class="contest-list table striped">
             <thead>
             <tr>
-                <th style="width:90%">{{ _('Contest') }}</th>
+                <th style="width:90%">{{ _('Task') }}</th>
                 <th>{{ _('Users') }}</th>
                 {% if not request.in_contest %}
                     <th style="width:15%"></th>

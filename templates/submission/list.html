@@ -270,11 +270,13 @@
                 </colgroup>
                 {% set profile_id = request.user.profile.id if request.user.is_authenticated else 0 %}
                 {% for submission in submissions %}
+                {% if perms.judge.change_submission or submission.user.id==request.user.profile.id %}
                     <tr id="{{ submission.id }}">
                         {% with problem_name=show_problem and submission.problem.i18n_name %}
                             {% include "submission/row.html" %}
                         {% endwith %}
                     </tr>
+                {% endif %}
                 {% endfor %}
             </table>
             {% if page_obj.num_pages > 1 %}

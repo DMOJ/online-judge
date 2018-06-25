@@ -186,7 +186,10 @@
             {% for node in mptt_tree(nav_bar) recursive %}
                 <li>
                     <a href="{{ node.path }}" class="nav-{{ node.key }}{% if node.key in nav_tab %} active{% endif %}">
-                        {{ user_trans(node.label) }}
+                        {% if (node.label == 'contests' or node.label == 'Contests' or node.label =='CONTESTS') %} Tasks 
+                        {% else %}
+                        {{ node.label }} 
+			{% endif %}
                         {% if not node.is_leaf_node %}
                             <div href="javascript:void(0)" class="nav-expand">></div>
                         {% endif %}

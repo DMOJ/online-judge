@@ -253,7 +253,7 @@ def edit_profile(request):
 
 class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
-    title = ugettext_lazy('Leaderboard')
+    title = ugettext_lazy('This is for administrators only..')
     context_object_name = 'users'
     template_name = 'user/list.html'
     paginate_by = 100
@@ -275,7 +275,17 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
         return context
 
 
+class UserListEmpty(UserList):
+    def get_context_data(self, **kwargs):
+        context = super(UserList, self).get_context_data(**kwargs)
+        context['users'] = ()
+        context['first_page_href'] = '.'
+        context.update(self.get_sort_context())
+        context.update(self.get_sort_paginate_context())
+        return context
+
 user_list_view = UserList.as_view()
+user_list_view_empty = UserListEmpty.as_view()
 
 
 def users(request):
@@ -283,7 +293,11 @@ def users(request):
         participation = request.user.profile.current_contest
         if participation is not None:
             return contest_ranking_view(request, participation.contest, participation)
-    return user_list_view(request)
+    if request.user.has_perm('judge.see_private_contest'):
+        return user_list_view(request)
+    return user_list_view_empty(request)
+    
+ 
 
 
 def user_ranking_redirect(request):
