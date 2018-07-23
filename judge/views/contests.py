@@ -367,8 +367,12 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
             raise Http404()
 
         dates = Contest.objects.aggregate(min=Min('start_time'), max=Max('end_time'))
-        min_month = dates['min'].year, dates['min'].month
-        max_month = max((dates['max'].year, dates['max'].month), (self.today.year, self.today.month))
+        min_month = self.today.year, self.today.month
+        max_month = self.today.year, self.today.month
+        if dates['min'].year != None:
+            min_month = dates['min'].year, dates['min'].month
+        if dates['max'].year != None:
+            max_month = max((dates['max'].year, dates['max'].month), max_month)
 
         month = (self.year, self.month)
         if month < min_month or month > max_month:
