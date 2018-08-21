@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-21 17:54-0400\n"
-"PO-Revision-Date: 2018-08-21 21:55\n"
+"PO-Revision-Date: 2018-08-21 22:17\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -388,7 +388,7 @@ msgstr "%d KB"
 #: .\judge\admin\submission.py:211
 #, python-format
 msgid "%.2f MB"
-msgstr "%d 2f MB"
+msgstr "%.2f MB"
 
 #: .\judge\admin\submission.py:213
 msgid "Memory"
@@ -2114,14 +2114,14 @@ msgstr "Su organización solo puede recibir %d miembros más. No puede aprobar %
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
-msgstr[0] "Usuarios aprobados."
+msgstr[0] "%d usuarios aprobados."
 msgstr[1] "Usuarios aprobados \"%d\"."
 
 #: .\judge\views\organization.py:237
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
-msgstr[0] "Usuarios rechazados."
+msgstr[0] "%d usuarios rechazados."
 msgstr[1] "Usuarios rechazados \"%d\"."
 
 #: .\judge\views\organization.py:267
