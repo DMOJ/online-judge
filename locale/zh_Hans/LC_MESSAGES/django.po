@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-21 17:54-0400\n"
-"PO-Revision-Date: 2018-08-21 21:55\n"
+"PO-Revision-Date: 2018-08-21 22:06\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -3783,7 +3783,7 @@ msgstr "隐藏我已经解决的题目"
 #: .\templates\user\user-problems.html:98
 #, python-format
 msgid "%(points).1f points"
-msgstr "%(points). 1f 分"
+msgstr "%(points).1f 分"
 
 #: .\templates\user\user-problems.html:104
 msgid "Score"
