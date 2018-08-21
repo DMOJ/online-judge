@@ -5,24 +5,24 @@ msgstr ""
 "POT-Creation-Date: 2018-08-21 17:54-0400\n"
 "PO-Revision-Date: 2018-08-21 21:55\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
-"Language-Team: Vietnamese\n"
-"Language: vi_VN\n"
+"Language-Team: Turkish\n"
+"Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: crowdin.com\n"
 "X-Crowdin-Project: dmoj\n"
-"X-Crowdin-Language: vi\n"
+"X-Crowdin-Language: tr\n"
 "X-Crowdin-File: django.po\n"
 
 #: .\dmoj\settings.py:247
 msgid "German"
-msgstr "Tiếng Đức"
+msgstr ""
 
 #: .\dmoj\settings.py:248
 msgid "English"
-msgstr "Tiếng Anh"
+msgstr ""
 
 #: .\dmoj\settings.py:249
 msgid "Spanish"
@@ -30,7 +30,7 @@ msgstr ""
 
 #: .\dmoj\settings.py:250
 msgid "French"
-msgstr "Tiếng Pháp"
+msgstr ""
 
 #: .\dmoj\settings.py:251
 msgid "Croatian"
@@ -46,15 +46,15 @@ msgstr ""
 
 #: .\dmoj\settings.py:254
 msgid "Romanian"
-msgstr "Tiếng Romania"
+msgstr ""
 
 #: .\dmoj\settings.py:255
 msgid "Russian"
-msgstr "Tiếng Nga"
+msgstr ""
 
 #: .\dmoj\settings.py:256
 msgid "Serbian (Latin)"
-msgstr "Tiếng Séc-bi (Latin)"
+msgstr ""
 
 #: .\dmoj\settings.py:257
 msgid "Turkish"
@@ -62,391 +62,402 @@ msgstr ""
 
 #: .\dmoj\settings.py:258
 msgid "Vietnamese"
-msgstr "Tiếng Việt"
+msgstr ""
 
 #: .\dmoj\settings.py:259
 msgid "Simplified Chinese"
-msgstr "Tiếng Trung (Giản thể)"
+msgstr ""
 
 #: .\dmoj\urls.py:51 .\templates\base.html:234
 msgid "Login"
-msgstr "Đăng nhập"
+msgstr "Giriş"
 
 #: .\dmoj\urls.py:92 .\templates\base.html:185
 msgid "Home"
-msgstr "Trang chủ"
+msgstr "Ana sayfa"
 
 #: .\judge\admin\comments.py:40
 #, python-format
 msgid "%d comment successfully hidden."
 msgid_plural "%d comments successfully hidden."
-msgstr[0] "%d bình luận đã được ẩn."
+msgstr[0] "%d yorum gizlendi."
+msgstr[1] "%d yorum gizlendi."
 
 #: .\judge\admin\comments.py:43
 msgid "Hide comments"
-msgstr "Ẩn bình luận"
+msgstr "Yorumları gizle"
 
 #: .\judge\admin\comments.py:47
 #, python-format
 msgid "%d comment successfully unhidden."
 msgid_plural "%d comments successfully unhidden."
-msgstr[0] "%d bình luận đã được hiện lại."
+msgstr[0] "%d yorum gösterildi."
+msgstr[1] "%d yorum gösterildi."
 
 #: .\judge\admin\comments.py:50
 msgid "Unhide comments"
-msgstr "Bỏ ẩn bình luận"
+msgstr "Yorumları göster"
 
 #: .\judge\admin\comments.py:58
 msgid "Associated page"
-msgstr "Trang liên kết"
+msgstr "İlişkili sayfa"
 
 #: .\judge\admin\contest.py:27
 msgid "Included contests"
-msgstr "Các cuộc thi"
+msgstr "Yarışmalar"
 
 #: .\judge\admin\contest.py:63 .\templates\contest\contest.html:83
 #: .\templates\problem\list.html:206 .\templates\problem\list.html:221
 #: .\templates\user\user-problems.html:61
 #: .\templates\user\user-problems.html:103
 msgid "Problem"
-msgstr "Đề bài"
+msgstr ""
 
 #: .\judge\admin\contest.py:91
 msgid "Scheduling"
-msgstr "Kế hoạch"
+msgstr "Planlama"
 
 #: .\judge\admin\contest.py:92
 msgid "Details"
-msgstr "Chi tiêt"
+msgstr "Ayrıntılar"
 
 #: .\judge\admin\contest.py:93 .\templates\contest\ranking-table.html:5
 msgid "Rating"
-msgstr "Xếp loại"
+msgstr "Derecelendirme"
 
 #: .\judge\admin\contest.py:94 .\templates\contest\ranking-table.html:7
 msgid "Organization"
-msgstr "Tổ chức"
+msgstr "Organizasyon"
 
 #: .\judge\admin\contest.py:130
 #, python-format
 msgid "%d contest successfully marked as public."
 msgid_plural "%d contests successfully marked as public."
-msgstr[0] "%d bài toán đã được công bố."
+msgstr[0] "%d yarışma başarıyla halka açıldı."
+msgstr[1] "%d yarışma başarıyla halka açıldı."
 
 #: .\judge\admin\contest.py:133
 msgid "Mark contests as public"
-msgstr "Đánh dấu cuộc thi là công khai"
+msgstr "Yarışmaları halka aç"
 
 #: .\judge\admin\contest.py:137
 #, python-format
 msgid "%d contest successfully marked as private."
 msgid_plural "%d contests successfully marked as private."
-msgstr[0] "%d bài toán đã được công bố."
+msgstr[0] "%d yarışma başarıyla özelleştirildi."
+msgstr[1] "%d yarışma başarıyla özelleştirildi."
 
 #: .\judge\admin\contest.py:140
 msgid "Mark contests as private"
-msgstr "Đánh dấu bài toán là cá nhân"
+msgstr "Yarışmaları halka kapat"
 
 #: .\judge\admin\contest.py:211
 #, python-format
 msgid "%d participation have scores recalculated."
 msgid_plural "%d participations have scores recalculated."
-msgstr[0] "%d người tham gia được tính lại điểm."
+msgstr[0] "%d katılımın puanları yeniden hesaplandı."
+msgstr[1] "%d katılımın puanları yeniden hesaplandı."
 
 #: .\judge\admin\contest.py:214 .\judge\admin\profile.py:90
 msgid "Recalculate scores"
-msgstr "Tính lại điểm"
+msgstr "Puanları yeniden hesapla"
 
 #: .\judge\admin\contest.py:221
 #, python-format
 msgid "%d participation have times recalculated."
 msgid_plural "%d participations have times recalculated."
-msgstr[0] "%d người tham gia được tính lại thời gian."
+msgstr[0] "%d katılımın süreleri yeniden hesaplandı."
+msgstr[1] "%d katılımın süreleri yeniden hesaplandı."
 
 #: .\judge\admin\contest.py:224
 msgid "Recalculate cumulative time"
-msgstr "Tính lại thời gian"
+msgstr "Kümülatif süreyi yeniden hesapla"
 
 #: .\judge\admin\contest.py:228 .\judge\admin\organization.py:63
 msgid "username"
-msgstr "tên người dùng"
+msgstr "kullanıcı adı"
 
 #: .\judge\admin\contest.py:233 .\templates\base.html:253
 msgid "virtual"
-msgstr "ảo"
+msgstr "sanal"
 
 #: .\judge\admin\interface.py:27 .\judge\models\interface.py:46
 msgid "link path"
-msgstr "đường dẫn liên kết"
+msgstr "link ucu"
 
 #: .\judge\admin\interface.py:61
 msgid "Content"
-msgstr "Nội dung"
+msgstr "İçerik"
 
 #: .\judge\admin\interface.py:62
 msgid "Summary"
-msgstr "Tổng hợp"
+msgstr "Özet"
 
 #: .\judge\admin\organization.py:32 .\judge\admin\problem.py:168
 #: .\judge\admin\profile.py:59
 msgid "View on site"
-msgstr "Xem trên trang web"
+msgstr "Sitede görüntüle"
 
 #: .\judge\admin\problem.py:28
 msgid "Describe the changes you made (optional)"
-msgstr "Mô tả những thay đổi bạn đã thực hiện (tùy chọn)"
+msgstr "Yaptığın değişiklikleri özetle (isteğe bağlı)"
 
 #: .\judge\admin\problem.py:123
 msgid "Social Media"
-msgstr "Mạng Xã hội"
+msgstr "Sosyal Medya"
 
 #: .\judge\admin\problem.py:124
 msgid "Taxonomy"
-msgstr "Phân loại"
+msgstr "Tasnif"
 
 #: .\judge\admin\problem.py:125 .\templates\contest\contest.html:84
 #: .\templates\problem\data.html:394 .\templates\problem\list.html:211
 #: .\templates\problem\list.html:232 .\templates\user\base-users-table.html:10
 #: .\templates\user\user-problems.html:63
 msgid "Points"
-msgstr "Điểm"
+msgstr "Puanlar"
 
 #: .\judge\admin\problem.py:126
 msgid "Limits"
-msgstr "Giới hạn"
+msgstr "Sınırlar"
 
 #: .\judge\admin\problem.py:127 .\templates\stats\base.html:16
 #: .\templates\submission\list.html:231
 msgid "Language"
-msgstr "Ngôn ngữ"
+msgstr "Dil"
 
 #: .\judge\admin\problem.py:128
 msgid "Justice"
-msgstr "Luật"
+msgstr "Demir yumruk"
 
 #: .\judge\admin\problem.py:129
 msgid "History"
-msgstr "Lịch sử"
+msgstr "Geçmiş"
 
 #: .\judge\admin\problem.py:165
 msgid "Authors"
-msgstr "Tác giả"
+msgstr "Yazarlar"
 
 #: .\judge\admin\problem.py:203
 #, python-format
 msgid "%d problem successfully marked as public."
 msgid_plural "%d problems successfully marked as public."
-msgstr[0] "%d bài toán đã được công bố."
+msgstr[0] "%d problem herkese açık olarak işaretlendi."
+msgstr[1] "%d problem herkese açık olarak işaretlendi."
 
 #: .\judge\admin\problem.py:207
 msgid "Mark problems as public"
-msgstr "Công bố đề bài"
+msgstr "Problemleri herkese aç"
 
 #: .\judge\admin\problem.py:212
 #, python-format
 msgid "%d problem successfully marked as private."
 msgid_plural "%d problems successfully marked as private."
-msgstr[0] "%d bài toán đã được đánh dấu là cá nhân."
+msgstr[0] "%d problem gizli olarak işaretlendi."
+msgstr[1] "%d problem gizli olarak işaretlendi."
 
 #: .\judge\admin\problem.py:216
 msgid "Mark problems as private"
-msgstr "Đánh dấu bài toán là cá nhân"
+msgstr "Problemleri gizle"
 
 #: .\judge\admin\profile.py:32
 msgid "timezone"
-msgstr ""
+msgstr "saat dilimi"
 
 #: .\judge\admin\profile.py:65 .\judge\admin\submission.py:197
 #: .\templates\organization\requests\log.html:9
 #: .\templates\organization\requests\pending.html:19
 #: .\templates\ticket\list.html:247
 msgid "User"
-msgstr "Thành viên"
+msgstr "Kullanıcı"
 
 #: .\judge\admin\profile.py:70
 #: .\templates\registration\registration_form.html:141
 msgid "Email"
-msgstr "Hộp thư"
+msgstr "E-posta"
 
 #: .\judge\admin\profile.py:75 .\judge\views\register.py:30
 #: .\templates\registration\registration_form.html:169
 #: .\templates\user\edit-profile.html:104
 msgid "Timezone"
-msgstr "Múi giờ"
+msgstr "Saat dilimi"
 
 #: .\judge\admin\profile.py:80
 msgid "date joined"
-msgstr "ngày tham gia"
+msgstr "kayıt tarihi"
 
 #: .\judge\admin\profile.py:87
 #, python-format
 msgid "%d user have scores recalculated."
 msgid_plural "%d users have scores recalculated."
-msgstr[0] "%d người dùng có tính lại điểm."
+msgstr[0] "%d kullanıcının puanları yeniden hesaplandı."
+msgstr[1] "%d kullanıcının puanları yeniden hesaplandı."
 
 #: .\judge\admin\runtime.py:15
 msgid "Disallowed problems"
-msgstr "Đề bài không được cho phép"
+msgstr "Yasaklı problemler"
 
 #: .\judge\admin\runtime.py:18
 msgid "These problems are NOT allowed to be submitted in this language"
-msgstr "Đề này KHÔNG được cho phép nộp bằng ngôn ngữ này"
+msgstr "Bu problemler için bu dilde çözüm gönderilemez"
 
 #: .\judge\admin\runtime.py:81
 msgid "Description"
-msgstr "Mô tả"
+msgstr "Tanım"
 
 #: .\judge\admin\runtime.py:82
 msgid "Information"
-msgstr "Thông tin"
+msgstr "Bilgi"
 
 #: .\judge\admin\runtime.py:83
 msgid "Capabilities"
-msgstr "Khả năng"
+msgstr "Desteklenenler"
 
 #: .\judge\admin\submission.py:21 .\judge\admin\submission.py:40
 #: .\judge\admin\submission.py:207
 msgid "None"
-msgstr "Không"
+msgstr "Hiç"
 
 #: .\judge\admin\submission.py:21
 msgid "Not done"
-msgstr "Chưa hoàn thành"
+msgstr "Bitmemiş"
 
 #: .\judge\admin\submission.py:21
 msgid "Exceptional"
-msgstr "Lỗi"
+msgstr "Sıra dışı"
 
 #: .\judge\admin\submission.py:40
 msgid "Unaccepted"
-msgstr "Không chấp nhận"
+msgstr "Kabul edilmemiş"
 
 #: .\judge\admin\submission.py:83
 #, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
-msgstr "%(problem)s trong %(contest)s"
+msgstr "%(problem)s - %(contest)s"
 
 #: .\judge\admin\submission.py:127 .\judge\admin\submission.py:148
 msgid "You do not have the permission to rejudge submissions."
-msgstr "Bạn không có quyền chấm lại bài."
+msgstr "Çözümleri yeniden değerlendirme yetkin yok."
 
 #: .\judge\admin\submission.py:132
 msgid "You do not have the permission to rejudge THAT many submissions."
-msgstr "Bạn không không có quyền chấm lại QUÁ NHIỀU bài nộp."
+msgstr "Bu miktarda çözümü yeniden değerlendirme yetkin yok."
 
 #: .\judge\admin\submission.py:141
 #, python-format
 msgid "%d submission were successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
-msgstr[0] "%d bài nộp sẽ được chấm."
+msgstr[0] "%d çözüm yeniden değerlendirme için sıraya alındı."
+msgstr[1] "%d çözüm yeniden değerlendirme için sıraya alındı."
 
 #: .\judge\admin\submission.py:144
 msgid "Rejudge the selected submissions"
-msgstr "Chấm lại các bài đã chọn"
+msgstr "Seçili çözümleri yeniden değerlendir"
 
 #: .\judge\admin\submission.py:177
 #, python-format
 msgid "%d submission were successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
-msgstr[0] "%d bài đã được tính điểm lại."
+msgstr[0] "%d çözüm yeniden puanlandı."
+msgstr[1] "%d çözüm yeniden puanlandı."
 
 #: .\judge\admin\submission.py:180
 msgid "Rescore the selected submissions"
-msgstr "Tính điểm lại các bài đã chọn"
+msgstr "Seçili çözümleri yeniden puanla"
 
 #: .\judge\admin\submission.py:184
 msgid "Problem code"
-msgstr "Mã bài tập"
+msgstr "Problem anahtarı"
 
 #: .\judge\admin\submission.py:189
 msgid "Problem name"
-msgstr "Tên bài"
+msgstr "Problem adı"
 
 #: .\judge\admin\submission.py:201
 #: .\templates\organization\requests\log.html:10
 #: .\templates\organization\requests\pending.html:20
 msgid "Time"
-msgstr "Thời gian"
+msgstr "Zaman"
 
 #: .\judge\admin\submission.py:209
 #, python-format
 msgid "%d KB"
-msgstr "%d KB"
+msgstr ""
 
 #: .\judge\admin\submission.py:211
 #, python-format
 msgid "%.2f MB"
-msgstr "%.2f MB"
+msgstr ""
 
 #: .\judge\admin\submission.py:213
 msgid "Memory"
-msgstr "Bộ nhớ"
+msgstr "Bellek"
 
 #: .\judge\admin\taxon.py:11 .\judge\admin\taxon.py:34
 msgid "Included problems"
-msgstr "Bao gồm các đề"
+msgstr "Problemler"
 
 #: .\judge\admin\taxon.py:14
 msgid "These problems are included in this group of problems"
-msgstr "Các đề bài này đã được bao gồm trong nhóm"
+msgstr "Bu problemler bu problem grubunun içindedir"
 
 #: .\judge\admin\taxon.py:37
 msgid "These problems are included in this type of problems"
-msgstr "Các đề bài đã chọn đã được bao gồm trong loại bài này"
+msgstr "Bu problemler bu problem tipinin içindedir"
 
 #: .\judge\apps.py:8
 msgid "Online Judge"
-msgstr "Chấm bài trực tuyến"
+msgstr "Online Değerlendirme Sistemi"
 
 #: .\judge\comments.py:40
 msgid "Comment title"
-msgstr "Tiêu đề bình luận"
+msgstr "Başlık"
 
 #: .\judge\comments.py:41
 msgid "Comment body"
-msgstr "Bình luận"
+msgstr "Yorum"
 
 #: .\judge\comments.py:47 .\judge\views\ticket.py:50
 msgid "Your part is silent, little toad."
-msgstr "Không có phần nói của ngươi, đồ cóc ghẻ."
+msgstr "Senin rolün sessiz, küçük kurbağa."
 
 #: .\judge\comments.py:50 .\templates\comments\list.html:122
 msgid "You need to have solved at least one problem before your voice can be heard."
-msgstr "Bạn cần giải được ít nhất một bài tập trước khi lời nói của bạn có thể được lắng nghe."
+msgstr "Sesini duyurabilmen için bir problem çözmüş olman gerekiyor."
 
 #: .\judge\comments.py:75
 msgid "Posted comment"
-msgstr "Đăng bình luận"
+msgstr "Gönderilmiş yorum"
 
 #: .\judge\forms.py:25
 msgid "Subscribe to contest updates"
-msgstr "Đăng ký để nhận các cập nhật về cuộc thi"
+msgstr "Yarışma güncellemelerine abone ol"
 
 #: .\judge\forms.py:26
 msgid "Enable experimental features"
-msgstr "Bật các tính năng đang thử nghiệm"
+msgstr "Deneysel özellikleri aç"
 
 #: .\judge\forms.py:51
 #, python-brace-format
 msgid "You may not be part of more than {count} public organizations."
-msgstr "Bạn không thể là thành viên của nhiều hơn {count} tổ chức công khai."
+msgstr "{count} açık organizasyondan daha fazlasına üye olamazsın."
 
 #: .\judge\forms.py:109 .\judge\views\register.py:26
 #: .\templates\registration\registration_form.html:135
 #: .\templates\user\base-users-table.html:5
 msgid "Username"
-msgstr "Tên truy cập"
+msgstr "Kullanıcı Adı"
 
 #: .\judge\forms.py:110 .\templates\registration\registration_form.html:147
 #: .\templates\registration\registration_form.html:161
 msgid "Password"
-msgstr "Mật khẩu"
+msgstr "Şifre"
 
 #: .\judge\jinja2\datetime.py:26 .\templates\blog\content.html:27
 #: .\templates\blog\dashboard.html:21
 msgid "N j, Y, g:i a"
-msgstr "N j, Y, g:i a"
+msgstr "j M Y, H:i"
 
 #: .\judge\jinja2\datetime.py:26
 #, python-brace-format
@@ -456,478 +467,481 @@ msgstr ""
 #: .\judge\jinja2\datetime.py:26
 #, python-brace-format
 msgid "on {time}"
-msgstr ""
+msgstr "{time} tarihinde"
 
 #: .\judge\jinja2\timedelta.py:52
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
-msgstr[0] "%d ngày %h:%m:%s"
+msgstr[0] "%d gün, %h:%m:%s"
+msgstr[1] "%d gün, %h:%m:%s"
 
 #: .\judge\jinja2\timedelta.py:56
 msgctxt "time format without day"
 msgid "%h:%m:%s"
-msgstr "%h:%m:%s"
+msgstr ""
 
 #: .\judge\jinja2\timedelta.py:62
 msgctxt "time format no seconds with day"
 msgid "%d day %h:%m"
 msgid_plural "%d days %h:%m"
-msgstr[0] "%d ngày %h:%m"
+msgstr[0] "%d gün, %h:%m"
+msgstr[1] "%d gün, %h:%m"
 
 #: .\judge\jinja2\timedelta.py:64
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "%d ngày"
+msgstr[0] "%d gün"
+msgstr[1] "%d gün"
 
 #: .\judge\jinja2\timedelta.py:66
 msgctxt "hours and minutes"
 msgid "%h:%m"
-msgstr "%h:%m"
+msgstr ""
 
 #: .\judge\models\choices.py:60
 msgid "Leave as LaTeX"
-msgstr "Giữ nguyên dạng LaTeX"
+msgstr "LaTeX olarak bırak"
 
 #: .\judge\models\choices.py:61
 msgid "SVG with PNG fallback"
-msgstr "SVG với PNG dự phòng"
+msgstr "SVG, fallback olarak PNG"
 
 #: .\judge\models\choices.py:62
 msgid "MathML only"
-msgstr "Chỉ dạng MathML"
+msgstr "Yalnızca MathML"
 
 #: .\judge\models\choices.py:63
 msgid "MathJax with SVG/PNG fallback"
-msgstr "MathJax với SVG/PNG dự phòng"
+msgstr "MathJax, fallback olarak SVG/PNG"
 
 #: .\judge\models\choices.py:64
 msgid "Detect best quality"
-msgstr "Phát hiện chất lượng tốt nhất"
+msgstr "En iyi kaliteyi tespit et"
 
 #: .\judge\models\comment.py:36
 msgid "commenter"
-msgstr "bình luận"
+msgstr "yorum yazan"
 
 #: .\judge\models\comment.py:37
 msgid "posted time"
-msgstr "thời gian đăng"
+msgstr "gönderi zamanı"
 
 #: .\judge\models\comment.py:38
 msgid "associated Page"
-msgstr "trang liên kết"
+msgstr "ilişkili sayfa"
 
 #: .\judge\models\comment.py:40
 msgid "Page code must be ^[pc]:[a-z0-9]+$|^b:\\d+$"
-msgstr "Mã của trang chỉ bao gồm ^[pc]:[a-z0-9] + $| ^ b:\\d+$"
+msgstr "Sayfa anahtarı ^[pc]:[a-z0-9]+$|^b:\\d+$ olmalı"
 
 #: .\judge\models\comment.py:41
 msgid "votes"
-msgstr "đánh giá"
+msgstr "oy"
 
 #: .\judge\models\comment.py:42
 msgid "title of comment"
-msgstr "tiêu đề của nhận xét"
+msgstr "yorum başlığı"
 
 #: .\judge\models\comment.py:43
 msgid "body of comment"
-msgstr "nhận xét"
+msgstr "yorum metni"
 
 #: .\judge\models\comment.py:44
 msgid "hide the comment"
-msgstr "ẩn bình luận"
+msgstr "yorumu gizle"
 
 #: .\judge\models\comment.py:45
 msgid "parent"
-msgstr "cấp trên"
+msgstr "üst yorum"
 
 #: .\judge\models\comment.py:49
 msgid "comment"
-msgstr "bình luận"
+msgstr "yorum"
 
 #: .\judge\models\comment.py:50
 msgid "comments"
-msgstr "nhận xét"
+msgstr "yorumlar"
 
 #: .\judge\models\comment.py:115 .\judge\models\problem.py:353
 #, python-format
 msgid "Editorial for %s"
-msgstr "Hướng giải cho %s"
+msgstr "%s problemi için editorial"
 
 #: .\judge\models\comment.py:146
 msgid "comment vote"
-msgstr "đánh giá bình luận"
+msgstr "yorum oyu"
 
 #: .\judge\models\comment.py:147
 msgid "comment votes"
-msgstr "đánh giá bình luận"
+msgstr "yorum oyları"
 
 #: .\judge\models\contest.py:20
 msgid "Invalid colour."
-msgstr "Màu sắc không hợp lệ."
+msgstr "Geçersiz renk."
 
 #: .\judge\models\contest.py:22
 msgid "tag name"
-msgstr "tên thẻ"
+msgstr "etiket adı"
 
 #: .\judge\models\contest.py:23
 msgid "Lowercase letters and hyphens only."
-msgstr "Chỉ bao gồm chữ thường và dấu gạch ngang."
+msgstr "Yalnızca küçük harfler ve tire kullanılabilir."
 
 #: .\judge\models\contest.py:24
 msgid "tag colour"
-msgstr "màu thẻ"
+msgstr "etiket rengi"
 
 #: .\judge\models\contest.py:25
 msgid "tag description"
-msgstr "mô tả thẻ"
+msgstr "etiket tanımı"
 
 #: .\judge\models\contest.py:44
 msgid "contest tag"
-msgstr "thẻ cuộc thi"
+msgstr "yarışma etiketi"
 
 #: .\judge\models\contest.py:45 .\judge\models\contest.py:87
 msgid "contest tags"
-msgstr "thẻ cuộc thi"
+msgstr "yarışma etiketleri"
 
 #: .\judge\models\contest.py:49
 msgid "contest id"
-msgstr "mã Id cuộc thi"
+msgstr "yarışma ID'si"
 
 #: .\judge\models\contest.py:50
 msgid "Contest id must be ^[a-z0-9]+$"
-msgstr "id cuộc thi phải bao gồm ^[a-z0-9] + $"
+msgstr "Yarışma ID'si ^[a-z0-9]+$ olmalıdır"
 
 #: .\judge\models\contest.py:51
 msgid "contest name"
-msgstr "tên cuộc thi"
+msgstr "yarışma adı"
 
 #: .\judge\models\contest.py:52
 msgid "These people will be able to edit the contest."
-msgstr "Những người này sẽ có thể chỉnh sửa các cuộc thi."
+msgstr "Bu kişiler yarışmayı düzenleyebilecekler."
 
 #: .\judge\models\contest.py:54 .\judge\models\runtime.py:118
 msgid "description"
-msgstr "mô tả"
+msgstr "Tanım"
 
 #: .\judge\models\contest.py:55 .\judge\models\problem.py:304
 #: .\judge\models\runtime.py:120
 msgid "problems"
-msgstr "đề bài"
+msgstr "problemler"
 
 #: .\judge\models\contest.py:56 .\judge\models\contest.py:182
 msgid "start time"
-msgstr "t. gian b. đầu"
+msgstr "başlangıç"
 
 #: .\judge\models\contest.py:57
 msgid "end time"
-msgstr "thời gian kết thúc"
+msgstr "bitiş"
 
 #: .\judge\models\contest.py:58 .\judge\models\problem.py:109
 #: .\judge\models\problem.py:328
 msgid "time limit"
-msgstr "giới hạn thời gian"
+msgstr "zaman sınırı"
 
 #: .\judge\models\contest.py:59 .\judge\models\problem.py:115
 msgid "publicly visible"
-msgstr "công khai"
+msgstr "herkese açık"
 
 #: .\judge\models\contest.py:60
 msgid "Should be set even for organization-private contests, where it determines whether the contest is visible to members of the specified organizations."
-msgstr "Nên được đặt ngay cả đối với các cuộc thi riêng, nơi nó sẽ xác định xem các cuộc thi chỉ được nhìn thấy bởi các thành viên của tổ chức này."
+msgstr "Organizasyona özel yarışmalar için de açılmalıdır. Eğer bir yarışma organizasyona özel ise bu seçenek yarışmanın üyelere açılıp açılmayacağını belirler."
 
 #: .\judge\models\contest.py:63
 msgid "contest rated"
-msgstr "cuộc thi đã được xếp hạng"
+msgstr "dereceli yarışma"
 
 #: .\judge\models\contest.py:63
 msgid "Whether this contest can be rated."
-msgstr "Cho dù cuộc thi này có thể được đánh giá cao."
+msgstr "Bu yarışma derecelendirilebilir mi?"
 
 #: .\judge\models\contest.py:65
 msgid "hide scoreboard"
-msgstr ""
+msgstr "puan tablosunu gizle"
 
 #: .\judge\models\contest.py:66
 msgid "Whether the scoreboard should remain hidden for the duration of the contest."
-msgstr ""
+msgstr "Puan tablosu yarışma boyunca gizli kalmalı mı?"
 
 #: .\judge\models\contest.py:69
 msgid "no comments"
-msgstr "không có bình luận gì"
+msgstr "yorum yok"
 
 #: .\judge\models\contest.py:70
 msgid "Use clarification system instead of comments."
-msgstr "Đừng comment mà hãy sử dụng hệ thống giải đáp thắc mắc."
+msgstr "Yorumlar yerine açıklama sistemini kullanın."
 
 #: .\judge\models\contest.py:72
 msgid "rate all"
-msgstr "đánh giá tất cả"
+msgstr "herkesi derecelendir"
 
 #: .\judge\models\contest.py:72
 msgid "Rate all users who joined."
-msgstr "Đánh giá những người đã tham gia."
+msgstr "Katılan tüm kullanıcıları derecelendir"
 
 #: .\judge\models\contest.py:73
 msgid "exclude from ratings"
-msgstr "không xếp hạng"
+msgstr "derecelendirme dışı kullanıcılar"
 
 #: .\judge\models\contest.py:75
 msgid "private to organizations"
-msgstr "dành riêng cho tổ chức"
+msgstr "organizasyonlara özel"
 
 #: .\judge\models\contest.py:76
 msgid "hide problem tags"
-msgstr "ẩn các thẻ đầu bài"
+msgstr "problem etiketlerini gizle"
 
 #: .\judge\models\contest.py:77
 msgid "Whether problem tags should be hidden by default."
-msgstr "Cho dù vấn đề tags nên được ẩn theo mặc định."
+msgstr "Problem etiketleri varsayılan olarak gizli olmalı mı?"
 
 #: .\judge\models\contest.py:79
 msgid "run pretests only"
-msgstr "chỉ chạy các phép thử trước"
+msgstr "yalnızca ön testleri çalıştır"
 
 #: .\judge\models\contest.py:80
 msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
-msgstr "Chỉ chấm bài thử. Thường sử dụng trong các cuộc thi, sau đó bỏ để chấm lại các bài chấm ở cuối cuộc thi."
+msgstr "Judge'lar yalnızca ön testleri mi çalıştırmalı? Bu seçenek genellikle yarışma sırasında açılır, yarışma bittiğinde kapatılır ve çözümler yeniden puanlanır."
 
 #: .\judge\models\contest.py:84 .\judge\models\profile.py:64
 msgid "organizations"
-msgstr "tổ chức"
+msgstr "organizasyonlar"
 
 #: .\judge\models\contest.py:85
 msgid "If private, only these organizations may see the contest"
-msgstr "Nếu là dành riêng, thì chỉ các tổ chức này mới có thể xem cuộc thi"
+msgstr "Özel ise, sadece bu organizasyonlar yarışmayı görebilirler"
 
 #: .\judge\models\contest.py:86 .\judge\models\problem.py:123
 msgid "OpenGraph image"
-msgstr "Ảnh OpenGraph"
+msgstr "OpenGraph resmi"
 
 #: .\judge\models\contest.py:88
 msgid "the amount of live participants"
-msgstr "số lượng người tham gia trực tiếp"
+msgstr "anlık katılımcı sayısı"
 
 #: .\judge\models\contest.py:89
 msgid "contest summary"
-msgstr "tổng kết cuộc thi"
+msgstr "yarışma özeti"
 
 #: .\judge\models\contest.py:90 .\judge\models\problem.py:125
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
-msgstr "Văn bản thuần tuý, Hiển thị trong thẻ meta, ví dụ như cho các phương tiện truyền thông xã hội."
+msgstr "Düz yazı, sosyal medya vb. için \"meta description\" tag'inde görünecektir."
 
 #: .\judge\models\contest.py:91 .\judge\models\profile.py:41
 msgid "access code"
-msgstr "mã truy cập"
+msgstr "erişim kodu"
 
 #: .\judge\models\contest.py:92
 msgid "An optional code to prompt contestants before they are allowed to join the contest. Leave it blank to disable."
-msgstr ""
+msgstr "Yarışmaya katılabilmek için girilmesi gereken, isteğe bağlı bir kod. Boş bırakılırsa devre dışı kalır."
 
 #: .\judge\models\contest.py:169
 msgid "See private contests"
-msgstr ""
+msgstr "Özel yarışmaları gör"
 
 #: .\judge\models\contest.py:170
 msgid "Edit own contests"
-msgstr ""
+msgstr "Kendi yarışmalarını düzenle"
 
 #: .\judge\models\contest.py:171
 msgid "Edit all contests"
-msgstr ""
+msgstr "Tüm yarışmaları düzenle"
 
 #: .\judge\models\contest.py:172
 msgid "Rate contests"
-msgstr ""
+msgstr "Yarışmaları derecelendir"
 
 #: .\judge\models\contest.py:173
 msgid "Contest access codes"
-msgstr ""
+msgstr "Yarışma erişim kodları"
 
 #: .\judge\models\contest.py:175 .\judge\models\contest.py:263
 #: .\judge\models\contest.py:298
 msgid "contest"
-msgstr "cuộc thi"
+msgstr "yarışma"
 
 #: .\judge\models\contest.py:176
 msgid "contests"
-msgstr "cuộc thi"
+msgstr "yarışmalar"
 
 #: .\judge\models\contest.py:180
 msgid "associated contest"
-msgstr "cuộc thi liên quan"
+msgstr "ilişkili yarışma"
 
 #: .\judge\models\contest.py:181 .\judge\models\contest.py:297
 #: .\judge\models\profile.py:173
 msgid "user"
-msgstr "thành viên"
+msgstr "kullanıcı"
 
 #: .\judge\models\contest.py:183
 msgid "score"
-msgstr "điểm"
+msgstr "puan"
 
 #: .\judge\models\contest.py:184
 msgid "cumulative time"
-msgstr "thời gian tích lũy"
+msgstr "kümülatif süre"
 
 #: .\judge\models\contest.py:185
 msgid "virtual participation id"
-msgstr "mã số tham gia ảo"
+msgstr "sanal katılım ID'si"
 
 #: .\judge\models\contest.py:186
 msgid "0 means non-virtual, otherwise the n-th virtual participation"
-msgstr "0 có nghĩa là không ảo, n nếu tham gia ảo"
+msgstr "0 sanal olmayan katılım, diğer sayılar n'inci sanal katılım"
 
 #: .\judge\models\contest.py:249
 #, python-format
 msgid "%s spectating in %s"
-msgstr "%s spectating trong %s"
+msgstr "%s, \"%s\" yarışmasında gözlemci"
 
 #: .\judge\models\contest.py:251
 #, python-format
 msgid "%s in %s, v%d"
-msgstr "%s trong %s, v%d"
+msgstr "%s, \"%s\" yarışmasında, sanal: %d"
 
 #: .\judge\models\contest.py:252
 #, python-format
 msgid "%s in %s"
-msgstr "%s trong %s"
+msgstr "%s, \"%s\" yarışmasında"
 
 #: .\judge\models\contest.py:255
 msgid "contest participation"
-msgstr "tham gia cuộc thi"
+msgstr "yarışma katılımı"
 
 #: .\judge\models\contest.py:256
 msgid "contest participations"
-msgstr "tham gia cuộc thi"
+msgstr "yarışma katılımı"
 
 #: .\judge\models\contest.py:262 .\judge\models\contest.py:282
 #: .\judge\models\problem.py:303 .\judge\models\problem.py:308
 #: .\judge\models\problem.py:326 .\judge\models\problem_data.py:34
 msgid "problem"
-msgstr "vấn đề"
+msgstr ""
 
 #: .\judge\models\contest.py:264 .\judge\models\contest.py:286
 #: .\judge\models\problem.py:112
 msgid "points"
-msgstr "điểm"
+msgstr "puan"
 
 #: .\judge\models\contest.py:265
 msgid "partial"
-msgstr "một phần"
+msgstr "kısmi"
 
 #: .\judge\models\contest.py:266 .\judge\models\contest.py:287
 msgid "is pretested"
-msgstr "được test trước"
+msgstr "ön testli"
 
 #: .\judge\models\contest.py:267 .\judge\models\interface.py:43
 msgid "order"
-msgstr "thứ tự"
+msgstr "sıra"
 
 #: .\judge\models\contest.py:268
 msgid "output prefix length override"
-msgstr "ghi đè độ dài output prefix"
+msgstr ""
 
 #: .\judge\models\contest.py:269
 msgid "Maximum number of submissions for this problem, or 0 for no limit."
-msgstr "Số lượng tối đa lần nộp cho bài này, hoặc 0 nếu không giới hạn."
+msgstr "Bu probleme gönderilebilen maksimum çözüm sayısı. 0 sınırsız demektir."
 
 #: .\judge\models\contest.py:271
 msgid "Why include a problem you can't submit to?"
-msgstr ""
+msgstr "Neden çözüm gönderemediğin bir problemi ekleyesin ki?"
 
 #: .\judge\models\contest.py:276
 msgid "contest problem"
-msgstr "đề bài của cuộc thi"
+msgstr "yarışma problemi"
 
 #: .\judge\models\contest.py:277
 msgid "contest problems"
-msgstr "đề bài của cuộc thi"
+msgstr "yarışma problemleri"
 
 #: .\judge\models\contest.py:281 .\judge\models\submission.py:149
 msgid "submission"
-msgstr "nộp bài"
+msgstr "çözüm"
 
 #: .\judge\models\contest.py:284 .\judge\models\contest.py:299
 msgid "participation"
-msgstr "tham dự"
+msgstr "katılım"
 
 #: .\judge\models\contest.py:288
 msgid "Whether this submission was ran only on pretests."
-msgstr "Bài nộp này chỉ chỉ chạy trên bài thử."
+msgstr "Bu çözüm yalnızca pretest'lerde mi çalıştı?"
 
 #: .\judge\models\contest.py:292
 msgid "contest submission"
-msgstr "nộp bài thi"
+msgstr "yarışma çözümü"
 
 #: .\judge\models\contest.py:293
 msgid "contest submissions"
-msgstr "nộp bài thi"
+msgstr "yarışma çözümleri"
 
 #: .\judge\models\contest.py:300
 msgid "rank"
-msgstr "hạng"
+msgstr "sıralama"
 
 #: .\judge\models\contest.py:301
 msgid "rating"
-msgstr "đánh giá"
+msgstr "derece"
 
 #: .\judge\models\contest.py:302
 msgid "volatility"
-msgstr "volative"
+msgstr "değişkenlik"
 
 #: .\judge\models\contest.py:303
 msgid "last rated"
-msgstr "lần xếp hạng cuối"
+msgstr "son derecelendirme"
 
 #: .\judge\models\contest.py:307
 msgid "contest rating"
-msgstr "xếp hạng cuộc thi"
+msgstr "yarışma derecesi"
 
 #: .\judge\models\contest.py:308
 msgid "contest ratings"
-msgstr "xếp hạng cuộc thi"
+msgstr "yarışma derecesi"
 
 #: .\judge\models\interface.py:24
 msgid "configuration item"
-msgstr "cấu hình"
+msgstr "ayar öğesi"
 
 #: .\judge\models\interface.py:25
 msgid "miscellaneous configuration"
-msgstr "cấu hình khác"
+msgstr "çeşitli ayarlar"
 
 #: .\judge\models\interface.py:37
 msgid "navigation item"
-msgstr "mục điều hướng"
+msgstr "navigasyon öğesi"
 
 #: .\judge\models\interface.py:38
 msgid "navigation bar"
-msgstr "thanh điều hướng"
+msgstr "navigasyon çubuğu"
 
 #: .\judge\models\interface.py:44 .\judge\models\profile.py:22
 msgid "identifier"
-msgstr "định danh"
+msgstr "tanımlayıcı"
 
 #: .\judge\models\interface.py:45
 msgid "label"
-msgstr "nhãn"
+msgstr "etiket"
 
 #: .\judge\models\interface.py:47
 msgid "highlight regex"
-msgstr "làm nổi regex"
+msgstr "vurgu regex'i"
 
 #: .\judge\models\interface.py:48
 msgid "parent item"
-msgstr "mục cha"
+msgstr "üst nesne"
 
 #: .\judge\models\interface.py:65
 msgid "post title"
-msgstr "tiêu đề bài viết"
+msgstr "gönderi başlığı"
 
 #: .\judge\models\interface.py:66 .\judge\models\problem.py:342
 msgid "authors"
-msgstr "tác giả"
+msgstr "yazarlar"
 
 #: .\judge\models\interface.py:67
 msgid "slug"
@@ -935,1047 +949,1047 @@ msgstr ""
 
 #: .\judge\models\interface.py:68 .\judge\models\problem.py:340
 msgid "public visibility"
-msgstr "hiển thị công khai"
+msgstr "halka açık mı?"
 
 #: .\judge\models\interface.py:69
 msgid "sticky"
-msgstr "dán"
+msgstr "yapışkan"
 
 #: .\judge\models\interface.py:70
 msgid "publish after"
-msgstr "xuất bản sau"
+msgstr "bu tarihten sonra yayınla"
 
 #: .\judge\models\interface.py:71
 msgid "post content"
-msgstr "đăng nội dung"
+msgstr "gönderi içeriği"
 
 #: .\judge\models\interface.py:72
 msgid "post summary"
-msgstr "đăng bài tóm tắt"
+msgstr "gönderi özeti"
 
 #: .\judge\models\interface.py:73
 msgid "openGraph image"
-msgstr "ảnh OpenGraph"
+msgstr "openGraph resmi"
 
 #: .\judge\models\interface.py:90
 msgid "Edit all posts"
-msgstr "Chỉnh sửa tất cả bài viết"
+msgstr "Tüm gönderileri düzenle"
 
 #: .\judge\models\interface.py:92
 msgid "blog post"
-msgstr "bài đăng blog"
+msgstr "blog gönderisi"
 
 #: .\judge\models\interface.py:93
 msgid "blog posts"
-msgstr "bài đăng blog"
+msgstr "blog gönderisi"
 
 #: .\judge\models\message.py:10
 msgid "message title"
-msgstr "tiêu đề thông báo"
+msgstr "mesaj başlığı"
 
 #: .\judge\models\message.py:11 .\judge\models\ticket.py:27
 msgid "message body"
-msgstr "nội dung thư"
+msgstr "mesaj içeriği"
 
 #: .\judge\models\message.py:12
 msgid "sender"
-msgstr "người gửi"
+msgstr "gönderici"
 
 #: .\judge\models\message.py:13
 msgid "target"
-msgstr "mục tiêu"
+msgstr "alıcı"
 
 #: .\judge\models\message.py:14
 msgid "message timestamp"
-msgstr "nhãn thời gian của tin nhắn"
+msgstr "mesaj zaman damgası(timestamp)"
 
 #: .\judge\models\message.py:15
 msgid "read"
-msgstr "đọc"
+msgstr "okundu"
 
 #: .\judge\models\message.py:19
 msgid "messages in the thread"
-msgstr "các tin nhắn trong luồng"
+msgstr "konudaki mesajlar"
 
 #: .\judge\models\problem.py:26
 msgid "problem category ID"
-msgstr "ID của đề bài"
+msgstr "problem kategori ID'si"
 
 #: .\judge\models\problem.py:27
 msgid "problem category name"
-msgstr "phân loại đề bài"
+msgstr "problem kategorisi adı"
 
 #: .\judge\models\problem.py:34
 msgid "problem type"
-msgstr "kiểu vấn đề"
+msgstr "problem tipi"
 
 #: .\judge\models\problem.py:35 .\judge\models\problem.py:107
 msgid "problem types"
-msgstr "kiểu vấn đề"
+msgstr "problem tipleri"
 
 #: .\judge\models\problem.py:39
 msgid "problem group ID"
-msgstr "iD của nhóm đề bài"
+msgstr "problem grup ID'si"
 
 #: .\judge\models\problem.py:40
 msgid "problem group name"
-msgstr "tên nhóm đề bài"
+msgstr "problem grubu adı"
 
 #: .\judge\models\problem.py:47 .\judge\models\problem.py:108
 msgid "problem group"
-msgstr "nhóm đề bài"
+msgstr "problem grubu"
 
 #: .\judge\models\problem.py:48
 msgid "problem groups"
-msgstr "nhóm đề bài"
+msgstr "problem grupları"
 
 #: .\judge\models\problem.py:52
 msgid "key"
-msgstr "khóa"
+msgstr "anahtar"
 
 #: .\judge\models\problem.py:54
 msgid "link"
-msgstr "liên kết"
+msgstr ""
 
 #: .\judge\models\problem.py:55
 msgid "full name"
-msgstr "tên đầy đủ"
+msgstr "Tam ad"
 
 #: .\judge\models\problem.py:56 .\judge\models\profile.py:26
 #: .\judge\models\runtime.py:20
 msgid "short name"
-msgstr "tên viết tắt"
+msgstr "Kısa ad"
 
 #: .\judge\models\problem.py:57
 msgid "Displayed on pages under this license"
-msgstr "Được hiển thị trên các trang theo giấy phép này"
+msgstr "Bu lisans altındaki sayfalarda gösterilir"
 
 #: .\judge\models\problem.py:58
 msgid "icon"
-msgstr "biểu tượng"
+msgstr "ikon"
 
 #: .\judge\models\problem.py:58
 msgid "URL to the icon"
-msgstr "URL cho biểu tượng"
+msgstr "ikon URL'si"
 
 #: .\judge\models\problem.py:59
 msgid "license text"
-msgstr "văn bản cấp phép"
+msgstr "lisans metni"
 
 #: .\judge\models\problem.py:68
 msgid "license"
-msgstr "giấy phép"
+msgstr "lisans"
 
 #: .\judge\models\problem.py:69
 msgid "licenses"
-msgstr "giấy phép"
+msgstr "lisans"
 
 #: .\judge\models\problem.py:96
 msgid "problem code"
-msgstr "mã đầu bài"
+msgstr "problem kodu"
 
 #: .\judge\models\problem.py:97
 msgid "Problem code must be ^[a-z0-9]+$"
-msgstr "Mã đầu bài chỉ bao gồm ^[a-z0-9] + $"
+msgstr "Problem kodu ^[a-z0-9]+$ olmalıdır"
 
 #: .\judge\models\problem.py:98
 msgid "problem name"
-msgstr "tên bài toán"
+msgstr "problem adı"
 
 #: .\judge\models\problem.py:99
 msgid "problem body"
-msgstr "bài toán"
+msgstr "problem içeriği"
 
 #: .\judge\models\problem.py:100
 msgid "creators"
-msgstr "người tạo"
+msgstr "yaratıcılar"
 
 #: .\judge\models\problem.py:101
 msgid "curators"
-msgstr ""
+msgstr "küratörler"
 
 #: .\judge\models\problem.py:102
 msgid "These users will be able to edit a problem, but not be publicly shown as an author."
-msgstr "Những người dùng này được phép sửa bài tập, nhưng sẽ không được hiển thị công khai như một trong các tác giả của bài tập."
+msgstr "Bu kullanıcılar problemi düzenleyebilirler ama yazarlar kısmında görünmeyeceklerdir."
 
 #: .\judge\models\problem.py:104
 msgid "testers"
-msgstr "người kiểm tra"
+msgstr "testçiler"
 
 #: .\judge\models\problem.py:106
 msgid "These users will be able to view a private problem, but not edit it."
-msgstr "Người dùng có thể xem bài toán riêng, nhưng không chỉnh sửa nó."
+msgstr "Bu kullanıcılar gizli bir problemi görüntüleyebilecek ancak düzenleyemeyeceklerdir."
 
 #: .\judge\models\problem.py:109
 msgid "The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported."
-msgstr ""
+msgstr "Bu problem için saniye cinsinden zaman sınırı. Küsuratlı saniyeler(örn. 1.5) desteklenmektedir."
 
 #: .\judge\models\problem.py:110 .\judge\models\problem.py:329
 msgid "memory limit"
-msgstr "giới hạn bộ nhớ"
+msgstr "bellek sınırı"
 
 #: .\judge\models\problem.py:110
 msgid "The memory limit for this problem, in kilobytes (e.g. 64mb = 65536 kilobytes)."
-msgstr ""
+msgstr "Bu problem için kilobayt cinsinden hafıza sınırı. (örn. 64MB = 65536 KB)"
 
 #: .\judge\models\problem.py:113
 msgid "allows partial points"
-msgstr "cho phép cho điểm từng phần"
+msgstr "kısmi puanlama yapılabilir"
 
 #: .\judge\models\problem.py:114
 msgid "allowed languages"
-msgstr "ngôn ngữ cho phép"
+msgstr "izin verilen diller"
 
 #: .\judge\models\problem.py:116
 msgid "manually managed"
-msgstr "quản lý thủ công"
+msgstr "elle yönetilir"
 
 #: .\judge\models\problem.py:117
 msgid "Whether judges should be allowed to manage data or not"
-msgstr "Cho phép các giám khảo quản lý dữ liệu hay là không"
+msgstr "Judge sunucuları veriyi düzenleyebilmeli mi? Bu işaretli değilse, problem verisini yönetici arayüzünden yüklemelisiniz."
 
 #: .\judge\models\problem.py:118
 msgid "date of publishing"
-msgstr "ngày xuất bản"
+msgstr "yayınlama tarihi"
 
 #: .\judge\models\problem.py:119
 msgid "Doesn't have magic ability to auto-publish due to backward compatibility"
-msgstr "Không có khả năng tự động công khai vì vấn đề tương thích ngược"
+msgstr "Geri uyumluluk sorunundan dolayı oto-yayınlama büyüsü yapılamamaktadır"
 
 #: .\judge\models\problem.py:120
 msgid "personae non gratae"
-msgstr "cá nhân - không tính điểm"
+msgstr "istenmeyen kişiler"
 
 #: .\judge\models\problem.py:121
 msgid "Bans the selected users from submitting to this problem"
-msgstr "Cấm những người dùng đã chọn nộp lời giải cho đề bài này"
+msgstr "Seçili kullanıcılar bu probleme çözüm gönderemez."
 
 #: .\judge\models\problem.py:124
 msgid "problem summary"
-msgstr "tổng quan bài tập"
+msgstr "problem özeti"
 
 #: .\judge\models\problem.py:126
 msgid "amount of users"
-msgstr "số lượng người dùng"
+msgstr "kullanıcı sayısı"
 
 #: .\judge\models\problem.py:127
 msgid "The amount of users on the best solutions page."
-msgstr "Số lượng người dùng trên trang giải pháp tốt nhất."
+msgstr "En iyi çözümler sayfasındaki kullanıcı sayısı."
 
 #: .\judge\models\problem.py:128
 msgid "rate of AC submissions"
-msgstr "tỷ lệ gửi AC"
+msgstr "AC alan çözüm oranı"
 
 #: .\judge\models\problem.py:309 .\judge\models\problem.py:327
 #: .\judge\models\runtime.py:96
 msgid "language"
-msgstr "ngôn ngữ"
+msgstr "dil"
 
 #: .\judge\models\problem.py:310
 msgid "translated name"
-msgstr "tên bộ dịch"
+msgstr "çevrilmiş ad"
 
 #: .\judge\models\problem.py:311
 msgid "translated description"
-msgstr "mô tả bộ dịch"
+msgstr "çevrilmiş tanım"
 
 #: .\judge\models\problem.py:315
 msgid "problem translation"
-msgstr "dịch đầu bài"
+msgstr "problem çevirisi"
 
 #: .\judge\models\problem.py:316
 msgid "problem translations"
-msgstr "dịch đầu bài"
+msgstr "problem çevirisi"
 
 #: .\judge\models\problem.py:320
 msgid "clarified problem"
-msgstr "bài tập được làm rõ"
+msgstr "açıklık getirilmiş problem"
 
 #: .\judge\models\problem.py:321
 msgid "clarification body"
-msgstr ""
+msgstr "açıklama içeriği"
 
 #: .\judge\models\problem.py:322
 msgid "clarification timestamp"
-msgstr ""
+msgstr "açıklama zaman damgası(timestamp)"
 
 #: .\judge\models\problem.py:333
 msgid "language-specific resource limit"
-msgstr "giới hạn tài nguyên theo ngôn ngữ"
+msgstr "Dile özel kaynak sınırı"
 
 #: .\judge\models\problem.py:334
 msgid "language-specific resource limits"
-msgstr "giới hạn tài nguyên theo ngôn ngữ"
+msgstr "Dile özel kaynak sınırları"
 
 #: .\judge\models\problem.py:338
 msgid "associated problem"
-msgstr "đầu bài liên quan"
+msgstr "ilgili problem"
 
 #: .\judge\models\problem.py:341
 msgid "publish date"
-msgstr ""
+msgstr "yayın tarihi"
 
 #: .\judge\models\problem.py:343
 msgid "editorial content"
-msgstr ""
+msgstr "problem analizi içeriği"
 
 #: .\judge\models\problem.py:359
 msgid "solution"
-msgstr "lời giải"
+msgstr "çözüm"
 
 #: .\judge\models\problem.py:360
 msgid "solutions"
-msgstr "lời giải"
+msgstr "çözümler"
 
 #: .\judge\models\problem_data.py:23
 msgid "Standard"
-msgstr "Mặc định"
+msgstr "Standart"
 
 #: .\judge\models\problem_data.py:24
 msgid "Floats"
-msgstr "Số thực"
+msgstr ""
 
 #: .\judge\models\problem_data.py:25
 msgid "Floats (absolute)"
-msgstr "Số thực (tuyệt đối)"
+msgstr ""
 
 #: .\judge\models\problem_data.py:26
 msgid "Floats (relative)"
-msgstr "Số thực (tương đối)"
+msgstr ""
 
 #: .\judge\models\problem_data.py:27
 msgid "Non-trailing spaces"
-msgstr "Dấu cách liền"
+msgstr ""
 
 #: .\judge\models\problem_data.py:28
 msgid "Unordered"
-msgstr "Không sắp xếp"
+msgstr ""
 
 #: .\judge\models\problem_data.py:29
 msgid "Byte identical"
-msgstr "Byte tương tự"
+msgstr ""
 
 #: .\judge\models\problem_data.py:35
 msgid "data zip file"
-msgstr "tập tin dữ liệu nén dạng zip"
+msgstr "data zip dosyası"
 
 #: .\judge\models\problem_data.py:37
 msgid "generator file"
-msgstr "file tạo mã"
+msgstr "generator dosyası"
 
 #: .\judge\models\problem_data.py:39 .\judge\models\problem_data.py:87
 msgid "output prefix length"
-msgstr "độ dài prefix"
+msgstr "çıktı öneki uzunluğu"
 
 #: .\judge\models\problem_data.py:40 .\judge\models\problem_data.py:88
 msgid "output limit length"
-msgstr "hạn chế chiều dài đầu ra"
+msgstr "çıktı sınır uzunluğu"
 
 #: .\judge\models\problem_data.py:41
 msgid "init.yml generation feedback"
-msgstr "phải hồi init.yml"
+msgstr "init.yml oluşturma mesajı"
 
 #: .\judge\models\problem_data.py:42 .\judge\models\problem_data.py:89
 msgid "checker"
-msgstr "kiểm tra"
+msgstr ""
 
 #: .\judge\models\problem_data.py:43 .\judge\models\problem_data.py:90
 msgid "checker arguments"
-msgstr "đối số kiểm tra"
+msgstr "checker değişkenleri"
 
 #: .\judge\models\problem_data.py:44 .\judge\models\problem_data.py:91
 msgid "checker arguments as a JSON object"
-msgstr "kiểm tra đối số như là một đối tượng JSON"
+msgstr "checker değişkenleri, JSON nesnesi olarak"
 
 #: .\judge\models\problem_data.py:75
 msgid "problem data set"
-msgstr "tập dữ liệu đề bài"
+msgstr ""
 
 #: .\judge\models\problem_data.py:76
 msgid "case position"
-msgstr "vị trí phép thử"
+msgstr "test konumu"
 
 #: .\judge\models\problem_data.py:77
 msgid "case type"
-msgstr "kiểu phép thử"
+msgstr "test tipi"
 
 #: .\judge\models\problem_data.py:78
 msgid "Normal case"
-msgstr "Test đơn"
+msgstr "Normal test"
 
 #: .\judge\models\problem_data.py:79
 msgid "Batch start"
-msgstr "Bắt đầu lô"
+msgstr "Küme başlangıcı"
 
 #: .\judge\models\problem_data.py:80
 msgid "Batch end"
-msgstr "Hết lô"
+msgstr "küme sonu"
 
 #: .\judge\models\problem_data.py:82
 msgid "input file name"
-msgstr "tên tập tin đầu vào"
+msgstr "girdi dosya adı"
 
 #: .\judge\models\problem_data.py:83
 msgid "output file name"
-msgstr "tên tập tin đầu ra"
+msgstr "çıktı dosya adı"
 
 #: .\judge\models\problem_data.py:84
 msgid "generator arguments"
-msgstr "bộ sinh đối số"
+msgstr "generator değişkenleri"
 
 #: .\judge\models\problem_data.py:85
 msgid "point value"
-msgstr "giá trị điểm"
+msgstr "puan değeri"
 
 #: .\judge\models\problem_data.py:86
 msgid "case is pretest?"
-msgstr "test mẫu?"
+msgstr "ön test mi?"
 
 #: .\judge\models\profile.py:21
 msgid "organization title"
-msgstr "tiêu đề của tổ chức"
+msgstr "organizasyon başlığı"
 
 #: .\judge\models\profile.py:23
 msgid "Organization name shows in URL"
-msgstr "Tên tổ chức thể hiện trong URL"
+msgstr "Organizasyon adı URL'de görünür"
 
 #: .\judge\models\profile.py:27
 msgid "Displayed beside user name during contests"
-msgstr "Hiển thị bên cạnh tên trong cuộc thi"
+msgstr "Yarışmalar sırasında kullanıcı adının yanında gösterilir"
 
 #: .\judge\models\profile.py:28
 msgid "organization description"
-msgstr "mô tả tổ chức"
+msgstr "organizasyon tanımı"
 
 #: .\judge\models\profile.py:29
 msgid "registrant"
-msgstr "người đăng ký"
+msgstr "Oluşturan"
 
 #: .\judge\models\profile.py:31
 msgid "User who registered this organization"
-msgstr "Người dùng đã đăng ký tổ chức này"
+msgstr "Bu organizasyonu oluşturan kullanıcı"
 
 #: .\judge\models\profile.py:32
 msgid "administrators"
-msgstr "quản trị viên"
+msgstr "Adminler"
 
 #: .\judge\models\profile.py:33
 msgid "Those who can edit this organization"
-msgstr "Những người có thể chỉnh sửa tổ chức"
+msgstr "Bu organizasyonu düzenleme yetkisi olanlar "
 
 #: .\judge\models\profile.py:34
 msgid "creation date"
-msgstr "ngày tạo"
+msgstr "Oluşturulma tarihi"
 
 #: .\judge\models\profile.py:35
 msgid "is open organization?"
-msgstr ""
+msgstr "Açık organizasyon mu?"
 
 #: .\judge\models\profile.py:36
 msgid "Allow joining organization"
-msgstr "Cho phép tham gia tổ chức"
+msgstr "Organizasyona katılmaya izin ver"
 
 #: .\judge\models\profile.py:37
 msgid "maximum size"
-msgstr "dung lượng tối đa"
+msgstr "maksimum boyut"
 
 #: .\judge\models\profile.py:38
 msgid "Maximum amount of users in this organization, only applicable to private organizations"
-msgstr "Số người dùng tối đa trong tổ chức này, chỉ áp dụng đối với tổ chức tư nhân"
+msgstr "Bu organizasyondaki maksimum üye sayısı. Sadece özel organizasyonlar için geçerlidir"
 
 #: .\judge\models\profile.py:40
 msgid "Student access code"
-msgstr "Mã truy cập sinh viên"
+msgstr "Öğrenci erişim kodu"
 
 #: .\judge\models\profile.py:63 .\judge\models\profile.py:80
 #: .\judge\models\profile.py:174
 msgid "organization"
-msgstr "tổ chức"
+msgstr "Organizasyon"
 
 #: .\judge\models\profile.py:68
 msgid "user associated"
-msgstr "liên kết với người sử dụng"
+msgstr "ilişkili kullanıcı"
 
 #: .\judge\models\profile.py:69
 msgid "display name"
-msgstr "tên hiển thị"
+msgstr "görünen ad"
 
 #: .\judge\models\profile.py:70
 msgid "self-description"
-msgstr "tự mô tả"
+msgstr "hakkında"
 
 #: .\judge\models\profile.py:71
 msgid "location"
-msgstr "vị trí"
+msgstr "konum"
 
 #: .\judge\models\profile.py:73
 msgid "preferred language"
-msgstr "ngôn ngữ"
+msgstr "tercih edilen dil"
 
 #: .\judge\models\profile.py:78
 msgid "last access time"
-msgstr "lần truy cập cuối cùng"
+msgstr "son erişim"
 
 #: .\judge\models\profile.py:79
 msgid "last IP"
-msgstr "IP"
+msgstr "son IP"
 
 #: .\judge\models\profile.py:82
 msgid "display rank"
-msgstr "hiển thị xếp hạng"
+msgstr "görünen derece"
 
 #: .\judge\models\profile.py:84
 msgid "comment mute"
-msgstr "bình luận tắt"
+msgstr "yorum engeli"
 
 #: .\judge\models\profile.py:84
 msgid "Some users are at their best when silent."
-msgstr "Một vài người tốt nhất là khi im lặng."
+msgstr "Bazı kullanıcıların sessiz kalması daha iyidir."
 
 #: .\judge\models\profile.py:87
 msgid "user script"
-msgstr "script tự định nghĩa"
+msgstr "userscript"
 
 #: .\judge\models\profile.py:88
 msgid "User-defined JavaScript for site customization."
-msgstr "JavaScript tự định nghĩa để tùy chỉnh trang web"
+msgstr "Site düzenlemesi için kullanıcı tanımlı JavaScript"
 
 #: .\judge\models\profile.py:89
 msgid "current contest"
-msgstr "cuộc thi hiện tại"
+msgstr "şu anki yarışma"
 
 #: .\judge\models\profile.py:91
 msgid "math engine"
-msgstr "bộ xử lý toán học"
+msgstr "matematik motoru"
 
 #: .\judge\models\profile.py:93
 msgid "the rendering engine used to render math"
-msgstr "công cụ được sử dụng để render toán học"
+msgstr "matematiksel ifadeleri gösteren program"
 
 #: .\judge\models\profile.py:130
 #, python-format
 msgctxt "user display name"
 msgid "%(username)s (%(display)s)"
-msgstr "%(username)s (%(display)s)"
+msgstr ""
 
 #: .\judge\models\profile.py:168
 msgid "user profile"
-msgstr "hồ sơ người dùng"
+msgstr "Kullanıcı Profili"
 
 #: .\judge\models\profile.py:169
 msgid "user profiles"
-msgstr "hồ sơ người dùng"
+msgstr "Kullanıcı Profilleri"
 
 #: .\judge\models\profile.py:175
 msgid "request time"
-msgstr "thời gian yêu cầu"
+msgstr "istek zamanı"
 
 #: .\judge\models\profile.py:176
 msgid "state"
-msgstr "trạng thái"
+msgstr "durum"
 
 #: .\judge\models\profile.py:181
 msgid "reason"
-msgstr "lý do"
+msgstr "sebep"
 
 #: .\judge\models\profile.py:184
 msgid "organization join request"
-msgstr "yêu cầu tham gia tổ chức"
+msgstr "organizasyona katılma isteği"
 
 #: .\judge\models\profile.py:185
 msgid "organization join requests"
-msgstr "yêu cầu tham gia tổ chức"
+msgstr "organizasyona katılma istekleri"
 
 #: .\judge\models\runtime.py:15
 msgid "short identifier"
-msgstr "nhận dạng ngắn"
+msgstr "anahtar"
 
 #: .\judge\models\runtime.py:16
 msgid "The identifier for this language; the same as its executor id for judges."
-msgstr "Mã định danh ngôn ngữ này; giống như id chấp hành cho bộ chấm."
+msgstr "Bu dilin tanımlayıcısı, judge'lar için executor ID'si ile aynıdır."
 
 #: .\judge\models\runtime.py:18
 msgid "long name"
-msgstr "tên dài"
+msgstr "uzun ad"
 
 #: .\judge\models\runtime.py:19
 msgid "Longer name for the language, e.g. \"Python 2\" or \"C++11\"."
-msgstr "Tên dài của ngôn ngữ, ví dụ như \"Python 2\" hay \"C ++ 11\"."
+msgstr "Dilin uzun adı, \"Python 2\" ya da \"C++11\" gibi."
 
 #: .\judge\models\runtime.py:21
 msgid "More readable, but short, name to display publicly; e.g. \"PY2\" or \"C++11\". If left blank, it will default to the short identifier."
-msgstr "Tên ngắn, dễ đọc hơn, để hiển thị công khai; Ví dụ: \"PY2\" hoặc \"C ++ 11\". Nếu để trống, nó sẽ sử dụng ID ngắn."
+msgstr "Herkese açık gösterim için daha okunabilir, ancak kısa ad.(örn. \"PY2\" ya da \"C++11\") Boş bırakılırsa kısa ad gösterilecektir."
 
 #: .\judge\models\runtime.py:25
 msgid "common name"
-msgstr "tên chung"
+msgstr "genel ad"
 
 #: .\judge\models\runtime.py:26
 msgid "Common name for the language. For example, the common name for C++03, C++11, and C++14 would be \"C++\""
-msgstr "Tên phổ biến cho các ngôn ngữ. Ví dụ, tên gọi chung cho C ++ 03, 11 C ++ và C ++ 14 sẽ là \"C++\""
+msgstr "Dilin genel adı. Örneğin C++03, C++11 ve C++14'ün genel adı \"C++\" olmalıdır."
 
 #: .\judge\models\runtime.py:28
 msgid "ace mode name"
-msgstr "chế độ tên ace"
+msgstr "ace mode adı"
 
 #: .\judge\models\runtime.py:29
 msgid "Language ID for Ace.js editor highlighting, appended to \"mode-\" to determine the Ace JavaScript file to use, e.g., \"python\"."
-msgstr "ID cho ngôn ngữ Ace.js, được nối thêm vào \"mode-\" để xác định tập tin Ace JavaScript để sử dụng, ví dụ như, \"python\"."
+msgstr "Ace.js editör vurgulaması için dil ID'si. örn. \"python\""
 
 #: .\judge\models\runtime.py:31
 msgid "pygments name"
-msgstr "tên pygments"
+msgstr "pygments adı"
 
 #: .\judge\models\runtime.py:32
 msgid "Language ID for Pygments highlighting in source windows."
-msgstr "Highligh ID cho Pygments trong cửa sổ mã nguồn."
+msgstr "Pygments vurgulaması için dil ID'si."
 
 #: .\judge\models\runtime.py:33
 msgid "code template"
-msgstr "code mẫu"
+msgstr "kod örneği"
 
 #: .\judge\models\runtime.py:34
 msgid "Code template to display in submission editor."
-msgstr "Mẫu mã nguồn hiển thị trong trình soạn thảo khi nộp bài."
+msgstr "Çözüm editöründe gösterilecek örnek kod."
 
 #: .\judge\models\runtime.py:35
 msgid "runtime info override"
-msgstr "ghi đè thời gian chạy"
+msgstr "çalıştırıcı komutu"
 
 #: .\judge\models\runtime.py:36
 msgid "Do not set this unless you know what you're doing! It will override the usually more specific, judge-provided runtime info!"
-msgstr "Không đặt này trừ khi bạn biết những gì bạn đang làm! Nó sẽ thiết lập các thông tin thời gian chạy, cung cấp cho chương trình chấm!"
+msgstr "Ne yaptığını bilmiyorsan bunu değiştirme! Judge tarafından verilen komutun yerine geçecektir."
 
 #: .\judge\models\runtime.py:38
 msgid "language description"
-msgstr "mô tả ngôn ngữ"
+msgstr "dil açıklaması"
 
 #: .\judge\models\runtime.py:39
 msgid "Use field this to inform users of quirks with your environment, additional restrictions, etc."
-msgstr "Sử dụng trường này để thông báo cho người dùng quirks môi trường, hạn chế bổ sung, vv."
+msgstr "Bu alanı kullanıcıları çalışma ortamının farklılıkları hakkında bilgilendirmek için kullan. (örn. v8dmoj'daki print fonksiyonu)"
 
 #: .\judge\models\runtime.py:41
 msgid "extension"
-msgstr "phần mở rộng"
+msgstr "uzantı"
 
 #: .\judge\models\runtime.py:42
 msgid "The extension of source files, e.g., \"py\" or \"cpp\"."
-msgstr "Phần mở rộng tập tin mã nguồn, ví dụ như, \"py\" hay \"cpp\"."
+msgstr "Kaynak kodlarının uzantıları, \"py\", \"cpp\" vb."
 
 #: .\judge\models\runtime.py:97
 msgid "languages"
-msgstr "ngôn ngữ"
+msgstr "diller"
 
 #: .\judge\models\runtime.py:101
 msgid "language to which this runtime belongs"
-msgstr "ngôn ngữ tạo ra runtime"
+msgstr "bu dil sürümünün ait olduğu dil"
 
 #: .\judge\models\runtime.py:102
 msgid "judge on which this runtime exists"
-msgstr "máy chấm tạo ra runtime"
+msgstr "bu dil sürümünün bulunduğu judge"
 
 #: .\judge\models\runtime.py:103
 msgid "runtime name"
-msgstr "tên runtime"
+msgstr "dil sürümü"
 
 #: .\judge\models\runtime.py:104
 msgid "runtime version"
-msgstr "phiên bản runtime"
+msgstr "dil sürümü versiyonu"
 
 #: .\judge\models\runtime.py:105
 msgid "order in which to display this runtime"
-msgstr "thứ tự hiện thị runtime"
+msgstr "dil sürümünün gösterim sırası"
 
 #: .\judge\models\runtime.py:109
 msgid "Server name, hostname-style"
-msgstr "Tên server, tên host"
+msgstr "Server adı, hostname şeklinde"
 
 #: .\judge\models\runtime.py:110
 msgid "time of creation"
-msgstr "thời gian tạo"
+msgstr "oluşturulma zamanı"
 
 #: .\judge\models\runtime.py:111
 msgid "A key to authenticated this judge"
-msgstr "Mã truy cập chấm bài"
+msgstr "Bu judge'ın kimliğini doğrulamak için bir anahtar"
 
 #: .\judge\models\runtime.py:112
 msgid "authentication key"
-msgstr "mã xác thực"
+msgstr "kimlik doğrulama anahtarı"
 
 #: .\judge\models\runtime.py:113
 msgid "judge online status"
-msgstr "trạng thái bộ chấm online"
+msgstr "judge'ın çevrimiçi durumu"
 
 #: .\judge\models\runtime.py:114
 msgid "judge start time"
-msgstr "thời gian bắt đầu chấm"
+msgstr "başlangıç"
 
 #: .\judge\models\runtime.py:115
 msgid "response time"
-msgstr "thời gian đáp ứng"
+msgstr "yanıt süresi"
 
 #: .\judge\models\runtime.py:116
 msgid "system load"
-msgstr "mức tải của hệ thống"
+msgstr "sistem yükü"
 
 #: .\judge\models\runtime.py:117
 msgid "Load for the last minute, divided by processors to be fair."
-msgstr "Tải cho phút cuối cùng, chia cho số bộ vi xử lý."
+msgstr "Son bir dakikadaki sistem yükü. Adil olması için işlemci sayısına bölünür."
 
 #: .\judge\models\runtime.py:121 .\judge\models\runtime.py:156
 msgid "judges"
-msgstr "chấm điểm"
+msgstr "judge'lar"
 
 #: .\judge\models\runtime.py:155
 msgid "judge"
-msgstr "máy chấm"
+msgstr ""
 
 #: .\judge\models\submission.py:15 .\judge\models\submission.py:41
 #: .\judge\utils\problems.py:81
 msgid "Accepted"
-msgstr "Chấp nhận (AC)"
+msgstr "Kabul edildi"
 
 #: .\judge\models\submission.py:16 .\judge\models\submission.py:42
 #: .\judge\utils\problems.py:82
 msgid "Wrong Answer"
-msgstr "Kết quả sai (WA)"
+msgstr "Yanlış cevap"
 
 #: .\judge\models\submission.py:17 .\judge\models\submission.py:44
 #: .\judge\utils\problems.py:84
 msgid "Time Limit Exceeded"
-msgstr "Quá thời gian (TLE)"
+msgstr "Zaman Sınırı Aşıldı"
 
 #: .\judge\models\submission.py:18 .\judge\models\submission.py:45
 #: .\judge\utils\problems.py:85
 msgid "Memory Limit Exceeded"
-msgstr "Tràn bộ nhớ (MLE)"
+msgstr "Bellek Sınırı Aşıldı"
 
 #: .\judge\models\submission.py:19 .\judge\models\submission.py:46
 msgid "Output Limit Exceeded"
-msgstr "Kết xuất dữ liệu ra quá nhiều"
+msgstr "Çıktı Limiti Aşıldı"
 
 #: .\judge\models\submission.py:20 .\judge\models\submission.py:47
 msgid "Invalid Return"
-msgstr "Lỗi khi chạy chương trình (IR)"
+msgstr "Geçersiz Dönüş Kodu"
 
 #: .\judge\models\submission.py:21 .\judge\models\submission.py:48
 msgid "Runtime Error"
-msgstr "Lỗi Runtime"
+msgstr "Çalışma Hatası"
 
 #: .\judge\models\submission.py:22 .\judge\models\submission.py:36
 #: .\judge\models\submission.py:49 .\judge\utils\problems.py:83
 msgid "Compile Error"
-msgstr "Lỗi dịch (CE)"
+msgstr "Derleme Hatası"
 
 #: .\judge\models\submission.py:23 .\judge\models\submission.py:35
 msgid "Internal Error"
-msgstr "Lỗi Nội Bộ"
+msgstr "İç Hata"
 
 #: .\judge\models\submission.py:24
 msgid "Short circuit"
-msgstr "Ngắn mạch"
+msgstr "Kısa devre"
 
 #: .\judge\models\submission.py:25 .\judge\models\submission.py:37
 #: .\judge\models\submission.py:55
 msgid "Aborted"
-msgstr "Bị hủy bỏ"
+msgstr "İptal edildi"
 
 #: .\judge\models\submission.py:31 .\judge\models\submission.py:51
 msgid "Queued"
-msgstr "Đang chờ"
+msgstr "Sıraya Alındı"
 
 #: .\judge\models\submission.py:32 .\judge\models\submission.py:52
 msgid "Processing"
-msgstr "Đang xử lý"
+msgstr "İşleniyor"
 
 #: .\judge\models\submission.py:33 .\judge\models\submission.py:53
 msgid "Grading"
-msgstr "Chấm điểm"
+msgstr "Puanlanıyor"
 
 #: .\judge\models\submission.py:34 .\judge\models\submission.py:54
 msgid "Completed"
-msgstr "Đã Hoàn Thành"
+msgstr "Tamamlandı"
 
 #: .\judge\models\submission.py:50
 msgid "Internal Error (judging server error)"
-msgstr "Lỗi nội bộ (máy chủ chấm bài lỗi)"
+msgstr "İç Hata (judge sunucusu hatası)"
 
 #: .\judge\models\submission.py:60
 msgid "submission time"
-msgstr "ngày nộp bài"
+msgstr "çözüm süresi"
 
 #: .\judge\models\submission.py:61 .\judge\models\submission.py:159
 msgid "execution time"
-msgstr "thời gian thực hiện tối đa"
+msgstr "çalışma süresi"
 
 #: .\judge\models\submission.py:62 .\judge\models\submission.py:160
 msgid "memory usage"
-msgstr "bộ nhớ sử dụng"
+msgstr "bellek kullanımı"
 
 #: .\judge\models\submission.py:63 .\judge\models\submission.py:161
 msgid "points granted"
-msgstr "điểm được cho"
+msgstr "verilen puan"
 
 #: .\judge\models\submission.py:64
 msgid "submission language"
-msgstr "ngôn ngữ lập trình"
+msgstr "çözüm dili"
 
 #: .\judge\models\submission.py:65
 msgid "source code"
-msgstr "mã nguồn"
+msgstr "kaynak kodu"
 
 #: .\judge\models\submission.py:66
 msgid "status"
-msgstr "trạng thái"
+msgstr "statü"
 
 #: .\judge\models\submission.py:67
 msgid "result"
-msgstr "kết quả"
+msgstr "sonuç"
 
 #: .\judge\models\submission.py:69
 msgid "compile errors"
-msgstr "lỗi dịch"
+msgstr "derleme hataları"
 
 #: .\judge\models\submission.py:71
 msgid "batched cases"
-msgstr "nhóm test"
+msgstr "kümelenmiş testler"
 
 #: .\judge\models\submission.py:72
 msgid "test case points"
-msgstr "điểm cho testcase"
+msgstr "test puanı"
 
 #: .\judge\models\submission.py:73
 msgid "test case total points"
-msgstr "tổng điểm test case"
+msgstr "toplam test puanı"
 
 #: .\judge\models\submission.py:74
 msgid "judged on"
-msgstr "đánh giá trên"
+msgstr "değerlendirildiği sunucu"
 
 #: .\judge\models\submission.py:76
 msgid "was rejudged by admin"
-msgstr "được chấm lại bởi admin"
+msgstr "admin tarafından yeniden değerlendirildi"
 
 #: .\judge\models\submission.py:77
 msgid "was ran on pretests only"
-msgstr "chỉ được chạy bởi test sơ bộ"
+msgstr "sadece ön testlerde çalıştı"
 
 #: .\judge\models\submission.py:150
 msgid "submissions"
-msgstr "nộp bài"
+msgstr "çözümler"
 
 #: .\judge\models\submission.py:156
 msgid "associated submission"
-msgstr "bài nộp liên quan"
+msgstr "ilişkili çözüm gönderisi"
 
 #: .\judge\models\submission.py:157
 msgid "test case ID"
-msgstr "mã testcase"
+msgstr "test ID"
 
 #: .\judge\models\submission.py:158
 msgid "status flag"
-msgstr "cờ trạng thái"
+msgstr "durum kodu"
 
 #: .\judge\models\submission.py:162
 msgid "points possible"
-msgstr "khả năng điểm"
+msgstr "alınabilecek puan"
 
 #: .\judge\models\submission.py:163
 msgid "batch number"
-msgstr "lô số"
+msgstr "küme #"
 
 #: .\judge\models\submission.py:164
 msgid "judging feedback"
-msgstr "phản hồi chấm thi"
+msgstr ""
 
 #: .\judge\models\submission.py:165
 msgid "program output"
-msgstr "lập trình đầu ra"
+msgstr "program çıktısı"
 
 #: .\judge\models\submission.py:172
 msgid "submission test case"
-msgstr "test case của bài"
+msgstr "çözüm testi"
 
 #: .\judge\models\submission.py:173
 msgid "submission test cases"
-msgstr "các test case của bài"
+msgstr "çözüm testleri"
 
 #: .\judge\models\ticket.py:10
 msgid "ticket title"
-msgstr ""
+msgstr "bilet başlığı"
 
 #: .\judge\models\ticket.py:11
 msgid "ticket creator"
-msgstr ""
+msgstr "bileti oluşturan"
 
 #: .\judge\models\ticket.py:12
 msgid "creation time"
-msgstr ""
+msgstr "oluşturulma zamanı"
 
 #: .\judge\models\ticket.py:13
 msgid "assignees"
-msgstr ""
+msgstr "sorumlular"
 
 #: .\judge\models\ticket.py:14
 msgid "quick notes"
-msgstr ""
+msgstr "hızlı notlar"
 
 #: .\judge\models\ticket.py:15
 msgid "Staff notes for this issue to aid in processing."
-msgstr ""
+msgstr "İşlemde yardımcı olacak notlar."
 
 #: .\judge\models\ticket.py:16
 msgid "linked item type"
-msgstr ""
+msgstr "bağlı öğe tipi"
 
 #: .\judge\models\ticket.py:18
 msgid "linked item ID"
-msgstr ""
+msgstr "bağlı nesne ID'si"
 
 #: .\judge\models\ticket.py:20
 msgid "is ticket open?"
-msgstr ""
+msgstr "bilet açık mı?"
 
 #: .\judge\models\ticket.py:24
 msgid "ticket"
-msgstr ""
+msgstr "bilet"
 
 #: .\judge\models\ticket.py:26
 msgid "poster"
-msgstr ""
+msgstr "gönderen"
 
 #: .\judge\models\ticket.py:28
 msgid "message time"
-msgstr ""
+msgstr "mesaj zamanı"
 
 #: .\judge\pdf_problems.py:111
 msgid "Page [page] of [topage]"
-msgstr "Trang [page] /[topage]"
+msgstr "[page]/[topage]"
 
 #: .\judge\utils\problem_data.py:63
 msgid "Empty batches not allowed."
-msgstr "Lệnh theo lô trống là không được phép."
+msgstr "Kümeler boş olamaz."
 
 #: .\judge\utils\problem_data.py:82
 #, python-format
 msgid "Points must be defined for non-batch case #%d."
-msgstr "Điểm phải được xác định cho các trường hợp không theo lô #%d."
+msgstr "Küme olmayan test #%d için puan tanımlanmalıdır."
 
 #: .\judge\utils\problem_data.py:87
 #, python-format
 msgid "Input file for case %d does not exist: %s"
-msgstr "Các tập tin đầu vào cho trường hợp %d không tồn tại: %s"
+msgstr "Test #%d için girdi dosyası yok: %s"
 
 #: .\judge\utils\problem_data.py:90
 #, python-format
 msgid "Output file for case %d does not exist: %s"
-msgstr "Các tập tin đầu vào cho trường hợp %d không tồn tại: %s"
+msgstr "Test #%d için çıktı dosyası yok: %s"
 
 #: .\judge\utils\problem_data.py:115
 #, python-format
 msgid "Batch start case #%d requires points."
-msgstr "Phép thử theo lô #%d yêu cầu điểm."
+msgstr "Küme başlangıç testi #%d puan değerine sahip olmalıdır."
 
 #: .\judge\utils\problem_data.py:136
 #, python-format
 msgid "Attempt to end batch outside of one in case #%d"
-msgstr "Cố gắng để kết thúc bộ số liệu nằm ngoài một trong các trường hợp #%d"
+msgstr "Test #%d bir kümenin içinde değil, ancak küme bitişini işaret ediyor."
 
 #: .\judge\utils\problem_data.py:154
 msgid "How did you corrupt the zip path?"
-msgstr "Bạn đã làm hỏng đường dẫn zip?"
+msgstr "Zip yolunu bozmayı nasıl becerdin?"
 
 #: .\judge\utils\problem_data.py:160
 msgid "How did you corrupt the generator path?"
-msgstr ""
+msgstr "Generator yolunu bozmayı nasıl becerdin?"
 
 #: .\judge\utils\problems.py:76
 msgid "Can't pass both queryset and keyword filters"
-msgstr "Không thể bỏ qua cả bộ lọc queryset và keyword"
+msgstr "Queryset ve keyword filtreleri aynı anda verilemez."
 
 #: .\judge\utils\problems.py:86
 msgid "Other"
-msgstr ""
+msgstr "Diğer"
 
 #: .\judge\utils\problems.py:87
 msgid "Total"
-msgstr "Tổng cộng"
+msgstr "Toplam"
 
 #: .\judge\views\blog.py:36
 #, python-format
 msgid "Page %d of Posts"
-msgstr "Trang %d của bài viết"
+msgstr "Sayfa %d"
 
 #: .\judge\views\comment.py:27
 msgid "Messing around, are we?"
-msgstr "Bị rối?"
+msgstr "Ooo, bakıyorum da etrafı karıştırıyoruz."
 
 #: .\judge\views\comment.py:59
 msgid "You already voted."
-msgstr "Bạn đã bỏ phiếu rồi."
+msgstr "Zaten oy verdin."
 
 #: .\judge\views\comment.py:116 .\judge\views\organization.py:282
 msgid "Edited from site"
-msgstr "Biên tập từ trang web"
+msgstr "Site aracılığıyla düzenlendi"
 
 #: .\judge\views\comment.py:137
 msgid "Editing comment"
-msgstr "Đang chỉnh sửa bình luận"
+msgstr "Yorum düzenleniyor"
 
 #: .\judge\views\contests.py:48 .\judge\views\contests.py:178
 #: .\judge\views\contests.py:181 .\judge\views\contests.py:308
 msgid "No such contest"
-msgstr "Không có cuộc thi như vậy"
+msgstr "Böyle bir yarışma yok :("
 
 #: .\judge\views\contests.py:49 .\judge\views\contests.py:179
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
-msgstr "Không thể tìm thấy một cuộc thi với khóa \"%s\"."
+msgstr "\"%s\" anahtarıyla bir yarışma bulunamadı."
 
 #: .\judge\views\contests.py:72 .\judge\views\contests.py:322
 msgid "Contests"
-msgstr "Cuộc thi"
+msgstr "Yarışmalar"
 
 #: .\judge\views\contests.py:182
 msgid "Could not find such contest."
-msgstr "Không thể tìm thấy các cuộc thi như vậy."
+msgstr "Yarışma bulunamadı."
 
 #: .\judge\views\contests.py:185
 #, python-format
 msgid "Access to contest \"%s\" denied"
-msgstr "Truy cập vào cuộc thi \"%s\" từ chối"
+msgstr "\"%s\" yarışmasına erişimin yok "
 
 #: .\judge\views\contests.py:236
 msgid "Contest not ongoing"
-msgstr "Cuộc thi không đang diễn ra"
+msgstr "Yarışma devam etmiyor"
 
 #: .\judge\views\contests.py:237
 #, python-format
 msgid "\"%s\" is not currently ongoing."
-msgstr "\"%s\" không đang diễn ra."
+msgstr "\"%s\" şu anda devam etmiyor."
 
 #: .\judge\views\contests.py:241
 msgid "Already in contest"
-msgstr "Đang trong cuộc thi"
+msgstr "Zaten yarışmadasın"
 
 #: .\judge\views\contests.py:242
 #, python-format
 msgid "You are already in a contest: \"%s\"."
-msgstr "Bạn đang ở một cuộc thi: \"%s\"."
+msgstr "Zaten bir yarışmadasın: \"%s\"."
 
 #: .\judge\views\contests.py:298
 #, python-format
 msgid "Enter access code for \"%s\""
-msgstr ""
+msgstr "“%s” için erişim kodunu gir"
 
 #: .\judge\views\contests.py:309
 #, python-format
 msgid "You are not in contest \"%s\"."
-msgstr "Bạn đang không tham gia cuộc thi \"%s\"."
+msgstr "\"%s\" yarışmasında değilsin."
 
 #: .\judge\views\contests.py:329
 msgid "ContestCalender requires integer year and month"
-msgstr "Yêu cầu năm và tháng là số nguyên"
+msgstr "Yarışma Takvimi için tam sayı yıl ve ay girmelisiniz"
 
 #: .\judge\views\contests.py:504
 msgid "???"
@@ -1984,484 +1998,486 @@ msgstr ""
 #: .\judge\views\contests.py:540
 #, python-format
 msgid "%s Rankings"
-msgstr "%s xếp hạng"
+msgstr "%s - Sıralama"
 
 #: .\judge\views\contests.py:592
 msgid "Live"
-msgstr "Trực tuyến"
+msgstr "Canlı"
 
 #: .\judge\views\contests.py:600
 #, python-format
 msgid "Your participation in %s"
-msgstr "Tham gia của bạn vào %s"
+msgstr "\"%s\" yarışmasına katılımın"
 
 #: .\judge\views\contests.py:601
 #, python-format
 msgid "%s's participation in %s"
-msgstr "%s tham gia vào %s"
+msgstr "%s adlı kullanıcının \"%s\" yarışmasına katılımı"
 
 #: .\judge\views\contests.py:610 .\templates\contest\contest-tabs.html:13
 msgid "Participation"
-msgstr "Tham gia"
+msgstr "Katılım"
 
 #: .\judge\views\contests.py:635
 #, python-format
 msgid "Contest tag: %s"
-msgstr "Thẻ cuộc thi %s"
+msgstr "Yarışma etiketi: %s"
 
 #: .\judge\views\error.py:14
 msgid "404 error"
-msgstr "lỗi 404"
+msgstr "404 Hatası"
 
 #: .\judge\views\error.py:15
 #, python-format
 msgid "Could not find page \"%s\""
-msgstr "Không thể tìm thấy trang \"%s\""
+msgstr "\"%s\" sayfası bulunamadı"
 
 #: .\judge\views\error.py:21
 #, python-format
 msgid "no permission for %s"
-msgstr "không cho phép %s"
+msgstr "%s için erişim izni yok"
 
 #: .\judge\views\error.py:27
 #, python-format
 msgid "corrupt page %s"
-msgstr "trang lỗi %s"
+msgstr "bozuk sayfa \"%s\""
 
 #: .\judge\views\language.py:12 .\templates\status\judge-status-table.html:9
 #: .\templates\status\status-tabs.html:5
 msgid "Runtimes"
-msgstr "Đang chạy"
+msgstr "Dil sürümleri"
 
 #: .\judge\views\organization.py:43 .\judge\views\organization.py:46
 msgid "No such organization"
-msgstr "Không có tổ chức như vậy"
+msgstr "Böyle bir organizasyon yok :("
 
 #: .\judge\views\organization.py:44
 #, python-format
 msgid "Could not find an organization with the key \"%s\"."
-msgstr "Không thể tìm thấy một tổ chức với khóa \"%s\"."
+msgstr "\"%s\" anahtarına sahip bir organizasyon bulunamadı."
 
 #: .\judge\views\organization.py:47
 msgid "Could not find such organization."
-msgstr "Không thể tìm thấy các tổ chức như vậy."
+msgstr "Böyle bir organizasyon bulunamadı."
 
 #: .\judge\views\organization.py:62 .\judge\views\register.py:35
 #: .\templates\organization\list.html:15 .\templates\user\user-list-tabs.html:5
 msgid "Organizations"
-msgstr "Tổ chức"
+msgstr "Organizasyonlar"
 
 #: .\judge\views\organization.py:83
 #, python-format
 msgid "%s Members"
-msgstr "%s thành viên"
+msgstr "%s üye"
 
 #: .\judge\views\organization.py:113 .\judge\views\organization.py:115
 msgid "Joining organization"
-msgstr "Đang tham gia tổ chức"
+msgstr "Organizasyona katılım"
 
 #: .\judge\views\organization.py:113
 msgid "You are already in the organization."
-msgstr "Bạn đã trong tổ chức."
+msgstr "Bu organizasyonda zaten varsın."
 
 #: .\judge\views\organization.py:115
 msgid "This organization is not open."
-msgstr "Tổ chức này không phải là mở."
+msgstr "Bu organizasyon açık değil."
 
 #: .\judge\views\organization.py:124
 msgid "Leaving organization"
-msgstr "Rời khỏi tổ chức"
+msgstr "Organizasyondan çık"
 
 #: .\judge\views\organization.py:124
 #, python-format
 msgid "You are not in \"%s\"."
-msgstr "Bạn đang không ở trong \"%s\"."
+msgstr "\"%s\" içinde değilsin."
 
 #: .\judge\views\organization.py:148
 #, python-format
 msgid "Request to join %s"
-msgstr "Yêu cầu tham gia %s"
+msgstr "%s'ye katılma isteği"
 
 #: .\judge\views\organization.py:164
 msgid "Join request detail"
-msgstr "Chi tiết yêu cầu tham gia"
+msgstr "Katılma isteği detayı"
 
 #: .\judge\views\organization.py:193
 #, python-format
 msgid "Managing join requests for %s"
-msgstr "Quản lý các yêu cầu tham gia %s"
+msgstr "%s - Katılım isteklerini yönet"
 
 #: .\judge\views\organization.py:224
 #, python-format
 msgid "Your organization can only receive %d more members. You cannot approve %d users."
-msgstr "Tổ chức của bạn có thể chỉ nhận được %d thêm các thành viên. Bạn không thể chấp nhận người dùng %d."
+msgstr "Organizasyon yalnızca %d üye daha alabilir. %d üyenin katılımını onaylayamazsın."
 
 #: .\judge\views\organization.py:236
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
-msgstr[0] "Chấp nhận %d thành viên."
+msgstr[0] "%d kullanıcı onaylandı"
+msgstr[1] "%d kullanıcı onaylandı"
 
 #: .\judge\views\organization.py:237
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
-msgstr[0] "Từ chối %d thành viên."
+msgstr[0] "%d kullanıcı onaylandı"
+msgstr[1] "%d kullanıcı onaylandı"
 
 #: .\judge\views\organization.py:267
 #, python-format
 msgid "Editing %s"
-msgstr "Đang chỉnh sửa %s"
+msgstr "%s düzenleniyor"
 
 #: .\judge\views\organization.py:290 .\judge\views\organization.py:298
 msgid "Can't edit organization"
-msgstr "Không thể chỉnh sửa tổ chức"
+msgstr "Bu organizasyon düzenlenemiyor"
 
 #: .\judge\views\organization.py:291
 msgid "You are not allowed to edit this organization."
-msgstr "Bạn không có quyền chỉnh sửa tổ chức này."
+msgstr "Bu organizasyonu düzenleme yetkisine sahip değilsin."
 
 #: .\judge\views\organization.py:299
 msgid "You are not allowed to kick people from this organization."
-msgstr "Bạn không có quyền loại người từ tổ chức này."
+msgstr "Üyeleri bu organizasyondan atma yetkisine sahip değilsin."
 
 #: .\judge\views\organization.py:304 .\judge\views\organization.py:308
 msgid "Can't kick user"
-msgstr "Không thể loại thành viên"
+msgstr "Bu üyeyi atamazsın."
 
 #: .\judge\views\organization.py:305
 msgid "The user you are trying to kick does not exist!"
-msgstr "Thành viên bạn muốn loại không tồn tại!"
+msgstr "Atmaya çalıştığın üye bulunamıyor!"
 
 #: .\judge\views\organization.py:309
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s."
-msgstr "Thành viên mà bạn muốn loại không thuộc tổ chức: %s."
+msgstr "Atmaya çalıştığın üye \"%s\" organizasyonunda değil."
 
 #: .\judge\views\problem.py:72
 msgid "No such problem"
-msgstr "Không có vấn đề như vậy"
+msgstr "Böyle bir problem yok :("
 
 #: .\judge\views\problem.py:73
 #, python-format
 msgid "Could not find a problem with the code \"%s\"."
-msgstr "Không thể tìm thấy một đề bài với mã \"%s\"."
+msgstr "\"%s\" anahtarına sahip problem bulunamadı."
 
 #: .\judge\views\problem.py:109
 #, python-brace-format
 msgid "Editorial for {0}"
-msgstr "Hướng giải của {0}"
+msgstr " {0} - Problem analizi"
 
 #: .\judge\views\problem.py:112
 #, python-brace-format
 msgid "Editorial for <a href=\"{1}\">{0}</a>"
-msgstr "Hướng giải của <a href=\"{1}\">{0}</a>"
+msgstr "<a href=\"{1}\">{0}</a> için problem analizi"
 
 #: .\judge\views\problem.py:271 .\templates\contest\contest.html:79
 #: .\templates\user\user-tabs.html:5 .\templates\user\users-table.html:22
 msgid "Problems"
-msgstr "Đề bài"
+msgstr "Problemler"
 
 #: .\judge\views\problem.py:527
 msgid "Banned from submitting"
-msgstr ""
+msgstr "Çözüm gönderme engellendi"
 
 #: .\judge\views\problem.py:528
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
-msgstr "Bạn đã được coi là cá nhận không tính điểm cho đề này. Bạn không thể nộp bài."
+msgstr "Bu problem için istenmeyen adam olarak işaretlendin. Çözüm gönderemezsin."
 
 #: .\judge\views\problem.py:539
 msgid "Too many submissions"
-msgstr "Quá nhiều bài nộp"
+msgstr "Çok fazla çözüm gönderisi"
 
 #: .\judge\views\problem.py:540
 msgid "You have exceeded the submission limit for this problem."
-msgstr "Bạn đã vượt quá giới hạn lần nộp của bài này."
+msgstr "Bu soru için çözüm gönderi sınırını geçtin."
 
 #: .\judge\views\problem.py:595 .\judge\views\problem.py:598
 #, python-format
 msgid "Submit to %(problem)s"
-msgstr "Nộp lời giải cho %(problem)s"
+msgstr "Çözüm gönder -%(problem)s"
 
 #: .\judge\views\problem_data.py:36
 msgid "Checker arguments must be a JSON object"
-msgstr "Đối số kiểm tra phải là đối tượng JSON"
+msgstr "Checker değişkenleri JSON nesnesi olarak verilmelidir."
 
 #: .\judge\views\problem_data.py:38
 msgid "Checker arguments is invalid JSON"
-msgstr "Đối số kiểm tra là đối tượng JSON không hợp lệ"
+msgstr "Checker değişkeni olarak geçersiz JSON verdin."
 
 #: .\judge\views\problem_data.py:45
 msgid "Your zip file is invalid!"
-msgstr "File nén bị lỗi!"
+msgstr "Zip dosyan geçersiz!"
 
 #: .\judge\views\problem_data.py:102
 #, python-brace-format
 msgid "Comparing submissions for {0}"
-msgstr ""
+msgstr "Çözümleri karşılaştır - {0}"
 
 #: .\judge\views\problem_data.py:105
 #, python-brace-format
 msgid "Comparing submissions for <a href=\"{1}\">{0}</a>"
-msgstr ""
+msgstr "<a href=\"{1}\">{0}</a> için çözümleri karşılaştır"
 
 #: .\judge\views\problem_data.py:140
 #, python-brace-format
 msgid "Editing data for {0}"
-msgstr ""
+msgstr "Verileri düzenle - {0}"
 
 #: .\judge\views\problem_data.py:143
 #, python-brace-format
 msgid "Editing data for <a href=\"{1}\">{0}</a>"
-msgstr ""
+msgstr "<a href=\"{1}\">{0}</a> için verileri düzenle"
 
 #: .\judge\views\problem_data.py:147
 #, python-format
 msgid "Editing data for %s"
-msgstr "Chỉnh sửa các dữ liệu cho %s"
+msgstr "%s için verileri düzenle"
 
 #: .\judge\views\problem_data.py:242 .\judge\views\problem_data.py:243
 #, python-format
 msgid "Generated init.yml for %s"
-msgstr "Tạo file Init.yml cho %s"
+msgstr "%s için init.yml oluşturuldu"
 
 #: .\judge\views\ranked_submission.py:59
 #, python-format
 msgid "Best solutions for %s"
-msgstr "Các giải pháp tốt nhất cho %s"
+msgstr "%s için en iyi çözümler"
 
 #: .\judge\views\ranked_submission.py:62
 #, python-brace-format
 msgid "Best solutions for <a href=\"{1}\">{0}</a>"
-msgstr "Các giải pháp tốt nhất cho <a href=\"{1}\">{0}</a>"
+msgstr "<a href=\"{1}\">{0}</a> için en iyi çözümler"
 
 #: .\judge\views\ranked_submission.py:72
 #, python-format
 msgid "Best solutions for %(problem)s in %(contest)s"
-msgstr "Các giải pháp tốt nhất cho %(problem)s trong %(contest)s"
+msgstr "\"%(problem)s\" için en iyi çözümler - %(contest)s"
 
 #: .\judge\views\ranked_submission.py:74
 #, python-format
 msgid "Best solutions for problem %(number)s in %(contest)s"
-msgstr "Những lời giải tốt nhất cho bài %(number)s trong cuộc thi %(contest)s"
+msgstr "Problem %(number)s için en iyi çözümler - %(contest)s"
 
 #: .\judge\views\ranked_submission.py:79
 #, python-brace-format
 msgid "Best solutions for <a href=\"{1}\">{0}</a> in <a href=\"{3}\">{2}</a>"
-msgstr "Các giải pháp tốt nhất cho <a href=\"{1}\">{0}</a> trong <a href=\"{3}\">{2}</a>"
+msgstr "<a href=\"{1}\">{0}</a> için en iyi çözümler - <a href=\"{3}\">{2}</a>"
 
 #: .\judge\views\ranked_submission.py:82
 #, python-brace-format
 msgid "Best solutions for problem {0} in <a href=\"{2}\">{1}</a>"
-msgstr "Những lời giải tốt nhất cho bài {0} trong <a href=\"{2}\">{1}</a>"
+msgstr "Problem {0} için en iyi çözümler - <a href=\"{2}\">{1}</a>"
 
 #: .\judge\views\register.py:27
 msgid "A username must contain letters, numbers, or underscores"
-msgstr "Tên người dùng phải chứa chữ cái, số hoặc dấu gạch chân"
+msgstr "Kullanıcı adı harfler, rakamlar veya alt çizgilerden oluşmalıdır"
 
 #: .\judge\views\register.py:29
 msgid "Real name (optional)"
-msgstr "Tên thật (tùy chọn)"
+msgstr "Gerçek isim (isteğe bağlı)"
 
 #: .\judge\views\register.py:32 .\templates\user\edit-profile.html:108
 msgid "Preferred language"
-msgstr "Ngôn ngữ ưa thích"
+msgstr "Tercih edilen dil"
 
 #: .\judge\views\register.py:39
 msgid "Subscribe to newsletter?"
-msgstr "Đăng ký nhận bản tin?"
+msgstr "Haber bültenine abone ol"
 
 #: .\judge\views\register.py:46
 #, python-format
 msgid "The email address \"%s\" is already taken. Only one registration is allowed per address."
-msgstr "Địa chỉ email \"%s\" đã được sử dụng. Chỉ có một đăng ký được cho phép cho mỗi địa chỉ mail."
+msgstr "\"%s\" zaten kullanımda. E-posta adresleri yalnızca bir kez kullanılabilir."
 
 #: .\judge\views\register.py:52
 msgid "Your email provider is not allowed due to history of abuse. Please use a reputable email provider."
-msgstr "Nhà cung cấp email của bạn không được phép do phát tán thư rác. Xin vui lòng sử dụng một nhà cung cấp email có uy tín."
+msgstr "E-posta sağlayıcın geçmişte yaşanan suistimallerden dolayı geçersizdir. Lütfen bilinen bir e-posta sağlayıcısı kullan."
 
 #: .\judge\views\register.py:58 .\judge\views\register.py:97
 msgid "Registration"
-msgstr "Đăng ký"
+msgstr "Kayıt"
 
 #: .\judge\views\register.py:108
 msgid "Authentication failure"
-msgstr "Xác thực không thành công"
+msgstr "Kimlik doğrulama hatası"
 
 #: .\judge\views\stats.py:94
 msgid "Language statistics"
-msgstr "Thống kê theo ngôn ngữ"
+msgstr "Dil istatistikleri"
 
 #: .\judge\views\status.py:24 .\templates\submission\list.html:222
 msgid "Status"
-msgstr "Trạng thái"
+msgstr "Durum"
 
 #: .\judge\views\status.py:109
 msgid "Version matrix"
-msgstr ""
+msgstr "Sürüm matrisi"
 
 #: .\judge\views\submission.py:56 .\judge\views\submission.py:63
 #, python-format
 msgid "Submission of %(problem)s by %(user)s"
-msgstr "Nộp %(problem)s bởi %(user)s"
+msgstr "%(user)s tarafından %(problem)s için gönderilen çözüm"
 
 #: .\judge\views\submission.py:155 .\judge\views\submission.py:156
 #: .\templates\problem\problem.html:111
 msgid "All submissions"
-msgstr "Tất cả các bài nộp"
+msgstr "Tüm çözümler"
 
 #: .\judge\views\submission.py:287
 msgid "All my submissions"
-msgstr "Tất cả những lần nộp bài của tôi"
+msgstr "Tüm çözümlerim"
 
 #: .\judge\views\submission.py:288
 #, python-format
 msgid "All submissions by %s"
-msgstr "Tất cả các bài nộp bởi %s"
+msgstr "%s'nin tüm çözümleri"
 
 #: .\judge\views\submission.py:318
 #, python-format
 msgid "All submissions for %s"
-msgstr "Tất cả các bài nộp bởi %s"
+msgstr "%s için tüm çözümler"
 
 #: .\judge\views\submission.py:339
 msgid "Must pass a problem"
-msgstr "Phải giải được 1 bài"
+msgstr "Bir problem tanımlanmalı"
 
 #: .\judge\views\submission.py:370
 #, python-format
 msgid "My submissions for %(problem)s"
-msgstr "Các bài nộp của tôi cho %(problem)s"
+msgstr "%(problem)s için çözümlerim"
 
 #: .\judge\views\submission.py:371
 #, python-format
 msgid "%(user)s's submissions for %(problem)s"
-msgstr "bài nộp của %(user)s cho %(problem)s"
+msgstr "%(user)s tarafından %(problem)s için gönderilen çözümler"
 
 #: .\judge\views\submission.py:445
 msgid "Must pass a contest"
-msgstr "Phải vượt qua một cuộc thi"
+msgstr "Bir yarışma tanımlanmalı"
 
 #: .\judge\views\submission.py:464
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions for <a href=\"{3}\">{2}</a> in <a href=\"{5}\">{4}</a>"
-msgstr "<a href=\"{1}\">{0}</a> gửi cho <a href=\"{3}\">{2}</a> trong <a href=\"{5}\">{4}</a>"
+msgstr "<a href=\"{1}\">{0}</a> tarafından <a href=\"{3}\">{2}</a> için gönderilen çözüm - <a href=\"{5}\">{4}</a>"
 
 #: .\judge\views\submission.py:469
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions for problem {2} in <a href=\"{4}\">{3}</a>"
-msgstr ""
+msgstr "<a href=\"{1}\">{0}</a> tarafından problem {2} için gönderilen çözüm - <a href=\"{4}\">{3}</a>"
 
 #: .\judge\views\ticket.py:37 .\judge\views\ticket.py:43
 msgid "Ticket title"
-msgstr ""
+msgstr "Bilet başlığı"
 
 #: .\judge\views\ticket.py:44
 msgid "Issue description"
-msgstr ""
+msgstr "Sorun açıklaması"
 
 #: .\judge\views\ticket.py:102 .\judge\views\ticket.py:105
 #, python-format
 msgid "New ticket for %s"
-msgstr ""
+msgstr "%s için yeni bilet"
 
 #: .\judge\views\ticket.py:151
 #, python-format
 msgid "%(title)s - Ticket %(id)d"
-msgstr ""
+msgstr "%(title)s - Bilet %(id)d"
 
 #: .\judge\views\ticket.py:258
 #, python-format
 msgid "Tickets - Page %(number)d of %(total)d"
-msgstr ""
+msgstr "Biletler - Sayfa %(number)d/%(total)d"
 
 #: .\judge\views\ticket.py:307
 #, python-format
 msgid "New Ticket: %s"
-msgstr ""
+msgstr "Yeni Bilet: %s"
 
 #: .\judge\views\ticket.py:308
 #, python-format
 msgid "#%(id)d, assigned to: %(users)s"
-msgstr ""
+msgstr "#%(id)d, sorumlular: %(users)s"
 
 #: .\judge\views\ticket.py:309
 msgid ", "
-msgstr ", "
+msgstr ","
 
 #: .\judge\views\ticket.py:310
 msgid "no one"
-msgstr "không có ai"
+msgstr "kimse"
 
 #: .\judge\views\user.py:70
 msgid "No such user"
-msgstr "Không có thư mục này"
+msgstr "Böyle bir kullanıcı yok"
 
 #: .\judge\views\user.py:70
 #, python-format
 msgid "No user handle \"%s\"."
-msgstr "Không xử lý người dùng \"%s\"."
+msgstr "\"%s\" adında bir kullanıcı yok."
 
 #: .\judge\views\user.py:74
 msgid "My account"
-msgstr "Tài khoản của tôi"
+msgstr "Hesabım"
 
 #: .\judge\views\user.py:75
 #, python-format
 msgid "User %s"
-msgstr "Người dùng %s"
+msgstr "Kullanıcı %s"
 
 #: .\judge\views\user.py:133
 msgid "M j, Y, G:i"
-msgstr "M j, Y, G:i"
+msgstr "j M Y, G:i"
 
 #: .\judge\views\user.py:215
 msgid "Updated on site"
-msgstr "Cập Nhật trên trang web"
+msgstr "Sitede güncellendi"
 
 #: .\judge\views\user.py:247 .\templates\admin\auth\user\change_form.html:14
 #: .\templates\admin\auth\user\change_form.html:17 .\templates\base.html:217
 #: .\templates\user\user-tabs.html:10
 msgid "Edit profile"
-msgstr "Chỉnh sửa tiểu sử"
+msgstr "Profili düzenle"
 
 #: .\judge\views\user.py:256 .\templates\user\user-list-tabs.html:4
 msgid "Leaderboard"
-msgstr "Leaderboard"
+msgstr "Sıralama"
 
 #: .\judge\views\widgets.py:53 .\judge\views\widgets.py:64
 #, python-format
 msgid "Invalid upstream data: %s"
-msgstr "Dữ liệu nguồn không hợp lệ %s"
+msgstr "Gelen veri geçersiz: %s"
 
 #: .\judge\views\widgets.py:74
 msgid "Bad latitude or longitude"
-msgstr "Sai tọa độ"
+msgstr "Hatalı enlem veya boylam"
 
 #: .\templates\admin\judge\contest\change_form.html:14
 #: .\templates\admin\judge\contest\change_form.html:17
 msgid "Rate"
-msgstr "Đánh giá"
+msgstr "Derecelendir"
 
 #: .\templates\admin\judge\contest\change_list.html:9
 msgid "Rate all ratable contests"
-msgstr "Đánh giá các cuộc thi"
+msgstr "Tüm yarışmaları derecelendir"
 
 #: .\templates\admin\judge\profile\change_form.html:14
 #: .\templates\admin\judge\profile\change_form.html:17
 msgid "Edit user"
-msgstr "Cập nhật người dùng"
+msgstr "Kullanıcı düzenle"
 
 #: .\templates\admin\judge\submission\change_form.html:14
 #: .\templates\admin\judge\submission\change_form.html:17
 #: .\templates\submission\source.html:34 .\templates\submission\status.html:67
 msgid "Rejudge"
-msgstr "Chấm lại"
+msgstr "Yeniden değerlendir"
 
 #: .\templates\base.html:209
 #, python-format
 msgid "Hello, <b>%(username)s</b>."
-msgstr "Xin chào, <b>%(username)s</b>."
+msgstr "Merhaba, <b>%(username)s</b>."
 
 #: .\templates\base.html:215 .\templates\comments\list.html:89
 #: .\templates\contest\contest-list-tabs.html:21
@@ -2469,23 +2485,23 @@ msgstr "Xin chào, <b>%(username)s</b>."
 #: .\templates\submission\info-base.html:12
 #: .\templates\submission\submission-list-tabs.html:15
 msgid "Admin"
-msgstr "Quản trị"
+msgstr "Yönetici"
 
 #: .\templates\base.html:224
 msgid "Log out"
-msgstr "Đăng xuất"
+msgstr "Çıkış yap"
 
 #: .\templates\base.html:235
 msgid "Register"
-msgstr "Đăng ký"
+msgstr "Kayıt"
 
 #: .\templates\base.html:247
 msgid "spectating"
-msgstr "spectating"
+msgstr "izleniyor"
 
 #: .\templates\base.html:260
 msgid "This site works best with JavaScript enabled."
-msgstr "Trang web này hoạt động tốt nhất với JavaScript được cho phép."
+msgstr ""
 
 #: .\templates\blog\content.html:13 .\templates\comments\list.html:68
 #: .\templates\comments\list.html:83 .\templates\contest\contest-tabs.html:17
@@ -2493,339 +2509,341 @@ msgstr "Trang web này hoạt động tốt nhất với JavaScript được cho
 #: .\templates\license.html:10 .\templates\problem\data.html:437
 #: .\templates\problem\editorial.html:14
 msgid "Edit"
-msgstr "Soạn thảo"
+msgstr "Düzenle"
 
 #: .\templates\blog\content.html:27
 #, python-format
 msgid "\n"
 "                    posted on %(time)s\n"
 "                "
-msgstr ""
+msgstr "\n"
+"%(time)s"
 
 #: .\templates\blog\dashboard.html:21
 #, python-format
 msgid "\n"
 "                                    on %(time)s\n"
 "                                "
-msgstr ""
+msgstr "\n"
+"%(time)s"
 
 #: .\templates\blog\list.html:85
 msgid "Blog"
-msgstr "Blog"
+msgstr ""
 
 #: .\templates\blog\list.html:87
 msgid "Events"
-msgstr "Sự kiện"
+msgstr "Etkinlikler"
 
 #: .\templates\blog\list.html:92
 msgid "News"
-msgstr "Tin tức"
+msgstr "Haberler"
 
 #: .\templates\blog\list.html:106
 #, python-brace-format
 msgid "posted on {time}"
-msgstr ""
+msgstr "{time}"
 
 #: .\templates\blog\list.html:130 .\templates\problem\problem.html:256
 msgid "Clarifications"
-msgstr "Làm rõ"
+msgstr "Açıklamalar"
 
 #: .\templates\blog\list.html:146 .\templates\problem\problem.html:267
 msgid "No clarifications have been made at this time."
-msgstr "Chưa có lời làm rõ nào được đưa ra ở thời điểm này."
+msgstr "Henüz bir açıklama yapılmadı."
 
 #: .\templates\blog\list.html:154
 msgid "Ongoing contests"
-msgstr "Cuộc thi đang diễn ra"
+msgstr "Devam eden yarışmalar"
 
 #: .\templates\blog\list.html:172
 msgid "Upcoming contests"
-msgstr "Sự kiện sắp tới"
+msgstr "Gelecek yarışmalar"
 
 #: .\templates\blog\list.html:189
 msgid "Comment stream"
-msgstr "Dòng bình luận"
+msgstr "Son yorumlar"
 
 #: .\templates\blog\list.html:208
 msgid "New problems"
-msgstr "Đề bài mới"
+msgstr "Yeni problemler"
 
 #: .\templates\blog\list.html:225
 msgid "My open tickets"
-msgstr ""
+msgstr "Açık biletlerim"
 
 #: .\templates\blog\list.html:246
 msgid "New tickets"
-msgstr ""
+msgstr "Yeni biletler"
 
 #: .\templates\comments\list.html:2
 msgid "Comments"
-msgstr "Nhận xét"
+msgstr "Yorumlar"
 
 #: .\templates\comments\list.html:18 .\templates\comments\list.html:27
 msgid "Please login to vote"
-msgstr "Hãy đăng nhập để bình chọn"
+msgstr "Oylamak için lütfen giriş yap"
 
 #: .\templates\comments\list.html:40
 #, python-brace-format
 msgid "commented on {time}"
-msgstr ""
+msgstr "{time} "
 
 #: .\templates\comments\list.html:49
 #, python-format
 msgid "edit %(edits)s"
-msgstr ""
+msgstr "düzenleme %(edits)s"
 
 #: .\templates\comments\list.html:51 .\templates\comments\media-js.html:71
 msgid "edited"
-msgstr "chỉnh sửa"
+msgstr "düzenlendi"
 
 #: .\templates\comments\list.html:60
 msgid "Link"
-msgstr "Liên kết"
+msgstr ""
 
 #: .\templates\comments\list.html:73 .\templates\comments\list.html:80
 msgid "Reply"
-msgstr "Phản hồi"
+msgstr "Yanıtla"
 
 #: .\templates\comments\list.html:86
 msgid "Hide"
-msgstr "Ẩn"
+msgstr "Gizle"
 
 #: .\templates\comments\list.html:111
 msgid "There are no comments at the moment."
-msgstr "Không có ý kiến tại thời điểm này."
+msgstr "Şu anda hiç yorum yok."
 
 #: .\templates\comments\list.html:117
 msgid "New comment"
-msgstr "Bình luận mới"
+msgstr "Yeni yorum"
 
 #: .\templates\comments\list.html:131
 msgid "Invalid comment body."
-msgstr "Bình luận không hợp lệ."
+msgstr "Yorum metninde hata!"
 
 #: .\templates\comments\list.html:139
 msgid "Post!"
-msgstr "Đăng!"
+msgstr "Yayınla!"
 
 #: .\templates\comments\media-js.html:66
 #, python-brace-format
 msgid "edit {edits}"
-msgstr "chỉnh sửa {edits}"
+msgstr "düzenleme {edits}"
 
 #: .\templates\comments\media-js.html:69
 msgid "original"
-msgstr ""
+msgstr "orijinal"
 
 #: .\templates\contest\access_code.html:26
 msgid "Invalid access code."
-msgstr ""
+msgstr "Hatalı erişim kodu!"
 
 #: .\templates\contest\access_code.html:29
 msgid "Please enter your access code:"
-msgstr ""
+msgstr "Lütfen erişim kodunu gir:"
 
 #: .\templates\contest\access_code.html:32
 msgid "Join Contest"
-msgstr ""
+msgstr "Yarışmaya katıl"
 
 #: .\templates\contest\calendar.html:6
 #, python-format
 msgid "Contests in %(month)s"
-msgstr "Cuộc thi tại %(month)s"
+msgstr "%(month)s ayındaki yarışmalar"
 
 #: .\templates\contest\calendar.html:13
 msgid "Sunday"
-msgstr "Chủ nhật"
+msgstr "Pazar"
 
 #: .\templates\contest\calendar.html:14
 msgid "Monday"
-msgstr "Thứ Hai"
+msgstr "Pazartesi"
 
 #: .\templates\contest\calendar.html:15
 msgid "Tuesday"
-msgstr "Thứ Ba"
+msgstr "Salı"
 
 #: .\templates\contest\calendar.html:16
 msgid "Wednesday"
-msgstr "Thứ tư"
+msgstr "Çarşamba "
 
 #: .\templates\contest\calendar.html:17
 msgid "Thursday"
-msgstr "Thứ Năm"
+msgstr "Perşembe "
 
 #: .\templates\contest\calendar.html:18
 msgid "Friday"
-msgstr "Thứ Sáu"
+msgstr "Cuma"
 
 #: .\templates\contest\calendar.html:19
 msgid "Saturday"
-msgstr "Thứ Bảy"
+msgstr "Cumartesi"
 
 #: .\templates\contest\contest-list-tabs.html:7
 msgid "Prev"
-msgstr "Trước"
+msgstr "Önceki"
 
 #: .\templates\contest\contest-list-tabs.html:10
 msgid "Next"
-msgstr "Kế tiếp"
+msgstr "Sonraki"
 
 #: .\templates\contest\contest-list-tabs.html:18
 #: .\templates\problem\problem-list-tabs.html:5
 msgid "List"
-msgstr ""
+msgstr "Liste"
 
 #: .\templates\contest\contest-list-tabs.html:19
 msgid "Calendar"
-msgstr "Lịch"
+msgstr "Takvim"
 
 #: .\templates\contest\contest-tabs.html:4
 msgid "Info"
-msgstr "Thông tin"
+msgstr "Hakkında"
 
 #: .\templates\contest\contest-tabs.html:8
 msgid "Rankings"
-msgstr "Bảng xếp hạng"
+msgstr "Sıralamalar"
 
 #: .\templates\contest\contest-tabs.html:10
 msgid "Hidden Rankings"
-msgstr ""
+msgstr "Gizli Sıralamalar"
 
 #: .\templates\contest\contest-tabs.html:26
 #: .\templates\contest\contest-tabs.html:40
 msgid "Leave contest"
-msgstr "Rời khỏi cuộc thi"
+msgstr "Yarışmadan ayrıl"
 
 #: .\templates\contest\contest-tabs.html:30 .\templates\contest\list.html:209
 msgid "Virtual join"
-msgstr "Tham gia ảo"
+msgstr "Sanal katılım"
 
 #: .\templates\contest\contest-tabs.html:38
 msgid "Stop spectating"
-msgstr "Ngừng theo dõi"
+msgstr "İzlemeyi bırak"
 
 #: .\templates\contest\contest-tabs.html:45
 msgid "Spectate contest"
-msgstr "Theo dõi cuộc thi"
+msgstr "Yarışmayı izle"
 
 #: .\templates\contest\contest-tabs.html:48
 #: .\templates\contest\contest-tabs.html:51
 msgid "Join contest"
-msgstr "Tham gia cuộc thi"
+msgstr "Yarışmaya katıl"
 
 #: .\templates\contest\contest-tabs.html:57
 msgid "Login to participate"
-msgstr "Đăng nhập để tham gia"
+msgstr "Katılmak için giriş yap"
 
 #: .\templates\contest\contest.html:37
 msgid "Participating virtually."
-msgstr ""
+msgstr "Sanal olarak katılınıyor. "
 
 #: .\templates\contest\contest.html:43
 msgid "Contest is over."
-msgstr "Cuộc thi kết thúc."
+msgstr "Yarışma sona erdi"
 
 #: .\templates\contest\contest.html:59 .\templates\contest\contest.html:63
 msgid "F j, Y, G:i T"
-msgstr "F j, Y, G:i T"
+msgstr "j F Y, G:i T"
 
 #: .\templates\contest\contest.html:59
 #, python-format
 msgid "<b>%(time_limit)s</b> window between <b>%(start_time)s</b> and <b>%(end_time)s</b>"
-msgstr "cửa sổ <b>%(time_limit)s</b> giữa <b>%(start_time)s</b> và <b>%(end_time)s</b>"
+msgstr " <b>%(start_time)s</b> ile <b>%(end_time)s</b> arasında, süre sınırı <b>%(time_limit)s</b>"
 
 #: .\templates\contest\contest.html:63
 #, python-format
 msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
-msgstr "<b>%(length)s</b> tính từ <b>%(start_time)s</b>"
+msgstr "başlangıç <b>%(start_time)s</b>, yarışma süresi <b>%(length)s</b>"
 
 #: .\templates\contest\contest.html:85
 msgid "AC Rate"
-msgstr "Tỷ lệ AC"
+msgstr "AC Oranı"
 
 #: .\templates\contest\contest.html:86 .\templates\contest\list.html:98
 #: .\templates\contest\list.html:185 .\templates\problem\list.html:212
 #: .\templates\problem\list.html:238
 msgid "Users"
-msgstr "Thành viên"
+msgstr "Kullanıcılar"
 
 #: .\templates\contest\contest.html:99
 msgid "Editorial"
-msgstr "Hướng dẫn giải"
+msgstr "Problem analizi"
 
 #: .\templates\contest\list.html:27 .\templates\contest\media-js.html:9
 msgid "Are you sure you want to join?"
-msgstr "Bạn có chắc bạn muốn tham gia?"
+msgstr "Katılmak istediğine emin misin?"
 
 #: .\templates\contest\list.html:28
 msgid "Joining a contest for the first time starts your timer, after which it becomes unstoppable."
-msgstr "Truy cập vào một cuộc thi lần đầu tiên sẽ bắt đầu việc đếm ngược thời gian cuộc thi và không thể dừng lại được."
+msgstr "Bir yarışmaya ilk defa katılmak süreni başlatır, süren başladıktan sonra durdurulamaz. "
 
 #: .\templates\contest\list.html:93
 msgid "Ongoing Contests"
-msgstr "Cuộc thi đang diễn ra"
+msgstr "Devam Eden Yarışmalar"
 
 #: .\templates\contest\list.html:97 .\templates\contest\list.html:153
 #: .\templates\contest\list.html:184
 msgid "Contest"
-msgstr "Cuộc thi"
+msgstr "Yarışma"
 
 #: .\templates\contest\list.html:132
 msgid "Spectate"
-msgstr "Hóng"
+msgstr "İzle"
 
 #: .\templates\contest\list.html:136
 msgid "Join"
-msgstr "Tham gia"
+msgstr "Katıl"
 
 #: .\templates\contest\list.html:148
 msgid "Upcoming Contests"
-msgstr "Sự kiện sắp tới"
+msgstr "Gelecek yarışmalar"
 
 #: .\templates\contest\list.html:175
 msgid "There are no scheduled contests at this time."
-msgstr "Không có không có cuộc thi dự kiến tại thời điểm này."
+msgstr "Şu anda planlanmış yarışma bulunmuyor."
 
 #: .\templates\contest\list.html:180
 msgid "Past Contests"
-msgstr "Cuộc thi đã qua"
+msgstr "Eski Yarışmalar"
 
 #: .\templates\contest\media-js.html:4
 msgid "Are you sure you want to leave?"
-msgstr "Bạn có chắc bạn muốn bỏ qua?"
+msgstr "Ayrılmak istediğine emin misin?"
 
 #: .\templates\contest\media-js.html:5
 msgid "You cannot come back to a virtual participation. You will have to start a new one."
-msgstr "Bạn không thể trở lại với việc tham gia ảo. Bạn phải bắt đầu một tham gia ảo mới."
+msgstr "Sanal katılıma geri dönemezsin. Yeni bir sanal katılım oluşturmalısın."
 
 #: .\templates\contest\media-js.html:10
 msgid "Joining a contest starts your timer, after which it becomes unstoppable."
-msgstr "Truy cập một cuộc thi sẽ bắt đầu đếm ngược thời gian cuộc thi đó, và không thể dừng lại được."
+msgstr "Bir yarışmaya katılmak süreni başlatır, sayaç durdurulamaz."
 
 #: .\templates\contest\private.html:4
 msgid "Only the following organizations may access this contest:"
-msgstr "Chỉ có các tổ chức sau có thể truy cập vào cuộc thi này:"
+msgstr "Yarışmaya yalnızca şu organizasyonlar erişebilir:"
 
 #: .\templates\contest\ranking-table.html:27
 #, python-brace-format
 msgid "Started on {time}"
-msgstr ""
+msgstr "Başlangıç: {time}"
 
 #: .\templates\contest\ranking-table.html:30
 msgid "Participation ended."
-msgstr "Kết thúc tham gia."
+msgstr "Katılım sona erdi."
 
 #: .\templates\contest\ranking.html:232
 msgid "View user participation"
-msgstr "Xem thành viên tham gia"
+msgstr "Kullanıcı katılımını göster"
 
 #: .\templates\contest\ranking.html:236
 msgid "Show organizations"
-msgstr "Hiển thị các tổ chức"
+msgstr "Organizasyonları göster"
 
 #: .\templates\license.html:12
 msgid "Source:"
-msgstr "Nguồn:"
+msgstr "Kaynak:"
 
 #: .\templates\newsletter\common.html:6
 #: .\templates\newsletter\subscription_unsubscribe_activated.html:3
@@ -2833,393 +2851,396 @@ msgstr "Nguồn:"
 #: .\templates\newsletter\subscription_update_activated.html:3
 #: .\templates\newsletter\subscription_update_activated.html:6
 msgid "Newsletter"
-msgstr "Bản tin"
+msgstr "Haber bülteni"
 
 #: .\templates\newsletter\subscription_unsubscribe_activated.html:3
 #: .\templates\newsletter\subscription_unsubscribe_activated.html:6
 #: .\templates\newsletter\subscription_update_activated.html:3
 #: .\templates\newsletter\subscription_update_activated.html:6
 msgid "activate"
-msgstr "hoạt động"
+msgstr "aktifleştir"
 
 #: .\templates\newsletter\subscription_unsubscribe_activated.html:8
 msgid "You have successfully been unsubscribed."
-msgstr "Bạn đã bỏ đăng ký thành công."
+msgstr "Başarıyla abonelikten çıktın."
 
 #: .\templates\newsletter\subscription_unsubscribe_email_sent.html:3
 #: .\templates\newsletter\subscription_unsubscribe_email_sent.html:6
 #: .\templates\newsletter\subscription_unsubscribe_user.html:3
 #: .\templates\newsletter\subscription_unsubscribe_user.html:6
 msgid "Newsletter unsubscribe"
-msgstr "Bỏ đăng ký bản tin"
+msgstr "Haber bülteni aboneliğinden çık"
 
 #: .\templates\newsletter\subscription_unsubscribe_email_sent.html:8
 msgid "Your unsubscription request has successfully been received. An email has been sent to you with a link you need to follow in order to confirm your unsubscription."
-msgstr "Đã nhận yêu cầu hủy đăng ký của bạn. Email đã được gửi cho bạn với một liên kết bạn cần phải làm theo để xác nhận hủy đăng ký."
+msgstr "Abonelikten çıkma isteğin alındı. Abonelikten çıkman için gerekli linki içeren bir e-posta, adresine gönderildi."
 
 #: .\templates\newsletter\subscription_unsubscribe_user.html:17
 msgid "Do you want to unsubscribe from this newsletter?"
-msgstr "Bạn có muốn hủy đăng ký bản tin này?"
+msgstr "Bu haber bültenine olan aboneliğinden çıkmak istiyor musun?"
 
 #: .\templates\newsletter\subscription_unsubscribe_user.html:21
 msgid "Unsubscribe"
-msgstr "Hủy đăng ký"
+msgstr "Abonelikten çık"
 
 #: .\templates\newsletter\subscription_update.html:3
 #: .\templates\newsletter\subscription_update.html:6
 #: .\templates\newsletter\subscription_update_email_sent.html:3
 #: .\templates\newsletter\subscription_update_email_sent.html:6
 msgid "Newsletter update"
-msgstr "Bản tin Cập Nhật"
+msgstr "Haber bülteni güncellemesi"
 
 #: .\templates\newsletter\subscription_update.html:9
 msgid "Due to a technical error we were not able to submit your confirmation email. This could be because your email address is invalid."
-msgstr "Do một lỗi kỹ thuật chúng tôi đã không thể gửi email xác nhận. Điều này có thể bởi vì địa chỉ email không hợp lệ."
+msgstr "Teknik bir hata sebebiyle onay e-postanı gönderemedik. E-posta adresin geçersiz olabilir."
 
 #: .\templates\newsletter\subscription_update.html:14
 msgid "Update subscription"
-msgstr "Cập nhật bài nộp của tôi"
+msgstr "Aboneliği güncelle"
 
 #: .\templates\newsletter\subscription_update_activated.html:8
 msgid "Your subscription has successfully been updated."
-msgstr "Đăng ký của bạn đã được cập nhật thành công."
+msgstr "Aboneliğin başarıyla güncellenmiştir."
 
 #: .\templates\newsletter\subscription_update_email_sent.html:8
 msgid "Your update request was successfully received and an activation email has been sent to you. In that email you will find a link which you need to follow in order to update your subscription."
-msgstr "Yêu cầu bản Cập Nhật của bạn đã được nhận thành công và kích hoạt email đã được gửi đến bạn. Trong email đó, bạn sẽ tìm thấy một liên kết mà bạn cần phải làm theo để cập nhật đăng ký của bạn."
+msgstr "Güncelleme isteğin alındı ve adresine aktivasyon e-postası gönderildi. E-postadaki bağlantıyı izleyerek aboneliğini güncelleyebilirsin."
 
 #: .\templates\organization\edit.html:46
 #: .\templates\organization\requests\pending.html:41
 #: .\templates\ticket\edit-notes.html:4
 msgid "Update"
-msgstr "Cập Nhật"
+msgstr "Güncelle"
 
 #: .\templates\organization\home.html:8
 msgid "Leave organization"
-msgstr "Rời khỏi tổ chức"
+msgstr "Organizasyondan ayrıl"
 
 #: .\templates\organization\home.html:11
 msgid "Join organization"
-msgstr "Tham gia tổ chức"
+msgstr "Organizasyona katıl"
 
 #: .\templates\organization\home.html:14
 msgid "Request membership"
-msgstr "Yêu cầu tư cách thành viên"
+msgstr "Üyelik talep et"
 
 #: .\templates\organization\home.html:21
 msgid "Edit organization"
-msgstr "Chỉnh sửa các tổ chức"
+msgstr "Organizasyonu düzenle"
 
 #: .\templates\organization\home.html:25
 msgid "View requests"
-msgstr "Xem yêu cầu"
+msgstr "İstekleri göster"
 
 #: .\templates\organization\home.html:32
 msgid "Admin organization"
-msgstr "Tổ chức người quản trị"
+msgstr "Organizasyonu düzenle"
 
 #: .\templates\organization\home.html:37
 msgid "View members"
-msgstr "Xem các thành viên"
+msgstr "Üyeleri göster"
 
 #: .\templates\organization\list.html:23
 #: .\templates\status\language-list.html:33 .\templates\ticket\list.html:245
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #: .\templates\organization\list.html:24
 #: .\templates\status\language-list.html:34
 msgid "Name"
-msgstr "Tên"
+msgstr "İsim"
 
 #: .\templates\organization\list.html:25
 msgid "Members"
-msgstr "Các thành viên"
+msgstr "Üyeler"
 
 #: .\templates\organization\new.html:10 .\templates\ticket\new.html:36
 msgid "Create"
-msgstr "Tạo"
+msgstr "Oluştur"
 
 #: .\templates\organization\requests\detail.html:13
 msgid "User:"
-msgstr "Người dùng:"
+msgstr "Kullanıcı:"
 
 #: .\templates\organization\requests\detail.html:17
 msgid "Organization:"
-msgstr "Tổ chức:"
+msgstr "Organizasyon:"
 
 #: .\templates\organization\requests\detail.html:25
 msgid "Time:"
-msgstr "Thời gian:"
+msgstr "Zaman:"
 
 #: .\templates\organization\requests\detail.html:29
 msgid "Reason:"
-msgstr "Lý Do:"
+msgstr "Sebep:"
 
 #: .\templates\organization\requests\log.html:11
 #: .\templates\organization\requests\pending.html:21
 msgid "State"
-msgstr "Trạng thái"
+msgstr "Durum"
 
 #: .\templates\organization\requests\log.html:12
 #: .\templates\organization\requests\pending.html:22
 msgid "Reason"
-msgstr "Lý do"
+msgstr "Sebep"
 
 #: .\templates\organization\requests\log.html:28
 #: .\templates\organization\requests\pending.html:44
 msgid "There are no requests to approve."
-msgstr "Không có yêu cầu để chấp nhận."
+msgstr "Onaylanacak istek yok."
 
 #: .\templates\organization\requests\pending.html:24
 #: .\templates\problem\data.html:401
 msgid "Delete?"
-msgstr "Xoá?"
+msgstr "Sil?"
 
 #: .\templates\organization\requests\request.html:18
 msgid "Your reason for joining:"
-msgstr "Lý do của bạn để tham gia:"
+msgstr "Katılma sebebin:"
 
 #: .\templates\organization\requests\request.html:20
 msgid "Request"
-msgstr "Yêu cầu"
+msgstr "İstek"
 
 #: .\templates\organization\requests\tabs.html:4
 msgid "Pending"
-msgstr "Đang chờ"
+msgstr "Beklemede"
 
 #: .\templates\organization\requests\tabs.html:7
 msgid "Log"
-msgstr "Nhật ký"
+msgstr ""
 
 #: .\templates\organization\requests\tabs.html:10
 msgid "Approved"
-msgstr "Phê duyệt"
+msgstr "Onaylandı"
 
 #: .\templates\organization\requests\tabs.html:13
 msgid "Rejected"
-msgstr "Bị từ chối"
+msgstr "Geri çevrildi"
 
 #: .\templates\organization\users-table.html:15
 msgid "Kick"
-msgstr "Loại"
+msgstr "At"
 
 #: .\templates\problem\data.html:353
 msgid "View YAML"
-msgstr "Xem YAML"
+msgstr "YAML'i görüntüle"
 
 #: .\templates\problem\data.html:369
 msgid "Show columns:"
-msgstr "Hiển thị các cột:"
+msgstr "Sütunları göster"
 
 #: .\templates\problem\data.html:372 .\templates\problem\data.html:396
 msgid "Output prefix"
-msgstr "Tiền tố đầu ra"
+msgstr "Çıktı öneki"
 
 #: .\templates\problem\data.html:376 .\templates\problem\data.html:397
 msgid "Output limit"
-msgstr "Giới hạn đầu ra"
+msgstr "Çıktı sınırı"
 
 #: .\templates\problem\data.html:380 .\templates\problem\data.html:398
 msgid "Checker"
-msgstr "Kiểm tra"
+msgstr ""
 
 #: .\templates\problem\data.html:384 .\templates\problem\data.html:399
 msgid "Generator args"
-msgstr "Bộ sinh args"
+msgstr "Generator değişkenleri"
 
 #: .\templates\problem\data.html:391
 msgid "Type"
-msgstr "Kiểu"
+msgstr "Tip"
 
 #: .\templates\problem\data.html:392
 msgid "Input file"
-msgstr "Tập tin đầu vào"
+msgstr "Girdi dosyası"
 
 #: .\templates\problem\data.html:393
 msgid "Output file"
-msgstr "Tập tin đầu ra"
+msgstr "Çıktı dosyası"
 
 #: .\templates\problem\data.html:395
 msgid "Pretest?"
-msgstr "Thử sơ bộ?"
+msgstr "Ön test?"
 
 #: .\templates\problem\data.html:447 .\templates\problem\submit.html:253
 msgid "Submit!"
-msgstr "Nộp bài!"
+msgstr "Gönder!"
 
 #: .\templates\problem\data.html:448
 msgid "Add new case"
-msgstr "Thêm mới trường hợp"
+msgstr "Yeni test ekle"
 
 #: .\templates\problem\editorial.html:22
 msgid "Remember to use this editorial <b>only</b> when stuck, and <b>not to copy-paste code from it</b>. Please be respectful to the problem author and editorialist. <br><br> <b>Submitting an official solution before solving the problem yourself is a bannable offence.</b>"
-msgstr ""
+msgstr "Bu problem analizini <b>yalnızca</b> takıldığın yerlerde kullanmalısın. Lütfen analizden <b>kod kopyalayıp yapıştırma</b>.<br><br>Problemi çözmeden resmi çözümü kopyalayıp yapıştırmak engellenmene neden olabilir."
 
 #: .\templates\problem\list.html:62
 msgid "Filter by type..."
-msgstr "Lọc theo loại..."
+msgstr "Tipe göre filtrele..."
 
 #: .\templates\problem\list.html:179
 msgid "Hot problems"
-msgstr "Những bài tập nổi bật"
+msgstr "Popüler problemler"
 
 #: .\templates\problem\list.html:207 .\templates\problem\list.html:224
 #: .\templates\problem\search-form.html:30
 #: .\templates\user\user-problems.html:62
 msgid "Category"
-msgstr "Thuộc Danh mục"
+msgstr "Kategori"
 
 #: .\templates\problem\list.html:209 .\templates\problem\list.html:228
 msgid "Types"
-msgstr "Kiểu"
+msgstr "Tipler"
 
 #: .\templates\problem\list.html:235
 #, python-format
 msgid "AC %%"
-msgstr "AC %%"
+msgstr ""
 
 #: .\templates\problem\problem.html:76
 msgid "View as PDF"
-msgstr "Xem dạng PDF"
+msgstr "PDF olarak göster"
 
 #: .\templates\problem\problem.html:86 .\templates\problem\problem.html:96
 #: .\templates\problem\problem.html:101
 msgid "Submit solution"
-msgstr "Gửi bài giải"
+msgstr "Çözüm yolla"
 
 #: .\templates\problem\problem.html:89
 #, python-format
 msgid "%(counter)s submission left"
 msgid_plural "%(counter)s submissions left"
-msgstr[0] "Còn %(counter)s lần nộp"
+msgstr[0] "%(counter)s gönderi kaldı"
+msgstr[1] "%(counter)s gönderi kaldı"
 
 #: .\templates\problem\problem.html:97
 msgid "0 submissions left"
-msgstr "Còn 0 lần nộp"
+msgstr "0 çözüm kaldı"
 
 #: .\templates\problem\problem.html:108
 msgid "My submissions"
-msgstr "Lời giải của tôi"
+msgstr "Benim çözümlerim"
 
 #: .\templates\problem\problem.html:112
 msgid "Best submissions"
-msgstr "Lời giải tốt nhất"
+msgstr "En iyi çözümler"
 
 #: .\templates\problem\problem.html:115
 msgid "Read editorial"
-msgstr ""
+msgstr "Problem analizine git"
 
 #: .\templates\problem\problem.html:120
 msgid "Manage tickets"
-msgstr "Quản lý thẻ"
+msgstr "Biletleri yönet"
 
 #: .\templates\problem\problem.html:124
 msgid "Edit problem"
-msgstr "Sửa đề bài"
+msgstr "Soruyu düzenle"
 
 #: .\templates\problem\problem.html:126
 msgid "Edit test data"
-msgstr "Sửa đổi test"
+msgstr "Test verisini düzenle"
 
 #: .\templates\problem\problem.html:134
 msgid "Clone problem"
-msgstr "Copy sang bài mới"
+msgstr "Soruyu çoğalt"
 
 #: .\templates\problem\problem.html:141
 msgid "Points:"
-msgstr "Điểm:"
+msgstr "Puan:"
 
 #: .\templates\problem\problem.html:144 .\templates\problem\problem.html:146
 msgid "(partial)"
-msgstr "(một phần)"
+msgstr "(kısmi)"
 
 #: .\templates\problem\problem.html:151
 msgid "Time limit:"
-msgstr "Giới hạn thời gian:"
+msgstr "Zaman sınırı:"
 
 #: .\templates\problem\problem.html:163
 msgid "Memory limit:"
-msgstr "Giới hạn bộ nhớ:"
+msgstr "Bellek sınırı:"
 
 #: .\templates\problem\problem.html:179
 msgid "Author:"
 msgid_plural "Authors:"
-msgstr[0] "Tác giả:"
+msgstr[0] "Yazar"
+msgstr[1] "Yazarlar"
 
 #: .\templates\problem\problem.html:194
 msgid "Problem type"
 msgid_plural "Problem types"
-msgstr[0] "Loại đề bài"
+msgstr[0] "Soru tipi"
+msgstr[1] "Soru tipleri"
 
 #: .\templates\problem\problem.html:208
 msgid "Allowed languages"
-msgstr "Ngôn ngữ cho phép"
+msgstr "İzin verilen diller"
 
 #: .\templates\problem\problem.html:216
 #, python-format
 msgid "No %(lang)s judge online"
-msgstr "Không có máy chấm %(lang)s đang online"
+msgstr "%(lang)s için çevrimiçi judge yok"
 
 #: .\templates\problem\problem.html:245
 msgid "Request clarification"
-msgstr "Gửi thắc mắc"
+msgstr "Açıklama talebi"
 
 #: .\templates\problem\problem.html:247
 msgid "Report an issue"
-msgstr "Báo cáo vấn đề"
+msgstr "Bir sorun bildir"
 
 #: .\templates\problem\search-form.html:2
 msgid "Problem search"
-msgstr "Tìm kiếm bài tập"
+msgstr "Problem ara"
 
 #: .\templates\problem\search-form.html:8
 msgid "Search problems..."
-msgstr "Tìm đề bài..."
+msgstr "Problemlerde ara..."
 
 #: .\templates\problem\search-form.html:14
 msgid "Full text search"
-msgstr "Tìm kiếm"
+msgstr "Tam metin araması"
 
 #: .\templates\problem\search-form.html:21
 msgid "Hide solved problems"
-msgstr "Ẩn các bài đã có lời giải"
+msgstr "Çözülmüş problemleri gizle"
 
 #: .\templates\problem\search-form.html:27
 msgid "Show problem types"
-msgstr "Hiện loại đề"
+msgstr "Problem tiplerini göster"
 
 #: .\templates\problem\search-form.html:33
 #: .\templates\problem\search-form.html:35
 #: .\templates\submission\submission-list-tabs.html:4
 msgid "All"
-msgstr "Tất cả"
+msgstr "Tümü"
 
 #: .\templates\problem\search-form.html:46
 msgid "Problem types"
-msgstr "Kiểu bài tập"
+msgstr "Problem tipleri"
 
 #: .\templates\problem\search-form.html:57
 msgid "Point range"
-msgstr ""
+msgstr "Puan aralığı"
 
 #: .\templates\problem\search-form.html:63 .\templates\submission\list.html:240
 #: .\templates\ticket\list.html:232
 msgid "Go"
-msgstr "Tìm"
+msgstr "Git"
 
 #: .\templates\problem\search-form.html:64
 msgid "Random"
-msgstr "Ngẫu nhiên"
+msgstr "Rastgele"
 
 #: .\templates\problem\statistics-table.html:1 .\templates\stats\base.html:11
 msgid "Statistics"
-msgstr "Thống kê"
+msgstr "İstatistikler"
 
 #: .\templates\problem\submit.html:193
 #, python-format
 msgid "<b>Warning!</b> Your default language, <b>%(default_language)s</b>, is unavailable for this problem and has been deselected."
-msgstr ""
+msgstr "<b>Uyarı</b> Varsayılan dilin, <b>%(default_language)s</b>, bu soru için kullanılamıyor."
 
 #: .\templates\problem\submit.html:204
 #, python-format
@@ -3229,467 +3250,471 @@ msgid "\n"
 msgid_plural "\n"
 "                        You have %(left)s submissions left\n"
 "                    "
-msgstr[0] ""
+msgstr[0] "\n"
+"Geriye %(left)s çözümün kaldı"
+msgstr[1] "\n"
+"Geriye %(left)s çözümün kaldı"
 
 #: .\templates\problem\submit.html:213
 msgid "You have 0 submissions left"
-msgstr "Bạn còn 0 lần nộp"
+msgstr "Geriye 0 çözümün kaldı"
 
 #: .\templates\problem\submit.html:251
 msgid "No judge is available for this problem."
-msgstr "Bài tập này hiện không sẵn sàng để chấm."
+msgstr "Bu problem için herhangi bir judge mevcut değil."
 
 #: .\templates\registration\activate.html:3
 #, python-format
 msgid "%(key)s is an invalid activation key."
-msgstr "%(key)s là một mã kích hoạt không hợp lệ."
+msgstr "Geçersiz aktivasyon kodu: %(key)s."
 
 #: .\templates\registration\activation_complete.html:3
 msgid "Your account has been successfully activated."
-msgstr "Tài khoản của bạn đã được kích hoạt thành công."
+msgstr "Hesabın başarıyla aktifleştirildi."
 
 #: .\templates\registration\login.html:46
 msgid "Invalid username or password."
-msgstr "Tên người dùng hoặc mật khẩu không hợp lệ."
+msgstr "Kullanıcı adı veya şifre yanlış"
 
 #: .\templates\registration\login.html:64
 msgid "Login!"
-msgstr "Đăng nhập!"
+msgstr "Giriş Yap!"
 
 #: .\templates\registration\login.html:67
 msgid "Forgot your password?"
-msgstr "Quên mật khẩu?"
+msgstr "Şifremi unuttum"
 
 #: .\templates\registration\login.html:70
 msgid "Or log in with..."
-msgstr "Hoặc đăng nhập bằng..."
+msgstr "Diğer giriş seçenekleri:"
 
 #: .\templates\registration\logout.html:3
 msgid "See you later!"
-msgstr "Hẹn gặp lại!"
+msgstr ""
 
 #: .\templates\registration\password_change_done.html:3
 msgid "Your password was sucessfully changed."
-msgstr "Mật khẩu của bạn đã được thay đổi."
+msgstr "Şifren başarıyla değiştirildi."
 
 #: .\templates\registration\password_change_form.html:8
 msgid "Change Password"
-msgstr "Đổi mật khẩu"
+msgstr "Şifre Değiştir"
 
 #: .\templates\registration\password_reset.html:7
 msgid "Send Reset Email"
-msgstr "Gửi email đặt lại mật khẩu"
+msgstr "Sıfırlama E-postası Gönder"
 
 #: .\templates\registration\password_reset_complete.html:3
 msgid "Your password has been set.  You may go ahead and log in now"
-msgstr "Mật khẩu của bạn đã được đặt. Giờ bạn đã có thể đăng nhập"
+msgstr "Şifren oluşturuldu. Şimdi giriş yapabilirsin."
 
 #: .\templates\registration\password_reset_complete.html:4
 msgid "Log in"
-msgstr "Đăng nhập"
+msgstr "Giriş yap"
 
 #: .\templates\registration\password_reset_confirm.html:9
 msgid "Reset Password"
-msgstr "Đặt lại mật khẩu"
+msgstr "Şifreyi sıfırla"
 
 #: .\templates\registration\password_reset_done.html:4
 msgid "We've emailed you instructions for setting your password. You should be receiving them shortly."
-msgstr ""
+msgstr "Şifreni belirlemen için sana yapman gerekenleri içeren bir e-posta gönderdik. Birazdan sana ulaşacaktır."
 
 #: .\templates\registration\password_reset_done.html:5
 msgid "If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder."
-msgstr ""
+msgstr "Eğer bir e-posta almadıysan, kaydolduğun e-posta adresini girdiğinden emin ol ve spam klasörünü kontrol et."
 
 #: .\templates\registration\password_reset_email.txt:1
 #, python-format
 msgid "You're receiving this email because you requested a password reset for your user account at %(site_name)s."
-msgstr "Bạn nhận được email này bởi vì bạn đã yêu cầu đặt lại mật khẩu cho tài khoản của mình tại %(site_name)s."
+msgstr "Bu e-posta %(site_name)s üyeliğinin şifre sıfırlaması için gönderildi."
 
 #: .\templates\registration\password_reset_email.txt:3
 msgid "Please go to the following page and choose a new password:"
-msgstr "Hãy đi đến trang sau và chọn một mật khẩu mới:"
+msgstr "Lütfen bu sayfaya git ve yeni bir şifre seç:"
 
 #: .\templates\registration\password_reset_email.txt:7
 msgid "Your username, in case you've forgotten:"
-msgstr "Tên người dùng của bạn, trong trường hợp bạn quên:"
+msgstr "Unuttuysan diye, kullanıcı adın:"
 
 #: .\templates\registration\password_reset_email.txt:9
 msgid "Thanks for using our site!"
-msgstr "Cảm ơn đã sử dụng hệ thống của chúng tôi!"
+msgstr "Sitemizi kullandığın için teşekkür ederiz!"
 
 #: .\templates\registration\password_reset_email.txt:11
 #, python-format
 msgid "The %(site_name)s team"
-msgstr "Đội ngũ %(site_name)s"
+msgstr "%(site_name)s takımı"
 
 #: .\templates\registration\password_reset_subject.txt:1
 #, python-format
 msgid "Password reset on %(site_name)s"
-msgstr "Đặt lại mật khẩu tại %(site_name)s"
+msgstr "%(site_name)s şifre sıfırlaması"
 
 #: .\templates\registration\profile_creation.html:36
 #: .\templates\registration\username_select.html:7
 msgid "Continue >"
-msgstr "Tiếp tục >"
+msgstr "Devam et >"
 
 #: .\templates\registration\registration_complete.html:3
 msgid "You have successfully been registered. An email has been sent to the email address you provided to confirm your registration."
-msgstr "Chúc mừng bạn đã đăng ký thành công. Một Email đã được gửi đến cho bạn để xác nhận đăng ký của bạn."
+msgstr "Başarıyla kaydoldun! Girdiğin e-posta adresine kaydını onaylaman için bir e-posta gönderdik."
 
 #: .\templates\registration\registration_form.html:162
 msgid "(again, for confirmation)"
-msgstr "(một lần nữa, để xác nhận)"
+msgstr "(onaylamak için lütfen tekrar gir)"
 
 #: .\templates\registration\registration_form.html:169
 msgid "(select your closest major city)"
-msgstr ""
+msgstr "(sana en yakın büyük şehri seç)"
 
 #: .\templates\registration\registration_form.html:173
 msgid "or"
-msgstr "hoặc"
+msgstr "ya da"
 
 #: .\templates\registration\registration_form.html:174
 msgid "pick from map"
-msgstr "chọn từ bản đồ"
+msgstr "Haritadan seç"
 
 #: .\templates\registration\registration_form.html:179
 msgid "Default language"
-msgstr "Ngôn ngữ mặc định"
+msgstr "Varsayılan dil"
 
 #: .\templates\registration\registration_form.html:182
 #: .\templates\user\edit-profile.html:156
 msgid "Affiliated organizations"
-msgstr "Tổ chức đại diện"
+msgstr "Organizasyon üyelikleri"
 
 #: .\templates\registration\registration_form.html:188
 #: .\templates\user\edit-profile.html:126
 msgid "Notify me about upcoming contests"
-msgstr "Thông báo cho tôi về các cuộc thi sắp tới"
+msgstr "Gelecek yarışmalar hakkında beni bilgilendir"
 
 #: .\templates\registration\registration_form.html:202
 msgid "By registering, you agree to our"
-msgstr ""
+msgstr "Kayıt olmakla birlikte şunları kabul edersin:"
 
 #: .\templates\registration\registration_form.html:203
 msgid "Terms & Conditions"
-msgstr "Điều khoản & Điều kiện"
+msgstr "Şartlar & Koşullar"
 
 #: .\templates\registration\registration_form.html:206
 msgid "Register!"
-msgstr "Đăng ký!"
+msgstr "Kaydol!"
 
 #: .\templates\stats\language.html:44
 msgid "Submission Statistics"
-msgstr "Thống kê bài nộp"
+msgstr "Çözüm İstatistikleri"
 
 #: .\templates\stats\language.html:50
 msgid "Submissions by Language"
-msgstr "Bài nộp theo ngôn ngữ"
+msgstr "Dillere Göre Çözümler"
 
 #: .\templates\stats\language.html:56
 msgid "AC Submissions by Language"
-msgstr "Các bài nộp đã AC theo ngôn ngữ"
+msgstr "Dillere Göre AC Alan Çözümler"
 
 #: .\templates\stats\language.html:62
 msgid "Language AC Rate"
-msgstr "Tỉ lệ AC của ngôn ngữ"
+msgstr "Dil AC Oranı"
 
 #: .\templates\status\judge-status-table.html:2
 msgid "Judge"
-msgstr "Máy chấm"
+msgstr ""
 
 #: .\templates\status\judge-status-table.html:4
 msgid "Online"
-msgstr "Trực tuyến"
+msgstr ""
 
 #: .\templates\status\judge-status-table.html:6
 msgid "Uptime"
-msgstr "Thời gian hoạt động"
+msgstr "Çalışma süresi"
 
 #: .\templates\status\judge-status-table.html:7
 msgid "Ping"
-msgstr "Ping"
+msgstr ""
 
 #: .\templates\status\judge-status-table.html:8
 msgid "Load"
-msgstr "Tải"
+msgstr "Yükle"
 
 #: .\templates\status\judge-status-table.html:34
 #: .\templates\status\judge-status-table.html:41
 #: .\templates\status\judge-status-table.html:48
 #: .\templates\status\judge-status-table.html:59
 msgid "N/A"
-msgstr "Không có thông tin"
+msgstr ""
 
 #: .\templates\status\judge-status-table.html:64
 msgid "There are no judges available at this time."
-msgstr "Không có máy chấm nào tại thời điểm này."
+msgstr "Şu an mevcut hiçbir judge bulunmuyor."
 
 #: .\templates\status\language-list.html:35
 msgid "Runtime Info"
-msgstr "Thông tin thời gian chạy"
+msgstr "Dil sürümü bilgileri"
 
 #: .\templates\status\status-tabs.html:4
 msgid "Judges"
-msgstr "Máy chấm"
+msgstr "Judge'lar"
 
 #: .\templates\status\status-tabs.html:6
 msgid "Version Matrix"
-msgstr ""
+msgstr "Sürüm Matrisi"
 
 #: .\templates\submission\internal-error-message.html:8
 msgid "An internal error occurred while grading."
-msgstr "Một lỗi hệ thống vừa xảy ra trong quá trình chấm bài."
+msgstr "Değerlendirme sırasında bir hata oluştu."
 
 #: .\templates\submission\internal-error-message.html:15
 msgid "Error information"
-msgstr "Thông tin về lỗi"
+msgstr "Hata bilgisi"
 
 #: .\templates\submission\list.html:60
 msgid "Filter by status..."
-msgstr "Lọc theo trạng thái..."
+msgstr "Duruma göre filtrele..."
 
 #: .\templates\submission\list.html:62
 msgid "Filter by language..."
-msgstr "Lọc theo ngôn ngữ..."
+msgstr "Dile göre filtrele..."
 
 #: .\templates\submission\list.html:218
 msgid "Filter submissions"
-msgstr "Lọc các bài nộp"
+msgstr "Çözümleri filtrele"
 
 #: .\templates\submission\list.html:260
 msgid "You were disconnected. Refresh to show latest updates."
-msgstr "Bạn đã bị ngắt kết nối. Tải lại trang để hiển thị thông tin cập nhật mới nhất."
+msgstr "Bağlantın koptu. Son güncellemeleri görmek için sayfayı yenile."
 
 #: .\templates\submission\row.html:39
 #, python-format
 msgid "Case #%(case)s"
-msgstr ""
+msgstr "Test #%(case)s"
 
 #: .\templates\submission\row.html:49
 msgid "view"
-msgstr "xem"
+msgstr "görüntüle "
 
 #: .\templates\submission\row.html:53
 msgid "rejudge"
-msgstr "chấm lại"
+msgstr "yeniden değerlendir"
 
 #: .\templates\submission\row.html:58
 msgid "admin"
-msgstr "quản trị"
+msgstr "yönetici"
 
 #: .\templates\submission\source.html:25
 msgid "View status"
-msgstr "Xem trạng thái"
+msgstr "Durumu görüntüle"
 
 #: .\templates\submission\source.html:26
 msgid "View raw source"
-msgstr "Xem mã nguồn"
+msgstr "Ham kaynağı görüntüle"
 
 #: .\templates\submission\source.html:28 .\templates\submission\status.html:61
 msgid "Resubmit"
-msgstr "Gửi lại"
+msgstr "yeniden gönder"
 
 #: .\templates\submission\status-testcases.html:10
 msgid "We are waiting for a suitable judge to process your submission..."
-msgstr "Chúng tôi đang chờ đợi cho một máy chấm phù hợp để xử lý thông tin của bạn..."
+msgstr "Çözümünü değerlendirmeye uygun bir judge bekleniyor..."
 
 #: .\templates\submission\status-testcases.html:12
 msgid "Your submission is being processed..."
-msgstr "Bài nộp của bạn đang được xử lý..."
+msgstr "Çözüm değerlendiriliyor..."
 
 #: .\templates\submission\status-testcases.html:14
 msgid "Compilation Error"
-msgstr "Lỗi dịch"
+msgstr "Derleme Hatası"
 
 #: .\templates\submission\status-testcases.html:18
 msgid "Compilation Warnings"
-msgstr "Các cảnh báo Biên dịch"
+msgstr "Derleme Uyarıları"
 
 #: .\templates\submission\status-testcases.html:23
 msgid "Pretest Execution Results"
-msgstr "Kết quả thực hiện Pretest"
+msgstr "Ön Test Sonuçları"
 
 #: .\templates\submission\status-testcases.html:25
 msgid "Execution Results"
-msgstr "Kết quả thực hiện"
+msgstr "Sonuçlar"
 
 #: .\templates\submission\status-testcases.html:31
 msgid "Batch "
-msgstr "Hàng loạt "
+msgstr "Küme"
 
 #: .\templates\submission\status-testcases.html:43
 msgid "Case"
-msgstr ""
+msgstr "Test"
 
 #: .\templates\submission\status-testcases.html:45
 msgid "Pretest"
-msgstr ""
+msgstr "Ön test"
 
 #: .\templates\submission\status-testcases.html:47
 msgid "Test case"
-msgstr "Bộ test"
+msgstr "Test"
 
 #: .\templates\submission\status-testcases.html:79
 msgid "Your output (clipped)"
-msgstr ""
+msgstr "Çıktı (kısaltılmış)"
 
 #: .\templates\submission\status-testcases.html:99
 msgid "Final pretest score:"
-msgstr ""
+msgstr "Ön test puanı:"
 
 #: .\templates\submission\status-testcases.html:101
 msgid "Final score:"
-msgstr ""
+msgstr "Puan:"
 
 #: .\templates\submission\status-testcases.html:115
 msgid "Passing pretests does not guarantee a full score on system tests."
-msgstr "Vượt qua các bộ test thử không chắc chắn được toàn bộ số điểm từ các bộ test hệ thống."
+msgstr "Ön testleri geçmek sistem testlerinde tam puan almayı garantilemez."
 
 #: .\templates\submission\status-testcases.html:118
 msgid "Submission aborted!"
-msgstr "Bài nộp đã bị huỷ!"
+msgstr "Çözüm iptal edildi!"
 
 #: .\templates\submission\status.html:59
 msgid "View source"
-msgstr "Xem nguồn"
+msgstr "Kaynağı görüntüle"
 
 #: .\templates\submission\status.html:88
 msgid "Abort"
-msgstr "Huỷ bỏ"
+msgstr "İptal et"
 
 #: .\templates\submission\submission-list-tabs.html:6
 msgid "Mine"
-msgstr "Bài của tôi"
+msgstr "Çözümlerim"
 
 #: .\templates\submission\submission-list-tabs.html:9
 msgid "Best"
-msgstr "Tốt nhất"
+msgstr "En iyi"
 
 #: .\templates\submission\submission-list-tabs.html:12
 #, python-format
 msgid "%(user)s's"
-msgstr ""
+msgstr "%(user)s"
 
 #: .\templates\ticket\list.html:135 .\templates\ticket\ticket.html:257
 msgid "Reopened: "
-msgstr "Đã mở lại: "
+msgstr "Yeniden açıldı:"
 
 #: .\templates\ticket\list.html:138 .\templates\ticket\ticket.html:258
 msgid "Closed: "
-msgstr "Đã đóng: "
+msgstr "Kapatıldı:"
 
 #: .\templates\ticket\list.html:205
 msgid "Use desktop notification"
-msgstr "Sử dụng thông báo trên màn hình"
+msgstr "Masaüstü bildirimlerini kullan"
 
 #: .\templates\ticket\list.html:211
 msgid "Show my tickets only"
-msgstr ""
+msgstr "Sadece benim biletlerimi göster"
 
 #: .\templates\ticket\list.html:215
 msgid "Filing user"
-msgstr ""
+msgstr "Dolduran kullanıcı"
 
 #: .\templates\ticket\list.html:224
 msgid "Assignee"
-msgstr ""
+msgstr "Sorumlu"
 
 #: .\templates\ticket\list.html:246
 msgid "Title"
-msgstr "Tiêu đề"
+msgstr "Başlık"
 
 #: .\templates\ticket\list.html:248 .\templates\ticket\ticket.html:304
 msgid "Assignees"
-msgstr ""
+msgstr "Sorumlular"
 
 #: .\templates\ticket\new_problem.html:7
 msgid "Thanks for opening a ticket!"
-msgstr ""
+msgstr "Bilet oluşturduğunuz için teşekkürler!"
 
 #: .\templates\ticket\new_problem.html:9
 msgid "Please keep in mind that this form is for reporting issues with a problem statement, and not for asking for help. If you require assistance on solving a problem, ask in the comments instead."
-msgstr "Xin lưu ý rằng biểu mẫu này dành cho việc báo cáo các vấn đề của đề bài, và không dành cho việc hỏi xin trợ giúp. Nếu bạn cần hỗ trợ về việc giải bài, hỏi trong phần bình luận."
+msgstr "Lütfen bu formun problem metni hakkındaki sorunları belirtmek için olduğunu dikkate al. Bu form yardım istemek için değildir. Yardıma ihtiyacın varsa, sorunu yorumlarda sormayı deneyebilirsin."
 
 #: .\templates\ticket\ticket.html:298
 msgid "Associated object"
-msgstr ""
+msgstr "İlişkili nesne"
 
 #: .\templates\ticket\ticket.html:309
 msgid "No one is assigned."
-msgstr ""
+msgstr "Kimse atanmamış."
 
 #: .\templates\ticket\ticket.html:315
 msgid "Close ticket"
-msgstr ""
+msgstr "Bileti kapat"
 
 #: .\templates\ticket\ticket.html:317
 msgid "Reopen ticket"
-msgstr ""
+msgstr "Bileti yeniden aç"
 
 #: .\templates\ticket\ticket.html:321
 msgid "Assignee notes"
-msgstr ""
+msgstr "Sorumlu notları"
 
 #: .\templates\ticket\ticket.html:328 .\templates\widgets\select_all.html:4
 msgid "Nothing here."
-msgstr "Không có gì ở đây."
+msgstr "Burada hiçbir şey yok :("
 
 #: .\templates\ticket\ticket.html:376
 msgid "Post"
-msgstr "Bài viết"
+msgstr "Gönderi"
 
 #: .\templates\user\base-users-table.html:3
 msgid "Rank"
-msgstr "Xếp hạng"
+msgstr "Sıralama"
 
 #: .\templates\user\base-users.html:14 .\templates\user\base-users.html:69
 msgid "Search by handle..."
-msgstr ""
+msgstr "Kullanıcı adı ile ara..."
 
 #: .\templates\user\edit-profile.html:91
 msgid "Display name"
-msgstr "Tên hiển thị"
+msgstr "Görünen ad"
 
 #: .\templates\user\edit-profile.html:95
 msgid "Self-description"
-msgstr ""
+msgstr "Künye"
 
 #: .\templates\user\edit-profile.html:103
 msgid "Select your closest major city"
-msgstr ""
+msgstr "En yakın büyük şehri seç"
 
 #: .\templates\user\edit-profile.html:112
 msgid "Editor theme"
-msgstr "Giao diện khung viết code"
+msgstr "Editör teması"
 
 #: .\templates\user\edit-profile.html:117
 msgid "Math engine"
-msgstr ""
+msgstr "Matematik motoru"
 
 #: .\templates\user\edit-profile.html:141
 #: .\templates\user\edit-profile.html:142
 msgid "Change your avatar"
-msgstr "Đổi ảnh đại diện của bạn"
+msgstr "Profil fotoğrafı değiştir"
 
 #: .\templates\user\edit-profile.html:148
 msgid "Change your password"
-msgstr "Đổi mật khẩu của bạn"
+msgstr "Şifre değiştir"
 
 #: .\templates\user\edit-profile.html:164
 msgid "User-script"
-msgstr ""
+msgstr "Userscript"
 
 #: .\templates\user\edit-profile.html:168
 msgid "Update profile"
-msgstr "Cập nhật profile"
+msgstr "Profilini güncelle"
 
 #: .\templates\user\pp-row.html:22
 #, python-format
 msgid "\n"
 "            weighted <b>%(weight)s%%</b>\n"
 "        "
-msgstr ""
+msgstr "\n"
+"ağırlık <b>%(weight)s%%</b>"
 
 #: .\templates\user\pp-row.html:27
 #, python-format
@@ -3703,104 +3728,104 @@ msgstr ""
 
 #: .\templates\user\user-about.html:14
 msgid "From"
-msgstr ""
+msgstr "Organizasyonlar"
 
 #: .\templates\user\user-about.html:24 .\templates\user\user-tabs.html:4
 msgid "About"
-msgstr ""
+msgstr "Hakkında"
 
 #: .\templates\user\user-about.html:31
 msgid "You have not shared any information."
-msgstr ""
+msgstr "Henüz hiçbir bilgi paylaşmadın."
 
 #: .\templates\user\user-about.html:33
 msgid "This user has not shared any information."
-msgstr ""
+msgstr "Bu kullanıcı henüz hiçbir bilgi paylaşmadı."
 
 #: .\templates\user\user-base.html:46
 #, python-format
 msgid "%(count)d problems solved"
-msgstr ""
+msgstr "%(count)d problem çözdü"
 
 #: .\templates\user\user-base.html:48
 msgid "Rank by points:"
-msgstr ""
+msgstr "Puan sırası:"
 
 #: .\templates\user\user-base.html:50
 msgid "Total points:"
-msgstr ""
+msgstr "Toplam puan:"
 
 #: .\templates\user\user-base.html:58
 msgid "View submissions"
-msgstr ""
+msgstr "Gönderileri görüntüle"
 
 #: .\templates\user\user-base.html:64
 msgid "Rank by rating:"
-msgstr "Xếp hạng theo điểm số:"
+msgstr "Derece sırası:"
 
 #: .\templates\user\user-base.html:65
 msgid "Rating:"
-msgstr "Điểm số:"
+msgstr ""
 
 #: .\templates\user\user-base.html:66
 msgid "Volatility:"
-msgstr "Độ biến động:"
+msgstr "Değişkenlik:"
 
 #: .\templates\user\user-base.html:67
 msgid "Min. rating:"
-msgstr "Điểm số thấp nhất:"
+msgstr "En düşük derece:"
 
 #: .\templates\user\user-base.html:68
 msgid "Max rating:"
-msgstr "Điểm số cao nhất:"
+msgstr "En yüksek derece:"
 
 #: .\templates\user\user-problems.html:35
 msgid "Points Breakdown"
-msgstr ""
+msgstr "Puan Dağılımı"
 
 #: .\templates\user\user-problems.html:46
 msgid "Load more..."
-msgstr "Xem thêm..."
+msgstr "Daha fazla yükle..."
 
 #: .\templates\user\user-problems.html:50
 msgid "This user has not yet solved any problems."
-msgstr "Người dùng này chưa giải bài tập nào."
+msgstr "Bu kullanıcı henüz hiç soru çözmedi."
 
 #: .\templates\user\user-problems.html:56
 msgid "Authored Problems"
-msgstr ""
+msgstr "Yazılan Problemler"
 
 #: .\templates\user\user-problems.html:88
 msgid "Hide problems I've solved"
-msgstr "Ẩn các bài tôi đã giải được"
+msgstr "Çözdüğüm soruları gizle"
 
 #: .\templates\user\user-problems.html:98
 #, python-format
 msgid "%(points).1f points"
-msgstr ""
+msgstr "%(points).1f puan"
 
 #: .\templates\user\user-problems.html:104
 msgid "Score"
-msgstr "Điểm"
+msgstr "Puan"
 
 #: .\templates\user\user-problems.html:115
 #, python-format
 msgid "%(points)s / %(total)s"
-msgstr ""
+msgstr "%(points)s/%(total)s"
 
 #: .\templates\user\user-tabs.html:7
 msgid "Impersonate"
-msgstr ""
+msgstr "Yerine geç"
 
 #: .\templates\user\user-tabs.html:13
 msgid "Admin User"
-msgstr ""
+msgstr "Yönetici kullanıcı"
 
 #: .\templates\user\user-tabs.html:16
 msgid "Admin Profile"
-msgstr ""
+msgstr "Yönetici Profili"
 
 #: .\templates\widgets\select_all.html:8
 msgid "Check all"
-msgstr "Chọn tất cả"
+msgstr "Tümünü seç"
 

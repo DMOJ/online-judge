@@ -249,10 +249,12 @@ LANGUAGES = [
     ('es', _('Spanish')),
     ('fr', _('French')),
     ('hr', _('Croatian')),
+    ('hu', _('Hungarian')),
     ('ko', _('Korean')),
     ('ro', _('Romanian')),
     ('ru', _('Russian')),
     ('sr-latn', _('Serbian (Latin)')),
+    ('tr', _('Turkish')),
     ('vi', _('Vietnamese')),
     ('zh-hans', _('Simplified Chinese')),
 ]
