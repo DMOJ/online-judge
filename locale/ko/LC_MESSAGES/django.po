@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-21 17:54-0400\n"
-"PO-Revision-Date: 2018-08-21 21:55\n"
+"PO-Revision-Date: 2018-08-21 22:12\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -520,8 +520,7 @@ msgstr "관련된 페이지"
 
 #: .\judge\models\comment.py:40
 msgid "Page code must be ^[pc]:[a-z0-9]+$|^b:\\d+$"
-msgstr "Page code must be ^[pc]:[a-z0-9]+$|^b:\\d+$\n"
-""
+msgstr "Page code must be ^[pc]:[a-z0-9]+$|^b:\\d+$"
 
 #: .\judge\models\comment.py:41
 msgid "votes"
@@ -1573,8 +1572,7 @@ msgstr "이 런타임에 속해 있는 언어"
 
 #: .\judge\models\runtime.py:102
 msgid "judge on which this runtime exists"
-msgstr "judge on which this runtime exists\n"
-""
+msgstr "judge on which this runtime exists"
 
 #: .\judge\models\runtime.py:103
 msgid "runtime name"
@@ -2138,7 +2136,7 @@ msgstr "탈퇴시키려는 사용자가 존재하지 않습니다."
 #: .\judge\views\organization.py:309
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s."
-msgstr "탈퇴시키려는 사용자가 조직에 없습니다."
+msgstr ""
 
 #: .\judge\views\problem.py:72
 msgid "No such problem"
@@ -2187,8 +2185,7 @@ msgstr ""
 
 #: .\judge\views\problem_data.py:36
 msgid "Checker arguments must be a JSON object"
-msgstr "Checker arguments must be a JSON object\n"
-""
+msgstr "Checker arguments must be a JSON object"
 
 #: .\judge\views\problem_data.py:38
 msgid "Checker arguments is invalid JSON"
