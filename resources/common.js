@@ -193,8 +193,12 @@ function count_down(label) {
 
     var timer = setInterval(function () {
         var time = Math.round(initial - (Date.now() - start) / 1000);
-        if (time <= 0)
+        if (time <= 0) {
             clearInterval(timer);
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000);
+        }
         var d = Math.floor(time / 86400);
         var h = Math.floor(time % 86400 / 3600);
         var m = Math.floor(time % 3600 / 60);
