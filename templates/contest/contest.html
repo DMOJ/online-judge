@@ -90,14 +90,26 @@
                 <tbody>
                 {% for problem in contest_problems %}
                     <tr>
-                        <td><a href="{{ url('problem_detail', problem.code) }}">{{ problem.i18n_name }}</a></td>
+                        <td>
+                            {% if problem.is_public %}
+                                <a href="{{ url('problem_detail', problem.code) }}">{{ problem.i18n_name }}</a>
+                            {% else %}
+                                {{ problem.i18n_name }}
+                            {% endif %}
+                        </td>
                         <td>{{ problem.points|floatformat }}{% if problem.partial %}p{% endif %}</td>
                         <td>{{ problem.ac_rate|floatformat(1) }}%</td>
-                        <td><a href="{{ url('ranked_submissions', problem.code) }}">{{ problem.user_count }}</a></td>
                         <td>
-                            {%- if problem.has_public_editorial -%}
+                            {% if problem.is_public %}
+                                <a href="{{ url('ranked_submissions', problem.code) }}">{{ problem.user_count }}</a>
+                            {% else %}
+                                {{ problem.user_count }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if problem.is_public and problem.has_public_editorial %}
                                 <a href="{{ url('problem_editorial', problem.code) }}">{{ _('Editorial') }}</a>
-                            {%- endif -%}
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
