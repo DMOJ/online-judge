@@ -1,12 +1,16 @@
+from django.conf.urls import url
+from django.core.urlresolvers import reverse
 from django.db.models import TextField
 from django.forms import TextInput, ModelForm, ModelMultipleChoiceField
+from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
-from judge.models import Problem
+from judge.models import Judge, Problem
 from judge.widgets import AdminPagedownWidget, HeavySelect2MultipleWidget
 
 
@@ -84,6 +88,14 @@ class JudgeAdmin(VersionAdmin):
     )
     list_display = ('name', 'online', 'start_time', 'ping', 'load', 'last_ip')
     ordering = ['-online', 'name']
+
+    def get_urls(self):
+        return [url(r'^(\d+)/disconnect/$', self.disconnect_view, name='judge_judge_disconnect')] + super(JudgeAdmin, self).get_urls()
+
+    def disconnect_view(self, request, id):
+        judge = get_object_or_404(Judge, id=id)
+        judge.disconnect()
+        return HttpResponseRedirect(reverse('admin:judge_judge_changelist'))
 
     def get_readonly_fields(self, request, obj=None):
         if obj is not None and obj.online:
