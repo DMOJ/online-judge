@@ -81,7 +81,7 @@ class JudgeAdmin(VersionAdmin):
     form = JudgeAdminForm
     readonly_fields = ('created', 'online', 'start_time', 'ping', 'load', 'last_ip', 'runtimes', 'problems')
     fieldsets = (
-        (None, {'fields': ('name', 'auth_key')}),
+        (None, {'fields': ('name', 'auth_key', 'is_blocked')}),
         (_('Description'), {'fields': ('description',)}),
         (_('Information'), {'fields': ('created', 'online', 'last_ip', 'start_time', 'ping', 'load')}),
         (_('Capabilities'), {'fields': ('runtimes', 'problems')}),
