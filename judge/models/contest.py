@@ -57,7 +57,8 @@ class Contest(models.Model):
     end_time = models.DateTimeField(verbose_name=_('end time'), db_index=True)
     time_limit = models.DurationField(verbose_name=_('time limit'), blank=True, null=True)
     time_penalty_incorrect_solution = models.DurationField(verbose_name=_('time penalty'), blank=True, null=True,
-                                                           help_text=_('Time penalty for an incorrect solution.'))
+                                                           help_text=_('Time penalty for an incorrect solution, '
+                                                                       'e.g. 20:00 for ACM ICPC-style contests.'))
     time_penalty_is_strict = models.BooleanField(verbose_name=_('strict time penalty'), default=False,
                                                  help_text=_('Whether Compilation Error should count as an incorrect solution.'))
     is_public = models.BooleanField(verbose_name=_('publicly visible'), default=False,
