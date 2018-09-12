@@ -8,6 +8,8 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
+from judge.judgeapi import disconnect_judge
+
 __all__ = ['Language', 'RuntimeVersion', 'Judge']
 
 
@@ -122,6 +124,12 @@ class Judge(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def disconnect(self):
+        if self.online:
+            disconnect_judge(self)
+
+    disconnect.alters_data = True
 
     @cached_property
     def runtime_versions(self):

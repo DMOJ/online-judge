@@ -108,6 +108,9 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
     def get_related_submission_data(self, submission):
         return 2, 16384, False, False
 
+    def disconnect(self):
+        self.send({'name': 'disconnect'})
+
     def submit(self, id, problem, language, source):
         time, memory, short, pretests_only = self.get_related_submission_data(id)
         self._working = id
