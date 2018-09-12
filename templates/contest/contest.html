@@ -65,6 +65,38 @@
                 {% endtrans %}
             {% endif %}
         </div>
+        <ul id="details">
+            {% if not contest.is_private %}
+              <li>
+                  {% if contest.is_rated %}
+                      {{ _('This contest <b>will be rated</b>.')|safe }}
+                  {% else %}
+                      {{ _('This contest <b>will not be rated</b>.')|safe }}
+                  {% endif %}
+              </li>
+            {% endif %}
+            <li>
+                {% if pretests_enabled %}
+                    {{ _('<b>Pretests are enabled</b> for some or all of the problems.')|safe }}
+                {% else %}
+                    {{ _('This contest <b>will not use pretests</b>.')|safe }}
+                {% endif %}
+            </li>
+            <li>
+                {% if partial_scoring_enabled %}
+                    {{ _('<b>Partial scoring is enabled</b> for some or all of the problems.')|safe }}
+                {% else %}
+                    {{ _('This contest <b>will not use partial scoring</b>.')|safe }}
+                {% endif %}
+            </li>
+            <li>
+                {% if contest.hide_scoreboard %}
+                    {{ _('The <b>scoreboard will be hidden</b> for the duration of the contest.')|safe }}
+                {% else %}
+                    {{ _('The <b>scoreboard will be visible</b> for the duration of the contest.')|safe }}
+                {% endif %}
+            </li>
+        </ul>
     </div>
 
     <div class="content-description">

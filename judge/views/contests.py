@@ -12,7 +12,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import connection, IntegrityError
-from django.db.models import Q, Min, Max, Count, Sum, Case, When, IntegerField
+from django.db.models import Q, Min, Max, Count, Sum, Case, When, IntegerField, F
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
@@ -197,11 +197,16 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ContestDetail, self).get_context_data(**kwargs)
-        context['contest_problems'] = Problem.objects.filter(contests__contest=self.object) \
+        contest_problems = Problem.objects.filter(contests__contest=self.object) \
             .order_by('contests__order').defer('description') \
             .annotate(has_public_editorial=Sum(Case(When(solution__is_public=True, then=1),
-                                                    default=0, output_field=IntegerField()))) \
+                                                    default=0, output_field=IntegerField())),
+                      is_pretested=F('contests__is_pretested'),
+                      is_partial=F('contests__partial')) \
             .add_i18n_name(self.request.LANGUAGE_CODE)
+        context['contest_problems'] = contest_problems
+        context['pretests_enabled'] = any(p.is_pretested for p in contest_problems)
+        context['partial_scoring_enabled'] = any(p.is_partial for p in contest_problems)
         return context
 
 
