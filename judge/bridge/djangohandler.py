@@ -60,7 +60,8 @@ class DjangoHandler(ZlibPacketHandler):
 
     def on_disconnect(self, data):
         judge_id = data['judge-id']
-        self.server.judges.disconnect(judge_id)
+        force = data['force']
+        self.server.judges.disconnect(judge_id, force=force)
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)

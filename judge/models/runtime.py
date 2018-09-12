@@ -128,9 +128,9 @@ class Judge(models.Model):
     def __unicode__(self):
         return self.name
 
-    def disconnect(self):
+    def disconnect(self, force=False):
         if self.online:
-            disconnect_judge(self)
+            disconnect_judge(self, force=force)
 
     disconnect.alters_data = True
 
