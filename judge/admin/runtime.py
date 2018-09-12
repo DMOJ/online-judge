@@ -90,12 +90,19 @@ class JudgeAdmin(VersionAdmin):
     ordering = ['-online', 'name']
 
     def get_urls(self):
-        return [url(r'^(\d+)/disconnect/$', self.disconnect_view, name='judge_judge_disconnect')] + super(JudgeAdmin, self).get_urls()
+        return [url(r'^(\d+)/disconnect/$', self.disconnect_view, name='judge_judge_disconnect'),
+                url(r'^(\d+)/terminate/$', self.terminate_view, name='judge_judge_terminate')] + super(JudgeAdmin, self).get_urls()
+
+    def disconnect_judge(self, id, force=False):
+        judge = get_object_or_404(Judge, id=id)
+        judge.disconnect(force=force)
+        return HttpResponseRedirect(reverse('admin:judge_judge_changelist'))
 
     def disconnect_view(self, request, id):
-        judge = get_object_or_404(Judge, id=id)
-        judge.disconnect()
-        return HttpResponseRedirect(reverse('admin:judge_judge_changelist'))
+        return self.disconnect_judge(id)
+
+    def terminate_view(self, request, id):
+        return self.disconnect_judge(id, force=True)
 
     def get_readonly_fields(self, request, obj=None):
         if obj is not None and obj.online:
