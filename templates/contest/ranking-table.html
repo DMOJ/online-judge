@@ -51,7 +51,13 @@
             <td class="{% if problem.is_pretested and contest.run_pretests_only %}pretest-{% endif %}{{ problem.state }}">
                 <a href="{{ url('contest_user_submissions', contest.key, user.user.username, problem.code) }}">
                     {{- problem.points|floatformat }}
-                    <div class="solving-time">{{ problem.time|timedelta('noday') }}</div>
+                    <div class="solving-time">
+                        {{ problem.time|timedelta('noday') }}
+                        {% if problem.time_penalty %}
+                          <br/>
+                          (+ {{ problem.time_penalty|timedelta('noday') }})
+                        {% endif %}
+                    </div>
                 </a>
             </td>
         {% else %}
@@ -63,6 +69,12 @@
 {% block point %}
     <td class="user-points">
         {{- user.points|floatformat }}
-        <div class="solving-time">{{ user.cumtime|timestampdelta('noday') }}</div>
+        <div class="solving-time">
+          {{ user.cumtime|timestampdelta('noday') }}
+          {% if user.total_time_penalty %}
+            <br/>
+            (+ {{ user.total_time_penalty|timedelta('noday') }})
+          {% endif %}
+        </div>
     </td>
 {% endblock %}

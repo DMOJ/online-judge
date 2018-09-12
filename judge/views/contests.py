@@ -408,18 +408,21 @@ class CachedContestCalendar(ContestCalendar):
 
 
 class ContestRankingProfile(namedtuple(
-    'ContestRankingProfile', 'id user display_rank long_display_name points cumtime problems rating organization '
+    'ContestRankingProfile', 'id user display_rank long_display_name points cumtime total_time_penalty problems rating organization '
                              'participation participation_rating')):
     @cached_property
     def css_class(self):
         return Profile.get_user_css_class(self.display_rank, self.rating)
 
 
-BestSolutionData = namedtuple('BestSolutionData', 'code points time state is_pretested')
+BestSolutionData = namedtuple('BestSolutionData', 'code points time time_penalty state is_pretested')
 
 
 def make_contest_ranking_profile(participation, problems):
     user = participation.user
+    total_time_penalty = timedelta()
+    for prob in filter(None, problems):
+        total_time_penalty += prob.time_penalty
     return ContestRankingProfile(
         id=user.id,
         user=user.user,
@@ -427,6 +430,7 @@ def make_contest_ranking_profile(participation, problems):
         long_display_name=user.long_display_name,
         points=participation.score,
         cumtime=participation.cumtime,
+        total_time_penalty=total_time_penalty,
         organization=user.organization,
         rating=user.rating,
         participation_rating=participation.rating.rating if hasattr(participation, 'rating') else None,
@@ -446,39 +450,59 @@ def best_solution_state(points, total):
 def base_contest_ranking_list(contest, problems, queryset, for_user=None):
     cursor = connection.cursor()
     cursor.execute('''
-        SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, MAX(sub.date) AS `last`
+        SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, MAX(sub.date) AS `last`,
+             CAST(SUM(CASE WHEN sub.result <> 'AC' AND (sub.result <> 'CE' OR c.time_penalty_is_strict)
+                        THEN c.time_penalty_incorrect_solution
+                        ELSE 0
+                      END) AS INT) AS time_penalty
         FROM judge_contestproblem cp CROSS JOIN judge_contestparticipation part INNER JOIN
              judge_problem prob ON (cp.problem_id = prob.id) LEFT OUTER JOIN
              judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = part.id) LEFT OUTER JOIN
-             judge_submission sub ON (sub.id = cs.submission_id)
-        WHERE cp.contest_id = %s AND part.contest_id = %s {extra}
+             judge_submission sub ON (sub.id = cs.submission_id) LEFT OUTER JOIN
+             judge_contest c ON (cp.contest_id = c.id)
+        WHERE cp.contest_id = %s AND part.contest_id = %s AND sub.status <> 'IE' {extra}
         GROUP BY cp.id, part.id
     '''.format(extra=('AND part.user_id = %s' if for_user is not None else
                                          'AND part.virtual = 0')),
                    (contest.id, contest.id) + ((for_user,) if for_user is not None else ()))
-    data = {(part, prob): (code, best, last and from_database_time(last)) for part, prob, code, best, last in cursor}
+    data = {(part, prob): (code, best, last and from_database_time(last), num_attempts) for part, prob, code, best, last, num_attempts in cursor}
     cursor.close()
 
     problems = map(attrgetter('id', 'points', 'is_pretested'), problems)
 
     def make_ranking_profile(participation):
         part = participation.id
-        return make_contest_ranking_profile(participation, [
-            BestSolutionData(code=data[part, prob][0], points=data[part, prob][1],
-                             time=data[part, prob][2] - participation.start,
-                             state=best_solution_state(data[part, prob][1], points),
-                             is_pretested=is_pretested)
-            if (part, prob) in data and data[part, prob][1] is not None else None
-            for prob, points, is_pretested in problems])
+        contest_progress = []
+        for prob, points, is_pretested in problems:
+            if (part, prob) in data and data[part, prob][1] is not None:
+                best_points = data[part, prob][1]
+                last_attempt_time = data[part, prob][2] - participation.start
+                time_penalty = timedelta(microseconds=data[part, prob][3])
 
-    return map(make_ranking_profile, queryset.select_related('user__user', 'rating')
-               .defer('user__about', 'user__organizations__about'))
+                sol_data =  BestSolutionData(code=data[part, prob][0],
+                                             points=best_points,
+                                             time=last_attempt_time,
+                                             time_penalty=time_penalty,
+                                             state=best_solution_state(best_points, points),
+                                             is_pretested=is_pretested)
+            else:
+                sol_data = None
 
+            contest_progress.append(sol_data)
+
+        return make_contest_ranking_profile(participation, contest_progress)
+
+    rankings = map(make_ranking_profile, queryset.select_related('user__user', 'rating')
+                                                  .defer('user__about', 'user__organizations__about'))
+    rankings.sort(key=profile_ranking_sort_key)
+    return rankings
+
+def profile_ranking_sort_key(profile):
+    return (profile.points, timedelta(seconds=profile.cumtime) + profile.total_time_penalty)
 
 def contest_ranking_list(contest, problems):
     return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
-                                                                     .prefetch_related('user__organizations')
-                                                                     .order_by('-score', 'cumtime'))
+                                                                     .prefetch_related('user__organizations'))
 
 
 def get_participation_ranking_profile(contest, participation, problems):
@@ -504,7 +528,7 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
         return [(_('???'), get_participation_ranking_profile(contest,
                                                              request.user.profile.current_contest, problems))], problems
 
-    users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
+    users = ranker(ranking_list(contest, problems), key=profile_ranking_sort_key)
 
     if show_current_virtual:
         if participation is None and request.user.is_authenticated:
