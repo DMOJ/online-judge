@@ -109,11 +109,11 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
         return 2, 16384, False, False
 
     def disconnect(self, force=False):
-        if not force:
-            self.send({'name': 'disconnect'})
-        else:
+        if force:
             # Yank the power out.
             self.close()
+        else:
+            self.send({'name': 'disconnect'})
 
     def submit(self, id, problem, language, source):
         time, memory, short, pretests_only = self.get_related_submission_data(id)

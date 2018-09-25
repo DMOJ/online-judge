@@ -51,7 +51,6 @@ class JudgeList(object):
         for judge in self.judges:
             if judge.name == judge_id:
                 judge.disconnect(force=force)
-                return
 
     def update_problems(self, judge):
         with self.lock:

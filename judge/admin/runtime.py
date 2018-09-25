@@ -90,8 +90,9 @@ class JudgeAdmin(VersionAdmin):
     ordering = ['-online', 'name']
 
     def get_urls(self):
-        return [url(r'^(\d+)/disconnect/$', self.disconnect_view, name='judge_judge_disconnect'),
-                url(r'^(\d+)/terminate/$', self.terminate_view, name='judge_judge_terminate')] + super(JudgeAdmin, self).get_urls()
+        return ([url(r'^(\d+)/disconnect/$', self.disconnect_view, name='judge_judge_disconnect'),
+                 url(r'^(\d+)/terminate/$', self.terminate_view, name='judge_judge_terminate')] +
+                super(JudgeAdmin, self).get_urls())
 
     def disconnect_judge(self, id, force=False):
         judge = get_object_or_404(Judge, id=id)

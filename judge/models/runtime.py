@@ -129,8 +129,7 @@ class Judge(models.Model):
         return self.name
 
     def disconnect(self, force=False):
-        if self.online:
-            disconnect_judge(self, force=force)
+        disconnect_judge(self, force=force)
 
     disconnect.alters_data = True
 
