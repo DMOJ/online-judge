@@ -163,9 +163,15 @@ class Contest(models.Model):
         return True
 
     def is_accessible_by(self, user):
-        # All users can see 
+        # Contest is public
         if self.is_public:
-            return True
+            # Contest is not private to an organization
+            if not self.is_private:
+                return True
+            # User is in the organizations
+            if user.is_authenticated and \
+                    self.organizations.filter(id__in=user.profile.organizations.all()):
+                return True
 
         # If the user can view all contests
         if user.has_perm('judge.see_private_contest'):
