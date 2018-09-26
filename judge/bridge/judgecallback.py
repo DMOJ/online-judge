@@ -78,7 +78,7 @@ class DjangoJudgeHandler(JudgeHandler):
         return time, memory, short_circuit, is_pretested
 
     def _authenticate(self, id, key):
-        result = Judge.objects.filter(name=id, auth_key=key).exists()
+        result = Judge.objects.filter(name=id, auth_key=key, is_blocked=False).exists()
         if not result:
             json_log.warning(self._make_json_log(action='auth', judge=id, info='judge failed authentication'))
         return result

@@ -1,0 +1,26 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{ block.super }}
+    <script>
+        django.jQuery(function ($) {
+            $('.disconnect-link').appendTo('div#bottombar').show();
+            $('.terminate-link').appendTo('div#bottombar').show();
+        });
+    </script>
+{% endblock extrahead %}
+
+{% block after_field_sets %}{{ block.super }}
+    {% if original %}
+        <a style="display: none" title="{% trans "Disconnect" %}" href="{% url 'admin:judge_judge_disconnect' original.pk %}"
+           class="button disconnect-link">
+            <i class="fa fa-lg fa-power-off"></i>
+            <span class="text">{% trans "Disconnect" %}</span>
+        </a>
+        <a style="display: none" title="{% trans "Terminate" %}" href="{% url 'admin:judge_judge_terminate' original.pk %}"
+           class="button terminate-link">
+            <i class="fa fa-lg fa-plug"></i>
+            <span class="text">{% trans "Terminate" %}</span>
+        </a>
+    {% endif %}
+{% endblock %}

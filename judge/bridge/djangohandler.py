@@ -15,6 +15,7 @@ class DjangoHandler(ZlibPacketHandler):
         self.handlers = {
             'submission-request': self.on_submission,
             'terminate-submission': self.on_termination,
+            'disconnect-judge': self.on_disconnect,
         }
         self._to_kill = True
         #self.server.schedule(5, self._kill_if_no_request)
@@ -56,6 +57,11 @@ class DjangoHandler(ZlibPacketHandler):
             self.server.judges.abort(data['submission-id'])
         except KeyError:
             return {'name': 'bad-request'}
+
+    def on_disconnect(self, data):
+        judge_id = data['judge-id']
+        force = data['force']
+        self.server.judges.disconnect(judge_id, force=force)
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)

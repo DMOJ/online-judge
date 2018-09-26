@@ -90,5 +90,9 @@ def judge_submission(submission, rejudge):
     return success
 
 
+def disconnect_judge(judge, force=False):
+    judge_request({'name': 'disconnect-judge', 'judge-id': judge.name, 'force': force}, reply=False)
+
+
 def abort_submission(submission):
     judge_request({'name': 'terminate-submission', 'submission-id': submission.id}, reply=False)
