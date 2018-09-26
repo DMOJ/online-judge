@@ -74,9 +74,9 @@ class Comment(MPTTModel):
                         pass
                 elif comment.page.startswith('c:'):
                     try:
-                        if Contests.ovjects.get(code=comment.page[2:]).is_accessible_by(user):
+                        if Contest.objects.get(code=comment.page[2:]).is_accessible_by(user):
                             output.append(comment)
-                    except Problem.DoesNotExist:
+                    except Contest.DoesNotExist:
                         pass
                 else:
                     output.append(comment)
