@@ -36,6 +36,7 @@ __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'Co
            'contest_ranking_ajax', 'participation_list', 'own_participation_list', 'get_contest_ranking_list',
            'base_contest_ranking_list']
 
+
 def _find_contest(request, key, private_check=True):
     try:
         contest = Contest.objects.get(key=key)
