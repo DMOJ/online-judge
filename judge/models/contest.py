@@ -162,6 +162,22 @@ class Contest(models.Model):
             return False
         return True
 
+    def is_accessible_by(self, user):
+        # All users can see 
+        if self.is_public:
+            return True
+
+        # If the user can view all contests
+        if user.has_perm('judge.see_private_contest'):
+            return True
+
+        # If the user is a contest organizer
+        if user.has_perm('judge.edit_own_contest') and \
+           self.organizers.filter(id=user.profile.id).exists():
+            return True
+
+        return False
+
     update_user_count.alters_data = True
 
     class Meta:

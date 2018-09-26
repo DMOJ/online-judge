@@ -72,6 +72,12 @@ class Comment(MPTTModel):
                             output.append(comment)
                     except Problem.DoesNotExist:
                         pass
+                elif comment.page.startswith('c:'):
+                    try:
+                        if Contests.ovjects.get(code=comment.page[2:]).is_accessible_by(user):
+                            output.append(comment)
+                    except Problem.DoesNotExist:
+                        pass
                 else:
                     output.append(comment)
                 if len(output) >= n:
