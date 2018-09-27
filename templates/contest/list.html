@@ -54,7 +54,20 @@
     {% spaceless %}
         <a href="{{ url('contest_view', contest.key) }}" class="contest-list-title">
             {{- contest.name -}}
-        </a><span class="contest-tags">
+        </a>
+        <span class="contest-tags">
+            {% if not contest.is_public %}
+                <span style="background-color: #000000; color: #ffffff;" class="contest-tag">
+                    <i class="fa fa-eye-slash"></i> _('Private Contest')
+                </span>
+            {% endif %}
+            {% if contest.is_private %}
+                {% for org in contest.organizations.all() %}
+                    <span style="background-color: #afafaf; color: #000000;" class="contest-tag">
+                        <i class="fa fa-lock"></i> {{ org.name }}
+                    </span>
+                {% endfor %}
+            {% endif %}
             {% for tag in contest.tags.all() %}
                 <span style="background-color: {{ tag.color }}" class="contest-tag">
                     <a href="{{ url('contest_tag', tag.name) }}"
@@ -65,8 +78,6 @@
                 </span>
             {% endfor %}
         </span>
-        {% if not contest.is_public %}<i class="fa fa-eye-slash"></i>{% endif %}
-        {% if contest.is_private %}<i class="fa fa-lock"></i>{% endif %}
     {% endspaceless %}
 {% endmacro %}
 
