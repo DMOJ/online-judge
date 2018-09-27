@@ -13,7 +13,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from judge.fulltext import SearchQuerySet
-from judge.models.profile import Profile
+from judge.models.profile import Profile, Organization
 from judge.models.runtime import Language
 from judge.user_translations import ugettext as user_ugettext
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
@@ -129,6 +129,10 @@ class Problem(models.Model):
 
     objects = TranslatedProblemQuerySet.as_manager()
     tickets = GenericRelation('Ticket')
+
+    organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
+                                          help_text=_('If private, only these organizations may see the problem'))
+    is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
     def __init__(self, *args, **kwargs):
         super(Problem, self).__init__(*args, **kwargs)
