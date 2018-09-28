@@ -1,16 +1,16 @@
 <div class="tabs">
     <ul>
         <li{% if tab == 'pending' %} class="active"{% endif %}>
-            <a href="{{ url('organization_requests_pending', object.key) }}">{{ _('Pending') }}</a>
+            <a href="{{ url('organization_requests_pending', object.id, object.slug) }}">{{ _('Pending') }}</a>
         </li>
         <li{% if tab == 'log' %} class="active"{% endif %}>
-            <a href="{{ url('organization_requests_log', object.key) }}">{{ _('Log') }}</a>
+            <a href="{{ url('organization_requests_log', object.id, object.slug) }}">{{ _('Log') }}</a>
         </li>
         <li{% if tab == 'approved' %} class="active"{% endif %}>
-            <a href="{{ url('organization_requests_approved', object.key) }}">{{ _('Approved') }}</a>
+            <a href="{{ url('organization_requests_approved', object.id, object.slug) }}">{{ _('Approved') }}</a>
         </li>
         <li{% if tab == 'rejected' %} class="active"{% endif %}>
-            <a href="{{ url('organization_requests_rejected', object.key) }}">{{ _('Rejected') }}</a>
+            <a href="{{ url('organization_requests_rejected', object.id, object.slug) }}">{{ _('Rejected') }}</a>
         </li>
     </ul>
 </div>

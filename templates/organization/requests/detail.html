@@ -17,7 +17,7 @@
             <th>{{ _('Organization:') }}</th>
             <td>
                 {% with org=object.organization %}
-                    <a href="{{ url('organization_home', org.key) }}">{{ org.name }}</a>
+                    <a href="{{ org.get_absolute_url() }}">{{ org.name }}</a>
                 {% endwith %}
             </td>
         </tr>

@@ -54,7 +54,10 @@ class Organization(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('organization_home', args=(self.key,))
+        return reverse('organization_home', args=(self.id, self.slug))
+
+    def get_users_url(self):
+        return reverse('organization_users', args=(self.id, self.slug))
 
     class Meta:
         ordering = ['key']

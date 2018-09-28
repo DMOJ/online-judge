@@ -4,17 +4,17 @@
     {% if request.user.is_authenticated %}
         {% with profile=request.user.profile %}
             {% if profile in organization %}
-                <form method="post" action="{{ url('leave_organization', organization.key) }}">
+                <form method="post" action="{{ url('leave_organization', organization.id, organization.slug) }}">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full" value="{{ _('Leave organization') }}">
                 </form>
             {% elif organization.is_open %}
-                <form method="post" action="{{ url('join_organization', organization.key) }}">
+                <form method="post" action="{{ url('join_organization', organization.id, organization.slug) }}">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full" value="{{ _('Join organization') }}">
                 </form>
             {% else %}
-                <a href="{{ url('request_organization', organization.key) }}"
+                <a href="{{ url('request_organization', organization.id, organization.slug) }}"
                    class="unselectable button full">{{ _('Request membership') }}</a>
             {% endif %}
         {% endwith %}
@@ -22,11 +22,11 @@
     {% endif %}
 
     {% if can_edit %}
-        <div><a href="{{ url('edit_organization', organization.key) }}">{{ _('Edit organization') }}</a></div>
+        <div><a href="{{ url('edit_organization', organization.id, organization.slug) }}">{{ _('Edit organization') }}</a></div>
 
         {% if not organization.is_open %}
             <div>
-                <a href="{{ url('organization_requests_pending', organization.key) }}">{{ _('View requests') }}</a>
+                <a href="{{ url('organization_requests_pending', organization.id, organization.slug) }}">{{ _('View requests') }}</a>
             </div>
         {% endif %}
     {% endif %}
@@ -38,7 +38,7 @@
     {% endif %}
 
     <div>
-        <a href="{{ url('organization_users', organization.key) }}">{{ _('View members') }}</a>
+        <a href="{{ organization.get_users_url() }}">{{ _('View members') }}</a>
     </div>
 {% endblock %}
 

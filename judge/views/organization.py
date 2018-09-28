@@ -31,8 +31,6 @@ __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'Organiz
 class OrganizationMixin(object):
     context_object_name = 'organization'
     model = Organization
-    slug_field = 'key'
-    slug_url_kwarg = 'key'
 
     def dispatch(self, request, *args, **kwargs):
         try:
@@ -91,7 +89,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
         ]))
         context['partial'] = True
         context['is_admin'] = self.can_edit_organization()
-        context['kick_url'] = reverse('organization_user_kick', args=[self.object.key])
+        context['kick_url'] = reverse('organization_user_kick', args=[self.object.id, self.object.slug])
         return context
 
 
@@ -101,7 +99,7 @@ class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, Single
         response = self.handle(request, org, request.user.profile)
         if response is not None:
             return response
-        return HttpResponseRedirect(reverse('organization_home', args=(org.key,)))
+        return HttpResponseRedirect(org.get_absolute_url())
 
     def handle(self, request, org, profile):
         raise NotImplementedError()
@@ -155,13 +153,16 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
         request.reason = form.cleaned_data['reason']
         request.state = 'P'
         request.save()
-        return HttpResponseRedirect(reverse('request_organization_detail', args=(request.organization.key, request.id)))
+        return HttpResponseRedirect(reverse('request_organization_detail', args=(
+            request.organization.id, request.organization.slug, request.id
+        )))
 
 
 class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
     model = OrganizationRequest
     template_name = 'organization/requests/detail.html'
     title = ugettext_lazy('Join request detail')
+    pk_url_kwarg = 'rpk'
 
     def get_object(self, queryset=None):
         object = super(OrganizationRequestDetail, self).get_object(queryset)
@@ -310,4 +311,4 @@ class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, View):
                                    organization.name, status=400)
 
         organization.members.remove(user)
-        return HttpResponseRedirect(reverse('organization_users', args=[organization.key]))
+        return HttpResponseRedirect(organization.get_users_url())
