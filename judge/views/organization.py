@@ -53,6 +53,15 @@ class OrganizationMixin(object):
         return org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id
 
 
+class OrganizationDetailView(OrganizationMixin, DetailView):
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.slug != kwargs['slug']:
+            return HttpResponsePermanentRedirect(request.get_full_path().replace(kwargs['slug'], self.object.slug))
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+
 class OrganizationList(TitleMixin, ListView):
     model = Organization
     context_object_name = 'organizations'
@@ -63,7 +72,7 @@ class OrganizationList(TitleMixin, ListView):
         return super(OrganizationList, self).get_queryset().annotate(member_count=Count('member'))
 
 
-class OrganizationHome(OrganizationMixin, DetailView):
+class OrganizationHome(OrganizationDetailView):
     template_name = 'organization/home.html'
 
     def get_context_data(self, **kwargs):
@@ -73,7 +82,7 @@ class OrganizationHome(OrganizationMixin, DetailView):
         return context
 
 
-class OrganizationUsers(OrganizationMixin, DetailView):
+class OrganizationUsers(OrganizationDetailView):
     template_name = 'organization/users.html'
 
     def get_context_data(self, **kwargs):
@@ -247,11 +256,6 @@ class OrganizationRequestLog(OrganizationRequestBaseView):
     states = ('A', 'R')
     tab = 'log'
     template_name = 'organization/requests/log.html'
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationRequestLog, self).get_context_data(**kwargs)
