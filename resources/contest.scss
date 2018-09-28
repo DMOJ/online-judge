@@ -182,12 +182,19 @@
     font-weight: 600;
 }
 
-a.contest-join-pseudotab {
+form.contest-join-pseudotab {
     display: inline;
     width: 9em;
     line-height: 1.7em;
     margin-left: 0.5em;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-    font-weight: 600;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+    input {
+        display: inline;
+        border: none;
+        padding: 0;
+        background: none;
+        font-weight: 600;
+    }
 }

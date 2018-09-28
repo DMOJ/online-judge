@@ -139,13 +139,17 @@
                         {% if not request.in_contest %}
                             <td>
                                 {% if request.user.profile in contest.organizers.all() %}
-                                    <a href="{{ url('contest_join', contest.key) }}"
-                                       class="unselectable button full participate-button">{{ _('Spectate') }}</a>
+                                    <form action="{{ url('contest_join', contest.key) }}" method="post">
+                                        {% csrf_token %}
+                                        <input type="submit" class="unselectable button full participate-button"
+                                               value="{{ _('Spectate') }}">
+                                    </form>
                                 {% else %}
-                                    <a href="{{ url('contest_join', contest.key) }}"
-                                       class="unselectable button full participate-button join-warning">
-                                        {{- _('Join') -}}
-                                    </a>
+                                    <form action="{{ url('contest_join', contest.key) }}" method="post">
+                                        {% csrf_token %}
+                                        <input type="submit" class="unselectable button full participate-button join-warning"
+                                               value="{{ _('Join') }}">
+                                    </form>
                                 {% endif %}
                             </td>
                         {% endif %}

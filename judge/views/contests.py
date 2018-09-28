@@ -218,14 +218,17 @@ class ContestAccessCodeForm(forms.Form):
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        try:
-            return self.join_contest(request)
-        except ContestAccessDenied:
-            return self.ask_for_access_code()
+        return self.ask_for_access_code()
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return self.ask_for_access_code(ContestAccessCodeForm(request.POST))
+        try:
+            return self.join_contest(request)
+        except ContestAccessDenied:
+            if request.POST.get('access_code'):
+                return self.ask_for_access_code(ContestAccessCodeForm(request.POST))
+            else:
+                return HttpResponseRedirect(request.path)
 
     def join_contest(self, request, access_code=None):
         contest = self.object
@@ -298,7 +301,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
 
 
 class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         contest = self.get_object()
 
         profile = request.user.profile
