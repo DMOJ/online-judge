@@ -4,11 +4,15 @@
     {% if request.user.is_authenticated %}
         {% with profile=request.user.profile %}
             {% if profile in organization %}
-                <a href="{{ url('leave_organization', organization.key) }}"
-                   class="unselectable button full">{{ _('Leave organization') }}</a>
+                <form method="post" action="{{ url('leave_organization', organization.key) }}">
+                    {% csrf_token %}
+                    <input type="submit" class="unselectable button full" value="{{ _('Leave organization') }}">
+                </form>
             {% elif organization.is_open %}
-                <a href="{{ url('join_organization', organization.key) }}"
-                   class="unselectable button full">{{ _('Join organization') }}</a>
+                <form method="post" action="{{ url('join_organization', organization.key) }}">
+                    {% csrf_token %}
+                    <input type="submit" class="unselectable button full" value="{{ _('Join organization') }}">
+                </form>
             {% else %}
                 <a href="{{ url('request_organization', organization.key) }}"
                    class="unselectable button full">{{ _('Request membership') }}</a>

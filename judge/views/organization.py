@@ -96,7 +96,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
 
 
 class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         org = self.get_object()
         response = self.handle(request, org, request.user.profile)
         if response is not None:
