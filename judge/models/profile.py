@@ -18,9 +18,11 @@ __all__ = ['Organization', 'Profile', 'OrganizationRequest']
 
 
 class Organization(models.Model):
-    name = models.CharField(max_length=50, verbose_name=_('organization title'))
+    name = models.CharField(max_length=128, verbose_name=_('organization title'))
+    slug = models.SlugField(max_length=128, verbose_name=_('organization slug'),
+                            help_text=_('Organization name shown in URL'))
     key = models.CharField(max_length=6, verbose_name=_('identifier'), unique=True,
-                           help_text=_('Organization name shows in URL'),
+                           help_text=_('Organization name shows in URL'), null=True,
                            validators=[RegexValidator('^[A-Za-z0-9]+$',
                                                       'Identifier must contain letters and numbers only')])
     short_name = models.CharField(max_length=20, verbose_name=_('short name'),

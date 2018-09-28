@@ -21,8 +21,8 @@ class OrganizationForm(ModelForm):
 
 class OrganizationAdmin(VersionAdmin):
     readonly_fields = ('creation_date',)
-    fields = ('name', 'key', 'short_name', 'is_open', 'about', 'slots', 'registrant', 'creation_date', 'admins')
-    list_display = ('name', 'key', 'short_name', 'is_open', 'slots', 'registrant', 'show_public')
+    fields = ('name', 'slug', 'short_name', 'is_open', 'about', 'slots', 'registrant', 'creation_date', 'admins')
+    list_display = ('name', 'short_name', 'is_open', 'slots', 'registrant', 'show_public')
     actions_on_top = True
     actions_on_bottom = True
     form = OrganizationForm
