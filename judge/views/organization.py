@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Count, Max
 from django.forms import Form, modelformset_factory
-from django.http import HttpResponseRedirect, Http404
+from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _, ugettext_lazy, ungettext
 from django.views.generic import DetailView, ListView, View, UpdateView, FormView
@@ -312,3 +312,11 @@ class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, SingleObjectMixi
 
         organization.members.remove(user)
         return HttpResponseRedirect(organization.get_users_url())
+
+
+# Once upon a time, DMOJ used organization pages under `/organization/<6 character key>`.
+# Now, we use `/organization/<id>-<slug>`. This view is intended to redirect old URLs to new ones.
+# See <https://github.com/DMOJ/site/issues/704> for rationale and details.
+def fallback(request, key, rest):
+    organization = get_object_or_404(Organization, key=key)
+    return HttpResponsePermanentRedirect(organization.get_absolute_url() + (rest or ''))
