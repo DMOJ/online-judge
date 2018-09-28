@@ -292,9 +292,9 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
                                    _('You are not allowed to edit this organization.'), status=403)
 
 
-class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, View):
+class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
-        organization = get_object_or_404(Organization, key=kwargs['key'])
+        organization = self.get_object()
         if not self.can_edit_organization(organization):
             return generic_message(request, _("Can't edit organization"),
                                    _('You are not allowed to kick people from this organization.'), status=403)
