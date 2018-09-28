@@ -27,7 +27,7 @@
                 {% for form in formset %}
                     <tr id="request-{{ form.instance.id }}">
                         <td>{{ form.id }}{{ link_user(form.instance.user) }}</td>
-                        <td><a href="{{ url('request_organization_detail', object.key, form.instance.id) }}">
+                        <td><a href="{{ url('request_organization_detail', object.id, object.slug, form.instance.id) }}">
                             {{ form.instance.time|date(_("N j, Y, H:i")) }}
                         </a></td>
                         <td>{{ form.state }}</td>

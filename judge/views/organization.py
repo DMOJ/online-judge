@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Count, Max
 from django.forms import Form, modelformset_factory
-from django.http import HttpResponseRedirect, Http404
+from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _, ugettext_lazy, ungettext
 from django.views.generic import DetailView, ListView, View, UpdateView, FormView
@@ -31,8 +31,6 @@ __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'Organiz
 class OrganizationMixin(object):
     context_object_name = 'organization'
     model = Organization
-    slug_field = 'key'
-    slug_url_kwarg = 'key'
 
     def dispatch(self, request, *args, **kwargs):
         try:
@@ -55,6 +53,15 @@ class OrganizationMixin(object):
         return org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id
 
 
+class OrganizationDetailView(OrganizationMixin, DetailView):
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.slug != kwargs['slug']:
+            return HttpResponsePermanentRedirect(request.get_full_path().replace(kwargs['slug'], self.object.slug))
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+
 class OrganizationList(TitleMixin, ListView):
     model = Organization
     context_object_name = 'organizations'
@@ -65,7 +72,7 @@ class OrganizationList(TitleMixin, ListView):
         return super(OrganizationList, self).get_queryset().annotate(member_count=Count('member'))
 
 
-class OrganizationHome(OrganizationMixin, DetailView):
+class OrganizationHome(OrganizationDetailView):
     template_name = 'organization/home.html'
 
     def get_context_data(self, **kwargs):
@@ -75,7 +82,7 @@ class OrganizationHome(OrganizationMixin, DetailView):
         return context
 
 
-class OrganizationUsers(OrganizationMixin, DetailView):
+class OrganizationUsers(OrganizationDetailView):
     template_name = 'organization/users.html'
 
     def get_context_data(self, **kwargs):
@@ -91,7 +98,7 @@ class OrganizationUsers(OrganizationMixin, DetailView):
         ]))
         context['partial'] = True
         context['is_admin'] = self.can_edit_organization()
-        context['kick_url'] = reverse('organization_user_kick', args=[self.object.key])
+        context['kick_url'] = reverse('organization_user_kick', args=[self.object.id, self.object.slug])
         return context
 
 
@@ -101,7 +108,7 @@ class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, Single
         response = self.handle(request, org, request.user.profile)
         if response is not None:
             return response
-        return HttpResponseRedirect(reverse('organization_home', args=(org.key,)))
+        return HttpResponseRedirect(org.get_absolute_url())
 
     def handle(self, request, org, profile):
         raise NotImplementedError()
@@ -155,13 +162,16 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
         request.reason = form.cleaned_data['reason']
         request.state = 'P'
         request.save()
-        return HttpResponseRedirect(reverse('request_organization_detail', args=(request.organization.key, request.id)))
+        return HttpResponseRedirect(reverse('request_organization_detail', args=(
+            request.organization.id, request.organization.slug, request.id
+        )))
 
 
 class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
     model = OrganizationRequest
     template_name = 'organization/requests/detail.html'
     title = ugettext_lazy('Join request detail')
+    pk_url_kwarg = 'rpk'
 
     def get_object(self, queryset=None):
         object = super(OrganizationRequestDetail, self).get_object(queryset)
@@ -247,11 +257,6 @@ class OrganizationRequestLog(OrganizationRequestBaseView):
     tab = 'log'
     template_name = 'organization/requests/log.html'
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
-
     def get_context_data(self, **kwargs):
         context = super(OrganizationRequestLog, self).get_context_data(**kwargs)
         context['requests'] = self.object.requests.filter(state__in=self.states)
@@ -291,9 +296,9 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
                                    _('You are not allowed to edit this organization.'), status=403)
 
 
-class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, View):
+class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
-        organization = get_object_or_404(Organization, key=kwargs['key'])
+        organization = self.get_object()
         if not self.can_edit_organization(organization):
             return generic_message(request, _("Can't edit organization"),
                                    _('You are not allowed to kick people from this organization.'), status=403)
@@ -310,4 +315,12 @@ class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, View):
                                    organization.name, status=400)
 
         organization.members.remove(user)
-        return HttpResponseRedirect(reverse('organization_users', args=[organization.key]))
+        return HttpResponseRedirect(organization.get_users_url())
+
+
+# Once upon a time, DMOJ used organization pages under `/organization/<6 character key>`.
+# Now, we use `/organization/<id>-<slug>`. This view is intended to redirect old URLs to new ones.
+# See <https://github.com/DMOJ/site/issues/704> for rationale and details.
+def fallback(request, key, rest):
+    organization = get_object_or_404(Organization, key=key)
+    return HttpResponsePermanentRedirect(organization.get_absolute_url() + (rest or ''))

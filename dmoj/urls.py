@@ -195,7 +195,8 @@ urlpatterns = [
     ])),
 
     url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
-    url(r'^organization/(?P<key>\w+)', include([
+    url(r'^organization/(?P<key>\w+)(?P<rest>/.*)?$', organization.fallback),
+    url(r'^organization/(?P<pk>\d+)-(?P<slug>[\w-]+)', include([
         url(r'^$', organization.OrganizationHome.as_view(), name='organization_home'),
         url(r'^/users$', organization.OrganizationUsers.as_view(), name='organization_users'),
         url(r'^/join$', organization.JoinOrganization.as_view(), name='join_organization'),
@@ -204,7 +205,7 @@ urlpatterns = [
         url(r'^/kick$', organization.KickUserWidgetView.as_view(), name='organization_user_kick'),
 
         url(r'^/request$', organization.RequestJoinOrganization.as_view(), name='request_organization'),
-        url(r'^/request/(?P<pk>\d+)$', organization.OrganizationRequestDetail.as_view(),
+        url(r'^/request/(?P<rpk>\d+)$', organization.OrganizationRequestDetail.as_view(),
             name='request_organization_detail'),
         url(r'^/requests/', include([
             url(r'^pending$', organization.OrganizationRequestView.as_view(), name='organization_requests_pending'),
@@ -215,7 +216,7 @@ urlpatterns = [
                 name='organization_requests_rejected'),
         ])),
 
-        url(r'^/$', lambda _, key: HttpResponsePermanentRedirect(reverse('organization_home', args=[key]))),
+        url(r'^/$', lambda _, pk, slug: HttpResponsePermanentRedirect(reverse('organization_home', args=[pk, slug]))),
     ])),
 
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),

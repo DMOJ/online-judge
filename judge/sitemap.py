@@ -46,7 +46,7 @@ class OrganizationSitemap(Sitemap):
         return Organization.objects.values_list('key')
 
     def location(self, obj):
-        return reverse('organization_home', args=obj)
+        return obj.get_absolute_url()
 
 
 class BlogPostSitemap(Sitemap):
