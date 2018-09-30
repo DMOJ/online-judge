@@ -1,11 +1,7 @@
 import hmac
 from hashlib import sha1
 
-from django import template
 from django.conf import settings
-
-register = template.Library()
-
 
 class CamoClient(object):
     """Based on https://github.com/sionide21/camo-client"""
