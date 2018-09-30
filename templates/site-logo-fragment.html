@@ -1,2 +1,8 @@
-<img src="{{ static('icons/logo.svg') }}" alt="{{ SITE_NAME }}" width="160" height="44"
-     onerror="this.src=&quot;{{ static('icons/logo.png') }}&quot;; this.onerror=null" style="border: none">
+{% if request.in_contest and request.participation.contest.logo_override_image %}
+    <img src="{{ request.participation.contest.logo_override_image|camo }}" alt="{{ SITE_NAME }}" height="44" style="border: none">
+{% elif contest is defined and contest.logo_override_image %}
+    <img src="{{ contest.logo_override_image|camo }}" alt="{{ SITE_NAME }}" height="44" style="border: none">
+{% else %}
+    <img src="{{ static('icons/logo.svg') }}" alt="{{ SITE_NAME }}" width="160" height="44"
+         onerror="this.src=&quot;{{ static('icons/logo.png') }}&quot;; this.onerror=null" style="border: none">
+{% endif %}
