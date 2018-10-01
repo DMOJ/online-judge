@@ -10,7 +10,7 @@ from lxml.etree import XMLSyntaxError, ParserError
 from jinja2 import Markup
 
 from judge.highlight_code import highlight_code
-from judge.jinja2.markdown.camo import client as camo_client
+from judge.utils.camo import client as camo_client
 from judge.jinja2.markdown.lazy_load import lazy_load as lazy_load_processor
 from judge.jinja2.markdown.math import MathRenderer, MathInlineLexer, MathInlineGrammar
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer

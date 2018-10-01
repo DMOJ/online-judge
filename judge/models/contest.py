@@ -84,6 +84,8 @@ class Contest(models.Model):
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may see the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
+    logo_override_image = models.CharField(verbose_name=_('Logo override image'), default='', max_length=150, blank=True,
+                                           help_text=_('This image will replace the default site logo for users inside the contest.'))
     tags = models.ManyToManyField(ContestTag, verbose_name=_('contest tags'), blank=True, related_name='contests')
     user_count = models.IntegerField(verbose_name=_('the amount of live participants'), default=0)
     summary = models.TextField(blank=True, verbose_name=_('contest summary'),
