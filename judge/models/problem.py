@@ -13,7 +13,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from judge.fulltext import SearchQuerySet
-from judge.models.profile import Profile
+from judge.models.profile import Profile, Organization
 from judge.models.runtime import Language
 from judge.user_translations import ugettext as user_ugettext
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
@@ -130,6 +130,10 @@ class Problem(models.Model):
     objects = TranslatedProblemQuerySet.as_manager()
     tickets = GenericRelation('Ticket')
 
+    organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
+                                          help_text=_('If private, only these organizations may see the problem'))
+    is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
+
     def __init__(self, *args, **kwargs):
         super(Problem, self).__init__(*args, **kwargs)
         self._translated_name_cache = {}
@@ -154,26 +158,37 @@ class Problem(models.Model):
         return self.is_editor(user.profile)
 
     def is_accessible_by(self, user):
-        # All users can see public problems
+        # Problem is public.
         if self.is_public:
-            return True
+            # Contest is not private to an organization.
+            if not self.is_organization_private:
+                return True
 
-        # If the user can view all problems
+            # If the user can see all organization private problems.
+            if user.has_perm('judge.see_organization_problems'):
+                return True
+
+            # If the user is in the organization.
+            if user.is_authenticated and \
+               self.organizations.filter(id__in=user.profile.organizations.all()):
+                return True
+
+        # If the user can view all problems.
         if user.has_perm('judge.see_private_problem'):
-            return True
-
-        # If the user authored the problem or is a curator
-        if user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile):
             return True
 
         if not user.is_authenticated:
             return False
 
-        # If user is a tester
+        # If the user authored the problem or is a curator.
+        if user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile):
+            return True
+
+        # If user is a tester.
         if self.testers.filter(id=user.profile.id).exists():
             return True
 
-        # If user is currently in a contest containing that problem
+        # If user is currently in a contest containing that problem.
         current = user.profile.current_contest_id
         if current is None:
             return False
@@ -299,6 +314,7 @@ class Problem(models.Model):
             ('clone_problem', 'Clone problem'),
             ('change_public_visibility', 'Change is_public field'),
             ('change_manually_managed', 'Change is_manually_managed field'),
+            ('see_organization_problem', 'See organization-private problems'),
         )
         verbose_name = _('problem')
         verbose_name_plural = _('problems')
