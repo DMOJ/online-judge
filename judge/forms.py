@@ -29,9 +29,8 @@ class ProfileForm(ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['name', 'about', 'organizations', 'timezone', 'language', 'ace_theme', 'user_script']
+        fields = ['about', 'organizations', 'timezone', 'language', 'ace_theme', 'user_script']
         widgets = {
-            'name': TextInput(attrs={'style': 'width:100%;box-sizing:border-box'}),
             'user_script': AceWidget(theme='github'),
             'timezone': Select2Widget(attrs={'style': 'width:200px'}),
             'language': Select2Widget(attrs={'style': 'width:200px'}),
@@ -65,9 +64,6 @@ class ProfileForm(ModelForm):
             self.fields['organizations'].queryset = Organization.objects.filter(
                 Q(is_open=True) | Q(id__in=user.profile.organizations.all())
             )
-
-    def clean_name(self):
-        return fix_unicode(self.cleaned_data['name'] or '')
 
 
 class ProblemSubmitForm(ModelForm):
