@@ -131,7 +131,7 @@ class Problem(models.Model):
     tickets = GenericRelation('Ticket')
 
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
-                                          help_text=_('If private, only these organizations may see the problem'))
+                                          help_text=_('If private, only these organizations may see the problem.'))
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
     def __init__(self, *args, **kwargs):
