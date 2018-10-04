@@ -89,7 +89,7 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
             inactive = []
             for contest in present:
                 participation = participations.filter(contest_id=contest.id).first()
-                if participation and not participation.ended:
+                if participation is not None and not participation.ended:
                     active.append(participation)
                 else:
                     inactive.append(contest)
@@ -339,7 +339,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
             self.year = int(kwargs['year'])
             self.month = int(kwargs['month'])
         except (KeyError, ValueError):
-            raise ImproperlyConfigured(_('ContestCalender requires integer year and month'))
+            raise ImproperlyConfigured(_('ContestCalendar requires integer year and month'))
         self.today = timezone.now().date()
         return self.render()
 
