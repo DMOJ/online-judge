@@ -7,11 +7,11 @@ $(function () {
         var preview_url = $preview.attr('data-preview-url');
         var $textarea = $('#' + $preview.attr('data-textarea-id'));
 
-        // submit the form if ctrl + enter is pressed in pagedown textarea
+        // Submit the form if ctrl + enter is pressed in pagedown textarea.
         $textarea.keydown(function (ev) {
-            // Ctrl-Enter pressed (metaKey used to support command key on mac)
+            // Ctrl-Enter pressed (metaKey used to support command key on mac).
             if ((ev.metaKey || ev.ctrlKey) && ev.which == 13) {
-                $form.submit()
+                $form.submit();
             }
         })
 
