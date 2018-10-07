@@ -9,8 +9,8 @@ $(function () {
 
         // submit the form if ctrl + enter is pressed in pagedown textarea
         $textarea.keydown(function (ev) {
-            // Ctrl-Enter pressed
-            if (ev.ctrlKey && ev.keyCode == 13) {
+            // Ctrl-Enter pressed (metaKey used to support command key on mac)
+            if ((ev.metaKey || ev.ctrlKey) && ev.which == 13) {
                 $form.submit()
             }
         })
