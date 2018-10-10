@@ -1,6 +1,5 @@
 $(function () {
     window.register_dmmd_preview = function ($preview) {
-
         var $form = $preview.parents('form').first();
         var $update = $preview.find('.dmmd-preview-update');
         var $content = $preview.find('.dmmd-preview-content');
