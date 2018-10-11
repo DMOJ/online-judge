@@ -15,6 +15,7 @@ from django.db import connection, IntegrityError
 from django.db.models import Q, Min, Max, Count, Sum, Case, When, IntegerField
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.template.defaultfilters import date as date_filter
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
@@ -320,7 +321,6 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
     firstweekday = SUNDAY
     weekday_classes = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     template_name = 'contest/calendar.html'
-    title = ugettext_lazy('Contests')
 
     def get(self, request, *args, **kwargs):
         try:
@@ -363,9 +363,11 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         context = super(ContestCalendar, self).get_context_data(**kwargs)
 
         try:
-            context['month'] = date(self.year, self.month, 1)
+            month = date(self.year, self.month, 1)
         except ValueError:
             raise Http404()
+        else:
+            context['title'] = _('Contests in %(month)s') % {'month': date_filter(month, _("F Y"))}
 
         dates = Contest.objects.aggregate(min=Min('start_time'), max=Max('end_time'))
         min_month = (self.today.year, self.today.month)
@@ -374,7 +376,6 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         max_month = (self.today.year, self.today.month)
         if dates['max'] is not None:
             max_month = max((dates['max'].year, dates['max'].month), (self.today.year, self.today.month))
-
 
         month = (self.year, self.month)
         if month < min_month or month > max_month:

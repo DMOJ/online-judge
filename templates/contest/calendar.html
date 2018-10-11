@@ -3,7 +3,6 @@
 
 {% block title_row %}
     {% set tab = 'calendar' %}
-    {% set title = _('Contests in %(month)s', month=month|date(_("F Y"))) %}
     {% include "contest/contest-list-tabs.html" %}
 {% endblock %}
 
