@@ -12,7 +12,7 @@ $(function () {
             if ((ev.metaKey || ev.ctrlKey) && ev.which == 13) {
                 $form.submit();
             }
-        })
+        });
 
         $update.click(function () {
             var text = $textarea.val();
