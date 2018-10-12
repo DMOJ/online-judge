@@ -193,6 +193,21 @@ a.edit-profile {
     word-wrap: break-word;
 }
 
+@media not all and (min-width: 600px) {
+    .user-info-page {
+        display: block;
+    }
+
+    .user-sidebar {
+        width: 150px;
+        margin: 0 auto;
+    }
+
+    .user-content {
+        overflow: visible;
+    }
+}
+
 .pp-table {
     .pp {
         font-weight: 600;
