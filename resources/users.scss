@@ -176,9 +176,21 @@ a.edit-profile {
     margin-right: 5px;
 }
 
-table.user-info-page > tbody > tr > td {
-    margin: 0;
-    vertical-align: top;
+.user-info-page {
+    display: flex;
+    max-width: 100%;
+    min-height: 0;
+}
+
+.user-sidebar {
+    flex: 0 0 150px;
+    padding-left: 1em;
+}
+
+.user-content {
+    flex: 1 1;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 .pp-table {
