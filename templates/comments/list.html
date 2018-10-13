@@ -60,7 +60,7 @@
                                     <a href="#comment-{{ node.id }}" title="{{ _('Link') }}" class="comment-link">
                                     <i class="fa fa-link fa-fw"></i>
                                 </a>
-                                    {% if logged_in %}
+                                    {% if logged_in and not comment_lock %}
                                         {% set can_edit = node.author.id == profile.id and not profile.mute %}
                                         {% if can_edit %}
                                             <a data-featherlight="{{ url('comment_edit_ajax', node.id) }}"
@@ -107,11 +107,11 @@
                 {% endwith %}
             {% endif %}{% endfor %}
         </ul>
-    {% else %}
+    {% elif not comment_lock %}
         <p class="no-comments-message">{{ _('There are no comments at the moment.') }}</p>
     {% endif %}
 
-    {% if request.user.is_authenticated and comment_form %}
+    {% if request.user.is_authenticated and comment_form and not comment_lock %}
         <div class="form-area comment-submit">
             {% block comment_submit_title %}
                 <h3>{{ _('New comment') }}</h3>
@@ -139,6 +139,12 @@
                     <input style="float:right" type="submit" value="{{ _('Post!') }}" class="button">
                 </form>
             {% endif %}
+        </div>
+    {% endif %}
+
+    {% if comment_lock %}
+        <div class="alert alert-warning comment-lock">
+            {{ _('Comments are disabled on this page.') }}
         </div>
     {% endif %}
 </div>
