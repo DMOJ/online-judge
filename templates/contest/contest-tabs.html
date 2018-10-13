@@ -70,7 +70,10 @@
             {% endif %}
         {% endif %}
     {% elif contest.can_join %}
-        <a href="{{ url('auth_login') }}?next={{ LOGIN_RETURN_PATH|urlencode }}"
-           class="contest-join-pseudotab unselectable button full">{{ _('Login to participate') }}</a>
+        <form action="{{ url('auth_login') }}" method="get"
+              class="contest-join-pseudotab unselectable button full">
+            <input type="hidden" name="next" value="{{ LOGIN_RETURN_PATH|urlencode }}">
+            <input type="submit" value="{{ _('Login to participate') }}">
+        </form>
     {% endif %}
 {% endblock %}
