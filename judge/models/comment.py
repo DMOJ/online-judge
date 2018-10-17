@@ -17,7 +17,7 @@ from judge.models.interface import BlogPost
 from judge.models.problem import Problem
 from judge.models.profile import Profile
 
-__all__ = ['Comment', 'CommentVote']
+__all__ = ['Comment', 'CommentLock', 'CommentVote']
 
 
 class VersionRelation(GenericRelation):
@@ -151,3 +151,16 @@ class CommentVote(models.Model):
         unique_together = ['voter', 'comment']
         verbose_name = _('comment vote')
         verbose_name_plural = _('comment votes')
+
+class CommentLock(models.Model):
+    page = models.CharField(max_length=30, verbose_name=_('associated Page'), db_index=True,
+                            validators=[RegexValidator('^[pc]:[a-z0-9]+$|^b:\d+$|^s:',
+                                                       _('Page code must be ^[pc]:[a-z0-9]+$|^b:\d+$'))])
+
+    class Meta:
+        permissions = (
+            ('override_comment_lock', _('Override comment lock')),
+        )
+
+    def __str__(self):
+        return str(self.page)

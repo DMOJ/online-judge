@@ -1,7 +1,7 @@
 from reversion import revisions
 
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES, EFFECTIVE_MATH_ENGINES
-from judge.models.comment import Comment, CommentVote
+from judge.models.comment import Comment, CommentLock, CommentVote
 from judge.models.contest import Contest, ContestTag, ContestParticipation, ContestProblem, ContestSubmission, Rating
 from judge.models.interface import MiscConfig, validate_regex, NavigationBar, BlogPost
 from judge.models.message import PrivateMessage, PrivateMessageThread
