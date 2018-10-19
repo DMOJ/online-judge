@@ -126,7 +126,7 @@
             var $comments = $('.comments');
             $comments.find('a.hide-comment').click(function (e) {
                 e.preventDefault();
-                if (!e.ctrlKey && !confirm('Are you sure you want to hide this comment?'))
+                if (!(e.ctrlKey || e.metaKey || confirm('Are you sure you want to hide this comment?')))
                     return;
 
                 var id = $(this).attr('data-id');
