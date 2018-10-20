@@ -75,3 +75,18 @@ class TOTPDisableView(TOTPView):
         self.profile.totp_key = None
         self.profile.save()
         return self.next_page()
+
+
+class TOTPLoginView(TOTPView):
+    title = _('Perform Two Factor Authetication')
+    template_name = 'registration/totp_auth.html'
+
+    def check_skip(self):
+        return not self.profile.is_totp_enabled or self.request.session.get('2fa_passed', False)
+
+    def next_page(self):
+        return HttpResponseRedirect(self.request.GET.get('next', '') or reverse('user_page'))
+
+    def form_valid(self, form):
+        self.request.session['2fa_passed'] = True
+        return self.next_page()
