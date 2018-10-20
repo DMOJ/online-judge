@@ -61,3 +61,17 @@ class TOTPEnableView(TOTPView):
         # Make sure users don't get prompted to enter code right after enabling:
         self.request.session['2fa_passed'] = True
         return self.next_page()
+
+
+class TOTPDisableView(TOTPView):
+    title = _('Disable Two Factor Authentication')
+    template_name = 'registration/totp_disable.html'
+
+    def check_skip(self):
+        return not self.profile.is_totp_enabled
+
+    def form_valid(self, form):
+        self.profile.is_totp_enabled = False
+        self.profile.totp_key = None
+        self.profile.save()
+        return self.next_page()
