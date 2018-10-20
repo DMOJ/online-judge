@@ -156,7 +156,7 @@
                                         <a href="#" class="button inline-button">Disable</a>
                                     {% else %}
                                         {{ _('Two Factor Authentication is disabled.') }}
-                                        <a href="#" class="button inline-button">Enable</a>
+                                        <a href="{{ url('enable_2fa') }}" class="button inline-button">Enable</a>
                                     {% endif %}
                                 </span></td>
                             </tr>
