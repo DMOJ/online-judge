@@ -149,6 +149,17 @@
                                     </a>
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="2"><span class="inline-header">
+                                    {% if profile.is_totp_enabled %}
+                                        {{ _('Two Factor Authentication is enabled.') }}
+                                        <a href="#" class="button inline-button">Disable</a>
+                                    {% else %}
+                                        {{ _('Two Factor Authentication is disabled.') }}
+                                        <a href="#" class="button inline-button">Enable</a>
+                                    {% endif %}
+                                </span></td>
+                            </tr>
                         </table>
                     </td>
                     <td>
