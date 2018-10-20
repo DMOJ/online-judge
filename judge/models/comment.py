@@ -19,6 +19,8 @@ from judge.models.profile import Profile
 
 __all__ = ['Comment', 'CommentLock', 'CommentVote']
 
+comment_validator = RegexValidator('^[pcs]:[a-z0-9]+$|^b:\d+$',
+                                   _('Page code must be ^[pcs]:[a-z0-9]+$|^b:\d+$'))
 
 class VersionRelation(GenericRelation):
     def __init__(self):
@@ -35,9 +37,8 @@ class VersionRelation(GenericRelation):
 class Comment(MPTTModel):
     author = models.ForeignKey(Profile, verbose_name=_('commenter'))
     time = models.DateTimeField(verbose_name=_('posted time'), auto_now_add=True)
-    page = models.CharField(max_length=30, verbose_name=_('associated Page'), db_index=True,
-                            validators=[RegexValidator('^[pc]:[a-z0-9]+$|^b:\d+$|^s:',
-                                                       _('Page code must be ^[pc]:[a-z0-9]+$|^b:\d+$'))])
+    page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
+                            validators=[comment_validator])
     score = models.IntegerField(verbose_name=_('votes'), default=0)
     title = models.CharField(max_length=200, verbose_name=_('title of comment'), blank=True)
     body = models.TextField(verbose_name=_('body of comment'), max_length=8192)
@@ -153,9 +154,8 @@ class CommentVote(models.Model):
         verbose_name_plural = _('comment votes')
 
 class CommentLock(models.Model):
-    page = models.CharField(max_length=30, verbose_name=_('associated Page'), db_index=True,
-                            validators=[RegexValidator('^[pc]:[a-z0-9]+$|^b:\d+$|^s:',
-                                                       _('Page code must be ^[pc]:[a-z0-9]+$|^b:\d+$'))])
+    page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
+                            validators=[comment_validator])
 
     class Meta:
         permissions = (
