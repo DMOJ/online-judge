@@ -20,3 +20,4 @@ pyyaml
 jinja2
 django_jinja
 llist
+requests
