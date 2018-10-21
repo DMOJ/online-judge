@@ -24,9 +24,23 @@
         }
 
         #totp-enable-form {
-            border: unset;
-            background: unset;
+            border: none;
+            background: none;
             max-width: 700px;
+        }
+
+        .totp-qr-code img {
+            width: 400px;
+            max-width: 100%;
+            margin: 0 auto;
+            display: block;
+            -ms-interpolation-mode: nearest-neighbor;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: -webkit-crisp-edges;
+            image-rendering: -o-crisp-edges;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
         }
     </style>
 {% endblock %}
@@ -37,6 +51,7 @@
             {% csrf_token %}
 
             <div class="block-header">{{ _('Scan this code with your authenticator app:') }}</div>
+            <div class="totp-qr-code"><img src="{{ qr_code }}" alt="{{ _('QR code') }}"></div>
             <div class="inline-header">{{ _('Or enter this code manually:') }}
                 <code class="totp-code">{{ totp_key }}</code>
             </div>

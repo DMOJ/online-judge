@@ -1,4 +1,9 @@
+import base64
+from io import BytesIO
+
 import pyotp
+import qrcode
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.urls import reverse
@@ -53,6 +58,7 @@ class TOTPEnableView(TOTPView):
     def get_context_data(self, **kwargs):
         context = super(TOTPEnableView, self).get_context_data(**kwargs)
         context['totp_key'] = self.profile.totp_key
+        context['qr_code'] = self.render_qr_code(self.request.user.username, self.profile.totp_key)
         return context
 
     def form_valid(self, form):
@@ -61,6 +67,20 @@ class TOTPEnableView(TOTPView):
         # Make sure users don't get prompted to enter code right after enabling:
         self.request.session['2fa_passed'] = True
         return self.next_page()
+
+    @classmethod
+    def render_qr_code(cls, username, key):
+        totp = pyotp.TOTP(key)
+        uri = totp.provisioning_uri(username, settings.SITE_NAME)
+
+        qr = qrcode.QRCode(box_size=1)
+        qr.add_data(uri)
+        qr.make(fit=True)
+
+        image = qr.make_image(fill_color='black', back_color='white')
+        buf = BytesIO()
+        image.save(buf, format='PNG')
+        return 'data:image/png;base64,' + base64.b64encode(buf.getvalue())
 
 
 class TOTPDisableView(TOTPView):
