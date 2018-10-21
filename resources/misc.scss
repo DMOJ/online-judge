@@ -44,3 +44,12 @@
         padding: 7px 5px;
     }
 }
+
+.django-as-table {
+    text-align: left;
+
+    th {
+        vertical-align: top;
+        padding-top: 4px;
+    }
+}
