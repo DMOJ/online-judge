@@ -29,7 +29,7 @@
             max-width: 700px;
         }
 
-        .totp-qr-code img {
+        .totp-qr-code img, .totp-qr-code canvas {
             width: 400px;
             max-width: 100%;
             margin: 0 auto;
@@ -43,6 +43,24 @@
             image-rendering: crisp-edges;
         }
     </style>
+{% endblock %}
+
+{% block js_media %}
+    <script>
+        $(function () {
+            if (window.navigator.userAgent.indexOf('Edge') >= 0) {
+                var $qr = $('.totp-qr-code');
+                var $canvas = $('<canvas width="400" height="400">').appendTo($qr);
+                var ctx = $canvas[0].getContext('2d');
+                $qr.find('img').on('load', function () {
+                    ctx.msImageSmoothingEnabled = false;
+                    ctx.imageSmoothingEnabled = false;
+                    ctx.drawImage(this, 0, 0, 400, 400);
+                    $(this).hide();
+                });
+            }
+        });
+    </script>
 {% endblock %}
 
 {% block body %}
