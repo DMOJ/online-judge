@@ -16,6 +16,10 @@
         #id_totp_token {
             width: 100%;
         }
+
+        .totp-panel-message {
+            width: 300px;
+        }
     </style>
 {% endblock %}
 
@@ -34,5 +38,6 @@
             <hr>
             <button style="float:right;" type="submit">{{ _('Login!') }}</button>
         </form>
+        <p class="totp-panel-message">{{ _('If you lost your authentication device, please contact us at %(email)s.', email=SITE_ADMIN_EMAIL)|urlize }}</p>
     </div>
 {% endblock %}
