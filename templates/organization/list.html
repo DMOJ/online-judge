@@ -30,7 +30,7 @@
             <tr>
                 <td>{{ org.key }}</td>
                 <td><a href="{{ org.get_absolute_url() }}">{{ org.name }}</a></td>
-                <td><a href="{{ org.get_absolute_url() }}">{{ org.member_count }}</a></td>
+                <td><a href="{{ org.get_users_url() }}">{{ org.member_count }}</a></td>
             </tr>
         {% endfor %}
         </tbody>
