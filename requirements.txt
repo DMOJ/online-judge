@@ -21,3 +21,6 @@ jinja2
 django_jinja
 llist
 requests
+django-fernet-fields
+pyotp
+qrcode[pil]

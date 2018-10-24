@@ -43,9 +43,10 @@ class TimezoneFilter(admin.SimpleListFilter):
 
 class ProfileAdmin(VersionAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
-              'math_engine', 'last_access', 'ip', 'mute', 'user_script', 'current_contest')
+              'math_engine', 'last_access', 'ip', 'mute', 'is_totp_enabled', 'user_script', 'current_contest')
     readonly_fields = ('user',)
-    list_display = ('admin_user_admin', 'email', 'timezone_full', 'date_joined', 'last_access', 'ip', 'show_public')
+    list_display = ('admin_user_admin', 'email', 'is_totp_enabled', 'timezone_full',
+                    'date_joined', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
     search_fields = ('user__username', 'name', 'ip', 'user__email')
     list_filter = ('language', TimezoneFilter)
@@ -53,6 +54,20 @@ class ProfileAdmin(VersionAdmin):
     actions_on_top = True
     actions_on_bottom = True
     form = ProfileForm
+
+    def get_fields(self, request, obj=None):
+        if request.user.has_perm('judge.totp'):
+            fields = list(self.fields)
+            fields.insert(fields.index('is_totp_enabled') + 1, 'totp_key')
+            return tuple(fields)
+        else:
+            return self.fields
+
+    def get_readonly_fields(self, request, obj=None):
+        if request.user.has_perm('judge.totp'):
+            return ()
+        else:
+            return 'is_totp_enabled',
 
     def show_public(self, obj):
         return format_html(u'<a href="{0}" style="white-space:nowrap;">{1}</a>',

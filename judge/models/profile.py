@@ -9,12 +9,20 @@ from django.db.models import Max
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, pgettext
+from fernet_fields import EncryptedCharField
 from sortedm2m.fields import SortedManyToManyField
 
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES
 from judge.ratings import rating_class
 
 __all__ = ['Organization', 'Profile', 'OrganizationRequest']
+
+
+class EncryptedNullCharField(EncryptedCharField):
+    def get_prep_value(self, value):
+        if not value:
+            return None
+        return super(EncryptedNullCharField, self).get_prep_value(value)
 
 
 class Organization(models.Model):
@@ -96,6 +104,12 @@ class Profile(models.Model):
     math_engine = models.CharField(verbose_name=_('math engine'), choices=MATH_ENGINES_CHOICES, max_length=4,
                                    default=getattr(settings, 'MATHOID_DEFAULT_TYPE', 'auto'),
                                    help_text=_('the rendering engine used to render math'))
+    is_totp_enabled = models.BooleanField(verbose_name=_('2FA enabled'), default=False,
+                                          help_text=_('check to enable TOTP-based two factor authentication'))
+    totp_key = EncryptedNullCharField(max_length=32, null=True, blank=True, verbose_name=_('TOTP key'),
+                                      help_text=_('32 character base32-encoded key for TOTP'),
+                                      validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
+                                                                 _('TOTP key must be empty or base32'))])
 
     @cached_property
     def organization(self):
@@ -169,6 +183,7 @@ class Profile(models.Model):
     class Meta:
         permissions = (
             ('test_site', 'Shows in-progress development stuff'),
+            ('totp', 'Edit TOTP settings')
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')

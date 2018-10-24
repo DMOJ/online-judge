@@ -3,7 +3,6 @@ import json
 from datetime import datetime
 from operator import itemgetter
 
-import django
 from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -13,10 +12,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count, Min
-from django.http import HttpResponseRedirect, Http404
-from django.http import JsonResponse
+from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.template import RequestContext, Context
 from django.utils import timezone
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
@@ -244,7 +241,7 @@ def edit_profile(request):
 
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
     return render(request, 'user/edit-profile.html', {
-        'form': form, 'title': _('Edit profile'),
+        'form': form, 'title': _('Edit profile'), 'profile': profile,
         'has_math_config': bool(getattr(settings, 'MATHOID_URL', False)),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD'),
