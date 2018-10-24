@@ -70,6 +70,7 @@ The DMOJ admin interface is highly versatile, and can be efficiently used for an
 This is by no means a complete list, but other features in the DMOJ site include:
 
 * OAuth logins
+* two factor authentication (TOTP)
 * user comments
 * arbitrary flatpages
 * editorial support
