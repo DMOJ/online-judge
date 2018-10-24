@@ -182,6 +182,8 @@ class UserPerformancePointsAjax(UserProblemsPage):
         try:
             start = int(self.request.GET.get('start', 0))
             end = int(self.request.GET.get('end', PP_ENTRIES))
+            if start < 0 or end < 0 or start > end:
+                raise ValueError
         except ValueError:
             start, end = 0, 100
         breakdown, self.has_more = get_pp_breakdown(self.object, start=start, end=end)
