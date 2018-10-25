@@ -222,9 +222,11 @@
                         {% endif %}
                     </td>
                     {% if not request.in_contest %}
-                        <td><a href="{{ url('contest_join', contest.key) }}"
-                               class="unselectable button full participate-button">{{ _('Virtual join') }}</a>
-                        </td>
+                        <td><form action="{{ url('contest_join', contest.key) }}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" class="unselectable button full participate-button"
+                                   value="{{ _('Virtual join') }}">
+                        </form></td>
                     {% endif %}
                 </tr>
             {% endfor %}
