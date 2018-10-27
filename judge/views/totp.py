@@ -1,14 +1,16 @@
 import base64
-from io import BytesIO
 
 import pyotp
 import qrcode
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import SuccessURLAllowedHostsMixin
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.urls import reverse
+from django.utils.http import is_safe_url
 from django.utils.translation import ugettext as _
 from django.views.generic import FormView
+from io import BytesIO
 
 from judge.forms import TOTPForm
 from judge.utils.views import TitleMixin
@@ -97,7 +99,7 @@ class TOTPDisableView(TOTPView):
         return self.next_page()
 
 
-class TOTPLoginView(TOTPView):
+class TOTPLoginView(SuccessURLAllowedHostsMixin, TOTPView):
     title = _('Perform Two Factor Authetication')
     template_name = 'registration/totp_auth.html'
 
@@ -105,7 +107,13 @@ class TOTPLoginView(TOTPView):
         return not self.profile.is_totp_enabled or self.request.session.get('2fa_passed', False)
 
     def next_page(self):
-        return HttpResponseRedirect(self.request.GET.get('next', '') or reverse('user_page'))
+        redirect_to = self.request.GET.get('next', '')
+        url_is_safe = is_safe_url(
+            url=redirect_to,
+            allowed_hosts=self.get_success_url_allowed_hosts(),
+            require_https=self.request.is_secure(),
+        )
+        return HttpResponseRedirect((redirect_to if url_is_safe else '') or reverse('user_page'))
 
     def form_valid(self, form):
         self.request.session['2fa_passed'] = True
