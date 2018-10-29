@@ -106,6 +106,8 @@ class Profile(models.Model):
                                       help_text=_('32 character base32-encoded key for TOTP'),
                                       validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
                                                                  _('TOTP key must be empty or base32'))])
+    notes = models.TextField(verbose_name=_('internal notes'), help_text=_('Notes for administrators regarding this user.'),
+                             null=True, blank=True)
 
     @cached_property
     def organization(self):
