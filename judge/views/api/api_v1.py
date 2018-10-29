@@ -31,15 +31,17 @@ def api_v1_contest_list(request):
 
 def api_v1_contest_detail(request, contest):
     contest = get_object_or_404(Contest, key=contest)
-    if not contest.can_see_scoreboard(request):
-        raise Http404()
 
-    is_visible = contest.can_see_scoreboard(request)
+    in_contest = contest.is_in_contest(request)
+    can_see_rankings = contest.can_see_scoreboard(request)
+    if contest.hide_scoreboard and in_contest:
+        can_see_rankings = False
+
     problems = list(contest.contest_problems.select_related('problem')
-                    .defer('problem__description').order_by('order')) if is_visible else []
+                    .defer('problem__description').order_by('order')) if in_contest else []
     users = base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
                                       .prefetch_related('user__organizations')
-                                      .order_by('-score', 'cumtime')) if is_visible else []
+                                      .order_by('-score', 'cumtime')) if can_see_rankings else []
     return JsonResponse({
         'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
         'start_time': contest.start_time.isoformat(),
