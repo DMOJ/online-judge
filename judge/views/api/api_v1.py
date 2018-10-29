@@ -34,11 +34,12 @@ def api_v1_contest_detail(request, contest):
     if not contest.can_see_scoreboard(request):
         raise Http404()
 
+    is_visible = not contest.hide_scoreboard
     problems = list(contest.contest_problems.select_related('problem')
-                    .defer('problem__description').order_by('order'))
+                    .defer('problem__description').order_by('order')) if is_visible else []
     users = base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
                                       .prefetch_related('user__organizations')
-                                      .order_by('-score', 'cumtime'))
+                                      .order_by('-score', 'cumtime')) if is_visible else []
     return JsonResponse({
         'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
         'start_time': contest.start_time.isoformat(),
