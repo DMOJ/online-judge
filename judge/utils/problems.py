@@ -78,13 +78,17 @@ def get_result_table(*args, **kwargs):
         submissions = Submission.objects.filter(**kwargs) if kwargs is not None else Submission.objects
     raw = submissions.values('result').annotate(count=Count('result')).values_list('result', 'count')
     results = defaultdict(int, raw)
-    return [(_('Accepted'), 'AC', results['AC']),
-            (_('Wrong Answer'), 'WA', results['WA']),
+
+    return {
+        'categories': [
+            (_('Accepted'), 'AC', results['AC']),
+            (_('Wrong'), 'WA', results['WA']),
             (_('Compile Error'), 'CE', results['CE']),
-            (_('Time Limit Exceeded'), 'TLE', results['TLE']),
-            (_('Memory Limit Exceeded'), 'MLE', results['MLE']),
-            (_('Other'), 'OTH', results['RTE'] + results['IR'] + results['OLE'] + results['AB'] + results['IE']),
-            (_('Total'), 'TOT', sum(results.values()))]
+            (_('Timeout'), 'TLE', results['TLE']),
+            (_('Error'), 'ERR', results['MLE'] + results['OLE'] + results['IR'] + results['RTE'] + results['AB'] + results['IE']),
+        ],
+        'total': sum(results.values()),
+    }
 
 
 def editable_problems(user, profile=None):
@@ -105,14 +109,14 @@ def hot_problems(duration, limit):
     if qs is None:
         qs = Problem.objects.filter(is_public=True, submission__date__gt=timezone.now() - duration, points__gt=3, points__lt=25)
         qs0 = qs.annotate(k=Count('submission__user', distinct=True)).order_by('-k').values_list('k', flat=True)
-        
+
         if not qs0:
             return []
         # make this an aggregate
         mx = float(qs0[0])
 
-        qs = qs.annotate(unique_user_count=Count('submission__user', distinct=True))  
-        # fix braindamage in excluding CE  
+        qs = qs.annotate(unique_user_count=Count('submission__user', distinct=True))
+        # fix braindamage in excluding CE
         qs = qs.annotate(submission_volume=Count(Case(
                 When(submission__result='AC', then=1),
                 When(submission__result='WA', then=1),
