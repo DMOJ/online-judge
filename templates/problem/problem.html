@@ -28,6 +28,19 @@
             display: inline-block;
             padding-left: 3em;
         }
+
+        #content-right {
+            max-width: 12.5em;
+            min-width: 12.5em;
+        }
+
+        #problem-types, #allowed-langs {
+            padding-top: 1em;
+        }
+
+        .problem-info-entry {
+            padding-top: 0.5em;
+        }
     </style>
 {% endblock %}
 
@@ -101,7 +114,8 @@
             {{ _('Submit solution') }}
         </a>
     {% endif %}
-    <hr>
+
+    <hr style="padding-bottom: 0.3em">
 
     {% if request.user.is_authenticated and has_submissions %}
         <div>
@@ -135,8 +149,9 @@
             </form>
         </div>
     {% endif %}
-    <hr>
-    <br>
+
+    <hr style="padding-top: 0.3em">
+
     <div class="problem-info-entry">
         <i class="fa fa-check fa-fw"></i><span class="pi-name">{{ _('Points:') }}</span>
         <span class="pi-value">
@@ -171,6 +186,9 @@
             </div>
         {% endfor %}
     </div>
+
+    <hr style="padding-top: 0.7em">
+
     {% cache 86400 'problem_authors' problem.id LANGUAGE_CODE %}
         {% with authors=problem.authors.all() %}
             {% if authors %}
@@ -186,7 +204,7 @@
             {% endif %}
         {% endwith %}
     {% endcache %}
-    <br>
+
     {% if not contest_problem or not contest_problem.contest.hide_problem_tags %}
         <div id="problem-types">
             {% with types=problem.types_list %}
@@ -200,7 +218,6 @@
                 <div style="display:none" class="toggled">{{ problem.types_list|join(", ") }}</div>
             {% endwith %}
         </div>
-        <br>
     {% endif %}
     {% if show_languages %}
         <div id="allowed-langs">
@@ -220,7 +237,6 @@
                 {% endwith %}
             </div>
         </div>
-        <br>
     {% endif %}
 {% endblock %}
 
