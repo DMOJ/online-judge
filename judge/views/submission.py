@@ -388,6 +388,10 @@ class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissi
 def single_submission(request, submission_id, show_problem=True):
     authenticated = request.user.is_authenticated
     submission = get_object_or_404(submission_related(Submission.objects.all()), id=int(submission_id))
+
+    if not submission.problem.is_accessible_by(request):
+        raise Http404()
+
     return render(request, 'submission/row.html', {
         'submission': submission,
         'authored_problem_ids': user_authored_ids(request.user.profile) if authenticated else [],
