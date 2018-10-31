@@ -139,7 +139,7 @@ class DjangoJudgeHandler(JudgeHandler):
     def on_submission_processing(self, packet):
         id = packet['submission-id']
         if Submission.objects.filter(id=id).update(status='P', judged_on=self.judge):
-            event.post('sub_%d' % id, {'type': 'processing'})
+            event.post('sub_%s' % Submission.get_id_secret(id), {'type': 'processing'})
             self._post_update_submission(id, 'processing')
             json_log.info(self._make_json_log(packet, action='processing'))
         else:
@@ -155,7 +155,7 @@ class DjangoJudgeHandler(JudgeHandler):
                 status='G', is_pretested=packet['pretested'],
                 current_testcase=1, batch=False):
             SubmissionTestCase.objects.filter(submission_id=packet['submission-id']).delete()
-            event.post('sub_%d' % packet['submission-id'], {'type': 'grading-begin'})
+            event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {'type': 'grading-begin'})
             self._post_update_submission(packet['submission-id'], 'grading-begin')
             json_log.info(self._make_json_log(packet, action='grading-begin'))
         else:
@@ -244,7 +244,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
         finished_submission(submission)
 
-        event.post('sub_%d' % submission.id, {
+        event.post('sub_%s' % submission.id_secret, {
             'type': 'grading-end',
             'time': time,
             'memory': memory,
@@ -261,7 +261,7 @@ class DjangoJudgeHandler(JudgeHandler):
         super(DjangoJudgeHandler, self).on_compile_error(packet)
 
         if Submission.objects.filter(id=packet['submission-id']).update(status='CE', result='CE', error=packet['log']):
-            event.post('sub_%d' % packet['submission-id'], {
+            event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {
                 'type': 'compile-error',
                 'log': packet['log']
             })
@@ -277,7 +277,7 @@ class DjangoJudgeHandler(JudgeHandler):
         super(DjangoJudgeHandler, self).on_compile_message(packet)
 
         if Submission.objects.filter(id=packet['submission-id']).update(error=packet['log']):
-            event.post('sub_%d' % packet['submission-id'], {'type': 'compile-message'})
+            event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {'type': 'compile-message'})
             json_log.info(self._make_json_log(packet, action='compile-message', log=packet['log']))
         else:
             logger.warning('Unknown submission: %d', packet['submission-id'])
@@ -289,7 +289,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
         id = packet['submission-id']
         if Submission.objects.filter(id=id).update(status='IE', result='IE', error=packet['message']):
-            event.post('sub_%d' % id, {'type': 'internal-error'})
+            event.post('sub_%s' % Submission.get_id_secret(id), {'type': 'internal-error'})
             self._post_update_submission(id, 'internal-error', done=True)
             json_log.info(self._make_json_log(packet, action='internal-error', message=packet['message'],
                                               finish=True, result='IE'))
@@ -302,7 +302,7 @@ class DjangoJudgeHandler(JudgeHandler):
         super(DjangoJudgeHandler, self).on_submission_terminated(packet)
 
         if Submission.objects.filter(id=packet['submission-id']).update(status='AB', result='AB'):
-            event.post('sub_%d' % packet['submission-id'], {'type': 'aborted-submission'})
+            event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {'type': 'aborted-submission'})
             self._post_update_submission(packet['submission-id'], 'terminated', done=True)
             json_log.info(self._make_json_log(packet, action='aborted', finish=True, result='AB'))
         else:
@@ -376,7 +376,7 @@ class DjangoJudgeHandler(JudgeHandler):
             self.update_counter[id] = (1, TIMER())
 
         if do_post:
-            event.post('sub_%d' % id, {
+            event.post('sub_%s' % Submission.get_id_secret(id), {
                 'type': 'test-case',
                 'id': packet['position'],
                 'status': test_case.status,
