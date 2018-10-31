@@ -35,7 +35,7 @@
 
             var receiver = new EventReceiver(
                 "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
-                ['sub_{{ submission.id }}'], {{ last_msg }}, function (message) {
+                ['sub_{{ submission.id_secret }}'], {{ last_msg }}, function (message) {
                     switch (message.type) {
                         case 'internal-error':
                         case 'grading-end':

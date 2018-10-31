@@ -1,3 +1,7 @@
+import hashlib
+import hmac
+
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -136,6 +140,15 @@ class Submission(models.Model):
             return self.contest
         except ObjectDoesNotExist:
             return None
+
+    @classmethod
+    def get_id_secret(cls, sub_id):
+        return (hmac.new(settings.EVENT_DAEMON_SUBMISSION_KEY, str(sub_id), hashlib.sha512).hexdigest()[:16] +
+                '%08x' % sub_id)
+
+    @cached_property
+    def id_secret(self):
+        return self.get_id_secret(self.id)
 
     class Meta:
         permissions = (
