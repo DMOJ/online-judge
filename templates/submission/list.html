@@ -43,6 +43,9 @@
                 };
             </script>
         {% endif %}
+
+        <script src="{{ static('libs/chart.js/Chart.Core.js') }}"></script>
+        <script src="{{ static('libs/chart.js/Chart.Doughnut.js') }}"></script>
         <script type="text/javascript">
             $(function () {
                 var info_float = $('.info-float');
@@ -61,6 +64,38 @@
                     .css({'visibility': 'visible'});
                 $('#language').select2({multiple: 1, placeholder: '{{ _('Filter by language...') }}'})
                     .css({'visibility': 'visible'});
+            });
+
+            // Draw the statistics graph.
+            $(function () {
+              var colors = {
+                "TLE": "#a3bcbd",
+                "AC": "#00a92a",
+                "WA": "#ed4420",
+                "CE": "#42586d",
+                "ERR": "#ffa71c",
+              };
+
+              var data = [
+                {% for key, cls, count in results['categories'] %}
+                  {
+                    "color": colors["{{ cls }}"],
+                    "label": "{{ key }}",
+                    "value": {{ count }}
+                  },
+                {% endfor %}
+              ];
+
+              Chart.defaults.global.scaleFontFamily =
+                Chart.defaults.global.tooltipFontFamily =
+                  Chart.defaults.global.tooltipTitleFontFamily =
+                    $('body').css('font-family');
+
+              var $chart = $('#status-graph');
+              var ctx = $chart.find('canvas').get(0).getContext('2d');
+              var chart = new Chart(ctx).Pie(data, {
+                animation: false,
+              });
             });
 
             function load_dynamic_update(last_msg) {
@@ -123,6 +158,8 @@
                 var stats_outdated = false;
 
                 function update_stats() {
+                    return;  // TODO: add back live-updating with graph
+
                     $.ajax({
                         url: '?results'
                     }).done(function (data) {
@@ -208,6 +245,22 @@
             }
         </style>
     {% endif %}
+
+    <style>
+       .total {
+          text-align: center;
+          margin-bottom: 0.5em;
+        }
+
+        #status-graph {
+          padding: 1em 0em;
+        }
+
+        #status-graph canvas {
+          display: block;
+          margin: 0 auto;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
