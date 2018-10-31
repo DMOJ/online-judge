@@ -108,6 +108,10 @@
             display: inline-block;
             padding-right: 1em;
         }
+
+        .pass-req {
+            padding: 0;
+        }
     </style>
 {% endblock %}
 
@@ -147,7 +151,7 @@
             <div class="block-header">{{ _('Password') -}}
                 <small>(<a href="#" class="pass-req-link">?</a>)</small>
             </div>
-            <div style="display: none" class="pass-req">
+            <div style="display: none" class="pass-req alert alert-info">
                 <ul>
                     {% for validator in password_validators %}
                         <li>{{ validator.get_help_text() }}</li>
