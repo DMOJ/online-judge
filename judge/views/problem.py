@@ -620,6 +620,9 @@ def problem_submit(request, problem=None, submission=None):
 @permission_required('judge.clone_problem')
 def clone_problem(request, problem):
     problem = get_object_or_404(Problem, code=problem)
+    if not problem.is_accessible_by(request.user):
+        raise Http404()
+
     languages = problem.allowed_languages.all()
     types = problem.types.all()
     problem.pk = None
