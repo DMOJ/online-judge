@@ -389,7 +389,7 @@ def single_submission(request, submission_id, show_problem=True):
     authenticated = request.user.is_authenticated
     submission = get_object_or_404(submission_related(Submission.objects.all()), id=int(submission_id))
 
-    if not submission.problem.is_accessible_by(request):
+    if not submission.problem.is_accessible_by(request.user):
         raise Http404()
 
     return render(request, 'submission/row.html', {
