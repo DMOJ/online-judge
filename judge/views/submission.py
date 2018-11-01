@@ -1,10 +1,11 @@
+import json
 from operator import attrgetter
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db.models import F, Prefetch
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -17,7 +18,7 @@ from django.views.generic import ListView, DetailView
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Problem, Submission, Profile, Contest, ProblemTranslation, Language
-from judge.utils.problems import user_completed_ids, user_authored_ids, user_editable_ids, get_result_table
+from judge.utils.problems import get_result_data, user_completed_ids, user_authored_ids, user_editable_ids
 from judge.utils.raw_sql import use_straight_join
 from judge.utils.views import TitleMixin, DiggPaginatorMixin
 
@@ -159,8 +160,8 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     context_object_name = 'submissions'
     first_page_href = None
 
-    def get_result_table(self):
-        return get_result_table(self.get_queryset().order_by())
+    def get_result_data(self):
+        return get_result_data(self.get_queryset().order_by())
 
     def access_check(self, request):
         pass
@@ -235,7 +236,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['all_statuses'] = self.get_searchable_status_codes()
         context['selected_statuses'] = self.selected_statuses
 
-        context['results'] = self.get_result_table()
+        context['results_json'] = mark_safe(json.dumps(self.get_result_data()))
 
         context['page_suffix'] = suffix = ('?' + self.request.GET.urlencode()) if self.request.GET else ''
         context['first_page_href'] = (self.first_page_href or '.') + suffix
@@ -253,7 +254,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         self.selected_statuses = set(request.GET.getlist('status'))
 
         if 'results' in request.GET:
-            return render(request, 'problem/statistics-table.html', {'results': self.get_result_table()})
+            return JsonResponse(self.get_result_data())
 
         return super(SubmissionsListBase, self).get(request, *args, **kwargs)
 
