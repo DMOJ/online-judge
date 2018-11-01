@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 
 from judge.models import Submission, Problem
 
-__all__ = ['contest_completed_ids', 'user_completed_ids', 'user_authored_ids', 'user_editable_ids']
+__all__ = ['contest_completed_ids', 'get_result_data', 'user_completed_ids', 'user_authored_ids', 'user_editable_ids']
 
 
 def user_authored_ids(profile):
@@ -69,7 +69,7 @@ def user_attempted_ids(profile):
     return result
 
 
-def get_result_table(*args, **kwargs):
+def get_result_data(*args, **kwargs):
     if args:
         submissions = args[0]
         if kwargs:
@@ -81,11 +81,12 @@ def get_result_table(*args, **kwargs):
 
     return {
         'categories': [
-            (_('Accepted'), 'AC', results['AC']),
-            (_('Wrong'), 'WA', results['WA']),
-            (_('Compile Error'), 'CE', results['CE']),
-            (_('Timeout'), 'TLE', results['TLE']),
-            (_('Error'), 'ERR', results['MLE'] + results['OLE'] + results['IR'] + results['RTE'] + results['AB'] + results['IE']),
+            {'code': 'AC', 'name': _('Accepted'), 'count': results['AC']},
+            {'code': 'WA', 'name': _('Wrong'), 'count': results['WA']},
+            {'code': 'CE', 'name': _('Compile Error'), 'count': results['CE']},
+            {'code': 'TLE', 'name': _('Timeout'), 'count': results['TLE']},
+            {'code': 'ERR', 'name': _('Error'),
+             'count': results['MLE'] + results['OLE'] + results['IR'] + results['RTE'] + results['AB'] + results['IE']},
         ],
         'total': sum(results.values()),
     }
