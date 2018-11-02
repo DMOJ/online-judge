@@ -1,4 +1,5 @@
-"""Based on https://github.com/ubernostrum/pwned-passwords-django.
+"""
+Based on https://github.com/ubernostrum/pwned-passwords-django.
 
 Original license:
 
@@ -34,7 +35,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."""
 
 import hashlib
 import logging
-import sys
 
 import requests
 from django.conf import settings
@@ -83,9 +83,11 @@ def pwned_password(password):
     """
     Checks a password against the Pwned Passwords database.
     """
-    if not isinstance(password, text_type):
-        raise TypeError('Password values to check must be Unicode strings.')
-    password_hash = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
+    if not isinstance(password, string_types):
+        raise TypeError('Password values to check must be strings.')
+    if isinstance(password, text_type):
+        password = password.encode('utf-8')
+    password_hash = hashlib.sha1(password).hexdigest().upper()
     prefix, suffix = password_hash[:5], password_hash[5:]
     results = _get_pwned(prefix)
     if results is None:
