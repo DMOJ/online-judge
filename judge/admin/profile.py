@@ -64,10 +64,10 @@ class ProfileAdmin(VersionAdmin):
             return self.fields
 
     def get_readonly_fields(self, request, obj=None):
-        if request.user.has_perm('judge.totp'):
-            return ()
-        else:
-            return 'is_totp_enabled',
+        fields = self.readonly_fields
+        if not request.user.has_perm('judge.totp'):
+            fields += ('is_totp_enabled',)
+        return fields
 
     def show_public(self, obj):
         return format_html(u'<a href="{0}" style="white-space:nowrap;">{1}</a>',
