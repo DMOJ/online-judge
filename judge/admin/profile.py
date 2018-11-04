@@ -55,6 +55,9 @@ class ProfileAdmin(VersionAdmin):
     actions_on_bottom = True
     form = ProfileForm
 
+    def get_queryset(self, request):
+        return super(ProfileAdmin, self).get_queryset(request).select_related('user')
+
     def get_fields(self, request, obj=None):
         if request.user.has_perm('judge.totp'):
             fields = list(self.fields)
