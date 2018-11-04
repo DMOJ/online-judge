@@ -14,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _, pgettext, ugettext, ung
 from django_ace import AceWidget
 from judge.models import Submission, SubmissionTestCase, ContestSubmission, ContestParticipation, ContestProblem, \
     Profile
+from judge.utils.raw_sql import use_straight_join
 
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
@@ -95,7 +96,7 @@ class SubmissionAdmin(admin.ModelAdmin):
               'case_points', 'case_total', 'judged_on', 'error')
     actions = ('judge', 'recalculate_score')
     list_display = ('id', 'problem_code', 'problem_name', 'user_column', 'execution_time', 'pretty_memory',
-                    'points', 'language', 'status', 'result', 'judge_column')
+                    'points', 'language_column', 'status', 'result', 'judge_column')
     list_filter = ('language', SubmissionStatusFilter, SubmissionResultFilter)
     search_fields = ('problem__code', 'problem__name', 'user__user__username', 'user__name')
     actions_on_top = True
@@ -103,10 +104,11 @@ class SubmissionAdmin(admin.ModelAdmin):
     inlines = [SubmissionTestCaseInline, ContestSubmissionInline]
 
     def get_queryset(self, request):
-        queryset = Submission.objects.only(
+        queryset = Submission.objects.select_related('problem', 'user__user', 'language').only(
             'problem__code', 'problem__name', 'user__user__username', 'user__name', 'language__name',
             'time', 'memory', 'points', 'status', 'result'
         )
+        use_straight_join(queryset)
         if not request.user.has_perm('judge.edit_all_problem'):
             id = request.user.profile.id
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id)).distinct()
@@ -211,6 +213,11 @@ class SubmissionAdmin(admin.ModelAdmin):
             return ugettext('%.2f MB') % (memory / 1024.)
     pretty_memory.admin_order_field = 'memory'
     pretty_memory.short_description = _('Memory')
+
+    def language_column(self, obj):
+        return obj.language.name
+    language_column.admin_order_field = 'language__name'
+    language_column.short_description = _('Language')
 
     def judge_column(self, obj):
         return '<input type="button" value="Rejudge" onclick="location.href=\'%s/judge/\'" />' % obj.id
