@@ -16,11 +16,13 @@ from judge.models.contest import Contest
 from judge.models.interface import BlogPost
 from judge.models.problem import Problem
 from judge.models.profile import Profile
+from judge.utils.cachedict import CacheDict
 
 __all__ = ['Comment', 'CommentLock', 'CommentVote']
 
 comment_validator = RegexValidator('^[pcs]:[a-z0-9]+$|^b:\d+$',
                                    _('Page code must be ^[pcs]:[a-z0-9]+$|^b:\d+$'))
+
 
 class VersionRelation(GenericRelation):
     def __init__(self):
@@ -57,6 +59,10 @@ class Comment(MPTTModel):
     def most_recent(cls, user, n, batch=None):
         queryset = cls.objects.filter(hidden=False).select_related('author__user') \
             .defer('author__about', 'body').order_by('-id')
+
+        problem_access = CacheDict(lambda code: Problem.objects.get(code=code).is_accessible_by(user))
+        contest_access = CacheDict(lambda key: Contest.objects.get(key=key).is_accessible_by(user))
+
         if user.is_superuser:
             return queryset[:n]
         if batch is None:
@@ -69,13 +75,13 @@ class Comment(MPTTModel):
             for comment in slice:
                 if comment.page.startswith('p:'):
                     try:
-                        if Problem.objects.get(code=comment.page[2:]).is_accessible_by(user):
+                        if problem_access[comment.page[2:]]:
                             output.append(comment)
                     except Problem.DoesNotExist:
                         pass
                 elif comment.page.startswith('c:'):
                     try:
-                        if Contest.objects.get(key=comment.page[2:]).is_accessible_by(user):
+                        if contest_access[comment.page[2:]]:
                             output.append(comment)
                     except Contest.DoesNotExist:
                         pass
@@ -152,6 +158,7 @@ class CommentVote(models.Model):
         unique_together = ['voter', 'comment']
         verbose_name = _('comment vote')
         verbose_name_plural = _('comment votes')
+
 
 class CommentLock(models.Model):
     page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
