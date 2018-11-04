@@ -9,6 +9,7 @@ from django.views.generic import ListView
 from judge.comments import CommentedDetailView
 from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submission, Language, ProblemClarification
 from judge.models import Ticket
+from judge.utils.cachedict import CacheDict
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import user_completed_ids
 from judge.utils.tickets import filter_visible_tickets
@@ -38,6 +39,7 @@ class PostList(ListView):
         context['page_prefix'] = reverse('blog_post_list')
         context['comments'] = Comment.most_recent(self.request.user, 10)
         context['new_problems'] = Problem.objects.filter(is_public=True).order_by('-date', '-id')[:7]
+        context['page_titles'] = CacheDict(lambda page: Comment.get_page_title(page))
 
         context['has_clarifications'] = False
         if self.request.user.is_authenticated:

@@ -115,20 +115,24 @@ class Comment(MPTTModel):
             link = 'invalid'
         return link
 
-    @cached_property
-    def page_title(self):
+    @classmethod
+    def get_page_title(cls, page):
         try:
-            if self.page.startswith('p:'):
-                return Problem.objects.values_list('name', flat=True).get(code=self.page[2:])
-            elif self.page.startswith('c:'):
-                return Contest.objects.values_list('name', flat=True).get(key=self.page[2:])
-            elif self.page.startswith('b:'):
-                return BlogPost.objects.values_list('title', flat=True).get(id=self.page[2:])
-            elif self.page.startswith('s:'):
-                return _('Editorial for %s') % Problem.objects.values_list('name', flat=True).get(code=self.page[2:])
+            if page.startswith('p:'):
+                return Problem.objects.values_list('name', flat=True).get(code=page[2:])
+            elif page.startswith('c:'):
+                return Contest.objects.values_list('name', flat=True).get(key=page[2:])
+            elif page.startswith('b:'):
+                return BlogPost.objects.values_list('title', flat=True).get(id=page[2:])
+            elif page.startswith('s:'):
+                return _('Editorial for %s') % Problem.objects.values_list('name', flat=True).get(code=page[2:])
             return '<unknown>'
         except ObjectDoesNotExist:
             return '<deleted>'
+
+    @cached_property
+    def page_title(self):
+        return self.get_page_title(self.page)
 
     def get_absolute_url(self):
         return '%s#comment-%d' % (self.link, self.id)
