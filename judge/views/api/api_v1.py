@@ -68,7 +68,7 @@ def api_v1_contest_detail(request, contest):
 
 
 def api_v1_problem_list(request):
-    queryset = Problem.objects.filter(is_public=True)
+    queryset = Problem.objects.filter(is_public=True, is_organization_private=False)
     if settings.ENABLE_FTS and 'search' in request.GET:
         query = ' '.join(request.GET.getlist('search')).strip()
         if query:
@@ -112,7 +112,7 @@ def api_v1_user_list(request):
 
 def api_v1_user_info(request, user):
     profile = get_object_or_404(Profile, user__username=user)
-    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True)
+    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True, problem__is_organization_private=False)
                        .values('problem').distinct().values_list('problem__code', flat=True))
     return JsonResponse({
         'display_name': profile.name,
@@ -125,7 +125,7 @@ def api_v1_user_info(request, user):
 
 def api_v1_user_submissions(request, user):
     profile = get_object_or_404(Profile, user__username=user)
-    subs = Submission.objects.filter(user=profile, problem__is_public=True)
+    subs = Submission.objects.filter(user=profile, problem__is_public=True, problem__is_organization_private=False)
 
     return JsonResponse({sub['id']: {
         'problem': sub['problem__code'],

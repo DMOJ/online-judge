@@ -108,7 +108,7 @@ def hot_problems(duration, limit):
     cache_key = 'hot_problems:%d:%d' % (duration.total_seconds(), limit)
     qs = cache.get(cache_key)
     if qs is None:
-        qs = Problem.objects.filter(is_public=True, submission__date__gt=timezone.now() - duration, points__gt=3, points__lt=25)
+        qs = Problem.objects.filter(is_public=True, is_organization_private=False, submission__date__gt=timezone.now() - duration, points__gt=3, points__lt=25)
         qs0 = qs.annotate(k=Count('submission__user', distinct=True)).order_by('-k').values_list('k', flat=True)
 
         if not qs0:

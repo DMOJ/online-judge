@@ -92,7 +92,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context = super(UserPage, self).get_context_data(**kwargs)
 
         context['hide_solved'] = int(self.hide_solved)
-        context['authored'] = self.object.authored_problems.filter(is_public=True).order_by('code')
+        context['authored'] = self.object.authored_problems.filter(is_public=True, is_organization_private=False).order_by('code')
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
 
@@ -150,7 +150,8 @@ class UserProblemsPage(UserPage):
     def get_context_data(self, **kwargs):
         context = super(UserProblemsPage, self).get_context_data(**kwargs)
 
-        result = Submission.objects.filter(user=self.object, points__gt=0, problem__is_public=True) \
+        result = Submission.objects.filter(user=self.object, points__gt=0, problem__is_public=True,
+                                           problem__is_organization_private=False) \
             .exclude(problem__id__in=self.get_completed_problems() if self.hide_solved else []) \
             .values('problem__id', 'problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
             .distinct().annotate(points=Max('points')).order_by('problem__group__full_name', 'problem__code')

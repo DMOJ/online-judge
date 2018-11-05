@@ -36,6 +36,7 @@ def get_pp_breakdown(user, start=0, end=100):
                 FROM judge_problem
                 INNER JOIN judge_submission ON (judge_problem.id = judge_submission.problem_id)
                 WHERE (judge_problem.is_public = True AND
+                       judge_problem.is_organization_private = False AND
                        judge_submission.points IS NOT NULL AND
                        judge_submission.user_id = %s)
                 GROUP BY judge_problem.id
