@@ -39,7 +39,7 @@ class Organization(models.Model):
     registrant = models.ForeignKey('Profile', verbose_name=_('registrant'),
                                    related_name='registrant+',
                                    help_text=_('User who registered this organization'))
-    admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='+',
+    admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='admin_of',
                                     help_text=_('Those who can edit this organization'))
     creation_date = models.DateTimeField(verbose_name=_('creation date'), auto_now_add=True)
     is_open = models.BooleanField(verbose_name=_('is open organization?'),
