@@ -8,7 +8,7 @@ from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.db.models import Count, Max
+from django.db.models import Count, Max, Q
 from django.forms import Form, modelformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404
@@ -279,7 +279,7 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
 
     def get_form(self, form_class=None):
         form = super(EditOrganization, self).get_form(form_class)
-        form.fields['admins'].queryset = self.object.members.all()
+        form.fields['admins'].queryset = Profile.objects.filter(Q(organizations=self.object) | Q(admin_of=self.object))
         return form
 
     def form_valid(self, form):
