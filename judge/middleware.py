@@ -20,6 +20,16 @@ class DMOJLoginMiddleware(object):
         return self.get_response(request)
 
 
+class DMOJImpersonationMiddleware(object):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.user.is_impersonate:
+            request.profile = request.user.profile
+        return self.get_response(request)
+
+
 class ContestMiddleware(object):
     def __init__(self, get_response):
         self.get_response = get_response
