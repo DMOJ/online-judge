@@ -88,7 +88,7 @@ class Language(models.Model):
     @classmethod
     def get_python2(cls):
         # We really need a default language, and this app is in Python 2
-        return Language.objects.get_or_create(key='PY2', name='Python 2')[0]
+        return Language.objects.get_or_create(key='PY2', defaults={'name': 'Python 2'})[0]
 
     def get_absolute_url(self):
         return reverse('runtime_list') + '#' + self.key
