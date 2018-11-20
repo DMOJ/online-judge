@@ -227,12 +227,12 @@
             <div style="margin-bottom:-1em" class="toggled">
                 {% with usable=problem.usable_common_names, langs=problem.languages_list() %}
                     {% for lang in langs %}
-                        {% if lang in usable %}
+                        {%- if lang in usable -%}
                             {{ lang }}
-                        {% else %}
+                        {%- else -%}
                             <s title="{{ _('No %(lang)s judge online', lang=lang) }}">{{ lang }}</s>
-                        {% endif %}
-                        {% if not loop.last %}, {% endif %}
+                        {%- endif -%}
+                        {% if not loop.last %}, {% endif -%}
                     {% endfor %}
                 {% endwith %}
             </div>
