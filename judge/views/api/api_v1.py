@@ -131,8 +131,8 @@ def api_v1_user_info(request, user):
         }
 
     resp['contests'] = {
-        "current_rating": last_rating[0].rating if last_rating else None,
-        "volatility": last_rating[0].volatility if last_rating else None,
+        'current_rating': last_rating[0].rating if last_rating else None,
+        'volatility': last_rating[0].volatility if last_rating else None,
         'history': contest_history,
     }
 
