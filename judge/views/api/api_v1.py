@@ -5,7 +5,7 @@ from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
 
 from dmoj import settings
-from judge.models import Contest, Problem, Profile, Submission, ContestTag
+from judge.models import Contest, ContestParticipation, Problem, Profile, Submission, ContestTag
 from judge.views.contests import base_contest_ranking_list
 
 
@@ -38,10 +38,13 @@ def api_v1_contest_detail(request, contest):
         can_see_rankings = False
 
     problems = list(contest.contest_problems.select_related('problem')
-                    .defer('problem__description').order_by('order')) if in_contest else []
+                    .defer('problem__description').order_by('order'))
     users = base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
                                       .prefetch_related('user__organizations')
                                       .order_by('-score', 'cumtime')) if can_see_rankings else []
+    if not in_contest:
+        problems = []
+
     return JsonResponse({
         'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
         'start_time': contest.start_time.isoformat(),
@@ -109,18 +112,34 @@ def api_v1_user_list(request):
         'rank': rank
     } for username, name, points, rank in queryset})
 
-
 def api_v1_user_info(request, user):
     profile = get_object_or_404(Profile, user__username=user)
     submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True, problem__is_organization_private=False)
                        .values('problem').distinct().values_list('problem__code', flat=True))
-    return JsonResponse({
+    resp = {
         'display_name': profile.name,
         'points': profile.points,
         'rank': profile.display_rank,
         'solved_problems': submissions,
         'organizations': list(profile.organizations.values_list('key', flat=True)),
-    })
+    }
+
+    last_rating = list(profile.ratings.order_by('-contest__end_time'))
+
+    contest_history = {}
+    for participation in (ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False)
+                                  .order_by('-contest__end_time')):
+        contest_history[participation.contest.key] = {
+            'rating': participation.rating.rating if hasattr(participation, 'rating') else None,
+        }
+
+    resp['contests'] = {
+        "current_rating": last_rating[0].rating if last_rating else None,
+        "volatility": last_rating[0].volatility if last_rating else None,
+        'history': contest_history,
+    }
+
+    return JsonResponse(resp)
 
 
 def api_v1_user_submissions(request, user):
