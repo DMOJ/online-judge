@@ -5,7 +5,7 @@ from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
 
 from dmoj import settings
-from judge.models import Contest, Problem, Profile, Submission, ContestTag
+from judge.models import Contest, ContestParticipation, Problem, Profile, Submission, ContestTag
 from judge.views.contests import base_contest_ranking_list
 
 
@@ -109,18 +109,34 @@ def api_v1_user_list(request):
         'rank': rank
     } for username, name, points, rank in queryset})
 
-
 def api_v1_user_info(request, user):
     profile = get_object_or_404(Profile, user__username=user)
     submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True, problem__is_organization_private=False)
                        .values('problem').distinct().values_list('problem__code', flat=True))
-    return JsonResponse({
+    resp = {
         'display_name': profile.name,
         'points': profile.points,
         'rank': profile.display_rank,
         'solved_problems': submissions,
         'organizations': list(profile.organizations.values_list('key', flat=True)),
-    })
+    }
+
+    last_rating = list(profile.ratings.order_by('-contest__end_time'))
+
+    contest_history = {}
+    for participation in (ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False)
+                                  .order_by('-contest__end_time')):
+        contest_history[participation.contest.key] = {
+            'rating': participation.rating.rating if hasattr(participation, 'rating') else None,
+        }
+
+    resp['contests'] = {
+        "current_rating": last_rating[0].rating if last_rating else None,
+        "volatility": last_rating[0].volatility if last_rating else None,
+        'history': contest_history,
+    }
+
+    return JsonResponse(resp)
 
 
 def api_v1_user_submissions(request, user):
@@ -136,3 +152,4 @@ def api_v1_user_submissions(request, user):
         'status': sub['status'],
         'result': sub['result'],
     } for sub in subs.values('id', 'problem__code', 'time', 'memory', 'points', 'language__key', 'status', 'result')})
+
