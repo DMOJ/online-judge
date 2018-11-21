@@ -5,7 +5,7 @@ from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
 
 from dmoj import settings
-from judge.models import Contest, ContestParticipation, Problem, Profile, Submission, ContestTag
+from judge.models import Contest, ContestParticipation, ContestTag, Problem, Profile, Submission
 from judge.views.contests import base_contest_ranking_list
 
 
@@ -109,6 +109,7 @@ def api_v1_user_list(request):
         'rank': rank
     } for username, name, points, rank in queryset})
 
+
 def api_v1_user_info(request, user):
     profile = get_object_or_404(Profile, user__username=user)
     submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True, problem__is_organization_private=False)
@@ -152,4 +153,3 @@ def api_v1_user_submissions(request, user):
         'status': sub['status'],
         'result': sub['result'],
     } for sub in subs.values('id', 'problem__code', 'time', 'memory', 'points', 'language__key', 'status', 'result')})
-
