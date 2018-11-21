@@ -124,17 +124,15 @@ def api_v1_user_info(request, user):
 
     last_rating = list(profile.ratings.order_by('-contest__end_time'))
 
-    contest_history = {}
-    for participation in (ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False)
-                                  .order_by('-contest__end_time')):
-        contest_history[participation.contest.key] = {
-            'rating': participation.rating.rating if hasattr(participation, 'rating') else None,
-        }
-
     resp['contests'] = {
-        'current_rating': last_rating[0].rating if last_rating else None,
-        'volatility': last_rating[0].volatility if last_rating else None,
-        'history': contest_history,
+        "current_rating": last_rating[0].rating if last_rating else None,
+        "volatility": last_rating[0].volatility if last_rating else None,
+        'history': {
+            contest_key: {
+                'rating': rating,
+            } for contest_key, rating in ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False)
+                                                             .order_by('-contest__end_time').values_list('contest__key', 'rating__rating')
+        },
     }
 
     return JsonResponse(resp)
