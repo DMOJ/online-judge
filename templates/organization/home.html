@@ -6,9 +6,9 @@
             {% if profile in organization %}
                 <form method="post" action="{{ url('leave_organization', organization.id, organization.slug) }}">
                     {% csrf_token %}
-                    <input type="submit" class="unselectable button full" value="{{ _('Leave organization') }}">
+                    <input type="submit" class="unselectable button full" value="{{ _('Leave organization') }}" {% if not organization.is_open and not can_edit %}disabled style="pointer-events:none;"{% endif %}>
                 </form>
-            {% elif organization.is_open %}
+            {% elif organization.is_open or can_edit %}
                 <form method="post" action="{{ url('join_organization', organization.id, organization.slug) }}">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full" value="{{ _('Join organization') }}">

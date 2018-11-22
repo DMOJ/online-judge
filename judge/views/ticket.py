@@ -95,6 +95,12 @@ class NewProblemTicketView(TitleMixin, NewTicketView):
     slug_url_kwarg = 'problem'
     template_name = 'ticket/new_problem.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(NewProblemTicketView, self).get_context_data(**kwargs)
+        if not self.object.is_accessible_by(self.request.user):
+            raise Http404()
+        return context
+
     def get_assignees(self):
         return self.object.authors.all()
 

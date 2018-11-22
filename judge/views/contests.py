@@ -26,7 +26,7 @@ from django.views.generic.detail import BaseDetailView, DetailView
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
-from judge.models import Contest, ContestParticipation, ContestTag, Profile
+from judge.models import Contest, ContestParticipation, ContestTag, Organization, Profile
 from judge.models import Problem
 from judge.timezone import from_database_time
 from judge.utils.opengraph import generate_opengraph
@@ -52,6 +52,8 @@ def _find_contest(request, key, private_check=True):
 class ContestListMixin(object):
     def get_queryset(self):
         queryset = Contest.objects.all()
+        if not self.request.user.is_authenticated:
+            return Contest.objects.none()
         if not self.request.user.has_perm('judge.see_private_contest'):
             q = Q(is_public=True)
             if self.request.user.is_authenticated:
@@ -61,7 +63,7 @@ class ContestListMixin(object):
             q = Q(is_private=False)
             if self.request.user.is_authenticated:
                 q |= Q(organizations__in=self.request.user.profile.organizations.all())
-            queryset = queryset.filter(q)
+            queryset = queryset.filter(q)    
         return queryset.distinct()
 
 
@@ -149,6 +151,8 @@ class ContestMixin(object):
         return context
 
     def get_object(self, queryset=None):
+        if not self.request.user.is_authenticated:
+            raise Http404()
         contest = super(ContestMixin, self).get_object(queryset)
         user = self.request.user
         profile = self.request.user.profile if user.is_authenticated else None
@@ -243,7 +247,19 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('Already in contest'),
                                    _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
 
+        is_lcc_contest = ContestTag.objects.get(name="lcc") in contest.tags.all()
+
+        if is_lcc_contest and not profile.is_lcc_account:
+            return generic_message(request, _('Cannot join LCC contest'),
+                                   _('What are you trying to do? Join the LCC contest on your own account? You shall be banned.'))
+        elif not is_lcc_contest and profile.is_lcc_account:
+            return generic_message(request, _('Cannot join non-LCC contest'),
+                                   _('What are you trying to do? Join the contest on your LCC account? You shall be banned.'))
+
         if contest.ended:
+            if is_lcc_contest:
+                return generic_message(request, _('Cannot virtual LCC contest'),
+                                   _('What are you trying to do? Trying to virtual the LCC contest? You shall be banned.'))
             while True:
                 virtual_id = (ContestParticipation.objects.filter(contest=contest, user=profile)
                               .aggregate(virtual_id=Max('virtual'))['virtual_id'] or 0) + 1
@@ -310,6 +326,7 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('No such contest'),
                                    _('You are not in contest "%s".') % contest.key, 404)
 
+         
         profile.remove_contest()
         return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
 
@@ -410,14 +427,14 @@ class CachedContestCalendar(ContestCalendar):
 
 
 class ContestRankingProfile(namedtuple(
-    'ContestRankingProfile', 'id user display_rank long_display_name points cumtime problems rating organization '
+    'ContestRankingProfile', 'id user display_rank name long_display_name points cumtime problems rating organization '
                              'participation participation_rating')):
     @cached_property
     def css_class(self):
         return Profile.get_user_css_class(self.display_rank, self.rating)
 
 
-BestSolutionData = namedtuple('BestSolutionData', 'code points time state is_pretested')
+BestSolutionData = namedtuple('BestSolutionData', 'code points bonus time state is_pretested')
 
 
 def make_contest_ranking_profile(participation, problems):
@@ -426,6 +443,7 @@ def make_contest_ranking_profile(participation, problems):
         id=user.id,
         user=user.user,
         display_rank=user.display_rank,
+        name=user.name,
         long_display_name=user.long_display_name,
         points=participation.score,
         cumtime=participation.cumtime,
@@ -447,18 +465,40 @@ def best_solution_state(points, total):
 
 def base_contest_ranking_list(contest, problems, queryset, for_user=None):
     cursor = connection.cursor()
+#    cursor.execute('''
+#        SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, (
+#                SELECT MAX(ccs.bonus) 
+#                FROM judge_contestsubmission ccs 
+#                WHERE ccs.problem_id = cp.id AND ccs.participation_id = part.id 
+#                GROUP BY ccs.points
+#                HAVING ccs.points = MAX(cs.points)
+#        ) AS total_best, MAX(sub.date) AS `last`
+#        FROM judge_contestproblem cp CROSS JOIN judge_contestparticipation part INNER JOIN
+#             judge_problem prob ON (cp.problem_id = prob.id) LEFT OUTER JOIN
+#             judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = part.id) LEFT OUTER JOIN
+#             judge_submission sub ON (sub.id = cs.submission_id)
+#        WHERE cp.contest_id = %s AND part.contest_id = %s {extra}
+#        GROUP BY cp.id, part.id
+#    '''.format(extra=('AND part.user_id = %s' if for_user is not None else 'AND part.virtual = 0')),
+#                   (contest.id, contest.id) + ((for_user,) if for_user is not None else ()))
     cursor.execute('''
-        SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, MAX(sub.date) AS `last`
+        SELECT part.id, cp.id, prob.code, (
+                SELECT MAX(ccs.points)
+                FROM judge_contestsubmission ccs 
+                WHERE ccs.problem_id = cp.id AND ccs.participation_id = part.id 
+                GROUP BY ccs.points, ccs.bonus
+                HAVING ccs.points+ccs.bonus = MAX(cs.points+cs.bonus)
+        ) AS best, MAX(cs.points+cs.bonus) AS total_best, MAX(sub.date) AS `last`
         FROM judge_contestproblem cp CROSS JOIN judge_contestparticipation part INNER JOIN
              judge_problem prob ON (cp.problem_id = prob.id) LEFT OUTER JOIN
              judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = part.id) LEFT OUTER JOIN
              judge_submission sub ON (sub.id = cs.submission_id)
         WHERE cp.contest_id = %s AND part.contest_id = %s {extra}
         GROUP BY cp.id, part.id
-    '''.format(extra=('AND part.user_id = %s' if for_user is not None else
-                                         'AND part.virtual = 0')),
+    '''.format(extra=('AND part.user_id = %s' if for_user is not None else 'AND part.virtual = 0')),
                    (contest.id, contest.id) + ((for_user,) if for_user is not None else ()))
-    data = {(part, prob): (code, best, last and from_database_time(last)) for part, prob, code, best, last in cursor}
+
+    data = {(part, prob): (code, best, total_best, last and from_database_time(last)) for part, prob, code, best, total_best, last in cursor}
     cursor.close()
 
     problems = map(attrgetter('id', 'points', 'is_pretested'), problems)
@@ -466,8 +506,8 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None):
     def make_ranking_profile(participation):
         part = participation.id
         return make_contest_ranking_profile(participation, [
-            BestSolutionData(code=data[part, prob][0], points=data[part, prob][1],
-                             time=data[part, prob][2] - participation.start,
+            BestSolutionData(code=data[part, prob][0], points=data[part, prob][1], bonus=data[part, prob][2]-data[part, prob][1],
+                             time=data[part, prob][3] - participation.start,
                              state=best_solution_state(data[part, prob][1], points),
                              is_pretested=is_pretested)
             if (part, prob) in data and data[part, prob][1] is not None else None
@@ -483,15 +523,28 @@ def contest_ranking_list(contest, problems):
                                                                      .order_by('-score', 'cumtime'))
 
 
-def get_participation_ranking_profile(contest, participation, problems):
-    scoring = {data['id']: (data['score'], data['time']) for data in
-               contest.contest_problems.filter(submission__participation=participation)
-                   .annotate(score=Max('submission__points'), time=Max('submission__submission__date'))
-                   .values('score', 'time', 'id')}
+def get_participation_ranking_profile(contest, participation, problems):    
+    cursor = connection.cursor()
+    cursor.execute('''
+        SELECT cp.id, (
+                SELECT MAX(ccs.points)
+                FROM judge_contestsubmission ccs 
+                WHERE ccs.problem_id = cp.id AND ccs.participation_id = %s
+                GROUP BY ccs.points, ccs.bonus
+                HAVING ccs.points+ccs.bonus = MAX(cs.points+cs.bonus)
+        ) AS best, MAX(cs.points+cs.bonus) AS total_best, MAX(sub.date) AS `last`
+        FROM judge_contestproblem cp INNER JOIN
+             judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
+             judge_submission sub ON (sub.id = cs.submission_id)
+        WHERE cp.contest_id = %s
+        GROUP BY cp.id
+   ''', (participation.id, participation.id, contest.id))
+    scoring = {prob: (best, total_best, last and from_database_time(last)) for prob, best, total_best, last in cursor}
+    cursor.close()
 
     return make_contest_ranking_profile(participation, [
-        BestSolutionData(code=problem.problem.code, points=scoring[problem.id][0],
-                         time=scoring[problem.id][1] - participation.start,
+        BestSolutionData(code=problem.problem.code, points=scoring[problem.id][0], bonus=scoring[problem.id][1] - scoring[problem.id][0],
+                         time=scoring[problem.id][2] - participation.start,
                          state=best_solution_state(scoring[problem.id][0], problem.points),
                          is_pretested=problem.is_pretested)
         if problem.id in scoring else None for problem in problems

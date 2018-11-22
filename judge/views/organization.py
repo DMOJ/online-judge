@@ -49,6 +49,8 @@ class OrganizationMixin(object):
             org = self.object
         if not self.request.user.is_authenticated:
             return False
+        if self.request.user.has_perm('judge.edit_all_organization'):
+            return True
         profile_id = self.request.user.profile.id
         return org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id
 
@@ -118,7 +120,8 @@ class JoinOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
         if profile.organizations.filter(id=org.id).exists():
             return generic_message(request, _('Joining organization'), _('You are already in the organization.'))
-        if not org.is_open:
+
+        if not org.is_open and not self.can_edit_organization(org=org):
             return generic_message(request, _('Joining organization'), _('This organization is not open.'))
         profile.organizations.add(org)
         profile.save()
@@ -129,6 +132,9 @@ class LeaveOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
         if not profile.organizations.filter(id=org.id).exists():
             return generic_message(request, _('Leaving organization'), _('You are not in "%s".') % org.key)
+
+        if not org.is_open and not self.can_edit_organization(org=org):
+            return generic_message(request, _('Cannot leave organization'), _('You may not leave "%s".') % org.key, status=403)
         profile.organizations.remove(org)
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
@@ -257,6 +263,11 @@ class OrganizationRequestLog(OrganizationRequestBaseView):
     tab = 'log'
     template_name = 'organization/requests/log.html'
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
     def get_context_data(self, **kwargs):
         context = super(OrganizationRequestLog, self).get_context_data(**kwargs)
         context['requests'] = self.object.requests.filter(state__in=self.states)
@@ -313,7 +324,7 @@ class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, SingleObjectMixi
             return generic_message(request, _("Can't kick user"),
                                    _('The user you are trying to kick is not in organization: %s.') %
                                    organization.name, status=400)
-
+        
         organization.members.remove(user)
         return HttpResponseRedirect(organization.get_users_url())
 

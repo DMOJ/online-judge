@@ -4,7 +4,7 @@ from operator import attrgetter
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.db.models import F, Prefetch
+from django.db.models import F, Q, Prefetch
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
@@ -40,8 +40,6 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
     def get_object(self, queryset=None):
         submission = super(SubmissionDetailBase, self).get_object(queryset)
         profile = self.request.user.profile
-        if self.request.user.has_perm('judge.view_all_submission'):
-            return submission
         if submission.user_id == profile.id:
             return submission
         if submission.problem.is_editor(profile):
@@ -49,6 +47,11 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
         if submission.problem.is_public or submission.problem.testers.filter(id=profile.id).exists():
             if Submission.objects.filter(user_id=profile.id, result='AC', problem__code=submission.problem.code,
                                          points=F('problem__points')).exists():
+                return submission
+        if self.request.user.has_perm('judge.view_all_submission'):
+            if submission.problem.is_public:
+                return submission
+            elif self.request.user.has_perm('judge.see_lcc_problem') or not submission.problem.is_lcc_problem:
                 return submission
         raise PermissionDenied()
 
@@ -205,8 +208,11 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
 
     def get_queryset(self):
         queryset = self._get_queryset()
-        if not self.in_contest and not self.request.user.has_perm('judge.see_private_problem'):
-            queryset = queryset.filter(problem__is_public=True)
+        if not self.in_contest:
+            if not self.request.user.has_perm('judge.see_private_problem'):
+                queryset = queryset.filter(problem__is_public=True)
+            elif not self.request.user.has_perm('judge.see_lcc_problem'):
+                queryset = queryset.exclude(problem__group__name="lcc", problem__is_public=False)
         return queryset
 
     def get_my_submissions_page(self):
@@ -447,7 +453,7 @@ class ForceContestMixin(object):
         return self._contest
 
     def access_check(self, request):
-        super(ForceContestMixin, self).access_check(request)
+        #super(ForceContestMixin, self).access_check(request)
 
         if not request.user.has_perm('judge.see_private_contest'):
             if not self.contest.is_public:

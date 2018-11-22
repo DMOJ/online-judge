@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '5*9f5q57mqmlz2#f$x1h76&jxy#yortjl1v+l*6hd18$d*yx#0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True 
 
 ALLOWED_HOSTS = []
 
@@ -49,7 +49,7 @@ else:
 
     WPADMIN = {
         'admin': {
-            'title': 'DMOJ Admin',
+            'title': 'WLMOJ Admin',
             'menu': {
                 'top': 'wpadmin.menu.menus.BasicTopMenu',
                 'left': 'wpadmin.menu.custom.CustomModelLeftMenuWithDashboard',
@@ -106,7 +106,13 @@ else:
                     ],
                 },
                 ('judge.BlogPost', 'fa-rss-square'),
-                ('judge.Comment', 'fa-comment-o'),
+                {
+                    'model': 'judge.Comment',
+                    'icon': 'fa-comment-o',
+                    'children': [
+                        'judge.CommentLock',
+                    ],
+                },
                 ('flatpages.FlatPage', 'fa-file-text-o'),
                 ('judge.Solution', 'fa-pencil'),
             ],

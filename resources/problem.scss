@@ -4,7 +4,7 @@
             text-align: left;
             padding: 0 1em;
         }
-
+        
         &.problem {
             text-align: left;
             padding-left: 1em;
@@ -91,12 +91,12 @@
     height: 2.3em;
 }
 
-label[for="category"], label[for="type"] {
+label[for="category"], label[for="type"], label[for="problem_visibility"] {
     padding-bottom: 0.25em;
     display: block;
 }
 
-#category {
+#category, #problem_visibility {
     margin-top: 0.5em;
     width: 100%;
 }
@@ -230,7 +230,7 @@ ul.problem-list {
     padding: 4px 10px;
 }
 
-#category, #types {
+#category, #types, #problem_visibility {
     visibility: hidden;
 }
 

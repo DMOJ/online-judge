@@ -220,24 +220,30 @@ class ProblemAdmin(VersionAdmin):
 
     def get_queryset(self, request):
         queryset = Problem.objects.prefetch_related('authors__user')
-        if request.user.has_perm('judge.edit_all_problem'):
-            return queryset
-
         access = Q()
+
         if request.user.has_perm('judge.edit_public_problem'):
             access |= Q(is_public=True)
         if request.user.has_perm('judge.edit_own_problem'):
             access |= Q(authors__id=request.user.profile.id) | Q(curators__id=request.user.profile.id)
+        if request.user.has_perm('judge.edit_all_problem'):
+            access |= ~Q(group__name='lcc')
+            if request.user.has_perm('judge.see_lcc_problem'):
+                access |= Q(group__name='lcc')
         return queryset.filter(access).distinct() if access else queryset.none()
 
     def has_change_permission(self, request, obj=None):
-        if request.user.has_perm('judge.edit_all_problem') or obj is None:
+        if obj is None:
             return True
         if request.user.has_perm('judge.edit_public_problem') and obj.is_public:
             return True
-        if not request.user.has_perm('judge.edit_own_problem'):
-            return False
-        return obj.is_editor(request.user.profile)
+        if request.user.has_perm('judge.edit_own_problem') and obj.is_editor(request.user.profile):
+            return True
+        if request.user.has_perm('judge.edit_all_problem'):
+            if not request.user.has_perm('judge.see_lcc_problem') and obj.is_lcc_problem:
+                return False
+            return True
+        return False
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'allowed_languages':

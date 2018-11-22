@@ -59,7 +59,7 @@ class Comment(MPTTModel):
     def most_recent(cls, user, n, batch=None):
         queryset = cls.objects.filter(hidden=False).select_related('author__user') \
             .defer('author__about', 'body').order_by('-id')
-
+        
         problem_access = CacheDict(lambda code: Problem.objects.get(code=code).is_accessible_by(user))
         contest_access = CacheDict(lambda key: Contest.objects.get(key=key).is_accessible_by(user))
 
@@ -166,7 +166,7 @@ class CommentVote(models.Model):
 
 class CommentLock(models.Model):
     page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
-                            validators=[comment_validator])
+                            validators=[comment_validator], help_text=_('c:contest_code, p:problem_code, s:problem_solution_id, or b:blog_id'))
 
     class Meta:
         permissions = (

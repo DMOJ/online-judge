@@ -102,8 +102,7 @@ class Problem(models.Model):
                                       help_text=_('These users will be able to edit a problem, '
                                                   'but not be publicly shown as an author.'))
     testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True, related_name='tested_problems',
-                                     help_text=_(
-                                         'These users will be able to view a private problem, but not edit it.'))
+                                     help_text=_('These users will be able to view a private problem, but not edit it.'))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'))
     time_limit = models.FloatField(verbose_name=_('time limit'), help_text=_('The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported.'))
@@ -158,6 +157,7 @@ class Problem(models.Model):
         return self.is_editor(user.profile)
 
     def is_accessible_by(self, user):
+        
         # Problem is public.
         if self.is_public:
             # Contest is not private to an organization.
@@ -165,17 +165,13 @@ class Problem(models.Model):
                 return True
 
             # If the user can see all organization private problems.
-            if user.has_perm('judge.see_organization_problems'):
+            if user.has_perm('judge.see_organization_problem'):
                 return True
 
             # If the user is in the organization.
             if user.is_authenticated and \
                self.organizations.filter(id__in=user.profile.organizations.all()):
                 return True
-
-        # If the user can view all problems.
-        if user.has_perm('judge.see_private_problem'):
-            return True
 
         if not user.is_authenticated:
             return False
@@ -190,16 +186,25 @@ class Problem(models.Model):
 
         # If user is currently in a contest containing that problem.
         current = user.profile.current_contest_id
-        if current is None:
-            return False
-        from judge.models import ContestProblem
-        return ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists()
+        if current is not None:
+            from judge.models import ContestProblem
+            return ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists()
+        # If the user can view all problems.
+        if user.has_perm('judge.see_private_problem'):
+            if not user.has_perm('judge.see_lcc_problem') and self.is_lcc_problem:
+                return False
+            return True
+        return False
 
     def __unicode__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse('problem_detail', args=(self.code,))
+
+    @cached_property
+    def is_lcc_problem(self):
+        return self.group.name == 'lcc'
 
     @cached_property
     def author_ids(self):
@@ -308,6 +313,7 @@ class Problem(models.Model):
     class Meta:
         permissions = (
             ('see_private_problem', 'See hidden problems'),
+            ('see_lcc_problem', 'See LCC problems'),
             ('edit_own_problem', 'Edit own problems'),
             ('edit_all_problem', 'Edit all problems'),
             ('edit_public_problem', 'Edit all public problems'),

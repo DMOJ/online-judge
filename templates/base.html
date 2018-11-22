@@ -25,10 +25,10 @@
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
     <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
     <link rel="manifest" href="/manifest.json">
-    <meta name="msapplication-TileColor" content="#FFBB33">
+    <meta name="msapplication-TileColor" content="#3737B4">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     {# Chrome 39 for Android colour #}
-    <meta name="theme-color" content="#FFBB33">
+    <meta name="theme-color" content="#3737B4">
     {% if og_image %}
         <meta property="og:image" content="{{ request.build_absolute_uri(og_image) }}">
     {% endif %}
@@ -234,7 +234,7 @@
                 <span class="anon">
                     <a href="{{ url('auth_login') }}?next={{ LOGIN_RETURN_PATH|urlencode }}">
                         <b>{{ _('Login') }}</b>
-                    </a>&nbsp;|&nbsp;<a href="{{ url('registration_register') }}">{{ _('Register') }}</a>
+			</a>&nbsp;|&nbsp;<a href="{{ url('registration_register') }}">{{ _('Register') }}</a>
                 </span>
             {% endif %}
         </span>
@@ -286,8 +286,11 @@
     <footer>
         <span id="footer-content">
             <br>
-            <a style="color: #808080" href="https://dmoj.ca">proudly powered by <b>DMOJ</b></a> |
-            {% if i18n_config.footer %}
+	    <a style="color: #808080" href="https://ninjaclasher.tk">Run by Ninjaclasher</a> |
+	    <a style="color: #808080" href="http://mcpt.ca"><b>Mackenzie's CPT Judge</b></a> |
+        <a style="color: #808080" href="http://mcpt.ca/privacy/">Privacy Policy</a> |
+        <a style="color: #808080" href="https://github.com/MCPT/wlmoj">Source code</a> |
+	    {% if i18n_config.footer %}
                 {{ i18n_config.footer|safe }} |
             {% endif %}
             <form action="{{ url('set_language') }}" method="post" style="display: inline">

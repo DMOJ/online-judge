@@ -93,6 +93,9 @@ class Contest(models.Model):
     access_code = models.CharField(verbose_name=_('access code'), blank=True, default='', max_length=255,
                                    help_text=_('An optional code to prompt contestants before they are allowed '
                                                'to join the contest. Leave it blank to disable.'))
+    time_bonus = models.IntegerField(verbose_name=_('time bonus'), help_text=_('Number of minutes to award an extra point for submitting before the contest end. Leave as 0 for no time bonus.'), default=0)
+    
+    first_submission_bonus = models.IntegerField(verbose_name=_('first try bonus'), help_text=_('Bonus points for fully solving on first submission.'), default=0)
 
     def clean(self):
         if self.start_time >= self.end_time:
@@ -165,6 +168,8 @@ class Contest(models.Model):
         return True
 
     def is_accessible_by(self, user):
+        if not user.is_authenticated:
+            return False
         # Contest is public
         if self.is_public:
             # Contest is not private to an organization
@@ -210,8 +215,9 @@ class ContestParticipation(models.Model):
                                   help_text=_('0 means non-virtual, otherwise the n-th virtual participation'))
 
     def recalculate_score(self):
-        self.score = sum(map(itemgetter('points'),
-                             self.submissions.values('submission__problem').annotate(points=Max('points'))))
+        from django.db.models import F, FloatField
+        values = self.submissions.values('submission__problem').annotate(total=Max(F('points')+F('bonus'), output_field=FloatField()))
+        self.score = sum(map(itemgetter('total'), values))
         self.save()
         return self.score
 
@@ -311,6 +317,7 @@ class ContestSubmission(models.Model):
     is_pretest = models.BooleanField(verbose_name=_('is pretested'),
                                      help_text=_('Whether this submission was ran only on pretests.'),
                                      default=False)
+    bonus = models.IntegerField(default=0, verbose_name=_('bonus'))
 
     class Meta:
         verbose_name = _('contest submission')

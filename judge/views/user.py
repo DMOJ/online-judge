@@ -32,7 +32,7 @@ from judge.utils.subscription import Subscription
 from judge.utils.views import TitleMixin, generic_message, DiggPaginatorMixin, QueryStringSortMixin
 from .contests import contest_ranking_view
 
-__all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile']
+__all__ = ['UserPage', 'UserAboutPage', 'UserList', 'UserProblemsPage', 'users', 'edit_profile']
 
 
 def remap_keys(iterable, mapping):
@@ -93,14 +93,17 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
         context['hide_solved'] = int(self.hide_solved)
         context['authored'] = self.object.authored_problems.filter(is_public=True, is_organization_private=False).order_by('code')
+        context['rank'] = Profile.objects.filter(is_lcc_account=False, performance_points__gt=self.object.performance_points).count() + 1
+
+        if not self.request.user.is_authenticated:
+            return context
+
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
 
-        context['rank'] = Profile.objects.filter(performance_points__gt=self.object.performance_points).count() + 1
-
         if rating:
-            context['rating_rank'] = Profile.objects.filter(rating__gt=self.object.rating).count() + 1
-            context['rated_users'] = Profile.objects.filter(rating__isnull=False).count()
+            context['rating_rank'] = Profile.objects.filter(is_lcc_account=False, rating__gt=self.object.rating).count() + 1
+            context['rated_users'] = Profile.objects.filter(is_lcc_account=False, rating__isnull=False).count()
         context.update(self.object.ratings.aggregate(min_rating=Min('rating'), max_rating=Max('rating'),
                                                      contests=Count('contest')))
         return context
@@ -118,6 +121,7 @@ class UserAboutPage(UserPage):
 
     def get_context_data(self, **kwargs):
         context = super(UserAboutPage, self).get_context_data(**kwargs)
+        
         ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
             .defer('contest__description')
 
@@ -262,7 +266,7 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     default_sort = '-performance_points'
 
     def get_queryset(self):
-        return (Profile.objects.order_by(self.order, 'id').select_related('user')
+        return (Profile.objects.filter(is_lcc_account=False).order_by(self.order, 'id').select_related('user')
                 .only('display_rank', 'user__username', 'name', 'points', 'rating', 'performance_points',
                       'problem_count'))
 
@@ -292,8 +296,8 @@ def user_ranking_redirect(request):
     except KeyError:
         raise Http404()
     user = get_object_or_404(Profile, user__username=username)
-    rank = Profile.objects.filter(performance_points__gt=user.performance_points).count()
-    rank += Profile.objects.filter(performance_points__exact=user.performance_points, id__lt=user.id).count()
+    rank = Profile.objects.filter(is_lcc_account=False, performance_points__gt=user.performance_points).count()
+    rank += Profile.objects.filter(is_lcc_account=False, performance_points__exact=user.performance_points, id__lt=user.id).count()
     page = rank // UserList.paginate_by
     return HttpResponseRedirect('%s%s#!%s' % (reverse('user_list'), '?page=%d' % (page + 1) if page else '', username))
 

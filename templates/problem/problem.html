@@ -39,7 +39,7 @@
         }
 
         .problem-info-entry {
-            padding-top: 0.5em;
+            padding-top: 0.1em;
         }
     </style>
 {% endblock %}
@@ -51,6 +51,11 @@
             $('a#clone-link').click(function (event) {
                 event.preventDefault();
                 if (confirm('Are you sure you want to clone?'))
+                    $(this).closest("form").submit();
+            })
+            $('a#rejudge-link').click(function (event) {
+                event.preventDefault();
+                if (confirm('Are you sure you want to rejudge all submissions?'))
                     $(this).closest("form").submit();
             })
         });
@@ -79,7 +84,7 @@
             {% endif %}
         {% endif %}
         <h2 style="color:#393630; display: inline-block">{{ title }}</h2>
-        {% if has_pdf_render %}
+        {% if has_pdf_render and (problem.is_public or not problem.is_lcc_problem or perms.judge.see_lcc_problem) %}
             <span class="spacer"></span>
             <a href="{{ url('problem_pdf', problem.code) }}" class="view-pdf">
                 <span class="pdf-icon">
@@ -149,7 +154,16 @@
             </form>
         </div>
     {% endif %}
-
+    
+    {% if perms.judge.rejudge_submission_lot %}
+        <div>
+            <form action="{{ url('problem_submission_rejudge', problem.code) }}" method="post">
+                {% csrf_token %}
+                <a id="rejudge-link" href="#">{{ _('Rejudge all submissions') }}</a>
+            </form>
+        </div>
+    {% endif %}
+    
     <hr style="padding-top: 0.3em">
 
     <div class="problem-info-entry">
@@ -187,7 +201,7 @@
         {% endfor %}
     </div>
 
-    <hr style="padding-top: 0.7em">
+    <hr style="padding-top: 0.1em">
 
     {% cache 86400 'problem_authors' problem.id LANGUAGE_CODE %}
         {% with authors=problem.authors.all() %}

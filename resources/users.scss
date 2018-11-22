@@ -50,8 +50,12 @@ th.header.rank {
 }
 
 #users-table {
+    .realname {
+        width: 30%;
+    }
+    
     .username {
-        width: 100%;
+        width: 70%;
     }
 
     .header {

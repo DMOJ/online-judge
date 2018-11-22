@@ -43,9 +43,8 @@ class TimezoneFilter(admin.SimpleListFilter):
 
 class ProfileAdmin(VersionAdmin):
     fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
-              'math_engine', 'last_access', 'ip', 'mute', 'is_totp_enabled', 'user_script', 'current_contest')
-    readonly_fields = ('user',)
-    list_display = ('admin_user_admin', 'email', 'is_totp_enabled', 'timezone_full',
+              'math_engine', 'last_access', 'ip', 'is_lcc_account', 'mute', 'is_totp_enabled', 'user_script', 'current_contest')
+    list_display = ('user', 'name', 'email', 'is_totp_enabled', 'is_lcc_account',
                     'date_joined', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
     search_fields = ('user__username', 'name', 'ip', 'user__email')

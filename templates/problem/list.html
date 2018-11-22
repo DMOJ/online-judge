@@ -47,10 +47,12 @@
                 var $form = $('form#filter-form');
                 var $search = $('#search');
                 var $category = $('#category');
+                var $problem_visibility = $('#problem_visibility');
 
                 function prep_form() {
                     $search.prop('disabled', !$search.val());
                     $category.prop('disabled', !$category.val());
+                    $problem_visibility.prop('disabled', !$problem_visibility.val());
                 }
 
                 function clean_submit() {
@@ -59,6 +61,8 @@
                 }
 
                 $category.select2().css({'visibility': 'visible'}).change(clean_submit);
+                $problem_visibility.select2().css({'visibility': 'visible'}).change(clean_submit);
+
                 $('#types').select2({multiple: 1, placeholder: '{{ _('Filter by type...') }}'})
                     .css({'visibility': 'visible'});
 

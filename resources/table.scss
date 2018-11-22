@@ -1,6 +1,6 @@
 @import "vars";
 
-$table_header_rounding: 6px;
+$table_header_rounding: 1px;
 
 .table {
     border-spacing: 0;
@@ -44,7 +44,7 @@ $table_header_rounding: 6px;
         height: 2em;
         color: #FFF;
         background-color: $widget_black;
-        border-color: #555;
+        border-color: #2d2db7;
         border-width: 1px 1px 0 0;
         border-style: solid;
         padding: 4px 10px;

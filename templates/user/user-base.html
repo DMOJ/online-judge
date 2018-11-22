@@ -39,8 +39,12 @@
             <br>
 
             <div><b>{{ _('%(count)d problems solved', count=user.problem_count) }}</b></div>
-
-            <div><b class="semibold">{{ _('Rank by points:') }}</b> #{{ rank }}</div>
+            {% if not user.is_lcc_account %}
+                <div>
+                    <b class="semibold">{{ _('Rank by points:') }}</b> 
+                    #{{ rank }}
+                </div>
+            {% endif %}
             <div>
                 <b class="semibold">{{ _('Total points:') }}</b>
                 <span title="{{ user.performance_points|floatformat(2) }}">

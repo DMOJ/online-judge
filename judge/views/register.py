@@ -26,7 +26,8 @@ class CustomRegistrationForm(RegistrationForm):
     username = forms.RegexField(regex=r'^\w+$', max_length=30, label=_('Username'),
                                 error_messages={'invalid': _('A username must contain letters, '
                                                              'numbers, or underscores')})
-    display_name = CharField(max_length=50, required=False, label=_('Real name (optional)'))
+    display_name = forms.RegexField(regex=r'^[\w,\s]+$', max_length=30, required=True, label=_('Real name'),
+                                error_messages={'invalid': _('Your name must contain only letters')})
     timezone = ChoiceField(label=_('Timezone'), choices=TIMEZONE,
                            widget=Select2Widget(attrs={'style': 'width:100%'}))
     language = ModelChoiceField(queryset=Language.objects.all(), label=_('Preferred language'), empty_label=None,
@@ -75,7 +76,16 @@ class RegistrationView(OldRegistrationView):
             'language': Language.get_python2()
         })
 
+
         cleaned_data = form.cleaned_data
+        '''        
+        user = User(username=cleaned_data['username'], email=cleaned_data['email'], is_active=True)
+        user.set_password(cleaned_data['password1'])
+        user.save()
+        profile, _ = Profile.objects.get_or_create(user=user, defaults={
+            'language': Language.get_python2()
+        })
+        '''
         profile.name = cleaned_data['display_name']
         profile.timezone = cleaned_data['timezone']
         profile.language = cleaned_data['language']

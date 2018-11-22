@@ -242,7 +242,7 @@ input {
 // Bootstrap-y pagination
 ul.pagination a:hover {
     color: #FFF;
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(55, 55, 180, 0.70);
 }
 
 ul.pagination {
@@ -280,7 +280,7 @@ ul.pagination {
                     text-decoration: none;
                     color: #FFF;
                     background-color: $widget_black;
-                    border: 1px solid #505050;
+                    border: 1px solid $pagination_border;
                     margin-left: -1px;
                 }
             }
@@ -296,7 +296,7 @@ ul.pagination {
             span {
                 color: #888;
                 background-color: $widget_black;
-                border-color: #505050;
+                border-color: $pagination_border;
             }
         }
 

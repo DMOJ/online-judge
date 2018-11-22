@@ -26,6 +26,22 @@
                         {% if show_types %} checked{% endif %}>
                 <label for="show_types">{{ _('Show problem types') }}</label>
             </div>
+            {% if perms.judge.see_private_problem %}
+                <div class="filter-form-group">
+                    <label for="problem_visibility"><i>{{ _('Problem Visibility') }}</i></label>
+                    <select id="problem_visibility" name="problem_visibility">
+                        {% if problem_visibility %}
+                            <option value="" selected="selected">{{ _('All') }}</option>
+                        {% else %}
+                            <option value="">{{ _('All') }}</option>{% endif %}
+                        {% for id, name in visibilities.items() %}
+                            <option value="{{ id }}"{% if id == problem_visibility %} selected{% endif %}>
+                                {{ name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
             <div class="filter-form-group">
                 <label for="category"><i>{{ _('Category') }}</i></label>
                 <select id="category" name="category">

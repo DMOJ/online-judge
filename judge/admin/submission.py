@@ -62,7 +62,7 @@ class SubmissionTestCaseInline(admin.TabularInline):
 
 
 class ContestSubmissionInline(admin.StackedInline):
-    fields = ('problem', 'participation', 'points')
+    fields = ('problem', 'participation', 'points', 'bonus')
     model = ContestSubmission
 
     def get_formset(self, request, obj=None, **kwargs):
@@ -97,7 +97,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     actions = ('judge', 'recalculate_score')
     list_display = ('id', 'problem_code', 'problem_name', 'user_column', 'execution_time', 'pretty_memory',
                     'points', 'language_column', 'status', 'result', 'judge_column')
-    list_filter = ('language', SubmissionStatusFilter, SubmissionResultFilter)
+    list_filter = ('language', 'judged_on', SubmissionStatusFilter, SubmissionResultFilter)
     search_fields = ('problem__code', 'problem__name', 'user__user__username', 'user__name')
     actions_on_top = True
     actions_on_bottom = True
@@ -112,6 +112,8 @@ class SubmissionAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.edit_all_problem'):
             id = request.user.profile.id
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id)).distinct()
+        elif not request.user.has_perm('judge.see_lcc_problem'):
+            queryset = queryset.exclude(problem__group__name="lcc", problem__is_public=False)
         return queryset
 
     def has_add_permission(self, request):
@@ -120,8 +122,11 @@ class SubmissionAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         if not request.user.has_perm('judge.edit_own_problem'):
             return False
-        if request.user.has_perm('judge.edit_all_problem') or obj is None:
+        if obj is None:
             return True
+        if request.user.has_perm('judge.edit_all_problem'):
+            if request.user.has_perm('judge.see_lcc_problem') or not obj.problem.is_lcc_problem:
+                return True
         return obj.problem.is_editor(request.user.profile)
 
     def judge(self, request, queryset):
@@ -137,6 +142,8 @@ class SubmissionAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.edit_all_problem'):
             id = request.user.profile.id
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id))
+        elif not request.user.has_perm('judge.see_lcc_problem'):
+            queryset = queryset.exclude(problem__group__name="lcc", problem__is_public=False)
         judged = len(queryset)
         for model in queryset:
             model.judge(rejudge=True)
@@ -150,22 +157,17 @@ class SubmissionAdmin(admin.ModelAdmin):
             self.message_user(request, ugettext('You do not have the permission to rejudge submissions.'),
                               level=messages.ERROR)
             return
-        submissions = list(queryset.select_related('problem').only('points', 'case_points', 'case_total',
-                                                                   'problem__partial', 'problem__points'))
+        submissions = list(queryset.select_related('problem'))#.only('points', 'case_points', 'case_total',
+                                                             #      'problem__partial', 'problem__points'))
+                                                             # Some sort of brain damage going on - quantum
         for submission in submissions:
             submission.points = round(submission.case_points / submission.case_total * submission.problem.points
-                                      if submission.case_total else 0, 1)
+                                      if submission.case_total else 0, 3)
             if not submission.problem.partial and submission.points < submission.problem.points:
                 submission.points = 0
             submission.save()
 
-            if hasattr(submission, 'contest'):
-                contest = submission.contest
-                contest.points = round(submission.case_points / submission.case_total * contest.problem.points
-                                       if submission.case_total > 0 else 0, 1)
-                if not contest.problem.partial and contest.points < contest.problem.points:
-                    contest.points = 0
-                contest.save()
+            submission.recalculate_contest_submission()
 
         for profile in Profile.objects.filter(id__in=queryset.values_list('user_id', flat=True).distinct()):
             profile.calculate_points()

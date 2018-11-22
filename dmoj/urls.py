@@ -110,12 +110,13 @@ urlpatterns = [
         url(r'^/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
         url(r'^/pdf/(?P<language>[a-z-]+)$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
         url(r'^/clone', problem.clone_problem, name='problem_clone'),
+        url(r'^/rejudge', problem.rejudge_submissions, name='problem_submission_rejudge'),
         url(r'^/submit$', problem.problem_submit, name='problem_submit'),
         url(r'^/resubmit/(?P<submission>\d+)$', problem.problem_submit, name='problem_submit'),
 
         url(r'^/rank/', paged_list_view(ranked_submission.RankedSubmissions, 'ranked_submissions')),
         url(r'^/submissions/', paged_list_view(submission.ProblemSubmissions, 'chronological_submissions')),
-        url(r'^/submissions/(?P<user>\w+)/', paged_list_view(submission.UserProblemSubmissions, 'user_submissions')),
+        url(r'^/submissions/(?P<user>[\w,:]+)/', paged_list_view(submission.UserProblemSubmissions, 'user_submissions')),
 
         url(r'^/$', lambda _, problem: HttpResponsePermanentRedirect(reverse('problem_detail', args=[problem]))),
 
@@ -129,7 +130,7 @@ urlpatterns = [
     ])),
 
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
-    url(r'^submissions/user/(?P<user>\w+)/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
+    url(r'^submissions/user/(?P<user>[\w,:]+)/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
 
     url(r'^src/(?P<submission>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
     url(r'^src/(?P<submission>\d+)/raw$', submission.SubmissionSourceRaw.as_view(), name='submission_source_raw'),
@@ -149,7 +150,7 @@ urlpatterns = [
 
     url(r'^user$', user.UserAboutPage.as_view(), name='user_page'),
     url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
-    url(r'^user/(?P<user>\w+)', include([
+    url(r'^user/(?P<user>[\w,:]+)', include([
         url(r'^$', user.UserAboutPage.as_view(), name='user_page'),
         url(r'^/solved', include([
             url(r'^$', user.UserProblemsPage.as_view(), name='user_problems'),
@@ -189,11 +190,11 @@ urlpatterns = [
         url(r'^/rank/(?P<problem>\w+)/',
             paged_list_view(ranked_submission.ContestRankedSubmission, 'contest_ranked_submissions')),
 
-        url(r'^/submissions/(?P<user>\w+)/(?P<problem>\w+)/',
+        url(r'^/submissions/(?P<user>[\w,:]+)/(?P<problem>\w+)/',
             paged_list_view(submission.UserContestSubmissions, 'contest_user_submissions')),
 
         url(r'^/participations$', contests.own_participation_list, name='contest_participation_own'),
-        url(r'^/participations/(?P<user>\w+)$', contests.participation_list, name='contest_participation'),
+        url(r'^/participations/(?P<user>[\w,:]+)$', contests.participation_list, name='contest_participation'),
 
         url(r'^/$', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))),
     ])),
@@ -233,8 +234,11 @@ urlpatterns = [
         url(r'^problem/list$', api.api_v1_problem_list),
         url(r'^problem/info/(\w+)$', api.api_v1_problem_info),
         url(r'^user/list$', api.api_v1_user_list),
-        url(r'^user/info/(\w+)$', api.api_v1_user_info),
-        url(r'^user/submissions/(\w+)$', api.api_v1_user_submissions),
+        url(r'^user/info/([\w,:]+)$', api.api_v1_user_info),
+        url(r'^user/submissions/([\w,:]+)$', api.api_v1_user_submissions),
+#        url(r'^v2/', include([
+#            url(r'user-info$', api.api_v2_user_info),
+#        ])),
     ])),
 
     url(r'^blog/', paged_list_view(blog.PostList, 'blog_post_list')),

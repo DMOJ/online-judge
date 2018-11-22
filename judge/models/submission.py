@@ -116,8 +116,31 @@ class Submission(models.Model):
 
     def abort(self):
         abort_submission(self)
-
+    
     abort.alters_data = True
+
+    def recalculate_contest_submission(self):
+        if hasattr(self, 'contest'):
+            contest = self.contest
+            contest.points = round(self.case_points / self.case_total * contest.problem.points if self.case_total > 0 else 0, 3)
+            if not contest.problem.partial and contest.points < contest.problem.points:
+                contest.points = 0
+
+            time_bonus = contest.participation.contest.time_bonus
+            first_submission_bonus = contest.participation.contest.first_submission_bonus
+            contest.bonus = 0
+            if contest.points != 0 and not contest.participation.spectate:
+                if time_bonus != 0:
+                    contest.bonus = (contest.points / contest.problem.points)\
+                            * ((contest.participation.end_time - contest.submission.date).total_seconds()//(60*time_bonus))
+                if contest.points == contest.problem.points\
+                        and contest.problem.submissions.filter(participation=contest.participation, submission__date__lte=contest.submission.date).count() == 1:
+                    contest.bonus += first_submission_bonus
+            contest.save()
+            self.contest.participation.recalculate_score()
+            self.contest.participation.update_cumtime()
+
+    recalculate_contest_submission.alters_data = True
 
     @property
     def is_graded(self):

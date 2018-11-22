@@ -51,6 +51,9 @@
             <td class="{% if problem.is_pretested and contest.run_pretests_only %}pretest-{% endif %}{{ problem.state }}">
                 <a href="{{ url('contest_user_submissions', contest.key, user.user.username, problem.code) }}">
                     {{- problem.points|floatformat }}
+                    {% if (contest.time_bonus or contest.first_submission_bonus) and problem.bonus %}
+                        <font style="font-size:10px;"> +{{ problem.bonus|floatformat }}</font>
+                    {% endif %}
                     <div class="solving-time">{{ problem.time|timedelta('noday') }}</div>
                 </a>
             </td>

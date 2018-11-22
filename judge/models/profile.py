@@ -93,7 +93,12 @@ class Profile(models.Model):
     organizations = SortedManyToManyField(Organization, verbose_name=_('organization'), blank=True,
                                           related_name='members', related_query_name='member')
     display_rank = models.CharField(max_length=10, default='user', verbose_name=_('display rank'),
-                                    choices=(('user', 'Normal User'), ('setter', 'Problem Setter'), ('admin', 'Admin')))
+                                    choices=(('user', 'Normal User'), 
+                                             ('setter', 'Problem Setter'), 
+                                             ('exec', 'Exec'), 
+                                             ('teacher', 'Teacher'), 
+                                             ('admin', 'Admin'),
+                                            ))
     mute = models.BooleanField(verbose_name=_('comment mute'), help_text=_('Some users are at their best when silent.'),
                                default=False)
     rating = models.IntegerField(null=True, default=None)
@@ -110,6 +115,8 @@ class Profile(models.Model):
                                       help_text=_('32 character base32-encoded key for TOTP'),
                                       validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
                                                                  _('TOTP key must be empty or base32'))])
+    is_lcc_account = models.BooleanField(verbose_name=_('LCC account'), default=False, 
+                                      help_text=_('If set, limits this account to LCC-only permissions'))
 
     @cached_property
     def organization(self):
@@ -183,7 +190,8 @@ class Profile(models.Model):
     class Meta:
         permissions = (
             ('test_site', 'Shows in-progress development stuff'),
-            ('totp', 'Edit TOTP settings')
+            ('totp', 'Edit TOTP settings'),
+            ('view_name', 'View user\'s real name'),
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')

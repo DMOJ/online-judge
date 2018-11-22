@@ -141,7 +141,13 @@
             {% if form.username.errors %}
                 <div class="form-field-error">{{ form.username.errors }}</div>
             {% endif %}
-
+            
+            <div class="block-header">{{ _('Real Name') }}</div>
+            <span class="fullwidth{% if form.display_name.errors %}-error{% endif %}">{{ form.display_name }}</span>
+            {% if form.display_name.errors %}
+                <div class="form-field-error">{{ form.display_name.errors }}</div>
+            {% endif %}
+ 
             <div class="block-header">{{ _('Email') }}</div>
             <span class="fullwidth{% if form.email.errors %}-error{% endif %}">{{ form.email }}</span>
             {% if form.email.errors %}

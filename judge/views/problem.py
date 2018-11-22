@@ -222,6 +222,9 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
             raise Http404()
 
         problem = self.get_object()
+        if not problem.is_public and problem.is_lcc_problem and not self.request.user.has_perm('see_lcc_problem'):
+            raise Http404()
+
         try:
             trans = problem.translations.get(language=language)
         except ProblemTranslation.DoesNotExist:
@@ -347,11 +350,15 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     def get_normal_queryset(self):
         filter = Q(is_public=True)
         if self.profile is not None:
+            if self.request.user.has_perm('judge.see_private_problem'):
+                filter |= ~Q(group__name='lcc')
+                if self.request.user.has_perm('judge.see_lcc_problem'):
+                    filter |= Q(group__name='lcc')
             filter |= Q(authors=self.profile)
             filter |= Q(curators=self.profile)
             filter |= Q(testers=self.profile)
         queryset = Problem.objects.filter(filter).select_related('group').defer('description')
-        if not self.request.user.has_perm('see_organization_problem'):
+        if not self.request.user.has_perm('judge.see_organization_problem'):
             filter = Q(is_organization_private=False)
             if self.profile is not None:
                 filter |= Q(organizations__id__in=self.profile.organizations.all())
@@ -362,7 +369,19 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         if self.show_types:
             queryset = queryset.prefetch_related('types')
         if self.category is not None:
-            queryset = queryset.filter(group__id=self.category)
+            queryset = queryset.filter(group__id=self.category) 
+
+        if self.request.user.has_perm('judge.see_private_problem'):
+            if self.problem_visibility == 1:
+                filter = Q(is_public=True)
+            elif self.problem_visibility == 2:
+                filter = ~Q(group__name="lcc") & Q(is_public=False)
+            elif self.problem_visibility == 3 and self.request.user.has_perm('judge.see_lcc_problem'):
+                filter = Q(group__name="lcc", is_public=False)
+            else:
+                filter = ~Q(group__name="lcc") | Q(is_public=True)
+            queryset = queryset.filter(filter)
+
         if self.selected_types:
             queryset = queryset.filter(types__in=self.selected_types)
         if 'search' in self.request.GET:
@@ -392,6 +411,14 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         context['hide_solved'] = 0 if self.in_contest else int(self.hide_solved)
         context['show_types'] = 0 if self.in_contest else int(self.show_types)
         context['full_text'] = 0 if self.in_contest else int(self.full_text)
+        context['problem_visibility'] = self.problem_visibility
+        context['visibilities'] = {
+                1 : 'Public',
+                2 : 'Private',
+                }
+        if self.request.user.has_perm('judge.see_lcc_problem'):
+            context['visibilities'][3] = 'Private LCC Problems'
+
         context['category'] = self.category
         context['categories'] = ProblemGroup.objects.all()
         if self.show_types:
@@ -405,7 +432,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         context.update(self.get_sort_paginate_context())
         if not self.in_contest:
             context.update(self.get_sort_context())
-            context['hot_problems'] = hot_problems(timedelta(days=1), 7)
+            context['hot_problems'] = hot_problems(timedelta(days=1), 5)
             context['point_start'], context['point_end'], context['point_values'] = self.get_noui_slider_points()
         else:
             context['hot_problems'] = None
@@ -444,6 +471,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
 
         self.search_query = None
         self.category = None
+        self.problem_visibility = None
         self.selected_types = []
 
         # This actually copies into the instance dictionary...
@@ -452,6 +480,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             self.all_sorts.discard('type')
 
         self.category = safe_int_or_none(request.GET.get('category'))
+        self.problem_visibility = safe_int_or_none(request.GET.get('problem_visibility'))
         if 'type' in request.GET:
             try:
                 self.selected_types = map(int, request.GET.getlist('type'))
@@ -625,6 +654,8 @@ def clone_problem(request, problem):
 
     languages = problem.allowed_languages.all()
     types = problem.types.all()
+    problem.ac_rate = 0
+    problem.user_count = 0
     problem.pk = None
     problem.is_public = False
     problem.code += '_clone'
@@ -640,7 +671,20 @@ def clone_problem(request, problem):
                 pass
             else:
                 break
-    problem.authors.add(request.user.profile)
+    #problem.authors.add(request.user.profile)
     problem.allowed_languages = languages
     problem.types = types
     return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
+
+@require_POST
+@login_required
+@permission_required('judge.rejudge_submission_lot')
+def rejudge_submissions(request, problem):
+    problem_model = get_object_or_404(Problem, code=problem)
+    if not problem_model.is_editable_by(request.user):
+        raise PermissionDenied()
+    queryset = Submission.objects.filter(problem__code=problem)
+    for model in queryset:
+        model.judge(rejudge=True)
+    return HttpResponseRedirect(reverse('problem_detail', args=(problem,)))
+        

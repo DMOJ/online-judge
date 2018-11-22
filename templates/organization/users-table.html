@@ -1,12 +1,12 @@
 {% extends "user/users-table.html" %}
 
-{% block before_point_head %}
+{% block after_username_head %}
     {% if is_admin %}
         <th class="header"></th>
     {% endif %}
 {% endblock %}
 
-{% block before_point %}
+{% block after_username %}
     {% if is_admin %}
         <td>
             <form action="{{ kick_url }}" method="POST" class="kick-form">
