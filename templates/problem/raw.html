@@ -42,15 +42,17 @@
 <h2 style="color:#393630; display: inline-block">{{ problem_name }}</h2>
 <hr>
 <div class="content-description printing">
-    {{ description|markdown('problem', 'tex')|reference|absolutify(url)|str|safe }}
+    {{ description|markdown('problem', 'tex' if math_engine == 'jax' else math_engine)|reference|absolutify(url)|str|safe }}
 </div>
-<script type="text/javascript" src="mathjax_config.js"></script>
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-<script type="text/javascript">
-    MathJax.Hub.queue.Push(function () {
-        if (typeof window.callPhantom === 'function')
-            window.callPhantom({'action': 'snapshot'});
-    });
-</script>
+{% if math_engine == 'jax' %}
+    <script type="text/javascript" src="mathjax_config.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script type="text/javascript">
+        MathJax.Hub.queue.Push(function () {
+            if (typeof window.callPhantom === 'function')
+                window.callPhantom({'action': 'snapshot'});
+        });
+    </script>
+{% endif %}
 </body>
 </html>

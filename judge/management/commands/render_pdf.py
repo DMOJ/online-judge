@@ -8,7 +8,7 @@ from django.template.loader import get_template
 from django.utils import translation
 
 from judge.models import Problem, ProblemTranslation
-from judge.pdf_problems import WebKitPdfMaker, PhantomJSPdfMaker, DefaultPdfMaker
+from judge.pdf_problems import DefaultPdfMaker, PhantomJSPdfMaker, SlimerJSPdfMaker
 
 
 class Command(BaseCommand):
@@ -21,7 +21,7 @@ class Command(BaseCommand):
                             help='language to render PDF in')
         parser.add_argument('-p', '--phantomjs', action='store_const', const=PhantomJSPdfMaker,
                             default=DefaultPdfMaker, dest='engine')
-        parser.add_argument('-w', '--wkhtmltopdf', action='store_const', const=WebKitPdfMaker, dest='engine')
+        parser.add_argument('-s', '--slimerjs', action='store_const', const=SlimerJSPdfMaker, dest='engine')
 
     def handle(self, *args, **options):
         try:
@@ -42,8 +42,9 @@ class Command(BaseCommand):
                 'problem': problem,
                 'problem_name': problem.name if trans is None else trans.name,
                 'description': problem.description if trans is None else trans.description,
-                'url': ''
-            }).replace('"//', '"http://').replace("'//", "'http://")
+                'url': '',
+                'math_engine': maker.math_engine,
+            }).replace('"//', '"https://').replace("'//", "'https://")
             for file in ('style.css', 'pygment-github.css', 'mathjax_config.js'):
                 maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
             maker.make(debug=True)
