@@ -11,10 +11,13 @@ from django.conf import settings
 from django.utils.translation import ugettext
 
 HAS_PHANTOMJS = os.access(getattr(settings, 'PHANTOMJS', ''), os.X_OK)
+HAS_SLIMERJS = os.access(getattr(settings, 'SLIMERJS', ''), os.X_OK)
 HAS_PDF = (os.path.isdir(getattr(settings, 'PROBLEM_PDF_CACHE', '')) and HAS_PHANTOMJS)
 
 
 class BasePdfMaker(object):
+    math_engine = 'jax'
+
     def __init__(self, dir=None, clean_up=True):
         self.dir = dir or os.path.join(getattr(settings, 'PROBLEM_PDF_TEMP_DIR', tempfile.gettempdir()),
                                        str(uuid.uuid1()))
@@ -63,7 +66,7 @@ class BasePdfMaker(object):
 
 
 class PhantomJSPdfMaker(BasePdfMaker):
-    template = u'''
+    template = u'''\
 "use strict";
 var page = require('webpage').create();
 var param = {params};
@@ -114,12 +117,74 @@ page.open(param.input, function (status) {
     def make(self, debug=False):
         with io.open(os.path.join(self.dir, '_render.js'), 'w', encoding='utf-8') as f:
             f.write(self.get_render_script())
-        cmdline = [getattr(settings, 'PHANTOMJS', 'phantomjs'), '_render.js']
+        cmdline = [settings.PHANTOMJS, '_render.js']
         self.proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir)
         self.log = self.proc.communicate()[0]
 
 
-if HAS_PHANTOMJS:
+class SlimerJSPdfMaker(BasePdfMaker):
+    math_engine = 'mml'
+
+    template = u'''\
+"use strict";
+try {
+    var param = {params};
+
+    var {Cc, Ci} = require('chrome');
+    var prefs = Cc['@mozilla.org/preferences-service;1'].getService(Ci.nsIPrefService);
+    // Changing the serif font so that printed footers show up as Segoe UI.
+    var branch = prefs.getBranch('font.name.serif.');
+    branch.setCharPref('x-western', 'Segoe UI');
+
+    var page = require('webpage').create();
+
+    page.paperSize = {
+        format: param.paper, orientation: 'portrait', margin: '1cm', edge: '0.5cm',
+        footerStr: { left: '', right: '', center: param.footer }
+    };
+
+    page.open(param.input, function (status) {
+        if (status !== 'success') {
+            console.log('Unable to load the address!');
+            slimer.exit(1);
+        } else {
+            page.render(param.output, { ratio: param.zoom });
+            slimer.exit();
+        }
+    });
+} catch (e) {
+    console.error(e);
+    slimer.exit(1);
+}
+'''
+
+    def get_render_script(self):
+        return self.template.replace('{params}', json.dumps({
+            'zoom': getattr(settings, 'SLIMERJS_PDF_ZOOM', 0.75),
+            'input': 'input.html', 'output': 'output.pdf',
+            'paper': getattr(settings, 'SLIMERJS_PAPER_SIZE', 'Letter'),
+            'footer': ugettext('Page [page] of [topage]').replace('[page]', '&P')
+                .replace('[topage]', '&L').encode('utf-8'),
+        }))
+
+    def make(self, debug=False):
+        with io.open(os.path.join(self.dir, '_render.js'), 'w', encoding='utf-8') as f:
+            f.write(self.get_render_script())
+
+        env = None
+        firefox = getattr(settings, 'SLIMERJS_FIREFOX_PATH', '')
+        if firefox:
+            env = os.environ.copy()
+            env['SLIMERJSLAUNCHER'] = firefox
+
+        cmdline = [settings.SLIMERJS, '--headless', '_render.js']
+        self.proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir, env=env)
+        self.log = self.proc.communicate()[0]
+
+
+if HAS_SLIMERJS:
+    DefaultPdfMaker = SlimerJSPdfMaker
+elif HAS_PHANTOMJS:
     DefaultPdfMaker = PhantomJSPdfMaker
 else:
     DefaultPdfMaker = None
