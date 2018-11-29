@@ -51,20 +51,7 @@ def _find_contest(request, key, private_check=True):
 
 class ContestListMixin(object):
     def get_queryset(self):
-        queryset = Contest.objects.all()
-        if not self.request.user.is_authenticated:
-            return Contest.objects.none()
-        if not self.request.user.has_perm('judge.see_private_contest'):
-            q = Q(is_public=True)
-            if self.request.user.is_authenticated:
-                q |= Q(organizers=self.request.user.profile)
-            queryset = queryset.filter(q)
-        if not self.request.user.has_perm('judge.edit_all_contest'):
-            q = Q(is_private=False)
-            if self.request.user.is_authenticated:
-                q |= Q(organizations__in=self.request.user.profile.organizations.all())
-            queryset = queryset.filter(q)    
-        return queryset.distinct()
+        return Contest.contests_list(self.request.user)
 
 
 class ContestList(TitleMixin, ContestListMixin, ListView):
@@ -249,10 +236,10 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
 
         is_lcc_contest = ContestTag.objects.get(name="lcc") in contest.tags.all()
 
-        if is_lcc_contest and not profile.is_lcc_account:
+        if is_lcc_contest and not profile.is_contest_account:
             return generic_message(request, _('Cannot join LCC contest'),
                                    _('What are you trying to do? Join the LCC contest on your own account? You shall be banned.'))
-        elif not is_lcc_contest and profile.is_lcc_account:
+        elif not is_lcc_contest and profile.is_contest_account:
             return generic_message(request, _('Cannot join non-LCC contest'),
                                    _('What are you trying to do? Join the contest on your LCC account? You shall be banned.'))
 
@@ -555,7 +542,7 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
                              show_current_virtual=True, ranker=ranker):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
 
-    if contest.hide_scoreboard and contest.is_in_contest(request):
+    if contest.hide_scoreboard and contest.is_in_contest(request.user):
         return [(_('???'), get_participation_ranking_profile(contest,
                                                              request.user.profile.current_contest, problems))], problems
 
@@ -576,7 +563,7 @@ def contest_ranking_ajax(request, contest, participation=None):
     if not exists:
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
 
-    if not contest.can_see_scoreboard(request):
+    if not contest.can_see_scoreboard(request.user):
         raise Http404()
 
     users, problems = get_contest_ranking_list(request, contest, participation)
@@ -589,7 +576,7 @@ def contest_ranking_ajax(request, contest, participation=None):
 
 
 def contest_ranking_view(request, contest, participation=None):
-    if not contest.can_see_scoreboard(request):
+    if not contest.can_see_scoreboard(request.user):
         raise Http404()
 
     users, problems = get_contest_ranking_list(request, contest, participation)
@@ -641,7 +628,7 @@ def base_participation_list(request, contest, profile):
     contest, exists = _find_contest(request, contest)
     if not exists:
         return contest
-    if not contest.can_see_scoreboard(request):
+    if not contest.can_see_scoreboard(request.user):
         raise Http404()
 
     req_username = request.user.username if request.user.is_authenticated else None

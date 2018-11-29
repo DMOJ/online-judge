@@ -106,6 +106,9 @@ class OrganizationUsers(OrganizationDetailView):
 
 class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
+        if request.user.profile.is_contest_account:
+            raise Http404()
+
         org = self.get_object()
         response = self.handle(request, org, request.user.profile)
         if response is not None:

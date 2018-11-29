@@ -1,5 +1,7 @@
 from operator import attrgetter
 
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db.models import Prefetch, F
 from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
@@ -9,20 +11,36 @@ from judge.models import Contest, ContestParticipation, ContestTag, Problem, Pro
 from judge.views.contests import base_contest_ranking_list
 
 
+def error(message):
+    return JsonResponse({
+        "error": message
+    }, status=422)
+
+
 def sane_time_repr(delta):
     days = delta.days
     hours = delta.seconds / 3600
     minutes = (delta.seconds % 3600) / 60
     return '%02d:%02d:%02d' % (days, hours, minutes)
 
+def get_request_user(request):
+    try:
+        username = request.GET['id']
+        token = request.GET['token']
+        user = User.objects.get(username=username)
+        if user.profile.api_token != token:
+            raise ObjectDoesNotExist()
+    except (KeyError, ObjectDoesNotExist):
+        return request.user
+    else:
+        return user 
 
 def api_v1_contest_list(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({})
+    user = get_request_user(request)
 
-    queryset = Contest.objects.filter(is_public=True, is_private=False).prefetch_related(
+    queryset = Contest.contests_list(user).prefetch_related(
         Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description')
-
+    
     return JsonResponse({c.key: {
         'name': c.name,
         'start_time': c.start_time.isoformat(),
@@ -33,13 +51,15 @@ def api_v1_contest_list(request):
 
 
 def api_v1_contest_detail(request, contest):
-    if not request.user.is_authenticated:
-        raise Http404()
+    user = get_request_user(request)
 
     contest = get_object_or_404(Contest, key=contest)
 
-    in_contest = contest.is_in_contest(request)
-    can_see_rankings = contest.can_see_scoreboard(request)
+    if not contest.is_accessible_by(user):
+        raise Http404()
+
+    in_contest = contest.is_in_contest(user)
+    can_see_rankings = contest.can_see_scoreboard(user)
     if contest.hide_scoreboard and in_contest:
         can_see_rankings = False
 
@@ -77,10 +97,13 @@ def api_v1_contest_detail(request, contest):
 
 
 def api_v1_problem_list(request):
-    if not request.user.is_authenticated:
+    user = get_request_user(request)
+
+    if not user.is_authenticated:
         return JsonResponse({})
 
-    queryset = Problem.objects.filter(is_public=True, is_organization_private=False)
+    queryset = Problem.problems_list(user)
+    
     if settings.ENABLE_FTS and 'search' in request.GET:
         query = ' '.join(request.GET.getlist('search')).strip()
         if query:
@@ -96,11 +119,13 @@ def api_v1_problem_list(request):
 
 
 def api_v1_problem_info(request, problem):
-    if not request.user.is_authenticated:
+    user = get_request_user(request)
+
+    if not user.is_authenticated:
         raise Http404()
 
     p = get_object_or_404(Problem, code=problem)
-    if not p.is_accessible_by(request.user):
+    if not p.is_accessible_by(user):
         raise Http404()
 
     return JsonResponse({
@@ -117,7 +142,9 @@ def api_v1_problem_info(request, problem):
 
 
 def api_v1_user_list(request):
-    if not request.user.is_authenticated:
+    user = get_request_user(request)
+
+    if not user.is_authenticated:
         return JsonResponse({})
 
     queryset = Profile.objects.values_list('user__username', 'points', 'display_rank')
@@ -127,11 +154,13 @@ def api_v1_user_list(request):
     } for username, points, rank in queryset})
 
 
-def api_v1_user_info(request, user):
-    if not request.user.is_authenticated:
+def api_v1_user_info(request, username):
+    user = get_request_user(request)
+
+    if not user.is_authenticated:
         return JsonResponse({})
 
-    profile = get_object_or_404(Profile, user__username=user)
+    profile = get_object_or_404(Profile, user__username=username)
     submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True, problem__is_organization_private=False)
                        .values('problem').distinct().values_list('problem__code', flat=True))
     resp = {
@@ -141,32 +170,39 @@ def api_v1_user_info(request, user):
         'organizations': list(profile.organizations.values_list('key', flat=True)),
     }
 
-    if request.user.has_perm('judge.view_name'):
+    if user.has_perm('judge.view_name'):
         resp['name'] = profile.name
 
-    last_rating = profile.ratings.order_by('-contest__end_time').first()
-    
+    last_rating = None
+    last_volatility = None
     contest_history = {}
-    for contest_key, rating in ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False) \
-                                                           .order_by('-contest__end_time').values_list('contest__key', 'rating__rating'):
+    for contest_key, rating, volatility in ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False) \
+                                                               .order_by('-contest__end_time') \
+                                                               .values_list('contest__key', 'rating__rating', 'rating__volatility'):
         contest_history[contest_key] = {
             'rating': rating,
+            'volatility': volatility,
         }
+        if last_rating is None:
+            last_rating = rating
+            last_volatility = volatility
 
     resp['contests'] = {
-        'current_rating': last_rating.rating if last_rating else None,
-        'volatility': last_rating.volatility if last_rating else None,
+        'current_rating': last_rating,
+        'volatility': last_volatility,
         'history': contest_history,
     }
 
     return JsonResponse(resp)
 
 
-def api_v1_user_submissions(request, user):
-    if not request.user.is_authenticated:
+def api_v1_user_submissions(request, username):
+    user = get_request_user(request)
+
+    if not user.is_authenticated:
         return JsonResponse({})
 
-    profile = get_object_or_404(Profile, user__username=user)
+    profile = get_object_or_404(Profile, user__username=username)
     subs = Submission.objects.filter(user=profile, problem__is_public=True, problem__is_organization_private=False)
 
     return JsonResponse({sub['id']: {
@@ -178,3 +214,51 @@ def api_v1_user_submissions(request, user):
         'status': sub['status'],
         'result': sub['result'],
     } for sub in subs.values('id', 'problem__code', 'time', 'memory', 'points', 'language__key', 'status', 'result')})
+
+
+def api_v1_submission_list(request):
+    pass
+
+
+def api_v1_submission_detail(request, submission):
+    user = get_request_user(request)
+
+    submission = get_object_or_404(Submission, id=submission)
+    
+    if not submission.is_accessible_by(user):
+        raise PermissionDenied()
+
+    resp = {
+        'problem': submission.problem.code,
+        'user': submission.user.user.username,
+        'time': submission.time,
+        'memory': submission.memory,
+        'points': submission.points,
+        'total': submission.problem.points,
+        'language': submission.language.key,
+        'status': submission.status,
+        'result': submission.result,
+        'cases': [{
+            'case_number': case['case'],
+            'status': case['status'],
+            'time': case['time'],
+            'memory': case['memory'],
+            'points': case['points'],
+            'total': case['total'],
+            'clipped_output': case['output'],
+        } for case in submission.test_cases.all().values('case', 'status', 'time', 'memory', 'points', 'total', 'output')]
+    }
+    
+    return JsonResponse(resp)
+
+def api_v1_submission_source(request, submission):
+    user = get_request_user(request)
+
+    submission = get_object_or_404(Submission, id=submission)
+
+    if not submission.is_accessible_by(user):
+        raise PermissionDenied()
+
+    return JsonResponse({
+        'source': submission.source.replace('\r', ''),
+    })

@@ -3,22 +3,24 @@
 {% block info_float %}
     {% if request.user.is_authenticated %}
         {% with profile=request.user.profile %}
-            {% if profile in organization %}
-                <form method="post" action="{{ url('leave_organization', organization.id, organization.slug) }}">
-                    {% csrf_token %}
-                    <input type="submit" class="unselectable button full" value="{{ _('Leave organization') }}" {% if not organization.is_open and not can_edit %}disabled style="pointer-events:none;"{% endif %}>
-                </form>
-            {% elif organization.is_open or can_edit %}
-                <form method="post" action="{{ url('join_organization', organization.id, organization.slug) }}">
-                    {% csrf_token %}
-                    <input type="submit" class="unselectable button full" value="{{ _('Join organization') }}">
-                </form>
-            {% else %}
-                <a href="{{ url('request_organization', organization.id, organization.slug) }}"
-                   class="unselectable button full">{{ _('Request membership') }}</a>
+            {% if not profile.is_contest_account %}
+                {% if profile in organization %}
+                    <form method="post" action="{{ url('leave_organization', organization.id, organization.slug) }}">
+                        {% csrf_token %}
+                        <input type="submit" class="unselectable button full" value="{{ _('Leave organization') }}">
+                    </form>
+                {% elif organization.is_open or can_edit %}
+                    <form method="post" action="{{ url('join_organization', organization.id, organization.slug) }}">
+                        {% csrf_token %}
+                        <input type="submit" class="unselectable button full" value="{{ _('Join organization') }}">
+                    </form>
+                {% else %}
+                    <a href="{{ url('request_organization', organization.id, organization.slug) }}"
+                       class="unselectable button full">{{ _('Request membership') }}</a>
+                {% endif %}
+                <hr>
             {% endif %}
         {% endwith %}
-        <hr>
     {% endif %}
 
     {% if can_edit %}

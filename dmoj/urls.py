@@ -78,6 +78,8 @@ register_patterns = [
     url(r'^2fa/$', totp.TOTPLoginView.as_view(), name='login_2fa'),
     url(r'^2fa/enable/$', totp.TOTPEnableView.as_view(), name='enable_2fa'),
     url(r'^2fa/disable/$', totp.TOTPDisableView.as_view(), name='disable_2fa'),
+
+    url(r'^api/token/generate/$', user.generate_api_token, name="generate_api_token"),
 ]
 
 
@@ -236,6 +238,8 @@ urlpatterns = [
         url(r'^user/list$', api.api_v1_user_list),
         url(r'^user/info/([\w,:]+)$', api.api_v1_user_info),
         url(r'^user/submissions/([\w,:]+)$', api.api_v1_user_submissions),
+        url(r'^submission/info/(\d+)$', api.api_v1_submission_detail),
+        url(r'^submission/source/(\d+)$', api.api_v1_submission_source),
 #        url(r'^v2/', include([
 #            url(r'user-info$', api.api_v2_user_info),
 #        ])),
@@ -313,7 +317,7 @@ urlpatterns = [
         'problem': ProblemSitemap,
         'user': UserSitemap,
         'home': HomePageSitemap,
-        'contest': ContestSitemap,
+#        'contest': ContestSitemap,
         'organization': OrganizationSitemap,
         'blog': BlogPostSitemap,
         'solutions': SolutionSitemap,

@@ -15,7 +15,7 @@ from sortedm2m.fields import SortedManyToManyField
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES
 from judge.ratings import rating_class
 
-__all__ = ['Organization', 'Profile', 'OrganizationRequest']
+__all__ = ['Organization', 'Profile', 'APIToken', 'OrganizationRequest']
 
 
 class EncryptedNullCharField(EncryptedCharField):
@@ -23,7 +23,6 @@ class EncryptedNullCharField(EncryptedCharField):
         if not value:
             return None
         return super(EncryptedNullCharField, self).get_prep_value(value)
-
 
 class Organization(models.Model):
     name = models.CharField(max_length=128, verbose_name=_('organization title'))
@@ -115,8 +114,12 @@ class Profile(models.Model):
                                       help_text=_('32 character base32-encoded key for TOTP'),
                                       validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
                                                                  _('TOTP key must be empty or base32'))])
-    is_lcc_account = models.BooleanField(verbose_name=_('LCC account'), default=False, 
-                                      help_text=_('If set, limits this account to LCC-only permissions'))
+    api_token = EncryptedNullCharField(max_length=32, null=True, blank=True, verbose_name=_('API token'),
+                                       help_text=_('32 character base32-encoded key for API access'),
+                                       validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
+                                                                  _('API token must be empty or base32'))])
+    is_contest_account = models.BooleanField(verbose_name=_('Contest account'), default=False, 
+                                             help_text=_('If set, restricts this account to only contest features.'))
 
     @cached_property
     def organization(self):
@@ -195,7 +198,6 @@ class Profile(models.Model):
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')
-
 
 class OrganizationRequest(models.Model):
     user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='requests')

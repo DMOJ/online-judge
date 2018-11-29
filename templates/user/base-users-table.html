@@ -26,7 +26,7 @@
             {{ link_user(user) }} 
         </td>
         {% block after_username scoped %}{% endblock %}
-        {% if perms.judge.view_name %} 
+        {% if perms.judge.view_name %}
             <td class="real-name">
                 {% if user.name %}
                     {{ user.name }}

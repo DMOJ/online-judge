@@ -6,7 +6,7 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import F, QuerySet
+from django.db.models import F, Q, QuerySet, Prefetch
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from django.utils.functional import cached_property
@@ -112,6 +112,8 @@ class Problem(models.Model):
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
     allowed_languages = models.ManyToManyField(Language, verbose_name=_('allowed languages'))
     is_public = models.BooleanField(verbose_name=_('publicly visible'), db_index=True, default=False)
+    is_restricted = models.BooleanField(verbose_name=_('restricted'), db_index=True, default=False,
+                                        help_text=_('Whether to restrict access to the problem, and require special permissions. Set for contest problems, such as LCC problems.'))
     is_manually_managed = models.BooleanField(verbose_name=_('manually managed'), db_index=True, default=False,
                                               help_text=_('Whether judges should be allowed to manage data or not'))
     date = models.DateTimeField(verbose_name=_('date of publishing'), null=True, blank=True, db_index=True,
@@ -138,6 +140,29 @@ class Problem(models.Model):
         self._translated_name_cache = {}
         self._i18n_name = None
         self.__original_code = self.code
+
+    @classmethod
+    def problems_list(cls, user):
+        profile = user.profile if user.is_authenticated else None
+
+        filter = Q(is_public=True)
+        if profile is not None:
+            if user.has_perm('judge.see_private_problem'):
+                filter |= Q(is_restricted=False)
+                if user.has_perm('judge.see_restricted_problem'):
+                    filter |= Q(is_restricted=True)
+            filter |= Q(authors=profile)
+            filter |= Q(curators=profile)
+            filter |= Q(testers=profile)
+
+        queryset = cls.objects.filter(filter).select_related('group').defer('description')
+        if not user.has_perm('judge.see_organization_problem'):
+            filter = Q(is_organization_private=False)
+            if profile is not None:
+                filter |= Q(organizations__id__in=profile.organizations.all())
+            queryset = queryset.filter(filter)
+
+        return queryset
 
     @cached_property
     def types_list(self):
@@ -188,10 +213,11 @@ class Problem(models.Model):
         current = user.profile.current_contest_id
         if current is not None:
             from judge.models import ContestProblem
-            return ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists()
+            if ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists():
+                return True
         # If the user can view all problems.
         if user.has_perm('judge.see_private_problem'):
-            if not user.has_perm('judge.see_lcc_problem') and self.is_lcc_problem:
+            if not user.has_perm('judge.see_restricted_problem') and self.is_restricted:
                 return False
             return True
         return False
@@ -201,10 +227,6 @@ class Problem(models.Model):
 
     def get_absolute_url(self):
         return reverse('problem_detail', args=(self.code,))
-
-    @cached_property
-    def is_lcc_problem(self):
-        return self.group.name == 'lcc'
 
     @cached_property
     def author_ids(self):
@@ -313,12 +335,13 @@ class Problem(models.Model):
     class Meta:
         permissions = (
             ('see_private_problem', 'See hidden problems'),
-            ('see_lcc_problem', 'See LCC problems'),
+            ('see_restricted_problem', 'See restricted problems'),
             ('edit_own_problem', 'Edit own problems'),
             ('edit_all_problem', 'Edit all problems'),
             ('edit_public_problem', 'Edit all public problems'),
             ('clone_problem', 'Clone problem'),
             ('change_public_visibility', 'Change is_public field'),
+            ('change_restricted_field', 'Change is_restricted field'),
             ('change_manually_managed', 'Change is_manually_managed field'),
             ('see_organization_problem', 'See organization-private problems'),
         )

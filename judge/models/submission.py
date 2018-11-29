@@ -131,9 +131,9 @@ class Submission(models.Model):
             contest.bonus = 0
             if contest.points != 0 and not contest.participation.spectate:
                 if time_bonus != 0:
-                    contest.bonus = (contest.points / contest.problem.points)\
-                            * ((contest.participation.end_time - contest.submission.date).total_seconds()//(60*time_bonus))
-                if contest.points == contest.problem.points\
+                    contest.bonus = (contest.points / contest.problem.points) \
+                                  * ((contest.participation.end_time - contest.submission.date).total_seconds()//(60*time_bonus))
+                if contest.points == contest.problem.points \
                         and contest.problem.submissions.filter(participation=contest.participation, submission__date__lte=contest.submission.date).count() == 1:
                     contest.bonus += first_submission_bonus
             contest.save()
@@ -141,6 +141,26 @@ class Submission(models.Model):
             self.contest.participation.update_cumtime()
 
     recalculate_contest_submission.alters_data = True
+
+    def is_accessible_by(self, user):
+        if not user.is_authenticated:
+            return False
+        profile = user.profile
+        if self.user_id == profile.id:
+            return True
+        if self.problem.is_editor(profile):
+            return True
+        if self.problem.is_public or self.problem.testers.filter(id=profile.id).exists():
+            if self.problem.submission_set.filter(user_id=profile.id, result='AC',
+                                                  points=self.problem.points).exists():
+                return True
+        
+        if user.has_perm('judge.view_all_submission'):
+            if self.problem.is_public:
+                return True
+            elif user.has_perm('judge.see_restricted_problem') or not self.problem.is_restricted:
+                return True
+        return False
 
     @property
     def is_graded(self):

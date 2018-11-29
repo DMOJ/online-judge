@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -101,24 +101,45 @@ class Contest(models.Model):
         if self.start_time >= self.end_time:
             raise ValidationError('What is this? A contest that ended before it starts?')
 
-    def is_in_contest(self, request):
-        if request.user.is_authenticated:
-            profile = request.user.profile
+    def is_in_contest(self, user):
+        if user.is_authenticated:
+            profile = user.profile
             return profile and profile.current_contest is not None and profile.current_contest.contest == self
         return False
 
-    def can_see_scoreboard(self, request):
-        if request.user.has_perm('judge.see_private_contest'):
+    def can_see_scoreboard(self, user):
+        if user.has_perm('judge.see_private_contest'):
             return True
-        if request.user.is_authenticated and self.organizers.filter(id=request.user.profile.id).exists():
+        if user.is_authenticated and self.organizers.filter(id=user.profile.id).exists():
             return True
         if not self.is_public:
             return False
         if self.start_time is not None and self.start_time > timezone.now():
             return False
-        if self.hide_scoreboard and not self.is_in_contest(request) and self.end_time > timezone.now():
+        if self.hide_scoreboard and not self.is_in_contest(user) and self.end_time > timezone.now():
             return False
         return True
+
+    @classmethod
+    def contests_list(cls, user):
+        if not user.is_authenticated:
+            return cls.objects.none()
+
+        profile = user.profile
+
+        queryset = cls.objects.all()
+        if not user.has_perm('judge.see_private_contest'):
+            q = Q(is_public=True)
+            if user.is_authenticated:
+                q |= Q(organizers=profile)
+            queryset = queryset.filter(q)
+        if not user.has_perm('judge.edit_all_contest'):
+            q = Q(is_private=False)
+            if user.is_authenticated:
+                q |= Q(organizations__in=profile.organizations.all())
+            queryset = queryset.filter(q)
+        return queryset.distinct()
+
 
     @property
     def contest_window_length(self):

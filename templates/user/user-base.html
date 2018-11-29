@@ -39,7 +39,7 @@
             <br>
 
             <div><b>{{ _('%(count)d problems solved', count=user.problem_count) }}</b></div>
-            {% if not user.is_lcc_account %}
+            {% if not user.is_contest_account %}
                 <div>
                     <b class="semibold">{{ _('Rank by points:') }}</b> 
                     #{{ rank }}

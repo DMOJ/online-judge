@@ -14,8 +14,8 @@ from django.utils.translation import ugettext_lazy as _
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, PrivateMessage, Language
 from judge.utils.subscription import newsletter_id
-from judge.widgets import MathJaxPagedownWidget, HeavyPreviewPageDownWidget, PagedownWidget, \
-    Select2Widget, Select2MultipleWidget
+from judge.widgets import MathJaxPagedownWidget, GenerateKeyTextInputButton, HeavyPreviewPageDownWidget, \
+    PagedownWidget, Select2Widget, Select2MultipleWidget
 
 
 def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
@@ -29,12 +29,13 @@ class ProfileForm(ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['about', 'organizations', 'timezone', 'language', 'ace_theme', 'user_script']
+        fields = ['about', 'organizations', 'timezone', 'language', 'ace_theme', 'api_token', 'user_script']
         widgets = {
             'user_script': AceWidget(theme='github'),
             'timezone': Select2Widget(attrs={'style': 'width:200px'}),
             'language': Select2Widget(attrs={'style': 'width:200px'}),
             'ace_theme': Select2Widget(attrs={'style': 'width:200px'}),
+            'api_token': TextInput(attrs={'style': 'width:312px'}),
         }
 
         has_math_config = bool(getattr(settings, 'MATHOID_URL', False))
@@ -64,8 +65,9 @@ class ProfileForm(ModelForm):
             self.fields['organizations'].queryset = Organization.objects.filter(
                 Q(is_open=True) | Q(id__in=user.profile.organizations.all())
             )
-            if user.profile.is_lcc_account:
+            if user.profile.is_contest_account:
                 self.fields['organizations'].disabled = True
+        self.fields['api_token'].disabled = True
 
     def clean_name(self):
         return fix_unicode(self.cleaned_data['name'] or '')

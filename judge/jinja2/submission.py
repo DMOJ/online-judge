@@ -21,7 +21,7 @@ def submission_layout(submission, profile_id, user, editable_problem_ids, comple
     if user.has_perm('judge.view_all_submission'):
         if submission.problem.is_public:
             can_view = True
-        elif user.has_perm('judge.see_lcc_problem') or not submission.problem.is_lcc_problem:
+        elif user.has_perm('judge.see_restricted_problem') or not submission.problem.is_restricted:
             can_view = True
     
     info_colspan = 1 if can_view else 2

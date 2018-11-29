@@ -1,17 +1,15 @@
 from django.conf.urls import url
 from django.core.urlresolvers import reverse
 from django.db.models import TextField
-from django.forms import TextInput, ModelForm, ModelMultipleChoiceField
+from django.forms import ModelForm, ModelMultipleChoiceField
 from django.http import HttpResponseRedirect
-from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Judge, Problem
-from judge.widgets import AdminPagedownWidget, HeavySelect2MultipleWidget
+from judge.widgets import AdminPagedownWidget, GenerateKeyTextInputButton, HeavySelect2MultipleWidget
 
 
 class LanguageForm(ModelForm):
@@ -45,34 +43,9 @@ class LanguageAdmin(VersionAdmin):
             form.base_fields['template'].widget = AceWidget(obj.ace, request.user.profile.ace_theme)
         return form
 
-
-class GenerateKeyTextInput(TextInput):
-    def render(self, name, value, attrs=None):
-        text = super(TextInput, self).render(name, value, attrs)
-        return mark_safe(text + format_html(
-            '''\
-<a href="#" onclick="return false;" class="button" id="id_{0}_regen">Regenerate</a>
-<script type="text/javascript">
-(function ($) {{
-    $(document).ready(function () {{
-        $('#id_{0}_regen').click(function () {{
-            var length = 100,
-                charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{{}};:,<>./?",
-                key = "";
-            for (var i = 0, n = charset.length; i < length; ++i) {{
-                key += charset.charAt(Math.floor(Math.random() * n));
-            }}
-            $('#id_{0}').val(key);
-        }});
-    }});
-}})(django.jQuery);
-</script>
-''', name))
-
-
 class JudgeAdminForm(ModelForm):
     class Meta:
-        widgets = {'auth_key': GenerateKeyTextInput}
+        widgets = {'auth_key': GenerateKeyTextInputButton}
         if AdminPagedownWidget is not None:
             widgets['description'] = AdminPagedownWidget
 

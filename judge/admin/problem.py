@@ -118,7 +118,7 @@ class ProblemAdmin(VersionAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'code', 'name', 'is_public', 'is_manually_managed', 'date', 'authors', 'curators', 'testers',
+                'code', 'name', 'is_public', 'is_restricted', 'is_manually_managed', 'date', 'authors', 'curators', 'testers',
                 'is_organization_private', 'organizations',
                 'description',
                 'license')
@@ -131,19 +131,23 @@ class ProblemAdmin(VersionAdmin):
         (_('Justice'), {'fields': ('banned_users',)}),
         (_('History'), {'fields': ('change_message',)})
     )
-    list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'show_public']
+    list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'is_restricted', 'show_public']
     ordering = ['code']
     search_fields = ('code', 'name', 'authors__user__username', 'curators__user__username')
     inlines = [LanguageLimitInline, ProblemClarificationInline, ProblemSolutionInline, ProblemTranslationInline]
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
-    list_filter = ('is_public', ProblemCreatorListFilter)
+    list_filter = ('is_public', 'is_restricted', ProblemCreatorListFilter)
     form = ProblemForm
     date_hierarchy = 'date'
 
     def get_actions(self, request):
         actions = super(ProblemAdmin, self).get_actions(request)
+
+        if request.user.has_perm('judge.change_restricted_field'):
+            func, name, desc = self.get_action('make_restricted')
+            actions[name] = (func, name, desc)
 
         if request.user.has_perm('judge.change_public_visibility'):
             func, name, desc = self.get_action('make_public')
@@ -156,6 +160,8 @@ class ProblemAdmin(VersionAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         fields = self.readonly_fields
+        if not request.user.has_perm('judge.change_restricted_field'):
+            fields += ('is_restricted',)
         if not request.user.has_perm('judge.change_public_visibility'):
             fields += ('is_public',)
         if not request.user.has_perm('judge.change_manually_managed'):
@@ -200,6 +206,14 @@ class ProblemAdmin(VersionAdmin):
                 WHERE `data`.delta IS NOT NULL
             '''.format(', '.join(['%s'] * len(ids)), sign), ids)
 
+    def make_restricted(self, request, queryset):
+        count = queryset.update(is_restricted=True)
+        self.message_user(request, ungettext('%d problem successfully marked as restricted.',
+                                             '%d problems successfully marked as restricted.',
+                                             count) % count)
+
+    make_restricted.short_description = _('Mark problems as restricted')
+
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self._update_points_many(queryset.values_list('id', flat=True), '+')
@@ -227,9 +241,9 @@ class ProblemAdmin(VersionAdmin):
         if request.user.has_perm('judge.edit_own_problem'):
             access |= Q(authors__id=request.user.profile.id) | Q(curators__id=request.user.profile.id)
         if request.user.has_perm('judge.edit_all_problem'):
-            access |= ~Q(group__name='lcc')
-            if request.user.has_perm('judge.see_lcc_problem'):
-                access |= Q(group__name='lcc')
+            access |= Q(is_restricted=False)
+            if request.user.has_perm('judge.see_restricted_problem'):
+                access |= Q(is_restricted=True)
         return queryset.filter(access).distinct() if access else queryset.none()
 
     def has_change_permission(self, request, obj=None):
@@ -240,7 +254,7 @@ class ProblemAdmin(VersionAdmin):
         if request.user.has_perm('judge.edit_own_problem') and obj.is_editor(request.user.profile):
             return True
         if request.user.has_perm('judge.edit_all_problem'):
-            if not request.user.has_perm('judge.see_lcc_problem') and obj.is_lcc_problem:
+            if not request.user.has_perm('judge.see_restricted_problem') and obj.is_restricted:
                 return False
             return True
         return False

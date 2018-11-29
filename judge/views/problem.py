@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.db.models import Count, Q, F, Prefetch
+from django.db.models import Count, F, Q, Prefetch
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
@@ -222,7 +222,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
             raise Http404()
 
         problem = self.get_object()
-        if not problem.is_public and problem.is_lcc_problem and not self.request.user.has_perm('see_lcc_problem'):
+        if not problem.is_public and problem.is_restricted and not self.request.user.has_perm('see_restricted_problem'):
             raise Http404()
 
         try:
@@ -348,21 +348,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                                    'problem__group__full_name', 'points', 'partial', 'user_count')]
 
     def get_normal_queryset(self):
-        filter = Q(is_public=True)
-        if self.profile is not None:
-            if self.request.user.has_perm('judge.see_private_problem'):
-                filter |= ~Q(group__name='lcc')
-                if self.request.user.has_perm('judge.see_lcc_problem'):
-                    filter |= Q(group__name='lcc')
-            filter |= Q(authors=self.profile)
-            filter |= Q(curators=self.profile)
-            filter |= Q(testers=self.profile)
-        queryset = Problem.objects.filter(filter).select_related('group').defer('description')
-        if not self.request.user.has_perm('judge.see_organization_problem'):
-            filter = Q(is_organization_private=False)
-            if self.profile is not None:
-                filter |= Q(organizations__id__in=self.profile.organizations.all())
-            queryset = queryset.filter(filter)
+        queryset = Problem.problems_list(self.request.user)
+
         if self.profile is not None and self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
                                         .values_list('problem__id', flat=True))
@@ -375,11 +362,15 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             if self.problem_visibility == 1:
                 filter = Q(is_public=True)
             elif self.problem_visibility == 2:
-                filter = ~Q(group__name="lcc") & Q(is_public=False)
-            elif self.problem_visibility == 3 and self.request.user.has_perm('judge.see_lcc_problem'):
-                filter = Q(group__name="lcc", is_public=False)
+                filter = Q(is_restricted=False, is_public=False)
+            elif self.problem_visibility == 3 and self.request.user.has_perm('judge.see_restricted_problem'):
+                filter = Q(is_restricted=True, is_public=False)
             else:
-                filter = ~Q(group__name="lcc") | Q(is_public=True)
+                filter = Q(is_restricted=False) | Q(is_public=True)
+            
+            if not self.request.user.has_perm('judge.see_restricted_problem'):
+                filter |= Q(is_restricted=True)
+            
             queryset = queryset.filter(filter)
 
         if self.selected_types:
@@ -416,8 +407,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                 1 : 'Public',
                 2 : 'Private',
                 }
-        if self.request.user.has_perm('judge.see_lcc_problem'):
-            context['visibilities'][3] = 'Private LCC Problems'
+        if self.request.user.has_perm('judge.see_restricted_problem'):
+            context['visibilities'][3] = 'Restricted'
 
         context['category'] = self.category
         context['categories'] = ProblemGroup.objects.all()
@@ -542,6 +533,11 @@ def problem_submit(request, problem=None, submission=None):
         raise PermissionDenied()
 
     profile = request.user.profile
+    
+    # Contest accounts should not be able to submit outside of contests
+    if profile.current_contest is None and profile.is_contest_account:
+        raise PermissionDenied()
+
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))
         if form.is_valid():
@@ -687,4 +683,3 @@ def rejudge_submissions(request, problem):
     for model in queryset:
         model.judge(rejudge=True)
     return HttpResponseRedirect(reverse('problem_detail', args=(problem,)))
-        

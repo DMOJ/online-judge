@@ -1,5 +1,5 @@
 from django.db.models import Q, F
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import smart_text
 from django.views.generic.list import BaseListView
@@ -65,6 +65,9 @@ class ProblemSelect2View(Select2View):
 
 class ContestSelect2View(Select2View):
     def get_queryset(self):
+        if not request.user.is_authenticated:
+            return Contest.objects.none()
+
         queryset = Contest.objects.filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
         if not self.request.user.has_perm('judge.see_private_contest'):
             queryset = queryset.filter(is_public=True)
@@ -115,8 +118,11 @@ class UserSearchSelect2View(BaseListView):
 
 class ContestUserSearchSelect2View(UserSearchSelect2View):
     def get_queryset(self):
+        if not request.user.is_authenticated:
+            raise Http404()
+
         contest = get_object_or_404(Contest, key=self.kwargs['contest'])
-        if not contest.can_see_scoreboard(self.request) or contest.hide_scoreboard and contest.is_in_contest(self.request):
+        if not contest.can_see_scoreboard(self.request.user) or contest.hide_scoreboard and contest.is_in_contest(self.request.user):
             raise Http404()
         
         return Profile.objects.filter(contest_history__contest=contest,

@@ -6,8 +6,7 @@ from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Profile
-from judge.widgets import Select2Widget, AdminPagedownWidget
-
+from judge.widgets import GenerateKeyTextInputButton, Select2Widget, AdminPagedownWidget
 
 class ProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -23,6 +22,7 @@ class ProfileForm(ModelForm):
             'language': Select2Widget,
             'ace_theme': Select2Widget,
             'current_contest': Select2Widget,
+            'api_token': GenerateKeyTextInputButton(charset="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
         }
         if AdminPagedownWidget is not None:
             widgets['about'] = AdminPagedownWidget
@@ -40,11 +40,11 @@ class TimezoneFilter(admin.SimpleListFilter):
             return queryset
         return queryset.filter(timezone=self.value())
 
-
 class ProfileAdmin(VersionAdmin):
+    form = ProfileForm
     fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
-              'math_engine', 'last_access', 'ip', 'is_lcc_account', 'mute', 'is_totp_enabled', 'user_script', 'current_contest')
-    list_display = ('user', 'name', 'email', 'is_totp_enabled', 'is_lcc_account',
+              'math_engine', 'last_access', 'ip', 'is_contest_account', 'mute', 'is_totp_enabled', 'api_token', 'user_script', 'current_contest')
+    list_display = ('user', 'name', 'email', 'is_totp_enabled', 'is_contest_account',
                     'date_joined', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
     search_fields = ('user__username', 'name', 'ip', 'user__email')
@@ -52,7 +52,6 @@ class ProfileAdmin(VersionAdmin):
     actions = ('recalculate_points',)
     actions_on_top = True
     actions_on_bottom = True
-    form = ProfileForm
 
     def get_queryset(self, request):
         return super(ProfileAdmin, self).get_queryset(request).select_related('user')

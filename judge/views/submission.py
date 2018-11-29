@@ -39,20 +39,8 @@ class SubmissionMixin(object):
 class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, DetailView):
     def get_object(self, queryset=None):
         submission = super(SubmissionDetailBase, self).get_object(queryset)
-        profile = self.request.user.profile
-        if submission.user_id == profile.id:
+        if submission.is_accessible_by(self.request.user):
             return submission
-        if submission.problem.is_editor(profile):
-            return submission
-        if submission.problem.is_public or submission.problem.testers.filter(id=profile.id).exists():
-            if Submission.objects.filter(user_id=profile.id, result='AC', problem__code=submission.problem.code,
-                                         points=F('problem__points')).exists():
-                return submission
-        if self.request.user.has_perm('judge.view_all_submission'):
-            if submission.problem.is_public:
-                return submission
-            elif self.request.user.has_perm('judge.see_lcc_problem') or not submission.problem.is_lcc_problem:
-                return submission
         raise PermissionDenied()
 
     def get_title(self):
@@ -187,7 +175,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                                                               language=self.request.LANGUAGE_CODE), to_attr='_trans'))
         if self.in_contest:
             queryset = queryset.filter(contest__participation__contest_id=self.contest.id)
-            if self.contest.hide_scoreboard and self.contest.is_in_contest(self.request):
+            if self.contest.hide_scoreboard and self.contest.is_in_contest(self.request.user):
                 queryset = queryset.filter(contest__participation__user=self.request.user.profile)
             return queryset
         else:
@@ -211,8 +199,8 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         if not self.in_contest:
             if not self.request.user.has_perm('judge.see_private_problem'):
                 queryset = queryset.filter(problem__is_public=True)
-            elif not self.request.user.has_perm('judge.see_lcc_problem'):
-                queryset = queryset.exclude(problem__group__name="lcc", problem__is_public=False)
+            elif not self.request.user.has_perm('judge.see_restricted_problem'):
+                queryset = queryset.exclude(problem__is_restricted=True, problem__is_public=False)
         return queryset
 
     def get_my_submissions_page(self):
@@ -330,7 +318,7 @@ class ProblemSubmissionsBase(SubmissionsListBase):
                            reverse('problem_detail', args=[self.problem.code]))
 
     def access_check_contest(self, request):
-        if self.in_contest and not self.contest.can_see_scoreboard(request):
+        if self.in_contest and not self.contest.can_see_scoreboard(request.user):
             raise Http404()
 
     def access_check(self, request):
