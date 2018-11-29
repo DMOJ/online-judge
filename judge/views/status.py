@@ -61,6 +61,7 @@ def version_matrix(request):
 
     judges = {judge.id: judge.name for judge in Judge.objects.filter(online=True)}
     languages = Language.objects.all()
+
     for runtime in RuntimeVersion.objects.filter(judge__online=True).order_by('priority'):
         if runtime.version:
             matrix[runtime.judge_id][runtime.language_id].append(runtime)
@@ -68,6 +69,7 @@ def version_matrix(request):
     for judge, data in six.iteritems(matrix):
         name_tuple = judges[judge].rpartition('.')
         groups[name_tuple[0] or name_tuple[-1]].append((judges[judge], data))
+
     matrix = {}
     for group, data in six.iteritems(groups):
         if len(data) == 1:
@@ -91,6 +93,7 @@ def version_matrix(request):
         for i, (j, x) in enumerate(data):
             if ds[i] != rep:
                 matrix[j] = x
+
     for data in six.itervalues(matrix):
         for language, versions in six.iteritems(data):
             versions.versions = [LooseVersion(runtime.version) for runtime in versions]

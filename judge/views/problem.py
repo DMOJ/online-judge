@@ -222,8 +222,9 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
             raise Http404()
 
         problem = self.get_object()
-        if not problem.is_public and problem.is_restricted and not self.request.user.has_perm('see_restricted_problem'):
-            raise Http404()
+        if not problem.is_public:
+            if problem.is_restricted and not self.request.user.has_perm('see_restricted_problem'):
+                raise Http404()
 
         try:
             trans = problem.translations.get(language=language)
@@ -667,7 +668,7 @@ def clone_problem(request, problem):
                 pass
             else:
                 break
-    #problem.authors.add(request.user.profile)
+    problem.authors.add(request.user.profile)
     problem.allowed_languages = languages
     problem.types = types
     return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))

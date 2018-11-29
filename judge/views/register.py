@@ -76,16 +76,7 @@ class RegistrationView(OldRegistrationView):
             'language': Language.get_python2()
         })
 
-
         cleaned_data = form.cleaned_data
-        '''        
-        user = User(username=cleaned_data['username'], email=cleaned_data['email'], is_active=True)
-        user.set_password(cleaned_data['password1'])
-        user.save()
-        profile, _ = Profile.objects.get_or_create(user=user, defaults={
-            'language': Language.get_python2()
-        })
-        '''
         profile.name = cleaned_data['display_name']
         profile.timezone = cleaned_data['timezone']
         profile.language = cleaned_data['language']

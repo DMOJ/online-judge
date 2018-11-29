@@ -41,7 +41,6 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated):
     # if there are ties, use the average of places (if places 2, 3, 4, 5 tie, use 3.5 for all of them)
 
     N = len(old_rating)
-
     new_rating = old_rating[:]
     new_volatility = old_volatility[:]
     if N <= 1:

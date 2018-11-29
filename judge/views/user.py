@@ -264,8 +264,11 @@ def generate_api_token(request):
     profile = Profile.objects.get(user=request.user)
     if profile.mute:
         raise Http404()
-    profile.api_token = pyotp.random_base32(length=32)
-    profile.save()
+    with transaction.atomic(), revisions.create_revision():
+        profile.api_token = pyotp.random_base32(length=32)
+        profile.save()
+        revisions.set_user(request.user)
+        revisions.set_comment(_('Updated API token on site'))
     return HttpResponseRedirect(reverse('user_edit_profile'))
 
 

@@ -26,6 +26,7 @@ from judge.views.problem import ProblemMixin
 mimetypes.init()
 mimetypes.add_type('application/x-yaml', '.yml')
 
+
 def checker_args_cleaner(self):
     data = self.cleaned_data['checker_args']
     if not data or data.isspace():

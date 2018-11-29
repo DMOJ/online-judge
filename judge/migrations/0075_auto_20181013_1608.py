@@ -8,19 +8,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0074_merge_20181006_2239'),
+        ('judge', '0074_totp'),
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.AddField(
+            model_name='contest',
+            name='time_bonus',
+            field=models.IntegerField(default=0, help_text='Number of minutes to award an extra point for submitting before the contest end. Leave as 0 for no time bonus.', verbose_name='time bonus'),
+        ),
+        migrations.AddField(
             model_name='contestsubmission',
             name='bonus',
             field=models.IntegerField(default=0, verbose_name='bonus'),
         ),
-        migrations.AlterField(
-            model_name='problem',
-            name='organizations',
-            field=models.ManyToManyField(blank=True, help_text='If private, only these organizations may see the problem.', to='judge.Organization', verbose_name='organizations'),
+        migrations.AddField(
+            model_name='contest',
+            name='first_submission_bonus',
+            field=models.IntegerField(default=0, help_text='Bonus points for fully solving on first submission.', verbose_name='first try bonus'),
         ),
         migrations.AlterField(
             model_name='profile',

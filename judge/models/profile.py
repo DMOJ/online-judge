@@ -15,7 +15,7 @@ from sortedm2m.fields import SortedManyToManyField
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES
 from judge.ratings import rating_class
 
-__all__ = ['Organization', 'Profile', 'APIToken', 'OrganizationRequest']
+__all__ = ['Organization', 'Profile', 'OrganizationRequest']
 
 
 class EncryptedNullCharField(EncryptedCharField):

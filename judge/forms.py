@@ -29,13 +29,12 @@ class ProfileForm(ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['about', 'organizations', 'timezone', 'language', 'ace_theme', 'api_token', 'user_script']
+        fields = ['about', 'organizations', 'timezone', 'language', 'ace_theme', 'user_script']
         widgets = {
             'user_script': AceWidget(theme='github'),
             'timezone': Select2Widget(attrs={'style': 'width:200px'}),
             'language': Select2Widget(attrs={'style': 'width:200px'}),
             'ace_theme': Select2Widget(attrs={'style': 'width:200px'}),
-            'api_token': TextInput(attrs={'style': 'width:312px'}),
         }
 
         has_math_config = bool(getattr(settings, 'MATHOID_URL', False))
@@ -67,7 +66,6 @@ class ProfileForm(ModelForm):
             )
             if user.profile.is_contest_account:
                 self.fields['organizations'].disabled = True
-        self.fields['api_token'].disabled = True
 
     def clean_name(self):
         return fix_unicode(self.cleaned_data['name'] or '')

@@ -15,7 +15,7 @@ class ProblemFeed(Feed):
     description = 'The latest problems added on the %s website' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
 
     def items(self):
-        return Problem.problems_list(AnonymousUser())
+        return Problem.problems_list(AnonymousUser()).order_by('-date', '-id')[:25]
 
     def item_title(self, problem):
         return problem.name

@@ -116,7 +116,7 @@ class Submission(models.Model):
 
     def abort(self):
         abort_submission(self)
-    
+
     abort.alters_data = True
 
     def recalculate_contest_submission(self):

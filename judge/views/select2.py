@@ -65,7 +65,7 @@ class ProblemSelect2View(Select2View):
 
 class ContestSelect2View(Select2View):
     def get_queryset(self):
-        if not request.user.is_authenticated:
+        if not self.request.user.is_authenticated:
             return Contest.objects.none()
 
         queryset = Contest.objects.filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
@@ -118,7 +118,7 @@ class UserSearchSelect2View(BaseListView):
 
 class ContestUserSearchSelect2View(UserSearchSelect2View):
     def get_queryset(self):
-        if not request.user.is_authenticated:
+        if not self.request.user.is_authenticated:
             raise Http404()
 
         contest = get_object_or_404(Contest, key=self.kwargs['contest'])
