@@ -64,8 +64,11 @@ class ProfileForm(ModelForm):
             self.fields['organizations'].queryset = Organization.objects.filter(
                 Q(is_open=True) | Q(id__in=user.profile.organizations.all())
             )
-            if user.profile.is_contest_account:
-                self.fields['organizations'].disabled = True
+        if user.profile.is_contest_account:
+            self.fields['organizations'].disabled = True
+            self.fields['test_site'].disabled = True
+            if newsletter_id is not None:
+                self.fields['newsletter'].disabled = True
 
     def clean_name(self):
         return fix_unicode(self.cleaned_data['name'] or '')

@@ -86,13 +86,13 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'use_clarifications',
-                           'hide_problem_tags', 'hide_scoreboard', 'run_pretests_only')}),
+        (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'is_virtualable', 'use_clarifications',
+                           'hide_problem_tags', 'hide_scoreboard', 'run_pretests_only', 'access_code')}),
         (_('Bonuses'), {'fields': ('time_bonus', 'first_submission_bonus')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
-        (_('Organization'), {'fields': ('is_private', 'organizations', 'access_code')}),
+        (_('Organization'), {'fields': ('is_private', 'is_private_viewable', 'organizations')}),
     )
     list_display = ('key', 'name', 'is_public', 'is_rated', 'start_time', 'end_time', 'time_limit', 'time_bonus', 'first_submission_bonus', 'user_count')
     actions = ['make_public', 'make_private']

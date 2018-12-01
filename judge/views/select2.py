@@ -65,19 +65,7 @@ class ProblemSelect2View(Select2View):
 
 class ContestSelect2View(Select2View):
     def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            return Contest.objects.none()
-
-        queryset = Contest.objects.filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
-        if not self.request.user.has_perm('judge.see_private_contest'):
-            queryset = queryset.filter(is_public=True)
-        if not self.request.user.has_perm('judge.edit_all_contest'):
-            q = Q(is_private=False)
-            if self.request.user.is_authenticated:
-                q |= Q(organizations__in=self.request.user.profile.organizations.all())
-            queryset = queryset.filter(q)
-        return queryset
-
+        return Contest.contests_list(self.request.user).filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
 
 class CommentSelect2View(Select2View):
     def get_queryset(self):

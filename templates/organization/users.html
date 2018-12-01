@@ -22,9 +22,14 @@
 {% block users_js_media %}
     <script type="text/javascript">
         $(function () {
-            $('form.kick-form').find('a.button').click(function () {
-                $(this).parent().submit();
-                return false;
+        //    $('form.kick-form').find('a.button').click(function () {
+        //        $(this).parent().submit();
+        //        return false;
+        //})
+            $('a#kick-user-link').click(function (event) {
+                event.preventDefault();
+                if (confirm('Are you sure you want to kick a user?'))
+                    $(this).closest("form").submit();
             })
         });
     </script>

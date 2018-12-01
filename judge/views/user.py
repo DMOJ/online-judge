@@ -262,7 +262,7 @@ def edit_profile(request):
 @login_required
 def generate_api_token(request):
     profile = Profile.objects.get(user=request.user)
-    if profile.mute:
+    if profile.mute or profile.is_contest_account:
         raise Http404()
     with transaction.atomic(), revisions.create_revision():
         profile.api_token = pyotp.random_base32(length=32)

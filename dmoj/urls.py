@@ -317,7 +317,7 @@ urlpatterns = [
         'problem': ProblemSitemap,
         'user': UserSitemap,
         'home': HomePageSitemap,
-#        'contest': ContestSitemap,
+        'contest': ContestSitemap,
         'organization': OrganizationSitemap,
         'blog': BlogPostSitemap,
         'solutions': SolutionSitemap,

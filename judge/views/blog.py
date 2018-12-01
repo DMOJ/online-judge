@@ -72,10 +72,7 @@ class PostList(ListView):
                                                       .annotate(points=Max('points'), latest=Max('date'))
                                                       .order_by('-latest'))[:7]
 
-        if self.request.user.is_authenticated:
-            visible_contests = Contest.objects.filter(is_public=True).order_by('start_time')
-        else:
-            visible_contests = Contest.objects.none()
+        visible_contests = Contest.contests_list(self.request.user).order_by('start_time')
 
         q = Q(is_private=False)
         if self.request.user.is_authenticated:

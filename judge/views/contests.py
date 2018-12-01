@@ -9,7 +9,7 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
+from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import connection, IntegrityError
 from django.db.models import Q, Min, Max, Count, Sum, Case, When, IntegerField
@@ -138,8 +138,6 @@ class ContestMixin(object):
         return context
 
     def get_object(self, queryset=None):
-        if not self.request.user.is_authenticated:
-            raise Http404()
         contest = super(ContestMixin, self).get_object(queryset)
         user = self.request.user
         profile = self.request.user.profile if user.is_authenticated else None
@@ -153,10 +151,14 @@ class ContestMixin(object):
                     not self.check_organizer(contest, profile)):
             raise Http404()
 
-        if contest.is_private:
+        if contest.is_private: 
             if profile is None or (not user.has_perm('judge.edit_all_contest') and
                                        not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
                 raise PrivateContestError(contest.name, contest.organizations.all())
+        
+        if not contest.is_accessible_by(self.request.user):
+            raise Http404()
+
         return contest
 
     def dispatch(self, request, *args, **kwargs):
@@ -232,21 +234,13 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
         profile = request.user.profile
         if profile.current_contest is not None:
             return generic_message(request, _('Already in contest'),
-                                   _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
+                                   _('You are already in a contest: "%s".') % profile.current_contest.contest.name)         
 
-        is_lcc_contest = ContestTag.objects.get(name="lcc") in contest.tags.all()
-
-        if is_lcc_contest and not profile.is_contest_account:
-            return generic_message(request, _('Cannot join LCC contest'),
-                                   _('What are you trying to do? Join the LCC contest on your own account? You shall be banned.'))
-        elif not is_lcc_contest and profile.is_contest_account:
-            return generic_message(request, _('Cannot join non-LCC contest'),
-                                   _('What are you trying to do? Join the contest on your LCC account? You shall be banned.'))
+        if not contest.is_joinable_by(request.user):
+            return generic_message(request, _('Cannot join contest'),
+                                   _('You do not have permission to join: "%s".') % contest.name)
 
         if contest.ended:
-            if is_lcc_contest:
-                return generic_message(request, _('Cannot virtual LCC contest'),
-                                   _('What are you trying to do? Trying to virtual the LCC contest? You shall be banned.'))
             while True:
                 virtual_id = (ContestParticipation.objects.filter(contest=contest, user=profile)
                               .aggregate(virtual_id=Max('virtual'))['virtual_id'] or 0) + 1
@@ -331,7 +325,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
             self.year = int(kwargs['year'])
             self.month = int(kwargs['month'])
         except (KeyError, ValueError):
-            raise ImproperlyConfigured(_('ContestCalender requires integer year and month'))
+            raise ImproperlyConfigured(_('ContestCalendar requires integer year and month'))
         self.today = timezone.now().date()
         return self.render()
 

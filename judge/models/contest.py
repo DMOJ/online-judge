@@ -60,6 +60,9 @@ class Contest(models.Model):
                                     help_text=_('Should be set even for organization-private contests, where it '
                                                 'determines whether the contest is visible to members of the '
                                                 'specified organizations.'))
+    is_virtualable = models.BooleanField(verbose_name=_('virtualable'),
+                                         help_text=_('Whether a user can virtually participate in this contest or not.'),
+                                         default=True)
     is_rated = models.BooleanField(verbose_name=_('contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
     hide_scoreboard = models.BooleanField(verbose_name=_('hide scoreboard'),
@@ -72,7 +75,12 @@ class Contest(models.Model):
     rate_all = models.BooleanField(verbose_name=_('rate all'), help_text=_('Rate all users who joined.'), default=False)
     rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
                                           related_name='rate_exclude+')
-    is_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
+    is_private = models.BooleanField(verbose_name=_('completely private to organizations'),
+                                     help_text=_('Whether only specified organizations can view and join this contest.'),
+                                     default=False)
+    is_private_viewable = models.BooleanField(verbose_name=_('viewable but private to organizations'),
+                                              help_text=_('Whether only specified organizations can join the contest, but everyone can view.'),
+                                              default=False)
     hide_problem_tags = models.BooleanField(verbose_name=_('hide problem tags'),
                                             help_text=_('Whether problem tags should be hidden by default.'),
                                             default=False)
@@ -82,7 +90,7 @@ class Contest(models.Model):
                                                         'prior to rejudging user submissions when the contest ends.'),
                                             default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
-                                           help_text=_('If private, only these organizations may see the contest'))
+                                           help_text=_('If private, only these organizations may join the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
     logo_override_image = models.CharField(verbose_name=_('Logo override image'), default='', max_length=150, blank=True,
                                            help_text=_('This image will replace the default site logo for users inside the contest.'))
@@ -126,8 +134,11 @@ class Contest(models.Model):
             return cls.objects.none()
 
         profile = user.profile
-
         queryset = cls.objects.all()
+
+        if profile.is_contest_account:
+            queryset = queryset.filter(organizations__in=profile.organizations.all())
+
         if not user.has_perm('judge.see_private_contest'):
             q = Q(is_public=True)
             if user.is_authenticated:
@@ -188,9 +199,27 @@ class Contest(models.Model):
             return False
         return True
 
+    def is_joinable_by(self, user):
+        if not user.is_authenticated:
+            return False
+        if not self.is_accessible_by(user):
+            return False
+        if user.has_perm('judge.join_all_contest'):
+            return True
+        if user.has_perm('judge.edit_own_contest') and \
+                self.organizers.filter(id=user.profile.id).exists():
+            return True 
+        if self.ended:
+            return self.is_virtualable
+        return (not self.is_private_viewable and not self.is_private) or self.organizations.filter(id__in=user.profile.organizations.all())
+
     def is_accessible_by(self, user):
         if not user.is_authenticated:
             return False
+
+        if user.profile.is_contest_account:
+            return self.organizations.filter(id__in=user.profile.organizations.all())
+
         # Contest is public
         if self.is_public:
             # Contest is not private to an organization
@@ -207,7 +236,7 @@ class Contest(models.Model):
 
         # If the user is a contest organizer
         if user.has_perm('judge.edit_own_contest') and \
-           self.organizers.filter(id=user.profile.id).exists():
+                self.organizers.filter(id=user.profile.id).exists():
             return True
 
         return False
@@ -217,6 +246,7 @@ class Contest(models.Model):
     class Meta:
         permissions = (
             ('see_private_contest', _('See private contests')),
+            ('join_all_contest', _('Join all contests')),
             ('edit_own_contest', _('Edit own contests')),
             ('edit_all_contest', _('Edit all contests')),
             ('contest_rating', _('Rate contests')),

@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.contrib.sitemaps import Sitemap
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AnonymousUser, User
 from django.utils import timezone
 from judge.models import Problem, Organization, Contest, BlogPost, Solution
 
@@ -10,7 +10,7 @@ class ProblemSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Problem.objects.filter(is_public=True).values_list('code')
+        return Problem.problems_list(AnonymousUser()).values_list('code')
 
     def location(self, obj):
         return reverse('problem_detail', args=obj)
@@ -32,7 +32,7 @@ class ContestSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Contest.objects.filter(is_public=True, is_private=False).values_list('key')
+        return Contest.contests_list(AnonymousUser()).values_list('key')
 
     def location(self, obj):
         return reverse('contest_view', args=obj)
