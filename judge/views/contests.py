@@ -26,7 +26,7 @@ from django.views.generic.detail import BaseDetailView, DetailView
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
-from judge.models import Contest, ContestParticipation, ContestRegistration, ContestTag, Organization, Profile
+from judge.models import Contest, ContestParticipation, ContestTag, Organization, Profile
 from judge.models import Problem
 from judge.timezone import from_database_time
 from judge.utils.opengraph import generate_opengraph
@@ -210,36 +210,16 @@ class ContestAccessCodeForm(forms.Form):
 
 
 class ContestRegister(LoginRequiredMixin, ContestMixin, BaseDetailView):
-    def access_check(self, request):
-        contest = self.object
-        user = request.user
-        if not contest.can_register(user):
-            return generic_message(request, _('Cannot register for contest'),
-                                   _('You may not register for: "%s".') % contest.name)
-        if contest.is_registered(user):
-            return generic_message(request, _('Already registered'),
-                                   _('You have already registered for: "%s".') % contest.name)
-        return None
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        error = self.access_check(request)
-        if error is not None:
-            return error
-        
-        return render(request, 'contest/register.html', {
-            'title': _('Register for "%s"') % self.object.name,
-            'contest': self.object,
-        })
-        
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        error = self.access_check(request)
-        if error is not None:
-            return error
-
-        registration = ContestRegistration.objects.create(contest=self.object, user=request.user.profile)
-        return HttpResponseRedirect(reverse('contest_view', args=(self.object.key,)))
+        user = self.request.user
+        if not self.object.require_registration or not self.object.is_joinable_by(user, check_registered=False):
+            return generic_message(request, _('Cannot register for contest'),
+                                   _('You may not register for: "%s".') % contest.key)
+        
+        if self.object.registrants.filter(user=user.profile):
+            return generic_message(request, _('Already registered'),
+                                   _('You have already registered for: "%s".') % contest.key)        
 
 
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):

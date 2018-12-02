@@ -100,26 +100,6 @@
     </div>
 {% endmacro %}
 
-{% macro user_count(contest, user) %}
-    {% if contest.show_scoreboard or contest.can_see_scoreboard(user) %}
-        <a href="{{ url('contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
-    {% else %}
-        {{ contest.user_count }}
-    {% endif %}
-{% endmacro %}
-
-{% macro contest_register(contest, user) %}
-    {% if contest.can_register(user) %}
-        <a href="{{ url('contest_register', contest.key) }}" class="unselectable button full participate-button">
-            {% if contest.is_registered(user) %}
-                {{ _('Registered') }}
-            {% else %}
-                {{ _('Register') }}
-            {% endif %}
-        </a>
-    {% endif %}
-{% endmacro %}
-
 {% block body %}
     <div class="content-description">
         {% if current_contests %}
@@ -150,7 +130,11 @@
                             </div>
                         </td>
                         <td>
-                            {{ user_count(contest, request.user) }}
+                            {% if contest.show_scoreboard or contest.can_see_scoreboard(request) %}
+                                <a href="{{ url('contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
+                            {% else %}
+                                {{ contest.user_count }}
+                            {% endif %}
                         </td>
                         {% if not request.in_contest %}
                             <td>
@@ -166,8 +150,6 @@
                                         <input type="submit" class="unselectable button full participate-button join-warning"
                                                value="{{ _('Join') }}">
                                     </form>
-                                {% else %}
-                                    {{ contest_register(contest, request.user) }}
                                 {% endif %}
                             </td>
                         {% endif %}
@@ -184,9 +166,6 @@
                 <thead>
                 <tr>
                     <th>{{ _('Contest') }}</th>
-                    {% if not request.in_contest %}
-                        <th style="width:10%"></th>
-                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>{% for contest in future_contests %}
@@ -203,11 +182,6 @@
                                 {% endif %}
                             </div>
                         </td>
-                        {% if not request.in_contest %}
-                            <td>
-                                {{ contest_register(contest, request.user) }}
-                            </td>
-                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -239,7 +213,11 @@
                         </div>
                     </td>
                     <td>
-                        {{ user_count(contest, request.user) }}
+                        {% if contest.show_scoreboard or perms.judge.see_private_contest %}
+                            <a href="{{ url('contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
+                        {% else %}
+                            {{ contest.user_count }}
+                        {% endif %}
                     </td>
                     {% if not request.in_contest %}
                         <td>
