@@ -65,6 +65,9 @@ class Contest(models.Model):
                                          default=True)
     is_rated = models.BooleanField(verbose_name=_('contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
+    require_registration = models.BooleanField(verbose_name=_('require registration'),
+                                                help_text=_('Whether the user must be registered before being able to join the contest'),
+                                                default=False)
     hide_scoreboard = models.BooleanField(verbose_name=_('hide scoreboard'),
                                           help_text=_('Whether the scoreboard should remain hidden for the duration '
                                                       'of the contest.'),
@@ -199,7 +202,7 @@ class Contest(models.Model):
             return False
         return True
 
-    def is_joinable_by(self, user):
+    def is_joinable_by(self, user, check_registered=True):
         if not user.is_authenticated:
             return False
         if not self.is_accessible_by(user):
@@ -208,10 +211,16 @@ class Contest(models.Model):
             return True
         if user.has_perm('judge.edit_own_contest') and \
                 self.organizers.filter(id=user.profile.id).exists():
-            return True 
+            return True
         if self.ended:
             return self.is_virtualable
-        return (not self.is_private_viewable and not self.is_private) or self.organizations.filter(id__in=user.profile.organizations.all())
+        
+        if check_registered and self.require_registration and not self.registrants.filter(user=user.profile):
+            return False
+
+        if self.is_private_viewable or self.is_private:
+            return bool(self.organizations.filter(id__in=user.profile.organizations.all()))
+        return True
 
     def is_accessible_by(self, user):
         if not user.is_authenticated:
@@ -254,6 +263,18 @@ class Contest(models.Model):
         )
         verbose_name = _('contest')
         verbose_name_plural = _('contests')
+
+
+class ContestRegistration(models.Model):
+    contest = models.ForeignKey(Contest, verbose_name=_('associated contest'), related_name='registrants')
+    user = models.ForeignKey(Profile, verbose_name=_('registrant'), related_name='contest_registrations')
+    registration_time = models.DateTimeField(verbose_name=_('time of registration'), default=timezone.now)
+
+    class Meta:
+        verbose_name = _('contest registration')
+        verbose_name_plural = _('contest registrations')
+
+        unique_together = ('contest', 'user')
 
 
 class ContestParticipation(models.Model):

@@ -9,7 +9,7 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured, PermissionDenied
+from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import connection, IntegrityError
 from django.db.models import Q, Min, Max, Count, Sum, Case, When, IntegerField
@@ -33,7 +33,7 @@ from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
 
-__all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
+__all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestRegister', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'participation_list', 'own_participation_list', 'get_contest_ranking_list',
            'base_contest_ranking_list']
 
@@ -151,7 +151,7 @@ class ContestMixin(object):
                     not self.check_organizer(contest, profile)):
             raise Http404()
 
-        if contest.is_private: 
+        if contest.is_private:
             if profile is None or (not user.has_perm('judge.edit_all_contest') and
                                        not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
                 raise PrivateContestError(contest.name, contest.organizations.all())
@@ -207,6 +207,19 @@ class ContestAccessCodeForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ContestAccessCodeForm, self).__init__(*args, **kwargs)
         self.fields['access_code'].widget.attrs.update({'autocomplete': 'off'})
+
+
+class ContestRegister(LoginRequiredMixin, ContestMixin, BaseDetailView):
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        user = self.request.user
+        if not self.object.require_registration or not self.object.is_joinable_by(user, check_registered=False):
+            return generic_message(request, _('Cannot register for contest'),
+                                   _('You may not register for: "%s".') % contest.key)
+        
+        if self.object.registrants.filter(user=user.profile):
+            return generic_message(request, _('Already registered'),
+                                   _('You have already registered for: "%s".') % contest.key)        
 
 
 class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):

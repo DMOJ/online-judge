@@ -86,8 +86,8 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'is_virtualable', 'use_clarifications',
-                           'hide_problem_tags', 'hide_scoreboard', 'run_pretests_only', 'access_code')}),
+        (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'is_virtualable', 'require_registration',
+                            'use_clarifications', 'hide_problem_tags', 'hide_scoreboard', 'run_pretests_only', 'access_code')}),
         (_('Bonuses'), {'fields': ('time_bonus', 'first_submission_bonus')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
@@ -233,3 +233,16 @@ class ContestParticipationAdmin(admin.ModelAdmin):
         return obj.virtual or '-'
     show_virtual.short_description = _('virtual')
     show_virtual.admin_order_field = 'virtual'
+
+class ContestRegistrationAdmin(admin.ModelAdmin):
+    fields = ('contest', 'user', 'registration_time')
+    list_display = ('contest', 'username', 'registration_time')
+    search_fields = ('contest__key', 'contest__name', 'user__user__username', 'user__name')
+    form = ContestParticipationForm
+    date_hierarchy = 'registration_time'
+
+    def username(self, obj):
+        return obj.user.long_display_name
+    username.short_description = _('username')
+    username.admin_order_field = 'user__user__username'
+
