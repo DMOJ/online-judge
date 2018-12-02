@@ -1,0 +1,44 @@
+.map-inset {
+    padding-bottom: 50%;
+    background-size: cover !important;
+    position: relative;
+    border-radius: 2px;
+}
+
+.map-wrap {
+    padding: 1px;
+    border-radius: 3px;
+    position: relative;
+}
+
+.map-inset span {
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    background: #fff;
+    position: absolute;
+    border-radius: 3px;
+    border: 1px solid #4e7cad;
+}
+
+.map-inset span.active {
+    background: #4e7cad;
+}
+
+.map-inset .map-axis-x {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px solid rgba(78, 124, 173, 0.5);
+    width: 0;
+    transition: left 100ms ease-out;
+}
+
+.map-inset .map-axis-y {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px solid rgba(78, 124, 173, 0.5);
+    height: 0;
+    transition: top 100ms ease-out;
+}

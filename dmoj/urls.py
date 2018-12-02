@@ -186,6 +186,7 @@ urlpatterns = [
         url(r'^$', contests.ContestDetail.as_view(), name='contest_view'),
         url(r'^/ranking/$', contests.contest_ranking, name='contest_ranking'),
         url(r'^/ranking/ajax$', contests.contest_ranking_ajax, name='contest_ranking_ajax'),
+        url(r'^/register$', contests.ContestRegister.as_view(), name='contest_register'),
         url(r'^/join$', contests.ContestJoin.as_view(), name='contest_join'),
         url(r'^/leave$', contests.ContestLeave.as_view(), name='contest_leave'),
 
