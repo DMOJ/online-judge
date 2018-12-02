@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block media %}
+    <style>
+        .button-line {
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <form action="" method="post" class="form-area" >
+        {% csrf_token %}
+        {{ contest.registration_page|markdown('solution', MATH_ENGINE)|reference }}
+        <p class="button-line">
+            <button type="submit">{{ _('Register for Contest') }}</button>
+        </p>
+    </form>
+{% endblock %}

@@ -68,6 +68,9 @@ class Contest(models.Model):
     require_registration = models.BooleanField(verbose_name=_('require registration'),
                                                 help_text=_('Whether the user must be registered before being able to join the contest'),
                                                 default=False)
+    registration_page = models.TextField(verbose_name=_('registration page'),
+                                         help_text=_('Flatpage to display when registering.'),
+                                         blank=True, null=True)
     hide_scoreboard = models.BooleanField(verbose_name=_('hide scoreboard'),
                                           help_text=_('Whether the scoreboard should remain hidden for the duration '
                                                       'of the contest.'),
@@ -137,7 +140,7 @@ class Contest(models.Model):
             return cls.objects.none()
 
         profile = user.profile
-        queryset = cls.objects.all()
+        queryset = cls.objects.all().defer('description')
 
         if profile.is_contest_account:
             queryset = queryset.filter(organizations__in=profile.organizations.all())
@@ -202,9 +205,18 @@ class Contest(models.Model):
             return False
         return True
 
+    def can_register(self, user):
+        if self.require_registration:
+            return self.is_joinable_by(user, check_registered=False)
+        return False
+
+    def is_registered(self, user):
+        if not self.require_registration:
+            return True
+        # TODO optimiziable
+        return self.registrants.filter(user=user.profile).exists()
+
     def is_joinable_by(self, user, check_registered=True):
-        if not user.is_authenticated:
-            return False
         if not self.is_accessible_by(user):
             return False
         if user.has_perm('judge.join_all_contest'):
@@ -215,11 +227,11 @@ class Contest(models.Model):
         if self.ended:
             return self.is_virtualable
         
-        if check_registered and self.require_registration and not self.registrants.filter(user=user.profile):
+        if check_registered and not self.is_registered(user):
             return False
 
         if self.is_private_viewable or self.is_private:
-            return bool(self.organizations.filter(id__in=user.profile.organizations.all()))
+            return self.organizations.filter(id__in=user.profile.organizations.all()).exists()
         return True
 
     def is_accessible_by(self, user):
@@ -227,7 +239,7 @@ class Contest(models.Model):
             return False
 
         if user.profile.is_contest_account:
-            return self.organizations.filter(id__in=user.profile.organizations.all())
+            return self.organizations.filter(id__in=user.profile.organizations.all()).exists()
 
         # Contest is public
         if self.is_public:
