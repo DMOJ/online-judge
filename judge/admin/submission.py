@@ -150,8 +150,8 @@ class SubmissionAdmin(admin.ModelAdmin):
             self.message_user(request, ugettext('You do not have the permission to rejudge submissions.'),
                               level=messages.ERROR)
             return
-        submissions = list(queryset.select_related('problem').only('points', 'case_points', 'case_total',
-                                                                   'problem__partial', 'problem__points'))
+        submissions = list(queryset.defer(None).select_related(None).select_related('problem')
+                           .only('points', 'case_points', 'case_total', 'problem__partial', 'problem__points'))
         for submission in submissions:
             submission.points = round(submission.case_points / submission.case_total * submission.problem.points
                                       if submission.case_total else 0, 1)
