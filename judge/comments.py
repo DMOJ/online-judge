@@ -72,6 +72,16 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         if self.is_comment_locked():
             return HttpResponseForbidden()
 
+        parent = request.POST.get('parent')
+        if parent:
+            try:
+                parent = int(parent)
+            except ValueError:
+                return HttpResponseNotFound()
+            else:
+                if not Comment.objects.filter(hidden=False, id=parent, page=page).exists():
+                    return HttpResponseNotFound()
+
         form = CommentForm(request, request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
