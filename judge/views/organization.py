@@ -316,11 +316,3 @@ class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, SingleObjectMixi
 
         organization.members.remove(user)
         return HttpResponseRedirect(organization.get_users_url())
-
-
-# Once upon a time, DMOJ used organization pages under `/organization/<6 character key>`.
-# Now, we use `/organization/<id>-<slug>`. This view is intended to redirect old URLs to new ones.
-# See <https://github.com/DMOJ/site/issues/704> for rationale and details.
-def fallback(request, key, rest):
-    organization = get_object_or_404(Organization, key=key)
-    return HttpResponsePermanentRedirect(organization.get_absolute_url() + (rest or ''))
