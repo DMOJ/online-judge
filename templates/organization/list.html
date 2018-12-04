@@ -20,7 +20,6 @@
     <table id="organization-table" class="table">
         <thead>
         <tr>
-            <th>{{ _('ID') }}</th>
             <th style="width:85%">{{ _('Name') }}</th>
             <th>{{ _('Members') }}</th>
         </tr>
@@ -28,7 +27,6 @@
         <tbody>
         {% for org in organizations %}
             <tr>
-                <td>{{ org.key }}</td>
                 <td><a href="{{ org.get_absolute_url() }}">{{ org.name }}</a></td>
                 <td><a href="{{ org.get_users_url() }}">{{ org.member_count }}</a></td>
             </tr>

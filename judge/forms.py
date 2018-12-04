@@ -106,7 +106,7 @@ class NewMessageForm(ModelForm):
 
 class NewOrganizationForm(EditOrganizationForm):
     class Meta(EditOrganizationForm.Meta):
-        fields = ['key'] + EditOrganizationForm.Meta.fields
+        fields = ['slug'] + EditOrganizationForm.Meta.fields
 
 
 class CustomAuthenticationForm(AuthenticationForm):
