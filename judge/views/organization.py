@@ -128,7 +128,7 @@ class JoinOrganization(OrganizationMembershipChange):
 class LeaveOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
         if not profile.organizations.filter(id=org.id).exists():
-            return generic_message(request, _('Leaving organization'), _('You are not in "%s".') % org.key)
+            return generic_message(request, _('Leaving organization'), _('You are not in "%s".') % org.short_name)
         profile.organizations.remove(org)
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
