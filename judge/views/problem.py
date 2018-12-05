@@ -540,8 +540,10 @@ def problem_submit(request, problem=None, submission=None):
     profile = request.user.profile
     
     # Contest accounts should not be able to submit outside of contests
-    if profile.current_contest is None and profile.is_contest_account:
-        raise PermissionDenied()
+    if profile.is_contest_account:
+        if profile.current_contest is None \
+                or not profile.current_contest.contest.contest_problems.filter(problem__code=problem).exists():
+            raise PermissionDenied()
 
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))

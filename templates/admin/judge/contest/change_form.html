@@ -21,6 +21,7 @@
     {% if original and original.freeze_submissions and perms.judge.contest_frozen_state %}
         <a style="display: none" title="{% trans "Unfreeze" %}" href="{% url 'admin:judge_contest_unfreeze' original.pk %}"
            class="button unfreezelink">
+            <i class="fa fa-lg fa-unlock"></i>
             <span class="text">{% trans "Unfreeze" %}</span>
         </a>
     {% endif %}

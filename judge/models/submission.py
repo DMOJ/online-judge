@@ -156,6 +156,7 @@ class Submission(models.Model):
             return False
         profile = user.profile
         problem = self.problem
+        
         if self.user_id == profile.id:
             return True
         if problem.is_editor(profile):

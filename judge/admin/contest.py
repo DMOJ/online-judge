@@ -157,11 +157,11 @@ class ContestAdmin(VersionAdmin):
         contest = get_object_or_404(Contest, id=id)
         if not contest.freeze_submissions:
             raise Http404()
+        contest.freeze_submissions = False
+        contest.save()
         with transaction.atomic():
             for submission in ContestSubmission.objects.filter(updated_frozen=True, participation__contest=contest):
                 submission.submission.recalculate_contest_submission()
-        contest.freeze_submissions = False
-        contest.save()
         return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(id,)))
 
     def rate_all_view(self, request):

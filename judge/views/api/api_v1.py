@@ -228,6 +228,9 @@ def api_v1_submission_detail(request, submission):
     if not submission.is_accessible_by(user):
         raise PermissionDenied()
 
+    if user.profile.current_contest is not None:
+        return JsonResponse({})
+
     resp = {
         'problem': submission.problem.code,
         'user': submission.user.user.username,
@@ -258,6 +261,9 @@ def api_v1_submission_source(request, submission):
 
     if not submission.is_accessible_by(user):
         raise PermissionDenied()
+
+    if user.profile.current_contest is not None:
+        return JsonResponse({})
 
     return JsonResponse({
         'source': submission.source.replace('\r', ''),
