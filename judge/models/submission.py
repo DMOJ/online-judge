@@ -122,23 +122,32 @@ class Submission(models.Model):
     def recalculate_contest_submission(self):
         if hasattr(self, 'contest'):
             contest = self.contest
-            contest.points = round(self.case_points / self.case_total * contest.problem.points if self.case_total > 0 else 0, 3)
-            if not contest.problem.partial and contest.points < contest.problem.points:
-                contest.points = 0
+            problem = contest.problem
+            participation = contest.participation
 
-            time_bonus = contest.participation.contest.time_bonus
-            first_submission_bonus = contest.participation.contest.first_submission_bonus
+            if participation.contest.freeze_submissions and participation.live:
+                contest.updated_frozen = True
+                contest.save()
+                return
+ 
+            contest.updated_frozen = False
+            contest.points = round(self.case_points / self.case_total * problem.points if self.case_total > 0 else 0, 3)
+            if not problem.partial and contest.points < problem.points:
+                contest.points = 0
+            
             contest.bonus = 0
-            if contest.points != 0 and not contest.participation.spectate:
+            if contest.points != 0 and not participation.spectate:
+                time_bonus = participation.contest.time_bonus
+                first_submission_bonus = participation.contest.first_submission_bonus
                 if time_bonus != 0:
-                    contest.bonus = (contest.points / contest.problem.points) \
-                                  * ((contest.participation.end_time - contest.submission.date).total_seconds()//(60*time_bonus))
-                if contest.points == contest.problem.points \
-                        and contest.problem.submissions.filter(participation=contest.participation, submission__date__lte=contest.submission.date).count() == 1:
+                    dt = participation.end_time - contest.submission.date
+                    contest.bonus = (contest.points / problem.points) * (dt.total_seconds()//(60*time_bonus))
+                if contest.points == problem.points \
+                        and participation.submissions.filter(problem=problem, submission__date__lte=contest.submission.date).count():
                     contest.bonus += first_submission_bonus
             contest.save()
-            self.contest.participation.recalculate_score()
-            self.contest.participation.update_cumtime()
+            participation.recalculate_score()
+            participation.update_cumtime()
 
     recalculate_contest_submission.alters_data = True
 
@@ -146,19 +155,20 @@ class Submission(models.Model):
         if not user.is_authenticated:
             return False
         profile = user.profile
+        problem = self.problem
         if self.user_id == profile.id:
             return True
-        if self.problem.is_editor(profile):
+        if problem.is_editor(profile):
             return True
-        if self.problem.is_public or self.problem.testers.filter(id=profile.id).exists():
-            if self.problem.submission_set.filter(user_id=profile.id, result='AC',
-                                                  points=self.problem.points).exists():
+        if problem.is_public or problem.testers.filter(id=profile.id).exists():
+            if problem.submission_set.filter(user_id=profile.id, result='AC',
+                                             points=problem.points).exists():
                 return True
         
         if user.has_perm('judge.view_all_submission'):
-            if self.problem.is_public:
+            if problem.is_public:
                 return True
-            elif user.has_perm('judge.see_restricted_problem') or not self.problem.is_restricted:
+            elif user.has_perm('judge.see_restricted_problem') or not problem.is_restricted:
                 return True
         return False
 

@@ -24,6 +24,7 @@ class EncryptedNullCharField(EncryptedCharField):
             return None
         return super(EncryptedNullCharField, self).get_prep_value(value)
 
+
 class Organization(models.Model):
     name = models.CharField(max_length=128, verbose_name=_('organization title'))
     slug = models.SlugField(max_length=128, verbose_name=_('organization slug'),
@@ -198,6 +199,7 @@ class Profile(models.Model):
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')
+
 
 class OrganizationRequest(models.Model):
     user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='requests')

@@ -124,9 +124,9 @@ class Problem(models.Model):
     og_image = models.CharField(verbose_name=_('OpenGraph image'), max_length=150, blank=True)
     summary = models.TextField(blank=True, verbose_name=_('problem summary'),
                                help_text=_('Plain-text, shown in meta description tag, e.g. for social media.'))
-    user_count = models.IntegerField(verbose_name=_('amount of users'), default=0,
-                                     help_text=_('The amount of users on the best solutions page.'))
-    ac_rate = models.FloatField(verbose_name=_('rate of AC submissions'), default=0)
+    user_count = models.IntegerField(verbose_name=_('number of users'), default=0,
+                                     help_text=_('The number of users who solved the problem.'))
+    ac_rate = models.FloatField(verbose_name=_('solve rate'), default=0)
 
     objects = TranslatedProblemQuerySet.as_manager()
     tickets = GenericRelation('Ticket')
@@ -195,7 +195,7 @@ class Problem(models.Model):
 
             # If the user is in the organization.
             if user.is_authenticated and \
-               self.organizations.filter(id__in=user.profile.organizations.all()):
+               self.organizations.filter(id__in=user.profile.organizations.all()).exists():
                 return True
 
         if not user.is_authenticated:
@@ -274,9 +274,9 @@ class Problem(models.Model):
         return ProblemClarification.objects.filter(problem=self)
 
     def update_stats(self):
-        self.user_count = self.submission_set.filter(points__gt=0).values('user').distinct().count()
+        self.user_count = self.submission_set.filter(points__gte=self.points, result='AC').values('user').distinct().count()
         submissions = self.submission_set.count()
-        self.ac_rate = 100.0 * self.submission_set.filter(result='AC').count() / submissions if submissions else 0
+        self.ac_rate = 100.0 * self.submission_set.filter(points__gte=self.points, result='AC').count() / submissions if submissions else 0
         self.save()
 
     update_stats.alters_data = True

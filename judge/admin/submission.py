@@ -62,8 +62,17 @@ class SubmissionTestCaseInline(admin.TabularInline):
 
 
 class ContestSubmissionInline(admin.StackedInline):
-    fields = ('problem', 'participation', 'points', 'bonus')
+    fields = ('problem', 'participation', 'points', 'bonus', 'updated_frozen')
+    readonly_fields = ('updated_frozen',)
     model = ContestSubmission
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = self.readonly_fields
+        if obj is None:
+            return fields
+        if not request.user.has_perm('judge.contest_frozen_state') and obj.participation.contest.freeze_submissions:
+            fields += ('points', 'bonus')
+        return fields
 
     def get_formset(self, request, obj=None, **kwargs):
         kwargs['formfield_callback'] = partial(self.formfield_for_dbfield, request=request, obj=obj)
@@ -157,9 +166,8 @@ class SubmissionAdmin(admin.ModelAdmin):
             self.message_user(request, ugettext('You do not have the permission to rejudge submissions.'),
                               level=messages.ERROR)
             return
-        submissions = list(queryset.select_related('problem'))#.only('points', 'case_points', 'case_total',
-                                                             #      'problem__partial', 'problem__points'))
-                                                             # Some sort of brain damage going on - quantum
+        submissions = list(queryset.defer(None).select_related(None).select_related('problem')
+                           .only('points', 'case_points', 'case_total', 'problem__partial', 'problem__points'))
         for submission in submissions:
             submission.points = round(submission.case_points / submission.case_total * submission.problem.points
                                       if submission.case_total else 0, 3)

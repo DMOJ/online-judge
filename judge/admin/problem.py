@@ -6,6 +6,8 @@ from django.core.urlresolvers import reverse_lazy
 from django.db import connection
 from django.db.models import Q
 from django.forms import ModelForm
+
+from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import ugettext, ungettext, ugettext_lazy as _
 from reversion.admin import VersionAdmin
@@ -156,6 +158,9 @@ class ProblemAdmin(VersionAdmin):
             func, name, desc = self.get_action('make_private')
             actions[name] = (func, name, desc)
 
+        func, name, desc = self.get_action('update_publish_date')
+        actions[name] = (func, name, desc)
+        
         return actions
 
     def get_readonly_fields(self, request, obj=None):
@@ -205,6 +210,14 @@ class ProblemAdmin(VersionAdmin):
                 SET prof.points = prof.points {} `data`.delta
                 WHERE `data`.delta IS NOT NULL
             '''.format(', '.join(['%s'] * len(ids)), sign), ids)
+
+    def update_publish_date(self, request, queryset):
+        count = queryset.update(date=timezone.now())
+        self.message_user(request, ungettext('%d problem\'s publish date successfully updated.',
+                                             '%d problems\' publish date successfully updated.',
+                                             count) % count)
+
+    update_publish_date.short_description = _('Set publish date to now')
 
     def make_restricted(self, request, queryset):
         count = queryset.update(is_restricted=True)

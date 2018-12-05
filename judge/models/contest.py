@@ -95,6 +95,11 @@ class Contest(models.Model):
                                                         'testcases. Commonly set during a contest, then unset '
                                                         'prior to rejudging user submissions when the contest ends.'),
                                             default=False)
+    freeze_submissions = models.BooleanField(verbose_name=_('freeze submissions'),
+                                             help_text=_('Whether submission updates should be frozen. If frozen, rejudging/rescoring '
+                                                         'will not propagate to related contest submissions until after this is '
+                                                         'unchecked.'),
+                                             default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may join the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
@@ -107,9 +112,14 @@ class Contest(models.Model):
     access_code = models.CharField(verbose_name=_('access code'), blank=True, default='', max_length=255,
                                    help_text=_('An optional code to prompt contestants before they are allowed '
                                                'to join the contest. Leave it blank to disable.'))
-    time_bonus = models.IntegerField(verbose_name=_('time bonus'), help_text=_('Number of minutes to award an extra point for submitting before the contest end. Leave as 0 for no time bonus.'), default=0)
+    time_bonus = models.IntegerField(verbose_name=_('time bonus'),
+                                     help_text=_('Number of minutes to award an extra point for submitting '
+                                                 'before the contest end. Leave as 0 for no time bonus.'),
+                                     default=0)
     
-    first_submission_bonus = models.IntegerField(verbose_name=_('first try bonus'), help_text=_('Bonus points for fully solving on first submission.'), default=0)
+    first_submission_bonus = models.IntegerField(verbose_name=_('first try bonus'),
+                                                 help_text=_('Bonus points for fully solving on first submission.'),
+                                                 default=0)
 
     def clean(self):
         if self.start_time >= self.end_time:
@@ -248,7 +258,7 @@ class Contest(models.Model):
                 return True
             # User is in the organizations
             if user.is_authenticated and \
-                    self.organizations.filter(id__in=user.profile.organizations.all()):
+                    self.organizations.filter(id__in=user.profile.organizations.all()).exists():
                 return True
 
         # If the user can view all contests
@@ -270,6 +280,7 @@ class Contest(models.Model):
             ('join_all_contest', _('Join all contests')),
             ('edit_own_contest', _('Edit own contests')),
             ('edit_all_contest', _('Edit all contests')),
+            ('contest_frozen_state', _('Change contest frozen state')),
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
         )
@@ -306,6 +317,10 @@ class ContestParticipation(models.Model):
         return self.score
 
     recalculate_score.alters_data = True
+
+    @property
+    def live(self):
+        return self.virtual == 0
 
     @property
     def spectate(self):
@@ -381,7 +396,8 @@ class ContestProblem(models.Model):
     order = models.PositiveIntegerField(db_index=True, verbose_name=_('order'))
     output_prefix_override = models.IntegerField(verbose_name=_('output prefix length override'), null=True, blank=True)
     max_submissions = models.IntegerField(help_text=_('Maximum number of submissions for this problem, '
-                                                      'or 0 for no limit.'), default=0,
+                                                      'or 0 for no limit.'),
+                                          default=0,
                                           validators=[MinValueValidator(0, _('Why include a problem you '
                                                                              'can\'t submit to?'))])
 
@@ -402,6 +418,9 @@ class ContestSubmission(models.Model):
                                      help_text=_('Whether this submission was ran only on pretests.'),
                                      default=False)
     bonus = models.IntegerField(default=0, verbose_name=_('bonus'))
+    updated_frozen = models.BooleanField(verbose_name=_('updated while frozen'),
+                                         help_text=_('Whether this submission was rejudged/rescored while the contest was frozen.'),
+                                         default=False)
 
     class Meta:
         verbose_name = _('contest submission')

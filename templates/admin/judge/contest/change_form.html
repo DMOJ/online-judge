@@ -5,6 +5,7 @@
     <script>
         django.jQuery(function ($) {
             $('.reratelink').appendTo('div#bottombar').show();
+            $('.unfreezelink').appendTo('div#bottombar').show();
         });
     </script>
 {% endblock extrahead %}
@@ -15,6 +16,12 @@
            class="button reratelink">
             <i class="fa fa-lg fa-signal"></i>
             <span class="text">{% trans "Rate" %}</span>
+        </a>
+    {% endif %}
+    {% if original and original.freeze_submissions and perms.judge.contest_frozen_state %}
+        <a style="display: none" title="{% trans "Unfreeze" %}" href="{% url 'admin:judge_contest_unfreeze' original.pk %}"
+           class="button unfreezelink">
+            <span class="text">{% trans "Unfreeze" %}</span>
         </a>
     {% endif %}
 {% endblock %}

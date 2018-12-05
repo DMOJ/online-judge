@@ -269,7 +269,11 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('Already in contest'),
                                    _('You are already in a contest: "%s".') % profile.current_contest.contest.name)         
 
-        if not contest.is_joinable_by(request.user):
+        if not contest.is_registered(request.user):
+            return generic_message(request, _('Cannot join contest'),
+                                   _('You have not registered for: "%s".') % contest.name)
+
+        if not contest.is_joinable_by(request.user, check_registered=False):
             return generic_message(request, _('Cannot join contest'),
                                    _('You do not have permission to join: "%s".') % contest.name)
 

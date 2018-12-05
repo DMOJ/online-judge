@@ -33,6 +33,14 @@ ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
                                             preview_timeout=1000, hide_preview_button=True))
 
 
+## TODO temp fix - just no
+def access_check(obj, request):
+    if isinstance(obj, Ticket):
+        linked = obj.linked_item
+        if isinstance(linked, Problem) and not linked.is_accessible_by(request.user):
+            raise PermissionDenied()
+
+
 class TicketForm(forms.Form):
     title = forms.CharField(max_length=100, label=ugettext_lazy('Ticket title'))
     body = forms.CharField(widget=ticket_widget)
@@ -54,10 +62,12 @@ class TicketForm(forms.Form):
 class SingleObjectFormView(SingleObjectMixin, FormView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+        access_check(self.object, request)
         return super(SingleObjectFormView, self).post(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
+        access_check(self.object, request)
         return super(SingleObjectFormView, self).get(request, *args, **kwargs)
 
 
@@ -76,6 +86,8 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
     def form_valid(self, form):
         ticket = Ticket(user=self.request.user.profile, title=form.cleaned_data['title'])
         ticket.linked_item = self.object
+        if isinstance(self.object, Problem) and not self.object.is_accessible_by(self.request.user):
+            raise PermissionDenied()
         ticket.save()
         message = TicketMessage(ticket=ticket, user=ticket.user, body=form.cleaned_data['body'])
         message.save()
@@ -122,6 +134,7 @@ class TicketMixin(object):
 
     def get_object(self, queryset=None):
         ticket = super(TicketMixin, self).get_object(queryset)
+        access_check(ticket, self.request)
         profile_id = self.request.user.profile.id
         if self.request.user.has_perm('judge.change_ticket'):
             return ticket
@@ -171,6 +184,7 @@ class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, SingleObjectMixin,
         if self.open is None:
             raise ImproperlyConfigured('Need to define open')
         ticket = self.get_object()
+        access_check(ticket, request)
         if ticket.is_open != self.open:
             ticket.is_open = self.open
             ticket.save()
