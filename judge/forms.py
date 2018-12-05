@@ -104,11 +104,6 @@ class NewMessageForm(ModelForm):
             widgets['content'] = MathJaxPagedownWidget()
 
 
-class NewOrganizationForm(EditOrganizationForm):
-    class Meta(EditOrganizationForm.Meta):
-        fields = ['slug'] + EditOrganizationForm.Meta.fields
-
-
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(CustomAuthenticationForm, self).__init__(*args, **kwargs)
