@@ -38,6 +38,9 @@ def get_request_user(request):
 def api_v1_contest_list(request):
     user = get_request_user(request)
 
+    if user.profile.is_contest_account:
+        return JsonReponse({})
+
     queryset = Contest.contests_list(user).prefetch_related(
         Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description')
     
@@ -55,7 +58,7 @@ def api_v1_contest_detail(request, contest):
 
     contest = get_object_or_404(Contest, key=contest)
 
-    if not contest.is_accessible_by(user):
+    if not contest.is_accessible_by(user) or user.profile.is_contest_account:
         raise Http404()
 
     in_contest = contest.is_in_contest(user)
@@ -99,7 +102,7 @@ def api_v1_contest_detail(request, contest):
 def api_v1_problem_list(request):
     user = get_request_user(request)
 
-    if not user.is_authenticated:
+    if not user.is_authenticated or user.profile.is_contest_account:
         return JsonResponse({})
 
     queryset = Problem.problems_list(user)
@@ -121,7 +124,7 @@ def api_v1_problem_list(request):
 def api_v1_problem_info(request, problem):
     user = get_request_user(request)
 
-    if not user.is_authenticated:
+    if not user.is_authenticated or user.profile.is_contest_account:
         raise Http404()
 
     p = get_object_or_404(Problem, code=problem)
@@ -144,7 +147,7 @@ def api_v1_problem_info(request, problem):
 def api_v1_user_list(request):
     user = get_request_user(request)
 
-    if not user.is_authenticated:
+    if not user.is_authenticated or user.profile.is_contest_account:
         return JsonResponse({})
 
     queryset = Profile.objects.values_list('user__username', 'points', 'display_rank')
@@ -157,7 +160,7 @@ def api_v1_user_list(request):
 def api_v1_user_info(request, username):
     user = get_request_user(request)
 
-    if not user.is_authenticated:
+    if not user.is_authenticated or user.profile.is_contest_account:
         return JsonResponse({})
 
     profile = get_object_or_404(Profile, user__username=username)
@@ -199,7 +202,7 @@ def api_v1_user_info(request, username):
 def api_v1_user_submissions(request, username):
     user = get_request_user(request)
 
-    if not user.is_authenticated:
+    if not user.is_authenticated or user.profile.is_contest_account:
         return JsonResponse({})
 
     profile = get_object_or_404(Profile, user__username=username)
@@ -225,8 +228,8 @@ def api_v1_submission_detail(request, submission):
 
     submission = get_object_or_404(Submission, id=submission)
     
-    if not submission.is_accessible_by(user):
-        raise PermissionDenied()
+    if not submission.is_accessible_by(user) or user.profile.is_contest_account:
+        raise Http404()
 
     if user.profile.current_contest is not None:
         return JsonResponse({})
@@ -259,8 +262,8 @@ def api_v1_submission_source(request, submission):
 
     submission = get_object_or_404(Submission, id=submission)
 
-    if not submission.is_accessible_by(user):
-        raise PermissionDenied()
+    if not submission.is_accessible_by(user) or user.profile.is_contest_account:
+        raise Http404()
 
     if user.profile.current_contest is not None:
         return JsonResponse({})

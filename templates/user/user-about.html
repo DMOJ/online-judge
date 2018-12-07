@@ -50,6 +50,15 @@
                 </div>
             </div>
         {% endif %}
+
+        {% if user.notes and request.user.is_superuser %}
+            <br>
+            <br>
+            <br>
+            <h4>Administrator Notes</h4>
+            {{ user.notes|str|linebreaks }}
+        {% endif %}
+
     </div>
 {% endblock %}
 

@@ -42,8 +42,13 @@ class TimezoneFilter(admin.SimpleListFilter):
 
 class ProfileAdmin(VersionAdmin):
     form = ProfileForm
-    fields = ('user', 'name', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
-              'math_engine', 'last_access', 'ip', 'is_contest_account', 'mute', 'is_totp_enabled', 'api_token', 'user_script', 'current_contest')
+    fieldsets = (
+        (None,                  {'fields': ('user', 'name', 'display_rank')}),
+        (_('Settings'),         {'fields': ('organizations', 'timezone', 'language', 'ace_theme', 'math_engine')}),
+        (_('Administration'),   {'fields': ('is_contest_account', 'mute', 'is_totp_enabled', 'api_token',
+                                            'last_access', 'ip', 'current_contest', 'notes')}),
+        (_('Text Fields'),      {'fields': ('about', 'user_script')}),
+    )
     list_display = ('user', 'name', 'email', 'is_totp_enabled', 'is_contest_account',
                     'date_joined', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
@@ -56,13 +61,16 @@ class ProfileAdmin(VersionAdmin):
     def get_queryset(self, request):
         return super(ProfileAdmin, self).get_queryset(request).select_related('user')
 
-    def get_fields(self, request, obj=None):
+    def get_fieldsets(self, request, obj=None):
         if request.user.has_perm('judge.totp'):
-            fields = list(self.fields)
-            fields.insert(fields.index('is_totp_enabled') + 1, 'totp_key')
-            return tuple(fields)
+            fieldsets = self.fieldsets[:]
+            fields = list(fieldsets[2][1]['fields'])
+            if 'totp_key' not in fields:
+                fields.insert(fields.index('is_totp_enabled') + 1, 'totp_key')
+            fieldsets[2][1]['fields'] = tuple(fields)
+            return fieldsets
         else:
-            return self.fields
+            return self.fieldsets
 
     def get_readonly_fields(self, request, obj=None):
         fields = self.readonly_fields
