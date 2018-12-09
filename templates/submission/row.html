@@ -24,11 +24,15 @@
     <div>
         {{ link_user(submission.user) }}
         <span class="time">{{ relative_time(submission.date) }}</span>
-        {% if not request.in_contest and submission.contest_or_none and request.user.is_authenticated %}
-            <a href="{{ url('contest_view', submission.contest_or_none.participation.contest.key) }}"
-               class="submission-contest">
-                <i title="{{ submission.contest_or_none.participation.contest.name }}" class="fa fa-dot-circle-o"></i>
-            </a>
+        {% if not request.in_contest and submission.contest_or_none %}
+            {% with contest=submission.contest_or_none.participation.contest %}
+                {% if contest.is_accessible_by(request.user) %}
+                    <a href="{{ url('contest_view', contest.key) }}"
+                       class="submission-contest">
+                        <i title="{{ contest.name }}" class="fa fa-dot-circle-o"></i>
+                    </a>
+                {% endif %}
+            {% endwith %}
         {% endif %}
     </div>
 </td>
