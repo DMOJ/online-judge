@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.syndication.views import Feed
 from django.core.cache import cache
 from django.utils import timezone
@@ -44,7 +45,7 @@ class CommentFeed(Feed):
     description = 'The latest comments on the %s website' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
 
     def items(self):
-        return Comment.objects.filter(hidden=False).order_by('-time')[:25]
+        return Comment.most_recent(AnonymousUser(), 25)
 
     def item_title(self, comment):
         return '%s -> %s' % (comment.author.user.username, comment.page_title)
