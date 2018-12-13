@@ -66,11 +66,17 @@ class Contest(models.Model):
     is_rated = models.BooleanField(verbose_name=_('contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
     require_registration = models.BooleanField(verbose_name=_('require registration'),
-                                                help_text=_('Whether the user must be registered before being able to join the contest'),
+                                                help_text=_('Whether the user must be registered before being able to join the contest.'),
                                                 default=False)
     registration_page = models.TextField(verbose_name=_('registration page'),
                                          help_text=_('Flatpage to display when registering.'),
                                          blank=True, null=True)
+    registration_start_time = models.DateTimeField(verbose_name=_('registration start time'),
+                                                   help_text=_('Allow registration starting at the specified time.'),
+                                                   blank=True, null=True)
+    registration_end_time = models.DateTimeField(verbose_name=_('registration end time'), 
+                                                 help_text=_('Allow registration until the specified time.'),
+                                                 blank=True, null=True)
     hide_scoreboard = models.BooleanField(verbose_name=_('hide scoreboard'),
                                           help_text=_('Whether the scoreboard should remain hidden for the duration '
                                                       'of the contest.'),
@@ -124,6 +130,13 @@ class Contest(models.Model):
     def clean(self):
         if self.start_time >= self.end_time:
             raise ValidationError('What is this? A contest that ended before it starts?')
+        if self.require_registration:
+            if self.registration_start_time is None:
+                raise ValidationError('Registration start time field cannot be empty.')
+            elif self.registration_end_time is None:
+                raise ValidationError('Registration end time field cannot be empty.')
+            elif self.registration_start_time >= self.registration_end_time:
+                raise ValidationError('What is this? Registration ends before it starts?')
 
     def is_in_contest(self, user):
         if user.is_authenticated:
@@ -217,6 +230,10 @@ class Contest(models.Model):
 
     def can_register(self, user):
         if self.require_registration:
+            start_time = self.registration_start_time or self._now
+            end_time = self.registration_end_time or self._now
+            if not self.registration_start_time <= self._now <= self.registration_end_time:
+                return False
             return self.is_joinable_by(user, check_registered=False)
         return False
 

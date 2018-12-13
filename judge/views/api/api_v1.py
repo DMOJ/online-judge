@@ -175,24 +175,20 @@ def api_v1_user_info(request, username):
 
     if user.has_perm('judge.view_name'):
         resp['name'] = profile.name
+    
+    last_rating = profile.ratings.last()
 
-    last_rating = None
-    last_volatility = None
     contest_history = {}
     for contest_key, rating, volatility in ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False) \
-                                                               .order_by('-contest__end_time') \
                                                                .values_list('contest__key', 'rating__rating', 'rating__volatility'):
         contest_history[contest_key] = {
             'rating': rating,
             'volatility': volatility,
         }
-        if last_rating is None:
-            last_rating = rating
-            last_volatility = volatility
 
     resp['contests'] = {
-        'current_rating': last_rating,
-        'volatility': last_volatility,
+        'current_rating': last_rating.rating if last_rating else None,
+        'volatility': last_rating.volatility if last_rating else None,
         'history': contest_history,
     }
 

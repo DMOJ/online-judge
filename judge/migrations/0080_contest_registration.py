@@ -33,11 +33,21 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contest',
             name='require_registration',
-            field=models.BooleanField(default=False, help_text='Whether the user must be registered before being able to join the contest', verbose_name='require registration'),
+            field=models.BooleanField(default=False, help_text='Whether the user must be registered before being able to join the contest.', verbose_name='require registration'),
         ),
         migrations.AddField(
             model_name='contest',
             name='registration_page',
             field=models.TextField(blank=True, help_text='Flatpage to display when registering.', null=True, verbose_name='registration page'),
+        ),
+        migrations.AddField(
+            model_name='contest',
+            name='registration_end_time',
+            field=models.DateTimeField(blank=True, help_text='Allow registration until the specified time.', null=True, verbose_name='registration end time'),
+        ),
+        migrations.AddField(
+            model_name='contest',
+            name='registration_start_time',
+            field=models.DateTimeField(blank=True, help_text='Allow registration starting at the specified time.', null=True, verbose_name='registration start time'),
         ),
     ]

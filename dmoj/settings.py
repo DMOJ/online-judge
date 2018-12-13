@@ -286,7 +286,6 @@ MARKDOWN_USER_LARGE_STYLE = {
     'safe_mode': True,
     'nofollow': True,
     'use_camo': True,
-    'texoid': True,
     'math': True,
 }
 

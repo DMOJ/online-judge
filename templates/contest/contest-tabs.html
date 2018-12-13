@@ -13,7 +13,7 @@
             {{ make_tab('participation', 'fa-users', url('contest_participation_own', contest.key), _('Participation')) }}
         {% endif %}
     {% endif %}
-    {% if perms.judge.change_contest %}
+    {% if perms.judge.change_contest or is_organizer %}
         {{ make_tab('edit', 'fa-edit', url('admin:judge_contest_change', contest.id), _('Edit')) }}
     {% endif %}
 
