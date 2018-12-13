@@ -49,7 +49,7 @@ class UserSelect2View(Select2View):
 
 class OrganizationSelect2View(Select2View):
     def get_queryset(self):
-        return Organization.objects.filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
+        return Organization.objects.filter(name__icontains=self.term)
 
 
 class ProblemSelect2View(Select2View):
