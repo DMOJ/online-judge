@@ -119,7 +119,7 @@ def api_v1_user_info(request, user):
         'points': profile.points,
         'rank': profile.display_rank,
         'solved_problems': submissions,
-        'organizations': list(profile.organizations.values_list('key', flat=True)),
+        'organizations': list(profile.organizations.values_list('id', flat=True)),
     }
 
     last_rating = profile.ratings.last()
