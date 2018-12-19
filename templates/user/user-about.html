@@ -19,6 +19,15 @@
                 </p>
             {% endif %}
         {% endwith %}
+        {% if perms.judge.change_profile %}
+            {% with notes=user.notes %}
+                {% if notes %}
+                    <p style="margin-top: 0"><b>{{ _('Admin Notes') }}: </b>
+                        {{ notes }}
+                    </p>
+                {% endif %}
+            {% endwith %}
+        {% endif%}
 
         {% if user.about %}
             <h4>{{ _('About') }}</h4>
