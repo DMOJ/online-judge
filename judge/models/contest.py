@@ -8,7 +8,9 @@ from django.db.models import Max
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _, ugettext
+from jsonfield import JSONField
 
+from judge import contest_format
 from judge.models.problem import Problem
 from judge.models.profile import Profile, Organization
 from judge.models.submission import Submission
@@ -95,10 +97,25 @@ class Contest(models.Model):
                                                'to join the contest. Leave it blank to disable.'))
     banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
                                           help_text=_('Bans the selected users from joining this contest.'))
+    format_name = models.CharField(verbose_name=_('contest format'), default='default', max_length=32,
+                                   choices=contest_format.choices(), help_text=_('The contest format module to use.'))
+    format_config = JSONField(verbose_name=_('contest format configuration'), null=True, blank=True,
+                              help_text=_('A JSON object to serve as the configuration for the chosen contest format '
+                                          'module. Leave empty to use None. Exact format depends on the contest format '
+                                          'selected.'))
+
+    @cached_property
+    def format_class(self):
+        return contest_format.formats[self.format_name]
+
+    @cached_property
+    def format(self):
+        return self.format_class(self, self.format_config)
 
     def clean(self):
         if self.start_time >= self.end_time:
             raise ValidationError('What is this? A contest that ended before it starts?')
+        self.format_class.validate(self.format_config)
 
     def is_in_contest(self, request):
         if request.user.is_authenticated:
@@ -183,7 +200,7 @@ class Contest(models.Model):
 
         # If the user is a contest organizer
         if user.has_perm('judge.edit_own_contest') and \
-           self.organizers.filter(id=user.profile.id).exists():
+                self.organizers.filter(id=user.profile.id).exists():
             return True
 
         return False
@@ -210,6 +227,7 @@ class ContestParticipation(models.Model):
     cumtime = models.PositiveIntegerField(verbose_name=_('cumulative time'), default=0)
     virtual = models.IntegerField(verbose_name=_('virtual participation id'), default=0,
                                   help_text=_('0 means non-virtual, otherwise the n-th virtual participation'))
+    format_data = JSONField(verbose_name=_('contest format specific data'), null=True, blank=True)
 
     def recalculate_score(self):
         self.score = sum(map(itemgetter('points'),
