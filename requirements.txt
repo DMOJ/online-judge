@@ -24,3 +24,4 @@ requests
 django-fernet-fields
 pyotp
 qrcode[pil]
+jsonfield
