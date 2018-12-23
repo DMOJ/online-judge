@@ -49,17 +49,17 @@ class UserSelect2View(Select2View):
 
 class OrganizationSelect2View(Select2View):
     def get_queryset(self):
-        return Organization.objects.filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
+        return Organization.objects.filter(name__icontains=self.term)
 
 
 class ProblemSelect2View(Select2View):
     def get_queryset(self):
-        return Problem.problems_list(self.request.user).filter(Q(code__icontains=self.term) | Q(name__icontains=self.term))
+        return Problem.problems_list(self.request.user).filter(Q(code__icontains=self.term) | Q(name__icontains=self.term)).distinct()
 
 
 class ContestSelect2View(Select2View):
     def get_queryset(self):
-        return Contest.contests_list(self.request.user).filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
+        return Contest.contests_list(self.request.user).filter(Q(key__icontains=self.term) | Q(name__icontains=self.term)).distinct()
 
 
 class CommentSelect2View(Select2View):

@@ -82,7 +82,7 @@
                     {% endif %}
                 </a>
             {% elif not problem.is_public and not request.in_contest %}
-                <i class="unsolved-problem-color title-state fa fa-lock"></i>
+                <a><i class="unsolved-problem-color title-state fa fa-lock"></i></a>
             {% endif %}
         {% endif %}
         <h2 style="color:#393630; display: inline-block">{{ title }}</h2>

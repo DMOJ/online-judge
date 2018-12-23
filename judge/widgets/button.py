@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 class GenerateKeyTextInputButton(TextInput):
     def __init__(self, *args, **kwargs):
         self.charset = kwargs.pop("charset", "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{};:,<>./")
+        self.length = kwargs.pop("length", 100)
         super(TextInput, self).__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None, charset=None):
@@ -16,8 +17,8 @@ class GenerateKeyTextInputButton(TextInput):
 (function ($) {{
     $(document).ready(function () {{
         $('#id_{0}_regen').click(function () {{
-            var length = 32,
-                charset = "{1}",
+            var length = {length},
+                charset = "{charset}",
                 key = "";
             for (var i = 0, n = charset.length; i < length; ++i) {{
                 key += charset.charAt(Math.floor(Math.random() * n));
@@ -27,4 +28,4 @@ class GenerateKeyTextInputButton(TextInput):
     }});
 }})(django.jQuery);
 </script>
-''', name, self.charset))
+''', name, length=self.length, charset=self.charset))

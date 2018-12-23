@@ -1,8 +1,9 @@
 from django.contrib import admin
+from django.contrib.flatpages.models import FlatPage
 
 from judge.admin.comments import CommentAdmin
 from judge.admin.contest import ContestTagAdmin, ContestAdmin, ContestParticipationAdmin, ContestRegistrationAdmin
-from judge.admin.interface import NavigationBarAdmin, BlogPostAdmin, LicenseAdmin
+from judge.admin.interface import NavigationBarAdmin, BlogPostAdmin, FlatPageAdmin, LicenseAdmin
 from judge.admin.organization import OrganizationAdmin, OrganizationRequestAdmin
 from judge.admin.problem import ProblemAdmin
 from judge.admin.profile import ProfileAdmin
@@ -21,6 +22,8 @@ admin.site.register(Contest, ContestAdmin)
 admin.site.register(ContestParticipation, ContestParticipationAdmin)
 admin.site.register(ContestRegistration, ContestRegistrationAdmin)
 admin.site.register(ContestTag, ContestTagAdmin)
+admin.site.unregister(FlatPage)
+admin.site.register(FlatPage, FlatPageAdmin)
 admin.site.register(Judge, JudgeAdmin)
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(License, LicenseAdmin)

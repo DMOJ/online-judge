@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, PrivateMessage, Language
 from judge.utils.subscription import newsletter_id
-from judge.widgets import MathJaxPagedownWidget, GenerateKeyTextInputButton, HeavyPreviewPageDownWidget, \
+from judge.widgets import MathJaxPagedownWidget, HeavyPreviewPageDownWidget, \
     PagedownWidget, Select2Widget, Select2MultipleWidget
 
 
@@ -61,14 +61,15 @@ class ProfileForm(ModelForm):
         user = kwargs.pop('user', None)
         super(ProfileForm, self).__init__(*args, **kwargs)
         if not user.has_perm('judge.edit_all_organization'):
-            self.fields['organizations'].queryset = Organization.objects.filter(
-                Q(is_open=True) | Q(id__in=user.profile.organizations.all())
-            )
-        if user.profile.is_contest_account:
-            self.fields['organizations'].disabled = True
-            self.fields['test_site'].disabled = True
-            if newsletter_id is not None:
-                self.fields['newsletter'].disabled = True
+            filter = Q(id__in=user.profile.organizations.all())
+            if not user.profile.is_contest_account:
+                filter |= Q(is_open=True)
+            self.fields['organizations'].queryset = Organization.objects.filter(filter)
+
+    def clean_organizations(self):
+        if self.instance.is_contest_account:
+            return self.instance.organizations.all()
+        return self.cleaned_data['organizations']
 
     def clean_name(self):
         return fix_unicode(self.cleaned_data['name'] or '')
@@ -106,11 +107,6 @@ class NewMessageForm(ModelForm):
         widgets = {}
         if PagedownWidget is not None:
             widgets['content'] = MathJaxPagedownWidget()
-
-
-class NewOrganizationForm(EditOrganizationForm):
-    class Meta(EditOrganizationForm.Meta):
-        fields = ['key'] + EditOrganizationForm.Meta.fields
 
 
 class CustomAuthenticationForm(AuthenticationForm):

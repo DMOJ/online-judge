@@ -82,6 +82,7 @@ class ContestForm(ModelForm):
 
         if HeavyPreviewAdminPageDownWidget is not None:
             widgets['description'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('contest_preview'))
+            widgets['registration_page'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('contest_preview'))
 
 
 class ContestAdmin(VersionAdmin):
@@ -157,9 +158,9 @@ class ContestAdmin(VersionAdmin):
         contest = get_object_or_404(Contest, id=id)
         if not contest.freeze_submissions:
             raise Http404()
-        contest.freeze_submissions = False
-        contest.save()
         with transaction.atomic():
+            contest.freeze_submissions = False
+            contest.save()
             for submission in ContestSubmission.objects.filter(updated_frozen=True, participation__contest=contest):
                 submission.submission.recalculate_contest_submission()
         return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(id,)))

@@ -22,7 +22,7 @@ class ProfileForm(ModelForm):
             'language': Select2Widget,
             'ace_theme': Select2Widget,
             'current_contest': Select2Widget,
-            'api_token': GenerateKeyTextInputButton(charset="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"),
+            'api_token': GenerateKeyTextInputButton(charset="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", length=32),
         }
         if AdminPagedownWidget is not None:
             widgets['about'] = AdminPagedownWidget
@@ -43,16 +43,16 @@ class TimezoneFilter(admin.SimpleListFilter):
 class ProfileAdmin(VersionAdmin):
     form = ProfileForm
     fieldsets = (
-        (None,                  {'fields': ('user', 'name', 'display_rank')}),
+        (None,                  {'fields': ('user', 'display_rank')}),
         (_('Settings'),         {'fields': ('organizations', 'timezone', 'language', 'ace_theme', 'math_engine')}),
         (_('Administration'),   {'fields': ('is_contest_account', 'mute', 'is_totp_enabled', 'api_token',
                                             'last_access', 'ip', 'current_contest', 'notes')}),
         (_('Text Fields'),      {'fields': ('about', 'user_script')}),
     )
-    list_display = ('user', 'name', 'email', 'is_totp_enabled', 'is_contest_account',
+    list_display = ('user', 'full_name', 'email', 'is_totp_enabled', 'is_contest_account',
                     'date_joined', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
-    search_fields = ('user__username', 'name', 'ip', 'user__email')
+    search_fields = ('user__username', 'user__first_name', 'user__last_name', 'ip', 'user__email')
     list_filter = ('language', TimezoneFilter)
     actions = ('recalculate_points',)
     actions_on_top = True
@@ -87,6 +87,11 @@ class ProfileAdmin(VersionAdmin):
         return obj.long_display_name
     admin_user_admin.admin_order_field = 'user__username'
     admin_user_admin.short_description = _('User')
+
+    def full_name(self, obj):
+        return obj.user.get_full_name()
+    full_name.admin_order_field = 'full_name'
+    full_name.short_description = _('Name')
 
     def email(self, obj):
         return obj.user.email

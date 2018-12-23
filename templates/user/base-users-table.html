@@ -28,9 +28,7 @@
         {% block after_username scoped %}{% endblock %}
         {% if perms.judge.view_name %}
             <td class="real-name">
-                {% if user.name %}
-                    {{ user.name }}
-                {% endif %}
+                {{ user.user.get_full_name() }}
             </td>
         {% endif %}
         {% block before_point scoped %}{% endblock %}

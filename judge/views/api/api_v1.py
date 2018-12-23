@@ -170,11 +170,11 @@ def api_v1_user_info(request, username):
         'points': profile.points,
         'rank': profile.display_rank,
         'solved_problems': submissions,
-        'organizations': list(profile.organizations.values_list('key', flat=True)),
+        'organizations': list(profile.organizations.values_list('id', flat=True)),
     }
 
     if user.has_perm('judge.view_name'):
-        resp['name'] = profile.name
+        resp['name'] = profile.user.get_full_name()
     
     last_rating = profile.ratings.last()
 

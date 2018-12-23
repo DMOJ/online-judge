@@ -143,7 +143,7 @@ class Submission(models.Model):
                     dt = participation.end_time - contest.submission.date
                     contest.bonus = (contest.points / problem.points) * (dt.total_seconds()//(60*time_bonus))
                 if contest.points == problem.points \
-                        and participation.submissions.filter(problem=problem, submission__date__lte=contest.submission.date).count():
+                        and not participation.submissions.filter(problem=problem, submission__date__lt=contest.submission.date).exists():
                     contest.bonus += first_submission_bonus
             contest.save()
             participation.recalculate_score()

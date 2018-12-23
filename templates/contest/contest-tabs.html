@@ -68,14 +68,16 @@
                     </form>
                 {% endif %}
             {% endif %}
-        {% elif contest.can_register(request.user) %}
-            <a href="{{ url('contest_register', contest.key) }}" class="contest-join-pseudotab unselectable button full">
-                {% if contest.is_registered(request.user) %}
-                    <input type="submit" value="{{ _('Registered') }}" disabled>
-                {% else %}
+        {% else %}
+            {% if contest.require_registration and contest.is_registered(request.user) %}
+                <a class="contest-join-pseudotab unselectable button full" style="pointer-events:none;">
+                    <input type="submit" value="{{ _('Registered') }}">
+                </a>
+            {% elif contest.can_register(request.user) %}
+                <a href="{{ url('contest_register', contest.key) }}" class="contest-join-pseudotab unselectable button full">
                     <input type="submit" value="{{ _('Register') }}">
-                {% endif %}
-            </a>
+                </a>
+            {% endif %}
         {% endif %}
     {% elif contest.can_join %}
         <form action="{{ url('auth_login') }}" method="get"

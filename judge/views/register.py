@@ -26,8 +26,10 @@ class CustomRegistrationForm(RegistrationForm):
     username = forms.RegexField(regex=r'^\w+$', max_length=30, label=_('Username'),
                                 error_messages={'invalid': _('A username must contain letters, '
                                                              'numbers, or underscores')})
-    display_name = forms.RegexField(regex=r'^[\w,\s]+$', max_length=30, required=True, label=_('Real name'),
-                                error_messages={'invalid': _('Your name must contain only letters')})
+    first_name = forms.RegexField(regex=r'^[a-zA-Z]+$', max_length=30, required=True, label=_('First name'),
+                                  error_messages={'invalid': _('Your first name must contain only letters.')})
+    last_name = forms.RegexField(regex=r'^[a-zA-Z]+$', max_length=30, required=True, label=_('Last name'),
+                                 error_messages={'invalid': _('Your last name must contain only letters.')})
     timezone = ChoiceField(label=_('Timezone'), choices=TIMEZONE,
                            widget=Select2Widget(attrs={'style': 'width:100%'}))
     language = ModelChoiceField(queryset=Language.objects.all(), label=_('Preferred language'), empty_label=None,
@@ -77,7 +79,9 @@ class RegistrationView(OldRegistrationView):
         })
 
         cleaned_data = form.cleaned_data
-        profile.name = cleaned_data['display_name']
+        user.first_name = cleaned_data['first_name']
+        user.last_name = cleaned_data['last_name']
+        user.save()
         profile.timezone = cleaned_data['timezone']
         profile.language = cleaned_data['language']
         profile.organizations.add(*cleaned_data['organizations'])

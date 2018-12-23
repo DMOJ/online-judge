@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.flatpages.admin import FlatPageAdmin
+from django.contrib.flatpages.models import FlatPage
 from django.core.urlresolvers import reverse_lazy
 from django.forms import ModelForm
 from django.utils.html import format_html
@@ -38,6 +40,30 @@ class NavigationBarAdmin(DraggableMPTTAdmin):
             with LockModel(write=(NavigationBar,)):
                 NavigationBar.objects.rebuild()
         return result
+
+
+class FlatPageForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(FlatPageForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        widgets = {}
+        if HeavyPreviewAdminPageDownWidget is not None:
+            widgets['content'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('flatpage_preview'))
+
+
+class FlatPageAdmin(FlatPageAdmin):
+    fieldsets = (
+        (None, {'fields': ('url', 'title', 'content')}),
+        (_('Advanced options'), {
+            'classes': ('collapse',),
+            'fields': (
+                'template_name',
+                'sites',
+            ),
+        }),
+    )
+    form = FlatPageForm
 
 
 class BlogPostForm(ModelForm):
