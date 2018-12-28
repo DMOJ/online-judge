@@ -1,14 +1,13 @@
 import hashlib
-import logging
-import urllib2
-from contextlib import closing
-from urllib import urlencode
 import json
+import logging
 
-from django.core.cache import caches
+import requests
 from django.conf import settings
+from django.core.cache import caches
 
 from judge.utils.file_cache import HashFileCache
+from judge.utils.unicode import utf8bytes
 
 logger = logging.getLogger('judge.texoid')
 
@@ -23,34 +22,32 @@ class TexoidRenderer(object):
         self.meta_cache = caches[getattr(settings, 'TEXOID_META_CACHE', 'default')]
         self.meta_cache_ttl = getattr(settings, 'TEXOID_META_CACHE_TTL', 86400)
 
-    def query_texoid(self, formula, hash):
+    def query_texoid(self, document, hash):
         self.cache.create(hash)
 
         try:
-            request = urllib2.urlopen(settings.TEXOID_URL, urlencode({
-                'q': formula
-            }))
-        except urllib2.HTTPError as e:
-            with closing(e):
-                if e.code == 400:
-                    logger.error('Texoid failed to render: %s\n%s', formula, e.read())
-                else:
-                    logger.exception('Failed to connect to texoid for: %s' % formula)
+            response = requests.post(settings.TEXOID_URL, body=utf8bytes(document), headers={
+                'Content-Type': 'application/x-tex'
+            })
+            response.raise_for_status()
+        except requests.HTTPError as e:
+            if e.response.status == 400:
+                logger.error('Texoid failed to render: %s\n%s', document, e.response.text)
+            else:
+                logger.exception('Failed to connect to texoid for: %s' % document)
             return
         except Exception:
-            logger.exception('Failed to connect to texoid for: %s' % formula)
+            logger.exception('Failed to connect to texoid for: %s' % document)
             return
 
-        with closing(request) as f:
-            data = f.read()
-            try:
-                data = json.loads(data)
-            except ValueError:
-                logger.exception('Invalid texoid response for: %s\n%s', formula, data)
-                return
+        try:
+            data = response.json()
+        except ValueError:
+            logger.exception('Invalid texoid response for: %s\n%s', document, response.text)
+            return
 
         if not data['success']:
-            logger.error('Texoid failure for: %s\n%s', formula, data)
+            logger.error('Texoid failure for: %s\n%s', document, data)
             return {'error': data['error']}
 
         meta = data['meta']
