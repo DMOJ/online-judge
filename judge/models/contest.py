@@ -297,6 +297,7 @@ class Contest(models.Model):
             ('join_all_contest', _('Join all contests')),
             ('edit_own_contest', _('Edit own contests')),
             ('edit_all_contest', _('Edit all contests')),
+            ('clone_contest', _('Clone contest')),
             ('contest_frozen_state', _('Change contest frozen state')),
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),

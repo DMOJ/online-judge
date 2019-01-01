@@ -27,9 +27,4 @@ class Migration(migrations.Migration):
             name='first_submission_bonus',
             field=models.IntegerField(default=0, help_text='Bonus points for fully solving on first submission.', verbose_name='first try bonus'),
         ),
-        migrations.AlterField(
-            model_name='profile',
-            name='display_rank',
-            field=models.CharField(choices=[(b'user', b'Normal User'), (b'setter', b'Problem Setter'), (b'exec', b'Exec'), (b'teacher', b'Teacher'), (b'admin', b'Admin')], default=b'user', max_length=10, verbose_name='display rank'),
-        ),
     ]

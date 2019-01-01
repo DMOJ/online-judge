@@ -1,6 +1,6 @@
 {% macro make_tab(name, fa, url, text) %}
     <li class="tab{% if tab == name %} active{% endif %}">
-        {%- if url %}<a href="{{ url }}">{% else %}<span>{% endif -%}
+        {%- if url %}<a id="{{ name }}-link" href="{{ url }}">{% else %}<span>{% endif -%}
         <i class="tab-icon fa {{ fa }}"></i> {{ text }}
         {%- if url %}</a>{% else %}</span>{% endif -%}
     </li>

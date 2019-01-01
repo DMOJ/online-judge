@@ -1,12 +1,12 @@
 from calendar import Calendar, SUNDAY
 from collections import namedtuple, defaultdict
 from functools import partial
-from itertools import chain
+from itertools import chain, count
 from operator import attrgetter
 
 from datetime import timedelta, date, datetime, time
 from django import forms
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
@@ -21,6 +21,7 @@ from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.timezone import make_aware
 from django.utils.translation import ugettext as _, ugettext_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView, DetailView
 
@@ -708,3 +709,36 @@ class ContestTagDetail(TitleMixin, ContestTagDetailAjax):
 
     def get_title(self):
         return _('Contest tag: %s') % self.object.name
+
+@require_POST
+@login_required
+@permission_required('judge.clone_contest')
+def clone_contest(request, contest):
+    contest = get_object_or_404(Contest, key=contest)
+    if not contest.is_accessible_by(request.user):
+        raise Http404()
+
+    tags = contest.tags.all()
+    organizations = contest.organizations.all()
+    
+    contest.pk = None
+    contest.is_public = False
+    contest.freeze_submissions = False
+    contest.key += '_clone'
+    try:
+        contest.save()
+    except IntegrityError:
+        key = contest.key
+        for i in count(1):
+            contest.key = '%s%d' % (key, i)
+            try:
+                contest.save()
+            except IntegrityError:
+                pass
+            else:
+                break
+    contest.organizers.add(request.user.profile)
+    contest.organizations = organizations
+    contest.tags = tags
+    contest.save()
+    return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest.id,))) 

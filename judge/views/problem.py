@@ -657,9 +657,10 @@ def clone_problem(request, problem):
 
     languages = problem.allowed_languages.all()
     types = problem.types.all()
+    
+    problem.pk = None
     problem.ac_rate = 0
     problem.user_count = 0
-    problem.pk = None
     problem.is_public = False
     problem.code += '_clone'
     try:
@@ -677,6 +678,7 @@ def clone_problem(request, problem):
     problem.authors.add(request.user.profile)
     problem.allowed_languages = languages
     problem.types = types
+    problem.save()
     return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
 
 @require_POST
