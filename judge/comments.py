@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
@@ -117,5 +118,6 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
             context['is_new_user'] = (not self.request.user.is_staff and
                                       not profile.submission_set.filter(points=F('problem__points')).exists())
         context['comment_list'] = queryset
+        context['vote_hide_threshold'] = getattr(settings, 'COMMENT_VOTE_HIDE_THRESHOLD', -5)
 
         return context
