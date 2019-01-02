@@ -243,6 +243,11 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('Already in contest'),
                                    _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
 
+        if not request.user.is_superuser and contest.banned_users.filter(id=profile.id).exists():
+             return generic_message(request, _('Banned from joining'),
+                                       _('You have been declared persona non grata for this contest. '
+                                         'You are permanently barred from joining this contest.'))
+
         if contest.ended:
             while True:
                 virtual_id = (ContestParticipation.objects.filter(contest=contest, user=profile)
