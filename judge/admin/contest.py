@@ -72,12 +72,18 @@ class ContestForm(ModelForm):
         if 'rate_exclude' in self.fields:
             self.fields['rate_exclude'].queryset = \
                 Profile.objects.filter(contest_history__contest=self.instance).distinct()
+        self.fields['banned_users'].widget.can_add_related = False
+
+    def clean(self):
+        cleaned_data = super(ContestForm, self).clean()
+        cleaned_data['banned_users'].filter(current_contest__contest=self.instance).update(current_contest=None)
 
     class Meta:
         widgets = {
             'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
             'organizations': HeavySelect2MultipleWidget(data_view='organization_select2'),
-            'tags': Select2MultipleWidget
+            'tags': Select2MultipleWidget,
+            'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
         }
 
         if HeavyPreviewAdminPageDownWidget is not None:
@@ -92,6 +98,7 @@ class ContestAdmin(VersionAdmin):
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image','tags', 'summary')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
         (_('Organization'), {'fields': ('is_private', 'organizations', 'access_code')}),
+        (_('Justice'), {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_public', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
     actions = ['make_public', 'make_private']
