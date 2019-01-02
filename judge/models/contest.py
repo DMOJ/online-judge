@@ -93,6 +93,8 @@ class Contest(models.Model):
     access_code = models.CharField(verbose_name=_('access code'), blank=True, default='', max_length=255,
                                    help_text=_('An optional code to prompt contestants before they are allowed '
                                                'to join the contest. Leave it blank to disable.'))
+    banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
+                                          help_text=_('Bans the selected users from joining this contest.'))
 
     def clean(self):
         if self.start_time >= self.end_time:
