@@ -26,7 +26,7 @@ from judge.widgets import HeavyPreviewPageDownWidget
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
-        fields = ['title', 'body', 'parent']
+        fields = ['body', 'parent']
         widgets = {
             'parent': forms.HiddenInput(),
         }
@@ -38,7 +38,6 @@ class CommentForm(ModelForm):
     def __init__(self, request, *args, **kwargs):
         self.request = request
         super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs.update({'placeholder': _('Comment title')})
         self.fields['body'].widget.attrs.update({'placeholder': _('Comment body')})
 
     def clean(self):

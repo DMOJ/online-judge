@@ -42,7 +42,6 @@ class Comment(MPTTModel):
     page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
                             validators=[comment_validator])
     score = models.IntegerField(verbose_name=_('votes'), default=0)
-    title = models.CharField(max_length=200, verbose_name=_('title of comment'), blank=True)
     body = models.TextField(verbose_name=_('body of comment'), max_length=8192)
     hidden = models.BooleanField(verbose_name=_('hide the comment'), default=0)
     parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies')

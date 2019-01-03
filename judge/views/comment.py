@@ -102,7 +102,7 @@ class CommentRevisionAjax(CommentMixin, DetailView):
 class CommentEditForm(ModelForm):
     class Meta:
         model = Comment
-        fields = ['title', 'body']
+        fields = ['body']
         if MathJaxPagedownWidget is not None:
             widgets = {'body': MathJaxPagedownWidget(attrs={'id': 'id-edit-comment-body'})}
 
