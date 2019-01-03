@@ -92,21 +92,19 @@
                             </span>
                             </div>
                             <div class="content content-description">
-                                <div class="comment-title"{% if not node.title or node.title.startswith('Re:') %}
-                                     style="display: none"{% endif %}>{{ node.title }}</div>
-                                    <div class="comment-body"{% if node.score <= vote_hide_threshold %} style="display:none"{% endif %}>
-                                        {{ node.body|markdown('comment', MATH_ENGINE, True)|reference|str|safe }}
+                                <div class="comment-body"{% if node.score <= vote_hide_threshold %} style="display:none"{% endif %}>
+                                    {{ node.body|markdown('comment', MATH_ENGINE, True)|reference|str|safe }}
+                                </div>
+                                {% if node.score <= vote_hide_threshold %}
+                                    <div class="comment-body bad-comment-body">
+                                        <p>
+                                            {% trans id=node.id %}
+                                                This comment is hidden due to too much negative feedback.
+                                                Click <a href="javascript:comment_show_content({{ id }})">here</a> to view it.
+                                            {% endtrans %}
+                                        </p>
                                     </div>
-                                    {% if node.score <= vote_hide_threshold %}
-                                        <div class="comment-body bad-comment-body">
-                                            <p>
-                                                {% trans id=node.id %}
-                                                    This comment is hidden due to too much negative feedback.
-                                                    Click <a href="javascript:comment_show_content({{ id }})">here</a> to view it.
-                                                {% endtrans %}
-                                            </p>
-                                        </div>
-                                    {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>
