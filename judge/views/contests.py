@@ -77,22 +77,24 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
         now = timezone.now()
-        past, present, active, future = [], set(), [], []
+        past, present, active, future = [], [], [], []
         for contest in self.get_queryset():
             if contest.end_time < now:
                 past.append(contest)
             elif contest.start_time > now:
                 future.append(contest)
             else:
-                present.add(contest)
-        if self.request.user.is_authenticated:
-            active = filter(lambda x: not x.ended, ContestParticipation.objects.filter(contest__in=present, virtual=0))
-            present -= set(map(lambda x: x.contest, active))
-        active.sort(key=attrgetter('time_remaining'))
+                present.append(contest)
+        for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.user.profile, contest_id__in=present) \
+                                                         .select_related('contest'):
+            if not participation.ended:
+                active.append(participation)
+                present.remove(participation.contest)
+        active.sort(key=attrgetter('end_time'))
         future.sort(key=attrgetter('start_time'))
+        context['active_contests'] = active
         context['current_contests'] = present
         context['past_contests'] = past
-        context['active_contests'] = active
         context['future_contests'] = future
         context['now'] = timezone.now()
         return context
