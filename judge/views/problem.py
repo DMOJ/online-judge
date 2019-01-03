@@ -174,7 +174,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             if contest_problem.max_submissions:
                 context['submissions_left'] = max(contest_problem.max_submissions - get_contest_submission_count(self.object.code, user.profile), 0)
 
-        context['judges'] = Judge.objects.filter(online=True, problems=self.object)
+        context['available_judges'] = Judge.objects.filter(online=True, problems=self.object)
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
         context['has_pdf_render'] = HAS_PDF
         context['completed_problem_ids'] = self.get_completed_problems()

@@ -241,23 +241,24 @@
     {% if problem.is_editable_by(request.user) %}
         <div id="available-judges">
             <i class="fa fa-database fa-fw"></i><span
-                class="pi-name">{% trans trimmed count=judges|length %}
-            Judge:
-            {% pluralize count %}
-            Judges:
-        {% endtrans %}</span>
+                class="pi-name">{% trans trimmed count=available_judges|length %}
+                Judge:
+                {% pluralize count %}
+                Judges:
+            {% endtrans %}
+            </span>
             <div class="pi-value judges-value">
-                {% if judges %}
+                {% if available_judges %}
                     {% if perms.judge.change_judge %}
-                        {% for judge in judges %}
+                        {% for judge in available_judges %}
                             <a href="{{ url('admin:judge_judge_change', judge.id) }}">{{ judge.name }}</a>
                             {% if not loop.last %}, {% endif %}
                         {% endfor %}
                     {% else %}
-                        {{ judges|join(", ") }}
+                        {{ available_judges|join(", ") }}
                     {% endif %}
                 {% else %}
-                    <i>{{ _('No available judges') }}</i>
+                    <i>{{ _('None available') }}</i>
                 {% endif %}
             </div>
         </div>
