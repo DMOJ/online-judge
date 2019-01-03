@@ -368,10 +368,12 @@
                 <div class="detail">
                     <form action="" method="post">
                         {% csrf_token %}
-                        <div class="form-errors">
-                            {{ form.non_field_errors() }}
-                            {{ form.body.errors }}
-                        </div>
+                        {% if form.non_field_errors() or form.body.errors %}
+                            <div class="form-errors">
+                                {{ form.non_field_errors() }}
+                                {{ form.body.errors }}
+                            </div>
+                        {% endif %}
                         <div class="body-block">{{ form.body }}</div>
                         <button type="submit" class="submit">{{ _('Post') }}</button>
                     </form>
