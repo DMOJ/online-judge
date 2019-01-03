@@ -4,7 +4,7 @@
     {{ make_tab('detail', 'fa-info-circle', url('contest_view', contest.key), _('Info')) }}
 
     {% if contest.start_time <= now or perms.judge.see_private_contest %}
-        {% if contest.show_scoreboard or perms.judge.see_private_contest or in_contest %}
+        {% if contest.show_scoreboard or contest.can_see_scoreboard(request) %}
             {{ make_tab('ranking', 'fa-bar-chart', url('contest_ranking', contest.key), _('Rankings')) }}
         {% else %}
             {{ make_tab('ranking', 'fa-bar-chart', None, _('Hidden Rankings')) }}
@@ -13,7 +13,7 @@
             {{ make_tab('participation', 'fa-users', url('contest_participation_own', contest.key), _('Participation')) }}
         {% endif %}
     {% endif %}
-    {% if perms.judge.change_contest %}
+    {% if perms.judge.change_contest or is_organizer %}
         {{ make_tab('edit', 'fa-edit', url('admin:judge_contest_change', contest.id), _('Edit')) }}
     {% endif %}
 
@@ -70,7 +70,10 @@
             {% endif %}
         {% endif %}
     {% elif contest.can_join %}
-        <a href="{{ url('auth_login') }}?next={{ LOGIN_RETURN_PATH|urlencode }}"
-           class="contest-join-pseudotab unselectable button full">{{ _('Login to participate') }}</a>
+        <form action="{{ url('auth_login') }}" method="get"
+              class="contest-join-pseudotab unselectable button full">
+            <input type="hidden" name="next" value="{{ LOGIN_RETURN_PATH|urlencode }}">
+            <input type="submit" value="{{ _('Login to participate') }}">
+        </form>
     {% endif %}
 {% endblock %}

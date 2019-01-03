@@ -8,7 +8,7 @@ from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.db.models import Count, Max
+from django.db.models import Count, Max, Q
 from django.forms import Form, modelformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import get_object_or_404
@@ -128,7 +128,7 @@ class JoinOrganization(OrganizationMembershipChange):
 class LeaveOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
         if not profile.organizations.filter(id=org.id).exists():
-            return generic_message(request, _('Leaving organization'), _('You are not in "%s".') % org.key)
+            return generic_message(request, _('Leaving organization'), _('You are not in "%s".') % org.short_name)
         profile.organizations.remove(org)
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
@@ -279,7 +279,7 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
 
     def get_form(self, form_class=None):
         form = super(EditOrganization, self).get_form(form_class)
-        form.fields['admins'].queryset = self.object.members.all()
+        form.fields['admins'].queryset = Profile.objects.filter(Q(organizations=self.object) | Q(admin_of=self.object)).distinct()
         return form
 
     def form_valid(self, form):
@@ -316,11 +316,3 @@ class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, SingleObjectMixi
 
         organization.members.remove(user)
         return HttpResponseRedirect(organization.get_users_url())
-
-
-# Once upon a time, DMOJ used organization pages under `/organization/<6 character key>`.
-# Now, we use `/organization/<id>-<slug>`. This view is intended to redirect old URLs to new ones.
-# See <https://github.com/DMOJ/site/issues/704> for rationale and details.
-def fallback(request, key, rest):
-    organization = get_object_or_404(Organization, key=key)
-    return HttpResponsePermanentRedirect(organization.get_absolute_url() + (rest or ''))

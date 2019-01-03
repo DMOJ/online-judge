@@ -3,7 +3,6 @@ import json
 from datetime import datetime
 from operator import itemgetter
 
-import django
 from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -13,10 +12,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Max, Count, Min
-from django.http import HttpResponseRedirect, Http404
-from django.http import JsonResponse
+from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.template import RequestContext, Context
 from django.utils import timezone
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
@@ -95,7 +92,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context = super(UserPage, self).get_context_data(**kwargs)
 
         context['hide_solved'] = int(self.hide_solved)
-        context['authored'] = self.object.authored_problems.filter(is_public=True).order_by('code')
+        context['authored'] = self.object.authored_problems.filter(is_public=True, is_organization_private=False).order_by('code')
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
 
@@ -153,7 +150,8 @@ class UserProblemsPage(UserPage):
     def get_context_data(self, **kwargs):
         context = super(UserProblemsPage, self).get_context_data(**kwargs)
 
-        result = Submission.objects.filter(user=self.object, points__gt=0, problem__is_public=True) \
+        result = Submission.objects.filter(user=self.object, points__gt=0, problem__is_public=True,
+                                           problem__is_organization_private=False) \
             .exclude(problem__id__in=self.get_completed_problems() if self.hide_solved else []) \
             .values('problem__id', 'problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
             .distinct().annotate(points=Max('points')).order_by('problem__group__full_name', 'problem__code')
@@ -185,6 +183,8 @@ class UserPerformancePointsAjax(UserProblemsPage):
         try:
             start = int(self.request.GET.get('start', 0))
             end = int(self.request.GET.get('end', PP_ENTRIES))
+            if start < 0 or end < 0 or start > end:
+                raise ValueError
         except ValueError:
             start, end = 0, 100
         breakdown, self.has_more = get_pp_breakdown(self.object, start=start, end=end)
@@ -244,7 +244,7 @@ def edit_profile(request):
 
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
     return render(request, 'user/edit-profile.html', {
-        'form': form, 'title': _('Edit profile'),
+        'form': form, 'title': _('Edit profile'), 'profile': profile,
         'has_math_config': bool(getattr(settings, 'MATHOID_URL', False)),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD'),

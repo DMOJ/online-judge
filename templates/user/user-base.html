@@ -23,10 +23,6 @@
             display: -ms-flexbox;
             display: flex;
         }
-
-        .user-content {
-            width: 100%;
-        }
     </style>
 {% endblock %}
 
@@ -35,40 +31,38 @@
 {% endblock %}
 
 {% block body %}
-    <table class="user-info-page">
-        <tr>
-            <td style="padding-left:1em">
-                <div class="user-gravatar">
-                    <img src="{{ gravatar(user, 135) }}" width="135px" height="135px">
-                </div>
+    <div class="user-info-page">
+        <div class="user-sidebar">
+            <div class="user-gravatar">
+                <img src="{{ gravatar(user, 135) }}" width="135px" height="135px">
+            </div>
+            <br>
+
+            <div><b>{{ _('%(count)d problems solved', count=user.problem_count) }}</b></div>
+
+            <div><b class="semibold">{{ _('Rank by points:') }}</b> #{{ rank }}</div>
+            <div>
+                <b class="semibold">{{ _('Total points:') }}</b>
+                <span title="{{ user.performance_points|floatformat(2) }}">
+                    {{ user.performance_points|floatformat(0) }}
+                </span>
+            </div>
+
+            <br>
+            <div>
+                <a href="{{ url('all_user_submissions', user.user.username) }}">{{ _('View submissions') }}</a>
+            </div>
+
+            {% if ratings %}
                 <br>
-
-                <div><b>{{ _('%(count)d problems solved', count=user.problem_count) }}</b></div>
-
-                <div><b class="semibold">{{ _('Rank by points:') }}</b> #{{ rank }}</div>
-                <div>
-                    <b class="semibold">{{ _('Total points:') }}</b>
-                    <span title="{{ user.performance_points|floatformat(2) }}">
-                        {{ user.performance_points|floatformat(0) }}
-                    </span>
-                </div>
-
-                <br>
-                <div>
-                    <a href="{{ url('all_user_submissions', user.user.username) }}">{{ _('View submissions') }}</a>
-                </div>
-
-                {% if ratings %}
-                    <br>
-                    <div><b>{{ ratings|length }} contests written</b></div>
-                    <div><b class="semibold">{{ _('Rank by rating:') }}</b> #{{ rating_rank }}</div>
-                    <div><b class="semibold">{{ _('Rating:') }}</b> {{ rating_number(rating) }}</div>
-                    <div><b class="semibold">{{ _('Volatility:') }}</b> {{ rating.volatility }}</div>
-                    <div><b class="semibold">{{ _('Min. rating:') }}</b> {{ rating_number(min_rating) }}</div>
-                    <div><b class="semibold">{{ _('Max rating:') }}</b> {{ rating_number(max_rating) }}</div>
-                {% endif %}
-            </td>
-            <td class="user-content">{% block user_content %}{% endblock %}</td>
-        </tr>
-    </table>
+                <div><b>{{ ratings|length }} contests written</b></div>
+                <div><b class="semibold">{{ _('Rank by rating:') }}</b> #{{ rating_rank }}</div>
+                <div><b class="semibold">{{ _('Rating:') }}</b> {{ rating_number(rating) }}</div>
+                <div><b class="semibold">{{ _('Volatility:') }}</b> {{ rating.volatility }}</div>
+                <div><b class="semibold">{{ _('Min. rating:') }}</b> {{ rating_number(min_rating) }}</div>
+                <div><b class="semibold">{{ _('Max rating:') }}</b> {{ rating_number(max_rating) }}</div>
+            {% endif %}
+        </div>
+        <div class="user-content">{% block user_content %}{% endblock %}</div>
+    </div>
 {% endblock %}

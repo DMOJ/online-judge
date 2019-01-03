@@ -43,6 +43,9 @@
                 };
             </script>
         {% endif %}
+
+        <script src="{{ static('libs/chart.js/Chart.Core.js') }}"></script>
+        <script src="{{ static('libs/chart.js/Chart.Doughnut.js') }}"></script>
         <script type="text/javascript">
             $(function () {
                 var info_float = $('.info-float');
@@ -61,6 +64,38 @@
                     .css({'visibility': 'visible'});
                 $('#language').select2({multiple: 1, placeholder: '{{ _('Filter by language...') }}'})
                     .css({'visibility': 'visible'});
+            });
+
+            // Draw the statistics graph.
+            function stats_graph(raw_data) {
+                var colors = {
+                    TLE: '#a3bcbd',
+                    AC: '#00a92a',
+                    WA: '#ed4420',
+                    CE: '#42586d',
+                    ERR: '#ffa71c',
+                };
+
+                var ctx = $('#status-graph').find('canvas')[0].getContext('2d');
+                var font = $('body').css('font-family');
+                new Chart(ctx).Pie(raw_data.categories.map(function (entry) {
+                    return {
+                        color: colors[entry.code],
+                        label: entry.name,
+                        value: entry.count,
+                    };
+                }), {
+                    animation: false,
+                    scaleFontFamily: font,
+                    tooltipFontFamily: font,
+                    tooltipTitleFontFamily: font,
+                });
+
+                $('#total-submission-count').text(raw_data.total);
+            }
+
+            $(function () {
+                stats_graph({{ results_json }});
             });
 
             function load_dynamic_update(last_msg) {
@@ -126,7 +161,7 @@
                     $.ajax({
                         url: '?results'
                     }).done(function (data) {
-                        statistics.html(data);
+                        stats_graph(data);
                     }).fail(function () {
                         console.log('Failed to update statistics table!' + id);
                     }).always(function () {
@@ -208,6 +243,22 @@
             }
         </style>
     {% endif %}
+
+    <style>
+        .total {
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+
+        #status-graph {
+            padding: 1em 0em;
+        }
+
+        #status-graph canvas {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
@@ -244,7 +295,17 @@
                 </div>
 
                 <div class="sidebox">
-                    <div id="statistics-table">{% include "problem/statistics-table.html" %}</div>
+                    <div id="statistics-table">
+                        <h3>{{ _('Statistics') }} <i class="fa fa-pie-chart"></i></h3>
+                        <div class="sidebox-content">
+                            <div id="status-graph">
+                                <canvas width="230" height="170"></canvas>
+                            </div>
+                            <div class="total">
+                                {{ _('Total:') }} <span id="total-submission-count"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -285,5 +346,5 @@
 {% endblock %}
 
 {% block bodyend %}
-{# Don't load MathJax from common-content! #}
+    {# Don't load MathJax from common-content! #}
 {% endblock %}

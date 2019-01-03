@@ -7,6 +7,8 @@ from django.db.models.sql.constants import LOUTER, INNER
 from django.db.models.sql.datastructures import Join
 from django.utils import six
 
+from judge.utils.cachedict import CacheDict
+
 
 def unique_together_left_join(queryset, model, link_field_name, filter_field_name, filter_value, parent_model=None):
     link_field = copy(model._meta.get_field(link_field_name).rel)
@@ -35,11 +37,8 @@ def RawSQLColumn(model, field=None):
     return RawSQL('%s.%s' % (model._meta.db_table, field.get_attname_column()[1]), ())
 
 
-def use_straight_join(queryset):
-    if connections[queryset.db].vendor != 'mysql':
-        return
-
-    class Query(type(queryset.query)):
+def make_straight_join_query(QueryType):
+    class Query(QueryType):
         def join(self, join, reuse=None):
             alias = super(Query, self).join(join, reuse)
             join = self.alias_map[alias]
@@ -47,4 +46,13 @@ def use_straight_join(queryset):
                 join.join_type = 'STRAIGHT_JOIN'
             return alias
 
-    queryset.query = queryset.query.clone(Query)
+    return Query
+
+
+straight_join_cache = CacheDict(make_straight_join_query)
+
+
+def use_straight_join(queryset):
+    if connections[queryset.db].vendor != 'mysql':
+        return
+    queryset.query = queryset.query.clone(straight_join_cache[type(queryset.query)])

@@ -71,6 +71,12 @@ button:hover, button:hover, input[type=submit]:hover {
     background: #265a88;
 }
 
+.inline-button {
+    display: inline;
+    vertical-align: top;
+    padding: 3px 6px;
+}
+
 input {
     &[type=text], &[type=password], &[type=email], &[type=number] {
         padding: 4px 8px;

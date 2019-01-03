@@ -56,13 +56,14 @@ wss_receiver.on('connection', function (socket) {
         },
         set_filter: function (request) {
             var filter = {};
-            if (Array.isArray(request.filter) && request.filter.every(function (channel, index, array) {
-                if (typeof channel != 'string')
-                    return false;
-                filter[channel] = true;
-                return true;
+            if (Array.isArray(request.filter) && request.filter.length > 0 &&
+                request.filter.every(function (channel, index, array) {
+                    if (typeof channel != 'string')
+                        return false;
+                    filter[channel] = true;
+                    return true;
             })) {
-                socket.filter = request.filter.length == 0 ? true : filter;
+                socket.filter = filter;
                 followers.add(socket);
                 messages.catch_up(socket);
             } else {
@@ -76,7 +77,7 @@ wss_receiver.on('connection', function (socket) {
     };
 
     socket.got_message = function (message) {
-        if (socket.filter === true || message.channel in socket.filter)
+        if (message.channel in socket.filter)
             socket.send(JSON.stringify(message));
         socket.last_msg = message.id;
     };
@@ -160,23 +161,28 @@ require('http').createServer(function (req, res) {
         res.end('404 Not Found');
         return;
     }
+
     var channels = parts.pathname.slice(10).split('|');
+    if (channels.length == 1 && !channels[0].length) {
+        res.writeHead(400, {'Content-Type': 'text/plain'});
+        res.end('400 Bad Request');
+        return;
+    }
+
     req.channels = {};
     req.last_msg = parseInt(parts.query.last);
     if (isNaN(req.last_msg)) req.last_msg = 0;
 
-    if (!channels.every(function (channel, index, array) {
-        if (!channel || !channel.length)
-            return false;
-        return req.channels[channel] = true;
-    })) req.channels = true;
+    channels.forEach(function (channel) {
+        req.channels[channel] = true;
+    });
 
     req.on('close', function () {
         pollers.remove(req);
     });
 
     req.got_message = function (message) {
-        if (req.channels === true || message.channel in req.channels) {
+        if (message.channel in req.channels) {
             res.writeHead(200, {'Content-Type': 'application/json'});
             res.end(JSON.stringify(message));
             pollers.remove(req);

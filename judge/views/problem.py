@@ -241,10 +241,14 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                     'problem': problem,
                     'problem_name': problem.name if trans is None else trans.name,
                     'description': problem.description if trans is None else trans.description,
-                    'url': request.build_absolute_uri()
-                }).replace('"//', '"http://').replace("'//", "'http://")
+                    'url': request.build_absolute_uri(),
+                    'math_engine': maker.math_engine,
+                }).replace('"//', '"https://').replace("'//", "'https://")
 
-                for file in ('style.css', 'pygment-github.css', 'mathjax_config.js'):
+                assets = ['style.css', 'pygment-github.css']
+                if maker.math_engine == 'jax':
+                    assets.append('mathjax_config.js')
+                for file in assets:
                     maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
                 maker.make()
                 if not maker.success:
@@ -620,6 +624,9 @@ def problem_submit(request, problem=None, submission=None):
 @permission_required('judge.clone_problem')
 def clone_problem(request, problem):
     problem = get_object_or_404(Problem, code=problem)
+    if not problem.is_accessible_by(request.user):
+        raise Http404()
+
     languages = problem.allowed_languages.all()
     types = problem.types.all()
     problem.pk = None

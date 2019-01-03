@@ -15,6 +15,7 @@ from django.db import connection, IntegrityError
 from django.db.models import Q, Min, Max, Count, Sum, Case, When, IntegerField
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.template.defaultfilters import date as date_filter
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
@@ -71,7 +72,7 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
 
     def get_queryset(self):
         return super(ContestList, self).get_queryset() \
-            .order_by('-start_time', 'key').prefetch_related('tags')
+            .order_by('-start_time', 'key').prefetch_related('tags', 'organizations')
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
@@ -325,7 +326,6 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
     firstweekday = SUNDAY
     weekday_classes = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     template_name = 'contest/calendar.html'
-    title = ugettext_lazy('Contests')
 
     def get(self, request, *args, **kwargs):
         try:
@@ -368,9 +368,11 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         context = super(ContestCalendar, self).get_context_data(**kwargs)
 
         try:
-            context['month'] = date(self.year, self.month, 1)
+            month = date(self.year, self.month, 1)
         except ValueError:
             raise Http404()
+        else:
+            context['title'] = _('Contests in %(month)s') % {'month': date_filter(month, _("F Y"))}
 
         dates = Contest.objects.aggregate(min=Min('start_time'), max=Max('end_time'))
         min_month = (self.today.year, self.today.month)
@@ -379,7 +381,6 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         max_month = (self.today.year, self.today.month)
         if dates['max'] is not None:
             max_month = max((dates['max'].year, dates['max'].month), (self.today.year, self.today.month))
-
 
         month = (self.year, self.month)
         if month < min_month or month > max_month:
@@ -527,6 +528,9 @@ def contest_ranking_ajax(request, contest, participation=None):
     if not exists:
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
 
+    if not contest.can_see_scoreboard(request):
+        raise Http404()
+
     users, problems = get_contest_ranking_list(request, contest, participation)
     return render(request, 'contest/ranking-table.html', {
         'users': users,
@@ -539,6 +543,7 @@ def contest_ranking_ajax(request, contest, participation=None):
 def contest_ranking_view(request, contest, participation=None):
     if not contest.can_see_scoreboard(request):
         raise Http404()
+
     users, problems = get_contest_ranking_list(request, contest, participation)
 
     context = {

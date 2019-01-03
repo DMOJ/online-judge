@@ -16,8 +16,12 @@ from judge.models.contest import Contest
 from judge.models.interface import BlogPost
 from judge.models.problem import Problem
 from judge.models.profile import Profile
+from judge.utils.cachedict import CacheDict
 
-__all__ = ['Comment', 'CommentVote']
+__all__ = ['Comment', 'CommentLock', 'CommentVote']
+
+comment_validator = RegexValidator('^[pcs]:[a-z0-9]+$|^b:\d+$',
+                                   _('Page code must be ^[pcs]:[a-z0-9]+$|^b:\d+$'))
 
 
 class VersionRelation(GenericRelation):
@@ -35,9 +39,8 @@ class VersionRelation(GenericRelation):
 class Comment(MPTTModel):
     author = models.ForeignKey(Profile, verbose_name=_('commenter'))
     time = models.DateTimeField(verbose_name=_('posted time'), auto_now_add=True)
-    page = models.CharField(max_length=30, verbose_name=_('associated Page'), db_index=True,
-                            validators=[RegexValidator('^[pc]:[a-z0-9]+$|^b:\d+$|^s:',
-                                                       _('Page code must be ^[pc]:[a-z0-9]+$|^b:\d+$'))])
+    page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
+                            validators=[comment_validator])
     score = models.IntegerField(verbose_name=_('votes'), default=0)
     title = models.CharField(max_length=200, verbose_name=_('title of comment'), blank=True)
     body = models.TextField(verbose_name=_('body of comment'), max_length=8192)
@@ -56,6 +59,10 @@ class Comment(MPTTModel):
     def most_recent(cls, user, n, batch=None):
         queryset = cls.objects.filter(hidden=False).select_related('author__user') \
             .defer('author__about', 'body').order_by('-id')
+
+        problem_access = CacheDict(lambda code: Problem.objects.get(code=code).is_accessible_by(user))
+        contest_access = CacheDict(lambda key: Contest.objects.get(key=key).is_accessible_by(user))
+
         if user.is_superuser:
             return queryset[:n]
         if batch is None:
@@ -68,13 +75,13 @@ class Comment(MPTTModel):
             for comment in slice:
                 if comment.page.startswith('p:'):
                     try:
-                        if Problem.objects.get(code=comment.page[2:]).is_accessible_by(user):
+                        if problem_access[comment.page[2:]]:
                             output.append(comment)
                     except Problem.DoesNotExist:
                         pass
                 elif comment.page.startswith('c:'):
                     try:
-                        if Contest.objects.get(key=comment.page[2:]).is_accessible_by(user):
+                        if contest_access[comment.page[2:]]:
                             output.append(comment)
                     except Contest.DoesNotExist:
                         pass
@@ -108,20 +115,24 @@ class Comment(MPTTModel):
             link = 'invalid'
         return link
 
-    @cached_property
-    def page_title(self):
+    @classmethod
+    def get_page_title(cls, page):
         try:
-            if self.page.startswith('p:'):
-                return Problem.objects.values_list('name', flat=True).get(code=self.page[2:])
-            elif self.page.startswith('c:'):
-                return Contest.objects.values_list('name', flat=True).get(key=self.page[2:])
-            elif self.page.startswith('b:'):
-                return BlogPost.objects.values_list('title', flat=True).get(id=self.page[2:])
-            elif self.page.startswith('s:'):
-                return _('Editorial for %s') % Problem.objects.values_list('name', flat=True).get(code=self.page[2:])
+            if page.startswith('p:'):
+                return Problem.objects.values_list('name', flat=True).get(code=page[2:])
+            elif page.startswith('c:'):
+                return Contest.objects.values_list('name', flat=True).get(key=page[2:])
+            elif page.startswith('b:'):
+                return BlogPost.objects.values_list('title', flat=True).get(id=page[2:])
+            elif page.startswith('s:'):
+                return _('Editorial for %s') % Problem.objects.values_list('name', flat=True).get(code=page[2:])
             return '<unknown>'
         except ObjectDoesNotExist:
             return '<deleted>'
+
+    @cached_property
+    def page_title(self):
+        return self.get_page_title(self.page)
 
     def get_absolute_url(self):
         return '%s#comment-%d' % (self.link, self.id)
@@ -151,3 +162,16 @@ class CommentVote(models.Model):
         unique_together = ['voter', 'comment']
         verbose_name = _('comment vote')
         verbose_name_plural = _('comment votes')
+
+
+class CommentLock(models.Model):
+    page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
+                            validators=[comment_validator])
+
+    class Meta:
+        permissions = (
+            ('override_comment_lock', _('Override comment lock')),
+        )
+
+    def __str__(self):
+        return str(self.page)

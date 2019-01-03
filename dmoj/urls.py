@@ -14,7 +14,7 @@ from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitem
     BlogPostSitemap, SolutionSitemap
 from judge.views import TitledTemplateView
 from judge.views import organization, language, status, blog, problem, mailgun, license, register, user, \
-    submission, widgets, comment, contests, api, ranked_submission, stats, preview, ticket
+    submission, widgets, comment, contests, api, ranked_submission, stats, preview, ticket, totp
 from judge.views.problem_data import ProblemDataView, ProblemSubmissionDiff, \
     problem_data_file, problem_init_view
 from judge.views.register import RegistrationView, ActivationView
@@ -74,6 +74,10 @@ register_patterns = [
         template_name='registration/password_reset_done.html',
     ), name='password_reset_done'),
     url(r'^social/error/$', register.social_auth_error, name='social_auth_error'),
+
+    url(r'^2fa/$', totp.TOTPLoginView.as_view(), name='login_2fa'),
+    url(r'^2fa/enable/$', totp.TOTPEnableView.as_view(), name='enable_2fa'),
+    url(r'^2fa/disable/$', totp.TOTPDisableView.as_view(), name='disable_2fa'),
 ]
 
 
@@ -195,8 +199,7 @@ urlpatterns = [
     ])),
 
     url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
-    url(r'^organization/(?P<key>\w+)(?P<rest>/.*)?$', organization.fallback),
-    url(r'^organization/(?P<pk>\d+)-(?P<slug>[\w-]+)', include([
+    url(r'^organization/(?P<pk>\d+)-(?P<slug>[\w-]*)', include([
         url(r'^$', organization.OrganizationHome.as_view(), name='organization_home'),
         url(r'^/users$', organization.OrganizationUsers.as_view(), name='organization_users'),
         url(r'^/join$', organization.JoinOrganization.as_view(), name='join_organization'),
@@ -231,9 +234,6 @@ urlpatterns = [
         url(r'^user/list$', api.api_v1_user_list),
         url(r'^user/info/(\w+)$', api.api_v1_user_info),
         url(r'^user/submissions/(\w+)$', api.api_v1_user_submissions),
-        url(r'^v2/', include([
-            url(r'user-info$', api.api_v2_user_info),
-        ])),
     ])),
 
     url(r'^blog/', paged_list_view(blog.PostList, 'blog_post_list')),

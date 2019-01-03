@@ -449,7 +449,7 @@ noscript #noscript {
     }
 }
 
-#form-errors {
+#form-errors, .form-errors {
     background: rgba(255, 0, 0, 0.3);
     border: 3px solid red;
     border-radius: $widget_border_radius;

@@ -9,6 +9,7 @@ from django.db.models import Max
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, pgettext
+from fernet_fields import EncryptedCharField
 from sortedm2m.fields import SortedManyToManyField
 
 from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES
@@ -17,21 +18,24 @@ from judge.ratings import rating_class
 __all__ = ['Organization', 'Profile', 'OrganizationRequest']
 
 
+class EncryptedNullCharField(EncryptedCharField):
+    def get_prep_value(self, value):
+        if not value:
+            return None
+        return super(EncryptedNullCharField, self).get_prep_value(value)
+
+
 class Organization(models.Model):
     name = models.CharField(max_length=128, verbose_name=_('organization title'))
     slug = models.SlugField(max_length=128, verbose_name=_('organization slug'),
                             help_text=_('Organization name shown in URL'))
-    key = models.CharField(max_length=6, verbose_name=_('identifier'), unique=True,
-                           help_text=_('Organization name shows in URL'), null=True,
-                           validators=[RegexValidator('^[A-Za-z0-9]+$',
-                                                      'Identifier must contain letters and numbers only')])
     short_name = models.CharField(max_length=20, verbose_name=_('short name'),
                                   help_text=_('Displayed beside user name during contests'))
     about = models.TextField(verbose_name=_('organization description'))
     registrant = models.ForeignKey('Profile', verbose_name=_('registrant'),
                                    related_name='registrant+',
                                    help_text=_('User who registered this organization'))
-    admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='+',
+    admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='admin_of',
                                     help_text=_('Those who can edit this organization'))
     creation_date = models.DateTimeField(verbose_name=_('creation date'), auto_now_add=True)
     is_open = models.BooleanField(verbose_name=_('is open organization?'),
@@ -60,7 +64,7 @@ class Organization(models.Model):
         return reverse('organization_users', args=(self.id, self.slug))
 
     class Meta:
-        ordering = ['key']
+        ordering = ['name']
         permissions = (
             ('organization_admin', 'Administer organizations'),
             ('edit_all_organization', 'Edit all organizations'),
@@ -96,6 +100,12 @@ class Profile(models.Model):
     math_engine = models.CharField(verbose_name=_('math engine'), choices=MATH_ENGINES_CHOICES, max_length=4,
                                    default=getattr(settings, 'MATHOID_DEFAULT_TYPE', 'auto'),
                                    help_text=_('the rendering engine used to render math'))
+    is_totp_enabled = models.BooleanField(verbose_name=_('2FA enabled'), default=False,
+                                          help_text=_('check to enable TOTP-based two factor authentication'))
+    totp_key = EncryptedNullCharField(max_length=32, null=True, blank=True, verbose_name=_('TOTP key'),
+                                      help_text=_('32 character base32-encoded key for TOTP'),
+                                      validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
+                                                                 _('TOTP key must be empty or base32'))])
 
     @cached_property
     def organization(self):
@@ -105,7 +115,7 @@ class Profile(models.Model):
 
     def calculate_points(self, table=(lambda x: [pow(x, i) for i in xrange(100)])(getattr(settings, 'PP_STEP', 0.95))):
         from judge.models import Problem
-        data = (Problem.objects.filter(submission__user=self, submission__points__isnull=False, is_public=True)
+        data = (Problem.objects.filter(submission__user=self, submission__points__isnull=False, is_public=True, is_organization_private=False)
                 .annotate(max_points=Max('submission__points')).order_by('-max_points')
                 .values_list('max_points', flat=True).filter(max_points__gt=0))
         extradata = Problem.objects.filter(submission__user=self, submission__result='AC', is_public=True).values('id').distinct().count()
@@ -169,6 +179,7 @@ class Profile(models.Model):
     class Meta:
         permissions = (
             ('test_site', 'Shows in-progress development stuff'),
+            ('totp', 'Edit TOTP settings')
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')

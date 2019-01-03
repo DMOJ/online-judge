@@ -5,7 +5,7 @@ from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
 
 from dmoj import settings
-from judge.models import Contest, Problem, Profile, Submission, ContestTag
+from judge.models import Contest, ContestParticipation, ContestTag, Problem, Profile, Submission
 from judge.views.contests import base_contest_ranking_list
 
 
@@ -31,14 +31,17 @@ def api_v1_contest_list(request):
 
 def api_v1_contest_detail(request, contest):
     contest = get_object_or_404(Contest, key=contest)
-    if not contest.can_see_scoreboard(request):
-        raise Http404()
+
+    in_contest = contest.is_in_contest(request)
+    can_see_rankings = contest.can_see_scoreboard(request)
+    if contest.hide_scoreboard and in_contest:
+        can_see_rankings = False
 
     problems = list(contest.contest_problems.select_related('problem')
-                    .defer('problem__description').order_by('order'))
+                    .defer('problem__description').order_by('order')) if in_contest else []
     users = base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
                                       .prefetch_related('user__organizations')
-                                      .order_by('-score', 'cumtime'))
+                                      .order_by('-score', 'cumtime')) if can_see_rankings else []
     return JsonResponse({
         'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
         'start_time': contest.start_time.isoformat(),
@@ -65,7 +68,7 @@ def api_v1_contest_detail(request, contest):
 
 
 def api_v1_problem_list(request):
-    queryset = Problem.objects.filter(is_public=True)
+    queryset = Problem.objects.filter(is_public=True, is_organization_private=False)
     if settings.ENABLE_FTS and 'search' in request.GET:
         query = ' '.join(request.GET.getlist('search')).strip()
         if query:
@@ -109,20 +112,38 @@ def api_v1_user_list(request):
 
 def api_v1_user_info(request, user):
     profile = get_object_or_404(Profile, user__username=user)
-    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True)
+    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True, problem__is_organization_private=False)
                        .values('problem').distinct().values_list('problem__code', flat=True))
-    return JsonResponse({
+    resp = {
         'display_name': profile.name,
         'points': profile.points,
         'rank': profile.display_rank,
         'solved_problems': submissions,
-        'organizations': list(profile.organizations.values_list('key', flat=True)),
-    })
+        'organizations': list(profile.organizations.values_list('id', flat=True)),
+    }
+
+    last_rating = profile.ratings.last()
+
+    contest_history = {}
+    for contest_key, rating, volatility in ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False) \
+                                                               .values_list('contest__key', 'rating__rating', 'rating__volatility'):
+        contest_history[contest_key] = {
+            'rating': rating,
+            'volatility': volatility,
+        }
+
+    resp['contests'] = {
+        'current_rating': last_rating.rating if last_rating else None,
+        'volatility': last_rating.volatility if last_rating else None,
+        'history': contest_history,
+    }
+
+    return JsonResponse(resp)
 
 
 def api_v1_user_submissions(request, user):
     profile = get_object_or_404(Profile, user__username=user)
-    subs = Submission.objects.filter(user=profile, problem__is_public=True)
+    subs = Submission.objects.filter(user=profile, problem__is_public=True, problem__is_organization_private=False)
 
     return JsonResponse({sub['id']: {
         'problem': sub['problem__code'],

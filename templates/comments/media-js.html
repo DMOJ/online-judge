@@ -49,6 +49,12 @@
 
             window.show_revision = function (comment_id, offset) {
                 var $comment = $("#comment-" + comment_id);
+
+                // If .comment-body is hidden, then this is a bad comment that the user has not clicked
+                // Thus the revision retrieval should do nothing
+                if (!$comment.find('.comment-body').is(':visible'))
+                    return;
+
                 var cur_revision = parseInt($comment.attr("data-revision"));
                 var max_revision = parseInt($comment.attr("data-max-revision"));
                 var revision_ajax = $comment.attr("data-revision-ajax");
@@ -126,7 +132,7 @@
             var $comments = $('.comments');
             $comments.find('a.hide-comment').click(function (e) {
                 e.preventDefault();
-                if (!e.ctrlKey && !confirm('Are you sure you want to hide this comment?'))
+                if (!(e.ctrlKey || e.metaKey || confirm('Are you sure you want to hide this comment?')))
                     return;
 
                 var id = $(this).attr('data-id');
@@ -188,6 +194,12 @@
             });
 
             $('img.unveil').unveil(200);
+
+            window.comment_show_content = function (comment_id) {
+                var $comment = $('#comment-' + comment_id);
+                $comment.find('.comment-body').show();
+                $comment.find('.bad-comment-body').hide();
+            };
         });
     </script>
 {% endcompress %}

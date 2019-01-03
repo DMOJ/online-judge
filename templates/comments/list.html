@@ -8,7 +8,7 @@
                 <li id="comment-{{ node.id }}" data-revision="{{ node.revisions - 1 }}"
                     data-max-revision="{{ node.revisions - 1 }}"
                     data-revision-ajax="{{ url('comment_revision_ajax', node.id) }}" class="comment">
-                    <div class="comment-display">
+                    <div class="comment-display{% if node.score <= vote_hide_threshold %} bad-comment{% endif %}">
                         <div class="info">
                             <div class="vote">
                                 {% if logged_in %}
@@ -60,7 +60,7 @@
                                     <a href="#comment-{{ node.id }}" title="{{ _('Link') }}" class="comment-link">
                                     <i class="fa fa-link fa-fw"></i>
                                 </a>
-                                    {% if logged_in %}
+                                    {% if logged_in and not comment_lock %}
                                         {% set can_edit = node.author.id == profile.id and not profile.mute %}
                                         {% if can_edit %}
                                             <a data-featherlight="{{ url('comment_edit_ajax', node.id) }}"
@@ -94,9 +94,19 @@
                             <div class="content content-description">
                                 <div class="comment-title"{% if not node.title or node.title.startswith('Re:') %}
                                      style="display: none"{% endif %}>{{ node.title }}</div>
-                                <div class="comment-body">
-                                    {{ node.body|markdown('comment', MATH_ENGINE, True)|reference|str|safe }}
-                                </div>
+                                    <div class="comment-body"{% if node.score <= vote_hide_threshold %} style="display:none"{% endif %}>
+                                        {{ node.body|markdown('comment', MATH_ENGINE, True)|reference|str|safe }}
+                                    </div>
+                                    {% if node.score <= vote_hide_threshold %}
+                                        <div class="comment-body bad-comment-body">
+                                            <p>
+                                                {% trans id=node.id %}
+                                                    This comment is hidden due to too much negative feedback.
+                                                    Click <a href="javascript:comment_show_content({{ id }})">here</a> to view it.
+                                                {% endtrans %}
+                                            </p>
+                                        </div>
+                                    {% endif %}
                             </div>
                         </div>
                     </div>
@@ -107,11 +117,11 @@
                 {% endwith %}
             {% endif %}{% endfor %}
         </ul>
-    {% else %}
+    {% elif not comment_lock %}
         <p class="no-comments-message">{{ _('There are no comments at the moment.') }}</p>
     {% endif %}
 
-    {% if request.user.is_authenticated and comment_form %}
+    {% if request.user.is_authenticated and comment_form and not comment_lock %}
         <div class="form-area comment-submit">
             {% block comment_submit_title %}
                 <h3>{{ _('New comment') }}</h3>
@@ -139,6 +149,12 @@
                     <input style="float:right" type="submit" value="{{ _('Post!') }}" class="button">
                 </form>
             {% endif %}
+        </div>
+    {% endif %}
+
+    {% if comment_lock %}
+        <div class="alert alert-warning comment-lock">
+            {{ _('Comments are disabled on this page.') }}
         </div>
     {% endif %}
 </div>
