@@ -28,10 +28,12 @@
         {% block guideline_message %}{% endblock %}
         {% csrf_token %}
         <div class="title-block{% if form.title.errors %} error{% endif %}">{{ form.title }}</div>
-        <div class="form-errors">
-            {{ form.title.errors }}
-            {{ form.body.errors }}
-        </div>
+        {% if form.title.errors or form.body.errors %}
+            <div class="form-errors">
+                {{ form.title.errors }}
+                {{ form.body.errors }}
+            </div>
+        {% endif %}
         <div class="body-block">{{ form.body }}</div>
         <button type="submit" class="submit">{{ _('Create') }}</button>
     </form>
