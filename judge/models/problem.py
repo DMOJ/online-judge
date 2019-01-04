@@ -118,7 +118,7 @@ class Problem(models.Model):
     date = models.DateTimeField(verbose_name=_('date of publishing'), null=True, blank=True, db_index=True,
                                 help_text=_("Doesn't have magic ability to auto-publish due to backward compatibility"))
     banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
-                                          help_text=_('Bans the selected users from submitting to this problem'))
+                                          help_text=_('Bans the selected users from submitting to this problem.'))
     license = models.ForeignKey(License, null=True, blank=True, on_delete=models.SET_NULL)
     og_image = models.CharField(verbose_name=_('OpenGraph image'), max_length=150, blank=True)
     summary = models.TextField(blank=True, verbose_name=_('problem summary'),
