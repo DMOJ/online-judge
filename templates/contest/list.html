@@ -70,6 +70,11 @@
                     </span>
                 {% endfor %}
             {% endif %}
+            {% if contest.is_rated %}
+                <span style="background-color: #e54c14; color: #ffffff" class="contest-tag">
+                    <i class="fa fa-bar-chart"></i> {{ _('rated') }}
+                </span>
+            {% endif %}
             {% for tag in contest.tags.all() %}
                 <span style="background-color: {{ tag.color }}" class="contest-tag">
                     <a href="{{ url('contest_tag', tag.name) }}"
