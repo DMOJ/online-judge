@@ -44,7 +44,7 @@ class ProfileAdmin(VersionAdmin):
     form = ProfileForm
     fieldsets = (
         (None,                  {'fields': ('user', 'display_rank')}),
-        (_('Settings'),         {'fields': ('organizations', 'timezone', 'language', 'ace_theme', 'math_engine')}),
+        (_('User Settings'),         {'fields': ('organizations', 'timezone', 'language', 'ace_theme', 'math_engine')}),
         (_('Administration'),   {'fields': ('is_contest_account', 'mute', 'is_totp_enabled', 'api_token',
                                             'last_access', 'ip', 'current_contest', 'notes')}),
         (_('Text Fields'),      {'fields': ('about', 'user_script')}),

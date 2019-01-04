@@ -267,7 +267,8 @@
                 {% if available_judges %}
                     {% if perms.judge.change_judge %}
                         {% for judge in available_judges %}
-                            <a href="{{ url('admin:judge_judge_change', judge.id) }}">{{ judge.name }}</a>{% if not loop.last %}, {% endif %}
+                            <a href="{{ url('admin:judge_judge_change', judge.id) }}">{{ judge.name }}</a>
+                            {%- if not loop.last %}, {% endif %}
                         {% endfor %}
                     {% else %}
                         {{ available_judges|join(", ") }}
