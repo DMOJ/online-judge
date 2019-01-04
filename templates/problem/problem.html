@@ -34,7 +34,7 @@
             min-width: 12.5em;
         }
 
-        #problem-types, #allowed-langs {
+        #problem-types, #allowed-langs, #available-judges {
             padding-top: 1em;
         }
 
@@ -235,6 +235,31 @@
                         {% if not loop.last %}, {% endif -%}
                     {% endfor %}
                 {% endwith %}
+            </div>
+        </div>
+    {% endif %}
+    {% if problem.is_editable_by(request.user) %}
+        <div id="available-judges">
+            <i class="fa fa-database fa-fw"></i><span
+                class="pi-name">{% trans trimmed count=available_judges|length %}
+                Judge:
+                {% pluralize count %}
+                Judges:
+            {% endtrans %}
+            </span>
+            <div class="pi-value judges-value">
+                {% if available_judges %}
+                    {% if perms.judge.change_judge %}
+                        {% for judge in available_judges %}
+                            <a href="{{ url('admin:judge_judge_change', judge.id) }}">{{ judge.name }}</a>
+                            {% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {{ available_judges|join(", ") }}
+                    {% endif %}
+                {% else %}
+                    <i>{{ _('none available') }}</i>
+                {% endif %}
             </div>
         </div>
     {% endif %}
