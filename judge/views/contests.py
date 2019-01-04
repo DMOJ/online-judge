@@ -85,7 +85,7 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
                 future.append(contest)
             else:
                 present.append(contest)
-        if request.user.is_authenticated:
+        if self.request.user.is_authenticated:
             for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.user.profile, contest_id__in=present) \
                                                              .select_related('contest'):
                 if not participation.ended:
