@@ -35,12 +35,6 @@
             max-width: calc(100% - 134px);
         }
 
-        .new-comments .comment-title {
-            font-weight: 600;
-            color: black;
-            padding-top: 0.8em;
-        }
-
         .new-comments .comment-edits {
             padding-right: 0.75em;
         }
@@ -90,6 +84,20 @@
 
         .comments.top-level-comments {
             margin-bottom: -3px;
+        }
+
+        .bad-comment {
+            opacity: 0.3;
+        }
+
+        .bad-comment:hover {
+            opacity: 1;
+            /* This is necessary to prevent random flickering */
+            -webkit-transform: translatez(0)
+            -moz-transform: translatez(0);
+            -ms-transform: translatez(0);
+            -o-transform: translatez(0);
+            transform: translatez(0);
         }
     </style>
 {% endcompress %}

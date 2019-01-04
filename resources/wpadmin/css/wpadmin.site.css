@@ -43,7 +43,7 @@
 }
 
 #content .content-description li {
-    list-style-type: initial;
+    list-style-type: inherit;
 }
 
 select[id^=id_contest_problems] {

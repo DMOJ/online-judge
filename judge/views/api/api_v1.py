@@ -71,7 +71,8 @@ def api_v1_contest_detail(request, contest):
     users = base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
                                       .prefetch_related('user__organizations')
                                       .order_by('-score', 'cumtime')) if can_see_rankings else []
-    if not in_contest:
+    if not (in_contest or contest.ended or request.user.is_superuser \
+            or contest.organizers.filter(id=request.user.profile.id).exists()):
         problems = []
 
     return JsonResponse({

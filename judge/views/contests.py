@@ -67,7 +67,7 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
         now = timezone.now()
-        past, present, future = [], [], []
+        past, present, active, future = [], [], [], []
         for contest in self.get_queryset():
             if contest.end_time < now:
                 past.append(contest)
@@ -75,7 +75,15 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
                 future.append(contest)
             else:
                 present.append(contest)
+        if self.request.user.is_authenticated:
+            for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.user.profile, contest_id__in=present) \
+                                                             .select_related('contest'):
+                if not participation.ended:
+                    active.append(participation)
+                    present.remove(participation.contest)
+        active.sort(key=attrgetter('end_time'))
         future.sort(key=attrgetter('start_time'))
+        context['active_contests'] = active
         context['current_contests'] = present
         context['past_contests'] = past
         context['future_contests'] = future
@@ -238,8 +246,10 @@ class ContestRegister(LoginRequiredMixin, ContestMixin, BaseDetailView):
         error = self.access_check(request)
         if error is not None:
             return error
-
-        registration = ContestRegistration.objects.create(contest=self.object, user=request.user.profile)
+        try:
+            registration = ContestRegistration.objects.create(contest=self.object, user=request.user.profile)
+        except IntegrityError:
+            pass
         return HttpResponseRedirect(reverse('contest_view', args=(self.object.key,)))
 
 
@@ -482,22 +492,6 @@ def best_solution_state(points, total):
 
 def base_contest_ranking_list(contest, problems, queryset, for_user=None):
     cursor = connection.cursor()
-#    cursor.execute('''
-#        SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, (
-#                SELECT MAX(ccs.bonus) 
-#                FROM judge_contestsubmission ccs 
-#                WHERE ccs.problem_id = cp.id AND ccs.participation_id = part.id 
-#                GROUP BY ccs.points
-#                HAVING ccs.points = MAX(cs.points)
-#        ) AS total_best, MAX(sub.date) AS `last`
-#        FROM judge_contestproblem cp CROSS JOIN judge_contestparticipation part INNER JOIN
-#             judge_problem prob ON (cp.problem_id = prob.id) LEFT OUTER JOIN
-#             judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = part.id) LEFT OUTER JOIN
-#             judge_submission sub ON (sub.id = cs.submission_id)
-#        WHERE cp.contest_id = %s AND part.contest_id = %s {extra}
-#        GROUP BY cp.id, part.id
-#    '''.format(extra=('AND part.user_id = %s' if for_user is not None else 'AND part.virtual = 0')),
-#                   (contest.id, contest.id) + ((for_user,) if for_user is not None else ()))
     cursor.execute('''
         SELECT part.id, cp.id, prob.code, (
                 SELECT MAX(ccs.points)
@@ -537,7 +531,8 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None):
 def contest_ranking_list(contest, problems):
     return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
                                                                      .prefetch_related('user__organizations')
-                                                                     .order_by('-score', 'cumtime'))
+                                                                     .annotate(submission_count=Count('submission'))
+                                                                     .order_by('-score', 'cumtime', '-submission_count'))
 
 
 def get_participation_ranking_profile(contest, participation, problems):    

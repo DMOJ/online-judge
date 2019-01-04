@@ -127,7 +127,7 @@ ul.problem-list {
     content: " ";
 }
 
-.authors-value {
+.authors-value, .judges-value {
     padding-left: 1.5em;
 }
 
@@ -242,6 +242,10 @@ ul.problem-list {
 #point-slider {
     margin: 30px 15px 10px;
     height: 10px;
+
+    .noUi-connect {
+        background: #3737B4;
+    }
 
     .noUi-handle {
         height: 20px;
