@@ -48,7 +48,7 @@ else:
             media = super(MathJaxPagedownWidget, self)._media()
             media.add_js([
                 'mathjax_config.js',
-                '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
+                'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
                 'pagedown_math.js',
             ])
             return media
