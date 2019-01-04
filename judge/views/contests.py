@@ -85,11 +85,12 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
                 future.append(contest)
             else:
                 present.append(contest)
-        for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.user.profile, contest_id__in=present) \
-                                                         .select_related('contest'):
-            if not participation.ended:
-                active.append(participation)
-                present.remove(participation.contest)
+        if request.user.is_authenticated:
+            for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.user.profile, contest_id__in=present) \
+                                                             .select_related('contest'):
+                if not participation.ended:
+                    active.append(participation)
+                    present.remove(participation.contest)
         active.sort(key=attrgetter('end_time'))
         future.sort(key=attrgetter('start_time'))
         context['active_contests'] = active
