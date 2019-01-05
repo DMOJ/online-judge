@@ -529,7 +529,7 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None):
 
 
 def contest_ranking_list(contest, problems):
-    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
+    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0, user__is_unlisted=False)
                                                                      .prefetch_related('user__organizations')
                                                                      .annotate(submission_count=Count('submission'))
                                                                      .order_by('-score', 'cumtime', '-submission_count'))
