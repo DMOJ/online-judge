@@ -102,7 +102,7 @@ def api_v1_problem_info(request, problem):
 
 
 def api_v1_user_list(request):
-    queryset = Profile.objects.filter(is_unlisted=False).values_list('user__username', 'points', 'display_rank')
+    queryset = Profile.objects.filter(is_unlisted=False).values_list('user__username', 'name', 'points', 'display_rank')
     return JsonResponse({username: {
         'display_name': name,
         'points': points,
