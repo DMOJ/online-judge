@@ -119,7 +119,7 @@ class Profile(models.Model):
                                        help_text=_('32 character base32-encoded key for API access'),
                                        validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
                                                                   _('API token must be empty or base32'))])
-    is_contest_account = models.BooleanField(verbose_name=_('Contest account'), default=False, 
+    is_contest_account = models.BooleanField(verbose_name=_('Contest account'), default=False,
                                              help_text=_('If set, restricts this account to only contest features.'))
 
     @cached_property

@@ -59,7 +59,9 @@
             {% if ratings %}
                 <br>
                 <div><b>{{ ratings|length }} contests written</b></div>
-                <div><b class="semibold">{{ _('Rank by rating:') }}</b> #{{ rating_rank }}</div>
+                {% if not user.is_contest_account %}
+                    <div><b class="semibold">{{ _('Rank by rating:') }}</b> #{{ rating_rank }}</div>
+                {% endif %}
                 <div><b class="semibold">{{ _('Rating:') }}</b> {{ rating_number(rating) }}</div>
                 <div><b class="semibold">{{ _('Volatility:') }}</b> {{ rating.volatility }}</div>
                 <div><b class="semibold">{{ _('Min. rating:') }}</b> {{ rating_number(min_rating) }}</div>

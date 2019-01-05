@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0085_contest_clone'),
+        ('judge', '0082_contest_clone'),
     ]
 
     operations = [

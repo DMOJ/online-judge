@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('judge', '0079_remove_comment_title'),
-        ('judge', '0086_add_display_ranks'),
+        ('judge', '0083_add_display_ranks'),
     ]
 
     operations = [
