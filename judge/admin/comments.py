@@ -21,10 +21,10 @@ class CommentForm(ModelForm):
 class CommentAdmin(VersionAdmin):
     fieldsets = (
         (None, {'fields': ('author', 'page', 'parent', 'score', 'hidden')}),
-        ('Content', {'fields': ('title', 'body')}),
+        ('Content', {'fields': ('body',)}),
     )
     list_display = ['author', 'linked_page', 'time']
-    search_fields = ['author__user__username', 'author__name', 'page', 'title', 'body']
+    search_fields = ['author__user__username', 'author__name', 'page', 'body']
     actions = ['hide_comment', 'unhide_comment']
     list_filter = ['hidden']
     actions_on_top = True
