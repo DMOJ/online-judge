@@ -78,7 +78,7 @@ class ContestSelect2View(Select2View):
 
 class CommentSelect2View(Select2View):
     def get_queryset(self):
-        return Comment.objects.filter(Q(title__icontains=self.term) | Q(page__icontains=self.term))
+        return Comment.objects.filter(page__icontains=self.term)
 
 
 class UserSearchSelect2View(BaseListView):
