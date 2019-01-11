@@ -719,6 +719,7 @@ def clone_contest(request, contest):
     contest.pk = None
     contest.is_public = False
     contest.freeze_submissions = False
+    contest.user_count = 0
     contest.key += '_clone'
     try:
         contest.save()

@@ -12,8 +12,8 @@ from judge.widgets import HeavySelect2MultipleWidget, HeavySelect2Widget, HeavyP
 class OrganizationForm(ModelForm):
     class Meta:
         widgets = {
-            'admins': HeavySelect2MultipleWidget(data_view='profile_select2'),
-            'registrant': HeavySelect2Widget(data_view='profile_select2'),
+            'admins': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'registrant': HeavySelect2Widget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
         }
         if HeavyPreviewAdminPageDownWidget is not None:
             widgets['about'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('organization_preview'))

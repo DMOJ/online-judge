@@ -246,13 +246,13 @@ class Contest(models.Model):
     def is_joinable_by(self, user, check_registered=True):
         if not self.is_accessible_by(user):
             return False
+        if self.ended:
+            return self.is_virtualable
         if user.has_perm('judge.join_all_contest'):
             return True
         if user.has_perm('judge.edit_own_contest') and \
                 self.organizers.filter(id=user.profile.id).exists():
             return True
-        if self.ended:
-            return self.is_virtualable
         
         if check_registered and not self.is_registered(user):
             return False

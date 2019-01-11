@@ -37,6 +37,13 @@
                 <img src="{{ gravatar(user, 135) }}" width="135px" height="135px">
             </div>
             <br>
+            {% with name = user.user.get_full_name() %}
+                {% if name and perms.view_name %}
+                    <div style="padding-bottom: 0.3em">
+                        <b class="semibold">{{ name }}</b>
+                    </div>
+                {% endif %}
+            {% endwith %}
 
             <div><b>{{ _('%(count)d problems solved', count=user.problem_count) }}</b></div>
             {% if not user.is_contest_account and not user.is_unlisted %}

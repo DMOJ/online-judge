@@ -296,14 +296,18 @@
 {% endblock %}
 
 {% block post_description_end %}
-    {% if request.user.is_authenticated and not request.user.profile.mute %}
-        <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
-            {%- if contest_problem and contest_problem.contest.use_clarifications -%}
-                {{ _('Request clarification') }}
-            {%- else -%}
-                {{ _('Report an issue') }}
-            {%- endif -%}
-        </a>
+    {% if request.user.is_authenticated %}
+        {% with profile=request.user.profile %}
+            {% if not profile.mute %}
+                <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
+                    {%- if contest_problem and contest_problem.contest.use_clarifications and profile.current_contest.virtual <= 0 -%}
+                        {{ _('Request clarification') }}
+                    {%- else -%}
+                        {{ _('Report an issue') }}
+                    {%- endif -%}
+                </a>
+            {% endif %}
+        {% endwith %}
     {% endif %}
 {% endblock %}
 

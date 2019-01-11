@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body %}
-    <form action="" method="post" class="form-area" >
+    <form action="" method="post" class="form-area">
         {% csrf_token %}
         {{ contest.registration_page|markdown('solution', MATH_ENGINE)|reference }}
         <p class="button-line">

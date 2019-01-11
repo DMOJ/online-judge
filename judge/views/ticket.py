@@ -320,6 +320,7 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
         except KeyError:
             return HttpResponseBadRequest()
         ticket = self.get_object()
+        access_check(ticket, request)
         message = ticket.messages.first()
         return JsonResponse({
             'row': get_template('ticket/row.html').render({'ticket': ticket}, request),

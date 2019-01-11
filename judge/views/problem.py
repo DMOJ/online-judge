@@ -223,9 +223,8 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
             raise Http404()
 
         problem = self.get_object()
-        if not problem.is_public:
-            if problem.is_restricted and not self.request.user.has_perm('see_restricted_problem'):
-                raise Http404()
+        if not problem.is_accessible_by(self.request.user):
+            raise Http404()
 
         try:
             trans = problem.translations.get(language=language)
@@ -365,19 +364,21 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             queryset = queryset.filter(group__id=self.category) 
 
         if self.request.user.has_perm('judge.see_private_problem'):
+            filter = None
+            see_restricted = self.request.user.has_perm('judge.see_restricted_problem')
             if self.problem_visibility == 1:
                 filter = Q(is_public=True)
             elif self.problem_visibility == 2:
-                filter = Q(is_restricted=False, is_public=False)
-            elif self.problem_visibility == 3 and self.request.user.has_perm('judge.see_restricted_problem'):
+                filter = Q(is_public=False)
+                if see_restricted:
+                    filter &= Q(is_restricted=False)
+            elif self.problem_visibility == 3 and see_restricted:
                 filter = Q(is_restricted=True, is_public=False)
-            else:
+            elif see_restricted:
                 filter = Q(is_restricted=False) | Q(is_public=True)
-            
-            if not self.request.user.has_perm('judge.see_restricted_problem'):
-                filter |= Q(is_restricted=True)
-            
-            queryset = queryset.filter(filter)
+
+            if filter is not None:
+                queryset = queryset.filter(filter)
 
         if self.selected_types:
             queryset = queryset.filter(types__in=self.selected_types)
