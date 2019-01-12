@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-21 17:54-0400\n"
-"PO-Revision-Date: 2018-08-21 21:55\n"
+"PO-Revision-Date: 2019-01-12 03:12\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Croatian\n"
 "Language: hr_HR\n"
@@ -38,7 +38,7 @@ msgstr "Hrvatski"
 
 #: .\dmoj\settings.py:252
 msgid "Hungarian"
-msgstr ""
+msgstr "Mađarski"
 
 #: .\dmoj\settings.py:253
 msgid "Korean"
@@ -58,7 +58,7 @@ msgstr "Srpski (Latinica)"
 
 #: .\dmoj\settings.py:257
 msgid "Turkish"
-msgstr ""
+msgstr "Turski"
 
 #: .\dmoj\settings.py:258
 msgid "Vietnamese"
@@ -679,7 +679,7 @@ msgstr ""
 
 #: .\judge\models\contest.py:66
 msgid "Whether the scoreboard should remain hidden for the duration of the contest."
-msgstr ""
+msgstr "Treba li tablica poretka ostati skrivena za vrijeme natjecanja."
 
 #: .\judge\models\contest.py:69
 msgid "no comments"
@@ -731,7 +731,7 @@ msgstr ""
 
 #: .\judge\models\contest.py:86 .\judge\models\problem.py:123
 msgid "OpenGraph image"
-msgstr ""
+msgstr "OpenGraph slika"
 
 #: .\judge\models\contest.py:88
 msgid "the amount of live participants"
@@ -776,11 +776,11 @@ msgstr ""
 #: .\judge\models\contest.py:175 .\judge\models\contest.py:263
 #: .\judge\models\contest.py:298
 msgid "contest"
-msgstr ""
+msgstr "natjecanje"
 
 #: .\judge\models\contest.py:176
 msgid "contests"
-msgstr ""
+msgstr "natjecanja"
 
 #: .\judge\models\contest.py:180
 msgid "associated contest"
@@ -789,11 +789,11 @@ msgstr ""
 #: .\judge\models\contest.py:181 .\judge\models\contest.py:297
 #: .\judge\models\profile.py:173
 msgid "user"
-msgstr ""
+msgstr "korisnik"
 
 #: .\judge\models\contest.py:183
 msgid "score"
-msgstr ""
+msgstr "bodovi"
 
 #: .\judge\models\contest.py:184
 msgid "cumulative time"

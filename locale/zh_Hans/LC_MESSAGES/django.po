@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-21 17:54-0400\n"
-"PO-Revision-Date: 2018-08-21 22:06\n"
+"PO-Revision-Date: 2019-01-12 03:12\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -38,7 +38,7 @@ msgstr "克罗地亚语"
 
 #: .\dmoj\settings.py:252
 msgid "Hungarian"
-msgstr ""
+msgstr "匈牙利语"
 
 #: .\dmoj\settings.py:253
 msgid "Korean"
@@ -58,7 +58,7 @@ msgstr "塞尔维亚文（拉丁字母）"
 
 #: .\dmoj\settings.py:257
 msgid "Turkish"
-msgstr ""
+msgstr "土耳其语"
 
 #: .\dmoj\settings.py:258
 msgid "Vietnamese"
@@ -254,7 +254,7 @@ msgstr "隐藏题目"
 
 #: .\judge\admin\profile.py:32
 msgid "timezone"
-msgstr ""
+msgstr "时区"
 
 #: .\judge\admin\profile.py:65 .\judge\admin\submission.py:197
 #: .\templates\organization\requests\log.html:9
@@ -413,7 +413,7 @@ msgstr "你已被静音……"
 
 #: .\judge\comments.py:50 .\templates\comments\list.html:122
 msgid "You need to have solved at least one problem before your voice can be heard."
-msgstr "只有解决了一个题目以后你才能有发言权。"
+msgstr "只有解决了至少一个题目以后你才能有发言权。"
 
 #: .\judge\comments.py:75
 msgid "Posted comment"
@@ -565,7 +565,7 @@ msgstr "评论投票"
 
 #: .\judge\models\contest.py:20
 msgid "Invalid colour."
-msgstr "无效的颜色。"
+msgstr "无效的颜色"
 
 #: .\judge\models\contest.py:22
 msgid "tag name"
@@ -643,15 +643,15 @@ msgstr "竞赛参与评分"
 
 #: .\judge\models\contest.py:63
 msgid "Whether this contest can be rated."
-msgstr "竞赛是否参与用户评分"
+msgstr "这场比赛是否可以评分"
 
 #: .\judge\models\contest.py:65
 msgid "hide scoreboard"
-msgstr ""
+msgstr "隐藏记分板"
 
 #: .\judge\models\contest.py:66
 msgid "Whether the scoreboard should remain hidden for the duration of the contest."
-msgstr ""
+msgstr "记分牌是否在比赛期间保持隐藏。"
 
 #: .\judge\models\contest.py:69
 msgid "no comments"
@@ -1979,7 +1979,7 @@ msgstr "ContestCalender 需要整数年份和月份"
 
 #: .\judge\views\contests.py:504
 msgid "???"
-msgstr ""
+msgstr "???"
 
 #: .\judge\views\contests.py:540
 #, python-format
@@ -2198,22 +2198,22 @@ msgstr "您的 zip 文件是无效的 ！"
 #: .\judge\views\problem_data.py:102
 #, python-brace-format
 msgid "Comparing submissions for {0}"
-msgstr ""
+msgstr "比较 {0} 的提交"
 
 #: .\judge\views\problem_data.py:105
 #, python-brace-format
 msgid "Comparing submissions for <a href=\"{1}\">{0}</a>"
-msgstr ""
+msgstr "正在比较 <a href=\"{1}\">{0}</a> 的提交情况"
 
 #: .\judge\views\problem_data.py:140
 #, python-brace-format
 msgid "Editing data for {0}"
-msgstr ""
+msgstr "正在编辑 {0} 的数据"
 
 #: .\judge\views\problem_data.py:143
 #, python-brace-format
 msgid "Editing data for <a href=\"{1}\">{0}</a>"
-msgstr ""
+msgstr "正在编辑 <a href=\"{1}\">{0}</a> 的数据"
 
 #: .\judge\views\problem_data.py:147
 #, python-format
@@ -2693,7 +2693,7 @@ msgstr "排行榜"
 
 #: .\templates\contest\contest-tabs.html:10
 msgid "Hidden Rankings"
-msgstr ""
+msgstr "隐藏的排名"
 
 #: .\templates\contest\contest-tabs.html:26
 #: .\templates\contest\contest-tabs.html:40
@@ -2755,7 +2755,7 @@ msgstr "用户"
 
 #: .\templates\contest\contest.html:99
 msgid "Editorial"
-msgstr "编辑"
+msgstr "题解"
 
 #: .\templates\contest\list.html:27 .\templates\contest\media-js.html:9
 msgid "Are you sure you want to join?"
@@ -3348,7 +3348,7 @@ msgstr "（再输一次密码以确定）"
 
 #: .\templates\registration\registration_form.html:169
 msgid "(select your closest major city)"
-msgstr ""
+msgstr "(选择离您最近的主要城市)"
 
 #: .\templates\registration\registration_form.html:173
 msgid "or"
@@ -3595,7 +3595,7 @@ msgstr "只显示我的工单"
 
 #: .\templates\ticket\list.html:215
 msgid "Filing user"
-msgstr ""
+msgstr "归档用户"
 
 #: .\templates\ticket\list.html:224
 msgid "Assignee"
@@ -3635,7 +3635,7 @@ msgstr "重开工单"
 
 #: .\templates\ticket\ticket.html:321
 msgid "Assignee notes"
-msgstr ""
+msgstr "受让人说明"
 
 #: .\templates\ticket\ticket.html:328 .\templates\widgets\select_all.html:4
 msgid "Nothing here."
@@ -3663,7 +3663,7 @@ msgstr "自我描述"
 
 #: .\templates\user\edit-profile.html:103
 msgid "Select your closest major city"
-msgstr ""
+msgstr "选择离您最近的主要城市"
 
 #: .\templates\user\edit-profile.html:112
 msgid "Editor theme"
@@ -3695,7 +3695,9 @@ msgstr "更新资料"
 msgid "\n"
 "            weighted <b>%(weight)s%%</b>\n"
 "        "
-msgstr ""
+msgstr "\n"
+"        比重 <b>%(weight)s%%</b>\n"
+"        "
 
 #: .\templates\user\pp-row.html:27
 #, python-format

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-21 17:54-0400\n"
-"PO-Revision-Date: 2018-08-21 21:55\n"
+"PO-Revision-Date: 2019-01-12 03:12\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -262,7 +262,7 @@ msgstr "Jelöld a problémákat privátnak"
 
 #: .\judge\admin\profile.py:32
 msgid "timezone"
-msgstr ""
+msgstr "időzóna"
 
 #: .\judge\admin\profile.py:65 .\judge\admin\submission.py:197
 #: .\templates\organization\requests\log.html:9
@@ -1993,7 +1993,7 @@ msgstr "A ContestCalendar-nak egész évekre és hónapokra van szüksége"
 
 #: .\judge\views\contests.py:504
 msgid "???"
-msgstr ""
+msgstr "???"
 
 #: .\judge\views\contests.py:540
 #, python-format
@@ -2285,12 +2285,12 @@ msgstr "Preferált nyelv"
 
 #: .\judge\views\register.py:39
 msgid "Subscribe to newsletter?"
-msgstr ""
+msgstr "Feliratkozol a hírlevélre?"
 
 #: .\judge\views\register.py:46
 #, python-format
 msgid "The email address \"%s\" is already taken. Only one registration is allowed per address."
-msgstr ""
+msgstr "A \"%s\" email cím már foglalt. Csak egy regisztráció engedélyezett címenként."
 
 #: .\judge\views\register.py:52
 msgid "Your email provider is not allowed due to history of abuse. Please use a reputable email provider."
@@ -2302,7 +2302,7 @@ msgstr "Regisztráció"
 
 #: .\judge\views\register.py:108
 msgid "Authentication failure"
-msgstr ""
+msgstr "Azonosítási hiba"
 
 #: .\judge\views\stats.py:94
 msgid "Language statistics"
@@ -2310,7 +2310,7 @@ msgstr ""
 
 #: .\judge\views\status.py:24 .\templates\submission\list.html:222
 msgid "Status"
-msgstr ""
+msgstr "Státusz"
 
 #: .\judge\views\status.py:109
 msgid "Version matrix"
@@ -2324,11 +2324,11 @@ msgstr ""
 #: .\judge\views\submission.py:155 .\judge\views\submission.py:156
 #: .\templates\problem\problem.html:111
 msgid "All submissions"
-msgstr ""
+msgstr "Összes beküldés"
 
 #: .\judge\views\submission.py:287
 msgid "All my submissions"
-msgstr ""
+msgstr "Összes beküldésem"
 
 #: .\judge\views\submission.py:288
 #, python-format
@@ -2622,7 +2622,7 @@ msgstr "Érvénytelen hozzászólás törzs."
 
 #: .\templates\comments\list.html:139
 msgid "Post!"
-msgstr ""
+msgstr "Küld!"
 
 #: .\templates\comments\media-js.html:66
 #, python-brace-format

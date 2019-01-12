@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-21 17:54-0400\n"
-"PO-Revision-Date: 2018-08-21 22:17\n"
+"PO-Revision-Date: 2019-01-12 03:12\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -215,7 +215,7 @@ msgstr "Tasnif"
 #: .\templates\problem\list.html:232 .\templates\user\base-users-table.html:10
 #: .\templates\user\user-problems.html:63
 msgid "Points"
-msgstr "Puanlar"
+msgstr "Puan"
 
 #: .\judge\admin\problem.py:126
 msgid "Limits"
@@ -383,12 +383,12 @@ msgstr "Zaman"
 #: .\judge\admin\submission.py:209
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d KB"
 
 #: .\judge\admin\submission.py:211
 #, python-format
 msgid "%.2f MB"
-msgstr ""
+msgstr "%.2f MB"
 
 #: .\judge\admin\submission.py:213
 msgid "Memory"
@@ -479,7 +479,7 @@ msgstr[1] "%d gün, %h:%m:%s"
 #: .\judge\jinja2\timedelta.py:56
 msgctxt "time format without day"
 msgid "%h:%m:%s"
-msgstr ""
+msgstr "%h:%m:%s"
 
 #: .\judge\jinja2\timedelta.py:62
 msgctxt "time format no seconds with day"
@@ -498,7 +498,7 @@ msgstr[1] "%d gün"
 #: .\judge\jinja2\timedelta.py:66
 msgctxt "hours and minutes"
 msgid "%h:%m"
-msgstr ""
+msgstr "%h:%m"
 
 #: .\judge\models\choices.py:60
 msgid "Leave as LaTeX"
@@ -567,7 +567,7 @@ msgstr "yorumlar"
 #: .\judge\models\comment.py:115 .\judge\models\problem.py:353
 #, python-format
 msgid "Editorial for %s"
-msgstr "%s problemi için editorial"
+msgstr "%s problemi için problem analizi"
 
 #: .\judge\models\comment.py:146
 msgid "comment vote"
@@ -1470,7 +1470,7 @@ msgstr "matematiksel ifadeleri gösteren program"
 #, python-format
 msgctxt "user display name"
 msgid "%(username)s (%(display)s)"
-msgstr ""
+msgstr "%(username)s (%(display)s)"
 
 #: .\judge\models\profile.py:168
 msgid "user profile"
@@ -1993,7 +1993,7 @@ msgstr "Yarışma Takvimi için tam sayı yıl ve ay girmelisiniz"
 
 #: .\judge\views\contests.py:504
 msgid "???"
-msgstr ""
+msgstr "???"
 
 #: .\judge\views\contests.py:540
 #, python-format
@@ -2501,7 +2501,7 @@ msgstr "izleniyor"
 
 #: .\templates\base.html:260
 msgid "This site works best with JavaScript enabled."
-msgstr ""
+msgstr "Bu sitenin düzgün görüntülenmesi için JavaScript etkin olmalıdır."
 
 #: .\templates\blog\content.html:13 .\templates\comments\list.html:68
 #: .\templates\comments\list.html:83 .\templates\contest\contest-tabs.html:17
@@ -2741,7 +2741,7 @@ msgstr "Sanal olarak katılınıyor. "
 
 #: .\templates\contest\contest.html:43
 msgid "Contest is over."
-msgstr "Yarışma sona erdi"
+msgstr "Yarışma sona erdi."
 
 #: .\templates\contest\contest.html:59 .\templates\contest\contest.html:63
 msgid "F j, Y, G:i T"
@@ -3095,7 +3095,7 @@ msgstr "Tipler"
 #: .\templates\problem\list.html:235
 #, python-format
 msgid "AC %%"
-msgstr ""
+msgstr "AC %%"
 
 #: .\templates\problem\problem.html:76
 msgid "View as PDF"
@@ -3290,7 +3290,7 @@ msgstr "Diğer giriş seçenekleri:"
 
 #: .\templates\registration\logout.html:3
 msgid "See you later!"
-msgstr ""
+msgstr "Görüşürüz!"
 
 #: .\templates\registration\password_change_done.html:3
 msgid "Your password was sucessfully changed."
@@ -3436,7 +3436,7 @@ msgstr ""
 
 #: .\templates\status\judge-status-table.html:8
 msgid "Load"
-msgstr "Yükle"
+msgstr "Yük"
 
 #: .\templates\status\judge-status-table.html:34
 #: .\templates\status\judge-status-table.html:41
@@ -3719,12 +3719,12 @@ msgstr "\n"
 #: .\templates\user\pp-row.html:27
 #, python-format
 msgid "%(pp).1fpp"
-msgstr ""
+msgstr "%(pp).1fpp"
 
 #: .\templates\user\pp-row.html:29
 #, python-format
 msgid "%(pp).0fpp"
-msgstr ""
+msgstr "%(pp).0fpp"
 
 #: .\templates\user\user-about.html:14
 msgid "From"

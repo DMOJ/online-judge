@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-21 17:54-0400\n"
-"PO-Revision-Date: 2018-08-21 21:55\n"
+"PO-Revision-Date: 2019-01-12 03:12\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -38,7 +38,7 @@ msgstr "Croate"
 
 #: .\dmoj\settings.py:252
 msgid "Hungarian"
-msgstr ""
+msgstr "Hongrois"
 
 #: .\dmoj\settings.py:253
 msgid "Korean"
@@ -58,7 +58,7 @@ msgstr "Serbe (Latin)"
 
 #: .\dmoj\settings.py:257
 msgid "Turkish"
-msgstr ""
+msgstr "Turque"
 
 #: .\dmoj\settings.py:258
 msgid "Vietnamese"
@@ -91,8 +91,8 @@ msgstr "Masquer les commentaires"
 #, python-format
 msgid "%d comment successfully unhidden."
 msgid_plural "%d comments successfully unhidden."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d commentaire non masqué avec succès."
+msgstr[1] "%d commentaires non masqués avec succès."
 
 #: .\judge\admin\comments.py:50
 msgid "Unhide comments"
@@ -133,8 +133,8 @@ msgstr "Organisation "
 #, python-format
 msgid "%d contest successfully marked as public."
 msgid_plural "%d contests successfully marked as public."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d concours marqué avec succès comme public."
+msgstr[1] "%d concours a été marqué avec succès comme public."
 
 #: .\judge\admin\contest.py:133
 msgid "Mark contests as public"
@@ -144,8 +144,8 @@ msgstr "Marquer ces concours comme publiques"
 #, python-format
 msgid "%d contest successfully marked as private."
 msgid_plural "%d contests successfully marked as private."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d concour marqué avec succès comme public."
+msgstr[1] "%d concour marqué avec succès comme public."
 
 #: .\judge\admin\contest.py:140
 msgid "Mark contests as private"

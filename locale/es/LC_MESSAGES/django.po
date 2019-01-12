@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-21 17:54-0400\n"
-"PO-Revision-Date: 2018-08-21 22:17\n"
+"PO-Revision-Date: 2019-01-12 03:12\n"
 "Last-Translator: Icyene <vulcainus@gmail.com>\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -38,7 +38,7 @@ msgstr "Croata"
 
 #: .\dmoj\settings.py:252
 msgid "Hungarian"
-msgstr ""
+msgstr "Húngaro"
 
 #: .\dmoj\settings.py:253
 msgid "Korean"
@@ -58,7 +58,7 @@ msgstr "Serbio (Latino)"
 
 #: .\dmoj\settings.py:257
 msgid "Turkish"
-msgstr ""
+msgstr "Turco"
 
 #: .\dmoj\settings.py:258
 msgid "Vietnamese"
@@ -224,7 +224,7 @@ msgstr "Límites"
 #: .\judge\admin\problem.py:127 .\templates\stats\base.html:16
 #: .\templates\submission\list.html:231
 msgid "Language"
-msgstr "Idioma"
+msgstr "Lenguaje"
 
 #: .\judge\admin\problem.py:128
 msgid "Justice"
@@ -262,7 +262,7 @@ msgstr "Marcar problemas como privados"
 
 #: .\judge\admin\profile.py:32
 msgid "timezone"
-msgstr ""
+msgstr "zona horaria"
 
 #: .\judge\admin\profile.py:65 .\judge\admin\submission.py:197
 #: .\templates\organization\requests\log.html:9
@@ -299,7 +299,7 @@ msgstr "Problemas no permitidos"
 
 #: .\judge\admin\runtime.py:18
 msgid "These problems are NOT allowed to be submitted in this language"
-msgstr "Estos problemas no están permitidos para ser presentados en este idioma"
+msgstr "Estos problemas no están permitidos para ser enviados en este lenguaje"
 
 #: .\judge\admin\runtime.py:81
 msgid "Description"
@@ -420,7 +420,7 @@ msgstr "Cuerpo del comentario"
 
 #: .\judge\comments.py:47 .\judge\views\ticket.py:50
 msgid "Your part is silent, little toad."
-msgstr ""
+msgstr "Estás un poco callado."
 
 #: .\judge\comments.py:50 .\templates\comments\list.html:122
 msgid "You need to have solved at least one problem before your voice can be heard."
@@ -661,11 +661,11 @@ msgstr "Si esta publicación puede ser calificada."
 
 #: .\judge\models\contest.py:65
 msgid "hide scoreboard"
-msgstr ""
+msgstr "ocultar scoreboard"
 
 #: .\judge\models\contest.py:66
 msgid "Whether the scoreboard should remain hidden for the duration of the contest."
-msgstr ""
+msgstr "Si el scoreboard debe permanecer oculto durante la competencia."
 
 #: .\judge\models\contest.py:69
 msgid "no comments"
@@ -1138,7 +1138,7 @@ msgstr "permitir puntos parciales"
 
 #: .\judge\models\problem.py:114
 msgid "allowed languages"
-msgstr "idiomas permitidos"
+msgstr "lenguajes permitidos"
 
 #: .\judge\models\problem.py:116
 msgid "manually managed"
@@ -1183,7 +1183,7 @@ msgstr "índice de las presentaciones de AC"
 #: .\judge\models\problem.py:309 .\judge\models\problem.py:327
 #: .\judge\models\runtime.py:96
 msgid "language"
-msgstr "idioma"
+msgstr "lenguaje"
 
 #: .\judge\models\problem.py:310
 msgid "translated name"
@@ -1215,11 +1215,11 @@ msgstr "marca de tiempo de aclaración"
 
 #: .\judge\models\problem.py:333
 msgid "language-specific resource limit"
-msgstr "límite de recursos específicos del idioma"
+msgstr "límite de recursos específicos del lenguaje"
 
 #: .\judge\models\problem.py:334
 msgid "language-specific resource limits"
-msgstr "límites de recursos específicos del idioma"
+msgstr "límites de recursos específicos del lenguaje"
 
 #: .\judge\models\problem.py:338
 msgid "associated problem"
@@ -1424,7 +1424,7 @@ msgstr "ubicación"
 
 #: .\judge\models\profile.py:73
 msgid "preferred language"
-msgstr "idioma preferido"
+msgstr "lenguaje preferido"
 
 #: .\judge\models\profile.py:78
 msgid "last access time"
@@ -1578,15 +1578,15 @@ msgstr "La extensión de los archivos de código fuente, por ejemplo, \"py\" o \
 
 #: .\judge\models\runtime.py:97
 msgid "languages"
-msgstr "idiomas"
+msgstr "lenguajes"
 
 #: .\judge\models\runtime.py:101
 msgid "language to which this runtime belongs"
-msgstr "idioma al que pertenece este tiempo de ejecución"
+msgstr "lenguaje al que pertenece este entorno de ejecución"
 
 #: .\judge\models\runtime.py:102
 msgid "judge on which this runtime exists"
-msgstr ""
+msgstr "juzgar donde exista el runtime"
 
 #: .\judge\models\runtime.py:103
 msgid "runtime name"
@@ -1732,7 +1732,7 @@ msgstr "puntos otorgados"
 
 #: .\judge\models\submission.py:64
 msgid "submission language"
-msgstr "idioma de presentación"
+msgstr "lenguaje del envío"
 
 #: .\judge\models\submission.py:65
 msgid "source code"
@@ -2045,7 +2045,7 @@ msgstr "página corrupta %s"
 #: .\judge\views\language.py:12 .\templates\status\judge-status-table.html:9
 #: .\templates\status\status-tabs.html:5
 msgid "Runtimes"
-msgstr "Duración"
+msgstr "Entornos de ejecución"
 
 #: .\judge\views\organization.py:43 .\judge\views\organization.py:46
 msgid "No such organization"
@@ -2214,7 +2214,7 @@ msgstr "¡Tu carpeta Zip es invalida!"
 #: .\judge\views\problem_data.py:102
 #, python-brace-format
 msgid "Comparing submissions for {0}"
-msgstr ""
+msgstr "Comparando envíos para {0}"
 
 #: .\judge\views\problem_data.py:105
 #, python-brace-format
@@ -2281,7 +2281,7 @@ msgstr "Nombre real (opcional)"
 
 #: .\judge\views\register.py:32 .\templates\user\edit-profile.html:108
 msgid "Preferred language"
-msgstr "Idioma preferido"
+msgstr "Lenguaje preferido"
 
 #: .\judge\views\register.py:39
 msgid "Subscribe to newsletter?"
@@ -2306,7 +2306,7 @@ msgstr "Error de autenticación"
 
 #: .\judge\views\stats.py:94
 msgid "Language statistics"
-msgstr "Estadísticas del idioma"
+msgstr "Estadísticas del lenguaje"
 
 #: .\judge\views\status.py:24 .\templates\submission\list.html:222
 msgid "Status"
@@ -2564,7 +2564,7 @@ msgstr "Próximos concursos"
 
 #: .\templates\blog\list.html:189
 msgid "Comment stream"
-msgstr "Corriente del comentario"
+msgstr "Comentarios recientes"
 
 #: .\templates\blog\list.html:208
 msgid "New problems"
@@ -2705,11 +2705,11 @@ msgstr "Información"
 
 #: .\templates\contest\contest-tabs.html:8
 msgid "Rankings"
-msgstr "Valoraciones"
+msgstr "Posiciones"
 
 #: .\templates\contest\contest-tabs.html:10
 msgid "Hidden Rankings"
-msgstr ""
+msgstr "Rankings ocultos"
 
 #: .\templates\contest\contest-tabs.html:26
 #: .\templates\contest\contest-tabs.html:40
@@ -3177,12 +3177,12 @@ msgstr[1] "Tipos de problema"
 
 #: .\templates\problem\problem.html:208
 msgid "Allowed languages"
-msgstr "Idiomas permitidos"
+msgstr "Lenguajes permitidos"
 
 #: .\templates\problem\problem.html:216
 #, python-format
 msgid "No %(lang)s judge online"
-msgstr ""
+msgstr "No hay jueces online para %(lang)s"
 
 #: .\templates\problem\problem.html:245
 msgid "Request clarification"
@@ -3242,18 +3242,17 @@ msgstr "Estadística"
 #: .\templates\problem\submit.html:193
 #, python-format
 msgid "<b>Warning!</b> Your default language, <b>%(default_language)s</b>, is unavailable for this problem and has been deselected."
-msgstr "<b>¡Advertencia!</b> Su idioma predeterminado, <b>%(default_language)s</b>, no está disponible para este problema y no se seleccionó."
+msgstr "<b>¡Advertencia!</b> Su lenguaje predeterminado, <b>%(default_language)s</b>, no está disponible para este problema y no se seleccionó."
 
 #: .\templates\problem\submit.html:204
 #, python-format
 msgid "\n"
 "                        You have %(left)s submission left\n"
-"                        "
 msgid_plural "\n"
 "                        You have %(left)s submissions left\n"
-"                    "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "\n"
+" Aún tienes %(left)s envíos restantes\n"
+msgstr[1] "\n"
 
 #: .\templates\problem\submit.html:213
 msgid "You have 0 submissions left"
@@ -3344,7 +3343,7 @@ msgstr "¡Gracias por usar nuestro sitio!"
 #: .\templates\registration\password_reset_email.txt:11
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "El equipo de %(site_name)s"
 
 #: .\templates\registration\password_reset_subject.txt:1
 #, python-format
@@ -3366,7 +3365,7 @@ msgstr "(de nuevo, por confirmación)"
 
 #: .\templates\registration\registration_form.html:169
 msgid "(select your closest major city)"
-msgstr ""
+msgstr "(Seleccione la ciudad importante más cercana)"
 
 #: .\templates\registration\registration_form.html:173
 msgid "or"
@@ -3378,7 +3377,7 @@ msgstr "seleccionar en el mapa"
 
 #: .\templates\registration\registration_form.html:179
 msgid "Default language"
-msgstr "Idioma predeterminado"
+msgstr "Lenguaje por defecto"
 
 #: .\templates\registration\registration_form.html:182
 #: .\templates\user\edit-profile.html:156
@@ -3436,7 +3435,7 @@ msgstr ""
 
 #: .\templates\status\judge-status-table.html:8
 msgid "Load"
-msgstr "Cargar"
+msgstr "Carga"
 
 #: .\templates\status\judge-status-table.html:34
 #: .\templates\status\judge-status-table.html:41
@@ -3447,11 +3446,11 @@ msgstr "N/A"
 
 #: .\templates\status\judge-status-table.html:64
 msgid "There are no judges available at this time."
-msgstr ""
+msgstr "No hay jueces disponibles en este momento."
 
 #: .\templates\status\language-list.html:35
 msgid "Runtime Info"
-msgstr "Información del tiempo transcurrido"
+msgstr "Información del entorno de ejecución"
 
 #: .\templates\status\status-tabs.html:4
 msgid "Judges"
@@ -3475,7 +3474,7 @@ msgstr "Filtrar por estatus..."
 
 #: .\templates\submission\list.html:62
 msgid "Filter by language..."
-msgstr "Filtrar por idioma..."
+msgstr "Filtrar por lenguaje..."
 
 #: .\templates\submission\list.html:218
 msgid "Filter submissions"
@@ -3681,7 +3680,7 @@ msgstr "Descripción propia"
 
 #: .\templates\user\edit-profile.html:103
 msgid "Select your closest major city"
-msgstr ""
+msgstr "Seleccione la ciudad importante más cercana"
 
 #: .\templates\user\edit-profile.html:112
 msgid "Editor theme"
