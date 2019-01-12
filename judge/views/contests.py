@@ -482,24 +482,29 @@ def make_contest_ranking_profile(participation, problems):
     )
 
 
-def best_solution_state(points, total):
+def best_solution_state(points, total, best_sub, first_sub):
     if not points:
         return 'failed-score'
     if points == total:
+        if best_sub == first_sub:
+            return 'full-score first-solve'
         return 'full-score'
     return 'partial-score'
 
-
 def base_contest_ranking_list(contest, problems, queryset, for_user=None):
     cursor = connection.cursor()
+
     cursor.execute('''
-        SELECT part.id, cp.id, prob.code, (
-                SELECT MAX(ccs.points)
-                FROM judge_contestsubmission ccs 
-                WHERE ccs.problem_id = cp.id AND ccs.participation_id = part.id 
-                GROUP BY ccs.points, ccs.bonus
-                HAVING ccs.points+ccs.bonus = MAX(cs.points+cs.bonus)
-        ) AS best, MAX(cs.points+cs.bonus) AS total_best, MAX(sub.date) AS `last`
+        SELECT part.id, cp.id, prob.code, (    
+                    SELECT MAX(ccs.points)
+                    FROM judge_contestsubmission ccs 
+                    WHERE ccs.problem_id = cp.id AND ccs.participation_id = part.id AND ccs.points+ccs.bonus = MAX(cs.points+cs.bonus)
+               ) AS best, MAX(cs.points+cs.bonus) AS total_best, (
+                    SELECT MIN(csub.date)
+                    FROM judge_contestsubmission ccs LEFT OUTER JOIN
+                         judge_submission csub ON (csub.id = ccs.submission_id)
+                    WHERE ccs.problem_id = cp.id AND ccs.participation_id = part.id AND ccs.points+ccs.bonus = MAX(cs.points+cs.bonus)
+               ) AS first_best, MIN(sub.date) AS `first`
         FROM judge_contestproblem cp CROSS JOIN judge_contestparticipation part INNER JOIN
              judge_problem prob ON (cp.problem_id = prob.id) LEFT OUTER JOIN
              judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = part.id) LEFT OUTER JOIN
@@ -509,7 +514,7 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None):
     '''.format(extra=('AND part.user_id = %s' if for_user is not None else 'AND part.virtual = 0')),
                    (contest.id, contest.id) + ((for_user,) if for_user is not None else ()))
 
-    data = {(part, prob): (code, best, total_best, last and from_database_time(last)) for part, prob, code, best, total_best, last in cursor}
+    data = {(part, prob): (code, best, total_best, from_database_time(first_best), from_database_time(first)) for part, prob, code, best, total_best, first_best, first in cursor}
     cursor.close()
 
     problems = map(attrgetter('id', 'points', 'is_pretested'), problems)
@@ -517,15 +522,17 @@ def base_contest_ranking_list(contest, problems, queryset, for_user=None):
     def make_ranking_profile(participation):
         part = participation.id
         return make_contest_ranking_profile(participation, [
-            BestSolutionData(code=data[part, prob][0], points=data[part, prob][1], bonus=data[part, prob][2]-data[part, prob][1],
+            BestSolutionData(code=data[part, prob][0],
+                             points=data[part, prob][1],
+                             bonus=data[part, prob][2] - data[part, prob][1],
                              time=data[part, prob][3] - participation.start,
-                             state=best_solution_state(data[part, prob][1], points),
+                             state=best_solution_state(data[part, prob][1], points, data[part, prob][3], data[part, prob][4]),
                              is_pretested=is_pretested)
             if (part, prob) in data and data[part, prob][1] is not None else None
             for prob, points, is_pretested in problems])
 
     return map(make_ranking_profile, queryset.select_related('user__user', 'rating')
-               .defer('user__about', 'user__organizations__about'))
+                                             .defer('user__about', 'user__organizations__about'))
 
 
 def contest_ranking_list(contest, problems):
@@ -539,25 +546,30 @@ def get_participation_ranking_profile(contest, participation, problems):
     cursor = connection.cursor()
     cursor.execute('''
         SELECT cp.id, (
-                SELECT MAX(ccs.points)
-                FROM judge_contestsubmission ccs 
-                WHERE ccs.problem_id = cp.id AND ccs.participation_id = %s
-                GROUP BY ccs.points, ccs.bonus
-                HAVING ccs.points+ccs.bonus = MAX(cs.points+cs.bonus)
-        ) AS best, MAX(cs.points+cs.bonus) AS total_best, MAX(sub.date) AS `last`
+                    SELECT MAX(ccs.points)
+                    FROM judge_contestsubmission ccs 
+                    WHERE ccs.problem_id = cp.id AND ccs.participation_id = %s AND ccs.points+ccs.bonus = MAX(cs.points+cs.bonus)
+               ) AS best, MAX(cs.points+cs.bonus) AS total_best, (
+                    SELECT MIN(csub.date)
+                    FROM judge_contestsubmission ccs LEFT OUTER JOIN
+                         judge_submission csub ON (csub.id = ccs.submission_id)
+                    WHERE ccs.problem_id = cp.id AND ccs.participation_id = %s AND ccs.points+ccs.bonus = MAX(cs.points+cs.bonus)
+               ) AS first_best, MIN(sub.date) AS `first`
         FROM judge_contestproblem cp INNER JOIN
              judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
              judge_submission sub ON (sub.id = cs.submission_id)
         WHERE cp.contest_id = %s
         GROUP BY cp.id
-   ''', (participation.id, participation.id, contest.id))
-    scoring = {prob: (best, total_best, last and from_database_time(last)) for prob, best, total_best, last in cursor}
+   ''', (participation.id, participation.id, participation.id, contest.id))
+    scoring = {prob: (best, total_best, from_database_time(first_best), from_database_time(first)) for prob, best, total_best, first_best, first in cursor}
     cursor.close()
 
     return make_contest_ranking_profile(participation, [
-        BestSolutionData(code=problem.problem.code, points=scoring[problem.id][0], bonus=scoring[problem.id][1] - scoring[problem.id][0],
+        BestSolutionData(code=problem.problem.code,
+                         points=scoring[problem.id][0],
+                         bonus=scoring[problem.id][1] - scoring[problem.id][0],
                          time=scoring[problem.id][2] - participation.start,
-                         state=best_solution_state(scoring[problem.id][0], problem.points),
+                         state=best_solution_state(scoring[problem.id][0], problem.points, scoring[problem.id][2], scoring[problem.id][3]),
                          is_pretested=problem.is_pretested)
         if problem.id in scoring else None for problem in problems
     ])
