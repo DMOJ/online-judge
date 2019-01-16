@@ -111,7 +111,7 @@
 {% macro contest_join(contest, request) %}
     {% if not request.in_contest %}
         <td>
-            {% if request.user.profile in contest.organizers.all() %}
+            {% if request.profile in contest.organizers.all() %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button"
@@ -130,7 +130,7 @@
 
 {% block body %}
     <div class="content-description">
-        {% if active_contests %}
+        {% if active_participations %}
             <h4>{{ _('Active Contests') }}</h4>
             <table class="contest-list table striped">
                 <thead>
@@ -143,7 +143,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for participation in active_contests %}
+                {% for participation in active_participations %}
                     {% with contest=participation.contest %}
                         <tr>
                             <td>
