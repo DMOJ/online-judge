@@ -146,11 +146,11 @@ class Problem(models.Model):
         profile = user.profile if user.is_authenticated else None
 
         filter = Q(is_public=True)
+        if user.has_perm('judge.see_private_problem'):
+            filter |= Q(is_restricted=False)
+            if user.has_perm('judge.see_restricted_problem'):
+                filter |= Q(is_restricted=True)
         if profile is not None:
-            if user.has_perm('judge.see_private_problem'):
-                filter |= Q(is_restricted=False)
-                if user.has_perm('judge.see_restricted_problem'):
-                    filter |= Q(is_restricted=True)
             filter |= Q(authors=profile)
             filter |= Q(curators=profile)
             filter |= Q(testers=profile)
@@ -177,7 +177,7 @@ class Problem(models.Model):
     def is_editable_by(self, user):
         if not user.is_authenticated:
             return False
-        if user.has_perm('judge.edit_all_problem') or user.has_perm('judge.edit_public_problem') and self.is_public:
+        if user.has_perm('judge.edit_all_problem') or (user.has_perm('judge.edit_public_problem') and self.is_public):
             return True
         return self.is_editor(user.profile)
 
@@ -185,7 +185,7 @@ class Problem(models.Model):
         
         # Problem is public.
         if self.is_public:
-            # Contest is not private to an organization.
+            # Problem is not private to an organization.
             if not self.is_organization_private:
                 return True
 

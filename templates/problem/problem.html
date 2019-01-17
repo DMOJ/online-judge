@@ -146,6 +146,13 @@
         {% if not problem.is_manually_managed %}
             <div><a href="{{ url('problem_data', problem.code) }}">{{ _('Edit test data') }}</a></div>
         {% endif %}
+    {% else %}
+        <hr>
+        <div>
+            <a href="{{ url('problem_ticket_list', problem.code) }}">{{ _('My tickets') }}
+                {% if num_open_tickets %}<span class="badge">{{ num_open_tickets }}</span>{% endif %}
+            </a>
+        </div>
     {% endif %}
 
     {% if perms.judge.clone_problem %}
@@ -296,18 +303,14 @@
 {% endblock %}
 
 {% block post_description_end %}
-    {% if request.user.is_authenticated %}
-        {% with profile=request.user.profile %}
-            {% if not profile.mute %}
-                <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
-                    {%- if contest_problem and contest_problem.contest.use_clarifications and profile.current_contest.virtual <= 0 -%}
-                        {{ _('Request clarification') }}
-                    {%- else -%}
-                        {{ _('Report an issue') }}
-                    {%- endif -%}
-                </a>
-            {% endif %}
-        {% endwith %}
+    {% if request.user.is_authenticated and not request.profile.mute %}
+        <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
+            {%- if contest_problem and contest_problem.contest.use_clarifications and request.profile.current_contest.live -%}
+                {{ _('Request clarification') }}
+            {%- else -%}
+                {{ _('Report an issue') }}
+            {%- endif -%}
+        </a>
     {% endif %}
 {% endblock %}
 

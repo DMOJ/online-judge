@@ -70,7 +70,6 @@ class SingleObjectFormView(SingleObjectMixin, FormView):
         access_check(self.object, request)
         return super(SingleObjectFormView, self).get(request, *args, **kwargs)
 
-
 class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
     form_class = TicketForm
     template_name = 'ticket/new.html'
@@ -86,8 +85,7 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
     def form_valid(self, form):
         ticket = Ticket(user=self.request.user.profile, title=form.cleaned_data['title'])
         ticket.linked_item = self.object
-        if isinstance(self.object, Problem) and not self.object.is_accessible_by(self.request.user):
-            raise PermissionDenied()
+        access_check(ticket, self.request)
         ticket.save()
         message = TicketMessage(ticket=ticket, user=ticket.user, body=form.cleaned_data['body'])
         message.save()
@@ -134,7 +132,6 @@ class TicketMixin(object):
 
     def get_object(self, queryset=None):
         ticket = super(TicketMixin, self).get_object(queryset)
-        access_check(ticket, self.request)
         profile_id = self.request.user.profile.id
         if self.request.user.has_perm('judge.change_ticket'):
             return ticket
@@ -184,7 +181,6 @@ class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, SingleObjectMixin,
         if self.open is None:
             raise ImproperlyConfigured('Need to define open')
         ticket = self.get_object()
-        access_check(ticket, request)
         if ticket.is_open != self.open:
             ticket.is_open = self.open
             ticket.save()
@@ -308,9 +304,11 @@ class ProblemTicketListView(TicketList):
         if 'problem' not in self.kwargs:
             raise Http404()
         problem = Problem.objects.get(code=self.kwargs['problem'])
-        if not self.request.user.is_authenticated or not problem.is_editable_by(self.request.user):
-            raise Http404()
-        return problem.tickets.all()
+        if problem.is_editable_by(self.request.user):
+            return problem.tickets.all()
+        elif problem.is_accessible_by(self.request.user):
+            return problem.tickets.filter(own_ticket_filter(self.profile.id))
+        raise Http404()
 
 
 class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
@@ -320,7 +318,6 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
         except KeyError:
             return HttpResponseBadRequest()
         ticket = self.get_object()
-        access_check(ticket, request)
         message = ticket.messages.first()
         return JsonResponse({
             'row': get_template('ticket/row.html').render({'ticket': ticket}, request),
