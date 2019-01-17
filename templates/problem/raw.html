@@ -50,7 +50,6 @@
         {% endfor %}
         </ul>
     </span>
-    <br>
     <span>
         <b>{{ _('Memory Limit') }}:</b> {{ problem.memory_limit | kbsimpleformat}}
         <ul>
@@ -64,9 +63,6 @@
 <div class="content-description printing">
     {{ description|markdown('problem', 'tex' if math_engine == 'jax' else math_engine)|reference|absolutify(url)|str|safe }}
 </div>
-<hr>
-<br>
-
 {% if math_engine == 'jax' %}
     <script type="text/javascript" src="mathjax_config.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
