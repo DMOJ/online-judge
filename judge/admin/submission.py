@@ -121,7 +121,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.edit_all_problem'):
             id = request.user.profile.id
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id)).distinct()
-        elif not request.user.has_perm('judge.see_problem_problem'):
+        elif not request.user.has_perm('judge.see_restricted_problem'):
             queryset = queryset.exclude(problem__is_restricted=True, problem__is_public=False)
         return queryset
 

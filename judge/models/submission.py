@@ -169,7 +169,7 @@ class Submission(models.Model):
         if user.has_perm('judge.view_all_submission'):
             if problem.is_public:
                 return True
-            elif user.has_perm('judge.see_restricted_problem') or not problem.is_restricted:
+            if user.has_perm('judge.see_restricted_problem') or not problem.is_restricted:
                 return True
         return False
 

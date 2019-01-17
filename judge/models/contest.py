@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
-from django.db.models import Max, Q
+from django.db.models import Max, F, Q
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -163,21 +163,15 @@ class Contest(models.Model):
             return cls.objects.none()
 
         profile = user.profile
-        queryset = cls.objects.all().defer('description')
+        queryset = cls.objects.all().defer('description', 'registration_page')
 
         if profile.is_contest_account:
             queryset = queryset.filter(organizations__in=profile.organizations.all())
 
         if not user.has_perm('judge.see_private_contest'):
-            q = Q(is_public=True)
-            if user.is_authenticated:
-                q |= Q(organizers=profile)
-            queryset = queryset.filter(q)
+            queryset = queryset.filter(Q(is_public=True) | Q(organizers=profile))
         if not user.has_perm('judge.edit_all_contest'):
-            q = Q(is_private=False)
-            if user.is_authenticated:
-                q |= Q(organizations__in=profile.organizations.all())
-            queryset = queryset.filter(q)
+            queryset = queryset.filter(Q(is_private=False) | Q(organizations__in=profile.organizations.all()))
         return queryset.distinct()
 
 
@@ -381,10 +375,12 @@ class ContestParticipation(models.Model):
         cumtime = 0
         for problem in self.contest.contest_problems.all():
             solution = problem.submissions.filter(participation=self, points__gt=0) \
-                .values('submission__user_id').annotate(time=Max('submission__date'))
-            if not solution:
+                                          .annotate(best=Max('points')) \
+                                          .filter(points=F('best')) \
+                                          .aggregate(time=Max('submission__date'))
+            if solution['time'] is None:
                 continue
-            dt = solution[0]['time'] - self.start
+            dt = solution['time'] - self.start
             cumtime += dt.total_seconds()
         self.cumtime = cumtime
         self.save()
