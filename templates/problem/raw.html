@@ -39,10 +39,31 @@
 </head>
 
 <body>
-<h2 style="color:#393630; display: inline-block">{{ problem_name }}</h2>
+<h2 style="color:#393630; display: inline-block;">{{ problem_name }}</h2>
 <hr>
 <div class="content-description printing">
     {{ description|markdown('problem', 'tex' if math_engine == 'jax' else math_engine)|reference|absolutify(url)|str|safe }}
+</div>
+<hr>
+<br>
+<div>
+    <span>
+        <b>Time Limit:</b> {{ problem.time_limit }}s
+        <ul style="margin-top: 0.0em">
+        {% for name, limit in problem.language_time_limit %}
+            <li><b>{{ name }}</b>: {{ limit }}s</li>
+        {% endfor %}
+        </ul>
+    </span>
+    <br />
+    <span>
+        <b>Memory Limit:</b> {{ problem.memory_limit | kbsimpleformat}}
+        <ul style="margin-top: 0.0em">
+        {% for name, limit in problem.language_memory_limit %}
+            <li><b>{{ name }}</b>: {{ limit | kbsimpleformat}}</li>
+        {% endfor %}
+        </ul>
+    </span>
 </div>
 {% if math_engine == 'jax' %}
     <script type="text/javascript" src="mathjax_config.js"></script>
