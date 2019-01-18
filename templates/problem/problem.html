@@ -280,9 +280,9 @@
 {% endblock %}
 
 {% block post_description_end %}
-    {% if request.user.is_authenticated and not request.user.profile.mute %}
+    {% if request.user.is_authenticated and not request.profile.mute %}
         <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
-            {%- if contest_problem and contest_problem.contest.use_clarifications -%}
+            {%- if contest_problem and contest_problem.contest.use_clarifications and request.profile.current_contest.live -%}
                 {{ _('Request clarification') }}
             {%- else -%}
                 {{ _('Report an issue') }}
