@@ -118,11 +118,12 @@ class Contest(models.Model):
     access_code = models.CharField(verbose_name=_('access code'), blank=True, default='', max_length=255,
                                    help_text=_('An optional code to prompt contestants before they are allowed '
                                                'to join the contest. Leave it blank to disable.'))
+    banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
+                                          help_text=_('Bans the selected users from joining this contest.'))
     time_bonus = models.IntegerField(verbose_name=_('time bonus'),
                                      help_text=_('Number of minutes to award an extra point for submitting '
                                                  'before the contest end. Leave as 0 for no time bonus.'),
-                                     default=0)
-    
+                                     default=0)    
     first_submission_bonus = models.IntegerField(verbose_name=_('first try bonus'),
                                                  help_text=_('Bonus points for fully solving on first submission.'),
                                                  default=0)

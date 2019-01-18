@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0084_merge_20190103_2023'),
+        ('judge', '0083_add_display_ranks'),
     ]
 
     operations = [

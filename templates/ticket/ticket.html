@@ -382,3 +382,7 @@
         </div>
     </div>
 {% endblock %}
+
+{% block bodyend %}
+    {% if REQUIRE_JAX %}{% include "mathjax-load.html" %}{% endif %}
+{% endblock %}
