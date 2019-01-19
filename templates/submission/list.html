@@ -75,8 +75,10 @@
                     CE: '#42586d',
                     ERR: '#ffa71c',
                 };
-
-                var ctx = $('#status-graph').find('canvas')[0].getContext('2d');
+                var canvas = $('#status-graph').find('canvas');
+                var ctx = canvas[0].getContext('2d');
+                ctx.canvas.width = canvas.width(); // resize to default width
+                ctx.canvas.height = canvas.height(); // resize to default height
                 var font = $('body').css('font-family');
                 new Chart(ctx).Pie(raw_data.categories.map(function (entry) {
                     return {
@@ -90,7 +92,6 @@
                     tooltipFontFamily: font,
                     tooltipTitleFontFamily: font,
                 });
-
                 $('#total-submission-count').text(raw_data.total);
             }
 
