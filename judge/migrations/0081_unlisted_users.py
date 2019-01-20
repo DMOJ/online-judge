@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0079_remove_comment_title'),
+        ('judge', '0080_contest_banned_users'),
     ]
 
     operations = [
