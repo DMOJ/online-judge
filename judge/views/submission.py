@@ -399,6 +399,7 @@ class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissi
 
 
 def single_submission(request, submission_id, show_problem=True):
+    request.no_profile_update = True
     authenticated = request.user.is_authenticated
     submission = get_object_or_404(submission_related(Submission.objects.all()), id=int(submission_id))
 
@@ -417,6 +418,7 @@ def single_submission(request, submission_id, show_problem=True):
 
 
 def single_submission_query(request):
+    request.no_profile_update = True
     if 'id' not in request.GET or not request.GET['id'].isdigit():
         return HttpResponseBadRequest()
     try:
