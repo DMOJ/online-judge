@@ -47,6 +47,9 @@ def api_v1_contest_detail(request, contest):
         'start_time': contest.start_time.isoformat(),
         'end_time': contest.end_time.isoformat(),
         'tags': list(contest.tags.values_list('name', flat=True)),
+        'is_rated': contest.is_rated,
+        'rate_all': contest.is_rated and contest.rate_all,
+        'has_rating': contest.ratings.exists(),
         'problems': [
             {
                 'points': int(problem.points),
