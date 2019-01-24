@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
-from judge.models.profile import Profile
+from judge.models.profile import Organization, Profile
 
 __all__ = ['MiscConfig', 'validate_regex', 'NavigationBar', 'BlogPost', 'Solution']
 
@@ -71,6 +71,9 @@ class BlogPost(models.Model):
     content = models.TextField(verbose_name=_('post content'))
     summary = models.TextField(verbose_name=_('post summary'), blank=True)
     og_image = models.CharField(verbose_name=_('openGraph image'), default='', max_length=150, blank=True)
+    organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
+                                          help_text=_('If private, only these organizations may see the blog post.'))
+    is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
     def __unicode__(self):
         return self.title

@@ -29,8 +29,14 @@ class PostList(ListView):
                              orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
 
     def get_queryset(self):
-        return (BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).order_by('-sticky', '-publish_on')
-                        .prefetch_related('authors__user'))
+        queryset = BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()) \
+                                   .order_by('-sticky', '-publish_on').prefetch_related('authors__user', 'organizations')
+        if not self.request.user.has_perm('judge.edit_all_post'):
+            filter = Q(is_organization_private=False)
+            if self.request.user.is_authenticated:
+                filter |= Q(organizations__id__in=self.request.profile.organizations.all())
+            queryset = queryset.filter(filter)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data(**kwargs)
@@ -43,7 +49,7 @@ class PostList(ListView):
 
         context['has_clarifications'] = False
         if self.request.user.is_authenticated:
-            participation = self.request.user.profile.current_contest
+            participation = self.request.profile.current_contest
             if participation:
                 clarifications = ProblemClarification.objects.filter(problem__in=participation.contest.problems.all())
                 context['has_clarifications'] = clarifications.count() > 0
@@ -65,35 +71,28 @@ class PostList(ListView):
 
         # Dashboard stuff
         if self.request.user.is_authenticated:
-            user = self.request.user.profile
-            context['recently_attempted_problems'] = (Submission.objects.filter(user=user)
-                                                      .exclude(problem__id__in=user_completed_ids(user))
+            context['recently_attempted_problems'] = (Submission.objects.filter(user=self.request.profile)
+                                                      .exclude(problem__id__in=user_completed_ids(self.request.profile))
                                                       .values_list('problem__code', 'problem__name', 'problem__points')
                                                       .annotate(points=Max('points'), latest=Max('date'))
                                                       .order_by('-latest'))[:7]
 
         visible_contests = Contest.contests_list(self.request.user).order_by('start_time')
 
-        q = Q(is_private=False)
-        if self.request.user.is_authenticated:
-            q |= Q(organizations__in=user.organizations.all())
-        visible_contests = visible_contests.filter(q)
         context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
 
         if self.request.user.is_authenticated:
-            profile = self.request.user.profile
-            context['own_open_tickets'] = (Ticket.objects.filter(user=profile, is_open=True).order_by('-id')
+            context['own_open_tickets'] = (Ticket.objects.filter(user=self.request.profile, is_open=True).order_by('-id')
                                            .prefetch_related('linked_item').select_related('user__user'))
         else:
-            profile = None
             context['own_open_tickets'] = []
 
         # Superusers better be staffs, not the spell-casting kind either.
         if self.request.user.is_staff:
             tickets = (Ticket.objects.order_by('-id').filter(is_open=True).prefetch_related('linked_item')
                              .select_related('user__user'))
-            context['open_tickets'] = filter_visible_tickets(tickets, self.request.user, profile)[:10]
+            context['open_tickets'] = filter_visible_tickets(tickets, self.request.user, self.request.profile)[:10]
         else:
             context['open_tickets'] = []
         return context
@@ -103,7 +102,7 @@ class PostView(TitleMixin, CommentedDetailView):
     model = BlogPost
     pk_url_kwarg = 'id'
     context_object_name = 'post'
-    template_name = 'blog/content.html'
+    template_name = 'blog/blog.html'
 
     def get_title(self):
         return self.object.title
