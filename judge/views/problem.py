@@ -183,10 +183,11 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         
         can_edit = self.object.is_editable_by(user)
         context['can_edit_problem'] = can_edit
-        tickets = self.object.tickets.filter(is_open=True)
-        if not can_edit:
-            tickets.filter(own_ticket_filter(user.profile.id))
-        context['num_open_tickets'] = tickets.count()
+        if user.is_authenticated:
+            tickets = self.object.tickets.filter(is_open=True)
+            if not can_edit:
+                tickets.filter(own_ticket_filter(user.profile.id))
+            context['num_open_tickets'] = tickets.count()
 
         try:
             context['editorial'] = Solution.objects.get(problem=self.object)

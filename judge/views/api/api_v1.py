@@ -80,6 +80,9 @@ def api_v1_contest_detail(request, contest):
         'start_time': contest.start_time.isoformat(),
         'end_time': contest.end_time.isoformat(),
         'tags': list(contest.tags.values_list('name', flat=True)),
+        'is_rated': contest.is_rated,
+        'rate_all': contest.is_rated and contest.rate_all,
+        'has_rating': contest.ratings.exists(),
         'problems': [
             {
                 'points': int(problem.points),
@@ -132,17 +135,21 @@ def api_v1_problem_info(request, problem):
     if not p.is_accessible_by(user):
         raise Http404()
 
-    return JsonResponse({
+    resp = {
         'name': p.name,
         'authors': list(p.authors.values_list('user__username', flat=True)),
-        'types': list(p.types.values_list('full_name', flat=True)),
         'group': p.group.full_name,
         'time_limit': p.time_limit,
         'memory_limit': p.memory_limit,
-        'points': p.points,
-        'partial': p.partial,
         'languages': list(p.allowed_languages.values_list('key', flat=True)),
-    })
+    }
+
+    if user.profile.current_contest is not None:
+        resp['types'] = list(p.types.values_list('full_name', flat=True))
+        resp['points'] = p.points
+        resp['partial'] = p.partial
+
+    return JsonResponse(resp)
 
 
 def api_v1_user_list(request):
