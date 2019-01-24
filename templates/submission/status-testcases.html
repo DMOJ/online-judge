@@ -25,6 +25,28 @@
             <h3>{{ _('Execution Results') }}</h3>
         {% endif %}
         <br>
+        {% for batch in batches %}
+            {% if batch.id %}
+                {% set cases = [batch.last_case] %}
+            {% else %}
+                {% set cases = batch.cases %}
+            {% endif %}
+            {% set graded = not loop.last or submission.is_graded %}
+            {% for case in cases %}
+                {% if not graded and loop.last %}
+                    <span class="fa fa-spinner"></span>
+                {% elif case.status == "AC" %}
+                    <span class="fa fa-check case-AC"></span>
+                {% elif case.status == "SC" %}
+                    <span class="case-SC">&ndash;</span>
+                {% else %}
+                    <a href="#{{ case.id }}">
+                        <span class="fa fa-times case-{{ case.status }} case-bad"></span>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        <br><br>
         {% set test_case_id = counter() %}
         {% for batch in batches %}
             {% if batch.id %}
@@ -96,9 +118,12 @@
             <br>
             {% if submission.result != "AB" %}
                 <b>{{ _('Resources:') }}</b>
-                {% if submission.result != "TLE" %}
+                {% if submission.result == "TLE" %}
+                    <span>---,</span>
+                {% else %}
                     <span title="{{ submission.time }}s">{{ submission.time|floatformat(3) }}s,</span>
                 {% endif %}
+
                 {{ submission.memory|kbdetailformat }}
                 <br>
                 {% if is_pretest %}

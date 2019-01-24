@@ -78,6 +78,7 @@ def make_batch(batch, cases):
     if batch:
         result['points'] = min(map(attrgetter('points'), cases))
         result['total'] = max(map(attrgetter('total'), cases))
+        result['last_case'] = next((case for case in cases if case.status != 'AC'), cases[0])
     return result
 
 
