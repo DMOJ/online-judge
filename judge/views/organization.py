@@ -1,6 +1,7 @@
 from itertools import chain
 
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
@@ -118,8 +119,14 @@ class JoinOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
         if profile.organizations.filter(id=org.id).exists():
             return generic_message(request, _('Joining organization'), _('You are already in the organization.'))
+
         if not org.is_open:
             return generic_message(request, _('Joining organization'), _('This organization is not open.'))
+
+        max_orgs = getattr(settings, 'MAX_USER_ORGANIZATION_COUNT', 3)
+        if profile.organizations.filter(is_open=True).count() >= max_orgs:
+            return generic_message(request, _('Joining organization'), _('You may not be part of more than {count} public organizations.').format(count=max_orgs))
+
         profile.organizations.add(org)
         profile.save()
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
