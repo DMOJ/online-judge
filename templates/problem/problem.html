@@ -224,7 +224,7 @@
             <div class="toggle open unselectable">
                 <i class="fa fa-chevron-right fa-fw"></i>{{ _('Allowed languages') }}
             </div>
-            <div style="margin-bottom:-1em" class="toggled">
+            <div class="toggled">
                 {% with usable=problem.usable_common_names, langs=problem.languages_list() %}
                     {% for lang in langs %}
                         {%- if lang in usable -%}
