@@ -122,6 +122,14 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
 
 
+class UserDashboard(UserPage):
+    template_name = 'user/user-dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserDashboard, self).get_context_data(**kwargs)
+        return context
+
+
 class UserAboutPage(UserPage):
     template_name = 'user/user-about.html'
 

@@ -83,7 +83,12 @@ class BlogPost(models.Model):
 
     def can_see(self, user):
         if self.visible and self.publish_on <= timezone.now():
-            return True
+            if not self.is_organization_private:
+                return True
+            if user.is_authenticated and \
+               self.organizations.filter(id__in=user.profile.organizations.all()).exists():
+                return True
+
         if user.has_perm('judge.edit_all_post'):
             return True
         return user.is_authenticated and self.authors.filter(id=user.profile.id).exists()

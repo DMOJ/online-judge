@@ -116,9 +116,9 @@
                     </div>
                 </div>
             </div>
-            {% if is_member or can_edit %}
+            {% if (is_member or can_edit) and new_problems %}
                 <div class="blog-sidebox sidebox">
-                    <h3>{{ _('New organization problems') }} <i class="fa fa-puzzle-piece"></i>
+                    <h3>{{ _('New Private Problems') }} <i class="fa fa-puzzle-piece"></i>
                     </h3>
                     <div class="sidebox-content">
                         <ul class="problem-list">

@@ -1,6 +1,9 @@
 {% extends "tabs-base.html" %}
 
 {% block tabs %}
+    {% if user.user == request.user %}
+        {{ make_tab('dashboard', 'fa-tachometer', url('user_dashboard'), _('Dashboard')) }}
+    {% endif %}
     {{ make_tab('about', 'fa-info-circle', url('user_page', user.user.username), _('About')) }}
     {{ make_tab('problems', 'fa-puzzle-piece', url('user_problems', user.user.username), _('Problems')) }}
     {% if request.user.is_superuser and user.user != request.user and not user.user.is_superuser %}
