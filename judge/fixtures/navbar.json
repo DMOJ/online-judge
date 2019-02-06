@@ -7,7 +7,7 @@
             "lft": 1,
             "order": 1,
             "parent": null,
-            "path": "/problems/",
+            "path": "problems/",
             "regex": "^/problem",
             "rght": 2,
             "tree_id": 1
@@ -23,7 +23,7 @@
             "lft": 1,
             "order": 2,
             "parent": null,
-            "path": "/submissions/",
+            "path": "submissions/",
             "regex": "^/submi|^/src/",
             "rght": 2,
             "tree_id": 2
@@ -39,7 +39,7 @@
             "lft": 1,
             "order": 3,
             "parent": null,
-            "path": "/users/",
+            "path": "users/",
             "regex": "^/user",
             "rght": 2,
             "tree_id": 3
@@ -55,7 +55,7 @@
             "lft": 1,
             "order": 5,
             "parent": null,
-            "path": "/contests/",
+            "path": "contests/",
             "regex": "^/contest",
             "rght": 2,
             "tree_id": 4
@@ -71,7 +71,7 @@
             "lft": 1,
             "order": 6,
             "parent": null,
-            "path": "/about/",
+            "path": "about/",
             "regex": "^/about/$",
             "rght": 4,
             "tree_id": 5
@@ -87,7 +87,7 @@
             "lft": 2,
             "order": 7,
             "parent": 6,
-            "path": "/status/",
+            "path": "status/",
             "regex": "^/status/$|^/judge/",
             "rght": 3,
             "tree_id": 5
