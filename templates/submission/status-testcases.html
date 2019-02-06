@@ -95,6 +95,14 @@
         {% if submission.is_graded %}
             <br>
             {% if submission.result != "AB" %}
+                <b>{{ _('Resources:') }}</b>
+                {% if submission.result == "TLE" %}
+                    <span>---,</span>
+                {% else %}
+                    <span title="{{ submission.time }}s">{{ submission.time|floatformat(3) }}s,</span>
+                {% endif %}
+                {{ submission.memory|kbdetailformat }}
+                <br>
                 {% if is_pretest %}
                     <b>{{ _('Final pretest score:') }}</b>
                 {% else %}
