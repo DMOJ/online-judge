@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
@@ -62,8 +63,18 @@ class ContestProblemInline(admin.TabularInline):
     model = ContestProblem
     verbose_name = _('Problem')
     verbose_name_plural = 'Problems'
-    fields = ('problem', 'points', 'partial', 'is_pretested', 'max_submissions', 'output_prefix_override', 'order')
+    fields = ('problem', 'points', 'partial', 'is_pretested', 'max_submissions', 'output_prefix_override', 'order',
+              'rejudge_column')
+    readonly_fields = ('rejudge_column',)
     form = ContestProblemInlineForm
+
+    def rejudge_column(self, obj):
+        if obj.id is None:
+            return ''
+        return '<a class="button rejudge-link" href="%s">Rejudge</a>' % reverse('admin:judge_contest_rejudge',
+                                                                                args=(obj.contest.id, obj.id))
+    rejudge_column.short_description = ''
+    rejudge_column.allow_tags = True
 
 
 class ContestForm(ModelForm):
@@ -148,7 +159,29 @@ class ContestAdmin(VersionAdmin):
 
     def get_urls(self):
         return [url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
-                url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate')] + super(ContestAdmin, self).get_urls()
+                url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
+                url(r'^(\d+)/judge/(\d+)/$', self.rejudge_view, name='judge_contest_rejudge')] + super(ContestAdmin, self).get_urls()
+
+    def rejudge_view(self, request, contest_id, problem_id):
+        if not request.user.has_perm('judge.rejudge_submission'):
+            self.message_user(request, ugettext('You do not have the permission to rejudge submissions.'),
+                              level=messages.ERROR)
+            return
+
+        queryset = ContestSubmission.objects.filter(problem_id=problem_id).select_related('submission')
+        if not request.user.has_perm('judge.rejudge_submission_lot') and \
+                len(queryset) > getattr(settings, 'REJUDGE_SUBMISSION_LIMIT', 10):
+            self.message_user(request, ugettext('You do not have the permission to rejudge THAT many submissions.'),
+                              level=messages.ERROR)
+            return
+
+        for model in queryset:
+            model.submission.judge(rejudge=True)
+
+        self.message_user(request, ungettext('%d submission were successfully scheduled for rejudging.',
+                                             '%d submissions were successfully scheduled for rejudging.',
+                                             len(queryset)) % len(queryset))
+        return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest_id,)))
 
     def rate_all_view(self, request):
         if not request.user.has_perm('judge.contest_rating'):

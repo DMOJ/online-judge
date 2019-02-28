@@ -4,7 +4,10 @@
 {% block extrahead %}{{ block.super }}
     <script>
         django.jQuery(function ($) {
-            $('.reratelink').appendTo('div#bottombar').show();
+            $('.rerate-link').appendTo('div#bottombar').show();
+            $('.rejudge-link').click(function () {
+                return confirm('{{ _('Are you sure you want to rejudge ALL the submissions?') }}');
+            });
         });
     </script>
 {% endblock extrahead %}
@@ -12,7 +15,7 @@
 {% block after_field_sets %}{{ block.super }}
     {% if original and original.is_rated and perms.judge.contest_rating %}
         <a style="display: none" title="{% trans "Rate" %}" href="{% url 'admin:judge_contest_rate' original.pk %}"
-           class="button reratelink">
+           class="button rerate-link">
             <i class="fa fa-lg fa-signal"></i>
             <span class="text">{% trans "Rate" %}</span>
         </a>
