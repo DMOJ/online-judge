@@ -1,0 +1,20 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{ block.super }}
+    <script>
+        django.jQuery(function ($) {
+            $('.submissions-link').appendTo('div#bottombar').show();
+        });
+    </script>
+{% endblock extrahead %}
+
+{% block after_field_sets %}{{ block.super }}
+    {% if original %}
+        <a style="display: none" title="{% trans "View Submissions" %}" class="button submissions-link"
+           href="{% url 'admin:judge_submission_changelist' %}?problem__code={{ original.code }}">
+            <i class="fa fa-lg fa-search-plus"></i>
+            <span class="text">{% trans "View Submissions" %}</span>
+        </a>
+    {% endif %}
+{% endblock %}
