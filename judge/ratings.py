@@ -118,7 +118,7 @@ def rate_contest(contest):
     cursor.close()
 
     users = contest.users.order_by('-score', 'cumtime').annotate(submissions=Count('submission')) \
-                   .exclude(user_id__in=contest.rate_exclude.all()).filter(virtual=0)\
+                   .exclude(user_id__in=contest.rate_exclude.all()).filter(virtual=0, user__is_unlisted=False) \
                    .values_list('id', 'user_id', 'score', 'cumtime')
     if not contest.rate_all:
         users = users.filter(submissions__gt=0)

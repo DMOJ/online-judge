@@ -39,7 +39,7 @@ def api_v1_contest_detail(request, contest):
 
     problems = list(contest.contest_problems.select_related('problem')
                     .defer('problem__description').order_by('order')) if in_contest else []
-    users = base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
+    users = base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0, user__is_unlisted=False)
                                       .prefetch_related('user__organizations')
                                       .order_by('-score', 'cumtime')) if can_see_rankings else []
     return JsonResponse({
@@ -105,7 +105,7 @@ def api_v1_problem_info(request, problem):
 
 
 def api_v1_user_list(request):
-    queryset = Profile.objects.values_list('user__username', 'name', 'points', 'display_rank')
+    queryset = Profile.objects.filter(is_unlisted=False).values_list('user__username', 'name', 'points', 'display_rank')
     return JsonResponse({username: {
         'display_name': name,
         'points': points,
@@ -128,12 +128,13 @@ def api_v1_user_info(request, user):
     last_rating = profile.ratings.last()
 
     contest_history = {}
-    for contest_key, rating, volatility in ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False) \
-                                                               .values_list('contest__key', 'rating__rating', 'rating__volatility'):
-        contest_history[contest_key] = {
-            'rating': rating,
-            'volatility': volatility,
-        }
+    if not profile.is_unlisted:
+        for contest_key, rating, volatility in ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False) \
+                                                                   .values_list('contest__key', 'rating__rating', 'rating__volatility'):
+            contest_history[contest_key] = {
+                'rating': rating,
+                'volatility': volatility,
+            }
 
     resp['contests'] = {
         'current_rating': last_rating.rating if last_rating else None,
