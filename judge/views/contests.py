@@ -1,3 +1,5 @@
+import json
+import re
 from calendar import Calendar, SUNDAY
 from collections import namedtuple, defaultdict
 from functools import partial
@@ -246,8 +248,13 @@ class ContestRegister(LoginRequiredMixin, ContestMixin, BaseDetailView):
         error = self.access_check(request)
         if error is not None:
             return error
+
+        data = {}
+        for field in re.findall('name="([\w:\-]+)"', self.object.registration_page):
+            data[field] = request.POST.get(field)
+        
         try:
-            registration = ContestRegistration.objects.create(contest=self.object, user=request.user.profile)
+            registration = ContestRegistration.objects.create(contest=self.object, user=request.profile, data=data)
         except IntegrityError:
             pass
         return HttpResponseRedirect(reverse('contest_view', args=(self.object.key,)))
@@ -294,6 +301,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                          'You are permanently barred from joining this contest.'))
 
         if contest.ended:
+            if contest.access_code and access_code != contest.access_code:
+                raise ContestAccessDenied()
             while True:
                 virtual_id = (ContestParticipation.objects.filter(contest=contest, user=profile)
                               .aggregate(virtual_id=Max('virtual'))['virtual_id'] or 0) + 1

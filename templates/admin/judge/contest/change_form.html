@@ -6,6 +6,10 @@
         django.jQuery(function ($) {
             $('.reratelink').appendTo('div#bottombar').show();
             $('.unfreezelink').appendTo('div#bottombar').show();
+            $('.rejudgelink').click(function () {
+                if (confirm('{{ _('Are you sure you want to rejudge ALL the submissions?') }}'))
+                    location.href = this.getAttribute("href");
+            });
         });
     </script>
 {% endblock extrahead %}

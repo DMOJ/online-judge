@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 
-{% block media %}
+{% block js_media %}
     <style>
         .button-line {
             text-align: right;
         }
     </style>
+    <script type="text/javascript">
+        $(function () {
+            $('#register-link').click(function (event) {
+                event.preventDefault();
+                if (confirm('Are you sure you want to register?'))
+                    $(this).closest("form").submit();
+            })
+        });
+    </script>
 {% endblock %}
 
 {% block body %}
@@ -13,7 +22,7 @@
         {% csrf_token %}
         {{ contest.registration_page|markdown('solution', MATH_ENGINE)|reference }}
         <p class="button-line">
-            <button type="submit">{{ _('Register') }}</button>
+            <button id="register-link" type="submit">{{ _('Register') }}</button>
         </p>
     </form>
 {% endblock %}

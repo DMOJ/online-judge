@@ -62,8 +62,16 @@ class ContestProblemInline(admin.TabularInline):
     model = ContestProblem
     verbose_name = _('Problem')
     verbose_name_plural = 'Problems'
-    fields = ('problem', 'points', 'partial', 'is_pretested', 'max_submissions', 'output_prefix_override', 'order')
+    fields = ('problem', 'points', 'partial', 'is_pretested', 'max_submissions', 'output_prefix_override', 'order', 'rejudge_column')
+    readonly_fields = ('rejudge_column',)
     form = ContestProblemInlineForm
+
+    def rejudge_column(self, obj):
+        if obj.id is None:
+            return ''
+        return '<input class="rejudgelink" href="%s" type="button" value="Rejudge"/>' % reverse('admin:judge_contest_rejudge', args=(obj.contest.id, obj.id,))
+    rejudge_column.short_description = ''
+    rejudge_column.allow_tags = True
 
 
 class ContestForm(ModelForm):
@@ -156,8 +164,27 @@ class ContestAdmin(VersionAdmin):
     def get_urls(self):
         return [url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
                 url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
+                url(r'^(\d+)/judge/(\d+)/$', self.rejudge_view, name='judge_contest_rejudge'),
                 url(r'^(\d+)/unfreeze/$', self.unfreeze_view, name='judge_contest_unfreeze')
                 ] + super(ContestAdmin, self).get_urls()
+
+    def rejudge_view(self, request, contest_id, problem_id):
+        if not request.user.has_perm('judge.rejudge_submission'):
+            self.message_user(request, ugettext('You do not have the permission to rejudge submissions.'),
+                              level=messages.ERROR)
+            return
+        queryset = ContestSubmission.objects.filter(problem_id=problem_id)
+        if queryset.count() > 10 and not request.user.has_perm('judge.rejudge_submission_lot'):
+            self.message_user(request, ugettext('You do not have the permission to rejudge THAT many submissions.'),
+                              level=messages.ERROR)
+            return
+        judged = len(queryset)
+        for model in queryset:
+            model.submission.judge(rejudge=True)
+        self.message_user(request, ungettext('%d submission were successfully scheduled for rejudging.',
+                                             '%d submissions were successfully scheduled for rejudging.',
+                                             judged) % judged)
+        return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest_id,)))
 
     def unfreeze_view(self, request, id):
         if not request.user.has_perm('judge.contest_frozen_state'):
@@ -263,7 +290,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     show_virtual.admin_order_field = 'virtual'
 
 class ContestRegistrationAdmin(admin.ModelAdmin):
-    fields = ('contest', 'user', 'registration_time')
+    fields = ('contest', 'user', 'registration_time', 'data')
     list_display = ('contest', 'username', 'registration_time')
     search_fields = ('contest__key', 'contest__name', 'user__user__username', 'user__name')
     form = ContestParticipationForm

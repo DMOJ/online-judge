@@ -11,8 +11,6 @@ from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submissio
 from judge.models import Ticket
 from judge.utils.cachedict import CacheDict
 from judge.utils.diggpaginator import DiggPaginator
-from judge.utils.problems import user_completed_ids
-from judge.utils.tickets import filter_visible_tickets
 from judge.utils.views import TitleMixin
 
 
@@ -69,30 +67,19 @@ class PostList(ListView):
 
         now = timezone.now()
 
-        # Dashboard stuff
-        if self.request.user.is_authenticated:
-            context['recently_attempted_problems'] = (Submission.objects.filter(user=self.request.profile)
-                                                      .exclude(problem__id__in=user_completed_ids(self.request.profile))
-                                                      .values_list('problem__code', 'problem__name', 'problem__points')
-                                                      .annotate(points=Max('points'), latest=Max('date'))
-                                                      .order_by('-latest'))[:7]
-
         visible_contests = Contest.contests_list(self.request.user).order_by('start_time')
 
         context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
 
         if self.request.user.is_authenticated:
-            context['own_open_tickets'] = (Ticket.objects.filter(user=self.request.profile, is_open=True).order_by('-id')
-                                           .prefetch_related('linked_item').select_related('user__user'))
+            context['own_open_tickets'] = Ticket.tickets_list(self.request.user, author=self.request.user)
         else:
             context['own_open_tickets'] = []
 
         # Superusers better be staffs, not the spell-casting kind either.
         if self.request.user.is_staff:
-            tickets = (Ticket.objects.order_by('-id').filter(is_open=True).prefetch_related('linked_item')
-                             .select_related('user__user'))
-            context['open_tickets'] = filter_visible_tickets(tickets, self.request.user, self.request.profile)[:10]
+            context['open_tickets'] = Ticket.tickets_list(self.request.user)[:10]
         else:
             context['open_tickets'] = []
         return context

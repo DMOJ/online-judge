@@ -55,9 +55,12 @@ class Comment(MPTTModel):
         order_insertion_by = ['-time']
 
     @classmethod
-    def most_recent(cls, user, n, batch=None):
+    def most_recent(cls, user, n, batch=None, author=None):
         queryset = cls.objects.filter(hidden=False).select_related('author__user') \
             .defer('author__about', 'body').order_by('-id')
+
+        if author is not None:
+            queryset = queryset.filter(author=author.profile)
 
         problem_access = CacheDict(lambda code: Problem.objects.get(code=code).is_accessible_by(user))
         contest_access = CacheDict(lambda key: Contest.objects.get(key=key).is_accessible_by(user))

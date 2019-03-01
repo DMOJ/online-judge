@@ -26,9 +26,10 @@ from django.views.generic import DetailView, ListView, TemplateView
 from reversion import revisions
 
 from judge.forms import ProfileForm, newsletter_id
-from judge.models import Profile, Submission, Rating
+from judge.models import Comment, Problem, Profile, Rating, Submission
 from judge.performance_points import get_pp_breakdown, PP_ENTRIES
 from judge.ratings import rating_class, rating_progress
+from judge.utils.cachedict import CacheDict
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
@@ -125,8 +126,23 @@ EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
 class UserDashboard(UserPage):
     template_name = 'user/user-dashboard.html'
 
+    def get_title(self):
+        return _('Dashboard')
+
     def get_context_data(self, **kwargs):
+        if not self.request.user.is_authenticated:
+            raise Http404()
+        user = self.request.user
+        profile = self.request.profile
         context = super(UserDashboard, self).get_context_data(**kwargs)
+        context['recently_attempted_problems'] = (Submission.objects.filter(user=profile, problem__is_public=True)
+                                                  .exclude(problem__id__in=user_completed_ids(profile))
+                                                  .values_list('problem__code', 'problem__name', 'problem__points')
+                                                  .annotate(points=Max('points'), latest=Max('date'))
+                                                  .order_by('-latest'))[:7]
+        context['own_comments'] = Comment.most_recent(user, 10, author=user)
+        context['page_titles'] = CacheDict(lambda page: Comment.get_page_title(page))
+
         return context
 
 

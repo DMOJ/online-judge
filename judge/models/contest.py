@@ -69,7 +69,7 @@ class Contest(models.Model):
                                                 help_text=_('Whether the user must be registered before being able to join the contest.'),
                                                 default=False)
     registration_page = models.TextField(verbose_name=_('registration page'),
-                                         help_text=_('Flatpage to display when registering.'),
+                                         help_text=_('Flatpage to display when registering. Use name="" for form identifiers that will be stored in the registrations.'),
                                          blank=True, null=True)
     registration_start_time = models.DateTimeField(verbose_name=_('registration start time'),
                                                    help_text=_('Allow registration starting at the specified time.'),
@@ -305,6 +305,7 @@ class ContestRegistration(models.Model):
     contest = models.ForeignKey(Contest, verbose_name=_('associated contest'), related_name='registrants')
     user = models.ForeignKey(Profile, verbose_name=_('registrant'), related_name='contest_registrations')
     registration_time = models.DateTimeField(verbose_name=_('time of registration'), default=timezone.now)
+    data = models.TextField(verbose_name=_('user registration data'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('contest registration')

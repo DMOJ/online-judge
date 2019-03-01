@@ -282,10 +282,7 @@ class Problem(models.Model):
     update_stats.alters_data = True
 
     def _get_limits(self, key):
-        global_limit = {
-            'time_limit': self.time_limit,
-            'memory_limit': self.memory_limit,
-        }[key]
+        global_limit = getattr(self, key)
         limits = {limit['language_id']: (limit['language__name'], limit[key])
                   for limit in self.language_limits.values('language_id', 'language__name', key) if limit[key] != global_limit}
         limit_ids = set(limits.keys())
