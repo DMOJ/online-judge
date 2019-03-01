@@ -77,7 +77,7 @@
                 var ctx = $('#status-graph').find('canvas')[0].getContext('2d');
                 var font = $('body').css('font-family');
                 if (typeof chart != "undefined") {
-                  chart.destroy();
+                    chart.destroy();
                 }
                 chart = new Chart(ctx).Pie(raw_data.categories.map(function (entry) {
                     return {
