@@ -360,7 +360,7 @@
             <hr>
             <section class="message new-message">
                 <div class="info">
-                    <a href="{{ url('user_page') }}" class="user">
+                    <a href="{{ url('user_page', request.user.username) }}" class="user">
                         <img src="{{ gravatar(request.user) }}" class="gravatar">
                         <div class="username {{ request.user.profile.css_class }}">{{ request.user.username }}</div>
                     </a>

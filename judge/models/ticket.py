@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from judge.models.profile import Profile
-
+from judge.utils.tickets import filter_visible_tickets
 
 class Ticket(models.Model):
     title = models.CharField(max_length=100, verbose_name=_('ticket title'))
@@ -18,6 +18,15 @@ class Ticket(models.Model):
     object_id = models.PositiveIntegerField(verbose_name=_('linked item ID'))
     linked_item = GenericForeignKey()
     is_open = models.BooleanField(verbose_name=_('is ticket open?'), default=True)
+
+    @classmethod
+    def tickets_list(cls, user, author=None):
+        queryset = cls.objects.filter(is_open=True).order_by('-id') \
+                              .prefetch_related('linked_item').select_related('user__user')
+        if author is not None:
+            queryset = queryset.filter(user=author.profile)
+
+        return filter_visible_tickets(queryset, user)
 
 
 class TicketMessage(models.Model):

@@ -26,7 +26,7 @@ class TexoidRenderer(object):
         self.cache.create(hash)
 
         try:
-            response = requests.post(settings.TEXOID_URL, body=utf8bytes(document), headers={
+            response = requests.post(settings.TEXOID_URL, data=utf8bytes(document), headers={
                 'Content-Type': 'application/x-tex'
             })
             response.raise_for_status()
