@@ -72,12 +72,12 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
 
     def get_queryset(self):
         return super(ContestList, self).get_queryset() \
-            .order_by('-start_time', 'key').prefetch_related('tags', 'organizations')
+            .order_by('-start_time', 'key').prefetch_related('tags', 'organizations', 'organizers')
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
         now = timezone.now()
-        past, present, future = [], [], []
+        past, present, active, future = [], [], [], []
         for contest in self.get_queryset():
             if contest.end_time < now:
                 past.append(contest)
@@ -85,7 +85,17 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
                 future.append(contest)
             else:
                 present.append(contest)
+
+        if self.request.user.is_authenticated:
+            for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.profile, contest_id__in=present) \
+                                                             .select_related('contest').prefetch_related('contest__organizers'):
+                if not participation.ended:
+                    active.append(participation)
+                    present.remove(participation.contest)
+
+        active.sort(key=attrgetter('end_time'))
         future.sort(key=attrgetter('start_time'))
+        context['active_participations'] = active
         context['current_contests'] = present
         context['past_contests'] = past
         context['future_contests'] = future
@@ -332,7 +342,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
             self.year = int(kwargs['year'])
             self.month = int(kwargs['month'])
         except (KeyError, ValueError):
-            raise ImproperlyConfigured(_('ContestCalender requires integer year and month'))
+            raise ImproperlyConfigured(_('ContestCalendar requires integer year and month'))
         self.today = timezone.now().date()
         return self.render()
 
