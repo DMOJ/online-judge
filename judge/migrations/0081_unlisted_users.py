@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0083_add_display_ranks'),
+        ('judge', '0080_contest_banned_users'),
     ]
 
     operations = [
@@ -18,3 +18,4 @@ class Migration(migrations.Migration):
             field=models.BooleanField(default=False, help_text='User will not be ranked.', verbose_name='unlisted user'),
         ),
     ]
+

@@ -4,11 +4,13 @@
 {% block extrahead %}{{ block.super }}
     <script>
         django.jQuery(function ($) {
-            $('.reratelink').appendTo('div#bottombar').show();
-            $('.unfreezelink').appendTo('div#bottombar').show();
-            $('.rejudgelink').click(function () {
-                if (confirm('{{ _('Are you sure you want to rejudge ALL the submissions?') }}'))
-                    location.href = this.getAttribute("href");
+            $('.rerate-link').appendTo('div#bottombar').show();
+            $('.unfreeze-link').appendTo('div#bottombar').show();
+            $('.rejudge-link').click(function () {
+                event.preventDefault();
+                if (confirm('{{ _('Are you sure you want to rejudge ALL the submissions?') }}')) {
+                    location.href = this.getAttribute('href');
+                }
             });
         });
     </script>
@@ -17,14 +19,14 @@
 {% block after_field_sets %}{{ block.super }}
     {% if original and original.is_rated and perms.judge.contest_rating %}
         <a style="display: none" title="{% trans "Rate" %}" href="{% url 'admin:judge_contest_rate' original.pk %}"
-           class="button reratelink">
+           class="button rerate-link">
             <i class="fa fa-lg fa-signal"></i>
             <span class="text">{% trans "Rate" %}</span>
         </a>
     {% endif %}
     {% if original and original.freeze_submissions and perms.judge.contest_frozen_state %}
         <a style="display: none" title="{% trans "Unfreeze" %}" href="{% url 'admin:judge_contest_unfreeze' original.pk %}"
-           class="button unfreezelink">
+           class="button unfreeze-link">
             <i class="fa fa-lg fa-unlock"></i>
             <span class="text">{% trans "Unfreeze" %}</span>
         </a>

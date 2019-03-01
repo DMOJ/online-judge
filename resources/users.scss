@@ -280,3 +280,27 @@ a.edit-profile {
         color: white;
     }
 }
+
+@media (min-width: 700px) {
+    .dashboard-container {
+        display: flex;
+    }
+
+    #dashboard-left {
+        flex: 60%;
+        margin-right: 0.5em;
+    }
+
+    #dashboard-right {
+        flex: 40%;
+    }
+}
+
+@media not all and (min-width: 700px) {
+    #dashboard-right {
+        float: none;
+        width: 100% !important;
+        position: static !important;
+        box-sizing: border-box;
+    }
+}

@@ -139,7 +139,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         return obj.problem.is_editor(request.user.profile)
     
     def lookup_allowed(self, key, value):
-        return super(SubmissionAdmin, self).lookup_allowed(key, value) or key in ['problem__code']
+        return super(SubmissionAdmin, self).lookup_allowed(key, value) or key in ('problem__code',)
 
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
