@@ -50,7 +50,9 @@ def judge_submission(submission, rejudge):
         updates['is_pretested'] = ContestSubmission.objects.filter(submission=submission) \
             .values_list('problem__contest__run_pretests_only', flat=True)[0]
     except IndexError:
-        pass
+        priority = 1
+    else:
+        priority = 0
 
     # This should prevent double rejudge issues by permitting only the judging of
     # QU (which is the initial state) and D (which is the final state).
@@ -72,7 +74,7 @@ def judge_submission(submission, rejudge):
             'problem-id': submission.problem.code,
             'language': submission.language.key,
             'source': submission.source,
-            'priority': 1 if rejudge else 0,
+            'priority': 2 if rejudge else priority,
         })
     except BaseException:
         logger.exception('Failed to send request to judge')

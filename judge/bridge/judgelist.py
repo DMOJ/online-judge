@@ -14,7 +14,7 @@ PriorityMarker = namedtuple('PriorityMarker', 'priority')
 
 
 class JudgeList(object):
-    priorities = 2
+    priorities = 3
 
     def __init__(self):
         self.queue = dllist()
