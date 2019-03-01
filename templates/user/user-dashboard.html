@@ -1,5 +1,19 @@
 {% extends "user/user-base.html" %}
 
+{% block user_media %}
+    <style>
+        .dashboard-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dashboard-content {
+            padding: 1em 0.9em;
+        }
+    </style>
+{% endblock %}
+
 {% block title_ruler %}{% endblock %}
 
 {% block title_row %}
@@ -7,7 +21,74 @@
     {% include "user/user-tabs.html" %}
 {% endblock %}
 
+{% macro format_datetime(datetime) %}
+    <div class="time" style="padding-left: 1.5em;">
+        <span data-unix="{{ datetime|utc|date("c") }}"
+              class="recent-time moment-time-toggle">
+            {% trans time=datetime|date(_("N j, Y, g:i a")) %}
+                on {{ time }}
+            {% endtrans %}
+        </span>
+    </span>
+{% endmacro %}
+
 {% block user_content %}
+    <div class="dashboard-container">
+        <div id="dashboard-left"> 
+            <div class="dashboard-box sidebox">
+                <h3>{{ _('Recently attempted problems') }} <i class="fa fa-pencil"></i></h3>
+                <div class="sidebox-content dashboard-content">
+                    <ul>
+                        {% for code, name, problem_points, user_points, s_date in recently_attempted_problems %}
+                            <li>
+                                <a href="{{ url('problem_detail', code) }}">{{ name }}</a>
+                                [<a href="{{ url('user_submissions', code, request.user.username) }}">
+                                {{- user_points }}/{{ problem_points|floatformat }}</a>]
+                                {{ format_datetime(s_date) }}
+                            </li>
+                        {% else %}
+                            <i>{{ _('You have not attempted any problems.') }}</i>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="dashboard-box sidebox">
+                <h3>{{  _('Recommended problems') }} <i class="fa fa-thumbs-up"></i></h3>
+                <div class="sidebox-content dashboard-content">
+                    <i>Coming soon.</i>
+                </div>
+            </div>
+            <div class="dashboard-box sidebox">
+                <h3>{{  _('Solved problem statistics') }} <i class="fa fa-bar-chart"></i></h3>
+                <div class="sidebox-content dashboard-content">
+                    <i>Coming soon.</i>
+                </div>
+            </div>
+        </div>
+        <div id="dashboard-right">
+            <div class="dashboard-box sidebox">
+                <h3>{{  _('My recent comments') }} <i class="fa fa-comment"></i></h3>
+                <div class="sidebox-content dashboard-content">
+                    <ul>
+                        {% for comment in own_comments %}
+                            <li>
+                                <a href="{{ comment.link }}#comment-{{ comment.id }}">{{ page_titles[comment.page] }}</a>
+                                {{ format_datetime(comment.time) }}
+                            </li>
+                        {% else %}
+                            <i>{{ _('You have not commented on any pages.') }}</i>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="dashboard-box sidebox">
+                <h3>{{  _('My open tickets') }} <i class="fa fa-exclamation-circle"></i></h3>
+                <div class="sidebox-content dashboard-content">
+                    <i>Coming soon.</i>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block bodyend %}

@@ -150,7 +150,7 @@ urlpatterns = [
         url(r'^find$', user.user_ranking_redirect, name='user_ranking_redirect'),
     ])),
 
-    url(r'^user$', user.UserAboutPage.as_view(), name='user_page'),
+    url(r'^user$', user.UserDashboard.as_view(), name='user_dashboard'),
     url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
     url(r'^user/(?P<user>[\w,:]+)', include([
         url(r'^$', user.UserAboutPage.as_view(), name='user_page'),
