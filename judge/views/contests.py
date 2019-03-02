@@ -34,7 +34,7 @@ from judge.models import Problem
 from judge.timezone import from_database_time
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
-from judge.utils.views import TitleMixin, generic_message
+from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestRegister', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'participation_list', 'own_participation_list', 'get_contest_ranking_list',
@@ -57,8 +57,9 @@ class ContestListMixin(object):
         return Contest.contests_list(self.request.user)
 
 
-class ContestList(TitleMixin, ContestListMixin, ListView):
+class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
     model = Contest
+    paginate_by = 20
     template_name = 'contest/list.html'
     title = ugettext_lazy('Contests')
 
@@ -85,6 +86,9 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
                     active.append(participation)
                     present.remove(participation.contest)
 
+        start = self.paginate_by * (context['page_obj'].number - 1)
+        past = past[start:start+self.paginate_by]
+
         active.sort(key=attrgetter('end_time'))
         future.sort(key=attrgetter('start_time'))
         context['active_participations'] = active
@@ -92,6 +96,7 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
         context['past_contests'] = past
         context['future_contests'] = future
         context['now'] = timezone.now()
+        context['first_page_href'] = '.'
         return context
 
 
