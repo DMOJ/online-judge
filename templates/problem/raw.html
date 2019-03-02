@@ -35,12 +35,49 @@
         #info-table td.key {
             font-weight: bold;
         }
+
+        .lang-limit {
+            margin-left: 1.5em;
+        }
+
+        .lang-name:after {
+            content: ": ";
+        }
+
+        .problem-info-entry {
+            vertical-align: top;
+            float: center;
+            padding: 0.6em;
+            display: inline-block;
+            text-align: left;
+        }
     </style>
 </head>
 
 <body>
-<h2 style="color:#393630; display: inline-block">{{ problem_name }}</h2>
+<h2 style="color:#393630; display: inline-block;">{{ problem_name }}</h2>
 <hr>
+<div align="center" style="position: relative;">
+    <div class="problem-info-entry">
+        <b>{{ _('Time Limit:') }}</b> {{ problem.time_limit }}s
+        {% for name, limit in problem.language_time_limit %}
+            <div class="lang-limit">
+                <span class="lang-name">{{ name }}</span>
+                <span>{{ limit }}s</span>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="problem-info-entry">
+        <b>{{ _('Memory Limit:') }}</b> {{ problem.memory_limit|kbsimpleformat}}
+        {% for name, limit in problem.language_memory_limit %}
+            <div class="lang-limit">
+                <span class="lang-name">{{ name }}</span>
+                <span>{{ limit|kbsimpleformat }}</span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<hr style="clear: both;">
 <div class="content-description printing">
     {{ description|markdown('problem', 'tex' if math_engine == 'jax' else math_engine)|reference|absolutify(url)|str|safe }}
 </div>
