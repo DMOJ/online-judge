@@ -288,9 +288,11 @@ class ProblemTicketListView(TicketList):
         if 'problem' not in self.kwargs:
             raise Http404()
         problem = Problem.objects.get(code=self.kwargs['problem'])
-        if not self.request.user.is_authenticated or not problem.is_editable_by(self.request.user):
-            raise Http404()
-        return problem.tickets.all()
+        if problem.is_editable_by(self.request.user):
+            return problem.tickets.all()
+        elif problem.is_accessible_by(self.request.user):
+            return problem.tickets.filter(own_ticket_filter(self.profile.id))
+        raise Http404()
 
 
 class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):

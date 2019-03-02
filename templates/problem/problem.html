@@ -139,6 +139,13 @@
         {% if not problem.is_manually_managed %}
             <div><a href="{{ url('problem_data', problem.code) }}">{{ _('Edit test data') }}</a></div>
         {% endif %}
+    {% elif request.user.is_authenticated and has_tickets %}
+        <hr>
+        <div>
+            <a href="{{ url('problem_ticket_list', problem.code) }}">{{ _('My tickets') }}
+                {% if num_open_tickets %}<span class="badge">{{ num_open_tickets }}</span>{% endif %}
+            </a>
+        </div>
     {% endif %}
 
     {% if perms.judge.clone_problem %}
