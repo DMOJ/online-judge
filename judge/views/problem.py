@@ -39,6 +39,7 @@ from judge.utils.opengraph import generate_opengraph
 from judge.utils.problems import contest_completed_ids, user_completed_ids, contest_attempted_ids, user_attempted_ids, \
     hot_problems
 from judge.utils.strings import safe_int_or_none, safe_float_or_none
+from judge.utils.tickets import own_ticket_filter
 from judge.utils.views import TitleMixin, generic_message, QueryStringSortMixin
 
 
@@ -179,8 +180,16 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['has_pdf_render'] = HAS_PDF
         context['completed_problem_ids'] = self.get_completed_problems()
         context['attempted_problems'] = self.get_attempted_problems()
-        context['num_open_tickets'] = self.object.tickets.filter(is_open=True).count()
-        context['can_edit_problem'] = self.object.is_editable_by(user)
+
+        can_edit = self.object.is_editable_by(user)
+        context['can_edit_problem'] = can_edit
+        if user.is_authenticated:
+            tickets = self.object.tickets
+            if not can_edit:
+                tickets = tickets.filter(own_ticket_filter(user.profile.id))
+            context['has_tickets'] = tickets.exists()
+            context['num_open_tickets'] = tickets.filter(is_open=True).count()
+
         try:
             context['editorial'] = Solution.objects.get(problem=self.object)
         except ObjectDoesNotExist:
