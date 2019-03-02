@@ -31,7 +31,7 @@ from judge.models import Problem
 from judge.timezone import from_database_time
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
-from judge.utils.views import TitleMixin, generic_message
+from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message
 
 __all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'participation_list', 'own_participation_list', 'get_contest_ranking_list',
@@ -65,23 +65,29 @@ class ContestListMixin(object):
         return queryset.distinct()
 
 
-class ContestList(TitleMixin, ContestListMixin, ListView):
+class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
     model = Contest
+    paginate_by = 20
     template_name = 'contest/list.html'
     title = ugettext_lazy('Contests')
+    context_object_name = 'past_contests'
 
-    def get_queryset(self):
+    @cached_property
+    def _now(self):
+        return timezone.now()
+
+    def _get_queryset(self):
         return super(ContestList, self).get_queryset() \
             .order_by('-start_time', 'key').prefetch_related('tags', 'organizations', 'organizers')
 
+    def get_queryset(self):
+        return self._get_queryset().filter(end_time__lt=self._now)
+
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
-        now = timezone.now()
-        past, present, active, future = [], [], [], []
-        for contest in self.get_queryset():
-            if contest.end_time < now:
-                past.append(contest)
-            elif contest.start_time > now:
+        present, active, future = [], [], []
+        for contest in self._get_queryset().exclude(end_time__lt=self._now):
+            if contest.start_time > self._now:
                 future.append(contest)
             else:
                 present.append(contest)
@@ -97,9 +103,9 @@ class ContestList(TitleMixin, ContestListMixin, ListView):
         future.sort(key=attrgetter('start_time'))
         context['active_participations'] = active
         context['current_contests'] = present
-        context['past_contests'] = past
         context['future_contests'] = future
-        context['now'] = timezone.now()
+        context['now'] = self._now
+        context['first_page_href'] = '.'
         return context
 
 
