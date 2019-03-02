@@ -10,6 +10,10 @@
             color: #777;
             padding-top: 0.5em;
         }
+
+        .content-description ul {
+            padding: 0 !important;
+        }
     </style>
 {% endblock %}
 
@@ -250,6 +254,11 @@
 
         {% if past_contests %}
             <h4>{{ _('Past Contests') }}</h4>
+            {% if page_obj and page_obj.num_pages > 1 %}
+                <div style="margin-bottom: 4px;">
+                    {% include "list-pages.html" %}
+                </div>
+            {% endif %}
             <table class="contest-list table striped">
                 <thead>
                 <tr>
@@ -283,6 +292,11 @@
                 {% endfor %}
                 </tbody>
             </table>
+            {% if page_obj and page_obj.num_pages > 1 %}
+                <div style="margin-top: 10px;">
+                    {% include "list-pages.html" %}
+                </div>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}
