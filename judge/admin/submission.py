@@ -1,6 +1,7 @@
 from functools import partial
 from operator import itemgetter
 
+from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.core.cache import cache
@@ -130,7 +131,8 @@ class SubmissionAdmin(admin.ModelAdmin):
                               level=messages.ERROR)
             return
         queryset = queryset.order_by('id')
-        if queryset.count() > 10 and not request.user.has_perm('judge.rejudge_submission_lot'):
+        if not request.user.has_perm('judge.rejudge_submission_lot') and \
+                queryset.count() > getattr(settings, 'REJUDGE_SUBMISSION_LIMIT', 10):
             self.message_user(request, ugettext('You do not have the permission to rejudge THAT many submissions.'),
                               level=messages.ERROR)
             return
