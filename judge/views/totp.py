@@ -100,7 +100,7 @@ class TOTPDisableView(TOTPView):
 
 
 class TOTPLoginView(SuccessURLAllowedHostsMixin, TOTPView):
-    title = _('Perform Two Factor Authetication')
+    title = _('Perform Two Factor Authentication')
     template_name = 'registration/totp_auth.html'
 
     def check_skip(self):
