@@ -38,10 +38,14 @@ def api_v1_contest_detail(request, contest):
         can_see_rankings = False
 
     problems = list(contest.contest_problems.select_related('problem')
-                    .defer('problem__description').order_by('order')) if in_contest else []
+                    .defer('problem__description').order_by('order'))
     users = base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0, user__is_unlisted=False)
                                       .prefetch_related('user__organizations')
                                       .order_by('-score', 'cumtime')) if can_see_rankings else []
+    if not (in_contest or contest.ended or request.user.is_superuser \
+            or contest.organizers.filter(id=request.user.profile.id).exists()):
+        problems = []
+
     return JsonResponse({
         'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
         'start_time': contest.start_time.isoformat(),
