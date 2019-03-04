@@ -67,7 +67,7 @@
             });
 
             // Draw the statistics graph.
-            var chart;
+            var chart = null;
             function stats_graph(raw_data) {
                 var colors = {
                     TLE: '#a3bcbd',
@@ -79,7 +79,7 @@
 
                 var ctx = $('#status-graph').find('canvas')[0].getContext('2d');
                 var font = $('body').css('font-family');
-                if (typeof chart != "undefined") {
+                if (chart !== null) {
                     chart.destroy();
                 }
                 chart = new Chart(ctx).Pie(raw_data.categories.map(function (entry) {
