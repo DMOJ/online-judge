@@ -1,7 +1,7 @@
 {% extends "common-content.html" %}
 {% block js_media %}
-    {% if dynamic_update and last_msg %}
-        <script type="text/javascript">
+    <script type="text/javascript">
+        {% if dynamic_update and last_msg %}
             {% if request.in_contest %}
                 window.current_contest = '{{request.participation.contest.key}}';
             {% else %}
@@ -22,8 +22,9 @@
             {% else %}
                 window.show_problem = 0;
             {% endif %}
-        </script>
-    {% endif %}
+        {% endif %}
+        window.results_json = {{ results_json }};
+    </script>
 
     {% compress js %}
         <script type="text/javascript" src="{{ static('event.js') }}"></script>
@@ -95,7 +96,7 @@
             }
 
             $(function () {
-                stats_graph({{ results_json }});
+                stats_graph(window.results_json);
             });
 
             function load_dynamic_update(last_msg) {
@@ -157,7 +158,7 @@
 
                 var stats_outdated = false;
                 var last_stat_update = Date.now();
-                var stats_update_interval = {{ stats_update_interval|default(0) }};
+                var stats_update_interval = {{ stats_update_interval|default(0) * 3600 }};
 
                 function update_stats() {
                     if (Date.now() - last_stat_update < stats_update_interval)
