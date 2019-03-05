@@ -5,7 +5,7 @@ from django.core.cache import cache
 from django.db.models import F, Count, Max, Q, ExpressionWrapper, Case, When
 from django.db.models.fields import FloatField
 from django.utils import timezone
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext as _, gettext_noop
 
 from judge.models import Submission, Problem
 
@@ -81,11 +81,13 @@ def get_result_data(*args, **kwargs):
 
     return {
         'categories': [
-            {'code': 'AC', 'name': _('Accepted'), 'count': results['AC']},
-            {'code': 'WA', 'name': _('Wrong'), 'count': results['WA']},
-            {'code': 'CE', 'name': _('Compile Error'), 'count': results['CE']},
-            {'code': 'TLE', 'name': _('Timeout'), 'count': results['TLE']},
-            {'code': 'ERR', 'name': _('Error'),
+            # Using gettext_noop here since this will be tacked into the cache, so it must be language neutral.
+            # The caller, SubmissionList.get_result_data will run ugettext on the name.
+            {'code': 'AC', 'name': gettext_noop('Accepted'), 'count': results['AC']},
+            {'code': 'WA', 'name': gettext_noop('Wrong'), 'count': results['WA']},
+            {'code': 'CE', 'name': gettext_noop('Compile Error'), 'count': results['CE']},
+            {'code': 'TLE', 'name': gettext_noop('Timeout'), 'count': results['TLE']},
+            {'code': 'ERR', 'name': gettext_noop('Error'),
              'count': results['MLE'] + results['OLE'] + results['IR'] + results['RTE'] + results['AB'] + results['IE']},
         ],
         'total': sum(results.values()),

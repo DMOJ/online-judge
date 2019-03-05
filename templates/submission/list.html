@@ -156,11 +156,16 @@
                 };
 
                 var stats_outdated = false;
+                var last_stat_update = Date.now();
+                var stats_update_interval = {{ stats_update_interval|default(0) }};
 
                 function update_stats() {
+                    if (Date.now() - last_stat_update < stats_update_interval)
+                        return;
                     $.ajax({
                         url: '?results'
                     }).done(function (data) {
+                        last_stat_update = Date.now();
                         stats_graph(data);
                     }).fail(function () {
                         console.log('Failed to update statistics table!' + id);
