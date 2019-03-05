@@ -184,10 +184,11 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         can_edit = self.object.is_editable_by(user)
         context['can_edit_problem'] = can_edit
         if user.is_authenticated:
-            tickets = self.object.tickets.filter(is_open=True)
+            tickets = self.object.tickets
             if not can_edit:
-                tickets.filter(own_ticket_filter(user.profile.id))
-            context['num_open_tickets'] = tickets.count()
+                tickets = tickets.filter(own_ticket_filter(user.profile.id))
+            context['has_tickets'] = tickets.exists()
+            context['num_open_tickets'] = tickets.filter(is_open=True).count()
 
         try:
             context['editorial'] = Solution.objects.get(problem=self.object)
@@ -329,7 +330,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                     queryset = list(queryset)
                     queryset.sort(key=lambda problem: problem.types_list[0] if problem.types_list else '',
                                   reverse=self.order.startswith('-'))
-            paginator.object_list = queryset
+            paginator.object_list = list(queryset)
         return paginator
 
     @cached_property

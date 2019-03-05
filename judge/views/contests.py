@@ -62,19 +62,24 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
     paginate_by = 20
     template_name = 'contest/list.html'
     title = ugettext_lazy('Contests')
+    context_object_name = 'past_contests'
 
-    def get_queryset(self):
+    @cached_property
+    def _now(self):
+        return timezone.now()
+
+    def _get_queryset(self):
         return super(ContestList, self).get_queryset() \
             .order_by('-start_time', 'key').prefetch_related('tags', 'organizations', 'organizers')
 
+    def get_queryset(self):
+        return self._get_queryset().filter(end_time__lt=self._now)
+
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
-        now = timezone.now()
-        past, present, active, future = [], [], [], []
-        for contest in self.get_queryset():
-            if contest.end_time < now:
-                past.append(contest)
-            elif contest.start_time > now:
+        present, active, future = [], [], []
+        for contest in self._get_queryset().exclude(end_time__lt=self._now):
+            if contest.start_time > self._now:
                 future.append(contest)
             else:
                 present.append(contest)
@@ -86,16 +91,12 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
                     active.append(participation)
                     present.remove(participation.contest)
 
-        start = self.paginate_by * (context['page_obj'].number - 1)
-        past = past[start:start+self.paginate_by]
-
         active.sort(key=attrgetter('end_time'))
         future.sort(key=attrgetter('start_time'))
         context['active_participations'] = active
         context['current_contests'] = present
-        context['past_contests'] = past
         context['future_contests'] = future
-        context['now'] = timezone.now()
+        context['now'] = self._now
         context['first_page_href'] = '.'
         return context
 

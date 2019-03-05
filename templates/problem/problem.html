@@ -86,6 +86,13 @@
             {% endif %}
         {% endif %}
         <h2 style="color:#393630; display: inline-block">{{ title }}</h2>
+        {% if problem.is_organization_private %}
+            {% with organizations=problem.organizations.all() %}
+                {% if organizations %}
+                    <span title="Private to {{ organizations|join(", ") }}"><i class="fa fa-exclamation-circle" style="padding-left:0.4em;"></i></span>
+                {% endif %}
+            {% endwith %}
+        {% endif %}
         {% if has_pdf_render and (problem.is_public or not problem.is_restricted or perms.judge.see_restricted_problem) %}
             <span class="spacer"></span>
             <a href="{{ url('problem_pdf', problem.code) }}" class="view-pdf">
@@ -146,7 +153,7 @@
         {% if not problem.is_manually_managed %}
             <div><a href="{{ url('problem_data', problem.code) }}">{{ _('Edit test data') }}</a></div>
         {% endif %}
-    {% elif request.user.is_authenticated %}
+    {% elif request.user.is_authenticated and has_tickets %}
         <hr>
         <div>
             <a href="{{ url('problem_ticket_list', problem.code) }}">{{ _('My tickets') }}
@@ -154,7 +161,6 @@
             </a>
         </div>
     {% endif %}
-
     {% if perms.judge.clone_problem %}
         <div>
             <form action="{{ url('problem_clone', problem.code) }}" method="post">

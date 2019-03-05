@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
@@ -62,14 +63,16 @@ class ContestProblemInline(admin.TabularInline):
     model = ContestProblem
     verbose_name = _('Problem')
     verbose_name_plural = 'Problems'
-    fields = ('problem', 'points', 'partial', 'is_pretested', 'max_submissions', 'output_prefix_override', 'order', 'rejudge_column')
+    fields = ('problem', 'points', 'partial', 'is_pretested', 'max_submissions', 'output_prefix_override', 'order',
+              'rejudge_column')
     readonly_fields = ('rejudge_column',)
     form = ContestProblemInlineForm
 
     def rejudge_column(self, obj):
         if obj.id is None:
             return ''
-        return '<input class="rejudge-link" href="%s" type="button" value="Rejudge"/>' % reverse('admin:judge_contest_rejudge', args=(obj.contest.id, obj.id,))
+        return '<a class="button rejudge-link" href="%s">Rejudge</a>' % reverse('admin:judge_contest_rejudge',
+                                                                                args=(obj.contest.id, obj.id))
     rejudge_column.short_description = ''
     rejudge_column.allow_tags = True
 
@@ -174,7 +177,8 @@ class ContestAdmin(VersionAdmin):
             return
 
         queryset = ContestSubmission.objects.filter(problem_id=problem_id).select_related('submission')
-        if queryset.count() > 10 and not request.user.has_perm('judge.rejudge_submission_lot'):
+        if not request.user.has_perm('judge.rejudge_submission_lot') and \
+                len(queryset) > getattr(settings, 'REJUDGE_SUBMISSION_LIMIT', 10):
             self.message_user(request, ugettext('You do not have the permission to rejudge THAT many submissions.'),
                               level=messages.ERROR)
             return
@@ -184,7 +188,7 @@ class ContestAdmin(VersionAdmin):
 
         self.message_user(request, ungettext('%d submission were successfully scheduled for rejudging.',
                                              '%d submissions were successfully scheduled for rejudging.',
-                                             queryset.count()) % queryset.count())
+                                             len(queryset)) % len(queryset))
         return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest_id,)))
 
     def unfreeze_view(self, request, id):

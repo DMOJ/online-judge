@@ -162,7 +162,7 @@ class Problem(models.Model):
                 filter |= Q(organizations__id__in=profile.organizations.all())
             queryset = queryset.filter(filter)
 
-        return queryset
+        return queryset.distinct()
 
     @cached_property
     def types_list(self):
@@ -179,7 +179,7 @@ class Problem(models.Model):
             return False
         if user.has_perm('judge.edit_all_problem') or (user.has_perm('judge.edit_public_problem') and self.is_public):
             return True
-        return self.is_editor(user.profile)
+        return user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile)
 
     def is_accessible_by(self, user):
         

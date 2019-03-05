@@ -62,7 +62,7 @@ class RankedSubmissions(ProblemSubmissions):
         return format_html(_(u'Best solutions for <a href="{1}">{0}</a>'), self.problem_name,
                            reverse('problem_detail', args=[self.problem.code]))
 
-    def get_result_data(self):
+    def _get_result_data(self):
         return get_result_data(super(RankedSubmissions, self).get_queryset().order_by())
 
 
@@ -82,6 +82,6 @@ class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
         return format_html(_(u'Best solutions for problem {0} in <a href="{2}">{1}</a>'),
                             self.get_problem_number(self.problem), self.contest.name, reverse('contest_view', args=[self.contest.key]))
 
-    def get_result_data(self):
+    def _get_result_data(self):
         return get_result_data(Submission.objects.filter(
                 problem_id=self.problem.id, contest__participation__contest_id=self.contest.id))

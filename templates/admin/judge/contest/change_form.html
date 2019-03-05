@@ -7,10 +7,7 @@
             $('.rerate-link').appendTo('div#bottombar').show();
             $('.unfreeze-link').appendTo('div#bottombar').show();
             $('.rejudge-link').click(function () {
-                event.preventDefault();
-                if (confirm('{{ _('Are you sure you want to rejudge ALL the submissions?') }}')) {
-                    location.href = this.getAttribute('href');
-                }
+                return confirm('{{ _('Are you sure you want to rejudge ALL the submissions?') }}');
             });
         });
     </script>

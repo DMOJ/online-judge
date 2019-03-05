@@ -175,7 +175,6 @@ class Contest(models.Model):
             queryset = queryset.filter(Q(is_private=False) | Q(organizations__in=profile.organizations.all()))
         return queryset.distinct()
 
-
     @property
     def contest_window_length(self):
         return self.end_time - self.start_time
