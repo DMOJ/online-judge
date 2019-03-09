@@ -116,6 +116,10 @@ class Profile(models.Model):
         orgs = self.organizations.all()
         return orgs[0] if orgs else None
 
+    @cached_property
+    def username(self):
+        return self.user.username
+
     def calculate_points(self, table=(lambda x: [pow(x, i) for i in xrange(100)])(getattr(settings, 'PP_STEP', 0.95))):
         from judge.models import Problem
         data = (Problem.objects.filter(submission__user=self, submission__points__isnull=False, is_public=True, is_organization_private=False)
@@ -135,14 +139,6 @@ class Profile(models.Model):
         return points
 
     calculate_points.alters_data = True
-
-    @cached_property
-    def display_name(self):
-        return self.user.username
-
-    @cached_property
-    def long_display_name(self):
-        return self.user.username
 
     def remove_contest(self):
         self.current_contest = None

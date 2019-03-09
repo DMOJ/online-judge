@@ -276,10 +276,10 @@ class ContestParticipation(models.Model):
 
     def __unicode__(self):
         if self.spectate:
-            return ugettext('%s spectating in %s') % (self.user.long_display_name, self.contest.name)
+            return ugettext('%s spectating in %s') % (self.user.username, self.contest.name)
         if self.virtual:
-            return ugettext('%s in %s, v%d') % (self.user.long_display_name, self.contest.name, self.virtual)
-        return ugettext('%s in %s') % (self.user.long_display_name, self.contest.name)
+            return ugettext('%s in %s, v%d') % (self.user.username, self.contest.name, self.virtual)
+        return ugettext('%s in %s') % (self.user.username, self.contest.name)
 
     class Meta:
         verbose_name = _('contest participation')
