@@ -10,16 +10,12 @@ from django.utils.functional import lazystr
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView
 
-from judge.feed import AtomBlogFeed, AtomCommentFeed, AtomProblemFeed, BlogFeed, CommentFeed, ProblemFeed
 from judge.forms import CustomAuthenticationForm
-from judge.sitemap import BlogPostSitemap, ContestSitemap, HomePageSitemap, OrganizationSitemap, ProblemSitemap, \
-    SolutionSitemap, UrlSitemap, UserSitemap
-from judge.views import TitledTemplateView, api, blog, comment, contests, language, license, mailgun, organization, \
-    preview, problem, problem_manage, ranked_submission, register, stats, status, submission, tasks, ticket, totp, \
-    user, widgets
+from judge.sitemap import BlogPostSitemap, ContestSitemap, HomePageSitemap, ProblemSitemap, UrlSitemap, UserSitemap
+from judge.views import blog, contests, language, license, preview, problem, problem_manage, ranked_submission, \
+    stats, status, submission, tasks, ticket, totp, user, widgets
 from judge.views.problem_data import ProblemDataView, ProblemSubmissionDiff, \
     problem_data_file, problem_init_view
-from judge.views.register import ActivationView, RegistrationView
 from judge.views.select2 import AssigneeSelect2View, CommentSelect2View, ContestSelect2View, \
     ContestUserSearchSelect2View, OrganizationSelect2View, ProblemSelect2View, TicketUserSelect2View, \
     UserSearchSelect2View, UserSelect2View
@@ -27,28 +23,6 @@ from judge.views.select2 import AssigneeSelect2View, CommentSelect2View, Contest
 admin.autodiscover()
 
 register_patterns = [
-    url(r'^activate/complete/$',
-        TitledTemplateView.as_view(template_name='registration/activation_complete.html',
-                                   title='Activation Successful!'),
-        name='registration_activation_complete'),
-    # Activation keys get matched by \w+ instead of the more specific
-    # [a-fA-F0-9]{40} because a bad activation key should still get to the view;
-    # that way it can return a sensible "invalid key" message instead of a
-    # confusing 404.
-    url(r'^activate/(?P<activation_key>\w+)/$',
-        ActivationView.as_view(title='Activation key invalid'),
-        name='registration_activate'),
-    url(r'^register/$',
-        RegistrationView.as_view(title='Register'),
-        name='registration_register'),
-    url(r'^register/complete/$',
-        TitledTemplateView.as_view(template_name='registration/registration_complete.html',
-                                   title='Registration Completed'),
-        name='registration_complete'),
-    url(r'^register/closed/$',
-        TitledTemplateView.as_view(template_name='registration/registration_closed.html',
-                                   title='Registration not allowed'),
-        name='registration_disallowed'),
     url(r'^login/$', auth_views.LoginView.as_view(
         template_name='registration/login.html',
         extra_context={'title': _('Login')},
@@ -77,7 +51,6 @@ register_patterns = [
     url(r'^password/reset/done/$', auth_views.PasswordResetDoneView.as_view(
         template_name='registration/password_reset_done.html',
     ), name='password_reset_done'),
-    url(r'^social/error/$', register.social_auth_error, name='social_auth_error'),
 
     url(r'^2fa/$', totp.TOTPLoginView.as_view(), name='login_2fa'),
     url(r'^2fa/enable/$', totp.TOTPEnableView.as_view(), name='enable_2fa'),
@@ -100,7 +73,6 @@ def paged_list_view(view, name):
 
 urlpatterns = [
     url(r'^$', blog.PostList.as_view(template_name='home.html', title=_('Home')), kwargs={'page': 1}, name='home'),
-    url(r'^500/$', exception),
     url(r'^admin/', admin.site.urls),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^accounts/', include(register_patterns)),
@@ -181,17 +153,6 @@ urlpatterns = [
         url(r'^/$', lambda _, user: HttpResponsePermanentRedirect(reverse('user_page', args=[user]))),
     ])),
 
-    url(r'^comments/upvote/$', comment.upvote_comment, name='comment_upvote'),
-    url(r'^comments/downvote/$', comment.downvote_comment, name='comment_downvote'),
-    url(r'^comments/hide/$', comment.comment_hide, name='comment_hide'),
-    url(r'^comments/(?P<id>\d+)/', include([
-        url(r'^edit$', comment.CommentEdit.as_view(), name='comment_edit'),
-        url(r'^history/ajax$', comment.CommentRevisionAjax.as_view(), name='comment_revision_ajax'),
-        url(r'^edit/ajax$', comment.CommentEditAjax.as_view(), name='comment_edit_ajax'),
-        url(r'^votes/ajax$', comment.CommentVotesAjax.as_view(), name='comment_votes_ajax'),
-        url(r'^render$', comment.CommentContent.as_view(), name='comment_content'),
-    ])),
-
     url(r'^contests/', paged_list_view(contests.ContestList, 'contest_list')),
     url(r'^contests/(?P<year>\d+)/(?P<month>\d+)/$', contests.ContestCalendar.as_view(), name='contest_calendar'),
     url(r'^contests/tag/(?P<name>[a-z-]+)', include([
@@ -225,50 +186,14 @@ urlpatterns = [
         url(r'^/$', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))),
     ])),
 
-    url(r'^organizations/$', organization.OrganizationList.as_view(), name='organization_list'),
-    url(r'^organization/(?P<pk>\d+)-(?P<slug>[\w-]*)', include([
-        url(r'^$', organization.OrganizationHome.as_view(), name='organization_home'),
-        url(r'^/users$', organization.OrganizationUsers.as_view(), name='organization_users'),
-        url(r'^/join$', organization.JoinOrganization.as_view(), name='join_organization'),
-        url(r'^/leave$', organization.LeaveOrganization.as_view(), name='leave_organization'),
-        url(r'^/edit$', organization.EditOrganization.as_view(), name='edit_organization'),
-        url(r'^/kick$', organization.KickUserWidgetView.as_view(), name='organization_user_kick'),
-
-        url(r'^/request$', organization.RequestJoinOrganization.as_view(), name='request_organization'),
-        url(r'^/request/(?P<rpk>\d+)$', organization.OrganizationRequestDetail.as_view(),
-            name='request_organization_detail'),
-        url(r'^/requests/', include([
-            url(r'^pending$', organization.OrganizationRequestView.as_view(), name='organization_requests_pending'),
-            url(r'^log$', organization.OrganizationRequestLog.as_view(), name='organization_requests_log'),
-            url(r'^approved$', organization.OrganizationRequestLog.as_view(states=('A',), tab='approved'),
-                name='organization_requests_approved'),
-            url(r'^rejected$', organization.OrganizationRequestLog.as_view(states=('R',), tab='rejected'),
-                name='organization_requests_rejected'),
-        ])),
-
-        url(r'^/$', lambda _, pk, slug: HttpResponsePermanentRedirect(reverse('organization_home', args=[pk, slug]))),
-    ])),
-
     url(r'^runtimes/$', language.LanguageList.as_view(), name='runtime_list'),
     url(r'^runtimes/matrix/$', status.version_matrix, name='version_matrix'),
     url(r'^status/$', status.status_all, name='status_all'),
-
-    url(r'^api/', include([
-        url(r'^contest/list$', api.api_v1_contest_list),
-        url(r'^contest/info/(\w+)$', api.api_v1_contest_detail),
-        url(r'^problem/list$', api.api_v1_problem_list),
-        url(r'^problem/info/(\w+)$', api.api_v1_problem_info),
-        url(r'^user/list$', api.api_v1_user_list),
-        url(r'^user/info/(\w+)$', api.api_v1_user_info),
-        url(r'^user/submissions/(\w+)$', api.api_v1_user_submissions),
-    ])),
 
     url(r'^blog/', paged_list_view(blog.PostList, 'blog_post_list')),
     url(r'^post/(?P<id>\d+)-(?P<slug>.*)$', blog.PostView.as_view(), name='blog_post'),
 
     url(r'^license/(?P<key>[-\w.]+)$', license.LicenseDetail.as_view(), name='license'),
-
-    url(r'^mailgun/mail_activate/$', mailgun.MailgunActivationView.as_view(), name='mailgun_activate'),
 
     url(r'^widgets/', include([
         url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
@@ -300,15 +225,6 @@ urlpatterns = [
         ])),
     ])),
 
-    url(r'^feed/', include([
-        url(r'^problems/rss/$', ProblemFeed(), name='problem_rss'),
-        url(r'^problems/atom/$', AtomProblemFeed(), name='problem_atom'),
-        url(r'^comment/rss/$', CommentFeed(), name='comment_rss'),
-        url(r'^comment/atom/$', AtomCommentFeed(), name='comment_atom'),
-        url(r'^blog/rss/$', BlogFeed(), name='blog_rss'),
-        url(r'^blog/atom/$', AtomBlogFeed(), name='blog_atom'),
-    ])),
-
     url(r'^stats/', include([
         url('^language/', include([
             url('^$', stats.language, name='language_stats'),
@@ -337,9 +253,7 @@ urlpatterns = [
         'user': UserSitemap,
         'home': HomePageSitemap,
         'contest': ContestSitemap,
-        'organization': OrganizationSitemap,
         'blog': BlogPostSitemap,
-        'solutions': SolutionSitemap,
         'pages': UrlSitemap([
             {'location': '/about/', 'priority': 0.9},
         ]),
