@@ -227,10 +227,6 @@ urlpatterns = [
     ])),
 
     url(r'^feed/', include([
-        url(r'^problems/rss/$', ProblemFeed(), name='problem_rss'),
-        url(r'^problems/atom/$', AtomProblemFeed(), name='problem_atom'),
-        url(r'^comment/rss/$', CommentFeed(), name='comment_rss'),
-        url(r'^comment/atom/$', AtomCommentFeed(), name='comment_atom'),
         url(r'^blog/rss/$', BlogFeed(), name='blog_rss'),
         url(r'^blog/atom/$', AtomBlogFeed(), name='blog_atom'),
     ])),
