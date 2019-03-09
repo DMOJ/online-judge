@@ -173,8 +173,9 @@ header {
 
     .anon {
         position: absolute;
-        bottom: 6px;
-        right: 5px;
+        // This works poorly on mobile... but it's fine...?
+        bottom: 15px;
+        right: 15px;
         white-space: nowrap;
     }
 
