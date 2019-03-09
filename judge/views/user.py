@@ -214,33 +214,9 @@ def edit_profile(request):
                 revisions.set_user(request.user)
                 revisions.set_comment(_('Updated on site'))
 
-            if newsletter_id is not None:
-                try:
-                    subscription = Subscription.objects.get(user=request.user, newsletter_id=newsletter_id)
-                except Subscription.DoesNotExist:
-                    if form.cleaned_data['newsletter']:
-                        Subscription(user=request.user, newsletter_id=newsletter_id, subscribed=True).save()
-                else:
-                    if subscription.subscribed != form.cleaned_data['newsletter']:
-                        subscription.update(('unsubscribe', 'subscribe')[form.cleaned_data['newsletter']])
-
-            perm = Permission.objects.get(codename='test_site', content_type=ContentType.objects.get_for_model(Profile))
-            if form.cleaned_data['test_site']:
-                request.user.user_permissions.add(perm)
-            else:
-                request.user.user_permissions.remove(perm)
-
             return HttpResponseRedirect(request.path)
     else:
         form = ProfileForm(instance=profile, user=request.user)
-        if newsletter_id is not None:
-            try:
-                subscription = Subscription.objects.get(user=request.user, newsletter_id=newsletter_id)
-            except Subscription.DoesNotExist:
-                form.fields['newsletter'].initial = False
-            else:
-                form.fields['newsletter'].initial = subscription.subscribed
-        form.fields['test_site'].initial = request.user.has_perm('judge.test_site')
 
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
     return render(request, 'user/edit-profile.html', {

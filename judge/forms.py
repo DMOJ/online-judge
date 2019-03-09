@@ -23,47 +23,18 @@ def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
 
 
 class ProfileForm(ModelForm):
-    if newsletter_id is not None:
-        newsletter = forms.BooleanField(label=_('Subscribe to contest updates'), initial=False, required=False)
-    test_site = forms.BooleanField(label=_('Enable experimental features'), initial=False, required=False)
-
     class Meta:
         model = Profile
-        fields = ['about', 'organizations', 'timezone', 'language', 'ace_theme', 'user_script']
+        fields = ['language', 'ace_theme', 'user_script']
         widgets = {
             'user_script': AceWidget(theme='github'),
-            'timezone': Select2Widget(attrs={'style': 'width:200px'}),
             'language': Select2Widget(attrs={'style': 'width:200px'}),
             'ace_theme': Select2Widget(attrs={'style': 'width:200px'}),
         }
-
-        has_math_config = bool(getattr(settings, 'MATHOID_URL', False))
-        if has_math_config:
-            fields.append('math_engine')
-            widgets['math_engine'] = Select2Widget(attrs={'style': 'width:200px'})
-
-        if HeavyPreviewPageDownWidget is not None:
-            widgets['about'] = HeavyPreviewPageDownWidget(
-                preview=reverse_lazy('profile_preview'),
-                attrs={'style': 'max-width:700px;min-width:700px;width:700px'}
-            )
-
-    def clean(self):
-        organizations = self.cleaned_data.get('organizations') or []
-        max_orgs = getattr(settings, 'MAX_USER_ORGANIZATION_COUNT', 3)
-
-        if sum(org.is_open for org in organizations) > max_orgs:
-            raise ValidationError(_('You may not be part of more than {count} public organizations.').format(count=max_orgs))
-
-        return self.cleaned_data
-
+    
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(ProfileForm, self).__init__(*args, **kwargs)
-        if not user.has_perm('judge.edit_all_organization'):
-            self.fields['organizations'].queryset = Organization.objects.filter(
-                Q(is_open=True) | Q(id__in=user.profile.organizations.all())
-            )
 
 
 class ProblemSubmitForm(ModelForm):

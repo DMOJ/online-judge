@@ -44,6 +44,7 @@
             border: unset;
             background: unset;
             max-width: 700px;
+            width: 100%;
         }
 
         #center-float {
@@ -87,82 +88,38 @@
 
             {% csrf_token %}
 
-            <div style="padding-top:0.5em" class="block-header">{{ _('Self-description') }}:</div>
-            {{ form.about }}
-            <hr>
-
-            <table border="0" style="padding-top:0.7em">
+            <table style="padding-right:0.8em; width: 100%">
                 <tr>
-                    <td style="vertical-align:top;">
-                        <table style="padding-right:0.8em">
-                            <tr title="{{ _('Select your closest major city') }}">
-                                <td><label class="inline-header grayed">{{ _('Timezone') }}:</label></td>
-                                <td><span class="fullwidth">{{ form.timezone }}</span></td>
-                            </tr>
-                            <tr>
-                                <td><label class="inline-header grayed">{{ _('Preferred language') }}:</label></td>
-                                <td><span class="fullwidth">{{ form.language }}</span></td>
-                            </tr>
-                            <tr>
-                                <td><label class="inline-header grayed">{{ _('Editor theme') }}:</label></td>
-                                <td><span class="fullwidth">{{ form.ace_theme }}</span></td>
-                            </tr>
-                            {% if has_math_config %}
-                                <tr>
-                                    <td><label class="inline-header grayed">{{ _('Math engine') }}:</label></td>
-                                    <td><span class="fullwidth">{{ form.math_engine }}</span></td>
-                                </tr>
-                            {% endif %}
-                            {% if form.newsletter %}
-                                <tr>
-                                    <td colspan="2">
-                                        {{ form.newsletter }}
-                                        <label for="id_newsletter" style="float: unset" class="inline-header grayed">
-                                            {{- _('Notify me about upcoming contests') -}}
-                                        </label>
-                                    </td>
-                                </tr>
-                            {% endif %}
-                            <tr>
-                                <td colspan="2">
-                                    {{ form.test_site }}
-                                    <label for="id_test_site" style="float: unset" class="inline-header grayed">
-                                        {{- form.test_site.label -}}
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <a href="http://www.gravatar.com/" title="{{ _('Change your avatar') }}"
-                                       target="_blank" class="inline-header">{{ _('Change your avatar') }}</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <a href="{{ url('password_change') }}" class="inline-header">
-                                        {{ _('Change your password') }}
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><span class="inline-header">
-                                    {% if profile.is_totp_enabled %}
-                                        {{ _('Two Factor Authentication is enabled.') }}
-                                        <a href="{{ url('disable_2fa') }}" class="button inline-button">Disable</a>
-                                    {% else %}
-                                        {{ _('Two Factor Authentication is disabled.') }}
-                                        <a href="{{ url('enable_2fa') }}" class="button inline-button">Enable</a>
-                                    {% endif %}
-                                </span></td>
-                            </tr>
-                        </table>
+                    <td><label class="inline-header grayed">{{ _('Preferred language') }}:</label></td>
+                    <td><span class="fullwidth">{{ form.language }}</span></td>
+                </tr>
+                <tr>
+                    <td><label class="inline-header grayed">{{ _('Editor theme') }}:</label></td>
+                    <td><span class="fullwidth">{{ form.ace_theme }}</span></td>
+                </tr>
+                {% if has_math_config %}
+                    <tr>
+                        <td><label class="inline-header grayed">{{ _('Math engine') }}:</label></td>
+                        <td><span class="fullwidth">{{ form.math_engine }}</span></td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td colspan="2">
+                        <a href="{{ url('password_change') }}" class="inline-header">
+                            {{ _('Change your password') }}
+                        </a>
                     </td>
-                    <td>
-                        <div style="padding-bottom:0.4em;margin-top:-2em" class="block-header">
-                            {{ _('Affiliated organizations') }}:
-                        </div>
-                        {{ form.organizations }}
-                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><span class="inline-header">
+                        {% if profile.is_totp_enabled %}
+                            {{ _('Two Factor Authentication is enabled.') }}
+                            <a href="{{ url('disable_2fa') }}" class="button inline-button">Disable</a>
+                        {% else %}
+                            {{ _('Two Factor Authentication is disabled.') }}
+                            <a href="{{ url('enable_2fa') }}" class="button inline-button">Enable</a>
+                        {% endif %}
+                    </span></td>
                 </tr>
             </table>
 
