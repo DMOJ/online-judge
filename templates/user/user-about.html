@@ -1,165 +1,77 @@
 {% extends "user/user-base.html" %}
 
+{% block user_js_media %}
+    <script type="text/javascript">
+        window.show_pp_base = 1;
+        window.currently_requesting_pp = false;
+        window.load_more_pp = function () {
+            if (window.currently_requesting_pp) return;
+            window.currently_requesting_pp = true;
+
+            $.get('{{ url('user_pp_ajax', user.user.username) }}', {
+                start: window.show_pp_base * 10,
+                end: (window.show_pp_base + 1) * 10
+            }).done(function (data) {
+                $('table.pp-table').append(data['results']);
+                window.show_pp_base++;
+                if (!data['has_more']) {
+                    $("#pp-load-link-wrapper").hide();
+                }
+                window.currently_requesting_pp = false;
+            });
+        };
+    </script>
+{% endblock %}
+
 {% block title_ruler %}{% endblock %}
 
 {% block title_row %}
-    {% set tab = 'about' %}
+    {% set tab = 'problems' %}
     {% include "user/user-tabs.html" %}
 {% endblock %}
 
 {% block user_content %}
-    <div class="content-description">
-        {% with orgs=user.organizations.all() %}
-            {% if orgs %}
-                <p style="margin-top: 0"><b>{{ _('From') }}</b>
-                    {% for org in orgs -%}
-                        <a href="{{ org.get_absolute_url() }}">{{ org.name }}</a>
-                        {%- if not loop.last %}, {% endif %}
-                    {% endfor %}
-                </p>
-            {% endif %}
-        {% endwith %}
-        {% if perms.judge.change_profile %}
-            {% with notes=user.notes %}
-                {% if notes %}
-                    <p style="margin-top: 0"><b>{{ _('Admin Notes') }}: </b>
-                        {{ notes }}
-                    </p>
-                {% endif %}
-            {% endwith %}
-        {% endif%}
-
-        {% if user.about %}
-            <h4>{{ _('About') }}</h4>
-            {% cache 86400 'user_about' user.id MATH_ENGINE %}
-                {{ user.about|markdown('self-description', MATH_ENGINE)|reference|str|safe }}
-            {% endcache %}
-        {% else %}
-            <i>
-                {% if user.user == request.user %}
-                    {{ _('You have not shared any information.') }}
-                {% else %}
-                    {{ _('This user has not shared any information.') }}
-                {% endif %}
-            </i>
-            <br>
-        {% endif %}
-
-        {% if rating %}
-            <h4>Rating History</h4>
-            <div id="rating-chart">
-                <canvas></canvas>
-            </div>
-            <div id="rating-tooltip">
-                <div class="contest"></div>
-                <div class="date"></div>
-                <div class="rate-group">
-                    <span class="rate-box"><span></span></span>
-                    <span class="rating"></span>, #<span class="rank"></span>
-                </div>
-            </div>
-        {% endif %}
-    </div>
-{% endblock %}
-
-{% block bodyend %}
-    {% if REQUIRE_JAX %}
-        {% include "mathjax-load.html" %}
+    {% if not pp_breakdown %}
+        <i>{{ _('This user has not yet solved any problems.') }}</i>
     {% endif %}
 
-    {% if ratings %}
-        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.Core.js') }}"></script>
-        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.Scatter.js') }}"></script>
-        <script type="text/javascript">
-            var rating_history = {{rating_data}};
-            var data_index = {};
-
-            $.each(rating_history, function (index, item) {
-                data_index[item.timestamp.toString() + ',' + item.rating.toString()] = index;
-                item.x = new Date(item.timestamp);
-                item.y = item.rating;
-            });
-
-            $(function () {
-                var $canvas = $('#rating-chart').find('canvas');
-                var ctx = $canvas.get(0).getContext('2d');
-
-                var getItem = function (elements) {
-                    return rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
-                };
-
-                Chart.types.Scatter.extend({
-                    name: 'RatingScatter',
-                    showTooltip: function (elements) {
-                        var $tooltip = $('#rating-tooltip');
-
-                        this.draw();
-                        if (elements.length > 0) {
-                            var item = getItem(elements);
-                            var offset = elements[0].tooltipPosition();
-
-                            $tooltip.find('.contest').text(item.label);
-                            $tooltip.find('.date').text(item.date);
-                            $tooltip.find('.rate-box').attr('class', 'rate-box ' + item.class)
-                                .find('span').css('height', item.height);
-                            $tooltip.find('.rating').text(item.rating).attr('class', 'rating ' + item.class);
-                            $tooltip.find('.rank').text(item.ranking);
-
-                            $tooltip.removeClass('above below');
-                            $tooltip.addClass(offset.y < $tooltip.height() ? 'below' : 'above');
-
-                            var position = $canvas.offset();
-                            var container = $('#page-container').offset();
-                            $tooltip.css({
-                                left: position.left - container.left + offset.x + $tooltip.width() / 2,
-                                top: position.top - container.top + offset.y - $tooltip.height() - 13,
-                                fontFamily: this.options.tooltipFontFamily,
-                                fontSize: this.options.tooltipFontSize,
-                                fontStyle: this.options.tooltipFontStyle
-                            }).show();
-                        } else
-                            $tooltip.hide();
-
-                        return this;
-                    }
-                });
-
-                window.rating_chart = new Chart(ctx).RatingScatter([
-                    {
-                        label: 'rating',
-                        strokeColor: '#A31515',
-                        fillColor: '#A31515',
-                        data: rating_history
-                    }
-                ], {
-                    bezierCurve: false,
-                    showTooltips: true,
-                    scaleShowHorizontalLines: true,
-                    scaleShowLabels: true,
-                    scaleType: 'date',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    pointDotRadius: 6,
-                    pointHitDetectionRadius: 6
-                });
-
-                $canvas.click(function (evt) {
-                    var elements = window.rating_chart.getPointsAtEvent(evt);
-                    if (elements.length > 0) {
-                        var item = getItem(elements);
-                        window.location.href = item.link;
-                    }
-                });
-
-                $canvas.mousemove(function (evt) {
-                    var elements = window.rating_chart.getPointsAtEvent(evt);
-                    if (elements.length > 0) {
-                        $canvas.css('cursor', 'pointer');
-                    } else {
-                        $canvas.css('cursor', '');
-                    }
-                });
-            });
-        </script>
+    {% if request.user.is_authenticated and request.user != user.user %}
+        <div class="hide-solved-problems"><span>
+            <form name="form" action="" method="get">
+                <input id="hide_solved" style="vertical-align:middle" onclick="form.submit()" type="checkbox"
+                       name="hide_solved"{% if hide_solved %} checked{% endif %} value="1">
+                <label style="vertical-align:middle" for="hide_solved">{{ _("Hide problems I've solved") }}</label>
+            </form>
+        </span></div>
     {% endif %}
+
+    {% for group in best_submissions %}
+        <div class="user-problem-group">
+            <h3 class="unselectable toggle"><span class="fa fa-chevron-right fa-fw"></span>
+                {{ group.name }} ({{ _('%(points).1f points', points=group.points) }})
+            </h3>
+            <table style="display: table" class="table toggled">
+                <thead>
+                <tr>
+                    <th>{{ _('Problem') }}</th>
+                    <th>{{ _('Score') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry in group.problems %}
+                    <tr>
+                        <td class="problem-name">
+                            <a href="{{ url('problem_detail', entry.code) }}">{{ entry.name }}</a>
+                        </td>
+                        <td class="problem-score">
+                            <a href="{{ url('user_submissions', entry.code, user.user.username) }}">
+                                {{ _('%(points)s / %(total)s', points=entry.points, total=entry.total) }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
 {% endblock %}

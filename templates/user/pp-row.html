@@ -16,17 +16,6 @@
 
 <td class="sub-pp sub-usage">
     <div class="pp">
-        <a href="{{ url('submission_status', breakdown.sub_id) }}">{{ breakdown.points|floatformat(0) }}pp</a>
-    </div>
-    <div class="pp-weighted">
-        {% trans weight=breakdown.weight|floatformat(0) %}
-            weighted <b>{{ weight }}%</b>
-        {% endtrans %}
-
-        {% if breakdown.scaled_points < 10 %}
-            ({{ _('%(pp).1fpp', pp=breakdown.scaled_points) }})
-        {% else %}
-            ({{ _('%(pp).0fpp', pp=breakdown.scaled_points) }})
-        {% endif %}
+        <a href="{{ url('submission_status', breakdown.sub_id) }}">{{ breakdown.points|floatformat(0) }}p</a>
     </div>
 </td>
