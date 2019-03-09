@@ -234,13 +234,13 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     list_display = ('contest', 'username', 'show_virtual', 'real_start', 'score', 'cumtime')
     actions = ['recalculate_points', 'recalculate_cumtime']
     actions_on_bottom = actions_on_top = True
-    search_fields = ('contest__key', 'contest__name', 'user__user__username', 'user__name')
+    search_fields = ('contest__key', 'contest__name', 'user__user__username')
     form = ContestParticipationForm
     date_hierarchy = 'real_start'
 
     def get_queryset(self, request):
         return super(ContestParticipationAdmin, self).get_queryset(request).only(
-            'contest__name', 'user__user__username', 'user__name', 'real_start', 'score', 'cumtime', 'virtual'
+            'contest__name', 'user__user__username', 'real_start', 'score', 'cumtime', 'virtual'
         )
 
     def recalculate_points(self, request, queryset):
@@ -264,7 +264,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     recalculate_cumtime.short_description = _('Recalculate cumulative time')
 
     def username(self, obj):
-        return obj.user.long_display_name
+        return obj.user.username
     username.short_description = _('username')
     username.admin_order_field = 'user__user__username'
 

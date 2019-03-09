@@ -99,14 +99,14 @@ class SubmissionAdmin(admin.ModelAdmin):
     list_display = ('id', 'problem_code', 'problem_name', 'user_column', 'execution_time', 'pretty_memory',
                     'points', 'language_column', 'status', 'result', 'judge_column')
     list_filter = ('language', SubmissionStatusFilter, SubmissionResultFilter)
-    search_fields = ('problem__code', 'problem__name', 'user__user__username', 'user__name')
+    search_fields = ('problem__code', 'problem__name', 'user__user__username')
     actions_on_top = True
     actions_on_bottom = True
     inlines = [SubmissionTestCaseInline, ContestSubmissionInline]
 
     def get_queryset(self, request):
         queryset = Submission.objects.select_related('problem', 'user__user', 'language').only(
-            'problem__code', 'problem__name', 'user__user__username', 'user__name', 'language__name',
+            'problem__code', 'problem__name', 'user__user__username', 'language__name',
             'time', 'memory', 'points', 'status', 'result'
         )
         use_straight_join(queryset)

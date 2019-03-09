@@ -78,7 +78,7 @@ class ProfileAdmin(VersionAdmin):
     show_public.short_description = ''
 
     def admin_user_admin(self, obj):
-        return obj.long_display_name
+        return obj.username
     admin_user_admin.admin_order_field = 'user__username'
     admin_user_admin.short_description = _('User')
 

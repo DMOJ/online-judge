@@ -26,7 +26,6 @@ class CustomRegistrationForm(RegistrationForm):
     username = forms.RegexField(regex=r'^\w+$', max_length=30, label=_('Username'),
                                 error_messages={'invalid': _('A username must contain letters, '
                                                              'numbers, or underscores')})
-    display_name = CharField(max_length=50, required=False, label=_('Real name (optional)'))
     timezone = ChoiceField(label=_('Timezone'), choices=TIMEZONE,
                            widget=Select2Widget(attrs={'style': 'width:100%'}))
     language = ModelChoiceField(queryset=Language.objects.all(), label=_('Preferred language'), empty_label=None,
@@ -76,7 +75,6 @@ class RegistrationView(OldRegistrationView):
         })
 
         cleaned_data = form.cleaned_data
-        profile.name = cleaned_data['display_name']
         profile.timezone = cleaned_data['timezone']
         profile.language = cleaned_data['language']
         profile.organizations.add(*cleaned_data['organizations'])

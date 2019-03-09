@@ -263,7 +263,7 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
 
     def get_queryset(self):
         return (Profile.objects.filter(is_unlisted=False).order_by(self.order, 'id').select_related('user')
-                .only('display_rank', 'user__username', 'name', 'points', 'rating', 'performance_points',
+                .only('display_rank', 'user__username', 'points', 'rating', 'performance_points',
                       'problem_count'))
 
     def get_context_data(self, **kwargs):
