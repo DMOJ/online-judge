@@ -194,9 +194,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     problem_name.admin_order_field = 'problem__name'
 
     def user_column(self, obj):
-        return format_html(u'<span title="{display}">{username}</span>',
-                           username=obj.user.user.username,
-                           display=obj.user.name)
+        return obj.user.user.username
     user_column.admin_order_field = 'user__user__username'
     user_column.short_description = _('User')
 
