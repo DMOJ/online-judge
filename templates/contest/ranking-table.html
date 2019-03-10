@@ -46,23 +46,11 @@
 {% endblock %}
 
 {% block before_point %}
-    {% for problem in user.problems %}
-        {% if problem %}
-            <td class="{% if problem.is_pretested and contest.run_pretests_only %}pretest-{% endif %}{{ problem.state }}">
-                <a href="{{ url('contest_user_submissions', contest.key, user.user.username, problem.code) }}">
-                    {{- problem.points|floatformat }}
-                    <div class="solving-time">{{ problem.time|timedelta('noday') }}</div>
-                </a>
-            </td>
-        {% else %}
-            <td></td>
-        {% endif %}
+    {% for cell in user.problem_cells %}
+        {{ cell }}
     {% endfor %}
 {% endblock %}
 
 {% block point %}
-    <td class="user-points">
-        {{- user.points|floatformat }}
-        <div class="solving-time">{{ user.cumtime|timestampdelta('noday') }}</div>
-    </td>
+    {{ user.result_cell }}
 {% endblock %}
