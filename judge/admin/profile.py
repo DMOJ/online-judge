@@ -48,7 +48,7 @@ class ProfileAdmin(VersionAdmin):
     list_display = ('admin_user_admin', 'email', 'is_totp_enabled', 'timezone_full',
                     'date_joined', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
-    search_fields = ('user__username', 'name', 'ip', 'user__email')
+    search_fields = ('user__username', 'ip', 'user__email')
     list_filter = ('language', TimezoneFilter)
     actions = ('recalculate_points',)
     actions_on_top = True
