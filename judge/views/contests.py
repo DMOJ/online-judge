@@ -1,9 +1,7 @@
 from calendar import Calendar, SUNDAY
-from collections import namedtuple, defaultdict
-from functools import partial
-from itertools import chain
 from operator import attrgetter
 
+from collections import namedtuple, defaultdict
 from datetime import timedelta, date, datetime, time
 from django import forms
 from django.contrib.auth.decorators import login_required
@@ -11,8 +9,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.db import connection, IntegrityError
-from django.db.models import Q, Min, Max, Count, Sum, Case, When, IntegerField
+from django.db import IntegrityError
+from django.db.models import Q, Min, Max, Sum, Case, When, IntegerField
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import date as date_filter
@@ -23,12 +21,13 @@ from django.utils.timezone import make_aware
 from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView, DetailView
+from functools import partial
+from itertools import chain
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation, ContestTag, Profile
 from judge.models import Problem
-from judge.timezone import from_database_time
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
 from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message
@@ -174,13 +173,13 @@ class ContestMixin(object):
             return contest
 
         if not contest.is_public and not user.has_perm('judge.see_private_contest') and (
-                    not user.has_perm('judge.edit_own_contest') or
-                    not self.check_organizer(contest, profile)):
+                not user.has_perm('judge.edit_own_contest') or
+                not self.check_organizer(contest, profile)):
             raise Http404()
 
         if contest.is_private:
             if profile is None or (not user.has_perm('judge.edit_all_contest') and
-                                       not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
+                                   not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
                 raise PrivateContestError(contest.name, contest.organizations.all())
         return contest
 
@@ -435,93 +434,42 @@ class CachedContestCalendar(ContestCalendar):
         return response
 
 
-class ContestRankingProfile(namedtuple(
-    'ContestRankingProfile', 'id user display_rank username points cumtime problems rating organization '
-                             'participation participation_rating')):
-    @cached_property
-    def css_class(self):
-        return Profile.get_user_css_class(self.display_rank, self.rating)
-
+ContestRankingProfile = namedtuple(
+    'ContestRankingProfile',
+    'id user css_class username points cumtime organization participation '
+    'participation_rating problem_cells result_cell'
+)
 
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state is_pretested')
 
 
-def make_contest_ranking_profile(participation, problems):
+def make_contest_ranking_profile(contest, participation, contest_problems):
     user = participation.user
     return ContestRankingProfile(
         id=user.id,
         user=user.user,
-        display_rank=user.display_rank,
+        css_class=user.css_class,
         username=user.username,
         points=participation.score,
         cumtime=participation.cumtime,
         organization=user.organization,
-        rating=user.rating,
         participation_rating=participation.rating.rating if hasattr(participation, 'rating') else None,
-        problems=problems,
+        problem_cells=[contest.format.display_user_problem(participation, contest_problem)
+                       for contest_problem in contest_problems],
+        result_cell=contest.format.display_participation_result(participation),
         participation=participation,
     )
 
 
-def best_solution_state(points, total):
-    if not points:
-        return 'failed-score'
-    if points == total:
-        return 'full-score'
-    return 'partial-score'
-
-
-def base_contest_ranking_list(contest, problems, queryset, for_user=None):
-    cursor = connection.cursor()
-    cursor.execute('''
-        SELECT part.id, cp.id, prob.code, MAX(cs.points) AS best, MAX(sub.date) AS `last`
-        FROM judge_contestproblem cp CROSS JOIN judge_contestparticipation part INNER JOIN
-             judge_problem prob ON (cp.problem_id = prob.id) LEFT OUTER JOIN
-             judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = part.id) LEFT OUTER JOIN
-             judge_submission sub ON (sub.id = cs.submission_id)
-        WHERE cp.contest_id = %s AND part.contest_id = %s {extra}
-        GROUP BY cp.id, part.id
-    '''.format(extra=('AND part.user_id = %s' if for_user is not None else
-                                         'AND part.virtual = 0')),
-                   (contest.id, contest.id) + ((for_user,) if for_user is not None else ()))
-    data = {(part, prob): (code, best, last and from_database_time(last)) for part, prob, code, best, last in cursor}
-    cursor.close()
-
-    problems = map(attrgetter('id', 'points', 'is_pretested'), problems)
-
-    def make_ranking_profile(participation):
-        part = participation.id
-        return make_contest_ranking_profile(participation, [
-            BestSolutionData(code=data[part, prob][0], points=data[part, prob][1],
-                             time=data[part, prob][2] - participation.start,
-                             state=best_solution_state(data[part, prob][1], points),
-                             is_pretested=is_pretested)
-            if (part, prob) in data and data[part, prob][1] is not None else None
-            for prob, points, is_pretested in problems])
-
-    return map(make_ranking_profile, queryset.select_related('user__user', 'rating')
-               .defer('user__about', 'user__organizations__about'))
+def base_contest_ranking_list(contest, problems, queryset):
+    return [make_contest_ranking_profile(contest, participation, problems) for participation in
+            queryset.select_related('user__user', 'rating').defer('user__about', 'user__organizations__about')]
 
 
 def contest_ranking_list(contest, problems):
-    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0, user__is_unlisted=False)
-                                                                     .prefetch_related('user__organizations')
-                                                                     .order_by('-score', 'cumtime'))
-
-
-def get_participation_ranking_profile(contest, participation, problems):
-    scoring = {data['id']: (data['score'], data['time']) for data in
-               contest.contest_problems.filter(submission__participation=participation)
-                   .annotate(score=Max('submission__points'), time=Max('submission__submission__date'))
-                   .values('score', 'time', 'id')}
-
-    return make_contest_ranking_profile(participation, [
-        BestSolutionData(code=problem.problem.code, points=scoring[problem.id][0],
-                         time=scoring[problem.id][1] - participation.start,
-                         state=best_solution_state(scoring[problem.id][0], problem.points),
-                         is_pretested=problem.is_pretested)
-        if problem.id in scoring else None for problem in problems
-    ])
+    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
+                                     .prefetch_related('user__organizations')
+                                     .order_by('-score', 'cumtime'))
 
 
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
@@ -529,8 +477,8 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
 
     if contest.hide_scoreboard and contest.is_in_contest(request):
-        return [(_('???'), get_participation_ranking_profile(contest,
-                                                             request.user.profile.current_contest, problems))], problems
+        return ([(_('???'), make_contest_ranking_profile(contest, request.user.profile.current_contest, problems))],
+                problems)
 
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
 
@@ -540,7 +488,7 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
             if participation is None or participation.contest_id != contest.id:
                 participation = None
         if participation is not None and participation.virtual:
-            users = chain([('-', get_participation_ranking_profile(contest, participation, problems))], users)
+            users = chain([('-', make_contest_ranking_profile(contest, participation, problems))], users)
     return users, problems
 
 
@@ -625,7 +573,7 @@ def base_participation_list(request, contest, profile):
                             reverse('contest_ranking', args=[contest.key]))
     users, problems = get_contest_ranking_list(
         request, contest, show_current_virtual=False,
-        ranking_list=partial(base_contest_ranking_list, for_user=profile.id, queryset=queryset),
+        ranking_list=partial(base_contest_ranking_list, queryset=queryset),
         ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users))
     return render(request, 'contest/ranking.html', {
         'users': users,
