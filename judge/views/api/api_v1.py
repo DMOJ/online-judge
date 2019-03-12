@@ -43,7 +43,7 @@ def api_v1_contest_detail(request, contest):
                                       .prefetch_related('user__organizations')
                                       .order_by('-score', 'cumtime')) if can_see_rankings else []
     if not (in_contest or contest.ended or request.user.is_superuser \
-            or contest.organizers.filter(id=request.user.profile.id).exists()):
+            or (request.user.is_authenticated and contest.organizers.filter(id=request.profile.id).exists())):
         problems = []
 
     return JsonResponse({
