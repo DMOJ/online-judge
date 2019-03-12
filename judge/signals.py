@@ -110,7 +110,7 @@ def submission_delete(sender, instance, **kwargs):
 @receiver(post_delete, sender=ContestSubmission)
 def contest_submission_delete(sender, instance, **kwargs):
     participation = instance.participation
-    participation.recalculate_score()
+    participation.recompute_results()
 
 
 @receiver(post_save, sender=Organization)
