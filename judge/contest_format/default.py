@@ -65,3 +65,6 @@ class DefaultContestFormat(BaseContestFormat):
             points=floatformat(participation.score),
             cumtime=nice_repr(timedelta(seconds=participation.cumtime), 'noday'),
         )
+
+    def get_problem_breakdown(self, participation, contest_problems):
+        return [(participation.format_data or {}).get(str(contest_problem.id)) for contest_problem in contest_problems]

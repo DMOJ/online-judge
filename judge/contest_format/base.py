@@ -71,6 +71,17 @@ class BaseContestFormat(six.with_metaclass(ABCMeta)):
         """
         raise NotImplementedError()
 
+    @abstractmethod
+    def get_problem_breakdown(self, participation, contest_problems):
+        """
+        Returns a machine-readable breakdown for the user's performance on every problem.
+
+        :param participation: The ContestParticipation object.
+        :param contest_problems: The list of ContestProblem objects to display performance for.
+        :return: A list of dictionaries, whose content is to be determined by the contest system.
+        """
+        raise NotImplementedError()
+
     @classmethod
     def best_solution_state(cls, points, total):
         if not points:
