@@ -232,7 +232,7 @@ class ContestParticipationForm(ModelForm):
 class ContestParticipationAdmin(admin.ModelAdmin):
     fields = ('contest', 'user', 'real_start', 'virtual')
     list_display = ('contest', 'username', 'show_virtual', 'real_start', 'score', 'cumtime')
-    actions = ['recalculate_points', 'recalculate_cumtime']
+    actions = ['recalculate_results']
     actions_on_bottom = actions_on_top = True
     search_fields = ('contest__key', 'contest__name', 'user__user__username')
     form = ContestParticipationForm
@@ -240,28 +240,19 @@ class ContestParticipationAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super(ContestParticipationAdmin, self).get_queryset(request).only(
-            'contest__name', 'user__user__username', 'real_start', 'score', 'cumtime', 'virtual'
+            'contest__name', 'contest__format_name', 'contest__format_config',
+            'user__user__username', 'real_start', 'score', 'cumtime', 'virtual'
         )
 
-    def recalculate_points(self, request, queryset):
+    def recalculate_results(self, request, queryset):
         count = 0
         for participation in queryset:
-            participation.recalculate_score()
+            participation.recompute_results()
             count += 1
-        self.message_user(request, ungettext('%d participation have scores recalculated.',
-                                             '%d participations have scores recalculated.',
+        self.message_user(request, ungettext('%d participation recalculated.',
+                                             '%d participations recalculated.',
                                              count) % count)
-    recalculate_points.short_description = _('Recalculate scores')
-
-    def recalculate_cumtime(self, request, queryset):
-        count = 0
-        for participation in queryset:
-            participation.update_cumtime()
-            count += 1
-        self.message_user(request, ungettext('%d participation have times recalculated.',
-                                             '%d participations have times recalculated.',
-                                             count) % count)
-    recalculate_cumtime.short_description = _('Recalculate cumulative time')
+    recalculate_results.short_description = _('Recalculate results')
 
     def username(self, obj):
         return obj.user.username

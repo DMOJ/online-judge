@@ -175,8 +175,8 @@ class SubmissionAdmin(admin.ModelAdmin):
             cache.delete('user_attempted:%d' % profile.id)
 
         for participation in ContestParticipation.objects.filter(
-                id__in=queryset.values_list('contest__participation_id')):
-            participation.recalculate_score()
+                id__in=queryset.values_list('contest__participation_id')).prefetch_related('contest'):
+            participation.recompute_results()
 
         self.message_user(request, ungettext('%d submission were successfully rescored.',
                                              '%d submissions were successfully rescored.',
