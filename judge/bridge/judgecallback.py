@@ -239,8 +239,7 @@ class DjangoJudgeHandler(JudgeHandler):
             if not contest.problem.partial and contest.points != contest.problem.points:
                 contest.points = 0
             contest.save()
-            submission.contest.participation.recalculate_score()
-            submission.contest.participation.update_cumtime()
+            submission.contest.participation.recompute_results()
 
         finished_submission(submission)
 

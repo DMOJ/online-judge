@@ -229,13 +229,9 @@ class ContestParticipation(models.Model):
                                   help_text=_('0 means non-virtual, otherwise the n-th virtual participation'))
     format_data = JSONField(verbose_name=_('contest format specific data'), null=True, blank=True)
 
-    def recalculate_score(self):
-        self.score = sum(map(itemgetter('points'),
-                             self.submissions.values('submission__problem').annotate(points=Max('points'))))
-        self.save()
-        return self.score
-
-    recalculate_score.alters_data = True
+    def recompute_results(self):
+        self.contest.format.update_participation(self)
+    recompute_results.alters_data = True
 
     @property
     def live(self):
@@ -277,20 +273,6 @@ class ContestParticipation(models.Model):
         end = self.end_time
         if end is not None and end >= self._now:
             return end - self._now
-
-    def update_cumtime(self):
-        cumtime = 0
-        for problem in self.contest.contest_problems.all():
-            solution = problem.submissions.filter(participation=self, points__gt=0) \
-                .values('submission__user_id').annotate(time=Max('submission__date'))
-            if not solution:
-                continue
-            dt = solution[0]['time'] - self.start
-            cumtime += dt.total_seconds()
-        self.cumtime = cumtime
-        self.save()
-
-    update_cumtime.alters_data = True
 
     def __unicode__(self):
         if self.spectate:
