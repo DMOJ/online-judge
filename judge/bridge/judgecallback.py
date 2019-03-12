@@ -232,15 +232,7 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.user.calculate_points()
         problem._updating_stats_only = True
         problem.update_stats()
-
-        if hasattr(submission, 'contest'):
-            contest = submission.contest
-            contest.points = round(points / total * contest.problem.points if total > 0 else 0, 3)
-            if not contest.problem.partial and contest.points != contest.problem.points:
-                contest.points = 0
-            contest.save()
-            submission.contest.participation.recalculate_score()
-            submission.contest.participation.update_cumtime()
+        submission.update_contest()
 
         finished_submission(submission)
 
