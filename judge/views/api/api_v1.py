@@ -6,7 +6,6 @@ from django.shortcuts import get_object_or_404
 
 from dmoj import settings
 from judge.models import Contest, ContestParticipation, ContestTag, Problem, Profile, Submission
-from judge.views.contests import base_contest_ranking_list
 
 
 def sane_time_repr(delta):
@@ -39,10 +38,12 @@ def api_v1_contest_detail(request, contest):
 
     problems = list(contest.contest_problems.select_related('problem')
                     .defer('problem__description').order_by('order'))
-    users = base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0, user__is_unlisted=False)
-                                      .prefetch_related('user__organizations')
-                                      .order_by('-score', 'cumtime')) if can_see_rankings else []
-    if not (in_contest or contest.ended or request.user.is_superuser \
+    participations = (contest.users.filter(virtual=0, user__is_unlisted=False)
+                      .prefetch_related('user__organizations')
+                      .annotate(username=F('user__user__username'))
+                      .order_by('-score', 'cumtime') if can_see_rankings else [])
+
+    if not (in_contest or contest.ended or request.user.is_superuser
             or (request.user.is_authenticated and contest.organizers.filter(id=request.profile.id).exists())):
         problems = []
 
@@ -54,6 +55,10 @@ def api_v1_contest_detail(request, contest):
         'is_rated': contest.is_rated,
         'rate_all': contest.is_rated and contest.rate_all,
         'has_rating': contest.ratings.exists(),
+        'format': {
+            'name': contest.format_name,
+            'config': contest.format_config,
+        },
         'problems': [
             {
                 'points': int(problem.points),
@@ -63,14 +68,11 @@ def api_v1_contest_detail(request, contest):
             } for problem in problems],
         'rankings': [
             {
-                'user': user.user.username,
-                'points': user.points,
-                'cumtime': user.cumtime,
-                'solutions': [{
-                                  'points': int(sol.points),
-                                  'time': sol.time.total_seconds()
-                              } if sol else None for sol in user.problems]
-            } for user in users]
+                'user': participation.username,
+                'points': participation.score,
+                'cumtime': participation.cumtime,
+                'solutions': contest.format.get_problem_breakdown(participation, problems)
+            } for participation in participations]
     })
 
 
