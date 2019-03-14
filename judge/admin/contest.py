@@ -200,7 +200,8 @@ class ContestAdmin(VersionAdmin):
         with transaction.atomic():
             contest.freeze_submissions = False
             contest.save()
-            for submission in ContestSubmission.objects.filter(updated_frozen=True, participation__contest=contest):
+            for submission in ContestSubmission.objects.filter(updated_frozen=True, participation__contest=contest) \
+                                                       .select_related('submission').defer('submission__source'):
                 submission.submission.recalculate_contest_submission()
         return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(id,)))
 

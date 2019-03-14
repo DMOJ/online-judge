@@ -9,6 +9,9 @@
             $('.rejudge-link').click(function () {
                 return confirm('{{ _('Are you sure you want to rejudge ALL the submissions?') }}');
             });
+            $('.unfreeze-link').click(function() {
+                return confirm('{{ _('Are you sure you want to unfreeze the contest?') }}');
+            });
         });
     </script>
 {% endblock extrahead %}
