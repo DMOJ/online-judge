@@ -298,12 +298,12 @@ class ContestParticipationAdmin(admin.ModelAdmin):
 class ContestRegistrationAdmin(admin.ModelAdmin):
     fields = ('contest', 'user', 'registration_time', 'data')
     list_display = ('contest', 'username', 'registration_time')
-    search_fields = ('contest__key', 'contest__name', 'user__user__username', 'user__name')
+    search_fields = ('contest__key', 'contest__name', 'user__user__username')
     form = ContestParticipationForm
     date_hierarchy = 'registration_time'
 
     def username(self, obj):
-        return obj.user.long_display_name
+        return obj.user.username
     username.short_description = _('username')
     username.admin_order_field = 'user__user__username'
 
