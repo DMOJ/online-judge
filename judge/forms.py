@@ -70,9 +70,6 @@ class ProfileForm(ModelForm):
             return self.instance.organizations.all()
         return self.cleaned_data['organizations']
 
-    def clean_name(self):
-        return fix_unicode(self.cleaned_data['name'] or '')
-
 
 class ProblemSubmitForm(ModelForm):
     source = CharField(max_length=65536, widget=AceWidget(theme='twilight', no_ace_media=True))

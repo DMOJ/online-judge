@@ -267,8 +267,13 @@
         {% endif %}
         <br>
 
-        {% if past_contests %}
+        {% if has_past_contests %}
             <h4>{{ _('Past Contests') }}</h4>
+            <form id="filter-form" style="display: flex;" name="form" action="" method="get">
+                <input id="search" type="text" name="search" value="{{ search_query or '' }}"
+                       placeholder="{{ _('Search contests...') }}">
+                <input type="submit" class="button" value="{{ _('Go') }}">
+            </form>
             {% if page_obj and page_obj.num_pages > 1 %}
                 <div style="margin-bottom: 4px;">
                     {% include "list-pages.html" %}

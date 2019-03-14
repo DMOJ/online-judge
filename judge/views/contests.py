@@ -73,7 +73,12 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
             .order_by('-start_time', 'key').prefetch_related('tags', 'organizations', 'organizers')
 
     def get_queryset(self):
-        return self._get_queryset().filter(end_time__lt=self._now)
+        queryset = self._get_queryset().filter(end_time__lt=self._now)
+        self.has_past_contests = queryset.exists()
+        if 'search' in self.request.GET:
+            self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
+            queryset = queryset.filter(Q(key__icontains=query) | Q(name__icontains=query))
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
@@ -97,9 +102,17 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         context['current_contests'] = present
         context['future_contests'] = future
         context['now'] = self._now
+        context['search_query'] = self.search_query
+        context['has_past_contests'] = self.has_past_contests
         context['first_page_href'] = '.'
         return context
 
+    def setup(self, request):
+        self.search_query = None
+
+    def get(self, request, *args, **kwargs):
+        self.setup(request)
+        return super(ContestList, self).get(request, *args, **kwargs)
 
 class PrivateContestError(Exception):
     def __init__(self, name, orgs):

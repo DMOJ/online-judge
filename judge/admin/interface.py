@@ -52,7 +52,7 @@ class FlatPageForm(ModelForm):
             widgets['content'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('flatpage_preview'))
 
 
-class FlatPageAdmin(FlatPageAdmin):
+class FlatPageAdmin(VersionAdmin, FlatPageAdmin):
     fieldsets = (
         (None, {'fields': ('url', 'title', 'content')}),
         (_('Advanced options'), {

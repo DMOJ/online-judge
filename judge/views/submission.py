@@ -26,7 +26,7 @@ from judge.utils.views import TitleMixin, DiggPaginatorMixin
 
 def submission_related(queryset):
     return queryset.select_related('user__user', 'problem', 'language') \
-        .only('id', 'user__user__username', 'user__name', 'user__display_rank', 'user__rating', 'problem__name',
+        .only('id', 'user__user__username', 'user__display_rank', 'user__rating', 'problem__name',
               'problem__code', 'problem__is_public', 'language__short_name', 'language__key', 'date', 'time', 'memory',
               'points', 'result', 'status', 'case_points', 'case_total', 'current_testcase')
 
@@ -186,7 +186,6 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
             queryset = queryset.filter(contest__participation__contest_id=self.contest.id)
             if self.contest.hide_scoreboard and self.contest.is_in_contest(self.request.user):
                 queryset = queryset.filter(contest__participation__user=self.request.user.profile)
-            return queryset
         else:
             queryset = queryset.select_related('contest__participation__contest') \
                 .defer('contest__participation__contest__description')
