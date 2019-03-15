@@ -1,4 +1,6 @@
 import errno
+import logging
+
 import io
 import json
 import os
@@ -20,9 +22,15 @@ HAS_PUPPETEER = os.access(NODE_PATH, os.X_OK) and os.path.isdir(PUPPETEER_MODULE
 HAS_PDF = (os.path.isdir(getattr(settings, 'PROBLEM_PDF_CACHE', '')) and
            (HAS_PHANTOMJS or HAS_SLIMERJS or HAS_PUPPETEER))
 
+EXIFTOOL = getattr(settings, 'EXIFTOOL', '/usr/bin/exiftool')
+HAS_EXIFTOOL = os.access(EXIFTOOL, os.X_OK)
+
+logger = logging.getLogger('judge.problem.pdf')
+
 
 class BasePdfMaker(object):
     math_engine = 'jax'
+    title = None
 
     def __init__(self, dir=None, clean_up=True):
         self.dir = dir or os.path.join(getattr(settings, 'PROBLEM_PDF_TEMP_DIR', tempfile.gettempdir()),
@@ -38,6 +46,15 @@ class BasePdfMaker(object):
             target.write(source.read())
 
     def make(self, debug=False):
+        self._make(debug)
+
+        if self.title and HAS_EXIFTOOL:
+            try:
+                subprocess.check_output([EXIFTOOL, '-Title=%s' % (self.title,), self.pdffile])
+            except subprocess.CalledProcessError as e:
+                logger.error('Failed to run exiftool to set title for: %s\n%s', self.title, e.output)
+
+    def _make(self, debug):
         raise NotImplementedError()
 
     @property
@@ -120,7 +137,7 @@ page.open(param.input, function (status) {
             'footer': ugettext('Page [page] of [topage]').encode('utf-8'),
         }))
 
-    def make(self, debug=False):
+    def _make(self, debug):
         with io.open(os.path.join(self.dir, '_render.js'), 'w', encoding='utf-8') as f:
             f.write(self.get_render_script())
         cmdline = [settings.PHANTOMJS, '_render.js']
@@ -173,7 +190,7 @@ try {
                 .replace('[topage]', '&L').encode('utf-8'),
         }))
 
-    def make(self, debug=False):
+    def _make(self, debug):
         with io.open(os.path.join(self.dir, '_render.js'), 'w', encoding='utf-8') as f:
             f.write(self.get_render_script())
 
@@ -233,7 +250,7 @@ puppeteer.launch().then(browser => Promise.resolve()
             'footer': ugettext('Page [page] of [topage]'),
         }))
 
-    def make(self, debug=False):
+    def _make(self, debug):
         with io.open(os.path.join(self.dir, '_render.js'), 'w', encoding='utf-8') as f:
             f.write(self.get_render_script())
 
