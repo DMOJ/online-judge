@@ -85,9 +85,10 @@
     <script type="text/javascript" src="mathjax_config.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
     <script type="text/javascript">
-        MathJax.Hub.queue.Push(function () {
+        MathJax.Hub.Register.StartupHook("End", function () {
             if (typeof window.callPhantom === 'function')
                 window.callPhantom({'action': 'snapshot'});
+            document.body.classList.add('math-loaded');
         });
     </script>
 {% endif %}
