@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db import connection
 from django.utils.timezone import make_aware
 
-from judge.models import Profile
+from judge.models.profile import Profile
 
 
 class TimezoneMiddleware(object):

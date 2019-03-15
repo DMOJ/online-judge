@@ -119,6 +119,21 @@ class Submission(models.Model):
 
     abort.alters_data = True
 
+    def recalculate_contest_submission(self):
+        if hasattr(self, 'contest'):
+            contest = self.contest
+            problem = contest.problem
+            participation = contest.participation
+
+            contest.points = round(self.case_points / self.case_total * problem.points if self.case_total > 0 else 0, 1)
+            if not problem.partial and contest.points < problem.points:
+                contest.points = 0
+
+            contest.save()
+            participation.recompute_results()
+
+    recalculate_contest_submission.alters_data = True
+
     @property
     def is_graded(self):
         return self.status not in ('QU', 'P', 'G')
