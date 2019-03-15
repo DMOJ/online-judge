@@ -125,6 +125,13 @@ class Submission(models.Model):
             problem = contest.problem
             participation = contest.participation
 
+            if participation.contest.freeze_submissions and participation.live:
+                contest.updated_frozen = True
+                contest.save()
+                return
+
+            contest.updated_frozen = False
+
             contest.points = round(self.case_points / self.case_total * problem.points if self.case_total > 0 else 0, 1)
             if not problem.partial and contest.points < problem.points:
                 contest.points = 0

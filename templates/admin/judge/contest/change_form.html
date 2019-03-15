@@ -5,6 +5,7 @@
     <script>
         django.jQuery(function ($) {
             $('.rerate-link').appendTo('div#bottombar').show();
+            $('.unfreeze-link').appendTo('div#bottombar').show();
             $('.rejudge-link').click(function () {
                 return confirm('{{ _('Are you sure you want to rejudge ALL the submissions?') }}');
             });
@@ -18,6 +19,13 @@
            class="button rerate-link">
             <i class="fa fa-lg fa-signal"></i>
             <span class="text">{% trans "Rate" %}</span>
+        </a>
+    {% endif %}
+    {% if original and original.freeze_submissions and perms.judge.contest_frozen_state %}
+        <a style="display: none" title="{% trans "Unfreeze" %}" href="{% url 'admin:judge_contest_unfreeze' original.pk %}"
+           class="button unfreeze-link">
+            <i class="fa fa-lg fa-unlock"></i>
+            <span class="text">{% trans "Unfreeze" %}</span>
         </a>
     {% endif %}
 {% endblock %}

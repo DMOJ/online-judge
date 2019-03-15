@@ -83,6 +83,11 @@ class Contest(models.Model):
                                                         'testcases. Commonly set during a contest, then unset '
                                                         'prior to rejudging user submissions when the contest ends.'),
                                             default=False)
+    freeze_submissions = models.BooleanField(verbose_name=_('freeze submissions'),
+                                             help_text=_('Whether submission updates should be frozen. If frozen, rejudging/rescoring '
+                                                         'will not propagate to related contest submissions until after this is '
+                                                         'unchecked.'),
+                                             default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may see the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
@@ -191,7 +196,7 @@ class Contest(models.Model):
                 return True
             # User is in the organizations
             if user.is_authenticated and \
-                    self.organizations.filter(id__in=user.profile.organizations.all()):
+                    self.organizations.filter(id__in=user.profile.organizations.all()).exists():
                 return True
 
         # If the user can view all contests
@@ -212,6 +217,7 @@ class Contest(models.Model):
             ('see_private_contest', _('See private contests')),
             ('edit_own_contest', _('Edit own contests')),
             ('edit_all_contest', _('Edit all contests')),
+            ('contest_frozen_state', _('Change contest frozen state')),
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
         )
@@ -317,6 +323,9 @@ class ContestSubmission(models.Model):
     is_pretest = models.BooleanField(verbose_name=_('is pretested'),
                                      help_text=_('Whether this submission was ran only on pretests.'),
                                      default=False)
+    updated_frozen = models.BooleanField(verbose_name=_('updated while frozen'),
+                                         help_text=_('Whether this submission was rejudged/rescored while the contest was frozen.'),
+                                         default=False)
 
     class Meta:
         verbose_name = _('contest submission')

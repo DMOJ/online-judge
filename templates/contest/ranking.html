@@ -232,6 +232,11 @@
                 <input id="search-contest" type="text" placeholder="{{ _('View user participation') }}">
             {% endif %}
         {% endif %}
+        {% if tab == 'ranking' and contest.freeze_submissions %}
+            <div class="alert alert-warning" style="text-align: center;">
+                {{ _('Scoreboard is frozen for this contest.') }}
+            </div>
+        {% endif %}
         <input id="show-organizations-checkbox" type="checkbox" style="vertical-align: bottom">
         <label for="show-organizations-checkbox" style="vertical-align: bottom">{{ _('Show organizations') }}</label>
     </div>

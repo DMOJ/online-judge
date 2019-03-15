@@ -63,8 +63,17 @@ class SubmissionTestCaseInline(admin.TabularInline):
 
 
 class ContestSubmissionInline(admin.StackedInline):
-    fields = ('problem', 'participation', 'points')
+    fields = ('problem', 'participation', 'points', 'updated_frozen')
+    readonly_fields = ('updated_frozen',)
     model = ContestSubmission
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = self.readonly_fields
+        if obj is None:
+            return fields
+        if not request.user.has_perm('judge.contest_frozen_state') and obj.participation.contest.freeze_submissions:
+            fields += ('points',)
+        return fields
 
     def get_formset(self, request, obj=None, **kwargs):
         kwargs['formfield_callback'] = partial(self.formfield_for_dbfield, request=request, obj=obj)
