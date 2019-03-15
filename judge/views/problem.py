@@ -247,13 +247,15 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.%s.pdf', problem.code, language)
             with DefaultPdfMaker() as maker, translation.override(language):
+                problem_name = problem.name if trans is None else trans.name
                 maker.html = get_template('problem/raw.html').render({
                     'problem': problem,
-                    'problem_name': problem.name if trans is None else trans.name,
+                    'problem_name': problem_name,
                     'description': problem.description if trans is None else trans.description,
                     'url': request.build_absolute_uri(),
                     'math_engine': maker.math_engine,
                 }).replace('"//', '"https://').replace("'//", "'https://")
+                maker.title = problem_name
 
                 assets = ['style.css', 'pygment-github.css']
                 if maker.math_engine == 'jax':
