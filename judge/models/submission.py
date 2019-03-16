@@ -175,6 +175,7 @@ class SubmissionTestCase(models.Model):
     total = models.FloatField(verbose_name=_('points possible'), null=True)
     batch = models.IntegerField(verbose_name=_('batch number'), null=True)
     feedback = models.CharField(max_length=50, verbose_name=_('judging feedback'), blank=True)
+    extended_feedback = models.TextField(verbose_name=_('extended judging feedback'), blank=True)
     output = models.TextField(verbose_name=_('program output'), blank=True)
 
     @property
