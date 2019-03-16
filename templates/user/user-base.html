@@ -39,11 +39,11 @@
             <br>
 
             <div><b>
-            {% trans trimmed counter=user.problem_count %}
-                {{ counter }} problem solved
-            {% pluralize %}
-                {{ counter }} problems solved
-            {% endtrans %}
+                {%- trans trimmed counter=user.problem_count %}
+                    {{ counter }} problem solved
+                {% pluralize %}
+                    {{ counter }} problems solved
+                {% endtrans -%}
             </b></div>
 
             {% if not user.is_unlisted %}
