@@ -27,6 +27,7 @@ CHECKERS = (
     ('rstripped', _('Non-trailing spaces')),
     ('sorted', _('Unordered')),
     ('identical', _('Byte identical')),
+    ('linecount', _('Line-by-line')),
 )
 
 
