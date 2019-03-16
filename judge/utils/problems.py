@@ -1,15 +1,18 @@
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from math import e
 
+from django.conf import settings
 from django.core.cache import cache
 from django.db.models import F, Count, Max, Q, ExpressionWrapper, Case, When
 from django.db.models.fields import FloatField
 from django.utils import timezone
 from django.utils.translation import ugettext as _, gettext_noop
 
+from judge import event_poster as event
 from judge.models import Submission, Problem
 
-__all__ = ['contest_completed_ids', 'get_result_data', 'user_completed_ids', 'user_authored_ids', 'user_editable_ids']
+__all__ = ['contest_completed_ids', 'get_result_data', 'add_to_result_data',
+           'user_completed_ids', 'user_authored_ids', 'user_editable_ids']
 
 
 def user_authored_ids(profile):
@@ -18,8 +21,8 @@ def user_authored_ids(profile):
 
 
 def user_editable_ids(profile):
-    result = set((Problem.objects.filter(authors=profile) | Problem.objects.filter(curators=profile)).values_list('id',
-                                                                                                                  flat=True))
+    result = set((Problem.objects.filter(authors=profile) |
+                  Problem.objects.filter(curators=profile)).values_list('id', flat=True))
     return result
 
 
@@ -69,6 +72,21 @@ def user_attempted_ids(profile):
     return result
 
 
+ResultType = namedtuple('ResultType', 'code name results')
+
+# Using gettext_noop here since this will be tacked into the cache, so it must be language neutral.
+# The ultimate consumer, SubmissionList.get_result_data will run ugettext on the name.
+RESULT_TYPES = [
+    ResultType('AC', gettext_noop('Accepted'), {'AC'}),
+    ResultType('WA', gettext_noop('Wrong'), {'WA'}),
+    ResultType('CE', gettext_noop('Compile Error'), {'CE'}),
+    ResultType('TLE', gettext_noop('Timeout'), {'TLE'}),
+    ResultType('ERR', gettext_noop('Error'), {'MLE', 'OLE', 'IR', 'RTE', 'AB', 'IE'}),
+]
+
+RESULT_TO_TYPE = {status: rtype.code for rtype in RESULT_TYPES for status in rtype.results}
+
+
 def get_result_data(*args, **kwargs):
     if args:
         submissions = args[0]
@@ -81,17 +99,36 @@ def get_result_data(*args, **kwargs):
 
     return {
         'categories': [
-            # Using gettext_noop here since this will be tacked into the cache, so it must be language neutral.
-            # The caller, SubmissionList.get_result_data will run ugettext on the name.
-            {'code': 'AC', 'name': gettext_noop('Accepted'), 'count': results['AC']},
-            {'code': 'WA', 'name': gettext_noop('Wrong'), 'count': results['WA']},
-            {'code': 'CE', 'name': gettext_noop('Compile Error'), 'count': results['CE']},
-            {'code': 'TLE', 'name': gettext_noop('Timeout'), 'count': results['TLE']},
-            {'code': 'ERR', 'name': gettext_noop('Error'),
-             'count': results['MLE'] + results['OLE'] + results['IR'] + results['RTE'] + results['AB'] + results['IE']},
+            {'code': rtype.code, 'name': rtype.name, 'count': sum(results[status] for status in rtype.results)}
+            for rtype in RESULT_TYPES
         ],
         'total': sum(results.values()),
     }
+
+
+def add_to_result_data(result, delta):
+    if result not in RESULT_TO_TYPE:
+        return
+
+    cache_key = 'global_submission_result_data'
+    result_data = cache.get(cache_key)
+    if not result_data:
+        return
+
+    code = RESULT_TO_TYPE.get(result)
+    for category in result_data['categories']:
+        if category['code'] == code:
+            category['count'] += delta
+            result_data['total'] += delta
+            break
+
+    cache.set(cache_key, result_data, settings.GLOBAL_SUBMISSION_STAT_UPDATE_INTERVAL)
+
+    event.post('submissions', {
+        'type': 'change-global-stats',
+        'result_type': RESULT_TO_TYPE[result],
+        'delta': delta
+    })
 
 
 def editable_problems(user, profile=None):
