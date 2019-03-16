@@ -467,7 +467,7 @@ def base_contest_ranking_list(contest, problems, queryset):
 
 
 def contest_ranking_list(contest, problems):
-    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
+    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0, user__is_unlisted=False)
                                      .prefetch_related('user__organizations')
                                      .order_by('-score', 'cumtime'))
 
