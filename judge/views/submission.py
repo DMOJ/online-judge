@@ -445,7 +445,6 @@ class AllSubmissions(SubmissionsListBase):
         context = super(AllSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
         context['last_msg'] = event.last()
-        context['stats_update_interval'] = settings.GLOBAL_SUBMISSION_STAT_UPDATE_INTERVAL
         return context
 
     def _get_result_data(self):
