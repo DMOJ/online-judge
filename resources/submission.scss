@@ -278,6 +278,14 @@ label[for="language"], label[for="status"] {
     .toggle {
         font-weight: normal;
     }
+
+    .case-feedback {
+        vertical-align: top;
+    }
+
+    .case-ext-feedback {
+        width: 50%;
+    }
 }
 
 .case-AC {
