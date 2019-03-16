@@ -262,9 +262,6 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         self.selected_languages = set(request.GET.getlist('language'))
         self.selected_statuses = set(request.GET.getlist('status'))
 
-        if 'results' in request.GET:
-            return JsonResponse(self.get_result_data())
-
         return super(SubmissionsListBase, self).get(request, *args, **kwargs)
 
 
