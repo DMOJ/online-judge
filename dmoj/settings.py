@@ -386,6 +386,8 @@ JUDGE_AMQP_PATH = None
 
 MOSS_API_KEY = None
 
+GLOBAL_SUBMISSION_STAT_UPDATE_INTERVAL = 3600
+
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:
         exec f in globals()

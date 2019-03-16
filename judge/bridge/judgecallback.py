@@ -9,6 +9,7 @@ from django.utils import timezone
 from judge import event_poster as event
 from judge.caching import finished_submission
 from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit, RuntimeVersion
+from judge.utils.problems import add_to_result_data
 from .judgehandler import JudgeHandler
 
 logger = logging.getLogger('judge.bridge')
@@ -44,7 +45,8 @@ class DjangoJudgeHandler(JudgeHandler):
         super(DjangoJudgeHandler, self).on_close()
         json_log.info(self._make_json_log(action='disconnect', info='judge disconnected'))
         if self._working:
-            Submission.objects.filter(id=self._working).update(status='IE')
+            if Submission.objects.filter(id=self._working).update(status='IE'):
+                add_to_result_data('IE', 1)
             json_log.error(self._make_json_log(sub=self._working, action='close', info='IE due to shutdown on grading'))
 
     def on_malformed(self, packet):
@@ -117,7 +119,7 @@ class DjangoJudgeHandler(JudgeHandler):
             if e.__class__.__name__ == 'OperationalError' and e.__module__ == '_mysql_exceptions' and e.args[0] == 2006:
                 db.connection.close()
 
-    def _post_update_submission(self, id, state, done=False):
+    def _post_update_submission(self, id, state, result=None, done=False):
         if self._submission_cache_id == id:
             data = self._submission_cache
         else:
@@ -127,10 +129,12 @@ class DjangoJudgeHandler(JudgeHandler):
             ).get()
             self._submission_cache_id = id
 
+        add_to_result_data(result, 1)
+
         if data['problem__is_public']:
             event.post('submissions', {
                 'type': 'done-submission' if done else 'update-submission',
-                'state': state, 'id': id,
+                'state': state, 'id': id, 'result': result,
                 'contest': data['contest__participation__contest__key'],
                 'user': data['user_id'], 'problem': data['problem_id'],
                 'status': data['status'], 'language': data['language__key'],
@@ -247,7 +251,7 @@ class DjangoJudgeHandler(JudgeHandler):
         if hasattr(submission, 'contest'):
             participation = submission.contest.participation
             event.post('contest_%d' % participation.contest_id, {'type': 'update'})
-        self._post_update_submission(submission.id, 'grading-end', done=True)
+        self._post_update_submission(submission.id, 'grading-end', result=submission.result, done=True)
 
     def on_compile_error(self, packet):
         super(DjangoJudgeHandler, self).on_compile_error(packet)
@@ -257,7 +261,7 @@ class DjangoJudgeHandler(JudgeHandler):
                 'type': 'compile-error',
                 'log': packet['log']
             })
-            self._post_update_submission(packet['submission-id'], 'compile-error', done=True)
+            self._post_update_submission(packet['submission-id'], 'compile-error', result='CE', done=True)
             json_log.info(self._make_json_log(packet, action='compile-error', log=packet['log'],
                                               finish=True, result='CE'))
         else:
@@ -282,7 +286,7 @@ class DjangoJudgeHandler(JudgeHandler):
         id = packet['submission-id']
         if Submission.objects.filter(id=id).update(status='IE', result='IE', error=packet['message']):
             event.post('sub_%s' % Submission.get_id_secret(id), {'type': 'internal-error'})
-            self._post_update_submission(id, 'internal-error', done=True)
+            self._post_update_submission(id, 'internal-error', result='IE', done=True)
             json_log.info(self._make_json_log(packet, action='internal-error', message=packet['message'],
                                               finish=True, result='IE'))
         else:
@@ -295,7 +299,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
         if Submission.objects.filter(id=packet['submission-id']).update(status='AB', result='AB'):
             event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {'type': 'aborted-submission'})
-            self._post_update_submission(packet['submission-id'], 'terminated', done=True)
+            self._post_update_submission(packet['submission-id'], 'terminated', result='AB', done=True)
             json_log.info(self._make_json_log(packet, action='aborted', finish=True, result='AB'))
         else:
             logger.warning('Unknown submission: %d', packet['submission-id'])
