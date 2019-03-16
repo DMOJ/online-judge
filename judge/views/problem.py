@@ -180,7 +180,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['has_pdf_render'] = HAS_PDF
         context['completed_problem_ids'] = self.get_completed_problems()
         context['attempted_problems'] = self.get_attempted_problems()
-        
+
         can_edit = self.object.is_editable_by(user)
         context['can_edit_problem'] = can_edit
         if user.is_authenticated:

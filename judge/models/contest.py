@@ -142,7 +142,7 @@ class Contest(models.Model):
     def is_in_contest(self, user):
         if user.is_authenticated:
             profile = user.profile
-            return profile and profile.current_contest is not None and profile.current_contest.contest == self
+            return profile.current_contest is not None and profile.current_contest.contest == self
         return False
 
     def can_see_scoreboard(self, user):
@@ -161,7 +161,7 @@ class Contest(models.Model):
     @classmethod
     def contests_list(cls, user):
         if not user.is_authenticated:
-            return cls.objects.none()
+            return cls.objects.filter(tags__name__in=['external'], is_public=True, is_private=False)
 
         profile = user.profile
         queryset = cls.objects.all().defer('description', 'registration_page')
@@ -224,8 +224,6 @@ class Contest(models.Model):
 
     def can_register(self, user):
         if self.require_registration:
-            start_time = self.registration_start_time or self._now
-            end_time = self.registration_end_time or self._now
             if not self.registration_start_time <= self._now <= self.registration_end_time:
                 return False
             return self.is_joinable_by(user, check_registered=False)
@@ -234,11 +232,10 @@ class Contest(models.Model):
     def is_registered(self, user):
         if not self.require_registration:
             return True
-        # TODO optimiziable
         return self.registrants.filter(user=user.profile).exists()
 
     def is_joinable_by(self, user, check_registered=True):
-        if not self.is_accessible_by(user):
+        if not user.is_authenticated or not self.is_accessible_by(user):
             return False
         if self.ended:
             return self.is_virtualable
@@ -247,7 +244,7 @@ class Contest(models.Model):
         if user.has_perm('judge.edit_own_contest') and \
                 self.organizers.filter(id=user.profile.id).exists():
             return True
-        
+
         if check_registered and not self.is_registered(user):
             return False
 
@@ -257,10 +254,11 @@ class Contest(models.Model):
 
     def is_accessible_by(self, user):
         if not user.is_authenticated:
-            return False
+            return self.is_public and not self.is_private and 'external' in self.tags.values_list('name', flat=True)
 
-        if user.profile.is_contest_account:
-            return self.organizations.filter(id__in=user.profile.organizations.all()).exists()
+        if user.profile.is_contest_account and \
+                not self.organizations.filter(id__in=user.profile.organizations.all()).exists():
+            return False
 
         # Contest is public
         if self.is_public:
