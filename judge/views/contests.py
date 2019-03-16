@@ -264,7 +264,12 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                        _('You have been declared persona non grata for this contest. '
                                          'You are permanently barred from joining this contest.'))
 
+        requires_access_code = not (request.user.is_superuser or self.is_organizer) \
+                                    and contest.access_code and access_code != contest.access_code
         if contest.ended:
+            if requires_access_code:
+                 raise ContestAccessDenied()
+
             while True:
                 virtual_id = (ContestParticipation.objects.filter(contest=contest, user=profile)
                               .aggregate(virtual_id=Max('virtual'))['virtual_id'] or 0) + 1
@@ -284,7 +289,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                     contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0)
                 )
             except ContestParticipation.DoesNotExist:
-                if contest.access_code and access_code != contest.access_code:
+                if requires_access_code:
                     raise ContestAccessDenied()
 
                 participation = ContestParticipation.objects.create(
