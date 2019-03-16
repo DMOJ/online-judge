@@ -73,7 +73,7 @@
             </tr>
 
             {% if case.status != 'AC' and case.output %}
-                <tr id="{{ case.id }}-output" style="display:none" class="toggled">
+                <tr id="{{ case.id }}-output" style="display:none" class="case-feedback toggled">
                     <td colspan="5">
                         <div class="case-info">
                             <strong>{{ _('Your output (clipped)') }}</strong>
@@ -84,6 +84,14 @@
                             {% endif %}
                         </div>
                     </td>
+                    {% if case.extended_feedback %}
+                        <td colspan="5" class="case-ext-feedback">
+                            <div class="case-info">
+                                <strong>{{ _('Judge feedback') }}</strong>
+                                <pre class="case-output">{{ case.extended_feedback|linebreaksbr }}</pre>
+                            </div>
+                        </td>
+                    {% endif %}
                 </tr>
             {% endif %}
         {% endfor %}
