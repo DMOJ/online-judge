@@ -24,6 +24,8 @@ from django.utils.translation import ugettext as _, ugettext_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView, DetailView
+from functools import partial
+from itertools import chain
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
@@ -491,11 +493,13 @@ class CachedContestCalendar(ContestCalendar):
         cached.set(key, response.content)
         return response
 
+
 ContestRankingProfile = namedtuple(
     'ContestRankingProfile',
     'id user css_class username points cumtime organization participation '
     'participation_rating problem_cells result_cell'
 )
+
 
 BestSolutionData = namedtuple('BestSolutionData', 'code points bonus time state is_pretested')
 
