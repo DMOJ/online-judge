@@ -43,14 +43,14 @@ class BonusesContestFormat(DefaultContestFormat):
         total_wrapper = ExpressionWrapper(F('points')+F('bonus'), output_field=FloatField())
 
         queryset = (participation.submissions.values('problem_id', 'problem__points')
-                                            .annotate(total=total_wrapper)
-                                            .filter(total=Subquery(
-                                                participation.submissions.filter(problem_id=OuterRef('problem_id'))
-                                                                         .annotate(best=total_wrapper)
-                                                                         .order_by('-best').values('best')[:1]
-                                            ))
-                                            .annotate(time=Min('submission__date'), points=Max('points'))
-                                            .values('problem_id', 'time', 'points', 'total', 'problem__points'))
+                                             .annotate(total=total_wrapper)
+                                             .filter(total=Subquery(
+                                                 participation.submissions.filter(problem_id=OuterRef('problem_id'))
+                                                                          .annotate(best=total_wrapper)
+                                                                          .order_by('-best').values('best')[:1]
+                                             ))
+                                             .annotate(time=Min('submission__date'), points=Max('points'))
+                                             .values('problem_id', 'time', 'points', 'total', 'problem__points'))
 
         for problem_id, time, points, total, problem_points in queryset:
             dt = (time - participation.start).total_seconds()
