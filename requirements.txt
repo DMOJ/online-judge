@@ -25,3 +25,4 @@ django-fernet-fields
 pyotp
 qrcode[pil]
 jsonfield
+pymoss

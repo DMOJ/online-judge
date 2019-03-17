@@ -45,7 +45,14 @@
                 {% endif %}
             {% endwith %}
 
-            <div><b>{{ _('%(count)d problems solved', count=user.problem_count) }}</b></div>
+            <div><b>
+                {%- trans trimmed counter=user.problem_count %}
+                    {{ counter }} problem solved
+                {% pluralize %}
+                    {{ counter }} problems solved
+                {% endtrans -%}
+            </b></div>
+
             {% if not user.is_contest_account and not user.is_unlisted %}
                 <div>
                     <b class="semibold">{{ _('Rank by points:') }}</b> 

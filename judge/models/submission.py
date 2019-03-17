@@ -178,6 +178,8 @@ class Submission(models.Model):
                 return True
         return False
 
+    update_contest.alters_data = True
+
     @property
     def is_graded(self):
         return self.status not in ('QU', 'P', 'G')
