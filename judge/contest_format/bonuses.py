@@ -1,6 +1,6 @@
 from datetime import timedelta
 from django.core.exceptions import ValidationError
-from django.db.models import ExpressionWrapper, F, FloatField, Max, Min
+from django.db.models import ExpressionWrapper, F, FloatField, Max, Min, Subquery, OuterRef
 from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
@@ -50,7 +50,7 @@ class BonusesContestFormat(DefaultContestFormat):
                                                                           .order_by('-best').values('best')[:1]
                                              ))
                                              .annotate(time=Min('submission__date'), points=Max('points'))
-                                             .values('problem_id', 'time', 'points', 'total', 'problem__points'))
+                                             .values_list('problem_id', 'time', 'points', 'total', 'problem__points'))
 
         for problem_id, time, points, total, problem_points in queryset:
             dt = (time - participation.start).total_seconds()

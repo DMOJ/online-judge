@@ -36,7 +36,7 @@ class DefaultContestFormat(BaseContestFormat):
                                                                          .order_by('-points').values('points')[:1]
                                             ))
                                             .annotate(time=Min('submission__date'))
-                                            .values('problem_id', 'time', 'points', 'problem__points'))
+                                            .values_list('problem_id', 'time', 'points', 'problem__points'))
 
         for problem_id, time, points, problem_points in queryset:
             dt = (time - participation.start).total_seconds()
