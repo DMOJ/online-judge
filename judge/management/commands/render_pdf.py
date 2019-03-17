@@ -8,7 +8,7 @@ from django.template.loader import get_template
 from django.utils import translation
 
 from judge.models import Problem, ProblemTranslation
-from judge.pdf_problems import DefaultPdfMaker, PhantomJSPdfMaker, SlimerJSPdfMaker
+from judge.pdf_problems import DefaultPdfMaker, PhantomJSPdfMaker, SlimerJSPdfMaker, PuppeteerPDFRender
 
 
 class Command(BaseCommand):
@@ -22,6 +22,8 @@ class Command(BaseCommand):
         parser.add_argument('-p', '--phantomjs', action='store_const', const=PhantomJSPdfMaker,
                             default=DefaultPdfMaker, dest='engine')
         parser.add_argument('-s', '--slimerjs', action='store_const', const=SlimerJSPdfMaker, dest='engine')
+        parser.add_argument('-c', '--chrome', '--puppeteer', action='store_const',
+                            const=PuppeteerPDFRender, dest='engine')
 
     def handle(self, *args, **options):
         try:
@@ -38,13 +40,15 @@ class Command(BaseCommand):
         directory = options['directory']
         with options['engine'](directory, clean_up=directory is None) as maker, \
                 translation.override(options['language']):
+            problem_name = problem.name if trans is None else trans.name
             maker.html = get_template('problem/raw.html').render({
                 'problem': problem,
-                'problem_name': problem.name if trans is None else trans.name,
+                'problem_name': problem_name,
                 'description': problem.description if trans is None else trans.description,
                 'url': '',
                 'math_engine': maker.math_engine,
             }).replace('"//', '"https://').replace("'//", "'https://")
+            maker.title = problem_name
             for file in ('style.css', 'pygment-github.css', 'mathjax_config.js'):
                 maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
             maker.make(debug=True)

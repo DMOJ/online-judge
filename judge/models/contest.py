@@ -8,7 +8,9 @@ from django.db.models import Max, F, Q
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _, ugettext
+from jsonfield import JSONField
 
+from judge import contest_format
 from judge.models.problem import Problem
 from judge.models.profile import Profile, Organization
 from judge.models.submission import Submission
@@ -120,13 +122,20 @@ class Contest(models.Model):
                                                'to join the contest. Leave it blank to disable.'))
     banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
                                           help_text=_('Bans the selected users from joining this contest.'))
-    time_bonus = models.IntegerField(verbose_name=_('time bonus'),
-                                     help_text=_('Number of minutes to award an extra point for submitting '
-                                                 'before the contest end. Leave as 0 for no time bonus.'),
-                                     default=0)    
-    first_submission_bonus = models.IntegerField(verbose_name=_('first try bonus'),
-                                                 help_text=_('Bonus points for fully solving on first submission.'),
-                                                 default=0)
+    format_name = models.CharField(verbose_name=_('contest format'), default='default', max_length=32,
+                                   choices=contest_format.choices(), help_text=_('The contest format module to use.'))
+    format_config = JSONField(verbose_name=_('contest format configuration'), null=True, blank=True,
+                              help_text=_('A JSON object to serve as the configuration for the chosen contest format '
+                                          'module. Leave empty to use None. Exact format depends on the contest format '
+                                          'selected.'))
+
+    @cached_property
+    def format_class(self):
+        return contest_format.formats[self.format_name]
+
+    @cached_property
+    def format(self):
+        return self.format_class(self, self.format_config)
 
     def clean(self):
         if self.start_time >= self.end_time:
@@ -138,6 +147,7 @@ class Contest(models.Model):
                 raise ValidationError('Registration end time field cannot be empty.')
             elif self.registration_start_time >= self.registration_end_time:
                 raise ValidationError('What is this? Registration ends before it starts?')
+        self.format_class.validate(self.format_config)
 
     def is_in_contest(self, user):
         if user.is_authenticated:
@@ -319,15 +329,11 @@ class ContestParticipation(models.Model):
     cumtime = models.PositiveIntegerField(verbose_name=_('cumulative time'), default=0)
     virtual = models.IntegerField(verbose_name=_('virtual participation id'), default=0,
                                   help_text=_('0 means non-virtual, otherwise the n-th virtual participation'))
+    format_data = JSONField(verbose_name=_('contest format specific data'), null=True, blank=True)
 
-    def recalculate_score(self):
-        from django.db.models import F, FloatField
-        values = self.submissions.values('submission__problem').annotate(total=Max(F('points')+F('bonus'), output_field=FloatField()))
-        self.score = sum(map(itemgetter('total'), values))
-        self.save()
-        return self.score
-
-    recalculate_score.alters_data = True
+    def recompute_results(self):
+        self.contest.format.update_participation(self)
+    recompute_results.alters_data = True
 
     @property
     def live(self):
@@ -369,22 +375,6 @@ class ContestParticipation(models.Model):
         end = self.end_time
         if end is not None and end >= self._now:
             return end - self._now
-
-    def update_cumtime(self):
-        cumtime = 0
-        for problem in self.contest.contest_problems.all():
-            solution = problem.submissions.filter(participation=self, points__gt=0) \
-                                          .annotate(best=Max('points')) \
-                                          .filter(points=F('best')) \
-                                          .aggregate(time=Max('submission__date'))
-            if solution['time'] is None:
-                continue
-            dt = solution['time'] - self.start
-            cumtime += dt.total_seconds()
-        self.cumtime = cumtime
-        self.save()
-
-    update_cumtime.alters_data = True
 
     def __unicode__(self):
         if self.spectate:

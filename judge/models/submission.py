@@ -119,37 +119,42 @@ class Submission(models.Model):
 
     abort.alters_data = True
 
-    def recalculate_contest_submission(self):
-        if hasattr(self, 'contest'):
+    def update_contest(self):
+        try:
             contest = self.contest
-            problem = contest.problem
-            participation = contest.participation
+        except AttributeError:
+            return
+        
+        contest_problem = contest.problem
+        participation = contest.participation
 
-            if participation.contest.freeze_submissions and participation.live:
-                contest.updated_frozen = True
-                contest.save()
-                return
- 
-            contest.updated_frozen = False
-            contest.points = round(self.case_points / self.case_total * problem.points if self.case_total > 0 else 0, 3)
-            if not problem.partial and contest.points < problem.points:
-                contest.points = 0
-            
-            contest.bonus = 0
-            if contest.points != 0 and not participation.spectate:
-                time_bonus = participation.contest.time_bonus
-                first_submission_bonus = participation.contest.first_submission_bonus
-                if time_bonus != 0:
-                    dt = participation.end_time - contest.submission.date
-                    contest.bonus = (contest.points / problem.points) * (dt.total_seconds()//(60*time_bonus))
-                if contest.points == problem.points \
-                        and not participation.submissions.filter(problem=problem, submission__date__lt=contest.submission.date).exists():
-                    contest.bonus += first_submission_bonus
+        if participation.contest.freeze_submissions and participation.live:
+            contest.updated_frozen = True
             contest.save()
-            participation.recalculate_score()
-            participation.update_cumtime()
+            return
+ 
+        contest.updated_frozen = False
+        contest.points = round(self.case_points / self.case_total * contest_problem.points
+                               if self.case_total > 0 else 0, 3)
+        if not contest_problem.partial and contest.points != contest_problem.points:
+            contest.points = 0
 
-    recalculate_contest_submission.alters_data = True
+        contest.bonus = 0
+        if contest.points != 0 and not participation.spectate:
+            config = participation.contest.format.config
+            if config:
+                time_bonus = config.get('time_bonus') or 0
+                first_submission_bonus = config.get('first_submission_bonus') or 0
+                if time_bonus:
+                    dt = (participation.end_time - self.date).total_seconds()
+                    contest.bonus = (contest.points / contest_problem.points) * (dt//(60*time_bonus))
+                if first_submission_bonus and contest.points == contest_problem.points and \
+                        not participation.submissions.filter(problem=contest_problem, submission__date__lt=self.date).exists():
+                    contest.bonus += first_submission_bonus
+        contest.save()
+        participation.recompute_results()
+
+    update_contest.alters_data = True
 
     def is_accessible_by(self, user):
         if not user.is_authenticated:
@@ -229,6 +234,7 @@ class SubmissionTestCase(models.Model):
     total = models.FloatField(verbose_name=_('points possible'), null=True)
     batch = models.IntegerField(verbose_name=_('batch number'), null=True)
     feedback = models.CharField(max_length=50, verbose_name=_('judging feedback'), blank=True)
+    extended_feedback = models.TextField(verbose_name=_('extended judging feedback'), blank=True)
     output = models.TextField(verbose_name=_('program output'), blank=True)
 
     @property

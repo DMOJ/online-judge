@@ -107,16 +107,16 @@ class ContestAdmin(VersionAdmin):
         (None,              {'fields': ('key', 'name', 'organizers')}),
         (_('Settings'),     {'fields': ('is_public', 'is_virtualable', 'use_clarifications', 'hide_problem_tags',
                                         'freeze_submissions', 'hide_scoreboard', 'run_pretests_only', 'access_code')}),
-        (_('Bonuses'),      {'fields': ('time_bonus', 'first_submission_bonus')}),
         (_('Scheduling'),   {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'),      {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
+        (_('Format'),       {'fields': ('format_name', 'format_config')}),
         (_('Rating'),       {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
         (_('Registration'), {'fields': ('require_registration', 'registration_start_time', 'registration_end_time', 'registration_page')}),
         (_('Organization'), {'fields': ('is_private', 'is_private_viewable', 'organizations')}),
         (_('Justice'),      {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_public', 'is_rated', 'start_time', 'end_time',
-                    'time_limit', 'time_bonus', 'first_submission_bonus', 'user_count')
+                    'time_limit', 'user_count')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
     actions_on_top = True
@@ -202,7 +202,7 @@ class ContestAdmin(VersionAdmin):
             contest.save()
             for submission in ContestSubmission.objects.filter(updated_frozen=True, participation__contest=contest) \
                                                        .select_related('submission').defer('submission__source'):
-                submission.submission.recalculate_contest_submission()
+                submission.submission.update_contest()
         return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(id,)))
 
     def rate_all_view(self, request):
@@ -254,7 +254,7 @@ class ContestParticipationForm(ModelForm):
 class ContestParticipationAdmin(admin.ModelAdmin):
     fields = ('contest', 'user', 'real_start', 'virtual')
     list_display = ('contest', 'username', 'show_virtual', 'real_start', 'score', 'cumtime')
-    actions = ['recalculate_points', 'recalculate_cumtime']
+    actions = ['recalculate_results']
     actions_on_bottom = actions_on_top = True
     search_fields = ('contest__key', 'contest__name', 'user__user__username')
     form = ContestParticipationForm
@@ -262,28 +262,19 @@ class ContestParticipationAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super(ContestParticipationAdmin, self).get_queryset(request).only(
-            'contest__name', 'user__user__username', 'real_start', 'score', 'cumtime', 'virtual'
+            'contest__name', 'contest__format_name', 'contest__format_config',
+            'user__user__username', 'real_start', 'score', 'cumtime', 'virtual'
         )
 
-    def recalculate_points(self, request, queryset):
+    def recalculate_results(self, request, queryset):
         count = 0
         for participation in queryset:
-            participation.recalculate_score()
+            participation.recompute_results()
             count += 1
-        self.message_user(request, ungettext('%d participation have scores recalculated.',
-                                             '%d participations have scores recalculated.',
+        self.message_user(request, ungettext('%d participation recalculated.',
+                                             '%d participations recalculated.',
                                              count) % count)
-    recalculate_points.short_description = _('Recalculate scores')
-
-    def recalculate_cumtime(self, request, queryset):
-        count = 0
-        for participation in queryset:
-            participation.update_cumtime()
-            count += 1
-        self.message_user(request, ungettext('%d participation have times recalculated.',
-                                             '%d participations have times recalculated.',
-                                             count) % count)
-    recalculate_cumtime.short_description = _('Recalculate cumulative time')
+    recalculate_results.short_description = _('Recalculate results')
 
     def username(self, obj):
         return obj.user.username

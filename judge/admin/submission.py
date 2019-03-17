@@ -179,8 +179,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             if not submission.problem.partial and submission.points < submission.problem.points:
                 submission.points = 0
             submission.save()
-
-            submission.recalculate_contest_submission()
+            submission.update_contest()
 
         for profile in Profile.objects.filter(id__in=queryset.values_list('user_id', flat=True).distinct()):
             profile.calculate_points()
@@ -188,8 +187,8 @@ class SubmissionAdmin(admin.ModelAdmin):
             cache.delete('user_attempted:%d' % profile.id)
 
         for participation in ContestParticipation.objects.filter(
-                id__in=queryset.values_list('contest__participation_id')):
-            participation.recalculate_score()
+                id__in=queryset.values_list('contest__participation_id')).prefetch_related('contest'):
+            participation.recompute_results()
 
         self.message_user(request, ungettext('%d submission were successfully rescored.',
                                              '%d submissions were successfully rescored.',
