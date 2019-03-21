@@ -106,6 +106,7 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         context['search_query'] = self.search_query
         context['has_past_contests'] = self.has_past_contests
         context['first_page_href'] = '.'
+        context['page_suffix'] = '#past-contests'
         return context
 
     def setup(self, request):

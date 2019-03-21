@@ -89,6 +89,11 @@ class JudgeAdmin(VersionAdmin):
             return not obj.online
         return result
 
+    def save_model(self, request, obj, form, change):
+        if obj.id and obj.is_blocked and obj.online:
+            obj.disconnect(force=False)
+        super(JudgeAdmin, self).save_model(request, obj, form, change)
+
     if AdminPagedownWidget is not None:
         formfield_overrides = {
             TextField: {'widget': AdminPagedownWidget},

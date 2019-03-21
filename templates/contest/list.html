@@ -269,7 +269,7 @@
         <br>
 
         {% if has_past_contests %}
-            <h4>{{ _('Past Contests') }}</h4>
+            <h4 id="past-contests">{{ _('Past Contests') }}</h4>
             <form id="filter-form" style="display: flex;" name="form" action="" method="get">
                 <input id="search" type="text" name="search" value="{{ search_query or '' }}"
                        placeholder="{{ _('Search contests...') }}">
