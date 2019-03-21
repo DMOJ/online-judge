@@ -9,7 +9,7 @@ import jsonfield.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0083_contest_formats'),
+        ('judge', '0084_extended_feedback'),
     ]
 
     operations = [
