@@ -38,12 +38,17 @@ class ECOOContestFormat(BaseContestFormat):
                     FROM judge_contestsubmission ccs LEFT OUTER JOIN
                          judge_submission csub ON (csub.id = ccs.submission_id)
                     WHERE ccs.problem_id = cp.id AND ccs.participation_id = %s AND csub.date = MAX(sub.date)
-                ) AS `score`, MAX(sub.date) AS `time`, cp.id AS `prob`, COUNT(sub.id) AS `subs`, cp.points AS `max_score`
-                FROM judge_contestproblem cp INNER JOIN
-                     judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
-                     judge_submission sub ON (sub.id = cs.submission_id)
-                GROUP BY cp.id
-            ''', (participation.id, participation.id))
+            ) AS `score`, MAX(sub.date) AS `time`, cp.id AS `prob`, (
+                SELECT COUNT(ccs.id)
+                    FROM judge_contestsubmission ccs LEFT OUTER JOIN
+                         judge_submission csub ON (csub.id = ccs.submission_id)
+                    WHERE ccs.problem_id = cp.id AND ccs.participation_id = %s AND csub.result <> 'CE'
+            ) AS `subs`, cp.points AS `max_score`
+            FROM judge_contestproblem cp INNER JOIN
+                 judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
+                 judge_submission sub ON (sub.id = cs.submission_id)
+            GROUP BY cp.id
+            ''', (participation.id, participation.id, participation.id))
             for score, time, prob, subs, max_score in cursor.fetchall():
                 time = from_database_time(time)
                 dt = (time - participation.start).total_seconds()
