@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0082_remove_profile_name'),
+        ('judge', '0083_contest_formats'),
     ]
 
     operations = [
