@@ -37,8 +37,8 @@ from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message
 from functools import partial
 from itertools import chain
 
-__all__ = ['ContestList', 'ContestDetail', 'contest_ranking', 'ContestRegister', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
-           'contest_ranking_ajax', 'participation_list', 'own_participation_list', 'get_contest_ranking_list',
+__all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestRegister', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
+           'contest_ranking_ajax', 'ContestParticipationList', 'get_contest_ranking_list',
            'base_contest_ranking_list']
 
 
@@ -174,7 +174,7 @@ class ContestMixin(object):
     def get_object(self, queryset=None):
         contest = super(ContestMixin, self).get_object(queryset)
         user = self.request.user
-        profile = self.request.user.profile if user.is_authenticated else None
+        profile = self.request.profile
 
         if (profile is not None and
                 ContestParticipation.objects.filter(id=profile.current_contest_id, contest_id=contest.id).exists()):
@@ -189,8 +189,8 @@ class ContestMixin(object):
             if profile is None or (not user.has_perm('judge.edit_all_contest') and
                                    not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
                 raise PrivateContestError(contest.name, contest.organizations.all())
-        
-        if not contest.is_accessible_by(self.request.user):
+
+        if not contest.is_accessible_by(user):
             raise Http404()
 
         return contest
@@ -540,14 +540,14 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
 
     if contest.hide_scoreboard and contest.is_in_contest(request.user):
-        return ([(_('???'), make_contest_ranking_profile(contest, request.user.profile.current_contest, problems))],
+        return ([(_('???'), make_contest_ranking_profile(contest, request.profile.current_contest, problems))],
                 problems)
 
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
 
     if show_current_virtual:
         if participation is None and request.user.is_authenticated:
-            participation = request.user.profile.current_contest
+            participation = request.profile.current_contest
             if participation is None or participation.contest_id != contest.id:
                 participation = None
         if participation is not None and participation.virtual:
@@ -572,96 +572,79 @@ def contest_ranking_ajax(request, contest, participation=None):
     })
 
 
-def contest_ranking_view(request, contest, participation=None):
-    if not contest.can_see_scoreboard(request.user):
-        raise Http404()
+class ContestRankingBase(ContestMixin, TitleMixin, DetailView):
+    template_name = 'contest/ranking.html'
+    tab = None
 
-    users, problems = get_contest_ranking_list(request, contest, participation)
+    def get_title(self):
+        return ''
 
-    context = {
-        'users': users,
-        'title': _('%s Rankings') % contest.name,
-        'content_title': contest.name,
-        'problems': problems,
-        'contest': contest,
-        'last_msg': event.last(),
-        'has_rating': contest.ratings.exists(),
-        'tab': 'ranking',
-    }
+    def get_content_title(self):
+        return self.object.name
 
-    # TODO: use ContestMixin when this becomes a class-based view
-    if request.user.is_authenticated:
-        profile = request.user.profile
-        in_contest = context['in_contest'] = (profile.current_contest is not None and
-                                              profile.current_contest.contest == contest)
-        if in_contest:
-            context['participation'] = profile.current_contest
-            context['participating'] = True
+    def get_ranking_list(self):
+        return (None, None)
+
+    def get_context_data(self, **kwargs):
+        context = super(ContestRankingBase, self).get_context_data(**kwargs)
+
+        if not self.object.can_see_scoreboard(self.request.user):
+            raise Http404()
+
+        users, problems = self.get_ranking_list()
+        context['users'] = users
+        context['problems'] = problems
+        context['last_msg'] = event.last()
+        context['tab'] = self.tab
+        return context
+
+
+class ContestRanking(ContestRankingBase):
+    tab = 'ranking'
+
+    def get_title(self):
+        return _('%s Rankings') % self.object.name
+
+    def get_ranking_list(self):
+        return get_contest_ranking_list(self.request, self.object)
+
+    def get_context_data(self, **kwargs):
+        context = super(ContestRanking, self).get_context_data(**kwargs)
+        context['has_rating'] = self.object.ratings.exists()
+        return context
+
+
+class ContestParticipationList(ContestRankingBase, LoginRequiredMixin):
+    tab = 'participation'
+
+    def get_title(self):
+        if self.profile == self.request.profile:
+            return _('Your participation in %s') % self.object.name
+        return _("%s's participation in %s") % (self.profile.username, self.object.name)
+
+    def get_ranking_list(self):
+        queryset = self.object.users.filter(user=self.profile, virtual__gte=0).order_by('-virtual')
+        live_link = format_html(u'<a href="{2}#!{1}">{0}</a>', _('Live'), self.profile.username,
+                                reverse('contest_ranking', args=[self.object.key]))
+
+        return get_contest_ranking_list(
+            self.request, self.object, show_current_virtual=False,
+            ranking_list=partial(base_contest_ranking_list, queryset=queryset),
+            ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users))
+
+    def get_context_data(self, **kwargs):
+        context = super(ContestParticipationList, self).get_context_data(**kwargs)
+        context['has_rating'] = False
+        context['now'] = timezone.now()
+        context['rank_header'] = _('Participation')
+        return context
+
+    def get(self, request, *args, **kwargs):
+        if 'user' in kwargs:
+            self.profile = get_object_or_404(Profile, user__username=kwargs['user'])
         else:
-            try:
-                context['participation'] = profile.contest_history.get(contest=contest, virtual=0)
-            except ContestParticipation.DoesNotExist:
-                context['participating'] = False
-                context['participation'] = None
-            else:
-                context['participating'] = True
-    else:
-        context['participating'] = False
-        context['participation'] = None
-        context['in_contest'] = False
-    context['now'] = timezone.now()
-
-    return render(request, 'contest/ranking.html', context)
-
-
-def contest_ranking(request, contest):
-    contest, exists = _find_contest(request, contest)
-    if not exists:
-        return contest
-    return contest_ranking_view(request, contest)
-
-
-def base_participation_list(request, contest, profile):
-    contest, exists = _find_contest(request, contest)
-    if not exists:
-        return contest
-    if not contest.can_see_scoreboard(request.user):
-        raise Http404()
-
-    req_username = request.user.username if request.user.is_authenticated else None
-    prof_username = profile.user.username
-
-    queryset = contest.users.filter(user=profile, virtual__gte=0).order_by('-virtual')
-    live_link = format_html(u'<a href="{2}#!{1}">{0}</a>', _('Live'), prof_username,
-                            reverse('contest_ranking', args=[contest.key]))
-    users, problems = get_contest_ranking_list(
-        request, contest, show_current_virtual=False,
-        ranking_list=partial(base_contest_ranking_list, queryset=queryset),
-        ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users))
-    return render(request, 'contest/ranking.html', {
-        'users': users,
-        'title': _('Your participation in %s') % contest.name if req_username == prof_username else
-        _("%s's participation in %s") % (prof_username, contest.name),
-        'content_title': contest.name,
-        # 'subtitle': _('Your participation') if req_username == prof_username else _(
-        #    "%s's participation") % prof_username,
-        'problems': problems,
-        'contest': contest,
-        'last_msg': event.last(),
-        'has_rating': False,
-        'now': timezone.now(),
-        'rank_header': _('Participation'),
-        'tab': 'participation',
-    })
-
-
-@login_required
-def own_participation_list(request, contest):
-    return base_participation_list(request, contest, request.user.profile)
-
-
-def participation_list(request, contest, user):
-    return base_participation_list(request, contest, get_object_or_404(Profile, user__username=user))
+            self.profile = self.request.profile
+        return super(ContestParticipationList, self).get(request, *args, **kwargs)
 
 
 class ContestTagDetailAjax(DetailView):
@@ -676,6 +659,7 @@ class ContestTagDetail(TitleMixin, ContestTagDetailAjax):
 
     def get_title(self):
         return _('Contest tag: %s') % self.object.name
+
 
 @require_POST
 @login_required
