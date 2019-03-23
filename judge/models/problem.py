@@ -177,12 +177,16 @@ class Problem(models.Model):
     def is_editable_by(self, user):
         if not user.is_authenticated:
             return False
-        if user.has_perm('judge.edit_all_problem') or (user.has_perm('judge.edit_public_problem') and self.is_public):
+        if user.has_perm('judge.edit_public_problem') and self.is_public:
             return True
-        return user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile)
+        if user.has_perm('judge.edit_all_problem') and \
+                (user.has_perm('judge.see_restricted_problem') or not self.is_restricted):
+            return True
+        if user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile):
+            return True
+        return False
 
     def is_accessible_by(self, user):
-        
         # Problem is public.
         if self.is_public:
             # Problem is not private to an organization.
@@ -201,8 +205,7 @@ class Problem(models.Model):
         if not user.is_authenticated:
             return False
 
-        # If the user authored the problem or is a curator.
-        if user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile):
+        if self.is_editable_by(user):
             return True
 
         # If user is a tester.
@@ -215,11 +218,11 @@ class Problem(models.Model):
             from judge.models import ContestProblem
             if ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists():
                 return True
+
         # If the user can view all problems.
         if user.has_perm('judge.see_private_problem'):
-            if not user.has_perm('judge.see_restricted_problem') and self.is_restricted:
-                return False
-            return True
+            if user.has_perm('judge.see_restricted_problem') or not self.is_restricted:
+                return True
         return False
 
     def __unicode__(self):

@@ -262,15 +262,7 @@ class ProblemAdmin(VersionAdmin):
     def has_change_permission(self, request, obj=None):
         if obj is None:
             return True
-        if request.user.has_perm('judge.edit_public_problem') and obj.is_public:
-            return True
-        if request.user.has_perm('judge.edit_own_problem') and obj.is_editor(request.user.profile):
-            return True
-        if request.user.has_perm('judge.edit_all_problem'):
-            if not request.user.has_perm('judge.see_restricted_problem') and obj.is_restricted:
-                return False
-            return True
-        return False
+        return obj.is_editable_by(request.user)
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'allowed_languages':

@@ -161,21 +161,23 @@ class Submission(models.Model):
             return False
         profile = user.profile
         problem = self.problem
-        
-        if self.user_id == profile.id:
+
+        if self.user_id == profile.id and problem.is_accessible_by(user):
             return True
-        if problem.is_editor(profile):
+        if problem.is_editable_by(user):
             return True
-        if problem.is_public or problem.testers.filter(id=profile.id).exists():
-            if problem.submission_set.filter(user_id=profile.id, result='AC',
-                                             points=problem.points).exists():
-                return True
-        
+
         if user.has_perm('judge.view_all_submission'):
             if problem.is_public:
                 return True
             if user.has_perm('judge.see_restricted_problem') or not problem.is_restricted:
                 return True
+
+        if problem.is_public or problem.testers.filter(id=profile.id).exists():
+            if problem.submission_set.filter(user_id=profile.id, result='AC',
+                                             points=problem.points).exists():
+                return True
+
         return False
 
     update_contest.alters_data = True
