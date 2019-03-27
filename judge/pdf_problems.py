@@ -19,7 +19,7 @@ NODE_PATH = getattr(settings, 'NODEJS', '/usr/bin/node')
 PUPPETEER_MODULE = getattr(settings, 'PUPPETEER_MODULE', '/usr/lib/node_modules/puppeteer')
 HAS_PUPPETEER = os.access(NODE_PATH, os.X_OK) and os.path.isdir(PUPPETEER_MODULE)
 
-HAS_PDF = (os.path.isdir(getattr(settings, 'PROBLEM_PDF_CACHE', '')) and
+HAS_PDF = (os.path.isdir(getattr(settings, 'DMOJ_PDF_PROBLEM_CACHE', '')) and
            (HAS_PHANTOMJS or HAS_SLIMERJS or HAS_PUPPETEER))
 
 EXIFTOOL = getattr(settings, 'EXIFTOOL', '/usr/bin/exiftool')
@@ -33,7 +33,7 @@ class BasePdfMaker(object):
     title = None
 
     def __init__(self, dir=None, clean_up=True):
-        self.dir = dir or os.path.join(getattr(settings, 'PROBLEM_PDF_TEMP_DIR', tempfile.gettempdir()),
+        self.dir = dir or os.path.join(getattr(settings, 'DMOJ_PDF_PROBLEM_TEMP_DIR', tempfile.gettempdir()),
                                        str(uuid.uuid1()))
         self.proc = None
         self.log = None

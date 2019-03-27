@@ -126,7 +126,7 @@ class JoinOrganization(OrganizationMembershipChange):
         if not org.is_open:
             return generic_message(request, _('Joining organization'), _('This organization is not open.'))
 
-        max_orgs = getattr(settings, 'MAX_USER_ORGANIZATION_COUNT', 3)
+        max_orgs = getattr(settings, 'DMOJ_USER_MAX_ORGANIZATION_COUNT', 3)
         if profile.organizations.filter(is_open=True).count() >= max_orgs:
             return generic_message(request, _('Joining organization'), _('You may not be part of more than {count} public organizations.').format(count=max_orgs))
 
