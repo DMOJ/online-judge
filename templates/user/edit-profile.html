@@ -177,7 +177,11 @@
                         </span></td>
                         <td>
                             {% if profile.is_totp_enabled %}
-                                <a href="{{ url('disable_2fa') }}" class="button inline-button">Disable</a>
+                                {% if enforce_staff_2fa and request.user.is_staff %}
+                                    <span class="grayed"><i>{{ _('Staff members may not disable 2FA.') }}</i></span>
+                                {% else %}
+                                    <a href="{{ url('disable_2fa') }}" class="button inline-button">Disable</a>
+                                {% endif %}
                             {% else %}
                                 <a href="{{ url('enable_2fa') }}" class="button inline-button">Enable</a>
                             {% endif %}

@@ -281,6 +281,7 @@ def edit_profile(request):
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
     return render(request, 'user/edit-profile.html', {
         'form': form, 'title': _('Edit profile'), 'profile': profile,
+        'enforce_staff_2fa': getattr(settings, 'ENFORCE_STAFF_2FA', True),
         'has_math_config': bool(getattr(settings, 'MATHOID_URL', False)),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD'),
