@@ -170,7 +170,7 @@
         </div>
     {% endif %}
     
-    {% if perms.judge.rejudge_submission_lot %}
+    {% if perms.judge.rejudge_submission_lot and can_edit_problem %}
         <div>
             <form action="{{ url('problem_submission_rejudge', problem.code) }}" method="post">
                 {% csrf_token %}
