@@ -29,7 +29,7 @@ from itertools import chain
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
-from judge.models import Contest, ContestParticipation, ContestRegistration, ContestTag, Organization, Profile
+from judge.models import Contest, ContestTag, ContestParticipation, ContestRegistration, ContestTag, Organization, Profile
 from judge.models import Problem
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
@@ -76,10 +76,11 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
     def get_queryset(self):
         queryset = self._get_queryset().filter(end_time__lt=self._now)
         self.has_past_contests = queryset.exists()
-        if 'search' in self.request.GET:
-            self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
-            queryset = queryset.filter(Q(key__icontains=query) | Q(name__icontains=query))
-        return queryset
+        if self.search_query:
+            queryset = queryset.filter(Q(key__icontains=self.search_query) | Q(name__icontains=self.search_query))
+        if self.selected_tags:
+            queryset = queryset.filter(tags__in=self.selected_tags)
+        return queryset.distinct()
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
@@ -102,15 +103,30 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         context['active_participations'] = active
         context['current_contests'] = present
         context['future_contests'] = future
-        context['now'] = self._now
-        context['search_query'] = self.search_query
         context['has_past_contests'] = self.has_past_contests
+        context['now'] = self._now
         context['first_page_href'] = '.'
         context['page_suffix'] = '#past-contests'
+        
+        context['search_query'] = self.search_query
+        
+        tag_ids = self._get_queryset().values_list('tags', flat=True).distinct()
+        context['contest_tags'] = ContestTag.objects.filter(id__in=tag_ids)
+        context['selected_tags'] = self.selected_tags
         return context
 
     def setup(self, request):
         self.search_query = None
+        self.selected_tags = []
+
+        if 'search' in self.request.GET:
+            self.search_query = ' '.join(self.request.GET.getlist('search')).strip()
+
+        if 'tag' in request.GET:
+            try:
+                self.selected_tags = map(int, request.GET.getlist('tag'))
+            except ValueError:
+                pass
 
     def get(self, request, *args, **kwargs):
         self.setup(request)

@@ -14,6 +14,14 @@
         .content-description ul {
             padding: 0 !important;
         }
+
+        .filter-form-group ul {
+            padding: 0 5px !important;
+        }
+        
+        .sidebox h3 {
+            font-weight: 480;
+        }
     </style>
 {% endblock %}
 
@@ -31,6 +39,29 @@
                 return confirm('{{ _('Are you sure you want to join?') }}\n' +
                     '{{ _('Joining a contest for the first time starts your timer, after which it becomes unstoppable.') }}');
             });
+
+            $('#tags').select2({multiple: 1, placeholder: '{{ _('Filter by contest tag...') }}'})
+                .css({'visibility': 'visible'});
+            
+            var $form = $('form#filter-form');
+            var $search = $('#search');
+
+            function prep_form() {
+                $search.prop('disabled', !$search.val());
+            }
+
+            function clean_submit() {
+                prep_form();
+                $form.submit();
+            }
+
+            // This is incredibly nasty to do but it's needed because otherwise the select2 steals the focus
+            $search.keypress(function (e) {
+                if (e.keyCode == 13)
+                    $('#go').click();
+            });
+
+            $('#go').click(clean_submit);
 
             // var tooltip_classes = 'tooltipped tooltipped-e';
             //
@@ -270,16 +301,34 @@
 
         {% if has_past_contests %}
             <h4 id="past-contests">{{ _('Past Contests') }}</h4>
-            <form id="filter-form" style="display: flex;" name="form" action="" method="get">
-                <input id="search" type="text" name="search" value="{{ search_query or '' }}"
-                       placeholder="{{ _('Search contests...') }}">
-                <input type="submit" class="button" value="{{ _('Go') }}">
-            </form>
-            {% if page_obj and page_obj.num_pages > 1 %}
-                <div style="margin-bottom: 4px;">
-                    {% include "list-pages.html" %}
+            <div style="margin-bottom: 4px;">
+                <div class="sidebox">
+                    <h3>{{ _('Contest search') }} <i class="fa fa-search"></i></h3>
+                    <div class="sidebox-content">
+                        <form id="filter-form" name="form" action="#past-contests" method="get">
+                            <div style="display:flex">
+                                <input id="search" type="text" name="search" value="{{ search_query or '' }}"
+                                       placeholder="{{ _('Search contests...') }}">
+                            </div>
+                            <div class="filter-form-group">
+                                <select id="tags" name="tag" multiple style="width:100%;">
+                                    {% for tag in contest_tags %}
+                                        <option value="{{ tag.id }}"{% if tag.id in selected_tags %} selected{% endif %}>
+                                            {{ tag.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </form>
+                        <div style="display:inline-block; width:100%;"> 
+                            {% if page_obj and page_obj.num_pages > 1 %}
+                                {% include "list-pages.html" %}
+                            {% endif %}
+                            <a id="go" style="float:right;" class="button">{{ _('Go') }}</a>
+                        </div>
+                    </div>
                 </div>
-            {% endif %}
+            </div>
             <table class="contest-list table striped">
                 <thead>
                 <tr>
