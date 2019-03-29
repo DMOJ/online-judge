@@ -36,7 +36,7 @@
         <table>{% for case in batch.cases %}
             <tr id="{{ case.id }}" class="case-row toggle closed">
                 <td>
-                    {%- if case.status != 'AC' and case.output -%}
+                    {%- if case.status != 'AC' and case.output and (prefix_length is None or prefix_length > 0) -%}
                         <i class="fa fa-chevron-right fa-fw"></i>
                     {%- endif -%}
                     {%- if batch.id -%}
@@ -72,7 +72,7 @@
                 {% endif %}
             </tr>
 
-            {% if case.status != 'AC' and case.output %}
+            {% if case.status != 'AC' and case.output and (prefix_length is None or prefix_length > 0) %}
                 <tr id="{{ case.id }}-output" style="display:none" class="case-feedback toggled">
                     <td colspan="5">
                         <div class="case-info">
