@@ -7,7 +7,7 @@ from django.db import connection
 from django.db.models import Q
 from django.forms import ModelForm
 from django.utils.html import format_html
-from django.utils.translation import ugettext, ungettext, ugettext_lazy as _
+from django.utils.translation import gettext, ungettext, gettext_lazy as _
 from reversion.admin import VersionAdmin
 
 from judge.models import Profile, LanguageLimit, ProblemTranslation, Problem, ProblemClarification
@@ -26,7 +26,7 @@ class ProblemForm(ModelForm):
         self.fields['testers'].widget.can_add_related = False
         self.fields['banned_users'].widget.can_add_related = False
         self.fields['change_message'].widget.attrs.update({
-            'placeholder': ugettext('Describe the changes you made (optional)')
+            'placeholder': gettext('Describe the changes you made (optional)')
         })
 
     class Meta:
@@ -168,7 +168,7 @@ class ProblemAdmin(VersionAdmin):
     show_authors.short_description = _('Authors')
 
     def show_public(self, obj):
-        return format_html(u'<a href="{1}">{0}</a>', ugettext('View on site'), obj.get_absolute_url())
+        return format_html('<a href="{1}">{0}</a>', gettext('View on site'), obj.get_absolute_url())
 
     show_public.short_description = ''
 

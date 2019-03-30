@@ -1,18 +1,18 @@
 import logging
 import re
-from HTMLParser import HTMLParser
-from urlparse import urlparse
+from html.parser import HTMLParser
+from urllib.parse import urlparse
 
 import mistune
 from django.conf import settings
+from jinja2 import Markup
 from lxml import html
 from lxml.etree import XMLSyntaxError, ParserError
-from jinja2 import Markup
 
 from judge.highlight_code import highlight_code
-from judge.utils.camo import client as camo_client
 from judge.jinja2.markdown.lazy_load import lazy_load as lazy_load_processor
 from judge.jinja2.markdown.math import MathRenderer, MathInlineLexer, MathInlineGrammar
+from judge.utils.camo import client as camo_client
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
 from .. import registry
 

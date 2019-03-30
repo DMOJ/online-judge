@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.forms import ModelForm
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _, ugettext, ungettext
+from django.utils.translation import gettext_lazy as _, gettext, ungettext
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
@@ -73,8 +73,8 @@ class ProfileAdmin(VersionAdmin):
         return fields
 
     def show_public(self, obj):
-        return format_html(u'<a href="{0}" style="white-space:nowrap;">{1}</a>',
-                           obj.get_absolute_url(), ugettext('View on site'))
+        return format_html('<a href="{0}" style="white-space:nowrap;">{1}</a>',
+                           obj.get_absolute_url(), gettext('View on site'))
     show_public.short_description = ''
 
     def admin_user_admin(self, obj):

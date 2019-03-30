@@ -1,3 +1,4 @@
+import codecs
 import json
 import logging
 import socket
@@ -16,14 +17,14 @@ def judge_request(packet, reply=True):
                                     settings.BRIDGED_DJANGO_ADDRESS[0])
 
     output = json.dumps(packet, separators=(',', ':'))
-    output = output.encode('zlib')
-    writer = sock.makefile('w', 0)
+    output = codesc.encode(output.encode(), 'zlib')
+    writer = sock.makefile('wb')
     writer.write(size_pack.pack(len(output)))
     writer.write(output)
     writer.close()
 
     if reply:
-        reader = sock.makefile('r', -1)
+        reader = sock.makefile('rb', -1)
         input = reader.read(size_pack.size)
         if not input:
             raise ValueError('Judge did not respond')
@@ -34,8 +35,8 @@ def judge_request(packet, reply=True):
         reader.close()
         sock.close()
 
-        input = input.decode('zlib')
-        result = json.loads(input)
+        input = codecs.decode(input, 'zlib')
+        result = json.loads(input.decode())
         return result
 
 
