@@ -1,3 +1,4 @@
+import codecs
 import struct
 import zlib
 
@@ -9,7 +10,7 @@ size_pack = struct.Struct('!I')
 class SizedPacketHandler(Handler):
     def __init__(self, server, socket):
         super(SizedPacketHandler, self).__init__(server, socket)
-        self._buffer = ''
+        self._buffer = b''
         self._packetlen = 0
 
     def _packet(self, data):
@@ -38,14 +39,14 @@ class SizedPacketHandler(Handler):
 
 class ZlibPacketHandler(SizedPacketHandler):
     def _format_send(self, data):
-        return data.encode('zlib')
+        return codecs.encode(data.encode(), 'zlib')
 
     def packet(self, data):
         raise NotImplementedError()
 
     def _packet(self, data):
         try:
-            self.packet(data.decode('zlib'))
+            self.packet(codecs.decode(data, 'zlib').decode())
         except zlib.error as e:
             self.malformed_packet(e)
 

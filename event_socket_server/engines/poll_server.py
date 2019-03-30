@@ -51,7 +51,7 @@ class PollServer(BaseServer):
             super(PollServer, self)._clean_up_client(client, finalize)
 
     def _serve(self):
-        for fd, sock in self._server_fds.iteritems():
+        for fd, sock in self._server_fds.items():
             self._poll.register(fd, self.POLLIN)
             sock.listen(16)
         try:
@@ -90,7 +90,7 @@ class PollServer(BaseServer):
             self.on_shutdown()
             for client in self._clients:
                 self._clean_up_client(client, True)
-            for fd, sock in self._server_fds.iteritems():
+            for fd, sock in self._server_fds.items():
                 self._poll.unregister(fd)
                 sock.close()
             if self.NEED_CLOSE:

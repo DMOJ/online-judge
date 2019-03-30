@@ -87,8 +87,8 @@ class DjangoJudgeHandler(JudgeHandler):
         judge = self.judge = Judge.objects.get(name=self.name)
         judge.start_time = timezone.now()
         judge.online = True
-        judge.problems.set(Problem.objects.filter(code__in=self.problems.keys()))
-        judge.runtimes.set(Language.objects.filter(key__in=self.executors.keys()))
+        judge.problems.set(Problem.objects.filter(code__in=list(self.problems.keys())))
+        judge.runtimes.set(Language.objects.filter(key__in=list(self.executors.keys())))
 
         # Delete now in case we somehow crashed and left some over from the last connection
         RuntimeVersion.objects.filter(judge=judge).delete()
@@ -103,7 +103,7 @@ class DjangoJudgeHandler(JudgeHandler):
         judge.save()
         self.judge_address = '[%s]:%s' % (self.client_address[0], self.client_address[1])
         json_log.info(self._make_json_log(action='auth', info='judge successfully authenticated',
-                                          executors=self.executors.keys()))
+                                          executors=list(self.executors.keys())))
 
     def _disconnected(self):
         Judge.objects.filter(id=self.judge.id).update(online=False)
@@ -383,7 +383,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
     def on_supported_problems(self, packet):
         super(DjangoJudgeHandler, self).on_supported_problems(packet)
-        self.judge.problems.set(Problem.objects.filter(code__in=self.problems.keys()))
+        self.judge.problems.set(Problem.objects.filter(code__in=list(self.problems.keys())))
         json_log.info(self._make_json_log(action='update-problems', count=len(self.problems)))
 
     def _make_json_log(self, packet=None, sub=None, **kwargs):
