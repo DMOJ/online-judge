@@ -3,11 +3,12 @@ import itertools
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import CASCADE
+from django.urls imoprt reverse
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from reversion.models import Version
@@ -37,14 +38,15 @@ class VersionRelation(GenericRelation):
 
 
 class Comment(MPTTModel):
-    author = models.ForeignKey(Profile, verbose_name=_('commenter'))
+    author = models.ForeignKey(Profile, verbose_name=_('commenter'), on_delete=CASCADE)
     time = models.DateTimeField(verbose_name=_('posted time'), auto_now_add=True)
     page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
                             validators=[comment_validator])
     score = models.IntegerField(verbose_name=_('votes'), default=0)
     body = models.TextField(verbose_name=_('body of comment'), max_length=8192)
     hidden = models.BooleanField(verbose_name=_('hide the comment'), default=0)
-    parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies')
+    parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies',
+                            on_delete=CASCADE)
     versions = VersionRelation()
 
     class Meta:
@@ -136,7 +138,7 @@ class Comment(MPTTModel):
     def get_absolute_url(self):
         return '%s#comment-%d' % (self.link, self.id)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%(page)s by %(user)s' % {'page': self.page, 'user': self.author.user.username}
 
         # Only use this when queried with
@@ -153,8 +155,8 @@ class Comment(MPTTModel):
 
 
 class CommentVote(models.Model):
-    voter = models.ForeignKey(Profile, related_name='voted_comments')
-    comment = models.ForeignKey(Comment, related_name='votes')
+    voter = models.ForeignKey(Profile, related_name='voted_comments', on_delete=CASCADE)
+    comment = models.ForeignKey(Comment, related_name='votes', on_delete=CASCADE)
     score = models.IntegerField()
 
     class Meta:
