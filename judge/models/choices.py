@@ -2,7 +2,7 @@ from collections import defaultdict
 from operator import itemgetter
 
 import pytz
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 def make_timezones():
@@ -14,7 +14,7 @@ def make_timezones():
             area, loc = 'Other', tz
         if not loc.startswith('GMT'):
             data[area].append((tz, loc))
-    data = data.items()
+    data = list(data.items())
     data.sort(key=itemgetter(0))
     return data
 
