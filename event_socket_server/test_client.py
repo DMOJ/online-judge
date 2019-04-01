@@ -17,14 +17,14 @@ def open_connection():
 
 
 def zlibify(data):
-    data = codecs.encode(data.encode(), 'zlib')
+    data = codecs.encode(data.encode('utf-8'), 'zlib')
     return size_pack.pack(len(data)) + data
 
 
 def dezlibify(data, skip_head=True):
     if skip_head:
         data = data[size_pack.size:]
-    return codecs.decode(data, 'zlib')
+    return codecs.decode(data.decode('utf-8'), 'zlib')
 
 
 def random(length):

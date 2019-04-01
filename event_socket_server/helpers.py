@@ -39,14 +39,14 @@ class SizedPacketHandler(Handler):
 
 class ZlibPacketHandler(SizedPacketHandler):
     def _format_send(self, data):
-        return codecs.encode(data.encode(), 'zlib')
+        return codecs.encode(data.encode('utf-8'), 'zlib')
 
     def packet(self, data):
         raise NotImplementedError()
 
     def _packet(self, data):
         try:
-            self.packet(codecs.decode(data, 'zlib').decode())
+            self.packet(codecs.decode(data, 'zlib').decode('utf-8'))
         except zlib.error as e:
             self.malformed_packet(e)
 
