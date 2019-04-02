@@ -367,7 +367,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         starts, ends, oneday = (defaultdict(list) for i in xrange(3))
         for contest in contests:
             start_date = timezone.localtime(contest.start_time).date()
-            end_date = timezone.localtime(contest.end_time).date()
+            end_date = timezone.localtime(contest.end_time - timedelta(seconds=1)).date()
             if start_date == end_date:
                 oneday[start_date].append(contest)
             else:
