@@ -1,4 +1,3 @@
-import codecs
 import struct
 import zlib
 
