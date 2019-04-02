@@ -206,7 +206,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         if memory < 1000:
             return gettext('%d KB') % memory
         else:
-            return gettext('%.2f MB') % (memory / 1024.)
+            return gettext('%.2f MB') % (memory / 1024)
     pretty_memory.admin_order_field = 'memory'
     pretty_memory.short_description = _('Memory')
 
