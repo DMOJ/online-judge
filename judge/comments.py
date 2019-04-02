@@ -117,6 +117,6 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
             context['is_new_user'] = (not self.request.user.is_staff and
                                       not profile.submission_set.filter(points=F('problem__points')).exists())
         context['comment_list'] = queryset
-        context['vote_hide_threshold'] = getattr(settings, 'COMMENT_VOTE_HIDE_THRESHOLD', -5)
+        context['vote_hide_threshold'] = getattr(settings, 'DMOJ_COMMENT_VOTE_HIDE_THRESHOLD', -5)
 
         return context

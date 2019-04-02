@@ -11,13 +11,15 @@ from django.db.models import Max
 def gen_pp(apps, schema_editor):
     Profile = apps.get_model('judge', 'Profile')
     Problem = apps.get_model('judge', 'Problem')
-    table = (lambda x: [pow(x, i) for i in xrange(100)])(getattr(settings, 'PP_STEP', 0.95))
-    bonus_function =  getattr(settings, 'PP_BONUS_FUNCTION', lambda n: 300 * (1 - 0.997 ** n))
+    _pp_step = getattr(settings, 'DMOJ_PP_STEP', 0.95)
+    table = [pow(_pp_step, i) for i in xrange(getattr(settings, 'DMOJ_PP_ENTRIES', 100))]
+    bonus_function =  getattr(settings, 'DMOJ_PP_BONUS_FUNCTION', lambda n: 300 * (1 - 0.997 ** n))
     for row in Profile.objects.all():
         data = (Problem.objects.filter(submission__user=row, submission__points__isnull=False, is_public=True)
                 .annotate(max_points=Max('submission__points')).order_by('-max_points')
                 .values_list('max_points', flat=True))
-        extradata = Problem.objects.filter(submission__user=row, submission__result='AC', is_public=True).values('id').distinct().count()
+        extradata = Problem.objects.filter(submission__user=row, submission__result='AC', is_public=True) \
+                        .values('id').distinct().count()
         size = min(len(data), len(table))
         row.performance_points = sum(map(mul, table[:size], data[:size])) + bonus_function(extradata)
         row.save()

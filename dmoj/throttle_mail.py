@@ -8,7 +8,7 @@ DEFAULT_THROTTLE = (10, 60)
 
 
 def new_email():
-    cache.add('error_email_throttle', 0, getattr(settings, 'EMAIL_THROTTLING', DEFAULT_THROTTLE)[1])
+    cache.add('error_email_throttle', 0, getattr(settings, 'DMOJ_EMAIL_THROTTLING', DEFAULT_THROTTLE)[1])
     return cache.incr('error_email_throttle')
 
 
@@ -16,7 +16,7 @@ class ThrottledEmailHandler(AdminEmailHandler):
     def __init__(self, *args, **kwargs):
         super(ThrottledEmailHandler, self).__init__(*args, **kwargs)
 
-        self.throttle = getattr(settings, 'EMAIL_THROTTLING', DEFAULT_THROTTLE)[0]
+        self.throttle = getattr(settings, 'DMOJ_EMAIL_THROTTLING', DEFAULT_THROTTLE)[0]
 
     def emit(self, record):
         try:

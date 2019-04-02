@@ -171,7 +171,7 @@ class ContestAdmin(VersionAdmin):
 
         queryset = ContestSubmission.objects.filter(problem_id=problem_id).select_related('submission')
         if not request.user.has_perm('judge.rejudge_submission_lot') and \
-                len(queryset) > getattr(settings, 'REJUDGE_SUBMISSION_LIMIT', 10):
+                len(queryset) > getattr(settings, 'DMOJ_SUBMISSIONS_REJUDGE_LIMIT', 10):
             self.message_user(request, ugettext('You do not have the permission to rejudge THAT many submissions.'),
                               level=messages.ERROR)
             return
