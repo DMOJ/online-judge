@@ -89,7 +89,7 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated):
     for i in range(N):
         if abs(actual_rank[i] - best_rank) <= 1e-3 and new_rating[i] < old_rating[i] + 1:
             new_rating[i] = old_rating[i] + 1
-    return list(map(int, list(map(round, new_rating))), list(map(int, map(round, new_volatility))))
+    return list(map(int, map(round, new_rating))), list(map(int, map(round, new_volatility)))
 
 
 def rate_contest(contest):

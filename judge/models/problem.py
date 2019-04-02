@@ -142,7 +142,7 @@ class Problem(models.Model):
 
     @cached_property
     def types_list(self):
-        return list(map(user_gettext, list(map(attrgetter('full_name'), self.types.all()))))
+        return list(map(user_gettext, map(attrgetter('full_name'), self.types.all())))
 
     def languages_list(self):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
