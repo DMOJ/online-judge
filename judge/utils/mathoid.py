@@ -2,9 +2,12 @@ import hashlib
 import json
 import logging
 import re
-import urllib2
+import urllib2.error
+import urllib.parse
+import urllib.request
+
 from contextlib import closing
-from urllib import urlencode
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core.cache import caches
@@ -18,10 +21,10 @@ logger = logging.getLogger('judge.mathoid')
 reescape = re.compile(r'(?<!\\)(?:\\{2})*[$]')
 
 REPLACES = [
-    (u'\u2264', r'\le'),
-    (u'\u2265', r'\ge'),
-    (u'\u2026', '...'),
-    (u'\u2212', '-'),
+    ('\u2264', r'\le'),
+    ('\u2265', r'\ge'),
+    ('\u2026', '...'),
+    ('\u2212', '-'),
     ('&le;', r'\le'),
     ('&ge;', r'\ge'),
     ('&lt;', '<'),
@@ -63,11 +66,11 @@ class MathoidMathParser(object):
         self.cache.create(hash)
 
         try:
-            request = urllib2.urlopen(self.mathoid_url, urlencode({
+            request = urllib2.request.urlopen(self.mathoid_url, urlencode({
                 'q': reescape.sub(lambda m: '\\' + m.group(0), formula).encode('utf-8'),
                 'type': 'tex' if formula.startswith('\displaystyle') else 'inline-tex'
             }))
-        except urllib2.HTTPError as e:
+        except urllib2.error.HTTPError as e:
             if e.code == 400:
                 logger.error('Mathoid failed to render: %s\n%s', formula, e.read())
             else:
@@ -129,7 +132,7 @@ class MathoidMathParser(object):
         if self.type == 'tex':
             return
 
-        if isinstance(formula, unicode):
+        if isinstance(formula, str):
             hash = hashlib.sha1(formula.encode('utf-8')).hexdigest()
         else:
             hash = hashlib.sha1(formula).hexdigest()
@@ -158,32 +161,32 @@ class MathoidMathParser(object):
 
     def output_msp(self, result):
         # 100% MediaWiki compatibility.
-        return format_html(u'<span class="{5}-math">'
-                           u'<span class="mwe-math-mathml-{5} mwe-math-mathml-a11y"'
-                           u' style="display: none;">{0}</span>'
-                           u'<img src="{1}" class="mwe-math-fallback-image-{5}"'
-                           u' onerror="this.src=\'{2}\';this.onerror=null"'
-                           u' aria-hidden="true" style="{3}" alt="{4}"></span>',
+        return format_html('<span class="{5}-math">'
+                           '<span class="mwe-math-mathml-{5} mwe-math-mathml-a11y"'
+                           ' style="display: none;">{0}</span>'
+                           '<img src="{1}" class="mwe-math-fallback-image-{5}"'
+                           ' onerror="this.src=\'{2}\';this.onerror=null"'
+                           ' aria-hidden="true" style="{3}" alt="{4}"></span>',
                            mark_safe(result['mml']), result['svg'], result['png'], result['css'], result['tex'],
                            ['inline', 'display'][result['display']])
 
     def output_jax(self, result):
-        return format_html(u'<span class="{4}">'
-                           u'''<img class="tex-image" src="{0}" style="{2}" alt="{3}"'''
-                           u''' onerror="this.src='{1}';this.onerror=null">'''
-                           u'''<span class="tex-text" style="display:none">{5}{3}{5}</span>'''
-                           u'</span>',
+        return format_html('<span class="{4}">'
+                           '''<img class="tex-image" src="{0}" style="{2}" alt="{3}"'''
+                           ''' onerror="this.src='{1}';this.onerror=null">'''
+                           '''<span class="tex-text" style="display:none">{5}{3}{5}</span>'''
+                           '</span>',
                            result['svg'], result['png'], result['css'], result['tex'],
                            ['inline-math', 'display-math'][result['display']], ['~', '$$'][result['display']])
 
     def output_svg(self, result):
-        return format_html(u'<img class="{4}" src="{0}" style="{2}" alt="{3}" '
-                           u'''onerror="this.src='{1}';this.onerror=null">''',
+        return format_html('<img class="{4}" src="{0}" style="{2}" alt="{3}" '
+                           '''onerror="this.src='{1}';this.onerror=null">''',
                            result['svg'], result['png'], result['css'], result['tex'],
                            ['inline-math', 'display-math'][result['display']])
 
     def output_png(self, result):
-        return format_html(u'<img class="{3}" src="{0}" style="{1}" alt="{2}">',
+        return format_html('<img class="{3}" src="{0}" style="{1}" alt="{2}">',
                            result['png'], result['css'], result['tex'],
                            ['inline-math', 'display-math'][result['display']])
 

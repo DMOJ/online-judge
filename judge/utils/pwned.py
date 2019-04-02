@@ -41,7 +41,7 @@ from django.conf import settings
 from django.contrib.auth.password_validation import CommonPasswordValidator
 from django.core.exceptions import ValidationError
 from django.utils.six import string_types, text_type
-from django.utils.translation import ugettext as _, ungettext
+from django.utils.translation import gettext as _, ungettext
 
 log = logging.getLogger(__name__)
 
