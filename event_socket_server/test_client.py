@@ -1,8 +1,8 @@
-import codecs
 import ctypes
 import socket
 import struct
 import time
+import zlib
 
 size_pack = struct.Struct('!I')
 try:
@@ -17,14 +17,14 @@ def open_connection():
 
 
 def zlibify(data):
-    data = codecs.encode(data.encode('utf-8'), 'zlib')
+    data = zlib.compress(data.encode('utf-8'))
     return size_pack.pack(len(data)) + data
 
 
 def dezlibify(data, skip_head=True):
     if skip_head:
         data = data[size_pack.size:]
-    return codecs.decode(data.decode('utf-8'), 'zlib')
+    return zlib.decompress(data).decode('utf-8')
 
 
 def random(length):
