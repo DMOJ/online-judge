@@ -7,4 +7,4 @@ register = template.Library()
 
 @register.simple_tag
 def get_counter(start=1):
-    return count(start).next
+    return count(start).__next__

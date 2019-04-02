@@ -10,7 +10,7 @@ import tempfile
 import uuid
 
 from django.conf import settings
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 
 HAS_PHANTOMJS = os.access(getattr(settings, 'PHANTOMJS', ''), os.X_OK)
 HAS_SLIMERJS = os.access(getattr(settings, 'SLIMERJS', ''), os.X_OK)
@@ -89,7 +89,7 @@ class BasePdfMaker(object):
 
 
 class PhantomJSPdfMaker(BasePdfMaker):
-    template = u'''\
+    template = '''\
 "use strict";
 var page = require('webpage').create();
 var param = {params};
@@ -134,7 +134,7 @@ page.open(param.input, function (status) {
             'timeout': int(getattr(settings, 'PHANTOMJS_PDF_TIMEOUT', 5.0) * 1000),
             'input': 'input.html', 'output': 'output.pdf',
             'paper': getattr(settings, 'PHANTOMJS_PAPER_SIZE', 'Letter'),
-            'footer': ugettext('Page [page] of [topage]').encode('utf-8'),
+            'footer': gettext('Page [page] of [topage]').encode('utf-8'),
         }))
 
     def _make(self, debug):
@@ -148,7 +148,7 @@ page.open(param.input, function (status) {
 class SlimerJSPdfMaker(BasePdfMaker):
     math_engine = 'mml'
 
-    template = u'''\
+    template = '''\
 "use strict";
 try {
     var param = {params};
@@ -186,7 +186,7 @@ try {
             'zoom': getattr(settings, 'SLIMERJS_PDF_ZOOM', 0.75),
             'input': 'input.html', 'output': 'output.pdf',
             'paper': getattr(settings, 'SLIMERJS_PAPER_SIZE', 'Letter'),
-            'footer': ugettext('Page [page] of [topage]').replace('[page]', '&P')
+            'footer': gettext('Page [page] of [topage]').replace('[page]', '&P')
                 .replace('[topage]', '&L').encode('utf-8'),
         }))
 
@@ -206,7 +206,7 @@ try {
 
 
 class PuppeteerPDFRender(BasePdfMaker):
-    template = u'''\
+    template = '''\
 "use strict";
 const param = {params};
 const puppeteer = require('puppeteer');
@@ -247,7 +247,7 @@ puppeteer.launch().then(browser => Promise.resolve()
             'input': 'file://' + os.path.abspath(os.path.join(self.dir, 'input.html')),
             'output': os.path.abspath(os.path.join(self.dir, 'output.pdf')),
             'paper': getattr(settings, 'PUPPETEER_PAPER_SIZE', 'Letter'),
-            'footer': ugettext('Page [page] of [topage]'),
+            'footer': gettext('Page [page] of [topage]'),
         }))
 
     def _make(self, debug):

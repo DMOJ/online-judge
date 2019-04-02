@@ -26,17 +26,17 @@ def list_getattr(iterable, prop):
 
 @register.filter(name='list_getitem')
 def list_getitem(iterable, prop):
-    return map(itemgetter(prop), iterable)
+    return list(map(itemgetter(prop), iterable))
 
 
 @register.filter(name='list_getindex')
 def list_getindex(iterable, index):
-    return map(itemgetter(int(index)), iterable)
+    return list(map(itemgetter(int(index)), iterable))
 
 
 @register.filter(name='list_getattr')
 def list_getattr(iterable, prop):
-    return map(attrgetter(prop), iterable)
+    return list(map(attrgetter(prop), iterable))
 
 
 @register.filter(name='sum_list')

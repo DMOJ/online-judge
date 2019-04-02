@@ -1,7 +1,8 @@
-from django.core.urlresolvers import reverse
-from django.contrib.sitemaps import Sitemap
 from django.contrib.auth.models import User
+from django.contrib.sitemaps import Sitemap
+from django.urls import reverse
 from django.utils import timezone
+
 from judge.models import Problem, Organization, Contest, BlogPost, Solution
 
 

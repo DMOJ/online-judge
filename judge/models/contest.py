@@ -1,13 +1,13 @@
 from operator import itemgetter
 
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.db.models import Max
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import gettext_lazy as _, gettext
 from jsonfield import JSONField
 
 from judge import contest_format
@@ -26,7 +26,7 @@ class ContestTag(models.Model):
     color = models.CharField(max_length=7, verbose_name=_('tag colour'), validators=[color_validator])
     description = models.TextField(verbose_name=_('tag description'), blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -167,7 +167,7 @@ class Contest(models.Model):
     def ended(self):
         return self.end_time < self._now
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -274,12 +274,12 @@ class ContestParticipation(models.Model):
         if end is not None and end >= self._now:
             return end - self._now
 
-    def __unicode__(self):
+    def __str__(self):
         if self.spectate:
-            return ugettext('%s spectating in %s') % (self.user.username, self.contest.name)
+            return gettext('%s spectating in %s') % (self.user.username, self.contest.name)
         if self.virtual:
-            return ugettext('%s in %s, v%d') % (self.user.username, self.contest.name, self.virtual)
-        return ugettext('%s in %s') % (self.user.username, self.contest.name)
+            return gettext('%s in %s, v%d') % (self.user.username, self.contest.name, self.virtual)
+        return gettext('%s in %s') % (self.user.username, self.contest.name)
 
     class Meta:
         verbose_name = _('contest participation')

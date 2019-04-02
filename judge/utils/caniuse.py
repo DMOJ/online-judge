@@ -1,10 +1,10 @@
 import json
-import urllib2
+import urllib.request
 from contextlib import closing
 
 from ua_parser import user_agent_parser
 
-with closing(urllib2.urlopen('https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json')) as f:
+with closing(urllib.request.urlopen('https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json')) as f:
     _SUPPORT_DATA = json.load(f)['data']
 
 SUPPORT = 'y'
@@ -31,7 +31,7 @@ class BrowserFamily(object):
         max_version = ()
         max_support = UNKNOWN
 
-        for version, support in data.iteritems():
+        for version, support in data.items():
             if version == 'all':
                 self.max_support = support
             elif '-' in version:

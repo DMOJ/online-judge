@@ -3,10 +3,10 @@ import hmac
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse
 from django.db import models
+from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from judge.judgeapi import judge_submission, abort_submission
 from judge.models.problem import Problem, TranslatedProblemForeignKeyQuerySet
@@ -144,7 +144,7 @@ class Submission(models.Model):
         if hasattr(self, 'contest'):
             return self.contest.participation.contest.key
 
-    def __unicode__(self):
+    def __str__(self):
         return u'Submission %d of %s by %s' % (self.id, self.problem, self.user.user.username)
 
     def get_absolute_url(self):
@@ -159,8 +159,8 @@ class Submission(models.Model):
 
     @classmethod
     def get_id_secret(cls, sub_id):
-        return (hmac.new(settings.EVENT_DAEMON_SUBMISSION_KEY, str(sub_id), hashlib.sha512).hexdigest()[:16] +
-                '%08x' % sub_id)
+        return (hmac.new(settings.EVENT_DAEMON_SUBMISSION_KEY, str(sub_id).encode('utf-8'), hashlib.sha512) \
+                    .hexdigest()[:16] + '%08x' % sub_id)
 
     @cached_property
     def id_secret(self):

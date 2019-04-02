@@ -1,20 +1,20 @@
 import logging
 import re
 from operator import itemgetter
-from urllib import quote
+from urllib.parse import quote
 
 from django import forms
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from requests import HTTPError
 from reversion import revisions
-from social_django.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
 from social_core.backends.github import GithubOAuth2
 from social_core.exceptions import InvalidEmail, SocialAuthBaseException
 from social_core.pipeline.partial import partial
+from social_django.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
 
 from judge.forms import ProfileForm
 from judge.models import Profile, Language
@@ -34,7 +34,7 @@ class GitHubSecureEmailOAuth2(GithubOAuth2):
 
         emails = [(e.get('email'), e.get('primary'), 0) for e in emails if isinstance(e, dict) and e.get('verified')]
         emails.sort(key=itemgetter(1), reverse=True)
-        emails = map(itemgetter(0), emails)
+        emails = list(map(itemgetter(0), emails))
 
         if emails:
             data['email'] = emails[0]

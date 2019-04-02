@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from judge.judgeapi import disconnect_judge
 
@@ -55,7 +55,7 @@ class Language(models.Model):
             runtimes[id].add(runtime.version)
 
         lang_versions = []
-        for id, version_list in runtimes.iteritems():
+        for id, version_list in runtimes.items():
             lang_versions.append((id, list(sorted(version_list, key=lambda a: tuple(map(int, a.split('.')))))))
         return lang_versions
 
@@ -75,7 +75,7 @@ class Language(models.Model):
     def short_display_name(self):
         return self.short_name or self.key
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     @cached_property
@@ -125,7 +125,7 @@ class Judge(models.Model):
     problems = models.ManyToManyField('Problem', verbose_name=_('problems'), related_name='judges')
     runtimes = models.ManyToManyField(Language, verbose_name=_('judges'), related_name='judges')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def disconnect(self, force=False):
@@ -146,7 +146,7 @@ class Judge(models.Model):
                 ret[key] = {'name': data['language__name'], 'runtime': []}
             ret[key]['runtime'].append((data['name'], (data['version'],)))
 
-        return ret.items()
+        return list(ret.items())
 
     @cached_property
     def uptime(self):
