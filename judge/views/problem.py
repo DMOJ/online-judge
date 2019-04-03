@@ -238,8 +238,8 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         except ProblemTranslation.DoesNotExist:
             trans = None
 
-        error_cache = os.path.join(settings.PROBLEM_PDF_CACHE, '%s.%s.log' % (problem.code, language))
-        cache = os.path.join(settings.PROBLEM_PDF_CACHE, '%s.%s.pdf' % (problem.code, language))
+        error_cache = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, '%s.%s.log' % (problem.code, language))
+        cache = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, '%s.%s.pdf' % (problem.code, language))
 
         if os.path.exists(error_cache):
             with open(error_cache) as f:

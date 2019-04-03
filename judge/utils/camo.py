@@ -36,9 +36,9 @@ class CamoClient(object):
                 obj.set('data', self.rewrite_url(obj.get('data')))
 
 
-if getattr(settings, 'CAMO_URL', None) and getattr(settings, 'CAMO_KEY', None):
-    client = CamoClient(settings.CAMO_URL, key=settings.CAMO_KEY,
-                        excluded=getattr(settings, 'CAMO_EXCLUDE', ()),
-                        https=getattr(settings, 'CAMO_HTTPS', False))
+if getattr(settings, 'DMOJ_CAMO_URL', None) and getattr(settings, 'DMOJ_CAMO_KEY', None):
+    client = CamoClient(settings.DMOJ_CAMO_URL, key=settings.DMOJ_CAMO_KEY,
+                        excluded=getattr(settings, 'DMOJ_CAMO_EXCLUDE', ()),
+                        https=getattr(settings, 'DMOJ_CAMO_HTTPS', False))
 else:
     client = None
