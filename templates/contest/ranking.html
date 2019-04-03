@@ -165,6 +165,9 @@
 {% endblock %}
 
 {% block users_js_media %}
+    {% compress js %}
+        <script type="text/javascript" src="{{ static('event.js') }}"></script>
+    {% endcompress %}
     {% if perms.judge.change_contestparticipation %}
         <script type="text/javascript">
             $(function () {
@@ -194,6 +197,29 @@
                 };
 
                 install_tooltips();
+            });
+        </script>
+    {% endif %}
+    {% if not contest.ended and last_msg %}
+        <script type="text/javascript">
+            $(function () {
+                var receiver = new EventReceiver(
+                    "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
+                    ['contest_{{ contest.id }}'], {{ last_msg }}, function (message) {
+                        var table = $('#users-table');
+                        switch (message.type) {
+                            case 'update':
+                                $.ajax({
+                                    url: '{{ url('contest_ranking_ajax', contest.key) }}'
+                                }).done(function (data) {
+                                    table.html(data);
+                                    install_tooltips();
+                                }).fail(function () {
+                                    console.log('Failed to update table!');
+                                });
+                        }
+                    }
+                );
             });
         </script>
     {% endif %}
