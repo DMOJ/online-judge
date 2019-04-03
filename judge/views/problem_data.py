@@ -8,13 +8,13 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
 from django.forms import ModelForm, formset_factory, HiddenInput, NumberInput, Select, BaseModelFormSet
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.generic import DetailView
 
 from judge.highlight_code import highlight_code
@@ -102,7 +102,7 @@ class ProblemSubmissionDiff(TitleMixin, ProblemMixin, DetailView):
         return _('Comparing submissions for {0}').format(self.object.name)
 
     def get_content_title(self):
-        return format_html(_(u'Comparing submissions for <a href="{1}">{0}</a>'), self.object.name,
+        return format_html(_('Comparing submissions for <a href="{1}">{0}</a>'), self.object.name,
                            reverse('problem_detail', args=[self.object.code]))
 
     def get_object(self, queryset=None):
@@ -140,12 +140,12 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         return _('Editing data for {0}').format(self.object.name)
 
     def get_content_title(self):
-        return format_html(_(u'Editing data for <a href="{1}">{0}</a>'), self.object.name,
+        return format_html(_('Editing data for <a href="{1}">{0}</a>'), self.object.name,
                            reverse('problem_detail', args=[self.object.code]))
 
     def get_content_title(self):
         return mark_safe(escape(_('Editing data for %s')) % (
-            format_html(u'<a href="{1}">{0}</a>', self.object.name,
+            format_html('<a href="{1}">{0}</a>', self.object.name,
                         reverse('problem_detail', args=[self.object.code]))))
 
     def get_data_form(self, post=False):
@@ -241,6 +241,6 @@ def problem_init_view(request, problem):
         'raw_source': data, 'highlighted_source': highlight_code(data, 'yaml'),
         'title': _('Generated init.yml for %s') % problem.name,
         'content_title': mark_safe(escape(_('Generated init.yml for %s')) % (
-            format_html(u'<a href="{1}">{0}</a>', problem.name,
+            format_html('<a href="{1}">{0}</a>', problem.name,
                         reverse('problem_detail', args=[problem.code]))))
     })

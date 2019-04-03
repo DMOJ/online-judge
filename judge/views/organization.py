@@ -7,13 +7,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Count, Max, Q
 from django.forms import Form, modelformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
-from django.shortcuts import get_object_or_404
-from django.utils.translation import ugettext as _, ugettext_lazy, ungettext
+from django.urls import reverse
+from django.utils.translation import gettext as _, gettext_lazy, ungettext
 from django.views.generic import DetailView, ListView, View, UpdateView, FormView
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 from reversion import revisions
@@ -67,7 +66,7 @@ class OrganizationList(TitleMixin, ListView):
     model = Organization
     context_object_name = 'organizations'
     template_name = 'organization/list.html'
-    title = ugettext_lazy('Organizations')
+    title = gettext_lazy('Organizations')
 
     def get_queryset(self):
         return super(OrganizationList, self).get_queryset().annotate(member_count=Count('member'))
@@ -180,7 +179,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
 class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
     model = OrganizationRequest
     template_name = 'organization/requests/detail.html'
-    title = ugettext_lazy('Join request detail')
+    title = gettext_lazy('Join request detail')
     pk_url_kwarg = 'rpk'
 
     def get_object(self, queryset=None):

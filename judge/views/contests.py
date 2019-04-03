@@ -1,28 +1,28 @@
 from calendar import Calendar, SUNDAY
-from operator import attrgetter
-
 from collections import namedtuple, defaultdict
 from datetime import timedelta, date, datetime, time
+from functools import partial
+from itertools import chain
+from operator import attrgetter
+
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
-from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Q, Min, Max, Sum, Case, When, IntegerField
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.template.defaultfilters import date as date_filter
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.timezone import make_aware
-from django.utils.translation import ugettext as _, ugettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView, DetailView
-from functools import partial
-from itertools import chain
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
@@ -68,7 +68,7 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
     model = Contest
     paginate_by = 20
     template_name = 'contest/list.html'
-    title = ugettext_lazy('Contests')
+    title = gettext_lazy('Contests')
     context_object_name = 'past_contests'
 
     @cached_property
@@ -92,8 +92,9 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
                 present.append(contest)
 
         if self.request.user.is_authenticated:
-            for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.profile, contest_id__in=present) \
-                                                             .select_related('contest').prefetch_related('contest__organizers'):
+            for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.profile,
+                                                                     contest_id__in=present) \
+                    .select_related('contest').prefetch_related('contest__organizers'):
                 if not participation.ended:
                     active.append(participation)
                     present.remove(participation.contest)
@@ -259,15 +260,15 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                    _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
 
         if not request.user.is_superuser and contest.banned_users.filter(id=profile.id).exists():
-             return generic_message(request, _('Banned from joining'),
-                                       _('You have been declared persona non grata for this contest. '
-                                         'You are permanently barred from joining this contest.'))
+            return generic_message(request, _('Banned from joining'),
+                                   _('You have been declared persona non grata for this contest. '
+                                     'You are permanently barred from joining this contest.'))
 
         requires_access_code = not (request.user.is_superuser or self.is_organizer) \
-                                    and contest.access_code and access_code != contest.access_code
+                               and contest.access_code and access_code != contest.access_code
         if contest.ended:
             if requires_access_code:
-                 raise ContestAccessDenied()
+                raise ContestAccessDenied()
 
             while True:
                 virtual_id = (ContestParticipation.objects.filter(contest=contest, user=profile)
@@ -364,7 +365,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         end += timedelta(days=1)
         contests = self.get_queryset().filter(Q(start_time__gte=start, start_time__lt=end) |
                                               Q(end_time__gte=start, end_time__lt=end)).defer('description')
-        starts, ends, oneday = (defaultdict(list) for i in xrange(3))
+        starts, ends, oneday = (defaultdict(list) for i in range(3))
         for contest in contests:
             start_date = timezone.localtime(contest.start_time).date()
             end_date = timezone.localtime(contest.end_time - timedelta(seconds=1)).date()
@@ -569,7 +570,7 @@ def base_participation_list(request, contest, profile):
     prof_username = profile.user.username
 
     queryset = contest.users.filter(user=profile, virtual__gte=0).order_by('-virtual')
-    live_link = format_html(u'<a href="{2}#!{1}">{0}</a>', _('Live'), prof_username,
+    live_link = format_html('<a href="{2}#!{1}">{0}</a>', _('Live'), prof_username,
                             reverse('contest_ranking', args=[contest.key]))
     users, problems = get_contest_ranking_list(
         request, contest, show_current_virtual=False,

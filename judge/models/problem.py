@@ -106,8 +106,10 @@ class Problem(models.Model):
                                          'These users will be able to view a private problem, but not edit it.'))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'))
-    time_limit = models.FloatField(verbose_name=_('time limit'), help_text=_('The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported.'))
-    memory_limit = models.IntegerField(verbose_name=_('memory limit'), help_text=_('The memory limit for this problem, in kilobytes (e.g. 64mb = 65536 kilobytes).'))
+    time_limit = models.FloatField(verbose_name=_('time limit'), help_text=_(
+        'The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported.'))
+    memory_limit = models.IntegerField(verbose_name=_('memory limit'), help_text=_(
+        'The memory limit for this problem, in kilobytes (e.g. 64mb = 65536 kilobytes).'))
     short_circuit = models.BooleanField(default=False)
     points = models.FloatField(verbose_name=_('points'))
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
@@ -131,7 +133,7 @@ class Problem(models.Model):
     tickets = GenericRelation('Ticket')
 
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
-                                          help_text=_('If private, only these organizations may see the problem.'))
+                                           help_text=_('If private, only these organizations may see the problem.'))
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
     def __init__(self, *args, **kwargs):
@@ -170,7 +172,7 @@ class Problem(models.Model):
 
             # If the user is in the organization.
             if user.is_authenticated and \
-               self.organizations.filter(id__in=user.profile.organizations.all()):
+                    self.organizations.filter(id__in=user.profile.organizations.all()):
                 return True
 
         # If the user can view all problems.
@@ -247,9 +249,11 @@ class Problem(models.Model):
         return ProblemClarification.objects.filter(problem=self)
 
     def update_stats(self):
-        self.user_count = self.submission_set.filter(points__gte=self.points, result='AC', user__is_unlisted=False).values('user').distinct().count()
+        self.user_count = self.submission_set.filter(points__gte=self.points, result='AC',
+                                                     user__is_unlisted=False).values('user').distinct().count()
         submissions = self.submission_set.count()
-        self.ac_rate = 100.0 * self.submission_set.filter(points__gte=self.points, result='AC', user__is_unlisted=False).count() / submissions if submissions else 0
+        self.ac_rate = 100.0 * self.submission_set.filter(points__gte=self.points, result='AC',
+                                                          user__is_unlisted=False).count() / submissions if submissions else 0
         self.save()
 
     update_stats.alters_data = True
@@ -257,7 +261,8 @@ class Problem(models.Model):
     def _get_limits(self, key):
         global_limit = getattr(self, key)
         limits = {limit['language_id']: (limit['language__name'], limit[key])
-                  for limit in self.language_limits.values('language_id', 'language__name', key) if limit[key] != global_limit}
+                  for limit in self.language_limits.values('language_id', 'language__name', key) if
+                  limit[key] != global_limit}
         limit_ids = set(limits.keys())
         common = []
 
@@ -304,6 +309,7 @@ class Problem(models.Model):
                 pass
             else:
                 problem_data._update_code(self.__original_code, self.code)
+
     save.alters_data = True
 
     class Meta:

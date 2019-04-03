@@ -1,8 +1,8 @@
-import codecs
 import json
 import logging
 import socket
 import struct
+import zlib
 
 from django.conf import settings
 
@@ -17,7 +17,7 @@ def judge_request(packet, reply=True):
                                     settings.BRIDGED_DJANGO_ADDRESS[0])
 
     output = json.dumps(packet, separators=(',', ':'))
-    output = codesc.encode(output.encode(), 'zlib')
+    output = zlib.compress(output.encode('utf-8'))
     writer = sock.makefile('wb')
     writer.write(size_pack.pack(len(output)))
     writer.write(output)
@@ -35,8 +35,7 @@ def judge_request(packet, reply=True):
         reader.close()
         sock.close()
 
-        input = codecs.decode(input, 'zlib')
-        result = json.loads(input.decode())
+        result = json.loads(zlib.decompress(input).decode('utf-8'))
         return result
 
 

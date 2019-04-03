@@ -56,7 +56,7 @@ class Language(models.Model):
 
         lang_versions = []
         for id, version_list in runtimes.items():
-            lang_versions.append((id, list(sorted(version_list, key=lambda a: tuple(map(int, a.split('.')))))))
+            lang_versions.append((id, sorted(version_list, key=lambda a: tuple(map(int, a.split('.'))))))
         return lang_versions
 
     @classmethod

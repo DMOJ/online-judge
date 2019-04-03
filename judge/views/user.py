@@ -18,7 +18,7 @@ from django.utils import timezone
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _, ugettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import DetailView, ListView, TemplateView
 from reversion import revisions
 
@@ -36,7 +36,7 @@ __all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profi
 
 
 def remap_keys(iterable, mapping):
-    return [dict((mapping.get(k, k), v) for k, v in item.iteritems()) for item in iterable]
+    return [dict((mapping.get(k, k), v) for k, v in item.items()) for item in iterable]
 
 
 class UserMixin(object):
@@ -253,7 +253,7 @@ def edit_profile(request):
 
 class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
-    title = ugettext_lazy('Leaderboard')
+    title = gettext_lazy('Leaderboard')
     context_object_name = 'users'
     template_name = 'user/list.html'
     paginate_by = 100

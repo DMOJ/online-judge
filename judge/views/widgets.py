@@ -1,12 +1,12 @@
 import json
-import urllib2
+import urllib.request
 from contextlib import closing
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404, HttpResponseRedirect
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.generic import View
 
 from judge.models import Submission
@@ -43,7 +43,7 @@ class DetectTimezone(View):
     def askgeo(self, lat, long):
         if not hasattr(settings, 'ASKGEO_ACCOUNT_ID') or not hasattr(settings, 'ASKGEO_ACCOUNT_API_KEY'):
             raise ImproperlyConfigured()
-        with closing(urllib2.urlopen('http://api.askgeo.com/v1/%s/%s/query.json?databases=TimeZone&points=%f,%f' %
+        with closing(urllib.request.urlopen('http://api.askgeo.com/v1/%s/%s/query.json?databases=TimeZone&points=%f,%f' %
                                              (settings.ASKGEO_ACCOUNT_ID, settings.ASKGEO_ACCOUNT_API_KEY, lat,
                                               long))) as f:
             data = json.load(f)
@@ -55,7 +55,7 @@ class DetectTimezone(View):
     def geonames(self, lat, long):
         if not hasattr(settings, 'GEONAMES_USERNAME'):
             raise ImproperlyConfigured()
-        with closing(urllib2.urlopen('http://api.geonames.org/timezoneJSON?lat=%f&lng=%f&username=%s' %
+        with closing(urllib.request.urlopen('http://api.geonames.org/timezoneJSON?lat=%f&lng=%f&username=%s' %
                                              (lat, long, settings.GEONAMES_USERNAME))) as f:
             data = json.load(f)
             try:

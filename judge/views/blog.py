@@ -30,7 +30,7 @@ class PostList(ListView):
 
     def get_queryset(self):
         return (BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).order_by('-sticky', '-publish_on')
-                        .prefetch_related('authors__user'))
+                .prefetch_related('authors__user'))
 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data(**kwargs)
@@ -38,7 +38,8 @@ class PostList(ListView):
         context['first_page_href'] = reverse('home')
         context['page_prefix'] = reverse('blog_post_list')
         context['comments'] = Comment.most_recent(self.request.user, 10)
-        context['new_problems'] = Problem.objects.filter(is_public=True, is_organization_private=False).order_by('-date', '-id')[:7]
+        context['new_problems'] = Problem.objects.filter(is_public=True, is_organization_private=False) \
+                                      .order_by('-date', '-id')[:7]
         context['page_titles'] = CacheDict(lambda page: Comment.get_page_title(page))
 
         context['has_clarifications'] = False
@@ -91,7 +92,7 @@ class PostList(ListView):
         # Superusers better be staffs, not the spell-casting kind either.
         if self.request.user.is_staff:
             tickets = (Ticket.objects.order_by('-id').filter(is_open=True).prefetch_related('linked_item')
-                             .select_related('user__user'))
+                       .select_related('user__user'))
             context['open_tickets'] = filter_visible_tickets(tickets, self.request.user, profile)[:10]
         else:
             context['open_tickets'] = []
