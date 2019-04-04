@@ -345,8 +345,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             .annotate(user_count=Count('submission__participation', distinct=True)) \
             .order_by('order')
         queryset = TranslatedProblemForeignKeyQuerySet.add_problem_i18n_name(queryset, 'i18n_name',
-                                                                                      self.request.LANGUAGE_CODE,
-                                                                                      'problem__name')
+                                                                             self.request.LANGUAGE_CODE,
+                                                                             'problem__name')
         return [{
             'id': p['problem_id'],
             'code': p['problem__code'],
