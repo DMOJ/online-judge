@@ -2,7 +2,9 @@ import logging
 import socket
 import threading
 import time
+
 from collections import defaultdict, deque
+from functools import total_ordering
 from heapq import heappush, heappop
 
 logger = logging.getLogger('event_socket_server')
@@ -16,6 +18,7 @@ class SendMessage(object):
         self.callback = callback
 
 
+@total_ordering
 class ScheduledJob(object):
     __slots__ = ('time', 'func', 'args', 'kwargs', 'cancel', 'dispatched')
 
@@ -26,6 +29,12 @@ class ScheduledJob(object):
         self.kwargs = kwargs
         self.cancel = False
         self.dispatched = False
+
+    def __eq__(self, other):
+        return self.time == other.time
+
+    def __lt__(self, other):
+        return self.time < other.time
 
 
 class BaseServer(object):
