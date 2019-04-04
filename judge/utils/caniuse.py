@@ -5,7 +5,7 @@ from contextlib import closing
 from ua_parser import user_agent_parser
 
 with closing(urllib.request.urlopen('https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json')) as f:
-    _SUPPORT_DATA = json.load(f)['data']
+    _SUPPORT_DATA = json.loads(f.read().decode('utf-8'))['data']
 
 SUPPORT = 'y'
 PARTIAL_SUPPORT = 'a'
@@ -79,7 +79,7 @@ class BrowserFamily(object):
 class Feat(object):
     def __init__(self, data):
         self._data = data
-        self._family = {name: BrowserFamily(data) for name, data in data['stats'].iteritems()}
+        self._family = {name: BrowserFamily(data) for name, data in data['stats'].items()}
 
     def __getitem__(self, item):
         return self._family[item]
@@ -88,7 +88,7 @@ class Feat(object):
 class Database(object):
     def __init__(self, data):
         self._data = data
-        self._feats = {feat: Feat(data) for feat, data in data.iteritems()}
+        self._feats = {feat: Feat(data) for feat, data in data.items()}
 
     def __getitem__(self, item):
         return self._feats[item]

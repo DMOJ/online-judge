@@ -1,7 +1,7 @@
 import errno
 import os
 from gzip import open as gzip_open
-from urlparse.parse import urljoin
+from urllib.parse import urljoin
 
 
 class HashFileCache(object):

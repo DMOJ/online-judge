@@ -120,8 +120,7 @@ class Profile(models.Model):
     def username(self):
         return self.user.username
 
-    _pp_step = getattr(settings, 'DMOJ_PP_STEP', 0.95)
-    _pp_table = [pow(_pp_step, i) for i in range(getattr(settings, 'DMOJ_PP_ENTRIES', 100))]
+    _pp_table = [pow(getattr(settings, 'DMOJ_PP_STEP', 0.95), i) for i in range(getattr(settings, 'DMOJ_PP_ENTRIES', 100))]
     def calculate_points(self, table=_pp_table):
         from judge.models import Problem
         data = (Problem.objects.filter(submission__user=self, submission__points__isnull=False, is_public=True,

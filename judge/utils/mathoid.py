@@ -2,7 +2,7 @@ import hashlib
 import json
 import logging
 import re
-import urllib2.error
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -70,7 +70,7 @@ class MathoidMathParser(object):
                 'q': reescape.sub(lambda m: '\\' + m.group(0), formula).encode('utf-8'),
                 'type': 'tex' if formula.startswith('\displaystyle') else 'inline-tex'
             }))
-        except urllib2.error.HTTPError as e:
+        except urllib.error.HTTPError as e:
             if e.code == 400:
                 logger.error('Mathoid failed to render: %s\n%s', formula, e.read())
             else:
