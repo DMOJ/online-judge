@@ -12,6 +12,8 @@ from judge.judgeapi import judge_submission, abort_submission
 from judge.models.problem import Problem, TranslatedProblemForeignKeyQuerySet
 from judge.models.profile import Profile
 from judge.models.runtime import Language
+from judge.utils.unicode import utf8bytes
+
 
 __all__ = ['SUBMISSION_RESULT', 'Submission', 'SubmissionTestCase']
 
@@ -159,7 +161,7 @@ class Submission(models.Model):
 
     @classmethod
     def get_id_secret(cls, sub_id):
-        return (hmac.new(settings.EVENT_DAEMON_SUBMISSION_KEY, b'%d' % sub_id, hashlib.sha512).hexdigest()[:16] +
+        return (hmac.new(utf8bytes(settings.EVENT_DAEMON_SUBMISSION_KEY), b'%d' % sub_id, hashlib.sha512).hexdigest()[:16] +
                 '%08x' % sub_id)
 
     @cached_property
