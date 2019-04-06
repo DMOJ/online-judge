@@ -23,24 +23,24 @@ class RankedSubmissions(ProblemSubmissions):
             constraint = 'AND cp.contest_id = %s'
         else:
             contest_join = ''
-            points = 'sub.points'
+            points = 'sub.case_points'
             constraint = ''
         queryset = super(RankedSubmissions, self).get_queryset().filter(user__is_unlisted=False, id__in=RawSQL(
                 '''
                     SELECT sub.id
                     FROM (
-                        SELECT sub.user_id AS uid, MAX(sub.points) AS points
+                        SELECT sub.user_id AS uid, MAX(sub.case_points) AS case_points
                         FROM judge_submission AS sub INNER JOIN
                              judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
                         WHERE sub.problem_id = %s AND {points} > 0 {constraint}
                         GROUP BY sub.user_id
                     ) AS highscore INNER JOIN (
-                        SELECT sub.user_id AS uid, sub.points, MIN(sub.time) as time
+                        SELECT sub.user_id AS uid, sub.case_points, MIN(sub.time) as time
                         FROM judge_submission AS sub INNER JOIN
                              judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
                         WHERE sub.problem_id = %s AND {points} > 0 {constraint}
                         GROUP BY sub.user_id, {points}
-                    ) AS fastest ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
+                    ) AS fastest ON (highscore.uid = fastest.uid AND highscore.case_points = fastest.case_points)
                         INNER JOIN judge_submission AS sub
                             ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
                     WHERE sub.problem_id = %s AND {points} > 0 {constraint}
@@ -53,7 +53,7 @@ class RankedSubmissions(ProblemSubmissions):
         if self.in_contest:
             return queryset.order_by('-contest__points', 'time')
         else:
-            return queryset.order_by('-points', 'time')
+            return queryset.order_by('-points', '-case_points', 'time')
 
     def get_title(self):
         return _('Best solutions for %s') % self.problem_name
