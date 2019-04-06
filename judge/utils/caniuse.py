@@ -1,11 +1,13 @@
 import json
 import urllib.request
+
+import requests
+
 from contextlib import closing
 
 from ua_parser import user_agent_parser
 
-with closing(urllib.request.urlopen('https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json')) as f:
-    _SUPPORT_DATA = json.loads(f.read().decode('utf-8'))['data']
+_SUPPORT_DATA = requests.get('https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json').json()['data']
 
 SUPPORT = 'y'
 PARTIAL_SUPPORT = 'a'
