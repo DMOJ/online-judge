@@ -1,6 +1,6 @@
 from collections import defaultdict
-from distutils.version import LooseVersion
 from functools import partial
+from packaging import version
 
 from django.shortcuts import render
 from django.utils import six
@@ -96,7 +96,7 @@ def version_matrix(request):
 
     for data in six.itervalues(matrix):
         for language, versions in six.iteritems(data):
-            versions.versions = [LooseVersion(runtime.version) for runtime in versions]
+            versions.versions = [version.parse(runtime.version) for runtime in versions]
             if versions.versions > latest[language]:
                 latest[language] = versions.versions
 
@@ -104,7 +104,7 @@ def version_matrix(request):
         for language, versions in six.iteritems(data):
             versions.is_latest = versions.versions == latest[language]
 
-    languages = sorted(languages, key=lambda lang: LooseVersion(lang.name))
+    languages = sorted(languages, key=lambda lang: version.parse(lang.name))
     return render(request, 'status/versions.html', {
         'title': _('Version matrix'),
         'judges': sorted(matrix.keys()),
