@@ -5,7 +5,7 @@ from contextlib import closing
 from ua_parser import user_agent_parser
 
 with closing(urllib.request.urlopen('https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json')) as f:
-    _SUPPORT_DATA = json.load(f)['data']
+    _SUPPORT_DATA = json.loads(f.read().decode('utf-8'))['data']
 
 SUPPORT = 'y'
 PARTIAL_SUPPORT = 'a'
