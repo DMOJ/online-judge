@@ -1,9 +1,4 @@
-import json
-import urllib.request
-
 import requests
-
-from contextlib import closing
 
 from ua_parser import user_agent_parser
 

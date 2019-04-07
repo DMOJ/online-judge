@@ -1,10 +1,4 @@
-import json
-import urllib.request
-
 import requests
-
-from contextlib import closing
-
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ImproperlyConfigured
