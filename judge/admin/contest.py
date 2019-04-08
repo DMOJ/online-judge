@@ -179,7 +179,7 @@ class ContestAdmin(VersionAdmin):
         for model in queryset:
             model.submission.judge(rejudge=True)
 
-        self.message_user(request, ungettext('%d submission were successfully scheduled for rejudging.',
+        self.message_user(request, ungettext('%d submission was successfully scheduled for rejudging.',
                                              '%d submissions were successfully scheduled for rejudging.',
                                              len(queryset)) % len(queryset))
         return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest_id,)))
