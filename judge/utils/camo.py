@@ -2,6 +2,7 @@ import hmac
 from hashlib import sha1
 
 from django.conf import settings
+from judge.utils.unicode import utf8bytes
 
 class CamoClient(object):
     """Based on https://github.com/sionide21/camo-client"""
@@ -14,7 +15,7 @@ class CamoClient(object):
 
     def image_url(self, url):
         return '%s/%s/%s' % (self.server,
-                             hmac.new(self.key, url, sha1).hexdigest(),
+                             hmac.new(utf8bytes(self.key), utf8bytes(url), sha1).hexdigest(),
                              url.encode('hex'))
 
     def rewrite_url(self, url):
