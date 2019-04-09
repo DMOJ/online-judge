@@ -76,7 +76,7 @@ class TexoidRenderer(object):
         return result
 
     def get_result(self, formula):
-        hash = hashlib.sha1(formula).hexdigest()
+        hash = hashlib.sha1(utf8bytes(formula)).hexdigest()
 
         if self.cache.has_file(hash, 'svg'):
             return self.query_cache(hash)

@@ -16,6 +16,7 @@ from django.utils.safestring import mark_safe
 from mistune import escape
 
 from judge.utils.file_cache import HashFileCache
+from judge.utils.unicode import utf8bytes, utf8text
 
 logger = logging.getLogger('judge.mathoid')
 reescape = re.compile(r'(?<!\\)(?:\\{2})*[$]')
@@ -132,11 +133,8 @@ class MathoidMathParser(object):
         if self.type == 'tex':
             return
 
-        if isinstance(formula, str):
-            hash = hashlib.sha1(formula.encode('utf-8')).hexdigest()
-        else:
-            hash = hashlib.sha1(formula).hexdigest()
-            formula = formula.decode('utf-8')
+        hash = hashlib.sha1(utf8bytes(formula)).hexdigest()
+        formula = utf8text(formula)
         if self.cache.has_file(hash, 'css'):
             result = self.query_cache(hash)
         else:

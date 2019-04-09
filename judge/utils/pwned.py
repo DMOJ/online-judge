@@ -40,8 +40,10 @@ import requests
 from django.conf import settings
 from django.contrib.auth.password_validation import CommonPasswordValidator
 from django.core.exceptions import ValidationError
-from django.utils.six import string_types, text_type
+from django.utils.six import string_types
 from django.utils.translation import gettext as _, ungettext
+
+from judge.utils.unicode import utf8bytes
 
 log = logging.getLogger(__name__)
 
@@ -85,9 +87,7 @@ def pwned_password(password):
     """
     if not isinstance(password, string_types):
         raise TypeError('Password values to check must be strings.')
-    if isinstance(password, text_type):
-        password = password.encode('utf-8')
-    password_hash = hashlib.sha1(password).hexdigest().upper()
+    password_hash = hashlib.sha1(utf8bytes(password)).hexdigest().upper()
     prefix, suffix = password_hash[:5], password_hash[5:]
     results = _get_pwned(prefix)
     if results is None:
