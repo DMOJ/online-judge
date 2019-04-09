@@ -16,7 +16,7 @@ class CamoClient(object):
     def image_url(self, url):
         return '%s/%s/%s' % (self.server,
                              hmac.new(utf8bytes(self.key), utf8bytes(url), sha1).hexdigest(),
-                             url.encode('hex'))
+                             utf8bytes(url).hex())
 
     def rewrite_url(self, url):
         if url.startswith(self.server) or url.startswith(self.excluded):
