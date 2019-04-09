@@ -29,6 +29,7 @@ from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
+from judge.utils.unicode import utf8text
 from judge.utils.views import TitleMixin, generic_message, DiggPaginatorMixin, QueryStringSortMixin
 from .contests import contest_ranking_view
 
@@ -196,7 +197,7 @@ class UserPerformancePointsAjax(UserProblemsPage):
         httpresp.render()
 
         return JsonResponse({
-            'results': httpresp.content,
+            'results': utf8text(httpresp.content),
             'has_more': self.has_more,
         })
 
