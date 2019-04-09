@@ -1,6 +1,8 @@
 import struct
 import zlib
 
+from judge.utils.unicode import utf8text
+
 from .handler import Handler
 
 size_pack = struct.Struct('!I')
@@ -59,7 +61,7 @@ class ProxyProtocolMixin(object):
     __PROXY2 = 2
     __DATA = 3
 
-    __HEADER2 = '\x0D\x0A\x0D\x0A\x00\x0D\x0A\x51\x55\x49\x54\x0A'
+    __HEADER2 = b'\x0D\x0A\x0D\x0A\x00\x0D\x0A\x51\x55\x49\x54\x0A'
     __HEADER2_LEN = len(__HEADER2)
 
     _REAL_IP_SET = None
@@ -81,26 +83,26 @@ class ProxyProtocolMixin(object):
 
     def __init__(self, server, socket):
         super(ProxyProtocolMixin, self).__init__(server, socket)
-        self.__buffer = ''
+        self.__buffer = b''
         self.__type = (self.__UNKNOWN_TYPE if self._REAL_IP_SET and
                        self.client_address[0] in self._REAL_IP_SET else self.__DATA)
 
     def __parse_proxy1(self, data):
         self.__buffer += data
-        index = self.__buffer.find('\r\n')
+        index = self.__buffer.find(b'\r\n')
         if 0 <= index < 106:
             proxy = data[:index].split()
             if len(proxy) < 2:
                 return self.close()
-            if proxy[1] == 'TCP4':
+            if proxy[1] == b'TCP4':
                 if len(proxy) != 6:
                     return self.close()
-                self.client_address = (proxy[2], proxy[4])
-                self.server_address = (proxy[3], proxy[5])
-            elif proxy[1] == 'TCP6':
-                self.client_address = (proxy[2], proxy[4], 0, 0)
-                self.server_address = (proxy[3], proxy[5], 0, 0)
-            elif proxy[1] != 'UNKNOWN':
+                self.client_address = (utf8text(proxy[2]), utf8text(proxy[4]))
+                self.server_address = (utf8text(proxy[3]), utf8text(proxy[5]))
+            elif proxy[1] == b'TCP6':
+                self.client_address = (utf8text(proxy[2]), utf8text(proxy[4]), 0, 0)
+                self.server_address = (utf8text(proxy[3]), utf8text(proxy[5]), 0, 0)
+            elif proxy[1] != b'UNKNOWN':
                 return self.close()
 
             self.__type = self.__DATA
@@ -114,7 +116,7 @@ class ProxyProtocolMixin(object):
         elif self.__type == self.__UNKNOWN_TYPE:
             if len(data) >= 16 and data[:self.__HEADER2_LEN] == self.__HEADER2:
                 self.close()
-            elif len(data) >= 8 and data[:5] == 'PROXY':
+            elif len(data) >= 8 and data[:5] == b'PROXY':
                 self.__type = self.__PROXY1
                 self.__parse_proxy1(data)
             else:
