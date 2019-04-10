@@ -77,7 +77,7 @@ def version_matrix(request):
             matrix[judge] = data
             continue
 
-        ds = range(len(data))
+        ds = list(range(len(data)))
         size = [1] * len(data)
         for i, (p, x) in enumerate(data):
             if ds[i] != i:
@@ -88,7 +88,7 @@ def version_matrix(request):
                     size[i] += 1
                     size[j] = 0
 
-        rep = list(max(range(len(data)), key=size.__getitem__))
+        rep = max(range(len(data)), key=size.__getitem__)
         matrix[group] = data[rep][1]
         for i, (j, x) in enumerate(data):
             if ds[i] != rep:
