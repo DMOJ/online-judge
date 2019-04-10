@@ -82,7 +82,7 @@ class TOTPEnableView(TOTPView):
         image = qr.make_image(fill_color='black', back_color='white')
         buf = BytesIO()
         image.save(buf, format='PNG')
-        return 'data:image/png;base64,' + base64.b64encode(buf.getvalue())
+        return 'data:image/png;base64,' + base64.b64encode(buf.getvalue()).decode('ascii')
 
 
 class TOTPDisableView(TOTPView):
