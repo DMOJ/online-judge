@@ -36,9 +36,9 @@ class ContestTag(models.Model):
     def text_color(self, cache={}):
         if self.color not in cache:
             if len(self.color) == 4:
-                r, g, b = [ord((i * 2).decode('hex')) for i in self.color[1:]]
+                r, g, b = [ord(bytes.fromhex(i * 2)) for i in self.color[1:]]
             else:
-                r, g, b = [ord(i) for i in self.color[1:].decode('hex')]
+                r, g, b = [i for i in bytes.fromhex(self.color[1:])]
             cache[self.color] = '#000' if 299 * r + 587 * g + 144 * b > 140000 else '#fff'
         return cache[self.color]
 
