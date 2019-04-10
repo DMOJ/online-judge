@@ -67,7 +67,7 @@ class Language(models.Model):
         result = defaultdict(set)
         for id, cn in Language.objects.values_list('id', 'common_name'):
             result[cn].add(id)
-        result = {id: cns for id, cns in result.iteritems() if len(cns) > 1}
+        result = {id: cns for id, cns in result.items() if len(cns) > 1}
         cache.set('lang:cn_map', result, 86400)
         return result
 
