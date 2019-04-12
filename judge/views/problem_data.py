@@ -20,6 +20,7 @@ from django.views.generic import DetailView
 from judge.highlight_code import highlight_code
 from judge.models import ProblemData, Problem, ProblemTestCase, problem_data_storage, Submission
 from judge.utils.problem_data import ProblemDataCompiler
+from judge.utils.unicode import utf8text
 from judge.utils.views import TitleMixin
 from judge.views.problem import ProblemMixin
 
@@ -232,8 +233,8 @@ def problem_init_view(request, problem):
         raise Http404()
 
     try:
-        with problem_data_storage.open(os.path.join(problem.code, 'init.yml')) as f:
-            data = f.read().rstrip('\n')
+        with problem_data_storage.open(os.path.join(problem.code, 'init.yml'), 'rb') as f:
+            data = utf8text(f.read()).rstrip('\n')
     except IOError:
         raise Http404()
 
