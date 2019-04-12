@@ -19,10 +19,10 @@ def nice_repr(timedelta, display='long', sep=', '):
 
     result = []
 
-    weeks = timedelta.days / 7
+    weeks = timedelta.days // 7
     days = timedelta.days % 7
-    hours = timedelta.seconds / 3600
-    minutes = (timedelta.seconds % 3600) / 60
+    hours = timedelta.seconds // 3600
+    minutes = (timedelta.seconds % 3600) // 60
     seconds = timedelta.seconds % 60
 
     if display == 'simple-no-seconds':
