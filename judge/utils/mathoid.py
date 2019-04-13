@@ -1,14 +1,8 @@
 import hashlib
-import json
 import logging
 import re
-import urllib.error
-import urllib.parse
-import urllib.request
 
-from contextlib import closing
-from urllib.parse import urlencode
-
+import requests
 from django.conf import settings
 from django.core.cache import caches
 from django.utils.html import format_html
@@ -67,27 +61,21 @@ class MathoidMathParser(object):
         self.cache.create(hash)
 
         try:
-            request = urllib.request.urlopen(self.mathoid_url, urlencode({
+            response = requests.post(self.mathoid_url, data={
                 'q': reescape.sub(lambda m: '\\' + m.group(0), formula).encode('utf-8'),
                 'type': 'tex' if formula.startswith('\displaystyle') else 'inline-tex'
-            }))
-        except urllib.error.HTTPError as e:
-            if e.code == 400:
-                logger.error('Mathoid failed to render: %s\n%s', formula, e.read())
-            else:
-                logger.exception('Failed to connect to mathoid for: %s' % formula)
+            })
+            response.raise_for_status()
+            data = response.json()
+        except requests.ConnectionError:
+            logger.exception('Failed to connect to mathoid for: %s', formula)
+            return
+        except requests.HTTPError as e:
+            logger.error('Mathoid failed to render: %s\n%s', formula, e.response.text)
             return
         except Exception:
-            logger.exception('Failed to connect to mathoid for: %s' % formula)
+            logger.exception('Failed to connect to mathoid for: %s', formula)
             return
-
-        with closing(request) as f:
-            data = f.read()
-            try:
-                data = json.loads(data)
-            except ValueError:
-                logger.exception('Invalid mathoid response for: %s\n%s', formula, data)
-                return
 
         if not data['success']:
             logger.error('Mathoid failure for: %s\n%s', formula, data)
