@@ -25,28 +25,30 @@
             <h3>{{ _('Execution Results') }}</h3>
         {% endif %}
         <br>
-        {% for batch in batches %}
-            {% if batch.id %}
-                {% set cases = [batch.last_case] %}
-            {% else %}
-                {% set cases = batch.cases %}
-            {% endif %}
-            {% set graded = not loop.last or submission.is_graded %}
-            {% for case in cases %}
-                {% if not graded and loop.last %}
-                    <span class="fa fa-spinner"></span>
-                {% elif case.status == "AC" %}
-                    <span class="fa fa-check case-AC"></span>
-                {% elif case.status == "SC" %}
-                    <span class="case-SC">&ndash;</span>
+        {% if batches %}
+            {% for batch in batches %}
+                {% if batch.id %}
+                    {% set cases = [batch.last_case] %}
                 {% else %}
-                    <a href="#{{ case.id }}">
-                        <span class="fa fa-times case-{{ case.status }} case-bad"></span>
-                    </a>
+                    {% set cases = batch.cases %}
                 {% endif %}
+                {% set graded = not loop.last or submission.is_graded %}
+                {% for case in cases %}
+                    {% if not graded and loop.last %}
+                        <span class="fa fa-spinner fa-pulse"></span>
+                    {% elif case.status == "AC" %}
+                        <span class="fa fa-check case-AC"></span>
+                    {% elif case.status == "SC" %}
+                        <span class="case-SC">&ndash;</span>
+                    {% else %}
+                        <a href="#{{ case.id }}">
+                            <span class="fa fa-times case-{{ case.status }} case-bad"></span>
+                        </a>
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-        <br><br>
+            <br><br>
+        {% endif %}
         {% set test_case_id = counter() %}
         {% for batch in batches %}
             {% if batch.id %}
