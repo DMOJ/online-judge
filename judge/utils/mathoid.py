@@ -67,7 +67,7 @@ class MathoidMathParser(object):
         self.cache.create(hash)
 
         try:
-            request = urllib2.request.urlopen(self.mathoid_url, urlencode({
+            request = urllib.request.urlopen(self.mathoid_url, urlencode({
                 'q': reescape.sub(lambda m: '\\' + m.group(0), formula).encode('utf-8'),
                 'type': 'tex' if formula.startswith('\displaystyle') else 'inline-tex'
             }))
