@@ -53,10 +53,7 @@ class DjangoHandler(ZlibPacketHandler):
         return {'name': 'submission-received', 'submission-id': id}
 
     def on_termination(self, data):
-        try:
-            self.server.judges.abort(data['submission-id'])
-        except KeyError:
-            return {'name': 'bad-request'}
+        return {'name': 'submission-received', 'judge-aborted': self.server.judges.abort(data['submission-id'])}
 
     def on_disconnect(self, data):
         judge_id = data['judge-id']

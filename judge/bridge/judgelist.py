@@ -20,6 +20,7 @@ class JudgeList(object):
         self.queue = dllist()
         self.priority = [self.queue.append(PriorityMarker(i)) for i in range(self.priorities)]
         self.judges = set()
+        self.node_map = {}
         self.submission_map = {}
         self.lock = RLock()
 
@@ -38,6 +39,7 @@ class JudgeList(object):
                             logger.exception('Failed to dispatch %d (%s, %s) to %s', id, problem, language, judge.name)
                             self.judges.remove(judge)
                             return
+                        del self.node_map[id]
                         self.queue.remove(node)
                         break
                 node = node.next
@@ -78,7 +80,13 @@ class JudgeList(object):
     def abort(self, submission):
         with self.lock:
             logger.info('Abort request: %d', submission)
-            self.submission_map[submission].abort()
+            try:
+                self.submission_map[submission].abort()
+                return True
+            except KeyError:
+                self.queue.remove(self.node_map[submission])
+                del self.node_map[submission]
+                return False
 
     def check_priority(self, priority):
         return 0 <= priority < self.priorities
@@ -102,5 +110,5 @@ class JudgeList(object):
                     self.judges.discard(judge)
                     return self.judge(id, problem, language, source, priority)
             else:
-                self.queue.insert((id, problem, language, source), self.priority[priority])
+                self.node_map[id] = self.queue.insert((id, problem, language, source), self.priority[priority])
                 logger.info('Queued submission: %d', id)
