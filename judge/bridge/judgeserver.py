@@ -41,7 +41,7 @@ class JudgeServer(get_preferred_engine()):
 def main():
     import argparse
     import logging
-    from judgehandler import JudgeHandler
+    from .judgehandler import JudgeHandler
 
     format = '%(asctime)s:%(levelname)s:%(name)s:%(message)s'
     logging.basicConfig(format=format)
@@ -60,7 +60,7 @@ def main():
                         help='port to listen for the judge')
 
     args = parser.parse_args()
-    server = JudgeServer(zip(args.judge_host, args.judge_port), JudgeHandler)
+    server = JudgeServer(list(zip(args.judge_host, args.judge_port)), JudgeHandler)
     server.serve_forever()
 
 

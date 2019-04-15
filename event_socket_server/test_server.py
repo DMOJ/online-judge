@@ -10,17 +10,17 @@ class EchoPacketHandler(ProxyProtocolMixin, ZlibPacketHandler):
 
     def _kill_if_no_data(self):
         if not self._gotdata:
-            print 'Inactive client:', self._socket.getpeername()
+            print('Inactive client:', self._socket.getpeername())
             self.close()
 
     def packet(self, data):
         self._gotdata = True
-        print 'Data from %s: %r' % (self._socket.getpeername(), data[:30] if len(data) > 30 else data)
+        print('Data from %s: %r' % (self._socket.getpeername(), data[:30] if len(data) > 30 else data))
         self.send(data)
 
     def on_close(self):
         self._gotdata = True
-        print 'Closed client:', self._socket.getpeername()
+        print('Closed client:', self._socket.getpeername())
 
 
 def main():
@@ -40,13 +40,13 @@ def main():
     class TestServer(engines[args.engine]):
         def _accept(self, sock):
             client = super(TestServer, self)._accept(sock)
-            print 'New connection:', client.socket.getpeername()
+            print('New connection:', client.socket.getpeername())
             return client
 
     handler = EchoPacketHandler
     if netaddr is not None and args.proxy:
         handler = handler.with_proxy_set(args.proxy)
-    server = TestServer(zip(args.host, args.port), handler)
+    server = TestServer(list(zip(args.host, args.port)), handler)
     server.serve_forever()
 
 if __name__ == '__main__':

@@ -13,4 +13,4 @@ class Command(BaseCommand):
         if camo_client is None:
             raise CommandError('Camo not available')
 
-        print camo_client.image_url(options['url'])
+        print(camo_client.image_url(options['url']))

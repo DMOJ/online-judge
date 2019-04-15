@@ -37,16 +37,14 @@ Light widgets are normally named, i.e. there is no
 'Light' word in their names.
 
 """
-from __future__ import absolute_import, unicode_literals
-
 from copy import copy
 from itertools import chain
 
 from django import forms
 from django.conf import settings
 from django.core import signing
-from django.core.urlresolvers import reverse_lazy
 from django.forms.models import ModelChoiceIterator
+from django.urls import reverse_lazy
 
 DEFAULT_SELECT2_JS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'
 DEFAULT_SELECT2_CSS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
@@ -208,7 +206,7 @@ class HeavySelect2Mixin(Select2Mixin):
         if isinstance(self.choices, ModelChoiceIterator):
             chosen = copy(self.choices)
             chosen.queryset = chosen.queryset.filter(pk__in=[
-                int(i) for i in result if isinstance(i, (int, long)) or i.isdigit()
+                int(i) for i in result if isinstance(i, int) or i.isdigit()
             ])
             self.choices = set(chosen)
         return result

@@ -3,19 +3,19 @@ from operator import attrgetter
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import F, QuerySet
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
+from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from judge.fulltext import SearchQuerySet
 from judge.models.profile import Profile, Organization
 from judge.models.runtime import Language
-from judge.user_translations import ugettext as user_ugettext
+from judge.user_translations import gettext as user_gettext
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
 
 __all__ = ['ProblemGroup', 'ProblemType', 'Problem', 'ProblemTranslation', 'ProblemClarification',
@@ -26,7 +26,7 @@ class ProblemType(models.Model):
     name = models.CharField(max_length=20, verbose_name=_('problem category ID'), unique=True)
     full_name = models.CharField(max_length=100, verbose_name=_('problem category name'))
 
-    def __unicode__(self):
+    def __str__(self):
         return self.full_name
 
     class Meta:
@@ -39,7 +39,7 @@ class ProblemGroup(models.Model):
     name = models.CharField(max_length=20, verbose_name=_('problem group ID'), unique=True)
     full_name = models.CharField(max_length=100, verbose_name=_('problem group name'))
 
-    def __unicode__(self):
+    def __str__(self):
         return self.full_name
 
     class Meta:
@@ -58,7 +58,7 @@ class License(models.Model):
     icon = models.CharField(max_length=256, blank=True, verbose_name=_('icon'), help_text=_('URL to the icon'))
     text = models.TextField(verbose_name=_('license text'))
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -106,8 +106,12 @@ class Problem(models.Model):
                                          'These users will be able to view a private problem, but not edit it.'))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'))
-    time_limit = models.FloatField(verbose_name=_('time limit'), help_text=_('The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported.'))
-    memory_limit = models.IntegerField(verbose_name=_('memory limit'), help_text=_('The memory limit for this problem, in kilobytes (e.g. 64mb = 65536 kilobytes).'))
+    time_limit = models.FloatField(verbose_name=_('time limit'),
+                                   help_text=_('The time limit for this problem, in seconds. '
+                                               'Fractional seconds (e.g. 1.5) are supported.'))
+    memory_limit = models.IntegerField(verbose_name=_('memory limit'),
+                                       help_text=_('The memory limit for this problem, in kilobytes '
+                                                   '(e.g. 64mb = 65536 kilobytes).'))
     short_circuit = models.BooleanField(default=False)
     points = models.FloatField(verbose_name=_('points'))
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
@@ -131,7 +135,7 @@ class Problem(models.Model):
     tickets = GenericRelation('Ticket')
 
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
-                                          help_text=_('If private, only these organizations may see the problem.'))
+                                           help_text=_('If private, only these organizations may see the problem.'))
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
     def __init__(self, *args, **kwargs):
@@ -142,7 +146,7 @@ class Problem(models.Model):
 
     @cached_property
     def types_list(self):
-        return map(user_ugettext, map(attrgetter('full_name'), self.types.all()))
+        return list(map(user_gettext, map(attrgetter('full_name'), self.types.all())))
 
     def languages_list(self):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
@@ -170,7 +174,7 @@ class Problem(models.Model):
 
             # If the user is in the organization.
             if user.is_authenticated and \
-               self.organizations.filter(id__in=user.profile.organizations.all()):
+                    self.organizations.filter(id__in=user.profile.organizations.all()):
                 return True
 
         # If the user can view all problems.
@@ -195,7 +199,7 @@ class Problem(models.Model):
         from judge.models import ContestProblem
         return ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -247,9 +251,11 @@ class Problem(models.Model):
         return ProblemClarification.objects.filter(problem=self)
 
     def update_stats(self):
-        self.user_count = self.submission_set.filter(points__gte=self.points, result='AC', user__is_unlisted=False).values('user').distinct().count()
+        self.user_count = self.submission_set.filter(points__gte=self.points, result='AC',
+                                                     user__is_unlisted=False).values('user').distinct().count()
         submissions = self.submission_set.count()
-        self.ac_rate = 100.0 * self.submission_set.filter(points__gte=self.points, result='AC', user__is_unlisted=False).count() / submissions if submissions else 0
+        self.ac_rate = 100.0 * self.submission_set.filter(points__gte=self.points, result='AC',
+                                                          user__is_unlisted=False).count() / submissions if submissions else 0
         self.save()
 
     update_stats.alters_data = True
@@ -257,11 +263,12 @@ class Problem(models.Model):
     def _get_limits(self, key):
         global_limit = getattr(self, key)
         limits = {limit['language_id']: (limit['language__name'], limit[key])
-                  for limit in self.language_limits.values('language_id', 'language__name', key) if limit[key] != global_limit}
+                  for limit in self.language_limits.values('language_id', 'language__name', key)
+                  if limit[key] != global_limit}
         limit_ids = set(limits.keys())
         common = []
 
-        for cn, ids in Language.get_common_name_map().iteritems():
+        for cn, ids in Language.get_common_name_map().items():
             if ids - limit_ids:
                 continue
             limit = set(limits[id][1] for id in ids)
@@ -271,7 +278,7 @@ class Problem(models.Model):
                 for id in ids:
                     del limits[id]
 
-        limits = limits.values() + common
+        limits = list(limits.values()) + common
         limits.sort()
         return limits
 
@@ -304,6 +311,7 @@ class Problem(models.Model):
                 pass
             else:
                 problem_data._update_code(self.__original_code, self.code)
+
     save.alters_data = True
 
     class Meta:
@@ -366,7 +374,7 @@ class Solution(models.Model):
         else:
             return reverse('problem_editorial', args=[problem.code])
 
-    def __unicode__(self):
+    def __str__(self):
         return _('Editorial for %s') % self.problem.name
 
     class Meta:

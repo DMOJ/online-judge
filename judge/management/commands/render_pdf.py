@@ -29,7 +29,7 @@ class Command(BaseCommand):
         try:
             problem = Problem.objects.get(code=options['code'])
         except Problem.DoesNotExist:
-            print 'Bad problem code'
+            print('Bad problem code')
             return
 
         try:
@@ -53,6 +53,6 @@ class Command(BaseCommand):
                 maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
             maker.make(debug=True)
             if not maker.success:
-                print>>sys.stderr, maker.log
+                print(maker.log, file=sys.stderr)
             elif directory is None:
                 shutil.move(maker.pdffile, problem.code + '.pdf')

@@ -1,8 +1,7 @@
-from __future__ import absolute_import
-
 import datetime
 
 from judge.utils.timedelta import nice_repr
+
 from . import registry
 
 

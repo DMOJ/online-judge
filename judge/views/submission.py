@@ -4,15 +4,15 @@ from operator import attrgetter
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
-from django.core.urlresolvers import reverse
-from django.db.models import F, Prefetch
+from django.db.models import Prefetch
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import format_html, escape
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _, ugettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView
 
@@ -64,10 +64,10 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
     def get_content_title(self):
         submission = self.object
         return mark_safe(escape(_('Submission of %(problem)s by %(user)s')) % {
-            'problem': format_html(u'<a href="{0}">{1}</a>',
+            'problem': format_html('<a href="{0}">{1}</a>',
                                    reverse('problem_detail', args=[submission.problem.code]),
                                    submission.problem.translated_name(self.request.LANGUAGE_CODE)),
-            'user': format_html(u'<a href="{0}">{1}</a>',
+            'user': format_html('<a href="{0}">{1}</a>',
                                 reverse('user_page', args=[submission.user.user.username]),
                                 submission.user.user.username),
         })
@@ -155,8 +155,8 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     model = Submission
     paginate_by = 50
     show_problem = True
-    title = ugettext_lazy('All submissions')
-    content_title = ugettext_lazy('All submissions')
+    title = gettext_lazy('All submissions')
+    content_title = gettext_lazy('All submissions')
     tab = 'all_submissions_list'
     template_name = 'submission/list.html'
     context_object_name = 'submissions'
@@ -298,8 +298,8 @@ class AllUserSubmissions(ConditionalUserTabMixin, UserMixin, SubmissionsListBase
 
     def get_content_title(self):
         if self.request.user.is_authenticated and self.request.user.profile == self.profile:
-            return format_html(u'All my submissions')
-        return format_html(u'All submissions by <a href="{1}">{0}</a>', self.username,
+            return format_html('All my submissions')
+        return format_html('All submissions by <a href="{1}">{0}</a>', self.username,
                            reverse('user_page', args=[self.username]))
 
     def get_my_submissions_page(self):
@@ -328,7 +328,7 @@ class ProblemSubmissionsBase(SubmissionsListBase):
         return _('All submissions for %s') % self.problem_name
 
     def get_content_title(self):
-        return format_html(u'All submissions for <a href="{1}">{0}</a>', self.problem_name,
+        return format_html('All submissions for <a href="{1}">{0}</a>', self.problem_name,
                            reverse('problem_detail', args=[self.problem.code]))
 
     def access_check_contest(self, request):
@@ -392,10 +392,10 @@ class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissi
 
     def get_content_title(self):
         if self.request.user.is_authenticated and self.request.user.profile == self.profile:
-            return format_html(u'''My submissions for <a href="{3}">{2}</a>''',
+            return format_html('''My submissions for <a href="{3}">{2}</a>''',
                                self.username, reverse('user_page', args=[self.username]),
                                self.problem_name, reverse('problem_detail', args=[self.problem.code]))
-        return format_html(u'''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
+        return format_html('''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
                            self.username, reverse('user_page', args=[self.username]),
                            self.problem_name, reverse('problem_detail', args=[self.problem.code]))
 
@@ -504,13 +504,13 @@ class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
 
     def get_content_title(self):
         if self.problem.is_accessible_by(self.request.user):
-            return format_html(_(u'<a href="{1}">{0}</a>\'s submissions for '
-                                 u'<a href="{3}">{2}</a> in <a href="{5}">{4}</a>'),
+            return format_html(_('<a href="{1}">{0}</a>\'s submissions for '
+                                 '<a href="{3}">{2}</a> in <a href="{5}">{4}</a>'),
                                self.username, reverse('user_page', args=[self.username]),
                                self.problem_name, reverse('problem_detail', args=[self.problem.code]),
                                self.contest.name, reverse('contest_view', args=[self.contest.key]))
-        return format_html(_(u'<a href="{1}">{0}</a>\'s submissions for '
-                             u'problem {2} in <a href="{4}">{3}</a>'),
+        return format_html(_('<a href="{1}">{0}</a>\'s submissions for '
+                             'problem {2} in <a href="{4}">{3}</a>'),
                            self.username, reverse('user_page', args=[self.username]),
                            self.get_problem_number(self.problem),
                            self.contest.name, reverse('contest_view', args=[self.contest.key]))

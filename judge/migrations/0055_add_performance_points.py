@@ -12,7 +12,7 @@ def gen_pp(apps, schema_editor):
     Profile = apps.get_model('judge', 'Profile')
     Problem = apps.get_model('judge', 'Problem')
     _pp_step = getattr(settings, 'DMOJ_PP_STEP', 0.95)
-    table = [pow(_pp_step, i) for i in xrange(getattr(settings, 'DMOJ_PP_ENTRIES', 100))]
+    table = [pow(_pp_step, i) for i in range(getattr(settings, 'DMOJ_PP_ENTRIES', 100))]
     bonus_function =  getattr(settings, 'DMOJ_PP_BONUS_FUNCTION', lambda n: 300 * (1 - 0.997 ** n))
     for row in Profile.objects.all():
         data = (Problem.objects.filter(submission__user=row, submission__points__isnull=False, is_public=True)

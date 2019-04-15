@@ -4,9 +4,9 @@ from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError, transaction
 from django.db.models import F
 from django.forms.models import ModelForm
-from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404
 from django.shortcuts import get_object_or_404
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, UpdateView
 from reversion import revisions
@@ -33,7 +33,8 @@ def vote_comment(request, delta):
         return HttpResponseBadRequest()
 
     if not request.user.is_staff and not request.profile.submission_set.filter(points=F('problem__points')).exists():
-        return HttpResponseBadRequest(_('You must solve at least one problem before you can vote.'), content_type='text/plain')
+        return HttpResponseBadRequest(_('You must solve at least one problem before you can vote.'),
+                                      content_type='text/plain')
 
     try:
         comment_id = int(request.POST['id'])

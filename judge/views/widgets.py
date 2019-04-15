@@ -1,12 +1,9 @@
-import json
-import urllib2
-from contextlib import closing
-
+import requests
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404, HttpResponseRedirect
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.generic import View
 
 from judge.models import Submission
@@ -43,25 +40,22 @@ class DetectTimezone(View):
     def askgeo(self, lat, long):
         if not hasattr(settings, 'ASKGEO_ACCOUNT_ID') or not hasattr(settings, 'ASKGEO_ACCOUNT_API_KEY'):
             raise ImproperlyConfigured()
-        with closing(urllib2.urlopen('http://api.askgeo.com/v1/%s/%s/query.json?databases=TimeZone&points=%f,%f' %
-                                             (settings.ASKGEO_ACCOUNT_ID, settings.ASKGEO_ACCOUNT_API_KEY, lat,
-                                              long))) as f:
-            data = json.load(f)
-            try:
-                return HttpResponse(data['data'][0]['TimeZone']['TimeZoneId'], content_type='text/plain')
-            except (IndexError, KeyError):
-                return HttpResponse(_('Invalid upstream data: %s') % data, content_type='text/plain', status=500)
+        data = requests.get('http://api.askgeo.com/v1/%s/%s/query.json?databases=TimeZone&points=%f,%f' %
+                            (settings.ASKGEO_ACCOUNT_ID, settings.ASKGEO_ACCOUNT_API_KEY, lat, long)).json()
+        try:
+            return HttpResponse(data['data'][0]['TimeZone']['TimeZoneId'], content_type='text/plain')
+        except (IndexError, KeyError):
+            return HttpResponse(_('Invalid upstream data: %s') % data, content_type='text/plain', status=500)
 
     def geonames(self, lat, long):
         if not hasattr(settings, 'GEONAMES_USERNAME'):
             raise ImproperlyConfigured()
-        with closing(urllib2.urlopen('http://api.geonames.org/timezoneJSON?lat=%f&lng=%f&username=%s' %
-                                             (lat, long, settings.GEONAMES_USERNAME))) as f:
-            data = json.load(f)
-            try:
-                return HttpResponse(data['timezoneId'], content_type='text/plain')
-            except KeyError:
-                return HttpResponse(_('Invalid upstream data: %s') % data, content_type='text/plain', status=500)
+        data = requests.get('http://api.geonames.org/timezoneJSON?lat=%f&lng=%f&username=%s' %
+                                             (lat, long, settings.GEONAMES_USERNAME)).json()
+        try:
+            return HttpResponse(data['timezoneId'], content_type='text/plain')
+        except KeyError:
+            return HttpResponse(_('Invalid upstream data: %s') % data, content_type='text/plain', status=500)
 
     def default(self, lat, long):
         raise Http404()

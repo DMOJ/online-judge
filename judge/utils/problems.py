@@ -5,7 +5,7 @@ from django.core.cache import cache
 from django.db.models import F, Count, Max, Q, ExpressionWrapper, Case, When
 from django.db.models.fields import FloatField
 from django.utils import timezone
-from django.utils.translation import ugettext as _, gettext_noop
+from django.utils.translation import gettext as _, gettext_noop
 
 from judge.models import Submission, Problem
 

@@ -9,7 +9,7 @@ from django.core.validators import RegexValidator
 from django.db.models import Q
 from django.forms import ModelForm, CharField, TextInput, Form
 from django.urls import reverse_lazy
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, PrivateMessage, Language
@@ -18,8 +18,8 @@ from judge.widgets import MathJaxPagedownWidget, HeavyPreviewPageDownWidget, Pag
     Select2Widget, Select2MultipleWidget
 
 
-def fix_unicode(string, unsafe=tuple(u'\u202a\u202b\u202d\u202e')):
-    return string + (sum(k in unsafe for k in string) - string.count(u'\u202c')) * u'\u202c'
+def fix_unicode(string, unsafe=tuple('\u202a\u202b\u202d\u202e')):
+    return string + (sum(k in unsafe for k in string) - string.count('\u202c')) * '\u202c'
 
 
 class ProfileForm(ModelForm):

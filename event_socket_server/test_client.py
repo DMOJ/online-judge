@@ -2,6 +2,7 @@ import ctypes
 import socket
 import struct
 import time
+import zlib
 
 size_pack = struct.Struct('!I')
 try:
@@ -16,14 +17,14 @@ def open_connection():
 
 
 def zlibify(data):
-    data = data.encode('zlib')
+    data = zlib.compress(data.encode('utf-8'))
     return size_pack.pack(len(data)) + data
 
 
 def dezlibify(data, skip_head=True):
     if skip_head:
         data = data[size_pack.size:]
-    return data.decode('zlib')
+    return zlib.decompress(data).decode('utf-8')
 
 
 def random(length):
@@ -44,29 +45,29 @@ def main():
     args = parser.parse_args()
     host, port = args.host, args.port
 
-    print 'Opening idle connection:',
+    print('Opening idle connection:', end=' ')
     s1 = open_connection()
-    print 'Success'
-    print 'Opening hello world connection:',
+    print('Success')
+    print('Opening hello world connection:', end=' ')
     s2 = open_connection()
-    print 'Success'
-    print 'Sending Hello, World!',
+    print('Success')
+    print('Sending Hello, World!', end=' ')
     s2.sendall(zlibify('Hello, World!'))
-    print 'Success'
-    print 'Testing blank connection:',
+    print('Success')
+    print('Testing blank connection:', end=' ')
     s3 = open_connection()
     s3.close()
-    print 'Success'
+    print('Success')
     result = dezlibify(s2.recv(1024))
     assert result == 'Hello, World!'
-    print result
+    print(result)
     s2.close()
-    print 'Large random data test:',
+    print('Large random data test:', end=' ')
     s4 = open_connection()
     data = random(1000000)
-    print 'Generated',
+    print('Generated', end=' ')
     s4.sendall(zlibify(data))
-    print 'Sent',
+    print('Sent', end=' ')
     result = ''
     while len(result) < size_pack.size:
         result += s4.recv(1024)
@@ -74,18 +75,18 @@ def main():
     result = result[size_pack.size:]
     while len(result) < size:
         result += s4.recv(1024)
-    print 'Received',
+    print('Received', end=' ')
     assert dezlibify(result, False) == data
-    print 'Success'
+    print('Success')
     s4.close()
-    print 'Test malformed connection:',
+    print('Test malformed connection:', end=' ')
     s5 = open_connection()
     s5.sendall(data[:100000])
     s5.close()
-    print 'Success'
-    print 'Waiting for timeout to close idle connection:',
+    print('Success')
+    print('Waiting for timeout to close idle connection:', end=' ')
     time.sleep(6)
-    print 'Done'
+    print('Done')
     s1.close()
 
 if __name__ == '__main__':

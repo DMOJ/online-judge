@@ -30,7 +30,7 @@ class PostList(ListView):
 
     def get_queryset(self):
         return (BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).order_by('-sticky', '-publish_on')
-                        .prefetch_related('authors__user'))
+                .prefetch_related('authors__user'))
 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data(**kwargs)
@@ -38,7 +38,8 @@ class PostList(ListView):
         context['first_page_href'] = reverse('home')
         context['page_prefix'] = reverse('blog_post_list')
         context['comments'] = Comment.most_recent(self.request.user, 10)
-        context['new_problems'] = Problem.objects.filter(is_public=True, is_organization_private=False).order_by('-date', '-id')[:7]
+        context['new_problems'] = Problem.objects.filter(is_public=True, is_organization_private=False) \
+                                         .order_by('-date', '-id')[:7]
         context['page_titles'] = CacheDict(lambda page: Comment.get_page_title(page))
 
         context['has_clarifications'] = False
@@ -49,10 +50,10 @@ class PostList(ListView):
                 context['has_clarifications'] = clarifications.count() > 0
                 context['clarifications'] = clarifications.order_by('-date')
 
-        context['user_count'] = lazy(Profile.objects.count, int, long)
-        context['problem_count'] = lazy(Problem.objects.filter(is_public=True).count, int, long)
-        context['submission_count'] = lazy(Submission.objects.count, int, long)
-        context['language_count'] = lazy(Language.objects.count, int, long)
+        context['user_count'] = lazy(Profile.objects.count, int, int)
+        context['problem_count'] = lazy(Problem.objects.filter(is_public=True).count, int, int)
+        context['submission_count'] = lazy(Submission.objects.count, int, int)
+        context['language_count'] = lazy(Language.objects.count, int, int)
 
         context['post_comment_counts'] = {
             int(page[2:]): count for page, count in

@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models import Max
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _, pgettext
+from django.utils.translation import gettext_lazy as _, pgettext
 from fernet_fields import EncryptedCharField
 from sortedm2m.fields import SortedManyToManyField
 
@@ -47,14 +47,14 @@ class Organization(models.Model):
                                    verbose_name=_('access code'), null=True, blank=True)
 
     def __contains__(self, item):
-        if isinstance(item, (int, long)):
+        if isinstance(item, int):
             return self.members.filter(id=item).exists()
         elif isinstance(item, Profile):
             return self.members.filter(id=item.id).exists()
         else:
             raise TypeError('Organization membership test must be Profile or primany key')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -120,8 +120,7 @@ class Profile(models.Model):
     def username(self):
         return self.user.username
 
-    _pp_step = getattr(settings, 'DMOJ_PP_STEP', 0.95)
-    _pp_table = [pow(_pp_step, i) for i in xrange(getattr(settings, 'DMOJ_PP_ENTRIES', 100))]
+    _pp_table = [pow(getattr(settings, 'DMOJ_PP_STEP', 0.95), i) for i in range(getattr(settings, 'DMOJ_PP_ENTRIES', 100))]
     def calculate_points(self, table=_pp_table):
         from judge.models import Problem
         data = (Problem.objects.filter(submission__user=self, submission__points__isnull=False, is_public=True,
@@ -160,7 +159,7 @@ class Profile(models.Model):
     def get_absolute_url(self):
         return reverse('user_page', args=(self.user.username,))
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.username
 
     @classmethod

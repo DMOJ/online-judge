@@ -1,6 +1,7 @@
 import hashlib
 import json
 import logging
+from base64 import b64decode
 
 import requests
 from django.conf import settings
@@ -51,10 +52,10 @@ class TexoidRenderer(object):
             return {'error': data['error']}
 
         meta = data['meta']
-        self.cache.cache_data(hash, 'meta', json.dumps(meta), url=False, gzip=False)
+        self.cache.cache_data(hash, 'meta', utf8bytes(json.dumps(meta)), url=False, gzip=False)
 
         result = {
-            'png': self.cache.cache_data(hash, 'png', data['png'].decode('base64')),
+            'png': self.cache.cache_data(hash, 'png', b64decode(data['png'])),
             'svg': self.cache.cache_data(hash, 'svg', data['svg'].encode('utf-8')),
             'meta': meta,
         }
@@ -76,7 +77,7 @@ class TexoidRenderer(object):
         return result
 
     def get_result(self, formula):
-        hash = hashlib.sha1(formula).hexdigest()
+        hash = hashlib.sha1(utf8bytes(formula)).hexdigest()
 
         if self.cache.has_file(hash, 'svg'):
             return self.query_cache(hash)

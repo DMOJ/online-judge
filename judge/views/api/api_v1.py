@@ -24,7 +24,7 @@ def api_v1_contest_list(request):
         'start_time': c.start_time.isoformat(),
         'end_time': c.end_time.isoformat(),
         'time_limit': c.time_limit and sane_time_repr(c.time_limit),
-        'labels': map(attrgetter('name'), c.tag_list),
+        'labels': list(map(attrgetter('name'), c.tag_list)),
     } for c in queryset})
 
 
