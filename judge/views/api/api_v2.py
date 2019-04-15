@@ -117,7 +117,7 @@ def api_v2_user_info(request):
         'solved': solved_problems,
         'attempted': attempted_problems,
         'authored': list(Problem.objects.filter(is_public=True, is_organization_private=False, authors=profile)
-                         .values_list('code', flat=True))
+                                .values_list('code', flat=True))
     }
 
     return JsonResponse(resp)

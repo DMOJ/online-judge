@@ -39,7 +39,7 @@ class PostList(ListView):
         context['page_prefix'] = reverse('blog_post_list')
         context['comments'] = Comment.most_recent(self.request.user, 10)
         context['new_problems'] = Problem.objects.filter(is_public=True, is_organization_private=False) \
-                                      .order_by('-date', '-id')[:7]
+                                         .order_by('-date', '-id')[:7]
         context['page_titles'] = CacheDict(lambda page: Comment.get_page_title(page))
 
         context['has_clarifications'] = False
@@ -92,7 +92,7 @@ class PostList(ListView):
         # Superusers better be staffs, not the spell-casting kind either.
         if self.request.user.is_staff:
             tickets = (Ticket.objects.order_by('-id').filter(is_open=True).prefetch_related('linked_item')
-                       .select_related('user__user'))
+                             .select_related('user__user'))
             context['open_tickets'] = filter_visible_tickets(tickets, self.request.user, profile)[:10]
         else:
             context['open_tickets'] = []
