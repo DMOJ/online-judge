@@ -7,14 +7,16 @@ from django.contrib import admin, messages
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
+from django.forms import ModelForm
+from django.forms.models import modelformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _, pgettext, gettext, ungettext
 
 from django_ace import AceWidget
-from judge.models import Submission, SubmissionTestCase, ContestSubmission, ContestParticipation, ContestProblem, \
-    Profile
+from judge.models import Submission, SubmissionTestCase, SubmissionSource, ContestSubmission, ContestParticipation, \
+    ContestProblem, Profile
 from judge.utils.raw_sql import use_straight_join
 
 
@@ -91,9 +93,21 @@ class ContestSubmissionInline(admin.StackedInline):
         return field
 
 
+class SubmissionSourceInline(admin.StackedInline):
+    fields = ('source',)
+    model = SubmissionSource
+    can_delete = False
+    extra = 0
+
+    def get_formset(self, request, obj=None, **kwargs):
+        kwargs.setdefault('widgets', {})['source'] = AceWidget(mode=obj and obj.language.ace,
+                                                               theme=request.user.profile.ace_theme)
+        return super().get_formset(request, obj, **kwargs)
+
+
 class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date')
-    fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'source', 'status', 'result',
+    fields = ('user', 'problem', 'date', 'time', 'memory', 'points', 'language', 'status', 'result',
               'case_points', 'case_total', 'judged_on', 'error')
     actions = ('judge', 'recalculate_score')
     list_display = ('id', 'problem_code', 'problem_name', 'user_column', 'execution_time', 'pretty_memory',
@@ -102,7 +116,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     search_fields = ('problem__code', 'problem__name', 'user__user__username')
     actions_on_top = True
     actions_on_bottom = True
-    inlines = [SubmissionTestCaseInline, ContestSubmissionInline]
+    inlines = [SubmissionSourceInline, SubmissionTestCaseInline, ContestSubmissionInline]
 
     def get_queryset(self, request):
         queryset = Submission.objects.select_related('problem', 'user__user', 'language').only(
@@ -232,9 +246,3 @@ class SubmissionAdmin(admin.ModelAdmin):
             raise PermissionDenied()
         submission.judge(rejudge=True)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
-    def get_form(self, request, obj=None, **kwargs):
-        form = super(SubmissionAdmin, self).get_form(request, obj, **kwargs)
-        if obj is not None:
-            form.base_fields['source'].widget = AceWidget(obj.language.ace, request.user.profile.ace_theme)
-        return form
