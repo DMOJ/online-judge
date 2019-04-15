@@ -107,10 +107,10 @@ class Problem(models.Model):
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'))
     time_limit = models.FloatField(verbose_name=_('time limit'),
-                                   help_text=_('The time limit for this problem, in seconds.'
+                                   help_text=_('The time limit for this problem, in seconds. '
                                                'Fractional seconds (e.g. 1.5) are supported.'))
     memory_limit = models.IntegerField(verbose_name=_('memory limit'),
-                                       help_text=_('The memory limit for this problem, in kilobytes'
+                                       help_text=_('The memory limit for this problem, in kilobytes '
                                                    '(e.g. 64mb = 65536 kilobytes).'))
     short_circuit = models.BooleanField(default=False)
     points = models.FloatField(verbose_name=_('points'))
