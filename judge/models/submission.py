@@ -15,7 +15,7 @@ from judge.models.runtime import Language
 from judge.utils.unicode import utf8bytes
 
 
-__all__ = ['SUBMISSION_RESULT', 'Submission', 'SubmissionTestCase']
+__all__ = ['SUBMISSION_RESULT', 'Submission', 'SubmissionSource', 'SubmissionTestCase']
 
 SUBMISSION_RESULT = (
     ('AC', _('Accepted')),
@@ -68,7 +68,6 @@ class Submission(models.Model):
     memory = models.FloatField(verbose_name=_('memory usage'), null=True)
     points = models.FloatField(verbose_name=_('points granted'), null=True, db_index=True)
     language = models.ForeignKey(Language, verbose_name=_('submission language'), on_delete=models.CASCADE)
-    source = models.TextField(verbose_name=_('source code'), max_length=65536)
     status = models.CharField(verbose_name=_('status'), max_length=2, choices=STATUS, default='QU', db_index=True)
     result = models.CharField(verbose_name=_('result'), max_length=3, choices=SUBMISSION_RESULT,
                               default=None, null=True, blank=True, db_index=True)
@@ -147,7 +146,7 @@ class Submission(models.Model):
             return self.contest.participation.contest.key
 
     def __str__(self):
-        return u'Submission %d of %s by %s' % (self.id, self.problem, self.user.user.username)
+        return 'Submission %d of %s by %s' % (self.id, self.problem, self.user.user.username)
 
     def get_absolute_url(self):
         return reverse('submission_status', args=(self.id,))
@@ -179,6 +178,15 @@ class Submission(models.Model):
         )
         verbose_name = _('submission')
         verbose_name_plural = _('submissions')
+
+
+class SubmissionSource(models.Model):
+    submission = models.OneToOneField(Submission, on_delete=models.CASCADE, verbose_name=_('associated submission'),
+                                      related_name='source')
+    source = models.TextField(verbose_name=_('source code'), max_length=65536)
+
+    def __str__(self):
+        return 'Source of %s' % self.submission
 
 
 class SubmissionTestCase(models.Model):
