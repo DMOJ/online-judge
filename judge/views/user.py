@@ -20,7 +20,7 @@ from django.utils import timezone
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _, ugettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView, TemplateView
 from reversion import revisions
@@ -33,6 +33,7 @@ from judge.utils.cachedict import CacheDict
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
+from judge.utils.unicode import utf8text
 from judge.utils.views import TitleMixin, generic_message, DiggPaginatorMixin, QueryStringSortMixin
 from .contests import ContestRanking 
 
@@ -40,7 +41,7 @@ __all__ = ['UserPage', 'UserAboutPage', 'UserList', 'UserProblemsPage', 'users',
 
 
 def remap_keys(iterable, mapping):
-    return [dict((mapping.get(k, k), v) for k, v in item.iteritems()) for item in iterable]
+    return [dict((mapping.get(k, k), v) for k, v in item.items()) for item in iterable]
 
 
 class UserMixin(object):
@@ -232,7 +233,7 @@ class UserPerformancePointsAjax(UserProblemsPage):
         httpresp.render()
 
         return JsonResponse({
-            'results': httpresp.content,
+            'results': utf8text(httpresp.content),
             'has_more': self.has_more,
         })
 
@@ -304,7 +305,7 @@ def generate_api_token(request):
 
 class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
-    title = ugettext_lazy('Leaderboard')
+    title = gettext_lazy('Leaderboard')
     context_object_name = 'users'
     template_name = 'user/list.html'
     paginate_by = 100

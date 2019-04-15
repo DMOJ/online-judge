@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
@@ -17,7 +17,7 @@ class MiscConfig(models.Model):
     key = models.CharField(max_length=30, db_index=True)
     value = models.TextField(blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.key
 
     class Meta:
@@ -47,7 +47,7 @@ class NavigationBar(MPTTModel):
     regex = models.TextField(verbose_name=_('highlight regex'), validators=[validate_regex])
     parent = TreeForeignKey('self', verbose_name=_('parent item'), null=True, blank=True, related_name='children')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.label
 
     @property
@@ -75,7 +75,7 @@ class BlogPost(models.Model):
                                           help_text=_('If private, only these organizations may see the blog post.'))
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def get_absolute_url(self):

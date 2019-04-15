@@ -1,9 +1,9 @@
 import re
 from collections import defaultdict
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 from django.contrib.auth.models import AbstractUser
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from lxml.html import Element
 
 from judge import lxml_tree
@@ -122,7 +122,7 @@ def reference(text):
         if element.tail:
             populate_list(queries, tails, element, *process_reference(element.tail))
 
-    results = {type: reference_map[type][1](values) for type, values in queries.iteritems()}
+    results = {type: reference_map[type][1](values) for type, values in queries.items()}
     update_tree(texts, results, is_tail=False)
     update_tree(tails, results, is_tail=True)
     return tree

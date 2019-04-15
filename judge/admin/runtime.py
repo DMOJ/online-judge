@@ -1,10 +1,10 @@
 from django.conf.urls import url
-from django.core.urlresolvers import reverse
 from django.db.models import TextField
 from django.forms import ModelForm, ModelMultipleChoiceField
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
@@ -33,7 +33,7 @@ class LanguageAdmin(VersionAdmin):
 
     def save_model(self, request, obj, form, change):
         super(LanguageAdmin, self).save_model(request, obj, form, change)
-        obj.problem_set = Problem.objects.exclude(id__in=form.cleaned_data['problems'].values('id'))
+        obj.problem_set.set(Problem.objects.exclude(id__in=form.cleaned_data['problems'].values('id')))
 
     def get_form(self, request, obj=None, **kwargs):
         self.form.base_fields['problems'].initial = \

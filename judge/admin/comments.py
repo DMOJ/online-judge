@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.urls import reverse_lazy
 from django.utils.html import format_html
-from django.utils.translation import ungettext, ugettext_lazy as _
+from django.utils.translation import ungettext, gettext_lazy as _
 from reversion.admin import VersionAdmin
 
 from judge.models import Comment

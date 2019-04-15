@@ -5,7 +5,7 @@ from django.db.models import Count, Sum, Case, When, IntegerField, Value, FloatF
 from django.db.models.expressions import CombinedExpression
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from judge.models import Language, Submission
 
@@ -25,7 +25,7 @@ def _highlight_colors():
 _highlight_colors()
 del _highlight_colors
 
-chart_colors = map('#%06X'.__mod__, chart_colors)
+chart_colors = list(map('#%06X'.__mod__, chart_colors))
 ac_count = Count(Case(When(submission__result='AC', then=Value(1)), output_field=IntegerField()))
 
 
@@ -76,14 +76,14 @@ def ac_rate(request):
     data = Language.objects.annotate(total=Count('submission'), ac_rate=rate).filter(total__gt=0) \
         .values('key', 'name', 'short_name', 'ac_rate').order_by('total')
     return JsonResponse({
-        'labels': map(itemgetter('name'), data),
+        'labels': list(map(itemgetter('name'), data)),
         'datasets': [
             {
                 'fillColor': 'rgba(151,187,205,0.5)',
                 'strokeColor': 'rgba(151,187,205,0.8)',
                 'highlightFill': 'rgba(151,187,205,0.75)',
                 'highlightStroke': 'rgba(151,187,205,1)',
-                'data': map(itemgetter('ac_rate'), data),
+                'data': list(map(itemgetter('ac_rate'), data)),
             }
         ]
     })

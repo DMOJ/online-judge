@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.forms import ModelForm, ModelMultipleChoiceField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from judge.models import Problem
 from judge.widgets import HeavySelect2MultipleWidget

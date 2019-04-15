@@ -4,7 +4,7 @@ from django.contrib.flatpages.models import FlatPage
 from django.core.urlresolvers import reverse_lazy
 from django.forms import ModelForm
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
 from reversion.admin import VersionAdmin
 

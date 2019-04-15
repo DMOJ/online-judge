@@ -1,6 +1,5 @@
 import math
 from bisect import bisect
-from itertools import izip
 from operator import itemgetter
 
 from django.db import connection, transaction
@@ -46,7 +45,7 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated):
     if N <= 1:
         return new_rating, new_volatility
 
-    ranking = range(N)
+    ranking = list(range(N))
     ranking.sort(key=old_rating.__getitem__, reverse=True)
 
     ave_rating = float(sum(old_rating)) / N
@@ -54,9 +53,9 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated):
     sum2 = sum((i - ave_rating) ** 2 for i in old_rating) / (N - 1)
     CF = math.sqrt(sum1 + sum2)
 
-    for i in xrange(N):
+    for i in range(N):
         ERank = 0.5
-        for j in xrange(N):
+        for j in range(N):
             ERank += WP(old_rating[i], old_rating[j], old_volatility[i], old_volatility[j])
 
         EPerf = -normal_CDF_inverse((ERank - 0.5) / N)
@@ -84,13 +83,13 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated):
 
     # try to keep the sum of ratings constant
     adjust = float(sum(old_rating) - sum(new_rating)) / N
-    new_rating = map(adjust.__add__, new_rating)
+    new_rating = list(map(adjust.__add__, new_rating))
     # inflate a little if we have to so people who placed first don't lose rating
     best_rank = min(actual_rank)
-    for i in xrange(N):
+    for i in range(N):
         if abs(actual_rank[i] - best_rank) <= 1e-3 and new_rating[i] < old_rating[i] + 1:
             new_rating[i] = old_rating[i] + 1
-    return map(int, map(round, new_rating)), map(int, map(round, new_volatility))
+    return list(map(int, map(round, new_rating))), list(map(int, map(round, new_volatility)))
 
 
 def rate_contest(contest):
@@ -125,19 +124,19 @@ def rate_contest(contest):
     users = list(tie_ranker(users, key=itemgetter(2, 3)))
     participation_ids = [user[1][0] for user in users]
     user_ids = [user[1][1] for user in users]
-    ranking = map(itemgetter(0), users)
+    ranking = list(map(itemgetter(0), users))
     old_data = [data.get(user, (1200, 535, 0)) for user in user_ids]
-    old_rating = map(itemgetter(0), old_data)
-    old_volatility = map(itemgetter(1), old_data)
-    times_ranked = map(itemgetter(2), old_data)
+    old_rating = list(map(itemgetter(0), old_data))
+    old_volatility = list(map(itemgetter(1), old_data))
+    times_ranked = list(map(itemgetter(2), old_data))
     rating, volatility = recalculate_ratings(old_rating, old_volatility, ranking, times_ranked)
 
     now = timezone.now()
     ratings = [Rating(user_id=id, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p, rank=z)
-               for id, p, r, v, z in izip(user_ids, participation_ids, rating, volatility, ranking)]
+               for id, p, r, v, z in zip(user_ids, participation_ids, rating, volatility, ranking)]
     cursor = connection.cursor()
     cursor.execute('CREATE TEMPORARY TABLE _profile_rating_update(id integer, rating integer)')
-    cursor.executemany('INSERT INTO _profile_rating_update VALUES (%s, %s)', zip(user_ids, rating))
+    cursor.executemany('INSERT INTO _profile_rating_update VALUES (%s, %s)', list(zip(user_ids, rating)))
     with transaction.atomic():
         Rating.objects.filter(contest=contest).delete()
         Rating.objects.bulk_create(ratings)

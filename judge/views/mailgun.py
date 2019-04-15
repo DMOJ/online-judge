@@ -13,6 +13,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from registration.models import RegistrationProfile
 
+from judge.utils.unicode import utf8bytes
+
 logger = logging.getLogger('judge.mail.activate')
 
 
@@ -26,8 +28,8 @@ class MailgunActivationView(View):
 
             logger.debug('Received request: %s', params)
 
-            if signature != hmac.new(key=settings.MAILGUN_ACCESS_KEY, msg='%s%s' % (timestamp, token),
-                                     digestmod=hashlib.sha256).hexdigest():
+            if signature != hmac.new(key=utf8bytes(settings.MAILGUN_ACCESS_KEY),
+                                     msg=utf8bytes('%s%s' % (timestamp, token)), digestmod=hashlib.sha256).hexdigest():
                 logger.info('Rejected request: signature: %s, timestamp: %s, token: %s', signature, timestamp, token)
                 raise PermissionDenied()
             _, sender = parseaddr(params.get('from'))

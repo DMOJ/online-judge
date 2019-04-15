@@ -8,7 +8,7 @@ from judge.timezone import from_database_time
 
 PP_STEP = getattr(settings, 'DMOJ_PP_STEP', 0.95)
 PP_ENTRIES = getattr(settings, 'DMOJ_PP_ENTRIES', 100)
-PP_WEIGHT_TABLE = [pow(PP_STEP, i) for i in xrange(PP_ENTRIES)]
+PP_WEIGHT_TABLE = [pow(PP_STEP, i) for i in range(PP_ENTRIES)]
 
 PPBreakdown = namedtuple('PPBreakdown', 'points weight scaled_points problem_name problem_code '
                                         'sub_id sub_date sub_points sub_total sub_result_class '

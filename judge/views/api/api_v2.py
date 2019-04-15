@@ -1,13 +1,11 @@
 from operator import attrgetter
 
-from django.db.models import Prefetch, F, Max
-from django.http import JsonResponse, Http404
-from django.shortcuts import get_object_or_404
+from django.db.models import Max
+from django.http import JsonResponse
 
-from dmoj import settings
-from judge.models import Contest, Problem, Profile, Submission, ContestTag, ContestParticipation
+from judge.models import Problem, Profile, Submission, ContestParticipation
 from judge.utils.ranker import ranker
-from judge.views.contests import base_contest_ranking_list, contest_ranking_list
+from judge.views.contests import contest_ranking_list
 
 
 def error(message):
@@ -51,7 +49,7 @@ def api_v2_user_info(request):
    """
     try:
         username = request.GET['username']
-    except(KeyError):
+    except KeyError:
         return error("no username passed")
     if not username:
         return error("username argument not provided")
@@ -72,8 +70,10 @@ def api_v2_user_info(request):
                                   .order_by('-contest__end_time')):
         contest = participation.contest
 
-        problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
-        rank, result = filter(lambda data: data[1].user == profile.user, ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')))[0]
+        problems = list(contest.contest_problems.select_related('problem').defer('problem__description')
+                               .order_by('order'))
+        rank, result = next(filter(lambda data: data[1].user == profile.user,
+                                   ranker(contest_ranking_list(contest,problems), key=attrgetter('points', 'cumtime'))))
 
         contest_history.append({
             'contest': {
@@ -97,7 +97,8 @@ def api_v2_user_info(request):
     solved_problems = []
     attempted_problems = []
 
-    problem_data = (Submission.objects.filter(points__gt=0, user=profile, problem__is_public=True, problem__is_organization_private=False)
+    problem_data = (Submission.objects.filter(points__gt=0, user=profile, problem__is_public=True,
+                                              problem__is_organization_private=False)
                     .annotate(max_pts=Max('points'))
                     .values_list('max_pts', 'problem__points', 'problem__code')
                     .distinct())
@@ -115,7 +116,8 @@ def api_v2_user_info(request):
         'points': profile.points,
         'solved': solved_problems,
         'attempted': attempted_problems,
-        'authored': list(Problem.objects.filter(is_public=True, is_organization_private=False, authors=profile).values_list('code', flat=True))
+        'authored': list(Problem.objects.filter(is_public=True, is_organization_private=False, authors=profile)
+                                .values_list('code', flat=True))
     }
 
     return JsonResponse(resp)
