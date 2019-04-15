@@ -76,11 +76,14 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
 class SubmissionSource(SubmissionDetailBase):
     template_name = 'submission/source.html'
 
+    def get_queryset(self):
+        return super().get_queryset().select_related('source')
+
     def get_context_data(self, **kwargs):
         context = super(SubmissionSource, self).get_context_data(**kwargs)
         submission = self.object
-        context['raw_source'] = submission.source.rstrip('\n')
-        context['highlighted_source'] = highlight_code(submission.source, submission.language.pygments)
+        context['raw_source'] = submission.source.source.rstrip('\n')
+        context['highlighted_source'] = highlight_code(submission.source.source, submission.language.pygments)
         return context
 
 
@@ -138,7 +141,7 @@ class SubmissionTestCaseQuery(SubmissionStatus):
 class SubmissionSourceRaw(SubmissionSource):
     def get(self, request, *args, **kwargs):
         submission = self.get_object()
-        return HttpResponse(submission.source, content_type='text/plain')
+        return HttpResponse(submission.source.source, content_type='text/plain')
 
 
 @require_POST

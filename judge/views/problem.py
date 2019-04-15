@@ -30,7 +30,7 @@ from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import ContestSubmission, ContestProblem, Judge, Language, Problem, ProblemGroup, ProblemTranslation, \
-    ProblemType, RuntimeVersion, Solution, Submission, TranslatedProblemForeignKeyQuerySet
+    ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import HAS_PDF, DefaultPdfMaker
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
@@ -565,7 +565,12 @@ def problem_submit(request, problem=None, submission=None):
             else:
                 model = form.save()
 
+            # Create the SubmissionSource object
+            source = SubmissionSource(submission=model, source=form.cleaned_data['source'])
+            source.save()
             profile.update_contest()
+            # Save a query
+            model.source = source
             model.judge(rejudge=False)
             return HttpResponseRedirect(reverse('submission_status', args=[str(model.id)]))
         else:
@@ -581,9 +586,10 @@ def problem_submit(request, problem=None, submission=None):
                 raise Http404()
         if submission is not None:
             try:
-                sub = get_object_or_404(Submission, id=int(submission))
-                initial['source'] = sub.source
-                initial['language'] = sub.language
+                source, language = get_object_or_404(Submission.objects.values_list('source__source', 'language'),
+                                                     id=int(submission))
+                initial['source'] = source
+                initial['language'] = language
             except ValueError:
                 raise Http404()
         form = ProblemSubmitForm(initial=initial)
