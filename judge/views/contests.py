@@ -1,10 +1,9 @@
-import json
 import re
 from calendar import Calendar, SUNDAY
 from collections import namedtuple, defaultdict
 from datetime import timedelta, date, datetime, time
 from functools import partial
-from itertools import chain
+from itertools import chain, count
 from operator import attrgetter
 
 from django import forms
@@ -29,13 +28,10 @@ from django.views.generic.detail import BaseDetailView, DetailView
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
-from judge.models import Contest, ContestTag, ContestParticipation, ContestRegistration, ContestTag, Organization, Profile
-from judge.models import Problem
+from judge.models import Contest, ContestParticipation, ContestRegistration, ContestTag, Problem, Profile
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
 from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message
-from functools import partial
-from itertools import chain
 
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestRegister', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'ContestParticipationList', 'get_contest_ranking_list',
@@ -294,7 +290,7 @@ class ContestRegister(LoginRequiredMixin, ContestMixin, BaseDetailView):
             data[field] = request.POST.get(field)
         
         try:
-            registration = ContestRegistration.objects.create(contest=self.object, user=request.profile, data=data)
+            ContestRegistration.objects.create(contest=self.object, user=request.profile, data=data)
         except IntegrityError:
             pass
         return HttpResponseRedirect(reverse('contest_view', args=(self.object.key,)))

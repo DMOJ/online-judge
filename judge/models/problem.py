@@ -5,7 +5,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import F, Q, QuerySet, Prefetch
+from django.db.models import F, Q, QuerySet
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from django.urls import reverse
@@ -19,7 +19,7 @@ from judge.user_translations import gettext as user_gettext
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
 
 __all__ = ['ProblemGroup', 'ProblemType', 'Problem', 'ProblemTranslation', 'ProblemClarification',
-           'TranslatedProblemQuerySet', 'TranslatedProblemForeignKeyQuerySet', 'License']
+           'Solution', 'TranslatedProblemQuerySet', 'TranslatedProblemForeignKeyQuerySet', 'License']
 
 
 class ProblemType(models.Model):

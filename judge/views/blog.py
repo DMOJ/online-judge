@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.db.models import Q, Max, Count
+from django.db.models import Q, Count
 from django.http import Http404
 from django.utils import timezone
 from django.utils.functional import lazy

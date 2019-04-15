@@ -26,7 +26,7 @@ from django.views.generic import DetailView, ListView, TemplateView
 from reversion import revisions
 
 from judge.forms import ProfileForm, newsletter_id
-from judge.models import Comment, Problem, Profile, Rating, Submission
+from judge.models import Comment, Profile, Rating, Submission
 from judge.performance_points import get_pp_breakdown, PP_ENTRIES
 from judge.ratings import rating_class, rating_progress
 from judge.utils.cachedict import CacheDict

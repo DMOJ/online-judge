@@ -18,7 +18,7 @@ from reversion import revisions
 from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
-from judge.models import Comment, CommentLock, CommentVote, Problem, Profile, Submission
+from judge.models import Comment, CommentLock, CommentVote
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
 from judge.widgets import HeavyPreviewPageDownWidget
 

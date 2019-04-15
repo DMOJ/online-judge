@@ -1,7 +1,7 @@
 from operator import attrgetter
 
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch, F
 from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
@@ -38,7 +38,7 @@ def api_v1_contest_list(request):
     user = get_request_user(request)
 
     if user.profile.is_contest_account:
-        return JsonReponse({})
+        return JsonResponse({})
 
     queryset = Contest.contests_list(user).prefetch_related(
         Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description')
