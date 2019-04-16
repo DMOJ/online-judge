@@ -3,7 +3,6 @@ from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.core.urlresolvers import NoReverseMatch, reverse_lazy
 from django.forms import ModelForm
-from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
@@ -136,23 +135,17 @@ class LogEntryAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'action_time', 'user', 'content_type', 'object_link')
     search_fields = ('object_repr', 'change_message')
     list_filter = ('user', 'content_type')
+    list_display_links = None
     actions = None
-
-    def __init__(self, *args, **kwargs):
-        super(LogEntryAdmin, self).__init__(*args, **kwargs)
-        self.list_display_links = (None,)
 
     def has_add_permission(self, request):
         return False
 
     def has_change_permission(self, request, obj=None):
-        return request.user.is_superuser
+        return obj is None and request.user.is_superuser
 
     def has_delete_permission(self, request, obj=None):
         return False
-
-    def change_view(self, request, obj=None):
-        return HttpResponseRedirect(reverse('admin:admin_logentry_changelist'))
 
     def object_link(self, obj):
         if obj.is_deletion():
@@ -166,7 +159,7 @@ class LogEntryAdmin(admin.ModelAdmin):
                 link = obj.object_repr
         return link
     object_link.admin_order_field = 'object_repr'
-    object_link.short_description = 'object'
+    object_link.short_description = _('object')
 
     def queryset(self, request):
-        return super(LogEntryAdmin, self).queryset(request).prefetch_related('content_type')
+        return super().queryset(request).prefetch_related('content_type')

@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='contest',
             name='organizations',
-            field=models.ManyToManyField(blank=True, help_text='If private, only these organizations may join the contest', to=b'judge.Organization', verbose_name='organizations'),
+            field=models.ManyToManyField(blank=True, help_text='If private, only these organizations may join the contest', to='judge.Organization', verbose_name='organizations'),
         ),
         migrations.AlterModelOptions(
             name='contest',
