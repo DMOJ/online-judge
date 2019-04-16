@@ -162,6 +162,27 @@ ul.problem-list {
     color: red;
 }
 
+.organization-tags {
+    padding-left: 0.75em;
+    vertical-align: middle;
+}
+
+.organization-tag {
+    box-shadow: inset 0 -0.1em 0 rgba(0, 0, 0, 0.12);
+    padding: 0.15em 0.3em;
+    border-radius: 0.15em;
+    font-weight: 600;
+    margin-right: 0.45em;
+    position: relative;
+    background-color: #ccc;
+    transform: translateY(+35%);
+    display: inline-block;
+}
+
+.organization-tag a {
+    color: #000;
+}
+
 .pdf-icon {
     position: relative;
     display: inline-block;

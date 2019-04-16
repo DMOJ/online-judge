@@ -82,12 +82,11 @@ class JudgeList(object):
             logger.info('Abort request: %d', submission)
             try:
                 self.submission_map[submission].abort()
-                success = True
+                return True
             except KeyError:
                 self.queue.remove(self.node_map[submission])
                 del self.node_map[submission]
-                success = False
-            return success
+                return False
 
     def check_priority(self, priority):
         return 0 <= priority < self.priorities

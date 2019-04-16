@@ -20,6 +20,15 @@ def _post_update_submission(submission, done=False):
                                    'status': submission.status, 'language': submission.language.key})
 
 
+def _post_update_submission(submission, done=False):
+    if submission.problem.is_public:
+        event.post('submissions', {'type': 'done-submission' if done else 'update-submission',
+                                   'id': submission.id,
+                                   'contest': submission.contest_key,
+                                   'user': submission.user_id, 'problem': submission.problem_id,
+                                   'status': submission.status, 'language': submission.language.key})
+
+
 def judge_request(packet, reply=True):
     sock = socket.create_connection(getattr(settings, 'BRIDGED_DJANGO_CONNECT', None) or
                                     settings.BRIDGED_DJANGO_ADDRESS[0])

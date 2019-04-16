@@ -40,10 +40,9 @@ class LatestList(list):
 
 
 def compare_version_list(x, y):
-    keys = list(x.keys())
-    if keys != list(y.keys()):
+    if sorted(x.keys()) != sorted(y.keys()):
         return False
-    for k in keys:
+    for k in x.keys():
         if len(x[k]) != len(y[k]):
             return False
         for a, b in zip(x[k], y[k]):
