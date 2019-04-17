@@ -141,10 +141,6 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         return _('Editing data for {0}').format(self.object.name)
 
     def get_content_title(self):
-        return format_html(_('Editing data for <a href="{1}">{0}</a>'), self.object.name,
-                           reverse('problem_detail', args=[self.object.code]))
-
-    def get_content_title(self):
         return mark_safe(escape(_('Editing data for %s')) % (
             format_html('<a href="{1}">{0}</a>', self.object.name,
                         reverse('problem_detail', args=[self.object.code]))))
