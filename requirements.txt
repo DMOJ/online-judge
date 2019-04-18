@@ -1,6 +1,6 @@
 Django>=1.11,<2
 django_compressor
-django-mptt>=0.8.4,<0.9
+django-mptt
 django-pagedown
 django-registration-redux
 django-reversion
