@@ -2,6 +2,7 @@ from collections import OrderedDict, defaultdict
 from operator import attrgetter
 
 from django.core.cache import cache
+from django.db.models import CASCADE
 from django.urls import reverse
 from django.db import models
 from django.utils import timezone
@@ -100,8 +101,8 @@ class Language(models.Model):
 
 
 class RuntimeVersion(models.Model):
-    language = models.ForeignKey(Language, verbose_name=_('language to which this runtime belongs'))
-    judge = models.ForeignKey('Judge', verbose_name=_('judge on which this runtime exists'))
+    language = models.ForeignKey(Language, verbose_name=_('language to which this runtime belongs'), on_delete=CASCADE)
+    judge = models.ForeignKey('Judge', verbose_name=_('judge on which this runtime exists'), on_delete=CASCADE)
     name = models.CharField(max_length=64, verbose_name=_('runtime name'))
     version = models.CharField(max_length=64, verbose_name=_('runtime version'), blank=True)
     priority = models.IntegerField(verbose_name=_('order in which to display this runtime'), default=0)
