@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.forms import ModelForm
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy, NoReverseMatch
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
@@ -100,3 +100,38 @@ class LicenseAdmin(admin.ModelAdmin):
     fields = ('key', 'link', 'name', 'display', 'icon', 'text')
     list_display = ('name', 'key')
     form = LicenseForm
+
+
+class LogEntryAdmin(admin.ModelAdmin):
+    readonly_fields = ('user', 'content_type', 'object_id', 'object_repr', 'action_flag', 'change_message')
+    list_display = ('__str__', 'action_time', 'user', 'content_type', 'object_link')
+    search_fields = ('object_repr', 'change_message')
+    list_filter = ('user', 'content_type')
+    list_display_links = None
+    actions = None
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return obj is None and request.user.is_superuser
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def object_link(self, obj):
+        if obj.is_deletion():
+            link = obj.object_repr
+        else:
+            ct = obj.content_type
+            try:
+                link = format_html('<a href="{1}">{0}</a>', obj.object_repr,
+                                   reverse('admin:%s_%s_change' % (ct.app_label, ct.model), args=(obj.object_id,)))
+            except NoReverseMatch:
+                link = obj.object_repr
+        return link
+    object_link.admin_order_field = 'object_repr'
+    object_link.short_description = _('object')
+
+    def queryset(self, request):
+        return super().queryset(request).prefetch_related('content_type')
