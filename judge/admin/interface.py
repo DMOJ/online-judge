@@ -1,9 +1,9 @@
 from django.contrib import admin
+from django.contrib.auth.models import User
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
-from django.core.urlresolvers import NoReverseMatch, reverse_lazy
 from django.forms import ModelForm
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy, NoReverseMatch
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
@@ -130,11 +130,24 @@ class LicenseAdmin(admin.ModelAdmin):
     form = LicenseForm
 
 
+class UserListFilter(admin.SimpleListFilter):
+    title = _('user')
+    parameter_name = 'user'
+
+    def lookups(self, request, model_admin):
+        return User.objects.filter(is_staff=True).values_list('id', 'username')
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(user_id=self.value(), user__is_staff=True)
+        return queryset
+
+
 class LogEntryAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'content_type', 'object_id', 'object_repr', 'action_flag', 'change_message')
     list_display = ('__str__', 'action_time', 'user', 'content_type', 'object_link')
     search_fields = ('object_repr', 'change_message')
-    list_filter = ('user', 'content_type')
+    list_filter = (UserListFilter, 'content_type')
     list_display_links = None
     actions = None
 
