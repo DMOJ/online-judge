@@ -21,6 +21,10 @@ except ImportError:
     HeavyPreviewAdminPageDownWidget = None
 else:
     class PagedownWidget(CompressorWidgetMixin, OldPagedownWidget):
+        # The goal here is to compress all the pagedown JS into one file.
+        # We do not want any further compress down the chain, because
+        # 1. we'll creating multiple large JS files to download.
+        # 2. this is not a problem here because all the pagedown JS files will be used together.
         compress_js = True
 
         def __init__(self, *args, **kwargs):
