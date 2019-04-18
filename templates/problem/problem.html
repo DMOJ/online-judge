@@ -79,6 +79,17 @@
             {% endif %}
         {% endif %}
         <h2 style="color:#393630; display: inline-block">{{ title }}</h2>
+        {% if problem.is_organization_private %}
+            <span class="organization-tags">
+                {% for org in problem.organizations.all() %}
+                    <span class="organization-tag">
+                        <a href="{{ org.get_absolute_url() }}">
+                            <i class="fa fa-lock"></i> {{ org.name }}
+                        </a>
+                    </span>
+                {% endfor %}
+            </span>
+        {% endif %}
         {% if has_pdf_render %}
             <span class="spacer"></span>
             <a href="{{ url('problem_pdf', problem.code) }}" class="view-pdf">

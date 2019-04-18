@@ -1,6 +1,6 @@
-from django.core.urlresolvers import reverse
 from django.db.models import Q, Max, Count
 from django.http import Http404
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import lazy
 from django.utils.translation import ugettext as _
