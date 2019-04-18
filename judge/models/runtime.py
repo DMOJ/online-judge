@@ -2,7 +2,7 @@ from collections import OrderedDict, defaultdict
 from operator import attrgetter
 
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.utils import timezone
 from django.utils.functional import cached_property

@@ -2,10 +2,10 @@ from operator import attrgetter
 
 from django import forms
 from django.contrib import admin
-from django.core.urlresolvers import reverse_lazy
 from django.db import connection
 from django.db.models import Q
 from django.forms import ModelForm
+from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext, ungettext, gettext_lazy as _
 from reversion.admin import VersionAdmin
