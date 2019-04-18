@@ -29,29 +29,21 @@ else:
 
 
     class AdminPagedownWidget(PagedownWidget, admin_widgets.AdminTextareaWidget):
-        def _media(self):
-            media = super(AdminPagedownWidget, self)._media()
-            media.add_css({'all': [
+        class Media:
+            css = {'all': [
                 'content-description.css',
                 'admin/css/pagedown.css',
-            ]})
-            media.add_js(['admin/js/pagedown.js'])
-            return media
-
-        media = property(_media)
+            ]}
+            js = ['admin/js/pagedown.js']
 
 
     class MathJaxPagedownWidget(PagedownWidget):
-        def _media(self):
-            media = super(MathJaxPagedownWidget, self)._media()
-            media.add_js([
+        class Media:
+            js = [
                 'mathjax_config.js',
                 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
                 'pagedown_math.js',
-            ])
-            return media
-
-        media = property(_media)
+            ]
 
 
     class MathJaxAdminPagedownWidget(AdminPagedownWidget, MathJaxPagedownWidget):
@@ -86,22 +78,15 @@ else:
                 'extra_classes': 'dmmd-no-button' if self.hide_preview_button else None,
             }
 
-        def _media(self):
-            media = super(HeavyPreviewPageDownWidget, self)._media()
-            media.add_css({'all': ['dmmd-preview.css']})
-            media.add_js(['dmmd-preview.js'])
-            return media
+        class Media:
+            css = {'all': ['dmmd-preview.css']}
+            js = ['dmmd-preview.js']
 
-        media = property(_media)
 
     class HeavyPreviewAdminPageDownWidget(AdminPagedownWidget, HeavyPreviewPageDownWidget):
-        def _media(self):
-            media = super(HeavyPreviewAdminPageDownWidget, self)._media()
-            media.add_css({'all': [
+        class Media:
+            css = {'all': [
                 'pygment-github.css',
                 'table.css',
                 'ranks.css',
-            ]})
-            return media
-
-        media = property(_media)
+            ]}
