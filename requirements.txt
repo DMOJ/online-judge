@@ -1,8 +1,8 @@
 Django>=1.11,<2
 django_compressor
 django-mptt
--e git://github.com/DMOJ/django-pagedown.git#egg=django-pagedown
-django-registration-redux>=1.11,<2
+django-pagedown
+django-registration-redux
 django-reversion
 django-social-share
 django-sortedm2m
