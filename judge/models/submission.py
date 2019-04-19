@@ -61,13 +61,13 @@ class Submission(models.Model):
         'AB': _('Aborted'),
     }
 
-    user = models.ForeignKey(Profile)
-    problem = models.ForeignKey(Problem)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     date = models.DateTimeField(verbose_name=_('submission time'), auto_now_add=True, db_index=True)
     time = models.FloatField(verbose_name=_('execution time'), null=True, db_index=True)
     memory = models.FloatField(verbose_name=_('memory usage'), null=True)
     points = models.FloatField(verbose_name=_('points granted'), null=True, db_index=True)
-    language = models.ForeignKey(Language, verbose_name=_('submission language'))
+    language = models.ForeignKey(Language, verbose_name=_('submission language'), on_delete=models.CASCADE)
     source = models.TextField(verbose_name=_('source code'), max_length=65536)
     status = models.CharField(verbose_name=_('status'), max_length=2, choices=STATUS, default='QU', db_index=True)
     result = models.CharField(verbose_name=_('result'), max_length=3, choices=SUBMISSION_RESULT,
@@ -184,7 +184,8 @@ class Submission(models.Model):
 class SubmissionTestCase(models.Model):
     RESULT = SUBMISSION_RESULT
 
-    submission = models.ForeignKey(Submission, verbose_name=_('associated submission'), related_name='test_cases')
+    submission = models.ForeignKey(Submission, verbose_name=_('associated submission'),
+                                   related_name='test_cases', on_delete=models.CASCADE)
     case = models.IntegerField(verbose_name=_('test case ID'))
     status = models.CharField(max_length=3, verbose_name=_('status flag'), choices=SUBMISSION_RESULT)
     time = models.FloatField(verbose_name=_('execution time'), null=True)

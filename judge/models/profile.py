@@ -32,9 +32,8 @@ class Organization(models.Model):
     short_name = models.CharField(max_length=20, verbose_name=_('short name'),
                                   help_text=_('Displayed beside user name during contests'))
     about = models.TextField(verbose_name=_('organization description'))
-    registrant = models.ForeignKey('Profile', verbose_name=_('registrant'),
-                                   related_name='registrant+',
-                                   help_text=_('User who registered this organization'))
+    registrant = models.ForeignKey('Profile', verbose_name=_('registrant'), on_delete=models.CASCADE,
+                                   related_name='registrant+', help_text=_('User who registered this organization'))
     admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='admin_of',
                                     help_text=_('Those who can edit this organization'))
     creation_date = models.DateTimeField(verbose_name=_('creation date'), auto_now_add=True)
@@ -74,11 +73,11 @@ class Organization(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, verbose_name=_('user associated'))
+    user = models.OneToOneField(User, verbose_name=_('user associated'), on_delete=models.CASCADE)
     about = models.TextField(verbose_name=_('self-description'), null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name=_('location'), choices=TIMEZONE,
                                 default=getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto'))
-    language = models.ForeignKey('Language', verbose_name=_('preferred language'))
+    language = models.ForeignKey('Language', verbose_name=_('preferred language'), on_delete=models.CASCADE)
     points = models.FloatField(default=0, db_index=True)
     performance_points = models.FloatField(default=0, db_index=True)
     problem_count = models.IntegerField(default=0, db_index=True)
@@ -182,8 +181,9 @@ class Profile(models.Model):
 
 
 class OrganizationRequest(models.Model):
-    user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='requests')
-    organization = models.ForeignKey(Organization, verbose_name=_('organization'), related_name='requests')
+    user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='requests', on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, verbose_name=_('organization'), related_name='requests',
+                                     on_delete=models.CASCADE)
     time = models.DateTimeField(verbose_name=_('request time'), auto_now_add=True)
     state = models.CharField(max_length=1, verbose_name=_('state'), choices=(
         ('P', 'Pending'),

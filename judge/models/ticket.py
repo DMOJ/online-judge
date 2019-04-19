@@ -8,7 +8,8 @@ from judge.models.profile import Profile
 
 class Ticket(models.Model):
     title = models.CharField(max_length=100, verbose_name=_('ticket title'))
-    user = models.ForeignKey(Profile, verbose_name=_('ticket creator'), related_name='tickets')
+    user = models.ForeignKey(Profile, verbose_name=_('ticket creator'), related_name='tickets',
+                             on_delete=models.CASCADE)
     time = models.DateTimeField(verbose_name=_('creation time'), auto_now_add=True)
     assignees = models.ManyToManyField(Profile, verbose_name=_('assignees'), related_name='assigned_tickets')
     notes = models.TextField(verbose_name=_('quick notes'), blank=True,
@@ -22,7 +23,8 @@ class Ticket(models.Model):
 
 class TicketMessage(models.Model):
     ticket = models.ForeignKey(Ticket, verbose_name=_('ticket'), related_name='messages',
-                               related_query_name='message')
-    user = models.ForeignKey(Profile, verbose_name=_('poster'), related_name='ticket_messages')
+                               related_query_name='message', on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, verbose_name=_('poster'), related_name='ticket_messages',
+                             on_delete=models.CASCADE)
     body = models.TextField(verbose_name=_('message body'))
     time = models.DateTimeField(verbose_name=_('message time'), auto_now_add=True)

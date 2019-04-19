@@ -5,7 +5,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import F, QuerySet
+from django.db.models import F, QuerySet, CASCADE, SET_NULL
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from django.urls import reverse
@@ -105,7 +105,7 @@ class Problem(models.Model):
                                      help_text=_(
                                          'These users will be able to view a private problem, but not edit it.'))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'))
-    group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'))
+    group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'), on_delete=CASCADE)
     time_limit = models.FloatField(verbose_name=_('time limit'),
                                    help_text=_('The time limit for this problem, in seconds. '
                                                'Fractional seconds (e.g. 1.5) are supported.'))
@@ -123,7 +123,7 @@ class Problem(models.Model):
                                 help_text=_("Doesn't have magic ability to auto-publish due to backward compatibility"))
     banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
                                           help_text=_('Bans the selected users from submitting to this problem.'))
-    license = models.ForeignKey(License, null=True, blank=True, on_delete=models.SET_NULL)
+    license = models.ForeignKey(License, null=True, blank=True, on_delete=SET_NULL)
     og_image = models.CharField(verbose_name=_('OpenGraph image'), max_length=150, blank=True)
     summary = models.TextField(blank=True, verbose_name=_('problem summary'),
                                help_text=_('Plain-text, shown in meta description tag, e.g. for social media.'))
@@ -330,7 +330,7 @@ class Problem(models.Model):
 
 
 class ProblemTranslation(models.Model):
-    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='translations')
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='translations', on_delete=CASCADE)
     language = models.CharField(verbose_name=_('language'), max_length=7, choices=settings.LANGUAGES)
     name = models.CharField(verbose_name=_('translated name'), max_length=100, db_index=True)
     description = models.TextField(verbose_name=_('translated description'))
@@ -342,14 +342,14 @@ class ProblemTranslation(models.Model):
 
 
 class ProblemClarification(models.Model):
-    problem = models.ForeignKey(Problem, verbose_name=_('clarified problem'))
+    problem = models.ForeignKey(Problem, verbose_name=_('clarified problem'), on_delete=CASCADE)
     description = models.TextField(verbose_name=_('clarification body'))
     date = models.DateTimeField(verbose_name=_('clarification timestamp'), auto_now_add=True)
 
 
 class LanguageLimit(models.Model):
-    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='language_limits')
-    language = models.ForeignKey(Language, verbose_name=_('language'))
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='language_limits', on_delete=CASCADE)
+    language = models.ForeignKey(Language, verbose_name=_('language'), on_delete=CASCADE)
     time_limit = models.FloatField(verbose_name=_('time limit'))
     memory_limit = models.IntegerField(verbose_name=_('memory limit'))
 
@@ -360,7 +360,7 @@ class LanguageLimit(models.Model):
 
 
 class Solution(models.Model):
-    problem = models.OneToOneField(Problem, on_delete=models.SET_NULL, verbose_name=_('associated problem'),
+    problem = models.OneToOneField(Problem, on_delete=SET_NULL, verbose_name=_('associated problem'),
                                    null=True, blank=True, related_name='solution')
     is_public = models.BooleanField(verbose_name=_('public visibility'), default=False)
     publish_on = models.DateTimeField(verbose_name=_('publish date'))
