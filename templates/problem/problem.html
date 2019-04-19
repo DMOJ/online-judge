@@ -165,6 +165,7 @@
             </a>
         </div>
     {% endif %}
+
     {% if perms.judge.clone_problem %}
         <div>
             <form action="{{ url('problem_clone', problem.code) }}" method="post">
@@ -251,7 +252,7 @@
                 <div style="display:none" class="toggled">{{ problem.types_list|join(", ") }}</div>
             {% endwith %}
         </div>
-    {% endif %} 
+    {% endif %}
     {% if show_languages %}
         <div id="allowed-langs">
             <div class="toggle open unselectable">

@@ -43,6 +43,7 @@ class LanguageAdmin(VersionAdmin):
             form.base_fields['template'].widget = AceWidget(obj.ace, request.user.profile.ace_theme)
         return form
 
+
 class JudgeAdminForm(ModelForm):
     class Meta:
         widgets = {'auth_key': GenerateKeyTextInputButton}

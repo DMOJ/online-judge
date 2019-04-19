@@ -35,8 +35,6 @@ class TimezoneMiddleware(object):
 
 
 def from_database_time(datetime):
-    if datetime is None:
-        return datetime 
     tz = connection.timezone
     if tz is None:
         return datetime

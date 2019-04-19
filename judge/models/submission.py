@@ -126,7 +126,7 @@ class Submission(models.Model):
             contest = self.contest
         except AttributeError:
             return
-        
+
         contest_problem = contest.problem
         participation = contest.participation
 

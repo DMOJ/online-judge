@@ -8,6 +8,7 @@ from django_ace import AceWidget
 from judge.models import Profile
 from judge.widgets import GenerateKeyTextInputButton, Select2Widget, AdminPagedownWidget
 
+
 class ProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
@@ -39,6 +40,7 @@ class TimezoneFilter(admin.SimpleListFilter):
         if self.value() is None:
             return queryset
         return queryset.filter(timezone=self.value())
+
 
 class ProfileAdmin(VersionAdmin):
     form = ProfileForm

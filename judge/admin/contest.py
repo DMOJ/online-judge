@@ -286,6 +286,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     show_virtual.short_description = _('virtual')
     show_virtual.admin_order_field = 'virtual'
 
+
 class ContestRegistrationAdmin(admin.ModelAdmin):
     fields = ('contest', 'user', 'registration_time', 'data')
     list_display = ('contest', 'username', 'registration_time')

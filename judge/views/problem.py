@@ -231,7 +231,6 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
             raise Http404()
 
         problem = self.get_object()
-
         try:
             trans = problem.translations.get(language=language)
         except ProblemTranslation.DoesNotExist:
@@ -667,7 +666,6 @@ def clone_problem(request, problem):
 
     languages = problem.allowed_languages.all()
     types = problem.types.all()
-    
     problem.pk = None
     problem.ac_rate = 0
     problem.user_count = 0

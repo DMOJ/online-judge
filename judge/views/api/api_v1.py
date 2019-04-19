@@ -10,17 +10,12 @@ from dmoj import settings
 from judge.models import Contest, ContestParticipation, ContestTag, Problem, Profile, Submission
 
 
-def error(message):
-    return JsonResponse({
-        "error": message
-    }, status=422)
-
-
 def sane_time_repr(delta):
     days = delta.days
     hours = delta.seconds / 3600
     minutes = (delta.seconds % 3600) / 60
     return '%02d:%02d:%02d' % (days, hours, minutes)
+
 
 def get_request_user(request):
     try:
@@ -33,6 +28,7 @@ def get_request_user(request):
         return request.user
     else:
         return user 
+
 
 def api_v1_contest_list(request):
     user = get_request_user(request)
@@ -262,6 +258,7 @@ def api_v1_submission_detail(request, submission):
     }
     
     return JsonResponse(resp)
+
 
 def api_v1_submission_source(request, submission):
     user = get_request_user(request)

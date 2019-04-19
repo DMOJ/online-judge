@@ -33,7 +33,7 @@ ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
                                             preview_timeout=1000, hide_preview_button=True))
 
 
-## TODO temp fix - just no
+# TODO temp fix - just no
 def access_check(obj, request):
     if isinstance(obj, Ticket):
         linked = obj.linked_item
@@ -69,6 +69,7 @@ class SingleObjectFormView(SingleObjectMixin, FormView):
         self.object = self.get_object()
         access_check(self.object, request)
         return super(SingleObjectFormView, self).get(request, *args, **kwargs)
+
 
 class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
     form_class = TicketForm

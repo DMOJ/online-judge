@@ -247,7 +247,6 @@ class ProblemAdmin(VersionAdmin):
     def get_queryset(self, request):
         queryset = Problem.objects.prefetch_related('authors__user')
         access = Q()
-
         if request.user.has_perm('judge.edit_public_problem'):
             access |= Q(is_public=True)
         if request.user.has_perm('judge.edit_own_problem'):
