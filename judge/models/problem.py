@@ -164,12 +164,12 @@ class Problem(models.Model):
     def is_accessible_by(self, user):
         # Problem is public.
         if self.is_public:
-            # Contest is not private to an organization.
+            # Problem is not private to an organization.
             if not self.is_organization_private:
                 return True
 
             # If the user can see all organization private problems.
-            if user.has_perm('judge.see_organization_problems'):
+            if user.has_perm('judge.see_organization_problem'):
                 return True
 
             # If the user is in the organization.
