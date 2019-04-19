@@ -39,8 +39,8 @@ class JudgeList(object):
                             logger.exception('Failed to dispatch %d (%s, %s) to %s', id, problem, language, judge.name)
                             self.judges.remove(judge)
                             return
-                        del self.node_map[id]
                         self.queue.remove(node)
+                        del self.node_map[id]
                         break
                 node = node.next
 
@@ -93,7 +93,7 @@ class JudgeList(object):
 
     def judge(self, id, problem, language, source, priority):
         with self.lock:
-            if id in self.submission_map:
+            if id in self.submission_map or id in self.node_map:
                 logger.warning('Already judging? %d', id)
                 return
 
