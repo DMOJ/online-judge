@@ -73,7 +73,7 @@ class BonusesContestFormat(DefaultContestFormat):
     def display_user_problem(self, participation, contest_problem):
         format_data = (participation.format_data or {}).get(str(contest_problem.id))
         if format_data:
-            pretest = ('pretest-' if contest_problem.is_pretested else '')
+            pretest = ('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '')
             first_solve = (' first-solve' if format_data['first_solve'] else '')
             bonus = format_html(
                         u'<font style="font-size:10px;"> +{bonus}</font>',
