@@ -9,7 +9,7 @@ from django.utils import timezone
 from judge import event_poster as event
 from judge.caching import finished_submission
 from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit, RuntimeVersion
-from .judgehandler import JudgeHandler
+from .judgehandler import JudgeHandler, SubmissionData
 
 logger = logging.getLogger('judge.bridge')
 json_log = logging.getLogger('judge.json.bridge')
@@ -58,10 +58,11 @@ class DjangoJudgeHandler(JudgeHandler):
         _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
 
         try:
-            pid, time, memory, short_circuit, lid, is_pretested = (
+            pid, time, memory, short_circuit, lid, is_pretested, sub_date, uid, part_virtual, part_id = (
                 Submission.objects.filter(id=submission)
                           .values_list('problem__id', 'problem__time_limit', 'problem__memory_limit',
-                                       'problem__short_circuit', 'language__id', 'is_pretested')).get()
+                                       'problem__short_circuit', 'language__id', 'is_pretested', 'date', 'user__id',
+                                       'contest__participation__virtual', 'contest__participation__id')).get()
         except Submission.DoesNotExist:
             logger.error('Submission vanished: %d', submission)
             json_log.error(self._make_json_log(
@@ -70,12 +71,24 @@ class DjangoJudgeHandler(JudgeHandler):
             ))
             return
 
+        attempt_no = Submission.objects.filter(problem__id=pid, contest__participation__id=part_id, user__id=uid,
+                                               date__lt=sub_date).exclude(status__in=('CE', 'IE')).count() + 1
+
         try:
             time, memory = (LanguageLimit.objects.filter(problem__id=pid, language__id=lid)
                                          .values_list('time_limit', 'memory_limit').get())
         except LanguageLimit.DoesNotExist:
             pass
-        return time, memory, short_circuit, is_pretested
+
+        return SubmissionData(
+            time=time,
+            memory=memory,
+            short_circuit=short_circuit,
+            pretests_only=is_pretested,
+            contest_no=part_virtual,
+            attempt_no=attempt_no,
+            user_id=uid,
+        )
 
     def _authenticate(self, id, key):
         result = Judge.objects.filter(name=id, auth_key=key, is_blocked=False).exists()
