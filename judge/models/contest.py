@@ -1,9 +1,7 @@
-from operator import itemgetter
-
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
-from django.db.models import Max, CASCADE
+from django.db.models import CASCADE
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property

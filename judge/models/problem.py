@@ -19,7 +19,7 @@ from judge.user_translations import gettext as user_gettext
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
 
 __all__ = ['ProblemGroup', 'ProblemType', 'Problem', 'ProblemTranslation', 'ProblemClarification',
-           'TranslatedProblemQuerySet', 'TranslatedProblemForeignKeyQuerySet', 'License']
+           'License', 'Solution', 'TranslatedProblemQuerySet', 'TranslatedProblemForeignKeyQuerySet']
 
 
 class ProblemType(models.Model):

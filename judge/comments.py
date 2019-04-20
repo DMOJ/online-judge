@@ -18,7 +18,7 @@ from reversion import revisions
 from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
-from judge.models import Comment, CommentLock, CommentVote, Problem, Profile, Submission
+from judge.models import Comment, CommentLock, CommentVote
 from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
 from judge.widgets import HeavyPreviewPageDownWidget
 
@@ -59,7 +59,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         if self.comment_page is None:
             raise NotImplementedError()
         return self.comment_page
-    
+
     def is_comment_locked(self):
         return (CommentLock.objects.filter(page=self.get_comment_page()).exists() and
                 not self.request.user.has_perm('judge.override_comment_lock'))
