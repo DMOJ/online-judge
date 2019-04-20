@@ -1,11 +1,17 @@
 import json
 import logging
 import time
-from collections import deque
+from collections import deque, namedtuple
 
 from event_socket_server import ZlibPacketHandler, ProxyProtocolMixin
 
 logger = logging.getLogger('judge.bridge')
+
+
+SubmissionData = namedtuple(
+    'SubmissionData',
+    'time memory short_circuit pretests_only contest_no attempt_no user_id'
+)
 
 
 class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
@@ -104,7 +110,15 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
         return bool(self._working)
 
     def get_related_submission_data(self, submission):
-        return 2, 16384, False, False
+        return SubmissionData(
+            time=2,
+            memory=16384,
+            short_circuit=False,
+            pretests_only=False,
+            contest_no=None,
+            attempt_no=1,
+            user_id=None,
+        )
 
     def disconnect(self, force=False):
         if force:
@@ -114,7 +128,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
             self.send({'name': 'disconnect'})
 
     def submit(self, id, problem, language, source):
-        time, memory, short, pretests_only = self.get_related_submission_data(id)
+        data = self.get_related_submission_data(id)
         self._working = id
         self._no_response_job = self.server.schedule(20, self._kill_if_no_response)
         self.send({
@@ -123,10 +137,15 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
             'problem-id': problem,
             'language': language,
             'source': source,
-            'time-limit': time,
-            'memory-limit': memory,
-            'short-circuit': short,
-            'pretests-only': pretests_only,
+            'time-limit': data.time,
+            'memory-limit': data.memory,
+            'short-circuit': data.short_circuit,
+            'meta': {
+                'pretests-only': data.pretests_only,
+                'in-contest': data.contest_no,
+                'attempt-no': data.attempt_no,
+                'user': data.user_id,
+            },
         })
 
     def _kill_if_no_response(self):
