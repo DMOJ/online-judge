@@ -106,7 +106,7 @@ class ContestAdmin(VersionAdmin):
         (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'use_clarifications',
                            'hide_problem_tags', 'hide_scoreboard', 'run_pretests_only')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
-        (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image','tags', 'summary')}),
+        (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Format'), {'fields': ('format_name', 'format_config')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
         (_('Organization'), {'fields': ('is_private', 'organizations', 'access_code')}),

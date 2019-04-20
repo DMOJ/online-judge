@@ -10,7 +10,7 @@ from mptt.models import MPTTModel
 
 from judge.models.profile import Profile
 
-__all__ = ['MiscConfig', 'validate_regex', 'NavigationBar', 'BlogPost', 'Solution']
+__all__ = ['MiscConfig', 'validate_regex', 'NavigationBar', 'BlogPost']
 
 
 class MiscConfig(models.Model):
