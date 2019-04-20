@@ -31,7 +31,8 @@ from judge.comments import CommentedDetailView
 from judge.models import Contest, ContestParticipation, ContestRegistration, ContestTag, Problem, Profile
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
-from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message
+from judge.utils.strings import safe_int_or_none
+from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message, paginate_query_context
 
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestRegister', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'contest_ranking_ajax', 'ContestParticipationList', 'get_contest_ranking_list',
@@ -66,17 +67,25 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         return timezone.now()
 
     def _get_queryset(self):
-        return super(ContestList, self).get_queryset() \
+        queryset = super(ContestList, self).get_queryset() \
             .order_by('-start_time', 'key').prefetch_related('tags', 'organizations', 'organizers')
 
-    def get_queryset(self):
-        queryset = self._get_queryset().filter(end_time__lt=self._now)
-        self.has_past_contests = queryset.exists()
         if self.search_query:
             queryset = queryset.filter(Q(key__icontains=self.search_query) | Q(name__icontains=self.search_query))
         if self.selected_tags:
             queryset = queryset.filter(tags__in=self.selected_tags)
+
+        if self.rated_state == 1:
+            queryset = queryset.filter(is_rated=False)
+        elif self.rated_state == 2:
+            queryset = queryset.filter(is_rated=True)
+        elif self.rated_state == 3:
+            queryset = queryset.filter(is_rated=True, rate_all=True)
+
         return queryset.distinct()
+
+    def get_queryset(self):
+        return self._get_queryset().filter(end_time__lt=self._now)
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
@@ -100,34 +109,41 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         context['active_participations'] = active
         context['current_contests'] = present
         context['future_contests'] = future
-        context['has_past_contests'] = self.has_past_contests
         context['now'] = self._now
         context['first_page_href'] = '.'
-        context['page_suffix'] = '#past-contests'
-        
+
+        context['rated_state'] = self.rated_state
+        context['rated_states'] = {
+                1: 'Not rated',
+                2: 'Rated',
+                3: 'Rated for all',
+        }
         context['search_query'] = self.search_query
-        
+
         tag_ids = self._get_queryset().values_list('tags', flat=True).distinct()
         context['contest_tags'] = ContestTag.objects.filter(id__in=tag_ids)
         context['selected_tags'] = self.selected_tags
+
+        context.update(paginate_query_context(self.request))
         return context
 
     def setup(self, request):
         self.search_query = None
         self.selected_tags = []
+        self.rated_state = safe_int_or_none(request.GET.get('rated_state'))
 
-        if 'search' in self.request.GET:
-            self.search_query = ' '.join(self.request.GET.getlist('search')).strip()
-
+        if 'search' in request.GET:
+            self.search_query = ' '.join(request.GET.getlist('search')).strip()
         if 'tag' in request.GET:
             try:
-                self.selected_tags = map(int, request.GET.getlist('tag'))
+                self.selected_tags = list(map(int, request.GET.getlist('tag')))
             except ValueError:
                 pass
 
     def get(self, request, *args, **kwargs):
         self.setup(request)
         return super(ContestList, self).get(request, *args, **kwargs)
+
 
 class PrivateContestError(Exception):
     def __init__(self, name, orgs):

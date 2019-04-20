@@ -46,32 +46,6 @@
     }
 }
 
-#filter-form {
-    vertical-align: top;
-    margin-bottom: 0.5em;
-    margin-top: 0.75em;
-
-    a {
-        margin-right: 5px;
-        display: inline-block;
-        padding: 3px 10px;
-        vertical-align: middle;
-    }
-
-    input {
-        vertical-align: middle;
-        margin-bottom: 0.5em;
-    }
-
-    label {
-        vertical-align: middle;
-    }
-
-    .filter-form-group {
-        margin-top: 5px;
-    }
-}
-
 #content-right {
     &.problems {
         flex: 26.5%;
@@ -86,11 +60,6 @@
     }
 }
 
-#search {
-    width: 100%;
-    height: 2.3em;
-}
-
 label[for="category"], label[for="type"], label[for="problem_visibility"] {
     padding-bottom: 0.25em;
     display: block;
@@ -98,11 +67,11 @@ label[for="category"], label[for="type"], label[for="problem_visibility"] {
 
 #category, #problem_visibility {
     margin-top: 0.5em;
-    width: 100%;
 }
 
-#types {
+#category, #types, #problem_visibility {
     width: 100%;
+    visibility: hidden;
 }
 
 span.type-tag {
@@ -249,15 +218,6 @@ ul.problem-list {
     color: inherit;
     display: block;
     padding: 4px 10px;
-}
-
-#category, #types, #problem_visibility {
-    visibility: hidden;
-}
-
-#filter-form .form-label {
-    margin-top: 0.5em;
-    font-style: italic;
 }
 
 #point-slider {

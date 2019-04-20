@@ -418,9 +418,9 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         context['full_text'] = 0 if self.in_contest else int(self.full_text)
         context['problem_visibility'] = self.problem_visibility
         context['visibilities'] = {
-                1 : 'Public',
-                2 : 'Private',
-                }
+                1: 'Public',
+                2: 'Private',
+        }
         if self.request.user.has_perm('judge.see_restricted_problem'):
             context['visibilities'][3] = 'Restricted'
 

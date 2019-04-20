@@ -1,0 +1,40 @@
+<div class="sidebox">
+    <h3>{{ _('Contest search') }} <i class="fa fa-search"></i></h3>
+    <div class="sidebox-content">
+        <form id="filter-form" name="form" action="" method="get">
+            <div>
+                <input id="search" type="text" name="search" value="{{ search_query or '' }}"
+                       placeholder="{{ _('Search contests...') }}">
+            </div>
+            <div class="filter-form-group">
+                <label for="type"><i>{{ _('Contest tags') }}</i></label>
+                <select id="tags" name="tag" multiple>
+                    {% for tag in contest_tags %}
+                        <option value="{{ tag.id }}"{% if tag.id in selected_tags %} selected{% endif %}>
+                            {{ tag.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-form-group">
+                <label for="rated-state"><i>{{ _('Rated') }}</i></label>
+                <select id="rated-state" name="rated_state">
+                    {% if rated_state %}
+                        <option value="" selected="selected">{{ _('All') }}</option>
+                    {% else %}
+                        <option value="">{{ _('All') }}</option>
+                    {% endif %}
+                    <option disabled="disabled">---</option>
+                    {% for id, name in rated_states.items() %}
+                        <option value="{{ id }}"{% if id == rated_state %} selected{% endif %}>
+                            {{ name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-submit-group">
+                <a id="go" class="button">{{ _('Go') }}</a>
+            </div>
+        </form>
+    </div>
+</div>
