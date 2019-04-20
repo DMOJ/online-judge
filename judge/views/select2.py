@@ -107,7 +107,7 @@ class ContestUserSearchSelect2View(UserSearchSelect2View):
         contest = get_object_or_404(Contest, key=self.kwargs['contest'])
         if not contest.can_see_scoreboard(self.request.user) or contest.hide_scoreboard and contest.is_in_contest(self.request.user):
             raise Http404()
-        
+
         return Profile.objects.filter(contest_history__contest=contest,
                                       user__username__icontains=self.term).distinct()
 

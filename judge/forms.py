@@ -7,7 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
-from django.forms import ModelForm, CharField, TextInput, Form
+from django.forms import ModelForm, CharField, Form
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 

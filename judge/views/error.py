@@ -8,7 +8,7 @@ def error(request, context, status):
     return render(request, 'error.html', context=context, status=status)
 
 
-def error404(request):
+def error404(request, exception=None):
     # TODO: "panic: go back"
     return render(request, 'generic-message.html', {
         'title': _('404 error'),
@@ -16,7 +16,7 @@ def error404(request):
     }, status=404)
 
 
-def error403(request):
+def error403(request, exception=None):
     return error(request, {'id': 'unauthorized_access',
                            'description': _('no permission for %s') % request.path,
                            'code': 403}, 403)
