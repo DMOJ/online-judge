@@ -104,7 +104,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
         return bool(self._working)
 
     def get_related_submission_data(self, submission):
-        return 2, 16384, False, False
+        return 2, 16384, False, False, None, 1, None
 
     def disconnect(self, force=False):
         if force:
@@ -114,7 +114,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
             self.send({'name': 'disconnect'})
 
     def submit(self, id, problem, language, source):
-        time, memory, short, pretests_only = self.get_related_submission_data(id)
+        time, memory, short, pretests_only, part_virtual, attempt_no, user_id = self.get_related_submission_data(id)
         self._working = id
         self._no_response_job = self.server.schedule(20, self._kill_if_no_response)
         self.send({
@@ -127,6 +127,9 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
             'memory-limit': memory,
             'short-circuit': short,
             'pretests-only': pretests_only,
+            'in-contest': part_virtual,
+            'attempt-no': attempt_no,
+            'user': user_id,
         })
 
     def _kill_if_no_response(self):
