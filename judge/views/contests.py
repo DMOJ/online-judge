@@ -407,7 +407,7 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
         if profile.current_contest is None or profile.current_contest.contest_id != contest.id:
             return generic_message(request, _('No such contest'),
                                    _('You are not in contest "%s".') % contest.key, 404)
- 
+
         profile.remove_contest()
         return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
 

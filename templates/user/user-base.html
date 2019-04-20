@@ -54,10 +54,7 @@
             </b></div>
 
             {% if not user.is_contest_account and not user.is_unlisted %}
-                <div>
-                    <b class="semibold">{{ _('Rank by points:') }}</b> 
-                    #{{ rank }}
-                </div>
+                <div><b class="semibold">{{ _('Rank by points:') }}</b> #{{ rank }}</div>
             {% endif %}
             <div>
                 <b class="semibold">{{ _('Total points:') }}</b>
@@ -70,6 +67,7 @@
             <div>
                 <a href="{{ url('all_user_submissions', user.user.username) }}">{{ _('View submissions') }}</a>
             </div>
+
             {% if ratings %}
                 <br>
                 <div><b>{{ ratings|length }} contests written</b></div>

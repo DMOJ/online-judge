@@ -124,8 +124,8 @@ else:
     }
 
 INSTALLED_APPS += (
-    'judge',
     'django.contrib.admin',
+    'judge',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.flatpages',

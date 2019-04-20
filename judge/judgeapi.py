@@ -11,14 +11,6 @@ from judge import event_poster as event
 logger = logging.getLogger('judge.judgeapi')
 size_pack = struct.Struct('!I')
 
-def _post_update_submission(submission, done=False):
-    if submission.problem.is_public:
-        event.post('submissions', {'type': 'done-submission' if done else 'update-submission',
-                                   'id': submission.id,
-                                   'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id,
-                                   'status': submission.status, 'language': submission.language.key})
-
 
 def _post_update_submission(submission, done=False):
     if submission.problem.is_public:
