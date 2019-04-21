@@ -234,7 +234,7 @@
                 <span class="anon">
                     <a href="{{ url('auth_login') }}?next={{ LOGIN_RETURN_PATH|urlencode }}">
                         <b>{{ _('Login') }}</b>
-			</a>&nbsp;|&nbsp;<a href="{{ url('registration_register') }}">{{ _('Register') }}</a>
+                    </a>&nbsp;|&nbsp;<a href="{{ url('registration_register') }}">{{ _('Register') }}</a>
                 </span>
             {% endif %}
         </span>
@@ -290,7 +290,7 @@
             <a style="color: #808080" href="https://mcpt.github.io"><b>Mackenzie's CPT Judge</b></a> |
             <a style="color: #808080" href="https://mcpt.github.io/privacy/">Privacy Policy</a> |
             <a style="color: #808080" href="https://github.com/MCPT/wlmoj">Source code</a> |
-	        {% if i18n_config.footer %}
+            {% if i18n_config.footer %}
                 {{ i18n_config.footer|safe }} |
             {% endif %}
             <form action="{{ url('set_language') }}" method="post" style="display: inline">

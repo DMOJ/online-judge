@@ -102,7 +102,8 @@ class Problem(models.Model):
                                       help_text=_('These users will be able to edit a problem, '
                                                   'but not be publicly shown as an author.'))
     testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True, related_name='tested_problems',
-                                     help_text=_('These users will be able to view a private problem, but not edit it.'))
+                                     help_text=_(
+                                         'These users will be able to view a private problem, but not edit it.'))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'), on_delete=CASCADE)
     time_limit = models.FloatField(verbose_name=_('time limit'),

@@ -115,8 +115,7 @@ class ContestAdmin(VersionAdmin):
         (_('Organization'), {'fields': ('is_private', 'is_private_viewable', 'organizations')}),
         (_('Justice'),      {'fields': ('banned_users',)}),
     )
-    list_display = ('key', 'name', 'is_public', 'is_rated', 'start_time', 'end_time',
-                    'time_limit', 'user_count')
+    list_display = ('key', 'name', 'is_public', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
     actions = ['make_public', 'make_private']
     inlines = [ContestProblemInline]
     actions_on_top = True

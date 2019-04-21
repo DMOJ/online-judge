@@ -14,8 +14,8 @@ from django.utils.translation import gettext_lazy as _
 from django_ace import AceWidget
 from judge.models import Organization, Profile, Submission, PrivateMessage, Language
 from judge.utils.subscription import newsletter_id
-from judge.widgets import MathJaxPagedownWidget, HeavyPreviewPageDownWidget, \
-    PagedownWidget, Select2Widget, Select2MultipleWidget
+from judge.widgets import MathJaxPagedownWidget, HeavyPreviewPageDownWidget, PagedownWidget, \
+    Select2Widget, Select2MultipleWidget
 
 
 def fix_unicode(string, unsafe=tuple('\u202a\u202b\u202d\u202e')):

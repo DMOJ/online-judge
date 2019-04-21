@@ -321,7 +321,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
         profile = request.user.profile
         if profile.current_contest is not None:
             return generic_message(request, _('Already in contest'),
-                                   _('You are already in a contest: "%s".') % profile.current_contest.contest.name)         
+                                   _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
 
         if not contest.is_registered(request.user):
             return generic_message(request, _('Cannot join contest'),
