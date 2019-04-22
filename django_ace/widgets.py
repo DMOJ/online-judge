@@ -6,13 +6,8 @@ from urllib.parse import urljoin
 
 from django import forms
 from django.conf import settings
-
-try:
-    from django.forms.utils import flatatt
-except ImportError:
-    from django.forms.util import flatatt
+from django.forms.utils import flatatt
 from django.utils.safestring import mark_safe
-
 
 ACE_URL = getattr(settings, 'ACE_URL', '//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ext-split.js')
 
@@ -37,7 +32,7 @@ class AceWidget(forms.Textarea):
         }
         return forms.Media(js=js, css=css)
 
-    def render(self, name, value, attrs=None, render=None):
+    def render(self, name, value, attrs=None, renderer=None):
         attrs = attrs or {}
 
         ace_attrs = {

@@ -134,7 +134,7 @@ page.open(param.input, function (status) {
             'timeout': int(getattr(settings, 'PHANTOMJS_PDF_TIMEOUT', 5.0) * 1000),
             'input': 'input.html', 'output': 'output.pdf',
             'paper': getattr(settings, 'PHANTOMJS_PAPER_SIZE', 'Letter'),
-            'footer': gettext('Page [page] of [topage]').encode('utf-8'),
+            'footer': gettext('Page [page] of [topage]'),
         }))
 
     def _make(self, debug):
@@ -187,7 +187,7 @@ try {
             'input': 'input.html', 'output': 'output.pdf',
             'paper': getattr(settings, 'SLIMERJS_PAPER_SIZE', 'Letter'),
             'footer': gettext('Page [page] of [topage]').replace('[page]', '&P')
-                .replace('[topage]', '&L').encode('utf-8'),
+                .replace('[topage]', '&L'),
         }))
 
     def _make(self, debug):
