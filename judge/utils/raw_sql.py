@@ -39,8 +39,8 @@ def RawSQLColumn(model, field=None):
 
 def make_straight_join_query(QueryType):
     class Query(QueryType):
-        def join(self, join, reuse=None):
-            alias = super(Query, self).join(join, reuse)
+        def join(self, join, *args, **kwargs):
+            alias = super().join(join, *args, **kwargs)
             join = self.alias_map[alias]
             if join.join_type == INNER:
                 join.join_type = 'STRAIGHT_JOIN'
@@ -51,7 +51,12 @@ def make_straight_join_query(QueryType):
 
 straight_join_cache = CacheDict(make_straight_join_query)
 
+
 def use_straight_join(queryset):
     if connections[queryset.db].vendor != 'mysql':
         return
-    queryset.query = queryset.query.clone(straight_join_cache[type(queryset.query)])
+    try:
+        cloner = queryset.query.chain
+    except AttributeError:
+        cloner = queryset.query.clone
+    queryset.query = cloner(straight_join_cache[type(queryset.query)])
