@@ -9,6 +9,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _, pgettext, gettext, ungettext
 
 from django_ace import AceWidget
@@ -215,9 +216,8 @@ class SubmissionAdmin(admin.ModelAdmin):
     language_column.short_description = _('Language')
 
     def judge_column(self, obj):
-        return '<input type="button" value="Rejudge" onclick="location.href=\'%s/judge/\'" />' % obj.id
+        return format_html('<input type="button" value="Rejudge" onclick="location.href=\'{}/judge/\'" />', obj.id)
     judge_column.short_description = ''
-    judge_column.allow_tags = True
 
     def get_urls(self):
         return [url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge')] + \
