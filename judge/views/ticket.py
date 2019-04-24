@@ -33,14 +33,6 @@ ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
                                             preview_timeout=1000, hide_preview_button=True))
 
 
-# TODO temp fix - just no
-def access_check(obj, request):
-    if isinstance(obj, Ticket):
-        linked = obj.linked_item
-        if isinstance(linked, Problem) and not linked.is_accessible_by(request.user):
-            raise PermissionDenied()
-
-
 class TicketForm(forms.Form):
     title = forms.CharField(max_length=100, label=gettext_lazy('Ticket title'))
     body = forms.CharField(widget=ticket_widget)
@@ -62,12 +54,10 @@ class TicketForm(forms.Form):
 class SingleObjectFormView(SingleObjectMixin, FormView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        access_check(self.object, request)
         return super(SingleObjectFormView, self).post(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        access_check(self.object, request)
         return super(SingleObjectFormView, self).get(request, *args, **kwargs)
 
 
@@ -86,7 +76,6 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
     def form_valid(self, form):
         ticket = Ticket(user=self.request.user.profile, title=form.cleaned_data['title'])
         ticket.linked_item = self.object
-        access_check(ticket, self.request)
         ticket.save()
         message = TicketMessage(ticket=ticket, user=ticket.user, body=form.cleaned_data['body'])
         message.save()
@@ -122,6 +111,11 @@ class NewProblemTicketView(TitleMixin, NewTicketView):
         return mark_safe(escape(_('New ticket for %s')) %
                          format_html('<a href="{0}">{1}</a>', reverse('problem_detail', args=[self.object.code]),
                                      self.object.translated_name(self.request.LANGUAGE_CODE)))
+
+    def form_valid(self, form):
+        if not self.object.is_accessible_by(self.request.user):
+            raise Http404()
+        return super().form_valid(form)
 
 
 class TicketCommentForm(forms.Form):
