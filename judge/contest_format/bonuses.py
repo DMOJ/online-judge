@@ -15,7 +15,10 @@ from judge.utils.timedelta import nice_repr
 @register_contest_format('bonuses')
 class BonusesContestFormat(DefaultContestFormat):
     name = gettext_lazy('Bonuses')
-    config_keys = ('time_bonus', 'first_submission_bonus')
+    config_defaults = {
+        'time_bonus': 0,
+        'first_submission_bonus': 0,
+    }
     """
         time_bonus: Number of minutes to award an extra point for submitting before the contest end.
         first_submission_bonus: Bonus points for fully solving on first submission.
@@ -26,14 +29,12 @@ class BonusesContestFormat(DefaultContestFormat):
         if not isinstance(config, dict):
             raise ValidationError('bonuses contest expects a dict as config')
         for key in config.keys():
-            if key not in cls.config_keys:
+            if key not in cls.config_defaults:
                 raise ValidationError('unknown config key "%s"' % key)
 
     def __init__(self, contest, config):
-        super(BonusesContestFormat, self).__init__(contest, config)
-        for key in self.config_keys:
-            if key not in config.keys():
-                config[key] = 0
+        super().__init__(contest, self.config_defaults.copy())
+        self.config.update(config)
 
     def update_participation(self, participation):
         cumtime = 0
@@ -41,8 +42,7 @@ class BonusesContestFormat(DefaultContestFormat):
         format_data = {}
 
         total_wrapper = ExpressionWrapper(F('points')+F('bonus'), output_field=FloatField())
-
-        queryset = (participation.submissions.values('problem_id', 'problem__points')
+        queryset = (participation.submissions.values('problem_id')
                                              .annotate(total=total_wrapper)
                                              .filter(total=Subquery(
                                                  participation.submissions.filter(problem_id=OuterRef('problem_id'))
@@ -50,20 +50,32 @@ class BonusesContestFormat(DefaultContestFormat):
                                                                           .order_by('-best').values('best')[:1]
                                              ))
                                              .annotate(time=Min('submission__date'), points=Max('points'))
-                                             .values_list('problem_id', 'time', 'points', 'total', 'problem__points'))
+                                             .values_list('problem_id', 'time', 'points', 'total'))
 
-        for problem_id, time, points, total, problem_points in queryset:
+        for problem_id, time, points, total in queryset:
             dt = (time - participation.start).total_seconds()
             if total:
                 score += total
                 cumtime += dt
-
             format_data[str(problem_id)] = {
                 'points': points,
                 'bonus': total - points,
                 'time': dt,
-                'first_solve': participation.submissions.filter(problem_id=problem_id).order_by('submission__date').first().points == problem_points,
             }
+
+        queryset = (participation.submissions.values('problem_id', 'problem__points')
+                                      .filter(submission__date=Subquery(
+                                          participation.submissions.filter(problem_id=OuterRef('problem_id'))
+                                                                   .order_by('submission__date')
+                                                                   .values('submission__date')[:1]
+                                      ))
+                                      .annotate(points=Max('points'))
+                                      .values_list('problem_id', 'points', 'problem__points'))
+
+        for problem_id, points, problem_points in queryset:
+            format_data[str(problem_id)].update({
+                'first_solve': points == problem_points,
+            })
 
         participation.cumtime = max(cumtime, 0)
         participation.score = score
