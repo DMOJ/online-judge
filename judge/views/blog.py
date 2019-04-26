@@ -68,7 +68,7 @@ class PostList(ListView):
         if self.request.user.is_authenticated:
             user = self.request.user.profile
             context['recently_attempted_problems'] = (Submission.objects.filter(user=user)
-                                                      .exclude(problem__id__in=user_completed_ids(user))
+                                                      .exclude(problem__in=user_completed_ids(user))
                                                       .values_list('problem__code', 'problem__name', 'problem__points')
                                                       .annotate(points=Max('points'), latest=Max('date'))
                                                       .order_by('-latest'))[:7]

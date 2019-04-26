@@ -369,7 +369,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         if not self.request.user.has_perm('see_organization_problem'):
             filter = Q(is_organization_private=False)
             if self.profile is not None:
-                filter |= Q(organizations__id__in=self.profile.organizations.all())
+                filter |= Q(organizations__in=self.profile.organizations.all())
             queryset = queryset.filter(filter)
         if self.profile is not None and self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
