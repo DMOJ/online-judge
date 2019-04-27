@@ -562,7 +562,7 @@ class ContestParticipationList(ContestRankingBase, LoginRequiredMixin):
 
     def get_ranking_list(self):
         queryset = self.object.users.filter(user=self.profile, virtual__gte=0).order_by('-virtual')
-        live_link = format_html(u'<a href="{2}#!{1}">{0}</a>', _('Live'), self.profile.username,
+        live_link = format_html('<a href="{2}#!{1}">{0}</a>', _('Live'), self.profile.username,
                                 reverse('contest_ranking', args=[self.object.key]))
 
         return get_contest_ranking_list(
