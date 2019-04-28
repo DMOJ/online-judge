@@ -10,7 +10,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.http import is_safe_url
 
-from judge.tasks import success, failure
+from judge.tasks import success, failure, progress
 
 
 def get_task_status(task_id):
@@ -62,3 +62,4 @@ def demo_task(request, task, message):
 
 demo_success = partial(demo_task, task=success, message='Running example task that succeeds...')
 demo_failure = partial(demo_task, task=failure, message='Running example task that fails...')
+demo_progress = partial(demo_task, task=progress, message='Running example task that waits 10 seconds...')
