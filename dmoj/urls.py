@@ -329,6 +329,7 @@ urlpatterns = [
         url(r'^ajax_status$', tasks.task_status_ajax, name='task_status_ajax'),
         url(r'^success$', tasks.demo_success),
         url(r'^failure$', tasks.demo_failure),
+        url(r'^progress$', tasks.demo_progress),
     ])),
 ]
 
