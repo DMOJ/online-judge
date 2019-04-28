@@ -386,6 +386,8 @@ JUDGE_AMQP_PATH = None
 
 MOSS_API_KEY = None
 
+CELERY_WORKER_HIJACK_ROOT_LOGGER = False
+
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:
         exec(f.read(), globals())
