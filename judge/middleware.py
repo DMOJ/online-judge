@@ -1,7 +1,22 @@
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, resolve, Resolver404
 from django.utils.http import urlquote
+
+
+class ShortCircuitMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        try:
+            callback, args, kwargs = resolve(request.path_info, getattr(request, 'urlconf', None))
+        except Resolver404:
+            callback, args, kwargs = None, None, None
+
+        if getattr(callback, 'short_circuit_middleware', False):
+            return callback(request, *args, **kwargs)
+        return self.get_response(request)
 
 
 class DMOJLoginMiddleware(object):

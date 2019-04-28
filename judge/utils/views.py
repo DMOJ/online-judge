@@ -96,3 +96,8 @@ class QueryStringSortMixin(object):
 
     def get_sort_paginate_context(self):
         return paginate_query_context(self.request)
+
+
+def short_circuit_middleware(view):
+    view.short_circuit_middleware = True
+    return view
