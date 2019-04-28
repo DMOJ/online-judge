@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Progress - {{ SITE_LONG_NAME }}</title>
+    <link rel="stylesheet" href="{{ static('task_status.css') }}">
+    <script src="{{ static('libs/jquery-1.11.2.min.js') }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            var $jumbotron = $('.jumbotron');
+            var task_id = $jumbotron.attr('data-task-id');
+            var status = JSON.parse($jumbotron.attr('data-task-status'));
+            var redirect = $jumbotron.attr('data-redirect');
+            var $progress = $jumbotron.find('.progress');
+            var $known = $jumbotron.find('.progress-known');
+            var $known_bar = $known.find('.progress-bar');
+            var $known_text = $known.find('.progress-text');
+            var $fail = $jumbotron.find('.progress-failed');
+            var $fail_text = $fail.find('.progress-bar');
+
+            function show_status(status) {
+                $progress.hide();
+                switch (status.code) {
+                    case 'SUCCESS':
+                        $progress.filter('.progress-complete').show();
+                        break;
+                    case 'FAILURE':
+                        $fail_text.text(status.error || 'Failed');
+                        $fail.show();
+                        break;
+                    case 'PROGRESS':
+                        $known_bar.attr({
+                            'aria-valuenow': status.done,
+                            'aria-valuemax': status.total,
+                        }).width(100 * status.done / status.total + '%');
+                        $known_text.text(status.done + ' / ' + status.total);
+                        $known.show();
+                        break;
+                    case 'WORKING':
+                        $progress.filter('.progress-unknown').show();
+                        break;
+                }
+            }
+
+            function need_ajax(status) {
+                return status.code !== 'SUCCESS' && status.code !== 'FAILURE';
+            }
+
+            function do_ajax(backoff) {
+                $.get('{{ url('task_status_ajax') }}', {
+                    id: task_id
+                }).done(function (data) {
+                    show_status(data);
+                    if (data.code === 'SUCCESS') {
+                        window.location.href = redirect;
+                    } else if (need_ajax(data)) {
+                        setTimeout(do_ajax, 500);
+                    }
+                }).fail(function (xhr, status) {
+                    console.log(status);
+                    setTimeout(function () {
+                        do_ajax(backoff * 2);
+                    }, backoff);
+                });
+            }
+
+            show_status(status);
+            if (need_ajax(status)) {
+                do_ajax();
+            }
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron" data-task-id="{{ task_id }}" data-task-status="{{ task_status }}"
+         data-redirect="{{ redirect }}">
+        <img src="{{ static('icons/icon.svg') }}" class="icon" alt="DMOJ Icon">
+        <p class="action">{{ message }}</p>
+
+        <div class="progress progress-known">
+            <div class="progress-bar" role="progressbar" aria-valuemin="0"></div>
+            <div class="progress-text"></div>
+        </div>
+        <div class="progress progress-unknown">
+            <div class="progress-bar progress-bar-animated" role="progressbar"></div>
+        </div>
+        <div class="progress progress-complete">
+            <div class="progress-bar" role="progressbar">Completed!</div>
+        </div>
+        <div class="progress progress-failed">
+            <div class="progress-bar" role="progressbar">Failed!</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
