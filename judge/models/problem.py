@@ -164,7 +164,7 @@ class Problem(models.Model):
         if not user.has_perm('judge.see_organization_problem'):
             filter = Q(is_organization_private=False)
             if profile is not None:
-                filter |= Q(organizations__id__in=profile.organizations.all())
+                filter |= Q(organizations__in=profile.organizations.all())
             queryset = queryset.filter(filter)
 
         return queryset.distinct()

@@ -32,7 +32,7 @@ class PostList(ListView):
         if not self.request.user.has_perm('judge.edit_all_post'):
             filter = Q(is_organization_private=False)
             if self.request.user.is_authenticated:
-                filter |= Q(organizations__id__in=self.request.profile.organizations.all())
+                filter |= Q(organizations__in=self.request.profile.organizations.all())
             queryset = queryset.filter(filter)
         return queryset
 

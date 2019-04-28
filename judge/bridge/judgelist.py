@@ -84,8 +84,13 @@ class JudgeList(object):
                 self.submission_map[submission].abort()
                 return True
             except KeyError:
-                self.queue.remove(self.node_map[submission])
-                del self.node_map[submission]
+                try:
+                    node = self.node_map[submission]
+                except KeyError:
+                    pass
+                else:
+                    self.queue.remove(node)
+                    del self.node_map[submission]
                 return False
 
     def check_priority(self, priority):

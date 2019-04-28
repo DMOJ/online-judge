@@ -56,7 +56,6 @@ class CommentAdmin(VersionAdmin):
         else:
             return format_html('{0}', obj.page)
     linked_page.short_description = _('Associated page')
-    linked_page.allow_tags = True
     linked_page.admin_order_field = 'page'
 
     def save_model(self, request, obj, form, change):

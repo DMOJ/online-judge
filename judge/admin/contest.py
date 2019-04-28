@@ -8,6 +8,7 @@ from django.forms import ModelForm, ModelMultipleChoiceField
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _, ugettext, ungettext
 from reversion.admin import VersionAdmin
 
@@ -71,10 +72,9 @@ class ContestProblemInline(admin.TabularInline):
     def rejudge_column(self, obj):
         if obj.id is None:
             return ''
-        return '<a class="button rejudge-link" href="%s">Rejudge</a>' % reverse('admin:judge_contest_rejudge',
-                                                                                args=(obj.contest.id, obj.id))
+        return format_html('<a class="button rejudge-link" href="{}">Rejudge</a>',
+                           reverse('admin:judge_contest_rejudge', args=(obj.contest.id, obj.id)))
     rejudge_column.short_description = ''
-    rejudge_column.allow_tags = True
 
 
 class ContestForm(ModelForm):
