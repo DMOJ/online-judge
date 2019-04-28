@@ -27,3 +27,4 @@ qrcode[pil]
 jsonfield
 pymoss
 packaging
+celery
