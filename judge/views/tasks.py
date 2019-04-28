@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils.http import is_safe_url
 
 from judge.tasks import success, failure, progress
+from judge.utils.views import short_circuit_middleware
 
 
 def get_task_status(task_id):
@@ -45,6 +46,7 @@ def task_status(request, task_id):
     })
 
 
+@short_circuit_middleware
 def task_status_ajax(request):
     if 'id' not in request.GET:
         return HttpResponseBadRequest('Need to pass GET parameter "id"', content_type='text/plain')
