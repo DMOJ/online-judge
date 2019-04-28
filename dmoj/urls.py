@@ -325,6 +325,8 @@ urlpatterns = [
     ])),
 
     url(r'^tasks/', include([
+        url(r'^status/(?P<task_id>[A-Za-z0-9-]*)$', tasks.task_status, name='task_status'),
+        url(r'^ajax_status$', tasks.task_status_ajax, name='task_status_ajax'),
         url(r'^success$', tasks.demo_success),
         url(r'^failure$', tasks.demo_failure),
     ])),
