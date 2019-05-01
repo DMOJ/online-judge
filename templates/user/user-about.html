@@ -68,14 +68,11 @@
     {% endif %}
 
     {% if ratings %}
-        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.Core.js') }}"></script>
-        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.Scatter.js') }}"></script>
+        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.js') }}"></script>
         <script type="text/javascript">
             var rating_history = {{rating_data}};
-            var data_index = {};
 
             $.each(rating_history, function (index, item) {
-                data_index[item.timestamp.toString() + ',' + item.rating.toString()] = index;
                 item.x = new Date(item.timestamp);
                 item.y = item.rating;
             });
@@ -84,75 +81,90 @@
                 var $canvas = $('#rating-chart').find('canvas');
                 var ctx = $canvas.get(0).getContext('2d');
 
-                var getItem = function (elements) {
-                    return rating_history[data_index[elements[0].arg.toString() + ',' + elements[0].value.toString()]];
+                var getItem = function (index) {
+                    return rating_history[index];
                 };
 
-                Chart.types.Scatter.extend({
-                    name: 'RatingScatter',
-                    showTooltip: function (elements) {
-                        var $tooltip = $('#rating-tooltip');
+                window.rating_chart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'rating',
+                            backgroundColor: 'rgb(0,0,0,0)',
+                            borderColor: '#A31515',
+                            pointBackgroundColor: '#A31515',
+                            pointHoverBackgroundColor: '#FFF',
+                            pointRadius: 5,
+                            pointHoverRadius: 5,
+                            showLine: true,
+                            data: rating_history,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        lineTension: 0,
+                        legend: {
+                            display: false,
+                        },
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                distribution: 'linear',
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    precision: 0,
+                                },
+                            }],
+                        },
+                        tooltips: {
+                            enabled: false,
+                            custom: function (tooltipModel) {
+                                var $tooltip = $('#rating-tooltip');
 
-                        this.draw();
-                        if (elements.length > 0) {
-                            var item = getItem(elements);
-                            var offset = elements[0].tooltipPosition();
+                                if (tooltipModel.opacity == 0) {
+                                    $tooltip.hide();
+                                    return;
+                                }
 
-                            $tooltip.find('.contest').text(item.label);
-                            $tooltip.find('.date').text(item.date);
-                            $tooltip.find('.rate-box').attr('class', 'rate-box ' + item.class)
-                                .find('span').css('height', item.height);
-                            $tooltip.find('.rating').text(item.rating).attr('class', 'rating ' + item.class);
-                            $tooltip.find('.rank').text(item.ranking);
+                                var element = tooltipModel.dataPoints[0]
+                                var item = getItem(element.index);
 
-                            $tooltip.removeClass('above below');
-                            $tooltip.addClass(offset.y < $tooltip.height() ? 'below' : 'above');
+                                $tooltip.find('.contest').text(item.label);
+                                $tooltip.find('.date').text(item.date);
+                                $tooltip.find('.rate-box').attr('class', 'rate-box ' + item.class)
+                                        .find('span').css('height', item.height);
+                                $tooltip.find('.rating').text(item.rating).attr('class', 'rating ' + item.class);
+                                $tooltip.find('.rank').text(item.ranking);
 
-                            var position = $canvas.offset();
-                            var container = $('#page-container').offset();
-                            $tooltip.css({
-                                left: position.left - container.left + offset.x + $tooltip.width() / 2,
-                                top: position.top - container.top + offset.y - $tooltip.height() - 13,
-                                fontFamily: this.options.tooltipFontFamily,
-                                fontSize: this.options.tooltipFontSize,
-                                fontStyle: this.options.tooltipFontStyle
-                            }).show();
-                        } else
-                            $tooltip.hide();
+                                $tooltip.removeClass('above below');
+                                $tooltip.addClass(element.y < $tooltip.height() ? 'below' : 'above');
 
-                        return this;
+                                var position = $canvas.offset();
+                                var container = $('#page-container').offset();
+                                $tooltip.css({
+                                    left: position.left - container.left + element.x + $tooltip.width() / 2,
+                                    top: position.top - container.top + element.y - $tooltip.height() - 13,
+                                    fontFamily: tooltipModel._bodyFontFamily,
+                                    fontSize: tooltipModel._bodyFontSize,
+                                    fontStyle: tooltipModel._bodyFontStyle,
+                                }).show();
+                            },
+                        }
                     }
-                });
-
-                window.rating_chart = new Chart(ctx).RatingScatter([
-                    {
-                        label: 'rating',
-                        strokeColor: '#A31515',
-                        fillColor: '#A31515',
-                        data: rating_history
-                    }
-                ], {
-                    bezierCurve: false,
-                    showTooltips: true,
-                    scaleShowHorizontalLines: true,
-                    scaleShowLabels: true,
-                    scaleType: 'date',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    pointDotRadius: 6,
-                    pointHitDetectionRadius: 6
                 });
 
                 $canvas.click(function (evt) {
-                    var elements = window.rating_chart.getPointsAtEvent(evt);
+                    var elements = window.rating_chart.getElementsAtEvent(evt);
                     if (elements.length > 0) {
-                        var item = getItem(elements);
+                        var item = getItem(elements[0]._index);
                         window.location.href = item.link;
                     }
                 });
 
                 $canvas.mousemove(function (evt) {
-                    var elements = window.rating_chart.getPointsAtEvent(evt);
+                    var elements = window.rating_chart.getElementsAtEvent(evt);
                     if (elements.length > 0) {
                         $canvas.css('cursor', 'pointer');
                     } else {
