@@ -1,6 +1,7 @@
 from itertools import repeat, chain
 from operator import itemgetter
 
+from django.conf import settings
 from django.db.models import Count, Sum, Case, When, IntegerField, Value, FloatField
 from django.db.models.expressions import CombinedExpression
 from django.http import JsonResponse
@@ -34,18 +35,21 @@ def repeat_chain(iterable):
 
 
 def language_data(request, language_count=Language.objects.annotate(count=Count('submission'))):
-    languages = language_count.filter(count__gte=1000).values('key', 'name', 'short_name', 'count').order_by('-count')
-    data = []
-    for language, color, highlight in zip(languages, chart_colors, highlight_colors):
-        data.append({
-            'value': language['count'], 'label': language['name'],
-            'color': color, 'highlight': highlight,
-        })
-    data.append({
-        'value': language_count.filter(count__lt=1000).aggregate(total=Sum('count'))['total'],
-        'label': 'Other', 'color': '#FDB45C', 'highlight': '#FFC870',
-    })
-    return JsonResponse(data, safe=False)
+    threshold = getattr(settings, 'DMOJ_STATS_LANGUAGE_THRESHOLD', 10)
+    languages = language_count.filter(count__gte=threshold).values('key', 'name', 'count').order_by('-count')
+    num_languages = len(languages)
+    other_count = language_count.filter(count__lt=threshold).aggregate(total=Sum('count'))['total']
+
+    return JsonResponse({
+        'labels': list(map(itemgetter('name'), languages)) + ['Other'],
+        'datasets': [
+            {
+                'backgroundColor': chart_colors[:num_languages] + ['#FDB45C'],
+                'highlightBackgroundColor': highlight_colors[:num_languages] + ['#FFC870'],
+                'data': list(map(itemgetter('count'), languages)) + [other_count],
+            },
+        ],
+    }, safe=False)
 
 
 def ac_language_data(request):
@@ -57,35 +61,43 @@ def status_data(request, statuses=None):
         statuses = (Submission.objects.values('result').annotate(count=Count('result'))
                     .values('result', 'count').order_by('-count'))
     data = []
-    total_count = 0
-    for status, color, highlight in zip(statuses, chart_colors, highlight_colors):
+    for status in statuses:
         res = status['result']
         if not res:
             continue
         count = status['count']
-        total_count += count
         data.append({
-            'value': count, 'label': str(Submission.USER_DISPLAY_CODES[res]),
-            'color': color, 'highlight': highlight
+            'count': count, 'result': str(Submission.USER_DISPLAY_CODES[res]),
         })
-    return JsonResponse(data, safe=False)
+
+    return JsonResponse({
+        'labels': list(map(itemgetter('result'), data)),
+        'datasets': [
+            {
+                'backgroundColor': chart_colors,
+                'highlightBackgroundColor': highlight_colors,
+                'data': list(map(itemgetter('count'), data)),
+            },
+        ],
+    }, safe=False)
 
 
 def ac_rate(request):
     rate = CombinedExpression(ac_count / Count('submission'), '*', Value(100.0), output_field=FloatField())
     data = Language.objects.annotate(total=Count('submission'), ac_rate=rate).filter(total__gt=0) \
-        .values('key', 'name', 'short_name', 'ac_rate').order_by('total')
+        .values('key', 'name', 'ac_rate').order_by('total')
     return JsonResponse({
         'labels': list(map(itemgetter('name'), data)),
         'datasets': [
             {
-                'fillColor': 'rgba(151,187,205,0.5)',
-                'strokeColor': 'rgba(151,187,205,0.8)',
-                'highlightFill': 'rgba(151,187,205,0.75)',
-                'highlightStroke': 'rgba(151,187,205,1)',
+                'backgroundColor': 'rgba(151,187,205,0.5)',
+                'borderColor': 'rgba(151,187,205,0.8)',
+                'borderWidth': 1,
+                'hoverBackgroundColor': 'rgba(151,187,205,0.75)',
+                'hoverBorderColor': 'rgba(151,187,205,1)',
                 'data': list(map(itemgetter('ac_rate'), data)),
-            }
-        ]
+            },
+        ],
     })
 
 
