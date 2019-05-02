@@ -23,7 +23,7 @@
                 window.show_problem = 0;
             {% endif %}
         {% endif %}
-        window.results_json = {{ results_json }};
+        window.results_data = {{ results_json }};
     </script>
 
     {% compress js %}
@@ -100,7 +100,7 @@
             }
 
             $(function () {
-                stats_graph(window.results_json);
+                stats_graph(window.results_data);
             });
 
             function load_dynamic_update(last_msg) {
@@ -160,29 +160,17 @@
                     }
                 };
 
-                var stats_outdated = false;
-                var last_stat_update = Date.now();
-                var stats_update_interval = {{ stats_update_interval|default(0) * 1000 }};
-
-                function update_stats() {
-                    if (Date.now() - last_stat_update < stats_update_interval)
-                        return;
-                    $.ajax({
-                        url: '?results'
-                    }).done(function (data) {
-                        last_stat_update = Date.now();
-                        stats_graph(data);
-                    }).fail(function () {
-                        console.log('Failed to update statistics table!' + id);
-                    }).always(function () {
-                        stats_outdated = false;
-                    });
+                function update_stats(code, delta) {
+                    var categories = window.results_data.categories;
+                    for (var i = 0; i < categories.length; ++i) {
+                        if (categories[i].code === code) {
+                            categories[i].count += delta;
+                            window.result_data.total += delta;
+                            break;
+                        }
+                    }
+                    stats_graph(window.results_data);
                 }
-
-                $(window).on('dmoj:window-visible', function () {
-                    if (stats_outdated)
-                        update_stats();
-                });
 
                 var $body = $(document.body);
                 var receiver = new EventReceiver(
@@ -193,17 +181,14 @@
                         if (dynamic_user_id && message.user != dynamic_user_id ||
                             dynamic_problem_id && message.problem != dynamic_problem_id)
                             return;
-                        if (message.type == 'update-submission') {
-                            if (message.state == 'test-case' && $body.hasClass('window-hidden'))
+                        if (message.type === 'update-submission') {
+                            if (message.state === 'test-case' && $body.hasClass('window-hidden'))
                                 return;
                             update_submission(message);
-                        } else if (message.type == 'done-submission') {
+                        } else if (message.type === 'done-submission') {
                             update_submission(message, true);
-
-                            if (!statistics.length) return;
-                            if ($('body').hasClass('window-hidden'))
-                                return stats_outdated = true;
-                            update_stats();
+                        } else if (message.type === 'change-global-stats') {
+                            update_stats(message.result_type, message.delta);
                         }
                     }
                 );

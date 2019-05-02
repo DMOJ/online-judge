@@ -50,6 +50,7 @@ def judge_request(packet, reply=True):
 
 def judge_submission(submission, rejudge):
     from .models import ContestSubmission, Submission, SubmissionTestCase
+    from judge.utils.problems import add_to_result_data, RESULT_TO_TYPE
 
     updates = {'time': None, 'memory': None, 'points': None, 'result': None, 'error': None,
                'was_rejudged': rejudge, 'status': 'QU'}
@@ -75,6 +76,8 @@ def judge_submission(submission, rejudge):
         return False
 
     SubmissionTestCase.objects.filter(submission_id=submission.id).delete()
+
+    add_to_result_data(submission.result, -1)
 
     try:
         response = judge_request({

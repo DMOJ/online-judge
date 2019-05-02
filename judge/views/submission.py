@@ -1,6 +1,7 @@
 import json
 from operator import attrgetter
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
@@ -260,9 +261,6 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         self.selected_languages = set(request.GET.getlist('language'))
         self.selected_statuses = set(request.GET.getlist('status'))
 
-        if 'results' in request.GET:
-            return JsonResponse(self.get_result_data())
-
         return super(SubmissionsListBase, self).get(request, *args, **kwargs)
 
 
@@ -435,8 +433,6 @@ def single_submission_query(request):
 
 
 class AllSubmissions(SubmissionsListBase):
-    stats_update_interval = 3600
-
     def get_my_submissions_page(self):
         if self.request.user.is_authenticated:
             return reverse('all_user_submissions', kwargs={'user': self.request.user.username})
@@ -445,7 +441,6 @@ class AllSubmissions(SubmissionsListBase):
         context = super(AllSubmissions, self).get_context_data(**kwargs)
         context['dynamic_update'] = context['page_obj'].number == 1
         context['last_msg'] = event.last()
-        context['stats_update_interval'] = self.stats_update_interval
         return context
 
     def _get_result_data(self):
@@ -456,8 +451,8 @@ class AllSubmissions(SubmissionsListBase):
         result = cache.get(key)
         if result:
             return result
-        result = super(AllSubmissions, self)._get_result_data()
-        cache.set(key, result, self.stats_update_interval)
+        result = get_result_data(Submission.objects.all())
+        cache.set(key, result, settings.GLOBAL_SUBMISSION_STAT_UPDATE_INTERVAL)
         return result
 
 
