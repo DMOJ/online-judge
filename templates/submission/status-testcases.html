@@ -1,4 +1,4 @@
-{% if request.in_contest and submission.contest_or_none and request.participation.id == submission.contest_or_none.participation_id %}
+{% if submission.contest_or_none %}
     {% set prefix_length = submission.contest_or_none.problem.output_prefix_override %}
 {% else %}
     {% set prefix_length = None %}
