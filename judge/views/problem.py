@@ -187,7 +187,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             if not can_edit:
                 tickets = tickets.filter(own_ticket_filter(user.profile.id))
             context['has_tickets'] = tickets.exists()
-            context['num_open_tickets'] = tickets.filter(is_open=True).count()
+            context['num_open_tickets'] = tickets.filter(is_open=True).values('id').distinct().count()
 
         try:
             context['editorial'] = Solution.objects.get(problem=self.object)
