@@ -44,11 +44,10 @@ class RankedSubmissions(ProblemSubmissions):
                         INNER JOIN judge_submission AS sub
                             ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
                     WHERE sub.problem_id = %s AND {points} > 0 {constraint}
-                    GROUP BY fastest.uid
+                    GROUP BY sub.user_id
                 '''.format(points=points, contest_join=contest_join, constraint=constraint),
                 (self.problem.id, self.contest.id) * 3 if self.in_contest else (self.problem.id,) * 3,
                 output_field=IntegerField()))
-        queryset.query.group_by = ['user_id']
 
         if self.in_contest:
             return queryset.order_by('-contest__points', 'time')
