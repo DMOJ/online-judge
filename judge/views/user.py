@@ -31,7 +31,7 @@ from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
 from judge.utils.unicode import utf8text
 from judge.utils.views import TitleMixin, generic_message, DiggPaginatorMixin, QueryStringSortMixin
-from .contests import contest_ranking_view
+from .contests import ContestRanking
 
 __all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile']
 
@@ -277,6 +277,7 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
 
 
 user_list_view = UserList.as_view()
+contest_ranking_view = ContestRanking.as_view()
 
 
 def users(request):
