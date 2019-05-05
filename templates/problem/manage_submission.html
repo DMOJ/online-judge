@@ -34,7 +34,7 @@
             $('#rejudge-all').click(function (e) {
                 e.preventDefault();
                 if (confirm(this.dataset.warning)) {
-                    alert('Rejudging all submissions');
+                    $(this).parents('form').submit();
                 }
             });
 
@@ -61,10 +61,13 @@
         <div class="pane">
             <h3>{{ _('Rejudge Everything') }}</h3>
             <p id="rejudge-warning">{{ _('This will rejudge %(count)d submissions.', count=submission_count) }}</p>
-            <a id="rejudge-all" class="unselectable button full" href="#"
-               data-warning="{{ _('Are you sure you want to rejudge %(count)d submissions?', count=submission_count) }}">
-                {{ _('Rejudge all submissions') }}
-            </a>
+            <form action="{{ url('problem_submissions_rejudge_all', problem.code) }}" method="post">
+                {% csrf_token %}
+                <a id="rejudge-all" class="unselectable button full" href="#"
+                   data-warning="{{ _('Are you sure you want to rejudge %(count)d submissions?', count=submission_count) }}">
+                    {{ _('Rejudge all submissions') }}
+                </a>
+            </form>
         </div>
 
         <div class="pane">
