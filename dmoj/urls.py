@@ -134,6 +134,10 @@ urlpatterns = [
                 name='problem_submissions_rejudge_ids'),
             url('^/rejudge/success/(?P<task_id>[A-Za-z0-9-]*)$', problem_manage.rejudge_success,
                 name='problem_submissions_rejudge_success'),
+            url('^/rescore/all$', problem_manage.RescoreAllSubmissionsView.as_view(),
+                name='problem_submissions_rescore_all'),
+            url('^/rescore/success/(?P<task_id>[A-Za-z0-9-]*)$', problem_manage.rescore_success,
+                name='problem_submissions_rescore_success'),
         ])),
     ])),
 

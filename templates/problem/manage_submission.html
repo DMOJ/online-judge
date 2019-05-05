@@ -31,7 +31,7 @@
 {% block js_media %}
     <script>
         $(function () {
-            $('#rejudge-all').click(function (e) {
+            $('#rejudge-all, #rescore-all').click(function (e) {
                 e.preventDefault();
                 if (confirm(this.dataset.warning)) {
                     $(this).parents('form').submit();
@@ -89,6 +89,18 @@
                 <p>{{ _('This range includes both endpoints.') }}</p>
                 <a id="rejudge-by-range" class="unselectable button full" href="#">
                     {{ _('Rejudge submissions in range') }}
+                </a>
+            </form>
+        </div>
+
+        <div class="pane">
+            <h3>{{ _('Rescore Everything') }}</h3>
+            <p id="rescore-warning">{{ _('This will rescore %(count)d submissions.', count=submission_count) }}</p>
+            <form action="{{ url('problem_submissions_rescore_all', problem.code) }}" method="post">
+                {% csrf_token %}
+                <a id="rescore-all" class="unselectable button full" href="#"
+                   data-warning="{{ _('Are you sure you want to rescore %(count)d submissions?', count=submission_count) }}">
+                    {{ _('Rescore all submissions') }}
                 </a>
             </form>
         </div>
