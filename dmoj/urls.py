@@ -128,8 +128,10 @@ urlpatterns = [
 
         url(r'^/manage/submission', include([
             url('^$', problem_manage.ManageProblemSubmissionView.as_view(), name='problem_manage_submissions'),
-            url('^/rejudge_all$', problem_manage.RejudgeAllSubmissionsView.as_view(),
+            url('^/rejudge/all$', problem_manage.RejudgeAllSubmissionsView.as_view(),
                 name='problem_submissions_rejudge_all'),
+            url('^/rejudge/success/(?P<task_id>[A-Za-z0-9-]*)$', problem_manage.rejudge_success,
+                name='problem_submissions_rejudge_success'),
         ])),
     ])),
 

@@ -1,13 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li class="{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
+    {% include "messages.html" %}
     {% include "organization/requests/tabs.html" %}
 
     {% if formset.forms %}

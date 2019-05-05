@@ -1,8 +1,10 @@
-from django.http import Http404
+from celery.result import AsyncResult
+from django.contrib import messages
+from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, ngettext
 from django.views.generic import DetailView
 from django.views.generic.detail import BaseDetailView
 
@@ -57,4 +59,16 @@ class ManageProblemSubmissionView(TitleMixin, ManageProblemSubmissionMixin, Deta
 class RejudgeAllSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailView):
     def perform_action(self):
         status = rejudge_problem_all.delay(self.object.id)
-        return redirect_to_task_status(status, _('Rejudging all submissions for %s...') % (self.object.name,))
+        return redirect_to_task_status(
+            status, message=_('Rejudging all submissions for %s...') % (self.object.name,),
+            redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id])
+        )
+
+
+def rejudge_success(request, problem, task_id):
+    count = AsyncResult(task_id).result
+    if not isinstance(count, int):
+        raise Http404()
+    messages.success(request, ngettext('Successfully scheduled %d submission for rejudging.',
+                                       'Successfully scheduled %d submissions for rejudging.', count) % (count,))
+    return HttpResponseRedirect(reverse('problem_manage_submissions', args=[problem]))
