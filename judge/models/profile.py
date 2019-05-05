@@ -137,7 +137,7 @@ class Profile(models.Model):
             self.points = points
             self.problem_count = problems
             self.performance_points = pp
-            self.save()
+            self.save(update_fields=['points', 'problem_count', 'performance_points'])
         return points
 
     calculate_points.alters_data = True
