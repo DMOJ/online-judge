@@ -63,13 +63,16 @@ class ProblemMixin(object):
             raise Http404()
         return problem
 
+    def no_such_problem(self):
+        code = self.kwargs.get(self.slug_url_kwarg, None)
+        return generic_message(self.request, _('No such problem'),
+                               _('Could not find a problem with the code "%s".') % code, status=404)
+
     def get(self, request, *args, **kwargs):
         try:
             return super(ProblemMixin, self).get(request, *args, **kwargs)
         except Http404:
-            code = kwargs.get(self.slug_url_kwarg, None)
-            return generic_message(request, _('No such problem'),
-                                   _('Could not find a problem with the code "%s".') % code, status=404)
+            return self.no_such_problem()
 
 
 class SolvedProblemMixin(object):
