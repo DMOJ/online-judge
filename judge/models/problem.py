@@ -159,7 +159,7 @@ class Problem(models.Model):
             return False
         if user.has_perm('judge.edit_all_problem') or user.has_perm('judge.edit_public_problem') and self.is_public:
             return True
-        return self.is_editor(user.profile)
+        return user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile)
 
     def is_accessible_by(self, user):
         # Problem is public.
@@ -198,6 +198,9 @@ class Problem(models.Model):
             return False
         from judge.models import ContestProblem
         return ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists()
+
+    def is_subs_manageable_by(self, user):
+        return user.is_staff and user.has_perm('judge.rejudge_submission_lot') and self.is_editable_by(user)
 
     def __str__(self):
         return self.name

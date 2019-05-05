@@ -13,7 +13,7 @@ from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitem
     BlogPostSitemap, SolutionSitemap
 from judge.views import TitledTemplateView
 from judge.views import organization, language, status, blog, problem, mailgun, license, register, user, \
-    submission, widgets, comment, contests, api, ranked_submission, stats, preview, ticket, totp, tasks
+    submission, widgets, comment, contests, api, ranked_submission, stats, preview, ticket, totp, tasks, problem_manage
 from judge.views.problem_data import ProblemDataView, ProblemSubmissionDiff, \
     problem_data_file, problem_init_view
 from judge.views.register import RegistrationView, ActivationView
@@ -125,6 +125,10 @@ urlpatterns = [
 
         url(r'^/tickets$', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
         url(r'^/tickets/new$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
+
+        url(r'^/manage/submission', include([
+            url('^$', problem_manage.ManageProblemSubmissionView.as_view(), name='problem_manage_submissions'),
+        ])),
     ])),
 
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
