@@ -277,14 +277,21 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
 
 
 user_list_view = UserList.as_view()
-contest_ranking_view = ContestRanking.as_view()
+
+
+class FixedContestRanking(ContestRanking):
+    contest = None
+    
+    def get_object(self, queryset=None):
+        return self.contest
 
 
 def users(request):
     if request.user.is_authenticated:
         participation = request.user.profile.current_contest
         if participation is not None:
-            return contest_ranking_view(request, participation.contest, participation)
+            contest = participation.contest
+            return FixedContestRanking.as_view(contest=contest)(request, contest=contest.key)
     return user_list_view(request)
 
 
