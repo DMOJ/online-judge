@@ -159,6 +159,12 @@
         </div>
     {% endif %}
 
+    {% if problem.is_subs_manageable_by(request.user) %}
+        <div>
+            <a href="{{ url('problem_manage_submissions', problem.code) }}">{{ _('Manage submissions') }}</a>
+        </div>
+    {% endif %}
+
     {% if perms.judge.clone_problem %}
         <div>
             <form action="{{ url('problem_clone', problem.code) }}" method="post">

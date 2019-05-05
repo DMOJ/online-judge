@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block media %}
+    <style>
+        .panes {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pane {
+            display: block;
+            max-width: 20em;
+            border: 1px #ccc solid;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .pane h3 {
+            display: block;
+            background: #3b3b3b;
+            padding: 5px 10px 10px;
+            margin: -10px -10px 10px;
+            border-radius: 5px 5px 0 0;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block js_media %}
+    <script>
+        $(function () {
+            $('#rejudge-all').click(function (e) {
+                e.preventDefault();
+                if (confirm(this.dataset.warning)) {
+                    alert('Rejudging all submissions');
+                }
+            });
+
+            var $id_start = $('#by-range-start');
+            var $id_end = $('#by-range-end');
+            $('#rejudge-by-range').click(function (e) {
+                e.preventDefault();
+                var start = parseInt($id_start.val());
+                var end = parseInt($id_end.val());
+                if (!start || !end) {
+                    alert("{{ _('Need valid values for both start and end IDs.') }}");
+                } else if (start > end) {
+                    alert("{{ _('End ID must be after start ID.') }}");
+                } else {
+                    alert('Rejudging submissions from ' + start + ' to ' + end);
+                }
+            })
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="panes">
+        <div class="pane">
+            <h3>{{ _('Rejudge Everything') }}</h3>
+            <p id="rejudge-warning">{{ _('This will rejudge %(count)d submissions.', count=submission_count) }}</p>
+            <a id="rejudge-all" class="unselectable button full" href="#"
+               data-warning="{{ _('Are you sure you want to rejudge %(count)d submissions?', count=submission_count) }}">
+                {{ _('Rejudge all submissions') }}
+            </a>
+        </div>
+
+        <div class="pane">
+            <h3>{{ _('Rejudge by ID') }}</h3>
+            <table class="table">
+                <tr>
+                    <th><label for="by-range-start">{{ _('Starting ID:') }}</label></th>
+                    <td><input id="by-range-start" type="number"></td>
+                </tr>
+                <tr>
+                    <th><label for="by-range-end">{{ _('Ending ID:') }}</label></th>
+                    <td><input id="by-range-end" type="number"></td>
+                </tr>
+            </table>
+            <p>{{ _('This range includes both endpoints.') }}</p>
+            <a id="rejudge-by-range" class="unselectable button full" href="#">
+                {{ _('Rejudge submissions in range') }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
