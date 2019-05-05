@@ -4,10 +4,11 @@ from django.utils.http import urlencode
 
 
 class Progress:
-    def __init__(self, task, total):
+    def __init__(self, task, total, stage=None):
         self.task = task
         self._total = total
         self._done = 0
+        self._stage = stage
 
     def _update_state(self):
         self.task.update_state(
@@ -15,6 +16,7 @@ class Progress:
             meta={
                 'done': self._done,
                 'total': self._total,
+                'stage': self._stage,
             }
         )
 

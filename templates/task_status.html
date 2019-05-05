@@ -11,6 +11,7 @@
             var task_id = $jumbotron.attr('data-task-id');
             var status = JSON.parse($jumbotron.attr('data-task-status'));
             var redirect = $jumbotron.attr('data-redirect');
+            var $stage = $jumbotron.find('.stage');
             var $progress = $jumbotron.find('.progress');
             var $known = $jumbotron.find('.progress-known');
             var $known_bar = $known.find('.progress-bar');
@@ -40,6 +41,7 @@
                         $progress.filter('.progress-unknown').show();
                         break;
                 }
+                $stage.text(status.stage || '');
             }
 
             function need_ajax(status) {
@@ -77,6 +79,7 @@
          data-redirect="{{ redirect }}">
         <img src="{{ static('icons/icon.svg') }}" class="icon" alt="DMOJ Icon">
         <p class="action">{{ message }}</p>
+        <p class="stage"></p>
 
         <div class="progress progress-known">
             <div class="progress-bar" role="progressbar" aria-valuemin="0"></div>

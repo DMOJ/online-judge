@@ -125,6 +125,11 @@ body {
     font-weight: 300;
 }
 
+.jumbotron .stage {
+    text-align: center;
+    font-weight: 300;
+}
+
 .jumbotron .progress {
     background: #007bff;
     position: relative;
