@@ -130,6 +130,8 @@ urlpatterns = [
             url('^$', problem_manage.ManageProblemSubmissionView.as_view(), name='problem_manage_submissions'),
             url('^/rejudge/all$', problem_manage.RejudgeAllSubmissionsView.as_view(),
                 name='problem_submissions_rejudge_all'),
+            url('^/rejudge/ids$', problem_manage.RejudgeSubmissionsByIDView.as_view(),
+                name='problem_submissions_rejudge_ids'),
             url('^/rejudge/success/(?P<task_id>[A-Za-z0-9-]*)$', problem_manage.rejudge_success,
                 name='problem_submissions_rejudge_success'),
         ])),

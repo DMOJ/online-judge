@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _, ngettext
 from django.views.generic import DetailView
 from django.views.generic.detail import BaseDetailView
 
-from judge.tasks import rejudge_problem_all
+from judge.tasks import rejudge_problem_all, rejudge_problem_by_id
 from judge.utils.celery import redirect_to_task_status
 from judge.utils.views import TitleMixin
 from judge.views.problem import ProblemMixin
@@ -62,6 +62,22 @@ class RejudgeAllSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailVi
         return redirect_to_task_status(
             status, message=_('Rejudging all submissions for %s...') % (self.object.name,),
             redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id])
+        )
+
+
+class RejudgeSubmissionsByIDView(ManageProblemSubmissionActionMixin, BaseDetailView):
+    def perform_action(self):
+        try:
+            start = int(self.request.POST.get('start'))
+            end = int(self.request.POST.get('end'))
+        except (KeyError, ValueError):
+            raise Http404()
+
+        status = rejudge_problem_by_id.delay(self.object.id, start, end)
+        return redirect_to_task_status(
+            status, message=_('Rejudging submissions in [{start}, {end}] for {problem}...').format(
+                problem=self.object.name, start=start, end=end
+            ), redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id])
         )
 
 
