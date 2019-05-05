@@ -589,10 +589,9 @@ def problem_submit(request, problem=None, submission=None):
                 raise Http404()
         if submission is not None:
             try:
-                source, language_id = get_object_or_404(Submission.objects.values_list('source__source', 'language_id'),
-                                                        id=int(submission))
-                initial['source'] = source
-                initial['language'] = Language.objects.get(id=language_id)
+                sub = get_object_or_404(Submission.objects.select_related('source', 'language'), id=int(submission))
+                initial['source'] = sub.source.source
+                initial['language'] = sub.language
             except ValueError:
                 raise Http404()
         form = ProblemSubmitForm(initial=initial)
