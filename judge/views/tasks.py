@@ -17,12 +17,13 @@ from judge.utils.views import short_circuit_middleware
 
 def get_task_status(task_id):
     result = AsyncResult(task_id)
+    info = result.result
     if result.state == 'PROGRESS':
-        return {'code': 'PROGRESS', 'done': result.result['done'], 'total': result.result['total']}
+        return {'code': 'PROGRESS', 'done': info['done'], 'total': info['total'], 'stage': info['stage']}
     elif result.state == 'SUCCESS':
         return {'code': 'SUCCESS'}
     elif result.state == 'FAILURE':
-        return {'code': 'FAILURE', 'error': str(result.result)}
+        return {'code': 'FAILURE', 'error': str(info)}
     else:
         return {'code': 'WORKING'}
 
