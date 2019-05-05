@@ -4,7 +4,7 @@ from operator import attrgetter
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -215,8 +215,14 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
 
     def get_queryset(self):
         queryset = self._get_queryset()
-        if not self.in_contest and not self.request.user.has_perm('judge.see_private_problem'):
-            queryset = queryset.filter(problem__is_public=True)
+        if not self.in_contest:
+            if not self.request.user.has_perm('judge.see_private_problem'):
+                queryset = queryset.filter(problem__is_public=True)
+            if not self.request.user.has_perm('judge.see_organization_problem'):
+                filter = Q(problem__is_organization_private=False)
+                if self.request.user.is_authenticated:
+                    filter |= Q(problem__organizations__in=self.request.profile.organizations.all())
+                queryset = queryset.filter(filter)
         return queryset
 
     def get_my_submissions_page(self):
