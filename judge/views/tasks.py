@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils.http import is_safe_url
 
 from judge.tasks import success, failure, progress
+from judge.utils.celery import redirect_to_task_status
 from judge.utils.views import short_circuit_middleware
 
 
@@ -57,9 +58,7 @@ def demo_task(request, task, message):
     if not request.user.is_superuser:
         raise PermissionDenied()
     result = task.delay()
-    return HttpResponseRedirect(reverse('task_status', args=[result.id]) + '?' + urlencode({
-        'message': message, 'redirect': reverse('home')
-    }))
+    return redirect_to_task_status(result, message=message, redirect=reverse('home'))
 
 
 demo_success = partial(demo_task, task=success, message='Running example task that succeeds...')

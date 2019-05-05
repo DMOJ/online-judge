@@ -1,3 +1,8 @@
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.utils.http import urlencode
+
+
 class Progress:
     def __init__(self, task, total):
         self.task = task
@@ -42,3 +47,19 @@ class Progress:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type is None:
             self.done = self._total
+
+
+def task_status_url(result, message=None, redirect=None):
+    args = {}
+    if message:
+        args['message'] = message
+    if redirect:
+        args['redirect'] = redirect
+    url = reverse('task_status', args=[result.id])
+    if args:
+        url += '?' + urlencode(args)
+    return url
+
+
+def redirect_to_task_status(result, message=None, redirect=None):
+    return HttpResponseRedirect(task_status_url(result, message, redirect))
