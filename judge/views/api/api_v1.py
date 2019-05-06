@@ -272,5 +272,5 @@ def api_v1_submission_source(request, submission):
         return JsonResponse({})
 
     return JsonResponse({
-        'source': submission.source.replace('\r', ''),
+        'source': submission.source.source.replace('\r', ''),
     })
