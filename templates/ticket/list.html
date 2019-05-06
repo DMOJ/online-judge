@@ -178,25 +178,27 @@
                         }))
                         .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text));
                 },
-                data: function (params) {
-                    return {
-                        term: params.term || '',
-                        page: params.page || 1
-                    }
-                },
-                processResults: function (data) {
-                    return {
-                        results: data.results,
-                        pagination: {
-                            more: data.more
+                ajax: {
+                    data: function (params) {
+                        return {
+                            term: params.term || '',
+                            page: params.page || 1
                         }
-                    };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: data.more
+                            }
+                        };
+                    },
                 },
             };
 
-            $('#filter-user').select2($.extend({}, user_select2,
+            $('#filter-user').select2($.extend(true, {}, user_select2,
                 {ajax: {url: '{{ url('ticket_user_select2_ajax') }}'}}));
-            $('#filter-assignee').select2($.extend({}, user_select2,
+            $('#filter-assignee').select2($.extend(true, {}, user_select2,
                 {ajax: {url: '{{ url('ticket_assignee_select2_ajax') }}'}}));
         });
     </script>
