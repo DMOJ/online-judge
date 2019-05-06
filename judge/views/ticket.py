@@ -249,6 +249,8 @@ class TicketList(LoginRequiredMixin, ListView):
             queryset = filter_visible_tickets(queryset, self.user, self.profile)
         if self.filter_assignees:
             queryset = queryset.filter(assignees__user__username__in=self.filter_assignees)
+        if self.filter_users:
+            queryset = queryset.filter(user__user__username__in=self.filter_users)
         return queryset.distinct()
 
     def get_context_data(self, **kwargs):
