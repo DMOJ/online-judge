@@ -1,6 +1,8 @@
+from operator import itemgetter
+
 from celery.result import AsyncResult
 from django.contrib import messages
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
@@ -8,7 +10,8 @@ from django.utils.translation import gettext as _, ngettext
 from django.views.generic import DetailView
 from django.views.generic.detail import BaseDetailView
 
-from judge.tasks import rejudge_problem_all, rejudge_problem_by_id, rescore_problem
+from judge.models import Language, Submission
+from judge.tasks import rejudge_problem_filter, rescore_problem
 from judge.utils.celery import redirect_to_task_status
 from judge.utils.views import TitleMixin
 from judge.views.problem import ProblemMixin
@@ -53,31 +56,34 @@ class ManageProblemSubmissionView(TitleMixin, ManageProblemSubmissionMixin, Deta
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['submission_count'] = self.object.submission_set.count()
+        context['languages'] = [(lang_id, short_name or key) for lang_id, key, short_name in
+                                Language.objects.values_list('id', 'key', 'short_name')]
+        context['results'] = sorted(map(itemgetter(0), Submission.RESULT))
         return context
 
 
-class RejudgeAllSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailView):
+class RejudgeSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailView):
     def perform_action(self):
-        status = rejudge_problem_all.delay(self.object.id)
-        return redirect_to_task_status(
-            status, message=_('Rejudging all submissions for %s...') % (self.object.name,),
-            redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id])
-        )
+        if self.request.POST.get('use_range', 'off') == 'on':
+            try:
+                start = int(self.request.POST.get('start'))
+                end = int(self.request.POST.get('end'))
+            except (KeyError, ValueError):
+                return HttpResponseBadRequest()
+            id_range = (start, end)
+        else:
+            id_range = None
 
-
-class RejudgeSubmissionsByIDView(ManageProblemSubmissionActionMixin, BaseDetailView):
-    def perform_action(self):
         try:
-            start = int(self.request.POST.get('start'))
-            end = int(self.request.POST.get('end'))
-        except (KeyError, ValueError):
-            raise Http404()
+            languages = list(map(int, self.request.POST.getlist('language')))
+        except ValueError:
+            return HttpResponseBadRequest()
 
-        status = rejudge_problem_by_id.delay(self.object.id, start, end)
+        status = rejudge_problem_filter.delay(self.object.id, id_range=id_range, languages=languages,
+                                              results=self.request.POST.getlist('result'))
         return redirect_to_task_status(
-            status, message=_('Rejudging submissions in [{start}, {end}] for {problem}...').format(
-                problem=self.object.name, start=start, end=end
-            ), redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id])
+            status, message=_('Rejudging selected submissions for %s...') % (self.object.name,),
+            redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id])
         )
 
 
