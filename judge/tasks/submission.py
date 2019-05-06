@@ -5,30 +5,28 @@ from django.utils.translation import gettext as _
 from judge.models import Submission, Profile, Problem
 from judge.utils.celery import Progress
 
-__all__ = ('rejudge_problem_all', 'rejudge_problem_by_id', 'rescore_problem')
+__all__ = ('rejudge_problem_filter', 'rescore_problem')
 
 
-def rejudge_queryset(task, queryset):
+@shared_task(bind=True)
+def rejudge_problem_filter(self, problem_id, id_range=None, languages=None, results=None):
+    queryset = Submission.objects.filter(problem_id=problem_id)
+    if id_range:
+        start, end = id_range
+        queryset = queryset.filter(id__gte=start, id__lte=end)
+    if languages:
+        queryset = queryset.filter(language_id__in=languages)
+    if results:
+        queryset = queryset.filter(result__in=results)
+
     rejudged = 0
-    with Progress(task, queryset.count()) as p:
+    with Progress(self, queryset.count()) as p:
         for submission in queryset.iterator():
             submission.judge(rejudge=True)
             rejudged += 1
             if rejudged % 10 == 0:
                 p.done = rejudged
     return rejudged
-
-
-@shared_task(bind=True)
-def rejudge_problem_all(self, problem_id):
-    queryset = Submission.objects.filter(problem_id=problem_id)
-    return rejudge_queryset(self, queryset)
-
-
-@shared_task(bind=True)
-def rejudge_problem_by_id(self, problem_id, start, end):
-    queryset = Submission.objects.filter(problem_id=problem_id, id__gte=start, id__lte=end)
-    return rejudge_queryset(self, queryset)
 
 
 @shared_task(bind=True)
