@@ -184,6 +184,14 @@
                         page: params.page || 1
                     }
                 },
+                processResults: function (data) {
+                    return {
+                        results: data.results,
+                        pagination: {
+                            more: data.more
+                        }
+                    };
+                },
             };
 
             $('#filter-user').select2($.extend({}, user_select2,
