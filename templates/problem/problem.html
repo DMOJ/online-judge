@@ -53,11 +53,6 @@
                 if (confirm('Are you sure you want to clone?'))
                     $(this).closest("form").submit();
             })
-            $('a#rejudge-link').click(function (event) {
-                event.preventDefault();
-                if (confirm('Are you sure you want to rejudge all submissions?'))
-                    $(this).closest("form").submit();
-            })
         });
     </script>
 {% endblock %}
@@ -180,16 +175,7 @@
             </form>
         </div>
     {% endif %}
-    
-    {% if perms.judge.rejudge_submission_lot and can_edit_problem %}
-        <div>
-            <form action="{{ url('problem_submission_rejudge', problem.code) }}" method="post">
-                {% csrf_token %}
-                <a id="rejudge-link" href="#">{{ _('Rejudge all submissions') }}</a>
-            </form>
-        </div>
-    {% endif %}
-    
+
     <hr style="padding-top: 0.3em">
 
     <div class="problem-info-entry">

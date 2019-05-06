@@ -699,16 +699,3 @@ def clone_problem(request, problem):
     problem.types = types
     problem.save()
     return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
-
-
-@require_POST
-@login_required
-@permission_required('judge.rejudge_submission_lot')
-def rejudge_submissions(request, problem):
-    problem_model = get_object_or_404(Problem, code=problem)
-    if not problem_model.is_editable_by(request.user):
-        raise PermissionDenied()
-    queryset = Submission.objects.filter(problem__code=problem)
-    for model in queryset:
-        model.judge(rejudge=True)
-    return HttpResponseRedirect(reverse('problem_detail', args=(problem,)))
