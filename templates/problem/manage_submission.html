@@ -83,7 +83,20 @@
                         return;
                     }
                 }
-                $(this).parents('form').submit();
+
+                var $form = $(this).parents('form');
+                $.post('{{ url('problem_submissions_rejudge_preview', problem.code) }}', $form.serialize(), 'text')
+                    .done(function (count) {
+                        if (confirm("{{ _('You are about to rejudge {count} submissions. Are you sure you want to do this?') }}"
+                            .replace('{count}', count))) {
+                            $form.submit();
+                        }
+                    })
+                    .fail(function () {
+                        if (confirm("{{ _('You are about to rejudge a few submissions. Are you sure you want to do this?') }}")) {
+                            $form.submit();
+                        }
+                    });
             });
 
             $use_id.change(function () {
