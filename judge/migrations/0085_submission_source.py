@@ -9,7 +9,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0084_contest_formats'),
+        ('judge', '0001_squashed_0086_contest_formats'),
     ]
 
     operations = [
