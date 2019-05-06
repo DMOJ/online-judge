@@ -187,9 +187,7 @@ class Problem(models.Model):
         if user.has_perm('judge.edit_all_problem') and \
                 (user.has_perm('judge.see_restricted_problem') or not self.is_restricted):
             return True
-        if user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile):
-            return True
-        return False
+        return user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile)
 
     def is_accessible_by(self, user):
         # Problem is public.
@@ -229,6 +227,9 @@ class Problem(models.Model):
             if user.has_perm('judge.see_restricted_problem') or not self.is_restricted:
                 return True
         return False
+
+    def is_subs_manageable_by(self, user):
+        return user.is_staff and user.has_perm('judge.rejudge_submission_lot') and self.is_editable_by(user)
 
     def __str__(self):
         return self.name

@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block media %}
+    <style>
+        .panes {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pane {
+            display: block;
+            max-width: 20em;
+            border: 1px #ccc solid;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .pane h3 {
+            display: block;
+            background: #3b3b3b;
+            padding: 5px 10px 10px;
+            margin: -10px -10px 10px;
+            border-radius: 5px 5px 0 0;
+            color: white;
+        }
+
+        .control-group {
+            margin: 1em 0;
+        }
+
+        .control-group:not(:first-of-type) {
+            border-top: 1px solid #ccc;
+            padding-top: 0.5em;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 0.5em;
+        }
+
+        .control-group select {
+            display: block;
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block js_media %}
+    <script>
+        $(function () {
+            $('#by-lang-filter').select2({
+                multiple: true,
+                placeholder: '{{ _('Leave empty to not filter by language') }}'
+            });
+
+            $('#by-result-filter').select2({
+                multiple: true,
+                placeholder: '{{ _('Leave empty to not filter by result') }}'
+            });
+
+            $('#rescore-all').click(function (e) {
+                e.preventDefault();
+                if (confirm(this.dataset.warning)) {
+                    $(this).parents('form').submit();
+                }
+            });
+
+            var $use_id = $('#by-range-check');
+            var $id_start = $('#by-range-start');
+            var $id_end = $('#by-range-end');
+            $('#rejudge-selected').click(function (e) {
+                e.preventDefault();
+                if ($use_id.prop('checked')) {
+                    var start = parseInt($id_start.val());
+                    var end = parseInt($id_end.val());
+                    if (!start || !end) {
+                        alert("{{ _('Need valid values for both start and end IDs.') }}");
+                        return;
+                    } else if (start > end) {
+                        alert("{{ _('End ID must be after start ID.') }}");
+                        return;
+                    }
+                }
+
+                var $form = $(this).parents('form');
+                $.post('{{ url('problem_submissions_rejudge_preview', problem.code) }}', $form.serialize(), 'text')
+                    .done(function (count) {
+                        if (confirm("{{ _('You are about to rejudge {count} submissions. Are you sure you want to do this?') }}"
+                            .replace('{count}', count))) {
+                            $form.submit();
+                        }
+                    })
+                    .fail(function () {
+                        if (confirm("{{ _('You are about to rejudge a few submissions. Are you sure you want to do this?') }}")) {
+                            $form.submit();
+                        }
+                    });
+            });
+
+            $use_id.change(function () {
+                $('#by-range-filter').find('input').prop('disabled', !this.checked);
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    {% include "messages.html" %}
+
+    <div class="panes">
+        <div class="pane">
+            <h3>{{ _('Rejudge Submissions') }}</h3>
+            <form action="{{ url('problem_submissions_rejudge', problem.code) }}" method="post">
+                {% csrf_token %}
+                <div class="control-group">
+                    <label><input id="by-range-check" type="checkbox" name="use_range" value="on">
+                        {{ _('Filter by ID:') }}</label>
+                    <table id="by-range-filter" class="table">
+                        <tr>
+                            <th><label for="by-range-start">{{ _('Starting ID:') }}</label></th>
+                            <td><input id="by-range-start" name="start" type="number" disabled></td>
+                        </tr>
+                        <tr>
+                            <th><label for="by-range-end">{{ _('Ending ID:') }}</label></th>
+                            <td><input id="by-range-end" name="end" type="number" disabled></td>
+                        </tr>
+                    </table>
+                    <p>{{ _('This range includes both endpoints.') }}</p>
+                </div>
+                <div class="control-group">
+                    <label for="by-lang-filter">{{ _('Filter by language:') }}</label>
+                    <select id="by-lang-filter" name="language" multiple>
+                        {% for id, name in languages %}
+                            <option value="{{ id }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="by-result-filter">{{ _('Filter by result:') }}</label>
+                    <select id="by-result-filter" name="result" multiple>
+                        {% for name in results %}
+                            <option>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <a id="rejudge-selected" class="unselectable button full" href="#">
+                    {{ _('Rejudge selected submissions') }}
+                </a>
+            </form>
+        </div>
+
+        <div class="pane">
+            <h3>{{ _('Rescore Everything') }}</h3>
+            <p id="rescore-warning">{{ _('This will rescore %(count)d submissions.', count=submission_count) }}</p>
+            <form action="{{ url('problem_submissions_rescore_all', problem.code) }}" method="post">
+                {% csrf_token %}
+                <a id="rescore-all" class="unselectable button full" href="#"
+                   data-warning="{{ _('Are you sure you want to rescore %(count)d submissions?', count=submission_count) }}">
+                    {{ _('Rescore all submissions') }}
+                </a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -136,7 +136,8 @@ class Contest(models.Model):
         return self.format_class(self, self.format_config)
 
     def clean(self):
-        if self.start_time >= self.end_time:
+        # Django will complain if you didn't fill in start_time or end_time, so we don't have to.
+        if self.start_time and self.end_time and self.start_time >= self.end_time:
             raise ValidationError('What is this? A contest that ended before it starts?')
         if self.require_registration:
             if self.registration_start_time is None:

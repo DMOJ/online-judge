@@ -363,7 +363,7 @@ ul.pagination {
     line-height: 1;
     color: #000;
     text-shadow: 0 1px 0 #fff;
-    filter: alpha(opacity = 20);
+    filter: alpha(opacity=20);
     opacity: 0.2;
 }
 
@@ -382,7 +382,7 @@ a.close {
         color: #000;
         text-decoration: none;
         cursor: pointer;
-        filter: alpha(opacity = 50);
+        filter: alpha(opacity=50);
         opacity: 0.5;
     }
 }
@@ -471,4 +471,46 @@ ul.select2-selection__rendered {
 
 .semibold {
     font-weight: 600;
+}
+
+.messages {
+    list-style-type: none;
+    padding: 0;
+
+    li {
+        padding: 1em 1.5em;
+        margin-bottom: 1em;
+        border: 1px solid transparent;
+        border-radius: 5px;
+
+        &.debug {
+            color: #383d41;
+            background-color: #e2e3e5;
+            border-color: #d6d8db;
+        }
+
+        &.info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+
+        &.success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        &.warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+        }
+
+        &.error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+    }
 }
