@@ -2,7 +2,7 @@ from operator import itemgetter
 
 from celery.result import AsyncResult
 from django.contrib import messages
-from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.urls import reverse
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
@@ -11,7 +11,7 @@ from django.views.generic import DetailView
 from django.views.generic.detail import BaseDetailView
 
 from judge.models import Language, Submission
-from judge.tasks import rejudge_problem_filter, rescore_problem
+from judge.tasks import rejudge_problem_filter, rescore_problem, apply_submission_filter
 from judge.utils.celery import redirect_to_task_status
 from judge.utils.views import TitleMixin
 from judge.views.problem import ProblemMixin
@@ -62,7 +62,7 @@ class ManageProblemSubmissionView(TitleMixin, ManageProblemSubmissionMixin, Deta
         return context
 
 
-class RejudgeSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailView):
+class BaseRejudgeSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailView):
     def perform_action(self):
         if self.request.POST.get('use_range', 'off') == 'on':
             try:
@@ -79,12 +79,25 @@ class RejudgeSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailView)
         except ValueError:
             return HttpResponseBadRequest()
 
-        status = rejudge_problem_filter.delay(self.object.id, id_range=id_range, languages=languages,
-                                              results=self.request.POST.getlist('result'))
+        return self.generate_response(id_range, languages, self.request.POST.getlist('result'))
+
+    def generate_response(self, id_range, languages, results):
+        raise NotImplementedError()
+
+
+class RejudgeSubmissionsView(BaseRejudgeSubmissionsView):
+    def generate_response(self, id_range, languages, results):
+        status = rejudge_problem_filter.delay(self.object.id, id_range, languages, results)
         return redirect_to_task_status(
             status, message=_('Rejudging selected submissions for %s...') % (self.object.name,),
             redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id])
         )
+
+
+class PreviewRejudgeSubmissionsView(BaseRejudgeSubmissionsView):
+    def generate_response(self, id_range, languages, results):
+        queryset = apply_submission_filter(self.object.submission_set.all(), id_range, languages, results)
+        return HttpResponse(str(queryset.count()))
 
 
 class RescoreAllSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailView):

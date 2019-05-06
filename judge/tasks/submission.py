@@ -5,12 +5,10 @@ from django.utils.translation import gettext as _
 from judge.models import Submission, Profile, Problem
 from judge.utils.celery import Progress
 
-__all__ = ('rejudge_problem_filter', 'rescore_problem')
+__all__ = ('apply_submission_filter', 'rejudge_problem_filter', 'rescore_problem')
 
 
-@shared_task(bind=True)
-def rejudge_problem_filter(self, problem_id, id_range=None, languages=None, results=None):
-    queryset = Submission.objects.filter(problem_id=problem_id)
+def apply_submission_filter(queryset, id_range, languages, results):
     if id_range:
         start, end = id_range
         queryset = queryset.filter(id__gte=start, id__lte=end)
@@ -18,6 +16,13 @@ def rejudge_problem_filter(self, problem_id, id_range=None, languages=None, resu
         queryset = queryset.filter(language_id__in=languages)
     if results:
         queryset = queryset.filter(result__in=results)
+    return queryset
+
+
+@shared_task(bind=True)
+def rejudge_problem_filter(self, problem_id, id_range=None, languages=None, results=None):
+    queryset = Submission.objects.filter(problem_id=problem_id)
+    queryset = apply_submission_filter(queryset, id_range, languages, results)
 
     rejudged = 0
     with Progress(self, queryset.count()) as p:
