@@ -34,7 +34,7 @@ class Command(BaseCommand):
                     contest__participation__contest__key=contest,
                     result='AC', problem__id=problem.id,
                     language__common_name=dmoj_lang
-                ).values_list('user__user__username', 'source')
+                ).values_list('user__user__username', 'source__source')
                 if not subs:
                     print('<no submissions>')
                     continue

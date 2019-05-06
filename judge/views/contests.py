@@ -604,16 +604,16 @@ class ContestRankingBase(ContestMixin, TitleMixin, DetailView):
     tab = None
 
     def get_title(self):
-        return ''
+        raise NotImplementedError()
 
     def get_content_title(self):
         return self.object.name
 
     def get_ranking_list(self):
-        return (None, None)
+        raise NotImplementedError()
 
     def get_context_data(self, **kwargs):
-        context = super(ContestRankingBase, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         if not self.object.can_see_scoreboard(self.request.user):
             raise Http404()
@@ -636,7 +636,7 @@ class ContestRanking(ContestRankingBase):
         return get_contest_ranking_list(self.request, self.object)
 
     def get_context_data(self, **kwargs):
-        context = super(ContestRanking, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['has_rating'] = self.object.ratings.exists()
         return context
 
@@ -651,7 +651,7 @@ class ContestParticipationList(ContestRankingBase, LoginRequiredMixin):
 
     def get_ranking_list(self):
         queryset = self.object.users.filter(user=self.profile, virtual__gte=0).order_by('-virtual')
-        live_link = format_html(u'<a href="{2}#!{1}">{0}</a>', _('Live'), self.profile.username,
+        live_link = format_html('<a href="{2}#!{1}">{0}</a>', _('Live'), self.profile.username,
                                 reverse('contest_ranking', args=[self.object.key]))
 
         return get_contest_ranking_list(
@@ -660,7 +660,7 @@ class ContestParticipationList(ContestRankingBase, LoginRequiredMixin):
             ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users))
 
     def get_context_data(self, **kwargs):
-        context = super(ContestParticipationList, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['has_rating'] = False
         context['now'] = timezone.now()
         context['rank_header'] = _('Participation')
@@ -671,7 +671,7 @@ class ContestParticipationList(ContestRankingBase, LoginRequiredMixin):
             self.profile = get_object_or_404(Profile, user__username=kwargs['user'])
         else:
             self.profile = self.request.profile
-        return super(ContestParticipationList, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
 
 class ContestTagDetailAjax(DetailView):

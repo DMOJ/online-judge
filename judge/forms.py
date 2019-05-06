@@ -85,7 +85,7 @@ class ProblemSubmitForm(ModelForm):
 
     class Meta:
         model = Submission
-        fields = ['problem', 'source', 'language']
+        fields = ['problem', 'language']
 
 
 class EditOrganizationForm(ModelForm):

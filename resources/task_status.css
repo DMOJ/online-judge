@@ -1,0 +1,169 @@
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+.jumbotron {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: #e9ecef;
+    border-radius: 0.3rem;
+}
+
+@media (min-width: 576px) {
+    .jumbotron {
+        padding: 4rem 2rem;
+    }
+}
+
+.jumbotron-fluid {
+    padding-right: 0;
+    padding-left: 0;
+    border-radius: 0;
+}
+
+@keyframes progress-bar-stripes {
+    from {
+        background-position: 1rem 0;
+    }
+    to {
+        background-position: 0 0;
+    }
+}
+
+.progress {
+    display: flex;
+    height: 1rem;
+    overflow: hidden;
+    font-size: 0.75rem;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+}
+
+.progress-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #007bff;
+    transition: width 0.6s ease;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+    .progress-bar {
+        transition: none;
+    }
+}
+
+.progress-bar-striped, .jumbotron .progress.progress-unknown .progress-bar {
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-size: 1rem 1rem;
+}
+
+.progress-bar-animated {
+    animation: progress-bar-stripes 1s linear infinite;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    min-height: 100vh;
+    justify-content: center;
+}
+
+.jumbotron .icon {
+    display: block;
+    margin: 0 auto 3rem;
+    max-width: 15rem;
+}
+
+.jumbotron .action {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+.jumbotron .stage {
+    text-align: center;
+    font-weight: 300;
+}
+
+.jumbotron .progress {
+    background: #007bff;
+    position: relative;
+    height: 2rem;
+}
+
+.jumbotron .progress .progress-bar {
+    background: #28a745;
+    font-size: 1.25rem;
+    height: 2rem;
+}
+
+.jumbotron .progress .progress-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 1.25rem;
+    text-align: center;
+    color: #fff;
+}
+
+.jumbotron .progress.progress-unknown .progress-bar {
+    width: 100%;
+    background-color: #007bff;
+}
+
+.jumbotron .progress.progress-complete .progress-bar {
+    width: 100%;
+}
+
+.jumbotron .progress.progress-failed .progress-bar {
+    width: 100%;
+    background: #dc3545;
+}

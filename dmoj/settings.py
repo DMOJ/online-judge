@@ -150,9 +150,10 @@ INSTALLED_APPS += (
 )
 
 MIDDLEWARE = (
+    'judge.middleware.ShortCircuitMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'judge.middleware.DMOJLoginMiddleware',
@@ -392,6 +393,8 @@ SOCIAL_AUTH_SLUGIFY_FUNCTION = 'judge.social_auth.slugify_username'
 JUDGE_AMQP_PATH = None
 
 MOSS_API_KEY = None
+
+CELERY_WORKER_HIJACK_ROOT_LOGGER = False
 
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:

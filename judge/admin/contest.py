@@ -81,8 +81,11 @@ class ContestForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ContestForm, self).__init__(*args, **kwargs)
         if 'rate_exclude' in self.fields:
-            self.fields['rate_exclude'].queryset = \
-                Profile.objects.filter(contest_history__contest=self.instance).distinct()
+            if self.instance and self.instance.id:
+                self.fields['rate_exclude'].queryset = \
+                    Profile.objects.filter(contest_history__contest=self.instance).distinct()
+            else:
+                self.fields['rate_exclude'].queryset = Profile.objects.none()
         self.fields['banned_users'].widget.can_add_related = False
 
     def clean(self):

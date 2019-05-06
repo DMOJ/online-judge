@@ -4,7 +4,7 @@ from operator import attrgetter
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -66,11 +66,14 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
 class SubmissionSource(SubmissionDetailBase):
     template_name = 'submission/source.html'
 
+    def get_queryset(self):
+        return super().get_queryset().select_related('source')
+
     def get_context_data(self, **kwargs):
         context = super(SubmissionSource, self).get_context_data(**kwargs)
         submission = self.object
-        context['raw_source'] = submission.source.rstrip('\n')
-        context['highlighted_source'] = highlight_code(submission.source, submission.language.pygments)
+        context['raw_source'] = submission.source.source.rstrip('\n')
+        context['highlighted_source'] = highlight_code(submission.source.source, submission.language.pygments)
         return context
 
 
@@ -129,7 +132,7 @@ class SubmissionTestCaseQuery(SubmissionStatus):
 class SubmissionSourceRaw(SubmissionSource):
     def get(self, request, *args, **kwargs):
         submission = self.get_object()
-        return HttpResponse(submission.source, content_type='text/plain')
+        return HttpResponse(submission.source.source, content_type='text/plain')
 
 
 @require_POST
@@ -209,6 +212,12 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                 queryset = queryset.filter(problem__is_public=True)
             elif not self.request.user.has_perm('judge.see_restricted_problem'):
                 queryset = queryset.exclude(problem__is_restricted=True, problem__is_public=False)
+
+            if not self.request.user.has_perm('judge.see_organization_problem'):
+                filter = Q(problem__is_organization_private=False)
+                if self.request.user.is_authenticated:
+                    filter |= Q(problem__organizations__in=self.request.profile.organizations.all())
+                queryset = queryset.filter(filter)
         return queryset
 
     def get_my_submissions_page(self):

@@ -9,7 +9,7 @@ from random import randrange
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.db.models import Count, F, Q, Prefetch
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
@@ -30,7 +30,7 @@ from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemSubmitForm
 from judge.models import ContestSubmission, ContestProblem, Judge, Language, Problem, ProblemGroup, ProblemTranslation, \
-    ProblemType, RuntimeVersion, Solution, Submission, TranslatedProblemForeignKeyQuerySet
+    ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import HAS_PDF, DefaultPdfMaker
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
@@ -187,7 +187,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             if not can_edit:
                 tickets = tickets.filter(own_ticket_filter(user.profile.id))
             context['has_tickets'] = tickets.exists()
-            context['num_open_tickets'] = tickets.filter(is_open=True).count()
+            context['num_open_tickets'] = tickets.filter(is_open=True).values('id').distinct().count()
 
         try:
             context['editorial'] = Solution.objects.get(problem=self.object)
@@ -574,25 +574,33 @@ def problem_submit(request, problem=None, submission=None):
                                        _('You have been declared persona non grata for this problem. '
                                          'You are permanently barred from submitting this problem.'))
 
-            if profile.current_contest is not None:
-                try:
-                    contest_problem = form.cleaned_data['problem'].contests.get(contest=profile.current_contest.contest)
-                except ContestProblem.DoesNotExist:
-                    model = form.save()
+            with transaction.atomic():
+                if profile.current_contest is not None:
+                    try:
+                        contest_problem = form.cleaned_data['problem'].contests.get(contest=profile.current_contest.contest)
+                    except ContestProblem.DoesNotExist:
+                        model = form.save()
+                    else:
+                        max_subs = contest_problem.max_submissions
+                        if max_subs and get_contest_submission_count(problem, profile) >= max_subs:
+                            return generic_message(request, _('Too many submissions'),
+                                                    _('You have exceeded the submission limit for this problem.'))
+                        model = form.save()
+                        contest = ContestSubmission(submission=model, problem=contest_problem,
+                                                    participation=profile.current_contest)
+                        contest.save()
                 else:
-                    max_subs = contest_problem.max_submissions
-                    if max_subs and get_contest_submission_count(problem, profile) >= max_subs:
-                        return generic_message(request, _('Too many submissions'),
-                                                _('You have exceeded the submission limit for this problem.'))
                     model = form.save()
-                    contest = ContestSubmission(submission=model, problem=contest_problem,
-                                                participation=profile.current_contest)
-                    contest.save()
-            else:
-                model = form.save()
 
-            profile.update_contest()
+                # Create the SubmissionSource object
+                source = SubmissionSource(submission=model, source=form.cleaned_data['source'])
+                source.save()
+                profile.update_contest()
+
+            # Save a query
+            model.source = source
             model.judge(rejudge=False)
+
             return HttpResponseRedirect(reverse('submission_status', args=[str(model.id)]))
         else:
             form_data = form.cleaned_data
@@ -607,8 +615,8 @@ def problem_submit(request, problem=None, submission=None):
                 raise Http404()
         if submission is not None:
             try:
-                sub = get_object_or_404(Submission, id=int(submission))
-                initial['source'] = sub.source
+                sub = get_object_or_404(Submission.objects.select_related('source', 'language'), id=int(submission))
+                initial['source'] = sub.source.source
                 initial['language'] = sub.language
             except ValueError:
                 raise Http404()
