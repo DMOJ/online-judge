@@ -223,7 +223,7 @@
 
                 <form id="filter-form" name="form" action="" method="get">
                     <div id="own-box" class="filter-check">
-                        <input id="own" type="checkbox" name="own"{% if filter_status %} checked{% endif %} value="1">
+                        <input id="own" type="checkbox" name="own"{% if filter_status.own %} checked{% endif %} value="1">
                         <label for="own">{{ _('Show my tickets only') }}</label>
                     </div>
 
