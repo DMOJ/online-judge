@@ -198,7 +198,7 @@ class ProblemAdmin(VersionAdmin):
                 ) `data` ON (`data`.id = prof.id)
                 SET prof.points = prof.points {} `data`.delta
                 WHERE `data`.delta IS NOT NULL
-            '''.format(', '.join(['%s'] * len(ids)), sign), ids)
+            '''.format(', '.join(['%s'] * len(ids)), sign), list(ids))
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
