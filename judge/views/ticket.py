@@ -291,9 +291,9 @@ class ProblemTicketListView(TicketList):
             raise Http404()
         problem = Problem.objects.get(code=self.kwargs['problem'])
         if problem.is_editable_by(self.request.user):
-            return problem.tickets.all()
+            return problem.tickets.order_by('-id')
         elif problem.is_accessible_by(self.request.user):
-            return problem.tickets.filter(own_ticket_filter(self.profile.id))
+            return problem.tickets.filter(own_ticket_filter(self.profile.id)).order_by('-id')
         raise Http404()
 
 
