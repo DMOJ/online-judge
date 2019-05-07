@@ -185,10 +185,10 @@ class TicketNotesForm(forms.Form):
     notes = forms.CharField(widget=forms.Textarea(), required=False)
 
 
-class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, FormView):
+class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectFormView):
     template_name = 'ticket/edit-notes.html'
     form_class = TicketNotesForm
-    object = None
+    context_object_name = 'ticket'
 
     def get_initial(self):
         return {'notes': self.get_object().notes}
