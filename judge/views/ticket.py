@@ -152,7 +152,7 @@ class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectFormVi
 
     def get_context_data(self, **kwargs):
         context = super(TicketView, self).get_context_data(**kwargs)
-        context['messages'] = self.object.messages.select_related('user__user')
+        context['ticket_messages'] = self.object.messages.select_related('user__user')
         context['assignees'] = self.object.assignees.select_related('user')
         context['last_msg'] = event.last()
         return context
