@@ -552,7 +552,7 @@ class ContestRanking(ContestRankingBase):
         return context
 
 
-class ContestParticipationList(ContestRankingBase, LoginRequiredMixin):
+class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
     tab = 'participation'
 
     def get_title(self):
