@@ -650,6 +650,7 @@ def clone_problem(request, problem):
         raise Http404()
 
     languages = problem.allowed_languages.all()
+    language_limits = problem.language_limits.all()
     types = problem.types.all()
     problem.pk = None
     problem.is_public = False
@@ -667,6 +668,7 @@ def clone_problem(request, problem):
             else:
                 break
     problem.authors.add(request.user.profile)
-    problem.allowed_languages = languages
-    problem.types = types
+    problem.allowed_languages.set(languages)
+    problem.language_limits.set(language_limits)
+    problem.types.set(types)
     return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
