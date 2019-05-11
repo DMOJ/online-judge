@@ -654,6 +654,8 @@ def clone_problem(request, problem):
     types = problem.types.all()
     problem.pk = None
     problem.is_public = False
+    problem.ac_rate = 0
+    problem.user_count = 0
     problem.code += '_clone'
     try:
         problem.save()
