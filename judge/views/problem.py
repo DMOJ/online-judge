@@ -536,7 +536,7 @@ def problem_submit(request, problem=None, submission=None):
         if form.is_valid():
             if (not request.user.has_perm('judge.spam_submission') and
                         Submission.objects.filter(user=profile, was_rejudged=False).exclude(
-                            status__in=['D', 'IE', 'CE', 'AB']).count() > 2):
+                            getattr(settings, DMOJ_SUBMISSIONS_MAX_CONCURRENT_SUBS, 2)
                 return HttpResponse('<h1>You submitted too many submissions.</h1>', status=429)
             if not form.cleaned_data['problem'].allowed_languages.filter(
                     id=form.cleaned_data['language'].id).exists():
