@@ -163,7 +163,7 @@ class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectFormVi
 
     def get_context_data(self, **kwargs):
         context = super(TicketView, self).get_context_data(**kwargs)
-        context['messages'] = self.object.messages.select_related('user__user')
+        context['ticket_messages'] = self.object.messages.select_related('user__user')
         context['assignees'] = self.object.assignees.select_related('user')
         context['last_msg'] = event.last()
         return context
@@ -196,10 +196,10 @@ class TicketNotesForm(forms.Form):
     notes = forms.CharField(widget=forms.Textarea(), required=False)
 
 
-class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, FormView):
+class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectFormView):
     template_name = 'ticket/edit-notes.html'
     form_class = TicketNotesForm
-    object = None
+    context_object_name = 'ticket'
 
     def get_initial(self):
         return {'notes': self.get_object().notes}

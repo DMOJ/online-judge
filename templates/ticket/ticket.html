@@ -336,7 +336,7 @@
 
         <div class="ticket-messages">
             <main class="messages">
-                {% for message in messages %}
+                {% for message in ticket_messages %}
                     <section id="message-{{ message.id }}" class="message">
                         <div class="info">
                             <a href="{{ url('user_page', message.user.user.username) }}" class="user">
