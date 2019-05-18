@@ -679,8 +679,6 @@ def clone_problem(request, problem):
     language_limits = problem.language_limits.all()
     types = problem.types.all()
     problem.pk = None
-    problem.ac_rate = 0
-    problem.user_count = 0
     problem.is_public = False
     problem.ac_rate = 0
     problem.user_count = 0
