@@ -9,6 +9,7 @@ from django.db.models.functions import Coalesce
 from django.forms import ModelForm
 from django.http import HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views.generic import View
@@ -70,6 +71,11 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         page = self.get_comment_page()
 
         if self.is_comment_locked():
+            return HttpResponseForbidden()
+
+        if request.profile.is_external_user and \
+                Comment.objects.filter(author=request.profile,
+                                       time__gte=timezone.now()-timezone.timedelta(minutes=10)).exists():
             return HttpResponseForbidden()
 
         parent = request.POST.get('parent')

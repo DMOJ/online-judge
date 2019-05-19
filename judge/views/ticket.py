@@ -12,6 +12,7 @@ from django.template.defaultfilters import truncatechars
 from django.template.loader import get_template
 from django.urls import reverse
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html, linebreaks
 from django.utils.safestring import mark_safe
@@ -48,6 +49,10 @@ class TicketForm(forms.Form):
             profile = self.request.user.profile
             if profile.mute:
                 raise ValidationError(_('Your part is silent, little toad.'))
+            if profile.is_external_user and \
+                Ticket.objects.filter(user=profile,
+                                      time__gte=timezone.now()-timezone.timedelta(minutes=10)).exists():
+                raise ValidationError(_('You may only make a ticket once every 10 minutes.'))
         return super(TicketForm, self).clean()
 
 
