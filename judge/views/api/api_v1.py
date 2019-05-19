@@ -213,7 +213,7 @@ def api_v1_submission_detail(request, submission):
 
     submission = get_object_or_404(Submission, id=submission)
 
-    if user.profile.current_contest is not None:
+    if not submission.is_accessible_by(user) or user.profile.current_contest is not None:
         return JsonResponse({})
 
     resp = {
@@ -244,10 +244,7 @@ def api_v1_submission_source(request, submission):
 
     submission = get_object_or_404(Submission, id=submission)
 
-    if not submission.is_accessible_by(user):
-        raise Http404()
-
-    if user.profile.current_contest is not None:
+    if not submission.is_accessible_by(user) or user.profile.current_contest is not None:
         return JsonResponse({})
 
     return JsonResponse({
