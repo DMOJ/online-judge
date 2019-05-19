@@ -53,7 +53,7 @@
                 {% endtrans -%}
             </b></div>
 
-            {% if not user.is_contest_account and not user.is_unlisted %}
+            {% if not user.is_external_user and not user.is_unlisted %}
                 <div><b class="semibold">{{ _('Rank by points:') }}</b> #{{ rank }}</div>
             {% endif %}
             <div>
@@ -71,7 +71,7 @@
             {% if ratings %}
                 <br>
                 <div><b>{{ ratings|length }} contests written</b></div>
-                {% if not user.is_contest_account and not user.is_unlisted %}
+                {% if not user.is_external_user and not user.is_unlisted %}
                     <div><b class="semibold">{{ _('Rank by rating:') }}</b> #{{ rating_rank }}</div>
                 {% endif %}
                 <div><b class="semibold">{{ _('Rating:') }}</b> {{ rating_number(rating) }}</div>

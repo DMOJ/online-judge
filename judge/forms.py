@@ -62,12 +62,12 @@ class ProfileForm(ModelForm):
         super(ProfileForm, self).__init__(*args, **kwargs)
         if not user.has_perm('judge.edit_all_organization'):
             filter = Q(id__in=user.profile.organizations.all())
-            if not user.profile.is_contest_account:
+            if not user.profile.is_external_user:
                 filter |= Q(is_open=True)
             self.fields['organizations'].queryset = Organization.objects.filter(filter)
 
     def clean_organizations(self):
-        if self.instance.is_contest_account:
+        if self.instance.is_external_user:
             return self.instance.organizations.all()
         return self.cleaned_data['organizations']
 

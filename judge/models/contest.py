@@ -169,19 +169,25 @@ class Contest(models.Model):
 
     @classmethod
     def contests_list(cls, user):
-        if not user.is_authenticated:
-            return cls.objects.filter(tags__name__in=['external'], is_public=True, is_private=False)
-
         profile = user.profile
         queryset = cls.objects.all().defer('description', 'registration_page')
 
-        if profile.is_contest_account:
-            queryset = queryset.filter(organizations__in=profile.organizations.all())
+        if not user.is_authenticated or profile.is_external_user:
+            filter = Q(tags__name='external')
+            if user.is_authenticated:
+                filter |= Q(organizations__in=profile.organizations.all())
+            queryset = queryset.filter(filter)
 
         if not user.has_perm('judge.see_private_contest'):
-            queryset = queryset.filter(Q(is_public=True) | Q(organizers=profile))
+            filter = Q(is_public=True)
+            if user.is_authenticated:
+                filter |= Q(organizers=profile)
+            queryset = queryset.filter(filter)
         if not user.has_perm('judge.edit_all_contest'):
-            queryset = queryset.filter(Q(is_private=False) | Q(organizations__in=profile.organizations.all()))
+            filter = Q(is_private=False)
+            if user.is_authenticated:
+                filter |= Q(organizations__in=profile.organizations.all())
+            queryset = queryset.filter(filter)
         return queryset.distinct()
 
     @property
@@ -262,12 +268,12 @@ class Contest(models.Model):
         return True
 
     def is_accessible_by(self, user):
-        if not user.is_authenticated:
-            return self.is_public and not self.is_private and 'external' in self.tags.values_list('name', flat=True)
-
-        if user.profile.is_contest_account and \
-                not self.organizations.filter(id__in=user.profile.organizations.all()).exists():
+        is_external = 'external' in self.tags.values_list('name', flat=True)
+        if not user.is_authenticated and not is_external:
             return False
+        if user.is_authenticated and user.profile.is_external_user:
+            if not is_external and not self.organizations.filter(id__in=user.profile.organizations.all()).exists():
+                return False
 
         # Contest is public
         if self.is_public:

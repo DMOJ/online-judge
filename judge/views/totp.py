@@ -44,8 +44,6 @@ class TOTPEnableView(TOTPView):
 
     def get(self, request, *args, **kwargs):
         profile = self.profile
-        if profile.is_contest_account:
-            raise Http404()
         if not profile.totp_key:
             profile.totp_key = pyotp.random_base32(length=32)
             profile.save()
@@ -55,8 +53,6 @@ class TOTPEnableView(TOTPView):
         return self.profile.is_totp_enabled
 
     def post(self, request, *args, **kwargs):
-        if self.profile.is_contest_account:
-            raise Http404()
         if not self.profile.totp_key:
             return HttpResponseBadRequest('No TOTP key generated on server side?')
         return super(TOTPEnableView, self).post(request, *args, **kwargs)

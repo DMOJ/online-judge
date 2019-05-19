@@ -33,9 +33,6 @@ def get_request_user(request):
 def api_v1_contest_list(request):
     user = get_request_user(request)
 
-    if user.profile.is_contest_account:
-        return JsonResponse({})
-
     queryset = Contest.contests_list(user).prefetch_related(
         Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description')
     
@@ -53,7 +50,7 @@ def api_v1_contest_detail(request, contest):
 
     contest = get_object_or_404(Contest, key=contest)
 
-    if not contest.is_accessible_by(user) or user.profile.is_contest_account:
+    if not contest.is_accessible_by(user):
         raise Http404()
 
     in_contest = contest.is_in_contest(user)
@@ -104,9 +101,6 @@ def api_v1_contest_detail(request, contest):
 def api_v1_problem_list(request):
     user = get_request_user(request)
 
-    if not user.is_authenticated or user.profile.is_contest_account:
-        return JsonResponse({})
-
     queryset = Problem.problems_list(user)
     
     if settings.ENABLE_FTS and 'search' in request.GET:
@@ -125,9 +119,6 @@ def api_v1_problem_list(request):
 
 def api_v1_problem_info(request, problem):
     user = get_request_user(request)
-
-    if not user.is_authenticated or user.profile.is_contest_account:
-        raise Http404()
 
     p = get_object_or_404(Problem, code=problem)
     if not p.is_accessible_by(user):
@@ -153,9 +144,6 @@ def api_v1_problem_info(request, problem):
 def api_v1_user_list(request):
     user = get_request_user(request)
 
-    if not user.is_authenticated or user.profile.is_contest_account:
-        return JsonResponse({})
-
     queryset = Profile.objects.filter(is_unlisted=False).values_list('user__username', 'points', 'display_rank')
     return JsonResponse({username: {
         'points': points,
@@ -165,9 +153,6 @@ def api_v1_user_list(request):
 
 def api_v1_user_info(request, username):
     user = get_request_user(request)
-
-    if not user.is_authenticated or user.profile.is_contest_account:
-        return JsonResponse({})
 
     profile = get_object_or_404(Profile, user__username=username)
     submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True, problem__is_organization_private=False)
@@ -205,9 +190,6 @@ def api_v1_user_info(request, username):
 def api_v1_user_submissions(request, username):
     user = get_request_user(request)
 
-    if not user.is_authenticated or user.profile.is_contest_account:
-        return JsonResponse({})
-
     profile = get_object_or_404(Profile, user__username=username)
     subs = Submission.objects.filter(user=profile, problem__is_public=True, problem__is_organization_private=False)
 
@@ -230,9 +212,6 @@ def api_v1_submission_detail(request, submission):
     user = get_request_user(request)
 
     submission = get_object_or_404(Submission, id=submission)
-    
-    if not submission.is_accessible_by(user) or user.profile.is_contest_account:
-        raise Http404()
 
     if user.profile.current_contest is not None:
         return JsonResponse({})
@@ -265,7 +244,7 @@ def api_v1_submission_source(request, submission):
 
     submission = get_object_or_404(Submission, id=submission)
 
-    if not submission.is_accessible_by(user) or user.profile.is_contest_account:
+    if not submission.is_accessible_by(user):
         raise Http404()
 
     if user.profile.current_contest is not None:

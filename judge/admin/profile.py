@@ -47,11 +47,11 @@ class ProfileAdmin(VersionAdmin):
     fieldsets = (
         (None,                  {'fields': ('user', 'display_rank')}),
         (_('User Settings'),    {'fields': ('organizations', 'timezone', 'language', 'ace_theme', 'math_engine')}),
-        (_('Administration'),   {'fields': ('is_contest_account', 'mute', 'is_unlisted', 'is_totp_enabled',
+        (_('Administration'),   {'fields': ('is_external_user', 'mute', 'is_unlisted', 'is_totp_enabled',
                                             'api_token', 'last_access', 'ip', 'current_contest', 'notes')}),
         (_('Text Fields'),      {'fields': ('about', 'user_script')}),
     )
-    list_display = ('user', 'full_name', 'email', 'is_totp_enabled', 'is_contest_account',
+    list_display = ('user', 'full_name', 'email', 'is_totp_enabled', 'is_external_user',
                     'date_joined', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
     search_fields = ('user__username', 'user__first_name', 'user__last_name', 'ip', 'user__email')

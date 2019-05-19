@@ -120,7 +120,7 @@ class OrganizationUsers(OrganizationDetailView):
 
 class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
-        if request.user.profile.is_contest_account:
+        if request.user.profile.is_external_user:
             raise Http404()
 
         org = self.get_object()

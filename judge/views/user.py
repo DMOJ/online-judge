@@ -98,7 +98,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
         context['hide_solved'] = int(self.hide_solved)
         context['authored'] = self.object.authored_problems.filter(is_public=True, is_organization_private=False).order_by('code')
-        context['rank'] = Profile.objects.filter(is_contest_account=False, is_unlisted=False,
+        context['rank'] = Profile.objects.filter(is_external_user=False, is_unlisted=False,
                                                  performance_points__gt=self.object.performance_points).count() + 1
 
         if not self.request.user.is_authenticated:
@@ -108,9 +108,9 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context['rating'] = rating[0] if rating else None
 
         if rating:
-            context['rating_rank'] = Profile.objects.filter(is_contest_account=False, is_unlisted=False,
+            context['rating_rank'] = Profile.objects.filter(is_external_user=False, is_unlisted=False,
                                                             rating__gt=self.object.rating).count() + 1
-            context['rated_users'] = Profile.objects.filter(is_contest_account=False, is_unlisted=False,
+            context['rated_users'] = Profile.objects.filter(is_external_user=False, is_unlisted=False,
                                                             rating__isnull=False).count()
         context.update(self.object.ratings.aggregate(min_rating=Min('rating'), max_rating=Max('rating'),
                                                      contests=Count('contest')))
@@ -293,7 +293,7 @@ def edit_profile(request):
 @login_required
 def generate_api_token(request):
     profile = Profile.objects.get(user=request.user)
-    if profile.mute or profile.is_contest_account:
+    if profile.mute:
         raise Http404()
     with transaction.atomic(), revisions.create_revision():
         profile.api_token = pyotp.random_base32(length=32)
@@ -314,7 +314,7 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     default_sort = '-performance_points'
 
     def get_queryset(self):
-        return (Profile.objects.filter(is_contest_account=False, is_unlisted=False).order_by(self.order, 'id').select_related('user')
+        return (Profile.objects.filter(is_external_user=False, is_unlisted=False).order_by(self.order, 'id').select_related('user')
                 .only('display_rank', 'user__username', 'points', 'rating', 'performance_points',
                       'problem_count'))
 
@@ -353,8 +353,8 @@ def user_ranking_redirect(request):
     except KeyError:
         raise Http404()
     user = get_object_or_404(Profile, user__username=username)
-    rank = Profile.objects.filter(is_contest_account=False, is_unlisted=False, performance_points__gt=user.performance_points).count()
-    rank += Profile.objects.filter(is_contest_account=False, is_unlisted=False, performance_points__exact=user.performance_points, id__lt=user.id).count()
+    rank = Profile.objects.filter(is_external_user=False, is_unlisted=False, performance_points__gt=user.performance_points).count()
+    rank += Profile.objects.filter(is_external_user=False, is_unlisted=False, performance_points__exact=user.performance_points, id__lt=user.id).count()
     page = rank // UserList.paginate_by
     return HttpResponseRedirect('%s%s#!%s' % (reverse('user_list'), '?page=%d' % (page + 1) if page else '', username))
 

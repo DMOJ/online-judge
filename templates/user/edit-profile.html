@@ -133,83 +133,81 @@
                 </tr>
             </table>
             
-            {% if not profile.is_contest_account %}
-                <hr>
-                <table border="0" style="padding-top:0.7em">
-                    {% if form.newsletter %}
-                        <tr>
-                            <td colspan="3">
-                                {{ form.newsletter }}
-                                <label for="id_newsletter" style="float: unset" class="inline-header grayed">
-                                    {{- _('Notify me about upcoming contests') -}}
-                                </label>
-                            </td>
-                        </tr>
-                    {% endif %}
+            <hr>
+            <table border="0" style="padding-top:0.7em">
+                {% if form.newsletter %}
                     <tr>
                         <td colspan="3">
-                            {{ form.test_site }}
-                            <label for="id_test_site" style="float: unset" class="inline-header grayed">
-                                {{- form.test_site.label -}}
+                            {{ form.newsletter }}
+                            <label for="id_newsletter" style="float: unset" class="inline-header grayed">
+                                {{- _('Notify me about upcoming contests') -}}
                             </label>
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="3">
-                            <a href="http://www.gravatar.com/" title="{{ _('Change your avatar') }}"
-                               target="_blank" class="inline-header">{{ _('Change your avatar') }}</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <a href="{{ url('password_change') }}" class="inline-header">
-                                {{ _('Change your password') }}
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><span class="inline-header grayed">
-                            {% if profile.is_totp_enabled %}
-                                {{ _('Two Factor Authentication is enabled') }}:
+                {% endif %}
+                <tr>
+                    <td colspan="3">
+                        {{ form.test_site }}
+                        <label for="id_test_site" style="float: unset" class="inline-header grayed">
+                            {{- form.test_site.label -}}
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <a href="http://www.gravatar.com/" title="{{ _('Change your avatar') }}"
+                           target="_blank" class="inline-header">{{ _('Change your avatar') }}</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <a href="{{ url('password_change') }}" class="inline-header">
+                            {{ _('Change your password') }}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><span class="inline-header grayed">
+                        {% if profile.is_totp_enabled %}
+                            {{ _('Two Factor Authentication is enabled') }}:
+                        {% else %}
+                            {{ _('Two Factor Authentication is disabled') }}:
+                        {% endif %}
+                    </span></td>
+                    <td>
+                        {% if profile.is_totp_enabled %}
+                            {% if enforce_staff_2fa and request.user.is_staff %}
+                                <span class="grayed"><i>{{ _('Staff members may not disable 2FA.') }}</i></span>
                             {% else %}
-                                {{ _('Two Factor Authentication is disabled') }}:
+                                <a href="{{ url('disable_2fa') }}" class="button inline-button">Disable</a>
                             {% endif %}
-                        </span></td>
-                        <td>
-                            {% if profile.is_totp_enabled %}
-                                {% if enforce_staff_2fa and request.user.is_staff %}
-                                    <span class="grayed"><i>{{ _('Staff members may not disable 2FA.') }}</i></span>
-                                {% else %}
-                                    <a href="{{ url('disable_2fa') }}" class="button inline-button">Disable</a>
-                                {% endif %}
+                        {% else %}
+                            <a href="{{ url('enable_2fa') }}" class="button inline-button">Enable</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><label class="inline-header grayed">{{ _('API Token') }}:</label></td>
+                    <td style="font-family:monospace; min-width:20em;">
+                        <p id="api-token">
+                            {% if profile.api_token %}
+                                <b>{{ profile.api_token }}</b>
                             {% else %}
-                                <a href="{{ url('enable_2fa') }}" class="button inline-button">Enable</a>
+                                {{ _('No API token') }}
                             {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label class="inline-header grayed">{{ _('API Token') }}:</label></td>
-                        <td style="font-family:monospace; min-width:20em;">
-                            <p id="api-token">
-                                {% if profile.api_token %}
-                                    <b>{{ profile.api_token }}</b>
-                                {% else %}
-                                    {{ _('No API token') }}
-                                {% endif %}
-                            </p>
-                        </td>
-                        <td>
-                            <a id="generate-api-token-link" class="button inline-button" href="#">
-                                {% if profile.api_token %}
-                                    {{ _('Regenerate') }}
-                                {% else %}
-                                    {{ _('Generate') }}
-                                {% endif %}
-                            </a>
-                        </td>
-                    </tr>
-                </table>
-            {% endif %}
+                        </p>
+                    </td>
+                    <td>
+                        <a id="generate-api-token-link" class="button inline-button" href="#">
+                            {% if profile.api_token %}
+                                {{ _('Regenerate') }}
+                            {% else %}
+                                {{ _('Generate') }}
+                            {% endif %}
+                        </a>
+                    </td>
+                </tr>
+            </table>
             <hr>
             <div class="block-header">{{ _('User-script') }}:</div>
             {{ form.user_script }}

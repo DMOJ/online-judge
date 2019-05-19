@@ -549,20 +549,18 @@ def problem_submit(request, problem=None, submission=None):
                     get_object_or_404(Submission, id=int(submission)).user.user != request.user:
         raise PermissionDenied()
 
-    profile = request.user.profile
+    profile = request.profile
     
-    # Contest accounts should not be able to submit outside of contests
-    if profile.is_contest_account:
-        if profile.current_contest is None \
-                or not profile.current_contest.contest.contest_problems.filter(problem__code=problem).exists():
-            raise PermissionDenied()
-
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))
         if form.is_valid():
-            if (not request.user.has_perm('judge.spam_submission') and
-                        Submission.objects.filter(user=profile, was_rejudged=False).exclude(
-                            status__in=['D', 'IE', 'CE', 'AB']).count() > 2):
+            submission_count = Submission.objects.filter(user=profile, was_rejudged=False).exclude(
+                                    status__in=['D', 'IE', 'CE', 'AB']).count()
+
+            exceeded_limit = (profile.is_external_user and submission_count > 0) or \
+                             (not profile.is_external_user and submission_count > 2)
+
+            if not request.user.has_perm('judge.spam_submission') and exceeded_limit:
                 return HttpResponse('<h1>You submitted too many submissions.</h1>', status=429)
             if not form.cleaned_data['problem'].allowed_languages.filter(
                     id=form.cleaned_data['language'].id).exists():
