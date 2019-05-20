@@ -46,15 +46,6 @@
 
 {% block content_js_media %}
     {% include "comments/media-js.html" %}
-    <script>
-        $(function () {
-            $('a#clone-link').click(function (event) {
-                event.preventDefault();
-                if (confirm('Are you sure you want to clone?'))
-                    $(this).closest("form").submit();
-            })
-        });
-    </script>
 {% endblock %}
 
 {% block title_row %}
@@ -167,10 +158,7 @@
 
     {% if perms.judge.clone_problem %}
         <div>
-            <form action="{{ url('problem_clone', problem.code) }}" method="post">
-                {% csrf_token %}
-                <a id="clone-link" href="#">{{ _('Clone problem') }}</a>
-            </form>
+            <a href="{{ url('problem_clone', problem.code) }}">{{ _('Clone problem') }}</a>
         </div>
     {% endif %}
 
