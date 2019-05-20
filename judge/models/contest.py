@@ -169,7 +169,7 @@ class Contest(models.Model):
 
     @classmethod
     def contests_list(cls, user):
-        profile = user.profile
+        profile = user.profile if user.is_authenticated else None
         queryset = cls.objects.all().defer('description', 'registration_page')
 
         if not user.is_authenticated or profile.is_external_user:
