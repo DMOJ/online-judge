@@ -111,7 +111,7 @@ urlpatterns = [
         url(r'^/raw$', problem.ProblemRaw.as_view(), name='problem_raw'),
         url(r'^/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
         url(r'^/pdf/(?P<language>[a-z-]+)$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
-        url(r'^/clone', problem.clone_problem, name='problem_clone'),
+        url(r'^/clone', problem.ProblemClone.as_view(), name='problem_clone'),
         url(r'^/submit$', problem.problem_submit, name='problem_submit'),
         url(r'^/resubmit/(?P<submission>\d+)$', problem.problem_submit, name='problem_submit'),
 

@@ -1,4 +1,3 @@
-import itertools
 import logging
 import os
 import shutil
@@ -7,7 +6,8 @@ from operator import itemgetter
 from random import randrange
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import IntegrityError, transaction
 from django.db.models import Count, Q, F, Prefetch
@@ -28,7 +28,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
-from judge.forms import ProblemSubmitForm
+from judge.forms import ProblemCloneForm, ProblemSubmitForm
 from judge.models import ContestSubmission, ContestProblem, Judge, Language, Problem, ProblemGroup, ProblemTranslation, \
     ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import HAS_PDF, DefaultPdfMaker
@@ -38,7 +38,7 @@ from judge.utils.problems import contest_completed_ids, user_completed_ids, cont
     hot_problems
 from judge.utils.strings import safe_int_or_none, safe_float_or_none
 from judge.utils.tickets import own_ticket_filter
-from judge.utils.views import TitleMixin, generic_message, QueryStringSortMixin
+from judge.utils.views import SingleObjectFormView, TitleMixin, generic_message, QueryStringSortMixin
 
 
 def get_contest_problem(problem, profile):
@@ -641,36 +641,27 @@ def problem_submit(request, problem=None, submission=None):
     })
 
 
-@require_POST
-@login_required
-@permission_required('judge.clone_problem')
-def clone_problem(request, problem):
-    problem = get_object_or_404(Problem, code=problem)
-    if not problem.is_accessible_by(request.user):
-        raise Http404()
+class ProblemClone(ProblemMixin, PermissionRequiredMixin, TitleMixin, SingleObjectFormView):
+    title = _('Clone Problem')
+    template_name = 'problem/clone.html'
+    form_class = ProblemCloneForm
+    permission_required = 'judge.clone_problem'
 
-    languages = problem.allowed_languages.all()
-    language_limits = problem.language_limits.all()
-    types = problem.types.all()
-    problem.pk = None
-    problem.is_public = False
-    problem.ac_rate = 0
-    problem.user_count = 0
-    problem.code += '_clone'
-    try:
+    def form_valid(self, form):
+        problem = self.object
+
+        languages = problem.allowed_languages.all()
+        language_limits = problem.language_limits.all()
+        types = problem.types.all()
+        problem.pk = None
+        problem.is_public = False
+        problem.ac_rate = 0
+        problem.user_count = 0
+        problem.code = form.cleaned_data['code']
         problem.save()
-    except IntegrityError:
-        code = problem.code
-        for i in itertools.count(1):
-            problem.code = '%s%d' % (code, i)
-            try:
-                problem.save()
-            except IntegrityError:
-                pass
-            else:
-                break
-    problem.authors.add(request.user.profile)
-    problem.allowed_languages.set(languages)
-    problem.language_limits.set(language_limits)
-    problem.types.set(types)
-    return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
+        problem.authors.add(self.request.profile)
+        problem.allowed_languages.set(languages)
+        problem.language_limits.set(language_limits)
+        problem.types.set(types)
+
+        return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
