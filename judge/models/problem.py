@@ -3,7 +3,7 @@ from operator import attrgetter
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
-from django.core.validators import RegexValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 from django.db.models import F, QuerySet, CASCADE, SET_NULL
 from django.db.models.expressions import RawSQL
@@ -108,10 +108,11 @@ class Problem(models.Model):
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'), on_delete=CASCADE)
     time_limit = models.FloatField(verbose_name=_('time limit'),
                                    help_text=_('The time limit for this problem, in seconds. '
-                                               'Fractional seconds (e.g. 1.5) are supported.'))
-    memory_limit = models.IntegerField(verbose_name=_('memory limit'),
-                                       help_text=_('The memory limit for this problem, in kilobytes '
-                                                   '(e.g. 64mb = 65536 kilobytes).'))
+                                               'Fractional seconds (e.g. 1.5) are supported.'),
+                                   validators=[MinValueValidator(0), MaxValueValidator(2000)])
+    memory_limit = models.PositiveIntegerField(verbose_name=_('memory limit'),
+                                               help_text=_('The memory limit for this problem, in kilobytes '
+                                                           '(e.g. 64mb = 65536 kilobytes).'))
     short_circuit = models.BooleanField(default=False)
     points = models.FloatField(verbose_name=_('points'))
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
