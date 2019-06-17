@@ -48,8 +48,13 @@ def judge_request(packet, reply=True):
         return result
 
 
-def judge_submission(submission, rejudge):
+def judge_submission(submission, rejudge, batch_rejudge=False):
     from .models import ContestSubmission, Submission, SubmissionTestCase
+
+    CONTEST_SUBMISSION_PRIORITY = 0
+    DEFAULT_PRIORITY = 1
+    REJUDGE_PRIORITY = 2
+    BATCH_REJUDGE_PRIORITY = 3
 
     updates = {'time': None, 'memory': None, 'points': None, 'result': None, 'error': None,
                'was_rejudged': rejudge, 'status': 'QU'}
@@ -59,9 +64,9 @@ def judge_submission(submission, rejudge):
         updates['is_pretested'] = ContestSubmission.objects.filter(submission=submission) \
             .values_list('problem__contest__run_pretests_only', flat=True)[0]
     except IndexError:
-        priority = 1
+        priority = DEFAULT_PRIORITY
     else:
-        priority = 0
+        priority = CONTEST_SUBMISSION_PRIORITY
 
     # This should prevent double rejudge issues by permitting only the judging of
     # QU (which is the initial state) and D (which is the final state).
@@ -83,7 +88,9 @@ def judge_submission(submission, rejudge):
             'problem-id': submission.problem.code,
             'language': submission.language.key,
             'source': submission.source.source,
-            'priority': 2 if rejudge else priority,
+            'priority': BATCH_REJUDGE_PRIORITY
+                if batch_rejudge
+                else REJUDGE_PRIORITY if rejudge else priority,
         })
     except BaseException:
         logger.exception('Failed to send request to judge')

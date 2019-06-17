@@ -174,7 +174,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             queryset = queryset.exclude(problem__is_restricted=True, problem__is_public=False)
         judged = len(queryset)
         for model in queryset:
-            model.judge(rejudge=True)
+            model.judge(rejudge=True, batch_rejudge=True)
         self.message_user(request, ungettext('%d submission was successfully scheduled for rejudging.',
                                              '%d submissions were successfully scheduled for rejudging.',
                                              judged) % judged)
