@@ -55,6 +55,8 @@ def api_v1_contest_detail(request, contest):
         'is_rated': contest.is_rated,
         'rate_all': contest.is_rated and contest.rate_all,
         'has_rating': contest.ratings.exists(),
+        'rating_floor': contest.rating_floor,
+        'rating_ceiling': contest.rating_ceiling,
         'format': {
             'name': contest.format_name,
             'config': contest.format_config,
