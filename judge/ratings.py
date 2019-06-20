@@ -121,6 +121,10 @@ def rate_contest(contest):
                    .values_list('id', 'user_id', 'score', 'cumtime')
     if not contest.rate_all:
         users = users.filter(submissions__gt=0)
+    if contest.rating_floor is not None:
+        users = users.exclude(user__rating__lt=contest.rating_floor)
+    if contest.rating_ceiling is not None:
+        users = users.exclude(user__rating__gt=contest.rating_ceiling)
     users = list(tie_ranker(users, key=itemgetter(2, 3)))
     participation_ids = [user[1][0] for user in users]
     user_ids = [user[1][1] for user in users]
