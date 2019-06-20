@@ -69,6 +69,10 @@ class Contest(models.Model):
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
+    rating_floor = models.IntegerField(verbose_name=('rating floor'), help_text=_('Rating floor for contest'),
+                                       null=True, blank=True)
+    rating_ceiling = models.IntegerField(verbose_name=('rating ceiling'), help_text=_('Rating ceiling for contest'),
+                                         null=True, blank=True)
     rate_all = models.BooleanField(verbose_name=_('rate all'), help_text=_('Rate all users who joined.'), default=False)
     rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
                                           related_name='rate_exclude+')
