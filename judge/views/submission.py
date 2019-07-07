@@ -193,8 +193,9 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
             queryset = queryset.select_related('contest__participation__contest') \
                 .defer('contest__participation__contest__description')
 
+            filter = Q(contest=None)
             # Show submissions for any contest that is finished
-            filter = Q(contest__participation__contest__end_time__lte=timezone.now())
+            filter |= Q(contest__participation__contest__end_time__lte=timezone.now())
             # Show submissions for any contest you can edit
             filter |= Q(contest__participation__contest__organizers=self.request.profile)
             # Show submissions if you can see all contests
