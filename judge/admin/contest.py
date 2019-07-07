@@ -113,7 +113,7 @@ class ContestAdmin(VersionAdmin):
         (_('Scheduling'),   {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'),      {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Format'),       {'fields': ('format_name', 'format_config')}),
-        (_('Rating'),       {'fields': ('is_rated', 'rate_all', 'rate_exclude')}),
+        (_('Rating'),       {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
         (_('Registration'), {'fields': ('require_registration', 'registration_start_time', 'registration_end_time', 'registration_page')}),
         (_('Organization'), {'fields': ('is_private', 'is_private_viewable', 'organizations')}),
         (_('Justice'),      {'fields': ('banned_users',)}),
