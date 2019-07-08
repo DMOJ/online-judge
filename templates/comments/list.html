@@ -4,7 +4,7 @@
         <ul class="comments top-level-comments new-comments">
             {% set logged_in = request.user.is_authenticated %}
             {% set profile = request.user.profile if logged_in else None %}
-            {% for node in mptt_tree(comment_list) recursive %}{% if not node.hidden %}
+            {% for node in mptt_tree(comment_list) recursive %}
                 <li id="comment-{{ node.id }}" data-revision="{{ node.revisions - 1 }}"
                     data-max-revision="{{ node.revisions - 1 }}"
                     data-revision-ajax="{{ url('comment_revision_ajax', node.id) }}" class="comment">
@@ -113,7 +113,7 @@
                     {% if children %}
                         <ul class="comments">{{ loop(children) }}</ul>{% endif %}
                 {% endwith %}
-            {% endif %}{% endfor %}
+            {% endfor %}
         </ul>
     {% elif not comment_lock %}
         <p class="no-comments-message">{{ _('There are no comments at the moment.') }}</p>

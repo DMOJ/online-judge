@@ -105,7 +105,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
 
     def get_context_data(self, **kwargs):
         context = super(CommentedDetailView, self).get_context_data(**kwargs)
-        queryset = Comment.objects.filter(page=self.get_comment_page())
+        queryset = Comment.objects.filter(hidden=False, page=self.get_comment_page())
         context['has_comments'] = queryset.exists()
         context['comment_lock'] = self.is_comment_locked()
         queryset = queryset.select_related('author__user').defer('author__about').annotate(revisions=Count('versions'))
