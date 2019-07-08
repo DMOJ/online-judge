@@ -195,6 +195,7 @@ class Submission(models.Model):
             ('spam_submission', 'Submit without limit'),
             ('view_all_submission', 'View all submission'),
             ('resubmit_other', "Resubmit others' submission"),
+            ('lock_submission', 'Change lock status of submission'),
         )
         verbose_name = _('submission')
         verbose_name_plural = _('submissions')
