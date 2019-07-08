@@ -83,6 +83,7 @@ class Submission(models.Model):
     is_pretested = models.BooleanField(verbose_name=_('was ran on pretests only'), default=False)
     contest_object = models.ForeignKey('Contest', verbose_name=_('contest'), null=True, blank=True,
                                        on_delete=models.SET_NULL, related_name='+')
+    is_locked = models.BooleanField(verbose_name=_('lock submission'), default=False)
 
     objects = TranslatedProblemForeignKeyQuerySet.as_manager()
 
