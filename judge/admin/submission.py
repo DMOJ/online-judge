@@ -109,8 +109,8 @@ class SubmissionSourceInline(admin.StackedInline):
 
 class SubmissionAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'problem', 'date', 'judged_date')
-    fields = ('user', 'problem', 'date', 'judged_date', 'time', 'memory', 'points', 'language', 'status', 'result',
-              'case_points', 'case_total', 'judged_on', 'error')
+    fields = ('user', 'problem', 'date', 'judged_date', 'is_locked', 'time', 'memory', 'points', 'language', 'status',
+              'result', 'case_points', 'case_total', 'judged_on', 'error')
     actions = ('judge', 'recalculate_score')
     list_display = ('id', 'problem_code', 'problem_name', 'user_column', 'execution_time', 'pretty_memory',
                     'points', 'language_column', 'status', 'result', 'judge_column')
@@ -119,6 +119,12 @@ class SubmissionAdmin(admin.ModelAdmin):
     actions_on_top = True
     actions_on_bottom = True
     inlines = [SubmissionSourceInline, SubmissionTestCaseInline, ContestSubmissionInline]
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = self.readonly_fields
+        if not request.user.has_perm('judge.lock_submission'):
+            fields += ('is_locked',)
+        return fields
 
     def get_queryset(self, request):
         queryset = Submission.objects.select_related('problem', 'user__user', 'language').only(
