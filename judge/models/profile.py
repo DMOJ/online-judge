@@ -88,11 +88,8 @@ class Profile(models.Model):
                                           related_name='members', related_query_name='member')
     display_rank = models.CharField(max_length=10, default='user', verbose_name=_('display rank'),
                                     choices=(('user', 'Normal User'), 
-                                             ('exec', 'Exec'),
                                              ('president', 'President'),
                                              ('alumnus', 'Alumnus'),
-                                             ('setter', 'Problem Setter'),
-                                             ('teacher', 'Teacher'),
                                              ('admin', 'Admin'),
                                             ))
     mute = models.BooleanField(verbose_name=_('comment mute'), help_text=_('Some users are at their best when silent.'),
