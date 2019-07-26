@@ -19,6 +19,7 @@ from django.utils.translation import gettext_lazy, gettext as _
 from django.views import View
 from django.views.generic import FormView, ListView
 from django.views.generic.detail import SingleObjectMixin
+from django.shortcuts import get_object_or_404
 
 from judge import event_poster as event
 from judge.models import Profile
@@ -287,9 +288,7 @@ class TicketList(LoginRequiredMixin, ListView):
 
 class ProblemTicketListView(TicketList):
     def _get_queryset(self):
-        if 'problem' not in self.kwargs:
-            raise Http404()
-        problem = Problem.objects.get(code=self.kwargs['problem'])
+        problem = get_object_or_404(Problem, code=self.kwargs.get('problem'))
         if problem.is_editable_by(self.request.user):
             return problem.tickets.all()
         elif problem.is_accessible_by(self.request.user):
