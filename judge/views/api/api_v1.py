@@ -116,13 +116,14 @@ def api_v1_user_list(request):
     queryset = Profile.objects.filter(is_unlisted=False).values_list('user__username', 'points', 'display_rank')
     return JsonResponse({username: {
         'points': points,
-        'rank': rank
+        'rank': rank,
     } for username, points, rank in queryset})
 
 
 def api_v1_user_info(request, user):
     profile = get_object_or_404(Profile, user__username=user)
-    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True, problem__is_organization_private=False)
+    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True,
+                                                 problem__is_organization_private=False)
                        .values('problem').distinct().values_list('problem__code', flat=True))
     resp = {
         'points': profile.points,
@@ -135,8 +136,11 @@ def api_v1_user_info(request, user):
 
     contest_history = {}
     if not profile.is_unlisted:
-        for contest_key, rating, volatility in ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False) \
-                                                                   .values_list('contest__key', 'rating__rating', 'rating__volatility'):
+        for contest_key, rating, volatility in ContestParticipation.objects.filter(user=profile, virtual=0,
+                                                                                   contest__is_public=True,
+                                                                                   contest__is_private=False) \
+                                                                   .values_list('contest__key', 'rating__rating',
+                                                                                'rating__volatility'):
             contest_history[contest_key] = {
                 'rating': rating,
                 'volatility': volatility,
