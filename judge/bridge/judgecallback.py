@@ -9,7 +9,7 @@ from django.utils import timezone
 from judge import event_poster as event
 from judge.caching import finished_submission
 from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit, RuntimeVersion
-from .judgehandler import JudgeHandler
+from .judgehandler import JudgeHandler, SubmissionData
 
 logger = logging.getLogger('judge.bridge')
 json_log = logging.getLogger('judge.json.bridge')
@@ -71,15 +71,24 @@ class DjangoJudgeHandler(JudgeHandler):
             ))
             return
 
-        attempt_no = Submission.objects.filter(problem__id=pid, contest__participation__id=part_id,
-                                               user__id=uid, date__lt=sub_date).count() + 1
+        attempt_no = Submission.objects.filter(problem__id=pid, contest__participation__id=part_id, user__id=uid,
+                                               date__lt=sub_date).exclude(status__in=('CE', 'IE')).count() + 1
 
         try:
             time, memory = (LanguageLimit.objects.filter(problem__id=pid, language__id=lid)
                                          .values_list('time_limit', 'memory_limit').get())
         except LanguageLimit.DoesNotExist:
             pass
-        return time, memory, short_circuit, is_pretested, part_virtual, attempt_no, uid
+
+        return SubmissionData(
+            time=time,
+            memory=memory,
+            short_circuit=short_circuit,
+            pretests_only=is_pretested,
+            contest_no=part_virtual,
+            attempt_no=attempt_no,
+            user_id=uid,
+        )
 
     def _authenticate(self, id, key):
         result = Judge.objects.filter(name=id, auth_key=key, is_blocked=False).exists()
