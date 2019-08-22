@@ -263,6 +263,11 @@ class OrganizationRequestLog(OrganizationRequestBaseView):
     tab = 'log'
     template_name = 'organization/requests/log.html'
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
     def get_context_data(self, **kwargs):
         context = super(OrganizationRequestLog, self).get_context_data(**kwargs)
         context['requests'] = self.object.requests.filter(state__in=self.states)
