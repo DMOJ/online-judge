@@ -119,7 +119,12 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
 
         solution = get_object_or_404(Solution, problem=self.object)
 
-        if (not solution.is_public or solution.publish_on > timezone.now()) and \
+        if not self.request.user.is_authenticated or self.request.profile.current_contest is None:
+            is_contest_problem = False
+        else:
+            is_contest_problem = get_contest_problem(self.object, self.request.profile) is not None
+
+        if (not solution.is_public or solution.publish_on > timezone.now() or is_contest_problem) and \
                 not self.request.user.has_perm('judge.see_private_solution'):
             raise Http404()
         context['solution'] = solution
@@ -371,7 +376,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         if self.show_types:
             queryset = queryset.prefetch_related('types')
         if self.category is not None:
-            queryset = queryset.filter(group__id=self.category) 
+            queryset = queryset.filter(group__id=self.category)
 
         if self.request.user.has_perm('judge.see_private_problem'):
             filter = None
@@ -550,7 +555,7 @@ def problem_submit(request, problem=None, submission=None):
         raise PermissionDenied()
 
     profile = request.profile
-    
+
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))
         if form.is_valid():
