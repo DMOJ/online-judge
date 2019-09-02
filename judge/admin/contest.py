@@ -46,7 +46,7 @@ class ContestTagAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super(ContestTagAdmin, self).save_model(request, obj, form, change)
-        obj.contests = form.cleaned_data['contests']
+        obj.contests.set(form.cleaned_data['contests'])
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ContestTagAdmin, self).get_form(request, obj, **kwargs)

@@ -146,11 +146,13 @@ def api_v1_problem_info(request, problem):
 def api_v1_user_list(request):
     user = get_request_user(request)
 
-    queryset = Profile.objects.filter(is_unlisted=False).values_list('user__username', 'points', 'display_rank')
+    queryset = Profile.objects.filter(is_unlisted=False).values_list('user__username', 'points', 'performance_points',
+                                                                     'display_rank')
     return JsonResponse({username: {
         'points': points,
+        'performance_points': performance_points,
         'rank': rank
-    } for username, points, rank in queryset})
+    } for username, points, performance_points, rank in queryset})
 
 
 def api_v1_user_info(request, username):
@@ -161,6 +163,7 @@ def api_v1_user_info(request, username):
                        .values('problem').distinct().values_list('problem__code', flat=True))
     resp = {
         'points': profile.points,
+        'performance_points': profile.performance_points,
         'rank': profile.display_rank,
         'solved_problems': submissions,
         'organizations': list(profile.organizations.values_list('id', flat=True)),
