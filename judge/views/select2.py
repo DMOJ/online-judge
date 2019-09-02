@@ -67,11 +67,12 @@ class ContestSelect2View(Select2View):
     def get_queryset(self):
         queryset = Contest.objects.filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
         if not self.request.user.has_perm('judge.see_private_contest'):
-            queryset = queryset.filter(is_public=True)
+            queryset = queryset.filter(is_visible=True)
         if not self.request.user.has_perm('judge.edit_all_contest'):
-            q = Q(is_private=False)
+            q = Q(is_private=False, is_organization_private=False)
             if self.request.user.is_authenticated:
-                q |= Q(organizations__in=self.request.user.profile.organizations.all())
+                q |= Q(organizations__in=self.request.profile.organizations.all())
+                q |= Q(private_contestants=self.request.profile)
             queryset = queryset.filter(q)
         return queryset
 
