@@ -95,6 +95,8 @@ class ContestForm(ModelForm):
     class Meta:
         widgets = {
             'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
+            'private_contestants': HeavySelect2MultipleWidget(data_view='profile_select2', 
+                                                              attrs={'style': 'width: 100%'}),
             'organizations': HeavySelect2MultipleWidget(data_view='organization_select2'),
             'tags': Select2MultipleWidget,
             'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
@@ -106,17 +108,19 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'organizers', 'is_public', 'use_clarifications',
-                           'hide_problem_tags', 'hide_scoreboard', 'run_pretests_only')}),
+        (None, {'fields': ('key', 'name', 'organizers') }),
+        (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'hide_scoreboard',
+                                    'run_pretests_only')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Format'), {'fields': ('format_name', 'format_config')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
-        (_('Organization'), {'fields': ('is_private', 'organizations', 'access_code')}),
+        (_('Access'), {'fields': ('access_code', 'is_private', 'private_contestants', 'is_organization_private',
+                                    'organizations')}),
         (_('Justice'), {'fields': ('banned_users',)}),
     )
-    list_display = ('key', 'name', 'is_public', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
-    actions = ['make_public', 'make_private']
+    list_display = ('key', 'name', 'is_visible', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
+    actions = ['make_visible', 'make_hidden']
     inlines = [ContestProblemInline]
     actions_on_top = True
     actions_on_bottom = True
@@ -138,6 +142,8 @@ class ContestAdmin(VersionAdmin):
             readonly += ['is_rated', 'rate_all', 'rate_exclude']
         if not request.user.has_perm('judge.contest_access_code'):
             readonly += ['access_code']
+        if not request.user.has_perm('judge.create_private_contest'):
+            readonly += ['is_private', 'private_contestants', 'is_organization_private', 'organizations']
         return readonly
 
     def has_change_permission(self, request, obj=None):
@@ -147,19 +153,19 @@ class ContestAdmin(VersionAdmin):
             return True
         return obj.organizers.filter(id=request.user.profile.id).exists()
 
-    def make_public(self, request, queryset):
-        count = queryset.update(is_public=True)
-        self.message_user(request, ungettext('%d contest successfully marked as public.',
-                                             '%d contests successfully marked as public.',
+    def make_visible(self, request, queryset):
+        count = queryset.update(is_visible=True)
+        self.message_user(request, ungettext('%d contest successfully marked as visible.',
+                                             '%d contests successfully marked as visible.',
                                              count) % count)
-    make_public.short_description = _('Mark contests as public')
+    make_visible.short_description = _('Mark contests as visible')
 
-    def make_private(self, request, queryset):
-        count = queryset.update(is_public=False)
-        self.message_user(request, ungettext('%d contest successfully marked as private.',
-                                             '%d contests successfully marked as private.',
+    def make_hidden(self, request, queryset):
+        count = queryset.update(is_visible=False)
+        self.message_user(request, ungettext('%d contest successfully marked as hidden.',
+                                             '%d contests successfully marked as hidden.',
                                              count) % count)
-    make_private.short_description = _('Mark contests as private')
+    make_hidden.short_description = _('Mark contests as hidden')
 
     def get_urls(self):
         return [url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
