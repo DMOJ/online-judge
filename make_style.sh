@@ -1,7 +1,23 @@
 #!/bin/bash
+if ! [ -x "$(command -v sass)" ]; then
+  echo 'Error: sass is not installed.' >&2
+  exit 1
+fi
+
+if ! [ -x "$(command -v postcss)" ]; then
+  echo 'Error: postcss is not installed.' >&2
+  exit 1
+fi
+
+if ! [ -x "$(command -v autoprefixer)" ]; then
+  echo 'Error: autoprefixer is not installed.' >&2
+  exit 1
+fi
+
+FILES=(sass_processed/style.css sass_processed/content-description.css sass_processed/table.css sass_processed/ranks.css)
+
 cd `dirname $0`
-sass --update resources:sass_processed
-pleeease compile sass_processed/style.css -t resources/style.css
-mv sass_processed/content-description.css resources/content-description.css
-mv sass_processed/table.css resources/table.css
-mv sass_processed/ranks.css resources/ranks.css
+sass -f --update resources:sass_processed
+
+echo
+postcss "${FILES[@]}" --verbose --use autoprefixer -d resources
