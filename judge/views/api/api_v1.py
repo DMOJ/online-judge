@@ -16,7 +16,8 @@ def sane_time_repr(delta):
 
 
 def api_v1_contest_list(request):
-    queryset = Contest.objects.filter(is_public=True, is_private=False).prefetch_related(
+    queryset = Contest.objects.filter(is_visible=True, is_private=False, 
+                                      is_organization_private=False).prefetch_related(
         Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description')
 
     return JsonResponse({c.key: {
@@ -138,8 +139,11 @@ def api_v1_user_info(request, user):
 
     contest_history = {}
     if not profile.is_unlisted:
-        for contest_key, rating, volatility in ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True, contest__is_private=False) \
-                                                                   .values_list('contest__key', 'rating__rating', 'rating__volatility'):
+        particiations = ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_visible=True,
+                                                            contest__is_private=False,
+                                                            contest__is_organization_private=False)
+        for contest_key, rating, volatility in participations.values_list('contest__key', 'rating__rating',
+                                                                          'rating__volatility'):
             contest_history[contest_key] = {
                 'rating': rating,
                 'volatility': volatility,
