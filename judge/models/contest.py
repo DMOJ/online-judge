@@ -56,7 +56,7 @@ class Contest(models.Model):
     start_time = models.DateTimeField(verbose_name=_('start time'), db_index=True)
     end_time = models.DateTimeField(verbose_name=_('end time'), db_index=True)
     time_limit = models.DurationField(verbose_name=_('time limit'), blank=True, null=True)
-    is_public = models.BooleanField(verbose_name=_('publicly visible'), default=False,
+    is_visible = models.BooleanField(verbose_name=_('publicly visible'), default=False,
                                     help_text=_('Should be set even for organization-private contests, where it '
                                                 'determines whether the contest is visible to members of the '
                                                 'specified organizations.'))
@@ -76,7 +76,10 @@ class Contest(models.Model):
     rate_all = models.BooleanField(verbose_name=_('rate all'), help_text=_('Rate all users who joined.'), default=False)
     rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
                                           related_name='rate_exclude+')
-    is_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
+    is_private = models.BooleanField(verbose_name=_('private to specific users'), default=False)
+    private_contestants = models.ManyToManyField(Profile, blank=True, verbose_name=_('private contestants'),
+                                                 help_text=_('If private, only these users may see the contest'),
+                                                 related_name='private_contestants+')
     hide_problem_tags = models.BooleanField(verbose_name=_('hide problem tags'),
                                             help_text=_('Whether problem tags should be hidden by default.'),
                                             default=False)
@@ -85,6 +88,7 @@ class Contest(models.Model):
                                                         'testcases. Commonly set during a contest, then unset '
                                                         'prior to rejudging user submissions when the contest ends.'),
                                             default=False)
+    is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may see the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
@@ -131,7 +135,7 @@ class Contest(models.Model):
             return True
         if user.is_authenticated and self.organizers.filter(id=user.profile.id).exists():
             return True
-        if not self.is_public:
+        if not self.is_visible:
             return False
         if self.start_time is not None and self.start_time > timezone.now():
             return False
@@ -187,15 +191,18 @@ class Contest(models.Model):
         return True
 
     def is_accessible_by(self, user):
-        # Contest is public
-        if self.is_public:
-            # Contest is not private to an organization
-            if not self.is_private:
+        # Contest is publicly visible
+        if self.is_visible:
+            # Contest is not private
+            if not self.is_private and not self.is_organization_private:
                 return True
-            # User is in the organizations
-            if user.is_authenticated and \
-                    self.organizations.filter(id__in=user.profile.organizations.all()):
-                return True
+            if user.is_authenticated:
+                # User is in the organizations it is private to
+                if self.organizations.filter(id__in=user.profile.organizations.all()):
+                    return True
+                # User is in the group of private contestants
+                if self.private_contestants.exists(user.profile):
+                    return True
 
         # If the user can view all contests
         if user.has_perm('judge.see_private_contest'):
@@ -217,6 +224,7 @@ class Contest(models.Model):
             ('edit_all_contest', _('Edit all contests')),
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
+            ('create_private_contest', _('Create private contests')),
         )
         verbose_name = _('contest')
         verbose_name_plural = _('contests')
