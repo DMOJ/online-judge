@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from moss import *
 
-from judge.models import Contest, Submission
+from judge.models import Contest, ContestParticipation, Submission
 
 
 class Command(BaseCommand):
@@ -30,7 +30,7 @@ class Command(BaseCommand):
             for dmoj_lang, moss_lang in self.LANG_MAPPING:
                 print("%s: " % dmoj_lang, end=' ')
                 subs = Submission.objects.filter(
-                    contest__participation__virtual__in=(0, 1),
+                    contest__participation__virtual__in=(ContestParticipation.LIVE, ContestParticipation.SPECTATE),
                     contest__participation__contest__key=contest,
                     result='AC', problem__id=problem.id,
                     language__common_name=dmoj_lang
