@@ -223,12 +223,15 @@ class Contest(models.Model):
 
 
 class ContestParticipation(models.Model):
+    LIVE = 0
+    SPECTATE = -1
+
     contest = models.ForeignKey(Contest, verbose_name=_('associated contest'), related_name='users', on_delete=CASCADE)
     user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='contest_history', on_delete=CASCADE)
     real_start = models.DateTimeField(verbose_name=_('start time'), default=timezone.now, db_column='start')
     score = models.IntegerField(verbose_name=_('score'), default=0, db_index=True)
     cumtime = models.PositiveIntegerField(verbose_name=_('cumulative time'), default=0)
-    virtual = models.IntegerField(verbose_name=_('virtual participation id'), default=0,
+    virtual = models.IntegerField(verbose_name=_('virtual participation id'), default=LIVE,
                                   help_text=_('0 means non-virtual, otherwise the n-th virtual participation'))
     format_data = JSONField(verbose_name=_('contest format specific data'), null=True, blank=True)
 
@@ -238,16 +241,16 @@ class ContestParticipation(models.Model):
 
     @property
     def live(self):
-        return self.virtual == 0
+        return self.virtual == LIVE
 
     @property
     def spectate(self):
-        return self.virtual == -1
+        return self.virtual == SPECTATE
 
     @cached_property
     def start(self):
         contest = self.contest
-        return contest.start_time if contest.time_limit is None and not self.virtual > 0 else self.real_start
+        return contest.start_time if contest.time_limit is None and (self.live or self.spectate) else self.real_start
 
     @cached_property
     def end_time(self):
