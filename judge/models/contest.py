@@ -318,8 +318,10 @@ class Contest(models.Model):
 
 
 class ContestRegistration(models.Model):
-    contest = models.ForeignKey(Contest, verbose_name=_('associated contest'), related_name='registrants')
-    user = models.ForeignKey(Profile, verbose_name=_('registrant'), related_name='contest_registrations')
+    contest = models.ForeignKey(Contest, verbose_name=_('associated contest'), related_name='registrants',
+                                on_delete=CASCADE)
+    user = models.ForeignKey(Profile, verbose_name=_('registrant'), related_name='contest_registrations',
+                             on_delete=CASCADE)
     registration_time = models.DateTimeField(verbose_name=_('time of registration'), default=timezone.now)
     data = models.TextField(verbose_name=_('user registration data'), null=True, blank=True)
 
