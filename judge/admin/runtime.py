@@ -47,7 +47,7 @@ class LanguageAdmin(VersionAdmin):
 
 
 class GenerateKeyTextInput(TextInput):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         text = super(TextInput, self).render(name, value, attrs)
         return mark_safe(text + format_html(
             '''\
