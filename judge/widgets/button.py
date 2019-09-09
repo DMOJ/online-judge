@@ -8,7 +8,7 @@ class GenerateKeyTextInputButton(TextInput):
         self.length = kwargs.pop("length", 100)
         super(TextInput, self).__init__(*args, **kwargs)
 
-    def render(self, name, value, attrs=None, charset=None):
+    def render(self, name, value, attrs=None, renderer=None, charset=None):
         text = super(TextInput, self).render(name, value, attrs)
         return mark_safe(text + format_html(
             '''\
