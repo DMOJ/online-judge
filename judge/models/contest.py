@@ -241,11 +241,11 @@ class ContestParticipation(models.Model):
 
     @property
     def live(self):
-        return self.virtual == LIVE
+        return self.virtual == self.LIVE
 
     @property
     def spectate(self):
-        return self.virtual == SPECTATE
+        return self.virtual == self.SPECTATE
 
     @cached_property
     def start(self):
