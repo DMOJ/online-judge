@@ -120,7 +120,9 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
         solution = get_object_or_404(Solution, problem=self.object)
 
         if (not solution.is_public or solution.publish_on > timezone.now()) and \
-                not self.request.user.has_perm('judge.see_private_solution'):
+                not self.request.user.has_perm('judge.see_private_solution') or \
+                (self.request.user.is_authenticated and
+                 self.request.profile.current_contest):
             raise Http404()
         context['solution'] = solution
         context['has_solved_problem'] = self.object.id in self.get_completed_problems()
