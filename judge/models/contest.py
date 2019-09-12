@@ -122,14 +122,14 @@ class Contest(models.Model):
 
     def is_in_contest(self, request):
         if request.user.is_authenticated:
-            profile = request.user.profile
+            profile = request.profile
             return profile and profile.current_contest is not None and profile.current_contest.contest == self
         return False
 
     def can_see_scoreboard(self, request):
         if request.user.has_perm('judge.see_private_contest'):
             return True
-        if request.user.is_authenticated and self.organizers.filter(id=request.user.profile.id).exists():
+        if request.user.is_authenticated and self.organizers.filter(id=request.profile.id).exists():
             return True
         if not self.is_public:
             return False

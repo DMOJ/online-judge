@@ -159,8 +159,8 @@
     {% endif %}
 
     {# Don't run userscript since it may be malicious #}
-    {% if request.user.is_authenticated and request.user.profile.user_script and not request.user.is_impersonate %}
-        <script type="text/javascript">{{ request.user.profile.user_script|safe }}</script>
+    {% if request.user.is_authenticated and request.profile.user_script and not request.user.is_impersonate %}
+        <script type="text/javascript">{{ request.profile.user_script|safe }}</script>
     {% endif %}
 
     <noscript>

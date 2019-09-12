@@ -71,7 +71,7 @@
 
 {% block title_row %}
     {% set tab = 'edit' %}
-    {% set user = request.user.profile %}
+    {% set user = request.profile %}
     {% include "user/user-tabs.html" %}
 {% endblock %}
 

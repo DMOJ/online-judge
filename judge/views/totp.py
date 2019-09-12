@@ -26,7 +26,7 @@ class TOTPView(TitleMixin, LoginRequiredMixin, FormView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            self.profile = request.user.profile
+            self.profile = request.profile
             if self.check_skip():
                 return self.next_page()
         return super(TOTPView, self).dispatch(request, *args, **kwargs)
