@@ -28,6 +28,7 @@ from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.tickets import own_ticket_filter, filter_visible_tickets
 from judge.utils.views import TitleMixin, paginate_query_context
+from judge.views.problem import ProblemMixin
 from judge.widgets import HeavyPreviewPageDownWidget
 
 ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
@@ -95,17 +96,8 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
         return HttpResponseRedirect(reverse('ticket', args=[ticket.id]))
 
 
-class NewProblemTicketView(TitleMixin, NewTicketView):
-    model = Problem
-    slug_field = 'code'
-    slug_url_kwarg = 'problem'
+class NewProblemTicketView(ProblemMixin, TitleMixin, NewTicketView):
     template_name = 'ticket/new_problem.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(NewProblemTicketView, self).get_context_data(**kwargs)
-        if not self.object.is_accessible_by(self.request.user):
-            raise Http404()
-        return context
 
     def get_assignees(self):
         return self.object.authors.all()
