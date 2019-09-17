@@ -2,6 +2,7 @@ import re
 from collections import defaultdict
 from urllib.parse import urljoin
 
+from ansi2html import Ansi2HTMLConverter
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from lxml.html import Element
@@ -178,3 +179,8 @@ def join(first, second, *rest):
     if not rest:
         return urljoin(first, second)
     return urljoin(urljoin(first, second), *rest)
+
+
+@registry.filter(name='ansi2html')
+def ansi2html(s):
+    return Ansi2HTMLConverter(inline=True).convert(s, full=False)
