@@ -120,22 +120,22 @@ class Contest(models.Model):
             raise ValidationError('What is this? A contest that ended before it starts?')
         self.format_class.validate(self.format_config)
 
-    def is_in_contest(self, request):
-        if request.user.is_authenticated:
-            profile = request.user.profile
+    def is_in_contest(self, user):
+        if user.is_authenticated:
+            profile = user.profile
             return profile and profile.current_contest is not None and profile.current_contest.contest == self
         return False
 
-    def can_see_scoreboard(self, request):
-        if request.user.has_perm('judge.see_private_contest'):
+    def can_see_scoreboard(self, user):
+        if user.has_perm('judge.see_private_contest'):
             return True
-        if request.user.is_authenticated and self.organizers.filter(id=request.user.profile.id).exists():
+        if user.is_authenticated and self.organizers.filter(id=user.profile.id).exists():
             return True
         if not self.is_public:
             return False
         if self.start_time is not None and self.start_time > timezone.now():
             return False
-        if self.hide_scoreboard and not self.is_in_contest(request) and self.end_time > timezone.now():
+        if self.hide_scoreboard and not self.is_in_contest(user) and self.end_time > timezone.now():
             return False
         return True
 

@@ -478,7 +478,7 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
                              show_current_virtual=True, ranker=ranker):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
 
-    if contest.hide_scoreboard and contest.is_in_contest(request):
+    if contest.hide_scoreboard and contest.is_in_contest(request.user):
         return ([(_('???'), make_contest_ranking_profile(contest, request.user.profile.current_contest, problems))],
                 problems)
 
@@ -499,7 +499,7 @@ def contest_ranking_ajax(request, contest, participation=None):
     if not exists:
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
 
-    if not contest.can_see_scoreboard(request):
+    if not contest.can_see_scoreboard(request.user):
         raise Http404()
 
     users, problems = get_contest_ranking_list(request, contest, participation)

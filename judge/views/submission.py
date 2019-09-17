@@ -195,8 +195,8 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                                                               language=self.request.LANGUAGE_CODE), to_attr='_trans'))
         if self.in_contest:
             queryset = queryset.filter(contest__participation__contest_id=self.contest.id)
-            if self.contest.hide_scoreboard and self.contest.is_in_contest(self.request):
-                queryset = queryset.filter(contest__participation__user=self.request.user.profile)
+            if self.contest.hide_scoreboard and self.contest.is_in_contest(self.request.user):
+                queryset = queryset.filter(contest__participation__user=self.request.profile)
         else:
             queryset = queryset.select_related('contest__participation__contest') \
                 .defer('contest__participation__contest__description')
@@ -340,7 +340,7 @@ class ProblemSubmissionsBase(SubmissionsListBase):
                            reverse('problem_detail', args=[self.problem.code]))
 
     def access_check_contest(self, request):
-        if self.in_contest and not self.contest.can_see_scoreboard(request):
+        if self.in_contest and not self.contest.can_see_scoreboard(request.user):
             raise Http404()
 
     def access_check(self, request):
