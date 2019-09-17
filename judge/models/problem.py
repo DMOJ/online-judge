@@ -99,13 +99,13 @@ class Problem(models.Model):
                                         'used in the url after /problem/'))
     name = models.CharField(max_length=100, verbose_name=_('problem name'), db_index=True,
                             help_text=_('The full name of the problem, '
-                                        'as shown in the problem list and title.'))
+                                        'as shown in the problem list.'))
     description = models.TextField(verbose_name=_('problem body'))
     authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems',
-                                      help_text=_('These users will be able to edit a problem, '
+                                      help_text=_('These users will be able to edit the problem, '
                                                   'and be listed as authors.'))
     curators = models.ManyToManyField(Profile, verbose_name=_('curators'), blank=True, related_name='curated_problems',
-                                      help_text=_('These users will be able to edit a problem, '
+                                      help_text=_('These users will be able to edit the problem, '
                                                   'but not be publicly shown as an author.'))
     testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True, related_name='tested_problems',
                                      help_text=_(
