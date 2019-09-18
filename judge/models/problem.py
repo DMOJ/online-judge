@@ -109,7 +109,7 @@ class Problem(models.Model):
                                                   'but not be publicly shown as an author.'))
     testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True, related_name='tested_problems',
                                      help_text=_(
-                                         'These users will be able to view a private problem, but not edit it.'))
+                                         'These users will be able to view the private problem, but not edit it.'))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'),
                                     help_text=_('The type of problem '
                                                 '(e.g. Data Structures, Simple Math, etc.).'))
