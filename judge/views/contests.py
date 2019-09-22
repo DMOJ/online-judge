@@ -410,6 +410,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
 
         context['now'] = timezone.now()
         context['calendar'] = self.get_table()
+        context['curr_month'] = date(self.year, self.month, 1)
 
         if month > min_month:
             context['prev_month'] = date(self.year - (self.month == 1), 12 if self.month == 1 else self.month - 1, 1)
