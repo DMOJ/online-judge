@@ -527,7 +527,7 @@ class ContestRankingBase(ContestMixin, TitleMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if not self.object.can_see_scoreboard(self.request):
+        if not self.object.can_see_scoreboard(self.request.user):
             raise Http404()
 
         users, problems = self.get_ranking_list()
