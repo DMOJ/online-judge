@@ -155,7 +155,7 @@ class Contest(models.Model):
     def is_in_contest(self, user):
         if user.is_authenticated:
             profile = user.profile
-            return profile.current_contest is not None and profile.current_contest.contest == self
+            return profile and profile.current_contest is not None and profile.current_contest.contest == self
         return False
 
     def can_see_scoreboard(self, user):
@@ -351,11 +351,11 @@ class ContestParticipation(models.Model):
 
     @property
     def live(self):
-        return self.virtual == LIVE
+        return self.virtual == self.LIVE
 
     @property
     def spectate(self):
-        return self.virtual == SPECTATE
+        return self.virtual == self.SPECTATE
 
     @cached_property
     def start(self):

@@ -6,6 +6,9 @@
             {% if prev_month %}
                 <a href="{{ url('contest_calendar', prev_month.year, prev_month.month) }}">&laquo; {{ _('Prev') }}</a>
             {% endif %}
+            {% if not (curr_month.year == now.year and curr_month.month == now.month) %}
+                <a href="{{ url('contest_calendar', now.year, now.month) }}"> {{ _('Today') }}</a>
+            {% endif %}
             {% if next_month %}
                 <a href="{{ url('contest_calendar', next_month.year, next_month.month) }}">{{ _('Next') }} &raquo;</a>
             {% endif %}
