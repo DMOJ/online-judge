@@ -112,7 +112,7 @@ class Problem(models.Model):
                                          'These users will be able to view the private problem, but not edit it.'))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'),
                                     help_text=_('The type of problem, '
-                                                "as shown on the Problem's page."))
+                                                "as shown on the problem's page."))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'), on_delete=CASCADE,
                                 help_text=_('The group of problem, '
                                             'shown under Category in the problem list.'))
