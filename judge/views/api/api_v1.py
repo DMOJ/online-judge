@@ -139,9 +139,9 @@ def api_v1_user_info(request, user):
 
     contest_history = {}
     if not profile.is_unlisted:
-        particiations = ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_visible=True,
-                                                            contest__is_private=False,
-                                                            contest__is_organization_private=False)
+        participations = ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_visible=True,
+                                                             contest__is_private=False,
+                                                             contest__is_organization_private=False)
         for contest_key, rating, volatility in participations.values_list('contest__key', 'rating__rating',
                                                                           'rating__volatility'):
             contest_history[contest_key] = {
