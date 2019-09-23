@@ -198,10 +198,10 @@ class Contest(models.Model):
                 return True
             if user.is_authenticated:
                 # User is in the organizations it is private to
-                if self.organizations.filter(id__in=user.profile.organizations.all()):
+                if self.organizations.filter(id__in=user.profile.organizations.all()).exists():
                     return True
                 # User is in the group of private contestants
-                if self.private_contestants.exists(user.profile):
+                if self.private_contestants.filter(id=user.profile.id).exists():
                     return True
 
         # If the user can view all contests
