@@ -146,8 +146,9 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
 
 
 class PrivateContestError(Exception):
-    def __init__(self, name, orgs):
+    def __init__(self, name, private_users, orgs):
         self.name = name
+        self.private_users = private_users
         self.orgs = orgs
 
 
@@ -209,18 +210,20 @@ class ContestMixin(object):
                 ContestParticipation.objects.filter(id=profile.current_contest_id, contest_id=contest.id).exists()):
             return contest
 
-        if not contest.is_public and not user.has_perm('judge.see_private_contest') and (
+        if not contest.is_visible and not user.has_perm('judge.see_private_contest') and (
                 not user.has_perm('judge.edit_own_contest') or
                 not self.check_organizer(contest, profile)):
             raise Http404()
 
-        if contest.is_private:
-            if profile is None or (not user.has_perm('judge.edit_all_contest') and
-                                   not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
-                raise PrivateContestError(contest.name, contest.organizations.all())
-
-        if not contest.is_accessible_by(user):
-            raise Http404()
+        if contest.is_private or contest.is_organization_private:
+            private_contest_error = PrivateContestError(contest.name, contest.private_contestants.all(), contest.organizations.all())
+            if profile is None:
+                raise private_contest_error
+            if user.has_perm('judge.edit_all_contest'):
+                return contest
+            if not contest.organizations.filter(id__in=profile.organizations.all()).exists() and \
+                    not contest.private_contestants.filter(id=profile.id).exists():
+                raise private_contest_error
 
         return contest
 
@@ -701,7 +704,7 @@ def clone_contest(request, contest):
     organizations = contest.organizations.all()
     
     contest.pk = None
-    contest.is_public = False
+    contest.is_visible = False
     contest.freeze_submissions = False
     contest.user_count = 0
     contest.key += '_clone'

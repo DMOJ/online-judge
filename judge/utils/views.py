@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
+from django.views.generic import FormView
+from django.views.generic.detail import SingleObjectMixin
 
 from judge.utils.diggpaginator import DiggPaginator
 
@@ -101,3 +103,13 @@ class QueryStringSortMixin(object):
 def short_circuit_middleware(view):
     view.short_circuit_middleware = True
     return view
+
+
+class SingleObjectFormView(SingleObjectMixin, FormView):
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)

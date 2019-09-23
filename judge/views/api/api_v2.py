@@ -66,7 +66,7 @@ def api_v2_user_info(request):
     }
 
     contest_history = []
-    for participation in (ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_public=True)
+    for participation in (ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_visible=True)
                                   .order_by('-contest__end_time')):
         contest = participation.contest
 

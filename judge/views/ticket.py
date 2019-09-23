@@ -27,7 +27,7 @@ from judge.models import Profile
 from judge.models import Ticket, TicketMessage, Problem
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.tickets import own_ticket_filter, filter_visible_tickets
-from judge.utils.views import TitleMixin, paginate_query_context
+from judge.utils.views import SingleObjectFormView, TitleMixin, paginate_query_context
 from judge.views.problem import ProblemMixin
 from judge.widgets import HeavyPreviewPageDownWidget
 
@@ -56,16 +56,6 @@ class TicketForm(forms.Form):
                                       time__gte=timezone.now()-timezone.timedelta(minutes=10)).exists():
                 raise ValidationError(_('You may only make a ticket once every 10 minutes.'))
         return super(TicketForm, self).clean()
-
-
-class SingleObjectFormView(SingleObjectMixin, FormView):
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super(SingleObjectFormView, self).post(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super(SingleObjectFormView, self).get(request, *args, **kwargs)
 
 
 class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
