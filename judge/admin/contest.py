@@ -116,9 +116,10 @@ class ContestAdmin(VersionAdmin):
         (_('Details'),      {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Format'),       {'fields': ('format_name', 'format_config')}),
         (_('Rating'),       {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
-        (_('Registration'), {'fields': ('require_registration', 'registration_start_time', 'registration_end_time', 'registration_page')}),
-        (_('Organization'), {'fields': ('is_organization_private', 'is_private_viewable', 'organizations')}),
-        (_('Users'),        {'fields': ('is_private', 'private_contestants')}),
+        (_('Registration'), {'fields': ('require_registration', 'registration_start_time',
+                                        'registration_end_time', 'registration_page')}),
+        (_('Access'),       {'fields': ('is_organization_private', 'is_private_viewable', 'organizations',
+                                        'is_private', 'private_contestants')}),
         (_('Justice'),      {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_visible', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
@@ -147,7 +148,7 @@ class ContestAdmin(VersionAdmin):
         if not request.user.has_perm('judge.contest_access_code'):
             readonly += ['access_code']
         if not request.user.has_perm('judge.create_private_contest'):
-            readonly += ['is_private', 'private_contestants', 'is_organization_private', 'organizations']
+            readonly += ['is_private', 'private_contestants', 'is_organization_private', 'is_private_viewable', 'organizations']
         return readonly
 
     def has_change_permission(self, request, obj=None):
