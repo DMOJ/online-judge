@@ -106,18 +106,16 @@ class Problem(models.Model):
                                                   'and be listed as authors.'))
     curators = models.ManyToManyField(Profile, verbose_name=_('curators'), blank=True, related_name='curated_problems',
                                       help_text=_('These users will be able to edit the problem, '
-                                                  'but not be publicly shown as an author.'))
+                                                  'but not be listed as authors.'))
     testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True, related_name='tested_problems',
                                      help_text=_(
                                          'These users will be able to view the private problem, but not edit it.'))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'),
-                                    help_text=_('The type of problem '
-                                                '(e.g. Data Structures, Simple Math, etc.).'))
+                                    help_text=_('The type of problem, '
+                                                "as shown on the Problem's page."))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'), on_delete=CASCADE,
-                                help_text=_('The group of your problem, '
-                                            'shown as Category in the problem list '
-                                            '(e.g. Fun Math, Seasonal, etc.). '
-                                            'Often used if your problem is from a contest.'))
+                                help_text=_('The group of problem, '
+                                            'shown under Category in the problem list.'))
     time_limit = models.FloatField(verbose_name=_('time limit'),
                                    help_text=_('The time limit for this problem, in seconds. '
                                                'Fractional seconds (e.g. 1.5) are supported.'))
@@ -126,8 +124,8 @@ class Problem(models.Model):
                                                    '(e.g. 64mb = 65536 kilobytes).'))
     short_circuit = models.BooleanField(default=False)
     points = models.FloatField(verbose_name=_('points'),
-                                help_text=_('Points given for problem completion. '
-                                            'Displayed with a \'p\' suffix if partial.'))
+                                help_text=_('Points awarded for problem completion. '
+                                            "Points are displayed with a 'p' suffix if partial."))
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
     allowed_languages = models.ManyToManyField(Language, verbose_name=_('allowed languages'),
                                             help_text=_('List of allowed submission languages.'))
@@ -135,7 +133,7 @@ class Problem(models.Model):
     is_manually_managed = models.BooleanField(verbose_name=_('manually managed'), db_index=True, default=False,
                                               help_text=_('Whether judges should be allowed to manage data or not.'))
     date = models.DateTimeField(verbose_name=_('date of publishing'), null=True, blank=True, db_index=True,
-                                help_text=_('Doesn\'t have magic ability to auto-publish due to backward compatibility'))
+                                help_text=_("Doesn't have magic ability to auto-publish due to backward compatibility"))
     banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
                                           help_text=_('Bans the selected users from submitting to this problem.'))
     license = models.ForeignKey(License, null=True, blank=True, on_delete=SET_NULL,
