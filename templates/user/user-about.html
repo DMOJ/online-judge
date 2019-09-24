@@ -103,9 +103,18 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        lineTension: 0,
+                        elements: {
+                            line: {
+                                tension: 0,
+                            },
+                        },
                         legend: {
                             display: false,
+                        },
+                        layout: {
+                            padding: {
+                                right: 10,
+                            },
                         },
                         scales: {
                             xAxes: [{
