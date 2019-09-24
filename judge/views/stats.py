@@ -35,10 +35,10 @@ def repeat_chain(iterable):
 
 
 def language_data(request, language_count=Language.objects.annotate(count=Count('submission'))):
+    languages = language_count.filter(count__gt=0).values('key', 'name', 'count').order_by('-count')
     threshold = getattr(settings, 'DMOJ_STATS_LANGUAGE_THRESHOLD', 10)
-    languages = language_count.filter(count__gte=threshold).values('key', 'name', 'count').order_by('-count')
-    num_languages = len(languages)
-    other_count = language_count.filter(count__lt=threshold).aggregate(total=Sum('count'))['total']
+    num_languages = min(len(languages), threshold)
+    other_count = sum(map(itemgetter('count'), languages[num_languages:]))
 
     return JsonResponse({
         'labels': list(map(itemgetter('name'), languages)) + ['Other'],
@@ -46,7 +46,7 @@ def language_data(request, language_count=Language.objects.annotate(count=Count(
             {
                 'backgroundColor': chart_colors[:num_languages] + ['#FDB45C'],
                 'highlightBackgroundColor': highlight_colors[:num_languages] + ['#FFC870'],
-                'data': list(map(itemgetter('count'), languages)) + [other_count],
+                'data': list(map(itemgetter('count'), languages[:num_languages])) + [other_count],
             },
         ],
     }, safe=False)
