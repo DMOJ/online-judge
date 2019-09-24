@@ -17,7 +17,7 @@ fi
 FILES=(sass_processed/style.css sass_processed/content-description.css sass_processed/table.css sass_processed/ranks.css)
 
 cd `dirname $0`
-sass -f --update resources:sass_processed
+sass --update resources:sass_processed
 
 echo
 postcss "${FILES[@]}" --verbose --use autoprefixer -d resources
