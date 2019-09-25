@@ -61,16 +61,16 @@
                 }
 
                 function matchAll(params, data) {
-                  if ($.trim(params.term) === '') {
-                    return data;
-                  }
+                    if ($.trim(params.term) === '') {
+                      return data;
+                    }
 
-                  if(data.text.toLowerCase().indexOf(params.term.toLowerCase()) > -1 ||
-                      data.id.toLowerCase().indexOf(params.term.toLowerCase()) > -1) {
-                    return data;
-                  }
+                    if(data.text.toLowerCase().indexOf(params.term.toLowerCase()) > -1 ||
+                        data.id.toLowerCase().indexOf(params.term.toLowerCase()) > -1) {
+                      return data;
+                    }
 
-                  return null;
+                    return null;
                 }
 
                 $('#status').select2({matcher: matchAll, multiple: 1, placeholder: '{{ _('Filter by status...') }}'})
