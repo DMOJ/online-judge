@@ -62,12 +62,12 @@
 
                 function matchAll(params, data) {
                     if ($.trim(params.term) === '') {
-                      return data;
+                        return data;
                     }
 
-                    if(data.text.toLowerCase().indexOf(params.term.toLowerCase()) > -1 ||
+                    if (data.text.toLowerCase().indexOf(params.term.toLowerCase()) > -1 ||
                         data.id.toLowerCase().indexOf(params.term.toLowerCase()) > -1) {
-                      return data;
+                        return data;
                     }
 
                     return null;
