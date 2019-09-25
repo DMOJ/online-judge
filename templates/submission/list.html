@@ -60,9 +60,22 @@
                     info_float.width(container.width());
                 }
 
-                $('#status').select2({multiple: 1, placeholder: '{{ _('Filter by status...') }}'})
+                function matchAll(params, data) {
+                  if ($.trim(params.term) === '') {
+                    return data;
+                  }
+
+                  if(data.text.toLowerCase().indexOf(params.term.toLowerCase()) > -1 ||
+                      data.id.toLowerCase().indexOf(params.term.toLowerCase()) > -1) {
+                    return data;
+                  }
+
+                  return null;
+                }
+
+                $('#status').select2({matcher: matchAll, multiple: 1, placeholder: '{{ _('Filter by status...') }}'})
                     .css({'visibility': 'visible'});
-                $('#language').select2({multiple: 1, placeholder: '{{ _('Filter by language...') }}'})
+                $('#language').select2({matcher: matchAll, multiple: 1, placeholder: '{{ _('Filter by language...') }}'})
                     .css({'visibility': 'visible'});
             });
 
