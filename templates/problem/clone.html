@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block media %}
+    <style>
+        #problem-clone-panel {
+            position: relative;
+            margin: 5em auto auto -10em;
+            top: 40%;
+            left: 50%;
+        }
+
+        #problem-code-container {
+            margin: 0.5em 0;
+        }
+
+        #id_code {
+            width: 100%;
+        }
+
+        ul.errorlist {
+            list-style-type: none;
+            padding-left: 0;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <form id="problem-clone-panel" action="" method="post" class="form-area">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div id="form-errors">
+                {{ form.code.errors }}
+            </div>
+        {% endif %}
+
+        <div><label class="inline-header grayed">{{ _('Enter a new code for the cloned problem:') }}</label></div>
+        <div id="problem-code-container"><span class="fullwidth">{{ form.code }}</span></div>
+        <hr>
+        <button style="float:right;" type="submit">{{ _('Clone!') }}</button>
+    </form>
+{% endblock %}

@@ -45,8 +45,7 @@
             </script>
         {% endif %}
 
-        <script src="{{ static('libs/chart.js/Chart.Core.js') }}"></script>
-        <script src="{{ static('libs/chart.js/Chart.Doughnut.js') }}"></script>
+        <script src="{{ static('libs/chart.js/Chart.js') }}"></script>
         <script type="text/javascript">
             $(function () {
                 var info_float = $('.info-float');
@@ -83,17 +82,32 @@
                 if (chart !== null) {
                     chart.destroy();
                 }
-                chart = new Chart(ctx).Pie(raw_data.categories.map(function (entry) {
-                    return {
-                        color: colors[entry.code],
-                        label: entry.name,
-                        value: entry.count,
-                    };
-                }), {
-                    animation: false,
-                    scaleFontFamily: font,
-                    tooltipFontFamily: font,
-                    tooltipTitleFontFamily: font,
+                chart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: raw_data.categories.map(function(entry) {
+                                return entry.count;
+                            }),
+                            backgroundColor: raw_data.categories.map(function(entry) {
+                                return colors[entry.code];
+                            }),
+                        }],
+                        labels: raw_data.categories.map(function(entry) {
+                            return entry.name;
+                        }),
+                    },
+                    options: {
+                        animation: false,
+                        scaleFontFamily: font,
+                        tooltips: {
+                            titleFontFamily: font,
+                            bodyFontFamily: font,
+                        },
+                        legend: {
+                            display: false,
+                        },
+                    },
                 });
 
                 $('#total-submission-count').text(raw_data.total);

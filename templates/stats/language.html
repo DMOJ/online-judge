@@ -74,15 +74,23 @@
             function draw_pie_chart(url, $chart) {
                 $.getJSON(url, function (data) {
                     var ctx = $chart.find('canvas').get(0).getContext('2d');
-                    var chart = new Chart(ctx).Pie(data, {
-                        animation: false,
+                    var chart = new Chart(ctx, {
+                        type: 'pie',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false,
+                            responsive: false,
+                            animation: false,
+                            legend: {
+                                display: false,
+                            }
+                        }
                     });
-
                     var $legend = $chart.find('.legend');
-                    for (var i = 0; i < data.length; ++i) {
+                    for (var i = 0; i < data.labels.length; ++i) {
                         $legend.append($('<li>')
-                            .append($('<span>').addClass('square').css('background-color', data[i].color))
-                            .append($('<span>').text(data[i].label))
+                            .append($('<span>').addClass('square').css('background-color', data.datasets[0].backgroundColor[i]))
+                            .append($('<span>').text(data.labels[i]))
                         );
                     }
                 });
@@ -95,8 +103,23 @@
             $.getJSON('{{ url('language_stats_data_ac_rate') }}', function (data) {
                 var ctx = $('canvas#ac-rate').get(0).getContext('2d');
                 ctx.canvas.height = 20 * data.labels.length;
-                new Chart(ctx).HorizontalBar(data, {
-                    tooltipTemplate: '<%=label%>: <%= Math.round(value * 100) / 100 %>%'
+                new Chart(ctx, {
+                    type: 'horizontalBar',
+                    data: data,
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: false,
+                        legend: {
+                            display: false,
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function(tooltipItem, data) {
+                                    return (Math.round(tooltipItem.value * 100) / 100) + '%';
+                                },
+                            },
+                        },
+                    },
                 });
             });
         });
