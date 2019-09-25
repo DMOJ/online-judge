@@ -71,11 +71,7 @@ class ContestSelect2View(Select2View):
         if not self.request.user.has_perm('judge.edit_all_contest'):
             q = Q(is_private=False, is_organization_private=False)
             if self.request.user.is_authenticated:
-                q |= Q(organizations__in=self.request.profile.organizations.all())
-<<<<<<< HEAD
-=======
                 q |= Q(private_contestants=self.request.profile)
->>>>>>> 4021a4a01bdde1694c551bcb7ea54e5e958bccd6
             queryset = queryset.filter(q)
         return queryset
 

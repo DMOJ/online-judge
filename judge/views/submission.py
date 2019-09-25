@@ -195,11 +195,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                                                               language=self.request.LANGUAGE_CODE), to_attr='_trans'))
         if self.in_contest:
             queryset = queryset.filter(contest__participation__contest_id=self.contest.id)
-<<<<<<< HEAD
-            if self.contest.hide_scoreboard and self.contest.is_in_contest(self.request):
-=======
             if self.contest.hide_scoreboard and self.contest.is_in_contest(self.request.user):
->>>>>>> 4021a4a01bdde1694c551bcb7ea54e5e958bccd6
                 queryset = queryset.filter(contest__participation__user=self.request.profile)
         else:
             queryset = queryset.select_related('contest__participation__contest') \
