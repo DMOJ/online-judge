@@ -61,12 +61,14 @@
                 }
 
                 function matchAll(params, data) {
-                    if ($.trim(params.term) === '') {
+                    ptl = params.term.toLowerCase()
+
+                    if ($.trim(ptl) === '') {
                         return data;
                     }
 
-                    if (data.text.toLowerCase().indexOf(params.term.toLowerCase()) > -1 ||
-                        data.id.toLowerCase().indexOf(params.term.toLowerCase()) > -1) {
+                    if (data.text.toLowerCase().indexOf(ptl) > -1 ||
+                            data.id.toLowerCase().indexOf(ptl) > -1) {
                         return data;
                     }
 
