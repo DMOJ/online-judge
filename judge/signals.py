@@ -128,3 +128,8 @@ def misc_config_update(sender, instance, **kwargs):
     cache.delete_many(['misc_config:%s:%s:%s' % (domain, lang, instance.key.split('.')[0])
                        for lang in _misc_config_i18n
                        for domain in Site.objects.values_list('domain', flat=True)])
+
+
+@receiver(post_save, sender=ContestSubmission)
+def contest_submission_update(sender, instance, **kwargs):
+    Submission.objects.filter(id=instance.submission_id).update(contest_object_id=instance.participation.contest_id)
