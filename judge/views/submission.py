@@ -198,8 +198,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
             if self.contest.hide_scoreboard and self.contest.is_in_contest(self.request.user):
                 queryset = queryset.filter(contest__participation__user=self.request.profile)
         else:
-            queryset = queryset.select_related('contest__participation__contest') \
-                .defer('contest__participation__contest__description')
+            queryset = queryset.select_related('contest_object').defer('contest_object__description')
 
             # This is not technically correct since contest organizers *should* see these, but
             # the join would be far too messy
