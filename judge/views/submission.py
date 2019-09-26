@@ -187,23 +187,16 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                                                           queryset=ProblemTranslation.objects.filter(
                                                               language=self.request.LANGUAGE_CODE), to_attr='_trans'))
         if self.in_contest:
-            queryset = queryset.filter(contest__participation__contest_id=self.contest.id)
+            queryset = queryset.filter(contest_object_id=self.contest.id)
             if self.contest.hide_scoreboard and self.contest.is_in_contest(self.request.user):
                 queryset = queryset.filter(contest__participation__user=self.request.profile)
         else:
-            queryset = queryset.select_related('contest__participation__contest') \
-                .defer('contest__participation__contest__description')
-
-            filter = Q(contest=None)
-            # Show submissions for any contest that is finished
-            filter |= Q(contest__participation__contest__end_time__lte=timezone.now())
-            # Show submissions for any contest you can edit
-            filter |= Q(contest__participation__contest__organizers=self.request.profile)
-            # Show submissions if you can see all contests
             if not self.request.user.has_perm('judge.see_private_contest'):
-                filter |= Q(contest__participation__contest__hide_scoreboard=False)
-
-            queryset = queryset.filter(filter)
+                # Show submissions for any contest you can edit, finished, or visible scoreboard
+                contest_queryset = Contest.objects.exclude(Q(organizers=self.request.profile) |
+                                                           Q(end_time__lte=timezone.now()) |
+                                                           Q(hide_scoreboard=False))
+                queryset = queryset.exclude(contest_object_id__in=contest_queryset)
 
         if self.selected_languages:
             queryset = queryset.filter(language_id__in=Language.objects.filter(key__in=self.selected_languages))
