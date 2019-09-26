@@ -31,18 +31,16 @@ class RankedSubmissions(ProblemSubmissions):
                 SELECT sub.id AS id
                 FROM (
                     SELECT sub.user_id AS uid, MAX(sub.points) AS points
-                    FROM judge_submission AS sub INNER JOIN
-                         judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
+                    FROM judge_submission AS sub {contest_join}
                     WHERE sub.problem_id = %s AND {points} > 0 {constraint}
                     GROUP BY sub.user_id
-                ) AS highscore INNER JOIN (
+                ) AS highscore STRAIGHT_JOIN (
                     SELECT sub.user_id AS uid, sub.points, MIN(sub.time) as time
-                    FROM judge_submission AS sub INNER JOIN
-                         judge_problem AS prob ON (sub.problem_id = prob.id) {contest_join}
+                    FROM judge_submission AS sub {contest_join}
                     WHERE sub.problem_id = %s AND {points} > 0 {constraint}
                     GROUP BY sub.user_id, {points}
                 ) AS fastest ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
-                    INNER JOIN judge_submission AS sub
+                    STRAIGHT_JOIN judge_submission AS sub
                         ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
                 WHERE sub.problem_id = %s AND {points} > 0 {constraint}
                 GROUP BY sub.user_id
