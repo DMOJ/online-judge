@@ -22,6 +22,6 @@ class Migration(migrations.Migration):
                     ON (`judge_submission`.`id` = `judge_contestsubmission`.`submission_id`)
                 INNER JOIN `judge_contestparticipation`
                     ON (`judge_contestsubmission`.`participation_id` = `judge_contestparticipation`.`id`)
-            SET `judge_submission`.`contest_id` = `judge_contestparticipation`.`contest_id`
+            SET `judge_submission`.`contest_object_id` = `judge_contestparticipation`.`contest_id`
         ''', migrations.RunSQL.noop),
     ]
