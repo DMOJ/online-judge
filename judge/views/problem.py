@@ -553,16 +553,19 @@ def problem_submit(request, problem=None, submission=None):
 
             with transaction.atomic():
                 if profile.current_contest is not None:
+                    contest_id = profile.current_contest.contest_id
                     try:
-                        contest_problem = form.cleaned_data['problem'].contests.get(contest=profile.current_contest.contest)
+                        contest_problem = form.cleaned_data['problem'].contests.get(contest_id=contest_id)
                     except ContestProblem.DoesNotExist:
                         model = form.save()
                     else:
                         max_subs = contest_problem.max_submissions
                         if max_subs and get_contest_submission_count(problem, profile) >= max_subs:
                             return generic_message(request, _('Too many submissions'),
-                                                    _('You have exceeded the submission limit for this problem.'))
+                                                   _('You have exceeded the submission limit for this problem.'))
                         model = form.save()
+                        model.contest_object_id = contest_id
+
                         contest = ContestSubmission(submission=model, problem=contest_problem,
                                                     participation=profile.current_contest)
                         contest.save()
