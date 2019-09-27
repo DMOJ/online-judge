@@ -44,7 +44,7 @@ class PostList(ListView):
 
         context['has_clarifications'] = False
         if self.request.user.is_authenticated:
-            participation = self.request.user.profile.current_contest
+            participation = self.request.profile.current_contest
             if participation:
                 clarifications = ProblemClarification.objects.filter(problem__in=participation.contest.problems.all())
                 context['has_clarifications'] = clarifications.count() > 0
@@ -66,7 +66,7 @@ class PostList(ListView):
 
         # Dashboard stuff
         if self.request.user.is_authenticated:
-            user = self.request.user.profile
+            user = self.request.profile
             context['recently_attempted_problems'] = (Submission.objects.filter(user=user)
                                                       .exclude(problem__in=user_completed_ids(user))
                                                       .values_list('problem__code', 'problem__name', 'problem__points')
@@ -82,7 +82,7 @@ class PostList(ListView):
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
 
         if self.request.user.is_authenticated:
-            profile = self.request.user.profile
+            profile = self.request.profile
             context['own_open_tickets'] = (Ticket.objects.filter(user=profile, is_open=True).order_by('-id')
                                            .prefetch_related('linked_item').select_related('user__user'))
         else:

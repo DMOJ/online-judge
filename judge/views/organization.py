@@ -49,7 +49,7 @@ class OrganizationMixin(object):
             org = self.object
         if not self.request.user.is_authenticated:
             return False
-        profile_id = self.request.user.profile.id
+        profile_id = self.request.profile.id
         return org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id
 
 
@@ -101,7 +101,7 @@ class OrganizationUsers(OrganizationDetailView):
 class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         org = self.get_object()
-        response = self.handle(request, org, request.user.profile)
+        response = self.handle(request, org, request.profile)
         if response is not None:
             return response
         return HttpResponseRedirect(org.get_absolute_url())
@@ -160,7 +160,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
     def form_valid(self, form):
         request = OrganizationRequest()
         request.organization = self.get_object()
-        request.user = self.request.user.profile
+        request.user = self.request.profile
         request.reason = form.cleaned_data['reason']
         request.state = 'P'
         request.save()
@@ -177,7 +177,7 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
 
     def get_object(self, queryset=None):
         object = super(OrganizationRequestDetail, self).get_object(queryset)
-        profile = self.request.user.profile
+        profile = self.request.profile
         if object.user_id != profile.id and not object.organization.admins.filter(id=profile.id).exists():
             raise PermissionDenied()
         return object
@@ -196,7 +196,7 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
 
     def get_object(self, queryset=None):
         organization = super(OrganizationRequestBaseView, self).get_object(queryset)
-        if not organization.admins.filter(id=self.request.user.profile.id).exists():
+        if not organization.admins.filter(id=self.request.profile.id).exists():
             raise PermissionDenied()
         return organization
 

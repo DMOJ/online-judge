@@ -2,7 +2,7 @@
 
 {% block info_float %}
     {% if request.user.is_authenticated %}
-        {% with profile=request.user.profile %}
+        {% with profile=request.profile %}
             {% if profile in organization %}
                 <form method="post" action="{{ url('leave_organization', organization.id, organization.slug) }}">
                     {% csrf_token %}

@@ -3,7 +3,7 @@
     {% if has_comments %}
         <ul class="comments top-level-comments new-comments">
             {% set logged_in = request.user.is_authenticated %}
-            {% set profile = request.user.profile if logged_in else None %}
+            {% set profile = request.profile if logged_in else None %}
             {% for node in mptt_tree(comment_list) recursive %}
                 <li id="comment-{{ node.id }}" data-revision="{{ node.revisions - 1 }}"
                     data-max-revision="{{ node.revisions - 1 }}"

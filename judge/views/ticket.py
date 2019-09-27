@@ -47,7 +47,7 @@ class TicketForm(forms.Form):
 
     def clean(self):
         if self.request is not None and self.request.user.is_authenticated:
-            profile = self.request.user.profile
+            profile = self.request.profile
             if profile.mute:
                 raise ValidationError(_('Your part is silent, little toad.'))
         return super(TicketForm, self).clean()
@@ -66,7 +66,7 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
         return kwargs
 
     def form_valid(self, form):
-        ticket = Ticket(user=self.request.user.profile, title=form.cleaned_data['title'])
+        ticket = Ticket(user=self.request.profile, title=form.cleaned_data['title'])
         ticket.linked_item = self.object
         ticket.save()
         message = TicketMessage(ticket=ticket, user=ticket.user, body=form.cleaned_data['body'])
@@ -110,7 +110,7 @@ class TicketMixin(object):
 
     def get_object(self, queryset=None):
         ticket = super(TicketMixin, self).get_object(queryset)
-        profile_id = self.request.user.profile.id
+        profile_id = self.request.profile.id
         if self.request.user.has_perm('judge.change_ticket'):
             return ticket
         if ticket.user_id == profile_id:
@@ -129,7 +129,7 @@ class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectFormVi
     context_object_name = 'ticket'
 
     def form_valid(self, form):
-        message = TicketMessage(user=self.request.user.profile,
+        message = TicketMessage(user=self.request.profile,
                                 body=form.cleaned_data['body'],
                                 ticket=self.object)
         message.save()

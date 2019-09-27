@@ -134,7 +134,7 @@ class ContestAdmin(VersionAdmin):
         if request.user.has_perm('judge.edit_all_contest'):
             return queryset
         else:
-            return queryset.filter(organizers__id=request.user.profile.id)
+            return queryset.filter(organizers__id=request.profile.id)
 
     def get_readonly_fields(self, request, obj=None):
         readonly = []
@@ -151,7 +151,7 @@ class ContestAdmin(VersionAdmin):
             return False
         if request.user.has_perm('judge.edit_all_contest') or obj is None:
             return True
-        return obj.organizers.filter(id=request.user.profile.id).exists()
+        return obj.organizers.filter(id=request.profile.id).exists()
 
     def make_visible(self, request, queryset):
         count = queryset.update(is_visible=True)

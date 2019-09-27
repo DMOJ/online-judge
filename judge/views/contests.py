@@ -54,7 +54,7 @@ class ContestListMixin(object):
         if not self.request.user.has_perm('judge.see_private_contest'):
             q = Q(is_visible=True)
             if self.request.user.is_authenticated:
-                q |= Q(organizers=self.request.user.profile)
+                q |= Q(organizers=self.request.profile)
             queryset = queryset.filter(q)
         if not self.request.user.has_perm('judge.edit_all_contest'):
             q = Q(is_private=False, is_organization_private=False)
@@ -131,13 +131,13 @@ class ContestMixin(object):
         if profile is None:
             if not self.request.user.is_authenticated:
                 return False
-            profile = self.request.user.profile
+            profile = self.request.profile
         return (contest or self.object).organizers.filter(id=profile.id).exists()
 
     def get_context_data(self, **kwargs):
         context = super(ContestMixin, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            profile = self.request.user.profile
+            profile = self.request.profile
             in_contest = context['in_contest'] = (profile.current_contest is not None and
                                                   profile.current_contest.contest == self.object)
             if in_contest:
@@ -262,7 +262,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('Contest not ongoing'),
                                    _('"%s" is not currently ongoing.') % contest.name)
 
-        profile = request.user.profile
+        profile = request.profile
         if profile.current_contest is not None:
             return generic_message(request, _('Already in contest'),
                                    _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
@@ -339,7 +339,7 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def post(self, request, *args, **kwargs):
         contest = self.get_object()
 
-        profile = request.user.profile
+        profile = request.profile
         if profile.current_contest is None or profile.current_contest.contest_id != contest.id:
             return generic_message(request, _('No such contest'),
                                    _('You are not in contest "%s".') % contest.key, 404)
@@ -487,14 +487,14 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
 
     if contest.hide_scoreboard and contest.is_in_contest(request.user):
-        return ([(_('???'), make_contest_ranking_profile(contest, request.user.profile.current_contest, problems))],
+        return ([(_('???'), make_contest_ranking_profile(contest, request.profile.current_contest, problems))],
                 problems)
 
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
 
     if show_current_virtual:
         if participation is None and request.user.is_authenticated:
-            participation = request.user.profile.current_contest
+            participation = request.profile.current_contest
             if participation is None or participation.contest_id != contest.id:
                 participation = None
         if participation is not None and participation.virtual:

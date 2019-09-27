@@ -73,7 +73,7 @@ class BlogPostAdmin(VersionAdmin):
         return (request.user.has_perm('judge.edit_all_post') or
                 request.user.has_perm('judge.change_blogpost') and (
                     obj is None or
-                    obj.authors.filter(id=request.user.profile.id).exists()))
+                    obj.authors.filter(id=request.profile.id).exists()))
 
 
 class SolutionForm(ModelForm):

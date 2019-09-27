@@ -26,7 +26,7 @@ def rejudge_submission(request):
         return HttpResponseBadRequest()
 
     if not request.user.has_perm('judge.edit_all_problem') and \
-            not submission.problem.is_editor(request.user.profile):
+            not submission.problem.is_editor(request.profile):
         return HttpResponseForbidden()
 
     submission.judge(rejudge=True)

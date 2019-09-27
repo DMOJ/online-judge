@@ -58,7 +58,7 @@ class ProblemSelect2View(Select2View):
         if not self.request.user.has_perm('judge.see_private_problem'):
             filter = Q(is_public=True)
             if self.request.user.is_authenticated:
-                filter |= Q(authors=self.request.user.profile) | Q(curators=self.request.user.profile)
+                filter |= Q(authors=self.request.profile) | Q(curators=self.request.profile)
             queryset = queryset.filter(filter).distinct()
         return queryset.distinct()
 
@@ -71,7 +71,6 @@ class ContestSelect2View(Select2View):
         if not self.request.user.has_perm('judge.edit_all_contest'):
             q = Q(is_private=False, is_organization_private=False)
             if self.request.user.is_authenticated:
-                q |= Q(organizations__in=self.request.profile.organizations.all())
                 q |= Q(private_contestants=self.request.profile)
             queryset = queryset.filter(q)
         return queryset

@@ -42,7 +42,7 @@
                           class="contest-join-pseudotab unselectable button full">
                         {% csrf_token %}
                         <input type="submit" value="
-                            {%- if participating and participation.ended or request.user.profile in contest.organizers.all() %}
+                            {%- if participating and participation.ended or request.profile in contest.organizers.all() %}
                                 {{- _('Stop spectating') -}}
                             {% else %}
                                 {{- _('Leave contest') -}}
