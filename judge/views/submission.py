@@ -4,7 +4,7 @@ from operator import attrgetter
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
-from django.db.models import Prefetch, Q, F
+from django.db.models import Prefetch, Q
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -198,7 +198,8 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
             if self.contest.hide_scoreboard and self.contest.is_in_contest(self.request.user):
                 queryset = queryset.filter(contest__participation__user=self.request.profile)
         else:
-            queryset = queryset.annotate(contest_key=F('contest_object__key'), contest_name=F('contest_object__name'))
+            queryset = queryset.select_related('contest__participation__contest') \
+                .defer('contest__participation__contest__description')
 
             # This is not technically correct since contest organizers *should* see these, but
             # the join would be far too messy
@@ -416,10 +417,6 @@ def single_submission(request, submission_id, show_problem=True):
     request.no_profile_update = True
     authenticated = request.user.is_authenticated
     submission = get_object_or_404(submission_related(Submission.objects.all()), id=int(submission_id))
-
-    if submission.contest_object:
-        submission.contest_key = submission.contest_object.key
-        submission.contest_name = submission.contest_object.name
 
     if not submission.problem.is_accessible_by(request.user):
         raise Http404()

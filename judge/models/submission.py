@@ -142,10 +142,10 @@ class Submission(models.Model):
     def is_graded(self):
         return self.status not in ('QU', 'P', 'G')
 
-    @cached_property
+    @property
     def contest_key(self):
         if hasattr(self, 'contest'):
-            return self.contest_object.key
+            return self.contest.participation.contest.key
 
     def __str__(self):
         return 'Submission %d of %s by %s' % (self.id, self.problem, self.user.user.username)
