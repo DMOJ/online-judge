@@ -24,10 +24,10 @@
     <div>
         {{ link_user(submission.user) }}
         <span class="time">{{ relative_time(submission.date) }}</span>
-        {% if not request.in_contest and submission.contest_or_none %}
-            <a href="{{ url('contest_view', submission.contest_or_none.participation.contest.key) }}"
+        {% if not request.in_contest and submission.contest_object_id %}
+            <a href="{{ url('contest_view', submission.contest_object.key) }}"
                class="submission-contest">
-                <i title="{{ submission.contest_or_none.participation.contest.name }}" class="fa fa-dot-circle-o"></i>
+                <i title="{{ submission.contest_object.name }}" class="fa fa-dot-circle-o"></i>
             </a>
         {% endif %}
     </div>
