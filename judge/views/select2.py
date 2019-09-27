@@ -58,7 +58,7 @@ class ProblemSelect2View(Select2View):
         if not self.request.user.has_perm('judge.see_private_problem'):
             filter = Q(is_public=True)
             if self.request.user.is_authenticated:
-                filter |= Q(authors=self.request.user.profile) | Q(curators=self.request.user.profile)
+                filter |= Q(authors=self.request.profile) | Q(curators=self.request.profile)
             queryset = queryset.filter(filter).distinct()
         return queryset.distinct()
 
@@ -67,11 +67,11 @@ class ContestSelect2View(Select2View):
     def get_queryset(self):
         queryset = Contest.objects.filter(Q(key__icontains=self.term) | Q(name__icontains=self.term))
         if not self.request.user.has_perm('judge.see_private_contest'):
-            queryset = queryset.filter(is_public=True)
+            queryset = queryset.filter(is_visible=True)
         if not self.request.user.has_perm('judge.edit_all_contest'):
-            q = Q(is_private=False)
+            q = Q(is_private=False, is_organization_private=False)
             if self.request.user.is_authenticated:
-                q |= Q(organizations__in=self.request.user.profile.organizations.all())
+                q |= Q(private_contestants=self.request.profile)
             queryset = queryset.filter(q)
         return queryset
 
@@ -116,7 +116,7 @@ class UserSearchSelect2View(BaseListView):
 class ContestUserSearchSelect2View(UserSearchSelect2View):
     def get_queryset(self):
         contest = get_object_or_404(Contest, key=self.kwargs['contest'])
-        if not contest.can_see_scoreboard(self.request) or contest.hide_scoreboard and contest.is_in_contest(self.request):
+        if not contest.can_see_scoreboard(self.request.user) or contest.hide_scoreboard and contest.is_in_contest(self.request.user):
             raise Http404()
 
         return Profile.objects.filter(contest_history__contest=contest,

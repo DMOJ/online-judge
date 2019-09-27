@@ -227,7 +227,7 @@ class ProblemAdmin(VersionAdmin):
         if request.user.has_perm('judge.edit_public_problem'):
             access |= Q(is_public=True)
         if request.user.has_perm('judge.edit_own_problem'):
-            access |= Q(authors__id=request.user.profile.id) | Q(curators__id=request.user.profile.id)
+            access |= Q(authors__id=request.profile.id) | Q(curators__id=request.profile.id)
         return queryset.filter(access).distinct() if access else queryset.none()
 
     def has_change_permission(self, request, obj=None):
@@ -237,7 +237,7 @@ class ProblemAdmin(VersionAdmin):
             return True
         if not request.user.has_perm('judge.edit_own_problem'):
             return False
-        return obj.is_editor(request.user.profile)
+        return obj.is_editor(request.profile)
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'allowed_languages':

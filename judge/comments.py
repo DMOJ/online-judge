@@ -42,7 +42,7 @@ class CommentForm(ModelForm):
 
     def clean(self):
         if self.request is not None and self.request.user.is_authenticated:
-            profile = self.request.user.profile
+            profile = self.request.profile
             if profile.mute:
                 raise ValidationError(_('Your part is silent, little toad.'))
             elif (not self.request.user.is_staff and
@@ -85,7 +85,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         form = CommentForm(request, request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.author = request.user.profile
+            comment.author = request.profile
             comment.page = page
             with LockModel(write=(Comment, Revision, Version), read=(ContentType,)), revisions.create_revision():
                 revisions.set_user(request.user)
@@ -112,7 +112,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
 
         if self.request.user.is_authenticated:
             queryset = queryset.annotate(vote_score=Coalesce(RawSQLColumn(CommentVote, 'score'), Value(0)))
-            profile = self.request.user.profile
+            profile = self.request.profile
             unique_together_left_join(queryset, CommentVote, 'comment', 'voter', profile.id)
             context['is_new_user'] = (not self.request.user.is_staff and
                                       not profile.submission_set.filter(points=F('problem__points')).exists())

@@ -60,12 +60,17 @@
             {{- contest.name -}}
         </a>
         <span class="contest-tags">
-            {% if not contest.is_public %}
+            {% if not contest.is_visible %}
                 <span style="background-color: #000000; color: #ffffff" class="contest-tag">
-                    <i class="fa fa-eye-slash"></i> {{ _('private') }}
+                    <i class="fa fa-eye-slash"></i> {{ _('hidden') }}
                 </span>
             {% endif %}
             {% if contest.is_private %}
+                <span style="background-color: #666666; color: #ffffff" class="contest-tag">
+                    <i class="fa fa-lock"></i> {{ _('private') }}
+                </span>
+            {% endif %}
+            {% if contest.is_organization_private %}
                 {% for org in contest.organizations.all() %}
                     <span style="background-color: #cccccc" class="contest-tag">
                         <a href="{{ org.get_absolute_url() }}" style="color: #000000">
@@ -110,7 +115,7 @@
 {% endmacro %}
 
 {% macro user_count(contest, user) %}
-    {% if contest.show_scoreboard or contest.can_see_scoreboard(request) %}
+    {% if contest.show_scoreboard or contest.can_see_scoreboard(user) %}
         <a href="{{ url('contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
     {% else %}
         {{ contest.user_count }}

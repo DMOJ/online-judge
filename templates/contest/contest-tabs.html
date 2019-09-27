@@ -4,7 +4,7 @@
     {{ make_tab('detail', 'fa-info-circle', url('contest_view', contest.key), _('Info')) }}
 
     {% if contest.start_time <= now or perms.judge.see_private_contest %}
-        {% if contest.show_scoreboard or contest.can_see_scoreboard(request) %}
+        {% if contest.show_scoreboard or contest.can_see_scoreboard(request.user) %}
             {{ make_tab('ranking', 'fa-bar-chart', url('contest_ranking', contest.key), _('Rankings')) }}
         {% else %}
             {{ make_tab('ranking', 'fa-bar-chart', None, _('Hidden Rankings')) }}
@@ -42,7 +42,7 @@
                           class="contest-join-pseudotab unselectable button full">
                         {% csrf_token %}
                         <input type="submit" value="
-                            {%- if participating and participation.ended or request.user.profile in contest.organizers.all() %}
+                            {%- if participating and participation.ended or request.profile in contest.organizers.all() %}
                                 {{- _('Stop spectating') -}}
                             {% else %}
                                 {{- _('Leave contest') -}}

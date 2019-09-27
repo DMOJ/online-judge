@@ -49,7 +49,7 @@ class OrganizationMixin(object):
             org = self.object
         if not self.request.user.is_authenticated:
             return False
-        profile_id = self.request.user.profile.id
+        profile_id = self.request.profile.id
         return org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id
 
 
@@ -88,17 +88,10 @@ class OrganizationUsers(OrganizationDetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = _('%s Members') % self.object.name
-        context['users'] = ranker(chain(*[
-            i.select_related('user').defer('about') for i in (
-                self.object.members.filter(submission__points__gt=0, is_unlisted=False)
-                    .order_by('-performance_points')
-                    .annotate(problems=Count('submission__problem', distinct=True)),
-                self.object.members.filter(is_unlisted=False)
-                                   .annotate(problems=Max('submission__points')).filter(problems=0),
-                self.object.members.filter(is_unlisted=False)
-                                   .annotate(problems=Count('submission__problem', distinct=True)).filter(problems=0),
-            )
-        ]))
+        context['users'] = ranker(
+            self.object.members.filter(is_unlisted=False).order_by('-performance_points', '-problem_count')
+                .select_related('user').defer('about', 'user_script', 'notes')
+        )
         context['partial'] = True
         context['is_admin'] = self.can_edit_organization()
         context['kick_url'] = reverse('organization_user_kick', args=[self.object.id, self.object.slug])
@@ -108,7 +101,7 @@ class OrganizationUsers(OrganizationDetailView):
 class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         org = self.get_object()
-        response = self.handle(request, org, request.user.profile)
+        response = self.handle(request, org, request.profile)
         if response is not None:
             return response
         return HttpResponseRedirect(org.get_absolute_url())
@@ -167,7 +160,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
     def form_valid(self, form):
         request = OrganizationRequest()
         request.organization = self.get_object()
-        request.user = self.request.user.profile
+        request.user = self.request.profile
         request.reason = form.cleaned_data['reason']
         request.state = 'P'
         request.save()
@@ -184,7 +177,7 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
 
     def get_object(self, queryset=None):
         object = super(OrganizationRequestDetail, self).get_object(queryset)
-        profile = self.request.user.profile
+        profile = self.request.profile
         if object.user_id != profile.id and not object.organization.admins.filter(id=profile.id).exists():
             raise PermissionDenied()
         return object
@@ -203,7 +196,7 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
 
     def get_object(self, queryset=None):
         organization = super(OrganizationRequestBaseView, self).get_object(queryset)
-        if not organization.admins.filter(id=self.request.user.profile.id).exists():
+        if not organization.admins.filter(id=self.request.profile.id).exists():
             raise PermissionDenied()
         return organization
 

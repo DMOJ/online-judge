@@ -52,14 +52,15 @@ class ContestListMixin(object):
     def get_queryset(self):
         queryset = Contest.objects.all()
         if not self.request.user.has_perm('judge.see_private_contest'):
-            q = Q(is_public=True)
+            q = Q(is_visible=True)
             if self.request.user.is_authenticated:
-                q |= Q(organizers=self.request.user.profile)
+                q |= Q(organizers=self.request.profile)
             queryset = queryset.filter(q)
         if not self.request.user.has_perm('judge.edit_all_contest'):
-            q = Q(is_private=False)
+            q = Q(is_private=False, is_organization_private=False)
             if self.request.user.is_authenticated:
-                q |= Q(organizations__in=self.request.user.profile.organizations.all())
+                q |= Q(organizations__in=self.request.profile.organizations.all())
+                q |= Q(private_contestants=self.request.profile)
             queryset = queryset.filter(q)
         return queryset.distinct()
 
@@ -110,8 +111,9 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
 
 
 class PrivateContestError(Exception):
-    def __init__(self, name, orgs):
+    def __init__(self, name, private_users, orgs):
         self.name = name
+        self.private_users = private_users
         self.orgs = orgs
 
 
@@ -129,13 +131,13 @@ class ContestMixin(object):
         if profile is None:
             if not self.request.user.is_authenticated:
                 return False
-            profile = self.request.user.profile
+            profile = self.request.profile
         return (contest or self.object).organizers.filter(id=profile.id).exists()
 
     def get_context_data(self, **kwargs):
         context = super(ContestMixin, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            profile = self.request.user.profile
+            profile = self.request.profile
             in_contest = context['in_contest'] = (profile.current_contest is not None and
                                                   profile.current_contest.contest == self.object)
             if in_contest:
@@ -173,15 +175,21 @@ class ContestMixin(object):
                 ContestParticipation.objects.filter(id=profile.current_contest_id, contest_id=contest.id).exists()):
             return contest
 
-        if not contest.is_public and not user.has_perm('judge.see_private_contest') and (
+        if not contest.is_visible and not user.has_perm('judge.see_private_contest') and (
                 not user.has_perm('judge.edit_own_contest') or
                 not self.check_organizer(contest, profile)):
             raise Http404()
 
-        if contest.is_private:
-            if profile is None or (not user.has_perm('judge.edit_all_contest') and
-                                   not contest.organizations.filter(id__in=profile.organizations.all()).exists()):
-                raise PrivateContestError(contest.name, contest.organizations.all())
+        if contest.is_private or contest.is_organization_private:
+            private_contest_error = PrivateContestError(contest.name, contest.private_contestants.all(), contest.organizations.all())
+            if profile is None:
+                raise private_contest_error
+            if user.has_perm('judge.edit_all_contest'):
+                return contest
+            if not contest.organizations.filter(id__in=profile.organizations.all()).exists() and \
+                    not contest.private_contestants.filter(id=profile.id).exists():
+                raise private_contest_error
+
         return contest
 
     def dispatch(self, request, *args, **kwargs):
@@ -254,7 +262,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('Contest not ongoing'),
                                    _('"%s" is not currently ongoing.') % contest.name)
 
-        profile = request.user.profile
+        profile = request.profile
         if profile.current_contest is not None:
             return generic_message(request, _('Already in contest'),
                                    _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
@@ -331,7 +339,7 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def post(self, request, *args, **kwargs):
         contest = self.get_object()
 
-        profile = request.user.profile
+        profile = request.profile
         if profile.current_contest is None or profile.current_contest.contest_id != contest.id:
             return generic_message(request, _('No such contest'),
                                    _('You are not in contest "%s".') % contest.key, 404)
@@ -410,6 +418,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
 
         context['now'] = timezone.now()
         context['calendar'] = self.get_table()
+        context['curr_month'] = date(self.year, self.month, 1)
 
         if month > min_month:
             context['prev_month'] = date(self.year - (self.month == 1), 12 if self.month == 1 else self.month - 1, 1)
@@ -477,15 +486,15 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
                              show_current_virtual=True, ranker=ranker):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
 
-    if contest.hide_scoreboard and contest.is_in_contest(request):
-        return ([(_('???'), make_contest_ranking_profile(contest, request.user.profile.current_contest, problems))],
+    if contest.hide_scoreboard and contest.is_in_contest(request.user):
+        return ([(_('???'), make_contest_ranking_profile(contest, request.profile.current_contest, problems))],
                 problems)
 
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
 
     if show_current_virtual:
         if participation is None and request.user.is_authenticated:
-            participation = request.user.profile.current_contest
+            participation = request.profile.current_contest
             if participation is None or participation.contest_id != contest.id:
                 participation = None
         if participation is not None and participation.virtual:
@@ -498,7 +507,7 @@ def contest_ranking_ajax(request, contest, participation=None):
     if not exists:
         return HttpResponseBadRequest('Invalid contest', content_type='text/plain')
 
-    if not contest.can_see_scoreboard(request):
+    if not contest.can_see_scoreboard(request.user):
         raise Http404()
 
     users, problems = get_contest_ranking_list(request, contest, participation)
@@ -526,7 +535,7 @@ class ContestRankingBase(ContestMixin, TitleMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if not self.object.can_see_scoreboard(self.request):
+        if not self.object.can_see_scoreboard(self.request.user):
             raise Http404()
 
         users, problems = self.get_ranking_list()

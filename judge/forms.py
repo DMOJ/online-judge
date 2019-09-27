@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from django_ace import AceWidget
-from judge.models import Organization, Profile, Submission, PrivateMessage, Language
+from judge.models import Organization, Problem, Profile, Submission, PrivateMessage, Language
 from judge.utils.subscription import newsletter_id
 from judge.widgets import MathJaxPagedownWidget, HeavyPreviewPageDownWidget, PagedownWidget, \
     Select2Widget, Select2MultipleWidget
@@ -137,3 +137,13 @@ class TOTPForm(Form):
     def clean_totp_token(self):
         if not pyotp.TOTP(self.totp_key).verify(self.cleaned_data['totp_token'], valid_window=self.TOLERANCE):
             raise ValidationError(_('Invalid Two Factor Authentication token.'))
+
+
+class ProblemCloneForm(Form):
+    code = CharField(max_length=20, validators=[RegexValidator('^[a-z0-9]+$', _('Problem code must be ^[a-z0-9]+$'))])
+
+    def clean_code(self):
+        code = self.cleaned_data['code']
+        if Problem.objects.filter(code=code).exists():
+            raise ValidationError(_('Problem with code already exists.'))
+        return code

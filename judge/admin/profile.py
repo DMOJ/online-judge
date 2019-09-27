@@ -109,5 +109,5 @@ class ProfileAdmin(VersionAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ProfileAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['user_script'].widget = AceWidget('javascript', request.user.profile.ace_theme)
+        form.base_fields['user_script'].widget = AceWidget('javascript', request.profile.ace_theme)
         return form

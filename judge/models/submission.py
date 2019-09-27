@@ -80,6 +80,8 @@ class Submission(models.Model):
                                   on_delete=models.SET_NULL)
     was_rejudged = models.BooleanField(verbose_name=_('was rejudged by admin'), default=False)
     is_pretested = models.BooleanField(verbose_name=_('was ran on pretests only'), default=False)
+    contest_object = models.ForeignKey('Contest', verbose_name=_('contest'), null=True, blank=True,
+                                       on_delete=models.SET_NULL, related_name='+')
 
     objects = TranslatedProblemForeignKeyQuerySet.as_manager()
 
@@ -140,10 +142,10 @@ class Submission(models.Model):
     def is_graded(self):
         return self.status not in ('QU', 'P', 'G')
 
-    @property
+    @cached_property
     def contest_key(self):
         if hasattr(self, 'contest'):
-            return self.contest.participation.contest.key
+            return self.contest_object.key
 
     def __str__(self):
         return 'Submission %d of %s by %s' % (self.id, self.problem, self.user.user.username)

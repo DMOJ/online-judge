@@ -55,7 +55,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
     def get_object(self, queryset=None):
         if self.kwargs.get(self.slug_url_kwarg, None) is None:
-            return self.request.user.profile
+            return self.request.profile
         return super(UserPage, self).get_object(queryset)
 
     def dispatch(self, request, *args, **kwargs):
@@ -77,7 +77,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
     def profile(self):
         if not self.request.user.is_authenticated:
             return None
-        return self.request.user.profile
+        return self.request.profile
 
     @cached_property
     def in_contest(self):
@@ -288,7 +288,7 @@ class FixedContestRanking(ContestRanking):
 
 def users(request):
     if request.user.is_authenticated:
-        participation = request.user.profile.current_contest
+        participation = request.profile.current_contest
         if participation is not None:
             contest = participation.contest
             return FixedContestRanking.as_view(contest=contest)(request, contest=contest.key)

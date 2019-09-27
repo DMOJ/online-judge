@@ -10,7 +10,7 @@
 </h3>
 
 {% if submission.error and request.user.is_authenticated %}
-    {% if request.user.profile.id in submission.problem.editor_ids or perms.judge.edit_all_problem %}
+    {% if request.profile.id in submission.problem.editor_ids or perms.judge.edit_all_problem %}
         <hr style="float:left;width:30%"><br>
         <h4>{{ _('Error information') }}</h4>
         <pre><code>{{ submission.error|highlight('pytb') }}</code></pre>

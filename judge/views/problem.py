@@ -1,4 +1,3 @@
-import itertools
 import logging
 import os
 import shutil
@@ -7,7 +6,8 @@ from operator import itemgetter
 from random import randrange
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import IntegrityError, transaction
 from django.db.models import Count, Q, F, Prefetch
@@ -28,7 +28,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
-from judge.forms import ProblemSubmitForm
+from judge.forms import ProblemCloneForm, ProblemSubmitForm
 from judge.models import ContestSubmission, ContestProblem, Judge, Language, Problem, ProblemGroup, ProblemTranslation, \
     ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import HAS_PDF, DefaultPdfMaker
@@ -38,7 +38,7 @@ from judge.utils.problems import contest_completed_ids, user_completed_ids, cont
     hot_problems
 from judge.utils.strings import safe_int_or_none, safe_float_or_none
 from judge.utils.tickets import own_ticket_filter
-from judge.utils.views import TitleMixin, generic_message, QueryStringSortMixin
+from judge.utils.views import SingleObjectFormView, TitleMixin, generic_message, QueryStringSortMixin
 
 
 def get_contest_problem(problem, profile):
@@ -94,13 +94,13 @@ class SolvedProblemMixin(object):
 
     @cached_property
     def contest(self):
-        return self.request.user.profile.current_contest.contest
+        return self.request.profile.current_contest.contest
 
     @cached_property
     def profile(self):
         if not self.request.user.is_authenticated:
             return None
-        return self.request.user.profile
+        return self.request.profile
 
 
 class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDetailView):
@@ -315,7 +315,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                 queryset = queryset.order_by(self.order + '__name')
             elif sort_key == 'solved':
                 if self.request.user.is_authenticated:
-                    profile = self.request.user.profile
+                    profile = self.request.profile
                     solved = user_completed_ids(profile)
                     attempted = user_attempted_ids(profile)
 
@@ -340,7 +340,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     def profile(self):
         if not self.request.user.is_authenticated:
             return None
-        return self.request.user.profile
+        return self.request.profile
 
     def get_contest_queryset(self):
         queryset = self.profile.current_contest.contest.contest_problems.select_related('problem__group') \
@@ -530,7 +530,7 @@ def problem_submit(request, problem=None, submission=None):
                     get_object_or_404(Submission, id=int(submission)).user.user != request.user:
         raise PermissionDenied()
 
-    profile = request.user.profile
+    profile = request.profile
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))
         if form.is_valid():
@@ -553,16 +553,19 @@ def problem_submit(request, problem=None, submission=None):
 
             with transaction.atomic():
                 if profile.current_contest is not None:
+                    contest_id = profile.current_contest.contest_id
                     try:
-                        contest_problem = form.cleaned_data['problem'].contests.get(contest=profile.current_contest.contest)
+                        contest_problem = form.cleaned_data['problem'].contests.get(contest_id=contest_id)
                     except ContestProblem.DoesNotExist:
                         model = form.save()
                     else:
                         max_subs = contest_problem.max_submissions
                         if max_subs and get_contest_submission_count(problem, profile) >= max_subs:
                             return generic_message(request, _('Too many submissions'),
-                                                    _('You have exceeded the submission limit for this problem.'))
+                                                   _('You have exceeded the submission limit for this problem.'))
                         model = form.save()
+                        model.contest_object_id = contest_id
+
                         contest = ContestSubmission(submission=model, problem=contest_problem,
                                                     participation=profile.current_contest)
                         contest.save()
@@ -610,7 +613,7 @@ def problem_submit(request, problem=None, submission=None):
     if submission is not None:
         default_lang = sub.language
     else:
-        default_lang = request.user.profile.language
+        default_lang = request.profile.language
 
     submission_limit = submissions_left = None
     if profile.current_contest is not None:
@@ -641,36 +644,27 @@ def problem_submit(request, problem=None, submission=None):
     })
 
 
-@require_POST
-@login_required
-@permission_required('judge.clone_problem')
-def clone_problem(request, problem):
-    problem = get_object_or_404(Problem, code=problem)
-    if not problem.is_accessible_by(request.user):
-        raise Http404()
+class ProblemClone(ProblemMixin, PermissionRequiredMixin, TitleMixin, SingleObjectFormView):
+    title = _('Clone Problem')
+    template_name = 'problem/clone.html'
+    form_class = ProblemCloneForm
+    permission_required = 'judge.clone_problem'
 
-    languages = problem.allowed_languages.all()
-    language_limits = problem.language_limits.all()
-    types = problem.types.all()
-    problem.pk = None
-    problem.is_public = False
-    problem.ac_rate = 0
-    problem.user_count = 0
-    problem.code += '_clone'
-    try:
+    def form_valid(self, form):
+        problem = self.object
+
+        languages = problem.allowed_languages.all()
+        language_limits = problem.language_limits.all()
+        types = problem.types.all()
+        problem.pk = None
+        problem.is_public = False
+        problem.ac_rate = 0
+        problem.user_count = 0
+        problem.code = form.cleaned_data['code']
         problem.save()
-    except IntegrityError:
-        code = problem.code
-        for i in itertools.count(1):
-            problem.code = '%s%d' % (code, i)
-            try:
-                problem.save()
-            except IntegrityError:
-                pass
-            else:
-                break
-    problem.authors.add(request.user.profile)
-    problem.allowed_languages.set(languages)
-    problem.language_limits.set(language_limits)
-    problem.types.set(types)
-    return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
+        problem.authors.add(self.request.profile)
+        problem.allowed_languages.set(languages)
+        problem.language_limits.set(language_limits)
+        problem.types.set(types)
+
+        return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))
