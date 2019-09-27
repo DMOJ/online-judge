@@ -88,17 +88,10 @@ class OrganizationUsers(OrganizationDetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = _('%s Members') % self.object.name
-        context['users'] = ranker(chain(*[
-            i.select_related('user').defer('about') for i in (
-                self.object.members.filter(submission__points__gt=0, is_unlisted=False)
-                    .order_by('-performance_points')
-                    .annotate(problems=Count('submission__problem', distinct=True)),
-                self.object.members.filter(is_unlisted=False)
-                                   .annotate(problems=Max('submission__points')).filter(problems=0),
-                self.object.members.filter(is_unlisted=False)
-                                   .annotate(problems=Count('submission__problem', distinct=True)).filter(problems=0),
-            )
-        ]))
+        context['users'] = ranker(
+            self.object.members.filter(is_unlisted=False).order_by('-performance_points', '-problem_count')
+                .select_related('user').defer('about')
+        )
         context['partial'] = True
         context['is_admin'] = self.can_edit_organization()
         context['kick_url'] = reverse('organization_user_kick', args=[self.object.id, self.object.slug])
