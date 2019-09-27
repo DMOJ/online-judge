@@ -166,13 +166,13 @@ class ContestMixin(object):
         if profile is None:
             if not self.request.user.is_authenticated:
                 return False
-            profile = self.request.user.profile
+            profile = self.request.profile
         return (contest or self.object).organizers.filter(id=profile.id).exists()
 
     def get_context_data(self, **kwargs):
         context = super(ContestMixin, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            profile = self.request.user.profile
+            profile = self.request.profile
             in_contest = context['in_contest'] = (profile.current_contest is not None and
                                                   profile.current_contest.contest == self.object)
             if in_contest:
@@ -337,7 +337,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('Contest not ongoing'),
                                    _('"%s" is not currently ongoing.') % contest.name)
 
-        profile = request.user.profile
+        profile = request.profile
         if profile.current_contest is not None:
             return generic_message(request, _('Already in contest'),
                                    _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
@@ -422,7 +422,7 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def post(self, request, *args, **kwargs):
         contest = self.get_object()
 
-        profile = request.user.profile
+        profile = request.profile
         if profile.current_contest is None or profile.current_contest.contest_id != contest.id:
             return generic_message(request, _('No such contest'),
                                    _('You are not in contest "%s".') % contest.key, 404)
@@ -720,7 +720,7 @@ def clone_contest(request, contest):
                 pass
             else:
                 break
-    contest.organizers.add(request.user.profile)
+    contest.organizers.add(request.profile)
     contest.organizations = organizations
     contest.tags = tags
     contest.save()

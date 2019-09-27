@@ -353,7 +353,7 @@
                     <col class="sub-prop">
                     <col class="sub-usage">
                 </colgroup>
-                {% set profile_id = request.user.profile.id if request.user.is_authenticated else 0 %}
+                {% set profile_id = request.profile.id if request.user.is_authenticated else 0 %}
                 {% for submission in submissions %}
                     <tr id="{{ submission.id }}">
                         {% with problem_name=show_problem and submission.problem.i18n_name %}

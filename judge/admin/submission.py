@@ -110,7 +110,7 @@ class SubmissionSourceInline(admin.StackedInline):
 
     def get_formset(self, request, obj=None, **kwargs):
         kwargs.setdefault('widgets', {})['source'] = AceWidget(mode=obj and obj.language.ace,
-                                                               theme=request.user.profile.ace_theme)
+                                                               theme=request.profile.ace_theme)
         return super().get_formset(request, obj, **kwargs)
 
 
@@ -134,7 +134,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         )
         use_straight_join(queryset)
         if not request.user.has_perm('judge.edit_all_problem'):
-            id = request.user.profile.id
+            id = request.profile.id
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id)).distinct()
         elif not request.user.has_perm('judge.see_restricted_problem'):
             queryset = queryset.exclude(problem__is_restricted=True, problem__is_public=False)
@@ -151,7 +151,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         if request.user.has_perm('judge.edit_all_problem'):
             if request.user.has_perm('judge.see_restricted_problem') or not obj.problem.is_restricted:
                 return True
-        return obj.problem.is_editor(request.user.profile)
+        return obj.problem.is_editor(request.profile)
 
     def lookup_allowed(self, key, value):
         return super(SubmissionAdmin, self).lookup_allowed(key, value) or key in ('problem__code',)
@@ -168,7 +168,7 @@ class SubmissionAdmin(admin.ModelAdmin):
                               level=messages.ERROR)
             return
         if not request.user.has_perm('judge.edit_all_problem'):
-            id = request.user.profile.id
+            id = request.profile.id
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id))
         elif not request.user.has_perm('judge.see_restricted_problem'):
             queryset = queryset.exclude(problem__is_restricted=True, problem__is_public=False)
@@ -258,7 +258,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             raise PermissionDenied()
         submission = get_object_or_404(Submission, id=id)
         if not request.user.has_perm('judge.edit_all_problem') and \
-                not submission.problem.is_editor(request.user.profile):
+                not submission.problem.is_editor(request.profile):
             raise PermissionDenied()
         submission.judge(rejudge=True)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

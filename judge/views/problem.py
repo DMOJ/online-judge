@@ -94,13 +94,13 @@ class SolvedProblemMixin(object):
 
     @cached_property
     def contest(self):
-        return self.request.user.profile.current_contest.contest
+        return self.request.profile.current_contest.contest
 
     @cached_property
     def profile(self):
         if not self.request.user.is_authenticated:
             return None
-        return self.request.user.profile
+        return self.request.profile
 
 
 class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDetailView):
@@ -320,7 +320,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                 queryset = queryset.order_by(self.order + '__name')
             elif sort_key == 'solved':
                 if self.request.user.is_authenticated:
-                    profile = self.request.user.profile
+                    profile = self.request.profile
                     solved = user_completed_ids(profile)
                     attempted = user_attempted_ids(profile)
 
@@ -345,7 +345,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     def profile(self):
         if not self.request.user.is_authenticated:
             return None
-        return self.request.user.profile
+        return self.request.profile
 
     def get_contest_queryset(self):
         queryset = self.profile.current_contest.contest.contest_problems.select_related('problem__group') \
@@ -555,7 +555,6 @@ def problem_submit(request, problem=None, submission=None):
         raise PermissionDenied()
 
     profile = request.profile
-
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))
         if form.is_valid():
@@ -642,7 +641,7 @@ def problem_submit(request, problem=None, submission=None):
     if submission is not None:
         default_lang = sub.language
     else:
-        default_lang = request.user.profile.language
+        default_lang = request.profile.language
 
     submission_limit = submissions_left = None
     if profile.current_contest is not None:

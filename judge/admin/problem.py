@@ -250,7 +250,7 @@ class ProblemAdmin(VersionAdmin):
         if request.user.has_perm('judge.edit_public_problem'):
             access |= Q(is_public=True)
         if request.user.has_perm('judge.edit_own_problem'):
-            access |= Q(authors__id=request.user.profile.id) | Q(curators__id=request.user.profile.id)
+            access |= Q(authors__id=request.profile.id) | Q(curators__id=request.profile.id)
         if request.user.has_perm('judge.edit_all_problem'):
             access |= Q(is_restricted=False)
             if request.user.has_perm('judge.see_restricted_problem'):

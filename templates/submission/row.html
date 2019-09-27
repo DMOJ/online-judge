@@ -24,8 +24,8 @@
     <div>
         {{ link_user(submission.user) }}
         <span class="time">{{ relative_time(submission.date) }}</span>
-        {% if not request.in_contest and submission.contest_or_none %}
-            {% with contest=submission.contest_or_none.participation.contest %}
+        {% if not request.in_contest and submission.contest_object_id %}
+            {% with contest=submission.contest_object %}
                 {% if contest.is_accessible_by(request.user) %}
                     <a href="{{ url('contest_view', contest.key) }}"
                        class="submission-contest">

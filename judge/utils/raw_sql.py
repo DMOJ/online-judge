@@ -28,6 +28,40 @@ def unique_together_left_join(queryset, model, link_field_name, filter_field_nam
     return queryset.query.join(Join(model._meta.db_table, parent_alias, None, LOUTER, link_field, True))
 
 
+class RawSQLJoin(Join):
+    def __init__(self, subquery, subquery_params, parent_alias, table_alias, join_type, join_field, nullable,
+                 filtered_relation=None):
+        self.subquery_params = subquery_params
+        super().__init__(subquery, parent_alias, table_alias, join_type, join_field, nullable, filtered_relation)
+
+    def as_sql(self, compiler, connection):
+        compiler.quote_cache[self.table_name] = '(%s)' % self.table_name
+        sql, params = super().as_sql(compiler, connection)
+        return sql, self.subquery_params + params
+
+
+class FakeJoinField:
+    def __init__(self, joining_columns):
+        self.joining_columns = joining_columns
+
+    def get_joining_columns(self):
+        return self.joining_columns
+
+    def get_extra_restriction(self, where_class, alias, remote_alias):
+        pass
+
+
+def join_sql_subquery(queryset, subquery, params, join_fields, alias, join_type=INNER, parent_model=None):
+    if parent_model is not None:
+        parent_alias = parent_model._meta.db_table
+    else:
+        parent_alias = queryset.query.get_initial_alias()
+    queryset.query.external_aliases.add(alias)
+    join = RawSQLJoin(subquery, params, parent_alias, alias, join_type, FakeJoinField(join_fields), join_type == LOUTER)
+    queryset.query.join(join)
+    join.table_alias = alias
+
+
 def RawSQLColumn(model, field=None):
     if isinstance(model, Field):
         field = model
