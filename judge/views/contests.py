@@ -57,8 +57,8 @@ class ContestListMixin(object):
         if not self.request.user.has_perm('judge.edit_all_contest'):
             q = Q(is_private=False, is_organization_private=False)
             if self.request.user.is_authenticated:
-                q |= Q(organizations__in=self.request.profile.organizations.all())
-                q |= Q(private_contestants=self.request.profile)
+                q |= Q(is_organization_private=True, organizations__in=self.request.profile.organizations.all())
+                q |= Q(is_private=True, private_contestants=self.request.profile)
             queryset = queryset.filter(q)
         return queryset.distinct()
 
@@ -185,8 +185,9 @@ class ContestMixin(object):
                 raise private_contest_error
             if user.has_perm('judge.edit_all_contest'):
                 return contest
-            if not contest.organizations.filter(id__in=profile.organizations.all()).exists() and \
-                    not contest.private_contestants.filter(id=profile.id).exists():
+            if not (contest.is_organization_private and
+                    contest.organizations.filter(id__in=profile.organizations.all()).exists()) and \
+                    not (contest.is_private and contest.private_contestants.filter(id=profile.id).exists()):
                 raise private_contest_error
 
         return contest
