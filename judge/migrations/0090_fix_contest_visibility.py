@@ -12,5 +12,8 @@ class Migration(migrations.Migration):
             UPDATE `judge_contest`
             SET `judge_contest`.`is_private` = 0, `judge_contest`.`is_organization_private` = 1
             WHERE `judge_contest`.`is_private` = 1
-        ''', migrations.RunSQL.noop),
+        ''', '''
+            UPDATE `judge_contest`
+            SET `judge_contest`.`is_private` = `judge_contest`.`is_organization_private`
+        '''),
     ]
