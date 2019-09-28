@@ -42,7 +42,13 @@ class AtomProblemFeed(ProblemFeed):
 class CommentFeed(Feed):
     title = 'Latest %s Comments' % settings.SITE_NAME
     link = '/'
+<<<<<<< HEAD
     description = 'The latest comments on the %s website' % settings.SITE_LONG_NAME
+=======
+    description = 'The latest comments on the %s website' % (
+        getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
+    )
+>>>>>>> Fix basic flake8 errors
 
     def items(self):
         return Comment.most_recent(AnonymousUser(), 25)
@@ -72,7 +78,13 @@ class AtomCommentFeed(CommentFeed):
 class BlogFeed(Feed):
     title = 'Latest %s Blog Posts' % settings.SITE_NAME
     link = '/'
+<<<<<<< HEAD
     description = 'The latest blog posts from the %s' % settings.SITE_LONG_NAME
+=======
+    description = 'The latest blog posts from the %s' % (
+        getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
+    )
+>>>>>>> Fix basic flake8 errors
 
     def items(self):
         return BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).order_by('-sticky', '-publish_on')

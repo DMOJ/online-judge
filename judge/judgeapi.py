@@ -88,9 +88,7 @@ def judge_submission(submission, rejudge, batch_rejudge=False):
             'problem-id': submission.problem.code,
             'language': submission.language.key,
             'source': submission.source.source,
-            'priority': BATCH_REJUDGE_PRIORITY
-                if batch_rejudge
-                else REJUDGE_PRIORITY if rejudge else priority,
+            'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else REJUDGE_PRIORITY if rejudge else priority,
         })
     except BaseException:
         logger.exception('Failed to send request to judge')

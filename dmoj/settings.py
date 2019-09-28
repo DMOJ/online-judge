@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import re
 import tempfile
 
 from django.utils.translation import ugettext_lazy as _

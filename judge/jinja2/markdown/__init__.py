@@ -85,10 +85,10 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
             elif 'error' not in result:
                 img = ('''<img src="%(svg)s" onerror="this.src='%(png)s';this.onerror=null"'''
                        'width="%(width)s" height="%(height)s"%(tail)s>') % {
-                          'svg': result['svg'], 'png': result['png'],
-                          'width': result['meta']['width'], 'height': result['meta']['height'],
-                          'tail': ' /' if self.options.get('use_xhtml') else ''
-                      }
+                    'svg': result['svg'], 'png': result['png'],
+                    'width': result['meta']['width'], 'height': result['meta']['height'],
+                    'tail': ' /' if self.options.get('use_xhtml') else ''
+                }
                 style = ['max-width: 100%',
                          'height: %s' % result['meta']['height'],
                          'max-height: %s' % result['meta']['height'],

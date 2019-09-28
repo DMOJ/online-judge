@@ -12,7 +12,7 @@ class Command(BaseCommand):
         judge_handler = DjangoJudgeHandler
 
         try:
-            import netaddr
+            import netaddr  # noqa: F401, imported to see if it exists
         except ImportError:
             pass
         else:

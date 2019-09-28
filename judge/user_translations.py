@@ -7,13 +7,11 @@ if settings.USE_I18N:
 
     _translations = {}
 
-
     def translation(language):
         global _translations
         if language not in _translations:
             _translations[language] = DjangoTranslation(language, domain='dmoj-user')
         return _translations[language]
-
 
     def do_translate(message, translation_function):
         """Copied from django.utils.translation.trans_real"""
@@ -34,7 +32,6 @@ if settings.USE_I18N:
             return mark_safe(result)
 
         return result
-
 
     def gettext(message):
         return do_translate(message, 'gettext')

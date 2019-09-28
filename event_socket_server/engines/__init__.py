@@ -3,7 +3,7 @@ import select
 __author__ = 'Quantum'
 engines = {}
 
-from .select_server import SelectServer
+from .select_server import SelectServer  # noqa: E402, import not at top for consistency
 engines['select'] = SelectServer
 
 if hasattr(select, 'poll'):

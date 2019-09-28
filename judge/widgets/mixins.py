@@ -42,6 +42,6 @@ class CompressorWidgetMixin(object):
                 result = html.fromstring(template.render(Context({'media': media})))
 
                 return forms.Media(
-                        css={'all': [result.find('.//link').get('href')]} if self.compress_css else media._css,
-                        js=[result.find('.//script').get('src')] if self.compress_js else media._js
+                    css={'all': [result.find('.//link').get('href')]} if self.compress_css else media._css,
+                    js=[result.find('.//script').get('src')] if self.compress_js else media._js
                 )

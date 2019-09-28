@@ -35,7 +35,8 @@ class ProblemForm(ModelForm):
             'curators': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'testers': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
-            'organizations': HeavySelect2MultipleWidget(data_view='organization_select2', attrs={'style': 'width: 100%'}),
+            'organizations': HeavySelect2MultipleWidget(data_view='organization_select2',
+                                                        attrs={'style': 'width: 100%'}),
             'types': Select2MultipleWidget,
             'group': Select2Widget,
         }
@@ -47,8 +48,8 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
     title = parameter_name = 'creator'
 
     def lookups(self, request, model_admin):
-        return [(name, name) for name in Profile.objects.exclude(authored_problems=None)
-            .values_list('user__username', flat=True)]
+        queryset = Profile.objects.exclude(authored_problems=None).values_list('user__username', flat=True)
+        return [(name, name) for name in queryset]
 
     def queryset(self, request, queryset):
         if self.value() is None:

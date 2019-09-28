@@ -51,7 +51,7 @@ class DetectTimezone(View):
         if not hasattr(settings, 'GEONAMES_USERNAME'):
             raise ImproperlyConfigured()
         data = requests.get('http://api.geonames.org/timezoneJSON?lat=%f&lng=%f&username=%s' %
-                                             (lat, long, settings.GEONAMES_USERNAME)).json()
+                            (lat, long, settings.GEONAMES_USERNAME)).json()
         try:
             return HttpResponse(data['timezoneId'], content_type='text/plain')
         except KeyError:

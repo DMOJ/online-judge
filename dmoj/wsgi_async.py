@@ -1,11 +1,12 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dmoj.settings')
 
 import gevent.monkey
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dmoj.settings')
 gevent.monkey.patch_all()
 
 try:
-    import MySQLdb
+    import MySQLdb  # noqa: F401, imported for side effect
 except ImportError:
     import pymysql
     pymysql.install_as_MySQLdb()
@@ -20,5 +21,5 @@ else:
         partial(MySQLdb.connect, waiter=gevent_waiter)
     )
 
-from django.core.wsgi import get_wsgi_application
+from django.core.wsgi import get_wsgi_application  # noqa: E402, django must be imported here
 application = get_wsgi_application()

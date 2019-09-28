@@ -95,7 +95,7 @@ class ContestForm(ModelForm):
     class Meta:
         widgets = {
             'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
-            'private_contestants': HeavySelect2MultipleWidget(data_view='profile_select2', 
+            'private_contestants': HeavySelect2MultipleWidget(data_view='profile_select2',
                                                               attrs={'style': 'width: 100%'}),
             'organizations': HeavySelect2MultipleWidget(data_view='organization_select2'),
             'tags': Select2MultipleWidget,
@@ -108,7 +108,7 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'organizers') }),
+        (None, {'fields': ('key', 'name', 'organizers')}),
         (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'hide_scoreboard',
                                     'run_pretests_only')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
@@ -116,7 +116,7 @@ class ContestAdmin(VersionAdmin):
         (_('Format'), {'fields': ('format_name', 'format_config')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
         (_('Access'), {'fields': ('access_code', 'is_private', 'private_contestants', 'is_organization_private',
-                                    'organizations')}),
+                                  'organizations')}),
         (_('Justice'), {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_visible', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
@@ -168,9 +168,11 @@ class ContestAdmin(VersionAdmin):
     make_hidden.short_description = _('Mark contests as hidden')
 
     def get_urls(self):
-        return [url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
-                url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
-                url(r'^(\d+)/judge/(\d+)/$', self.rejudge_view, name='judge_contest_rejudge')] + super(ContestAdmin, self).get_urls()
+        return [
+            url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
+            url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
+            url(r'^(\d+)/judge/(\d+)/$', self.rejudge_view, name='judge_contest_rejudge')
+        ] + super(ContestAdmin, self).get_urls()
 
     def rejudge_view(self, request, contest_id, problem_id):
         if not request.user.has_perm('judge.rejudge_submission'):

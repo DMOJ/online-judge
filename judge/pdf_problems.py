@@ -186,8 +186,7 @@ try {
             'zoom': settings.SLIMERJS_PDF_ZOOM,
             'input': 'input.html', 'output': 'output.pdf',
             'paper': settings.SLIMERJS_PAPER_SIZE,
-            'footer': gettext('Page [page] of [topage]').replace('[page]', '&P')
-                .replace('[topage]', '&L'),
+            'footer': gettext('Page [page] of [topage]').replace('[page]', '&P').replace('[topage]', '&L'),
         }))
 
     def _make(self, debug):

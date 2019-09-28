@@ -4,8 +4,15 @@ ignore =
     W504, # line break occurred after a binary operator
 per-file-ignores =
     # F401: unused imports, ignore in all __init__.py
-    ./*/__init__.py:F401
+    # F403: import *
+    ./*/__init__.py:F401,F403
+    # F405: name comes from import *
+    ./event_socket_server/__init__.py:F401,F403,F405
+    ./judge/management/commands/runmoss.py:F403,F405
     # E501: line too long, ignore in migrations
     ./judge/migrations/*.py:E501
+    # E303: too many blank lines
+    # PyCharm likes to have double lines between class/def in an if statement.
+    ./judge/widgets/pagedown.py:E303
 exclude =
     ./dmoj/local_settings.py, # belongs to the user

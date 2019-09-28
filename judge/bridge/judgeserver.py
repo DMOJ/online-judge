@@ -33,7 +33,7 @@ class JudgeServer(get_preferred_engine()):
                 for judge in self.judges:
                     judge.ping()
                 time.sleep(10)
-        except:
+        except Exception:
             logger.exception('Ping error')
             raise
 

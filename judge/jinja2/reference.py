@@ -51,7 +51,7 @@ def get_user_rating(username, data):
 def get_user_info(usernames):
     return {name: (rank, rating) for name, rank, rating in
             Profile.objects.filter(user__username__in=usernames)
-                .values_list('user__username', 'display_rank', 'rating')}
+                   .values_list('user__username', 'display_rank', 'rating')}
 
 
 reference_map = {
