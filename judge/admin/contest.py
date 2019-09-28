@@ -2,20 +2,20 @@ from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.core.exceptions import PermissionDenied
-from django.db import transaction, connection
-from django.db.models import TextField, Q
+from django.db import connection, transaction
+from django.db.models import Q, TextField
 from django.forms import ModelForm, ModelMultipleChoiceField
-from django.http import HttpResponseRedirect, Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _, ugettext, ungettext
 from reversion.admin import VersionAdmin
 
 from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
 from judge.ratings import rate_contest
-from judge.widgets import HeavySelect2Widget, HeavySelect2MultipleWidget, AdminPagedownWidget, Select2MultipleWidget, \
-    HeavyPreviewAdminPageDownWidget, Select2Widget
+from judge.widgets import AdminPagedownWidget, HeavyPreviewAdminPageDownWidget, HeavySelect2MultipleWidget, \
+    HeavySelect2Widget, Select2MultipleWidget, Select2Widget
 
 
 class HeavySelect2Widget(HeavySelect2Widget):

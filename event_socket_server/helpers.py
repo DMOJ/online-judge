@@ -2,7 +2,6 @@ import struct
 import zlib
 
 from judge.utils.unicode import utf8text
-
 from .handler import Handler
 
 size_pack = struct.Struct('!I')

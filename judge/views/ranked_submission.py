@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 from judge.models import Submission
 from judge.utils.problems import get_result_data
 from judge.utils.raw_sql import join_sql_subquery
-from judge.views.submission import ProblemSubmissions, ForceContestMixin
+from judge.views.submission import ForceContestMixin, ProblemSubmissions
 
 __all__ = ['RankedSubmissions', 'ContestRankedSubmission']
 

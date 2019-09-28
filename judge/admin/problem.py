@@ -7,13 +7,12 @@ from django.db.models import Q
 from django.forms import ModelForm
 from django.urls import reverse_lazy
 from django.utils.html import format_html
-from django.utils.translation import gettext, ungettext, gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
-from judge.models import Profile, LanguageLimit, ProblemTranslation, Problem, ProblemClarification
-from judge.models import Solution
-from judge.widgets import HeavySelect2MultipleWidget, Select2MultipleWidget, Select2Widget, \
-    HeavyPreviewAdminPageDownWidget, HeavyPreviewPageDownWidget, CheckboxSelectMultipleWithSelectAll
+from judge.models import LanguageLimit, Problem, ProblemClarification, ProblemTranslation, Profile, Solution
+from judge.widgets import CheckboxSelectMultipleWithSelectAll, HeavyPreviewAdminPageDownWidget, \
+    HeavyPreviewPageDownWidget, HeavySelect2MultipleWidget, Select2MultipleWidget, Select2Widget
 
 
 class ProblemForm(ModelForm):

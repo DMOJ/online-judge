@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-from django.urls import reverse, reverse_lazy, NoReverseMatch
+from django.urls import NoReverseMatch, reverse, reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
@@ -9,7 +9,7 @@ from reversion.admin import VersionAdmin
 
 from judge.dblock import LockModel
 from judge.models import NavigationBar
-from judge.widgets import HeavySelect2MultipleWidget, HeavyPreviewAdminPageDownWidget, HeavySelect2Widget
+from judge.widgets import HeavyPreviewAdminPageDownWidget, HeavySelect2MultipleWidget, HeavySelect2Widget
 
 
 class NavigationBarAdmin(DraggableMPTTAdmin):

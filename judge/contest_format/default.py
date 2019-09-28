@@ -1,4 +1,5 @@
 from datetime import timedelta
+
 from django.core.exceptions import ValidationError
 from django.db.models import Max
 from django.template.defaultfilters import floatformat

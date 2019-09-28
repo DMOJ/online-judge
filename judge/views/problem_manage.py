@@ -2,7 +2,7 @@ from operator import itemgetter
 
 from celery.result import AsyncResult
 from django.contrib import messages
-from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
@@ -11,7 +11,7 @@ from django.views.generic import DetailView
 from django.views.generic.detail import BaseDetailView
 
 from judge.models import Language, Submission
-from judge.tasks import rejudge_problem_filter, rescore_problem, apply_submission_filter
+from judge.tasks import apply_submission_filter, rejudge_problem_filter, rescore_problem
 from judge.utils.celery import redirect_to_task_status
 from judge.utils.views import TitleMixin
 from judge.views.problem import ProblemMixin

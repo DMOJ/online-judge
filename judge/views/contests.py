@@ -1,6 +1,6 @@
 from calendar import Calendar, SUNDAY
-from collections import namedtuple, defaultdict
-from datetime import timedelta, date, datetime, time
+from collections import defaultdict, namedtuple
+from datetime import date, datetime, time, timedelta
 from functools import partial
 from itertools import chain
 from operator import attrgetter
@@ -8,11 +8,11 @@ from operator import attrgetter
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
-from django.db.models import Q, Min, Max, Sum, Case, When, IntegerField
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.db.models import Case, IntegerField, Max, Min, Q, Sum, When
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.template.defaultfilters import date as date_filter
 from django.urls import reverse
 from django.utils import timezone
@@ -25,8 +25,7 @@ from django.views.generic.detail import BaseDetailView, DetailView
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
-from judge.models import Contest, ContestParticipation, ContestTag, Profile
-from judge.models import Problem
+from judge.models import Contest, ContestParticipation, ContestTag, Problem, Profile
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
 from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message

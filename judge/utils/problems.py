@@ -2,12 +2,12 @@ from collections import defaultdict
 from math import e
 
 from django.core.cache import cache
-from django.db.models import F, Count, Max, Q, ExpressionWrapper, Case, When
+from django.db.models import Case, Count, ExpressionWrapper, F, Max, Q, When
 from django.db.models.fields import FloatField
 from django.utils import timezone
 from django.utils.translation import gettext as _, gettext_noop
 
-from judge.models import Submission, Problem
+from judge.models import Problem, Submission
 
 __all__ = ['contest_completed_ids', 'get_result_data', 'user_completed_ids', 'user_authored_ids', 'user_editable_ids']
 

@@ -10,9 +10,9 @@ from django.contrib.auth.models import Permission
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
-from django.db.models import Max, Count, Min
+from django.db.models import Count, Max, Min
 from django.http import Http404, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.formats import date_format
@@ -23,14 +23,14 @@ from django.views.generic import DetailView, ListView, TemplateView
 from reversion import revisions
 
 from judge.forms import ProfileForm, newsletter_id
-from judge.models import Profile, Submission, Rating
-from judge.performance_points import get_pp_breakdown, PP_ENTRIES
+from judge.models import Profile, Rating, Submission
+from judge.performance_points import PP_ENTRIES, get_pp_breakdown
 from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
 from judge.utils.unicode import utf8text
-from judge.utils.views import TitleMixin, generic_message, DiggPaginatorMixin, QueryStringSortMixin
+from judge.utils.views import DiggPaginatorMixin, QueryStringSortMixin, TitleMixin, generic_message
 from .contests import ContestRanking
 
 __all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile']

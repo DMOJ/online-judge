@@ -1,5 +1,7 @@
 [flake8]
 max-line-length = 120
+application-import-names = dmoj,judge,django_ace,event_socket_server
+import-order-style = pycharm
 ignore =
     W504, # line break occurred after a binary operator
 per-file-ignores =

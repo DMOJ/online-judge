@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.forms import ModelForm
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy as _, gettext, ungettext
+from django.utils.translation import gettext, gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Profile
-from judge.widgets import Select2Widget, AdminPagedownWidget
+from judge.widgets import AdminPagedownWidget, Select2Widget
 
 
 class ProfileForm(ModelForm):

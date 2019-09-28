@@ -10,11 +10,11 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy as _, pgettext, gettext, ungettext
+from django.utils.translation import gettext, gettext_lazy as _, pgettext, ungettext
 
 from django_ace import AceWidget
-from judge.models import Submission, SubmissionTestCase, SubmissionSource, ContestSubmission, ContestParticipation, \
-    ContestProblem, Profile
+from judge.models import ContestParticipation, ContestProblem, ContestSubmission, Profile, Submission, \
+    SubmissionSource, SubmissionTestCase
 from judge.utils.raw_sql import use_straight_join
 
 

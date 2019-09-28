@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.contrib.admin.models import LogEntry
 
 from judge.admin.comments import CommentAdmin
-from judge.admin.contest import ContestTagAdmin, ContestAdmin, ContestParticipationAdmin
-from judge.admin.interface import NavigationBarAdmin, BlogPostAdmin, LicenseAdmin, LogEntryAdmin
+from judge.admin.contest import ContestAdmin, ContestParticipationAdmin, ContestTagAdmin
+from judge.admin.interface import BlogPostAdmin, LicenseAdmin, LogEntryAdmin, NavigationBarAdmin
 from judge.admin.organization import OrganizationAdmin, OrganizationRequestAdmin
 from judge.admin.problem import ProblemAdmin
 from judge.admin.profile import ProfileAdmin

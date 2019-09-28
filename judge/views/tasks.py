@@ -4,12 +4,12 @@ from uuid import UUID
 
 from celery.result import AsyncResult
 from django.core.exceptions import PermissionDenied
-from django.http import Http404, JsonResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.http import is_safe_url
 
-from judge.tasks import success, failure, progress
+from judge.tasks import failure, progress, success
 from judge.utils.celery import redirect_to_task_status
 from judge.utils.views import short_circuit_middleware
 

@@ -1,6 +1,6 @@
 import re
 
-from jinja2 import nodes, Markup
+from jinja2 import Markup, nodes
 from jinja2.ext import Extension
 
 
