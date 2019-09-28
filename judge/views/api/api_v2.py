@@ -67,13 +67,14 @@ def api_v2_user_info(request):
 
     contest_history = []
     for participation in (ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_visible=True)
-                                  .order_by('-contest__end_time')):
+                          .order_by('-contest__end_time')):
         contest = participation.contest
 
         problems = list(contest.contest_problems.select_related('problem').defer('problem__description')
                                .order_by('order'))
         rank, result = next(filter(lambda data: data[1].user == profile.user,
-                                   ranker(contest_ranking_list(contest,problems), key=attrgetter('points', 'cumtime'))))
+                                   ranker(contest_ranking_list(contest, problems),
+                                          key=attrgetter('points', 'cumtime'))))
 
         contest_history.append({
             'contest': {
@@ -117,7 +118,7 @@ def api_v2_user_info(request):
         'solved': solved_problems,
         'attempted': attempted_problems,
         'authored': list(Problem.objects.filter(is_public=True, is_organization_private=False, authors=profile)
-                                .values_list('code', flat=True))
+                         .values_list('code', flat=True))
     }
 
     return JsonResponse(resp)

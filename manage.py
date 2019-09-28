@@ -3,7 +3,7 @@ import os
 import sys
 
 try:
-    import MySQLdb
+    import MySQLdb  # noqa: F401, imported for side effect
 except ImportError:
     import pymysql
     pymysql.install_as_MySQLdb()

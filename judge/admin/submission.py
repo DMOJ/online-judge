@@ -7,8 +7,6 @@ from django.contrib import admin, messages
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.forms import ModelForm
-from django.forms.models import modelformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.html import format_html
@@ -80,13 +78,17 @@ class ContestSubmissionInline(admin.StackedInline):
                 kwargs['queryset'] = ContestParticipation.objects.filter(user=submission.user,
                                                                          contest__problems=submission.problem) \
                     .only('id', 'contest__name')
-                label = lambda obj: obj.contest.name
+
+                def label(obj):
+                    return obj.contest.name
             elif db_field.name == 'problem':
                 kwargs['queryset'] = ContestProblem.objects.filter(problem=submission.problem) \
                     .only('id', 'problem__name', 'contest__name')
-                label = lambda obj: pgettext('contest problem', '%(problem)s in %(contest)s') % {
-                    'problem': obj.problem.name, 'contest': obj.contest.name
-                }
+
+                def label(obj):
+                    return pgettext('contest problem', '%(problem)s in %(contest)s') % {
+                        'problem': obj.problem.name, 'contest': obj.contest.name
+                    }
         field = super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, **kwargs)
         if label is not None:
             field.label_from_instance = label
@@ -234,8 +236,9 @@ class SubmissionAdmin(admin.ModelAdmin):
     judge_column.short_description = ''
 
     def get_urls(self):
-        return [url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge')] + \
-               super(SubmissionAdmin, self).get_urls()
+        return [
+            url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge')
+        ] + super(SubmissionAdmin, self).get_urls()
 
     def judge_view(self, request, id):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):

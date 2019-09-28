@@ -17,7 +17,7 @@ from django.utils.html import escape, format_html, linebreaks
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy, gettext as _
 from django.views import View
-from django.views.generic import FormView, ListView
+from django.views.generic import ListView
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
 
@@ -302,8 +302,8 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
             'notification': {
                 'title': _('New Ticket: %s') % ticket.title,
                 'body': '%s\n%s' % (_('#%(id)d, assigned to: %(users)s') % {
-                    'id': ticket.id, 'users': (_(', ').join(ticket.assignees.values_list('user__username', flat=True))
-                                               or _('no one')),
+                    'id': ticket.id,
+                    'users': (_(', ').join(ticket.assignees.values_list('user__username', flat=True)) or _('no one')),
                 }, truncatechars(message.body, 200)),
             }
         })

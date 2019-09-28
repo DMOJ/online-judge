@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.db import IntegrityError, transaction
+from django.db import transaction
 from django.db.models import Count, Q, F, Prefetch
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
@@ -21,7 +21,6 @@ from django.utils.functional import cached_property
 from django.utils.html import format_html, escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy
-from django.views.decorators.http import require_POST
 from django.views.generic import ListView, View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
@@ -29,8 +28,9 @@ from django.views.generic.detail import SingleObjectMixin
 from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemSubmitForm
-from judge.models import ContestSubmission, ContestProblem, Judge, Language, Problem, ProblemGroup, ProblemTranslation, \
-    ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, TranslatedProblemForeignKeyQuerySet
+from judge.models import ContestSubmission, ContestProblem, Judge, Language, Problem, ProblemGroup, \
+    ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, \
+    TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import HAS_PDF, DefaultPdfMaker
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
@@ -49,7 +49,8 @@ def get_contest_problem(problem, profile):
 
 
 def get_contest_submission_count(problem, profile):
-    return profile.current_contest.submissions.exclude(submission__status__in=['IE']).filter(problem__problem__code=problem).count()
+    return profile.current_contest.submissions.exclude(submission__status__in=['IE'])\
+                  .filter(problem__problem__code=problem).count()
 
 
 class ProblemMixin(object):
@@ -273,7 +274,8 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                 shutil.move(maker.pdffile, cache)
 
         response = HttpResponse()
-        if hasattr(settings, 'DMOJ_PDF_PROBLEM_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
+        if hasattr(settings, 'DMOJ_PDF_PROBLEM_INTERNAL') and \
+                request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
             response['X-Accel-Redirect'] = '%s/%s.%s.pdf' % (settings.DMOJ_PDF_PROBLEM_INTERNAL, problem.code, language)
         else:
             with open(cache, 'rb') as f:
@@ -527,7 +529,7 @@ user_logger = logging.getLogger('judge.user')
 @login_required
 def problem_submit(request, problem=None, submission=None):
     if submission is not None and not request.user.has_perm('judge.resubmit_other') and \
-                    get_object_or_404(Submission, id=int(submission)).user.user != request.user:
+            get_object_or_404(Submission, id=int(submission)).user.user != request.user:
         raise PermissionDenied()
 
     profile = request.profile
@@ -535,8 +537,8 @@ def problem_submit(request, problem=None, submission=None):
         form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))
         if form.is_valid():
             if (not request.user.has_perm('judge.spam_submission') and
-                        Submission.objects.filter(user=profile, was_rejudged=False).exclude(
-                            status__in=['D', 'IE', 'CE', 'AB']).count() > 2):
+                    Submission.objects.filter(user=profile, was_rejudged=False)
+                              .exclude(status__in=['D', 'IE', 'CE', 'AB']).count() > 2):
                 return HttpResponse('<h1>You submitted too many submissions.</h1>', status=429)
             if not form.cleaned_data['problem'].allowed_languages.filter(
                     id=form.cleaned_data['language'].id).exists():
@@ -603,8 +605,10 @@ def problem_submit(request, problem=None, submission=None):
         form = ProblemSubmitForm(initial=initial)
         form_data = initial
     if 'problem' in form_data:
-        form.fields['language'].queryset = (form_data['problem'].usable_languages.order_by('name', 'key')
-            .prefetch_related(Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority'))))
+        form.fields['language'].queryset = (
+            form_data['problem'].usable_languages.order_by('name', 'key')
+            .prefetch_related(Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority')))
+        )
         problem_object = form_data['problem']
     if 'language' in form_data:
         form.fields['source'].widget.mode = form_data['language'].ace

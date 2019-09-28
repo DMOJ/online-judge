@@ -2,7 +2,7 @@ from itertools import repeat, chain
 from operator import itemgetter
 
 from django.conf import settings
-from django.db.models import Count, Sum, Case, When, IntegerField, Value, FloatField
+from django.db.models import Count, Case, When, IntegerField, Value, FloatField
 from django.db.models.expressions import CombinedExpression
 from django.http import JsonResponse
 from django.shortcuts import render
