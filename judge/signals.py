@@ -5,12 +5,12 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from .caching import finished_submission
-from .models import Problem, Contest, Submission, Organization, Profile, MiscConfig, Language, Judge, \
-    BlogPost, ContestSubmission, Comment, License, EFFECTIVE_MATH_ENGINES
+from .models import BlogPost, Comment, Contest, ContestSubmission, EFFECTIVE_MATH_ENGINES, Judge, Language, License, \
+    MiscConfig, Organization, Problem, Profile, Submission
 
 
 def get_pdf_path(basename):

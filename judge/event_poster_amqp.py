@@ -2,10 +2,9 @@ import json
 import threading
 from time import time
 
-from django.conf import settings
 import pika
+from django.conf import settings
 from pika.exceptions import AMQPError
-
 
 __all__ = ['EventPoster', 'post', 'last']
 

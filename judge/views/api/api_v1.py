@@ -1,7 +1,7 @@
 from operator import attrgetter
 
-from django.db.models import Prefetch, F
-from django.http import JsonResponse, Http404
+from django.db.models import F, Prefetch
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 
 from dmoj import settings

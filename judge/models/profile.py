@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from fernet_fields import EncryptedCharField
 from sortedm2m.fields import SortedManyToManyField
 
-from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES
+from judge.models.choices import ACE_THEMES, MATH_ENGINES_CHOICES, TIMEZONE
 from judge.ratings import rating_class
 
 __all__ = ['Organization', 'Profile', 'OrganizationRequest']

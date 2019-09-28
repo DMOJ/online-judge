@@ -2,7 +2,7 @@ from textwrap import dedent
 
 from django import forms
 from django.conf import settings
-from django.template import Template, Context
+from django.template import Context, Template
 from lxml import html
 
 

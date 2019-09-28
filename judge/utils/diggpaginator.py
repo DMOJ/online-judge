@@ -1,8 +1,7 @@
 import math
-
 from functools import reduce
 
-from django.core.paginator import Paginator, Page, InvalidPage
+from django.core.paginator import InvalidPage, Page, Paginator
 
 __all__ = (
     'InvalidPage',

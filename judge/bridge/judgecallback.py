@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from judge import event_poster as event
 from judge.caching import finished_submission
-from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit, RuntimeVersion
+from judge.models import Judge, Language, LanguageLimit, Problem, RuntimeVersion, Submission, SubmissionTestCase
 from .judgehandler import JudgeHandler, SubmissionData
 
 logger = logging.getLogger('judge.bridge')

@@ -1,11 +1,11 @@
-from django.db.models import Q, F
-from django.http import JsonResponse, Http404
+from django.db.models import F, Q
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import smart_text
 from django.views.generic.list import BaseListView
 
 from judge.jinja2.gravatar import gravatar
-from judge.models import Profile, Organization, Problem, Comment, Contest
+from judge.models import Comment, Contest, Organization, Problem, Profile
 
 
 def _get_user_queryset(term):

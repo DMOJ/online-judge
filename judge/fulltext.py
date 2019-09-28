@@ -1,6 +1,6 @@
 # From: http://www.mercurytide.co.uk/news/article/django-full-text-search/
 
-from django.db import models, connection
+from django.db import connection, models
 from django.db.models.query import QuerySet
 
 

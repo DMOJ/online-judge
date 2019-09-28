@@ -6,22 +6,23 @@ from django.contrib.sitemaps.views import sitemap
 from django.http import Http404, HttpResponsePermanentRedirect
 from django.templatetags.static import static
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import lazystr
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView
 
-from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
+from judge.feed import AtomBlogFeed, AtomCommentFeed, AtomProblemFeed, BlogFeed, CommentFeed, ProblemFeed
 from judge.forms import CustomAuthenticationForm
-from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, \
-    OrganizationSitemap, BlogPostSitemap, SolutionSitemap
-from judge.views import TitledTemplateView
-from judge.views import organization, language, status, blog, problem, mailgun, license, register, user, \
-    submission, widgets, comment, contests, api, ranked_submission, stats, preview, ticket, totp, tasks, problem_manage
+from judge.sitemap import BlogPostSitemap, ContestSitemap, HomePageSitemap, OrganizationSitemap, ProblemSitemap, \
+    SolutionSitemap, UrlSitemap, UserSitemap
+from judge.views import TitledTemplateView, api, blog, comment, contests, language, license, mailgun, organization, \
+    preview, problem, problem_manage, ranked_submission, register, stats, status, submission, tasks, ticket, totp, \
+    user, widgets
 from judge.views.problem_data import ProblemDataView, ProblemSubmissionDiff, \
     problem_data_file, problem_init_view
-from judge.views.register import RegistrationView, ActivationView
-from judge.views.select2 import UserSelect2View, OrganizationSelect2View, ProblemSelect2View, CommentSelect2View, \
-    ContestSelect2View, UserSearchSelect2View, ContestUserSearchSelect2View, TicketUserSelect2View, AssigneeSelect2View
+from judge.views.register import ActivationView, RegistrationView
+from judge.views.select2 import AssigneeSelect2View, CommentSelect2View, ContestSelect2View, \
+    ContestUserSearchSelect2View, OrganizationSelect2View, ProblemSelect2View, TicketUserSelect2View, \
+    UserSearchSelect2View, UserSelect2View
 
 admin.autodiscover()
 

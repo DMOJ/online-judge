@@ -21,5 +21,5 @@ else:
         partial(MySQLdb.connect, waiter=gevent_waiter)
     )
 
-from django.core.wsgi import get_wsgi_application  # noqa: E402, django must be imported here
+from django.core.wsgi import get_wsgi_application  # noqa: E402, I202, django must be imported here
 application = get_wsgi_application()

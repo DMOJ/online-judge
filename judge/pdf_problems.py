@@ -1,8 +1,7 @@
 import errno
-import logging
-
 import io
 import json
+import logging
 import os
 import shutil
 import subprocess
