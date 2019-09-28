@@ -68,9 +68,7 @@ def _get_pwned(prefix):
         response.raise_for_status()
     except requests.RequestException as e:
         # Gracefully handle timeouts and HTTP error response codes.
-        log.warning(
-            'Skipped Pwned Passwords check due to error: %r', e
-        )
+        log.warning('Skipped Pwned Passwords check due to error: %r', e)
         return None
 
     results = {}
@@ -100,12 +98,8 @@ class PwnedPasswordsValidator(object):
     """
     Password validator which checks the Pwned Passwords database.
     """
-    DEFAULT_HELP_MESSAGE = _(
-        "Your password can't be a commonly used password."
-    )
-    DEFAULT_PWNED_MESSAGE = _(
-        "This password is too common."
-    )
+    DEFAULT_HELP_MESSAGE = _("Your password can't be a commonly used password.")
+    DEFAULT_PWNED_MESSAGE = _('This password is too common.')
 
     def __init__(self, error_message=None, help_message=None):
         self.help_message = help_message or self.DEFAULT_HELP_MESSAGE
@@ -118,7 +112,7 @@ class PwnedPasswordsValidator(object):
             singular, plural = error_message
         self.error_message = {
             'singular': singular,
-            'plural': plural
+            'plural': plural,
         }
 
     def validate(self, password, user=None):

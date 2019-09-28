@@ -7,11 +7,7 @@ from event_socket_server import ProxyProtocolMixin, ZlibPacketHandler
 
 logger = logging.getLogger('judge.bridge')
 
-
-SubmissionData = namedtuple(
-    'SubmissionData',
-    'time memory short_circuit pretests_only contest_no attempt_no user_id'
-)
+SubmissionData = namedtuple('SubmissionData', 'time memory short_circuit pretests_only contest_no attempt_no user_id')
 
 
 class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):

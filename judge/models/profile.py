@@ -176,7 +176,7 @@ class Profile(models.Model):
     class Meta:
         permissions = (
             ('test_site', 'Shows in-progress development stuff'),
-            ('totp', 'Edit TOTP settings')
+            ('totp', 'Edit TOTP settings'),
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')

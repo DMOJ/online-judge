@@ -22,12 +22,8 @@ NOFOLLOW_WHITELIST = getattr(settings, 'NOFOLLOW_EXCLUDED', set())
 
 
 class CodeSafeInlineGrammar(mistune.InlineGrammar):
-    double_emphasis = re.compile(
-        r'^\*{2}([\s\S]+?)()\*{2}(?!\*)'  # **word**
-    )
-    emphasis = re.compile(
-        r'^\*((?:\*\*|[^\*])+?)()\*(?!\*)'  # *word*
-    )
+    double_emphasis = re.compile(r'^\*{2}([\s\S]+?)()\*{2}(?!\*)')  # **word**
+    emphasis = re.compile(r'^\*((?:\*\*|[^\*])+?)()\*(?!\*)')  # *word*
 
 
 class AwesomeInlineGrammar(MathInlineGrammar, CodeSafeInlineGrammar):
@@ -87,7 +83,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
                        'width="%(width)s" height="%(height)s"%(tail)s>') % {
                     'svg': result['svg'], 'png': result['png'],
                     'width': result['meta']['width'], 'height': result['meta']['height'],
-                    'tail': ' /' if self.options.get('use_xhtml') else ''
+                    'tail': ' /' if self.options.get('use_xhtml') else '',
                 }
                 style = ['max-width: 100%',
                          'height: %s' % result['meta']['height'],

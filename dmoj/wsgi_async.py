@@ -18,7 +18,7 @@ else:
         hub.wait(hub.loop.io(fd, 1))
 
     MySQLdb.connect = MySQLdb.Connection = MySQLdb.Connect = wraps(MySQLdb.connect)(
-        partial(MySQLdb.connect, waiter=gevent_waiter)
+        partial(MySQLdb.connect, waiter=gevent_waiter),
     )
 
 from django.core.wsgi import get_wsgi_application  # noqa: E402, I202, django must be imported here

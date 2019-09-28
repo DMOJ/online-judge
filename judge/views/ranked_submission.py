@@ -46,7 +46,7 @@ class RankedSubmissions(ProblemSubmissions):
                 GROUP BY sub.user_id
             '''.format(points=points, contest_join=contest_join, constraint=constraint),
             params=[self.problem.id, self.contest.id] * 3 if self.in_contest else [self.problem.id] * 3,
-            alias='best_subs', join_fields=[('id', 'id')]
+            alias='best_subs', join_fields=[('id', 'id')],
         )
 
         if self.in_contest:
@@ -69,10 +69,10 @@ class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
     def get_title(self):
         if self.problem.is_accessible_by(self.request.user):
             return _('Best solutions for %(problem)s in %(contest)s') % {
-                'problem': self.problem_name, 'contest': self.contest.name
+                'problem': self.problem_name, 'contest': self.contest.name,
             }
         return _('Best solutions for problem %(number)s in %(contest)s') % {
-            'number': self.get_problem_number(self.problem), 'contest': self.contest.name
+            'number': self.get_problem_number(self.problem), 'contest': self.contest.name,
         }
 
     def get_content_title(self):

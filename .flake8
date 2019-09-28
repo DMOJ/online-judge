@@ -6,6 +6,7 @@ ignore =
     W504, # line break occurred after a binary operator
     # allow only generator_stop and annotations future imports
     FI10,FI11,FI12,FI13,FI14,FI15,FI16,FI17,FI18,FI55,FI58,
+    C814, # missing trailing comma in Python 2 only
 per-file-ignores =
     # F401: unused imports, ignore in all __init__.py
     # F403: import *

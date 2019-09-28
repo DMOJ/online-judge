@@ -204,7 +204,7 @@ class ContestMixin(object):
                                        _('Could not find such contest.'))
         except PrivateContestError as e:
             return render(request, 'contest/private.html', {
-                'orgs': e.orgs, 'title': _('Access to contest "%s" denied') % escape(e.name)
+                'orgs': e.orgs, 'title': _('Access to contest "%s" denied') % escape(e.name),
             }, status=403)
 
 
@@ -283,7 +283,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 try:
                     participation = ContestParticipation.objects.create(
                         contest=contest, user=profile, virtual=virtual_id,
-                        real_start=timezone.now()
+                        real_start=timezone.now(),
                     )
                 # There is obviously a race condition here, so we keep trying until we win the race.
                 except IntegrityError:
@@ -293,7 +293,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
         else:
             try:
                 participation = ContestParticipation.objects.get(
-                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0)
+                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0),
                 )
             except ContestParticipation.DoesNotExist:
                 if requires_access_code:
@@ -307,9 +307,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 if participation.ended:
                     participation = ContestParticipation.objects.get_or_create(
                         contest=contest, user=profile, virtual=-1,
-                        defaults={
-                            'real_start': timezone.now()
-                        }
+                        defaults={'real_start': timezone.now()},
                     )[0]
 
         profile.current_contest = participation
@@ -446,7 +444,7 @@ class CachedContestCalendar(ContestCalendar):
 ContestRankingProfile = namedtuple(
     'ContestRankingProfile',
     'id user css_class username points cumtime organization participation '
-    'participation_rating problem_cells result_cell'
+    'participation_rating problem_cells result_cell',
 )
 
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state is_pretested')

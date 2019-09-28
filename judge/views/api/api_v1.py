@@ -74,8 +74,8 @@ def api_v1_contest_detail(request, contest):
                 'user': participation.username,
                 'points': participation.score,
                 'cumtime': participation.cumtime,
-                'solutions': contest.format.get_problem_breakdown(participation, problems)
-            } for participation in participations]
+                'solutions': contest.format.get_problem_breakdown(participation, problems),
+            } for participation in participations],
     })
 
 
@@ -91,7 +91,7 @@ def api_v1_problem_list(request):
         'points': points,
         'partial': partial,
         'name': name,
-        'group': group
+        'group': group,
     } for code, points, partial, name, group in queryset})
 
 
@@ -119,7 +119,7 @@ def api_v1_user_list(request):
     return JsonResponse({username: {
         'points': points,
         'performance_points': performance_points,
-        'rank': rank
+        'rank': rank,
     } for username, points, performance_points, rank in queryset})
 
 

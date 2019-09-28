@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             ['''UPDATE judge_submission sub
                 INNER JOIN judge_submissionsource src ON sub.id = src.submission_id
                 SET sub.source = src.source;'''],
-            elidable=True
+            elidable=True,
         ),
         migrations.RemoveField(
             model_name='submission',
@@ -34,6 +34,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='submissionsource',
             name='submission',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='source', to='judge.Submission', verbose_name='associated submission')
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='source', to='judge.Submission', verbose_name='associated submission'),
         ),
     ]

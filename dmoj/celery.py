@@ -28,5 +28,5 @@ logger = logging.getLogger('judge.celery')
 @task_failure.connect()
 def celery_failure_log(sender, task_id, exception, traceback, *args, **kwargs):
     logger.exception('Celery Task {task_name}: {task_id} on {hostname}'.format(
-        task_name=sender.name, task_id=task_id, hostname=socket.gethostname()
+        task_name=sender.name, task_id=task_id, hostname=socket.gethostname(),
     ), exc_info=(type(exception), exception, traceback))

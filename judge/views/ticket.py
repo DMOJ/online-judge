@@ -161,10 +161,10 @@ class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, SingleObjectMixin,
                     'type': 'ticket-status', 'id': ticket.id,
                     'open': self.open, 'user': ticket.user_id,
                     'assignees': list(ticket.assignees.values_list('id', flat=True)),
-                    'title': ticket.title
+                    'title': ticket.title,
                 })
                 event.post('ticket-%d' % ticket.id, {
-                    'type': 'ticket-status', 'open': self.open
+                    'type': 'ticket-status', 'open': self.open,
                 })
         return HttpResponse(status=204)
 
@@ -299,5 +299,5 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
                     'id': ticket.id,
                     'users': (_(', ').join(ticket.assignees.values_list('user__username', flat=True)) or _('no one')),
                 }, truncatechars(message.body, 200)),
-            }
+            },
         })
