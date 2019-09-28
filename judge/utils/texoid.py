@@ -35,10 +35,10 @@ class TexoidRenderer(object):
             if e.response.status == 400:
                 logger.error('Texoid failed to render: %s\n%s', document, e.response.text)
             else:
-                logger.exception('Failed to connect to texoid for: %s' % document)
+                logger.exception('Failed to connect to texoid for: %s', document)
             return
         except Exception:
-            logger.exception('Failed to connect to texoid for: %s' % document)
+            logger.exception('Failed to connect to texoid for: %s', document)
             return
 
         try:
