@@ -1,0 +1,11 @@
+[flake8]
+max-line-length = 120
+ignore =
+    W504, # line break occurred after a binary operator
+per-file-ignores =
+    # F401: unused imports, ignore in all __init__.py
+    ./*/__init__.py:F401
+    # E501: line too long, ignore in migrations
+    ./judge/migrations/*.py:E501
+exclude =
+    ./dmoj/local_settings.py, # belongs to the user
