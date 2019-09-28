@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.db.models import TextField
-from django.forms import TextInput, ModelForm, ModelMultipleChoiceField
+from django.forms import ModelForm, ModelMultipleChoiceField, TextInput
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse

@@ -17,7 +17,7 @@ from social_core.pipeline.partial import partial
 from social_django.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
 
 from judge.forms import ProfileForm
-from judge.models import Profile, Language
+from judge.models import Language, Profile
 
 logger = logging.getLogger('judge.social_auth')
 

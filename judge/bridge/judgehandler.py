@@ -3,7 +3,7 @@ import logging
 import time
 from collections import deque, namedtuple
 
-from event_socket_server import ZlibPacketHandler, ProxyProtocolMixin
+from event_socket_server import ProxyProtocolMixin, ZlibPacketHandler
 
 logger = logging.getLogger('judge.bridge')
 

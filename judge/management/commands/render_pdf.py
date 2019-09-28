@@ -8,7 +8,7 @@ from django.template.loader import get_template
 from django.utils import translation
 
 from judge.models import Problem, ProblemTranslation
-from judge.pdf_problems import DefaultPdfMaker, PhantomJSPdfMaker, SlimerJSPdfMaker, PuppeteerPDFRender
+from judge.pdf_problems import DefaultPdfMaker, PhantomJSPdfMaker, PuppeteerPDFRender, SlimerJSPdfMaker
 
 
 class Command(BaseCommand):

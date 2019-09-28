@@ -1,5 +1,4 @@
 from judge.utils.camo import client as camo_client
-
 from . import registry
 
 

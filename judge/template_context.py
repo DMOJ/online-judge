@@ -7,7 +7,7 @@ from django.core.cache import cache
 from django.utils.functional import SimpleLazyObject, new_method_proxy
 
 from judge.utils.caniuse import CanIUse, SUPPORT
-from .models import Profile, MiscConfig, NavigationBar
+from .models import MiscConfig, NavigationBar, Profile
 
 
 class FixedSimpleLazyObject(SimpleLazyObject):

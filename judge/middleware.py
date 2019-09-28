@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from django.urls import reverse, resolve, Resolver404
+from django.urls import Resolver404, resolve, reverse
 from django.utils.http import urlquote
 
 

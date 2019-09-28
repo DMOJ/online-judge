@@ -7,15 +7,15 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
-from django.forms import ModelForm, CharField, Form
+from django.forms import CharField, Form, ModelForm
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from django_ace import AceWidget
-from judge.models import Organization, Problem, Profile, Submission, PrivateMessage, Language
+from judge.models import Language, Organization, PrivateMessage, Problem, Profile, Submission
 from judge.utils.subscription import newsletter_id
-from judge.widgets import MathJaxPagedownWidget, HeavyPreviewPageDownWidget, PagedownWidget, \
-    Select2Widget, Select2MultipleWidget
+from judge.widgets import HeavyPreviewPageDownWidget, MathJaxPagedownWidget, PagedownWidget, Select2MultipleWidget, \
+    Select2Widget
 
 
 def fix_unicode(string, unsafe=tuple('\u202a\u202b\u202d\u202e')):

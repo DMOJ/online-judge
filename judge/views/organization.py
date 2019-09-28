@@ -8,17 +8,17 @@ from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Count, Q
 from django.forms import Form, modelformset_factory
-from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import gettext as _, gettext_lazy, ungettext
-from django.views.generic import DetailView, ListView, View, UpdateView, FormView
+from django.views.generic import DetailView, FormView, ListView, UpdateView, View
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 from reversion import revisions
 
 from judge.forms import EditOrganizationForm
 from judge.models import Organization, OrganizationRequest, Profile
 from judge.utils.ranker import ranker
-from judge.utils.views import generic_message, TitleMixin
+from judge.utils.views import TitleMixin, generic_message
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'OrganizationMembershipChange',
            'JoinOrganization', 'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization',

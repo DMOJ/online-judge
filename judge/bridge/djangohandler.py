@@ -1,5 +1,5 @@
-import logging
 import json
+import logging
 import struct
 
 from event_socket_server import ZlibPacketHandler

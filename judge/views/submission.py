@@ -3,25 +3,25 @@ from operator import attrgetter
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist, PermissionDenied
 from django.db.models import Prefetch, Q
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.html import format_html, escape
+from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.decorators.http import require_POST
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView, ListView
 
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
-from judge.models import Problem, Submission, Profile, Contest, ProblemTranslation, Language
-from judge.utils.problems import get_result_data, user_completed_ids, user_authored_ids, user_editable_ids
+from judge.models import Contest, Language, Problem, ProblemTranslation, Profile, Submission
+from judge.utils.problems import get_result_data, user_authored_ids, user_completed_ids, user_editable_ids
 from judge.utils.raw_sql import use_straight_join
-from judge.utils.views import TitleMixin, DiggPaginatorMixin
+from judge.utils.views import DiggPaginatorMixin, TitleMixin
 
 
 def submission_related(queryset):

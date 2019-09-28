@@ -5,12 +5,12 @@ from django.db.models import CASCADE
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext, gettext_lazy as _
 from jsonfield import JSONField
 
 from judge import contest_format
 from judge.models.problem import Problem
-from judge.models.profile import Profile, Organization
+from judge.models.profile import Organization, Profile
 from judge.models.submission import Submission
 
 __all__ = ['Contest', 'ContestTag', 'ContestParticipation', 'ContestProblem', 'ContestSubmission', 'Rating']

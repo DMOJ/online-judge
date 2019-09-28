@@ -1,4 +1,4 @@
-from django.db.models import Q, Max, Count
+from django.db.models import Count, Max, Q
 from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
@@ -7,8 +7,8 @@ from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 
 from judge.comments import CommentedDetailView
-from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submission, Language, ProblemClarification
-from judge.models import Ticket
+from judge.models import BlogPost, Comment, Contest, Language, Problem, ProblemClarification, Profile, Submission, \
+    Ticket
 from judge.utils.cachedict import CacheDict
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.problems import user_completed_ids

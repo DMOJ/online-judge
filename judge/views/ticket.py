@@ -2,30 +2,24 @@ import json
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied, ImproperlyConfigured, ValidationError
-from django.http import Http404
-from django.http import HttpResponse
-from django.http import HttpResponseBadRequest
-from django.http import HttpResponseRedirect
-from django.http import JsonResponse
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied, ValidationError
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import truncatechars
 from django.template.loader import get_template
-from django.urls import reverse
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html, linebreaks
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy, gettext as _
+from django.utils.translation import gettext as _, gettext_lazy
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import SingleObjectMixin
-from django.shortcuts import get_object_or_404
 
 from judge import event_poster as event
-from judge.models import Profile
-from judge.models import Ticket, TicketMessage, Problem
+from judge.models import Problem, Profile, Ticket, TicketMessage
 from judge.utils.diggpaginator import DiggPaginator
-from judge.utils.tickets import own_ticket_filter, filter_visible_tickets
+from judge.utils.tickets import filter_visible_tickets, own_ticket_filter
 from judge.utils.views import SingleObjectFormView, TitleMixin, paginate_query_context
 from judge.views.problem import ProblemMixin
 from judge.widgets import HeavyPreviewPageDownWidget

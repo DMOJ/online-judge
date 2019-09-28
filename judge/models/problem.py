@@ -5,7 +5,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
-from django.db.models import F, QuerySet, CASCADE, SET_NULL
+from django.db.models import CASCADE, F, QuerySet, SET_NULL
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from django.urls import reverse
@@ -13,10 +13,10 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from judge.fulltext import SearchQuerySet
-from judge.models.profile import Profile, Organization
+from judge.models.profile import Organization, Profile
 from judge.models.runtime import Language
 from judge.user_translations import gettext as user_gettext
-from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
+from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 
 __all__ = ['ProblemGroup', 'ProblemType', 'Problem', 'ProblemTranslation', 'ProblemClarification',
            'License', 'Solution', 'TranslatedProblemQuerySet', 'TranslatedProblemForeignKeyQuerySet']

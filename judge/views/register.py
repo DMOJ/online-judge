@@ -8,15 +8,15 @@ from django.contrib.auth.password_validation import get_default_password_validat
 from django.forms import ChoiceField, ModelChoiceField
 from django.shortcuts import render
 from django.utils.translation import gettext, gettext_lazy as _
-from registration.backends.default.views import (RegistrationView as OldRegistrationView,
-                                                 ActivationView as OldActivationView)
+from registration.backends.default.views import (ActivationView as OldActivationView,
+                                                 RegistrationView as OldRegistrationView)
 from registration.forms import RegistrationForm
 from sortedm2m.forms import SortedMultipleChoiceField
 
-from judge.models import Profile, Language, Organization, TIMEZONE
-from judge.utils.recaptcha import ReCaptchaWidget, ReCaptchaField
+from judge.models import Language, Organization, Profile, TIMEZONE
+from judge.utils.recaptcha import ReCaptchaField, ReCaptchaWidget
 from judge.utils.subscription import Subscription, newsletter_id
-from judge.widgets import Select2Widget, Select2MultipleWidget
+from judge.widgets import Select2MultipleWidget, Select2Widget
 
 valid_id = re.compile(r'^\w+$')
 bad_mail_regex = list(map(re.compile, getattr(settings, 'BAD_MAIL_PROVIDER_REGEX', ())))

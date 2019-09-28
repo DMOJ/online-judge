@@ -3,7 +3,7 @@ from operator import attrgetter
 from django.db.models import Max
 from django.http import JsonResponse
 
-from judge.models import Problem, Profile, Submission, ContestParticipation
+from judge.models import ContestParticipation, Problem, Profile, Submission
 from judge.utils.ranker import ranker
 from judge.views.contests import contest_ranking_list
 

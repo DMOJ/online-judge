@@ -10,7 +10,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dmoj.settings')
 
 app = Celery('dmoj')
 
-from django.conf import settings  # noqa: E402, django must be imported here
+from django.conf import settings  # noqa: E402, I202, django must be imported here
 app.config_from_object(settings, namespace='CELERY')
 
 if hasattr(settings, 'CELERY_BROKER_URL_SECRET'):

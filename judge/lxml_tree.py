@@ -1,6 +1,6 @@
 import logging
 
-from django.utils.safestring import mark_safe, SafeData
+from django.utils.safestring import SafeData, mark_safe
 from lxml import html
 from lxml.etree import ParserError, XMLSyntaxError
 

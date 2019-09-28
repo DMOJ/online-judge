@@ -8,12 +8,11 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from judge.judgeapi import judge_submission, abort_submission
+from judge.judgeapi import abort_submission, judge_submission
 from judge.models.problem import Problem, TranslatedProblemForeignKeyQuerySet
 from judge.models.profile import Profile
 from judge.models.runtime import Language
 from judge.utils.unicode import utf8bytes
-
 
 __all__ = ['SUBMISSION_RESULT', 'Submission', 'SubmissionSource', 'SubmissionTestCase']
 
