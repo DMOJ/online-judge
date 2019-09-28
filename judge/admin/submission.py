@@ -87,7 +87,7 @@ class ContestSubmissionInline(admin.StackedInline):
 
                 def label(obj):
                     return pgettext('contest problem', '%(problem)s in %(contest)s') % {
-                        'problem': obj.problem.name, 'contest': obj.contest.name
+                        'problem': obj.problem.name, 'contest': obj.contest.name,
                     }
         field = super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, **kwargs)
         if label is not None:
@@ -123,7 +123,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = Submission.objects.select_related('problem', 'user__user', 'language').only(
             'problem__code', 'problem__name', 'user__user__username', 'language__name',
-            'time', 'memory', 'points', 'status', 'result'
+            'time', 'memory', 'points', 'status', 'result',
         )
         use_straight_join(queryset)
         if not request.user.has_perm('judge.edit_all_problem'):
@@ -237,7 +237,7 @@ class SubmissionAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         return [
-            url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge')
+            url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge'),
         ] + super(SubmissionAdmin, self).get_urls()
 
     def judge_view(self, request, id):

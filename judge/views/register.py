@@ -71,7 +71,7 @@ class RegistrationView(OldRegistrationView):
     def register(self, form):
         user = super(RegistrationView, self).register(form)
         profile, _ = Profile.objects.get_or_create(user=user, defaults={
-            'language': Language.get_python2()
+            'language': Language.get_python2(),
         })
 
         cleaned_data = form.cleaned_data
@@ -104,5 +104,5 @@ class ActivationView(OldActivationView):
 def social_auth_error(request):
     return render(request, 'generic-message.html', {
         'title': gettext('Authentication failure'),
-        'message': request.GET.get('message')
+        'message': request.GET.get('message'),
     })

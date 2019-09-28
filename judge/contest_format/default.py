@@ -31,7 +31,7 @@ class DefaultContestFormat(BaseContestFormat):
         format_data = {}
 
         for result in participation.submissions.values('problem_id').annotate(
-                time=Max('submission__date'), points=Max('points')
+                time=Max('submission__date'), points=Max('points'),
         ):
             dt = (result['time'] - participation.start).total_seconds()
             if result['points']:

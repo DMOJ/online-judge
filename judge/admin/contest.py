@@ -171,7 +171,7 @@ class ContestAdmin(VersionAdmin):
         return [
             url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
             url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
-            url(r'^(\d+)/judge/(\d+)/$', self.rejudge_view, name='judge_contest_rejudge')
+            url(r'^(\d+)/judge/(\d+)/$', self.rejudge_view, name='judge_contest_rejudge'),
         ] + super(ContestAdmin, self).get_urls()
 
     def rejudge_view(self, request, contest_id, problem_id):
@@ -228,7 +228,7 @@ class ContestAdmin(VersionAdmin):
         form.base_fields['organizers'].queryset = Profile.objects.filter(
             Q(user__is_superuser=True) |
             Q(user__groups__permissions__codename__in=perms) |
-            Q(user__user_permissions__codename__in=perms)
+            Q(user__user_permissions__codename__in=perms),
         ).distinct()
         return form
 
@@ -253,7 +253,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super(ContestParticipationAdmin, self).get_queryset(request).only(
             'contest__name', 'contest__format_name', 'contest__format_config',
-            'user__user__username', 'real_start', 'score', 'cumtime', 'virtual'
+            'user__user__username', 'real_start', 'score', 'cumtime', 'virtual',
         )
 
     def recalculate_results(self, request, queryset):

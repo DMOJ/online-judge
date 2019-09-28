@@ -112,7 +112,7 @@ else:
             'dashboard': {
                 'breadcrumbs': True,
             },
-        }
+        },
     }
 
 INSTALLED_APPS += (
@@ -239,7 +239,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
-    }
+    },
 ]
 
 LOCALE_PATHS = [
@@ -305,7 +305,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    },
 }
 
 ENABLE_FTS = False
@@ -375,7 +375,7 @@ SOCIAL_AUTH_PIPELINE = (
     'judge.social_auth.make_profile',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details'
+    'social_core.pipeline.user.user_details',
 )
 
 SOCIAL_AUTH_GITHUB_SECURE_SCOPE = ['user:email']

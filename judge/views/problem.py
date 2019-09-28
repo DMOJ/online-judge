@@ -636,7 +636,7 @@ def problem_submit(request, problem=None, submission=None):
         'content_title': mark_safe(escape(_('Submit to %(problem)s')) % {
             'problem': format_html('<a href="{0}">{1}</a>',
                                    reverse('problem_detail', args=[problem_object.code]),
-                                   problem_object.translated_name(request.LANGUAGE_CODE))
+                                   problem_object.translated_name(request.LANGUAGE_CODE)),
         }),
         'langs': Language.objects.all(),
         'no_judges': not form.fields['language'].queryset,

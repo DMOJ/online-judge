@@ -25,7 +25,7 @@ class ProblemForm(ModelForm):
         self.fields['testers'].widget.can_add_related = False
         self.fields['banned_users'].widget.can_add_related = False
         self.fields['change_message'].widget.attrs.update({
-            'placeholder': gettext('Describe the changes you made (optional)')
+            'placeholder': gettext('Describe the changes you made (optional)'),
         })
 
     class Meta:
@@ -119,9 +119,8 @@ class ProblemAdmin(VersionAdmin):
         (None, {
             'fields': (
                 'code', 'name', 'is_public', 'is_manually_managed', 'date', 'authors', 'curators', 'testers',
-                'is_organization_private', 'organizations',
-                'description',
-                'license')
+                'is_organization_private', 'organizations', 'description', 'license',
+            ),
         }),
         (_('Social Media'), {'classes': ('collapse',), 'fields': ('og_image', 'summary')}),
         (_('Taxonomy'), {'fields': ('types', 'group')}),
@@ -129,7 +128,7 @@ class ProblemAdmin(VersionAdmin):
         (_('Limits'), {'fields': ('time_limit', 'memory_limit')}),
         (_('Language'), {'fields': ('allowed_languages',)}),
         (_('Justice'), {'fields': ('banned_users',)}),
-        (_('History'), {'fields': ('change_message',)})
+        (_('History'), {'fields': ('change_message',)}),
     )
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'show_public']
     ordering = ['code']

@@ -43,7 +43,7 @@ def task_status(request, task_id):
 
     return render(request, 'task_status.html', {
         'task_id': task_id, 'task_status': json.dumps(status),
-        'message': request.GET.get('message', ''), 'redirect': redirect or ''
+        'message': request.GET.get('message', ''), 'redirect': redirect or '',
     })
 
 

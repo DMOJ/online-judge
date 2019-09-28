@@ -45,7 +45,7 @@ class ProfileForm(ModelForm):
         if HeavyPreviewPageDownWidget is not None:
             widgets['about'] = HeavyPreviewPageDownWidget(
                 preview=reverse_lazy('profile_preview'),
-                attrs={'style': 'max-width:700px;min-width:700px;width:700px'}
+                attrs={'style': 'max-width:700px;min-width:700px;width:700px'},
             )
 
     def clean(self):
@@ -63,7 +63,7 @@ class ProfileForm(ModelForm):
         super(ProfileForm, self).__init__(*args, **kwargs)
         if not user.has_perm('judge.edit_all_organization'):
             self.fields['organizations'].queryset = Organization.objects.filter(
-                Q(is_open=True) | Q(id__in=user.profile.organizations.all())
+                Q(is_open=True) | Q(id__in=user.profile.organizations.all()),
             )
 
 
@@ -128,7 +128,7 @@ class TOTPForm(Form):
     TOLERANCE = getattr(settings, 'DMOJ_TOTP_TOLERANCE_HALF_MINUTES', 1)
 
     totp_token = NoAutoCompleteCharField(validators=[
-        RegexValidator('^[0-9]{6}$', _('Two Factor Authentication tokens must be 6 decimal digits.'))
+        RegexValidator('^[0-9]{6}$', _('Two Factor Authentication tokens must be 6 decimal digits.')),
     ])
 
     def __init__(self, *args, **kwargs):

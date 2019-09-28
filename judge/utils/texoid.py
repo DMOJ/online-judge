@@ -28,7 +28,7 @@ class TexoidRenderer(object):
 
         try:
             response = requests.post(settings.TEXOID_URL, data=utf8bytes(document), headers={
-                'Content-Type': 'application/x-tex'
+                'Content-Type': 'application/x-tex',
             })
             response.raise_for_status()
         except requests.HTTPError as e:

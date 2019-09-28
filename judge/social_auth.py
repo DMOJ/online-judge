@@ -74,7 +74,7 @@ def choose_username(backend, user, username=None, *args, **kwargs):
         else:
             form = UsernameForm(initial={'username': username})
         return render(request, 'registration/username_select.html', {
-            'title': 'Choose a username', 'form': form
+            'title': 'Choose a username', 'form': form,
         })
 
 
@@ -98,7 +98,7 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
                     revisions.set_comment('Updated on registration')
                     return
         return render(backend.strategy.request, 'registration/profile_creation.html', {
-            'title': 'Create your profile', 'form': form
+            'title': 'Create your profile', 'form': form,
         })
 
 

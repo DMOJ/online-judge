@@ -57,7 +57,7 @@ register_patterns = [
     ), name='auth_login'),
     url(r'^logout/$', user.UserLogoutView.as_view(), name='auth_logout'),
     url(r'^password/change/$', auth_views.PasswordChangeView.as_view(
-        template_name='registration/password_change_form.html'
+        template_name='registration/password_change_form.html',
     ), name='password_change'),
     url(r'^password/change/done/$', auth_views.PasswordChangeDoneView.as_view(
         template_name='registration/password_change_done.html',
@@ -367,7 +367,7 @@ favicon_paths = ['apple-touch-icon-180x180.png', 'apple-touch-icon-114x114.png',
 
 for favicon in favicon_paths:
     urlpatterns.append(url(r'^%s$' % favicon, RedirectView.as_view(
-        url=lazystr(lambda: static('icons/' + favicon))
+        url=lazystr(lambda: static('icons/' + favicon)),
     )))
 
 handler404 = 'judge.views.error.error404'
