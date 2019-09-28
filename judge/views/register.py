@@ -46,8 +46,8 @@ class CustomRegistrationForm(RegistrationForm):
                                                 'is allowed per address.') % self.cleaned_data['email'])
         if '@' in self.cleaned_data['email']:
             domain = self.cleaned_data['email'].split('@')[-1].lower()
-            if (domain in getattr(settings, 'BAD_MAIL_PROVIDERS', ())
-                    or any(regex.match(domain) for regex in bad_mail_regex)):
+            if (domain in getattr(settings, 'BAD_MAIL_PROVIDERS', ()) or
+                    any(regex.match(domain) for regex in bad_mail_regex)):
                 raise forms.ValidationError(gettext('Your email provider is not allowed due to history of abuse. '
                                                     'Please use a reputable email provider.'))
         return self.cleaned_data['email']

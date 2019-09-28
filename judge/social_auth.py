@@ -44,7 +44,7 @@ class GitHubSecureEmailOAuth2(GithubOAuth2):
         return data
 
 
-def slugify_username(username, renotword=re.compile('[^\w]')):
+def slugify_username(username, renotword=re.compile(r'[^\w]')):
     return renotword.sub('', username.replace('-', '_'))
 
 

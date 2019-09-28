@@ -53,7 +53,8 @@ class ProfileForm(ModelForm):
         max_orgs = getattr(settings, 'DMOJ_USER_MAX_ORGANIZATION_COUNT', 3)
 
         if sum(org.is_open for org in organizations) > max_orgs:
-            raise ValidationError(_('You may not be part of more than {count} public organizations.').format(count=max_orgs))
+            raise ValidationError(
+                _('You may not be part of more than {count} public organizations.').format(count=max_orgs))
 
         return self.cleaned_data
 

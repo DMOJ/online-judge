@@ -1,6 +1,5 @@
 import json
 from functools import partial
-from urllib.parse import urlencode
 from uuid import UUID
 
 from celery.result import AsyncResult

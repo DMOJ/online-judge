@@ -4,13 +4,16 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
 from django.http import Http404, HttpResponsePermanentRedirect
+from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.utils.functional import lazystr
+from django.views.generic import RedirectView
 
 from judge.feed import CommentFeed, AtomCommentFeed, BlogFeed, AtomBlogFeed, ProblemFeed, AtomProblemFeed
 from judge.forms import CustomAuthenticationForm
-from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, OrganizationSitemap, \
-    BlogPostSitemap, SolutionSitemap
+from judge.sitemap import ProblemSitemap, UserSitemap, HomePageSitemap, UrlSitemap, ContestSitemap, \
+    OrganizationSitemap, BlogPostSitemap, SolutionSitemap
 from judge.views import TitledTemplateView
 from judge.views import organization, language, status, blog, problem, mailgun, license, register, user, \
     submission, widgets, comment, contests, api, ranked_submission, stats, preview, ticket, totp, tasks, problem_manage
@@ -58,7 +61,7 @@ register_patterns = [
     url(r'^password/change/done/$', auth_views.PasswordChangeDoneView.as_view(
         template_name='registration/password_change_done.html',
     ), name='password_change_done'),
-    url(r'^password/reset/$',auth_views.PasswordResetView.as_view(
+    url(r'^password/reset/$', auth_views.PasswordResetView.as_view(
         template_name='registration/password_reset.html',
         html_email_template_name='registration/password_reset_email.html',
         email_template_name='registration/password_reset_email.txt',
@@ -158,7 +161,7 @@ urlpatterns = [
     url(r'^users/', include([
         url(r'^$', user.users, name='user_list'),
         url(r'^(?P<page>\d+)$', lambda request, page:
-        HttpResponsePermanentRedirect('%s?page=%s' % (reverse('user_list'), page))),
+            HttpResponsePermanentRedirect('%s?page=%s' % (reverse('user_list'), page))),
         url(r'^find$', user.user_ranking_redirect, name='user_ranking_redirect'),
     ])),
 
@@ -171,7 +174,8 @@ urlpatterns = [
             url(r'/ajax$', user.UserPerformancePointsAjax.as_view(), name='user_pp_ajax'),
         ])),
         url(r'^/submissions/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions_old')),
-        url(r'^/submissions/', lambda _, user: HttpResponsePermanentRedirect(reverse('all_user_submissions', args=[user]))),
+        url(r'^/submissions/', lambda _, user:
+            HttpResponsePermanentRedirect(reverse('all_user_submissions', args=[user]))),
 
         url(r'^/$', lambda _, user: HttpResponsePermanentRedirect(reverse('user_page', args=[user]))),
     ])),
@@ -208,7 +212,8 @@ urlpatterns = [
             paged_list_view(submission.UserContestSubmissions, 'contest_user_submissions')),
 
         url(r'^/participations$', contests.ContestParticipationList.as_view(), name='contest_participation_own'),
-        url(r'^/participations/(?P<user>\w+)$', contests.ContestParticipationList.as_view(), name='contest_participation'),
+        url(r'^/participations/(?P<user>\w+)$',
+            contests.ContestParticipationList.as_view(), name='contest_participation'),
 
         url(r'^/$', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))),
     ])),
@@ -358,11 +363,6 @@ favicon_paths = ['apple-touch-icon-180x180.png', 'apple-touch-icon-114x114.png',
                  'favicon-32x32.png', 'favicon-16x16.png', 'android-chrome-192x192.png', 'android-chrome-48x48.png',
                  'mstile-310x150.png', 'apple-touch-icon-144x144.png', 'browserconfig.xml', 'manifest.json',
                  'apple-touch-icon-120x120.png', 'mstile-310x310.png']
-
-
-from django.templatetags.static import static
-from django.utils.functional import lazystr
-from django.views.generic import RedirectView
 
 for favicon in favicon_paths:
     urlpatterns.append(url(r'^%s$' % favicon, RedirectView.as_view(

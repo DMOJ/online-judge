@@ -6,7 +6,6 @@ from itertools import chain
 from operator import attrgetter
 
 from django import forms
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
@@ -181,7 +180,8 @@ class ContestMixin(object):
             raise Http404()
 
         if contest.is_private or contest.is_organization_private:
-            private_contest_error = PrivateContestError(contest.name, contest.private_contestants.all(), contest.organizations.all())
+            private_contest_error = PrivateContestError(contest.name, contest.private_contestants.all(),
+                                                        contest.organizations.all())
             if profile is None:
                 raise private_contest_error
             if user.has_perm('judge.edit_all_contest'):
@@ -272,8 +272,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                    _('You have been declared persona non grata for this contest. '
                                      'You are permanently barred from joining this contest.'))
 
-        requires_access_code = not (request.user.is_superuser or self.is_organizer) \
-                               and contest.access_code and access_code != contest.access_code
+        requires_access_code = (not (request.user.is_superuser or self.is_organizer) and
+                                contest.access_code and access_code != contest.access_code)
         if contest.ended:
             if requires_access_code:
                 raise ContestAccessDenied()

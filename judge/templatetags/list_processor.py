@@ -6,7 +6,7 @@ register = template.Library()
 
 
 @register.filter(name='list_attr')
-def list_getattr(iterable, prop):
+def list_attr(iterable, prop):
     result = []
     for item in iterable:
         if hasattr(item, str(prop)):

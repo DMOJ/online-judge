@@ -1,5 +1,3 @@
-from itertools import chain
-
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -8,7 +6,7 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.db.models import Count, Max, Q
+from django.db.models import Count, Q
 from django.forms import Form, modelformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.urls import reverse
@@ -120,7 +118,10 @@ class JoinOrganization(OrganizationMembershipChange):
 
         max_orgs = getattr(settings, 'DMOJ_USER_MAX_ORGANIZATION_COUNT', 3)
         if profile.organizations.filter(is_open=True).count() >= max_orgs:
-            return generic_message(request, _('Joining organization'), _('You may not be part of more than {count} public organizations.').format(count=max_orgs))
+            return generic_message(
+                request, _('Joining organization'),
+                _('You may not be part of more than {count} public organizations.').format(count=max_orgs)
+            )
 
         profile.organizations.add(org)
         profile.save()
@@ -281,7 +282,8 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
 
     def get_form(self, form_class=None):
         form = super(EditOrganization, self).get_form(form_class)
-        form.fields['admins'].queryset = Profile.objects.filter(Q(organizations=self.object) | Q(admin_of=self.object)).distinct()
+        form.fields['admins'].queryset = \
+            Profile.objects.filter(Q(organizations=self.object) | Q(admin_of=self.object)).distinct()
         return form
 
     def form_valid(self, form):

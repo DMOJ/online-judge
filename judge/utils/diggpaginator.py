@@ -200,7 +200,7 @@ class DiggPaginator(ExPaginator):
         """
 
         page = super(DiggPaginator, self).page(number, *args, **kwargs)
-        number = int(number) # we know this will work
+        number = int(number)  # we know this will work
 
         # easier access
         num_pages, body, tail, padding, margin = \
@@ -208,7 +208,7 @@ class DiggPaginator(ExPaginator):
 
         # put active page in middle of main range
         main_range = list(map(int, [
-            math.floor(number - body / 2.0) + 1, # +1 = shift odd body to right
+            math.floor(number - body / 2.0) + 1,  # +1 = shift odd body to right
             math.floor(number + body / 2.0)]))
         # adjust bounds
         if main_range[0] < 1:

@@ -16,7 +16,7 @@ def sane_time_repr(delta):
 
 
 def api_v1_contest_list(request):
-    queryset = Contest.objects.filter(is_visible=True, is_private=False, 
+    queryset = Contest.objects.filter(is_visible=True, is_private=False,
                                       is_organization_private=False).prefetch_related(
         Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description')
 
@@ -44,8 +44,8 @@ def api_v1_contest_detail(request, contest):
                       .annotate(username=F('user__user__username'))
                       .order_by('-score', 'cumtime') if can_see_rankings else [])
 
-    if not (in_contest or contest.ended or request.user.is_superuser
-            or (request.user.is_authenticated and contest.organizers.filter(id=request.profile.id).exists())):
+    if not (in_contest or contest.ended or request.user.is_superuser or
+            (request.user.is_authenticated and contest.organizers.filter(id=request.profile.id).exists())):
         problems = []
 
     return JsonResponse({
@@ -125,7 +125,8 @@ def api_v1_user_list(request):
 
 def api_v1_user_info(request, user):
     profile = get_object_or_404(Profile, user__username=user)
-    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True, problem__is_organization_private=False)
+    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True,
+                                                 problem__is_organization_private=False)
                        .values('problem').distinct().values_list('problem__code', flat=True))
     resp = {
         'points': profile.points,
