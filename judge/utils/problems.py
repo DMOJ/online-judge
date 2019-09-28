@@ -138,7 +138,7 @@ def hot_problems(duration, limit):
 
         qs = qs.annotate(ordering=ExpressionWrapper(
             0.5 * F('points') * (0.4 * F('ac_volume') / F('submission_volume') + 0.6 * F('ac_rate')) +
-            100 * e ** (F('unique_user_count') / mx), output_field=FloatField()
+            100 * e ** (F('unique_user_count') / mx), output_field=FloatField(),
         )).order_by('-ordering').defer('description')[:limit]
 
         cache.set(cache_key, qs, 900)

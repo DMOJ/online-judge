@@ -86,10 +86,9 @@ class OrganizationUsers(OrganizationDetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = _('%s Members') % self.object.name
-        context['users'] = ranker(
-            self.object.members.filter(is_unlisted=False).order_by('-performance_points', '-problem_count')
-                .select_related('user').defer('about', 'user_script', 'notes')
-        )
+        context['users'] = \
+            ranker(self.object.members.filter(is_unlisted=False).order_by('-performance_points', '-problem_count')
+                   .select_related('user').defer('about', 'user_script', 'notes'))
         context['partial'] = True
         context['is_admin'] = self.can_edit_organization()
         context['kick_url'] = reverse('organization_user_kick', args=[self.object.id, self.object.slug])
@@ -120,7 +119,7 @@ class JoinOrganization(OrganizationMembershipChange):
         if profile.organizations.filter(is_open=True).count() >= max_orgs:
             return generic_message(
                 request, _('Joining organization'),
-                _('You may not be part of more than {count} public organizations.').format(count=max_orgs)
+                _('You may not be part of more than {count} public organizations.').format(count=max_orgs),
             )
 
         profile.organizations.add(org)
@@ -166,7 +165,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
         request.state = 'P'
         request.save()
         return HttpResponseRedirect(reverse('request_organization_detail', args=(
-            request.organization.id, request.organization.slug, request.id
+            request.organization.id, request.organization.slug, request.id,
         )))
 
 
@@ -184,9 +183,7 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
         return object
 
 
-OrganizationRequestFormSet = modelformset_factory(
-    OrganizationRequest, extra=0, fields=('state',), can_delete=True
-)
+OrganizationRequestFormSet = modelformset_factory(OrganizationRequest, extra=0, fields=('state',), can_delete=True)
 
 
 class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, SingleObjectMixin, View):
@@ -220,7 +217,7 @@ class OrganizationRequestView(OrganizationRequestBaseView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.formset = OrganizationRequestFormSet(
-            queryset=OrganizationRequest.objects.filter(state='P', organization=self.object)
+            queryset=OrganizationRequest.objects.filter(state='P', organization=self.object),
         )
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)

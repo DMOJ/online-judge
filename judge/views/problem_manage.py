@@ -51,7 +51,7 @@ class ManageProblemSubmissionView(TitleMixin, ManageProblemSubmissionMixin, Deta
     def get_content_title(self):
         return mark_safe(escape(_('Managing submissions for %s')) % (
             format_html('<a href="{1}">{0}</a>', self.object.name,
-                        reverse('problem_detail', args=[self.object.code]))), )
+                        reverse('problem_detail', args=[self.object.code]))))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -90,7 +90,7 @@ class RejudgeSubmissionsView(BaseRejudgeSubmissionsView):
         status = rejudge_problem_filter.delay(self.object.id, id_range, languages, results)
         return redirect_to_task_status(
             status, message=_('Rejudging selected submissions for %s...') % (self.object.name,),
-            redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id])
+            redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id]),
         )
 
 
@@ -105,7 +105,7 @@ class RescoreAllSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailVi
         status = rescore_problem.delay(self.object.id)
         return redirect_to_task_status(
             status, message=_('Rescoring all submissions for %s...') % (self.object.name,),
-            redirect=reverse('problem_submissions_rescore_success', args=[self.object.code, status.id])
+            redirect=reverse('problem_submissions_rescore_success', args=[self.object.code, status.id]),
         )
 
 

@@ -240,5 +240,5 @@ def problem_init_view(request, problem):
         'title': _('Generated init.yml for %s') % problem.name,
         'content_title': mark_safe(escape(_('Generated init.yml for %s')) % (
             format_html('<a href="{1}">{0}</a>', problem.name,
-                        reverse('problem_detail', args=[problem.code]))))
+                        reverse('problem_detail', args=[problem.code])))),
     })

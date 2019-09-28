@@ -9,9 +9,7 @@ from judge.views.contests import contest_ranking_list
 
 
 def error(message):
-    return JsonResponse({
-        "error": message
-    }, status=422)
+    return JsonResponse({'error': message}, status=422)
 
 
 def api_v2_user_info(request):
@@ -62,7 +60,7 @@ def api_v2_user_info(request):
 
     resp = {
         "rank": profile.display_rank,
-        "organizations": list(profile.organizations.values_list('key', flat=True))
+        "organizations": list(profile.organizations.values_list('key', flat=True)),
     }
 
     contest_history = []
@@ -110,7 +108,7 @@ def api_v2_user_info(request):
             attempted_problems.append({
                 'awarded': awarded_pts,
                 'max': max_pts,
-                'problem': problem
+                'problem': problem,
             })
 
     resp['problems'] = {
@@ -118,7 +116,7 @@ def api_v2_user_info(request):
         'solved': solved_problems,
         'attempted': attempted_problems,
         'authored': list(Problem.objects.filter(is_public=True, is_organization_private=False, authors=profile)
-                         .values_list('code', flat=True))
+                         .values_list('code', flat=True)),
     }
 
     return JsonResponse(resp)

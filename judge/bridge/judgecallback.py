@@ -67,7 +67,7 @@ class DjangoJudgeHandler(JudgeHandler):
             logger.error('Submission vanished: %d', submission)
             json_log.error(self._make_json_log(
                 sub=self._working, action='request',
-                info='submission vanished when fetching info'
+                info='submission vanished when fetching info',
             ))
             return
 
@@ -136,7 +136,7 @@ class DjangoJudgeHandler(JudgeHandler):
         else:
             self._submission_cache = data = Submission.objects.filter(id=id).values(
                 'problem__is_public', 'contest__participation__contest__key',
-                'user_id', 'problem_id', 'status', 'language__key'
+                'user_id', 'problem_id', 'status', 'language__key',
             ).get()
             self._submission_cache_id = id
 
@@ -238,7 +238,7 @@ class DjangoJudgeHandler(JudgeHandler):
             packet, action='grading-end', time=time, memory=memory,
             points=sub_points, total=problem.points, result=submission.result,
             case_points=points, case_total=total, user=submission.user_id,
-            problem=problem.code, finish=True
+            problem=problem.code, finish=True,
         ))
 
         submission.user._updating_stats_only = True
@@ -255,7 +255,7 @@ class DjangoJudgeHandler(JudgeHandler):
             'memory': memory,
             'points': float(points),
             'total': float(problem.points),
-            'result': submission.result
+            'result': submission.result,
         })
         if hasattr(submission, 'contest'):
             participation = submission.contest.participation
@@ -268,7 +268,7 @@ class DjangoJudgeHandler(JudgeHandler):
         if Submission.objects.filter(id=packet['submission-id']).update(status='CE', result='CE', error=packet['log']):
             event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {
                 'type': 'compile-error',
-                'log': packet['log']
+                'log': packet['log'],
             })
             self._post_update_submission(packet['submission-id'], 'compile-error', done=True)
             json_log.info(self._make_json_log(packet, action='compile-error', log=packet['log'],
@@ -364,7 +364,7 @@ class DjangoJudgeHandler(JudgeHandler):
             packet, action='test-case', case=test_case.case, batch=test_case.batch,
             time=test_case.time, memory=test_case.memory, feedback=test_case.feedback,
             extended_feedback=test_case.extended_feedback, output=test_case.output,
-            points=test_case.points, total=test_case.total, status=test_case.status
+            points=test_case.points, total=test_case.total, status=test_case.status,
         ))
 
         do_post = True
@@ -390,7 +390,7 @@ class DjangoJudgeHandler(JudgeHandler):
                 'memory': packet['memory'],
                 'points': float(test_case.points),
                 'total': float(test_case.total),
-                'output': packet['output']
+                'output': packet['output'],
             })
             self._post_update_submission(id, state='test-case')
 
