@@ -261,9 +261,6 @@ urlpatterns = [
         url(r'^user/submissions/(\w+)$', api.api_v1_user_submissions),
         url(r'^submission/info/(\d+)$', api.api_v1_submission_detail),
         url(r'^submission/source/(\d+)$', api.api_v1_submission_source),
-#        url(r'^v2/', include([
-#            url(r'user-info$', api.api_v2_user_info),
-#        ])),
     ])),
 
     url(r'^blog/', paged_list_view(blog.PostList, 'blog_post_list')),
