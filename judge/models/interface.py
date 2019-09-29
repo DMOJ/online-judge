@@ -73,7 +73,7 @@ class BlogPost(models.Model):
     summary = models.TextField(verbose_name=_('post summary'), blank=True)
     og_image = models.CharField(verbose_name=_('openGraph image'), default='', max_length=150, blank=True)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
-                                          help_text=_('If private, only these organizations may see the blog post.'))
+                                           help_text=_('If private, only these organizations may see the blog post.'))
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
     def __str__(self):

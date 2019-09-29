@@ -2,31 +2,25 @@ import json
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied, ImproperlyConfigured, ValidationError
-from django.http import Http404
-from django.http import HttpResponse
-from django.http import HttpResponseBadRequest
-from django.http import HttpResponseRedirect
-from django.http import JsonResponse
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied, ValidationError
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import truncatechars
 from django.template.loader import get_template
-from django.urls import reverse
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html, linebreaks
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy, gettext as _
+from django.utils.translation import gettext as _, gettext_lazy
 from django.views import View
-from django.views.generic import FormView, ListView
+from django.views.generic import ListView
 from django.views.generic.detail import SingleObjectMixin
-from django.shortcuts import get_object_or_404
 
 from judge import event_poster as event
-from judge.models import Profile
-from judge.models import Ticket, TicketMessage, Problem
+from judge.models import Problem, Profile, Ticket, TicketMessage
 from judge.utils.diggpaginator import DiggPaginator
-from judge.utils.tickets import own_ticket_filter, filter_visible_tickets
+from judge.utils.tickets import filter_visible_tickets, own_ticket_filter
 from judge.utils.views import SingleObjectFormView, TitleMixin, paginate_query_context
 from judge.views.problem import ProblemMixin
 from judge.widgets import HeavyPreviewPageDownWidget
@@ -53,7 +47,7 @@ class TicketForm(forms.Form):
                 raise ValidationError(_('Your part is silent, little toad.'))
             if profile.is_external_user and \
                 Ticket.objects.filter(user=profile,
-                                      time__gte=timezone.now()-timezone.timedelta(minutes=10)).exists():
+                                      time__gte=timezone.now() - timezone.timedelta(minutes=10)).exists():
                 raise ValidationError(_('You may only make a ticket once every 10 minutes.'))
         return super(TicketForm, self).clean()
 
@@ -172,10 +166,10 @@ class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, SingleObjectMixin,
                     'type': 'ticket-status', 'id': ticket.id,
                     'open': self.open, 'user': ticket.user_id,
                     'assignees': list(ticket.assignees.values_list('id', flat=True)),
-                    'title': ticket.title
+                    'title': ticket.title,
                 })
                 event.post('ticket-%d' % ticket.id, {
-                    'type': 'ticket-status', 'open': self.open
+                    'type': 'ticket-status', 'open': self.open,
                 })
         return HttpResponse(status=204)
 
@@ -307,8 +301,8 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
             'notification': {
                 'title': _('New Ticket: %s') % ticket.title,
                 'body': '%s\n%s' % (_('#%(id)d, assigned to: %(users)s') % {
-                    'id': ticket.id, 'users': (_(', ').join(ticket.assignees.values_list('user__username', flat=True))
-                                               or _('no one')),
+                    'id': ticket.id,
+                    'users': (_(', ').join(ticket.assignees.values_list('user__username', flat=True)) or _('no one')),
                 }, truncatechars(message.body, 200)),
-            }
+            },
         })

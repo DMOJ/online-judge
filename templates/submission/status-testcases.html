@@ -12,11 +12,11 @@
         <h4>{{ _('Your submission is being processed...') }}</h4>
     {% elif submission.status == 'CE' %}
         <h3>{{ _('Compilation Error') }}</h3>
-        <pre>{{ submission.error|safe }}</pre>
+        <pre>{{ submission.error|ansi2html }}</pre>
     {% else %}
         {% if submission.error %}
             <h3>{{ _('Compilation Warnings') }}</h3>
-            <pre>{{ submission.error|safe }}</pre>
+            <pre>{{ submission.error|ansi2html }}</pre>
             <hr class="half-hr"><br>
         {% endif %}
         {% if is_pretest %}

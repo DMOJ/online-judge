@@ -41,7 +41,7 @@ class BonusesContestFormat(DefaultContestFormat):
         score = 0
         format_data = {}
 
-        total_wrapper = ExpressionWrapper(F('points')+F('bonus'), output_field=FloatField())
+        total_wrapper = ExpressionWrapper(F('points') + F('bonus'), output_field=FloatField())
         queryset = (participation.submissions.values('problem_id')
                                              .annotate(total=total_wrapper)
                                              .filter(total=Subquery(
@@ -88,7 +88,7 @@ class BonusesContestFormat(DefaultContestFormat):
             pretest = ('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '')
             first_solve = (' first-solve' if format_data['first_solve'] else '')
             bonus = format_html(
-                        u'<font style="font-size:10px;"> +{bonus}</font>',
+                        '<font style="font-size:10px;"> +{bonus}</font>',
                         bonus=floatformat(format_data['bonus'])
                     ) if format_data['bonus'] else ''
 

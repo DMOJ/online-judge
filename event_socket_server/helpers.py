@@ -2,7 +2,6 @@ import struct
 import zlib
 
 from judge.utils.unicode import utf8text
-
 from .handler import Handler
 
 size_pack = struct.Struct('!I')
@@ -106,7 +105,7 @@ class ProxyProtocolMixin(object):
                 return self.close()
 
             self.__type = self.__DATA
-            super(ProxyProtocolMixin, self)._recv_data(data[index+2:])
+            super(ProxyProtocolMixin, self)._recv_data(data[index + 2:])
         elif len(self.__buffer) > 107 or index > 105:
             self.close()
 

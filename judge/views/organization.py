@@ -1,5 +1,3 @@
-from itertools import chain
-
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -8,20 +6,20 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.db.models import Count, Max, Q
+from django.db.models import Count, Q
 from django.forms import Form, modelformset_factory
-from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _, gettext_lazy, ungettext
-from django.views.generic import DetailView, ListView, View, UpdateView, FormView
+from django.views.generic import DetailView, FormView, ListView, UpdateView, View
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 from reversion import revisions
 
 from judge.forms import EditOrganizationForm
 from judge.models import BlogPost, Comment, Organization, OrganizationRequest, Problem, Profile
 from judge.utils.ranker import ranker
-from judge.utils.views import generic_message, TitleMixin
+from judge.utils.views import TitleMixin, generic_message
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'OrganizationMembershipChange',
            'JoinOrganization', 'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization',
@@ -83,10 +81,13 @@ class OrganizationHome(OrganizationDetailView):
         context['title'] = self.object.name
         context['can_edit'] = self.can_edit_organization()
         context['is_member'] = self.request.profile in self.object if self.request.user.is_authenticated else False
-        context['new_problems'] = Problem.objects.filter(is_public=True, is_organization_private=True, organizations=self.object) \
+        context['new_problems'] = Problem.objects.filter(is_public=True, is_organization_private=True,
+                                                         organizations=self.object) \
                                                  .order_by('-date', '-id')[:7]
-        context['posts'] = BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now(), is_organization_private=True, organizations=self.object) \
-                                           .order_by('-sticky', '-publish_on').prefetch_related('authors__user', 'organizations')
+        context['posts'] = BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now(),
+                                                   is_organization_private=True, organizations=self.object) \
+                                           .order_by('-sticky', '-publish_on') \
+                                           .prefetch_related('authors__user', 'organizations')
         context['post_comment_counts'] = {
             int(page[2:]): count for page, count in
                 Comment.objects.filter(page__in=['b:%d' % post.id for post in context['posts']], hidden=False)
@@ -101,10 +102,9 @@ class OrganizationUsers(OrganizationDetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = _('%s Members') % self.object.name
-        context['users'] = ranker(
-            self.object.members.filter(is_unlisted=False).order_by('-performance_points', '-problem_count')
-                .select_related('user').defer('about')
-        )
+        context['users'] = \
+            ranker(self.object.members.filter(is_unlisted=False).order_by('-performance_points', '-problem_count')
+                   .select_related('user').defer('about', 'user_script', 'notes'))
         context['partial'] = True
         context['is_admin'] = self.can_edit_organization()
         context['kick_url'] = reverse('organization_user_kick', args=[self.object.id, self.object.slug])
@@ -136,7 +136,10 @@ class JoinOrganization(OrganizationMembershipChange):
 
         max_orgs = getattr(settings, 'DMOJ_USER_MAX_ORGANIZATION_COUNT', 3)
         if profile.organizations.filter(is_open=True).count() >= max_orgs:
-            return generic_message(request, _('Joining organization'), _('You may not be part of more than {count} public organizations.').format(count=max_orgs))
+            return generic_message(
+                request, _('Joining organization'),
+                _('You may not be part of more than {count} public organizations.').format(count=max_orgs),
+            )
 
         profile.organizations.add(org)
         profile.save()
@@ -148,7 +151,11 @@ class LeaveOrganization(OrganizationMembershipChange):
         if not profile.organizations.filter(id=org.id).exists():
             return generic_message(request, _('Leaving organization'), _('You are not in "%s".') % org.short_name)
         if not org.is_open and not self.can_edit_organization(org=org):
-            return generic_message(request, _('Cannot leave organization'), _('You may not leave "%s".') % org.short_name, status=403)
+            return generic_message(
+                request, _('Cannot leave organization'),
+                _('You may not leave "%s".') % org.short_name,
+                status=403
+            )
         profile.organizations.remove(org)
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))
 
@@ -183,7 +190,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
         request.state = 'P'
         request.save()
         return HttpResponseRedirect(reverse('request_organization_detail', args=(
-            request.organization.id, request.organization.slug, request.id
+            request.organization.id, request.organization.slug, request.id,
         )))
 
 
@@ -201,9 +208,7 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
         return object
 
 
-OrganizationRequestFormSet = modelformset_factory(
-    OrganizationRequest, extra=0, fields=('state',), can_delete=True
-)
+OrganizationRequestFormSet = modelformset_factory(OrganizationRequest, extra=0, fields=('state',), can_delete=True)
 
 
 class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, SingleObjectMixin, View):
@@ -237,7 +242,7 @@ class OrganizationRequestView(OrganizationRequestBaseView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.formset = OrganizationRequestFormSet(
-            queryset=OrganizationRequest.objects.filter(state='P', organization=self.object)
+            queryset=OrganizationRequest.objects.filter(state='P', organization=self.object),
         )
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
@@ -304,7 +309,8 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
 
     def get_form(self, form_class=None):
         form = super(EditOrganization, self).get_form(form_class)
-        form.fields['admins'].queryset = Profile.objects.filter(Q(organizations=self.object) | Q(admin_of=self.object)).distinct()
+        form.fields['admins'].queryset = \
+            Profile.objects.filter(Q(organizations=self.object) | Q(admin_of=self.object)).distinct()
         return form
 
     def form_valid(self, form):

@@ -8,13 +8,12 @@ from django.forms import ModelForm
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.html import format_html
-from django.utils.translation import gettext, ungettext, gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
-from judge.models import Profile, LanguageLimit, ProblemTranslation, Problem, ProblemClarification
-from judge.models import Solution
-from judge.widgets import HeavySelect2MultipleWidget, Select2MultipleWidget, Select2Widget, \
-    HeavyPreviewAdminPageDownWidget, HeavyPreviewPageDownWidget, CheckboxSelectMultipleWithSelectAll
+from judge.models import LanguageLimit, Problem, ProblemClarification, ProblemTranslation, Profile, Solution
+from judge.widgets import CheckboxSelectMultipleWithSelectAll, HeavyPreviewAdminPageDownWidget, \
+    HeavyPreviewPageDownWidget, HeavySelect2MultipleWidget, Select2MultipleWidget, Select2Widget
 
 
 class ProblemForm(ModelForm):
@@ -27,7 +26,7 @@ class ProblemForm(ModelForm):
         self.fields['testers'].widget.can_add_related = False
         self.fields['banned_users'].widget.can_add_related = False
         self.fields['change_message'].widget.attrs.update({
-            'placeholder': gettext('Describe the changes you made (optional)')
+            'placeholder': gettext('Describe the changes you made (optional)'),
         })
 
     class Meta:
@@ -36,7 +35,8 @@ class ProblemForm(ModelForm):
             'curators': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'testers': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
-            'organizations': HeavySelect2MultipleWidget(data_view='organization_select2', attrs={'style': 'width: 100%'}),
+            'organizations': HeavySelect2MultipleWidget(data_view='organization_select2',
+                                                        attrs={'style': 'width: 100%'}),
             'types': Select2MultipleWidget,
             'group': Select2Widget,
         }
@@ -48,8 +48,8 @@ class ProblemCreatorListFilter(admin.SimpleListFilter):
     title = parameter_name = 'creator'
 
     def lookups(self, request, model_admin):
-        return [(name, name) for name in Profile.objects.exclude(authored_problems=None)
-            .values_list('user__username', flat=True)]
+        queryset = Profile.objects.exclude(authored_problems=None).values_list('user__username', flat=True)
+        return [(name, name) for name in queryset]
 
     def queryset(self, request, queryset):
         if self.value() is None:
@@ -119,10 +119,9 @@ class ProblemAdmin(VersionAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'code', 'name', 'is_public', 'is_restricted', 'is_manually_managed', 'date', 'authors', 'curators', 'testers',
-                'is_organization_private', 'organizations',
-                'description',
-                'license')
+                'code', 'name', 'is_public', 'is_restricted', 'is_manually_managed', 'date', 'authors', 'curators',
+                'testers', 'is_organization_private', 'organizations', 'description', 'license',
+            ),
         }),
         (_('Social Media'), {'classes': ('collapse',), 'fields': ('og_image', 'summary')}),
         (_('Taxonomy'), {'fields': ('types', 'group')}),
@@ -130,7 +129,7 @@ class ProblemAdmin(VersionAdmin):
         (_('Limits'), {'fields': ('time_limit', 'memory_limit')}),
         (_('Language'), {'fields': ('allowed_languages',)}),
         (_('Justice'), {'fields': ('banned_users',)}),
-        (_('History'), {'fields': ('change_message',)})
+        (_('History'), {'fields': ('change_message',)}),
     )
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'is_restricted', 'show_public']
     ordering = ['code']
@@ -159,7 +158,7 @@ class ProblemAdmin(VersionAdmin):
 
         func, name, desc = self.get_action('update_publish_date')
         actions[name] = (func, name, desc)
-        
+
         return actions
 
     def get_readonly_fields(self, request, obj=None):

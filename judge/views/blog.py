@@ -1,4 +1,4 @@
-from django.db.models import Q, Count
+from django.db.models import Count, Q
 from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
@@ -7,8 +7,8 @@ from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 
 from judge.comments import CommentedDetailView
-from judge.models import BlogPost, Comment, Problem, Contest, Profile, Submission, Language, ProblemClarification
-from judge.models import Ticket
+from judge.models import BlogPost, Comment, Contest, Language, Problem, ProblemClarification, Profile, Submission, \
+    Ticket
 from judge.utils.cachedict import CacheDict
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.views import TitleMixin
@@ -28,7 +28,8 @@ class PostList(ListView):
 
     def get_queryset(self):
         queryset = BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()) \
-                                   .order_by('-sticky', '-publish_on').prefetch_related('authors__user', 'organizations')
+                                   .order_by('-sticky', '-publish_on') \
+                                   .prefetch_related('authors__user', 'organizations')
         if not self.request.user.has_perm('judge.edit_all_post'):
             filter = Q(is_organization_private=False)
             if self.request.user.is_authenticated:
@@ -62,8 +63,8 @@ class PostList(ListView):
         context['post_comment_counts'] = {
             int(page[2:]): count for page, count in
             Comment.objects
-                .filter(page__in=['b:%d' % post.id for post in context['posts']], hidden=False)
-                .values_list('page').annotate(count=Count('page')).order_by()
+                   .filter(page__in=['b:%d' % post.id for post in context['posts']], hidden=False)
+                   .values_list('page').annotate(count=Count('page')).order_by()
         }
 
         now = timezone.now()

@@ -23,7 +23,7 @@ def submission_layout(submission, profile_id, user, editable_problem_ids, comple
             can_view = True
         elif user.has_perm('judge.see_restricted_problem') or not submission.problem.is_restricted:
             can_view = True
-    
+
     info_colspan = 1 if can_view else 2
     if submission.status != 'G':
         info_colspan += 1

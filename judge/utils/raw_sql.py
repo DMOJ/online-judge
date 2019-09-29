@@ -3,7 +3,7 @@ from copy import copy
 from django.db import connections
 from django.db.models import Field
 from django.db.models.expressions import RawSQL
-from django.db.models.sql.constants import LOUTER, INNER
+from django.db.models.sql.constants import INNER, LOUTER
 from django.db.models.sql.datastructures import Join
 from django.utils import six
 

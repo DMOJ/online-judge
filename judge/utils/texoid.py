@@ -28,17 +28,17 @@ class TexoidRenderer(object):
 
         try:
             response = requests.post(settings.TEXOID_URL, data=utf8bytes(document), headers={
-                'Content-Type': 'application/x-tex'
+                'Content-Type': 'application/x-tex',
             })
             response.raise_for_status()
         except requests.HTTPError as e:
             if e.response.status == 400:
                 logger.error('Texoid failed to render: %s\n%s', document, e.response.text)
             else:
-                logger.exception('Failed to connect to texoid for: %s' % document)
+                logger.exception('Failed to connect to texoid for: %s', document)
             return
         except Exception:
-            logger.exception('Failed to connect to texoid for: %s' % document)
+            logger.exception('Failed to connect to texoid for: %s', document)
             return
 
         try:

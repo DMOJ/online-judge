@@ -3,15 +3,11 @@ import logging
 import time
 from collections import deque, namedtuple
 
-from event_socket_server import ZlibPacketHandler, ProxyProtocolMixin
+from event_socket_server import ProxyProtocolMixin, ZlibPacketHandler
 
 logger = logging.getLogger('judge.bridge')
 
-
-SubmissionData = namedtuple(
-    'SubmissionData',
-    'time memory short_circuit pretests_only contest_no attempt_no user_id'
-)
+SubmissionData = namedtuple('SubmissionData', 'time memory short_circuit pretests_only contest_no attempt_no user_id')
 
 
 class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
@@ -194,7 +190,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
             else:
                 handler = self.handlers.get(data['name'], self.on_malformed)
                 handler(data)
-        except:
+        except Exception:
             logger.exception('Error in packet handling (Judge-side): %s', self.name)
             self._packet_exception()
             # You can't crash here because you aren't so sure about the judges

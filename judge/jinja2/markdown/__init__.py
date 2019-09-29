@@ -7,11 +7,11 @@ import mistune
 from django.conf import settings
 from jinja2 import Markup
 from lxml import html
-from lxml.etree import XMLSyntaxError, ParserError
+from lxml.etree import ParserError, XMLSyntaxError
 
 from judge.highlight_code import highlight_code
 from judge.jinja2.markdown.lazy_load import lazy_load as lazy_load_processor
-from judge.jinja2.markdown.math import MathRenderer, MathInlineLexer, MathInlineGrammar
+from judge.jinja2.markdown.math import MathInlineGrammar, MathInlineLexer, MathRenderer
 from judge.utils.camo import client as camo_client
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
 from .. import registry
@@ -22,12 +22,8 @@ NOFOLLOW_WHITELIST = getattr(settings, 'NOFOLLOW_EXCLUDED', set())
 
 
 class CodeSafeInlineGrammar(mistune.InlineGrammar):
-    double_emphasis = re.compile(
-        r'^\*{2}([\s\S]+?)()\*{2}(?!\*)'  # **word**
-    )
-    emphasis = re.compile(
-        r'^\*((?:\*\*|[^\*])+?)()\*(?!\*)'  # *word*
-    )
+    double_emphasis = re.compile(r'^\*{2}([\s\S]+?)()\*{2}(?!\*)')  # **word**
+    emphasis = re.compile(r'^\*((?:\*\*|[^\*])+?)()\*(?!\*)')  # *word*
 
 
 class AwesomeInlineGrammar(MathInlineGrammar, CodeSafeInlineGrammar):
@@ -85,10 +81,10 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
             elif 'error' not in result:
                 img = ('''<img src="%(svg)s" onerror="this.src='%(png)s';this.onerror=null"'''
                        'width="%(width)s" height="%(height)s"%(tail)s>') % {
-                          'svg': result['svg'], 'png': result['png'],
-                          'width': result['meta']['width'], 'height': result['meta']['height'],
-                          'tail': ' /' if self.options.get('use_xhtml') else ''
-                      }
+                    'svg': result['svg'], 'png': result['png'],
+                    'width': result['meta']['width'], 'height': result['meta']['height'],
+                    'tail': ' /' if self.options.get('use_xhtml') else '',
+                }
                 style = ['max-width: 100%',
                          'height: %s' % result['meta']['height'],
                          'max-height: %s' % result['meta']['height'],

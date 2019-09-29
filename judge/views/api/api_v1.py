@@ -2,8 +2,8 @@ from operator import attrgetter
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Prefetch, F
-from django.http import JsonResponse, Http404
+from django.db.models import F, Prefetch
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 
 from dmoj import settings
@@ -27,7 +27,7 @@ def get_request_user(request):
     except (KeyError, ObjectDoesNotExist):
         return request.user
     else:
-        return user 
+        return user
 
 
 def api_v1_contest_list(request):
@@ -35,7 +35,7 @@ def api_v1_contest_list(request):
 
     queryset = Contest.contests_list(user).prefetch_related(
         Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description')
-    
+
     return JsonResponse({c.key: {
         'name': c.name,
         'start_time': c.start_time.isoformat(),
@@ -65,8 +65,8 @@ def api_v1_contest_detail(request, contest):
                       .annotate(username=F('user__user__username'))
                       .order_by('-score', 'cumtime') if can_see_rankings else [])
 
-    if not (in_contest or contest.ended or request.user.is_superuser
-            or (request.user.is_authenticated and contest.organizers.filter(id=request.profile.id).exists())):
+    if not (in_contest or contest.ended or request.user.is_superuser or
+            (request.user.is_authenticated and contest.organizers.filter(id=request.profile.id).exists())):
         problems = []
 
     return JsonResponse({
@@ -95,8 +95,8 @@ def api_v1_contest_detail(request, contest):
                 'user': participation.username,
                 'points': participation.score,
                 'cumtime': participation.cumtime,
-                'solutions': contest.format.get_problem_breakdown(participation, problems)
-            } for participation in participations]
+                'solutions': contest.format.get_problem_breakdown(participation, problems),
+            } for participation in participations],
     })
 
 
@@ -104,7 +104,7 @@ def api_v1_problem_list(request):
     user = get_request_user(request)
 
     queryset = Problem.problems_list(user)
-    
+
     if settings.ENABLE_FTS and 'search' in request.GET:
         query = ' '.join(request.GET.getlist('search')).strip()
         if query:
@@ -115,7 +115,7 @@ def api_v1_problem_list(request):
         'points': points,
         'partial': partial,
         'name': name,
-        'group': group
+        'group': group,
     } for code, points, partial, name, group in queryset})
 
 
@@ -144,14 +144,12 @@ def api_v1_problem_info(request, problem):
 
 
 def api_v1_user_list(request):
-    user = get_request_user(request)
-
     queryset = Profile.objects.filter(is_unlisted=False).values_list('user__username', 'points', 'performance_points',
                                                                      'display_rank')
     return JsonResponse({username: {
         'points': points,
         'performance_points': performance_points,
-        'rank': rank
+        'rank': rank,
     } for username, points, performance_points, rank in queryset})
 
 
@@ -159,8 +157,9 @@ def api_v1_user_info(request, username):
     user = get_request_user(request)
 
     profile = get_object_or_404(Profile, user__username=username)
-    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True, problem__is_organization_private=False)
-                       .values('problem').distinct().values_list('problem__code', flat=True))
+    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile,
+                                                 problem__is_public=True, problem__is_organization_private=False)
+                                 .values('problem').distinct().values_list('problem__code', flat=True))
     resp = {
         'points': profile.points,
         'performance_points': profile.performance_points,
@@ -171,7 +170,7 @@ def api_v1_user_info(request, username):
 
     if user.has_perm('judge.view_name'):
         resp['name'] = profile.user.get_full_name()
-    
+
     last_rating = profile.ratings.last()
 
     contest_history = {}
@@ -196,8 +195,6 @@ def api_v1_user_info(request, username):
 
 
 def api_v1_user_submissions(request, username):
-    user = get_request_user(request)
-
     profile = get_object_or_404(Profile, user__username=username)
     subs = Submission.objects.filter(user=profile, problem__is_public=True, problem__is_organization_private=False)
 
@@ -243,7 +240,7 @@ def api_v1_submission_detail(request, submission):
             'total': case['total'],
         } for case in submission.test_cases.all().values('case', 'status', 'time', 'memory', 'points', 'total')]
     }
-    
+
     return JsonResponse(resp)
 
 

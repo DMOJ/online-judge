@@ -3,8 +3,8 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.flatpages.models import FlatPage
 
 from judge.admin.comments import CommentAdmin
-from judge.admin.contest import ContestTagAdmin, ContestAdmin, ContestParticipationAdmin, ContestRegistrationAdmin
-from judge.admin.interface import NavigationBarAdmin, BlogPostAdmin, FlatPageAdmin, LicenseAdmin, LogEntryAdmin
+from judge.admin.contest import ContestAdmin, ContestParticipationAdmin, ContestRegistrationAdmin, ContestTagAdmin
+from judge.admin.interface import BlogPostAdmin, FlatPageAdmin, LicenseAdmin, LogEntryAdmin, NavigationBarAdmin
 from judge.admin.organization import OrganizationAdmin, OrganizationRequestAdmin
 from judge.admin.problem import ProblemAdmin
 from judge.admin.profile import ProfileAdmin

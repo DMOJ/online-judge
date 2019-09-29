@@ -1,11 +1,11 @@
-from django.db.models import Q, F
-from django.http import JsonResponse, Http404
+from django.db.models import F, Q
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import smart_text
 from django.views.generic.list import BaseListView
 
 from judge.jinja2.gravatar import gravatar
-from judge.models import Profile, Organization, Problem, Comment, Contest
+from judge.models import Comment, Contest, Organization, Problem, Profile
 
 
 def _get_user_queryset(term):
@@ -54,12 +54,14 @@ class OrganizationSelect2View(Select2View):
 
 class ProblemSelect2View(Select2View):
     def get_queryset(self):
-        return Problem.problems_list(self.request.user).filter(Q(code__icontains=self.term) | Q(name__icontains=self.term)).distinct()
+        return Problem.problems_list(self.request.user) \
+                      .filter(Q(code__icontains=self.term) | Q(name__icontains=self.term)).distinct()
 
 
 class ContestSelect2View(Select2View):
     def get_queryset(self):
-        return Contest.contests_list(self.request.user).filter(Q(key__icontains=self.term) | Q(name__icontains=self.term)).distinct()
+        return Contest.contests_list(self.request.user) \
+                      .filter(Q(key__icontains=self.term) | Q(name__icontains=self.term)).distinct()
 
 
 class CommentSelect2View(Select2View):
@@ -105,7 +107,8 @@ class ContestUserSearchSelect2View(UserSearchSelect2View):
             raise Http404()
 
         contest = get_object_or_404(Contest, key=self.kwargs['contest'])
-        if not contest.can_see_scoreboard(self.request.user) or contest.hide_scoreboard and contest.is_in_contest(self.request.user):
+        if not contest.can_see_scoreboard(self.request.user) or \
+                contest.hide_scoreboard and contest.is_in_contest(self.request.user):
             raise Http404()
 
         return Profile.objects.filter(contest_history__contest=contest,

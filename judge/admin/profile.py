@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.forms import ModelForm
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy as _, gettext, ungettext
+from django.utils.translation import gettext, gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Profile
-from judge.widgets import GenerateKeyTextInputButton, Select2Widget, AdminPagedownWidget
+from judge.widgets import AdminPagedownWidget, GenerateKeyTextInputButton, Select2Widget
 
 
 class ProfileForm(ModelForm):
@@ -45,11 +45,11 @@ class TimezoneFilter(admin.SimpleListFilter):
 class ProfileAdmin(VersionAdmin):
     form = ProfileForm
     fieldsets = (
-        (None,                  {'fields': ('user', 'display_rank')}),
-        (_('User Settings'),    {'fields': ('organizations', 'timezone', 'language', 'ace_theme', 'math_engine')}),
-        (_('Administration'),   {'fields': ('is_external_user', 'mute', 'is_unlisted', 'is_totp_enabled',
-                                            'api_token', 'last_access', 'ip', 'current_contest', 'notes')}),
-        (_('Text Fields'),      {'fields': ('about', 'user_script')}),
+        (None, {'fields': ('user', 'display_rank')}),
+        (_('User Settings'), {'fields': ('organizations', 'timezone', 'language', 'ace_theme', 'math_engine')}),
+        (_('Administration'), {'fields': ('is_external_user', 'mute', 'is_unlisted', 'is_totp_enabled',
+                                          'api_token', 'last_access', 'ip', 'current_contest', 'notes')}),
+        (_('Text Fields'), {'fields': ('about', 'user_script')}),
     )
     list_display = ('user', 'full_name', 'email', 'is_totp_enabled', 'is_external_user',
                     'date_joined', 'last_access', 'ip', 'show_public')

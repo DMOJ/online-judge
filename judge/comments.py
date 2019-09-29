@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Count
-from django.db.models.expressions import Value, F
+from django.db.models.expressions import F, Value
 from django.db.models.functions import Coalesce
 from django.forms import ModelForm
 from django.http import HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
@@ -20,7 +20,7 @@ from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
 from judge.models import Comment, CommentLock, CommentVote
-from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
+from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 from judge.widgets import HeavyPreviewPageDownWidget
 
 
@@ -75,7 +75,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
 
         if request.profile.is_external_user and \
                 Comment.objects.filter(author=request.profile,
-                                       time__gte=timezone.now()-timezone.timedelta(minutes=10)).exists():
+                                       time__gte=timezone.now() - timezone.timedelta(minutes=10)).exists():
             return HttpResponseForbidden()
 
         parent = request.POST.get('parent')
@@ -106,7 +106,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         self.object = self.get_object()
         return self.render_to_response(self.get_context_data(
             object=self.object,
-            comment_form=CommentForm(request, initial={'page': self.get_comment_page(), 'parent': None})
+            comment_form=CommentForm(request, initial={'page': self.get_comment_page(), 'parent': None}),
         ))
 
     def get_context_data(self, **kwargs):

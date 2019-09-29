@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from judge.models.profile import Profile
 from judge.utils.tickets import filter_visible_tickets
 
+
 class Ticket(models.Model):
     title = models.CharField(max_length=100, verbose_name=_('ticket title'))
     user = models.ForeignKey(Profile, verbose_name=_('ticket creator'), related_name='tickets',

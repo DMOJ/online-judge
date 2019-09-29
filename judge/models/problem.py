@@ -5,7 +5,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
-from django.db.models import F, Q, QuerySet, CASCADE, SET_NULL
+from django.db.models import CASCADE, F, Q, QuerySet, SET_NULL
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from django.urls import reverse
@@ -13,10 +13,10 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from judge.fulltext import SearchQuerySet
-from judge.models.profile import Profile, Organization
+from judge.models.profile import Organization, Profile
 from judge.models.runtime import Language
 from judge.user_translations import gettext as user_gettext
-from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
+from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 
 __all__ = ['ProblemGroup', 'ProblemType', 'Problem', 'ProblemTranslation', 'ProblemClarification',
            'License', 'Solution', 'TranslatedProblemQuerySet', 'TranslatedProblemForeignKeyQuerySet']
@@ -114,8 +114,7 @@ class Problem(models.Model):
                                    help_text=_('The type of problem, '
                                                "as shown on the problem's page."))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'), on_delete=CASCADE,
-                              help_text=_('The group of problem, '
-                                          'shown under Category in the problem list.'))
+                              help_text=_('The group of problem, shown under Category in the problem list.'))
     time_limit = models.FloatField(verbose_name=_('time limit'),
                                    help_text=_('The time limit for this problem, in seconds. '
                                                'Fractional seconds (e.g. 1.5) are supported.'),
@@ -132,7 +131,8 @@ class Problem(models.Model):
                                                help_text=_('List of allowed submission languages.'))
     is_public = models.BooleanField(verbose_name=_('publicly visible'), db_index=True, default=False)
     is_restricted = models.BooleanField(verbose_name=_('restricted'), db_index=True, default=False,
-                                        help_text=_('Whether to restrict access to the problem, and require special permissions. Set for contest problems, such as LCC problems.'))
+                                        help_text=_('Whether to restrict access to the problem, and require special '
+                                                    'permissions. Set for contest problems, such as LCC problems.'))
     is_manually_managed = models.BooleanField(verbose_name=_('manually managed'), db_index=True, default=False,
                                               help_text=_('Whether judges should be allowed to manage data or not.'))
     date = models.DateTimeField(verbose_name=_('date of publishing'), null=True, blank=True, db_index=True,
@@ -301,8 +301,11 @@ class Problem(models.Model):
         self.user_count = self.submission_set.filter(points__gte=self.points, result='AC',
                                                      user__is_unlisted=False).values('user').distinct().count()
         submissions = self.submission_set.count()
-        self.ac_rate = 100.0 * self.submission_set.filter(points__gte=self.points, result='AC',
-                                                          user__is_unlisted=False).count() / submissions if submissions else 0
+        if submissions:
+            self.ac_rate = 100.0 * self.submission_set.filter(points__gte=self.points, result='AC',
+                                                              user__is_unlisted=False).count() / submissions
+        else:
+            self.ac_rate = 0
         self.save()
 
     update_stats.alters_data = True

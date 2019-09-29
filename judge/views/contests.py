@@ -1,7 +1,7 @@
 import re
 from calendar import Calendar, SUNDAY
-from collections import namedtuple, defaultdict
-from datetime import timedelta, date, datetime, time
+from collections import defaultdict, namedtuple
+from datetime import date, datetime, time, timedelta
 from functools import partial
 from itertools import chain, count
 from operator import attrgetter
@@ -10,11 +10,11 @@ from django import forms
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
-from django.db.models import Q, Min, Max, Sum, Case, Count, When, IntegerField
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.db.models import Case, Count, IntegerField, Max, Min, Q, Sum, When
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.template.defaultfilters import date as date_filter
 from django.urls import reverse
 from django.utils import timezone
@@ -34,8 +34,8 @@ from judge.utils.ranker import ranker
 from judge.utils.strings import safe_int_or_none
 from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message, paginate_query_context
 
-__all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestRegister', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
-           'contest_ranking_ajax', 'ContestParticipationList', 'get_contest_ranking_list',
+__all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestRegister', 'ContestJoin', 'ContestLeave',
+           'ContestCalendar', 'contest_ranking_ajax', 'ContestParticipationList', 'get_contest_ranking_list',
            'base_contest_ranking_list']
 
 
@@ -114,9 +114,9 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
 
         context['rated_state'] = self.rated_state
         context['rated_states'] = {
-                1: 'Not rated',
-                2: 'Rated',
-                3: 'Rated for all',
+            1: 'Not rated',
+            2: 'Rated',
+            3: 'Rated for all',
         }
         context['search_query'] = self.search_query
 
@@ -216,7 +216,8 @@ class ContestMixin(object):
             raise Http404()
 
         if contest.is_private or contest.is_organization_private:
-            private_contest_error = PrivateContestError(contest.name, contest.private_contestants.all(), contest.organizations.all())
+            private_contest_error = PrivateContestError(contest.name, contest.private_contestants.all(),
+                                                        contest.organizations.all())
             if profile is None:
                 raise private_contest_error
             if user.has_perm('judge.edit_all_contest'):
@@ -240,7 +241,7 @@ class ContestMixin(object):
                                        _('Could not find such contest.'))
         except PrivateContestError as e:
             return render(request, 'contest/private.html', {
-                'orgs': e.orgs, 'title': _('Access to contest "%s" denied') % escape(e.name)
+                'orgs': e.orgs, 'title': _('Access to contest "%s" denied') % escape(e.name),
             }, status=403)
 
 
@@ -292,12 +293,12 @@ class ContestRegister(LoginRequiredMixin, ContestMixin, BaseDetailView):
         error = self.access_check(request)
         if error is not None:
             return error
-        
+
         return render(request, 'contest/register.html', {
             'title': _('Register for "%s"') % self.object.name,
             'contest': self.object,
         })
-        
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         error = self.access_check(request)
@@ -305,9 +306,9 @@ class ContestRegister(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return error
 
         data = {}
-        for field in re.findall('name="([\w:\-]+)"', self.object.registration_page):
+        for field in re.findall(r'name="([\w:\-]+)"', self.object.registration_page):
             data[field] = request.POST.get(field)
-        
+
         try:
             ContestRegistration.objects.create(contest=self.object, user=request.profile, data=data)
         except IntegrityError:
@@ -355,8 +356,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                    _('You have been declared persona non grata for this contest. '
                                      'You are permanently barred from joining this contest.'))
 
-        requires_access_code = not (request.user.is_superuser or self.is_organizer) \
-                               and contest.access_code and access_code != contest.access_code
+        requires_access_code = (not (request.user.is_superuser or self.is_organizer) and
+                                contest.access_code and access_code != contest.access_code)
         if contest.ended:
             if requires_access_code:
                 raise ContestAccessDenied()
@@ -367,7 +368,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 try:
                     participation = ContestParticipation.objects.create(
                         contest=contest, user=profile, virtual=virtual_id,
-                        real_start=timezone.now()
+                        real_start=timezone.now(),
                     )
                 # There is obviously a race condition here, so we keep trying until we win the race.
                 except IntegrityError:
@@ -377,7 +378,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
         else:
             try:
                 participation = ContestParticipation.objects.get(
-                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0)
+                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0),
                 )
             except ContestParticipation.DoesNotExist:
                 if requires_access_code:
@@ -391,9 +392,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 if participation.ended:
                     participation = ContestParticipation.objects.get_or_create(
                         contest=contest, user=profile, virtual=-1,
-                        defaults={
-                            'real_start': timezone.now()
-                        }
+                        defaults={'real_start': timezone.now()},
                     )[0]
 
         profile.current_contest = participation
@@ -530,7 +529,7 @@ class CachedContestCalendar(ContestCalendar):
 ContestRankingProfile = namedtuple(
     'ContestRankingProfile',
     'id user css_class username points cumtime organization participation '
-    'participation_rating problem_cells result_cell'
+    'participation_rating problem_cells result_cell',
 )
 
 BestSolutionData = namedtuple('BestSolutionData', 'code points bonus time state is_pretested')
@@ -563,7 +562,8 @@ def contest_ranking_list(contest, problems):
     return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0, user__is_unlisted=False)
                                                                      .prefetch_related('user__organizations')
                                                                      .annotate(submission_count=Count('submission'))
-                                                                     .order_by('-score', 'cumtime', '-submission_count'))
+                                                                     .order_by('-score', 'cumtime',
+                                                                               '-submission_count'))
 
 
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
@@ -702,7 +702,7 @@ def clone_contest(request, contest):
 
     tags = contest.tags.all()
     organizations = contest.organizations.all()
-    
+
     contest.pk = None
     contest.is_visible = False
     contest.freeze_submissions = False
@@ -724,4 +724,4 @@ def clone_contest(request, contest):
     contest.organizations = organizations
     contest.tags = tags
     contest.save()
-    return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest.id,))) 
+    return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest.id,)))

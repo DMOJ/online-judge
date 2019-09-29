@@ -3,15 +3,13 @@ from operator import attrgetter
 from django.db.models import Max
 from django.http import JsonResponse
 
-from judge.models import Problem, Profile, Submission, ContestParticipation
+from judge.models import ContestParticipation, Problem, Profile, Submission
 from judge.utils.ranker import ranker
 from judge.views.contests import contest_ranking_list
 
 
 def error(message):
-    return JsonResponse({
-        "error": message
-    }, status=422)
+    return JsonResponse({'error': message}, status=422)
 
 
 def api_v2_user_info(request):
@@ -62,18 +60,19 @@ def api_v2_user_info(request):
 
     resp = {
         "rank": profile.display_rank,
-        "organizations": list(profile.organizations.values_list('key', flat=True))
+        "organizations": list(profile.organizations.values_list('key', flat=True)),
     }
 
     contest_history = []
     for participation in (ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_visible=True)
-                                  .order_by('-contest__end_time')):
+                          .order_by('-contest__end_time')):
         contest = participation.contest
 
         problems = list(contest.contest_problems.select_related('problem').defer('problem__description')
                                .order_by('order'))
         rank, result = next(filter(lambda data: data[1].user == profile.user,
-                                   ranker(contest_ranking_list(contest,problems), key=attrgetter('points', 'cumtime'))))
+                                   ranker(contest_ranking_list(contest, problems),
+                                          key=attrgetter('points', 'cumtime'))))
 
         contest_history.append({
             'contest': {
@@ -109,7 +108,7 @@ def api_v2_user_info(request):
             attempted_problems.append({
                 'awarded': awarded_pts,
                 'max': max_pts,
-                'problem': problem
+                'problem': problem,
             })
 
     resp['problems'] = {
@@ -117,7 +116,7 @@ def api_v2_user_info(request):
         'solved': solved_problems,
         'attempted': attempted_problems,
         'authored': list(Problem.objects.filter(is_public=True, is_organization_private=False, authors=profile)
-                                .values_list('code', flat=True))
+                         .values_list('code', flat=True)),
     }
 
     return JsonResponse(resp)

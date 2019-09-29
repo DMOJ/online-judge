@@ -5,12 +5,12 @@ from django.db.models import Q, CASCADE
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext, gettext_lazy as _
 from jsonfield import JSONField
 
 from judge import contest_format
 from judge.models.problem import Problem
-from judge.models.profile import Profile, Organization
+from judge.models.profile import Organization, Profile
 from judge.models.submission import Submission
 
 __all__ = ['Contest', 'ContestTag', 'ContestParticipation', 'ContestProblem', 'ContestSubmission', 'Rating']
@@ -57,24 +57,24 @@ class Contest(models.Model):
     end_time = models.DateTimeField(verbose_name=_('end time'), db_index=True)
     time_limit = models.DurationField(verbose_name=_('time limit'), blank=True, null=True)
     is_visible = models.BooleanField(verbose_name=_('publicly visible'), default=False,
-                                    help_text=_('Should be set even for organization-private contests, where it '
-                                                'determines whether the contest is visible to members of the '
-                                                'specified organizations.'))
+                                     help_text=_('Should be set even for organization-private contests, where it '
+                                                 'determines whether the contest is visible to members of the '
+                                                 'specified organizations.'))
     is_virtualable = models.BooleanField(verbose_name=_('virtualable'),
                                          help_text=_('Whether a user can virtually participate in this contest or not.'),
                                          default=True)
     is_rated = models.BooleanField(verbose_name=_('contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
     require_registration = models.BooleanField(verbose_name=_('require registration'),
-                                                help_text=_('Whether the user must be registered before being able to join the contest.'),
-                                                default=False)
+                                               help_text=_('Whether the user must be registered before being able to join the contest.'),
+                                               default=False)
     registration_page = models.TextField(verbose_name=_('registration page'),
                                          help_text=_('Flatpage to display when registering. Use name="" for form identifiers that will be stored in the registrations.'),
                                          blank=True, null=True)
     registration_start_time = models.DateTimeField(verbose_name=_('registration start time'),
                                                    help_text=_('Allow registration starting at the specified time.'),
                                                    blank=True, null=True)
-    registration_end_time = models.DateTimeField(verbose_name=_('registration end time'), 
+    registration_end_time = models.DateTimeField(verbose_name=_('registration end time'),
                                                  help_text=_('Allow registration until the specified time.'),
                                                  blank=True, null=True)
     hide_scoreboard = models.BooleanField(verbose_name=_('hide scoreboard'),
@@ -92,8 +92,8 @@ class Contest(models.Model):
     rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
                                           related_name='rate_exclude+')
     is_organization_private = models.BooleanField(verbose_name=_('completely private to organizations'),
-                                     help_text=_('Whether only specified organizations can view and join this contest.'),
-                                     default=False)
+                                                  help_text=_('Whether only specified organizations can view and join this contest.'),
+                                                  default=False)
     is_private_viewable = models.BooleanField(verbose_name=_('viewable but private to organizations'),
                                               help_text=_('Whether only specified organizations can join the contest, but everyone can view.'),
                                               default=False)
@@ -117,8 +117,10 @@ class Contest(models.Model):
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may join the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
-    logo_override_image = models.CharField(verbose_name=_('Logo override image'), default='', max_length=150, blank=True,
-                                           help_text=_('This image will replace the default site logo for users inside the contest.'))
+    logo_override_image = models.CharField(verbose_name=_('Logo override image'), default='', max_length=150,
+                                           blank=True,
+                                           help_text=_('This image will replace the default site logo for users '
+                                                       'inside the contest.'))
     tags = models.ManyToManyField(ContestTag, verbose_name=_('contest tags'), blank=True, related_name='contests')
     user_count = models.IntegerField(verbose_name=_('the amount of live participants'), default=0)
     summary = models.TextField(blank=True, verbose_name=_('contest summary'),

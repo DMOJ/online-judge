@@ -8,12 +8,11 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from judge.judgeapi import judge_submission, abort_submission
+from judge.judgeapi import abort_submission, judge_submission
 from judge.models.problem import Problem, TranslatedProblemForeignKeyQuerySet
 from judge.models.profile import Profile
 from judge.models.runtime import Language
 from judge.utils.unicode import utf8bytes
-
 
 __all__ = ['SUBMISSION_RESULT', 'Submission', 'SubmissionSource', 'SubmissionTestCase']
 
@@ -135,7 +134,7 @@ class Submission(models.Model):
             contest.updated_frozen = True
             contest.save()
             return
- 
+
         contest.updated_frozen = False
         contest.points = round(self.case_points / self.case_total * contest_problem.points
                                if self.case_total > 0 else 0, 3)
@@ -150,9 +149,10 @@ class Submission(models.Model):
                 first_submission_bonus = config.get('first_submission_bonus') or 0
                 if time_bonus:
                     dt = (participation.end_time - self.date).total_seconds()
-                    contest.bonus = (contest.points / contest_problem.points) * (dt//(60*time_bonus))
+                    contest.bonus = (contest.points / contest_problem.points) * (dt // (60 * time_bonus))
                 if first_submission_bonus and contest.points == contest_problem.points and \
-                        not participation.submissions.filter(problem=contest_problem, submission__date__lt=self.date).exists():
+                        not participation.submissions.filter(problem=contest_problem,
+                                                             submission__date__lt=self.date).exists():
                     contest.bonus += first_submission_bonus
         contest.save()
         participation.recompute_results()
@@ -207,8 +207,8 @@ class Submission(models.Model):
 
     @classmethod
     def get_id_secret(cls, sub_id):
-        return (hmac.new(utf8bytes(settings.EVENT_DAEMON_SUBMISSION_KEY), b'%d' % sub_id, hashlib.sha512).hexdigest()[:16] +
-                '%08x' % sub_id)
+        return (hmac.new(utf8bytes(settings.EVENT_DAEMON_SUBMISSION_KEY), b'%d' % sub_id, hashlib.sha512)
+                    .hexdigest()[:16] + '%08x' % sub_id)
 
     @cached_property
     def id_secret(self):

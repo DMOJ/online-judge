@@ -21,8 +21,8 @@ from judge.utils.cachedict import CacheDict
 
 __all__ = ['Comment', 'CommentLock', 'CommentVote']
 
-comment_validator = RegexValidator('^[pcs]:[a-z0-9]+$|^b:\d+$',
-                                   _('Page code must be ^[pcs]:[a-z0-9]+$|^b:\d+$'))
+comment_validator = RegexValidator(r'^[pcs]:[a-z0-9]+$|^b:\d+$',
+                                   _(r'Page code must be ^[pcs]:[a-z0-9]+$|^b:\d+$'))
 
 
 class VersionRelation(GenericRelation):
@@ -122,7 +122,7 @@ class Comment(MPTTModel):
                 link = reverse('blog_post', args=(self.page[2:], slug))
             elif self.page.startswith('s:'):
                 link = reverse('problem_editorial', args=(self.page[2:],))
-        except:
+        except Exception:
             link = 'invalid'
         return link
 
@@ -177,7 +177,8 @@ class CommentVote(models.Model):
 
 class CommentLock(models.Model):
     page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
-                            validators=[comment_validator], help_text=_('c:contest_code, p:problem_code, s:problem_solution_id, or b:blog_id'))
+                            validators=[comment_validator],
+                            help_text=_('c:contest_code, p:problem_code, s:problem_solution_id, or b:blog_id'))
 
     class Meta:
         permissions = (

@@ -1,5 +1,5 @@
 from django.http import HttpResponseBadRequest
-from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
+from django.views.generic.base import ContextMixin, TemplateResponseMixin, View
 
 
 class MarkdownPreviewView(TemplateResponseMixin, ContextMixin, View):
@@ -29,8 +29,10 @@ class ContestMarkdownPreviewView(MarkdownPreviewView):
 class CommentMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'comments/preview.html'
 
+
 class FlatPageMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'flatpage-preview.html'
+
 
 class ProfileMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'user/preview.html'

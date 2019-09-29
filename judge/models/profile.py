@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from fernet_fields import EncryptedCharField
 from sortedm2m.fields import SortedManyToManyField
 
-from judge.models.choices import TIMEZONE, ACE_THEMES, MATH_ENGINES_CHOICES
+from judge.models.choices import ACE_THEMES, MATH_ENGINES_CHOICES, TIMEZONE
 from judge.ratings import rating_class
 
 __all__ = ['Organization', 'Profile', 'OrganizationRequest']
@@ -87,7 +87,7 @@ class Profile(models.Model):
     organizations = SortedManyToManyField(Organization, verbose_name=_('organization'), blank=True,
                                           related_name='members', related_query_name='member')
     display_rank = models.CharField(max_length=10, default='user', verbose_name=_('display rank'),
-                                    choices=(('user', 'Normal User'), 
+                                    choices=(('user', 'Normal User'),
                                              ('president', 'President'),
                                              ('alumnus', 'Alumnus'),
                                              ('admin', 'Admin'),
@@ -110,8 +110,8 @@ class Profile(models.Model):
                                       help_text=_('32 character base32-encoded key for TOTP'),
                                       validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
                                                                  _('TOTP key must be empty or base32'))])
-    notes = models.TextField(verbose_name=_('internal notes'), help_text=_('Notes for administrators regarding this user.'),
-                             null=True, blank=True)
+    notes = models.TextField(verbose_name=_('internal notes'), null=True, blank=True,
+                             help_text=_('Notes for administrators regarding this user.'))
     api_token = EncryptedNullCharField(max_length=32, null=True, blank=True, verbose_name=_('API token'),
                                        help_text=_('32 character base32-encoded key for API access'),
                                        validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
@@ -129,15 +129,17 @@ class Profile(models.Model):
     def username(self):
         return self.user.username
 
-    _pp_table = [pow(getattr(settings, 'DMOJ_PP_STEP', 0.95), i) for i in range(getattr(settings, 'DMOJ_PP_ENTRIES', 100))]
+    _pp_table = [pow(getattr(settings, 'DMOJ_PP_STEP', 0.95), i)
+                 for i in range(getattr(settings, 'DMOJ_PP_ENTRIES', 100))]
+
     def calculate_points(self, table=_pp_table):
         from judge.models import Problem
         data = (Problem.objects.filter(submission__user=self, submission__points__isnull=False, is_public=True,
                                        is_organization_private=False)
-                    .annotate(max_points=Max('submission__points')).order_by('-max_points')
-                    .values_list('max_points', flat=True).filter(max_points__gt=0))
+                       .annotate(max_points=Max('submission__points')).order_by('-max_points')
+                       .values_list('max_points', flat=True).filter(max_points__gt=0))
         extradata = Problem.objects.filter(submission__user=self, submission__result='AC', is_public=True) \
-                        .values('id').distinct().count()
+                           .values('id').distinct().count()
         bonus_function = getattr(settings, 'DMOJ_PP_BONUS_FUNCTION', lambda n: 300 * (1 - 0.997 ** n))
         points = sum(data)
         problems = len(data)
@@ -185,7 +187,7 @@ class Profile(models.Model):
         permissions = (
             ('test_site', 'Shows in-progress development stuff'),
             ('totp', 'Edit TOTP settings'),
-            ('view_name', 'View user\'s real name'),
+            ('view_name', "View user's real name"),
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')

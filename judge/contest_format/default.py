@@ -1,9 +1,9 @@
 from datetime import timedelta
+
 from django.core.exceptions import ValidationError
 from django.db.models import Min, OuterRef, Subquery
 from django.template.defaultfilters import floatformat
 from django.urls import reverse
-from django.utils.functional import cached_property
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy
@@ -31,23 +31,24 @@ class DefaultContestFormat(BaseContestFormat):
         format_data = {}
 
         queryset = (participation.submissions.values('problem_id', 'problem__points')
-                                            .filter(points=Subquery(
-                                                participation.submissions.filter(problem_id=OuterRef('problem_id'))
-                                                                         .order_by('-points').values('points')[:1]
-                                            ))
-                                            .annotate(time=Min('submission__date'))
-                                            .values_list('problem_id', 'time', 'points', 'problem__points'))
+                                             .filter(points=Subquery(
+                                                 participation.submissions.filter(problem_id=OuterRef('problem_id'))
+                                                                          .order_by('-points').values('points')[:1]
+                                             ))
+                                             .annotate(time=Min('submission__date'))
+                                             .values_list('problem_id', 'time', 'points', 'problem__points'))
 
         for problem_id, time, points, problem_points in queryset:
             dt = (time - participation.start).total_seconds()
             if points:
-                score += points 
+                score += points
                 cumtime += dt
 
             format_data[str(problem_id)] = {
                 'points': points,
                 'time': dt,
-                'first_solve': participation.submissions.filter(problem_id=problem_id).order_by('submission__date').first().points == problem_points,
+                'first_solve': participation.submissions.filter(problem_id=problem_id)
+                                                        .order_by('submission__date').first().points == problem_points,
             }
 
         participation.cumtime = max(cumtime, 0)

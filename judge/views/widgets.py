@@ -2,7 +2,7 @@ import requests
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ImproperlyConfigured
-from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 from django.views.generic import View
@@ -51,7 +51,7 @@ class DetectTimezone(View):
         if not hasattr(settings, 'GEONAMES_USERNAME'):
             raise ImproperlyConfigured()
         data = requests.get('http://api.geonames.org/timezoneJSON?lat=%f&lng=%f&username=%s' %
-                                             (lat, long, settings.GEONAMES_USERNAME)).json()
+                            (lat, long, settings.GEONAMES_USERNAME)).json()
         try:
             return HttpResponse(data['timezoneId'], content_type='text/plain')
         except KeyError:

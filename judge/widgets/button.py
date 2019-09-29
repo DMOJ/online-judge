@@ -2,9 +2,11 @@ from django.forms import TextInput
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
+
 class GenerateKeyTextInputButton(TextInput):
     def __init__(self, *args, **kwargs):
-        self.charset = kwargs.pop("charset", "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{};:,<>./")
+        self.charset = kwargs.pop("charset", "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\
+                                              0123456789`~!@#$%^&*()_+-=|[]{};:,<>./")
         self.length = kwargs.pop("length", 100)
         super(TextInput, self).__init__(*args, **kwargs)
 
@@ -14,7 +16,7 @@ class GenerateKeyTextInputButton(TextInput):
             '''\
 &nbsp;<a href="#" onclick="return false;" class="button inline-button" id="id_{0}_regen">Regenerate</a>
 <script type="text/javascript">
-(function ($) {{
+django.jQuery(document).ready(function ($) {{
     $(document).ready(function () {{
         $('#id_{0}_regen').click(function () {{
             var length = {length},
@@ -26,6 +28,6 @@ class GenerateKeyTextInputButton(TextInput):
             $('#id_{0}').val(key);
         }});
     }});
-}})(django.jQuery);
+}});
 </script>
 ''', name, length=self.length, charset=self.charset))

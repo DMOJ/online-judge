@@ -1,9 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.flatpages.admin import FlatPageAdmin
-from django.contrib.flatpages.models import FlatPage
 from django.forms import ModelForm
-from django.urls import reverse, reverse_lazy, NoReverseMatch
+from django.urls import NoReverseMatch, reverse, reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from mptt.admin import DraggableMPTTAdmin
@@ -11,7 +10,7 @@ from reversion.admin import VersionAdmin
 
 from judge.dblock import LockModel
 from judge.models import NavigationBar
-from judge.widgets import HeavySelect2MultipleWidget, HeavyPreviewAdminPageDownWidget, HeavySelect2Widget
+from judge.widgets import HeavyPreviewAdminPageDownWidget, HeavySelect2MultipleWidget, HeavySelect2Widget
 
 
 class NavigationBarAdmin(DraggableMPTTAdmin):
@@ -75,7 +74,8 @@ class BlogPostForm(ModelForm):
     class Meta:
         widgets = {
             'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
-            'organizations': HeavySelect2MultipleWidget(data_view='organization_select2', attrs={'style': 'width: 100%'}),
+            'organizations': HeavySelect2MultipleWidget(data_view='organization_select2',
+                                                        attrs={'style': 'width: 100%'}),
         }
 
         if HeavyPreviewAdminPageDownWidget is not None:
@@ -85,7 +85,8 @@ class BlogPostForm(ModelForm):
 
 class BlogPostAdmin(VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('title', 'slug', 'authors', 'visible', 'sticky', 'publish_on', 'is_organization_private', 'organizations')}),
+        (None, {'fields': ('title', 'slug', 'authors', 'visible', 'sticky', 'publish_on',
+                           'is_organization_private', 'organizations')}),
         (_('Content'), {'fields': ('content', 'og_image',)}),
         (_('Summary'), {'classes': ('collapse',), 'fields': ('summary',)}),
     )

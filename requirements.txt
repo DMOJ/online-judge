@@ -28,3 +28,4 @@ jsonfield
 pymoss
 packaging
 celery
+ansi2html
