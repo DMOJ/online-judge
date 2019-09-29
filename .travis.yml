@@ -1,9 +1,0 @@
-language: python
-python: 3.7
-install: pip install flake8 flake8-import-order flake8-future-import flake8-commas flake8-logging-format
-script:
-  - flake8 --version
-  - flake8
-notifications:
-  slack:
-    secure: "MvIWGuK0YCWD/EbKDE5vZ89igUucKWB+urvfLNoOl3+s8nEJm+rqNX4HO5+o1eAMGvlOXYOse6/JoV/52UyNTjshdEmffQQn+Y7lgtqcYyD8GpsBcCpOM6nsV7T8FGeW0zKDu5vDiPZBdXdmlQM3THFmbOoK1C3gGRlfHixKn2Y="
