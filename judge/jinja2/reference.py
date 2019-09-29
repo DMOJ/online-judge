@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 from ansi2html import Ansi2HTMLConverter
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from lxml.html import Element
 
 from judge import lxml_tree
@@ -183,4 +184,4 @@ def join(first, second, *rest):
 
 @registry.filter(name='ansi2html')
 def ansi2html(s):
-    return Ansi2HTMLConverter(inline=True).convert(s, full=False)
+    return mark_safe(Ansi2HTMLConverter(inline=True).convert(s, full=False))
