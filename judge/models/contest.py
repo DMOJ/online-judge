@@ -224,6 +224,7 @@ class Contest(models.Model):
             ('see_private_contest', _('See private contests')),
             ('edit_own_contest', _('Edit own contests')),
             ('edit_all_contest', _('Edit all contests')),
+            ('clone_contest', _('Clone contest')),
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
             ('create_private_contest', _('Create private contests')),

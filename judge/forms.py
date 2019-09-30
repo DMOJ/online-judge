@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from django_ace import AceWidget
-from judge.models import Language, Organization, PrivateMessage, Problem, Profile, Submission
+from judge.models import Contest, Language, Organization, PrivateMessage, Problem, Profile, Submission
 from judge.utils.subscription import newsletter_id
 from judge.widgets import HeavyPreviewPageDownWidget, MathJaxPagedownWidget, PagedownWidget, Select2MultipleWidget, \
     Select2Widget
@@ -148,3 +148,13 @@ class ProblemCloneForm(Form):
         if Problem.objects.filter(code=code).exists():
             raise ValidationError(_('Problem with code already exists.'))
         return code
+
+
+class ContestCloneForm(Form):
+    key = CharField(max_length=20, validators=[RegexValidator('^[a-z0-9]+$', _('Contest id must be ^[a-z0-9]+$'))])
+
+    def clean_key(self):
+        key = self.cleaned_data['key']
+        if Contest.objects.filter(key=key).exists():
+            raise ValidationError(_('Contest with key already exists.'))
+        return key
