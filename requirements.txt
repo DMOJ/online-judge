@@ -1,7 +1,7 @@
 Django>=2.1,<2.2
 django_compressor
 django-mptt
-django-pagedown
+django-pagedown<2
 django-registration-redux
 django-reversion
 django-social-share
