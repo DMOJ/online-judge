@@ -1,5 +1,5 @@
-{% set can_view, info_colspan = submission_layout(submission, profile_id, request.user, editable_problem_ids, completed_problem_ids) %}
-<td class="sub-result {{ submission.result_class }}">
+{% set can_view = submission_layout(submission, profile_id, request.user, editable_problem_ids, completed_problem_ids) %}
+<div class="sub-result {{ submission.result_class }}">
     <div class="score">
         {%- if submission.is_graded -%}
             {%- if submission.status in ('IE', 'CE', 'AB') -%}
@@ -16,8 +16,8 @@
         <span title="{{ submission.long_status }}" class="status">{{ submission.short_status }}</span> |
         <span class="language">{{ submission.language.short_display_name }}</span>
     </div>
-</td>
-<td colspan="{{ info_colspan }}" class="sub-info{% if submission.status == 'G' %} sub-info-grading{% endif %}">
+</div>
+<div class="sub-info{% if submission.status == 'G' %} sub-info-grading{% endif %}">
     {% if show_problem %}
         <div class="name"><a href="{{ url('problem_detail', submission.problem.code) }}">{{ problem_name }}</a></div>
     {% endif %}
@@ -31,20 +31,20 @@
             </a>
         {% endif %}
     </div>
-</td>
+</div>
 
 {% if submission.status == 'G' %}
-    <td class="sub-testcase">
+    <div class="sub-testcase">
         {%- if submission.current_testcase > 0 -%}
             {{ _('Case #%(case)s', case=submission.current_testcase) }}
         {%- else -%}
             ...
         {%- endif -%}
-    </td>
+    </div>
 {% endif %}
 
 {% if can_view %}
-    <td class="sub-prop">
+    <div class="sub-prop"><div>
         <a href="{{ url('submission_status', submission.id) }}">
             <i class="fa fa-eye fa-fw"></i><span class="label">{{ _('view') }}</span>
         </a>
@@ -58,10 +58,10 @@
                 <i class="fa fa-cog fa-fw"></i><span class="label">{{ _('admin') }}</span>
             </a>
         {% endif %}
-    </td>
+    </div></div>
 {% endif %}
 
-<td class="sub-usage">
+<div class="sub-usage">
     {% if submission.status in ('QU', 'P', 'G', 'CE', 'IE', 'AB') %}
         <div class="time">---</div>
         <div class="memory">---</div>
@@ -76,4 +76,4 @@
         {# No one actually like IEC prefixes, Jinja2. #}
         <div class="memory">{{ (submission.memory_bytes|filesizeformat(True)).replace('i', '') }}</div>
     {% endif %}
-</td>
+</div>
