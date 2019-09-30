@@ -16,6 +16,9 @@
     {% if perms.judge.change_contest or is_organizer %}
         {{ make_tab('edit', 'fa-edit', url('admin:judge_contest_change', contest.id), _('Edit')) }}
     {% endif %}
+    {% if perms.judge.clone_contest %}
+        {{ make_tab('clone', 'fa-copy', url('contest_clone', contest.key), _('Clone')) }}
+    {% endif %}
 
     {% if request.user.is_authenticated %}
         {% if contest.can_join or participating or is_organizer %}

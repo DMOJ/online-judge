@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block media %}
+    <style>
+        #contest-clone-panel {
+            position: relative;
+            margin: 5em auto auto -10em;
+            top: 40%;
+            left: 50%;
+        }
+
+        #contest-key-container {
+            margin: 0.5em 0;
+        }
+
+        #id_key {
+            width: 100%;
+        }
+
+        ul.errorlist {
+            list-style-type: none;
+            padding-left: 0;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <form id="contest-clone-panel" action="" method="post" class="form-area">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div id="form-errors">
+                {{ form.key.errors }}
+            </div>
+        {% endif %}
+
+        <div><label class="inline-header grayed">{{ _('Enter a new key for the cloned contest:') }}</label></div>
+        <div id="contest-key-container"><span class="fullwidth">{{ form.key }}</span></div>
+        <hr>
+        <button style="float: right;" type="submit">{{ _('Clone!') }}</button>
+    </form>
+{% endblock %}
