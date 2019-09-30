@@ -3,83 +3,56 @@
     font-weight: bold !important;
 }
 
-.rate-box {
-    width: 1em;
-    height: 1em;
-    border-radius: 1em;
-    overflow: hidden;
-    position: relative;
-    border: solid 2px;
-    display: block;
+@mixin rate-svg-color($color) {
+    circle {
+        stroke: $color;
+    }
+    path {
+        fill: $color;
+    }
+}
 
-    span {
-        width: 1em;
-        position: absolute;
-        bottom: 0;
-        display: block;
+svg.rate-box {
+    width: 1.2em;
+
+    circle {
+        fill: none;
+        stroke-width: 2px;
     }
 
     &.rate-none {
-        border: none;
+        visibility: hidden;
     }
 
     &.rate-newbie {
-        border-color: #999;
+        @include rate-svg-color(#999);
     }
 
     &.rate-amateur {
-        border-color: #00a900;
+        @include rate-svg-color(#00a900);
     }
 
     &.rate-expert {
-        border-color: #66f;
+        @include rate-svg-color(#66f);
     }
 
     &.rate-candidate-master {
-        border-color: #f6f;
+        @include rate-svg-color(#f6f);
     }
 
     &.rate-master {
-        border-color: #dc0;
+        @include rate-svg-color(#dc0);
     }
 
     &.rate-grandmaster, &.rate-target {
-        border-color: #e00;
+        @include rate-svg-color(#e00);
     }
 
-    &.rate-newbie span {
-        background: #999;
-    }
-
-    &.rate-amateur span {
-        background: #00a900;
-    }
-
-    &.rate-expert span {
-        background: #66f;
-    }
-
-    &.rate-candidate-master span {
-        background: #f6f;
-    }
-
-    &.rate-master span {
-        background: #dc0;
-    }
-
-    &.rate-grandmaster span {
-        background: #e00;
-    }
-
-    &.rate-target span {
-        top: 0.28em;
-        bottom: 0.28em;
-        left: 0.28em;
-        right: 0.28em;
-        background: #e00;
-        height: auto !important;
-        width: auto !important;
-        border-radius: 50%;
+    &.rate-target {
+        circle:last-child {
+            stroke: none;
+            fill: #e00;
+        }
     }
 }
 
@@ -126,9 +99,7 @@
     }
 
     .rate-box {
-        display: inline-block;
         margin-right: 0.2em;
         vertical-align: bottom;
-        font-size: 0.8em;
     }
 }
