@@ -4,9 +4,10 @@
     <th class="header rank">
         {% if sort_links %}<a href="{{ sort_links.rating }}">{% endif %}
         <span class="rate-group">
-            <span style="color: white" class="rate-box">
-                <span style="background: white; height: 0.3em"></span>
-            </span>
+            <svg class="rate-box" viewBox="0 0 16 16">
+                <circle cx="8" cy="8" r="7" stroke="white"></circle>
+                <path clip-path="url(#rating-clip)" d="M0 16v-4.8h16 0v16z" fill="white"></path>
+            </svg>
         </span>
         {%- if sort_links %}{{ sort_order.rating }}</a>{% endif %}
     </th>
