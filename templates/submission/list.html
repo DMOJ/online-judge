@@ -138,14 +138,14 @@
                         return;
 
                     var id = message.id;
-                    var row = table.find('tr#' + id);
+                    var row = table.find('div#' + id);
                     if (row.length < 1) {
                         if (id < first)
                             return;
                         first = id;
-                        row = $('<tr>', {id: id}).hide().prependTo(table);
-                        if (table.find('tr').length >= {{ paginator.per_page }})
-                            table.find('tr:last-child').hide('slow', function () {
+                        row = $('<div>', {id: id, 'class': 'submission-row'}).hide().prependTo(table);
+                        if (table.find('>div').length >= {{ paginator.per_page }})
+                            table.find('>div:last-child').hide('slow', function () {
                                 $(this).remove();
                             });
                     }
@@ -159,9 +159,7 @@
                             row.html(data);
                             register_time(row.find('.time-with-rel'));
                             if (!was_shown) {
-                                row.show('slow');
-                                // Hack for Chrome
-                                $('#submissions-table').hide().show(0);
+                                row.slideDown('slow');
                             }
                             if (!force)
                                 setTimeout(function () {
@@ -345,23 +343,16 @@
                 <a href="javascript:void(0)">{{ _('You were disconnected. Refresh to show latest updates.') }}</a>
             </div>
 
-            <table id="submissions-table" class="table">
-                <colgroup>
-                    <col class="sub-result">
-                    <col class="sub-info">
-                    <col class="sub-testcase">
-                    <col class="sub-prop">
-                    <col class="sub-usage">
-                </colgroup>
+            <div id="submissions-table">
                 {% set profile_id = request.profile.id if request.user.is_authenticated else 0 %}
                 {% for submission in submissions %}
-                    <tr id="{{ submission.id }}">
+                    <div class="submission-row" id="{{ submission.id }}">
                         {% with problem_name=show_problem and submission.problem.i18n_name %}
                             {% include "submission/row.html" %}
                         {% endwith %}
-                    </tr>
+                    </div>
                 {% endfor %}
-            </table>
+            </div>
             {% if page_obj.num_pages > 1 %}
                 <div style="margin-top:10px;">{% include "list-pages.html" %}</div>
             {% endif %}
