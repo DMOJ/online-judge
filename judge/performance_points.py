@@ -6,8 +6,8 @@ from django.db import connection
 from judge.models import Submission
 from judge.timezone import from_database_time
 
-PP_STEP = getattr(settings, 'DMOJ_PP_STEP', 0.95)
-PP_ENTRIES = getattr(settings, 'DMOJ_PP_ENTRIES', 100)
+PP_STEP = settings.DMOJ_PP_STEP
+PP_ENTRIES = settings.DMOJ_PP_ENTRIES
 PP_WEIGHT_TABLE = [pow(PP_STEP, i) for i in range(PP_ENTRIES)]
 
 PPBreakdown = namedtuple('PPBreakdown', 'points weight scaled_points problem_name problem_code '

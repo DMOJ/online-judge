@@ -49,13 +49,13 @@ class MathoidMathParser(object):
         self.mathoid_url = settings.MATHOID_URL
         self.cache = HashFileCache(settings.MATHOID_CACHE_ROOT,
                                    settings.MATHOID_CACHE_URL,
-                                   getattr(settings, 'MATHOID_GZIP', False))
+                                   settings.MATHOID_GZIP)
 
-        mml_cache = getattr(settings, 'MATHOID_MML_CACHE', None)
+        mml_cache = settings.MATHOID_MML_CACHE
         self.mml_cache = mml_cache and caches[mml_cache]
-        self.css_cache = caches[getattr(settings, 'MATHOID_CSS_CACHE', 'default')]
+        self.css_cache = caches[settings.MATHOID_CSS_CACHE]
 
-        self.mml_cache_ttl = getattr(settings, 'MATHOID_MML_CACHE_TTL', 86400)
+        self.mml_cache_ttl = settings.MATHOID_MML_CACHE_TTL
 
     def query_mathoid(self, formula, hash):
         self.cache.create(hash)

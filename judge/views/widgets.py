@@ -61,7 +61,7 @@ class DetectTimezone(View):
         raise Http404()
 
     def get(self, request, *args, **kwargs):
-        backend = getattr(settings, 'TIMEZONE_DETECT_BACKEND', None)
+        backend = settings.TIMEZONE_DETECT_BACKEND
         try:
             lat, long = float(request.GET['lat']), float(request.GET['long'])
         except (ValueError, KeyError):

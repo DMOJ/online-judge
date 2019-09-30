@@ -36,7 +36,7 @@ def repeat_chain(iterable):
 
 def language_data(request, language_count=Language.objects.annotate(count=Count('submission'))):
     languages = language_count.filter(count__gt=0).values('key', 'name', 'count').order_by('-count')
-    threshold = getattr(settings, 'DMOJ_STATS_LANGUAGE_THRESHOLD', 10)
+    threshold = settings.DMOJ_STATS_LANGUAGE_THRESHOLD
     num_languages = min(len(languages), threshold)
     other_count = sum(map(itemgetter('count'), languages[num_languages:]))
 

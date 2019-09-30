@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import re
+import tempfile
 
 from django.utils.translation import ugettext_lazy as _
 from django_jinja.builtins import DEFAULT_EXTENSIONS
@@ -32,6 +33,75 @@ ALLOWED_HOSTS = []
 SITE_ID = 1
 SITE_NAME = 'DMOJ'
 SITE_LONG_NAME = 'DMOJ: Modern Online Judge'
+SITE_ADMIN_EMAIL = False
+
+# Constants
+DMOJ_PP_STEP = 0.95
+DMOJ_PP_ENTRIES = 100
+DMOJ_SSL = 0
+
+INLINE_JQUERY = True
+INLINE_FONTAWESOME = True
+JQUERY_JS = '//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'
+FONTAWESOME_CSS = '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
+DMOJ_CANONICAL = ''
+
+MATHOID_DEFAULT_TYPE = 'auto'
+MATHOID_URL = False
+MATHOID_GZIP = False
+MATHOID_MML_CACHE = None
+MATHOID_MML_CACHE_TTL = 86400
+MATHOID_CSS_CACHE = 'default'
+
+
+TEXOID_GZIP = False
+TEXOID_META_CACHE = 'default'
+TEXOID_META_CACHE_TTL = 86400
+NEWSLETTER_ID_ON_REGISTER = None
+DMOJ_CAMO_URL = None
+DMOJ_CAMO_KEY = None
+DMOJ_CAMO_EXCLUDE = ()
+DMOJ_CAMO_HTTPS = False
+DMOJ_PROBLEM_DATA_ROOT = None
+DMOJ_COMMENT_VOTE_HIDE_THRESHOLD = -5
+DMOJ_STATS_LANGUAGE_THRESHOLD = 10
+BAD_MAIL_PROVIDER_REGEX = ()
+BAD_MAIL_PROVIDERS = ()
+TIMEZONE_MAP = None
+TIMEZONE_BG = None
+TIMEZONE_DETECT_BACKEND = None
+TERMS_OF_SERVICE_URL = None
+DEFAULT_USER_LANGUAGE = 'PY2'
+DMOJ_USER_MAX_ORGANIZATION_COUNT = 3
+PHANTOMJS = ''
+SLIMERJS = ''
+NODEJS = '/usr/bin/node'
+PUPPETEER_MODULE = '/usr/lib/node_modules/puppeteer'
+DMOJ_PDF_PROBLEM_CACHE = ''
+EXIFTOOL = '/usr/bin/exiftool'
+SELECT2_JS_URL = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'
+DEFAULT_SELECT2_CSS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
+COMPRESS_ENABLED = False
+EVENT_DAEMON_AMQP_EXCHANGE = 'dmoj-events'
+DMOJ_TOTP_TOLERANCE_HALF_MINUTES = 1
+BRIDGED_DJANGO_CONNECT = None
+DMOJ_SUBMISSIONS_REJUDGE_LIMIT = 10
+BRIDGED_JUDGE_PROXIES = None
+NOFOLLOW_EXCLUDED = set()
+DMOJ_PDF_PROBLEM_TEMP_DIR = tempfile.gettempdir()
+MARKDOWN_STYLES = {}
+MARKDOWN_DEFAULT_STYLE = {}
+DMOJ_RATING_COLORS = False
+DMOJ_PP_BONUS_FUNCTION = lambda n: 300 * (1 - 0.997 ** n)
+ACE_URL = '//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ext-split.js'
+DMOJ_EMAIL_THROTTLING = (10, 60)
+PHANTOMJS_PDF_ZOOM = 0.75
+PHANTOMJS_PDF_TIMEOUT = 5.0
+PHANTOMJS_PAPER_SIZE = 'Letter'
+SLIMERJS_PDF_ZOOM = 0.75
+SLIMERJS_PAPER_SIZE = 'Letter'
+SLIMERJS_FIREFOX_PATH = ''
+PUPPETEER_PAPER_SIZE = 'Letter'
 
 PYGMENT_THEME = 'pygment-github.css'
 

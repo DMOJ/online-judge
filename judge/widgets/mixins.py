@@ -34,7 +34,7 @@ class CompressorWidgetMixin(object):
     except ImportError:
         pass
     else:
-        if getattr(settings, 'COMPRESS_ENABLED', not getattr(settings, 'DEBUG', False)):
+        if settings.COMPRESS_ENABLED:
             @property
             def media(self):
                 media = super().media

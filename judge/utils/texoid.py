@@ -19,9 +19,9 @@ class TexoidRenderer(object):
     def __init__(self):
         self.cache = HashFileCache(settings.TEXOID_CACHE_ROOT,
                                    settings.TEXOID_CACHE_URL,
-                                   getattr(settings, 'TEXOID_GZIP', False))
-        self.meta_cache = caches[getattr(settings, 'TEXOID_META_CACHE', 'default')]
-        self.meta_cache_ttl = getattr(settings, 'TEXOID_META_CACHE_TTL', 86400)
+                                   settings.TEXOID_GZIP)
+        self.meta_cache = caches[settings.TEXOID_META_CACHE]
+        self.meta_cache_ttl = settings.TEXOID_META_CACHE_TTL
 
     def query_texoid(self, document, hash):
         self.cache.create(hash)
