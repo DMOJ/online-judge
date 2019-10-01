@@ -2,7 +2,7 @@ name: makemessages
 # TODO: restrict to master
 on: [push]
 jobs:
-  build:
+  makemessages:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -15,7 +15,7 @@ jobs:
         git submodule init
         git submodule update
     - name: Install requirements
-      run: pip install -r requirements.txt
+      run: pip install -r requirements.txt && pip install pymysql
     - name: Collect localizable strings
       run: |
         python manage.py makemessages -l en -e py,html,txt
