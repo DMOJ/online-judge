@@ -1,6 +1,8 @@
 name: makemessages
-# TODO: restrict to master
-on: [push]
+on:
+  push:
+    branches:
+      - master
 jobs:
   makemessages:
     runs-on: ubuntu-latest
