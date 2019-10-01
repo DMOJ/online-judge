@@ -16,7 +16,7 @@ jobs:
         git submodule update
     - name: Install requirements
       run: |
-         apt-get install gettext
+         sudo apt-get install gettext
          pip install -r requirements.txt
          pip install pymysql
     - name: Collect localizable strings
