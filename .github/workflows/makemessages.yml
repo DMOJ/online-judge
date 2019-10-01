@@ -17,7 +17,7 @@ jobs:
     - name: Install requirements
       run: |
          sudo apt-get install gettext
-         wget https://artifacts.crowdin.com/repo/deb/crowdin.deb -O crowdin.deb
+         curl -O https://artifacts.crowdin.com/repo/deb/crowdin.deb
          sudo dpkg -i crowdin.deb
          pip install -r requirements.txt
          pip install pymysql
