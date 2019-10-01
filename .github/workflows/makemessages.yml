@@ -18,7 +18,7 @@ jobs:
       run: |
          sudo apt-get install gettext
          pip install -r requirements.txt
-         pip install pymysql
+         pip install pymysql crowdin-cli-py
     - name: Collect localizable strings
       run: |
         echo "STATIC_ROOT = '/tmp'" > dmoj/local_settings.py
