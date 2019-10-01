@@ -15,15 +15,14 @@ import os
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', '1') == '1'
+DEBUG = os.environ.get('DEBUG', '0') == '1'
 
 # Uncomment and set to the domain names this site is intended to serve.
 # You must do this once you set DEBUG to False.
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost']
 
 # Optional apps that DMOJ can make use of.
 INSTALLED_APPS += (
-    'django_select2', # Searchable comboboxes.
 )
 
 # Caching. You can use memcached or redis instead.
@@ -125,7 +124,7 @@ SERVER_EMAIL = 'Don Mills Online Judge <errors@dmoj.ca>'
 # webserver to serve the static files. This is the directory where all the 
 # s
 # You must configure your webserver to serve this directory as /static/ in production.
-STATIC_ROOT = '/site/static'
+STATIC_ROOT = '/code/static'
 
 # URL to access static files.
 #STATIC_URL = '/static/'
@@ -165,7 +164,7 @@ BAD_MAIL_PROVIDERS = set()
 
 ## Event server.
 # Uncomment to enable live updating.
-EVENT_DAEMON_USE = True
+#EVENT_DAEMON_USE = True
 
 
 # Uncomment this section to use websocket/daemon.js included in the site.
@@ -249,7 +248,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'file': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(messag
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s',
         },
         'simple': {
             'format': '%(levelname)s %(message)s',
@@ -260,7 +259,7 @@ LOGGING = {
         'bridge': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '<desired bridge log path>',
+            'filename': '/log/bridge.log',
             'maxBytes': 10 * 1024 * 1024,
             'backupCount': 10,
             'formatter': 'file',
@@ -271,7 +270,8 @@ LOGGING = {
         },
         'console': {
             'level': 'DEBUG',
-  
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '/log/console.log', 
             'formatter': 'file',
         },
     },
@@ -316,4 +316,5 @@ LOGGING = {
 
 ## ======== Custom Configuration ========
 # You may add whatever django configuration you would like here.
-# Do try to keep it separ
+# Do try to keep it separate so you can quickly patch in new settings.
+

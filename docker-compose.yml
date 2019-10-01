@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 
 services:
   db:
@@ -14,17 +14,17 @@ services:
     restart: always
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: /code/.docker/boot.sh
     environment:
       - DEBUG=1
       - SECRET_KEY=ChangeMe
-      - SQL_DATABASE=dmoj
-      - SQL_USER=dmoj
-      - 'SQL_PASSWORD=ChangeMe!'
-      - SQL_HOST=db
-      - SQL_PORT=3306
+      - SQL_DATABASE_NAME=dmoj
+      - SQL_DATABASE_USER=dmoj
+      - 'SQL_DATABASE_PASSWORD=ChangeMe!'
+      - SQL_DATABASE_HOST=db
+      - SQL_DATABASE_PORT=3306
     volumes:
-      - .:/code
+      - /tmp/log:/log
     ports:
       - "8000:8000"
     depends_on:
