@@ -222,8 +222,11 @@ a.edit-profile {
         color: #777;
     }
 
-    td.sub-pp {
+    div.sub-pp {
         text-align: right;
+        min-width: unset;
+        width: unset;
+        border-left: none;
     }
 
     td.problem-name {
