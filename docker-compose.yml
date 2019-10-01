@@ -9,6 +9,9 @@ services:
       MYSQL_USER: 'dmoj'
       MYSQL_PASSWORD: 'ChangeMe!'
       MYSQL_ROOT_PASSWORD: 'ChangeMe!'
+  redis:
+    image: redis:alpine
+    restart: always
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -26,3 +29,4 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - redis
