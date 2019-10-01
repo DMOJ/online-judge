@@ -1,10 +1,7 @@
 #!/bin/bash
 
 cd /code
-
-echo yes | python3 manage.py collectstatic
 python3 manage.py compilemessages
-python3 manage.py compilejsi18n
 
 # TODO: only if nothing in db, or provide a command
 # to do this that people run the first time

@@ -17,5 +17,3 @@ RUN pip3 install -r requirements.txt
 
 COPY . /code
 COPY .docker/local_settings.py /code/dmoj/
-
-RUN ./make_style.sh

@@ -17,6 +17,13 @@ services:
     build:
       context: .
       dockerfile: .docker/base/Dockerfile
+  static:
+    image: dmoj-site-static
+    build:
+      context: .
+      dockerfile: .docker/static/Dockerfile
+    depends_on:
+      - base
   site:
     build:
       context: .
@@ -46,3 +53,5 @@ services:
       - /tmp/log:/log
     ports:
       - "8080:80"
+    depends_on:
+      - static
