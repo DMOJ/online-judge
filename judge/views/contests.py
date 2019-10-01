@@ -222,8 +222,9 @@ class ContestMixin(object):
                 raise private_contest_error
             if user.has_perm('judge.edit_all_contest'):
                 return contest
-            if not contest.organizations.filter(id__in=profile.organizations.all()).exists() and \
-                    not contest.private_contestants.filter(id=profile.id).exists():
+            if not (contest.is_organization_private and
+                    contest.organizations.filter(id__in=profile.organizations.all()).exists()) and \
+                    not (contest.is_private and contest.private_contestants.filter(id=profile.id).exists()):
                 raise private_contest_error
 
         return contest

@@ -196,8 +196,8 @@ class Contest(models.Model):
         if not user.has_perm('judge.edit_all_contest'):
             filter = Q(is_private=False, is_organization_private=False)
             if user.is_authenticated:
-                filter |= Q(organizations__in=profile.organizations.all())
-                filter |= Q(private_contestants=profile)
+                filter |= Q(is_organization_private=True, organizations__in=profile.organizations.all())
+                filter |= Q(is_private=True, private_contestants=profile)
             queryset = queryset.filter(filter)
         return queryset.distinct()
 
