@@ -18,5 +18,6 @@ jobs:
       run: pip install -r requirements.txt && pip install pymysql
     - name: Collect localizable strings
       run: |
+        echo "STATIC_ROOT = '/tmp'" > dmoj/local_settings.py
         python manage.py makemessages -l en -e py,html,txt
         python manage.py makemessages -l en -d djangojs
