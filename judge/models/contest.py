@@ -60,6 +60,8 @@ class Contest(models.Model):
                                      help_text=_('Should be set even for organization-private contests, where it '
                                                  'determines whether the contest is visible to members of the '
                                                  'specified organizations.'))
+    is_external = models.BooleanField(verbose_name=_('external contest'), default=False,
+                                      help_text=_('Whether this contest is visible to external users.'))
     is_virtualable = models.BooleanField(verbose_name=_('virtualable'),
                                          help_text=_('Whether a user can virtually participate in this contest or not.'),
                                          default=True)
@@ -183,10 +185,7 @@ class Contest(models.Model):
         queryset = cls.objects.all().defer('description', 'registration_page')
 
         if not user.is_authenticated or profile.is_external_user:
-            filter = Q(tags__name='external')
-            if user.is_authenticated:
-                filter |= Q(organizations__in=profile.organizations.all())
-            queryset = queryset.filter(filter)
+            queryset = queryset.filter(is_external=True)
 
         if not user.has_perm('judge.see_private_contest'):
             filter = Q(is_visible=True)
@@ -279,12 +278,8 @@ class Contest(models.Model):
         return True
 
     def is_accessible_by(self, user):
-        is_external = 'external' in self.tags.values_list('name', flat=True)
-        if not user.is_authenticated and not is_external:
+        if not self.is_external and (not user.is_authenticated or user.profile.is_external_user):
             return False
-        if user.is_authenticated and user.profile.is_external_user:
-            if not is_external and not self.organizations.filter(id__in=user.profile.organizations.all()).exists():
-                return False
 
         # Contest is publicly visible
         if self.is_visible:
