@@ -273,8 +273,11 @@ class Contest(models.Model):
         if check_registered and not self.is_registered(user):
             return False
 
-        if self.is_private_viewable or self.is_private:
-            return self.organizations.filter(id__in=user.profile.organizations.all()).exists()
+        if (self.is_private_viewable or self.is_organization_private) and \
+                self.organizations.filter(id__in=user.profile.organizations.all()).exists():
+            return True
+        if self.is_private and self.private_contestants.filter(id=user.profile.id).exists():
+            return True
         return True
 
     def is_accessible_by(self, user):
