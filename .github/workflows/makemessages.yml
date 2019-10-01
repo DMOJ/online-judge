@@ -15,7 +15,10 @@ jobs:
         git submodule init
         git submodule update
     - name: Install requirements
-      run: pip install -r requirements.txt && pip install pymysql
+      run: |
+         apt-get install gettext
+         pip install -r requirements.txt
+         pip install pymysql
     - name: Collect localizable strings
       run: |
         echo "STATIC_ROOT = '/tmp'" > dmoj/local_settings.py
