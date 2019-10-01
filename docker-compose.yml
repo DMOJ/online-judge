@@ -12,9 +12,15 @@ services:
   redis:
     image: redis:alpine
     restart: always
-  web:
-    build: .
-    command: /code/.docker/boot.sh
+  base:
+    image: dmoj-site-base
+    build:
+      context: .
+      dockerfile: .docker/base/Dockerfile
+  site:
+    build:
+      context: .
+      dockerfile: .docker/site/Dockerfile
     environment:
       - DEBUG=1
       - SECRET_KEY=ChangeMe
@@ -26,7 +32,17 @@ services:
     volumes:
       - /tmp/log:/log
     ports:
-      - "8000:8000"
+      - "3031:3031"
     depends_on:
       - db
       - redis
+      - base
+  nginx:
+    build:
+      context: .
+      dockerfile: .docker/nginx/Dockerfile
+    restart: always
+    volumes:
+      - /tmp/log:/log
+    ports:
+      - "8080:80"
