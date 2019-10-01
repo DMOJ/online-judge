@@ -17,8 +17,10 @@ jobs:
     - name: Install requirements
       run: |
          sudo apt-get install gettext
+         wget https://artifacts.crowdin.com/repo/deb/crowdin.deb -O crowdin.deb
+         sudo dpkg -i crowdin.deb
          pip install -r requirements.txt
-         pip install pymysql crowdin-cli-py
+         pip install pymysql
     - name: Collect localizable strings
       run: |
         echo "STATIC_ROOT = '/tmp'" > dmoj/local_settings.py
@@ -46,4 +48,4 @@ jobs:
                 sr-CS: sr_Latn
         EOF
         echo "api_key: ${CROWDIN_API_TOKEN}" >> crowdin.yaml
-        crowdin-cli-py upload sources
+        crowdin upload sources
