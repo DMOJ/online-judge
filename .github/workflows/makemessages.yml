@@ -1,0 +1,22 @@
+name: makemessages
+# TODO: restrict to master
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name Checkout submodules
+      run: |
+         git submodule init
+         git submodule update
+    - name: Install requirements
+      run: pip install -r requirements.txt
+    - name: Collect localizable strings
+      run: |
+        python manage.py makemessages -l en -e py,html,txt
+        python manage.py makemessages -l en -d djangojs
