@@ -153,7 +153,7 @@ msgid_plural "%d contests successfully marked as private."
 msgstr[0] "%d соревнование успешно сделано приватным."
 msgstr[1] "%d соревнования успешно сделаны приватными."
 msgstr[2] "%d соревнования успешно сделаны приватными."
-msgstr[3] ""
+msgstr[3] "%d соревнования успешно сделаны приватными."
 
 #: .\judge\admin\contest.py:140
 msgid "Mark contests as private"
