@@ -24,12 +24,15 @@ RUN python manage.py compilemessages
 RUN python manage.py compilejsi18n
 
 
+RUN python manage.py migrate
+
+
 RUN python manage.py check
 RUN python manage.py loaddata navbar
 RUN python manage.py loaddata language_small
 
 
-EXPOSE 80
+EXPOSE 8000
 EXPOSE 9999
 EXPOSE 9998
 EXPOSE 15100
