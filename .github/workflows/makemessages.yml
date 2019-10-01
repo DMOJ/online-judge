@@ -24,3 +24,24 @@ jobs:
         echo "STATIC_ROOT = '/tmp'" > dmoj/local_settings.py
         python manage.py makemessages -l en -e py,html,txt
         python manage.py makemessages -l en -d djangojs
+    - name: Upload strings to Crowdin
+      run: |
+        cat > crowdin.yml <<EOF
+        project_identifier: dmoj
+
+        files:
+          - source: /locale/en/LC_MESSAGES/django.po
+            translation: /locale/%two_letters_code%/LC_MESSAGES/django.po
+            languages_mapping:
+              two_letters_code:
+                zh-CN: zh_Hans
+                sr-CS: sr_Latn
+          - source: /locale/en/LC_MESSAGES/djangojs.po
+            translation: /locale/%two_letters_code%/LC_MESSAGES/djangojs.po
+            languages_mapping:
+              two_letters_code:
+                zh-CN: zh_Hans
+                sr-CS: sr_Latn
+        EOF
+        
+        cat crowdin.yml
