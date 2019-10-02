@@ -24,6 +24,16 @@ jobs:
          sudo apt-get install gettext
          pip install -r requirements.txt
          pip install pymysql
+    - name: Check .po file validity
+      run: |
+        fail=0
+        while read -r file; do
+            if ! msgfmt --check-format "$file"; then
+                fail=$((fail + 1))
+            fi
+        done < <(find locale -name '*.po')
+        exit "$fail"
+      shell: bash
     - name: Compile messages
       run: |
         echo "STATIC_ROOT = '/tmp'" > dmoj/local_settings.py
