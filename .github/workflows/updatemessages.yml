@@ -18,7 +18,6 @@ jobs:
         sudo apt-get install gettext
         curl -O https://artifacts.crowdin.com/repo/deb/crowdin.deb
         sudo dpkg -i crowdin.deb
-        rm crowdin.deb
         pip install -r requirements.txt
         pip install pymysql
     - name: Download strings from Crowdin
@@ -46,7 +45,10 @@ jobs:
         crowdin download
         rm crowdin.yaml
     - name: Cleanup
-      run: rm -rf src/
+      run: |
+        git add locale
+        git checkout .
+        git clean -fd
     - name: Create pull request
       uses: peter-evans/create-pull-request@v1.4.0
       env:
