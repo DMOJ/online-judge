@@ -85,7 +85,7 @@ msgstr[1] "%d comentarios ocultos de manera exitosa."
 
 #: .\judge\admin\comments.py:43
 msgid "Hide comments"
-msgstr "Ocultar comentarios\n"
+msgstr "Ocultar comentarios"
 
 #: .\judge\admin\comments.py:47
 #, python-format
