@@ -53,7 +53,7 @@ jobs:
         git checkout .
         git clean -fd
     - name: Create pull request
-      uses: peter-evans/create-pull-request@v1.4.1
+      uses: peter-evans/create-pull-request@v1.4.1-multi
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
         COMMIT_MESSAGE: 'i18n: update translations from Crowdin'
