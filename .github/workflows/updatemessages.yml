@@ -1,7 +1,7 @@
 name: updatemessages
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 4 * * *'
 jobs:
   updatemessages:
     runs-on: ubuntu-latest
@@ -54,7 +54,7 @@ jobs:
     - name: Create pull request
       uses: peter-evans/create-pull-request@v1.4.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
         COMMIT_MESSAGE: 'i18n: update translations from Crowdin'
         PULL_REQUEST_TITLE: 'Update translations from Crowdin'
         PULL_REQUEST_BODY: This PR has been auto-generated to pull in latest translations from [Crowdin](https://translate.dmoj.ca).
