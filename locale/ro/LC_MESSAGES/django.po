@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-01 23:12+0000\n"
-"PO-Revision-Date: 2019-10-02 17:04\n"
+"PO-Revision-Date: 2019-10-02 21:03\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -446,7 +446,7 @@ msgstr "Comentariu postat"
 
 #: judge/contest_format/atcoder.py:19
 msgid "AtCoder"
-msgstr ""
+msgstr "AtCoder"
 
 #: judge/contest_format/default.py:18
 msgid "Default"
@@ -454,11 +454,11 @@ msgstr ""
 
 #: judge/contest_format/ecoo.py:19
 msgid "ECOO"
-msgstr ""
+msgstr "ECOO"
 
 #: judge/contest_format/ioi.py:19
 msgid "IOI"
-msgstr ""
+msgstr "IOI"
 
 #: judge/forms.py:27
 msgid "Subscribe to contest updates"
@@ -561,7 +561,7 @@ msgstr ""
 
 #: judge/models/comment.py:47
 msgid "hide the comment"
-msgstr ""
+msgstr "ascunde comentariul"
 
 #: judge/models/comment.py:48
 msgid "parent"
