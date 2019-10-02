@@ -1,11 +1,5 @@
 name: compilemessages
-on:
-  push:
-    paths:
-      - 'locale/**'
-  pull_request:
-    paths:
-      - 'locale/**'
+on: [push, pull_request]
 jobs:
   compilemessages:
     runs-on: ubuntu-latest
