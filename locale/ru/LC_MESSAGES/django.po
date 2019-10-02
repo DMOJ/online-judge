@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-01 23:12+0000\n"
-"PO-Revision-Date: 2019-10-01 23:55\n"
+"PO-Revision-Date: 2019-10-02 06:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2100,9 +2100,9 @@ msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
 msgstr[0] "%d день %h:%m:%s"
-msgstr[1] "%d дней %h:%m:%s"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "%d дня %h:%m:%s"
+msgstr[2] "%d дней %h:%m:%s"
+msgstr[3] "%d дней %h:%m:%s"
 
 #: judge/utils/timedelta.py:53
 msgctxt "time format without day"
@@ -2113,19 +2113,19 @@ msgstr "%h:%m:%s"
 msgctxt "time format no seconds with day"
 msgid "%d day %h:%m"
 msgid_plural "%d days %h:%m"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d день %h:%m"
+msgstr[1] "%d дня %h:%m"
+msgstr[2] "%d дней %h:%m"
+msgstr[3] "%d дней %h:%m"
 
 #: judge/utils/timedelta.py:61
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d день"
-msgstr[1] "%d дней"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "%d дня"
+msgstr[2] "%d дней"
+msgstr[3] "%d дней"
 
 #: judge/utils/timedelta.py:63
 msgctxt "hours and minutes"
@@ -3127,7 +3127,7 @@ msgstr "Предыдущая"
 
 #: templates/contest/contest-list-tabs.html:10
 msgid "Today"
-msgstr ""
+msgstr "Сегодня"
 
 #: templates/contest/contest-list-tabs.html:13
 msgid "Next"
