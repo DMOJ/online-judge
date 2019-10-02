@@ -5,114 +5,110 @@ msgstr ""
 "POT-Creation-Date: 2019-10-01 23:12+0000\n"
 "PO-Revision-Date: 2019-10-01 23:54\n"
 "Last-Translator: Icyene\n"
-"Language-Team: Croatian\n"
-"Language: hr_HR\n"
+"Language-Team: Chinese Traditional\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: crowdin.com\n"
 "X-Crowdin-Project: dmoj\n"
-"X-Crowdin-Language: hr\n"
+"X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: django.po\n"
 
 #: dmoj/settings.py:250
 msgid "German"
-msgstr "Njemački"
+msgstr "德文"
 
 #: dmoj/settings.py:251
 msgid "English"
-msgstr "Engleski"
+msgstr "英文"
 
 #: dmoj/settings.py:252
 msgid "Spanish"
-msgstr "Španjolski"
+msgstr "西班牙文"
 
 #: dmoj/settings.py:253
 msgid "French"
-msgstr "Francuski"
+msgstr "法文"
 
 #: dmoj/settings.py:254
 msgid "Croatian"
-msgstr "Hrvatski"
+msgstr "克羅地亞文"
 
 #: dmoj/settings.py:255
 msgid "Hungarian"
-msgstr "Mađarski"
+msgstr "匈牙利文"
 
 #: dmoj/settings.py:256
 msgid "Korean"
-msgstr "Korejski"
+msgstr "韓文"
 
 #: dmoj/settings.py:257
 msgid "Romanian"
-msgstr "Rumunjski"
+msgstr "羅馬尼亞文"
 
 #: dmoj/settings.py:258
 msgid "Russian"
-msgstr "Ruski"
+msgstr "俄文"
 
 #: dmoj/settings.py:259
 msgid "Serbian (Latin)"
-msgstr "Srpski (Latinica)"
+msgstr "塞爾維亞文 (拉丁語系)"
 
 #: dmoj/settings.py:260
 msgid "Turkish"
-msgstr "Turski"
+msgstr "土耳其文"
 
 #: dmoj/settings.py:261
 msgid "Vietnamese"
-msgstr "Vijetnamski"
+msgstr "越南文"
 
 #: dmoj/settings.py:262
 msgid "Simplified Chinese"
-msgstr "Pojednostavljeni kineski"
+msgstr "簡體中文"
 
 #: dmoj/urls.py:54 templates/base.html:239
 msgid "Login"
-msgstr "Prijava"
+msgstr "登入"
 
 #: dmoj/urls.py:102 templates/base.html:190
 msgid "Home"
-msgstr "Početna"
+msgstr "首頁"
 
 #: judge/admin/comments.py:40
 #, python-format
 msgid "%d comment successfully hidden."
 msgid_plural "%d comments successfully hidden."
-msgstr[0] "%d komentar uspješno sakriven."
-msgstr[1] "%d komentara uspješno sakriven."
-msgstr[2] "%d komentara uspješno sakriveno."
+msgstr[0] "%d 個回應已成功隱藏。"
 
 #: judge/admin/comments.py:43
 msgid "Hide comments"
-msgstr "Sakrij komentare"
+msgstr "隱藏評論"
 
 #: judge/admin/comments.py:47
 #, python-format
 msgid "%d comment successfully unhidden."
 msgid_plural "%d comments successfully unhidden."
-msgstr[0] "%d komentar uspješno otkriven."
-msgstr[1] "%d komentara uspješno otkriveno."
-msgstr[2] "%d komentara uspješno otkriveno."
+msgstr[0] "%d 個回應已成功取消隱藏。"
 
 #: judge/admin/comments.py:50
 msgid "Unhide comments"
-msgstr "Otkrij komentare"
+msgstr "取消隱藏回應"
 
 #: judge/admin/comments.py:58
 msgid "Associated page"
-msgstr "Povezana stranica"
+msgstr "關聯頁"
 
 #: judge/admin/contest.py:29
 msgid "Included contests"
-msgstr "Uključena natjecanja"
+msgstr ""
 
 #: judge/admin/contest.py:65 templates/contest/contest.html:83
 #: templates/problem/list.html:206 templates/problem/list.html:221
 #: templates/user/user-problems.html:56 templates/user/user-problems.html:98
 msgid "Problem"
-msgstr "Zadatak"
+msgstr "題目"
 
 #: judge/admin/contest.py:112
 msgid "Settings"
@@ -120,11 +116,11 @@ msgstr ""
 
 #: judge/admin/contest.py:114
 msgid "Scheduling"
-msgstr "Raspoređivanje"
+msgstr "排程"
 
 #: judge/admin/contest.py:115
 msgid "Details"
-msgstr "Pojedinosti"
+msgstr "詳細資訊"
 
 #: judge/admin/contest.py:116
 msgid "Format"
@@ -132,7 +128,7 @@ msgstr ""
 
 #: judge/admin/contest.py:117 templates/contest/ranking-table.html:5
 msgid "Rating"
-msgstr "Bodovi"
+msgstr "評分"
 
 #: judge/admin/contest.py:118
 msgid "Access"
@@ -140,15 +136,13 @@ msgstr ""
 
 #: judge/admin/contest.py:120 judge/admin/problem.py:130
 msgid "Justice"
-msgstr "Pravda"
+msgstr ""
 
 #: judge/admin/contest.py:158
 #, python-format
 msgid "%d contest successfully marked as visible."
 msgid_plural "%d contests successfully marked as visible."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: judge/admin/contest.py:161
 msgid "Mark contests as visible"
@@ -159,8 +153,6 @@ msgstr ""
 msgid "%d contest successfully marked as hidden."
 msgid_plural "%d contests successfully marked as hidden."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: judge/admin/contest.py:168
 msgid "Mark contests as hidden"
@@ -169,27 +161,23 @@ msgstr ""
 #: judge/admin/contest.py:179 judge/admin/submission.py:149
 #: judge/admin/submission.py:171
 msgid "You do not have the permission to rejudge submissions."
-msgstr "Nemate dozvolu za ponovno evaluiranje predanog rješenja."
+msgstr ""
 
 #: judge/admin/contest.py:186 judge/admin/submission.py:155
 msgid "You do not have the permission to rejudge THAT many submissions."
-msgstr "Nemate dozvolu za ponovnu evaluaciju toliko puno predanih rješenja."
+msgstr ""
 
 #: judge/admin/contest.py:193 judge/admin/submission.py:164
 #, python-format
 msgid "%d submission was successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: judge/admin/contest.py:264
 #, python-format
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: judge/admin/contest.py:267
 msgid "Recalculate results"
@@ -197,28 +185,28 @@ msgstr ""
 
 #: judge/admin/contest.py:271 judge/admin/organization.py:64
 msgid "username"
-msgstr "korisničko ime"
+msgstr "使用者名稱"
 
 #: judge/admin/contest.py:276 templates/base.html:258
 msgid "virtual"
-msgstr "virtualno"
+msgstr ""
 
 #: judge/admin/interface.py:28 judge/models/interface.py:46
 msgid "link path"
-msgstr "putanja veze"
+msgstr ""
 
 #: judge/admin/interface.py:62
 msgid "Content"
-msgstr "Sadržaj"
+msgstr "内容"
 
 #: judge/admin/interface.py:63
 msgid "Summary"
-msgstr "Sažetak"
+msgstr "概要"
 
 #: judge/admin/interface.py:107 judge/models/contest.py:240
 #: judge/models/contest.py:344 judge/models/profile.py:186
 msgid "user"
-msgstr "korisnik"
+msgstr "使用者"
 
 #: judge/admin/interface.py:148
 msgid "object"
@@ -227,176 +215,168 @@ msgstr ""
 #: judge/admin/organization.py:33 judge/admin/problem.py:170
 #: judge/admin/profile.py:78
 msgid "View on site"
-msgstr "Prikaži na stranici"
+msgstr ""
 
 #: judge/admin/problem.py:28
 msgid "Describe the changes you made (optional)"
-msgstr "Opišite promjene koje ste napravili (neobavezno)"
+msgstr ""
 
 #: judge/admin/problem.py:125
 msgid "Social Media"
-msgstr "Društveni mediji"
+msgstr "社交媒體"
 
 #: judge/admin/problem.py:126
 msgid "Taxonomy"
-msgstr "Taksonomija"
+msgstr ""
 
 #: judge/admin/problem.py:127 templates/contest/contest.html:84
 #: templates/problem/data.html:394 templates/problem/list.html:211
 #: templates/problem/list.html:232 templates/user/base-users-table.html:10
 #: templates/user/user-problems.html:58
 msgid "Points"
-msgstr "Bodovi"
+msgstr "分數"
 
 #: judge/admin/problem.py:128
 msgid "Limits"
-msgstr "Ograničenja"
+msgstr "限制"
 
 #: judge/admin/problem.py:129 judge/admin/submission.py:232
 #: templates/stats/base.html:14 templates/submission/list.html:310
 msgid "Language"
-msgstr "Jezik"
+msgstr "語言"
 
 #: judge/admin/problem.py:131
 msgid "History"
-msgstr "Povijest"
+msgstr "歷史記錄"
 
 #: judge/admin/problem.py:167
 msgid "Authors"
-msgstr "Autori"
+msgstr "作者"
 
 #: judge/admin/problem.py:205
 #, python-format
 msgid "%d problem successfully marked as public."
 msgid_plural "%d problems successfully marked as public."
-msgstr[0] "%d zadatak uspješno postavljen kao javno."
-msgstr[1] "%d zadataka uspješno postavljeno kao javni."
-msgstr[2] "%d zadataka uspješno postavljeno kao javni."
+msgstr[0] ""
 
 #: judge/admin/problem.py:209
 msgid "Mark problems as public"
-msgstr "Označi zadatke javnima"
+msgstr ""
 
 #: judge/admin/problem.py:214
 #, python-format
 msgid "%d problem successfully marked as private."
 msgid_plural "%d problems successfully marked as private."
-msgstr[0] "%d zadatak uspješno postavljen kao privatan."
-msgstr[1] "%d zadataka uspješno postavljeno kao privatni."
-msgstr[2] "%d zadataka uspješno postavljeno kao privatni."
+msgstr[0] ""
 
 #: judge/admin/problem.py:218
 msgid "Mark problems as private"
-msgstr "Označi zadatke privatnima"
+msgstr ""
 
 #: judge/admin/profile.py:32
 msgid "timezone"
-msgstr ""
+msgstr "時區"
 
 #: judge/admin/profile.py:84 judge/admin/submission.py:211
 #: templates/organization/requests/log.html:9
 #: templates/organization/requests/pending.html:12
 #: templates/ticket/list.html:263
 msgid "User"
-msgstr "Korisnik"
+msgstr "使用者"
 
 #: judge/admin/profile.py:89 templates/registration/registration_form.html:145
 msgid "Email"
-msgstr "E-mail"
+msgstr "電子郵件"
 
 #: judge/admin/profile.py:94 judge/views/register.py:29
 #: templates/registration/registration_form.html:173
 #: templates/user/edit-profile.html:99
 msgid "Timezone"
-msgstr "Vremenska zona"
+msgstr "時區"
 
 #: judge/admin/profile.py:99
 msgid "date joined"
-msgstr "datum registracije"
+msgstr ""
 
 #: judge/admin/profile.py:106
 #, python-format
 msgid "%d user have scores recalculated."
 msgid_plural "%d users have scores recalculated."
-msgstr[0] "%d korisnik je ponovno izračunao bodove."
-msgstr[1] "%d korisnika je ponovno izračunalo bodove."
-msgstr[2] "%d korisnika je ponovno izračunalo bodove."
+msgstr[0] ""
 
 #: judge/admin/profile.py:109
 msgid "Recalculate scores"
-msgstr "Ponovno izračunavanje rezultata"
+msgstr ""
 
 #: judge/admin/runtime.py:19
 msgid "Disallowed problems"
-msgstr "Nedozvoljeni zadaci"
+msgstr ""
 
 #: judge/admin/runtime.py:22
 msgid "These problems are NOT allowed to be submitted in this language"
-msgstr "Sljedeći zadatke NE možete riješiti u ovom jeziku"
+msgstr ""
 
 #: judge/admin/runtime.py:83
 msgid "Description"
-msgstr "Opis"
+msgstr "描述說明"
 
 #: judge/admin/runtime.py:84
 msgid "Information"
-msgstr "Informacije"
+msgstr ""
 
 #: judge/admin/runtime.py:85
 msgid "Capabilities"
-msgstr "Mogućnosti"
+msgstr ""
 
 #: judge/admin/submission.py:23 judge/admin/submission.py:42
 #: judge/admin/submission.py:221
 msgid "None"
-msgstr "Nepoznato"
+msgstr ""
 
 #: judge/admin/submission.py:23
 msgid "Not done"
-msgstr "Nedovršeno"
+msgstr ""
 
 #: judge/admin/submission.py:23
 msgid "Exceptional"
-msgstr "Izuzetno"
+msgstr ""
 
 #: judge/admin/submission.py:42
 msgid "Unaccepted"
-msgstr "Odbijeno"
+msgstr ""
 
 #: judge/admin/submission.py:89
 #, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
-msgstr "%(problem)s u %(contest)s"
+msgstr ""
 
 #: judge/admin/submission.py:167
 msgid "Rejudge the selected submissions"
-msgstr "Reevaluiraj označena predana rješenja"
+msgstr ""
 
 #: judge/admin/submission.py:193 judge/views/problem_manage.py:125
 #, python-format
 msgid "%d submission were successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
-msgstr[0] "%d predano rješenje je uspješno ponovno ocijenjeno."
-msgstr[1] "%d predanih rješenja je uspješno ponovno ocijenjeno."
-msgstr[2] "%d predanih rješenja je uspješno ponovno ocijenjeno."
+msgstr[0] ""
 
 #: judge/admin/submission.py:196
 msgid "Rescore the selected submissions"
-msgstr "Ponovno ocijeni označena predana rješenja"
+msgstr ""
 
 #: judge/admin/submission.py:200
 msgid "Problem code"
-msgstr "Kod zadatka"
+msgstr ""
 
 #: judge/admin/submission.py:205
 msgid "Problem name"
-msgstr "Ime zadatka"
+msgstr "題目名稱"
 
 #: judge/admin/submission.py:215 templates/organization/requests/log.html:10
 #: templates/organization/requests/pending.html:13
 msgid "Time"
-msgstr "Vrijeme"
+msgstr "時間"
 
 #: judge/admin/submission.py:223
 #, python-format
@@ -410,39 +390,39 @@ msgstr "%.2f MB"
 
 #: judge/admin/submission.py:227
 msgid "Memory"
-msgstr "Memorija"
+msgstr "記憶體"
 
 #: judge/admin/taxon.py:11 judge/admin/taxon.py:34
 msgid "Included problems"
-msgstr "Zadaci"
+msgstr ""
 
 #: judge/admin/taxon.py:14
 msgid "These problems are included in this group of problems"
-msgstr "Ovi zadaci su dio ove grupe zadataka"
+msgstr ""
 
 #: judge/admin/taxon.py:37
 msgid "These problems are included in this type of problems"
-msgstr "Ovi zadaci imaju ovaj tip zadatka"
+msgstr ""
 
 #: judge/apps.py:8
 msgid "Online Judge"
-msgstr "Evaluator"
+msgstr "線上裁判"
 
 #: judge/comments.py:41
 msgid "Comment body"
-msgstr "Tekst komentara"
+msgstr ""
 
 #: judge/comments.py:47 judge/views/ticket.py:46
 msgid "Your part is silent, little toad."
-msgstr "Budi tiho, mala žabice."
+msgstr ""
 
 #: judge/comments.py:50 templates/comments/list.html:130
 msgid "You need to have solved at least one problem before your voice can be heard."
-msgstr "Moraš riješiti barem jedan zadatak kako bi mogao komentirati."
+msgstr ""
 
 #: judge/comments.py:92
 msgid "Posted comment"
-msgstr "Objavljen komentar"
+msgstr ""
 
 #: judge/contest_format/atcoder.py:19
 msgid "AtCoder"
@@ -462,27 +442,27 @@ msgstr ""
 
 #: judge/forms.py:27
 msgid "Subscribe to contest updates"
-msgstr "Pretplati se na novosti na natjecanju"
+msgstr ""
 
 #: judge/forms.py:28
 msgid "Enable experimental features"
-msgstr "Uključi eksperimentalne opcije"
+msgstr ""
 
 #: judge/forms.py:57 judge/views/organization.py:122
 #, python-brace-format
 msgid "You may not be part of more than {count} public organizations."
-msgstr "Ne možete biti član više od {count} javnih organizacija."
+msgstr ""
 
 #: judge/forms.py:107 judge/views/register.py:26
 #: templates/registration/registration_form.html:139
 #: templates/user/base-users-table.html:5
 msgid "Username"
-msgstr "Korisničko ime"
+msgstr "使用者名稱"
 
 #: judge/forms.py:108 templates/registration/registration_form.html:151
 #: templates/registration/registration_form.html:165
 msgid "Password"
-msgstr "Lozinka"
+msgstr "密碼"
 
 #: judge/forms.py:131
 msgid "Two Factor Authentication tokens must be 6 decimal digits."
@@ -503,37 +483,37 @@ msgstr ""
 #: judge/jinja2/datetime.py:26 templates/blog/content.html:27
 #: templates/blog/dashboard.html:21
 msgid "N j, Y, g:i a"
-msgstr "N j, Y, g:i a"
+msgstr ""
 
 #: judge/jinja2/datetime.py:26
 #, python-brace-format
 msgid "{time}"
-msgstr "{time}"
+msgstr ""
 
 #: judge/jinja2/datetime.py:26
 #, python-brace-format
 msgid "on {time}"
-msgstr "u {time}"
+msgstr ""
 
 #: judge/models/choices.py:59
 msgid "Leave as LaTeX"
-msgstr "Ostavi kao LaTeX"
+msgstr ""
 
 #: judge/models/choices.py:60
 msgid "SVG with PNG fallback"
-msgstr "SVG sa PNG rezervom"
+msgstr ""
 
 #: judge/models/choices.py:61
 msgid "MathML only"
-msgstr "Samo MathML"
+msgstr ""
 
 #: judge/models/choices.py:62
 msgid "MathJax with SVG/PNG fallback"
-msgstr "MathJax sa SVG/PNG rezervom"
+msgstr ""
 
 #: judge/models/choices.py:63
 msgid "Detect best quality"
-msgstr "Prepoznaj najbolju kvalitetu"
+msgstr ""
 
 #: judge/models/comment.py:25
 msgid "Page code must be ^[pcs]:[a-z0-9]+$|^b:\\d+$"
@@ -541,11 +521,11 @@ msgstr ""
 
 #: judge/models/comment.py:41
 msgid "commenter"
-msgstr "komentator"
+msgstr ""
 
 #: judge/models/comment.py:42
 msgid "posted time"
-msgstr "vrijeme objave"
+msgstr "發佈時間"
 
 #: judge/models/comment.py:43 judge/models/comment.py:169
 msgid "associated page"
@@ -553,32 +533,32 @@ msgstr ""
 
 #: judge/models/comment.py:45
 msgid "votes"
-msgstr "glasova"
+msgstr "投票"
 
 #: judge/models/comment.py:46
 msgid "body of comment"
-msgstr "tekst komentara"
+msgstr ""
 
 #: judge/models/comment.py:47
 msgid "hide the comment"
-msgstr "sakrij komentar"
+msgstr ""
 
 #: judge/models/comment.py:48
 msgid "parent"
-msgstr "nadređeni komentar"
+msgstr ""
 
 #: judge/models/comment.py:53
 msgid "comment"
-msgstr "komentar"
+msgstr ""
 
 #: judge/models/comment.py:54
 msgid "comments"
-msgstr "komentari"
+msgstr ""
 
 #: judge/models/comment.py:129 judge/models/problem.py:398
 #, python-format
 msgid "Editorial for %s"
-msgstr "Objašnjenje za %s"
+msgstr ""
 
 #: judge/models/comment.py:164
 msgid "comment vote"
@@ -594,47 +574,47 @@ msgstr ""
 
 #: judge/models/contest.py:20
 msgid "Invalid colour."
-msgstr "Pogrešna boja."
+msgstr ""
 
 #: judge/models/contest.py:22
 msgid "tag name"
-msgstr "naziv oznake"
+msgstr ""
 
 #: judge/models/contest.py:23
 msgid "Lowercase letters and hyphens only."
-msgstr "Samo mala slova i crtice."
+msgstr ""
 
 #: judge/models/contest.py:24
 msgid "tag colour"
-msgstr "boja oznake"
+msgstr ""
 
 #: judge/models/contest.py:25
 msgid "tag description"
-msgstr "opis oznake"
+msgstr ""
 
 #: judge/models/contest.py:44
 msgid "contest tag"
-msgstr "oznaka natjecanja"
+msgstr ""
 
 #: judge/models/contest.py:45 judge/models/contest.py:99
 msgid "contest tags"
-msgstr "oznake natjecanja"
+msgstr ""
 
 #: judge/models/contest.py:49
 msgid "contest id"
-msgstr "ID natjecanja"
+msgstr ""
 
 #: judge/models/contest.py:50
 msgid "Contest id must be ^[a-z0-9]+$"
-msgstr "ID natjecanja mora biti ^[a-z0-9]+$"
+msgstr ""
 
 #: judge/models/contest.py:51
 msgid "contest name"
-msgstr "naziv natjecanja"
+msgstr ""
 
 #: judge/models/contest.py:52
 msgid "These people will be able to edit the contest."
-msgstr "Ove osobe će moći uređivati natjecanje."
+msgstr ""
 
 #: judge/models/contest.py:54 judge/models/runtime.py:124
 #: src/dmoj-wpadmin/test_project/apps/books/admin.py:20
@@ -645,29 +625,29 @@ msgstr "Ove osobe će moći uređivati natjecanje."
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:13
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:27
 msgid "description"
-msgstr "opis"
+msgstr ""
 
 #: judge/models/contest.py:55 judge/models/problem.py:349
 #: judge/models/runtime.py:126
 msgid "problems"
-msgstr "zadaci"
+msgstr ""
 
 #: judge/models/contest.py:56 judge/models/contest.py:241
 msgid "start time"
-msgstr "vrijeme početka"
+msgstr ""
 
 #: judge/models/contest.py:57
 msgid "end time"
-msgstr "vrijeme kraja"
+msgstr ""
 
 #: judge/models/contest.py:58 judge/models/problem.py:118
 #: judge/models/problem.py:373
 msgid "time limit"
-msgstr "vremensko ograničenje"
+msgstr ""
 
 #: judge/models/contest.py:59 judge/models/problem.py:132
 msgid "publicly visible"
-msgstr "javno vidljivo"
+msgstr ""
 
 #: judge/models/contest.py:60
 msgid "Should be set even for organization-private contests, where it determines whether the contest is visible to members of the specified organizations."
@@ -675,11 +655,11 @@ msgstr ""
 
 #: judge/models/contest.py:63
 msgid "contest rated"
-msgstr "bodovanje natjecanja"
+msgstr ""
 
 #: judge/models/contest.py:63
 msgid "Whether this contest can be rated."
-msgstr "Može li ovo natjecanje biti bodovano."
+msgstr ""
 
 #: judge/models/contest.py:65
 msgid "hide scoreboard"
@@ -687,15 +667,15 @@ msgstr ""
 
 #: judge/models/contest.py:66
 msgid "Whether the scoreboard should remain hidden for the duration of the contest."
-msgstr "Treba li tablica poretka ostati skrivena za vrijeme natjecanja."
+msgstr ""
 
 #: judge/models/contest.py:69
 msgid "no comments"
-msgstr "bez komentara"
+msgstr ""
 
 #: judge/models/contest.py:70
 msgid "Use clarification system instead of comments."
-msgstr "Koristite sustav za pojašnjenja umjesto komentara."
+msgstr ""
 
 #: judge/models/contest.py:72
 msgid "Rating floor for contest"
@@ -707,15 +687,15 @@ msgstr ""
 
 #: judge/models/contest.py:76
 msgid "rate all"
-msgstr "boduj sve"
+msgstr ""
 
 #: judge/models/contest.py:76
 msgid "Rate all users who joined."
-msgstr "Boduj sve korisnike koji su se pridružili."
+msgstr ""
 
 #: judge/models/contest.py:77
 msgid "exclude from ratings"
-msgstr "izostavi iz bodovanja"
+msgstr ""
 
 #: judge/models/contest.py:79
 msgid "private to specific users"
@@ -731,15 +711,15 @@ msgstr ""
 
 #: judge/models/contest.py:83
 msgid "hide problem tags"
-msgstr "sakrij oznake zadataka"
+msgstr ""
 
 #: judge/models/contest.py:84
 msgid "Whether problem tags should be hidden by default."
-msgstr "Trebaju li oznake zadataka biti zadano skrivene."
+msgstr ""
 
 #: judge/models/contest.py:86
 msgid "run pretests only"
-msgstr "pokreni samo predtestiranje"
+msgstr ""
 
 #: judge/models/contest.py:87
 msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
@@ -747,7 +727,7 @@ msgstr ""
 
 #: judge/models/contest.py:91 judge/models/problem.py:153
 msgid "private to organizations"
-msgstr "privatno za organizacije"
+msgstr ""
 
 #: judge/models/contest.py:92 judge/models/problem.py:151
 #: judge/models/profile.py:72
@@ -760,7 +740,7 @@ msgstr ""
 
 #: judge/models/contest.py:94 judge/models/problem.py:141
 msgid "OpenGraph image"
-msgstr "OpenGraph slika"
+msgstr ""
 
 #: judge/models/contest.py:95
 msgid "Logo override image"
@@ -792,7 +772,7 @@ msgstr ""
 
 #: judge/models/contest.py:106 judge/models/problem.py:137
 msgid "personae non gratae"
-msgstr "persona non grata"
+msgstr ""
 
 #: judge/models/contest.py:107
 msgid "Bans the selected users from joining this contest."
@@ -841,11 +821,11 @@ msgstr ""
 #: judge/models/contest.py:231 judge/models/contest.py:309
 #: judge/models/contest.py:345 judge/models/submission.py:82
 msgid "contest"
-msgstr "natjecanje"
+msgstr ""
 
 #: judge/models/contest.py:232
 msgid "contests"
-msgstr "natjecanja"
+msgstr ""
 
 #: judge/models/contest.py:239
 msgid "associated contest"
@@ -853,11 +833,11 @@ msgstr ""
 
 #: judge/models/contest.py:242
 msgid "score"
-msgstr "bodovi"
+msgstr "得分"
 
 #: judge/models/contest.py:243
 msgid "cumulative time"
-msgstr ""
+msgstr "累計時間"
 
 #: judge/models/contest.py:244
 msgid "virtual participation id"
@@ -898,16 +878,16 @@ msgstr ""
 #: judge/models/problem.py:348 judge/models/problem.py:353
 #: judge/models/problem.py:371 judge/models/problem_data.py:35
 msgid "problem"
-msgstr ""
+msgstr "題目"
 
 #: judge/models/contest.py:310 judge/models/contest.py:333
 #: judge/models/problem.py:126
 msgid "points"
-msgstr ""
+msgstr "分"
 
 #: judge/models/contest.py:311
 msgid "partial"
-msgstr ""
+msgstr "部分"
 
 #: judge/models/contest.py:312 judge/models/contest.py:334
 msgid "is pretested"
@@ -959,7 +939,7 @@ msgstr ""
 
 #: judge/models/contest.py:348
 msgid "rank"
-msgstr ""
+msgstr "排名"
 
 #: judge/models/contest.py:349
 msgid "rating"
@@ -1099,11 +1079,11 @@ msgstr ""
 
 #: judge/models/problem.py:34
 msgid "problem type"
-msgstr ""
+msgstr "題目類型"
 
 #: judge/models/problem.py:35 judge/models/problem.py:113
 msgid "problem types"
-msgstr ""
+msgstr "題目類型"
 
 #: judge/models/problem.py:39
 msgid "problem group ID"
@@ -1172,7 +1152,7 @@ msgstr ""
 
 #: judge/models/problem.py:100
 msgid "problem name"
-msgstr ""
+msgstr "題目名稱"
 
 #: judge/models/problem.py:101
 msgid "The full name of the problem, as shown in the problem list."
@@ -1184,7 +1164,7 @@ msgstr ""
 
 #: judge/models/problem.py:104
 msgid "creators"
-msgstr ""
+msgstr "建立者"
 
 #: judge/models/problem.py:105
 msgid "These users will be able to edit the problem, and be listed as authors."
@@ -1220,11 +1200,11 @@ msgstr ""
 
 #: judge/models/problem.py:122 judge/models/problem.py:374
 msgid "memory limit"
-msgstr "memorijsko ograničenje"
+msgstr "記憶體限制"
 
 #: judge/models/problem.py:123
 msgid "The memory limit for this problem, in kilobytes (e.g. 64mb = 65536 kilobytes)."
-msgstr "Memorijsko ograničenje za ovaj zadatak, u kilobajtima (npr. 64mb = 65536 kilobajta)."
+msgstr "此問題的記憶體限制，以kb為單位 ( 例如 64mb = 65536 kb)"
 
 #: judge/models/problem.py:127
 msgid "Points awarded for problem completion. Points are displayed with a 'p' suffix if partial."
@@ -1232,11 +1212,11 @@ msgstr ""
 
 #: judge/models/problem.py:129
 msgid "allows partial points"
-msgstr "dopušteno djelomično bodovanje"
+msgstr ""
 
 #: judge/models/problem.py:130
 msgid "allowed languages"
-msgstr "dopušteni programski jezici"
+msgstr "允許的語言"
 
 #: judge/models/problem.py:131
 msgid "List of allowed submission languages."
@@ -1244,7 +1224,7 @@ msgstr ""
 
 #: judge/models/problem.py:133
 msgid "manually managed"
-msgstr "ručno upravljano"
+msgstr ""
 
 #: judge/models/problem.py:134
 msgid "Whether judges should be allowed to manage data or not."
@@ -1252,7 +1232,7 @@ msgstr ""
 
 #: judge/models/problem.py:135
 msgid "date of publishing"
-msgstr "datum objave"
+msgstr ""
 
 #: judge/models/problem.py:136
 msgid "Doesn't have magic ability to auto-publish due to backward compatibility"
@@ -1268,7 +1248,7 @@ msgstr ""
 
 #: judge/models/problem.py:142
 msgid "problem summary"
-msgstr "sažetak zadatka"
+msgstr ""
 
 #: judge/models/problem.py:144
 msgid "number of users"
@@ -1341,27 +1321,27 @@ msgstr ""
 
 #: judge/models/problem.py:404
 msgid "solution"
-msgstr ""
+msgstr "題解"
 
 #: judge/models/problem.py:405
 msgid "solutions"
-msgstr ""
+msgstr "題解"
 
 #: judge/models/problem_data.py:23
 msgid "Standard"
-msgstr ""
+msgstr "標準"
 
 #: judge/models/problem_data.py:24
 msgid "Floats"
-msgstr ""
+msgstr "浮點數"
 
 #: judge/models/problem_data.py:25
 msgid "Floats (absolute)"
-msgstr ""
+msgstr "浮點數(絕對值)"
 
 #: judge/models/problem_data.py:26
 msgid "Floats (relative)"
-msgstr ""
+msgstr "浮點數(相對值)"
 
 #: judge/models/problem_data.py:27
 msgid "Non-trailing spaces"
@@ -1485,7 +1465,7 @@ msgstr ""
 
 #: judge/models/profile.py:37
 msgid "administrators"
-msgstr ""
+msgstr "管理員"
 
 #: judge/models/profile.py:38
 msgid "Those who can edit this organization"
@@ -1530,7 +1510,7 @@ msgstr ""
 
 #: judge/models/profile.py:78
 msgid "location"
-msgstr ""
+msgstr "位置"
 
 #: judge/models/profile.py:80
 msgid "preferred language"
@@ -1542,11 +1522,11 @@ msgstr ""
 
 #: judge/models/profile.py:86
 msgid "last IP"
-msgstr ""
+msgstr "上一訪問 IP"
 
 #: judge/models/profile.py:89
 msgid "display rank"
-msgstr ""
+msgstr "顯示排名"
 
 #: judge/models/profile.py:91
 msgid "comment mute"
@@ -1614,11 +1594,11 @@ msgstr ""
 
 #: judge/models/profile.py:181
 msgid "user profile"
-msgstr ""
+msgstr "使用者個人檔案"
 
 #: judge/models/profile.py:182
 msgid "user profiles"
-msgstr ""
+msgstr "使用者個人檔案"
 
 #: judge/models/profile.py:189
 msgid "request time"
@@ -1718,7 +1698,7 @@ msgstr ""
 
 #: judge/models/runtime.py:100
 msgid "languages"
-msgstr ""
+msgstr "語言"
 
 #: judge/models/runtime.py:104
 msgid "language to which this runtime belongs"
@@ -1795,23 +1775,23 @@ msgstr ""
 #: judge/models/submission.py:20 judge/models/submission.py:46
 #: judge/utils/problems.py:86
 msgid "Accepted"
-msgstr ""
+msgstr "接受"
 
 #: judge/models/submission.py:21 judge/models/submission.py:47
 msgid "Wrong Answer"
-msgstr ""
+msgstr "錯誤答案"
 
 #: judge/models/submission.py:22 judge/models/submission.py:49
 msgid "Time Limit Exceeded"
-msgstr ""
+msgstr "超出了時間限制"
 
 #: judge/models/submission.py:23 judge/models/submission.py:50
 msgid "Memory Limit Exceeded"
-msgstr ""
+msgstr "超出了記憶體限制"
 
 #: judge/models/submission.py:24 judge/models/submission.py:51
 msgid "Output Limit Exceeded"
-msgstr ""
+msgstr "超出了輸出限制"
 
 #: judge/models/submission.py:25 judge/models/submission.py:52
 msgid "Invalid Return"
@@ -1819,16 +1799,16 @@ msgstr ""
 
 #: judge/models/submission.py:26 judge/models/submission.py:53
 msgid "Runtime Error"
-msgstr ""
+msgstr "運行時錯誤"
 
 #: judge/models/submission.py:27 judge/models/submission.py:41
 #: judge/models/submission.py:54 judge/utils/problems.py:88
 msgid "Compile Error"
-msgstr ""
+msgstr "編譯錯誤"
 
 #: judge/models/submission.py:28 judge/models/submission.py:40
 msgid "Internal Error"
-msgstr ""
+msgstr "內部錯誤"
 
 #: judge/models/submission.py:29
 msgid "Short circuit"
@@ -1841,19 +1821,19 @@ msgstr ""
 
 #: judge/models/submission.py:36 judge/models/submission.py:56
 msgid "Queued"
-msgstr ""
+msgstr "已排入佇列"
 
 #: judge/models/submission.py:37 judge/models/submission.py:57
 msgid "Processing"
-msgstr ""
+msgstr "正在處理"
 
 #: judge/models/submission.py:38 judge/models/submission.py:58
 msgid "Grading"
-msgstr ""
+msgstr "評分中"
 
 #: judge/models/submission.py:39 judge/models/submission.py:59
 msgid "Completed"
-msgstr ""
+msgstr "已完成"
 
 #: judge/models/submission.py:55
 msgid "Internal Error (judging server error)"
@@ -1861,35 +1841,35 @@ msgstr ""
 
 #: judge/models/submission.py:65
 msgid "submission time"
-msgstr ""
+msgstr "提交時間"
 
 #: judge/models/submission.py:66 judge/models/submission.py:200
 msgid "execution time"
-msgstr ""
+msgstr "執行時間"
 
 #: judge/models/submission.py:67 judge/models/submission.py:201
 msgid "memory usage"
-msgstr ""
+msgstr "記憶體使用量"
 
 #: judge/models/submission.py:68 judge/models/submission.py:202
 msgid "points granted"
-msgstr ""
+msgstr "獲得分數"
 
 #: judge/models/submission.py:69
 msgid "submission language"
-msgstr ""
+msgstr "提交語言"
 
 #: judge/models/submission.py:70
 msgid "status"
-msgstr ""
+msgstr "狀態"
 
 #: judge/models/submission.py:71
 msgid "result"
-msgstr ""
+msgstr "結果"
 
 #: judge/models/submission.py:73
 msgid "compile errors"
-msgstr ""
+msgstr "編譯錯誤"
 
 #: judge/models/submission.py:75
 msgid "batched cases"
@@ -1925,7 +1905,7 @@ msgstr ""
 
 #: judge/models/submission.py:187
 msgid "source code"
-msgstr ""
+msgstr "源碼"
 
 #: judge/models/submission.py:198
 msgid "test case ID"
@@ -2089,9 +2069,7 @@ msgstr ""
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
-msgstr[0] "%d dan %h:%m:%s"
-msgstr[1] "%d dana %h:%m:%s"
-msgstr[2] "%d dana %h:%m:%s"
+msgstr[0] "%d 天 %h:%m:%s"
 
 #: judge/utils/timedelta.py:53
 msgctxt "time format without day"
@@ -2102,17 +2080,13 @@ msgstr "%h:%m:%s"
 msgctxt "time format no seconds with day"
 msgid "%d day %h:%m"
 msgid_plural "%d days %h:%m"
-msgstr[0] "%d dan %h:%m"
-msgstr[1] "%d dana %h:%m"
-msgstr[2] "%d dana %h:%m"
+msgstr[0] "%d 天 %h:%m"
 
 #: judge/utils/timedelta.py:61
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "%d dan"
-msgstr[1] "%d dana"
-msgstr[2] "%d dana"
+msgstr[0] "%d 天"
 
 #: judge/utils/timedelta.py:63
 msgctxt "hours and minutes"
@@ -2250,7 +2224,7 @@ msgstr ""
 
 #: judge/views/error.py:14
 msgid "404 error"
-msgstr "404 greška"
+msgstr ""
 
 #: judge/views/error.py:15
 #, python-format
@@ -2320,7 +2294,7 @@ msgstr ""
 #: judge/views/organization.py:157
 #, python-format
 msgid "Request to join %s"
-msgstr "Zahtjev za pridruživanje %s"
+msgstr ""
 
 #: judge/views/organization.py:175
 msgid "Join request detail"
@@ -2341,50 +2315,46 @@ msgstr ""
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: judge/views/organization.py:247
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: judge/views/organization.py:272
 #, python-format
 msgid "Editing %s"
-msgstr "Uređivanje %s"
+msgstr ""
 
 #: judge/views/organization.py:296 judge/views/organization.py:304
 msgid "Can't edit organization"
-msgstr "Nije moguće urediti organizaciju"
+msgstr ""
 
 #: judge/views/organization.py:297
 msgid "You are not allowed to edit this organization."
-msgstr "Nemate ovlasti za uređivanje ove organizacije."
+msgstr ""
 
 #: judge/views/organization.py:305
 msgid "You are not allowed to kick people from this organization."
-msgstr "Nemate ovlasti za izbacivanje ljudi iz ove organizacije."
+msgstr ""
 
 #: judge/views/organization.py:310 judge/views/organization.py:314
 msgid "Can't kick user"
-msgstr "Nije moguće izbaciti korisnika"
+msgstr ""
 
 #: judge/views/organization.py:311
 msgid "The user you are trying to kick does not exist!"
-msgstr "Korisnik kojeg pokušavate izbaciti ne postoji!"
+msgstr ""
 
 #: judge/views/organization.py:315
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s."
-msgstr "Korisnik kojeg pokušavate izbaciti nije u organizaciji: %s."
+msgstr ""
 
 #: judge/views/problem.py:69
 msgid "No such problem"
-msgstr ""
+msgstr "沒有這個題目"
 
 #: judge/views/problem.py:70
 #, python-format
@@ -2404,7 +2374,7 @@ msgstr ""
 #: judge/views/problem.py:291 templates/contest/contest.html:79
 #: templates/user/user-tabs.html:5 templates/user/users-table.html:23
 msgid "Problems"
-msgstr "Zadaci"
+msgstr "問題"
 
 #: judge/views/problem.py:552
 msgid "Banned from submitting"
@@ -2416,7 +2386,7 @@ msgstr ""
 
 #: judge/views/problem.py:566
 msgid "Too many submissions"
-msgstr "Previše poslanih rješenja"
+msgstr ""
 
 #: judge/views/problem.py:567
 msgid "You have exceeded the submission limit for this problem."
@@ -2488,8 +2458,6 @@ msgstr ""
 msgid "Successfully scheduled %d submission for rejudging."
 msgid_plural "Successfully scheduled %d submissions for rejudging."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: judge/views/ranked_submission.py:58
 #, python-format
@@ -2531,12 +2499,12 @@ msgstr ""
 
 #: judge/views/register.py:38
 msgid "Subscribe to newsletter?"
-msgstr "Pretplatite se na naš newsletter?"
+msgstr ""
 
 #: judge/views/register.py:45
 #, python-format
 msgid "The email address \"%s\" is already taken. Only one registration is allowed per address."
-msgstr "Vaša adresa e-pošte \"%s\" je već zauzeta. Dopuštena je isključivo jedna registracija za jednu adresu e-pošte."
+msgstr ""
 
 #: judge/views/register.py:51
 msgid "Your email provider is not allowed due to history of abuse. Please use a reputable email provider."
@@ -2544,7 +2512,7 @@ msgstr ""
 
 #: judge/views/register.py:57 judge/views/register.py:95
 msgid "Registration"
-msgstr "Registracija"
+msgstr ""
 
 #: judge/views/register.py:106
 msgid "Authentication failure"
@@ -2556,7 +2524,7 @@ msgstr ""
 
 #: judge/views/status.py:24 templates/submission/list.html:301
 msgid "Status"
-msgstr "Status predanog rješenja"
+msgstr ""
 
 #: judge/views/status.py:108
 msgid "Version matrix"
@@ -2565,26 +2533,26 @@ msgstr ""
 #: judge/views/submission.py:59 judge/views/submission.py:66
 #, python-format
 msgid "Submission of %(problem)s by %(user)s"
-msgstr "Predano rješenje za zadatak %(problem)s od korisnika %(user)s"
+msgstr ""
 
 #: judge/views/submission.py:161 judge/views/submission.py:162
 #: templates/problem/problem.html:127
 msgid "All submissions"
-msgstr "Sva predana rješenja"
+msgstr "全部的提交"
 
 #: judge/views/submission.py:303
 msgid "All my submissions"
-msgstr "Sva moja predana rješenja"
+msgstr "我的提交"
 
 #: judge/views/submission.py:304
 #, python-format
 msgid "All submissions by %s"
-msgstr "Sva predana rješenja od korisnika %s"
+msgstr "%s 的提交"
 
 #: judge/views/submission.py:335
 #, python-format
 msgid "All submissions for %s"
-msgstr "Sva predana rješenja za korisnika %s"
+msgstr ""
 
 #: judge/views/submission.py:354
 msgid "Must pass a problem"
@@ -2678,12 +2646,12 @@ msgstr ""
 
 #: judge/views/user.py:72
 msgid "My account"
-msgstr ""
+msgstr "我的帳戶"
 
 #: judge/views/user.py:73
 #, python-format
 msgid "User %s"
-msgstr ""
+msgstr "用戶 %s"
 
 #: judge/views/user.py:136
 msgid "M j, Y, G:i"
@@ -2909,11 +2877,11 @@ msgstr ""
 
 #: templates/base.html:229
 msgid "Log out"
-msgstr ""
+msgstr "登出"
 
 #: templates/base.html:240
 msgid "Register"
-msgstr ""
+msgstr "註冊"
 
 #: templates/base.html:252
 msgid "spectating"
@@ -2996,11 +2964,11 @@ msgstr ""
 
 #: templates/comments/list.html:2
 msgid "Comments"
-msgstr "Komentari"
+msgstr ""
 
 #: templates/comments/list.html:18 templates/comments/list.html:27
 msgid "Please login to vote"
-msgstr "Molimo, prijavite se da biste mogli glasati"
+msgstr ""
 
 #: templates/comments/list.html:40
 #, python-brace-format
@@ -3079,35 +3047,35 @@ msgstr ""
 
 #: templates/contest/calendar.html:12
 msgid "Sunday"
-msgstr "Nedjelja"
+msgstr "星期日"
 
 #: templates/contest/calendar.html:13
 msgid "Monday"
-msgstr "Ponedjeljak"
+msgstr "星期一"
 
 #: templates/contest/calendar.html:14
 msgid "Tuesday"
-msgstr "Utorak"
+msgstr "星期二"
 
 #: templates/contest/calendar.html:15
 msgid "Wednesday"
-msgstr "Srijeda"
+msgstr "星期三"
 
 #: templates/contest/calendar.html:16
 msgid "Thursday"
-msgstr "Četvrtak"
+msgstr "星期四"
 
 #: templates/contest/calendar.html:17
 msgid "Friday"
-msgstr "Petak"
+msgstr "星期五"
 
 #: templates/contest/calendar.html:18
 msgid "Saturday"
-msgstr "Subota"
+msgstr "星期六"
 
 #: templates/contest/contest-list-tabs.html:7
 msgid "Prev"
-msgstr "Prethodna"
+msgstr ""
 
 #: templates/contest/contest-list-tabs.html:10
 msgid "Today"
@@ -3115,7 +3083,7 @@ msgstr ""
 
 #: templates/contest/contest-list-tabs.html:13
 msgid "Next"
-msgstr "Sljedeća"
+msgstr ""
 
 #: templates/contest/contest-list-tabs.html:21
 #: templates/problem/problem-list-tabs.html:5
@@ -3124,7 +3092,7 @@ msgstr ""
 
 #: templates/contest/contest-list-tabs.html:22
 msgid "Calendar"
-msgstr "Kalendar"
+msgstr ""
 
 #: templates/contest/contest-tabs.html:4
 msgid "Info"
@@ -3271,7 +3239,7 @@ msgstr ""
 
 #: templates/contest/ranking-table.html:7
 msgid "Organization"
-msgstr "Organizacija"
+msgstr "組織"
 
 #: templates/contest/ranking-table.html:27
 #, python-brace-format
@@ -3636,8 +3604,6 @@ msgstr ""
 msgid "%(counter)s submission left"
 msgid_plural "%(counter)s submissions left"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: templates/problem/problem.html:112
 msgid "0 submissions left"
@@ -3689,29 +3655,25 @@ msgstr ""
 
 #: templates/problem/problem.html:178
 msgid "Time limit:"
-msgstr ""
+msgstr "時間限制："
 
 #: templates/problem/problem.html:190
 msgid "Memory limit:"
-msgstr ""
+msgstr "記憶體限制："
 
 #: templates/problem/problem.html:209
 msgid "Author:"
 msgid_plural "Authors:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "作者："
 
 #: templates/problem/problem.html:224
 msgid "Problem type"
 msgid_plural "Problem types"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "題目類型"
 
 #: templates/problem/problem.html:237
 msgid "Allowed languages"
-msgstr ""
+msgstr "允許的語言"
 
 #: templates/problem/problem.html:245
 #, python-format
@@ -3722,8 +3684,6 @@ msgstr ""
 msgid "Judge:"
 msgid_plural "Judges:"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: templates/problem/problem.html:273
 msgid "none available"
@@ -3801,8 +3761,6 @@ msgid_plural "\n"
 "                        You have %(left)s submissions left\n"
 "                    "
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: templates/problem/submit.html:213
 msgid "You have 0 submissions left"
@@ -4354,8 +4312,6 @@ msgstr ""
 msgid "%(counter)s problem solved"
 msgid_plural "%(counter)s problems solved"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #: templates/user/user-base.html:50
 msgid "Rank by points:"
