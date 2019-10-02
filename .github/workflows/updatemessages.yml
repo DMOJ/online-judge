@@ -1,7 +1,7 @@
 name: updatemessages
 on:
   schedule:
-    - cron: '0 4 * * *'
+    - cron: '15 4 * * *'
 jobs:
   updatemessages:
     runs-on: ubuntu-latest
@@ -48,6 +48,7 @@ jobs:
         rm crowdin.yaml
     - name: Cleanup
       run: |
+        rm -rf src/
         git add locale
         git checkout .
         git clean -fd
