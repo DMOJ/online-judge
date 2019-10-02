@@ -83,7 +83,7 @@ msgid_plural "%d comments successfully hidden."
 msgstr[0] "%d комментарий успешно скрыт."
 msgstr[1] "%d комментарий успешно скрыт."
 msgstr[2] "%d комментариев успешно скрыты."
-msgstr[3] "%d комментариев успешно скрыты."
+msgstr[3] ""
 
 #: .\judge\admin\comments.py:43
 msgid "Hide comments"
