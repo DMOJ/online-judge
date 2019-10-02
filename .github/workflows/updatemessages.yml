@@ -1,5 +1,7 @@
 name: updatemessages
-on: [push]
+on:
+  schedule:
+    - cron: '0 * * * *'
 jobs:
   updatemessages:
     runs-on: ubuntu-latest
