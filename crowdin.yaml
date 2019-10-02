@@ -1,0 +1,16 @@
+project_identifier: dmoj
+
+files:
+  - source: /locale/en/LC_MESSAGES/django.po
+    translation: /locale/%two_letters_code%/LC_MESSAGES/django.po
+    languages_mapping:
+      two_letters_code:
+        zh-CN: zh_Hans
+        sr-CS: sr_Latn
+  - source: /locale/en/LC_MESSAGES/djangojs.po
+    translation: /locale/%two_letters_code%/LC_MESSAGES/djangojs.po
+    languages_mapping:
+      two_letters_code:
+        zh-CN: zh_Hans
+        sr-CS: sr_Latn
+api_key: 45aaf12f43f52c68d1112b7050903f47
