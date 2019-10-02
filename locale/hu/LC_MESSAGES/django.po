@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-21 17:54-0400\n"
-"PO-Revision-Date: 2018-08-21 21:55\n"
-"Last-Translator: Icyene <vulcainus@gmail.com>\n"
+"POT-Creation-Date: 2019-10-01 23:12+0000\n"
+"PO-Revision-Date: 2019-10-02 17:03\n"
+"Last-Translator: Icyene\n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
@@ -16,3231 +16,3763 @@ msgstr ""
 "X-Crowdin-Language: hu\n"
 "X-Crowdin-File: django.po\n"
 
-#: .\dmoj\settings.py:247
+#: dmoj/settings.py:250
 msgid "German"
 msgstr "Német"
 
-#: .\dmoj\settings.py:248
+#: dmoj/settings.py:251
 msgid "English"
 msgstr "Angol"
 
-#: .\dmoj\settings.py:249
+#: dmoj/settings.py:252
 msgid "Spanish"
 msgstr "Spanyol"
 
-#: .\dmoj\settings.py:250
+#: dmoj/settings.py:253
 msgid "French"
 msgstr "Francia"
 
-#: .\dmoj\settings.py:251
+#: dmoj/settings.py:254
 msgid "Croatian"
 msgstr "Horvát"
 
-#: .\dmoj\settings.py:252
+#: dmoj/settings.py:255
 msgid "Hungarian"
 msgstr ""
 
-#: .\dmoj\settings.py:253
+#: dmoj/settings.py:256
 msgid "Korean"
 msgstr "Koreai"
 
-#: .\dmoj\settings.py:254
+#: dmoj/settings.py:257
 msgid "Romanian"
 msgstr "Román"
 
-#: .\dmoj\settings.py:255
+#: dmoj/settings.py:258
 msgid "Russian"
 msgstr "Orosz"
 
-#: .\dmoj\settings.py:256
+#: dmoj/settings.py:259
 msgid "Serbian (Latin)"
 msgstr "Szerb (latin)"
 
-#: .\dmoj\settings.py:257
+#: dmoj/settings.py:260
 msgid "Turkish"
 msgstr ""
 
-#: .\dmoj\settings.py:258
+#: dmoj/settings.py:261
 msgid "Vietnamese"
 msgstr "Vietnami"
 
-#: .\dmoj\settings.py:259
+#: dmoj/settings.py:262
 msgid "Simplified Chinese"
 msgstr "Egyszerűsített kínai"
 
-#: .\dmoj\urls.py:51 .\templates\base.html:234
+#: dmoj/urls.py:54 templates/base.html:239
 msgid "Login"
 msgstr "Belépés"
 
-#: .\dmoj\urls.py:92 .\templates\base.html:185
+#: dmoj/urls.py:102 templates/base.html:190
 msgid "Home"
 msgstr "Nyitólap"
 
-#: .\judge\admin\comments.py:40
+#: judge/admin/comments.py:40
 #, python-format
 msgid "%d comment successfully hidden."
 msgid_plural "%d comments successfully hidden."
 msgstr[0] "%d hozzászólás sikeresen elrejtve."
 msgstr[1] "%d hozzászólás elrejtve."
 
-#: .\judge\admin\comments.py:43
+#: judge/admin/comments.py:43
 msgid "Hide comments"
 msgstr "Kommentek elrejtése"
 
-#: .\judge\admin\comments.py:47
+#: judge/admin/comments.py:47
 #, python-format
 msgid "%d comment successfully unhidden."
 msgid_plural "%d comments successfully unhidden."
 msgstr[0] "%d megjegyzés újra megjelenítve."
 msgstr[1] "%d megjegyzés újra megjelenítve."
 
-#: .\judge\admin\comments.py:50
+#: judge/admin/comments.py:50
 msgid "Unhide comments"
 msgstr "Kommentek megjelenítése"
 
-#: .\judge\admin\comments.py:58
+#: judge/admin/comments.py:58
 msgid "Associated page"
 msgstr "Kapcsolódó lap"
 
-#: .\judge\admin\contest.py:27
+#: judge/admin/contest.py:29
 msgid "Included contests"
 msgstr "Hozzárendelt versenyek"
 
-#: .\judge\admin\contest.py:63 .\templates\contest\contest.html:83
-#: .\templates\problem\list.html:206 .\templates\problem\list.html:221
-#: .\templates\user\user-problems.html:61
-#: .\templates\user\user-problems.html:103
+#: judge/admin/contest.py:65 templates/contest/contest.html:83
+#: templates/problem/list.html:206 templates/problem/list.html:221
+#: templates/user/user-problems.html:56 templates/user/user-problems.html:98
 msgid "Problem"
 msgstr "Feladat"
 
-#: .\judge\admin\contest.py:91
+#: judge/admin/contest.py:112
+msgid "Settings"
+msgstr ""
+
+#: judge/admin/contest.py:114
 msgid "Scheduling"
 msgstr "Időbeosztás"
 
-#: .\judge\admin\contest.py:92
+#: judge/admin/contest.py:115
 msgid "Details"
 msgstr "Részletek"
 
-#: .\judge\admin\contest.py:93 .\templates\contest\ranking-table.html:5
+#: judge/admin/contest.py:116
+msgid "Format"
+msgstr ""
+
+#: judge/admin/contest.py:117 templates/contest/ranking-table.html:5
 msgid "Rating"
 msgstr "Értékelés"
 
-#: .\judge\admin\contest.py:94 .\templates\contest\ranking-table.html:7
-msgid "Organization"
-msgstr "Intézmény"
+#: judge/admin/contest.py:118
+msgid "Access"
+msgstr ""
 
-#: .\judge\admin\contest.py:130
-#, python-format
-msgid "%d contest successfully marked as public."
-msgid_plural "%d contests successfully marked as public."
-msgstr[0] "%d verseny sikeresen publikusnak jelölve."
-msgstr[1] "%d verseny sikeresen nyíltnak jelölve."
-
-#: .\judge\admin\contest.py:133
-msgid "Mark contests as public"
-msgstr "Versenyek nyilvánossá tétele"
-
-#: .\judge\admin\contest.py:137
-#, python-format
-msgid "%d contest successfully marked as private."
-msgid_plural "%d contests successfully marked as private."
-msgstr[0] "%d verseny sikeresen privátnak jelölve."
-msgstr[1] "%d verseny sikeresen privátnak jelölve."
-
-#: .\judge\admin\contest.py:140
-msgid "Mark contests as private"
-msgstr "Versenyek zártkörüvé tétele"
-
-#: .\judge\admin\contest.py:211
-#, python-format
-msgid "%d participation have scores recalculated."
-msgid_plural "%d participations have scores recalculated."
-msgstr[0] "%d résztvevő pontja újraszámolva."
-msgstr[1] "%d résztvevő pontja újraszámolva."
-
-#: .\judge\admin\contest.py:214 .\judge\admin\profile.py:90
-msgid "Recalculate scores"
-msgstr "Pontok újraszámítása"
-
-#: .\judge\admin\contest.py:221
-#, python-format
-msgid "%d participation have times recalculated."
-msgid_plural "%d participations have times recalculated."
-msgstr[0] "%d résztvevő ideje újraszámolva."
-msgstr[1] "%d résztvevő ideje újraszámolva."
-
-#: .\judge\admin\contest.py:224
-msgid "Recalculate cumulative time"
-msgstr "Összesített idő újraszámolása"
-
-#: .\judge\admin\contest.py:228 .\judge\admin\organization.py:63
-msgid "username"
-msgstr "felhasználónév"
-
-#: .\judge\admin\contest.py:233 .\templates\base.html:253
-msgid "virtual"
-msgstr "virtuális"
-
-#: .\judge\admin\interface.py:27 .\judge\models\interface.py:46
-msgid "link path"
-msgstr "csatolási útvonal"
-
-#: .\judge\admin\interface.py:61
-msgid "Content"
-msgstr "Tartalom"
-
-#: .\judge\admin\interface.py:62
-msgid "Summary"
-msgstr "Összefoglalás"
-
-#: .\judge\admin\organization.py:32 .\judge\admin\problem.py:168
-#: .\judge\admin\profile.py:59
-msgid "View on site"
-msgstr "Nézd meg élesben"
-
-#: .\judge\admin\problem.py:28
-msgid "Describe the changes you made (optional)"
-msgstr "Ismertesd a módosításokat (opcionális)"
-
-#: .\judge\admin\problem.py:123
-msgid "Social Media"
-msgstr "Közösségi média"
-
-#: .\judge\admin\problem.py:124
-msgid "Taxonomy"
-msgstr "Rendszerezés"
-
-#: .\judge\admin\problem.py:125 .\templates\contest\contest.html:84
-#: .\templates\problem\data.html:394 .\templates\problem\list.html:211
-#: .\templates\problem\list.html:232 .\templates\user\base-users-table.html:10
-#: .\templates\user\user-problems.html:63
-msgid "Points"
-msgstr "Pontok"
-
-#: .\judge\admin\problem.py:126
-msgid "Limits"
-msgstr "Limitek"
-
-#: .\judge\admin\problem.py:127 .\templates\stats\base.html:16
-#: .\templates\submission\list.html:231
-msgid "Language"
-msgstr "Nyelv"
-
-#: .\judge\admin\problem.py:128
+#: judge/admin/contest.py:120 judge/admin/problem.py:130
 msgid "Justice"
 msgstr "Igazságszolgáltatás"
 
-#: .\judge\admin\problem.py:129
+#: judge/admin/contest.py:158
+#, python-format
+msgid "%d contest successfully marked as visible."
+msgid_plural "%d contests successfully marked as visible."
+msgstr[0] ""
+msgstr[1] ""
+
+#: judge/admin/contest.py:161
+msgid "Mark contests as visible"
+msgstr ""
+
+#: judge/admin/contest.py:165
+#, python-format
+msgid "%d contest successfully marked as hidden."
+msgid_plural "%d contests successfully marked as hidden."
+msgstr[0] ""
+msgstr[1] ""
+
+#: judge/admin/contest.py:168
+msgid "Mark contests as hidden"
+msgstr ""
+
+#: judge/admin/contest.py:179 judge/admin/submission.py:149
+#: judge/admin/submission.py:171
+msgid "You do not have the permission to rejudge submissions."
+msgstr "Nincs jogosultságod a feltöltések újratesztelésére."
+
+#: judge/admin/contest.py:186 judge/admin/submission.py:155
+msgid "You do not have the permission to rejudge THAT many submissions."
+msgstr "Nincs jogosultságod ilyen sok feltöltés újratesztelésére."
+
+#: judge/admin/contest.py:193 judge/admin/submission.py:164
+#, python-format
+msgid "%d submission was successfully scheduled for rejudging."
+msgid_plural "%d submissions were successfully scheduled for rejudging."
+msgstr[0] ""
+msgstr[1] ""
+
+#: judge/admin/contest.py:264
+#, python-format
+msgid "%d participation recalculated."
+msgid_plural "%d participations recalculated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: judge/admin/contest.py:267
+msgid "Recalculate results"
+msgstr ""
+
+#: judge/admin/contest.py:271 judge/admin/organization.py:64
+msgid "username"
+msgstr "felhasználónév"
+
+#: judge/admin/contest.py:276 templates/base.html:258
+msgid "virtual"
+msgstr "virtuális"
+
+#: judge/admin/interface.py:28 judge/models/interface.py:46
+msgid "link path"
+msgstr "csatolási útvonal"
+
+#: judge/admin/interface.py:62
+msgid "Content"
+msgstr "Tartalom"
+
+#: judge/admin/interface.py:63
+msgid "Summary"
+msgstr "Összefoglalás"
+
+#: judge/admin/interface.py:107 judge/models/contest.py:240
+#: judge/models/contest.py:344 judge/models/profile.py:186
+msgid "user"
+msgstr "felhasználó"
+
+#: judge/admin/interface.py:148
+msgid "object"
+msgstr ""
+
+#: judge/admin/organization.py:33 judge/admin/problem.py:170
+#: judge/admin/profile.py:78
+msgid "View on site"
+msgstr "Nézd meg élesben"
+
+#: judge/admin/problem.py:28
+msgid "Describe the changes you made (optional)"
+msgstr "Ismertesd a módosításokat (opcionális)"
+
+#: judge/admin/problem.py:125
+msgid "Social Media"
+msgstr "Közösségi média"
+
+#: judge/admin/problem.py:126
+msgid "Taxonomy"
+msgstr "Rendszerezés"
+
+#: judge/admin/problem.py:127 templates/contest/contest.html:84
+#: templates/problem/data.html:394 templates/problem/list.html:211
+#: templates/problem/list.html:232 templates/user/base-users-table.html:10
+#: templates/user/user-problems.html:58
+msgid "Points"
+msgstr "Pontok"
+
+#: judge/admin/problem.py:128
+msgid "Limits"
+msgstr "Limitek"
+
+#: judge/admin/problem.py:129 judge/admin/submission.py:232
+#: templates/stats/base.html:14 templates/submission/list.html:310
+msgid "Language"
+msgstr "Nyelv"
+
+#: judge/admin/problem.py:131
 msgid "History"
 msgstr "Előzmények"
 
-#: .\judge\admin\problem.py:165
+#: judge/admin/problem.py:167
 msgid "Authors"
 msgstr "Szerzők"
 
-#: .\judge\admin\problem.py:203
+#: judge/admin/problem.py:205
 #, python-format
 msgid "%d problem successfully marked as public."
 msgid_plural "%d problems successfully marked as public."
 msgstr[0] "%d probléma sikeresen publikusnak jelölve."
 msgstr[1] "%d probléma sikeresen publikusnak jelölve."
 
-#: .\judge\admin\problem.py:207
+#: judge/admin/problem.py:209
 msgid "Mark problems as public"
 msgstr "Jelöld publikusnak a problémákat"
 
-#: .\judge\admin\problem.py:212
+#: judge/admin/problem.py:214
 #, python-format
 msgid "%d problem successfully marked as private."
 msgid_plural "%d problems successfully marked as private."
 msgstr[0] "%d probléma sikeresen privátnak jelölve."
 msgstr[1] "%d probléma sikeresen privátnak jelölve."
 
-#: .\judge\admin\problem.py:216
+#: judge/admin/problem.py:218
 msgid "Mark problems as private"
 msgstr "Jelöld a problémákat privátnak"
 
-#: .\judge\admin\profile.py:32
+#: judge/admin/profile.py:32
 msgid "timezone"
-msgstr ""
+msgstr "időzóna"
 
-#: .\judge\admin\profile.py:65 .\judge\admin\submission.py:197
-#: .\templates\organization\requests\log.html:9
-#: .\templates\organization\requests\pending.html:19
-#: .\templates\ticket\list.html:247
+#: judge/admin/profile.py:84 judge/admin/submission.py:211
+#: templates/organization/requests/log.html:9
+#: templates/organization/requests/pending.html:12
+#: templates/ticket/list.html:263
 msgid "User"
 msgstr "Felhasználó"
 
-#: .\judge\admin\profile.py:70
-#: .\templates\registration\registration_form.html:141
+#: judge/admin/profile.py:89 templates/registration/registration_form.html:145
 msgid "Email"
 msgstr "Email"
 
-#: .\judge\admin\profile.py:75 .\judge\views\register.py:30
-#: .\templates\registration\registration_form.html:169
-#: .\templates\user\edit-profile.html:104
+#: judge/admin/profile.py:94 judge/views/register.py:29
+#: templates/registration/registration_form.html:173
+#: templates/user/edit-profile.html:99
 msgid "Timezone"
 msgstr "Időzóna"
 
-#: .\judge\admin\profile.py:80
+#: judge/admin/profile.py:99
 msgid "date joined"
 msgstr "csatlakozás dátuma"
 
-#: .\judge\admin\profile.py:87
+#: judge/admin/profile.py:106
 #, python-format
 msgid "%d user have scores recalculated."
 msgid_plural "%d users have scores recalculated."
 msgstr[0] "%d felhasználó pontja újraszámolva."
 msgstr[1] "%d felhasználó pontja újraszámolva."
 
-#: .\judge\admin\runtime.py:15
+#: judge/admin/profile.py:109
+msgid "Recalculate scores"
+msgstr "Pontok újraszámítása"
+
+#: judge/admin/runtime.py:19
 msgid "Disallowed problems"
 msgstr "Tiltott feladatok"
 
-#: .\judge\admin\runtime.py:18
+#: judge/admin/runtime.py:22
 msgid "These problems are NOT allowed to be submitted in this language"
 msgstr "Ezekre a feladatokra nem lehet megoldást beküldeni ezen a nyelven"
 
-#: .\judge\admin\runtime.py:81
+#: judge/admin/runtime.py:83
 msgid "Description"
 msgstr "Leírás"
 
-#: .\judge\admin\runtime.py:82
+#: judge/admin/runtime.py:84
 msgid "Information"
 msgstr "Információ"
 
-#: .\judge\admin\runtime.py:83
+#: judge/admin/runtime.py:85
 msgid "Capabilities"
 msgstr "Képességek"
 
-#: .\judge\admin\submission.py:21 .\judge\admin\submission.py:40
-#: .\judge\admin\submission.py:207
+#: judge/admin/submission.py:23 judge/admin/submission.py:42
+#: judge/admin/submission.py:221
 msgid "None"
 msgstr "Semmi"
 
-#: .\judge\admin\submission.py:21
+#: judge/admin/submission.py:23
 msgid "Not done"
 msgstr "Nincs kész"
 
-#: .\judge\admin\submission.py:21
+#: judge/admin/submission.py:23
 msgid "Exceptional"
 msgstr "Kivételes"
 
-#: .\judge\admin\submission.py:40
+#: judge/admin/submission.py:42
 msgid "Unaccepted"
 msgstr "Nem elfogadott"
 
-#: .\judge\admin\submission.py:83
+#: judge/admin/submission.py:89
 #, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
 msgstr "%(problem)s - %(contest)s"
 
-#: .\judge\admin\submission.py:127 .\judge\admin\submission.py:148
-msgid "You do not have the permission to rejudge submissions."
-msgstr "Nincs jogosultságod a feltöltések újratesztelésére."
-
-#: .\judge\admin\submission.py:132
-msgid "You do not have the permission to rejudge THAT many submissions."
-msgstr "Nincs jogosultságod ilyen sok feltöltés újratesztelésére."
-
-#: .\judge\admin\submission.py:141
-#, python-format
-msgid "%d submission were successfully scheduled for rejudging."
-msgid_plural "%d submissions were successfully scheduled for rejudging."
-msgstr[0] "%d feltöltés sikeresen sorbaállitva újratesztelésre."
-msgstr[1] "%d feltöltés sikeresen sorbaállitva újratesztelésre."
-
-#: .\judge\admin\submission.py:144
+#: judge/admin/submission.py:167
 msgid "Rejudge the selected submissions"
 msgstr "A kiválasztott feltöltések újratesztelése"
 
-#: .\judge\admin\submission.py:177
+#: judge/admin/submission.py:193 judge/views/problem_manage.py:125
 #, python-format
 msgid "%d submission were successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
 msgstr[0] "%d feltöltés sikeresen újrapontozva."
 msgstr[1] "%d feltöltés sikeresen újrapontozva."
 
-#: .\judge\admin\submission.py:180
+#: judge/admin/submission.py:196
 msgid "Rescore the selected submissions"
 msgstr "A kiválasztott feltöltések újrapontozása"
 
-#: .\judge\admin\submission.py:184
+#: judge/admin/submission.py:200
 msgid "Problem code"
 msgstr "Feladat azonosító"
 
-#: .\judge\admin\submission.py:189
+#: judge/admin/submission.py:205
 msgid "Problem name"
 msgstr "Feladat név"
 
-#: .\judge\admin\submission.py:201
-#: .\templates\organization\requests\log.html:10
-#: .\templates\organization\requests\pending.html:20
+#: judge/admin/submission.py:215 templates/organization/requests/log.html:10
+#: templates/organization/requests/pending.html:13
 msgid "Time"
 msgstr "Idő"
 
-#: .\judge\admin\submission.py:209
+#: judge/admin/submission.py:223
 #, python-format
 msgid "%d KB"
 msgstr "%d KB"
 
-#: .\judge\admin\submission.py:211
+#: judge/admin/submission.py:225
 #, python-format
 msgid "%.2f MB"
 msgstr "%.2f MB"
 
-#: .\judge\admin\submission.py:213
+#: judge/admin/submission.py:227
 msgid "Memory"
 msgstr "Memória"
 
-#: .\judge\admin\taxon.py:11 .\judge\admin\taxon.py:34
+#: judge/admin/taxon.py:11 judge/admin/taxon.py:34
 msgid "Included problems"
 msgstr "Mellékelt problémák"
 
-#: .\judge\admin\taxon.py:14
+#: judge/admin/taxon.py:14
 msgid "These problems are included in this group of problems"
 msgstr "Ezek a problémák tartoznak ehhez a csoporthoz"
 
-#: .\judge\admin\taxon.py:37
+#: judge/admin/taxon.py:37
 msgid "These problems are included in this type of problems"
 msgstr "Ezek a problémák tartoznak ehhez a típushoz"
 
-#: .\judge\apps.py:8
+#: judge/apps.py:8
 msgid "Online Judge"
 msgstr "Online tesztelő"
 
-#: .\judge\comments.py:40
-msgid "Comment title"
-msgstr "Hozzászólás címe"
-
-#: .\judge\comments.py:41
+#: judge/comments.py:41
 msgid "Comment body"
 msgstr "Hozzászólás törzse"
 
-#: .\judge\comments.py:47 .\judge\views\ticket.py:50
+#: judge/comments.py:47 judge/views/ticket.py:46
 msgid "Your part is silent, little toad."
 msgstr "Az útvonalad csendes, kis varangy."
 
-#: .\judge\comments.py:50 .\templates\comments\list.html:122
+#: judge/comments.py:50 templates/comments/list.html:130
 msgid "You need to have solved at least one problem before your voice can be heard."
 msgstr "Legalább 1 feladatot meg kell oldanod mielőtt hozzászólsz."
 
-#: .\judge\comments.py:75
+#: judge/comments.py:92
 msgid "Posted comment"
 msgstr "Elküldött hozzászólás"
 
-#: .\judge\forms.py:25
+#: judge/contest_format/atcoder.py:19
+msgid "AtCoder"
+msgstr ""
+
+#: judge/contest_format/default.py:18
+msgid "Default"
+msgstr ""
+
+#: judge/contest_format/ecoo.py:19
+msgid "ECOO"
+msgstr ""
+
+#: judge/contest_format/ioi.py:19
+msgid "IOI"
+msgstr ""
+
+#: judge/forms.py:27
 msgid "Subscribe to contest updates"
 msgstr "Iratkozz fel hírlevelünkre"
 
-#: .\judge\forms.py:26
+#: judge/forms.py:28
 msgid "Enable experimental features"
 msgstr "Kísérleti funkciók engedélyezése"
 
-#: .\judge\forms.py:51
+#: judge/forms.py:57 judge/views/organization.py:122
 #, python-brace-format
 msgid "You may not be part of more than {count} public organizations."
 msgstr "Nem lehetsz tagja több mint {count} nyilvános csoportnak."
 
-#: .\judge\forms.py:109 .\judge\views\register.py:26
-#: .\templates\registration\registration_form.html:135
-#: .\templates\user\base-users-table.html:5
+#: judge/forms.py:107 judge/views/register.py:26
+#: templates/registration/registration_form.html:139
+#: templates/user/base-users-table.html:5
 msgid "Username"
 msgstr "Felhasználóinév"
 
-#: .\judge\forms.py:110 .\templates\registration\registration_form.html:147
-#: .\templates\registration\registration_form.html:161
+#: judge/forms.py:108 templates/registration/registration_form.html:151
+#: templates/registration/registration_form.html:165
 msgid "Password"
 msgstr "Jelszó"
 
-#: .\judge\jinja2\datetime.py:26 .\templates\blog\content.html:27
-#: .\templates\blog\dashboard.html:21
+#: judge/forms.py:131
+msgid "Two Factor Authentication tokens must be 6 decimal digits."
+msgstr ""
+
+#: judge/forms.py:140 templates/registration/totp_auth.html:32
+msgid "Invalid Two Factor Authentication token."
+msgstr ""
+
+#: judge/forms.py:144 judge/models/problem.py:97
+msgid "Problem code must be ^[a-z0-9]+$"
+msgstr "A feladat azonosítónak ^[a-z0-9]+$ kell lennie"
+
+#: judge/forms.py:149
+msgid "Problem with code already exists."
+msgstr ""
+
+#: judge/jinja2/datetime.py:26 templates/blog/content.html:27
+#: templates/blog/dashboard.html:21
 msgid "N j, Y, g:i a"
 msgstr "N j, Y, g:i a"
 
-#: .\judge\jinja2\datetime.py:26
+#: judge/jinja2/datetime.py:26
 #, python-brace-format
 msgid "{time}"
 msgstr "{time}"
 
-#: .\judge\jinja2\datetime.py:26
+#: judge/jinja2/datetime.py:26
 #, python-brace-format
 msgid "on {time}"
 msgstr "{time}-kor"
 
-#: .\judge\jinja2\timedelta.py:52
+#: judge/models/choices.py:59
+msgid "Leave as LaTeX"
+msgstr "Hagy LaTeX-ként"
+
+#: judge/models/choices.py:60
+msgid "SVG with PNG fallback"
+msgstr "SVG PNG fallbackkel"
+
+#: judge/models/choices.py:61
+msgid "MathML only"
+msgstr "Csak MathML"
+
+#: judge/models/choices.py:62
+msgid "MathJax with SVG/PNG fallback"
+msgstr "MathJax SVG/PNG fallback-kel"
+
+#: judge/models/choices.py:63
+msgid "Detect best quality"
+msgstr "Legjobb minőség detektálása"
+
+#: judge/models/comment.py:25
+msgid "Page code must be ^[pcs]:[a-z0-9]+$|^b:\\d+$"
+msgstr ""
+
+#: judge/models/comment.py:41
+msgid "commenter"
+msgstr "hozzászóló"
+
+#: judge/models/comment.py:42
+msgid "posted time"
+msgstr "hozzászólás ideje"
+
+#: judge/models/comment.py:43 judge/models/comment.py:169
+msgid "associated page"
+msgstr ""
+
+#: judge/models/comment.py:45
+msgid "votes"
+msgstr "szavazatok"
+
+#: judge/models/comment.py:46
+msgid "body of comment"
+msgstr "hozzászólás törzse"
+
+#: judge/models/comment.py:47
+msgid "hide the comment"
+msgstr "hozzászólás elrejtése"
+
+#: judge/models/comment.py:48
+msgid "parent"
+msgstr "előzmény"
+
+#: judge/models/comment.py:53
+msgid "comment"
+msgstr "hozzászólás"
+
+#: judge/models/comment.py:54
+msgid "comments"
+msgstr "hozzászólások"
+
+#: judge/models/comment.py:129 judge/models/problem.py:398
+#, python-format
+msgid "Editorial for %s"
+msgstr "Megoldási útmutató %s-hez"
+
+#: judge/models/comment.py:164
+msgid "comment vote"
+msgstr "hozzászólás értékelése"
+
+#: judge/models/comment.py:165
+msgid "comment votes"
+msgstr "hozzászólás értékelései"
+
+#: judge/models/comment.py:174
+msgid "Override comment lock"
+msgstr ""
+
+#: judge/models/contest.py:20
+msgid "Invalid colour."
+msgstr "Érvénytelen szín."
+
+#: judge/models/contest.py:22
+msgid "tag name"
+msgstr "címke neve"
+
+#: judge/models/contest.py:23
+msgid "Lowercase letters and hyphens only."
+msgstr "Csak kisbetűk és kötőjelek."
+
+#: judge/models/contest.py:24
+msgid "tag colour"
+msgstr "címke színe"
+
+#: judge/models/contest.py:25
+msgid "tag description"
+msgstr "címke leírása"
+
+#: judge/models/contest.py:44
+msgid "contest tag"
+msgstr "verseny címkéje"
+
+#: judge/models/contest.py:45 judge/models/contest.py:99
+msgid "contest tags"
+msgstr "verseny cimkéi"
+
+#: judge/models/contest.py:49
+msgid "contest id"
+msgstr "verseny azonosítója"
+
+#: judge/models/contest.py:50
+msgid "Contest id must be ^[a-z0-9]+$"
+msgstr "A verseny azonosítójának ^[a-z0-9]+$ kell lennie"
+
+#: judge/models/contest.py:51
+msgid "contest name"
+msgstr "verseny neve"
+
+#: judge/models/contest.py:52
+msgid "These people will be able to edit the contest."
+msgstr "Ezek az emberek szerkeszthetik a versenyt."
+
+#: judge/models/contest.py:54 judge/models/runtime.py:124
+#: src/dmoj-wpadmin/test_project/apps/books/admin.py:20
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:13
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:27
+#: src/dmoj-wpadmin/test_project/apps/cds/models.py:13
+#: src/dmoj-wpadmin/test_project/apps/cds/models.py:27
+#: src/dmoj-wpadmin/test_project/apps/dvds/models.py:13
+#: src/dmoj-wpadmin/test_project/apps/dvds/models.py:27
+msgid "description"
+msgstr "leírás"
+
+#: judge/models/contest.py:55 judge/models/problem.py:349
+#: judge/models/runtime.py:126
+msgid "problems"
+msgstr "feladatok"
+
+#: judge/models/contest.py:56 judge/models/contest.py:241
+msgid "start time"
+msgstr "kezdés"
+
+#: judge/models/contest.py:57
+msgid "end time"
+msgstr "befejezés"
+
+#: judge/models/contest.py:58 judge/models/problem.py:118
+#: judge/models/problem.py:373
+msgid "time limit"
+msgstr "időkorlát"
+
+#: judge/models/contest.py:59 judge/models/problem.py:132
+msgid "publicly visible"
+msgstr "nyilvánosan látható"
+
+#: judge/models/contest.py:60
+msgid "Should be set even for organization-private contests, where it determines whether the contest is visible to members of the specified organizations."
+msgstr "Azt határozza meg, hogy a verseny a megadott szervezetek tagjai számára látható-e. Célszerű meghatározni még szervezeten belüli-privát versenyeken is."
+
+#: judge/models/contest.py:63
+msgid "contest rated"
+msgstr "értékelt verseny"
+
+#: judge/models/contest.py:63
+msgid "Whether this contest can be rated."
+msgstr "Hogy ez a verseny értékelhető-e."
+
+#: judge/models/contest.py:65
+msgid "hide scoreboard"
+msgstr ""
+
+#: judge/models/contest.py:66
+msgid "Whether the scoreboard should remain hidden for the duration of the contest."
+msgstr ""
+
+#: judge/models/contest.py:69
+msgid "no comments"
+msgstr "nincsenek hozzászólások"
+
+#: judge/models/contest.py:70
+msgid "Use clarification system instead of comments."
+msgstr "A pontosítási rendszer használata hozzászólások helyett."
+
+#: judge/models/contest.py:72
+msgid "Rating floor for contest"
+msgstr ""
+
+#: judge/models/contest.py:74
+msgid "Rating ceiling for contest"
+msgstr ""
+
+#: judge/models/contest.py:76
+msgid "rate all"
+msgstr "összes értékelése"
+
+#: judge/models/contest.py:76
+msgid "Rate all users who joined."
+msgstr "Értékelése az összes felhasználónak, aki csatlakozott."
+
+#: judge/models/contest.py:77
+msgid "exclude from ratings"
+msgstr "kizárás a értékelésből"
+
+#: judge/models/contest.py:79
+msgid "private to specific users"
+msgstr ""
+
+#: judge/models/contest.py:80
+msgid "private contestants"
+msgstr ""
+
+#: judge/models/contest.py:81
+msgid "If private, only these users may see the contest"
+msgstr ""
+
+#: judge/models/contest.py:83
+msgid "hide problem tags"
+msgstr "feladat címkék elrejtése"
+
+#: judge/models/contest.py:84
+msgid "Whether problem tags should be hidden by default."
+msgstr ""
+
+#: judge/models/contest.py:86
+msgid "run pretests only"
+msgstr "csak pretesztek futtatása"
+
+#: judge/models/contest.py:87
+msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
+msgstr ""
+
+#: judge/models/contest.py:91 judge/models/problem.py:153
+msgid "private to organizations"
+msgstr "privát a csoport számára"
+
+#: judge/models/contest.py:92 judge/models/problem.py:151
+#: judge/models/profile.py:72
+msgid "organizations"
+msgstr "csoportok"
+
+#: judge/models/contest.py:93
+msgid "If private, only these organizations may see the contest"
+msgstr "Ha privát, csak ezek a csoportok láthatják a versenyt"
+
+#: judge/models/contest.py:94 judge/models/problem.py:141
+msgid "OpenGraph image"
+msgstr "OpenGraph kép"
+
+#: judge/models/contest.py:95
+msgid "Logo override image"
+msgstr ""
+
+#: judge/models/contest.py:97
+msgid "This image will replace the default site logo for users inside the contest."
+msgstr ""
+
+#: judge/models/contest.py:100
+msgid "the amount of live participants"
+msgstr "az éles résztvevők száma"
+
+#: judge/models/contest.py:101
+msgid "contest summary"
+msgstr "verseny összefoglaló"
+
+#: judge/models/contest.py:102 judge/models/problem.py:143
+msgid "Plain-text, shown in meta description tag, e.g. for social media."
+msgstr ""
+
+#: judge/models/contest.py:103 judge/models/profile.py:46
+msgid "access code"
+msgstr "hozzáférési kód"
+
+#: judge/models/contest.py:104
+msgid "An optional code to prompt contestants before they are allowed to join the contest. Leave it blank to disable."
+msgstr ""
+
+#: judge/models/contest.py:106 judge/models/problem.py:137
+msgid "personae non gratae"
+msgstr "nemkívánatos személy"
+
+#: judge/models/contest.py:107
+msgid "Bans the selected users from joining this contest."
+msgstr ""
+
+#: judge/models/contest.py:108
+msgid "contest format"
+msgstr ""
+
+#: judge/models/contest.py:109
+msgid "The contest format module to use."
+msgstr ""
+
+#: judge/models/contest.py:110
+msgid "contest format configuration"
+msgstr ""
+
+#: judge/models/contest.py:111
+msgid "A JSON object to serve as the configuration for the chosen contest format module. Leave empty to use None. Exact format depends on the contest format selected."
+msgstr ""
+
+#: judge/models/contest.py:224
+msgid "See private contests"
+msgstr "Privát versenyek mutatása"
+
+#: judge/models/contest.py:225
+msgid "Edit own contests"
+msgstr "Saját versenyek szerkesztése"
+
+#: judge/models/contest.py:226
+msgid "Edit all contests"
+msgstr "Az összes verseny szerkesztése"
+
+#: judge/models/contest.py:227
+msgid "Rate contests"
+msgstr "Versenyek értékelése"
+
+#: judge/models/contest.py:228
+msgid "Contest access codes"
+msgstr "Verseny hozzáférési kódok"
+
+#: judge/models/contest.py:229
+msgid "Create private contests"
+msgstr ""
+
+#: judge/models/contest.py:231 judge/models/contest.py:309
+#: judge/models/contest.py:345 judge/models/submission.py:82
+msgid "contest"
+msgstr "verseny"
+
+#: judge/models/contest.py:232
+msgid "contests"
+msgstr "versenyek"
+
+#: judge/models/contest.py:239
+msgid "associated contest"
+msgstr ""
+
+#: judge/models/contest.py:242
+msgid "score"
+msgstr "pontszám"
+
+#: judge/models/contest.py:243
+msgid "cumulative time"
+msgstr "összes idő"
+
+#: judge/models/contest.py:244
+msgid "virtual participation id"
+msgstr "virtuális részvételi azonosító"
+
+#: judge/models/contest.py:245
+msgid "0 means non-virtual, otherwise the n-th virtual participation"
+msgstr "A 0 nem virtuális, egyébként az n. virtuális részvétel"
+
+#: judge/models/contest.py:246
+msgid "contest format specific data"
+msgstr ""
+
+#: judge/models/contest.py:295
+#, python-format
+msgid "%s spectating in %s"
+msgstr "%s megfigyel %s-ben"
+
+#: judge/models/contest.py:297
+#, python-format
+msgid "%s in %s, v%d"
+msgstr "%s en %s, v%d"
+
+#: judge/models/contest.py:298
+#, python-format
+msgid "%s in %s"
+msgstr "%s %s-ben"
+
+#: judge/models/contest.py:301
+msgid "contest participation"
+msgstr "verseny részvétel"
+
+#: judge/models/contest.py:302
+msgid "contest participations"
+msgstr "verseny részvételek"
+
+#: judge/models/contest.py:308 judge/models/contest.py:329
+#: judge/models/problem.py:348 judge/models/problem.py:353
+#: judge/models/problem.py:371 judge/models/problem_data.py:35
+msgid "problem"
+msgstr "feladat"
+
+#: judge/models/contest.py:310 judge/models/contest.py:333
+#: judge/models/problem.py:126
+msgid "points"
+msgstr "pontok"
+
+#: judge/models/contest.py:311
+msgid "partial"
+msgstr "részleges"
+
+#: judge/models/contest.py:312 judge/models/contest.py:334
+msgid "is pretested"
+msgstr "pretesztes-e"
+
+#: judge/models/contest.py:313 judge/models/interface.py:43
+msgid "order"
+msgstr "sorrend"
+
+#: judge/models/contest.py:314
+msgid "output prefix length override"
+msgstr ""
+
+#: judge/models/contest.py:315
+msgid "Maximum number of submissions for this problem, or 0 for no limit."
+msgstr "A feltöltések maximális száma, 0 esetén nincs korlát."
+
+#: judge/models/contest.py:317
+msgid "Why include a problem you can't submit to?"
+msgstr ""
+
+#: judge/models/contest.py:322
+msgid "contest problem"
+msgstr "versenyfeladat"
+
+#: judge/models/contest.py:323
+msgid "contest problems"
+msgstr "versenyfeladatok"
+
+#: judge/models/contest.py:327 judge/models/submission.py:180
+msgid "submission"
+msgstr "feltöltés"
+
+#: judge/models/contest.py:331 judge/models/contest.py:346
+msgid "participation"
+msgstr "részvétel"
+
+#: judge/models/contest.py:335
+msgid "Whether this submission was ran only on pretests."
+msgstr ""
+
+#: judge/models/contest.py:339
+msgid "contest submission"
+msgstr "verseny feltöltés"
+
+#: judge/models/contest.py:340
+msgid "contest submissions"
+msgstr "verseny feltöltések"
+
+#: judge/models/contest.py:348
+msgid "rank"
+msgstr "helyezés"
+
+#: judge/models/contest.py:349
+msgid "rating"
+msgstr "értékelés"
+
+#: judge/models/contest.py:350
+msgid "volatility"
+msgstr "volatilitás"
+
+#: judge/models/contest.py:351
+msgid "last rated"
+msgstr "utolsó értékelt"
+
+#: judge/models/contest.py:355
+msgid "contest rating"
+msgstr "verseny értékelés"
+
+#: judge/models/contest.py:356
+msgid "contest ratings"
+msgstr "verseny értékelések"
+
+#: judge/models/interface.py:24
+msgid "configuration item"
+msgstr "konfigurációs elem"
+
+#: judge/models/interface.py:25
+msgid "miscellaneous configuration"
+msgstr "vegyes konfigurációk"
+
+#: judge/models/interface.py:37
+msgid "navigation item"
+msgstr "navigációs elem"
+
+#: judge/models/interface.py:38
+msgid "navigation bar"
+msgstr "navigációs sáv"
+
+#: judge/models/interface.py:44
+msgid "identifier"
+msgstr "azonosító"
+
+#: judge/models/interface.py:45
+msgid "label"
+msgstr "címke"
+
+#: judge/models/interface.py:47
+msgid "highlight regex"
+msgstr "regex kijelölése"
+
+#: judge/models/interface.py:48
+msgid "parent item"
+msgstr "szülő elem"
+
+#: judge/models/interface.py:66
+msgid "post title"
+msgstr "bejegyzés címe"
+
+#: judge/models/interface.py:67 judge/models/problem.py:387
+msgid "authors"
+msgstr "szerzők"
+
+#: judge/models/interface.py:68
+msgid "slug"
+msgstr "csonk"
+
+#: judge/models/interface.py:69 judge/models/problem.py:385
+msgid "public visibility"
+msgstr "láthatóság"
+
+#: judge/models/interface.py:70
+msgid "sticky"
+msgstr "kiemelt"
+
+#: judge/models/interface.py:71
+msgid "publish after"
+msgstr "közzététel ezután"
+
+#: judge/models/interface.py:72
+msgid "post content"
+msgstr "tartalom küldése"
+
+#: judge/models/interface.py:73
+msgid "post summary"
+msgstr "tartalom összefoglalója"
+
+#: judge/models/interface.py:74
+msgid "openGraph image"
+msgstr "openGraph kép"
+
+#: judge/models/interface.py:91
+msgid "Edit all posts"
+msgstr "Összes poszt szerkesztése"
+
+#: judge/models/interface.py:93
+msgid "blog post"
+msgstr "blog poszt"
+
+#: judge/models/interface.py:94
+msgid "blog posts"
+msgstr "blog posztok"
+
+#: judge/models/message.py:11
+msgid "message title"
+msgstr "üzenet címe"
+
+#: judge/models/message.py:12 judge/models/ticket.py:29
+msgid "message body"
+msgstr "üzenet törzse"
+
+#: judge/models/message.py:13
+msgid "sender"
+msgstr "küldő"
+
+#: judge/models/message.py:14
+msgid "target"
+msgstr "címzett"
+
+#: judge/models/message.py:15
+msgid "message timestamp"
+msgstr "üzenet időbélyege"
+
+#: judge/models/message.py:16
+msgid "read"
+msgstr "olvas"
+
+#: judge/models/message.py:20
+msgid "messages in the thread"
+msgstr "üzenetek a szálban"
+
+#: judge/models/problem.py:26
+msgid "problem category ID"
+msgstr "feladat kategória azonosító"
+
+#: judge/models/problem.py:27
+msgid "problem category name"
+msgstr "feladat kategória név"
+
+#: judge/models/problem.py:34
+msgid "problem type"
+msgstr "feladat típus"
+
+#: judge/models/problem.py:35 judge/models/problem.py:113
+msgid "problem types"
+msgstr "feladat típusok"
+
+#: judge/models/problem.py:39
+msgid "problem group ID"
+msgstr "feladat csoport azonosító"
+
+#: judge/models/problem.py:40
+msgid "problem group name"
+msgstr "feladat csoport név"
+
+#: judge/models/problem.py:47 judge/models/problem.py:116
+msgid "problem group"
+msgstr "feladat csoport"
+
+#: judge/models/problem.py:48
+msgid "problem groups"
+msgstr "feladat csoport nevek"
+
+#: judge/models/problem.py:52
+msgid "key"
+msgstr "kulcs"
+
+#: judge/models/problem.py:54
+msgid "link"
+msgstr "link"
+
+#: judge/models/problem.py:55
+msgid "full name"
+msgstr "teljes név"
+
+#: judge/models/problem.py:56 judge/models/profile.py:32
+#: judge/models/runtime.py:23
+msgid "short name"
+msgstr "rövid név"
+
+#: judge/models/problem.py:57
+msgid "Displayed on pages under this license"
+msgstr ""
+
+#: judge/models/problem.py:58
+msgid "icon"
+msgstr "ikon"
+
+#: judge/models/problem.py:58
+msgid "URL to the icon"
+msgstr "URL az ikonhoz"
+
+#: judge/models/problem.py:59
+msgid "license text"
+msgstr "licenc szöveg"
+
+#: judge/models/problem.py:68
+msgid "license"
+msgstr "licenc"
+
+#: judge/models/problem.py:69
+msgid "licenses"
+msgstr "licencek"
+
+#: judge/models/problem.py:96
+msgid "problem code"
+msgstr "feladat azonosító"
+
+#: judge/models/problem.py:98
+msgid "A short, unique code for the problem, used in the url after /problem/"
+msgstr ""
+
+#: judge/models/problem.py:100
+msgid "problem name"
+msgstr "feladat név"
+
+#: judge/models/problem.py:101
+msgid "The full name of the problem, as shown in the problem list."
+msgstr ""
+
+#: judge/models/problem.py:103
+msgid "problem body"
+msgstr "feladat törzs"
+
+#: judge/models/problem.py:104
+msgid "creators"
+msgstr "szerzők"
+
+#: judge/models/problem.py:105
+msgid "These users will be able to edit the problem, and be listed as authors."
+msgstr ""
+
+#: judge/models/problem.py:107
+msgid "curators"
+msgstr "kurátorok"
+
+#: judge/models/problem.py:108
+msgid "These users will be able to edit the problem, but not be listed as authors."
+msgstr ""
+
+#: judge/models/problem.py:110
+msgid "testers"
+msgstr "tesztelők"
+
+#: judge/models/problem.py:112
+msgid "These users will be able to view the private problem, but not edit it."
+msgstr ""
+
+#: judge/models/problem.py:114
+msgid "The type of problem, as shown on the problem's page."
+msgstr ""
+
+#: judge/models/problem.py:117
+msgid "The group of problem, shown under Category in the problem list."
+msgstr ""
+
+#: judge/models/problem.py:119
+msgid "The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported."
+msgstr "A feladat időlimitje másodpercekben. Tört másodperceket (pl. 1.5) is írhatunk."
+
+#: judge/models/problem.py:122 judge/models/problem.py:374
+msgid "memory limit"
+msgstr "memória korlát"
+
+#: judge/models/problem.py:123
+msgid "The memory limit for this problem, in kilobytes (e.g. 64mb = 65536 kilobytes)."
+msgstr "A feladat memória limitje kilobyte-okban (pl. 64mb = 65536 kilobyte)."
+
+#: judge/models/problem.py:127
+msgid "Points awarded for problem completion. Points are displayed with a 'p' suffix if partial."
+msgstr ""
+
+#: judge/models/problem.py:129
+msgid "allows partial points"
+msgstr "részleges pontok engedélyezése"
+
+#: judge/models/problem.py:130
+msgid "allowed languages"
+msgstr "engedélyezett nyelvek"
+
+#: judge/models/problem.py:131
+msgid "List of allowed submission languages."
+msgstr ""
+
+#: judge/models/problem.py:133
+msgid "manually managed"
+msgstr "manuáisan kezelt"
+
+#: judge/models/problem.py:134
+msgid "Whether judges should be allowed to manage data or not."
+msgstr ""
+
+#: judge/models/problem.py:135
+msgid "date of publishing"
+msgstr "publikálás ideje"
+
+#: judge/models/problem.py:136
+msgid "Doesn't have magic ability to auto-publish due to backward compatibility"
+msgstr ""
+
+#: judge/models/problem.py:138
+msgid "Bans the selected users from submitting to this problem."
+msgstr ""
+
+#: judge/models/problem.py:140
+msgid "The license under which this problem is published."
+msgstr ""
+
+#: judge/models/problem.py:142
+msgid "problem summary"
+msgstr "feladat összefoglaló"
+
+#: judge/models/problem.py:144
+msgid "number of users"
+msgstr ""
+
+#: judge/models/problem.py:145
+msgid "The number of users who solved the problem."
+msgstr ""
+
+#: judge/models/problem.py:146
+msgid "solve rate"
+msgstr ""
+
+#: judge/models/problem.py:152
+msgid "If private, only these organizations may see the problem."
+msgstr ""
+
+#: judge/models/problem.py:354 judge/models/problem.py:372
+#: judge/models/runtime.py:99
+msgid "language"
+msgstr "nyelv"
+
+#: judge/models/problem.py:355
+msgid "translated name"
+msgstr "lefordított név"
+
+#: judge/models/problem.py:356
+msgid "translated description"
+msgstr "lefordított leírás"
+
+#: judge/models/problem.py:360
+msgid "problem translation"
+msgstr "feladat fordítás"
+
+#: judge/models/problem.py:361
+msgid "problem translations"
+msgstr "feladat fordítások"
+
+#: judge/models/problem.py:365
+msgid "clarified problem"
+msgstr "pontosított feladat"
+
+#: judge/models/problem.py:366
+msgid "clarification body"
+msgstr "pontosítás törzse"
+
+#: judge/models/problem.py:367
+msgid "clarification timestamp"
+msgstr "pontosítás időbélyege"
+
+#: judge/models/problem.py:378
+msgid "language-specific resource limit"
+msgstr "nyelv specifikus erőforrás korlát"
+
+#: judge/models/problem.py:379
+msgid "language-specific resource limits"
+msgstr "nyelv specifikus erőforrás korlátok"
+
+#: judge/models/problem.py:383
+msgid "associated problem"
+msgstr "hozzárendelt probléma"
+
+#: judge/models/problem.py:386
+msgid "publish date"
+msgstr "publikálás dátuma"
+
+#: judge/models/problem.py:388
+msgid "editorial content"
+msgstr "megoldási útmutató tartalom"
+
+#: judge/models/problem.py:404
+msgid "solution"
+msgstr "megoldás"
+
+#: judge/models/problem.py:405
+msgid "solutions"
+msgstr "megoldások"
+
+#: judge/models/problem_data.py:23
+msgid "Standard"
+msgstr "Alapértelmezett"
+
+#: judge/models/problem_data.py:24
+msgid "Floats"
+msgstr "Lebegőpontosak"
+
+#: judge/models/problem_data.py:25
+msgid "Floats (absolute)"
+msgstr "Lebegőpontosak (abszolút)"
+
+#: judge/models/problem_data.py:26
+msgid "Floats (relative)"
+msgstr "Lebegőpontosak (relatív)"
+
+#: judge/models/problem_data.py:27
+msgid "Non-trailing spaces"
+msgstr ""
+
+#: judge/models/problem_data.py:28
+msgid "Unordered"
+msgstr "Rendezetlen"
+
+#: judge/models/problem_data.py:29
+msgid "Byte identical"
+msgstr "Bájtonként azonos"
+
+#: judge/models/problem_data.py:30
+msgid "Line-by-line"
+msgstr ""
+
+#: judge/models/problem_data.py:37
+msgid "data zip file"
+msgstr "adat zip fájl"
+
+#: judge/models/problem_data.py:39
+msgid "generator file"
+msgstr "generátor fájl"
+
+#: judge/models/problem_data.py:41 judge/models/problem_data.py:90
+msgid "output prefix length"
+msgstr "kimeneti prefix hossza"
+
+#: judge/models/problem_data.py:42 judge/models/problem_data.py:91
+msgid "output limit length"
+msgstr "kimenet hossz limitje"
+
+#: judge/models/problem_data.py:43
+msgid "init.yml generation feedback"
+msgstr "init.yml generálás visszajelzése"
+
+#: judge/models/problem_data.py:44 judge/models/problem_data.py:92
+msgid "checker"
+msgstr "checker"
+
+#: judge/models/problem_data.py:45 judge/models/problem_data.py:93
+msgid "checker arguments"
+msgstr "checker argumentumai"
+
+#: judge/models/problem_data.py:46 judge/models/problem_data.py:94
+msgid "checker arguments as a JSON object"
+msgstr "chceker argumentumai JSON objektumként"
+
+#: judge/models/problem_data.py:77
+msgid "problem data set"
+msgstr "feladat adathalmaz"
+
+#: judge/models/problem_data.py:79
+msgid "case position"
+msgstr "eset hely"
+
+#: judge/models/problem_data.py:80
+msgid "case type"
+msgstr "eset típus"
+
+#: judge/models/problem_data.py:81
+msgid "Normal case"
+msgstr "Normál eset"
+
+#: judge/models/problem_data.py:82
+msgid "Batch start"
+msgstr "Batch kezdete"
+
+#: judge/models/problem_data.py:83
+msgid "Batch end"
+msgstr "Batch vége"
+
+#: judge/models/problem_data.py:85
+msgid "input file name"
+msgstr "bemeneti fájl név"
+
+#: judge/models/problem_data.py:86
+msgid "output file name"
+msgstr "kimeneti fájl név"
+
+#: judge/models/problem_data.py:87
+msgid "generator arguments"
+msgstr "generátor argumentumai"
+
+#: judge/models/problem_data.py:88
+msgid "point value"
+msgstr "pont érték"
+
+#: judge/models/problem_data.py:89
+msgid "case is pretest?"
+msgstr "ez az eset preteszt?"
+
+#: judge/models/profile.py:29
+msgid "organization title"
+msgstr "csoport neve"
+
+#: judge/models/profile.py:30
+msgid "organization slug"
+msgstr ""
+
+#: judge/models/profile.py:31
+msgid "Organization name shown in URL"
+msgstr ""
+
+#: judge/models/profile.py:33
+msgid "Displayed beside user name during contests"
+msgstr "A felhasználóinév mellett van a versenyek alatt"
+
+#: judge/models/profile.py:34
+msgid "organization description"
+msgstr "csoport leírás"
+
+#: judge/models/profile.py:35
+msgid "registrant"
+msgstr "nyilvántartóba felvett személy"
+
+#: judge/models/profile.py:36
+msgid "User who registered this organization"
+msgstr "Felhasználók akik regisztrálták ezt a csoportot"
+
+#: judge/models/profile.py:37
+msgid "administrators"
+msgstr "adminisztrátorok"
+
+#: judge/models/profile.py:38
+msgid "Those who can edit this organization"
+msgstr "Azok, akik szerkeszteni tudják ezt a csoportot"
+
+#: judge/models/profile.py:39
+msgid "creation date"
+msgstr "létrehozás dátuma"
+
+#: judge/models/profile.py:40
+msgid "is open organization?"
+msgstr "nyílt-e a csoport?"
+
+#: judge/models/profile.py:41
+msgid "Allow joining organization"
+msgstr "A csoportba való belépés engedélyezése"
+
+#: judge/models/profile.py:42
+msgid "maximum size"
+msgstr "maximális méret"
+
+#: judge/models/profile.py:43
+msgid "Maximum amount of users in this organization, only applicable to private organizations"
+msgstr "Maximális felhasználó szám ebben a csoportban, csak privát csoportokra érvényes"
+
+#: judge/models/profile.py:45
+msgid "Student access code"
+msgstr "Tanulói hozzáférési kódok"
+
+#: judge/models/profile.py:71 judge/models/profile.py:87
+#: judge/models/profile.py:187
+msgid "organization"
+msgstr "csoport"
+
+#: judge/models/profile.py:76
+msgid "user associated"
+msgstr "felhasználóhoz társult"
+
+#: judge/models/profile.py:77
+msgid "self-description"
+msgstr "önleírás"
+
+#: judge/models/profile.py:78
+msgid "location"
+msgstr "helyszín"
+
+#: judge/models/profile.py:80
+msgid "preferred language"
+msgstr "preferált nyelv"
+
+#: judge/models/profile.py:85
+msgid "last access time"
+msgstr "utolsó belépés ideje"
+
+#: judge/models/profile.py:86
+msgid "last IP"
+msgstr "utolsó IP"
+
+#: judge/models/profile.py:89
+msgid "display rank"
+msgstr "megjelenített rang"
+
+#: judge/models/profile.py:91
+msgid "comment mute"
+msgstr "hozzászólás lenémítása"
+
+#: judge/models/profile.py:91
+msgid "Some users are at their best when silent."
+msgstr "Néhány felhasználó a legjobb amikor csendesek."
+
+#: judge/models/profile.py:93
+msgid "unlisted user"
+msgstr ""
+
+#: judge/models/profile.py:93
+msgid "User will not be ranked."
+msgstr ""
+
+#: judge/models/profile.py:96
+msgid "user script"
+msgstr "felhasználói szkript"
+
+#: judge/models/profile.py:97
+msgid "User-defined JavaScript for site customization."
+msgstr "Felhasználó által meghatározott JavaScript a webhely testreszabásához."
+
+#: judge/models/profile.py:98
+msgid "current contest"
+msgstr "jelenlegi verseny"
+
+#: judge/models/profile.py:100
+msgid "math engine"
+msgstr "matek motor"
+
+#: judge/models/profile.py:102
+msgid "the rendering engine used to render math"
+msgstr "a matek ábrákat renderelő motor"
+
+#: judge/models/profile.py:103
+msgid "2FA enabled"
+msgstr ""
+
+#: judge/models/profile.py:104
+msgid "check to enable TOTP-based two factor authentication"
+msgstr ""
+
+#: judge/models/profile.py:105
+msgid "TOTP key"
+msgstr ""
+
+#: judge/models/profile.py:106
+msgid "32 character base32-encoded key for TOTP"
+msgstr ""
+
+#: judge/models/profile.py:108
+msgid "TOTP key must be empty or base32"
+msgstr ""
+
+#: judge/models/profile.py:109
+msgid "internal notes"
+msgstr ""
+
+#: judge/models/profile.py:110
+msgid "Notes for administrators regarding this user."
+msgstr ""
+
+#: judge/models/profile.py:181
+msgid "user profile"
+msgstr "felhasználói profil"
+
+#: judge/models/profile.py:182
+msgid "user profiles"
+msgstr "felhasználói profilok"
+
+#: judge/models/profile.py:189
+msgid "request time"
+msgstr "kérési idő"
+
+#: judge/models/profile.py:190
+msgid "state"
+msgstr "állapot"
+
+#: judge/models/profile.py:195
+msgid "reason"
+msgstr "ok"
+
+#: judge/models/profile.py:198
+msgid "organization join request"
+msgstr "csoport belépési kérelem"
+
+#: judge/models/profile.py:199
+msgid "organization join requests"
+msgstr "csoport belépési kérelmek"
+
+#: judge/models/runtime.py:18
+msgid "short identifier"
+msgstr "rövid azonosító"
+
+#: judge/models/runtime.py:19
+msgid "The identifier for this language; the same as its executor id for judges."
+msgstr "Ennek a nyelvnek az azonosítója ugyanaz mint a bírók végrehajtó id-ja."
+
+#: judge/models/runtime.py:21
+msgid "long name"
+msgstr "hosszú név"
+
+#: judge/models/runtime.py:22
+msgid "Longer name for the language, e.g. \"Python 2\" or \"C++11\"."
+msgstr ""
+
+#: judge/models/runtime.py:24
+msgid "More readable, but short, name to display publicly; e.g. \"PY2\" or \"C++11\". If left blank, it will default to the short identifier."
+msgstr ""
+
+#: judge/models/runtime.py:28
+msgid "common name"
+msgstr ""
+
+#: judge/models/runtime.py:29
+msgid "Common name for the language. For example, the common name for C++03, C++11, and C++14 would be \"C++\""
+msgstr ""
+
+#: judge/models/runtime.py:31
+msgid "ace mode name"
+msgstr ""
+
+#: judge/models/runtime.py:32
+msgid "Language ID for Ace.js editor highlighting, appended to \"mode-\" to determine the Ace JavaScript file to use, e.g., \"python\"."
+msgstr ""
+
+#: judge/models/runtime.py:34
+msgid "pygments name"
+msgstr ""
+
+#: judge/models/runtime.py:35
+msgid "Language ID for Pygments highlighting in source windows."
+msgstr ""
+
+#: judge/models/runtime.py:36
+msgid "code template"
+msgstr "kód mintasablon"
+
+#: judge/models/runtime.py:37
+msgid "Code template to display in submission editor."
+msgstr ""
+
+#: judge/models/runtime.py:38
+msgid "runtime info override"
+msgstr ""
+
+#: judge/models/runtime.py:39
+msgid "Do not set this unless you know what you're doing! It will override the usually more specific, judge-provided runtime info!"
+msgstr ""
+
+#: judge/models/runtime.py:41
+msgid "language description"
+msgstr "nyelv leírás"
+
+#: judge/models/runtime.py:42
+msgid "Use field this to inform users of quirks with your environment, additional restrictions, etc."
+msgstr ""
+
+#: judge/models/runtime.py:44
+msgid "extension"
+msgstr "kiterjesztés"
+
+#: judge/models/runtime.py:45
+msgid "The extension of source files, e.g., \"py\" or \"cpp\"."
+msgstr ""
+
+#: judge/models/runtime.py:100
+msgid "languages"
+msgstr "nyelvek"
+
+#: judge/models/runtime.py:104
+msgid "language to which this runtime belongs"
+msgstr ""
+
+#: judge/models/runtime.py:105
+msgid "judge on which this runtime exists"
+msgstr ""
+
+#: judge/models/runtime.py:106
+msgid "runtime name"
+msgstr "runtime név"
+
+#: judge/models/runtime.py:107
+msgid "runtime version"
+msgstr "runtime verzió"
+
+#: judge/models/runtime.py:108
+msgid "order in which to display this runtime"
+msgstr ""
+
+#: judge/models/runtime.py:112
+msgid "Server name, hostname-style"
+msgstr "Szerver név, hosztnév-szerűen"
+
+#: judge/models/runtime.py:113
+msgid "time of creation"
+msgstr "létrehozás dátuma"
+
+#: judge/models/runtime.py:114
+msgid "A key to authenticated this judge"
+msgstr "A tesztelőhöz hozzárendelt kulcs"
+
+#: judge/models/runtime.py:115
+msgid "authentication key"
+msgstr "hitelesítő kulcs"
+
+#: judge/models/runtime.py:116
+msgid "block judge"
+msgstr ""
+
+#: judge/models/runtime.py:117
+msgid "Whether this judge should be blocked from connecting, even if its key is correct."
+msgstr ""
+
+#: judge/models/runtime.py:119
+msgid "judge online status"
+msgstr "tesztelő státusza"
+
+#: judge/models/runtime.py:120
+msgid "judge start time"
+msgstr "tesztelő indítási ideje"
+
+#: judge/models/runtime.py:121
+msgid "response time"
+msgstr "válaszidő"
+
+#: judge/models/runtime.py:122
+msgid "system load"
+msgstr "rendszer terheltsége"
+
+#: judge/models/runtime.py:123
+msgid "Load for the last minute, divided by processors to be fair."
+msgstr ""
+
+#: judge/models/runtime.py:127 judge/models/runtime.py:167
+msgid "judges"
+msgstr "bírók"
+
+#: judge/models/runtime.py:166
+msgid "judge"
+msgstr "bíró"
+
+#: judge/models/submission.py:20 judge/models/submission.py:46
+#: judge/utils/problems.py:86
+msgid "Accepted"
+msgstr "Elfogadva"
+
+#: judge/models/submission.py:21 judge/models/submission.py:47
+msgid "Wrong Answer"
+msgstr "Rossz válasz"
+
+#: judge/models/submission.py:22 judge/models/submission.py:49
+msgid "Time Limit Exceeded"
+msgstr "Időlimit túllépés"
+
+#: judge/models/submission.py:23 judge/models/submission.py:50
+msgid "Memory Limit Exceeded"
+msgstr "Memórialimit túllépés"
+
+#: judge/models/submission.py:24 judge/models/submission.py:51
+msgid "Output Limit Exceeded"
+msgstr "Kimenetlimint túllépés"
+
+#: judge/models/submission.py:25 judge/models/submission.py:52
+msgid "Invalid Return"
+msgstr "Érvénytelen visszatérés"
+
+#: judge/models/submission.py:26 judge/models/submission.py:53
+msgid "Runtime Error"
+msgstr "Futási hiba"
+
+#: judge/models/submission.py:27 judge/models/submission.py:41
+#: judge/models/submission.py:54 judge/utils/problems.py:88
+msgid "Compile Error"
+msgstr "Fordítási hiba"
+
+#: judge/models/submission.py:28 judge/models/submission.py:40
+msgid "Internal Error"
+msgstr "Belső hiba"
+
+#: judge/models/submission.py:29
+msgid "Short circuit"
+msgstr ""
+
+#: judge/models/submission.py:30 judge/models/submission.py:42
+#: judge/models/submission.py:60
+msgid "Aborted"
+msgstr "Megszakítva"
+
+#: judge/models/submission.py:36 judge/models/submission.py:56
+msgid "Queued"
+msgstr "Sorba állítva"
+
+#: judge/models/submission.py:37 judge/models/submission.py:57
+msgid "Processing"
+msgstr "Feldolgozás alatt"
+
+#: judge/models/submission.py:38 judge/models/submission.py:58
+msgid "Grading"
+msgstr "Pontozás"
+
+#: judge/models/submission.py:39 judge/models/submission.py:59
+msgid "Completed"
+msgstr ""
+
+#: judge/models/submission.py:55
+msgid "Internal Error (judging server error)"
+msgstr "Belső hiba (tesztelő szerver hiba)"
+
+#: judge/models/submission.py:65
+msgid "submission time"
+msgstr ""
+
+#: judge/models/submission.py:66 judge/models/submission.py:200
+msgid "execution time"
+msgstr "futási idő"
+
+#: judge/models/submission.py:67 judge/models/submission.py:201
+msgid "memory usage"
+msgstr "memória használat"
+
+#: judge/models/submission.py:68 judge/models/submission.py:202
+msgid "points granted"
+msgstr ""
+
+#: judge/models/submission.py:69
+msgid "submission language"
+msgstr ""
+
+#: judge/models/submission.py:70
+msgid "status"
+msgstr "állapot"
+
+#: judge/models/submission.py:71
+msgid "result"
+msgstr "eredmény"
+
+#: judge/models/submission.py:73
+msgid "compile errors"
+msgstr "fordítási hibák"
+
+#: judge/models/submission.py:75
+msgid "batched cases"
+msgstr ""
+
+#: judge/models/submission.py:76
+msgid "test case points"
+msgstr "teszteset pontjai"
+
+#: judge/models/submission.py:77
+msgid "test case total points"
+msgstr ""
+
+#: judge/models/submission.py:78
+msgid "judged on"
+msgstr "ezen tesztelve"
+
+#: judge/models/submission.py:80
+msgid "was rejudged by admin"
+msgstr ""
+
+#: judge/models/submission.py:81
+msgid "was ran on pretests only"
+msgstr ""
+
+#: judge/models/submission.py:181
+msgid "submissions"
+msgstr ""
+
+#: judge/models/submission.py:185 judge/models/submission.py:196
+msgid "associated submission"
+msgstr ""
+
+#: judge/models/submission.py:187
+msgid "source code"
+msgstr "forráskód"
+
+#: judge/models/submission.py:198
+msgid "test case ID"
+msgstr "teszteset azonosító"
+
+#: judge/models/submission.py:199
+msgid "status flag"
+msgstr ""
+
+#: judge/models/submission.py:203
+msgid "points possible"
+msgstr ""
+
+#: judge/models/submission.py:204
+msgid "batch number"
+msgstr ""
+
+#: judge/models/submission.py:205
+msgid "judging feedback"
+msgstr "tesztelési visszajelzés"
+
+#: judge/models/submission.py:206
+msgid "extended judging feedback"
+msgstr ""
+
+#: judge/models/submission.py:207
+msgid "program output"
+msgstr "program kimenet"
+
+#: judge/models/submission.py:214
+msgid "submission test case"
+msgstr ""
+
+#: judge/models/submission.py:215
+msgid "submission test cases"
+msgstr ""
+
+#: judge/models/ticket.py:10
+msgid "ticket title"
+msgstr "hibajegy címe"
+
+#: judge/models/ticket.py:11
+msgid "ticket creator"
+msgstr "hibajegy készítője"
+
+#: judge/models/ticket.py:13
+msgid "creation time"
+msgstr "létrehozás ideje"
+
+#: judge/models/ticket.py:14
+msgid "assignees"
+msgstr ""
+
+#: judge/models/ticket.py:15
+msgid "quick notes"
+msgstr ""
+
+#: judge/models/ticket.py:16
+msgid "Staff notes for this issue to aid in processing."
+msgstr ""
+
+#: judge/models/ticket.py:17
+msgid "linked item type"
+msgstr ""
+
+#: judge/models/ticket.py:19
+msgid "linked item ID"
+msgstr ""
+
+#: judge/models/ticket.py:21
+msgid "is ticket open?"
+msgstr "nyitva a jegy?"
+
+#: judge/models/ticket.py:25
+msgid "ticket"
+msgstr "hibajegy"
+
+#: judge/models/ticket.py:27
+msgid "poster"
+msgstr ""
+
+#: judge/models/ticket.py:30
+msgid "message time"
+msgstr ""
+
+#: judge/pdf_problems.py:136 judge/pdf_problems.py:188
+#: judge/pdf_problems.py:248
+msgid "Page [page] of [topage]"
+msgstr ""
+
+#: judge/tasks/submission.py:42
+msgid "Modifying submissions"
+msgstr ""
+
+#: judge/tasks/submission.py:55
+msgid "Recalculating user points"
+msgstr ""
+
+#: judge/utils/problem_data.py:63
+msgid "Empty batches not allowed."
+msgstr ""
+
+#: judge/utils/problem_data.py:82
+#, python-format
+msgid "Points must be defined for non-batch case #%d."
+msgstr ""
+
+#: judge/utils/problem_data.py:87
+#, python-format
+msgid "Input file for case %d does not exist: %s"
+msgstr "Bemeneti fájl a %d esetre nem létezik: %s"
+
+#: judge/utils/problem_data.py:90
+#, python-format
+msgid "Output file for case %d does not exist: %s"
+msgstr "Kimeneti fájl a %d esetre nem létezik: %s"
+
+#: judge/utils/problem_data.py:115
+#, python-format
+msgid "Batch start case #%d requires points."
+msgstr ""
+
+#: judge/utils/problem_data.py:136
+#, python-format
+msgid "Attempt to end batch outside of one in case #%d"
+msgstr ""
+
+#: judge/utils/problem_data.py:154
+msgid "How did you corrupt the zip path?"
+msgstr ""
+
+#: judge/utils/problem_data.py:160
+msgid "How did you corrupt the generator path?"
+msgstr ""
+
+#: judge/utils/problems.py:76
+msgid "Can't pass both queryset and keyword filters"
+msgstr ""
+
+#: judge/utils/problems.py:87
+msgid "Wrong"
+msgstr ""
+
+#: judge/utils/problems.py:89
+msgid "Timeout"
+msgstr ""
+
+#: judge/utils/problems.py:90
+msgid "Error"
+msgstr ""
+
+#: judge/utils/pwned.py:101
+msgid "Your password can't be a commonly used password."
+msgstr ""
+
+#: judge/utils/pwned.py:102
+msgid "This password is too common."
+msgstr ""
+
+#: judge/utils/timedelta.py:49
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
 msgstr[0] "%d nap %h:%m:%s"
 msgstr[1] "%d nap %h:%m:%s"
 
-#: .\judge\jinja2\timedelta.py:56
+#: judge/utils/timedelta.py:53
 msgctxt "time format without day"
 msgid "%h:%m:%s"
 msgstr "%h:%m:%s"
 
-#: .\judge\jinja2\timedelta.py:62
+#: judge/utils/timedelta.py:59
 msgctxt "time format no seconds with day"
 msgid "%d day %h:%m"
 msgid_plural "%d days %h:%m"
 msgstr[0] "%d nap %h:%m"
 msgstr[1] "%d nap %h:%m"
 
-#: .\judge\jinja2\timedelta.py:64
+#: judge/utils/timedelta.py:61
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d nap"
 msgstr[1] "%d nap"
 
-#: .\judge\jinja2\timedelta.py:66
+#: judge/utils/timedelta.py:63
 msgctxt "hours and minutes"
 msgid "%h:%m"
 msgstr "%h:%m"
 
-#: .\judge\models\choices.py:60
-msgid "Leave as LaTeX"
-msgstr "Hagy LaTeX-ként"
-
-#: .\judge\models\choices.py:61
-msgid "SVG with PNG fallback"
-msgstr "SVG PNG fallbackkel"
-
-#: .\judge\models\choices.py:62
-msgid "MathML only"
-msgstr "Csak MathML"
-
-#: .\judge\models\choices.py:63
-msgid "MathJax with SVG/PNG fallback"
-msgstr "MathJax SVG/PNG fallback-kel"
-
-#: .\judge\models\choices.py:64
-msgid "Detect best quality"
-msgstr "Legjobb minőség detektálása"
-
-#: .\judge\models\comment.py:36
-msgid "commenter"
-msgstr "hozzászóló"
-
-#: .\judge\models\comment.py:37
-msgid "posted time"
-msgstr "hozzászólás ideje"
-
-#: .\judge\models\comment.py:38
-msgid "associated Page"
-msgstr "kapcsolódó Lap"
-
-#: .\judge\models\comment.py:40
-msgid "Page code must be ^[pc]:[a-z0-9]+$|^b:\\d+$"
-msgstr "A lap azonosítójának ^[pc]:[a-z0-9]+$|^b:\\d+$ kell lennie"
-
-#: .\judge\models\comment.py:41
-msgid "votes"
-msgstr "szavazatok"
-
-#: .\judge\models\comment.py:42
-msgid "title of comment"
-msgstr "hozzászólás címe"
-
-#: .\judge\models\comment.py:43
-msgid "body of comment"
-msgstr "hozzászólás törzse"
-
-#: .\judge\models\comment.py:44
-msgid "hide the comment"
-msgstr "hozzászólás elrejtése"
-
-#: .\judge\models\comment.py:45
-msgid "parent"
-msgstr "előzmény"
-
-#: .\judge\models\comment.py:49
-msgid "comment"
-msgstr "hozzászólás"
-
-#: .\judge\models\comment.py:50
-msgid "comments"
-msgstr "hozzászólások"
-
-#: .\judge\models\comment.py:115 .\judge\models\problem.py:353
-#, python-format
-msgid "Editorial for %s"
-msgstr "Megoldási útmutató %s-hez"
-
-#: .\judge\models\comment.py:146
-msgid "comment vote"
-msgstr "hozzászólás értékelése"
-
-#: .\judge\models\comment.py:147
-msgid "comment votes"
-msgstr "hozzászólás értékelései"
-
-#: .\judge\models\contest.py:20
-msgid "Invalid colour."
-msgstr "Érvénytelen szín."
-
-#: .\judge\models\contest.py:22
-msgid "tag name"
-msgstr "címke neve"
-
-#: .\judge\models\contest.py:23
-msgid "Lowercase letters and hyphens only."
-msgstr "Csak kisbetűk és kötőjelek."
-
-#: .\judge\models\contest.py:24
-msgid "tag colour"
-msgstr "címke színe"
-
-#: .\judge\models\contest.py:25
-msgid "tag description"
-msgstr "címke leírása"
-
-#: .\judge\models\contest.py:44
-msgid "contest tag"
-msgstr "verseny címkéje"
-
-#: .\judge\models\contest.py:45 .\judge\models\contest.py:87
-msgid "contest tags"
-msgstr "verseny cimkéi"
-
-#: .\judge\models\contest.py:49
-msgid "contest id"
-msgstr "verseny azonosítója"
-
-#: .\judge\models\contest.py:50
-msgid "Contest id must be ^[a-z0-9]+$"
-msgstr "A verseny azonosítójának ^[a-z0-9]+$ kell lennie"
-
-#: .\judge\models\contest.py:51
-msgid "contest name"
-msgstr "verseny neve"
-
-#: .\judge\models\contest.py:52
-msgid "These people will be able to edit the contest."
-msgstr "Ezek az emberek szerkeszthetik a versenyt."
-
-#: .\judge\models\contest.py:54 .\judge\models\runtime.py:118
-msgid "description"
-msgstr "leírás"
-
-#: .\judge\models\contest.py:55 .\judge\models\problem.py:304
-#: .\judge\models\runtime.py:120
-msgid "problems"
-msgstr "feladatok"
-
-#: .\judge\models\contest.py:56 .\judge\models\contest.py:182
-msgid "start time"
-msgstr "kezdés"
-
-#: .\judge\models\contest.py:57
-msgid "end time"
-msgstr "befejezés"
-
-#: .\judge\models\contest.py:58 .\judge\models\problem.py:109
-#: .\judge\models\problem.py:328
-msgid "time limit"
-msgstr "időkorlát"
-
-#: .\judge\models\contest.py:59 .\judge\models\problem.py:115
-msgid "publicly visible"
-msgstr "nyilvánosan látható"
-
-#: .\judge\models\contest.py:60
-msgid "Should be set even for organization-private contests, where it determines whether the contest is visible to members of the specified organizations."
-msgstr "Azt határozza meg, hogy a verseny a megadott szervezetek tagjai számára látható-e. Célszerű meghatározni még szervezeten belüli-privát versenyeken is."
-
-#: .\judge\models\contest.py:63
-msgid "contest rated"
-msgstr "értékelt verseny"
-
-#: .\judge\models\contest.py:63
-msgid "Whether this contest can be rated."
-msgstr "Hogy ez a verseny értékelhető-e."
-
-#: .\judge\models\contest.py:65
-msgid "hide scoreboard"
-msgstr ""
-
-#: .\judge\models\contest.py:66
-msgid "Whether the scoreboard should remain hidden for the duration of the contest."
-msgstr ""
-
-#: .\judge\models\contest.py:69
-msgid "no comments"
-msgstr "nincsenek hozzászólások"
-
-#: .\judge\models\contest.py:70
-msgid "Use clarification system instead of comments."
-msgstr "A pontosítási rendszer használata hozzászólások helyett."
-
-#: .\judge\models\contest.py:72
-msgid "rate all"
-msgstr "összes értékelése"
-
-#: .\judge\models\contest.py:72
-msgid "Rate all users who joined."
-msgstr "Értékelése az összes felhasználónak, aki csatlakozott."
-
-#: .\judge\models\contest.py:73
-msgid "exclude from ratings"
-msgstr "kizárás a értékelésből"
-
-#: .\judge\models\contest.py:75
-msgid "private to organizations"
-msgstr "privát a csoport számára"
-
-#: .\judge\models\contest.py:76
-msgid "hide problem tags"
-msgstr "feladat címkék elrejtése"
-
-#: .\judge\models\contest.py:77
-msgid "Whether problem tags should be hidden by default."
-msgstr ""
-
-#: .\judge\models\contest.py:79
-msgid "run pretests only"
-msgstr "csak pretesztek futtatása"
-
-#: .\judge\models\contest.py:80
-msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
-msgstr ""
-
-#: .\judge\models\contest.py:84 .\judge\models\profile.py:64
-msgid "organizations"
-msgstr "csoportok"
-
-#: .\judge\models\contest.py:85
-msgid "If private, only these organizations may see the contest"
-msgstr "Ha privát, csak ezek a csoportok láthatják a versenyt"
-
-#: .\judge\models\contest.py:86 .\judge\models\problem.py:123
-msgid "OpenGraph image"
-msgstr "OpenGraph kép"
-
-#: .\judge\models\contest.py:88
-msgid "the amount of live participants"
-msgstr "az éles résztvevők száma"
-
-#: .\judge\models\contest.py:89
-msgid "contest summary"
-msgstr "verseny összefoglaló"
-
-#: .\judge\models\contest.py:90 .\judge\models\problem.py:125
-msgid "Plain-text, shown in meta description tag, e.g. for social media."
-msgstr ""
-
-#: .\judge\models\contest.py:91 .\judge\models\profile.py:41
-msgid "access code"
-msgstr "hozzáférési kód"
-
-#: .\judge\models\contest.py:92
-msgid "An optional code to prompt contestants before they are allowed to join the contest. Leave it blank to disable."
-msgstr ""
-
-#: .\judge\models\contest.py:169
-msgid "See private contests"
-msgstr "Privát versenyek mutatása"
-
-#: .\judge\models\contest.py:170
-msgid "Edit own contests"
-msgstr "Saját versenyek szerkesztése"
-
-#: .\judge\models\contest.py:171
-msgid "Edit all contests"
-msgstr "Az összes verseny szerkesztése"
-
-#: .\judge\models\contest.py:172
-msgid "Rate contests"
-msgstr "Versenyek értékelése"
-
-#: .\judge\models\contest.py:173
-msgid "Contest access codes"
-msgstr "Verseny hozzáférési kódok"
-
-#: .\judge\models\contest.py:175 .\judge\models\contest.py:263
-#: .\judge\models\contest.py:298
-msgid "contest"
-msgstr "verseny"
-
-#: .\judge\models\contest.py:176
-msgid "contests"
-msgstr "versenyek"
-
-#: .\judge\models\contest.py:180
-msgid "associated contest"
-msgstr ""
-
-#: .\judge\models\contest.py:181 .\judge\models\contest.py:297
-#: .\judge\models\profile.py:173
-msgid "user"
-msgstr "felhasználó"
-
-#: .\judge\models\contest.py:183
-msgid "score"
-msgstr "pontszám"
-
-#: .\judge\models\contest.py:184
-msgid "cumulative time"
-msgstr "összes idő"
-
-#: .\judge\models\contest.py:185
-msgid "virtual participation id"
-msgstr "virtuális részvételi azonosító"
-
-#: .\judge\models\contest.py:186
-msgid "0 means non-virtual, otherwise the n-th virtual participation"
-msgstr "A 0 nem virtuális, egyébként az n. virtuális részvétel"
-
-#: .\judge\models\contest.py:249
-#, python-format
-msgid "%s spectating in %s"
-msgstr "%s megfigyel %s-ben"
-
-#: .\judge\models\contest.py:251
-#, python-format
-msgid "%s in %s, v%d"
-msgstr "%s en %s, v%d"
-
-#: .\judge\models\contest.py:252
-#, python-format
-msgid "%s in %s"
-msgstr "%s %s-ben"
-
-#: .\judge\models\contest.py:255
-msgid "contest participation"
-msgstr "verseny részvétel"
-
-#: .\judge\models\contest.py:256
-msgid "contest participations"
-msgstr "verseny részvételek"
-
-#: .\judge\models\contest.py:262 .\judge\models\contest.py:282
-#: .\judge\models\problem.py:303 .\judge\models\problem.py:308
-#: .\judge\models\problem.py:326 .\judge\models\problem_data.py:34
-msgid "problem"
-msgstr "feladat"
-
-#: .\judge\models\contest.py:264 .\judge\models\contest.py:286
-#: .\judge\models\problem.py:112
-msgid "points"
-msgstr "pontok"
-
-#: .\judge\models\contest.py:265
-msgid "partial"
-msgstr "részleges"
-
-#: .\judge\models\contest.py:266 .\judge\models\contest.py:287
-msgid "is pretested"
-msgstr "pretesztes-e"
-
-#: .\judge\models\contest.py:267 .\judge\models\interface.py:43
-msgid "order"
-msgstr "sorrend"
-
-#: .\judge\models\contest.py:268
-msgid "output prefix length override"
-msgstr ""
-
-#: .\judge\models\contest.py:269
-msgid "Maximum number of submissions for this problem, or 0 for no limit."
-msgstr "A feltöltések maximális száma, 0 esetén nincs korlát."
-
-#: .\judge\models\contest.py:271
-msgid "Why include a problem you can't submit to?"
-msgstr ""
-
-#: .\judge\models\contest.py:276
-msgid "contest problem"
-msgstr "versenyfeladat"
-
-#: .\judge\models\contest.py:277
-msgid "contest problems"
-msgstr "versenyfeladatok"
-
-#: .\judge\models\contest.py:281 .\judge\models\submission.py:149
-msgid "submission"
-msgstr "feltöltés"
-
-#: .\judge\models\contest.py:284 .\judge\models\contest.py:299
-msgid "participation"
-msgstr "részvétel"
-
-#: .\judge\models\contest.py:288
-msgid "Whether this submission was ran only on pretests."
-msgstr ""
-
-#: .\judge\models\contest.py:292
-msgid "contest submission"
-msgstr "verseny feltöltés"
-
-#: .\judge\models\contest.py:293
-msgid "contest submissions"
-msgstr "verseny feltöltések"
-
-#: .\judge\models\contest.py:300
-msgid "rank"
-msgstr "helyezés"
-
-#: .\judge\models\contest.py:301
-msgid "rating"
-msgstr "értékelés"
-
-#: .\judge\models\contest.py:302
-msgid "volatility"
-msgstr "volatilitás"
-
-#: .\judge\models\contest.py:303
-msgid "last rated"
-msgstr "utolsó értékelt"
-
-#: .\judge\models\contest.py:307
-msgid "contest rating"
-msgstr "verseny értékelés"
-
-#: .\judge\models\contest.py:308
-msgid "contest ratings"
-msgstr "verseny értékelések"
-
-#: .\judge\models\interface.py:24
-msgid "configuration item"
-msgstr "konfigurációs elem"
-
-#: .\judge\models\interface.py:25
-msgid "miscellaneous configuration"
-msgstr "vegyes konfigurációk"
-
-#: .\judge\models\interface.py:37
-msgid "navigation item"
-msgstr "navigációs elem"
-
-#: .\judge\models\interface.py:38
-msgid "navigation bar"
-msgstr "navigációs sáv"
-
-#: .\judge\models\interface.py:44 .\judge\models\profile.py:22
-msgid "identifier"
-msgstr "azonosító"
-
-#: .\judge\models\interface.py:45
-msgid "label"
-msgstr "címke"
-
-#: .\judge\models\interface.py:47
-msgid "highlight regex"
-msgstr "regex kijelölése"
-
-#: .\judge\models\interface.py:48
-msgid "parent item"
-msgstr "szülő elem"
-
-#: .\judge\models\interface.py:65
-msgid "post title"
-msgstr "bejegyzés címe"
-
-#: .\judge\models\interface.py:66 .\judge\models\problem.py:342
-msgid "authors"
-msgstr "szerzők"
-
-#: .\judge\models\interface.py:67
-msgid "slug"
-msgstr "csonk"
-
-#: .\judge\models\interface.py:68 .\judge\models\problem.py:340
-msgid "public visibility"
-msgstr "láthatóság"
-
-#: .\judge\models\interface.py:69
-msgid "sticky"
-msgstr "kiemelt"
-
-#: .\judge\models\interface.py:70
-msgid "publish after"
-msgstr "közzététel ezután"
-
-#: .\judge\models\interface.py:71
-msgid "post content"
-msgstr "tartalom küldése"
-
-#: .\judge\models\interface.py:72
-msgid "post summary"
-msgstr "tartalom összefoglalója"
-
-#: .\judge\models\interface.py:73
-msgid "openGraph image"
-msgstr "openGraph kép"
-
-#: .\judge\models\interface.py:90
-msgid "Edit all posts"
-msgstr "Összes poszt szerkesztése"
-
-#: .\judge\models\interface.py:92
-msgid "blog post"
-msgstr "blog poszt"
-
-#: .\judge\models\interface.py:93
-msgid "blog posts"
-msgstr "blog posztok"
-
-#: .\judge\models\message.py:10
-msgid "message title"
-msgstr "üzenet címe"
-
-#: .\judge\models\message.py:11 .\judge\models\ticket.py:27
-msgid "message body"
-msgstr "üzenet törzse"
-
-#: .\judge\models\message.py:12
-msgid "sender"
-msgstr "küldő"
-
-#: .\judge\models\message.py:13
-msgid "target"
-msgstr "címzett"
-
-#: .\judge\models\message.py:14
-msgid "message timestamp"
-msgstr "üzenet időbélyege"
-
-#: .\judge\models\message.py:15
-msgid "read"
-msgstr "olvas"
-
-#: .\judge\models\message.py:19
-msgid "messages in the thread"
-msgstr "üzenetek a szálban"
-
-#: .\judge\models\problem.py:26
-msgid "problem category ID"
-msgstr "feladat kategória azonosító"
-
-#: .\judge\models\problem.py:27
-msgid "problem category name"
-msgstr "feladat kategória név"
-
-#: .\judge\models\problem.py:34
-msgid "problem type"
-msgstr "feladat típus"
-
-#: .\judge\models\problem.py:35 .\judge\models\problem.py:107
-msgid "problem types"
-msgstr "feladat típusok"
-
-#: .\judge\models\problem.py:39
-msgid "problem group ID"
-msgstr "feladat csoport azonosító"
-
-#: .\judge\models\problem.py:40
-msgid "problem group name"
-msgstr "feladat csoport név"
-
-#: .\judge\models\problem.py:47 .\judge\models\problem.py:108
-msgid "problem group"
-msgstr "feladat csoport"
-
-#: .\judge\models\problem.py:48
-msgid "problem groups"
-msgstr "feladat csoport nevek"
-
-#: .\judge\models\problem.py:52
-msgid "key"
-msgstr "kulcs"
-
-#: .\judge\models\problem.py:54
-msgid "link"
-msgstr "link"
-
-#: .\judge\models\problem.py:55
-msgid "full name"
-msgstr "teljes név"
-
-#: .\judge\models\problem.py:56 .\judge\models\profile.py:26
-#: .\judge\models\runtime.py:20
-msgid "short name"
-msgstr "rövid név"
-
-#: .\judge\models\problem.py:57
-msgid "Displayed on pages under this license"
-msgstr ""
-
-#: .\judge\models\problem.py:58
-msgid "icon"
-msgstr "ikon"
-
-#: .\judge\models\problem.py:58
-msgid "URL to the icon"
-msgstr "URL az ikonhoz"
-
-#: .\judge\models\problem.py:59
-msgid "license text"
-msgstr "licenc szöveg"
-
-#: .\judge\models\problem.py:68
-msgid "license"
-msgstr "licenc"
-
-#: .\judge\models\problem.py:69
-msgid "licenses"
-msgstr "licencek"
-
-#: .\judge\models\problem.py:96
-msgid "problem code"
-msgstr "feladat azonosító"
-
-#: .\judge\models\problem.py:97
-msgid "Problem code must be ^[a-z0-9]+$"
-msgstr "A feladat azonosítónak ^[a-z0-9]+$ kell lennie"
-
-#: .\judge\models\problem.py:98
-msgid "problem name"
-msgstr "feladat név"
-
-#: .\judge\models\problem.py:99
-msgid "problem body"
-msgstr "feladat törzs"
-
-#: .\judge\models\problem.py:100
-msgid "creators"
-msgstr "szerzők"
-
-#: .\judge\models\problem.py:101
-msgid "curators"
-msgstr "kurátorok"
-
-#: .\judge\models\problem.py:102
-msgid "These users will be able to edit a problem, but not be publicly shown as an author."
-msgstr "Ezek a felhasználók szerkeszthetik majd a feladatot, de nem jelennek meg szerzőként."
-
-#: .\judge\models\problem.py:104
-msgid "testers"
-msgstr "tesztelők"
-
-#: .\judge\models\problem.py:106
-msgid "These users will be able to view a private problem, but not edit it."
-msgstr ""
-
-#: .\judge\models\problem.py:109
-msgid "The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported."
-msgstr "A feladat időlimitje másodpercekben. Tört másodperceket (pl. 1.5) is írhatunk."
-
-#: .\judge\models\problem.py:110 .\judge\models\problem.py:329
-msgid "memory limit"
-msgstr "memória korlát"
-
-#: .\judge\models\problem.py:110
-msgid "The memory limit for this problem, in kilobytes (e.g. 64mb = 65536 kilobytes)."
-msgstr "A feladat memória limitje kilobyte-okban (pl. 64mb = 65536 kilobyte)."
-
-#: .\judge\models\problem.py:113
-msgid "allows partial points"
-msgstr "részleges pontok engedélyezése"
-
-#: .\judge\models\problem.py:114
-msgid "allowed languages"
-msgstr "engedélyezett nyelvek"
-
-#: .\judge\models\problem.py:116
-msgid "manually managed"
-msgstr "manuáisan kezelt"
-
-#: .\judge\models\problem.py:117
-msgid "Whether judges should be allowed to manage data or not"
-msgstr ""
-
-#: .\judge\models\problem.py:118
-msgid "date of publishing"
-msgstr "publikálás ideje"
-
-#: .\judge\models\problem.py:119
-msgid "Doesn't have magic ability to auto-publish due to backward compatibility"
-msgstr ""
-
-#: .\judge\models\problem.py:120
-msgid "personae non gratae"
-msgstr "nemkívánatos személy"
-
-#: .\judge\models\problem.py:121
-msgid "Bans the selected users from submitting to this problem"
-msgstr "A kiválasztott felhasználók eltiltása a feladat megoldásától"
-
-#: .\judge\models\problem.py:124
-msgid "problem summary"
-msgstr "feladat összefoglaló"
-
-#: .\judge\models\problem.py:126
-msgid "amount of users"
-msgstr "felhasználók száma"
-
-#: .\judge\models\problem.py:127
-msgid "The amount of users on the best solutions page."
-msgstr ""
-
-#: .\judge\models\problem.py:128
-msgid "rate of AC submissions"
-msgstr "AC feltöltések aránya"
-
-#: .\judge\models\problem.py:309 .\judge\models\problem.py:327
-#: .\judge\models\runtime.py:96
-msgid "language"
-msgstr "nyelv"
-
-#: .\judge\models\problem.py:310
-msgid "translated name"
-msgstr "lefordított név"
-
-#: .\judge\models\problem.py:311
-msgid "translated description"
-msgstr "lefordított leírás"
-
-#: .\judge\models\problem.py:315
-msgid "problem translation"
-msgstr "feladat fordítás"
-
-#: .\judge\models\problem.py:316
-msgid "problem translations"
-msgstr "feladat fordítások"
-
-#: .\judge\models\problem.py:320
-msgid "clarified problem"
-msgstr "pontosított feladat"
-
-#: .\judge\models\problem.py:321
-msgid "clarification body"
-msgstr "pontosítás törzse"
-
-#: .\judge\models\problem.py:322
-msgid "clarification timestamp"
-msgstr "pontosítás időbélyege"
-
-#: .\judge\models\problem.py:333
-msgid "language-specific resource limit"
-msgstr "nyelv specifikus erőforrás korlát"
-
-#: .\judge\models\problem.py:334
-msgid "language-specific resource limits"
-msgstr "nyelv specifikus erőforrás korlátok"
-
-#: .\judge\models\problem.py:338
-msgid "associated problem"
-msgstr "hozzárendelt probléma"
-
-#: .\judge\models\problem.py:341
-msgid "publish date"
-msgstr "publikálás dátuma"
-
-#: .\judge\models\problem.py:343
-msgid "editorial content"
-msgstr "megoldási útmutató tartalom"
-
-#: .\judge\models\problem.py:359
-msgid "solution"
-msgstr "megoldás"
-
-#: .\judge\models\problem.py:360
-msgid "solutions"
-msgstr "megoldások"
-
-#: .\judge\models\problem_data.py:23
-msgid "Standard"
-msgstr "Alapértelmezett"
-
-#: .\judge\models\problem_data.py:24
-msgid "Floats"
-msgstr "Lebegőpontosak"
-
-#: .\judge\models\problem_data.py:25
-msgid "Floats (absolute)"
-msgstr "Lebegőpontosak (abszolút)"
-
-#: .\judge\models\problem_data.py:26
-msgid "Floats (relative)"
-msgstr "Lebegőpontosak (relatív)"
-
-#: .\judge\models\problem_data.py:27
-msgid "Non-trailing spaces"
-msgstr ""
-
-#: .\judge\models\problem_data.py:28
-msgid "Unordered"
-msgstr "Rendezetlen"
-
-#: .\judge\models\problem_data.py:29
-msgid "Byte identical"
-msgstr "Bájtonként azonos"
-
-#: .\judge\models\problem_data.py:35
-msgid "data zip file"
-msgstr "adat zip fájl"
-
-#: .\judge\models\problem_data.py:37
-msgid "generator file"
-msgstr "generátor fájl"
-
-#: .\judge\models\problem_data.py:39 .\judge\models\problem_data.py:87
-msgid "output prefix length"
-msgstr "kimeneti prefix hossza"
-
-#: .\judge\models\problem_data.py:40 .\judge\models\problem_data.py:88
-msgid "output limit length"
-msgstr "kimenet hossz limitje"
-
-#: .\judge\models\problem_data.py:41
-msgid "init.yml generation feedback"
-msgstr "init.yml generálás visszajelzése"
-
-#: .\judge\models\problem_data.py:42 .\judge\models\problem_data.py:89
-msgid "checker"
-msgstr "checker"
-
-#: .\judge\models\problem_data.py:43 .\judge\models\problem_data.py:90
-msgid "checker arguments"
-msgstr "checker argumentumai"
-
-#: .\judge\models\problem_data.py:44 .\judge\models\problem_data.py:91
-msgid "checker arguments as a JSON object"
-msgstr "chceker argumentumai JSON objektumként"
-
-#: .\judge\models\problem_data.py:75
-msgid "problem data set"
-msgstr "feladat adathalmaz"
-
-#: .\judge\models\problem_data.py:76
-msgid "case position"
-msgstr "eset hely"
-
-#: .\judge\models\problem_data.py:77
-msgid "case type"
-msgstr "eset típus"
-
-#: .\judge\models\problem_data.py:78
-msgid "Normal case"
-msgstr "Normál eset"
-
-#: .\judge\models\problem_data.py:79
-msgid "Batch start"
-msgstr "Batch kezdete"
-
-#: .\judge\models\problem_data.py:80
-msgid "Batch end"
-msgstr "Batch vége"
-
-#: .\judge\models\problem_data.py:82
-msgid "input file name"
-msgstr "bemeneti fájl név"
-
-#: .\judge\models\problem_data.py:83
-msgid "output file name"
-msgstr "kimeneti fájl név"
-
-#: .\judge\models\problem_data.py:84
-msgid "generator arguments"
-msgstr "generátor argumentumai"
-
-#: .\judge\models\problem_data.py:85
-msgid "point value"
-msgstr "pont érték"
-
-#: .\judge\models\problem_data.py:86
-msgid "case is pretest?"
-msgstr "ez az eset preteszt?"
-
-#: .\judge\models\profile.py:21
-msgid "organization title"
-msgstr "csoport neve"
-
-#: .\judge\models\profile.py:23
-msgid "Organization name shows in URL"
-msgstr "Csoport név látszik az URL-ben"
-
-#: .\judge\models\profile.py:27
-msgid "Displayed beside user name during contests"
-msgstr "A felhasználóinév mellett van a versenyek alatt"
-
-#: .\judge\models\profile.py:28
-msgid "organization description"
-msgstr "csoport leírás"
-
-#: .\judge\models\profile.py:29
-msgid "registrant"
-msgstr "nyilvántartóba felvett személy"
-
-#: .\judge\models\profile.py:31
-msgid "User who registered this organization"
-msgstr "Felhasználók akik regisztrálták ezt a csoportot"
-
-#: .\judge\models\profile.py:32
-msgid "administrators"
-msgstr "adminisztrátorok"
-
-#: .\judge\models\profile.py:33
-msgid "Those who can edit this organization"
-msgstr "Azok, akik szerkeszteni tudják ezt a csoportot"
-
-#: .\judge\models\profile.py:34
-msgid "creation date"
-msgstr "létrehozás dátuma"
-
-#: .\judge\models\profile.py:35
-msgid "is open organization?"
-msgstr "nyílt-e a csoport?"
-
-#: .\judge\models\profile.py:36
-msgid "Allow joining organization"
-msgstr "A csoportba való belépés engedélyezése"
-
-#: .\judge\models\profile.py:37
-msgid "maximum size"
-msgstr "maximális méret"
-
-#: .\judge\models\profile.py:38
-msgid "Maximum amount of users in this organization, only applicable to private organizations"
-msgstr "Maximális felhasználó szám ebben a csoportban, csak privát csoportokra érvényes"
-
-#: .\judge\models\profile.py:40
-msgid "Student access code"
-msgstr "Tanulói hozzáférési kódok"
-
-#: .\judge\models\profile.py:63 .\judge\models\profile.py:80
-#: .\judge\models\profile.py:174
-msgid "organization"
-msgstr "csoport"
-
-#: .\judge\models\profile.py:68
-msgid "user associated"
-msgstr "felhasználóhoz társult"
-
-#: .\judge\models\profile.py:69
-msgid "display name"
-msgstr "megjelenített név"
-
-#: .\judge\models\profile.py:70
-msgid "self-description"
-msgstr "önleírás"
-
-#: .\judge\models\profile.py:71
-msgid "location"
-msgstr "helyszín"
-
-#: .\judge\models\profile.py:73
-msgid "preferred language"
-msgstr "preferált nyelv"
-
-#: .\judge\models\profile.py:78
-msgid "last access time"
-msgstr "utolsó belépés ideje"
-
-#: .\judge\models\profile.py:79
-msgid "last IP"
-msgstr "utolsó IP"
-
-#: .\judge\models\profile.py:82
-msgid "display rank"
-msgstr "megjelenített rang"
-
-#: .\judge\models\profile.py:84
-msgid "comment mute"
-msgstr "hozzászólás lenémítása"
-
-#: .\judge\models\profile.py:84
-msgid "Some users are at their best when silent."
-msgstr "Néhány felhasználó a legjobb amikor csendesek."
-
-#: .\judge\models\profile.py:87
-msgid "user script"
-msgstr "felhasználói szkript"
-
-#: .\judge\models\profile.py:88
-msgid "User-defined JavaScript for site customization."
-msgstr "Felhasználó által meghatározott JavaScript a webhely testreszabásához."
-
-#: .\judge\models\profile.py:89
-msgid "current contest"
-msgstr "jelenlegi verseny"
-
-#: .\judge\models\profile.py:91
-msgid "math engine"
-msgstr "matek motor"
-
-#: .\judge\models\profile.py:93
-msgid "the rendering engine used to render math"
-msgstr "a matek ábrákat renderelő motor"
-
-#: .\judge\models\profile.py:130
-#, python-format
-msgctxt "user display name"
-msgid "%(username)s (%(display)s)"
-msgstr "%(username)s (%(display)s)"
-
-#: .\judge\models\profile.py:168
-msgid "user profile"
-msgstr "felhasználói profil"
-
-#: .\judge\models\profile.py:169
-msgid "user profiles"
-msgstr "felhasználói profilok"
-
-#: .\judge\models\profile.py:175
-msgid "request time"
-msgstr "kérési idő"
-
-#: .\judge\models\profile.py:176
-msgid "state"
-msgstr "állapot"
-
-#: .\judge\models\profile.py:181
-msgid "reason"
-msgstr "ok"
-
-#: .\judge\models\profile.py:184
-msgid "organization join request"
-msgstr "csoport belépési kérelem"
-
-#: .\judge\models\profile.py:185
-msgid "organization join requests"
-msgstr "csoport belépési kérelmek"
-
-#: .\judge\models\runtime.py:15
-msgid "short identifier"
-msgstr "rövid azonosító"
-
-#: .\judge\models\runtime.py:16
-msgid "The identifier for this language; the same as its executor id for judges."
-msgstr "Ennek a nyelvnek az azonosítója ugyanaz mint a bírók végrehajtó id-ja."
-
-#: .\judge\models\runtime.py:18
-msgid "long name"
-msgstr "hosszú név"
-
-#: .\judge\models\runtime.py:19
-msgid "Longer name for the language, e.g. \"Python 2\" or \"C++11\"."
-msgstr ""
-
-#: .\judge\models\runtime.py:21
-msgid "More readable, but short, name to display publicly; e.g. \"PY2\" or \"C++11\". If left blank, it will default to the short identifier."
-msgstr ""
-
-#: .\judge\models\runtime.py:25
-msgid "common name"
-msgstr ""
-
-#: .\judge\models\runtime.py:26
-msgid "Common name for the language. For example, the common name for C++03, C++11, and C++14 would be \"C++\""
-msgstr ""
-
-#: .\judge\models\runtime.py:28
-msgid "ace mode name"
-msgstr ""
-
-#: .\judge\models\runtime.py:29
-msgid "Language ID for Ace.js editor highlighting, appended to \"mode-\" to determine the Ace JavaScript file to use, e.g., \"python\"."
-msgstr ""
-
-#: .\judge\models\runtime.py:31
-msgid "pygments name"
-msgstr ""
-
-#: .\judge\models\runtime.py:32
-msgid "Language ID for Pygments highlighting in source windows."
-msgstr ""
-
-#: .\judge\models\runtime.py:33
-msgid "code template"
-msgstr "kód mintasablon"
-
-#: .\judge\models\runtime.py:34
-msgid "Code template to display in submission editor."
-msgstr ""
-
-#: .\judge\models\runtime.py:35
-msgid "runtime info override"
-msgstr ""
-
-#: .\judge\models\runtime.py:36
-msgid "Do not set this unless you know what you're doing! It will override the usually more specific, judge-provided runtime info!"
-msgstr ""
-
-#: .\judge\models\runtime.py:38
-msgid "language description"
-msgstr "nyelv leírás"
-
-#: .\judge\models\runtime.py:39
-msgid "Use field this to inform users of quirks with your environment, additional restrictions, etc."
-msgstr ""
-
-#: .\judge\models\runtime.py:41
-msgid "extension"
-msgstr "kiterjesztés"
-
-#: .\judge\models\runtime.py:42
-msgid "The extension of source files, e.g., \"py\" or \"cpp\"."
-msgstr ""
-
-#: .\judge\models\runtime.py:97
-msgid "languages"
-msgstr "nyelvek"
-
-#: .\judge\models\runtime.py:101
-msgid "language to which this runtime belongs"
-msgstr ""
-
-#: .\judge\models\runtime.py:102
-msgid "judge on which this runtime exists"
-msgstr ""
-
-#: .\judge\models\runtime.py:103
-msgid "runtime name"
-msgstr "runtime név"
-
-#: .\judge\models\runtime.py:104
-msgid "runtime version"
-msgstr "runtime verzió"
-
-#: .\judge\models\runtime.py:105
-msgid "order in which to display this runtime"
-msgstr ""
-
-#: .\judge\models\runtime.py:109
-msgid "Server name, hostname-style"
-msgstr "Szerver név, hosztnév-szerűen"
-
-#: .\judge\models\runtime.py:110
-msgid "time of creation"
-msgstr "létrehozás dátuma"
-
-#: .\judge\models\runtime.py:111
-msgid "A key to authenticated this judge"
-msgstr "A tesztelőhöz hozzárendelt kulcs"
-
-#: .\judge\models\runtime.py:112
-msgid "authentication key"
-msgstr "hitelesítő kulcs"
-
-#: .\judge\models\runtime.py:113
-msgid "judge online status"
-msgstr "tesztelő státusza"
-
-#: .\judge\models\runtime.py:114
-msgid "judge start time"
-msgstr "tesztelő indítási ideje"
-
-#: .\judge\models\runtime.py:115
-msgid "response time"
-msgstr "válaszidő"
-
-#: .\judge\models\runtime.py:116
-msgid "system load"
-msgstr "rendszer terheltsége"
-
-#: .\judge\models\runtime.py:117
-msgid "Load for the last minute, divided by processors to be fair."
-msgstr ""
-
-#: .\judge\models\runtime.py:121 .\judge\models\runtime.py:156
-msgid "judges"
-msgstr "bírók"
-
-#: .\judge\models\runtime.py:155
-msgid "judge"
-msgstr "bíró"
-
-#: .\judge\models\submission.py:15 .\judge\models\submission.py:41
-#: .\judge\utils\problems.py:81
-msgid "Accepted"
-msgstr "Elfogadva"
-
-#: .\judge\models\submission.py:16 .\judge\models\submission.py:42
-#: .\judge\utils\problems.py:82
-msgid "Wrong Answer"
-msgstr "Rossz válasz"
-
-#: .\judge\models\submission.py:17 .\judge\models\submission.py:44
-#: .\judge\utils\problems.py:84
-msgid "Time Limit Exceeded"
-msgstr "Időlimit túllépés"
-
-#: .\judge\models\submission.py:18 .\judge\models\submission.py:45
-#: .\judge\utils\problems.py:85
-msgid "Memory Limit Exceeded"
-msgstr "Memórialimit túllépés"
-
-#: .\judge\models\submission.py:19 .\judge\models\submission.py:46
-msgid "Output Limit Exceeded"
-msgstr "Kimenetlimint túllépés"
-
-#: .\judge\models\submission.py:20 .\judge\models\submission.py:47
-msgid "Invalid Return"
-msgstr "Érvénytelen visszatérés"
-
-#: .\judge\models\submission.py:21 .\judge\models\submission.py:48
-msgid "Runtime Error"
-msgstr "Futási hiba"
-
-#: .\judge\models\submission.py:22 .\judge\models\submission.py:36
-#: .\judge\models\submission.py:49 .\judge\utils\problems.py:83
-msgid "Compile Error"
-msgstr "Fordítási hiba"
-
-#: .\judge\models\submission.py:23 .\judge\models\submission.py:35
-msgid "Internal Error"
-msgstr "Belső hiba"
-
-#: .\judge\models\submission.py:24
-msgid "Short circuit"
-msgstr ""
-
-#: .\judge\models\submission.py:25 .\judge\models\submission.py:37
-#: .\judge\models\submission.py:55
-msgid "Aborted"
-msgstr "Megszakítva"
-
-#: .\judge\models\submission.py:31 .\judge\models\submission.py:51
-msgid "Queued"
-msgstr "Sorba állítva"
-
-#: .\judge\models\submission.py:32 .\judge\models\submission.py:52
-msgid "Processing"
-msgstr "Feldolgozás alatt"
-
-#: .\judge\models\submission.py:33 .\judge\models\submission.py:53
-msgid "Grading"
-msgstr "Pontozás"
-
-#: .\judge\models\submission.py:34 .\judge\models\submission.py:54
-msgid "Completed"
-msgstr ""
-
-#: .\judge\models\submission.py:50
-msgid "Internal Error (judging server error)"
-msgstr "Belső hiba (tesztelő szerver hiba)"
-
-#: .\judge\models\submission.py:60
-msgid "submission time"
-msgstr ""
-
-#: .\judge\models\submission.py:61 .\judge\models\submission.py:159
-msgid "execution time"
-msgstr "futási idő"
-
-#: .\judge\models\submission.py:62 .\judge\models\submission.py:160
-msgid "memory usage"
-msgstr "memória használat"
-
-#: .\judge\models\submission.py:63 .\judge\models\submission.py:161
-msgid "points granted"
-msgstr ""
-
-#: .\judge\models\submission.py:64
-msgid "submission language"
-msgstr ""
-
-#: .\judge\models\submission.py:65
-msgid "source code"
-msgstr "forráskód"
-
-#: .\judge\models\submission.py:66
-msgid "status"
-msgstr "állapot"
-
-#: .\judge\models\submission.py:67
-msgid "result"
-msgstr "eredmény"
-
-#: .\judge\models\submission.py:69
-msgid "compile errors"
-msgstr "fordítási hibák"
-
-#: .\judge\models\submission.py:71
-msgid "batched cases"
-msgstr ""
-
-#: .\judge\models\submission.py:72
-msgid "test case points"
-msgstr "teszteset pontjai"
-
-#: .\judge\models\submission.py:73
-msgid "test case total points"
-msgstr ""
-
-#: .\judge\models\submission.py:74
-msgid "judged on"
-msgstr "ezen tesztelve"
-
-#: .\judge\models\submission.py:76
-msgid "was rejudged by admin"
-msgstr ""
-
-#: .\judge\models\submission.py:77
-msgid "was ran on pretests only"
-msgstr ""
-
-#: .\judge\models\submission.py:150
-msgid "submissions"
-msgstr ""
-
-#: .\judge\models\submission.py:156
-msgid "associated submission"
-msgstr ""
-
-#: .\judge\models\submission.py:157
-msgid "test case ID"
-msgstr "teszteset azonosító"
-
-#: .\judge\models\submission.py:158
-msgid "status flag"
-msgstr ""
-
-#: .\judge\models\submission.py:162
-msgid "points possible"
-msgstr ""
-
-#: .\judge\models\submission.py:163
-msgid "batch number"
-msgstr ""
-
-#: .\judge\models\submission.py:164
-msgid "judging feedback"
-msgstr "tesztelési visszajelzés"
-
-#: .\judge\models\submission.py:165
-msgid "program output"
-msgstr "program kimenet"
-
-#: .\judge\models\submission.py:172
-msgid "submission test case"
-msgstr ""
-
-#: .\judge\models\submission.py:173
-msgid "submission test cases"
-msgstr ""
-
-#: .\judge\models\ticket.py:10
-msgid "ticket title"
-msgstr "hibajegy címe"
-
-#: .\judge\models\ticket.py:11
-msgid "ticket creator"
-msgstr "hibajegy készítője"
-
-#: .\judge\models\ticket.py:12
-msgid "creation time"
-msgstr "létrehozás ideje"
-
-#: .\judge\models\ticket.py:13
-msgid "assignees"
-msgstr ""
-
-#: .\judge\models\ticket.py:14
-msgid "quick notes"
-msgstr ""
-
-#: .\judge\models\ticket.py:15
-msgid "Staff notes for this issue to aid in processing."
-msgstr ""
-
-#: .\judge\models\ticket.py:16
-msgid "linked item type"
-msgstr ""
-
-#: .\judge\models\ticket.py:18
-msgid "linked item ID"
-msgstr ""
-
-#: .\judge\models\ticket.py:20
-msgid "is ticket open?"
-msgstr "nyitva a jegy?"
-
-#: .\judge\models\ticket.py:24
-msgid "ticket"
-msgstr "hibajegy"
-
-#: .\judge\models\ticket.py:26
-msgid "poster"
-msgstr ""
-
-#: .\judge\models\ticket.py:28
-msgid "message time"
-msgstr ""
-
-#: .\judge\pdf_problems.py:111
-msgid "Page [page] of [topage]"
-msgstr ""
-
-#: .\judge\utils\problem_data.py:63
-msgid "Empty batches not allowed."
-msgstr ""
-
-#: .\judge\utils\problem_data.py:82
-#, python-format
-msgid "Points must be defined for non-batch case #%d."
-msgstr ""
-
-#: .\judge\utils\problem_data.py:87
-#, python-format
-msgid "Input file for case %d does not exist: %s"
-msgstr "Bemeneti fájl a %d esetre nem létezik: %s"
-
-#: .\judge\utils\problem_data.py:90
-#, python-format
-msgid "Output file for case %d does not exist: %s"
-msgstr "Kimeneti fájl a %d esetre nem létezik: %s"
-
-#: .\judge\utils\problem_data.py:115
-#, python-format
-msgid "Batch start case #%d requires points."
-msgstr ""
-
-#: .\judge\utils\problem_data.py:136
-#, python-format
-msgid "Attempt to end batch outside of one in case #%d"
-msgstr ""
-
-#: .\judge\utils\problem_data.py:154
-msgid "How did you corrupt the zip path?"
-msgstr ""
-
-#: .\judge\utils\problem_data.py:160
-msgid "How did you corrupt the generator path?"
-msgstr ""
-
-#: .\judge\utils\problems.py:76
-msgid "Can't pass both queryset and keyword filters"
-msgstr ""
-
-#: .\judge\utils\problems.py:86
-msgid "Other"
-msgstr "Egyéb"
-
-#: .\judge\utils\problems.py:87
-msgid "Total"
-msgstr "Összesen"
-
-#: .\judge\views\blog.py:36
+#: judge/views/blog.py:37
 #, python-format
 msgid "Page %d of Posts"
 msgstr ""
 
-#: .\judge\views\comment.py:27
+#: judge/views/comment.py:27
 msgid "Messing around, are we?"
 msgstr "Játszogatunk, he?"
 
-#: .\judge\views\comment.py:59
+#: judge/views/comment.py:36
+msgid "You must solve at least one problem before you can vote."
+msgstr ""
+
+#: judge/views/comment.py:63
 msgid "You already voted."
 msgstr "Már szavaztál."
 
-#: .\judge\views\comment.py:116 .\judge\views\organization.py:282
+#: judge/views/comment.py:120 judge/views/organization.py:288
 msgid "Edited from site"
 msgstr "Szerkesztve az oldalról"
 
-#: .\judge\views\comment.py:137
+#: judge/views/comment.py:141
 msgid "Editing comment"
 msgstr "Hozzászólás szerkesztése"
 
-#: .\judge\views\contests.py:48 .\judge\views\contests.py:178
-#: .\judge\views\contests.py:181 .\judge\views\contests.py:308
+#: judge/views/contests.py:44 judge/views/contests.py:201
+#: judge/views/contests.py:204 judge/views/contests.py:342
 msgid "No such contest"
 msgstr "Nincs ilyen verseny"
 
-#: .\judge\views\contests.py:49 .\judge\views\contests.py:179
+#: judge/views/contests.py:45 judge/views/contests.py:202
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr "Nem található verseny a \"%s\" kulccsal."
 
-#: .\judge\views\contests.py:72 .\judge\views\contests.py:322
+#: judge/views/contests.py:70
 msgid "Contests"
 msgstr "Versenyek"
 
-#: .\judge\views\contests.py:182
+#: judge/views/contests.py:205
 msgid "Could not find such contest."
 msgstr "Nem található ilyen verseny."
 
-#: .\judge\views\contests.py:185
+#: judge/views/contests.py:208
 #, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr "Hozzáférés a \"%s\" versenyhez megtagadva"
 
-#: .\judge\views\contests.py:236
+#: judge/views/contests.py:262
 msgid "Contest not ongoing"
 msgstr "A verseny nincs folyamatban"
 
-#: .\judge\views\contests.py:237
+#: judge/views/contests.py:263
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "\"%s\" nincs folyamatban."
 
-#: .\judge\views\contests.py:241
+#: judge/views/contests.py:267
 msgid "Already in contest"
 msgstr "Már a versenyben vagy"
 
-#: .\judge\views\contests.py:242
+#: judge/views/contests.py:268
 #, python-format
 msgid "You are already in a contest: \"%s\"."
 msgstr "Már a \"%s\" versenyben vagy."
 
-#: .\judge\views\contests.py:298
+#: judge/views/contests.py:271
+msgid "Banned from joining"
+msgstr ""
+
+#: judge/views/contests.py:272
+msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
+msgstr ""
+
+#: judge/views/contests.py:332
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr "Add meg a hozzáférési kódot a \"%s\"-hoz"
 
-#: .\judge\views\contests.py:309
+#: judge/views/contests.py:343
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "Nem vagy a \"%s\" versenyben."
 
-#: .\judge\views\contests.py:329
-msgid "ContestCalender requires integer year and month"
-msgstr "A ContestCalendar-nak egész évekre és hónapokra van szüksége"
-
-#: .\judge\views\contests.py:504
-msgid "???"
+#: judge/views/contests.py:362
+msgid "ContestCalendar requires integer year and month"
 msgstr ""
 
-#: .\judge\views\contests.py:540
+#: judge/views/contests.py:402
+#, python-format
+msgid "Contests in %(month)s"
+msgstr ""
+
+#: judge/views/contests.py:402
+msgid "F Y"
+msgstr ""
+
+#: judge/views/contests.py:488
+msgid "???"
+msgstr "???"
+
+#: judge/views/contests.py:551
 #, python-format
 msgid "%s Rankings"
 msgstr ""
 
-#: .\judge\views\contests.py:592
-msgid "Live"
-msgstr ""
-
-#: .\judge\views\contests.py:600
+#: judge/views/contests.py:567
 #, python-format
 msgid "Your participation in %s"
 msgstr ""
 
-#: .\judge\views\contests.py:601
+#: judge/views/contests.py:568
 #, python-format
 msgid "%s's participation in %s"
 msgstr ""
 
-#: .\judge\views\contests.py:610 .\templates\contest\contest-tabs.html:13
+#: judge/views/contests.py:572
+msgid "Live"
+msgstr ""
+
+#: judge/views/contests.py:584 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr ""
 
-#: .\judge\views\contests.py:635
+#: judge/views/contests.py:606
 #, python-format
 msgid "Contest tag: %s"
 msgstr ""
 
-#: .\judge\views\error.py:14
+#: judge/views/error.py:14
 msgid "404 error"
 msgstr "404-es hiba"
 
-#: .\judge\views\error.py:15
+#: judge/views/error.py:15
 #, python-format
 msgid "Could not find page \"%s\""
 msgstr "Nem található a \"%s\" oldal"
 
-#: .\judge\views\error.py:21
+#: judge/views/error.py:22
 #, python-format
 msgid "no permission for %s"
 msgstr ""
 
-#: .\judge\views\error.py:27
+#: judge/views/error.py:30
 #, python-format
 msgid "corrupt page %s"
 msgstr ""
 
-#: .\judge\views\language.py:12 .\templates\status\judge-status-table.html:9
-#: .\templates\status\status-tabs.html:5
+#: judge/views/language.py:12 templates/status/judge-status-table.html:9
+#: templates/status/status-tabs.html:5
 msgid "Runtimes"
 msgstr ""
 
-#: .\judge\views\organization.py:43 .\judge\views\organization.py:46
+#: judge/views/organization.py:39 judge/views/organization.py:42
 msgid "No such organization"
 msgstr "Nincs ilyen csoport"
 
-#: .\judge\views\organization.py:44
+#: judge/views/organization.py:40
 #, python-format
 msgid "Could not find an organization with the key \"%s\"."
 msgstr "Nem található csoport a \"%s\" kulccsal."
 
-#: .\judge\views\organization.py:47
+#: judge/views/organization.py:43
 msgid "Could not find such organization."
 msgstr "Nem található ilyen csoport."
 
-#: .\judge\views\organization.py:62 .\judge\views\register.py:35
-#: .\templates\organization\list.html:15 .\templates\user\user-list-tabs.html:5
+#: judge/views/organization.py:67 judge/views/register.py:34
+#: templates/organization/list.html:15 templates/user/user-list-tabs.html:5
 msgid "Organizations"
 msgstr "Csoportok"
 
-#: .\judge\views\organization.py:83
+#: judge/views/organization.py:88
 #, python-format
 msgid "%s Members"
 msgstr "%s Tagok"
 
-#: .\judge\views\organization.py:113 .\judge\views\organization.py:115
+#: judge/views/organization.py:113 judge/views/organization.py:116
+#: judge/views/organization.py:121
 msgid "Joining organization"
 msgstr "Belépés a csoportba"
 
-#: .\judge\views\organization.py:113
+#: judge/views/organization.py:113
 msgid "You are already in the organization."
 msgstr "Már benne vagy a csoportba."
 
-#: .\judge\views\organization.py:115
+#: judge/views/organization.py:116
 msgid "This organization is not open."
 msgstr "Ez a csoport nem nyílt."
 
-#: .\judge\views\organization.py:124
+#: judge/views/organization.py:133
 msgid "Leaving organization"
 msgstr "Csoport elhagyása"
 
-#: .\judge\views\organization.py:124
+#: judge/views/organization.py:133
 #, python-format
 msgid "You are not in \"%s\"."
 msgstr "Nem vagy \"%s\"-ben."
 
-#: .\judge\views\organization.py:148
+#: judge/views/organization.py:157
 #, python-format
 msgid "Request to join %s"
 msgstr "Kérés a \"%s\"-hez való csatlakozásra"
 
-#: .\judge\views\organization.py:164
+#: judge/views/organization.py:175
 msgid "Join request detail"
 msgstr "Belépési kérés részletei"
 
-#: .\judge\views\organization.py:193
+#: judge/views/organization.py:203
 #, python-format
 msgid "Managing join requests for %s"
 msgstr "%s belépési kéréseinek kezelése"
 
-#: .\judge\views\organization.py:224
+#: judge/views/organization.py:234
 #, python-format
 msgid "Your organization can only receive %d more members. You cannot approve %d users."
 msgstr "A csoportod csak %d további tagot tud fogadni. Nem tudsz felvenni %d felhasználót."
 
-#: .\judge\views\organization.py:236
+#: judge/views/organization.py:246
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
 msgstr[0] "%d darab felhasználó jóváhagyva."
 msgstr[1] "%d darab felhasználó jóváhagyva."
 
-#: .\judge\views\organization.py:237
+#: judge/views/organization.py:247
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] "%d darab felhasználó elutasítva."
 msgstr[1] "%d darab felhasználó elutasítva."
 
-#: .\judge\views\organization.py:267
+#: judge/views/organization.py:272
 #, python-format
 msgid "Editing %s"
 msgstr "%s szerkesztése"
 
-#: .\judge\views\organization.py:290 .\judge\views\organization.py:298
+#: judge/views/organization.py:296 judge/views/organization.py:304
 msgid "Can't edit organization"
 msgstr "Nem lehet szerkeszteni a csoportot"
 
-#: .\judge\views\organization.py:291
+#: judge/views/organization.py:297
 msgid "You are not allowed to edit this organization."
 msgstr "Nincs jogosultságod szerkeszteni ezt a csoportot."
 
-#: .\judge\views\organization.py:299
+#: judge/views/organization.py:305
 msgid "You are not allowed to kick people from this organization."
 msgstr "Nincs jogosultságod embereket kirúgni ebből a csoportból."
 
-#: .\judge\views\organization.py:304 .\judge\views\organization.py:308
+#: judge/views/organization.py:310 judge/views/organization.py:314
 msgid "Can't kick user"
 msgstr "Nem lehet kirúgni a felhasználót"
 
-#: .\judge\views\organization.py:305
+#: judge/views/organization.py:311
 msgid "The user you are trying to kick does not exist!"
 msgstr "A felhasználó akit megpróbálsz kirúgni nem létezik!"
 
-#: .\judge\views\organization.py:309
+#: judge/views/organization.py:315
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s."
 msgstr "A felhasználó akit ki akarsz rúgni nincs a csoportban: %s."
 
-#: .\judge\views\problem.py:72
+#: judge/views/problem.py:69
 msgid "No such problem"
 msgstr "Nincs ilyen feladat"
 
-#: .\judge\views\problem.py:73
+#: judge/views/problem.py:70
 #, python-format
 msgid "Could not find a problem with the code \"%s\"."
 msgstr ""
 
-#: .\judge\views\problem.py:109
+#: judge/views/problem.py:112
 #, python-brace-format
 msgid "Editorial for {0}"
 msgstr "Megoldás útmutató {0}-hez"
 
-#: .\judge\views\problem.py:112
+#: judge/views/problem.py:115
 #, python-brace-format
 msgid "Editorial for <a href=\"{1}\">{0}</a>"
 msgstr "Megoldási útmutató <a href=\"{1}\">{0}</a>-hez"
 
-#: .\judge\views\problem.py:271 .\templates\contest\contest.html:79
-#: .\templates\user\user-tabs.html:5 .\templates\user\users-table.html:22
+#: judge/views/problem.py:291 templates/contest/contest.html:79
+#: templates/user/user-tabs.html:5 templates/user/users-table.html:23
 msgid "Problems"
 msgstr "Feladatok"
 
-#: .\judge\views\problem.py:527
+#: judge/views/problem.py:552
 msgid "Banned from submitting"
 msgstr "Feltöltéstől eltiltott"
 
-#: .\judge\views\problem.py:528
+#: judge/views/problem.py:553
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
 msgstr "Nemkívánatos személy vagy ennél a feladatnál, így örökre el vagy tiltva a feltöltéstől."
 
-#: .\judge\views\problem.py:539
+#: judge/views/problem.py:566
 msgid "Too many submissions"
 msgstr "Túl sok feltöltés"
 
-#: .\judge\views\problem.py:540
+#: judge/views/problem.py:567
 msgid "You have exceeded the submission limit for this problem."
 msgstr ""
 
-#: .\judge\views\problem.py:595 .\judge\views\problem.py:598
+#: judge/views/problem.py:633 judge/views/problem.py:636
 #, python-format
 msgid "Submit to %(problem)s"
 msgstr ""
 
-#: .\judge\views\problem_data.py:36
+#: judge/views/problem.py:652
+msgid "Clone Problem"
+msgstr ""
+
+#: judge/views/problem_data.py:37
 msgid "Checker arguments must be a JSON object"
 msgstr ""
 
-#: .\judge\views\problem_data.py:38
+#: judge/views/problem_data.py:39
 msgid "Checker arguments is invalid JSON"
 msgstr ""
 
-#: .\judge\views\problem_data.py:45
+#: judge/views/problem_data.py:46
 msgid "Your zip file is invalid!"
 msgstr "A zip fájlod nem érvényes!"
 
-#: .\judge\views\problem_data.py:102
+#: judge/views/problem_data.py:104
 #, python-brace-format
 msgid "Comparing submissions for {0}"
 msgstr ""
 
-#: .\judge\views\problem_data.py:105
+#: judge/views/problem_data.py:107
 #, python-brace-format
 msgid "Comparing submissions for <a href=\"{1}\">{0}</a>"
 msgstr ""
 
-#: .\judge\views\problem_data.py:140
+#: judge/views/problem_data.py:142
 #, python-brace-format
 msgid "Editing data for {0}"
 msgstr ""
 
-#: .\judge\views\problem_data.py:143
-#, python-brace-format
-msgid "Editing data for <a href=\"{1}\">{0}</a>"
-msgstr ""
-
-#: .\judge\views\problem_data.py:147
+#: judge/views/problem_data.py:145
 #, python-format
 msgid "Editing data for %s"
 msgstr ""
 
-#: .\judge\views\problem_data.py:242 .\judge\views\problem_data.py:243
+#: judge/views/problem_data.py:240 judge/views/problem_data.py:241
 #, python-format
 msgid "Generated init.yml for %s"
 msgstr "init.yml generálva %s-hez"
 
-#: .\judge\views\ranked_submission.py:59
+#: judge/views/problem_manage.py:49 judge/views/problem_manage.py:52
+#, python-format
+msgid "Managing submissions for %s"
+msgstr ""
+
+#: judge/views/problem_manage.py:92
+#, python-format
+msgid "Rejudging selected submissions for %s..."
+msgstr ""
+
+#: judge/views/problem_manage.py:107
+#, python-format
+msgid "Rescoring all submissions for %s..."
+msgstr ""
+
+#: judge/views/problem_manage.py:116
+#, python-format
+msgid "Successfully scheduled %d submission for rejudging."
+msgid_plural "Successfully scheduled %d submissions for rejudging."
+msgstr[0] ""
+msgstr[1] ""
+
+#: judge/views/ranked_submission.py:58
 #, python-format
 msgid "Best solutions for %s"
 msgstr "Legjobb megoldások %s-hez"
 
-#: .\judge\views\ranked_submission.py:62
+#: judge/views/ranked_submission.py:61
 #, python-brace-format
 msgid "Best solutions for <a href=\"{1}\">{0}</a>"
 msgstr "Legjobb megoldások <a href=\"{1}\">{0}</a>-hez"
 
-#: .\judge\views\ranked_submission.py:72
+#: judge/views/ranked_submission.py:71
 #, python-format
 msgid "Best solutions for %(problem)s in %(contest)s"
 msgstr "Legjobb megoldások %(problem)s %(contest)s-ben"
 
-#: .\judge\views\ranked_submission.py:74
+#: judge/views/ranked_submission.py:74
 #, python-format
 msgid "Best solutions for problem %(number)s in %(contest)s"
 msgstr ""
 
-#: .\judge\views\ranked_submission.py:79
+#: judge/views/ranked_submission.py:80
 #, python-brace-format
 msgid "Best solutions for <a href=\"{1}\">{0}</a> in <a href=\"{3}\">{2}</a>"
 msgstr ""
 
-#: .\judge\views\ranked_submission.py:82
+#: judge/views/ranked_submission.py:83
 #, python-brace-format
 msgid "Best solutions for problem {0} in <a href=\"{2}\">{1}</a>"
 msgstr ""
 
-#: .\judge\views\register.py:27
+#: judge/views/register.py:27
 msgid "A username must contain letters, numbers, or underscores"
 msgstr ""
 
-#: .\judge\views\register.py:29
-msgid "Real name (optional)"
-msgstr "Valós név (opcionális)"
-
-#: .\judge\views\register.py:32 .\templates\user\edit-profile.html:108
+#: judge/views/register.py:31 templates/user/edit-profile.html:103
 msgid "Preferred language"
 msgstr "Preferált nyelv"
 
-#: .\judge\views\register.py:39
+#: judge/views/register.py:38
 msgid "Subscribe to newsletter?"
-msgstr ""
+msgstr "Feliratkozol a hírlevélre?"
 
-#: .\judge\views\register.py:46
+#: judge/views/register.py:45
 #, python-format
 msgid "The email address \"%s\" is already taken. Only one registration is allowed per address."
-msgstr ""
+msgstr "A \"%s\" email cím már foglalt. Csak egy regisztráció engedélyezett címenként."
 
-#: .\judge\views\register.py:52
+#: judge/views/register.py:51
 msgid "Your email provider is not allowed due to history of abuse. Please use a reputable email provider."
 msgstr ""
 
-#: .\judge\views\register.py:58 .\judge\views\register.py:97
+#: judge/views/register.py:57 judge/views/register.py:95
 msgid "Registration"
 msgstr "Regisztráció"
 
-#: .\judge\views\register.py:108
+#: judge/views/register.py:106
 msgid "Authentication failure"
-msgstr ""
+msgstr "Azonosítási hiba"
 
-#: .\judge\views\stats.py:94
+#: judge/views/stats.py:106
 msgid "Language statistics"
 msgstr ""
 
-#: .\judge\views\status.py:24 .\templates\submission\list.html:222
+#: judge/views/status.py:24 templates/submission/list.html:301
 msgid "Status"
-msgstr ""
+msgstr "Státusz"
 
-#: .\judge\views\status.py:109
+#: judge/views/status.py:108
 msgid "Version matrix"
 msgstr "Verzió mátrix"
 
-#: .\judge\views\submission.py:56 .\judge\views\submission.py:63
+#: judge/views/submission.py:59 judge/views/submission.py:66
 #, python-format
 msgid "Submission of %(problem)s by %(user)s"
 msgstr ""
 
-#: .\judge\views\submission.py:155 .\judge\views\submission.py:156
-#: .\templates\problem\problem.html:111
+#: judge/views/submission.py:161 judge/views/submission.py:162
+#: templates/problem/problem.html:127
 msgid "All submissions"
-msgstr ""
+msgstr "Összes beküldés"
 
-#: .\judge\views\submission.py:287
+#: judge/views/submission.py:303
 msgid "All my submissions"
-msgstr ""
+msgstr "Összes beküldésem"
 
-#: .\judge\views\submission.py:288
+#: judge/views/submission.py:304
 #, python-format
 msgid "All submissions by %s"
 msgstr ""
 
-#: .\judge\views\submission.py:318
+#: judge/views/submission.py:335
 #, python-format
 msgid "All submissions for %s"
 msgstr ""
 
-#: .\judge\views\submission.py:339
+#: judge/views/submission.py:354
 msgid "Must pass a problem"
 msgstr ""
 
-#: .\judge\views\submission.py:370
+#: judge/views/submission.py:397
 #, python-format
 msgid "My submissions for %(problem)s"
 msgstr ""
 
-#: .\judge\views\submission.py:371
+#: judge/views/submission.py:398
 #, python-format
 msgid "%(user)s's submissions for %(problem)s"
 msgstr ""
 
-#: .\judge\views\submission.py:445
+#: judge/views/submission.py:495
 msgid "Must pass a contest"
 msgstr ""
 
-#: .\judge\views\submission.py:464
+#: judge/views/submission.py:514
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions for <a href=\"{3}\">{2}</a> in <a href=\"{5}\">{4}</a>"
 msgstr ""
 
-#: .\judge\views\submission.py:469
+#: judge/views/submission.py:519
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions for problem {2} in <a href=\"{4}\">{3}</a>"
 msgstr ""
 
-#: .\judge\views\ticket.py:37 .\judge\views\ticket.py:43
+#: judge/views/ticket.py:33 judge/views/ticket.py:39
 msgid "Ticket title"
 msgstr "Hibajegy cím"
 
-#: .\judge\views\ticket.py:44
+#: judge/views/ticket.py:40
 msgid "Issue description"
 msgstr "Probléma leírása"
 
-#: .\judge\views\ticket.py:102 .\judge\views\ticket.py:105
+#: judge/views/ticket.py:85 judge/views/ticket.py:88
 #, python-format
 msgid "New ticket for %s"
 msgstr "Új hibajegy %s-hez"
 
-#: .\judge\views\ticket.py:151
+#: judge/views/ticket.py:139
 #, python-format
 msgid "%(title)s - Ticket %(id)d"
 msgstr ""
 
-#: .\judge\views\ticket.py:258
+#: judge/views/ticket.py:248
 #, python-format
 msgid "Tickets - Page %(number)d of %(total)d"
 msgstr ""
 
-#: .\judge\views\ticket.py:307
+#: judge/views/ticket.py:297
 #, python-format
 msgid "New Ticket: %s"
 msgstr "Új Hibajegy: %s"
 
-#: .\judge\views\ticket.py:308
+#: judge/views/ticket.py:298
 #, python-format
 msgid "#%(id)d, assigned to: %(users)s"
 msgstr ""
 
-#: .\judge\views\ticket.py:309
+#: judge/views/ticket.py:300
 msgid ", "
 msgstr ", "
 
-#: .\judge\views\ticket.py:310
+#: judge/views/ticket.py:300
 msgid "no one"
 msgstr ""
 
-#: .\judge\views\user.py:70
+#: judge/views/totp.py:42 templates/registration/totp_enable.html:86
+msgid "Enable Two Factor Authentication"
+msgstr ""
+
+#: judge/views/totp.py:89 templates/registration/totp_disable.html:48
+msgid "Disable Two Factor Authentication"
+msgstr ""
+
+#: judge/views/totp.py:103
+msgid "Perform Two Factor Authentication"
+msgstr ""
+
+#: judge/views/user.py:68
 msgid "No such user"
 msgstr "Nincs ilyen felhasználó"
 
-#: .\judge\views\user.py:70
+#: judge/views/user.py:68
 #, python-format
 msgid "No user handle \"%s\"."
 msgstr ""
 
-#: .\judge\views\user.py:74
+#: judge/views/user.py:72
 msgid "My account"
 msgstr "Saját fiók"
 
-#: .\judge\views\user.py:75
+#: judge/views/user.py:73
 #, python-format
 msgid "User %s"
 msgstr "Felhasználó %s"
 
-#: .\judge\views\user.py:133
+#: judge/views/user.py:136
 msgid "M j, Y, G:i"
 msgstr "M j, Y, G:i"
 
-#: .\judge\views\user.py:215
+#: judge/views/user.py:221
 msgid "Updated on site"
 msgstr "Frissítve az oldalon"
 
-#: .\judge\views\user.py:247 .\templates\admin\auth\user\change_form.html:14
-#: .\templates\admin\auth\user\change_form.html:17 .\templates\base.html:217
-#: .\templates\user\user-tabs.html:10
+#: judge/views/user.py:253 templates/admin/auth/user/change_form.html:14
+#: templates/admin/auth/user/change_form.html:17 templates/base.html:222
+#: templates/user/user-tabs.html:10
 msgid "Edit profile"
 msgstr "Profil szerkesztése"
 
-#: .\judge\views\user.py:256 .\templates\user\user-list-tabs.html:4
+#: judge/views/user.py:262 templates/user/user-list-tabs.html:4
 msgid "Leaderboard"
 msgstr "Ranglista"
 
-#: .\judge\views\widgets.py:53 .\judge\views\widgets.py:64
+#: judge/views/widgets.py:48 judge/views/widgets.py:58
 #, python-format
 msgid "Invalid upstream data: %s"
 msgstr ""
 
-#: .\judge\views\widgets.py:74
+#: judge/views/widgets.py:68
 msgid "Bad latitude or longitude"
 msgstr "Érvénytelen szélességi vagy hosszúsági kör"
 
-#: .\templates\admin\judge\contest\change_form.html:14
-#: .\templates\admin\judge\contest\change_form.html:17
+#: src/dmoj-wpadmin/test_project/apps/authors/models.py:9
+msgid "first name"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/authors/models.py:10
+msgid "last name"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/authors/models.py:11
+msgid "biography"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/books/admin.py:24
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:30
+#: src/dmoj-wpadmin/test_project/apps/cds/models.py:30
+#: src/dmoj-wpadmin/test_project/apps/dvds/models.py:30
+msgid "owner"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:12
+#: src/dmoj-wpadmin/test_project/apps/cds/models.py:12
+#: src/dmoj-wpadmin/test_project/apps/dvds/models.py:12
+msgid "name"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:19
+msgid "Category of Books"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:20
+msgid "Categories of Books"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:26
+#: src/dmoj-wpadmin/test_project/apps/cds/models.py:26
+#: src/dmoj-wpadmin/test_project/apps/dvds/models.py:26
+msgid "title"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:28
+#: src/dmoj-wpadmin/test_project/apps/cds/models.py:28
+#: src/dmoj-wpadmin/test_project/apps/dvds/models.py:28
+msgid "category"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:29
+#: src/dmoj-wpadmin/test_project/apps/cds/models.py:29
+#: src/dmoj-wpadmin/test_project/apps/dvds/models.py:29
+msgid "author"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:31
+msgid "publication date"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:37
+msgid "Book"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/books/models.py:38
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:136
+msgid "Books"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/cds/models.py:19
+msgid "Category of CDs"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/cds/models.py:20
+msgid "Categories of CDs"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/cds/models.py:36
+msgid "CD"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/cds/models.py:37
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:141
+msgid "CDs"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/dvds/models.py:19
+msgid "Category of DVDs"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/dvds/models.py:20
+msgid "Categories of DVDs"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/dvds/models.py:36
+msgid "DVD"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/apps/dvds/models.py:37
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:146
+msgid "DVDs"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/templates/admin/base_site.html:7
+msgid "Django administration"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/test_project/forms.py:12
+#, python-format
+msgid "Please enter the correct %(username)s and password for an admin account. Note that both fields may be case-sensitive."
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/test_project/forms.py:32
+#, python-format
+msgid "Please enter the correct %(username)s and password for an user account. Note that both fields may be case-sensitive."
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:27
+msgid "Site"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:38
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:41
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:130
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:133
+msgid "Dashboard"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:48
+msgid "Applications"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:53
+msgid "Administration"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:64
+msgid "Color theme"
+msgstr ""
+
+#: src/dmoj-wpadmin/test_project/test_project/wp.py:66
+msgid "Change color theme"
+msgstr ""
+
+#: templates/admin/judge/contest/change_form.html:9
+msgid "Are you sure you want to rejudge ALL the submissions?"
+msgstr ""
+
+#: templates/admin/judge/contest/change_form.html:17
+#: templates/admin/judge/contest/change_form.html:20
 msgid "Rate"
 msgstr ""
 
-#: .\templates\admin\judge\contest\change_list.html:9
+#: templates/admin/judge/contest/change_list.html:9
 msgid "Rate all ratable contests"
 msgstr ""
 
-#: .\templates\admin\judge\profile\change_form.html:14
-#: .\templates\admin\judge\profile\change_form.html:17
+#: templates/admin/judge/judge/change_form.html:15
+#: templates/admin/judge/judge/change_form.html:18
+msgid "Disconnect"
+msgstr ""
+
+#: templates/admin/judge/judge/change_form.html:20
+#: templates/admin/judge/judge/change_form.html:23
+msgid "Terminate"
+msgstr ""
+
+#: templates/admin/judge/problem/change_form.html:14
+msgid "View Submissions"
+msgstr ""
+
+#: templates/admin/judge/problem/change_form.html:17
+#: templates/user/user-base.html:61
+msgid "View submissions"
+msgstr ""
+
+#: templates/admin/judge/profile/change_form.html:14
+#: templates/admin/judge/profile/change_form.html:17
 msgid "Edit user"
 msgstr "Felhasználó szerkesztése"
 
-#: .\templates\admin\judge\submission\change_form.html:14
-#: .\templates\admin\judge\submission\change_form.html:17
-#: .\templates\submission\source.html:34 .\templates\submission\status.html:67
+#: templates/admin/judge/submission/change_form.html:14
+#: templates/admin/judge/submission/change_form.html:17
+#: templates/submission/source.html:34 templates/submission/status.html:67
 msgid "Rejudge"
 msgstr "Újratesztel"
 
-#: .\templates\base.html:209
+#: templates/base.html:214
 #, python-format
 msgid "Hello, <b>%(username)s</b>."
 msgstr "Heló, <b>%(username)s</b>."
 
-#: .\templates\base.html:215 .\templates\comments\list.html:89
-#: .\templates\contest\contest-list-tabs.html:21
-#: .\templates\problem\problem-list-tabs.html:6
-#: .\templates\submission\info-base.html:12
-#: .\templates\submission\submission-list-tabs.html:15
+#: templates/base.html:220 templates/comments/list.html:89
+#: templates/contest/contest-list-tabs.html:24
+#: templates/problem/problem-list-tabs.html:6
+#: templates/submission/info-base.html:12
+#: templates/submission/submission-list-tabs.html:15
 msgid "Admin"
 msgstr "Admin"
 
-#: .\templates\base.html:224
+#: templates/base.html:229
 msgid "Log out"
 msgstr "Kilépés"
 
-#: .\templates\base.html:235
+#: templates/base.html:240
 msgid "Register"
 msgstr "Regisztráció"
 
-#: .\templates\base.html:247
+#: templates/base.html:252
 msgid "spectating"
 msgstr "megfigyelés"
 
-#: .\templates\base.html:260
+#: templates/base.html:265
 msgid "This site works best with JavaScript enabled."
 msgstr "Az oldal JavaScript engedélyezésével működik a legjobban."
 
-#: .\templates\blog\content.html:13 .\templates\comments\list.html:68
-#: .\templates\comments\list.html:83 .\templates\contest\contest-tabs.html:17
-#: .\templates\contest\tag-title.html:9 .\templates\flatpages\admin_link.html:3
-#: .\templates\license.html:10 .\templates\problem\data.html:437
-#: .\templates\problem\editorial.html:14
+#: templates/blog/content.html:13 templates/comments/list.html:68
+#: templates/comments/list.html:83 templates/contest/contest-tabs.html:17
+#: templates/contest/tag-title.html:9 templates/flatpages/admin_link.html:3
+#: templates/license.html:10 templates/problem/data.html:437
+#: templates/problem/editorial.html:14
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: .\templates\blog\content.html:27
+#: templates/blog/content.html:27
 #, python-format
 msgid "\n"
 "                    posted on %(time)s\n"
 "                "
 msgstr ""
 
-#: .\templates\blog\dashboard.html:21
+#: templates/blog/dashboard.html:21
 #, python-format
 msgid "\n"
 "                                    on %(time)s\n"
 "                                "
 msgstr ""
 
-#: .\templates\blog\list.html:85
+#: templates/blog/list.html:85
 msgid "Blog"
 msgstr "Blog"
 
-#: .\templates\blog\list.html:87
+#: templates/blog/list.html:87
 msgid "Events"
 msgstr "Események"
 
-#: .\templates\blog\list.html:92
+#: templates/blog/list.html:92
 msgid "News"
 msgstr "Hírek"
 
-#: .\templates\blog\list.html:106
+#: templates/blog/list.html:106
 #, python-brace-format
 msgid "posted on {time}"
 msgstr "{time}-kor posztolva"
 
-#: .\templates\blog\list.html:130 .\templates\problem\problem.html:256
+#: templates/blog/list.html:130 templates/problem/problem.html:309
 msgid "Clarifications"
 msgstr "Pontosítások"
 
-#: .\templates\blog\list.html:146 .\templates\problem\problem.html:267
+#: templates/blog/list.html:146 templates/problem/problem.html:320
 msgid "No clarifications have been made at this time."
 msgstr "Nem jelentek meg pontosítások még."
 
-#: .\templates\blog\list.html:154
+#: templates/blog/list.html:154
 msgid "Ongoing contests"
 msgstr "Folyamatban lévő versenyek"
 
-#: .\templates\blog\list.html:172
+#: templates/blog/list.html:172
 msgid "Upcoming contests"
 msgstr "Közelgő versenyek"
 
-#: .\templates\blog\list.html:189
+#: templates/blog/list.html:189
 msgid "Comment stream"
 msgstr "Kommentfolyam"
 
-#: .\templates\blog\list.html:208
+#: templates/blog/list.html:208
 msgid "New problems"
 msgstr "Új feladatok"
 
-#: .\templates\blog\list.html:225
+#: templates/blog/list.html:225
 msgid "My open tickets"
 msgstr "Nyitott hibajegyeim"
 
-#: .\templates\blog\list.html:246
+#: templates/blog/list.html:246
 msgid "New tickets"
 msgstr "Új hibajegy"
 
-#: .\templates\comments\list.html:2
+#: templates/comments/list.html:2
 msgid "Comments"
 msgstr "Hozzászólások"
 
-#: .\templates\comments\list.html:18 .\templates\comments\list.html:27
+#: templates/comments/list.html:18 templates/comments/list.html:27
 msgid "Please login to vote"
 msgstr "Jelentkezz be a szavazáshoz"
 
-#: .\templates\comments\list.html:40
+#: templates/comments/list.html:40
 #, python-brace-format
 msgid "commented on {time}"
 msgstr ""
 
-#: .\templates\comments\list.html:49
+#: templates/comments/list.html:49
 #, python-format
 msgid "edit %(edits)s"
 msgstr ""
 
-#: .\templates\comments\list.html:51 .\templates\comments\media-js.html:71
+#: templates/comments/list.html:51 templates/comments/media-js.html:77
 msgid "edited"
 msgstr "szerkesztett"
 
-#: .\templates\comments\list.html:60
+#: templates/comments/list.html:60
 msgid "Link"
 msgstr "Link"
 
-#: .\templates\comments\list.html:73 .\templates\comments\list.html:80
+#: templates/comments/list.html:73 templates/comments/list.html:80
 msgid "Reply"
 msgstr "Válasz"
 
-#: .\templates\comments\list.html:86
+#: templates/comments/list.html:86
 msgid "Hide"
 msgstr "Elrejtés"
 
-#: .\templates\comments\list.html:111
+#: templates/comments/list.html:101
+#, python-format
+msgid "\n"
+"                                                This comment is hidden due to too much negative feedback.\n"
+"                                                Click <a href=\"javascript:comment_show_content(%(id)s)\">here</a> to view it.\n"
+"                                            "
+msgstr ""
+
+#: templates/comments/list.html:119
 msgid "There are no comments at the moment."
 msgstr ""
 
-#: .\templates\comments\list.html:117
+#: templates/comments/list.html:125
 msgid "New comment"
 msgstr "Új hozzászólás"
 
-#: .\templates\comments\list.html:131
+#: templates/comments/list.html:139
 msgid "Invalid comment body."
 msgstr "Érvénytelen hozzászólás törzs."
 
-#: .\templates\comments\list.html:139
+#: templates/comments/list.html:147
 msgid "Post!"
+msgstr "Küld!"
+
+#: templates/comments/list.html:155
+msgid "Comments are disabled on this page."
 msgstr ""
 
-#: .\templates\comments\media-js.html:66
+#: templates/comments/media-js.html:72
 #, python-brace-format
 msgid "edit {edits}"
 msgstr ""
 
-#: .\templates\comments\media-js.html:69
+#: templates/comments/media-js.html:75
 msgid "original"
 msgstr ""
 
-#: .\templates\contest\access_code.html:26
+#: templates/contest/access_code.html:26
 msgid "Invalid access code."
 msgstr ""
 
-#: .\templates\contest\access_code.html:29
+#: templates/contest/access_code.html:29
 msgid "Please enter your access code:"
 msgstr ""
 
-#: .\templates\contest\access_code.html:32
+#: templates/contest/access_code.html:32
 msgid "Join Contest"
 msgstr ""
 
-#: .\templates\contest\calendar.html:6
-#, python-format
-msgid "Contests in %(month)s"
-msgstr ""
-
-#: .\templates\contest\calendar.html:13
+#: templates/contest/calendar.html:12
 msgid "Sunday"
 msgstr "Vasárnap"
 
-#: .\templates\contest\calendar.html:14
+#: templates/contest/calendar.html:13
 msgid "Monday"
 msgstr "Hétfő"
 
-#: .\templates\contest\calendar.html:15
+#: templates/contest/calendar.html:14
 msgid "Tuesday"
 msgstr "Kedd"
 
-#: .\templates\contest\calendar.html:16
+#: templates/contest/calendar.html:15
 msgid "Wednesday"
 msgstr "Szerda"
 
-#: .\templates\contest\calendar.html:17
+#: templates/contest/calendar.html:16
 msgid "Thursday"
 msgstr "Csütörtök"
 
-#: .\templates\contest\calendar.html:18
+#: templates/contest/calendar.html:17
 msgid "Friday"
 msgstr "Péntek"
 
-#: .\templates\contest\calendar.html:19
+#: templates/contest/calendar.html:18
 msgid "Saturday"
 msgstr "Szombat"
 
-#: .\templates\contest\contest-list-tabs.html:7
+#: templates/contest/contest-list-tabs.html:7
 msgid "Prev"
 msgstr "Előző"
 
-#: .\templates\contest\contest-list-tabs.html:10
+#: templates/contest/contest-list-tabs.html:10
+msgid "Today"
+msgstr ""
+
+#: templates/contest/contest-list-tabs.html:13
 msgid "Next"
 msgstr "Következő"
 
-#: .\templates\contest\contest-list-tabs.html:18
-#: .\templates\problem\problem-list-tabs.html:5
+#: templates/contest/contest-list-tabs.html:21
+#: templates/problem/problem-list-tabs.html:5
 msgid "List"
 msgstr "Lista"
 
-#: .\templates\contest\contest-list-tabs.html:19
+#: templates/contest/contest-list-tabs.html:22
 msgid "Calendar"
 msgstr "Naptár"
 
-#: .\templates\contest\contest-tabs.html:4
+#: templates/contest/contest-tabs.html:4
 msgid "Info"
 msgstr ""
 
-#: .\templates\contest\contest-tabs.html:8
+#: templates/contest/contest-tabs.html:8
 msgid "Rankings"
 msgstr ""
 
-#: .\templates\contest\contest-tabs.html:10
+#: templates/contest/contest-tabs.html:10
 msgid "Hidden Rankings"
 msgstr ""
 
-#: .\templates\contest\contest-tabs.html:26
-#: .\templates\contest\contest-tabs.html:40
+#: templates/contest/contest-tabs.html:28
+#: templates/contest/contest-tabs.html:48
 msgid "Leave contest"
 msgstr ""
 
-#: .\templates\contest\contest-tabs.html:30 .\templates\contest\list.html:209
+#: templates/contest/contest-tabs.html:35 templates/contest/list.html:293
 msgid "Virtual join"
 msgstr "Virtuális csatlakozás"
 
-#: .\templates\contest\contest-tabs.html:38
+#: templates/contest/contest-tabs.html:46
 msgid "Stop spectating"
 msgstr "Felhagyás a megfigyeléssel"
 
-#: .\templates\contest\contest-tabs.html:45
+#: templates/contest/contest-tabs.html:55
 msgid "Spectate contest"
 msgstr ""
 
-#: .\templates\contest\contest-tabs.html:48
-#: .\templates\contest\contest-tabs.html:51
+#: templates/contest/contest-tabs.html:61
+#: templates/contest/contest-tabs.html:67
 msgid "Join contest"
 msgstr ""
 
-#: .\templates\contest\contest-tabs.html:57
+#: templates/contest/contest-tabs.html:76
 msgid "Login to participate"
 msgstr ""
 
-#: .\templates\contest\contest.html:37
+#: templates/contest/contest.html:37
 msgid "Participating virtually."
 msgstr ""
 
-#: .\templates\contest\contest.html:43
+#: templates/contest/contest.html:43
 msgid "Contest is over."
 msgstr "A versenynek vége."
 
-#: .\templates\contest\contest.html:59 .\templates\contest\contest.html:63
+#: templates/contest/contest.html:59 templates/contest/contest.html:63
 msgid "F j, Y, G:i T"
 msgstr "F j, Y, G:i T"
 
-#: .\templates\contest\contest.html:59
+#: templates/contest/contest.html:59
 #, python-format
 msgid "<b>%(time_limit)s</b> window between <b>%(start_time)s</b> and <b>%(end_time)s</b>"
 msgstr ""
 
-#: .\templates\contest\contest.html:63
+#: templates/contest/contest.html:63
 #, python-format
 msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
 msgstr ""
 
-#: .\templates\contest\contest.html:85
+#: templates/contest/contest.html:85
 msgid "AC Rate"
 msgstr "AC arány"
 
-#: .\templates\contest\contest.html:86 .\templates\contest\list.html:98
-#: .\templates\contest\list.html:185 .\templates\problem\list.html:212
-#: .\templates\problem\list.html:238
+#: templates/contest/contest.html:86 templates/contest/list.html:153
+#: templates/contest/list.html:195 templates/contest/list.html:271
+#: templates/problem/list.html:212 templates/problem/list.html:238
 msgid "Users"
 msgstr "Felhasználók"
 
-#: .\templates\contest\contest.html:99
+#: templates/contest/contest.html:111
 msgid "Editorial"
 msgstr "Megoldási útmutató"
 
-#: .\templates\contest\list.html:27 .\templates\contest\media-js.html:9
+#: templates/contest/list.html:31 templates/contest/media-js.html:9
 msgid "Are you sure you want to join?"
 msgstr "Biztos hogy csatlakozni akarsz?"
 
-#: .\templates\contest\list.html:28
+#: templates/contest/list.html:32
 msgid "Joining a contest for the first time starts your timer, after which it becomes unstoppable."
 msgstr ""
 
-#: .\templates\contest\list.html:93
-msgid "Ongoing Contests"
-msgstr "Folyamatban lévő versenyek"
+#: templates/contest/list.html:65
+msgid "hidden"
+msgstr ""
 
-#: .\templates\contest\list.html:97 .\templates\contest\list.html:153
-#: .\templates\contest\list.html:184
-msgid "Contest"
-msgstr "Verseny"
+#: templates/contest/list.html:70
+msgid "private"
+msgstr ""
 
-#: .\templates\contest\list.html:132
+#: templates/contest/list.html:84
+msgid "rated"
+msgstr ""
+
+#: templates/contest/list.html:132
 msgid "Spectate"
 msgstr "Megfigyelés"
 
-#: .\templates\contest\list.html:136
+#: templates/contest/list.html:138
 msgid "Join"
 msgstr "Csatlakozás"
 
-#: .\templates\contest\list.html:148
+#: templates/contest/list.html:148
+msgid "Active Contests"
+msgstr ""
+
+#: templates/contest/list.html:152 templates/contest/list.html:194
+#: templates/contest/list.html:232 templates/contest/list.html:270
+msgid "Contest"
+msgstr "Verseny"
+
+#: templates/contest/list.html:190
+msgid "Ongoing Contests"
+msgstr "Folyamatban lévő versenyek"
+
+#: templates/contest/list.html:227
 msgid "Upcoming Contests"
 msgstr "Közelgő Versenyek"
 
-#: .\templates\contest\list.html:175
+#: templates/contest/list.html:255
 msgid "There are no scheduled contests at this time."
 msgstr "Jelenleg nincs ütemezett verseny."
 
-#: .\templates\contest\list.html:180
+#: templates/contest/list.html:261
 msgid "Past Contests"
 msgstr "Elmúlt Versenyek"
 
-#: .\templates\contest\media-js.html:4
+#: templates/contest/media-js.html:4
 msgid "Are you sure you want to leave?"
 msgstr ""
 
-#: .\templates\contest\media-js.html:5
+#: templates/contest/media-js.html:5
 msgid "You cannot come back to a virtual participation. You will have to start a new one."
 msgstr ""
 
-#: .\templates\contest\media-js.html:10
+#: templates/contest/media-js.html:10
 msgid "Joining a contest starts your timer, after which it becomes unstoppable."
 msgstr ""
 
-#: .\templates\contest\private.html:4
+#: templates/contest/private.html:4
 msgid "Only the following organizations may access this contest:"
 msgstr "Csak a következő csoportok tagjai férhetnek hozzá ehhez a versenyhez:"
 
-#: .\templates\contest\ranking-table.html:27
+#: templates/contest/ranking-table.html:7
+msgid "Organization"
+msgstr "Intézmény"
+
+#: templates/contest/ranking-table.html:27
 #, python-brace-format
 msgid "Started on {time}"
 msgstr ""
 
-#: .\templates\contest\ranking-table.html:30
+#: templates/contest/ranking-table.html:30
 msgid "Participation ended."
 msgstr ""
 
-#: .\templates\contest\ranking.html:232
+#: templates/contest/ranking.html:232
 msgid "View user participation"
 msgstr ""
 
-#: .\templates\contest\ranking.html:236
+#: templates/contest/ranking.html:236
 msgid "Show organizations"
 msgstr "Csoportok mutatása"
 
-#: .\templates\license.html:12
+#: templates/license.html:12
 msgid "Source:"
 msgstr "Forrás:"
 
-#: .\templates\newsletter\common.html:6
-#: .\templates\newsletter\subscription_unsubscribe_activated.html:3
-#: .\templates\newsletter\subscription_unsubscribe_activated.html:6
-#: .\templates\newsletter\subscription_update_activated.html:3
-#: .\templates\newsletter\subscription_update_activated.html:6
+#: templates/newsletter/common.html:6
+#: templates/newsletter/subscription_unsubscribe_activated.html:3
+#: templates/newsletter/subscription_unsubscribe_activated.html:6
+#: templates/newsletter/subscription_update_activated.html:3
+#: templates/newsletter/subscription_update_activated.html:6
 msgid "Newsletter"
 msgstr "Hírlevél"
 
-#: .\templates\newsletter\subscription_unsubscribe_activated.html:3
-#: .\templates\newsletter\subscription_unsubscribe_activated.html:6
-#: .\templates\newsletter\subscription_update_activated.html:3
-#: .\templates\newsletter\subscription_update_activated.html:6
+#: templates/newsletter/subscription_unsubscribe_activated.html:3
+#: templates/newsletter/subscription_unsubscribe_activated.html:6
+#: templates/newsletter/subscription_update_activated.html:3
+#: templates/newsletter/subscription_update_activated.html:6
 msgid "activate"
 msgstr "aktiválás"
 
-#: .\templates\newsletter\subscription_unsubscribe_activated.html:8
+#: templates/newsletter/subscription_unsubscribe_activated.html:8
 msgid "You have successfully been unsubscribed."
 msgstr "Sikeresen leiratkoztál."
 
-#: .\templates\newsletter\subscription_unsubscribe_email_sent.html:3
-#: .\templates\newsletter\subscription_unsubscribe_email_sent.html:6
-#: .\templates\newsletter\subscription_unsubscribe_user.html:3
-#: .\templates\newsletter\subscription_unsubscribe_user.html:6
+#: templates/newsletter/subscription_unsubscribe_email_sent.html:3
+#: templates/newsletter/subscription_unsubscribe_email_sent.html:6
+#: templates/newsletter/subscription_unsubscribe_user.html:3
+#: templates/newsletter/subscription_unsubscribe_user.html:6
 msgid "Newsletter unsubscribe"
 msgstr "Hírlevél leiratkozás"
 
-#: .\templates\newsletter\subscription_unsubscribe_email_sent.html:8
+#: templates/newsletter/subscription_unsubscribe_email_sent.html:8
 msgid "Your unsubscription request has successfully been received. An email has been sent to you with a link you need to follow in order to confirm your unsubscription."
 msgstr ""
 
-#: .\templates\newsletter\subscription_unsubscribe_user.html:17
+#: templates/newsletter/subscription_unsubscribe_user.html:17
 msgid "Do you want to unsubscribe from this newsletter?"
 msgstr ""
 
-#: .\templates\newsletter\subscription_unsubscribe_user.html:21
+#: templates/newsletter/subscription_unsubscribe_user.html:21
 msgid "Unsubscribe"
 msgstr "Leiratkozás"
 
-#: .\templates\newsletter\subscription_update.html:3
-#: .\templates\newsletter\subscription_update.html:6
-#: .\templates\newsletter\subscription_update_email_sent.html:3
-#: .\templates\newsletter\subscription_update_email_sent.html:6
+#: templates/newsletter/subscription_update.html:3
+#: templates/newsletter/subscription_update.html:6
+#: templates/newsletter/subscription_update_email_sent.html:3
+#: templates/newsletter/subscription_update_email_sent.html:6
 msgid "Newsletter update"
 msgstr ""
 
-#: .\templates\newsletter\subscription_update.html:9
+#: templates/newsletter/subscription_update.html:9
 msgid "Due to a technical error we were not able to submit your confirmation email. This could be because your email address is invalid."
 msgstr ""
 
-#: .\templates\newsletter\subscription_update.html:14
+#: templates/newsletter/subscription_update.html:14
 msgid "Update subscription"
 msgstr ""
 
-#: .\templates\newsletter\subscription_update_activated.html:8
+#: templates/newsletter/subscription_update_activated.html:8
 msgid "Your subscription has successfully been updated."
 msgstr ""
 
-#: .\templates\newsletter\subscription_update_email_sent.html:8
+#: templates/newsletter/subscription_update_email_sent.html:8
 msgid "Your update request was successfully received and an activation email has been sent to you. In that email you will find a link which you need to follow in order to update your subscription."
 msgstr ""
 
-#: .\templates\organization\edit.html:46
-#: .\templates\organization\requests\pending.html:41
-#: .\templates\ticket\edit-notes.html:4
+#: templates/organization/edit.html:46
+#: templates/organization/requests/pending.html:34
+#: templates/ticket/edit-notes.html:4
 msgid "Update"
 msgstr "Frissít"
 
-#: .\templates\organization\home.html:8
+#: templates/organization/home.html:9
 msgid "Leave organization"
 msgstr "Csoport elhagyása"
 
-#: .\templates\organization\home.html:11
+#: templates/organization/home.html:14
 msgid "Join organization"
 msgstr "Belépés a csoportba"
 
-#: .\templates\organization\home.html:14
+#: templates/organization/home.html:18
 msgid "Request membership"
 msgstr "Tagság kérelmezése"
 
-#: .\templates\organization\home.html:21
+#: templates/organization/home.html:25
 msgid "Edit organization"
 msgstr "Csoport szerkesztése"
 
-#: .\templates\organization\home.html:25
+#: templates/organization/home.html:29
 msgid "View requests"
 msgstr "Kérések megtekintése"
 
-#: .\templates\organization\home.html:32
+#: templates/organization/home.html:36
 msgid "Admin organization"
 msgstr "Csoport adminisztrációja"
 
-#: .\templates\organization\home.html:37
+#: templates/organization/home.html:41
 msgid "View members"
 msgstr "Tagok megtekintése"
 
-#: .\templates\organization\list.html:23
-#: .\templates\status\language-list.html:33 .\templates\ticket\list.html:245
-msgid "ID"
-msgstr "Azonosító"
-
-#: .\templates\organization\list.html:24
-#: .\templates\status\language-list.html:34
+#: templates/organization/list.html:23 templates/status/language-list.html:34
 msgid "Name"
 msgstr "Név"
 
-#: .\templates\organization\list.html:25
+#: templates/organization/list.html:24
 msgid "Members"
 msgstr "Tagok"
 
-#: .\templates\organization\new.html:10 .\templates\ticket\new.html:36
+#: templates/organization/new.html:10 templates/ticket/new.html:38
 msgid "Create"
 msgstr "Létrehozás"
 
-#: .\templates\organization\requests\detail.html:13
+#: templates/organization/requests/detail.html:13
 msgid "User:"
 msgstr "Felhasználó:"
 
-#: .\templates\organization\requests\detail.html:17
+#: templates/organization/requests/detail.html:17
 msgid "Organization:"
 msgstr "Csoport:"
 
-#: .\templates\organization\requests\detail.html:25
+#: templates/organization/requests/detail.html:25
 msgid "Time:"
 msgstr "Idő:"
 
-#: .\templates\organization\requests\detail.html:29
+#: templates/organization/requests/detail.html:29
 msgid "Reason:"
 msgstr "Ok:"
 
-#: .\templates\organization\requests\log.html:11
-#: .\templates\organization\requests\pending.html:21
+#: templates/organization/requests/log.html:11
+#: templates/organization/requests/pending.html:14
 msgid "State"
 msgstr "Állapot"
 
-#: .\templates\organization\requests\log.html:12
-#: .\templates\organization\requests\pending.html:22
+#: templates/organization/requests/log.html:12
+#: templates/organization/requests/pending.html:15
 msgid "Reason"
 msgstr "Ok"
 
-#: .\templates\organization\requests\log.html:28
-#: .\templates\organization\requests\pending.html:44
+#: templates/organization/requests/log.html:28
+#: templates/organization/requests/pending.html:37
 msgid "There are no requests to approve."
 msgstr "Nincsenek jóváhagyásra váló kérések."
 
-#: .\templates\organization\requests\pending.html:24
-#: .\templates\problem\data.html:401
+#: templates/organization/requests/pending.html:17
+#: templates/problem/data.html:401
 msgid "Delete?"
 msgstr "Törlés?"
 
-#: .\templates\organization\requests\request.html:18
+#: templates/organization/requests/request.html:18
 msgid "Your reason for joining:"
 msgstr "A csatlakozás oka:"
 
-#: .\templates\organization\requests\request.html:20
+#: templates/organization/requests/request.html:20
 msgid "Request"
 msgstr "Kérés"
 
-#: .\templates\organization\requests\tabs.html:4
+#: templates/organization/requests/tabs.html:4
 msgid "Pending"
 msgstr "Elbírálás alatt"
 
-#: .\templates\organization\requests\tabs.html:7
+#: templates/organization/requests/tabs.html:7
 msgid "Log"
 msgstr "Log"
 
-#: .\templates\organization\requests\tabs.html:10
+#: templates/organization/requests/tabs.html:10
 msgid "Approved"
 msgstr "Jóváhagyva"
 
-#: .\templates\organization\requests\tabs.html:13
+#: templates/organization/requests/tabs.html:13
 msgid "Rejected"
 msgstr "Elutasítva"
 
-#: .\templates\organization\users-table.html:15
+#: templates/organization/users-table.html:15
 msgid "Kick"
 msgstr "Kirúg"
 
-#: .\templates\problem\data.html:353
+#: templates/problem/clone.html:37
+msgid "Enter a new code for the cloned problem:"
+msgstr ""
+
+#: templates/problem/clone.html:40
+msgid "Clone!"
+msgstr ""
+
+#: templates/problem/data.html:353
 msgid "View YAML"
 msgstr ""
 
-#: .\templates\problem\data.html:369
+#: templates/problem/data.html:369
 msgid "Show columns:"
 msgstr ""
 
-#: .\templates\problem\data.html:372 .\templates\problem\data.html:396
+#: templates/problem/data.html:372 templates/problem/data.html:396
 msgid "Output prefix"
 msgstr ""
 
-#: .\templates\problem\data.html:376 .\templates\problem\data.html:397
+#: templates/problem/data.html:376 templates/problem/data.html:397
 msgid "Output limit"
 msgstr "Kimenet limit"
 
-#: .\templates\problem\data.html:380 .\templates\problem\data.html:398
+#: templates/problem/data.html:380 templates/problem/data.html:398
 msgid "Checker"
 msgstr "Checker"
 
-#: .\templates\problem\data.html:384 .\templates\problem\data.html:399
+#: templates/problem/data.html:384 templates/problem/data.html:399
 msgid "Generator args"
 msgstr "Generátor argumentumok"
 
-#: .\templates\problem\data.html:391
+#: templates/problem/data.html:391
 msgid "Type"
 msgstr "Típus"
 
-#: .\templates\problem\data.html:392
+#: templates/problem/data.html:392
 msgid "Input file"
 msgstr "Bementi fájl"
 
-#: .\templates\problem\data.html:393
+#: templates/problem/data.html:393
 msgid "Output file"
 msgstr "Kimeneti fájl"
 
-#: .\templates\problem\data.html:395
+#: templates/problem/data.html:395
 msgid "Pretest?"
 msgstr "Preteszt?"
 
-#: .\templates\problem\data.html:447 .\templates\problem\submit.html:253
+#: templates/problem/data.html:447 templates/problem/submit.html:253
 msgid "Submit!"
 msgstr "Beküld!"
 
-#: .\templates\problem\data.html:448
+#: templates/problem/data.html:448
 msgid "Add new case"
 msgstr "Új eset hozzáadása"
 
-#: .\templates\problem\editorial.html:22
+#: templates/problem/editorial.html:22
 msgid "Remember to use this editorial <b>only</b> when stuck, and <b>not to copy-paste code from it</b>. Please be respectful to the problem author and editorialist. <br><br> <b>Submitting an official solution before solving the problem yourself is a bannable offence.</b>"
 msgstr "Ne feledd, hogy <b>csak</b> akkor használd a megoldási útmutatót ha elakadtál és <b>ne másold csak úgy ki belőle a kódot</b>. Kérlek legyél tisztelettudó a feladat és az útmutató szerzője felé. <br><br> <b>Ha hivatalos megoldást küldesz be mielőtt te magad megoldanád a feladatot az kitiltást vonhat maga után!</b>"
 
-#: .\templates\problem\list.html:62
+#: templates/problem/list.html:62
 msgid "Filter by type..."
 msgstr "Szűrés típus szerint..."
 
-#: .\templates\problem\list.html:179
+#: templates/problem/list.html:185
 msgid "Hot problems"
 msgstr ""
 
-#: .\templates\problem\list.html:207 .\templates\problem\list.html:224
-#: .\templates\problem\search-form.html:30
-#: .\templates\user\user-problems.html:62
+#: templates/problem/list.html:207 templates/problem/list.html:224
+#: templates/problem/search-form.html:30 templates/user/user-problems.html:57
 msgid "Category"
 msgstr "Kategória"
 
-#: .\templates\problem\list.html:209 .\templates\problem\list.html:228
+#: templates/problem/list.html:209 templates/problem/list.html:228
 msgid "Types"
 msgstr "Típusok"
 
-#: .\templates\problem\list.html:235
+#: templates/problem/list.html:235
 #, python-format
 msgid "AC %%"
 msgstr "AC %%"
 
-#: .\templates\problem\problem.html:76
+#: templates/problem/manage_submission.html:55
+msgid "Leave empty to not filter by language"
+msgstr ""
+
+#: templates/problem/manage_submission.html:60
+msgid "Leave empty to not filter by result"
+msgstr ""
+
+#: templates/problem/manage_submission.html:79
+msgid "Need valid values for both start and end IDs."
+msgstr ""
+
+#: templates/problem/manage_submission.html:82
+msgid "End ID must be after start ID."
+msgstr ""
+
+#: templates/problem/manage_submission.html:90
+#, python-brace-format
+msgid "You are about to rejudge {count} submissions. Are you sure you want to do this?"
+msgstr ""
+
+#: templates/problem/manage_submission.html:96
+msgid "You are about to rejudge a few submissions. Are you sure you want to do this?"
+msgstr ""
+
+#: templates/problem/manage_submission.html:114
+msgid "Rejudge Submissions"
+msgstr ""
+
+#: templates/problem/manage_submission.html:119
+msgid "Filter by ID:"
+msgstr ""
+
+#: templates/problem/manage_submission.html:122
+msgid "Starting ID:"
+msgstr ""
+
+#: templates/problem/manage_submission.html:126
+msgid "Ending ID:"
+msgstr ""
+
+#: templates/problem/manage_submission.html:130
+msgid "This range includes both endpoints."
+msgstr ""
+
+#: templates/problem/manage_submission.html:133
+msgid "Filter by language:"
+msgstr ""
+
+#: templates/problem/manage_submission.html:141
+msgid "Filter by result:"
+msgstr ""
+
+#: templates/problem/manage_submission.html:149
+msgid "Rejudge selected submissions"
+msgstr ""
+
+#: templates/problem/manage_submission.html:155
+msgid "Rescore Everything"
+msgstr ""
+
+#: templates/problem/manage_submission.html:156
+#, python-format
+msgid "This will rescore %(count)d submissions."
+msgstr ""
+
+#: templates/problem/manage_submission.html:160
+#, python-format
+msgid "Are you sure you want to rescore %(count)d submissions?"
+msgstr ""
+
+#: templates/problem/manage_submission.html:161
+msgid "Rescore all submissions"
+msgstr ""
+
+#: templates/problem/problem.html:91
 msgid "View as PDF"
 msgstr "Mutasd PDF-ként"
 
-#: .\templates\problem\problem.html:86 .\templates\problem\problem.html:96
-#: .\templates\problem\problem.html:101
+#: templates/problem/problem.html:101 templates/problem/problem.html:111
+#: templates/problem/problem.html:116
 msgid "Submit solution"
 msgstr "Megoldás beküldése"
 
-#: .\templates\problem\problem.html:89
+#: templates/problem/problem.html:104
 #, python-format
 msgid "%(counter)s submission left"
 msgid_plural "%(counter)s submissions left"
 msgstr[0] "%(counter)s beküldés van hátra"
 msgstr[1] "%(counter)s beküldés van hátra"
 
-#: .\templates\problem\problem.html:97
+#: templates/problem/problem.html:112
 msgid "0 submissions left"
 msgstr "0 beküldés van hátra"
 
-#: .\templates\problem\problem.html:108
+#: templates/problem/problem.html:124
 msgid "My submissions"
 msgstr "Beküldéseim"
 
-#: .\templates\problem\problem.html:112
+#: templates/problem/problem.html:128
 msgid "Best submissions"
 msgstr "Legjobb beküldések"
 
-#: .\templates\problem\problem.html:115
+#: templates/problem/problem.html:131
 msgid "Read editorial"
 msgstr "Megoldási útmutató olvasása"
 
-#: .\templates\problem\problem.html:120
+#: templates/problem/problem.html:136
 msgid "Manage tickets"
 msgstr "Hibajegyek kezelése"
 
-#: .\templates\problem\problem.html:124
+#: templates/problem/problem.html:140
 msgid "Edit problem"
 msgstr "Feladat szerkesztése"
 
-#: .\templates\problem\problem.html:126
+#: templates/problem/problem.html:142
 msgid "Edit test data"
 msgstr "Teszt adatok szerkesztése"
 
-#: .\templates\problem\problem.html:134
+#: templates/problem/problem.html:147
+msgid "My tickets"
+msgstr ""
+
+#: templates/problem/problem.html:155
+msgid "Manage submissions"
+msgstr ""
+
+#: templates/problem/problem.html:161
 msgid "Clone problem"
 msgstr "Feladat klónozása"
 
-#: .\templates\problem\problem.html:141
+#: templates/problem/problem.html:168
 msgid "Points:"
 msgstr "Pontok:"
 
-#: .\templates\problem\problem.html:144 .\templates\problem\problem.html:146
+#: templates/problem/problem.html:171 templates/problem/problem.html:173
 msgid "(partial)"
 msgstr "(részleges)"
 
-#: .\templates\problem\problem.html:151
+#: templates/problem/problem.html:178
 msgid "Time limit:"
 msgstr "Időkorlát:"
 
-#: .\templates\problem\problem.html:163
+#: templates/problem/problem.html:190
 msgid "Memory limit:"
 msgstr "Memóriakorlát:"
 
-#: .\templates\problem\problem.html:179
+#: templates/problem/problem.html:209
 msgid "Author:"
 msgid_plural "Authors:"
 msgstr[0] "Szerző:"
 msgstr[1] "Szerzők:"
 
-#: .\templates\problem\problem.html:194
+#: templates/problem/problem.html:224
 msgid "Problem type"
 msgid_plural "Problem types"
 msgstr[0] "Feladat típus"
 msgstr[1] "Feladat típusok"
 
-#: .\templates\problem\problem.html:208
+#: templates/problem/problem.html:237
 msgid "Allowed languages"
 msgstr "Engedélyezett nyelvek"
 
-#: .\templates\problem\problem.html:216
+#: templates/problem/problem.html:245
 #, python-format
 msgid "No %(lang)s judge online"
 msgstr "Nincs jelenleg online %(lang)s tesztelő"
 
-#: .\templates\problem\problem.html:245
+#: templates/problem/problem.html:256
+msgid "Judge:"
+msgid_plural "Judges:"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/problem/problem.html:273
+msgid "none available"
+msgstr ""
+
+#: templates/problem/problem.html:298
 msgid "Request clarification"
 msgstr "Pontosítást kérek"
 
-#: .\templates\problem\problem.html:247
+#: templates/problem/problem.html:300
 msgid "Report an issue"
 msgstr "Hiba jelentése"
 
-#: .\templates\problem\search-form.html:2
+#: templates/problem/raw.html:62
+msgid "Time Limit:"
+msgstr ""
+
+#: templates/problem/raw.html:71
+msgid "Memory Limit:"
+msgstr ""
+
+#: templates/problem/search-form.html:2
 msgid "Problem search"
 msgstr "Feladat keresés"
 
-#: .\templates\problem\search-form.html:8
+#: templates/problem/search-form.html:8
 msgid "Search problems..."
 msgstr "Feladatok keresése..."
 
-#: .\templates\problem\search-form.html:14
+#: templates/problem/search-form.html:14
 msgid "Full text search"
 msgstr "Szöveg keresése"
 
-#: .\templates\problem\search-form.html:21
+#: templates/problem/search-form.html:21
 msgid "Hide solved problems"
 msgstr ""
 
-#: .\templates\problem\search-form.html:27
+#: templates/problem/search-form.html:27
 msgid "Show problem types"
 msgstr ""
 
-#: .\templates\problem\search-form.html:33
-#: .\templates\problem\search-form.html:35
-#: .\templates\submission\submission-list-tabs.html:4
+#: templates/problem/search-form.html:33 templates/problem/search-form.html:35
+#: templates/submission/submission-list-tabs.html:4
 msgid "All"
 msgstr ""
 
-#: .\templates\problem\search-form.html:46
+#: templates/problem/search-form.html:46
 msgid "Problem types"
 msgstr ""
 
-#: .\templates\problem\search-form.html:57
+#: templates/problem/search-form.html:57
 msgid "Point range"
 msgstr ""
 
-#: .\templates\problem\search-form.html:63 .\templates\submission\list.html:240
-#: .\templates\ticket\list.html:232
+#: templates/problem/search-form.html:63 templates/submission/list.html:319
+#: templates/ticket/list.html:248
 msgid "Go"
 msgstr ""
 
-#: .\templates\problem\search-form.html:64
+#: templates/problem/search-form.html:64
 msgid "Random"
 msgstr ""
 
-#: .\templates\problem\statistics-table.html:1 .\templates\stats\base.html:11
-msgid "Statistics"
-msgstr ""
-
-#: .\templates\problem\submit.html:193
+#: templates/problem/submit.html:193
 #, python-format
 msgid "<b>Warning!</b> Your default language, <b>%(default_language)s</b>, is unavailable for this problem and has been deselected."
 msgstr ""
 
-#: .\templates\problem\submit.html:204
+#: templates/problem/submit.html:204
 #, python-format
 msgid "\n"
 "                        You have %(left)s submission left\n"
@@ -3251,576 +3783,633 @@ msgid_plural "\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: .\templates\problem\submit.html:213
+#: templates/problem/submit.html:213
 msgid "You have 0 submissions left"
 msgstr ""
 
-#: .\templates\problem\submit.html:251
+#: templates/problem/submit.html:251
 msgid "No judge is available for this problem."
 msgstr ""
 
-#: .\templates\registration\activate.html:3
+#: templates/registration/activate.html:3
 #, python-format
 msgid "%(key)s is an invalid activation key."
 msgstr ""
 
-#: .\templates\registration\activation_complete.html:3
+#: templates/registration/activation_complete.html:3
 msgid "Your account has been successfully activated."
 msgstr ""
 
-#: .\templates\registration\login.html:46
+#: templates/registration/login.html:46
 msgid "Invalid username or password."
 msgstr ""
 
-#: .\templates\registration\login.html:64
+#: templates/registration/login.html:64
+#: templates/registration/totp_auth.html:39
 msgid "Login!"
 msgstr ""
 
-#: .\templates\registration\login.html:67
+#: templates/registration/login.html:67
 msgid "Forgot your password?"
 msgstr ""
 
-#: .\templates\registration\login.html:70
+#: templates/registration/login.html:70
 msgid "Or log in with..."
 msgstr ""
 
-#: .\templates\registration\logout.html:3
+#: templates/registration/logout.html:3
 msgid "See you later!"
 msgstr ""
 
-#: .\templates\registration\password_change_done.html:3
+#: templates/registration/password_change_done.html:3
 msgid "Your password was sucessfully changed."
 msgstr ""
 
-#: .\templates\registration\password_change_form.html:8
+#: templates/registration/password_change_form.html:8
 msgid "Change Password"
 msgstr ""
 
-#: .\templates\registration\password_reset.html:7
+#: templates/registration/password_reset.html:7
 msgid "Send Reset Email"
 msgstr ""
 
-#: .\templates\registration\password_reset_complete.html:3
+#: templates/registration/password_reset_complete.html:3
 msgid "Your password has been set.  You may go ahead and log in now"
 msgstr ""
 
-#: .\templates\registration\password_reset_complete.html:4
+#: templates/registration/password_reset_complete.html:4
 msgid "Log in"
 msgstr ""
 
-#: .\templates\registration\password_reset_confirm.html:9
+#: templates/registration/password_reset_confirm.html:9
 msgid "Reset Password"
 msgstr ""
 
-#: .\templates\registration\password_reset_done.html:4
+#: templates/registration/password_reset_done.html:4
 msgid "We've emailed you instructions for setting your password. You should be receiving them shortly."
 msgstr ""
 
-#: .\templates\registration\password_reset_done.html:5
+#: templates/registration/password_reset_done.html:5
 msgid "If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder."
 msgstr ""
 
-#: .\templates\registration\password_reset_email.txt:1
+#: templates/registration/password_reset_email.txt:1
 #, python-format
 msgid "You're receiving this email because you requested a password reset for your user account at %(site_name)s."
 msgstr ""
 
-#: .\templates\registration\password_reset_email.txt:3
+#: templates/registration/password_reset_email.txt:3
 msgid "Please go to the following page and choose a new password:"
 msgstr ""
 
-#: .\templates\registration\password_reset_email.txt:7
+#: templates/registration/password_reset_email.txt:7
 msgid "Your username, in case you've forgotten:"
 msgstr ""
 
-#: .\templates\registration\password_reset_email.txt:9
+#: templates/registration/password_reset_email.txt:9
 msgid "Thanks for using our site!"
 msgstr ""
 
-#: .\templates\registration\password_reset_email.txt:11
+#: templates/registration/password_reset_email.txt:11
 #, python-format
 msgid "The %(site_name)s team"
 msgstr ""
 
-#: .\templates\registration\password_reset_subject.txt:1
+#: templates/registration/password_reset_subject.txt:1
 #, python-format
 msgid "Password reset on %(site_name)s"
 msgstr ""
 
-#: .\templates\registration\profile_creation.html:36
-#: .\templates\registration\username_select.html:7
+#: templates/registration/profile_creation.html:36
+#: templates/registration/username_select.html:7
 msgid "Continue >"
 msgstr "Folytatás >"
 
-#: .\templates\registration\registration_complete.html:3
+#: templates/registration/registration_closed.html:3
+msgid "Registration is currently closed. Please contact an administrator."
+msgstr ""
+
+#: templates/registration/registration_complete.html:3
 msgid "You have successfully been registered. An email has been sent to the email address you provided to confirm your registration."
 msgstr ""
 
-#: .\templates\registration\registration_form.html:162
+#: templates/registration/registration_form.html:166
 msgid "(again, for confirmation)"
 msgstr "(újra, megerősítésként)"
 
-#: .\templates\registration\registration_form.html:169
+#: templates/registration/registration_form.html:173
 msgid "(select your closest major city)"
 msgstr ""
 
-#: .\templates\registration\registration_form.html:173
+#: templates/registration/registration_form.html:177
 msgid "or"
 msgstr "vagy"
 
-#: .\templates\registration\registration_form.html:174
+#: templates/registration/registration_form.html:178
 msgid "pick from map"
 msgstr "válassz a térképről"
 
-#: .\templates\registration\registration_form.html:179
+#: templates/registration/registration_form.html:183
 msgid "Default language"
 msgstr "Alapértelmezett nyelv"
 
-#: .\templates\registration\registration_form.html:182
-#: .\templates\user\edit-profile.html:156
+#: templates/registration/registration_form.html:186
+#: templates/user/edit-profile.html:162
 msgid "Affiliated organizations"
 msgstr "Kapcsolódó csoportok"
 
-#: .\templates\registration\registration_form.html:188
-#: .\templates\user\edit-profile.html:126
+#: templates/registration/registration_form.html:192
+#: templates/user/edit-profile.html:121
 msgid "Notify me about upcoming contests"
 msgstr ""
 
-#: .\templates\registration\registration_form.html:202
+#: templates/registration/registration_form.html:206
 msgid "By registering, you agree to our"
 msgstr ""
 
-#: .\templates\registration\registration_form.html:203
+#: templates/registration/registration_form.html:207
 msgid "Terms & Conditions"
 msgstr "Felhasználási feltételek"
 
-#: .\templates\registration\registration_form.html:206
+#: templates/registration/registration_form.html:210
 msgid "Register!"
 msgstr ""
 
-#: .\templates\stats\language.html:44
+#: templates/registration/totp_auth.html:36
+#: templates/registration/totp_disable.html:45
+#: templates/registration/totp_enable.html:83
+msgid "Enter the 6-digit code generated by your app:"
+msgstr ""
+
+#: templates/registration/totp_auth.html:41
+#, python-format
+msgid "If you lost your authentication device, please contact us at %(email)s."
+msgstr ""
+
+#: templates/registration/totp_disable.html:38
+msgid "To protect your account, you must first authenticate before you can disable Two Factor Authentication."
+msgstr ""
+
+#: templates/registration/totp_enable.html:71
+msgid "Scan this code with your authenticator app:"
+msgstr ""
+
+#: templates/registration/totp_enable.html:72
+msgid "QR code"
+msgstr ""
+
+#: templates/registration/totp_enable.html:73
+msgid "Or enter this code manually:"
+msgstr ""
+
+#: templates/stats/base.html:9 templates/submission/list.html:327
+msgid "Statistics"
+msgstr ""
+
+#: templates/stats/language.html:44
 msgid "Submission Statistics"
 msgstr "Beküldési statisztikák"
 
-#: .\templates\stats\language.html:50
+#: templates/stats/language.html:50
 msgid "Submissions by Language"
 msgstr "Beküldések nyelvenként"
 
-#: .\templates\stats\language.html:56
+#: templates/stats/language.html:56
 msgid "AC Submissions by Language"
 msgstr ""
 
-#: .\templates\stats\language.html:62
+#: templates/stats/language.html:62
 msgid "Language AC Rate"
 msgstr ""
 
-#: .\templates\status\judge-status-table.html:2
+#: templates/status/judge-status-table.html:2
 msgid "Judge"
 msgstr "Tesztelő"
 
-#: .\templates\status\judge-status-table.html:4
+#: templates/status/judge-status-table.html:4
 msgid "Online"
 msgstr "Elérhető"
 
-#: .\templates\status\judge-status-table.html:6
+#: templates/status/judge-status-table.html:6
 msgid "Uptime"
 msgstr ""
 
-#: .\templates\status\judge-status-table.html:7
+#: templates/status/judge-status-table.html:7
 msgid "Ping"
 msgstr "Ping"
 
-#: .\templates\status\judge-status-table.html:8
+#: templates/status/judge-status-table.html:8
 msgid "Load"
 msgstr ""
 
-#: .\templates\status\judge-status-table.html:34
-#: .\templates\status\judge-status-table.html:41
-#: .\templates\status\judge-status-table.html:48
-#: .\templates\status\judge-status-table.html:59
+#: templates/status/judge-status-table.html:34
+#: templates/status/judge-status-table.html:41
+#: templates/status/judge-status-table.html:48
+#: templates/status/judge-status-table.html:59
 msgid "N/A"
 msgstr ""
 
-#: .\templates\status\judge-status-table.html:64
+#: templates/status/judge-status-table.html:64
 msgid "There are no judges available at this time."
 msgstr ""
 
-#: .\templates\status\language-list.html:35
+#: templates/status/language-list.html:33 templates/ticket/list.html:261
+msgid "ID"
+msgstr "Azonosító"
+
+#: templates/status/language-list.html:35
 msgid "Runtime Info"
 msgstr ""
 
-#: .\templates\status\status-tabs.html:4
+#: templates/status/status-tabs.html:4
 msgid "Judges"
 msgstr ""
 
-#: .\templates\status\status-tabs.html:6
+#: templates/status/status-tabs.html:6
 msgid "Version Matrix"
 msgstr ""
 
-#: .\templates\submission\internal-error-message.html:8
+#: templates/submission/internal-error-message.html:8
 msgid "An internal error occurred while grading."
 msgstr ""
 
-#: .\templates\submission\internal-error-message.html:15
+#: templates/submission/internal-error-message.html:15
 msgid "Error information"
 msgstr ""
 
-#: .\templates\submission\list.html:60
+#: templates/submission/list.html:63
 msgid "Filter by status..."
 msgstr ""
 
-#: .\templates\submission\list.html:62
+#: templates/submission/list.html:65
 msgid "Filter by language..."
 msgstr ""
 
-#: .\templates\submission\list.html:218
+#: templates/submission/list.html:297
 msgid "Filter submissions"
 msgstr ""
 
-#: .\templates\submission\list.html:260
+#: templates/submission/list.html:333
+msgid "Total:"
+msgstr ""
+
+#: templates/submission/list.html:343
 msgid "You were disconnected. Refresh to show latest updates."
 msgstr ""
 
-#: .\templates\submission\row.html:39
+#: templates/submission/row.html:39
 #, python-format
 msgid "Case #%(case)s"
 msgstr ""
 
-#: .\templates\submission\row.html:49
+#: templates/submission/row.html:49
 msgid "view"
 msgstr ""
 
-#: .\templates\submission\row.html:53
+#: templates/submission/row.html:53
 msgid "rejudge"
 msgstr "újratesztel"
 
-#: .\templates\submission\row.html:58
+#: templates/submission/row.html:58
 msgid "admin"
 msgstr "admin"
 
-#: .\templates\submission\source.html:25
+#: templates/submission/source.html:25
 msgid "View status"
 msgstr "Állapot megtekintése"
 
-#: .\templates\submission\source.html:26
+#: templates/submission/source.html:26
 msgid "View raw source"
 msgstr "Nyers forrás megkekintése"
 
-#: .\templates\submission\source.html:28 .\templates\submission\status.html:61
+#: templates/submission/source.html:28 templates/submission/status.html:61
 msgid "Resubmit"
 msgstr "Újraküld"
 
-#: .\templates\submission\status-testcases.html:10
+#: templates/submission/status-testcases.html:10
 msgid "We are waiting for a suitable judge to process your submission..."
 msgstr "Egy megfelelő tesztelőre várunk a feltöltés értékeléséhez..."
 
-#: .\templates\submission\status-testcases.html:12
+#: templates/submission/status-testcases.html:12
 msgid "Your submission is being processed..."
 msgstr "A beküldésed feldolgozás alatt áll..."
 
-#: .\templates\submission\status-testcases.html:14
+#: templates/submission/status-testcases.html:14
 msgid "Compilation Error"
 msgstr "Fordítási Hiba"
 
-#: .\templates\submission\status-testcases.html:18
+#: templates/submission/status-testcases.html:18
 msgid "Compilation Warnings"
 msgstr "Fordítási Figyelmeztetések"
 
-#: .\templates\submission\status-testcases.html:23
+#: templates/submission/status-testcases.html:23
 msgid "Pretest Execution Results"
 msgstr "Pretesztek futtatásának eredményei"
 
-#: .\templates\submission\status-testcases.html:25
+#: templates/submission/status-testcases.html:25
 msgid "Execution Results"
 msgstr ""
 
-#: .\templates\submission\status-testcases.html:31
+#: templates/submission/status-testcases.html:31
 msgid "Batch "
 msgstr ""
 
-#: .\templates\submission\status-testcases.html:43
+#: templates/submission/status-testcases.html:43
 msgid "Case"
 msgstr "Eset"
 
-#: .\templates\submission\status-testcases.html:45
+#: templates/submission/status-testcases.html:45
 msgid "Pretest"
 msgstr "Preteszt"
 
-#: .\templates\submission\status-testcases.html:47
+#: templates/submission/status-testcases.html:47
 msgid "Test case"
 msgstr "Teszt eset"
 
-#: .\templates\submission\status-testcases.html:79
+#: templates/submission/status-testcases.html:79
 msgid "Your output (clipped)"
 msgstr "A kimeneted (levágva)"
 
-#: .\templates\submission\status-testcases.html:99
+#: templates/submission/status-testcases.html:90
+msgid "Judge feedback"
+msgstr ""
+
+#: templates/submission/status-testcases.html:106
+msgid "Resources:"
+msgstr ""
+
+#: templates/submission/status-testcases.html:115
 msgid "Final pretest score:"
 msgstr "Végső preteszt pontszám:"
 
-#: .\templates\submission\status-testcases.html:101
+#: templates/submission/status-testcases.html:117
 msgid "Final score:"
 msgstr "Végső pontszám:"
 
-#: .\templates\submission\status-testcases.html:115
+#: templates/submission/status-testcases.html:131
 msgid "Passing pretests does not guarantee a full score on system tests."
 msgstr ""
 
-#: .\templates\submission\status-testcases.html:118
+#: templates/submission/status-testcases.html:134
 msgid "Submission aborted!"
 msgstr ""
 
-#: .\templates\submission\status.html:59
+#: templates/submission/status.html:59
 msgid "View source"
 msgstr "Forráskód megtekintése"
 
-#: .\templates\submission\status.html:88
+#: templates/submission/status.html:88
 msgid "Abort"
 msgstr "Megszakít"
 
-#: .\templates\submission\submission-list-tabs.html:6
+#: templates/submission/submission-list-tabs.html:6
 msgid "Mine"
 msgstr "Saját"
 
-#: .\templates\submission\submission-list-tabs.html:9
+#: templates/submission/submission-list-tabs.html:9
 msgid "Best"
 msgstr "Legjobb"
 
-#: .\templates\submission\submission-list-tabs.html:12
+#: templates/submission/submission-list-tabs.html:12
 #, python-format
 msgid "%(user)s's"
 msgstr ""
 
-#: .\templates\ticket\list.html:135 .\templates\ticket\ticket.html:257
+#: templates/ticket/list.html:135 templates/ticket/ticket.html:257
 msgid "Reopened: "
 msgstr "Újranyitva: "
 
-#: .\templates\ticket\list.html:138 .\templates\ticket\ticket.html:258
+#: templates/ticket/list.html:138 templates/ticket/ticket.html:258
 msgid "Closed: "
 msgstr "Lezárva: "
 
-#: .\templates\ticket\list.html:205
+#: templates/ticket/list.html:221
 msgid "Use desktop notification"
 msgstr "Asztali értesítés használata"
 
-#: .\templates\ticket\list.html:211
+#: templates/ticket/list.html:227
 msgid "Show my tickets only"
 msgstr "Csak a saját hibajegyek mutatása"
 
-#: .\templates\ticket\list.html:215
+#: templates/ticket/list.html:231
 msgid "Filing user"
 msgstr ""
 
-#: .\templates\ticket\list.html:224
+#: templates/ticket/list.html:240
 msgid "Assignee"
 msgstr ""
 
-#: .\templates\ticket\list.html:246
+#: templates/ticket/list.html:262
 msgid "Title"
 msgstr ""
 
-#: .\templates\ticket\list.html:248 .\templates\ticket\ticket.html:304
+#: templates/ticket/list.html:264 templates/ticket/ticket.html:304
 msgid "Assignees"
 msgstr ""
 
-#: .\templates\ticket\new_problem.html:7
+#: templates/ticket/new_problem.html:7
 msgid "Thanks for opening a ticket!"
 msgstr ""
 
-#: .\templates\ticket\new_problem.html:9
+#: templates/ticket/new_problem.html:9
 msgid "Please keep in mind that this form is for reporting issues with a problem statement, and not for asking for help. If you require assistance on solving a problem, ask in the comments instead."
 msgstr ""
 
-#: .\templates\ticket\ticket.html:298
+#: templates/ticket/ticket.html:298
 msgid "Associated object"
 msgstr ""
 
-#: .\templates\ticket\ticket.html:309
+#: templates/ticket/ticket.html:309
 msgid "No one is assigned."
 msgstr ""
 
-#: .\templates\ticket\ticket.html:315
+#: templates/ticket/ticket.html:315
 msgid "Close ticket"
 msgstr ""
 
-#: .\templates\ticket\ticket.html:317
+#: templates/ticket/ticket.html:317
 msgid "Reopen ticket"
 msgstr ""
 
-#: .\templates\ticket\ticket.html:321
+#: templates/ticket/ticket.html:321
 msgid "Assignee notes"
 msgstr ""
 
-#: .\templates\ticket\ticket.html:328 .\templates\widgets\select_all.html:4
+#: templates/ticket/ticket.html:328 templates/widgets/select_all.html:4
 msgid "Nothing here."
 msgstr ""
 
-#: .\templates\ticket\ticket.html:376
+#: templates/ticket/ticket.html:378
 msgid "Post"
 msgstr ""
 
-#: .\templates\user\base-users-table.html:3
+#: templates/user/base-users-table.html:3
 msgid "Rank"
 msgstr ""
 
-#: .\templates\user\base-users.html:14 .\templates\user\base-users.html:69
+#: templates/user/base-users.html:14 templates/user/base-users.html:69
 msgid "Search by handle..."
 msgstr ""
 
-#: .\templates\user\edit-profile.html:91
-msgid "Display name"
-msgstr ""
-
-#: .\templates\user\edit-profile.html:95
+#: templates/user/edit-profile.html:90
 msgid "Self-description"
 msgstr ""
 
-#: .\templates\user\edit-profile.html:103
+#: templates/user/edit-profile.html:98
 msgid "Select your closest major city"
 msgstr ""
 
-#: .\templates\user\edit-profile.html:112
+#: templates/user/edit-profile.html:107
 msgid "Editor theme"
 msgstr ""
 
-#: .\templates\user\edit-profile.html:117
+#: templates/user/edit-profile.html:112
 msgid "Math engine"
 msgstr "Matek motor"
 
-#: .\templates\user\edit-profile.html:141
-#: .\templates\user\edit-profile.html:142
+#: templates/user/edit-profile.html:136 templates/user/edit-profile.html:137
 msgid "Change your avatar"
 msgstr ""
 
-#: .\templates\user\edit-profile.html:148
+#: templates/user/edit-profile.html:143
 msgid "Change your password"
 msgstr ""
 
-#: .\templates\user\edit-profile.html:164
+#: templates/user/edit-profile.html:150
+msgid "Two Factor Authentication is enabled."
+msgstr ""
+
+#: templates/user/edit-profile.html:153
+msgid "Two Factor Authentication is disabled."
+msgstr ""
+
+#: templates/user/edit-profile.html:170
 msgid "User-script"
 msgstr ""
 
-#: .\templates\user\edit-profile.html:168
+#: templates/user/edit-profile.html:174
 msgid "Update profile"
 msgstr ""
 
-#: .\templates\user\pp-row.html:22
+#: templates/user/pp-row.html:22
 #, python-format
 msgid "\n"
 "            weighted <b>%(weight)s%%</b>\n"
 "        "
 msgstr ""
 
-#: .\templates\user\pp-row.html:27
+#: templates/user/pp-row.html:27
 #, python-format
 msgid "%(pp).1fpp"
 msgstr ""
 
-#: .\templates\user\pp-row.html:29
+#: templates/user/pp-row.html:29
 #, python-format
 msgid "%(pp).0fpp"
 msgstr ""
 
-#: .\templates\user\user-about.html:14
+#: templates/user/user-about.html:14
 msgid "From"
 msgstr ""
 
-#: .\templates\user\user-about.html:24 .\templates\user\user-tabs.html:4
+#: templates/user/user-about.html:25
+msgid "Admin Notes"
+msgstr ""
+
+#: templates/user/user-about.html:33 templates/user/user-tabs.html:4
 msgid "About"
 msgstr ""
 
-#: .\templates\user\user-about.html:31
+#: templates/user/user-about.html:40
 msgid "You have not shared any information."
 msgstr ""
 
-#: .\templates\user\user-about.html:33
+#: templates/user/user-about.html:42
 msgid "This user has not shared any information."
 msgstr ""
 
-#: .\templates\user\user-base.html:46
+#: templates/user/user-base.html:42
 #, python-format
-msgid "%(count)d problems solved"
-msgstr ""
+msgid "%(counter)s problem solved"
+msgid_plural "%(counter)s problems solved"
+msgstr[0] ""
+msgstr[1] ""
 
-#: .\templates\user\user-base.html:48
+#: templates/user/user-base.html:50
 msgid "Rank by points:"
 msgstr ""
 
-#: .\templates\user\user-base.html:50
+#: templates/user/user-base.html:53
 msgid "Total points:"
 msgstr ""
 
-#: .\templates\user\user-base.html:58
-msgid "View submissions"
-msgstr ""
-
-#: .\templates\user\user-base.html:64
+#: templates/user/user-base.html:68
 msgid "Rank by rating:"
 msgstr ""
 
-#: .\templates\user\user-base.html:65
+#: templates/user/user-base.html:70
 msgid "Rating:"
 msgstr ""
 
-#: .\templates\user\user-base.html:66
+#: templates/user/user-base.html:71
 msgid "Volatility:"
 msgstr ""
 
-#: .\templates\user\user-base.html:67
+#: templates/user/user-base.html:72
 msgid "Min. rating:"
 msgstr ""
 
-#: .\templates\user\user-base.html:68
+#: templates/user/user-base.html:73
 msgid "Max rating:"
 msgstr ""
 
-#: .\templates\user\user-problems.html:35
+#: templates/user/user-problems.html:35
 msgid "Points Breakdown"
 msgstr ""
 
-#: .\templates\user\user-problems.html:46
+#: templates/user/user-problems.html:41
 msgid "Load more..."
 msgstr "Továbbiak betöltése..."
 
-#: .\templates\user\user-problems.html:50
+#: templates/user/user-problems.html:45
 msgid "This user has not yet solved any problems."
 msgstr ""
 
-#: .\templates\user\user-problems.html:56
+#: templates/user/user-problems.html:51
 msgid "Authored Problems"
 msgstr "Létrehozott feladatok"
 
-#: .\templates\user\user-problems.html:88
+#: templates/user/user-problems.html:83
 msgid "Hide problems I've solved"
 msgstr ""
 
-#: .\templates\user\user-problems.html:98
+#: templates/user/user-problems.html:93
 #, python-format
 msgid "%(points).1f points"
 msgstr ""
 
-#: .\templates\user\user-problems.html:104
+#: templates/user/user-problems.html:99
 msgid "Score"
 msgstr "Pont"
 
-#: .\templates\user\user-problems.html:115
+#: templates/user/user-problems.html:110
 #, python-format
 msgid "%(points)s / %(total)s"
 msgstr ""
 
-#: .\templates\user\user-tabs.html:7
+#: templates/user/user-tabs.html:7
 msgid "Impersonate"
 msgstr ""
 
-#: .\templates\user\user-tabs.html:13
+#: templates/user/user-tabs.html:13
 msgid "Admin User"
 msgstr ""
 
-#: .\templates\user\user-tabs.html:16
+#: templates/user/user-tabs.html:16
 msgid "Admin Profile"
 msgstr ""
 
-#: .\templates\widgets\select_all.html:8
+#: templates/widgets/select_all.html:8
 msgid "Check all"
 msgstr "Az összes kijelölése"
 
