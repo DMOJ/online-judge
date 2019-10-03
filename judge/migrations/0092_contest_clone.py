@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0091_compiler_message_ansi2html'),
+        ('judge', '0092_contest_is_external'),
     ]
 
     operations = [
