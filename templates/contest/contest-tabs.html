@@ -17,12 +17,8 @@
         {{ make_tab('edit', 'fa-edit', url('admin:judge_contest_change', contest.id), _('Edit')) }}
     {% endif %}
     {% if perms.judge.clone_contest %}
-        <form action="{{ url('contest_clone', contest.key) }}" method="post">
-            {% csrf_token %}
-            {{ make_tab('clone', 'fa-copy', '#', _('Clone')) }}
-        </form>
+        {{ make_tab('clone', 'fa-copy', url('contest_clone', contest.key), _('Clone')) }}
     {% endif %}
-
 
     {% if request.user.is_authenticated %}
         {% if contest.can_join and (in_contest or contest.is_joinable_by(request.user)) %}

@@ -7,8 +7,7 @@ from itertools import chain, count
 from operator import attrgetter
 
 from django import forms
-from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
@@ -34,8 +33,8 @@ from judge.utils.ranker import ranker
 from judge.utils.strings import safe_int_or_none
 from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message, paginate_query_context
 
-__all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestRegister', 'ContestJoin', 'ContestLeave',
-           'ContestCalendar', 'contest_ranking_ajax', 'ContestParticipationList', 'get_contest_ranking_list',
+__all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
+           'ContestClone', 'contest_ranking_ajax', 'ContestParticipationList', 'get_contest_ranking_list',
            'base_contest_ranking_list']
 
 
@@ -263,6 +262,39 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
                                                     default=0, output_field=IntegerField()))) \
             .add_i18n_name(self.request.LANGUAGE_CODE)
         return context
+
+
+class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObjectFormView):
+    title = _('Clone Contest')
+    template_name = 'contest/clone.html'
+    form_class = ContestCloneForm
+    permission_required = 'judge.clone_contest'
+
+    def form_valid(self, form):
+        contest = self.object
+
+        tags = contest.tags.all()
+        organizations = contest.organizations.all()
+        private_contestants = contest.private_contestants.all()
+        contest_problems = contest.contest_problems.all()
+
+        contest.pk = None
+        contest.is_visible = False
+        contest.user_count = 0
+        contest.key = form.cleaned_data['key']
+        contest.save()
+
+        contest.tags.set(tags)
+        contest.organizations.set(organizations)
+        contest.private_contestants.set(private_contestants)
+        contest.organizers.add(self.request.profile)
+
+        for problem in contest_problems:
+            problem.contest = contest
+            problem.pk = None
+        ContestProblem.objects.bulk_create(contest_problems)
+
+        return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest.id,)))
 
 
 class ContestAccessDenied(Exception):
@@ -691,38 +723,3 @@ class ContestTagDetail(TitleMixin, ContestTagDetailAjax):
 
     def get_title(self):
         return _('Contest tag: %s') % self.object.name
-
-
-@require_POST
-@login_required
-@permission_required('judge.clone_contest')
-def clone_contest(request, contest):
-    contest = get_object_or_404(Contest, key=contest)
-    if not contest.is_accessible_by(request.user):
-        raise Http404()
-
-    tags = contest.tags.all()
-    organizations = contest.organizations.all()
-
-    contest.pk = None
-    contest.is_visible = False
-    contest.freeze_submissions = False
-    contest.user_count = 0
-    contest.key += '_clone'
-    try:
-        contest.save()
-    except IntegrityError:
-        key = contest.key
-        for i in count(1):
-            contest.key = '%s%d' % (key, i)
-            try:
-                contest.save()
-            except IntegrityError:
-                pass
-            else:
-                break
-    contest.organizers.add(request.profile)
-    contest.organizations = organizations
-    contest.tags = tags
-    contest.save()
-    return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest.id,)))
