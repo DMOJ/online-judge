@@ -9,11 +9,5 @@
             return confirm('{{ _('Are you sure you want to join?') }}\n' +
                 '{{ _('Joining a contest starts your timer, after which it becomes unstoppable.') }}');
         });
-        
-        $('a#clone-link').click(function (event) {
-            event.preventDefault();
-            if (confirm('Are you sure you want to clone?'))
-                $(this).closest("form").submit();
-        })
     });
 </script>
