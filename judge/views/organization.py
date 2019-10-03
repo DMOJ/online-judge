@@ -194,7 +194,8 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
 
     def get_object(self, queryset=None):
         organization = super(OrganizationRequestBaseView, self).get_object(queryset)
-        if not organization.admins.filter(id=self.request.profile.id).exists():
+        if not (organization.admins.filter(id=self.request.profile.id).exists() or
+                organization.registrant_id == self.request.profile.id):
             raise PermissionDenied()
         return organization
 
