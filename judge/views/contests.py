@@ -27,11 +27,12 @@ from django.views.generic.detail import BaseDetailView, DetailView
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
+from judge.forms import ContestCloneForm
 from judge.models import Contest, ContestParticipation, ContestRegistration, ContestTag, Problem, Profile
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
 from judge.utils.strings import safe_int_or_none
-from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message, paginate_query_context
+from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView,TitleMixin, generic_message, paginate_query_context
 
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'ContestClone', 'contest_ranking_ajax', 'ContestParticipationList', 'get_contest_ranking_list',
