@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 23:12+0000\n"
-"PO-Revision-Date: 2019-10-02 21:03\n"
+"POT-Creation-Date: 2019-10-03 20:39+0000\n"
+"PO-Revision-Date: 2019-10-03 21:02\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -203,8 +203,8 @@ msgstr "内容"
 msgid "Summary"
 msgstr "概要"
 
-#: judge/admin/interface.py:107 judge/models/contest.py:240
-#: judge/models/contest.py:344 judge/models/profile.py:186
+#: judge/admin/interface.py:107 judge/models/contest.py:241
+#: judge/models/contest.py:345 judge/models/profile.py:186
 msgid "user"
 msgstr "使用者"
 
@@ -480,6 +480,14 @@ msgstr ""
 msgid "Problem with code already exists."
 msgstr ""
 
+#: judge/forms.py:154 judge/models/contest.py:50
+msgid "Contest id must be ^[a-z0-9]+$"
+msgstr ""
+
+#: judge/forms.py:159
+msgid "Contest with key already exists."
+msgstr ""
+
 #: judge/jinja2/datetime.py:26 templates/blog/content.html:27
 #: templates/blog/dashboard.html:21
 msgid "N j, Y, g:i a"
@@ -604,10 +612,6 @@ msgstr ""
 msgid "contest id"
 msgstr ""
 
-#: judge/models/contest.py:50
-msgid "Contest id must be ^[a-z0-9]+$"
-msgstr ""
-
 #: judge/models/contest.py:51
 msgid "contest name"
 msgstr ""
@@ -632,7 +636,7 @@ msgstr ""
 msgid "problems"
 msgstr ""
 
-#: judge/models/contest.py:56 judge/models/contest.py:241
+#: judge/models/contest.py:56 judge/models/contest.py:242
 msgid "start time"
 msgstr ""
 
@@ -807,157 +811,161 @@ msgid "Edit all contests"
 msgstr ""
 
 #: judge/models/contest.py:227
-msgid "Rate contests"
+msgid "Clone contest"
 msgstr ""
 
 #: judge/models/contest.py:228
-msgid "Contest access codes"
+msgid "Rate contests"
 msgstr ""
 
 #: judge/models/contest.py:229
+msgid "Contest access codes"
+msgstr ""
+
+#: judge/models/contest.py:230
 msgid "Create private contests"
 msgstr ""
 
-#: judge/models/contest.py:231 judge/models/contest.py:309
-#: judge/models/contest.py:345 judge/models/submission.py:82
+#: judge/models/contest.py:232 judge/models/contest.py:310
+#: judge/models/contest.py:346 judge/models/submission.py:82
 msgid "contest"
 msgstr ""
 
-#: judge/models/contest.py:232
+#: judge/models/contest.py:233
 msgid "contests"
 msgstr ""
 
-#: judge/models/contest.py:239
+#: judge/models/contest.py:240
 msgid "associated contest"
 msgstr ""
 
-#: judge/models/contest.py:242
+#: judge/models/contest.py:243
 msgid "score"
 msgstr "得分"
 
-#: judge/models/contest.py:243
+#: judge/models/contest.py:244
 msgid "cumulative time"
 msgstr "累計時間"
 
-#: judge/models/contest.py:244
+#: judge/models/contest.py:245
 msgid "virtual participation id"
 msgstr ""
 
-#: judge/models/contest.py:245
+#: judge/models/contest.py:246
 msgid "0 means non-virtual, otherwise the n-th virtual participation"
 msgstr ""
 
-#: judge/models/contest.py:246
+#: judge/models/contest.py:247
 msgid "contest format specific data"
 msgstr ""
 
-#: judge/models/contest.py:295
+#: judge/models/contest.py:296
 #, python-format
 msgid "%s spectating in %s"
 msgstr ""
 
-#: judge/models/contest.py:297
+#: judge/models/contest.py:298
 #, python-format
 msgid "%s in %s, v%d"
 msgstr ""
 
-#: judge/models/contest.py:298
+#: judge/models/contest.py:299
 #, python-format
 msgid "%s in %s"
 msgstr ""
 
-#: judge/models/contest.py:301
+#: judge/models/contest.py:302
 msgid "contest participation"
 msgstr ""
 
-#: judge/models/contest.py:302
+#: judge/models/contest.py:303
 msgid "contest participations"
 msgstr ""
 
-#: judge/models/contest.py:308 judge/models/contest.py:329
+#: judge/models/contest.py:309 judge/models/contest.py:330
 #: judge/models/problem.py:348 judge/models/problem.py:353
 #: judge/models/problem.py:371 judge/models/problem_data.py:35
 msgid "problem"
 msgstr "題目"
 
-#: judge/models/contest.py:310 judge/models/contest.py:333
+#: judge/models/contest.py:311 judge/models/contest.py:334
 #: judge/models/problem.py:126
 msgid "points"
 msgstr "分"
 
-#: judge/models/contest.py:311
+#: judge/models/contest.py:312
 msgid "partial"
 msgstr "部分"
 
-#: judge/models/contest.py:312 judge/models/contest.py:334
+#: judge/models/contest.py:313 judge/models/contest.py:335
 msgid "is pretested"
 msgstr ""
 
-#: judge/models/contest.py:313 judge/models/interface.py:43
+#: judge/models/contest.py:314 judge/models/interface.py:43
 msgid "order"
 msgstr ""
 
-#: judge/models/contest.py:314
+#: judge/models/contest.py:315
 msgid "output prefix length override"
 msgstr ""
 
-#: judge/models/contest.py:315
+#: judge/models/contest.py:316
 msgid "Maximum number of submissions for this problem, or 0 for no limit."
 msgstr ""
 
-#: judge/models/contest.py:317
+#: judge/models/contest.py:318
 msgid "Why include a problem you can't submit to?"
 msgstr ""
 
-#: judge/models/contest.py:322
+#: judge/models/contest.py:323
 msgid "contest problem"
 msgstr ""
 
-#: judge/models/contest.py:323
+#: judge/models/contest.py:324
 msgid "contest problems"
 msgstr ""
 
-#: judge/models/contest.py:327 judge/models/submission.py:180
+#: judge/models/contest.py:328 judge/models/submission.py:180
 msgid "submission"
 msgstr ""
 
-#: judge/models/contest.py:331 judge/models/contest.py:346
+#: judge/models/contest.py:332 judge/models/contest.py:347
 msgid "participation"
 msgstr ""
 
-#: judge/models/contest.py:335
+#: judge/models/contest.py:336
 msgid "Whether this submission was ran only on pretests."
 msgstr ""
 
-#: judge/models/contest.py:339
+#: judge/models/contest.py:340
 msgid "contest submission"
 msgstr ""
 
-#: judge/models/contest.py:340
+#: judge/models/contest.py:341
 msgid "contest submissions"
 msgstr ""
 
-#: judge/models/contest.py:348
+#: judge/models/contest.py:349
 msgid "rank"
 msgstr "排名"
 
-#: judge/models/contest.py:349
+#: judge/models/contest.py:350
 msgid "rating"
 msgstr ""
 
-#: judge/models/contest.py:350
+#: judge/models/contest.py:351
 msgid "volatility"
 msgstr ""
 
-#: judge/models/contest.py:351
+#: judge/models/contest.py:352
 msgid "last rated"
 msgstr ""
 
-#: judge/models/contest.py:355
+#: judge/models/contest.py:356
 msgid "contest rating"
 msgstr ""
 
-#: judge/models/contest.py:356
+#: judge/models/contest.py:357
 msgid "contest ratings"
 msgstr ""
 
@@ -2110,7 +2118,7 @@ msgstr ""
 msgid "You already voted."
 msgstr ""
 
-#: judge/views/comment.py:120 judge/views/organization.py:288
+#: judge/views/comment.py:120 judge/views/organization.py:289
 msgid "Edited from site"
 msgstr ""
 
@@ -2118,106 +2126,110 @@ msgstr ""
 msgid "Editing comment"
 msgstr ""
 
-#: judge/views/contests.py:44 judge/views/contests.py:201
-#: judge/views/contests.py:204 judge/views/contests.py:342
+#: judge/views/contests.py:45 judge/views/contests.py:202
+#: judge/views/contests.py:205 judge/views/contests.py:376
 msgid "No such contest"
 msgstr ""
 
-#: judge/views/contests.py:45 judge/views/contests.py:202
+#: judge/views/contests.py:46 judge/views/contests.py:203
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr ""
 
-#: judge/views/contests.py:70
+#: judge/views/contests.py:71
 msgid "Contests"
 msgstr ""
 
-#: judge/views/contests.py:205
+#: judge/views/contests.py:206
 msgid "Could not find such contest."
 msgstr ""
 
-#: judge/views/contests.py:208
+#: judge/views/contests.py:209
 #, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr ""
 
-#: judge/views/contests.py:262
+#: judge/views/contests.py:233
+msgid "Clone Contest"
+msgstr ""
+
+#: judge/views/contests.py:296
 msgid "Contest not ongoing"
 msgstr ""
 
-#: judge/views/contests.py:263
+#: judge/views/contests.py:297
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr ""
 
-#: judge/views/contests.py:267
+#: judge/views/contests.py:301
 msgid "Already in contest"
 msgstr ""
 
-#: judge/views/contests.py:268
+#: judge/views/contests.py:302
 #, python-format
 msgid "You are already in a contest: \"%s\"."
 msgstr ""
 
-#: judge/views/contests.py:271
+#: judge/views/contests.py:305
 msgid "Banned from joining"
 msgstr ""
 
-#: judge/views/contests.py:272
+#: judge/views/contests.py:306
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
 msgstr ""
 
-#: judge/views/contests.py:332
+#: judge/views/contests.py:366
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr ""
 
-#: judge/views/contests.py:343
+#: judge/views/contests.py:377
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr ""
 
-#: judge/views/contests.py:362
+#: judge/views/contests.py:396
 msgid "ContestCalendar requires integer year and month"
 msgstr ""
 
-#: judge/views/contests.py:402
+#: judge/views/contests.py:436
 #, python-format
 msgid "Contests in %(month)s"
 msgstr ""
 
-#: judge/views/contests.py:402
+#: judge/views/contests.py:436
 msgid "F Y"
 msgstr ""
 
-#: judge/views/contests.py:488
+#: judge/views/contests.py:522
 msgid "???"
 msgstr ""
 
-#: judge/views/contests.py:551
+#: judge/views/contests.py:585
 #, python-format
 msgid "%s Rankings"
 msgstr ""
 
-#: judge/views/contests.py:567
+#: judge/views/contests.py:601
 #, python-format
 msgid "Your participation in %s"
 msgstr ""
 
-#: judge/views/contests.py:568
+#: judge/views/contests.py:602
 #, python-format
 msgid "%s's participation in %s"
 msgstr ""
 
-#: judge/views/contests.py:572
+#: judge/views/contests.py:606
 msgid "Live"
 msgstr ""
 
-#: judge/views/contests.py:584 templates/contest/contest-tabs.html:13
+#: judge/views/contests.py:618 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr ""
 
-#: judge/views/contests.py:606
+#: judge/views/contests.py:640
 #, python-format
 msgid "Contest tag: %s"
 msgstr ""
@@ -2300,54 +2312,54 @@ msgstr ""
 msgid "Join request detail"
 msgstr ""
 
-#: judge/views/organization.py:203
+#: judge/views/organization.py:204
 #, python-format
 msgid "Managing join requests for %s"
 msgstr ""
 
-#: judge/views/organization.py:234
+#: judge/views/organization.py:235
 #, python-format
 msgid "Your organization can only receive %d more members. You cannot approve %d users."
 msgstr ""
 
-#: judge/views/organization.py:246
+#: judge/views/organization.py:247
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
 msgstr[0] ""
 
-#: judge/views/organization.py:247
+#: judge/views/organization.py:248
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] ""
 
-#: judge/views/organization.py:272
+#: judge/views/organization.py:273
 #, python-format
 msgid "Editing %s"
 msgstr ""
 
-#: judge/views/organization.py:296 judge/views/organization.py:304
+#: judge/views/organization.py:297 judge/views/organization.py:305
 msgid "Can't edit organization"
 msgstr ""
 
-#: judge/views/organization.py:297
+#: judge/views/organization.py:298
 msgid "You are not allowed to edit this organization."
 msgstr ""
 
-#: judge/views/organization.py:305
+#: judge/views/organization.py:306
 msgid "You are not allowed to kick people from this organization."
 msgstr ""
 
-#: judge/views/organization.py:310 judge/views/organization.py:314
+#: judge/views/organization.py:311 judge/views/organization.py:315
 msgid "Can't kick user"
 msgstr ""
 
-#: judge/views/organization.py:311
+#: judge/views/organization.py:312
 msgid "The user you are trying to kick does not exist!"
 msgstr ""
 
-#: judge/views/organization.py:315
+#: judge/views/organization.py:316
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s."
 msgstr ""
@@ -3073,6 +3085,14 @@ msgstr "星期五"
 msgid "Saturday"
 msgstr "星期六"
 
+#: templates/contest/clone.html:37
+msgid "Enter a new key for the cloned contest:"
+msgstr ""
+
+#: templates/contest/clone.html:40 templates/problem/clone.html:40
+msgid "Clone!"
+msgstr ""
+
 #: templates/contest/contest-list-tabs.html:7
 msgid "Prev"
 msgstr ""
@@ -3106,29 +3126,33 @@ msgstr ""
 msgid "Hidden Rankings"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:28
-#: templates/contest/contest-tabs.html:48
+#: templates/contest/contest-tabs.html:20
+msgid "Clone"
+msgstr ""
+
+#: templates/contest/contest-tabs.html:31
+#: templates/contest/contest-tabs.html:51
 msgid "Leave contest"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:35 templates/contest/list.html:293
+#: templates/contest/contest-tabs.html:38 templates/contest/list.html:293
 msgid "Virtual join"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:46
+#: templates/contest/contest-tabs.html:49
 msgid "Stop spectating"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:55
+#: templates/contest/contest-tabs.html:58
 msgid "Spectate contest"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:61
-#: templates/contest/contest-tabs.html:67
+#: templates/contest/contest-tabs.html:64
+#: templates/contest/contest-tabs.html:70
 msgid "Join contest"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:76
+#: templates/contest/contest-tabs.html:79
 msgid "Login to participate"
 msgstr ""
 
@@ -3435,10 +3459,6 @@ msgstr ""
 
 #: templates/problem/clone.html:37
 msgid "Enter a new code for the cloned problem:"
-msgstr ""
-
-#: templates/problem/clone.html:40
-msgid "Clone!"
 msgstr ""
 
 #: templates/problem/data.html:353
