@@ -5,23 +5,22 @@ import logging
 import os
 import shutil
 import subprocess
-import tempfile
 import uuid
 
 from django.conf import settings
 from django.utils.translation import gettext
 
-HAS_PHANTOMJS = os.access(getattr(settings, 'PHANTOMJS', ''), os.X_OK)
-HAS_SLIMERJS = os.access(getattr(settings, 'SLIMERJS', ''), os.X_OK)
+HAS_PHANTOMJS = os.access(settings.PHANTOMJS, os.X_OK)
+HAS_SLIMERJS = os.access(settings.SLIMERJS, os.X_OK)
 
-NODE_PATH = getattr(settings, 'NODEJS', '/usr/bin/node')
-PUPPETEER_MODULE = getattr(settings, 'PUPPETEER_MODULE', '/usr/lib/node_modules/puppeteer')
+NODE_PATH = settings.NODEJS
+PUPPETEER_MODULE = settings.PUPPETEER_MODULE
 HAS_PUPPETEER = os.access(NODE_PATH, os.X_OK) and os.path.isdir(PUPPETEER_MODULE)
 
-HAS_PDF = (os.path.isdir(getattr(settings, 'DMOJ_PDF_PROBLEM_CACHE', '')) and
+HAS_PDF = (os.path.isdir(settings.DMOJ_PDF_PROBLEM_CACHE) and
            (HAS_PHANTOMJS or HAS_SLIMERJS or HAS_PUPPETEER))
 
-EXIFTOOL = getattr(settings, 'EXIFTOOL', '/usr/bin/exiftool')
+EXIFTOOL = settings.EXIFTOOL
 HAS_EXIFTOOL = os.access(EXIFTOOL, os.X_OK)
 
 logger = logging.getLogger('judge.problem.pdf')
@@ -32,8 +31,7 @@ class BasePdfMaker(object):
     title = None
 
     def __init__(self, dir=None, clean_up=True):
-        self.dir = dir or os.path.join(getattr(settings, 'DMOJ_PDF_PROBLEM_TEMP_DIR', tempfile.gettempdir()),
-                                       str(uuid.uuid1()))
+        self.dir = dir or os.path.join(settings.DMOJ_PDF_PROBLEM_TEMP_DIR, str(uuid.uuid1()))
         self.proc = None
         self.log = None
         self.htmlfile = os.path.join(self.dir, 'input.html')
@@ -129,10 +127,10 @@ page.open(param.input, function (status) {
 
     def get_render_script(self):
         return self.template.replace('{params}', json.dumps({
-            'zoom': getattr(settings, 'PHANTOMJS_PDF_ZOOM', 0.75),
-            'timeout': int(getattr(settings, 'PHANTOMJS_PDF_TIMEOUT', 5.0) * 1000),
+            'zoom': settings.PHANTOMJS_PDF_ZOOM,
+            'timeout': int(settings.PHANTOMJS_PDF_TIMEOUT * 1000),
             'input': 'input.html', 'output': 'output.pdf',
-            'paper': getattr(settings, 'PHANTOMJS_PAPER_SIZE', 'Letter'),
+            'paper': settings.PHANTOMJS_PAPER_SIZE,
             'footer': gettext('Page [page] of [topage]'),
         }))
 
@@ -182,9 +180,9 @@ try {
 
     def get_render_script(self):
         return self.template.replace('{params}', json.dumps({
-            'zoom': getattr(settings, 'SLIMERJS_PDF_ZOOM', 0.75),
+            'zoom': settings.SLIMERJS_PDF_ZOOM,
             'input': 'input.html', 'output': 'output.pdf',
-            'paper': getattr(settings, 'SLIMERJS_PAPER_SIZE', 'Letter'),
+            'paper': settings.SLIMERJS_PAPER_SIZE,
             'footer': gettext('Page [page] of [topage]').replace('[page]', '&P').replace('[topage]', '&L'),
         }))
 
@@ -193,7 +191,7 @@ try {
             f.write(self.get_render_script())
 
         env = None
-        firefox = getattr(settings, 'SLIMERJS_FIREFOX_PATH', '')
+        firefox = settings.SLIMERJS_FIREFOX_PATH
         if firefox:
             env = os.environ.copy()
             env['SLIMERJSLAUNCHER'] = firefox
@@ -244,7 +242,7 @@ puppeteer.launch().then(browser => Promise.resolve()
         return self.template.replace('{params}', json.dumps({
             'input': 'file://' + os.path.abspath(os.path.join(self.dir, 'input.html')),
             'output': os.path.abspath(os.path.join(self.dir, 'output.pdf')),
-            'paper': getattr(settings, 'PUPPETEER_PAPER_SIZE', 'Letter'),
+            'paper': settings.PUPPETEER_PAPER_SIZE,
             'footer': gettext('Page [page] of [topage]'),
         }))
 

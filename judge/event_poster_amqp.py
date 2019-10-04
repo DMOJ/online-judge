@@ -12,7 +12,7 @@ __all__ = ['EventPoster', 'post', 'last']
 class EventPoster(object):
     def __init__(self):
         self._connect()
-        self._exchange = getattr(settings, 'EVENT_DAEMON_AMQP_EXCHANGE', 'dmoj-events')
+        self._exchange = settings.EVENT_DAEMON_AMQP_EXCHANGE
 
     def _connect(self):
         self._conn = pika.BlockingConnection(pika.URLParameters(settings.EVENT_DAEMON_AMQP))

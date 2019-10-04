@@ -19,7 +19,7 @@ from judge.utils.subscription import Subscription, newsletter_id
 from judge.widgets import Select2MultipleWidget, Select2Widget
 
 valid_id = re.compile(r'^\w+$')
-bad_mail_regex = list(map(re.compile, getattr(settings, 'BAD_MAIL_PROVIDER_REGEX', ())))
+bad_mail_regex = list(map(re.compile, settings.BAD_MAIL_PROVIDER_REGEX))
 
 
 class CustomRegistrationForm(RegistrationForm):
@@ -46,7 +46,7 @@ class CustomRegistrationForm(RegistrationForm):
                                                 'is allowed per address.') % self.cleaned_data['email'])
         if '@' in self.cleaned_data['email']:
             domain = self.cleaned_data['email'].split('@')[-1].lower()
-            if (domain in getattr(settings, 'BAD_MAIL_PROVIDERS', ()) or
+            if (domain in settings.BAD_MAIL_PROVIDERS or
                     any(regex.match(domain) for regex in bad_mail_regex)):
                 raise forms.ValidationError(gettext('Your email provider is not allowed due to history of abuse. '
                                                     'Please use a reputable email provider.'))
@@ -61,11 +61,11 @@ class RegistrationView(OldRegistrationView):
     def get_context_data(self, **kwargs):
         if 'title' not in kwargs:
             kwargs['title'] = self.title
-        tzmap = getattr(settings, 'TIMEZONE_MAP', None)
+        tzmap = settings.TIMEZONE_MAP
         kwargs['TIMEZONE_MAP'] = tzmap or 'http://momentjs.com/static/img/world.png'
-        kwargs['TIMEZONE_BG'] = getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD')
+        kwargs['TIMEZONE_BG'] = settings.TIMEZONE_BG if tzmap else '#4E7CAD'
         kwargs['password_validators'] = get_default_password_validators()
-        kwargs['tos_url'] = getattr(settings, 'TERMS_OF_SERVICE_URL', None)
+        kwargs['tos_url'] = settings.TERMS_OF_SERVICE_URL
         return super(RegistrationView, self).get_context_data(**kwargs)
 
     def register(self, form):
@@ -86,8 +86,8 @@ class RegistrationView(OldRegistrationView):
 
     def get_initial(self, *args, **kwargs):
         initial = super(RegistrationView, self).get_initial(*args, **kwargs)
-        initial['timezone'] = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto')
-        initial['language'] = Language.objects.get(key=getattr(settings, 'DEFAULT_USER_LANGUAGE', 'PY2'))
+        initial['timezone'] = settings.DEFAULT_USER_TIME_ZONE
+        initial['language'] = Language.objects.get(key=settings.DEFAULT_USER_LANGUAGE)
         return initial
 
 

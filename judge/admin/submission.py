@@ -151,7 +151,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             return
         queryset = queryset.order_by('id')
         if not request.user.has_perm('judge.rejudge_submission_lot') and \
-                queryset.count() > getattr(settings, 'DMOJ_SUBMISSIONS_REJUDGE_LIMIT', 10):
+                queryset.count() > settings.DMOJ_SUBMISSIONS_REJUDGE_LIMIT:
             self.message_user(request, gettext('You do not have the permission to rejudge THAT many submissions.'),
                               level=messages.ERROR)
             return

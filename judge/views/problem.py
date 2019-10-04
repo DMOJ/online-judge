@@ -25,7 +25,6 @@ from django.views.generic import ListView, View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 
-from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemSubmitForm
 from judge.models import ContestProblem, ContestSubmission, Judge, Language, Problem, ProblemGroup, \
@@ -642,7 +641,7 @@ def problem_submit(request, problem=None, submission=None):
         'no_judges': not form.fields['language'].queryset,
         'submission_limit': submission_limit,
         'submissions_left': submissions_left,
-        'ACE_URL': ACE_URL,
+        'ACE_URL': settings.ACE_URL,
 
         'default_lang': default_lang,
     })

@@ -10,7 +10,7 @@ class TimezoneMiddleware(object):
         self.get_response = get_response
 
     def get_timezone(self, request):
-        tzname = getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto')
+        tzname = settings.DEFAULT_USER_TIME_ZONE
         if request.profile:
             tzname = request.profile.timezone
         return pytz.timezone(tzname)

@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import tempfile
 
 from django.utils.translation import ugettext_lazy as _
 from django_jinja.builtins import DEFAULT_EXTENSIONS
@@ -31,8 +32,89 @@ ALLOWED_HOSTS = []
 SITE_ID = 1
 SITE_NAME = 'DMOJ'
 SITE_LONG_NAME = 'DMOJ: Modern Online Judge'
+SITE_ADMIN_EMAIL = False
+
+
+# Set to 1 to use HTTPS if request was made to https://
+# Set to 2 to always use HTTPS for links
+# Set to 0 to always use HTTP for links
+DMOJ_SSL = 0
+
+# Refer to dmoj.ca/post/103-point-system-rework
+DMOJ_PP_STEP = 0.95
+DMOJ_PP_ENTRIES = 100
+DMOJ_PP_BONUS_FUNCTION = lambda n: 300 * (1 - 0.997 ** n)  # noqa: E731
+
+NODEJS = '/usr/bin/node'
+EXIFTOOL = '/usr/bin/exiftool'
+ACE_URL = '//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ext-split.js'
+SELECT2_JS_URL = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'
+DEFAULT_SELECT2_CSS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
+
+DMOJ_CAMO_URL = None
+DMOJ_CAMO_KEY = None
+DMOJ_CAMO_HTTPS = False
+DMOJ_CAMO_EXCLUDE = ()
+DMOJ_PROBLEM_DATA_ROOT = None
+DMOJ_RATING_COLORS = False
+DMOJ_EMAIL_THROTTLING = (10, 60)
+DMOJ_STATS_LANGUAGE_THRESHOLD = 10
+DMOJ_SUBMISSIONS_REJUDGE_LIMIT = 10
+DMOJ_BLOG_NEW_PROBLEM_COUNT = 7
+DMOJ_BLOG_RECENTLY_ATTEMPTED_PROBLEMS_COUNT = 7
+DMOJ_TOTP_TOLERANCE_HALF_MINUTES = 1
+DMOJ_USER_MAX_ORGANIZATION_COUNT = 3
+DMOJ_COMMENT_VOTE_HIDE_THRESHOLD = -5
+DMOJ_PDF_PROBLEM_CACHE = ''
+DMOJ_PDF_PROBLEM_TEMP_DIR = tempfile.gettempdir()
+
+MARKDOWN_STYLES = {}
+MARKDOWN_DEFAULT_STYLE = {}
+
+MATHOID_URL = False
+MATHOID_GZIP = False
+MATHOID_MML_CACHE = None
+MATHOID_CSS_CACHE = 'default'
+MATHOID_DEFAULT_TYPE = 'auto'
+MATHOID_MML_CACHE_TTL = 86400
+MATHOID_CACHE_ROOT = ''
+MATHOID_CACHE_URL = False
+
+TEXOID_GZIP = False
+TEXOID_META_CACHE = 'default'
+TEXOID_META_CACHE_TTL = 86400
+DMOJ_NEWSLETTER_ID_ON_REGISTER = None
+
+BAD_MAIL_PROVIDERS = ()
+BAD_MAIL_PROVIDER_REGEX = ()
+NOFOLLOW_EXCLUDED = set()
+
+TIMEZONE_BG = None
+TIMEZONE_MAP = None
+TIMEZONE_DETECT_BACKEND = None
+
+TERMS_OF_SERVICE_URL = None
+DEFAULT_USER_LANGUAGE = 'PY2'
+
+PHANTOMJS = ''
+PHANTOMJS_PDF_ZOOM = 0.75
+PHANDOMJS_PDF_TIMEOUT = 5.0
+PHANTOMJS_PAPER_SIZE = 'Letter'
+
+SLIMERJS = ''
+SLIMERJS_PDF_ZOOM = 0.75
+SLIMERJS_FIREFOX_PATH = ''
+SLIDERJS_PAPER_SIZE = 'Letter'
+
+PUPPETEER_MODULE = '/usr/lib/node_modules/puppeteer'
+PUPPETEER_PAPER_SIZE = 'Letter'
 
 PYGMENT_THEME = 'pygment-github.css'
+INLINE_JQUERY = True
+INLINE_FONTAWESOME = True
+JQUERY_JS = '//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'
+FONTAWESOME_CSS = '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
+DMOJ_CANONICAL = ''
 
 # Application definition
 
@@ -312,6 +394,7 @@ ENABLE_FTS = False
 
 # Bridged configuration
 BRIDGED_JUDGE_ADDRESS = [('localhost', 9999)]
+BRIDGED_JUDGE_PROXIES = None
 BRIDGED_DJANGO_ADDRESS = [('localhost', 9998)]
 BRIDGED_DJANGO_CONNECT = None
 
@@ -321,6 +404,7 @@ EVENT_DAEMON_POST = 'ws://localhost:9997/'
 EVENT_DAEMON_GET = 'ws://localhost:9996/'
 EVENT_DAEMON_POLL = '/channels/'
 EVENT_DAEMON_KEY = None
+EVENT_DAEMON_AMQP_EXCHANGE = 'dmoj-events'
 EVENT_DAEMON_SUBMISSION_KEY = '6Sdmkx^%pk@GsifDfXcwX*Y7LRF%RGT8vmFpSxFBT$fwS7trc8raWfN#CSfQuKApx&$B#Gh2L7p%W!Ww'
 
 # Internationalization

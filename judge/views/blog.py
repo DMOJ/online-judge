@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import Count, Max, Q
 from django.http import Http404
 from django.urls import reverse
@@ -39,7 +40,7 @@ class PostList(ListView):
         context['page_prefix'] = reverse('blog_post_list')
         context['comments'] = Comment.most_recent(self.request.user, 10)
         context['new_problems'] = Problem.objects.filter(is_public=True, is_organization_private=False) \
-                                         .order_by('-date', '-id')[:7]
+                                         .order_by('-date', '-id')[:settings.DMOJ_BLOG_NEW_PROBLEM_COUNT]
         context['page_titles'] = CacheDict(lambda page: Comment.get_page_title(page))
 
         context['has_clarifications'] = False
@@ -71,7 +72,8 @@ class PostList(ListView):
                                                       .exclude(problem__in=user_completed_ids(user))
                                                       .values_list('problem__code', 'problem__name', 'problem__points')
                                                       .annotate(points=Max('points'), latest=Max('date'))
-                                                      .order_by('-latest'))[:7]
+                                                      .order_by('-latest')
+                                                      [:settings.DMOJ_BLOG_RECENTLY_ATTEMPTED_PROBLEMS_COUNT])
 
         visible_contests = Contest.objects.filter(is_visible=True).order_by('start_time')
         q = Q(is_private=False, is_organization_private=False)

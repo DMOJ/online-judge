@@ -16,7 +16,7 @@ class FixedSimpleLazyObject(SimpleLazyObject):
 
 
 def get_resource(request):
-    use_https = getattr(settings, 'DMOJ_SSL', 0)
+    use_https = settings.DMOJ_SSL
     if use_https == 1:
         scheme = 'https' if request.is_secure() else 'http'
     elif use_https > 1:
@@ -24,14 +24,13 @@ def get_resource(request):
     else:
         scheme = 'http'
     return {
-        'PYGMENT_THEME': getattr(settings, 'PYGMENT_THEME', None),
-        'INLINE_JQUERY': getattr(settings, 'INLINE_JQUERY', True),
-        'INLINE_FONTAWESOME': getattr(settings, 'INLINE_FONTAWESOME', True),
-        'JQUERY_JS': getattr(settings, 'JQUERY_JS', '//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'),
-        'FONTAWESOME_CSS': getattr(settings, 'FONTAWESOME_CSS',
-                                   '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'),
+        'PYGMENT_THEME': settings.PYGMENT_THEME,
+        'INLINE_JQUERY': settings.INLINE_JQUERY,
+        'INLINE_FONTAWESOME': settings.INLINE_FONTAWESOME,
+        'JQUERY_JS': settings.JQUERY_JS,
+        'FONTAWESOME_CSS': settings.FONTAWESOME_CSS,
         'DMOJ_SCHEME': scheme,
-        'DMOJ_CANONICAL': getattr(settings, 'DMOJ_CANONICAL', ''),
+        'DMOJ_CANONICAL': settings.DMOJ_CANONICAL,
     }
 
 
@@ -43,8 +42,8 @@ def get_profile(request):
 
 def comet_location(request):
     if request.is_secure():
-        websocket = getattr(settings, 'EVENT_DAEMON_GET_SSL', settings.EVENT_DAEMON_GET)
-        poll = getattr(settings, 'EVENT_DAEMON_POLL_SSL', settings.EVENT_DAEMON_POLL)
+        websocket = settings.EVENT_DAEMON_GET
+        poll = settings.EVENT_DAEMON_POLL
     else:
         websocket = settings.EVENT_DAEMON_GET
         poll = settings.EVENT_DAEMON_POLL
@@ -105,9 +104,9 @@ def misc_config(request):
 
 
 def site_name(request):
-    return {'SITE_NAME': getattr(settings, 'SITE_NAME', 'DMOJ'),
-            'SITE_LONG_NAME': getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ')),
-            'SITE_ADMIN_EMAIL': getattr(settings, 'SITE_ADMIN_EMAIL', False)}
+    return {'SITE_NAME': settings.SITE_NAME,
+            'SITE_LONG_NAME': settings.SITE_LONG_NAME,
+            'SITE_ADMIN_EMAIL': settings.SITE_ADMIN_EMAIL}
 
 
 def math_setting(request):
@@ -116,7 +115,7 @@ def math_setting(request):
     if request.user.is_authenticated:
         engine = request.profile.math_engine
     else:
-        engine = getattr(settings, 'MATHOID_DEFAULT_TYPE', 'auto')
+        engine = settings.MATHOID_DEFAULT_TYPE
     if engine == 'auto':
-        engine = 'mml' if bool(getattr(settings, 'MATHOID_URL', False)) and caniuse.mathml == SUPPORT else 'jax'
+        engine = 'mml' if bool(settings.MATHOID_URL) and caniuse.mathml == SUPPORT else 'jax'
     return {'MATH_ENGINE': engine, 'REQUIRE_JAX': engine == 'jax', 'caniuse': caniuse}
