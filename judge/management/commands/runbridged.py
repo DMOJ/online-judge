@@ -16,7 +16,7 @@ class Command(BaseCommand):
         except ImportError:
             pass
         else:
-            proxies = getattr(settings, 'BRIDGED_JUDGE_PROXIES', None)
+            proxies = settings.BRIDGED_JUDGE_PROXIES
             if proxies:
                 judge_handler = judge_handler.with_proxy_set(proxies)
 

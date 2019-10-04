@@ -22,7 +22,7 @@ def _post_update_submission(submission, done=False):
 
 
 def judge_request(packet, reply=True):
-    sock = socket.create_connection(getattr(settings, 'BRIDGED_DJANGO_CONNECT', None) or
+    sock = socket.create_connection(settings.BRIDGED_DJANGO_CONNECT or
                                     settings.BRIDGED_DJANGO_ADDRESS[0])
 
     output = json.dumps(packet, separators=(',', ':'))
