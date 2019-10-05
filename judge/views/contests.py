@@ -28,7 +28,7 @@ from django.views.generic.detail import BaseDetailView, DetailView
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
 from judge.forms import ContestCloneForm
-from judge.models import Contest, ContestParticipation, ContestRegistration, ContestTag, Problem, Profile
+from judge.models import Contest, ContestParticipation, ContestProblem, ContestRegistration, ContestTag, Problem, Profile
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
 from judge.utils.strings import safe_int_or_none
