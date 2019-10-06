@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -28,6 +29,8 @@ from judge.widgets import HeavyPreviewPageDownWidget
 ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
                  HeavyPreviewPageDownWidget(preview=reverse_lazy('ticket_preview'),
                                             preview_timeout=1000, hide_preview_button=True))
+
+logger = logging.getLogger('judge.ticket')
 
 
 class TicketForm(forms.Form):
@@ -77,6 +80,12 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
                 'message': message.id, 'user': ticket.user_id,
                 'assignees': list(ticket.assignees.values_list('id', flat=True)),
             })
+        if isinstance(ticket.linked_item, Problem):
+            logger.info('New ticket for %s: %s', 
+                ticket.linked_item.code,
+                self.request.build_absolute_uri(reverse('ticket', args=[ticket.id]))
+            )
+             
         return HttpResponseRedirect(reverse('ticket', args=[ticket.id]))
 
 
