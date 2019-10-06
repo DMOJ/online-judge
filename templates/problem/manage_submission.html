@@ -110,46 +110,48 @@
     {% include "messages.html" %}
 
     <div class="panes">
-        <div class="pane">
-            <h3>{{ _('Rejudge Submissions') }}</h3>
-            <form action="{{ url('problem_submissions_rejudge', problem.code) }}" method="post">
-                {% csrf_token %}
-                <div class="control-group">
-                    <label><input id="by-range-check" type="checkbox" name="use_range" value="on">
-                        {{ _('Filter by ID:') }}</label>
-                    <table id="by-range-filter" class="table">
-                        <tr>
-                            <th><label for="by-range-start">{{ _('Starting ID:') }}</label></th>
-                            <td><input id="by-range-start" name="start" type="number" disabled></td>
-                        </tr>
-                        <tr>
-                            <th><label for="by-range-end">{{ _('Ending ID:') }}</label></th>
-                            <td><input id="by-range-end" name="end" type="number" disabled></td>
-                        </tr>
-                    </table>
-                    <p>{{ _('This range includes both endpoints.') }}</p>
-                </div>
-                <div class="control-group">
-                    <label for="by-lang-filter">{{ _('Filter by language:') }}</label>
-                    <select id="by-lang-filter" name="language" multiple>
-                        {% for id, name in languages %}
-                            <option value="{{ id }}">{{ name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="by-result-filter">{{ _('Filter by result:') }}</label>
-                    <select id="by-result-filter" name="result" multiple>
-                        {% for name in results %}
-                            <option>{{ name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <a id="rejudge-selected" class="unselectable button full" href="#">
-                    {{ _('Rejudge selected submissions') }}
-                </a>
-            </form>
-        </div>
+        {% if request.user.has_perm('judge.rejudge_submission_lot') %}
+            <div class="pane">
+                <h3>{{ _('Rejudge Submissions') }}</h3>
+                <form action="{{ url('problem_submissions_rejudge', problem.code) }}" method="post">
+                    {% csrf_token %}
+                    <div class="control-group">
+                        <label><input id="by-range-check" type="checkbox" name="use_range" value="on">
+                            {{ _('Filter by ID:') }}</label>
+                        <table id="by-range-filter" class="table">
+                            <tr>
+                                <th><label for="by-range-start">{{ _('Starting ID:') }}</label></th>
+                                <td><input id="by-range-start" name="start" type="number" disabled></td>
+                            </tr>
+                            <tr>
+                                <th><label for="by-range-end">{{ _('Ending ID:') }}</label></th>
+                                <td><input id="by-range-end" name="end" type="number" disabled></td>
+                            </tr>
+                        </table>
+                        <p>{{ _('This range includes both endpoints.') }}</p>
+                    </div>
+                    <div class="control-group">
+                        <label for="by-lang-filter">{{ _('Filter by language:') }}</label>
+                        <select id="by-lang-filter" name="language" multiple>
+                            {% for id, name in languages %}
+                                <option value="{{ id }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="by-result-filter">{{ _('Filter by result:') }}</label>
+                        <select id="by-result-filter" name="result" multiple>
+                            {% for name in results %}
+                                <option>{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <a id="rejudge-selected" class="unselectable button full" href="#">
+                        {{ _('Rejudge selected submissions') }}
+                    </a>
+                </form>
+            </div>
+        {% endif %}
 
         <div class="pane">
             <h3>{{ _('Rescore Everything') }}</h3>

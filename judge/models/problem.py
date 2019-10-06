@@ -214,7 +214,7 @@ class Problem(models.Model):
         return ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists()
 
     def is_subs_manageable_by(self, user):
-        return user.is_staff and user.has_perm('judge.rejudge_submission_lot') and self.is_editable_by(user)
+        return user.is_staff and user.has_perm('judge.rejudge_submission') and self.is_editable_by(user)
 
     def __str__(self):
         return self.name

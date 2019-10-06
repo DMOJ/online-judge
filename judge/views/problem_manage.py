@@ -2,6 +2,7 @@ from operator import itemgetter
 
 from celery.result import AsyncResult
 from django.contrib import messages
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import escape, format_html
@@ -62,7 +63,9 @@ class ManageProblemSubmissionView(TitleMixin, ManageProblemSubmissionMixin, Deta
         return context
 
 
-class BaseRejudgeSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailView):
+class BaseRejudgeSubmissionsView(PermissionRequiredMixin, ManageProblemSubmissionActionMixin, BaseDetailView):
+    permission_required = 'judge.rejudge_submission_lot'
+
     def perform_action(self):
         if self.request.POST.get('use_range', 'off') == 'on':
             try:
