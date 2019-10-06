@@ -110,7 +110,6 @@ class CustomAuthenticationForm(AuthenticationForm):
         self.has_google_auth = self._has_social_auth('GOOGLE_OAUTH2')
         self.has_facebook_auth = self._has_social_auth('FACEBOOK')
         self.has_github_auth = self._has_social_auth('GITHUB_SECURE')
-        self.has_dropbox_auth = self._has_social_auth('DROPBOX_OAUTH2')
 
     def _has_social_auth(self, key):
         return (getattr(settings, 'SOCIAL_AUTH_%s_KEY' % key, None) and
