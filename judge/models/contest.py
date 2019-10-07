@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext, gettext_lazy as _
 from jsonfield import JSONField
+from moss import MOSS_LANG_CC, MOSS_LANG_C, MOSS_LANG_JAVA, MOSS_LANG_PYTHON
 
 from judge import contest_format
 from judge.models.problem import Problem
@@ -490,3 +491,23 @@ class Rating(models.Model):
         unique_together = ('user', 'contest')
         verbose_name = _('contest rating')
         verbose_name_plural = _('contest ratings')
+
+
+class ContestMoss(models.Model):
+    LANG_MAPPING = {
+        ('C++', MOSS_LANG_CC),
+        ('C', MOSS_LANG_C),
+        ('Java', MOSS_LANG_JAVA),
+        ('Python', MOSS_LANG_PYTHON),
+    }
+
+    contest = models.ForeignKey(Contest, verbose_name=_('contest'), related_name='moss', on_delete=CASCADE)
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='moss', on_delete=CASCADE)
+    language = models.CharField(max_length=10)
+    submission_count = models.PositiveIntegerField(default=0)
+    url = models.URLField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('contest', 'language')
+        verbose_name = _('contest moss result')
+        verbose_name_plural = _('contest moss results')

@@ -5,7 +5,7 @@ from collections import defaultdict, namedtuple
 from datetime import date, datetime, time, timedelta
 from functools import partial
 from itertools import chain
-from operator import attrgetter
+from operator import attrgetter, itemgetter
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -30,8 +30,10 @@ from django.views.generic.detail import BaseDetailView, DetailView
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
 from judge.forms import ContestCloneForm
-from judge.models import Contest, ContestParticipation, ContestProblem, ContestRegistration, ContestTag, Problem, \
-    Profile, Submission
+from judge.models import Contest, ContestMoss, ContestParticipation, ContestProblem, ContestRegistration, \
+    ContestTag, Problem, Profile, Submission
+from judge.tasks import run_moss
+from judge.utils.celery import redirect_to_task_status
 from judge.utils.chart import get_bar_chart, get_pie_chart
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.problems import _get_result_data
@@ -797,6 +799,45 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
         else:
             self.profile = self.request.profile
         return super().get(request, *args, **kwargs)
+
+
+class ContestMossView(ContestMixin, TitleMixin, DetailView):
+    template_name = 'contest/moss.html'
+
+    def get_title(self):
+        return _('%s Moss Results') % self.object.name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if not self.object.is_editable_by(self.request.user):
+            raise Http404()
+
+        problems = list(map(attrgetter('problem'), self.object.contest_problems.order_by('order')
+                                                              .selected_related('problem')))
+        languages = list(map(itemgetter(0), ContestMoss.LANG_MAPPING))
+
+        results = ContestMoss.objects.filter(contest=self.object)
+        moss_results = defaultdict(list)
+        for result in results:
+            moss_results[result.problem].append(result)
+
+        for result_list in moss_results.values():
+            result_list.sort(key=lambda x: languages.index(x.language))
+
+        context['languages'] = languages
+        context['has_results'] = results.exists()
+        context['moss_results'] = [(problem, moss_results[problem]) for problem in problems]
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        status = run_moss.delay(self.object.key)
+        return redirect_to_task_status(
+            status, message=_('Running moss for %s...') % (self.object.name,),
+            redirect=reverse('contest_moss', args=(self.object.key,)),
+        )
 
 
 class ContestTagDetailAjax(DetailView):

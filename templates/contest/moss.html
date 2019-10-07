@@ -1,0 +1,44 @@
+{% extends "common-content.html" %}
+
+{% block title_ruler %}{% endblock %}
+
+{% block title_row %}
+    {% set tab = 'moss' %}
+    {% set title = contest.name %}
+    {% include "contest/contest-tabs.html" %}
+{% endblock %}
+
+{% block body %}
+    {% if has_results %}
+        <thead>
+        <tr>
+            <th class="header">{{ _('Problem') }}</th>
+            {% for lang in languages %}
+                <th class="header">{{ lang }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+
+        <tbody>
+            {% for problem, results in moss_results %}
+                <tr id="problem-{{ problem.code }}">
+                    <td>{{ problem.name }}</td>
+                    {% for result in results %}
+                        <td>
+                            {% if result.submission_count %}
+                                <a href="{{ result.url }}">{{ result.submission_count }} {{_('submissions')}}</a>
+                            {% else %}
+                                {{ _('No submissions') }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    {% endif %}
+    <form action="{{ url('contest_moss', contest.key) }}" method="post" class="button full">
+        {% csrf_token %}
+        <input type="submit"
+               value="{% if has_results %} {{ _('Re-Moss contest') }} {% else %} {{ _('Moss contest') }} {% endif %}">
+    </form>
+{% endblock %}
