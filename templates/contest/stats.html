@@ -1,0 +1,168 @@
+{% extends "common-content.html" %}
+
+{% block title_ruler %}{% endblock %}
+
+{% block title_row %}
+    {% set tab = 'stats' %}
+    {% set title = contest.name %}
+    {% include "contest/contest-tabs.html" %}
+{% endblock %}
+
+{% block content_js_media %}
+    <script type="text/javascript">
+        window.stats = {{ stats }};
+    </script>
+    {% compress js %}
+        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.js') }}"></script>
+        <script type="text/javascript">
+            $(function () {
+                function draw_pie_chart(data, $chart) {
+                    var ctx = $chart.find('canvas')[0].getContext('2d');
+                    var chart = new Chart(ctx, {
+                        type: 'pie',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false,
+                            responsive: false,
+                            animation: false,
+                            legend: {
+                                display: false,
+                            }
+                        }
+                    });
+
+                    var $legend = $chart.find('.legend');
+                    for (var i = 0; i < data.labels.length; ++i) {
+                        $legend.append($('<li>')
+                            .append($('<span>').addClass('square').css('background-color', data.datasets[0].backgroundColor[i]))
+                            .append($('<span>').text(data.labels[i]))
+                        );
+                    }
+                }
+
+                function draw_bar_chart(data, $chart) {
+                    var ctx = $chart.find('canvas')[0].getContext('2d');
+                    var chart = new Chart(ctx, {
+                        type: 'horizontalBar',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false,
+                            responsive: false,
+                            legend: {
+                                display: false,
+                            },
+                            layout: {
+                                padding: {
+                                    top: 25,
+                                    bottom: 25,
+                                },
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: function(tooltipItem, data) {
+                                        return (Math.round(tooltipItem.value * 100) / 100) + '%';
+                                    },
+                                },
+                            },
+                        },
+                    });
+                }
+
+                function draw_stacked_bar_chart(data, $chart) {
+                    var ctx = $chart.find('canvas')[0].getContext('2d');
+                    var chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            maintainAspectRatio: false,
+                            responsive: true,
+                            tooltips: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            scales: {
+                                xAxes: [{
+                                    stacked: true,
+                                }],
+                                yAxes: [{
+                                    stacked: true,
+                                }],
+                            },
+                        },
+                    });
+                }
+
+
+                draw_stacked_bar_chart(window.stats.problem_status_count, $('#problem-status-count'))
+                draw_bar_chart(window.stats.problem_ac_rate, $('#problem-ac-rate'))
+                draw_pie_chart(window.stats.language_count, $('#language-count'))
+                draw_bar_chart(window.stats.language_ac_rate, $('#language-ac-rate'))
+            });
+        </script>
+    {% endcompress %}
+    {% include "contest/media-js.html" %}
+{% endblock %}
+
+{% block content_media %}
+    <style>
+        .chart {
+            margin: 10px 0;
+        }
+
+        ul.legend {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .legend .square {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            margin-right: .3em;
+        }
+
+        @media (max-width: 450px) {
+            ul.legend {
+                -moz-columns: 5 7em;
+            }
+
+            .chart canvas {
+                display: block;
+                margin: 0 auto;
+            }
+        }
+
+        @media (min-width: 451px) {
+            .chart {
+                display: flex;
+            }
+
+            ul.legend {
+                margin-left: 20px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h3>{{ _('Problem Status Distribution') }}</h3>
+    <div id="problem-status-count" class="chart">
+        <canvas width="300" height="300"></canvas>
+    </div>
+
+    <h3>{{ _('Problem AC Rate') }}</h3>
+    <div id="problem-ac-rate" class="chart">
+        <canvas width="400"></canvas>
+    </div>
+
+    <h3>{{ _('Submissions by Language') }}</h3>
+    <div id="language-count" class="chart">
+        <canvas width="300" height="300"></canvas>
+        <ul class="legend"></ul>
+    </div>
+
+    <h3>{{ _('Language AC Rate') }}</h3>
+    <div id="language-ac-rate" class="chart">
+        <canvas width="400"></canvas>
+    </div>
+{% endblock %}

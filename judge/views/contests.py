@@ -1,3 +1,4 @@
+import json
 import re
 from calendar import Calendar, SUNDAY
 from collections import defaultdict, namedtuple
@@ -11,7 +12,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
-from django.db.models import Case, Count, IntegerField, Max, Min, Q, Sum, When
+from django.db.models import Case, Count, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
+from django.db.models.expressions import CombinedExpression
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template.defaultfilters import date as date_filter
@@ -19,6 +21,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
+from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.decorators.http import require_POST
@@ -28,15 +31,18 @@ from django.views.generic.detail import BaseDetailView, DetailView
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
 from judge.forms import ContestCloneForm
-from judge.models import Contest, ContestParticipation, ContestProblem, ContestRegistration, ContestTag, Problem, Profile
+from judge.models import Contest, ContestParticipation, ContestProblem, ContestRegistration, ContestTag, Problem, \
+    Profile, Submission
+from judge.utils.chart import get_bar_chart, get_pie_chart
 from judge.utils.opengraph import generate_opengraph
+from judge.utils.problems import _get_result_data
 from judge.utils.ranker import ranker
 from judge.utils.strings import safe_int_or_none
 from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView,TitleMixin, generic_message, paginate_query_context
 
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
-           'ContestClone', 'contest_ranking_ajax', 'ContestParticipationList', 'get_contest_ranking_list',
-           'base_contest_ranking_list']
+           'ContestClone', 'ContestStats', 'contest_ranking_ajax', 'ContestParticipationList',
+           'get_contest_ranking_list', 'base_contest_ranking_list']
 
 
 def _find_contest(request, key, private_check=True):
@@ -558,6 +564,79 @@ class CachedContestCalendar(ContestCalendar):
         response.render()
         cached.set(key, response.content)
         return response
+
+
+class ContestStats(TitleMixin, ContestMixin, DetailView):
+    template_name = 'contest/stats.html'
+
+    def get_title(self):
+        return _('%s Statistics') % self.object.name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if not self.object.ended:
+            raise Http404()
+
+        queryset = Submission.objects.filter(contest_object=self.object)
+
+        ac_count = Count(Case(When(result='AC', then=Value(1)), output_field=IntegerField()))
+        ac_rate = CombinedExpression(ac_count / Count('problem'), '*', Value(100.0), output_field=FloatField())
+
+        stats = {}
+
+        status_count_queryset = list(
+            queryset.values('problem__code', 'result').annotate(count=Count('result'))
+                    .values_list('problem__code', 'result', 'count')
+        )
+        labels, codes = zip(
+            *self.object.contest_problems.order_by('order').values_list('problem__name', 'problem__code')
+        )
+        num_problems = len(labels)
+        status_counts = [[] for i in range(num_problems)]
+        for problem_code, result, count in status_count_queryset:
+            status_counts[codes.index(problem_code)].append((result, count))
+
+        colors = {
+            'AC': '#00a92a',
+            'WA': '#ed4420',
+            'CE': '#42586d',
+            'TLE': '#a3bcbd',
+            'ERR': '#ffa71c',
+        }
+        categories = list(colors.keys())
+        result_data = {category: [0] * num_problems for category in categories}
+        for i in range(num_problems):
+            for category in _get_result_data(defaultdict(int, status_counts[i]))['categories']:
+                result_data[category['code']][i] = category['count']
+
+        stats['problem_status_count'] = {
+            'labels': labels,
+            'datasets': [
+                {
+                    'label': name,
+                    'backgroundColor': colors[name],
+                    'data': data,
+                }
+                for name, data in result_data.items()
+            ],
+        }
+        stats['problem_ac_rate'] = get_bar_chart(
+            queryset.values('contest__problem__order', 'problem__name').annotate(ac_rate=ac_rate)
+                    .order_by('contest__problem__order').values_list('problem__name', 'ac_rate')
+        )
+        stats['language_count'] = get_pie_chart(
+            queryset.values('language__name').annotate(count=Count('language__name'))
+                    .filter(count__gt=0).order_by('-count').values_list('language__name', 'count')
+        )
+        stats['language_ac_rate'] = get_bar_chart(
+            queryset.values('language__name').annotate(ac_rate=ac_rate)
+                    .filter(ac_rate__gt=0).values_list('language__name', 'ac_rate')
+        )
+
+        context['stats'] = mark_safe(json.dumps(stats))
+
+        return context
 
 
 ContestRankingProfile = namedtuple(

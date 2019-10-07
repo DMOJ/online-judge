@@ -69,16 +69,7 @@ def user_attempted_ids(profile):
     return result
 
 
-def get_result_data(*args, **kwargs):
-    if args:
-        submissions = args[0]
-        if kwargs:
-            raise ValueError(_("Can't pass both queryset and keyword filters"))
-    else:
-        submissions = Submission.objects.filter(**kwargs) if kwargs is not None else Submission.objects
-    raw = submissions.values('result').annotate(count=Count('result')).values_list('result', 'count')
-    results = defaultdict(int, raw)
-
+def _get_result_data(results):
     return {
         'categories': [
             # Using gettext_noop here since this will be tacked into the cache, so it must be language neutral.
@@ -92,6 +83,17 @@ def get_result_data(*args, **kwargs):
         ],
         'total': sum(results.values()),
     }
+
+
+def get_result_data(*args, **kwargs):
+    if args:
+        submissions = args[0]
+        if kwargs:
+            raise ValueError(_("Can't pass both queryset and keyword filters"))
+    else:
+        submissions = Submission.objects.filter(**kwargs) if kwargs is not None else Submission.objects
+    raw = submissions.values('result').annotate(count=Count('result')).values_list('result', 'count')
+    return _get_result_data(defaultdict(int, raw))
 
 
 def editable_problems(user, profile=None):
